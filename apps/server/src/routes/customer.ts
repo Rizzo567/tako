@@ -99,18 +99,33 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const [existing] = await db.select().from(orders).where(eq(orders.idempotencyKey, body.data.idempotencyKey)).limit(1)
     if (existing) return { data: existing }
 
-    // Load menu items to get prices
-    const itemIds = body.data.items.map(i => i.menuItemId)
-    const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, body.data.restaurantId)))
+    // SECURITY: verifica che il ristorante esista e sia attivo
+    const [restaurant] = await db.select().from(restaurants).where(and(eq(restaurants.id, body.data.restaurantId), eq(restaurants.active, true))).limit(1)
+    if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
+
+    // SECURITY: verifica che il tavolo appartenga al ristorante (previene ordini cross-ristorante)
+    if (body.data.tableId) {
+      const [table] = await db.select().from(tables).where(and(eq(tables.id, body.data.tableId), eq(tables.restaurantId, body.data.restaurantId))).limit(1)
+      if (!table) return reply.code(403).send({ error: { code: 'FORBIDDEN', message: 'Tavolo non valido' } })
+    }
+
+    // SECURITY: prezzi sempre dal DB, mai dal client — previene price tampering
+    const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, body.data.restaurantId), eq(menuItems.available, true)))
 
     let total = 0
     const resolvedItems = body.data.items.map(orderItem => {
       const dbItem = dbItems.find(i => i.id === orderItem.menuItemId)
-      if (!dbItem) throw new Error(`Item ${orderItem.menuItemId} not found`)
-      const price = dbItem.price
+      // SECURITY: item deve esistere e appartenere a questo ristorante
+      if (!dbItem) throw new Error(`Item non trovato o non disponibile`)
+      // SECURITY: quantità massima per voce (anti-spam)
+      if (orderItem.quantity > 20) throw new Error(`Quantità massima 20 per voce`)
+      const price = dbItem.price // prezzo SEMPRE dal DB
       total += price * orderItem.quantity
       return { ...orderItem, name: dbItem.name, unitPrice: price, kitchenStation: dbItem.kitchenStation }
     })
+
+    // SECURITY: max 15 voci per ordine
+    if (body.data.items.length > 15) return reply.code(400).send({ error: { code: 'TOO_MANY_ITEMS', message: 'Massimo 15 voci per ordine' } })
 
     const [order] = await db.insert(orders).values({
       restaurantId: body.data.restaurantId,

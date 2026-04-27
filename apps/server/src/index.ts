@@ -2,6 +2,8 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
+import rateLimit from '@fastify/rate-limit'
+import helmet from '@fastify/helmet'
 import { Server as SocketServer } from 'socket.io'
 import { setupSocketHandlers } from './socket/handlers.js'
 import { authRoutes } from './routes/auth.js'
@@ -21,9 +23,32 @@ const JWT_SECRET = process.env['JWT_SECRET'] ?? 'tako-super-secret-change-in-pro
 
 const fastify = Fastify({ logger: false })
 
-await fastify.register(cors, { origin: true })
+// Security headers
+await fastify.register(helmet, { contentSecurityPolicy: false })
+
+// CORS — solo origini note
+await fastify.register(cors, {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3002',
+    process.env['DASHBOARD_URL'] ?? 'http://localhost:3000',
+    process.env['CLIENT_BASE_URL'] ?? 'http://localhost:3002',
+  ],
+  credentials: true,
+})
+
 await fastify.register(jwt, { secret: JWT_SECRET })
 await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
+
+// Rate limiting globale
+await fastify.register(rateLimit, {
+  global: true,
+  max: 100,          // max 100 req per finestra
+  timeWindow: 60000, // 1 minuto
+  errorResponseBuilder: () => ({
+    error: { code: 'RATE_LIMIT', message: 'Troppe richieste. Riprova tra un minuto.' },
+  }),
+})
 
 // Health check
 fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString() }))

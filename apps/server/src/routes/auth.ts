@@ -19,7 +19,40 @@ const registerSchema = z.object({
   password: z.string().min(8),
 })
 
+// In-memory brute force tracker (per IP)
+const loginAttempts = new Map<string, { count: number; firstAttempt: number }>()
+const MAX_ATTEMPTS = 5
+const LOCKOUT_MS = 15 * 60 * 1000 // 15 minuti
+
+function checkBruteForce(ip: string): boolean {
+  const now = Date.now()
+  const record = loginAttempts.get(ip)
+  if (!record) return true
+  if (now - record.firstAttempt > LOCKOUT_MS) { loginAttempts.delete(ip); return true }
+  return record.count < MAX_ATTEMPTS
+}
+
+function recordFailedLogin(ip: string) {
+  const now = Date.now()
+  const record = loginAttempts.get(ip)
+  if (!record || now - record.firstAttempt > LOCKOUT_MS) {
+    loginAttempts.set(ip, { count: 1, firstAttempt: now })
+  } else {
+    record.count++
+  }
+}
+
 export async function authRoutes(fastify: FastifyInstance) {
+  // Rate limit su auth: 10 req/min per IP
+  fastify.register(async (instance) => {
+    instance.addHook('onRequest', async (req, reply) => {
+      const ip = req.ip
+      if (!checkBruteForce(ip)) {
+        return reply.code(429).send({ error: { code: 'BRUTE_FORCE', message: 'Troppi tentativi. Riprova tra 15 minuti.' } })
+      }
+    })
+  })
+
   // Register new restaurant + owner
   fastify.post('/register', async (req, reply) => {
     const body = registerSchema.safeParse(req.body)
@@ -66,10 +99,16 @@ export async function authRoutes(fastify: FastifyInstance) {
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     const [user] = await db.select().from(users).where(eq(users.email, body.data.email)).limit(1)
-    if (!user?.passwordHash) return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
+    if (!user?.passwordHash) {
+      recordFailedLogin(req.ip)
+      return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
+    }
 
     const valid = await bcrypt.compare(body.data.password, user.passwordHash)
-    if (!valid) return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
+    if (!valid) {
+      recordFailedLogin(req.ip)
+      return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
+    }
 
     const token = nanoid(64)
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
