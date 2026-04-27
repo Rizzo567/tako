@@ -1,5 +1,5 @@
 import { pgTable, text, uuid, timestamp, boolean, integer, real, jsonb } from 'drizzle-orm/pg-core'
-import { restaurants } from './restaurants.js'
+import { restaurants } from './restaurants'
 
 export const menus = pgTable('menus', {
   id: uuid('id').primaryKey().defaultRandom(),

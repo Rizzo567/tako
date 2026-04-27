@@ -4,31 +4,34 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@tako/db": "workspace:*",
-    "@tako/types": "workspace:*",
-    "fastify": "^5.2.1",
     "@fastify/cors": "^10.0.1",
     "@fastify/jwt": "^9.0.1",
     "@fastify/multipart": "^9.0.1",
     "@fastify/static": "^8.1.0",
-    "socket.io": "^4.8.1",
+    "@tako/db": "workspace:*",
+    "@tako/types": "workspace:*",
     "bcryptjs": "^3.0.2",
+    "drizzle-orm": "^0.38.4",
+    "fastify": "^5.2.1",
     "ioredis": "^5.4.1",
     "nanoid": "^5.0.9",
-    "zod": "^3.24.1",
-    "qrcode": "^1.5.4",
     "openai": "^4.83.0",
-    "sharp": "^0.33.5"
+    "postgres": "^3.4.9",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.33.5",
+    "socket.io": "^4.8.1",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.10.0",
     "@types/qrcode": "^1.5.5",
-    "typescript": "^5.7.2",
-    "@types/node": "^22.10.0"
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2"
   }
 }
