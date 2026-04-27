@@ -2,7 +2,6 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
-import { createServer } from 'http'
 import { Server as SocketServer } from 'socket.io'
 import { setupSocketHandlers } from './socket/handlers.js'
 import { authRoutes } from './routes/auth.js'
@@ -20,13 +19,7 @@ import { staffRoutes } from './routes/staff.js'
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET'] ?? 'tako-super-secret-change-in-production'
 
-const fastify = Fastify({ logger: { level: 'info' } })
-const httpServer = createServer(fastify.server)
-
-export const io = new SocketServer(httpServer, {
-  cors: { origin: '*', methods: ['GET', 'POST'] },
-  pingTimeout: 60000,
-})
+const fastify = Fastify({ logger: false })
 
 await fastify.register(cors, { origin: true })
 await fastify.register(jwt, { secret: JWT_SECRET })
@@ -48,15 +41,19 @@ await fastify.register(customerRoutes, { prefix: '/api/customer' })
 await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
 await fastify.register(staffRoutes, { prefix: '/api/staff' })
 
-// Socket.io
+// Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
+await fastify.ready()
+
+export const io = new SocketServer(fastify.server, {
+  cors: { origin: '*', methods: ['GET', 'POST'] },
+  pingTimeout: 60000,
+})
 setupSocketHandlers(io)
 
 try {
-  await fastify.ready()
-  httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`Tako server running on http://0.0.0.0:${PORT}`)
-  })
+  await fastify.listen({ port: PORT, host: '0.0.0.0' })
+  console.log(`Tako server running on http://0.0.0.0:${PORT}`)
 } catch (err) {
-  fastify.log.error(err)
+  console.error(err)
   process.exit(1)
 }
