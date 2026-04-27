@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { --coral: #ED7159; --ink: #2A1F1A; --cream: #FFF8F3; }
+  body { -webkit-tap-highlight-color: transparent; }
+}
+
+@layer components {
+  .btn-coral {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl font-display font-black text-white bg-coral active:bg-coral-deep transition-all active:scale-95;
+    box-shadow: 0 4px 0 #D9533A;
+  }
+  .btn-coral:active { box-shadow: none; transform: translateY(4px); }
+
+  .item-card {
+    @apply bg-white rounded-2xl border-2 border-ink/10 p-4 active:scale-[0.98] transition-transform cursor-pointer;
+  }
+
+  .badge-tag {
+    @apply inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-coral/10 text-coral-deep;
+  }
+
+  .bottom-bar {
+    @apply fixed bottom-0 inset-x-0 max-w-lg mx-auto bg-white border-t-2 border-ink/10 p-4 z-50;
+  }
+}

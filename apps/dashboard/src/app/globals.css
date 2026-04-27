@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --coral: #ED7159;
+    --coral-deep: #D9533A;
+    --coral-soft: #F8B7A6;
+    --coral-tint: #FFEEE8;
+    --cream: #FFF8F3;
+    --ink: #2A1F1A;
+    --ink-soft: #5C4A41;
+    --mint: #7FC4A8;
+    --sun: #F5C065;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  * { box-sizing: border-box; }
+}
+
+@layer components {
+  .btn-coral {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-black text-white bg-coral hover:bg-coral-deep transition-all active:scale-95;
+    box-shadow: 0 4px 0 var(--coral-deep);
+  }
+  .btn-coral:active { box-shadow: none; transform: translateY(4px); }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-black border-2 border-ink bg-white hover:bg-cream transition-all active:scale-95;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border-2 border-ink p-5;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .card-sm {
+    @apply bg-white rounded-xl border-2 border-ink p-3;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-ink/20 bg-white font-body font-semibold focus:outline-none focus:border-coral transition-colors;
+  }
+
+  .label {
+    @apply block text-sm font-display font-black text-ink/70 mb-1.5;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl font-display font-black text-sm transition-all;
+  }
+  .sidebar-link:hover { @apply bg-coral/10 text-coral-deep; }
+  .sidebar-link.active { @apply bg-coral text-white; box-shadow: 3px 3px 0 var(--coral-deep); }
+
+  .table-status-free { @apply bg-ink/5 text-ink/60; }
+  .table-status-occupied { @apply bg-sun/30 text-ink; }
+  .table-status-waiting { @apply bg-coral/20 text-coral-deep; }
+  .table-status-cleaning { @apply bg-sky/40 text-ink; }
+  .table-status-reserved { @apply bg-mint/30 text-ink; }
+}
