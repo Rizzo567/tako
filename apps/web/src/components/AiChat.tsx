@@ -7,6 +7,13 @@ import { cn } from '@/lib/utils'
 
 interface Message { role: 'user' | 'assistant'; content: string }
 
+const SUGGESTIONS = [
+  'Hai piatti vegani? 🌿',
+  'Quali piatti senza glutine avete? 🌾',
+  'Cosa mi consigli oggi? 🍽️',
+  'Ingredienti del piatto del giorno?',
+]
+
 export function AiChat({ onBack }: { onBack: () => void }) {
   const { restaurantId, primaryColor } = useSessionStore()
   const [messages, setMessages] = useState<Message[]>([
@@ -18,8 +25,8 @@ export function AiChat({ onBack }: { onBack: () => void }) {
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
-  async function send() {
-    const text = input.trim()
+  async function send(overrideText?: string) {
+    const text = (overrideText ?? input).trim()
     if (!text || loading) return
     setInput('')
     const newMessages: Message[] = [...messages, { role: 'user', content: text }]
@@ -55,6 +62,19 @@ export function AiChat({ onBack }: { onBack: () => void }) {
             {m.content}
           </div>
         ))}
+        {messages.length === 1 && (
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {SUGGESTIONS.map(s => (
+              <button
+                key={s}
+                onClick={() => { setInput(s); send(s) }}
+                className="shrink-0 px-4 py-2.5 rounded-2xl border-2 border-ink/15 bg-white font-body font-semibold text-sm text-ink/70 active:scale-95 transition-transform whitespace-nowrap"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
         {loading && (
           <div className="max-w-[85%] px-4 py-3 rounded-2xl bg-white border-2 border-ink/10 flex gap-1.5 items-center rounded-bl-sm">
             {[0, 1, 2].map(i => <span key={i} className="w-2 h-2 rounded-full bg-coral/60 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />)}
@@ -72,7 +92,7 @@ export function AiChat({ onBack }: { onBack: () => void }) {
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && send()}
           />
-          <button onClick={send} disabled={!input.trim() || loading} className="w-12 h-12 rounded-2xl grid place-items-center text-white disabled:opacity-40 transition-opacity" style={{ background: primaryColor ?? '#ED7159' }}>
+          <button onClick={() => send()} disabled={!input.trim() || loading} className="w-12 h-12 rounded-2xl grid place-items-center text-white disabled:opacity-40 transition-opacity" style={{ background: primaryColor ?? '#ED7159' }}>
             <Send size={18} />
           </button>
         </div>

@@ -51,6 +51,7 @@ interface SessionState {
   restaurantName: string | null
   primaryColor: string
   aiEnabled: boolean
+  logoUrl?: string
   orderId: string | null
   setSession: (data: Partial<SessionState>) => void
   setOrderId: (id: string) => void

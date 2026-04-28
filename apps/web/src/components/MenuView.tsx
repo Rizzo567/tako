@@ -23,9 +23,16 @@ function ItemModal({ item, onClose, onAdd }: { item: PublicItem; onClose: () => 
 
   return (
     <div className="fixed inset-0 bg-ink/60 z-50 flex items-end" onClick={onClose}>
-      <div className="bg-white w-full max-w-lg mx-auto rounded-t-3xl p-6 pb-10" onClick={e => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 text-ink/40 hover:text-ink"><X size={20} /></button>
-        {item.imageUrl && <img src={item.imageUrl} alt="" className="w-full h-48 object-cover rounded-2xl mb-4 border-2 border-ink/10" />}
+      <div className="bg-white w-full max-w-lg mx-auto rounded-t-3xl p-6 pb-10 relative overflow-hidden" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-4 right-4 text-ink/40 hover:text-ink z-10"><X size={20} /></button>
+        {item.imageUrl && (
+          <img
+            src={item.imageUrl}
+            alt=""
+            className="w-full h-52 object-cover -mx-6 -mt-6 mb-4"
+            style={{ width: 'calc(100% + 48px)' }}
+          />
+        )}
         <h2 className="font-display font-black text-2xl mb-1">{item.name}</h2>
         {item.description && <p className="text-ink/60 font-semibold text-sm mb-3">{item.description}</p>}
         {item.allergens.length > 0 && (
@@ -57,8 +64,9 @@ function ItemModal({ item, onClose, onAdd }: { item: PublicItem; onClose: () => 
             <span className="font-display font-black text-xl w-8 text-center">{qty}</span>
             <button onClick={() => setQty(q => q + 1)} className="w-10 h-10 rounded-xl border-2 border-ink/20 grid place-items-center hover:border-coral"><Plus size={16} /></button>
           </div>
-          <button onClick={() => onAdd(qty, selectedVariant, notes)} className="btn-coral px-6">
-            Aggiungi {formatEuro(price * qty)}
+          <button onClick={() => onAdd(qty, selectedVariant, notes)} className="btn-coral px-6 flex flex-col items-center leading-tight">
+            <span className="text-xs font-semibold opacity-80">Aggiungi</span>
+            <span className="font-display font-black text-2xl">{formatEuro(price * qty)}</span>
           </button>
         </div>
       </div>
@@ -72,7 +80,7 @@ export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoCha
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [selectedItem, setSelectedItem] = useState<PublicItem | null>(null)
   const [filterAllergen, setFilterAllergen] = useState<string | null>(null)
-  const { add, count } = useCartStore()
+  const { add, count, items } = useCartStore()
 
   useEffect(() => {
     if (!restaurantId) return
@@ -95,6 +103,16 @@ export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoCha
     })
     toast.success(`${selectedItem.name} aggiunto!`, { icon: '✅' })
     setSelectedItem(null)
+  }
+
+  function handleAddDirect(item: PublicItem) {
+    add({
+      menuItemId: item.id,
+      name: item.name,
+      quantity: 1,
+      unitPrice: item.price,
+    })
+    toast.success(`${item.name} aggiunto!`, { icon: '✅' })
   }
 
   const activeItems = menu?.sections.find(s => s.id === activeSection)?.items.filter(i => i.available && (!filterAllergen || !i.allergens.includes(filterAllergen))) ?? []
@@ -133,23 +151,71 @@ export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoCha
 
       {/* Items */}
       <div className="p-4 space-y-3">
-        {activeItems.map(item => (
-          <div key={item.id} className="item-card flex gap-3" onClick={() => setSelectedItem(item)}>
-            {item.imageUrl && <img src={item.imageUrl} alt="" className="w-20 h-20 rounded-xl object-cover border-2 border-ink/10 shrink-0" />}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-display font-black leading-tight">{item.name}</h3>
-                <span className="font-display font-black text-lg shrink-0" style={{ color: primaryColor }}>{formatEuro(item.price)}</span>
-              </div>
-              {item.description && <p className="text-xs text-ink/60 font-semibold mt-0.5 line-clamp-2">{item.description}</p>}
-              {item.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-1.5">
-                  {item.tags.map(t => <span key={t} className="badge-tag">{t}</span>)}
+        {activeItems.map(item => {
+          const hasVariants = item.variants && item.variants.length > 0
+          const cartQty = items.filter(i => i.menuItemId === item.id).reduce((sum, i) => sum + i.quantity, 0)
+          return (
+            <div
+              key={item.id}
+              className="item-card flex gap-3"
+              onClick={() => {
+                if (hasVariants) {
+                  setSelectedItem(item)
+                } else {
+                  handleAddDirect(item)
+                }
+              }}
+            >
+              {item.imageUrl && <img src={item.imageUrl} alt="" className="w-20 h-20 rounded-xl object-cover border-2 border-ink/10 shrink-0" />}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-display font-black leading-tight">{item.name}</h3>
+                  <span className="font-display font-black text-lg shrink-0" style={{ color: primaryColor }}>{formatEuro(item.price)}</span>
                 </div>
-              )}
+                {item.description && <p className="text-xs text-ink/60 font-semibold mt-0.5 line-clamp-2">{item.description}</p>}
+                {item.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {item.tags.map(t => <span key={t} className="badge-tag">{t}</span>)}
+                  </div>
+                )}
+                <div className="mt-2 flex items-center justify-between">
+                  <div>
+                    {item.allergens && item.allergens.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {item.allergens.map(a => (
+                          <span key={a} className="text-xs text-ink/50 font-bold">
+                            {ALLERGEN_ICONS[a.toLowerCase()] ?? '⚠️'}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {!hasVariants && (
+                    cartQty > 0 ? (
+                      <div
+                        className="flex items-center gap-1.5"
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <span className="text-xs font-display font-black" style={{ color: primaryColor }}>{cartQty} nel carrello</span>
+                        <button
+                          onClick={e => { e.stopPropagation(); handleAddDirect(item) }}
+                          className="w-8 h-8 rounded-xl grid place-items-center text-white text-xl font-black active:scale-90 transition-transform"
+                          style={{ background: primaryColor }}
+                        >+</button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={e => { e.stopPropagation(); handleAddDirect(item) }}
+                        className="w-8 h-8 rounded-xl grid place-items-center text-white text-xl font-black active:scale-90 transition-transform"
+                        style={{ background: primaryColor }}
+                      >+</button>
+                    )
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {selectedItem && <ItemModal item={selectedItem} onClose={() => setSelectedItem(null)} onAdd={handleAdd} />}
