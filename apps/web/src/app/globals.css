@@ -3,7 +3,25 @@
 @tailwind utilities;
 
 @layer base {
-  :root { --coral: #ED7159; --ink: #2A1F1A; --cream: #FFF8F3; }
+  :root {
+    --coral: #ED7159;
+    --coral-deep: #D9533A;
+    --coral-soft: #F8B7A6;
+    --coral-tint: #FFEEE8;
+    --cream: #FFF8F3;
+    --ink: #2A1F1A;
+    --ink-soft: #5C4A41;
+    --mint: #7FC4A8;
+    --sun: #F5C065;
+    --sky: #BDD9E8;
+    --shadow-sm: 2px 2px 0 rgba(42,31,26,0.12);
+    --shadow-md: 4px 4px 0 rgba(42,31,26,0.15);
+    --shadow-coral: 0 4px 16px rgba(237,113,89,0.35);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+  }
   body { -webkit-tap-highlight-color: transparent; }
 }
 
@@ -25,4 +43,22 @@
   .bottom-bar {
     @apply fixed bottom-0 inset-x-0 max-w-lg mx-auto bg-white border-t-2 border-ink/10 p-4 z-50;
   }
+
+  /* Cards */
+  .card { @apply bg-white rounded-2xl border-2 border-ink/10 p-4; box-shadow: var(--shadow-sm); }
+  .card-elevated { @apply bg-white rounded-2xl p-4; box-shadow: var(--shadow-md); }
+
+  /* Form */
+  .input { @apply w-full px-4 py-3 rounded-xl border-2 border-ink/20 bg-white font-body font-semibold focus:outline-none focus:border-coral transition-colors; }
+  .label { @apply block text-sm font-display font-black text-ink/70 mb-1.5; }
+
+  /* Badges */
+  .badge { @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black; }
+  .badge-success { @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-mint/20 text-mint; }
+
+  /* Skeleton */
+  .skeleton { @apply bg-ink/10 rounded-xl animate-pulse; }
+
+  /* Status bar safe area */
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
