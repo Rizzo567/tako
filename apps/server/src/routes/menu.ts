@@ -4,6 +4,9 @@ import { db, menus, menuSections, menuItems, itemVariants } from '@tako/db'
 import { eq, and, asc } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
+import OpenAI from 'openai'
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function menuRoutes(fastify: FastifyInstance) {
   // Get all menus for restaurant
@@ -117,5 +120,107 @@ export async function menuRoutes(fastify: FastifyInstance) {
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
     const [variant] = await db.insert(itemVariants).values({ itemId, ...body.data }).returning()
     return reply.code(201).send({ data: variant })
+  })
+
+  // Parse raw menu text with AI → return preview (no DB write)
+  fastify.post('/:menuId/import-text', { preHandler: requireAuth }, async (req, reply) => {
+    const { menuId } = req.params as { menuId: string }
+    const { text } = req.body as { text?: string }
+    if (!text?.trim()) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required' } })
+
+    const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      response_format: { type: 'json_object' },
+      messages: [
+        {
+          role: 'system',
+          content: `Sei un parser di menu ristorante. Estrai la struttura dal testo grezzo e restituisci JSON valido con questa forma esatta:
+{
+  "sections": [
+    {
+      "name": "Nome sezione",
+      "items": [
+        {
+          "name": "Nome piatto",
+          "description": "descrizione opzionale",
+          "price": 12.50,
+          "allergens": ["glutine", "latte"]
+        }
+      ]
+    }
+  ]
+}
+Regole:
+- price deve essere un numero (es. 8.5, non "8,50€")
+- Se il prezzo non è presente metti 0
+- allergens: array stringhe in italiano, solo quelli esplicitamente menzionati
+- description: solo se presente nel testo
+- Raggruppa i piatti per sezione naturale (Antipasti, Primi, Secondi, Dolci, Bevande, ecc.)
+- Se non ci sono sezioni esplicite, crea una sezione "Menu"`,
+        },
+        { role: 'user', content: text },
+      ],
+    })
+
+    const raw = completion.choices[0]?.message?.content ?? '{}'
+    let parsed: any
+    try {
+      parsed = JSON.parse(raw)
+    } catch {
+      return reply.code(422).send({ error: { code: 'PARSE_ERROR', message: 'AI non ha restituito JSON valido' } })
+    }
+
+    if (!Array.isArray(parsed?.sections)) {
+      return reply.code(422).send({ error: { code: 'PARSE_ERROR', message: 'Struttura non riconosciuta' } })
+    }
+
+    return { data: parsed }
+  })
+
+  // Confirm import: bulk-create sections + items from parsed preview
+  fastify.post('/:menuId/import-confirm', { preHandler: requireAuth }, async (req, reply) => {
+    const { menuId } = req.params as { menuId: string }
+    const bodySchema = z.object({
+      sections: z.array(z.object({
+        name: z.string().min(1),
+        items: z.array(z.object({
+          name: z.string().min(1),
+          description: z.string().optional(),
+          price: z.number().min(0),
+          allergens: z.array(z.string()).default([]),
+        })),
+      })),
+    })
+    const body = bodySchema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+
+    const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
+
+    let totalSections = 0
+    let totalItems = 0
+
+    for (const [si, sec] of body.data.sections.entries()) {
+      const [section] = await db.insert(menuSections).values({ menuId, name: sec.name, position: si }).returning()
+      totalSections++
+
+      for (const [ii, item] of sec.items.entries()) {
+        await db.insert(menuItems).values({
+          sectionId: section.id,
+          restaurantId: (req.user as any).restaurantId,
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          allergens: item.allergens,
+          position: ii,
+        })
+        totalItems++
+      }
+    }
+
+    return { data: { sections: totalSections, items: totalItems } }
   })
 }

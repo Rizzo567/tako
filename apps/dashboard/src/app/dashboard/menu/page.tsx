@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { api } from '@/lib/api'
 import { formatEuro } from '@/lib/utils'
 import { cn } from '@/lib/utils'
-import { Plus, ToggleLeft, ToggleRight, Pencil, Trash2, X, UtensilsCrossed, ChevronDown, ChevronRight } from 'lucide-react'
+import { Plus, ToggleLeft, ToggleRight, Pencil, Trash2, X, UtensilsCrossed, ChevronDown, ChevronRight, FileText, Loader2, CheckCircle2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // ─── Allergen emoji map ───────────────────────────────────────────────────────
@@ -230,6 +230,181 @@ function EmptyMenuWizard({ onCreated }: { onCreated: () => void }) {
   )
 }
 
+// ─── Import text modal ───────────────────────────────────────────────────────
+
+type ParsedSection = {
+  name: string
+  items: { name: string; description?: string; price: number; allergens: string[] }[]
+}
+
+function ImportTextModal({ menuId, onClose, onImported }: { menuId: string; onClose: () => void; onImported: () => void }) {
+  const [text, setText] = useState('')
+  const [preview, setPreview] = useState<ParsedSection[] | null>(null)
+  const [step, setStep] = useState<'input' | 'preview'>('input')
+
+  const parseMutation = useMutation({
+    mutationFn: () => api.post(`/menus/${menuId}/import-text`, { text }),
+    onSuccess: (res) => {
+      setPreview(res.data.data.sections)
+      setStep('preview')
+    },
+    onError: () => toast.error('Errore nel parsing del testo'),
+  })
+
+  const confirmMutation = useMutation({
+    mutationFn: () => api.post(`/menus/${menuId}/import-confirm`, { sections: preview }),
+    onSuccess: (res) => {
+      const { sections, items } = res.data.data
+      toast.success(`Importati ${sections} sezioni e ${items} piatti`)
+      onImported()
+      onClose()
+    },
+    onError: () => toast.error('Errore durante l\'importazione'),
+  })
+
+  function removeSection(si: number) {
+    setPreview(prev => prev!.filter((_, i) => i !== si))
+  }
+
+  function removeItem(si: number, ii: number) {
+    setPreview(prev => prev!.map((s, i) => i === si ? { ...s, items: s.items.filter((_, j) => j !== ii) } : s))
+  }
+
+  function editItemPrice(si: number, ii: number, val: string) {
+    const n = parseFloat(val)
+    if (isNaN(n)) return
+    setPreview(prev => prev!.map((s, i) => i === si ? {
+      ...s,
+      items: s.items.map((item, j) => j === ii ? { ...item, price: n } : item)
+    } : s))
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60" onClick={onClose}>
+      <div
+        className="bg-cream rounded-2xl border-2 border-ink w-full max-w-2xl max-h-[90vh] flex flex-col"
+        style={{ boxShadow: '6px 6px 0 #2A1F1A' }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-ink/10 shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-coral/10 rounded-xl grid place-items-center">
+              <FileText size={18} className="text-coral" />
+            </div>
+            <div>
+              <h2 className="font-display font-black text-xl">Importa da testo</h2>
+              <p className="text-xs text-ink/50 font-semibold">
+                {step === 'input' ? 'Incolla il testo del tuo menu' : 'Verifica e conferma'}
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 hover:bg-ink/10 rounded-lg transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto p-5">
+          {step === 'input' && (
+            <div className="space-y-4">
+              <p className="text-sm font-semibold text-ink/60">
+                Incolla il testo del menu fisico, un PDF copiato, o scrivi liberamente.<br />
+                Es: <span className="text-ink/80 italic">"Antipasti: Bruschetta 6€, Tagliere 12€. Primi: Carbonara 14€..."</span>
+              </p>
+              <textarea
+                className="input resize-none w-full font-mono text-sm"
+                rows={12}
+                value={text}
+                onChange={e => setText(e.target.value)}
+                placeholder={"ANTIPASTI\nBruschetta al pomodoro    6,00€\nTagliere misto            12,00€\n\nPRIMI\nSpaghetti cacio e pepe    14,00€\nRisotto ai funghi         16,00€\n\nSECONDI\n..."}
+                autoFocus
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={() => parseMutation.mutate()}
+                  disabled={!text.trim() || parseMutation.isPending}
+                  className="btn-coral flex-1 py-3 flex items-center justify-center gap-2"
+                >
+                  {parseMutation.isPending ? (
+                    <><Loader2 size={16} className="animate-spin" /> Analisi in corso...</>
+                  ) : (
+                    'Analizza menu →'
+                  )}
+                </button>
+                <button onClick={onClose} className="btn-outline px-5 py-3">Annulla</button>
+              </div>
+            </div>
+          )}
+
+          {step === 'preview' && preview && (
+            <div className="space-y-5">
+              <div className="flex items-center gap-2 text-sm font-bold text-mint bg-mint/10 rounded-xl px-3 py-2">
+                <CheckCircle2 size={16} />
+                Trovate {preview.length} sezioni e {preview.reduce((acc, s) => acc + s.items.length, 0)} piatti. Puoi modificare prima di importare.
+              </div>
+
+              {preview.map((section, si) => (
+                <div key={si} className="border-2 border-ink/10 rounded-xl overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-ink/3">
+                    <h3 className="font-display font-black text-base">{section.name}</h3>
+                    <button onClick={() => removeSection(si)} className="text-xs text-ink/40 hover:text-red-500 transition-colors font-bold">
+                      Rimuovi sezione
+                    </button>
+                  </div>
+                  <div className="divide-y divide-ink/5">
+                    {section.items.map((item, ii) => (
+                      <div key={ii} className="flex items-center gap-3 px-4 py-2.5">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-sm truncate">{item.name}</p>
+                          {item.description && <p className="text-xs text-ink/50 truncate">{item.description}</p>}
+                          {item.allergens.length > 0 && (
+                            <p className="text-xs text-coral/70 font-semibold">{item.allergens.join(', ')}</p>
+                          )}
+                        </div>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={item.price}
+                          onChange={e => editItemPrice(si, ii, e.target.value)}
+                          className="input w-24 text-right font-black text-sm py-1.5"
+                        />
+                        <span className="text-sm font-bold text-ink/50">€</span>
+                        <button onClick={() => removeItem(si, ii)} className="text-ink/30 hover:text-red-500 transition-colors">
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer preview step */}
+        {step === 'preview' && (
+          <div className="flex gap-2 p-5 border-t border-ink/10 shrink-0">
+            <button
+              onClick={() => confirmMutation.mutate()}
+              disabled={confirmMutation.isPending || preview!.length === 0}
+              className="btn-coral flex-1 py-3 flex items-center justify-center gap-2"
+            >
+              {confirmMutation.isPending ? (
+                <><Loader2 size={16} className="animate-spin" /> Importazione...</>
+              ) : (
+                `Importa ${preview!.reduce((acc, s) => acc + s.items.length, 0)} piatti`
+              )}
+            </button>
+            <button onClick={() => setStep('input')} className="btn-outline px-5 py-3">← Modifica testo</button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function MenuPage() {
@@ -239,6 +414,7 @@ export default function MenuPage() {
   const [showAddSection, setShowAddSection] = useState(false)
   const [newSectionName, setNewSectionName] = useState('')
   const [wizardDone, setWizardDone] = useState(false)
+  const [showImport, setShowImport] = useState(false)
 
   const { data: menus = [], isLoading: loadingMenus } = useQuery({
     queryKey: ['menus'],
@@ -318,12 +494,20 @@ export default function MenuPage() {
           <h1 className="font-display font-black text-3xl">Menu</h1>
           <p className="text-ink/60 font-semibold mt-1">{fullMenu?.name}</p>
         </div>
-        <button
-          onClick={() => setShowAddSection(true)}
-          className="btn-outline flex items-center gap-2 text-sm px-4 py-2.5"
-        >
-          <Plus size={14} /> Nuova sezione
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowImport(true)}
+            className="btn-outline flex items-center gap-2 text-sm px-4 py-2.5"
+          >
+            <FileText size={14} /> Importa da testo
+          </button>
+          <button
+            onClick={() => setShowAddSection(true)}
+            className="btn-outline flex items-center gap-2 text-sm px-4 py-2.5"
+          >
+            <Plus size={14} /> Nuova sezione
+          </button>
+        </div>
       </div>
 
       {/* Add section inline form */}
@@ -457,6 +641,18 @@ export default function MenuPage() {
           sectionId={itemModal.sectionId}
           item={itemModal.item}
           onClose={() => setItemModal(null)}
+        />
+      )}
+
+      {/* Import text modal */}
+      {showImport && menuId && (
+        <ImportTextModal
+          menuId={menuId}
+          onClose={() => setShowImport(false)}
+          onImported={() => {
+            qc.invalidateQueries({ queryKey: ['menu-full'] })
+            qc.invalidateQueries({ queryKey: ['menus'] })
+          }}
         />
       )}
     </div>
