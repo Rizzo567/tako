@@ -4,8 +4,9 @@ import { useEffect } from 'react'
 import { api } from '@/lib/api'
 import { socket } from '@/lib/socket'
 import { cn } from '@/lib/utils'
-import { Users } from 'lucide-react'
+import { Users, Plus } from 'lucide-react'
 import toast from 'react-hot-toast'
+import Link from 'next/link'
 
 type TableStatus = 'free' | 'occupied' | 'waiting' | 'cleaning' | 'reserved'
 
@@ -53,7 +54,26 @@ export default function SalaPage() {
     free: 'occupied', occupied: 'cleaning', cleaning: 'free', waiting: 'occupied', reserved: 'occupied',
   }
 
-  if (isLoading) return <div className="p-8"><p className="font-display font-black text-xl">Carico sala...</p></div>
+  if (isLoading) return (
+    <div className="p-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <div className="skeleton h-8 w-24 mb-2" />
+          <div className="skeleton h-4 w-48" />
+        </div>
+      </div>
+      {[1, 2].map(i => (
+        <div key={i} className="mb-8">
+          <div className="skeleton h-6 w-32 mb-4" />
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {Array.from({ length: 6 }).map((_, j) => (
+              <div key={j} className="skeleton h-24 rounded-2xl" />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 
   return (
     <div className="p-8">
@@ -90,6 +110,17 @@ export default function SalaPage() {
           </div>
         </div>
       ))}
+
+      {rooms.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-4xl mb-3">🪑</p>
+          <p className="font-display font-black text-xl text-ink/40 mb-2">Nessuna sala configurata</p>
+          <p className="text-sm text-ink/50 font-semibold mb-5">Crea prima la tua sala nella sezione Gestione Tavoli</p>
+          <Link href="/dashboard/sala/tavoli" className="btn-coral px-6 py-3 inline-flex items-center gap-2">
+            <Plus size={16} /> Gestione Tavoli
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

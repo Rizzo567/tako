@@ -13,6 +13,7 @@
     --ink-soft: #5C4A41;
     --mint: #7FC4A8;
     --sun: #F5C065;
+    --sky: #BDD9E8;
   }
 
   html { scroll-behavior: smooth; }
@@ -65,4 +66,8 @@
   .table-status-waiting { @apply bg-coral/20 text-coral-deep; }
   .table-status-cleaning { @apply bg-sky/40 text-ink; }
   .table-status-reserved { @apply bg-mint/30 text-ink; }
+
+  .skeleton {
+    @apply bg-ink/10 rounded-xl animate-pulse;
+  }
 }
