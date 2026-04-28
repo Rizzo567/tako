@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* ── Brand colors ── */
     --coral: #ED7159;
     --coral-deep: #D9533A;
     --coral-soft: #F8B7A6;
@@ -14,14 +15,30 @@
     --mint: #7FC4A8;
     --sun: #F5C065;
     --sky: #BDD9E8;
+
+    /* ── Shadow scale ── */
+    --shadow-sm: 2px 2px 0 rgba(42,31,26,0.12);
+    --shadow-md: 4px 4px 0 rgba(42,31,26,0.15);
+    --shadow-lg: 6px 6px 0 rgba(42,31,26,0.18);
+    --shadow-coral: 0 4px 16px rgba(237,113,89,0.35);
+    --shadow-coral-hard: 4px 4px 0 #D9533A;
+
+    /* ── Border radius scale ── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
   }
 
   html { scroll-behavior: smooth; }
-
   * { box-sizing: border-box; }
+  body { -webkit-tap-highlight-color: transparent; }
 }
 
 @layer components {
+
+  /* ── Buttons ── */
+
   .btn-coral {
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-black text-white bg-coral hover:bg-coral-deep transition-all active:scale-95;
     box-shadow: 0 4px 0 var(--coral-deep);
@@ -32,28 +49,82 @@
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-black border-2 border-ink bg-white hover:bg-cream transition-all active:scale-95;
     box-shadow: 3px 3px 0 var(--ink);
   }
+  .btn-outline:active { box-shadow: none; transform: translate(3px, 3px); }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-black text-ink/70 hover:bg-ink/5 hover:text-ink transition-all active:scale-95;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-black text-white bg-red-500 hover:bg-red-600 transition-all active:scale-95;
+    box-shadow: 0 4px 0 #b91c1c;
+  }
+  .btn-danger:active { box-shadow: none; transform: translateY(4px); }
+
+  /* ── Cards ── */
 
   .card {
     @apply bg-white rounded-2xl border-2 border-ink p-5;
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: var(--shadow-md);
   }
 
   .card-sm {
     @apply bg-white rounded-xl border-2 border-ink p-3;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: var(--shadow-sm);
   }
 
-  .badge {
-    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black;
+  .card-flat {
+    @apply bg-white rounded-2xl border-2 border-ink/15 p-5;
   }
+
+  .card-coral {
+    @apply bg-coral/5 rounded-2xl border-2 border-coral/30 p-5;
+    box-shadow: var(--shadow-coral);
+  }
+
+  /* ── Forms ── */
 
   .input {
     @apply w-full px-4 py-3 rounded-xl border-2 border-ink/20 bg-white font-body font-semibold focus:outline-none focus:border-coral transition-colors;
   }
 
+  .input-error {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-red-400 bg-red-50 font-body font-semibold focus:outline-none focus:border-red-500 transition-colors;
+  }
+
   .label {
     @apply block text-sm font-display font-black text-ink/70 mb-1.5;
   }
+
+  .label-error {
+    @apply block text-xs font-bold text-red-500 mt-1;
+  }
+
+  /* ── Badges ── */
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-mint/20 text-mint;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-sun/30 text-ink;
+  }
+
+  .badge-error {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-red-100 text-red-600;
+  }
+
+  /* ── Skeleton ── */
+
+  .skeleton {
+    @apply bg-ink/10 rounded-xl animate-pulse;
+  }
+
+  /* ── Sidebar ── */
 
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 rounded-xl font-display font-black text-sm transition-all;
@@ -61,13 +132,25 @@
   .sidebar-link:hover { @apply bg-coral/10 text-coral-deep; }
   .sidebar-link.active { @apply bg-coral text-white; box-shadow: 3px 3px 0 var(--coral-deep); }
 
+  /* ── Table status ── */
+
   .table-status-free { @apply bg-ink/5 text-ink/60; }
   .table-status-occupied { @apply bg-sun/30 text-ink; }
   .table-status-waiting { @apply bg-coral/20 text-coral-deep; }
   .table-status-cleaning { @apply bg-sky/40 text-ink; }
   .table-status-reserved { @apply bg-mint/30 text-ink; }
 
-  .skeleton {
-    @apply bg-ink/10 rounded-xl animate-pulse;
+  /* ── Page header ── */
+
+  .page-header {
+    @apply flex items-center justify-between mb-8;
+  }
+
+  .page-title {
+    @apply font-display font-black text-3xl;
+  }
+
+  .page-subtitle {
+    @apply text-ink/60 font-semibold mt-1;
   }
 }
