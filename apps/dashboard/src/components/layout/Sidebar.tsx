@@ -75,6 +75,7 @@ const bottomLinks = [
 const salaSubLinks = [
   { href: '/dashboard/sala', label: 'Sala Live', exact: true },
   { href: '/dashboard/sala/tavoli', label: 'Gestione Tavoli' },
+  { href: '/dashboard/sala/qr', label: 'QR Codes' },
 ]
 
 // ─── Sidebar inner content ────────────────────────────────────────────────────
