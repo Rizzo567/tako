@@ -2,69 +2,297 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { api } from '@/lib/api'
-import { useAuthStore } from '@/lib/store'
-import { Check, ChefHat, Grid3X3, QrCode, Users } from 'lucide-react'
+import { useAuthStore, useOnboardingStore } from '@/lib/store'
+import { Building2, Grid3X3, ChefHat, QrCode, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const STEPS = [
-  { id: 'menu', label: 'Crea il menu', desc: 'Aggiungi almeno una sezione e un piatto', icon: ChefHat },
-  { id: 'tables', label: 'Configura i tavoli', desc: 'Aggiungi le tue sale e i tavoli', icon: Grid3X3 },
-  { id: 'qr', label: 'Stampa i QR', desc: 'Scarica i QR code per i tavoli', icon: QrCode },
-  { id: 'staff', label: 'Invita il team', desc: 'Aggiungi camerieri e cuochi', icon: Users },
+  {
+    id: 'restaurant',
+    label: 'Dati ristorante',
+    desc: 'Nome, contatti e personalizzazione del tuo locale',
+    icon: Building2,
+  },
+  {
+    id: 'tables',
+    label: 'Configura i tavoli',
+    desc: 'Aggiungi sale e tavoli per gestire la sala in tempo reale',
+    icon: Grid3X3,
+    href: '/dashboard/sala/tavoli',
+  },
+  {
+    id: 'menu',
+    label: 'Crea il menu',
+    desc: 'Aggiungi sezioni, piatti e prezzi per iniziare a ricevere ordini',
+    icon: ChefHat,
+    href: '/dashboard/menu',
+  },
+  {
+    id: 'qr',
+    label: 'Stampa i QR',
+    desc: 'Scarica i QR code da mettere sui tavoli — i clienti ordinano da soli',
+    icon: QrCode,
+    href: '/dashboard/sala/tavoli',
+  },
+  {
+    id: 'staff',
+    label: 'Invita il team',
+    desc: 'Aggiungi camerieri, cuochi e cassieri (opzionale)',
+    icon: Users,
+    href: '/dashboard/staff',
+  },
 ]
 
 export default function OnboardingPage() {
-  const [completed, setCompleted] = useState<Set<string>>(new Set())
   const router = useRouter()
   const { restaurant } = useAuthStore()
+  const { completedSteps, completeStep, isStepComplete } = useOnboardingStore()
 
-  function complete(id: string) {
-    setCompleted(s => new Set([...s, id]))
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [saving, setSaving] = useState(false)
+  const [form, setForm] = useState({
+    name: restaurant?.name ?? '',
+    phone: '',
+    address: '',
+    primaryColor: '#ED7159',
+  })
+
+  const currentStep = STEPS[currentIndex]
+  const progress = Math.round((completedSteps.length / STEPS.length) * 100)
+  const allSeen = currentIndex >= STEPS.length - 1
+
+  function advance() {
+    if (currentIndex < STEPS.length - 1) setCurrentIndex(i => i + 1)
   }
 
-  function goToDashboard() {
+  function skip() {
+    advance()
+  }
+
+  async function submitRestaurant() {
+    setSaving(true)
+    try {
+      await api.patch('/restaurants/me', {
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        primaryColor: form.primaryColor,
+      })
+      completeStep('restaurant')
+      toast.success('Dati salvati!')
+      advance()
+    } catch {
+      toast.error('Errore nel salvataggio')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  function markAndAdvance() {
+    completeStep(currentStep.id)
+    advance()
+  }
+
+  function finish() {
     router.push('/dashboard')
     toast.success('Benvenuto in Tako! Sei pronto a ricevere ordini.')
   }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center p-6">
-      <div className="max-w-lg w-full">
-        <div className="text-center mb-10">
+    <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-6">
+      <div className="max-w-2xl w-full">
+        <div className="text-center mb-8">
           <p className="text-5xl mb-3">🐙</p>
-          <h1 className="font-display font-black text-4xl mb-2">Ciao, {restaurant?.name}!</h1>
-          <p className="text-ink/60 font-semibold">Completa il setup in 4 passi</p>
+          <h1 className="font-display font-black text-4xl text-ink mb-1">Configura Tako</h1>
+          <p className="text-ink/60 font-body">5 passi per iniziare</p>
         </div>
 
-        <div className="space-y-3 mb-8">
-          {STEPS.map(step => {
-            const done = completed.has(step.id)
-            return (
-              <div key={step.id} className={`card flex items-center gap-4 ${done ? 'opacity-60' : ''}`}>
-                <div className={`w-12 h-12 rounded-2xl grid place-items-center shrink-0 ${done ? 'bg-mint text-white' : 'bg-coral/10 text-coral'}`}>
-                  {done ? <Check size={22} /> : <step.icon size={22} />}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-display font-black text-sm text-ink">
+              Passo {currentIndex + 1} di {STEPS.length}
+            </span>
+            <span className="font-body text-sm text-ink/60">{progress}% completato</span>
+          </div>
+          <div className="h-2 bg-ink/10 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-coral rounded-full transition-all duration-500"
+              style={{ width: `${Math.max(((currentIndex + 1) / STEPS.length) * 100, 5)}%` }}
+            />
+          </div>
+          <div className="flex mt-3 gap-2">
+            {STEPS.map((s, i) => (
+              <button
+                key={s.id}
+                onClick={() => setCurrentIndex(i)}
+                className={`flex-1 h-1.5 rounded-full transition-colors ${
+                  i <= currentIndex ? 'bg-coral' : 'bg-ink/10'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="card p-8">
+          {currentStep.id === 'restaurant' ? (
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-coral/10 grid place-items-center">
+                  <Building2 size={22} className="text-coral" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-display font-black">{step.label}</p>
-                  <p className="text-sm text-ink/60 font-semibold">{step.desc}</p>
+                <div>
+                  <h2 className="font-display font-black text-2xl text-ink">Dati ristorante</h2>
+                  <p className="text-ink/60 font-body text-sm">Nome, contatti e personalizzazione</p>
                 </div>
-                {!done && (
-                  <a
-                    href={step.id === 'menu' ? '/dashboard/menu' : step.id === 'tables' ? '/dashboard/sala' : step.id === 'staff' ? '/dashboard/staff' : '#'}
-                    onClick={() => setTimeout(() => complete(step.id), 3000)}
-                    className="btn-coral text-sm px-4 py-2 shrink-0"
-                  >
-                    Vai →
-                  </a>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="label">Nome del ristorante</label>
+                  <input
+                    className="input"
+                    value={form.name}
+                    onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                    placeholder="Es. Osteria Da Mario"
+                  />
+                </div>
+                <div>
+                  <label className="label">Telefono</label>
+                  <input
+                    className="input"
+                    value={form.phone}
+                    onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                    placeholder="+39 02 1234567"
+                    type="tel"
+                  />
+                </div>
+                <div>
+                  <label className="label">Indirizzo</label>
+                  <input
+                    className="input"
+                    value={form.address}
+                    onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
+                    placeholder="Via Roma 1, Milano"
+                  />
+                </div>
+                <div>
+                  <label className="label">Colore principale</label>
+                  <div className="flex items-center gap-3 mt-1">
+                    <input
+                      type="color"
+                      value={form.primaryColor}
+                      onChange={e => setForm(f => ({ ...f, primaryColor: e.target.value }))}
+                      className="w-12 h-12 rounded-xl border-2 border-ink/10 cursor-pointer bg-transparent"
+                    />
+                    <div className="flex gap-2">
+                      {['#ED7159', '#7FC4A8', '#F5C065', '#2A1F1A'].map(c => (
+                        <button
+                          key={c}
+                          onClick={() => setForm(f => ({ ...f, primaryColor: c }))}
+                          className="w-8 h-8 rounded-lg border-2 transition-transform hover:scale-110"
+                          style={{
+                            backgroundColor: c,
+                            borderColor: form.primaryColor === c ? '#2A1F1A' : 'transparent',
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <span className="font-body text-sm text-ink/60">{form.primaryColor}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3 mt-8">
+                <button
+                  onClick={skip}
+                  className="btn-ghost flex-1"
+                >
+                  Salta →
+                </button>
+                <button
+                  onClick={submitRestaurant}
+                  disabled={saving || !form.name.trim()}
+                  className="btn-coral flex-1 px-8 disabled:opacity-50"
+                >
+                  {saving ? 'Salvataggio…' : 'Salva e avanti →'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-coral/10 grid place-items-center">
+                  <currentStep.icon size={22} className="text-coral" />
+                </div>
+                <div>
+                  <h2 className="font-display font-black text-2xl text-ink">{currentStep.label}</h2>
+                  <p className="text-ink/60 font-body text-sm">{currentStep.desc}</p>
+                </div>
+                {isStepComplete(currentStep.id) && (
+                  <span className="ml-auto badge-success">Fatto</span>
                 )}
               </div>
-            )
-          })}
+
+              <div className="bg-coral/5 border border-coral/20 rounded-2xl p-5 mb-6">
+                <p className="font-body text-ink/80 text-sm leading-relaxed">
+                  {currentStep.id === 'tables' &&
+                    'Dalla sezione Sala potrai aggiungere le tue sale, i tavoli e i posti. Ogni tavolo avrà un QR code univoco per far ordinare i clienti.'}
+                  {currentStep.id === 'menu' &&
+                    'Crea sezioni come "Antipasti", "Primi", "Bevande" e aggiungi i tuoi piatti con foto, descrizione e prezzo. I clienti vedranno il menu in tempo reale.'}
+                  {currentStep.id === 'qr' &&
+                    'I QR code si trovano nella sezione Tavoli. Stampali, plastificali e mettili su ogni tavolo — i clienti li scansionano per ordinare senza app.'}
+                  {currentStep.id === 'staff' &&
+                    'Invita camerieri, cuochi e cassieri. Ogni ruolo ha una vista ottimizzata: sala, KDS cucina o cassa. Puoi farlo anche dopo.'}
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                {currentIndex > 0 && (
+                  <button
+                    onClick={() => setCurrentIndex(i => i - 1)}
+                    className="btn-ghost px-4"
+                  >
+                    ← Indietro
+                  </button>
+                )}
+                <a
+                  href={currentStep.href}
+                  className="btn-outline flex-1 text-center"
+                >
+                  Vai →
+                </a>
+                <button
+                  onClick={markAndAdvance}
+                  className="btn-coral flex-1"
+                >
+                  {isStepComplete(currentStep.id) ? 'Avanti →' : 'Segna fatto ✓'}
+                </button>
+              </div>
+
+              {currentStep.id === 'staff' && (
+                <button
+                  onClick={skip}
+                  className="btn-ghost w-full mt-2 text-sm"
+                >
+                  Salta questo passo
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
-        <button onClick={goToDashboard} className="btn-coral w-full py-4 text-lg">
-          {completed.size >= 2 ? 'Inizia a usare Tako →' : 'Salta e vai alla dashboard →'}
-        </button>
+        {allSeen && (
+          <button
+            onClick={finish}
+            className="btn-coral w-full py-4 text-lg mt-4"
+          >
+            Inizia a usare Tako →
+          </button>
+        )}
+
+        <div className="text-center mt-6">
+          <button onClick={finish} className="btn-ghost text-sm text-ink/40">
+            Salta tutto e vai alla dashboard
+          </button>
+        </div>
       </div>
     </div>
   )

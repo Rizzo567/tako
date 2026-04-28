@@ -39,3 +39,22 @@ export const useOrdersStore = create<OrdersState>((set) => ({
   setPendingCount: (n) => set({ pendingCount: n }),
   increment: () => set((s) => ({ pendingCount: s.pendingCount + 1 })),
 }))
+
+interface OnboardingState {
+  completedSteps: string[]
+  completeStep: (id: string) => void
+  isStepComplete: (id: string) => boolean
+  resetOnboarding: () => void
+}
+
+export const useOnboardingStore = create<OnboardingState>()(
+  persist(
+    (set, get) => ({
+      completedSteps: [],
+      completeStep: (id) => set(s => ({ completedSteps: [...new Set([...s.completedSteps, id])] })),
+      isStepComplete: (id) => get().completedSteps.includes(id),
+      resetOnboarding: () => set({ completedSteps: [] }),
+    }),
+    { name: 'tako-onboarding' }
+  )
+)
