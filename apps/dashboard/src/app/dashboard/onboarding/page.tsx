@@ -118,7 +118,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-6">
       <div className="max-w-2xl w-full">
         <div className="text-center mb-8">
-          <Image src="/tako-cloche.png" alt="Tako" width={80} height={80} className="mx-auto mb-3" />
+          <Image src="/tako-cloche.png" alt="Tako" width={80} height={80} className="mx-auto mb-3" style={{ mixBlendMode: 'multiply' }} />
           <h1 className="font-display font-black text-4xl text-ink mb-1">Configura Tako</h1>
           <p className="text-ink/60 font-body">{STEPS.length} passi per iniziare</p>
         </div>
