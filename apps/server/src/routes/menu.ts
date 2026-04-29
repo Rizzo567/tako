@@ -6,7 +6,10 @@ import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import OpenAI from 'openai'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const getOpenAI = () => {
+  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set')
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+}
 
 export async function menuRoutes(fastify: FastifyInstance) {
   // Get all menus for restaurant
@@ -131,6 +134,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
     if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
 
+    const openai = getOpenAI()
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       response_format: { type: 'json_object' },

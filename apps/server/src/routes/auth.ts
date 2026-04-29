@@ -60,37 +60,51 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     const { restaurantName, restaurantSlug, name, email, password } = body.data
 
-    // Check slug unique
-    const existing = await db.select().from(restaurants).where(eq(restaurants.slug, restaurantSlug)).limit(1)
-    if (existing.length) return reply.code(409).send({ error: { code: 'CONFLICT', message: 'Slug already taken' } })
+    try {
+      // Check slug unique
+      const existing = await db.select().from(restaurants).where(eq(restaurants.slug, restaurantSlug)).limit(1)
+      if (existing.length) return reply.code(409).send({ error: { code: 'CONFLICT', message: 'Slug già in uso. Scegli un altro.' } })
 
-    const passwordHash = await bcrypt.hash(password, 12)
+      // Check email unique
+      const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1)
+      if (existingUser.length) return reply.code(409).send({ error: { code: 'EMAIL_TAKEN', message: 'Email già registrata.' } })
 
-    const [restaurant] = await db.insert(restaurants).values({
-      name: restaurantName,
-      slug: restaurantSlug,
-      plan: 'free',
-    }).returning()
+      const passwordHash = await bcrypt.hash(password, 12)
 
-    const [user] = await db.insert(users).values({
-      restaurantId: restaurant!.id,
-      name,
-      email,
-      passwordHash,
-      role: 'owner',
-    }).returning()
+      const [restaurant] = await db.insert(restaurants).values({
+        name: restaurantName,
+        slug: restaurantSlug,
+        plan: 'free',
+      }).returning()
 
-    const token = nanoid(64)
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-    await db.insert(sessions).values({ userId: user!.id, token, expiresAt })
+      const [user] = await db.insert(users).values({
+        restaurantId: restaurant!.id,
+        name,
+        email,
+        passwordHash,
+        role: 'owner',
+      }).returning()
 
-    return reply.code(201).send({
-      data: {
-        token,
-        user: { id: user!.id, name: user!.name, email: user!.email, role: user!.role },
-        restaurant: { id: restaurant!.id, name: restaurant!.name, slug: restaurant!.slug },
-      },
-    })
+      const token = nanoid(64)
+      const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      await db.insert(sessions).values({ userId: user!.id, token, expiresAt })
+
+      return reply.code(201).send({
+        data: {
+          token,
+          user: { id: user!.id, name: user!.name, email: user!.email, role: user!.role },
+          restaurant: { id: restaurant!.id, name: restaurant!.name, slug: restaurant!.slug },
+        },
+      })
+    } catch (err: any) {
+      fastify.log.error({ err }, 'Registration error')
+      // Postgres unique violation
+      if (err?.code === '23505') {
+        if (err.constraint?.includes('slug')) return reply.code(409).send({ error: { code: 'CONFLICT', message: 'Slug già in uso. Scegli un altro.' } })
+        if (err.constraint?.includes('email')) return reply.code(409).send({ error: { code: 'EMAIL_TAKEN', message: 'Email già registrata.' } })
+      }
+      return reply.code(500).send({ error: { code: 'SERVER_ERROR', message: 'Errore interno. Riprova tra qualche secondo.' } })
+    }
   })
 
   // Login

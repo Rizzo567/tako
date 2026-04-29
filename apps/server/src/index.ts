@@ -21,7 +21,7 @@ import { staffRoutes } from './routes/staff.js'
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET'] ?? 'tako-super-secret-change-in-production'
 
-const fastify = Fastify({ logger: false })
+const fastify = Fastify({ logger: { level: 'error' } })
 
 // Security headers
 await fastify.register(helmet, { contentSecurityPolicy: false })
