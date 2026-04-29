@@ -1,12 +1,27 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { api } from '@/lib/api'
 import { useAuthStore, useOnboardingStore } from '@/lib/store'
 import { Building2, Grid3X3, ChefHat, QrCode, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
 
+const DISCOVERY_OPTIONS = [
+  { value: 'passaparola', label: '🤝 Passaparola / Amici' },
+  { value: 'google', label: '🔍 Google / Ricerca online' },
+  { value: 'social', label: '📱 Instagram / TikTok / Social' },
+  { value: 'fiera', label: '🏛️ Fiera o evento' },
+  { value: 'altro', label: '💬 Altro' },
+]
+
 const STEPS = [
+  {
+    id: 'discovery',
+    label: 'Come ci hai conosciuto?',
+    desc: 'Aiutaci a capire come stai trovando Tako',
+    icon: Users,
+  },
   {
     id: 'restaurant',
     label: 'Dati ristorante',
@@ -50,6 +65,7 @@ export default function OnboardingPage() {
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [saving, setSaving] = useState(false)
+  const [discoverySource, setDiscoverySource] = useState('')
   const [form, setForm] = useState({
     name: restaurant?.name ?? '',
     phone: '',
@@ -102,9 +118,9 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-6">
       <div className="max-w-2xl w-full">
         <div className="text-center mb-8">
-          <p className="text-5xl mb-3">🐙</p>
+          <Image src="/tako-cloche.png" alt="Tako" width={80} height={80} className="mx-auto mb-3" />
           <h1 className="font-display font-black text-4xl text-ink mb-1">Configura Tako</h1>
-          <p className="text-ink/60 font-body">5 passi per iniziare</p>
+          <p className="text-ink/60 font-body">{STEPS.length} passi per iniziare</p>
         </div>
 
         <div className="mb-8">
@@ -134,7 +150,47 @@ export default function OnboardingPage() {
         </div>
 
         <div className="card p-8">
-          {currentStep.id === 'restaurant' ? (
+          {currentStep.id === 'discovery' ? (
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-coral/10 grid place-items-center text-2xl">🤝</div>
+                <div>
+                  <h2 className="font-display font-black text-2xl text-ink">Come ci hai conosciuto?</h2>
+                  <p className="text-ink/60 font-body text-sm">Ci aiuta a migliorare Tako</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-3">
+                {DISCOVERY_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setDiscoverySource(opt.value)}
+                    className={`w-full text-left px-5 py-4 rounded-2xl border-2 transition-all font-display font-black text-base ${
+                      discoverySource === opt.value
+                        ? 'border-coral bg-coral/5 text-coral-deep'
+                        : 'border-ink/10 bg-white hover:border-coral/40 text-ink'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-3 mt-8">
+                <button onClick={skip} className="btn-ghost flex-1">Preferisco non dirlo →</button>
+                <button
+                  onClick={async () => {
+                    if (discoverySource) {
+                      try { await api.patch('/restaurants/me', { settings: { discoverySource } }) } catch {}
+                    }
+                    completeStep('discovery')
+                    advance()
+                  }}
+                  className="btn-coral flex-1"
+                >
+                  {discoverySource ? 'Avanti →' : 'Salta →'}
+                </button>
+              </div>
+            </div>
+          ) : currentStep.id === 'restaurant' ? (
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-coral/10 grid place-items-center">

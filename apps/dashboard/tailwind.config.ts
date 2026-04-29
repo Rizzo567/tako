@@ -13,8 +13,8 @@ export default {
         sky: '#BDD9E8',
       },
       fontFamily: {
-        display: ['Nunito', 'system-ui', 'sans-serif'],
-        body: ['Quicksand', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         sm: '8px',

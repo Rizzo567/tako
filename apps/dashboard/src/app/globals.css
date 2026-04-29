@@ -4,6 +4,10 @@
 
 @layer base {
   :root {
+    /* ── Fonts (tako default) ── */
+    --font-display: var(--font-nunito);
+    --font-body: var(--font-quicksand);
+
     /* ── Brand colors ── */
     --coral: #ED7159;
     --coral-deep: #D9533A;
@@ -33,6 +37,18 @@
   html { scroll-behavior: smooth; }
   * { box-sizing: border-box; }
   body { -webkit-tap-highlight-color: transparent; }
+
+  /* ── Premium theme overrides ── */
+  [data-theme="premium"] {
+    --font-display: var(--font-dm-serif);
+    --font-body: var(--font-dm-sans);
+    --shadow-sm: 0 1px 4px rgba(42,31,26,.07);
+    --shadow-md: 0 2px 16px rgba(42,31,26,.07), 0 1px 3px rgba(42,31,26,.04);
+    --shadow-lg: 0 4px 24px rgba(42,31,26,.09), 0 2px 8px rgba(42,31,26,.05);
+    --shadow-coral: 0 2px 14px rgba(237,113,89,.38);
+    --shadow-coral-hard: 0 2px 14px rgba(237,113,89,.38);
+  }
+  [data-theme="premium"] body { background-color: #FAFAF8; }
 }
 
 @layer components {
@@ -154,3 +170,64 @@
     @apply text-ink/60 font-semibold mt-1;
   }
 }
+
+/* ── Premium component overrides (outside @layer to ensure specificity) ── */
+
+[data-theme="premium"] .btn-coral {
+  border-radius: 99px;
+  box-shadow: 0 2px 14px rgba(237,113,89,.38);
+  font-weight: 600;
+}
+[data-theme="premium"] .btn-coral:active {
+  box-shadow: 0 1px 6px rgba(237,113,89,.25) !important;
+  transform: translateY(1px) !important;
+}
+[data-theme="premium"] .btn-outline {
+  border-radius: 99px;
+  border-width: 1.5px;
+  border-color: rgba(42,31,26,.22);
+  box-shadow: none;
+  font-weight: 500;
+}
+[data-theme="premium"] .btn-outline:active {
+  box-shadow: none !important;
+  transform: scale(0.98) !important;
+}
+[data-theme="premium"] .btn-ghost { border-radius: 99px; font-weight: 500; }
+[data-theme="premium"] .btn-danger {
+  border-radius: 99px;
+  box-shadow: 0 2px 10px rgba(185,28,28,.3);
+}
+
+[data-theme="premium"] .card {
+  border-width: 1px;
+  border-color: #EDE9E4;
+  box-shadow: 0 2px 16px rgba(42,31,26,.06), 0 1px 3px rgba(42,31,26,.04);
+}
+[data-theme="premium"] .card-sm {
+  border-width: 1px;
+  border-color: #EDE9E4;
+  box-shadow: 0 1px 4px rgba(42,31,26,.06);
+}
+
+[data-theme="premium"] .input {
+  border-width: 1.5px;
+  border-color: #DDD8D3;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+
+[data-theme="premium"] .label { font-weight: 500; letter-spacing: .02em; }
+
+[data-theme="premium"] .sidebar-link { font-weight: 500; }
+[data-theme="premium"] .sidebar-link:hover { background: rgba(42,31,26,.07); color: #D9533A; }
+[data-theme="premium"] .sidebar-link.active {
+  background: rgba(237,113,89,.12);
+  color: #D9533A;
+  box-shadow: none;
+  border-left: 3px solid #ED7159;
+  padding-left: calc(1rem - 3px);
+}
+
+[data-theme="premium"] .badge { font-weight: 500; letter-spacing: .02em; }
+[data-theme="premium"] .skeleton { border-radius: 8px; }

@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/lib/store'
 import toast from 'react-hot-toast'
@@ -35,6 +36,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-cream flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
+          <Image src="/tako-cloche.png" alt="Tako" width={80} height={80} className="mx-auto mb-3" />
           <h1 className="font-display font-black text-4xl text-ink mb-2">Tako</h1>
           <p className="text-ink/60 font-semibold">Crea il tuo ristorante digitale</p>
         </div>

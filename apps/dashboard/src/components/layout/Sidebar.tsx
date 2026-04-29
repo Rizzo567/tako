@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, UtensilsCrossed, Grid3X3, ShoppingCart, Receipt,
@@ -91,12 +92,17 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       {/* Logo */}
-      <div className="p-5 border-b border-white/10">
-        <div className="flex items-center gap-2">
-          <span className="font-display font-black text-2xl text-cream">Tako</span>
-          <span className="text-xs bg-coral px-2 py-0.5 rounded-full text-white font-black">PRO</span>
+      <div className="p-4 border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <Image src="/tako-cloche.png" alt="Tako" width={40} height={40} className="flex-shrink-0" />
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-display font-black text-xl text-cream leading-none">Tako</span>
+              <span className="text-xs bg-coral px-1.5 py-0.5 rounded-full text-white font-black leading-none">PRO</span>
+            </div>
+            <p className="text-xs text-cream/60 font-semibold mt-0.5 truncate max-w-[140px]">{restaurant?.name}</p>
+          </div>
         </div>
-        <p className="text-xs text-cream/60 font-semibold mt-1 truncate">{restaurant?.name}</p>
       </div>
 
       {/* Nav */}

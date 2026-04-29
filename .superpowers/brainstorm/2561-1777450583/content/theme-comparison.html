@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tako vs Premium — Theme Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Quicksand:wght@500;600&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f5f5; font-family: 'DM Sans', sans-serif; padding: 32px 24px; }
+
+h1 { text-align: center; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 600; color: #333; margin-bottom: 8px; }
+.desc { text-align: center; color: #777; font-size: 14px; margin-bottom: 32px; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1100px; margin: 0 auto; }
+
+/* ── LABEL ── */
+.theme-label {
+  text-align: center; font-size: 13px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: #888; margin-bottom: 16px;
+}
+.theme-label span {
+  display: inline-block; background: #fff; border: 1px solid #e0e0e0;
+  padding: 4px 16px; border-radius: 20px;
+}
+
+/* ══════════════════════════════════════
+   TAKO THEME
+══════════════════════════════════════ */
+.tako { background: #FFF8F3; border-radius: 20px; padding: 28px; border: 2px solid #2A1F1A; }
+
+/* fonts */
+.tako .t-heading { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 24px; color: #2A1F1A; }
+.tako .t-sub    { font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 14px; color: #5C4A41; margin-top: 4px; }
+
+/* section */
+.tako .section { margin-bottom: 28px; }
+.tako .section-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #2A1F1A99; margin-bottom: 12px; }
+
+/* buttons */
+.tako .btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; color: #fff;
+  background: #ED7159;
+  box-shadow: 0 4px 0 #D9533A;
+  transition: all .15s;
+}
+.tako .btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 12px; border: 2px solid #2A1F1A; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; color: #2A1F1A;
+  background: #fff;
+  box-shadow: 3px 3px 0 #2A1F1A;
+}
+.tako .btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; color: #5C4A41;
+  background: transparent;
+}
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* card */
+.tako .card {
+  background: #fff; border-radius: 16px; border: 2px solid #2A1F1A;
+  padding: 18px 20px;
+  box-shadow: 4px 4px 0 rgba(42,31,26,0.15);
+  margin-bottom: 12px;
+}
+.tako .card-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 16px; color: #2A1F1A; }
+.tako .card-sub   { font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; color: #5C4A41; margin-top: 3px; }
+.tako .card-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 11px;
+  background: #7FC4A8/20; color: #7FC4A8; background-color: rgba(127,196,168,.2);
+  margin-top: 8px;
+}
+
+/* input */
+.tako .input {
+  width: 100%; padding: 12px 16px; border-radius: 12px;
+  border: 2px solid rgba(42,31,26,.2); background: #fff;
+  font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 14px; color: #2A1F1A;
+  outline: none;
+}
+.tako .label { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 12px; color: #2A1F1A99; margin-bottom: 6px; display: block; }
+
+/* sidebar item */
+.tako .sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 12px; margin-bottom: 4px;
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 14px; color: #2A1F1A;
+  cursor: pointer;
+}
+.tako .sidebar-item.active { background: #ED7159; color: #fff; box-shadow: 3px 3px 0 #D9533A; }
+.tako .sidebar-item:not(.active):hover { background: rgba(237,113,89,.1); color: #D9533A; }
+
+/* ══════════════════════════════════════
+   PREMIUM THEME
+══════════════════════════════════════ */
+.premium { background: #FAFAF8; border-radius: 20px; padding: 28px; border: 1px solid #E8E4DF; }
+
+/* fonts */
+.premium .t-heading { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 26px; color: #2A1F1A; letter-spacing: -.3px; }
+.premium .t-sub    { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 14px; color: #7A6E69; margin-top: 5px; }
+
+/* section */
+.premium .section { margin-bottom: 28px; }
+.premium .section-title { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: #A09890; margin-bottom: 12px; }
+
+/* buttons */
+.premium .btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px; border-radius: 99px; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; color: #fff;
+  background: #ED7159;
+  box-shadow: 0 2px 12px rgba(237,113,89,.4);
+  transition: all .2s;
+}
+.premium .btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 22px; border-radius: 99px; border: 1.5px solid rgba(42,31,26,.25); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; color: #2A1F1A;
+  background: transparent;
+}
+.premium .btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 99px; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; color: #7A6E69;
+  background: transparent;
+}
+
+/* card */
+.premium .card {
+  background: #fff; border-radius: 16px; border: 1px solid #EDE9E4;
+  padding: 20px 22px;
+  box-shadow: 0 2px 16px rgba(42,31,26,.06), 0 1px 3px rgba(42,31,26,.04);
+  margin-bottom: 12px;
+}
+.premium .card-title { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 17px; color: #2A1F1A; letter-spacing: -.2px; }
+.premium .card-sub   { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 13px; color: #7A6E69; margin-top: 4px; }
+.premium .card-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 6px;
+  font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 11px;
+  background: rgba(127,196,168,.15); color: #4A9E82;
+  margin-top: 10px; letter-spacing: .02em;
+}
+
+/* input */
+.premium .input {
+  width: 100%; padding: 11px 16px; border-radius: 10px;
+  border: 1.5px solid #DDD8D3; background: #fff;
+  font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 14px; color: #2A1F1A;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.premium .label { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 12px; color: #7A6E69; margin-bottom: 6px; display: block; letter-spacing: .02em; }
+
+/* sidebar item */
+.premium .sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-radius: 10px; margin-bottom: 3px;
+  font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; color: #5C4A41;
+  cursor: pointer;
+}
+.premium .sidebar-item.active {
+  background: rgba(237,113,89,.1); color: #D9533A;
+  border-left: 3px solid #ED7159;
+  padding-left: 11px;
+}
+.premium .sidebar-item:not(.active):hover { background: #F5F0EC; }
+
+/* dot icon */
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<h1>Confronto temi — Tako Dashboard</h1>
+<p class="desc">Stessi colori, due personalità. Clicca su quello che preferisci.</p>
+
+<div class="split">
+
+  <!-- TAKO -->
+  <div>
+    <div class="theme-label"><span>🐙 Tako — attuale</span></div>
+    <div class="tako" id="tako-card" onclick="selectTheme('tako')" style="cursor:pointer; transition: outline .15s;">
+
+      <div class="section">
+        <div class="t-heading">Buongiorno, Marco</div>
+        <div class="t-sub">Oggi hai 12 ordini aperti · 3 tavoli occupati</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Navigazione</div>
+        <div class="sidebar-item active">🏠 Dashboard</div>
+        <div class="sidebar-item">🪑 Sala</div>
+        <div class="sidebar-item">📋 Ordini</div>
+        <div class="sidebar-item">🍽️ Menu</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Azioni rapide</div>
+        <div class="btn-row">
+          <button class="btn-primary">+ Nuovo ordine</button>
+          <button class="btn-secondary">Gestisci tavoli</button>
+          <button class="btn-ghost">Vedi tutto</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ordine recente</div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div class="card-title">Tavolo 4 — Ordine #88</div>
+              <div class="card-sub">Carbonara × 2 · Tiramisù × 1 · Acqua</div>
+            </div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;color:#ED7159;">€ 34,50</div>
+          </div>
+          <span class="card-badge">✓ Pronto</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Cerca tavolo</div>
+        <label class="label">Numero tavolo</label>
+        <input class="input" value="Tavolo 4" readonly>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PREMIUM -->
+  <div>
+    <div class="theme-label"><span>✦ Premium — nuovo</span></div>
+    <div class="premium" id="premium-card" onclick="selectTheme('premium')" style="cursor:pointer; transition: outline .15s;">
+
+      <div class="section">
+        <div class="t-heading">Buongiorno, Marco</div>
+        <div class="t-sub">Oggi hai 12 ordini aperti · 3 tavoli occupati</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Navigazione</div>
+        <div class="sidebar-item active">🏠 Dashboard</div>
+        <div class="sidebar-item">🪑 Sala</div>
+        <div class="sidebar-item">📋 Ordini</div>
+        <div class="sidebar-item">🍽️ Menu</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Azioni rapide</div>
+        <div class="btn-row">
+          <button class="btn-primary">+ Nuovo ordine</button>
+          <button class="btn-secondary">Gestisci tavoli</button>
+          <button class="btn-ghost">Vedi tutto</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ordine recente</div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div class="card-title">Tavolo 4 — Ordine #88</div>
+              <div class="card-sub">Carbonara × 2 · Tiramisù × 1 · Acqua</div>
+            </div>
+            <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#ED7159;">€ 34,50</div>
+          </div>
+          <span class="card-badge">✓ Pronto</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Cerca tavolo</div>
+        <label class="label">Numero tavolo</label>
+        <input class="input" value="Tavolo 4" readonly>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div id="selection-msg" style="text-align:center;margin-top:28px;font-family:'DM Sans',sans-serif;font-size:15px;color:#888;min-height:40px;"></div>
+
+<script>
+function selectTheme(t) {
+  document.getElementById('tako-card').style.outline = t==='tako' ? '3px solid #ED7159' : 'none';
+  document.getElementById('premium-card').style.outline = t==='premium' ? '3px solid #ED7159' : 'none';
+  const msg = t === 'tako' ? '🐙 Scelto Tako — stile attuale' : '✦ Scelto Premium — elegante e raffinato';
+  document.getElementById('selection-msg').textContent = msg;
+  document.getElementById('selection-msg').style.color = '#ED7159';
+  document.getElementById('selection-msg').style.fontWeight = '600';
+}
+</script>
+
+</body>
+</html>

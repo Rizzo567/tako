@@ -5,8 +5,10 @@ interface AuthState {
   token: string | null
   user: { id: string; name: string; email: string; role: string } | null
   restaurant: { id: string; name: string; slug: string } | null
+  _hasHydrated: boolean
   setAuth: (token: string, user: AuthState['user'], restaurant: AuthState['restaurant']) => void
   clearAuth: () => void
+  setHasHydrated: (v: boolean) => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -15,6 +17,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       restaurant: null,
+      _hasHydrated: false,
       setAuth: (token, user, restaurant) => {
         localStorage.setItem('tako_token', token)
         set({ token, user, restaurant })
@@ -23,8 +26,28 @@ export const useAuthStore = create<AuthState>()(
         localStorage.removeItem('tako_token')
         set({ token: null, user: null, restaurant: null })
       },
+      setHasHydrated: (v) => set({ _hasHydrated: v }),
     }),
-    { name: 'tako-auth', partialize: (s) => ({ token: s.token, user: s.user, restaurant: s.restaurant }) }
+    {
+      name: 'tako-auth',
+      partialize: (s) => ({ token: s.token, user: s.user, restaurant: s.restaurant }),
+      onRehydrateStorage: () => (state) => { state?.setHasHydrated(true) },
+    }
+  )
+)
+
+interface ThemeState {
+  theme: 'tako' | 'premium'
+  setTheme: (t: 'tako' | 'premium') => void
+}
+
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set) => ({
+      theme: 'tako',
+      setTheme: (theme) => set({ theme }),
+    }),
+    { name: 'tako-theme' }
   )
 )
 
