@@ -156,7 +156,7 @@ function Hero() {
             <div className="absolute w-80 h-80 rounded-full" style={{ background: 'rgba(237,113,89,0.18)', animation: 'pulse-ring 3s ease-out 1s infinite' }} />
           </div>
           <div className="relative float-y">
-            <img src="assets/tako-hello.png" alt="Tako waving" className="mascot-hero w-[520px] max-w-full mx-auto" />
+            <img src="assets/tako-hello.png" alt="Tako waving" className="mascot-hero w-[520px] max-w-full mx-auto" style={{ mixBlendMode: 'multiply' }} />
           </div>
           {/* Floating sparkles instead of white cards */}
           <svg className="absolute top-8 -left-2 w-8 h-8 float-soft hidden md:block" style={{ animationDelay: '-1s' }} viewBox="0 0 32 32"><path d="M16 0 L19 13 L32 16 L19 19 L16 32 L13 19 L0 16 L13 13 Z" fill="var(--coral)" opacity="0.85"/></svg>
