@@ -17,6 +17,7 @@ import { statsRoutes } from './routes/stats.js'
 import { customerRoutes } from './routes/customer.js'
 import { uploadRoutes } from './routes/uploads.js'
 import { staffRoutes } from './routes/staff.js'
+import { insightsRoutes } from './routes/insights.js'
 
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET'] ?? 'tako-super-secret-change-in-production'
@@ -65,6 +66,7 @@ await fastify.register(statsRoutes, { prefix: '/api/stats' })
 await fastify.register(customerRoutes, { prefix: '/api/customer' })
 await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
 await fastify.register(staffRoutes, { prefix: '/api/staff' })
+await fastify.register(insightsRoutes, { prefix: '/api/insights' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()

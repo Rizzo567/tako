@@ -27,8 +27,8 @@ export function requireRole(...roles: string[]) {
   }
 }
 
-declare module 'fastify' {
-  interface FastifyRequest {
-    user?: { id: string; restaurantId: string; name: string; email: string; role: string }
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+    user: { id: string; restaurantId: string; name: string; email: string; role: string }
   }
 }

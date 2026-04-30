@@ -133,3 +133,39 @@ export interface PublicRestaurant {
   languages: string[]
   aiEnabled: boolean
 }
+
+// ——— Menu Engineering / Insights ———
+
+export type MenuQuadrant = 'star' | 'plowhorse' | 'puzzle' | 'dog' | 'unknown'
+
+export interface MenuItemMetrics {
+  menuItemId: string
+  name: string
+  totalQty: number
+  totalRevenue: number
+  avgPrice: number
+  revenueShare: number
+  velocityPerDay: number
+  costPrice: number | null
+  marginPercent: number | null
+  isFeatured: boolean
+  quadrant: MenuQuadrant
+}
+
+export type AiSuggestionType =
+  | 'increase_price'
+  | 'decrease_price'
+  | 'feature'
+  | 'reposition'
+  | 'remove'
+  | 'bundle'
+  | 'cost_check'
+
+export interface AiSuggestion {
+  menuItemId: string
+  itemName: string
+  type: AiSuggestionType
+  action: string
+  reason: string
+  estimatedMonthlyImpact: string
+}

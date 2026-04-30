@@ -1,5 +1,5 @@
 import { pgTable, text, uuid, timestamp, boolean, integer, real, jsonb } from 'drizzle-orm/pg-core'
-import { restaurants } from './restaurants'
+import { restaurants } from './restaurants.js'
 
 export const menus = pgTable('menus', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -41,6 +41,7 @@ export const menuItems = pgTable('menu_items', {
   position: integer('position').default(0).notNull(),
   kitchenStation: text('kitchen_station'),
   prepTimeMinutes: integer('prep_time_minutes').default(10),
+  costPrice: real('cost_price'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })

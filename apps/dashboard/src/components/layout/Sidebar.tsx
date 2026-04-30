@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, UtensilsCrossed, Grid3X3, ShoppingCart, Receipt,
   ChefHat, BarChart3, Package, Users, Settings, LogOut,
-  ChevronDown, ChevronUp, Menu, X,
+  ChevronDown, ChevronUp, Menu, X, Sparkles,
 } from 'lucide-react'
 import { createContext, useContext, useState, ReactNode } from 'react'
 import { useAuthStore } from '@/lib/store'
@@ -67,6 +67,7 @@ const bottomLinks = [
   { href: '/dashboard/cassa', label: 'Cassa', icon: Receipt },
   { href: '/dashboard/menu', label: 'Menu', icon: UtensilsCrossed },
   { href: '/dashboard/statistiche', label: 'Statistiche', icon: BarChart3 },
+  { href: '/dashboard/insights', label: 'Analisi Menu', icon: Sparkles },
   { href: '/dashboard/inventario', label: 'Inventario', icon: Package },
   { href: '/dashboard/staff', label: 'Staff', icon: Users },
   { href: '/dashboard/impostazioni', label: 'Impostazioni', icon: Settings },

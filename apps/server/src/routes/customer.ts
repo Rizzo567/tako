@@ -186,7 +186,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
   // AI chat
   fastify.post('/ai-chat', async (req, reply) => {
-    const { restaurantId, message, history } = req.body as { restaurantId: string; message: string; history: Array<{ role: string; content: string }> }
+    const { restaurantId, message, history } = req.body as { restaurantId: string; message: string; history: Array<{ role: 'user' | 'assistant'; content: string }> }
 
     const OPENAI_KEY = process.env['OPENAI_API_KEY']
     if (!OPENAI_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })

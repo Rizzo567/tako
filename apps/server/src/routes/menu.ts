@@ -213,7 +213,7 @@ Regole:
 
       for (const [ii, item] of sec.items.entries()) {
         await db.insert(menuItems).values({
-          sectionId: section.id,
+          sectionId: section!.id,
           restaurantId: (req.user as any).restaurantId,
           name: item.name,
           description: item.description,

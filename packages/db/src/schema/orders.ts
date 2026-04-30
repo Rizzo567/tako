@@ -1,8 +1,8 @@
 import { pgTable, text, uuid, timestamp, real, integer, jsonb } from 'drizzle-orm/pg-core'
-import { restaurants } from './restaurants'
-import { tables } from './tables'
-import { menuItems, itemVariants } from './menu'
-import { users } from './users'
+import { restaurants } from './restaurants.js'
+import { tables } from './tables.js'
+import { menuItems, itemVariants } from './menu.js'
+import { users } from './users.js'
 
 export const orders = pgTable('orders', {
   id: uuid('id').primaryKey().defaultRandom(),
