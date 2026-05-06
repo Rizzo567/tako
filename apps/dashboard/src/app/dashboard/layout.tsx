@@ -7,14 +7,15 @@ import { Breadcrumb } from '@/components/layout/Breadcrumb'
 import { useSocket } from '@/hooks/useSocket'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { token } = useAuthStore()
+  const { token, _hasHydrated } = useAuthStore()
   const router = useRouter()
   useSocket()
 
   useEffect(() => {
-    if (!token) router.push('/login')
-  }, [token, router])
+    if (_hasHydrated && !token) router.push('/login')
+  }, [token, _hasHydrated, router])
 
+  if (!_hasHydrated) return <div className="min-h-screen bg-cream" />
   if (!token) return null
 
   return (
