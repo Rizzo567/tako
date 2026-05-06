@@ -50,3 +50,27 @@ cd apps/web && pnpm dev
 - Prezzi ordini sempre dal DB (mai dal client)
 - Dashboard blocca porta 3000 da rete WiFi via firewall Windows
 - PostgreSQL ascolta solo localhost
+
+---
+
+## Istruzioni per agenti autonomi
+
+Quando sei un agente che lavora su Tako in modo autonomo, segui questo protocollo:
+
+### Loop standard
+
+1. Leggi `BACKLOG.md` — prendi il **primo task non completato** in ordine di priorità (P0 prima)
+2. Leggi il codice rilevante prima di modificare
+3. Implementa il task
+4. Verifica: `pnpm tsc --noEmit` dalla root — zero errori TypeScript prima di procedere
+5. Committa con messaggio descrittivo
+6. Aggiorna `BACKLOG.md`: sposta il task da `- [ ]` a `- [x]` con data
+7. Aggiungi entry a `AGENT-LOG.md`
+
+### Regole
+
+- Un task per run. Non iniziare il secondo se il primo non è done.
+- Se bloccato (API key mancante, decisione architetturale non chiara): scrivi in AGENT-LOG.md con `Stato: bloccato` e motivo, poi fermati.
+- Non toccare `packages/db/schema` senza aver letto l'intera schema prima.
+- Non fare `pnpm install` di nuove dipendenze senza motivo chiaro.
+- Commit atomici: un commit per task, messaggio in italiano.
