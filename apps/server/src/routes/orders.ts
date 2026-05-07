@@ -9,30 +9,48 @@ import type { OrderStatus } from '@tako/types'
 export async function orderRoutes(fastify: FastifyInstance) {
   // Get active orders for restaurant
   fastify.get('/active', { preHandler: requireAuth }, async (req) => {
-    const activeOrders = await db
-      .select()
+    const rows = await db
+      .select({ order: orders, item: orderItems })
       .from(orders)
+      .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
       .where(and(
         eq(orders.restaurantId, req.user!.restaurantId),
         inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready']),
       ))
       .orderBy(desc(orders.createdAt))
 
-    const items = await db.select().from(orderItems).where(inArray(orderItems.orderId, activeOrders.map(o => o.id)))
-    return { data: activeOrders.map(o => ({ ...o, items: items.filter(i => i.orderId === o.id) })) }
+    const ordersMap = new Map<string, typeof orders.$inferSelect & { items: typeof orderItems.$inferSelect[] }>()
+    for (const row of rows) {
+      if (!ordersMap.has(row.order.id)) {
+        ordersMap.set(row.order.id, { ...row.order, items: [] })
+      }
+      if (row.item) {
+        ordersMap.get(row.order.id)!.items.push(row.item)
+      }
+    }
+    return { data: [...ordersMap.values()] }
   })
 
   // Get orders by table
   fastify.get('/table/:tableId', { preHandler: requireAuth }, async (req) => {
     const { tableId } = req.params as { tableId: string }
-    const tableOrders = await db
-      .select()
+    const rows = await db
+      .select({ order: orders, item: orderItems })
       .from(orders)
+      .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
       .where(and(eq(orders.tableId, tableId), eq(orders.restaurantId, req.user!.restaurantId)))
       .orderBy(desc(orders.createdAt))
 
-    const items = await db.select().from(orderItems).where(inArray(orderItems.orderId, tableOrders.map(o => o.id)))
-    return { data: tableOrders.map(o => ({ ...o, items: items.filter(i => i.orderId === o.id) })) }
+    const ordersMap = new Map<string, typeof orders.$inferSelect & { items: typeof orderItems.$inferSelect[] }>()
+    for (const row of rows) {
+      if (!ordersMap.has(row.order.id)) {
+        ordersMap.set(row.order.id, { ...row.order, items: [] })
+      }
+      if (row.item) {
+        ordersMap.get(row.order.id)!.items.push(row.item)
+      }
+    }
+    return { data: [...ordersMap.values()] }
   })
 
   // Get order history (today)
