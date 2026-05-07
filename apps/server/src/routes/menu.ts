@@ -70,6 +70,16 @@ export async function menuRoutes(fastify: FastifyInstance) {
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+
+    // Ownership check: verify section belongs to a menu of this restaurant
+    const [owned] = await db
+      .select({ id: menuSections.id })
+      .from(menuSections)
+      .innerJoin(menus, eq(menuSections.menuId, menus.id))
+      .where(and(eq(menuSections.id, sectionId), eq(menus.restaurantId, req.user!.restaurantId)))
+      .limit(1)
+    if (!owned) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
+
     const [section] = await db.update(menuSections).set(body.data).where(eq(menuSections.id, sectionId)).returning()
     if (!section) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     return { data: section }
@@ -127,7 +137,10 @@ export async function menuRoutes(fastify: FastifyInstance) {
   fastify.patch('/items/:itemId/availability', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
     const { available } = req.body as { available: boolean }
-    const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(eq(menuItems.id, itemId)).returning()
+    const [item] = await db.update(menuItems)
+      .set({ available, updatedAt: new Date() })
+      .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId)))
+      .returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
     return { data: item }
@@ -136,7 +149,10 @@ export async function menuRoutes(fastify: FastifyInstance) {
   // Delete item
   fastify.delete('/items/:itemId', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
-    await db.delete(menuItems).where(eq(menuItems.id, itemId))
+    const [deleted] = await db.delete(menuItems)
+      .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId)))
+      .returning()
+    if (!deleted) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     return { data: { success: true } }
   })
 
@@ -146,6 +162,15 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({ name: z.string().min(1), priceModifier: z.number().default(0) })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+
+    // Ownership check: verify item belongs to this restaurant before inserting variant
+    const [ownedItem] = await db
+      .select({ id: menuItems.id })
+      .from(menuItems)
+      .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId)))
+      .limit(1)
+    if (!ownedItem) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+
     const [variant] = await db.insert(itemVariants).values({ itemId, ...body.data }).returning()
     return reply.code(201).send({ data: variant })
   })
