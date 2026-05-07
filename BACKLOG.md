@@ -33,6 +33,18 @@
 - [ ] **Landing page completamento** — la folder /landing esiste ma è incompleta | done quando: landing ha hero, features, pricing, CTA, deploy su Cloudflare
 - [ ] **Mobile responsive dashboard** — alcune sezioni dashboard non funzionano bene su tablet < 768px | done quando: tutte le sezioni usabili su iPad Mini
 
+### Branches pronti per merge (non ancora su main)
+| Branch | Cosa fa |
+|---|---|
+| `fix/item-variants-tenant-isolation` | #04 itemVariants scoped per tenant |
+| `fix/bills-reliability-shutdown` | #06 reject payment su bill closed + #09 graceful shutdown |
+| `feat/customer-pwa-realtime` | #07 menu realtime socket + #08 stati cancelled/paid in OrderTracking |
+| `fix/db-indexes` | #10 composite indexes per query multi-tenant |
+| `fix/menu-idor-ownership` | IDOR check su menu sections/items/variants |
+| `fix/stats-top-items-query` | Fix stats top-items inArray + aggregazione |
+| `docs/readme-setup` | README con setup guide |
+| `perf/orders-parallel-queries` | GET /active e /table/:tableId via LEFT JOIN |
+
 ---
 
 ## P2 — Miglioramento continuo
