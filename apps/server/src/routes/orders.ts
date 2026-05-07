@@ -52,16 +52,19 @@ export async function orderRoutes(fastify: FastifyInstance) {
   // Update order status
   fastify.patch('/:orderId/status', { preHandler: requireAuth }, async (req, reply) => {
     const { orderId } = req.params as { orderId: string }
-    const { status } = req.body as { status: OrderStatus }
+    const bodySchema = z.object({ status: z.enum(['pending', 'confirmed', 'preparing', 'ready', 'served', 'paid', 'cancelled']) })
+    const parsed = bodySchema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    const { status } = parsed.data as { status: OrderStatus }
 
-    const [current] = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1)
+    const [current] = await db.select().from(orders).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).limit(1)
     if (!current) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
 
-    const updateData: any = { status, updatedAt: new Date() }
+    const updateData: Partial<typeof current> & { updatedAt: Date; servedAt?: Date; paidAt?: Date } = { status, updatedAt: new Date() }
     if (status === 'served') updateData.servedAt = new Date()
     if (status === 'paid') updateData.paidAt = new Date()
 
-    const [updated] = await db.update(orders).set(updateData).where(eq(orders.id, orderId)).returning()
+    const [updated] = await db.update(orders).set(updateData).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).returning()
 
     await db.insert(orderStatusHistory).values({
       orderId,
@@ -84,7 +87,14 @@ export async function orderRoutes(fastify: FastifyInstance) {
   // Update single order item status (for KDS bump)
   fastify.patch('/:orderId/items/:itemId/status', { preHandler: requireAuth }, async (req, reply) => {
     const { orderId, itemId } = req.params as { orderId: string; itemId: string }
-    const { status } = req.body as { status: 'pending' | 'preparing' | 'ready' | 'served' }
+    const bodySchema = z.object({ status: z.enum(['pending', 'preparing', 'ready', 'served']) })
+    const parsed = bodySchema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    const { status } = parsed.data
+
+    // Verify the order belongs to this restaurant before updating its items
+    const [order] = await db.select().from(orders).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
 
     const [item] = await db.update(orderItems).set({ status }).where(and(eq(orderItems.id, itemId), eq(orderItems.orderId, orderId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
@@ -96,7 +106,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
   // Cancel order
   fastify.patch('/:orderId/cancel', { preHandler: requireAuth }, async (req, reply) => {
     const { orderId } = req.params as { orderId: string }
-    const [updated] = await db.update(orders).set({ status: 'cancelled', updatedAt: new Date() }).where(eq(orders.id, orderId)).returning()
+    const [updated] = await db.update(orders).set({ status: 'cancelled', updatedAt: new Date() }).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).returning()
     if (!updated) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'cancelled' })
     return { data: updated }

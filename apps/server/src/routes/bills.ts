@@ -54,14 +54,17 @@ export async function billRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
+    // Verify bill belongs to this restaurant before accepting payment
+    const [bill] = await db.select().from(bills).where(and(eq(bills.id, billId), eq(bills.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Bill not found' } })
+
     const [payment] = await db.insert(billPayments).values({ billId, ...body.data, status: 'completed' }).returning()
 
     // Check if bill is fully paid
-    const [bill] = await db.select().from(bills).where(eq(bills.id, billId)).limit(1)
     const allPayments = await db.select().from(billPayments).where(eq(billPayments.billId, billId))
     const paidTotal = allPayments.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0)
 
-    if (bill && paidTotal >= bill.total) {
+    if (paidTotal >= bill.total) {
       await db.update(bills).set({ status: 'closed', closedAt: new Date(), closedBy: req.user!.id }).where(eq(bills.id, billId))
       // Free the table
       if (bill.tableId) {

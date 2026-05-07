@@ -135,10 +135,23 @@ export async function authRoutes(fastify: FastifyInstance) {
 
   // PIN login (for shared tablets)
   fastify.post('/pin-login', async (req, reply) => {
-    const { restaurantId, pin } = req.body as { restaurantId: string; pin: string }
-    if (!restaurantId || !pin) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'restaurantId and pin required' } })
+    const pinLoginSchema = z.object({
+      restaurantId: z.string().uuid(),
+      pin: z.string().length(4).regex(/^\d{4}$/),
+    })
+    const body = pinLoginSchema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    const { restaurantId, pin } = body.data
 
-    const [user] = await db.select().from(users).where(and(eq(users.restaurantId, restaurantId), eq(users.pin, pin))).limit(1)
+    const candidates = await db.select().from(users).where(and(eq(users.restaurantId, restaurantId), eq(users.active, true)))
+    let user = null
+    for (const candidate of candidates) {
+      if (!candidate.pin) continue
+      const match = candidate.pin.startsWith('$2')
+        ? await bcrypt.compare(pin, candidate.pin)
+        : candidate.pin === pin
+      if (match) { user = candidate; break }
+    }
     if (!user) return reply.code(401).send({ error: { code: 'INVALID_PIN', message: 'Invalid PIN' } })
 
     const token = nanoid(32)

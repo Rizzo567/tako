@@ -51,7 +51,10 @@ export async function tableRoutes(fastify: FastifyInstance) {
   // Update table status
   fastify.patch('/:tableId/status', { preHandler: requireAuth }, async (req, reply) => {
     const { tableId } = req.params as { tableId: string }
-    const { status } = req.body as { status: 'free' | 'occupied' | 'waiting' | 'cleaning' | 'reserved' }
+    const bodySchema = z.object({ status: z.enum(['free', 'occupied', 'waiting', 'cleaning', 'reserved']) })
+    const parsed = bodySchema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    const { status } = parsed.data
 
     const [table] = await db.update(tables).set({
       status,

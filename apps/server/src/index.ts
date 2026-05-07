@@ -20,7 +20,8 @@ import { staffRoutes } from './routes/staff.js'
 import { insightsRoutes } from './routes/insights.js'
 
 const PORT = Number(process.env['PORT'] ?? 3001)
-const JWT_SECRET = process.env['JWT_SECRET'] ?? 'tako-super-secret-change-in-production'
+const JWT_SECRET = process.env['JWT_SECRET']
+if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
 
 const fastify = Fastify({ logger: { level: 'error' } })
 
@@ -71,8 +72,15 @@ await fastify.register(insightsRoutes, { prefix: '/api/insights' })
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3002',
+  process.env['DASHBOARD_URL'] ?? 'http://localhost:3000',
+  process.env['CLIENT_BASE_URL'] ?? 'http://localhost:3002',
+]
+
 export const io = new SocketServer(fastify.server, {
-  cors: { origin: '*', methods: ['GET', 'POST'] },
+  cors: { origin: allowedOrigins, methods: ['GET', 'POST'] },
   pingTimeout: 60000,
 })
 setupSocketHandlers(io)

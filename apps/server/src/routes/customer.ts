@@ -177,16 +177,32 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
   // Call waiter
   fastify.post('/waiter-call', async (req, reply) => {
-    const { restaurantId, tableId, tableNumber, type } = req.body as {
-      restaurantId: string; tableId: string; tableNumber: string; type: 'help' | 'bill' | 'water'
-    }
+    const schema = z.object({
+      restaurantId: z.string().uuid(),
+      tableId: z.string().uuid(),
+      tableNumber: z.string().max(20),
+      type: z.enum(['help', 'bill', 'water']),
+    })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    const { restaurantId, tableId, tableNumber, type } = body.data
     io.to(`restaurant:${restaurantId}`).emit('waiter:called', { tableId, tableNumber, type })
     return { data: { success: true } }
   })
 
   // AI chat
   fastify.post('/ai-chat', async (req, reply) => {
-    const { restaurantId, message, history } = req.body as { restaurantId: string; message: string; history: Array<{ role: 'user' | 'assistant'; content: string }> }
+    const aiChatSchema = z.object({
+      restaurantId: z.string().uuid(),
+      message: z.string().min(1).max(500),
+      history: z.array(z.object({
+        role: z.enum(['user', 'assistant']),
+        content: z.string().max(500),
+      })).max(10),
+    })
+    const parsed = aiChatSchema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    const { restaurantId, message, history } = parsed.data
 
     const OPENAI_KEY = process.env['OPENAI_API_KEY']
     if (!OPENAI_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })

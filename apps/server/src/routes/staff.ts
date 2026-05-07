@@ -26,12 +26,13 @@ export async function staffRoutes(fastify: FastifyInstance) {
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     const passwordHash = body.data.password ? await bcrypt.hash(body.data.password, 12) : undefined
+    const pinHash = body.data.pin ? await bcrypt.hash(body.data.pin, 10) : undefined
     const [user] = await db.insert(users).values({
       restaurantId: req.user!.restaurantId,
       name: body.data.name,
       email: body.data.email,
       role: body.data.role,
-      pin: body.data.pin,
+      pin: pinHash,
       passwordHash,
     }).returning()
 
