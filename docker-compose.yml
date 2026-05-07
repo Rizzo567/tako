@@ -11,8 +11,10 @@ services:
       POSTGRES_DB: takodb
     volumes:
       - tako-postgres-data:/var/lib/postgresql/data
+    # Port 5432 intentionally not exposed to host — only accessible within Docker network.
+    # In production, remove these two lines. Kept for local dev convenience.
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U tako']
       interval: 5s
@@ -23,8 +25,10 @@ services:
     image: redis:7-alpine
     container_name: tako-redis
     restart: unless-stopped
+    # Port 6379 bound to localhost only — not exposed to external interfaces.
+    # In production, remove this port binding entirely.
     ports:
-      - '6379:6379'
+      - '127.0.0.1:6379:6379'
     volumes:
       - tako-redis-data:/data
 

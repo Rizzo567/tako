@@ -62,7 +62,15 @@ export async function menuRoutes(fastify: FastifyInstance) {
   // Update section
   fastify.patch('/sections/:sectionId', { preHandler: requireAuth }, async (req, reply) => {
     const { sectionId } = req.params as { sectionId: string }
-    const [section] = await db.update(menuSections).set(req.body as any).where(eq(menuSections.id, sectionId)).returning()
+    const schema = z.object({
+      name: z.string().min(1).optional(),
+      description: z.string().optional(),
+      active: z.boolean().optional(),
+      position: z.number().int().min(0).optional(),
+    })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    const [section] = await db.update(menuSections).set(body.data).where(eq(menuSections.id, sectionId)).returning()
     if (!section) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     return { data: section }
   })
@@ -90,7 +98,24 @@ export async function menuRoutes(fastify: FastifyInstance) {
   // Update item
   fastify.patch('/items/:itemId', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
-    const [item] = await db.update(menuItems).set({ ...(req.body as any), updatedAt: new Date() }).where(eq(menuItems.id, itemId)).returning()
+    const schema = z.object({
+      name: z.string().min(1).optional(),
+      description: z.string().optional(),
+      price: z.number().positive().optional(),
+      available: z.boolean().optional(),
+      allergens: z.array(z.string()).optional(),
+      tags: z.array(z.string()).optional(),
+      imageUrl: z.string().url().optional(),
+      kitchenStation: z.string().optional(),
+      prepTimeMinutes: z.number().int().min(0).optional(),
+      position: z.number().int().min(0).optional(),
+    })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    const [item] = await db.update(menuItems)
+      .set({ ...body.data, updatedAt: new Date() })
+      .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId)))
+      .returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
 
     // Broadcast menu change to all customers of this restaurant
