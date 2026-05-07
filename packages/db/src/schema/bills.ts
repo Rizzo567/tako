@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, real, integer } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, real, integer, index } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { tables } from './tables.js'
 import { users } from './users.js'
@@ -18,7 +18,10 @@ export const bills = pgTable('bills', {
   closedBy: uuid('closed_by').references(() => users.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   closedAt: timestamp('closed_at'),
-})
+}, (t) => ({
+  restaurantStatusIdx: index('bills_restaurant_status_idx').on(t.restaurantId, t.status),
+  restaurantClosedAtIdx: index('bills_restaurant_closed_at_idx').on(t.restaurantId, t.closedAt),
+}))
 
 export const billPayments = pgTable('bill_payments', {
   id: uuid('id').primaryKey().defaultRandom(),

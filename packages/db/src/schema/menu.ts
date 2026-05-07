@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, boolean, integer, real, jsonb } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, boolean, integer, real, jsonb, index } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 
 export const menus = pgTable('menus', {
@@ -44,7 +44,9 @@ export const menuItems = pgTable('menu_items', {
   costPrice: real('cost_price'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
+}, (t) => ({
+  restaurantAvailableIdx: index('menu_items_restaurant_available_idx').on(t.restaurantId, t.available),
+}))
 
 export const itemVariants = pgTable('item_variants', {
   id: uuid('id').primaryKey().defaultRandom(),
