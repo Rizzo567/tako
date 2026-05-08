@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems } from '@tako/db'
-import { eq, and, asc } from 'drizzle-orm'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, bills } from '@tako/db'
+import { eq, and, asc, inArray } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 
@@ -163,6 +163,46 @@ export async function customerRoutes(fastify: FastifyInstance) {
       io.to(`restaurant:${body.data.restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
     }
 
+    // Lazy bill creation / update
+    if (body.data.tableId) {
+      const restaurantId = body.data.restaurantId
+      const tableId = body.data.tableId
+
+      // Cerca bill aperto per questo tavolo
+      const [existingBill] = await db
+        .select()
+        .from(bills)
+        .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open')))
+        .limit(1)
+
+      // Calcola subtotale sommando tutti gli ordini attivi sul tavolo
+      const activeOrders = await db
+        .select()
+        .from(orders)
+        .where(and(
+          eq(orders.restaurantId, restaurantId),
+          eq(orders.tableId, tableId),
+          inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready', 'served'])
+        ))
+      const subtotal = activeOrders.reduce((sum, o) => sum + o.total, 0)
+
+      if (existingBill) {
+        // Aggiorna subtotale e totale
+        await db.update(bills)
+          .set({ subtotal, total: subtotal - (existingBill.discount ?? 0) + (existingBill.tip ?? 0) })
+          .where(eq(bills.id, existingBill.id))
+      } else {
+        // Crea nuovo bill
+        await db.insert(bills).values({
+          restaurantId,
+          tableId,
+          subtotal,
+          total: subtotal,
+          status: 'open',
+        })
+      }
+    }
+
     return reply.code(201).send({ data: payload })
   })
 
@@ -204,7 +244,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
     const { restaurantId, message, history } = parsed.data
 
-    const OPENAI_KEY = process.env['OPENAI_API_KEY']
+    const OPENAI_KEY = process.env['GROQ_API_KEY']
     if (!OPENAI_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
 
     // Build menu context
@@ -223,10 +263,10 @@ ${menuContext}
 Rispondi sempre in italiano a meno che il cliente non scriva in un'altra lingua. Sii conciso (max 3 righe). Se non sai rispondere a qualcosa, suggerisci di chiedere al cameriere.`
 
     const { OpenAI } = await import('openai')
-    const openai = new OpenAI({ apiKey: OPENAI_KEY })
+    const openai = new OpenAI({ apiKey: OPENAI_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         ...history.slice(-6),
