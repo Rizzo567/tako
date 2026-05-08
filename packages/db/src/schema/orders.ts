@@ -18,10 +18,10 @@ export const orders = pgTable('orders', {
   customerName: text('customer_name'),
   assignedWaiterId: uuid('assigned_waiter_id').references(() => users.id),
   idempotencyKey: text('idempotency_key').unique(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-  servedAt: timestamp('served_at'),
-  paidAt: timestamp('paid_at'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  servedAt: timestamp('served_at', { withTimezone: true }),
+  paidAt: timestamp('paid_at', { withTimezone: true }),
 }, (t) => ({
   restaurantStatusIdx: index('orders_restaurant_status_idx').on(t.restaurantId, t.status),
   restaurantCreatedAtIdx: index('orders_restaurant_created_at_idx').on(t.restaurantId, t.createdAt),
@@ -30,7 +30,7 @@ export const orders = pgTable('orders', {
 export const orderItems = pgTable('order_items', {
   id: uuid('id').primaryKey().defaultRandom(),
   orderId: uuid('order_id').notNull().references(() => orders.id, { onDelete: 'cascade' }),
-  menuItemId: uuid('menu_item_id').notNull().references(() => menuItems.id),
+  menuItemId: uuid('menu_item_id').references(() => menuItems.id),
   variantId: uuid('variant_id').references(() => itemVariants.id),
   name: text('name').notNull(),
   quantity: integer('quantity').notNull(),
@@ -40,7 +40,7 @@ export const orderItems = pgTable('order_items', {
   status: text('status', {
     enum: ['pending', 'preparing', 'ready', 'served'],
   }).default('pending').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
 export const orderStatusHistory = pgTable('order_status_history', {
@@ -50,5 +50,5 @@ export const orderStatusHistory = pgTable('order_status_history', {
   toStatus: text('to_status').notNull(),
   changedBy: uuid('changed_by').references(() => users.id),
   note: text('note'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })

@@ -16,8 +16,8 @@ export const bills = pgTable('bills', {
   covers: integer('covers').default(1),
   status: text('status', { enum: ['open', 'closed', 'refunded'] }).default('open').notNull(),
   closedBy: uuid('closed_by').references(() => users.id),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  closedAt: timestamp('closed_at'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  closedAt: timestamp('closed_at', { withTimezone: true }),
 }, (t) => ({
   restaurantStatusIdx: index('bills_restaurant_status_idx').on(t.restaurantId, t.status),
   restaurantClosedAtIdx: index('bills_restaurant_closed_at_idx').on(t.restaurantId, t.closedAt),
@@ -30,5 +30,5 @@ export const billPayments = pgTable('bill_payments', {
   method: text('method', { enum: ['cash', 'card', 'digital', 'split'] }).notNull(),
   stripePaymentIntentId: text('stripe_payment_intent_id'),
   status: text('status', { enum: ['pending', 'completed', 'failed', 'refunded'] }).default('pending').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
