@@ -7,14 +7,18 @@ import { Plus, UserX } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const ROLE_COLORS: Record<string, string> = {
-  owner: 'bg-coral/20 text-coral-deep', manager: 'bg-sun/30 text-ink',
-  waiter: 'bg-mint/20 text-ink', chef: 'bg-sky/30 text-ink', cashier: 'bg-ink/10 text-ink',
+  owner: 'bg-coral/20 text-coral-deep',
+  dipendente: 'bg-mint/20 text-ink', chef: 'bg-sky/30 text-ink', cassiere: 'bg-ink/10 text-ink',
+}
+
+const ROLE_LABELS: Record<string, string> = {
+  owner: 'Titolare', dipendente: 'Dipendente', chef: 'Chef', cassiere: 'Cassiere',
 }
 
 export default function StaffPage() {
   const qc = useQueryClient()
   const [showAdd, setShowAdd] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', role: 'waiter', pin: '', password: '' })
+  const [form, setForm] = useState({ name: '', email: '', role: 'dipendente', pin: '', password: '' })
 
   const { data: staff = [] } = useQuery({
     queryKey: ['staff'],
@@ -47,7 +51,7 @@ export default function StaffPage() {
             <div>
               <label className="label">Ruolo</label>
               <select className="input" value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}>
-                {['manager', 'waiter', 'chef', 'cashier'].map(r => <option key={r} value={r}>{r}</option>)}
+                {['dipendente', 'chef', 'cassiere'].map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
               </select>
             </div>
             <div><label className="label">PIN (4 cifre, per tablet)</label><input className="input" maxLength={4} value={form.pin} onChange={e => setForm(f => ({ ...f, pin: e.target.value }))} /></div>
@@ -69,7 +73,7 @@ export default function StaffPage() {
             <div className="flex-1 min-w-0">
               <p className="font-display font-black truncate">{member.name}</p>
               <p className="text-xs text-ink/50 font-semibold truncate">{member.email}</p>
-              <span className={cn('badge mt-1', ROLE_COLORS[member.role] ?? 'bg-ink/10')}>{member.role}</span>
+              <span className={cn('badge mt-1', ROLE_COLORS[member.role] ?? 'bg-ink/10')}>{ROLE_LABELS[member.role] ?? member.role}</span>
             </div>
             {member.role !== 'owner' && (
               <button onClick={() => deleteMutation.mutate(member.id)} className="text-ink/30 hover:text-red-500 transition-colors">

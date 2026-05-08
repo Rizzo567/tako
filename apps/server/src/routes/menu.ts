@@ -1,14 +1,14 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { db, menus, menuSections, menuItems, itemVariants } from '@tako/db'
-import { eq, and, asc } from 'drizzle-orm'
+import { db, menus, menuSections, menuItems, itemVariants, orderItems } from '@tako/db'
+import { eq, and, asc, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import OpenAI from 'openai'
 
-const getOpenAI = () => {
-  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set')
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const getAI = () => {
+  if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
 export async function menuRoutes(fastify: FastifyInstance) {
@@ -75,6 +75,20 @@ export async function menuRoutes(fastify: FastifyInstance) {
     return { data: section }
   })
 
+  // Delete section
+  fastify.delete('/sections/:sectionId', { preHandler: requireAuth }, async (req, reply) => {
+    const { sectionId } = req.params as { sectionId: string }
+    const items = await db.select({ id: menuItems.id }).from(menuItems).where(eq(menuItems.sectionId, sectionId))
+    if (items.length > 0) {
+      const ids = items.map(i => i.id)
+      for (const id of ids) {
+        await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, id))
+      }
+    }
+    await db.delete(menuSections).where(eq(menuSections.id, sectionId))
+    return { data: { success: true } }
+  })
+
   // Create item
   fastify.post('/sections/:sectionId/items', { preHandler: requireAuth }, async (req, reply) => {
     const { sectionId } = req.params as { sectionId: string }
@@ -136,6 +150,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
   // Delete item
   fastify.delete('/items/:itemId', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
+    await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, itemId))
     await db.delete(menuItems).where(eq(menuItems.id, itemId))
     return { data: { success: true } }
   })
@@ -159,14 +174,16 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
     if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
 
-    const openai = getOpenAI()
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      messages: [
-        {
-          role: 'system',
-          content: `Sei un parser di menu ristorante. Estrai la struttura dal testo grezzo e restituisci JSON valido con questa forma esatta:
+    let completion: Awaited<ReturnType<ReturnType<typeof getAI>['chat']['completions']['create']>>
+    try {
+      const openai = getAI()
+      completion = await openai.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        response_format: { type: 'json_object' },
+        messages: [
+          {
+            role: 'system',
+            content: `Sei un parser di menu ristorante. Estrai la struttura dal testo grezzo e restituisci JSON valido con questa forma esatta:
 {
   "sections": [
     {
@@ -189,10 +206,13 @@ Regole:
 - description: solo se presente nel testo
 - Raggruppa i piatti per sezione naturale (Antipasti, Primi, Secondi, Dolci, Bevande, ecc.)
 - Se non ci sono sezioni esplicite, crea una sezione "Menu"`,
-        },
-        { role: 'user', content: text },
-      ],
-    })
+          },
+          { role: 'user', content: text },
+        ],
+      })
+    } catch (err: any) {
+      return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'Servizio AI non disponibile. Verifica la chiave OpenAI.' } })
+    }
 
     const raw = completion.choices[0]?.message?.content ?? '{}'
     let parsed: any

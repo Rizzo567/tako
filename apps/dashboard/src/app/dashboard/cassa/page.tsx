@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { formatEuro, formatDate } from '@/lib/utils'
 import { cn } from '@/lib/utils'
-import { CreditCard, Banknote, Smartphone, Search, Users, Delete } from 'lucide-react'
+import { CreditCard, Banknote, Smartphone, Search, Users, Delete, Plus } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -156,6 +156,50 @@ function PaymentModal({ bill, onClose, onPaid }: { bill: any; onClose: () => voi
   )
 }
 
+// ─── New bill modal ───────────────────────────────────────────────────────────
+
+function NewBillModal({ onClose, onCreated }: { onClose: () => void; onCreated: (bill: any) => void }) {
+  const { data: tables = [] } = useQuery({
+    queryKey: ['tables-list'],
+    queryFn: () => api.get('/tables').then(r => r.data.data),
+  })
+  const [tableId, setTableId] = useState('')
+
+  const createMutation = useMutation({
+    mutationFn: () => api.post('/bills', tableId ? { tableId } : {}),
+    onSuccess: (res) => onCreated(res.data.data),
+    onError: () => toast.error('Errore nella creazione del conto'),
+  })
+
+  // Flatten rooms → tables
+  const allTables = Array.isArray(tables)
+    ? tables.flatMap((r: any) => r.tables ?? [])
+    : []
+
+  return (
+    <div className="fixed inset-0 bg-ink/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-cream rounded-2xl border-2 border-ink w-full max-w-sm p-6" style={{ boxShadow: '6px 6px 0 #2A1F1A' }} onClick={e => e.stopPropagation()}>
+        <h2 className="font-display font-black text-xl mb-5">Nuovo conto</h2>
+        <div className="mb-4">
+          <label className="label">Tavolo (opzionale)</label>
+          <select className="input" value={tableId} onChange={e => setTableId(e.target.value)}>
+            <option value="">— Asporto / senza tavolo —</option>
+            {allTables.map((t: any) => (
+              <option key={t.id} value={t.id}>Tavolo {t.number}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => createMutation.mutate()} disabled={createMutation.isPending} className="btn-coral flex-1 py-3">
+            {createMutation.isPending ? 'Creazione...' : 'Crea conto'}
+          </button>
+          <button onClick={onClose} className="btn-outline px-4 py-3">Annulla</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Inner page (uses search params) ─────────────────────────────────────────
 
 function CassaInner() {
@@ -164,6 +208,7 @@ function CassaInner() {
   const [selectedBill, setSelectedBill] = useState<any>(null)
   const [search, setSearch] = useState('')
   const [autoOpenTableId, setAutoOpenTableId] = useState<string | null>(null)
+  const [showNewBill, setShowNewBill] = useState(false)
 
   const { data: openBills = [], isLoading } = useQuery({
     queryKey: ['open-bills'],
@@ -189,14 +234,12 @@ function CassaInner() {
   // Auto-open from sala "Apri conto" CTA
   const tableIdParam = searchParams.get('tableId')
   useEffect(() => {
-    if (tableIdParam && openBills.length > 0) {
-      const existing = openBills.find((b: any) => b.tableId === tableIdParam)
-      if (existing) { setSelectedBill(existing); return }
-      // Create bill for table if not exists
-      if (tableIdParam !== autoOpenTableId) {
-        setAutoOpenTableId(tableIdParam)
-        createBillMutation.mutate(tableIdParam)
-      }
+    if (!tableIdParam) return
+    const existing = openBills.find((b: any) => b.tableId === tableIdParam)
+    if (existing) { setSelectedBill(existing); return }
+    if (tableIdParam !== autoOpenTableId) {
+      setAutoOpenTableId(tableIdParam)
+      createBillMutation.mutate(tableIdParam)
     }
   }, [tableIdParam, openBills])
 
@@ -208,7 +251,17 @@ function CassaInner() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-display font-black text-3xl">Cassa</h1>
+        <button onClick={() => setShowNewBill(true)} className="btn-coral flex items-center gap-2">
+          <Plus size={16} /> Nuovo conto
+        </button>
       </div>
+
+      {showNewBill && (
+        <NewBillModal
+          onClose={() => setShowNewBill(false)}
+          onCreated={(bill) => { setShowNewBill(false); setSelectedBill(bill) }}
+        />
+      )}
 
       {/* Today KPIs */}
       <div className="grid grid-cols-3 gap-5 mb-8">

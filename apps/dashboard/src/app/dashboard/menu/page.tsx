@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { api } from '@/lib/api'
 import { formatEuro } from '@/lib/utils'
 import { cn } from '@/lib/utils'
-import { Plus, ToggleLeft, ToggleRight, Pencil, Trash2, X, UtensilsCrossed, ChevronDown, ChevronRight, FileText, Loader2, CheckCircle2 } from 'lucide-react'
+import { Plus, ToggleLeft, ToggleRight, Pencil, Trash2, X, UtensilsCrossed, ChevronDown, ChevronRight, FileText, Loader2, CheckCircle2, MoreHorizontal } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // ─── Allergen emoji map ───────────────────────────────────────────────────────
@@ -415,6 +415,7 @@ export default function MenuPage() {
   const [newSectionName, setNewSectionName] = useState('')
   const [wizardDone, setWizardDone] = useState(false)
   const [showImport, setShowImport] = useState(false)
+  const [sectionMenu, setSectionMenu] = useState<string | null>(null)
 
   const { data: menus = [], isLoading: loadingMenus } = useQuery({
     queryKey: ['menus'],
@@ -441,6 +442,13 @@ export default function MenuPage() {
   const deleteMutation = useMutation({
     mutationFn: (itemId: string) => api.delete(`/menus/items/${itemId}`),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['menu-full'] }); toast.success('Piatto rimosso') },
+    onError: () => toast.error('Errore nella rimozione del piatto'),
+  })
+
+  const deleteSectionMutation = useMutation({
+    mutationFn: (sectionId: string) => api.delete(`/menus/sections/${sectionId}`),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['menu-full'] }); toast.success('Sezione eliminata') },
+    onError: () => toast.error('Errore nella rimozione della sezione'),
   })
 
   const addSectionMutation = useMutation({
@@ -541,12 +549,39 @@ export default function MenuPage() {
                 <h2 className="font-display font-black text-xl group-hover:text-coral transition-colors">{section.name}</h2>
                 <span className="text-xs font-black text-ink/40 bg-ink/5 px-2 py-0.5 rounded-full">{count}</span>
               </button>
-              <button
-                onClick={() => setItemModal({ sectionId: section.id })}
-                className="btn-outline text-sm px-3 py-2 flex items-center gap-1"
-              >
-                <Plus size={13} /> Piatto
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setItemModal({ sectionId: section.id })}
+                  className="btn-outline text-sm px-3 py-2 flex items-center gap-1"
+                >
+                  <Plus size={13} /> Piatto
+                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setSectionMenu(sectionMenu === section.id ? null : section.id)}
+                    className="p-2 hover:bg-ink/10 rounded-lg transition-colors text-ink/40 hover:text-ink"
+                  >
+                    <MoreHorizontal size={16} />
+                  </button>
+                  {sectionMenu === section.id && (
+                    <div
+                      className="absolute right-0 top-full mt-1 bg-white border-2 border-ink/10 rounded-xl shadow-lg z-10 min-w-[160px]"
+                      onClick={() => setSectionMenu(null)}
+                    >
+                      <button
+                        onClick={() => {
+                          if (confirm(`Elimina la sezione "${section.name}" e tutti i suoi piatti?`)) {
+                            deleteSectionMutation.mutate(section.id)
+                          }
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                      >
+                        <Trash2 size={14} /> Elimina sezione
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             {!collapsed && (
@@ -611,7 +646,8 @@ export default function MenuPage() {
                         <Pencil size={15} />
                       </button>
                       <button
-                        onClick={() => { if (confirm(`Elimina "${item.name}"?`)) deleteMutation.mutate(item.id) }}
+                        onClick={() => deleteMutation.mutate(item.id)}
+                        disabled={deleteMutation.isPending}
                         className="text-ink/30 hover:text-red-500 transition-colors"
                       >
                         <Trash2 size={15} />

@@ -14,11 +14,11 @@ export async function staffRoutes(fastify: FastifyInstance) {
     return { data: staff }
   })
 
-  fastify.post('/', { preHandler: requireRole('owner', 'manager') }, async (req, reply) => {
+  fastify.post('/', { preHandler: requireRole('owner') }, async (req, reply) => {
     const schema = z.object({
       name: z.string().min(2),
       email: z.string().email(),
-      role: z.enum(['manager', 'waiter', 'chef', 'cashier']),
+      role: z.enum(['dipendente', 'chef', 'cassiere']),
       pin: z.string().length(4).optional(),
       password: z.string().min(6).optional(),
     })
@@ -39,11 +39,11 @@ export async function staffRoutes(fastify: FastifyInstance) {
     return reply.code(201).send({ data: { id: user!.id, name: user!.name, email: user!.email, role: user!.role } })
   })
 
-  fastify.patch('/:userId', { preHandler: requireRole('owner', 'manager') }, async (req, reply) => {
+  fastify.patch('/:userId', { preHandler: requireRole('owner') }, async (req, reply) => {
     const { userId } = req.params as { userId: string }
     const schema = z.object({
       name: z.string().optional(),
-      role: z.enum(['manager', 'waiter', 'chef', 'cashier']).optional(),
+      role: z.enum(['dipendente', 'chef', 'cassiere']).optional(),
       pin: z.string().length(4).optional(),
       active: z.boolean().optional(),
     })
@@ -55,7 +55,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
     return { data: user }
   })
 
-  fastify.delete('/:userId', { preHandler: requireRole('owner', 'manager') }, async (req, reply) => {
+  fastify.delete('/:userId', { preHandler: requireRole('owner') }, async (req, reply) => {
     const { userId } = req.params as { userId: string }
     if (userId === req.user!.id) return reply.code(400).send({ error: { code: 'SELF_DELETE', message: 'Cannot delete yourself' } })
     await db.update(users).set({ active: false }).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId)))

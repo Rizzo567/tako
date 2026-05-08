@@ -47,6 +47,23 @@
 
 ---
 
+## Piano finale — Lunedì 2026-05-12
+
+### Milestone 5 — Multi-tenant + scaling (7–10 giorni)
+> Permette a Tako di servire più ristoranti sullo stesso sistema. Necessario se vuoi distribuire Tako come prodotto SaaS o gestire più locali da un unico server.
+- [ ] **Wiring RLS completo** — `withRestaurantContext()` chiamato su ogni route autenticata, ogni query isolata per `restaurant_id`
+- [ ] **Multi-tenant base** — ogni ristorante ha dati isolati, un secondo ristorante si registra e vede solo i suoi dati
+- [ ] **Auth multi-ristorante** — owner con più ristoranti, dropdown nella dashboard
+
+### Milestone 6 — Compliance Italia / Registratore Telematico (15–20 giorni)
+> Obbligatoria per usare Tako legalmente in un ristorante italiano. Il registratore RT trasmette i corrispettivi all'Agenzia delle Entrate. Senza questo Tako non può essere la cassa ufficiale.
+- [ ] **Integrazione RT (Epson/Custom/Rch)** — stampa scontrino fiscale alla chiusura del conto
+- [ ] **Corrispettivi telematici** — trasmissione automatica ad Agenzia delle Entrate
+- [ ] **Lotteria scontrini** — campo codice fiscale/codice lotteria nel flusso pagamento
+- [ ] **Riepilogo corrispettivi giornalieri** — chiusura giornaliera conforme
+
+---
+
 ## P2 — Miglioramento continuo
 
 - [ ] **[SEC] Wiring RLS** — `packages/db/src/rls.ts` definisce `withRestaurantContext()` ma zero route la chiamano. Fix: aggiungere Fastify `onRequest` hook nel plugin auth che chiama `withRestaurantContext(req.user.restaurantId)` per ogni richiesta autenticata. Done quando: ogni query autenticata va in esecuzione con `app.current_restaurant_id` settato.

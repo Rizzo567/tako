@@ -49,7 +49,7 @@ type Order = {
 
 function canActOnOrders(role: string | undefined) {
   if (!role) return true
-  return ['waiter', 'manager', 'owner'].includes(role)
+  return ['dipendente', 'owner'].includes(role)
 }
 
 function OrderCard({

@@ -6,8 +6,8 @@ import { requireAuth } from '../middleware/auth.js'
 import OpenAI from 'openai'
 
 const getOpenAI = () => {
-  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set')
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -111,7 +111,8 @@ export async function insightsRoutes(fastify: FastifyInstance) {
     }
 
     // Fetch menu items for costPrice + featured
-    const itemIds = rawItems.map(r => r.menuItemId)
+    const filteredItems = rawItems.filter(r => r.menuItemId != null) as (typeof rawItems[number] & { menuItemId: string })[]
+    const itemIds = filteredItems.map(r => r.menuItemId)
     const dbItems = await db
       .select({
         id: menuItems.id,
@@ -130,7 +131,7 @@ export async function insightsRoutes(fastify: FastifyInstance) {
     const totalRevenue = rawItems.reduce((s, i) => s + i.totalRevenue, 0)
 
     // Build metrics (without quadrant first)
-    const metrics: Omit<MenuItemMetrics, 'quadrant'>[] = rawItems.map(r => {
+    const metrics: Omit<MenuItemMetrics, 'quadrant'>[] = filteredItems.map(r => {
       const dbItem = dbItemMap.get(r.menuItemId)
       const costPrice = dbItem?.costPrice ?? null
       const marginPercent = costPrice != null && r.avgPrice > 0
@@ -241,7 +242,7 @@ Produci i suggerimenti.`
     try {
       const openai = getOpenAI()
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: userMessage },
@@ -267,7 +268,7 @@ Produci i suggerimenti.`
       return { data: { suggestions: suggestions.slice(0, 5) } }
     } catch (err: any) {
       if (err.message?.includes('OPENAI_API_KEY')) {
-        return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'OPENAI_API_KEY non configurata' } })
+        return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'GROQ_API_KEY non configurata' } })
       }
       fastify.log.error(err, 'insights AI error')
       return reply.code(502).send({ error: { code: 'AI_ERROR', message: 'Errore AI temporaneo' } })
