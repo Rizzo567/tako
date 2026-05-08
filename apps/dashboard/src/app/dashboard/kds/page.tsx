@@ -51,8 +51,9 @@ function useElapsed(createdAt: string) {
   const [elapsed, setElapsed] = useState(0)
   useEffect(() => {
     const start = new Date(createdAt).getTime()
-    setElapsed(Math.floor((Date.now() - start) / 1000))
-    const id = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 1000)
+    const calc = () => Math.max(0, Math.floor((Date.now() - start) / 1000))
+    setElapsed(calc())
+    const id = setInterval(() => setElapsed(calc()), 1000)
     return () => clearInterval(id)
   }, [createdAt])
   const m = Math.floor(elapsed / 60)
@@ -80,7 +81,7 @@ const BUMP_LABEL: Record<string, string> = {
   pending: 'PRENDI IN CARICO', confirmed: 'PRENDI IN CARICO', preparing: 'PRONTO ✓', ready: 'SERVITO',
 }
 
-function KdsCard({ order, compact, onStatusChange }: { order: any; compact: boolean; onStatusChange: (orderId: string, status: string) => void }) {
+function KdsCard({ order, compact, onStatusChange, onItemStatusChange }: { order: any; compact: boolean; onStatusChange: (orderId: string, status: string) => void; onItemStatusChange: (orderId: string, itemId: string, status: string) => void }) {
   const { display, minutes } = useElapsed(order.createdAt)
 
   const timerColor = minutes < 5
@@ -151,12 +152,29 @@ function KdsCard({ order, compact, onStatusChange }: { order: any; compact: bool
               <span className="font-black text-base">{item.quantity}× {item.name}</span>
               {item.notes && <p className="text-xs text-ink/60 font-semibold mt-0.5">{item.notes}</p>}
             </div>
-            <span className="text-xs font-black px-2 py-0.5 rounded-full shrink-0 ml-2" style={{
-              background: item.status === 'ready' ? '#7FC4A8' : item.status === 'preparing' ? '#F5C065' : '#FFEEE8',
-              color: item.status === 'ready' ? 'white' : '#2A1F1A',
-            }}>
-              {ITEM_STATUS_LABELS[item.status] ?? item.status}
-            </span>
+            {item.status === 'pending' && (
+              <button
+                onClick={() => onItemStatusChange(order.id, item.id, 'preparing')}
+                className="text-xs font-black px-2 py-0.5 rounded-full shrink-0 ml-2 active:scale-95 transition-transform"
+                style={{ background: '#7FC4A8', color: 'white' }}
+              >
+                ▶ Inizia
+              </button>
+            )}
+            {item.status === 'preparing' && (
+              <button
+                onClick={() => onItemStatusChange(order.id, item.id, 'ready')}
+                className="text-xs font-black px-2 py-0.5 rounded-full shrink-0 ml-2 active:scale-95 transition-transform"
+                style={{ background: '#F5C065', color: '#2A1F1A' }}
+              >
+                ✓ Pronto
+              </button>
+            )}
+            {(item.status === 'ready' || item.status === 'served') && (
+              <span className="text-xs font-black px-2 py-0.5 rounded-full shrink-0 ml-2" style={{ background: '#7FC4A8', color: 'white' }}>
+                {ITEM_STATUS_LABELS[item.status] ?? item.status}
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -210,12 +228,19 @@ export default function KdsPage() {
       playDing()
       vibrate([200])
     })
-    socket.on('order:updated', ({ orderId, status }: any) => {
+    socket.on('order:updated', ({ orderId, status, itemId, itemStatus }: any) => {
       if (['paid', 'cancelled'].includes(status)) {
         qc.setQueryData(['active-orders'], (old: any[]) => old?.filter(o => o.id !== orderId) ?? [])
       } else {
         qc.setQueryData(['active-orders'], (old: any[]) =>
-          old?.map(o => o.id === orderId ? { ...o, status } : o) ?? []
+          old?.map(o => {
+            if (o.id !== orderId) return o
+            const updatedOrder = { ...o, status }
+            if (itemId && itemStatus) {
+              updatedOrder.items = o.items.map((i: any) => i.id === itemId ? { ...i, status: itemStatus } : i)
+            }
+            return updatedOrder
+          }) ?? []
         )
       }
     })
@@ -225,6 +250,12 @@ export default function KdsPage() {
   const statusMutation = useMutation({
     mutationFn: ({ orderId, status }: { orderId: string; status: string }) =>
       api.patch(`/orders/${orderId}/status`, { status }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['active-orders'] }),
+  })
+
+  const bumpItemMutation = useMutation({
+    mutationFn: ({ orderId, itemId, status }: { orderId: string; itemId: string; status: string }) =>
+      api.patch(`/orders/${orderId}/items/${itemId}/status`, { status }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['active-orders'] }),
   })
 
@@ -283,13 +314,13 @@ export default function KdsPage() {
       {compact ? (
         <div className="space-y-2">
           {filtered.map((order: any) => (
-            <KdsCard key={order.id} order={order} compact={true} onStatusChange={(id, s) => statusMutation.mutate({ orderId: id, status: s })} />
+            <KdsCard key={order.id} order={order} compact={true} onStatusChange={(id, s) => statusMutation.mutate({ orderId: id, status: s })} onItemStatusChange={(oId, iId, s) => bumpItemMutation.mutate({ orderId: oId, itemId: iId, status: s })} />
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((order: any) => (
-            <KdsCard key={order.id} order={order} compact={false} onStatusChange={(id, s) => statusMutation.mutate({ orderId: id, status: s })} />
+            <KdsCard key={order.id} order={order} compact={false} onStatusChange={(id, s) => statusMutation.mutate({ orderId: id, status: s })} onItemStatusChange={(oId, iId, s) => bumpItemMutation.mutate({ orderId: oId, itemId: iId, status: s })} />
           ))}
         </div>
       )}

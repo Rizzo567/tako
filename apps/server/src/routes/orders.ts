@@ -99,8 +99,19 @@ export async function orderRoutes(fastify: FastifyInstance) {
     const [item] = await db.update(orderItems).set({ status }).where(and(eq(orderItems.id, itemId), eq(orderItems.orderId, orderId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
 
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, itemId, status })
-    return { data: item }
+    // Derive order-level status from all items
+    const allItems = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
+
+    let derivedStatus: string
+    if (allItems.every(i => i.status === 'served')) derivedStatus = 'served'
+    else if (allItems.every(i => i.status === 'ready' || i.status === 'served')) derivedStatus = 'ready'
+    else if (allItems.some(i => i.status === 'preparing' || i.status === 'ready')) derivedStatus = 'preparing'
+    else derivedStatus = 'pending'
+
+    await db.update(orders).set({ status: derivedStatus as any, updatedAt: new Date() }).where(eq(orders.id, orderId))
+
+    io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, itemId, itemStatus: status, status: derivedStatus })
+    return { data: { item, orderStatus: derivedStatus } }
   })
 
   // Cancel order
