@@ -71,6 +71,26 @@ export async function billRoutes(fastify: FastifyInstance) {
         await db.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, bill.tableId))
         io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: bill.tableId, status: 'cleaning' })
       }
+      // Auto-cascade: tutti gli ordini attivi del tavolo → served
+      if (bill.tableId) {
+        const activeOrders = await db
+          .select({ id: orders.id })
+          .from(orders)
+          .where(and(
+            eq(orders.tableId, bill.tableId),
+            inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready'])
+          ))
+
+        if (activeOrders.length > 0) {
+          const servedAt = new Date()
+          for (const order of activeOrders) {
+            await db.update(orders)
+              .set({ status: 'served', servedAt })
+              .where(eq(orders.id, order.id))
+            io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId: order.id, status: 'served' })
+          }
+        }
+      }
     }
 
     return reply.code(201).send({ data: payment })
