@@ -21,7 +21,7 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
   useEffect(() => {
     api.get(`/customer/table/${token}`)
       .then(r => {
-        const { restaurant, table } = r.data.data
+        const { restaurant, table, sessionId } = r.data.data
         setSession({
           restaurantId: restaurant.id,
           tableId: table.id,
@@ -30,6 +30,7 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
           primaryColor: restaurant.primaryColor,
           aiEnabled: restaurant.aiEnabled,
           logoUrl: restaurant.logoUrl,
+          sessionId: sessionId ?? null,
         })
         document.documentElement.style.setProperty('--brand', restaurant.primaryColor)
       })
@@ -76,21 +77,10 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
     <div className="min-h-screen bg-cream pb-24">
       {/* Main views */}
       {view === 'menu' && (
-        <MenuView onGoCart={() => setCartOpen(true)} onGoChat={() => setView('chat')} />
+        <MenuView onGoCart={() => setCartOpen(true)} onGoChat={() => setView('chat')} onWaiterCall={() => setWaiterSheet(true)} />
       )}
       {view === 'tracking' && <OrderTracking onBack={() => setView('menu')} onOrderAgain={() => setView('menu')} />}
       {view === 'chat' && <AiChat onBack={() => setView('menu')} />}
-
-      {/* Floating "Chiama cameriere" button */}
-      {view === 'menu' && (
-        <button
-          onClick={() => setWaiterSheet(true)}
-          className="fixed bottom-24 left-4 z-30 bg-white border-2 border-ink rounded-2xl px-4 py-3 flex items-center gap-2 font-display font-black text-sm"
-          style={{ boxShadow: '3px 3px 0 #2A1F1A' }}
-        >
-          🔔 Chiama
-        </button>
-      )}
 
       {/* Cart bottom sheet overlay */}
       <div

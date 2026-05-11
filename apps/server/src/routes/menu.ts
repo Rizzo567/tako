@@ -165,6 +165,15 @@ export async function menuRoutes(fastify: FastifyInstance) {
     return reply.code(201).send({ data: variant })
   })
 
+  // Delete variant
+  fastify.delete('/items/:itemId/variants/:variantId', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId, variantId } = req.params as { itemId: string; variantId: string }
+    const [item] = await db.select({ id: menuItems.id }).from(menuItems).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    await db.delete(itemVariants).where(eq(itemVariants.id, variantId))
+    return { data: { success: true } }
+  })
+
   // Parse raw menu text with AI → return preview (no DB write)
   fastify.post('/:menuId/import-text', { preHandler: requireAuth }, async (req, reply) => {
     const { menuId } = req.params as { menuId: string }

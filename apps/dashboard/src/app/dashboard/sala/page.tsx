@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { api } from '@/lib/api'
 import { socket } from '@/lib/socket'
 import { cn, formatEuro } from '@/lib/utils'
-import { Users, Plus, Clock, X, Receipt, Sparkles, ChevronRight } from 'lucide-react'
+import { Users, Plus, Clock, X, Receipt, Sparkles, ChevronRight, Bell } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 type TableStatus = 'free' | 'occupied' | 'waiting' | 'cleaning' | 'reserved'
@@ -26,6 +26,11 @@ const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   pending: 'In attesa', confirmed: 'Confermato', preparing: 'In preparazione',
   ready: 'Pronto', served: 'Servito', paid: 'Pagato', cancelled: 'Annullato',
 }
+type WaiterCallEntry = { tableId: string; tableNumber: string; type: 'help' | 'bill' | 'water'; calledAt: number }
+
+const CALL_LABELS: Record<WaiterCallEntry['type'], string> = { help: 'Aiuto richiesto', bill: 'Conto', water: 'Acqua' }
+const CALL_EMOJIS: Record<WaiterCallEntry['type'], string> = { help: '👋', bill: '🧾', water: '💧' }
+
 const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
   pending: 'bg-sun/30 text-ink',
   confirmed: 'bg-sky/30 text-ink',
@@ -195,7 +200,7 @@ function TableModal({ table, onClose }: { table: any; onClose: () => void }) {
 export default function SalaPage() {
   const qc = useQueryClient()
   const [selectedTable, setSelectedTable] = useState<any | null>(null)
-  const [calledTables, setCalledTables] = useState<Set<string>>(new Set())
+  const [waiterCalls, setWaiterCalls] = useState<WaiterCallEntry[]>([])
   const [readyTables, setReadyTables] = useState<Set<string>>(new Set())
 
   const { data: rooms = [], isLoading } = useQuery({
@@ -229,11 +234,10 @@ export default function SalaPage() {
       )
     })
     socket.on('waiter:called', ({ tableId, tableNumber, type }: any) => {
-      toast(`🔔 T${tableNumber} chiama: ${type}`, { duration: 8000 })
-      setCalledTables(prev => new Set(prev).add(tableId))
-      setTimeout(() => {
-        setCalledTables(prev => { const n = new Set(prev); n.delete(tableId); return n })
-      }, 30000)
+      setWaiterCalls(prev => {
+        const filtered = prev.filter(c => c.tableId !== tableId)
+        return [...filtered, { tableId, tableNumber, type, calledAt: Date.now() }]
+      })
     })
     socket.on('order:updated', ({ status }: any) => {
       qc.invalidateQueries({ queryKey: ['active-orders'] })
@@ -245,6 +249,10 @@ export default function SalaPage() {
       socket.off('order:updated')
     }
   }, [qc, selectedTable])
+
+  function dismissCall(tableId: string) {
+    setWaiterCalls(prev => prev.filter(c => c.tableId !== tableId))
+  }
 
   const statusMutation = useMutation({
     mutationFn: ({ tableId, status }: { tableId: string; status: TableStatus }) =>
@@ -309,12 +317,39 @@ export default function SalaPage() {
         </div>
       </div>
 
+      {/* Waiter call notifications */}
+      {waiterCalls.length > 0 && (
+        <div className="mb-6 space-y-2">
+          {waiterCalls.map(call => (
+            <div
+              key={call.tableId}
+              className="flex items-center justify-between bg-coral/10 border-2 border-coral rounded-2xl px-5 py-3"
+              style={{ boxShadow: '3px 3px 0 rgba(220,80,60,0.2)' }}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{CALL_EMOJIS[call.type as WaiterCallEntry['type']]}</span>
+                <div>
+                  <span className="font-display font-black text-coral-deep">Tavolo {call.tableNumber}</span>
+                  <span className="ml-2 text-sm font-bold text-ink/70">{CALL_LABELS[call.type as WaiterCallEntry['type']]}</span>
+                </div>
+              </div>
+              <button
+                onClick={() => dismissCall(call.tableId)}
+                className="p-1.5 hover:bg-coral/20 rounded-xl transition-colors text-ink/50 hover:text-ink"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
       {rooms.map((room: any) => (
         <div key={room.id} className="mb-10">
           <h2 className="font-display font-black text-xl mb-4 text-ink/70">{room.name}</h2>
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {(room.tables ?? []).map((table: any) => {
-              const isCalled = calledTables.has(table.id)
+              const isCalled = waiterCalls.some(c => c.tableId === table.id)
               const hasReady = readyTables.has(table.id)
               const isOccupied = ['occupied', 'waiting'].includes(table.status)
 
@@ -323,8 +358,7 @@ export default function SalaPage() {
                   key={table.id}
                   onClick={() => {
                     if (isOccupied) {
-                      // dismiss waiter call on open
-                      setCalledTables(prev => { const n = new Set(prev); n.delete(table.id); return n })
+                      dismissCall(table.id)
                       setSelectedTable(table)
                     } else {
                       statusMutation.mutate({ tableId: table.id, status: nextStatus[table.status as TableStatus] })

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
 import { useSessionStore, useCartStore } from '@/lib/store'
 import { formatEuro, cn } from '@/lib/utils'
-import { ShoppingCart, MessageCircle, Minus, Plus, X, Filter } from 'lucide-react'
+import { ShoppingCart, MessageCircle, Minus, Plus, X, Filter, Bell } from 'lucide-react'
 import type { PublicMenu, PublicItem } from '@tako/types'
 import toast from 'react-hot-toast'
 
@@ -74,12 +74,12 @@ function ItemModal({ item, onClose, onAdd }: { item: PublicItem; onClose: () => 
   )
 }
 
-export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoChat: () => void }) {
+export function MenuView({ onGoCart, onGoChat, onWaiterCall }: { onGoCart: () => void; onGoChat: () => void; onWaiterCall: () => void }) {
   const { restaurantId, tableNumber, restaurantName, primaryColor, aiEnabled } = useSessionStore()
   const [menu, setMenu] = useState<PublicMenu | null>(null)
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [selectedItem, setSelectedItem] = useState<PublicItem | null>(null)
-  const [filterAllergen, setFilterAllergen] = useState<string | null>(null)
+  const [filterAllergens, setFilterAllergens] = useState<Set<string>>(new Set())
   const { add, count, items } = useCartStore()
 
   useEffect(() => {
@@ -115,7 +115,19 @@ export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoCha
     toast.success(`${item.name} aggiunto!`, { icon: '✅' })
   }
 
-  const activeItems = menu?.sections.find(s => s.id === activeSection)?.items.filter(i => i.available && (!filterAllergen || !i.allergens.includes(filterAllergen))) ?? []
+  const allAllergens = Array.from(new Set(menu?.sections.flatMap(s => s.items.flatMap(i => i.allergens)) ?? []))
+
+  function toggleAllergen(a: string) {
+    setFilterAllergens(prev => {
+      const next = new Set(prev)
+      next.has(a) ? next.delete(a) : next.add(a)
+      return next
+    })
+  }
+
+  const activeItems = menu?.sections.find(s => s.id === activeSection)?.items.filter(i =>
+    i.available && (filterAllergens.size === 0 || !i.allergens.some(a => filterAllergens.has(a)))
+  ) ?? []
 
   return (
     <>
@@ -132,6 +144,9 @@ export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoCha
                 <MessageCircle size={18} className="text-cream" />
               </button>
             )}
+            <button onClick={onWaiterCall} className="w-10 h-10 rounded-xl bg-ink grid place-items-center">
+              <Bell size={18} className="text-cream" />
+            </button>
             <button onClick={onGoCart} className="relative w-10 h-10 rounded-xl grid place-items-center" style={{ background: primaryColor }}>
               <ShoppingCart size={18} className="text-white" />
               {count() > 0 && <span className="absolute -top-1.5 -right-1.5 bg-white text-ink text-[10px] font-black w-5 h-5 rounded-full grid place-items-center border-2 border-ink">{count()}</span>}
@@ -147,6 +162,25 @@ export function MenuView({ onGoCart, onGoChat }: { onGoCart: () => void; onGoCha
             </button>
           ))}
         </div>
+
+        {/* Allergen filters */}
+        {allAllergens.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto pt-2 pb-1 scrollbar-hide">
+            <span className="shrink-0 flex items-center gap-1 text-[11px] font-black text-ink/40"><Filter size={11} /> Escludi:</span>
+            {allAllergens.map(a => {
+              const active = filterAllergens.has(a)
+              return (
+                <button
+                  key={a}
+                  onClick={() => toggleAllergen(a)}
+                  className={cn('shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black border-2 transition-all', active ? 'border-red-400 bg-red-50 text-red-600' : 'border-ink/15 bg-ink/3 text-ink/60')}
+                >
+                  {ALLERGEN_ICONS[a.toLowerCase()] ?? '⚠️'} {a}
+                </button>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       {/* Items */}

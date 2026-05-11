@@ -97,14 +97,14 @@ export async function insightsRoutes(fastify: FastifyInstance) {
       .select({
         menuItemId: orderItems.menuItemId,
         name: orderItems.name,
-        totalQty: sql<number>`SUM(${orderItems.quantity})`.as('total_qty'),
-        totalRevenue: sql<number>`SUM(${orderItems.quantity} * ${orderItems.unitPrice})`.as('total_revenue'),
-        avgPrice: sql<number>`AVG(${orderItems.unitPrice})`.as('avg_price'),
+        totalQty: sql<number>`SUM(${orderItems.quantity})::int`.as('total_qty'),
+        totalRevenue: sql<number>`SUM(${orderItems.quantity} * ${orderItems.unitPrice})::float`.as('total_revenue'),
+        avgPrice: sql<number>`AVG(${orderItems.unitPrice})::float`.as('avg_price'),
       })
       .from(orderItems)
       .where(inArray(orderItems.orderId, orderIds))
       .groupBy(orderItems.menuItemId, orderItems.name)
-      .orderBy(sql`total_revenue DESC`)
+      .orderBy(sql`SUM(${orderItems.quantity} * ${orderItems.unitPrice}) DESC`)
 
     if (!rawItems.length) {
       return { data: { items: [], periodDays: days, totalRevenue: 0 } }

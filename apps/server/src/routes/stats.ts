@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
-import { db, orders, orderItems, menuItems, bills } from '@tako/db'
-import { eq, and, gte, lte, desc, sql, inArray } from 'drizzle-orm'
+import { db, orders, orderItems, menuItems, bills, tableSessions } from '@tako/db'
+import { eq, and, gte, lte, desc, sql, inArray, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 
 export async function statsRoutes(fastify: FastifyInstance) {
@@ -31,7 +31,7 @@ export async function statsRoutes(fastify: FastifyInstance) {
     // Top items by quantity
     const servedOrders = await db.select().from(orders).where(and(
       eq(orders.restaurantId, restaurantId),
-      eq(orders.status, 'served'),
+      inArray(orders.status, ['served', 'paid']),
       gte(orders.createdAt, startDate),
     ))
 
@@ -74,6 +74,34 @@ export async function statsRoutes(fastify: FastifyInstance) {
       eq(orders.status, 'pending'),
     ))
 
+    // Session analytics
+    const periodSessions = await db
+      .select()
+      .from(tableSessions)
+      .where(and(
+        eq(tableSessions.restaurantId, restaurantId),
+        gte(tableSessions.scannedAt, startDate),
+        lte(tableSessions.scannedAt, endDate),
+      ))
+
+    const totalScans = periodSessions.length
+    const convertedSessions = periodSessions.filter(s => s.firstOrderAt !== null)
+    const conversionRate = totalScans > 0 ? Math.round((convertedSessions.length / totalScans) * 100) : 0
+
+    const timings = convertedSessions
+      .map(s => s.timeToFirstOrderSec)
+      .filter((t): t is number => t !== null && t > 0 && t < 3600)
+    const avgTimeToFirstOrderSec = timings.length
+      ? Math.round(timings.reduce((a, b) => a + b, 0) / timings.length)
+      : null
+
+    // Scans per hour (0-23) for peak hour chart
+    const scansPerHour: number[] = Array(24).fill(0)
+    for (const s of periodSessions) {
+      const hour = s.scannedAt.getHours()
+      scansPerHour[hour]!++
+    }
+
     return {
       data: {
         revenue,
@@ -84,6 +112,12 @@ export async function statsRoutes(fastify: FastifyInstance) {
         pendingOrdersCount: pendingOrders.length,
         dailyRevenue: Object.entries(dailyRevenue).map(([date, amount]) => ({ date, amount })),
         topItems,
+        sessions: {
+          totalScans,
+          conversionRate,
+          avgTimeToFirstOrderSec,
+          scansPerHour: scansPerHour.map((count, hour) => ({ hour, count })),
+        },
       },
     }
   })

@@ -4,6 +4,9 @@ import jwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 import helmet from '@fastify/helmet'
+import fastifyStatic from '@fastify/static'
+import { resolve } from 'path'
+import { mkdirSync } from 'fs'
 import { Server as SocketServer } from 'socket.io'
 import { setupSocketHandlers } from './socket/handlers.js'
 import { authRoutes } from './routes/auth.js'
@@ -18,6 +21,7 @@ import { customerRoutes } from './routes/customer.js'
 import { uploadRoutes } from './routes/uploads.js'
 import { staffRoutes } from './routes/staff.js'
 import { insightsRoutes } from './routes/insights.js'
+import { printRoutes } from './routes/print.js'
 
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET']
@@ -41,6 +45,10 @@ await fastify.register(cors, {
 
 await fastify.register(jwt, { secret: JWT_SECRET })
 await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
+
+const UPLOADS_DIR = resolve(process.env['UPLOADS_DIR'] ?? './uploads')
+mkdirSync(UPLOADS_DIR, { recursive: true })
+await fastify.register(fastifyStatic, { root: UPLOADS_DIR, prefix: '/uploads/', decorateReply: false })
 
 // Rate limiting globale
 await fastify.register(rateLimit, {
@@ -68,6 +76,7 @@ await fastify.register(customerRoutes, { prefix: '/api/customer' })
 await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
 await fastify.register(staffRoutes, { prefix: '/api/staff' })
 await fastify.register(insightsRoutes, { prefix: '/api/insights' })
+await fastify.register(printRoutes, { prefix: '/api/print' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()

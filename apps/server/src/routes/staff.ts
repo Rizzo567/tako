@@ -9,7 +9,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
   fastify.get('/', { preHandler: requireAuth }, async (req) => {
     const staff = await db.select({
       id: users.id, name: users.name, email: users.email, role: users.role,
-      active: users.active, lastLoginAt: users.lastLoginAt, avatarUrl: users.avatarUrl,
+      active: users.active, lastLoginAt: users.lastLoginAt, avatarUrl: users.avatarUrl, phone: users.phone,
     }).from(users).where(eq(users.restaurantId, req.user!.restaurantId))
     return { data: staff }
   })
@@ -21,6 +21,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
       role: z.enum(['dipendente', 'chef', 'cassiere']),
       pin: z.string().length(4).optional(),
       password: z.string().min(6).optional(),
+      phone: z.string().optional(),
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
@@ -34,6 +35,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
       role: body.data.role,
       pin: pinHash,
       passwordHash,
+      phone: body.data.phone,
     }).returning()
 
     return reply.code(201).send({ data: { id: user!.id, name: user!.name, email: user!.email, role: user!.role } })
@@ -46,6 +48,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
       role: z.enum(['dipendente', 'chef', 'cassiere']).optional(),
       pin: z.string().length(4).optional(),
       active: z.boolean().optional(),
+      phone: z.string().optional(),
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })

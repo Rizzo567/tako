@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, UtensilsCrossed, Grid3X3, ShoppingCart, Receipt,
   ChefHat, BarChart3, Package, Users, Settings, LogOut,
-  ChevronDown, ChevronUp, Menu, X, Sparkles,
+  ChevronDown, ChevronUp, Menu, X, Sparkles, Smartphone,
 } from 'lucide-react'
 import { createContext, useContext, useState, ReactNode } from 'react'
 import { useAuthStore } from '@/lib/store'
@@ -155,6 +155,19 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             </div>
           )}
         </div>
+
+        {/* Modalità Cameriere */}
+        <Link
+          href="/comanda"
+          onClick={onNavigate}
+          className={cn(
+            'sidebar-link',
+            pathname.startsWith('/comanda') ? 'active' : 'text-cream/70',
+          )}
+        >
+          <Smartphone size={18} />
+          <span>Modalità Cameriere</span>
+        </Link>
 
         {/* Bottom links */}
         {bottomLinks.map(({ href, label, icon: Icon, badge }) => {

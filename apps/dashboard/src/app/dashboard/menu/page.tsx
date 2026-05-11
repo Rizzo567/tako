@@ -1,11 +1,26 @@
 'use client'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { api } from '@/lib/api'
 import { formatEuro } from '@/lib/utils'
 import { cn } from '@/lib/utils'
-import { Plus, ToggleLeft, ToggleRight, Pencil, Trash2, X, UtensilsCrossed, ChevronDown, ChevronRight, FileText, Loader2, CheckCircle2, MoreHorizontal } from 'lucide-react'
+import { Plus, ToggleLeft, ToggleRight, Pencil, Trash2, X, UtensilsCrossed, ChevronDown, ChevronRight, FileText, Loader2, CheckCircle2, MoreHorizontal, Upload, GripVertical } from 'lucide-react'
 import toast from 'react-hot-toast'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 // ─── Allergen emoji map ───────────────────────────────────────────────────────
 
@@ -54,11 +69,15 @@ function ItemModal({
   onClose: () => void
 }) {
   const qc = useQueryClient()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [form, setForm] = useState<ItemForm>(
     item
       ? { name: item.name, price: String(item.price), description: item.description ?? '', allergens: (item.allergens ?? []).join(', '), imageUrl: item.imageUrl ?? '', prepTimeMinutes: String(item.prepTimeMinutes ?? 10) }
       : emptyForm
   )
+  const [uploading, setUploading] = useState(false)
+  const [newVariantName, setNewVariantName] = useState('')
+  const [newVariantPrice, setNewVariantPrice] = useState('0')
 
   const f = (k: keyof ItemForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(prev => ({ ...prev, [k]: e.target.value }))
@@ -76,6 +95,38 @@ function ItemModal({
     onError: () => toast.error('Errore nel salvataggio'),
   })
 
+  const addVariantMutation = useMutation({
+    mutationFn: () => api.post(`/menus/items/${item.id}/variants`, { name: newVariantName.trim(), priceModifier: parseFloat(newVariantPrice) || 0 }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['menu-full'] })
+      setNewVariantName('')
+      setNewVariantPrice('0')
+      toast.success('Variante aggiunta')
+    },
+    onError: () => toast.error('Errore'),
+  })
+
+  const deleteVariantMutation = useMutation({
+    mutationFn: (variantId: string) => api.delete(`/menus/items/${item.id}/variants/${variantId}`),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['menu-full'] }); toast.success('Variante rimossa') },
+  })
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await api.post('/uploads/image', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+      setForm(prev => ({ ...prev, imageUrl: res.data.data.url }))
+    } catch {
+      toast.error('Errore upload immagine')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!form.name.trim() || !form.price) return
@@ -90,9 +141,9 @@ function ItemModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 overflow-y-auto" onClick={onClose}>
       <div
-        className="bg-cream rounded-2xl border-2 border-ink w-full max-w-md"
+        className="bg-cream rounded-2xl border-2 border-ink w-full max-w-md my-4"
         style={{ boxShadow: '6px 6px 0 #2A1F1A' }}
         onClick={e => e.stopPropagation()}
       >
@@ -135,8 +186,20 @@ function ItemModal({
               )}
             </div>
             <div className="col-span-2">
-              <label className="label">URL foto</label>
-              <input className="input" type="url" value={form.imageUrl} onChange={f('imageUrl')} placeholder="https://..." />
+              <label className="label">Foto</label>
+              <div className="flex gap-2">
+                <input className="input flex-1" type="url" value={form.imageUrl} onChange={f('imageUrl')} placeholder="https://... oppure carica sotto" />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="btn-outline px-3 py-2 flex items-center gap-1.5 text-sm shrink-0"
+                >
+                  {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                  {uploading ? 'Upload...' : 'Carica'}
+                </button>
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+              </div>
               {form.imageUrl && (
                 <img src={form.imageUrl} alt="" className="mt-2 w-full h-32 object-cover rounded-xl border-2 border-ink/10" onError={e => (e.currentTarget.style.display = 'none')} />
               )}
@@ -150,7 +213,100 @@ function ItemModal({
             <button type="button" onClick={onClose} className="btn-outline px-4 py-2.5">Annulla</button>
           </div>
         </form>
+
+        {/* Variants section — only when editing */}
+        {item && (
+          <div className="border-t border-ink/10 p-5">
+            <h3 className="font-display font-black text-base mb-3">Varianti (S/M/L, opzioni)</h3>
+            <div className="space-y-2 mb-3">
+              {(item.variants ?? []).map((v: any) => (
+                <div key={v.id} className="flex items-center gap-2 bg-ink/3 rounded-xl px-3 py-2">
+                  <span className="font-bold text-sm flex-1">{v.name}</span>
+                  <span className="font-black text-sm text-ink/60">
+                    {v.priceModifier > 0 ? '+' : ''}{formatEuro(v.priceModifier)}
+                  </span>
+                  <button
+                    onClick={() => deleteVariantMutation.mutate(v.id)}
+                    className="text-ink/30 hover:text-red-500 transition-colors"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+              {(item.variants ?? []).length === 0 && (
+                <p className="text-xs text-ink/40 font-semibold">Nessuna variante</p>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <input
+                className="input flex-1 text-sm py-2"
+                placeholder="Nome (es. Grande)"
+                value={newVariantName}
+                onChange={e => setNewVariantName(e.target.value)}
+              />
+              <input
+                className="input w-24 text-sm py-2"
+                type="number"
+                step="0.5"
+                placeholder="+€"
+                value={newVariantPrice}
+                onChange={e => setNewVariantPrice(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => addVariantMutation.mutate()}
+                disabled={!newVariantName.trim() || addVariantMutation.isPending}
+                className="btn-coral px-3 py-2 text-sm"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+    </div>
+  )
+}
+
+// ─── Section sortable wrapper ─────────────────────────────────────────────────
+
+function SectionRow({ sectionId, children }: { sectionId: string; children: React.ReactNode }) {
+  const { setNodeRef, transform, transition, isDragging } = useSortable({ id: `sec-${sectionId}` })
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }}
+      className="mb-6"
+    >
+      {children}
+    </div>
+  )
+}
+
+function SectionDragHandle({ id }: { id: string }) {
+  const { attributes, listeners } = useSortable({ id })
+  return (
+    <button
+      {...attributes}
+      {...listeners}
+      className="cursor-grab active:cursor-grabbing text-ink/20 hover:text-ink/50 transition-colors p-1 shrink-0"
+    >
+      <GripVertical size={16} />
+    </button>
+  )
+}
+
+// ─── Sortable item row ────────────────────────────────────────────────────────
+
+function SortableItem({ id, children }: { id: string; children: React.ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
+  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1 }
+  return (
+    <div ref={setNodeRef} style={style} className="flex items-center gap-1">
+      <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-ink/20 hover:text-ink/50 transition-colors p-1 shrink-0">
+        <GripVertical size={14} />
+      </button>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }
@@ -286,7 +442,6 @@ function ImportTextModal({ menuId, onClose, onImported }: { menuId: string; onCl
         style={{ boxShadow: '6px 6px 0 #2A1F1A' }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-ink/10 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-coral/10 rounded-xl grid place-items-center">
@@ -304,7 +459,6 @@ function ImportTextModal({ menuId, onClose, onImported }: { menuId: string; onCl
           </button>
         </div>
 
-        {/* Body */}
         <div className="flex-1 overflow-y-auto p-5">
           {step === 'input' && (
             <div className="space-y-4">
@@ -383,7 +537,6 @@ function ImportTextModal({ menuId, onClose, onImported }: { menuId: string; onCl
           )}
         </div>
 
-        {/* Footer preview step */}
         {step === 'preview' && (
           <div className="flex gap-2 p-5 border-t border-ink/10 shrink-0">
             <button
@@ -416,6 +569,8 @@ export default function MenuPage() {
   const [wizardDone, setWizardDone] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [sectionMenu, setSectionMenu] = useState<string | null>(null)
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
   const { data: menus = [], isLoading: loadingMenus } = useQuery({
     queryKey: ['menus'],
@@ -461,6 +616,16 @@ export default function MenuPage() {
     },
   })
 
+  const patchSectionPosition = useMutation({
+    mutationFn: ({ id, position }: { id: string; position: number }) =>
+      api.patch(`/menus/sections/${id}`, { position }),
+  })
+
+  const patchItemPosition = useMutation({
+    mutationFn: ({ id, position }: { id: string; position: number }) =>
+      api.patch(`/menus/items/${id}`, { position }),
+  })
+
   function toggleSection(id: string) {
     setCollapsedSections(prev => {
       const next = new Set(prev)
@@ -469,9 +634,50 @@ export default function MenuPage() {
     })
   }
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const activeId = String(active.id)
+    const overId = String(over.id)
+
+    if (activeId.startsWith('sec-') && overId.startsWith('sec-')) {
+      const secs = fullMenu?.sections ?? []
+      const oldIdx = secs.findIndex((s: any) => `sec-${s.id}` === activeId)
+      const newIdx = secs.findIndex((s: any) => `sec-${s.id}` === overId)
+      if (oldIdx === -1 || newIdx === -1) return
+      const reordered = arrayMove(secs, oldIdx, newIdx)
+      // Optimistic update via cache
+      qc.setQueryData(['menu-full', menuId], (old: any) => old ? { ...old, sections: reordered } : old)
+      reordered.forEach((s: any, i: number) => {
+        if (secs[i]?.id !== s.id) patchSectionPosition.mutate({ id: s.id, position: i })
+      })
+      return
+    }
+
+    if (activeId.startsWith('item-') && overId.startsWith('item-')) {
+      const secs = fullMenu?.sections ?? []
+      for (const sec of secs) {
+        const items = sec.items ?? []
+        const oldIdx = items.findIndex((it: any) => `item-${it.id}` === activeId)
+        if (oldIdx === -1) continue
+        const newIdx = items.findIndex((it: any) => `item-${it.id}` === overId)
+        if (newIdx === -1) continue
+        const reordered = arrayMove(items, oldIdx, newIdx)
+        qc.setQueryData(['menu-full', menuId], (old: any) => old ? {
+          ...old,
+          sections: old.sections.map((s: any) => s.id === sec.id ? { ...s, items: reordered } : s)
+        } : old)
+        reordered.forEach((it: any, i: number) => {
+          if (items[i]?.id !== it.id) patchItemPosition.mutate({ id: it.id, position: i })
+        })
+        return
+      }
+    }
+  }
+
   const isLoading = loadingMenus || loadingMenu
 
-  // Skeleton
   if (isLoading) return (
     <div className="p-8">
       <div className="skeleton h-9 w-32 mb-8" />
@@ -486,14 +692,13 @@ export default function MenuPage() {
     </div>
   )
 
-  // No menu yet — show wizard
   if (!menuId && !wizardDone) return (
     <div className="p-8">
       <EmptyMenuWizard onCreated={() => setWizardDone(true)} />
     </div>
   )
 
-  const sections = fullMenu?.sections ?? []
+  const sections: any[] = fullMenu?.sections ?? []
 
   return (
     <div className="p-8 max-w-3xl">
@@ -518,7 +723,6 @@ export default function MenuPage() {
         </div>
       </div>
 
-      {/* Add section inline form */}
       {showAddSection && (
         <div className="card mb-6 border-coral/30 flex items-center gap-3">
           <input
@@ -534,132 +738,145 @@ export default function MenuPage() {
         </div>
       )}
 
-      {/* Sections */}
-      {sections.map((section: any) => {
-        const collapsed = collapsedSections.has(section.id)
-        const count = section.items?.length ?? 0
-        return (
-          <div key={section.id} className="mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <button
-                onClick={() => toggleSection(section.id)}
-                className="flex items-center gap-2 group"
-              >
-                {collapsed ? <ChevronRight size={18} className="text-ink/40" /> : <ChevronDown size={18} className="text-ink/40" />}
-                <h2 className="font-display font-black text-xl group-hover:text-coral transition-colors">{section.name}</h2>
-                <span className="text-xs font-black text-ink/40 bg-ink/5 px-2 py-0.5 rounded-full">{count}</span>
-              </button>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setItemModal({ sectionId: section.id })}
-                  className="btn-outline text-sm px-3 py-2 flex items-center gap-1"
-                >
-                  <Plus size={13} /> Piatto
-                </button>
-                <div className="relative">
-                  <button
-                    onClick={() => setSectionMenu(sectionMenu === section.id ? null : section.id)}
-                    className="p-2 hover:bg-ink/10 rounded-lg transition-colors text-ink/40 hover:text-ink"
-                  >
-                    <MoreHorizontal size={16} />
-                  </button>
-                  {sectionMenu === section.id && (
-                    <div
-                      className="absolute right-0 top-full mt-1 bg-white border-2 border-ink/10 rounded-xl shadow-lg z-10 min-w-[160px]"
-                      onClick={() => setSectionMenu(null)}
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={sections.map((s: any) => `sec-${s.id}`)} strategy={verticalListSortingStrategy}>
+          {sections.map((section: any) => {
+            const collapsed = collapsedSections.has(section.id)
+            const count = section.items?.length ?? 0
+            return (
+              <SectionRow key={section.id} sectionId={section.id}>
+                {/* Section header */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-1">
+                    <SectionDragHandle id={`sec-${section.id}`} />
+                    <button
+                      onClick={() => toggleSection(section.id)}
+                      className="flex items-center gap-2 group"
                     >
-                      <button
-                        onClick={() => {
-                          if (confirm(`Elimina la sezione "${section.name}" e tutti i suoi piatti?`)) {
-                            deleteSectionMutation.mutate(section.id)
-                          }
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                      >
-                        <Trash2 size={14} /> Elimina sezione
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {!collapsed && (
-              <div className="space-y-2">
-                {count === 0 && (
-                  <div className="border-2 border-dashed border-ink/15 rounded-xl p-5 text-center">
-                    <p className="text-sm font-bold text-ink/40 mb-2">Sezione vuota</p>
-                    <button onClick={() => setItemModal({ sectionId: section.id })} className="text-coral font-black text-sm hover:underline">
-                      + Aggiungi il primo piatto
+                      {collapsed ? <ChevronRight size={18} className="text-ink/40" /> : <ChevronDown size={18} className="text-ink/40" />}
+                      <h2 className="font-display font-black text-xl group-hover:text-coral transition-colors">{section.name}</h2>
+                      <span className="text-xs font-black text-ink/40 bg-ink/5 px-2 py-0.5 rounded-full">{count}</span>
                     </button>
                   </div>
-                )}
-
-                {section.items.map((item: any) => (
-                  <div
-                    key={item.id}
-                    className={cn(
-                      'card-sm flex items-center gap-4 transition-opacity',
-                      !item.available && 'opacity-50'
-                    )}
-                  >
-                    {item.imageUrl ? (
-                      <img src={item.imageUrl} alt="" className="w-14 h-14 rounded-xl object-cover border-2 border-ink/10 shrink-0" />
-                    ) : (
-                      <div className="w-14 h-14 rounded-xl bg-ink/5 grid place-items-center shrink-0 text-xl">🍽️</div>
-                    )}
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-display font-black truncate">{item.name}</p>
-                        {!item.available && (
-                          <span className="badge bg-ink/10 text-ink/50 text-xs">Esaurito</span>
-                        )}
-                      </div>
-                      {item.description && (
-                        <p className="text-xs text-ink/60 font-semibold truncate">{item.description}</p>
-                      )}
-                      {item.allergens?.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {item.allergens.map((a: string) => (
-                            <span key={a} className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-xs font-black bg-coral/8 text-coral-deep border border-coral/15">
-                              {allergenEmoji(a)} {a}
-                            </span>
-                          ))}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setItemModal({ sectionId: section.id })}
+                      className="btn-outline text-sm px-3 py-2 flex items-center gap-1"
+                    >
+                      <Plus size={13} /> Piatto
+                    </button>
+                    <div className="relative">
+                      <button
+                        onClick={() => setSectionMenu(sectionMenu === section.id ? null : section.id)}
+                        className="p-2 hover:bg-ink/10 rounded-lg transition-colors text-ink/40 hover:text-ink"
+                      >
+                        <MoreHorizontal size={16} />
+                      </button>
+                      {sectionMenu === section.id && (
+                        <div
+                          className="absolute right-0 top-full mt-1 bg-white border-2 border-ink/10 rounded-xl shadow-lg z-10 min-w-[160px]"
+                          onClick={() => setSectionMenu(null)}
+                        >
+                          <button
+                            onClick={() => {
+                              if (confirm(`Elimina la sezione "${section.name}" e tutti i suoi piatti?`)) {
+                                deleteSectionMutation.mutate(section.id)
+                              }
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                          >
+                            <Trash2 size={14} /> Elimina sezione
+                          </button>
                         </div>
                       )}
                     </div>
-
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="font-display font-black text-lg">{formatEuro(item.price)}</span>
-                      <button
-                        onClick={() => toggleMutation.mutate({ itemId: item.id, available: !item.available })}
-                        className="transition-colors"
-                        title={item.available ? 'Segna esaurito' : 'Rendi disponibile'}
-                      >
-                        {item.available
-                          ? <ToggleRight size={30} className="text-coral" />
-                          : <ToggleLeft size={30} className="text-ink/30" />
-                        }
-                      </button>
-                      <button onClick={() => setItemModal({ sectionId: section.id, item })} className="text-ink/30 hover:text-ink transition-colors">
-                        <Pencil size={15} />
-                      </button>
-                      <button
-                        onClick={() => deleteMutation.mutate(item.id)}
-                        disabled={deleteMutation.isPending}
-                        className="text-ink/30 hover:text-red-500 transition-colors"
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )
-      })}
+                </div>
+
+                {!collapsed && (
+                  <div className="space-y-2">
+                    {count === 0 && (
+                      <div className="border-2 border-dashed border-ink/15 rounded-xl p-5 text-center">
+                        <p className="text-sm font-bold text-ink/40 mb-2">Sezione vuota</p>
+                        <button onClick={() => setItemModal({ sectionId: section.id })} className="text-coral font-black text-sm hover:underline">
+                          + Aggiungi il primo piatto
+                        </button>
+                      </div>
+                    )}
+
+                    <SortableContext items={(section.items ?? []).map((it: any) => `item-${it.id}`)} strategy={verticalListSortingStrategy}>
+                      {(section.items ?? []).map((item: any) => (
+                        <SortableItem key={item.id} id={`item-${item.id}`}>
+                          <div
+                            className={cn(
+                              'card-sm flex items-center gap-4 transition-opacity',
+                              !item.available && 'opacity-50'
+                            )}
+                          >
+                            {item.imageUrl ? (
+                              <img src={item.imageUrl} alt="" className="w-14 h-14 rounded-xl object-cover border-2 border-ink/10 shrink-0" />
+                            ) : (
+                              <div className="w-14 h-14 rounded-xl bg-ink/5 grid place-items-center shrink-0 text-xl">🍽️</div>
+                            )}
+
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="font-display font-black truncate">{item.name}</p>
+                                {!item.available && (
+                                  <span className="badge bg-ink/10 text-ink/50 text-xs">Esaurito</span>
+                                )}
+                                {(item.variants ?? []).length > 0 && (
+                                  <span className="badge bg-sky/20 text-ink text-xs">{item.variants.length} varianti</span>
+                                )}
+                              </div>
+                              {item.description && (
+                                <p className="text-xs text-ink/60 font-semibold truncate">{item.description}</p>
+                              )}
+                              {item.allergens?.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {item.allergens.map((a: string) => (
+                                    <span key={a} className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-xs font-black bg-coral/8 text-coral-deep border border-coral/15">
+                                      {allergenEmoji(a)} {a}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="font-display font-black text-lg">{formatEuro(item.price)}</span>
+                              <button
+                                onClick={() => toggleMutation.mutate({ itemId: item.id, available: !item.available })}
+                                className="transition-colors"
+                                title={item.available ? 'Segna esaurito' : 'Rendi disponibile'}
+                              >
+                                {item.available
+                                  ? <ToggleRight size={30} className="text-coral" />
+                                  : <ToggleLeft size={30} className="text-ink/30" />
+                                }
+                              </button>
+                              <button onClick={() => setItemModal({ sectionId: section.id, item })} className="text-ink/30 hover:text-ink transition-colors">
+                                <Pencil size={15} />
+                              </button>
+                              <button
+                                onClick={() => deleteMutation.mutate(item.id)}
+                                disabled={deleteMutation.isPending}
+                                className="text-ink/30 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
+                          </div>
+                        </SortableItem>
+                      ))}
+                    </SortableContext>
+                  </div>
+                )}
+              </SectionRow>
+            )
+          })}
+        </SortableContext>
+      </DndContext>
 
       {sections.length === 0 && menuId && (
         <div className="text-center py-16">
@@ -671,7 +888,6 @@ export default function MenuPage() {
         </div>
       )}
 
-      {/* Item modal */}
       {itemModal && (
         <ItemModal
           sectionId={itemModal.sectionId}
@@ -680,7 +896,6 @@ export default function MenuPage() {
         />
       )}
 
-      {/* Import text modal */}
       {showImport && menuId && (
         <ImportTextModal
           menuId={menuId}

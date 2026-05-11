@@ -28,4 +28,6 @@ export type RestaurantSettings = {
   takeawayEnabled?: boolean
   payAtTableEnabled?: boolean
   aiEnabled?: boolean
+  printerIp?: string
+  printerPort?: number
 }

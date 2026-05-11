@@ -12,14 +12,14 @@ const CLIENT_BASE_URL = process.env['CLIENT_BASE_URL'] ?? 'http://localhost:3002
 export async function tableRoutes(fastify: FastifyInstance) {
   // Get all rooms with tables
   fastify.get('/rooms', { preHandler: requireAuth }, async (req) => {
-    const allRooms = await db.select().from(rooms).where(eq(rooms.restaurantId, req.user!.restaurantId))
-    const allTables = await db.select().from(tables).where(eq(tables.restaurantId, req.user!.restaurantId))
+    const allRooms = await db.select().from(rooms).where(and(eq(rooms.restaurantId, req.user!.restaurantId), eq(rooms.active, true)))
+    const allTables = await db.select().from(tables).where(and(eq(tables.restaurantId, req.user!.restaurantId), eq(tables.active, true)))
     return { data: allRooms.map(r => ({ ...r, tables: allTables.filter(t => t.roomId === r.id) })) }
   })
 
   // Get all tables flat
   fastify.get('/', { preHandler: requireAuth }, async (req) => {
-    const all = await db.select().from(tables).where(eq(tables.restaurantId, req.user!.restaurantId))
+    const all = await db.select().from(tables).where(and(eq(tables.restaurantId, req.user!.restaurantId), eq(tables.active, true)))
     return { data: all }
   })
 
@@ -46,6 +46,33 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const qrToken = nanoid(24)
     const [table] = await db.insert(tables).values({ restaurantId: req.user!.restaurantId, qrToken, ...body.data }).returning()
     return reply.code(201).send({ data: table })
+  })
+
+  // Update table (number, seats, roomId, shape)
+  fastify.patch('/:tableId', { preHandler: requireAuth }, async (req, reply) => {
+    const { tableId } = req.params as { tableId: string }
+    const schema = z.object({
+      number: z.string().min(1).optional(),
+      seats: z.number().int().min(1).optional(),
+      roomId: z.string().uuid().nullable().optional(),
+      shape: z.enum(['round', 'square', 'rectangle']).optional(),
+    })
+    const parsed = schema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+
+    const updates: Record<string, unknown> = {}
+    if (parsed.data.number !== undefined) updates['number'] = parsed.data.number
+    if (parsed.data.seats !== undefined) updates['seats'] = parsed.data.seats
+    if (parsed.data.roomId !== undefined) updates['roomId'] = parsed.data.roomId
+    if (parsed.data.shape !== undefined) updates['shape'] = parsed.data.shape
+
+    if (Object.keys(updates).length === 0) {
+      return reply.code(400).send({ error: { code: 'VALIDATION', message: 'No fields to update' } })
+    }
+
+    const [table] = await db.update(tables).set(updates).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).returning()
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    return { data: table }
   })
 
   // Update table status
@@ -87,10 +114,14 @@ export async function tableRoutes(fastify: FastifyInstance) {
     return { data: { qrToken: newToken } }
   })
 
-  // Delete table
+  // Delete table (soft delete — preserves order/bill history)
   fastify.delete('/:tableId', { preHandler: requireAuth }, async (req, reply) => {
     const { tableId } = req.params as { tableId: string }
-    await db.delete(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId)))
+    const [table] = await db.update(tables)
+      .set({ active: false })
+      .where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId)))
+      .returning()
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
     return { data: { success: true } }
   })
 }

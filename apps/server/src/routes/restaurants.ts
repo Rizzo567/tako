@@ -17,6 +17,7 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
       address: z.string().optional(),
       phone: z.string().optional(),
       primaryColor: z.string().optional(),
+      logoUrl: z.string().url().optional().nullable(),
       settings: z.object({
         currency: z.string().optional(),
         timezone: z.string().optional(),
@@ -27,6 +28,8 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
         takeawayEnabled: z.boolean().optional(),
         payAtTableEnabled: z.boolean().optional(),
         aiEnabled: z.boolean().optional(),
+        printerIp: z.string().optional(),
+        printerPort: z.number().int().min(1).max(65535).optional(),
       }).optional(),
     })
     const body = schema.safeParse(req.body)

@@ -53,6 +53,7 @@ interface SessionState {
   aiEnabled: boolean
   logoUrl?: string
   orderId: string | null
+  sessionId: string | null
   setSession: (data: Partial<SessionState>) => void
   setOrderId: (id: string) => void
 }
@@ -62,6 +63,7 @@ export const useSessionStore = create<SessionState>()(
     (set) => ({
       restaurantId: null, tableId: null, tableNumber: null,
       restaurantName: null, primaryColor: '#ED7159', aiEnabled: false, orderId: null,
+      sessionId: null,
       setSession: (data) => set(data),
       setOrderId: (id) => set({ orderId: id }),
     }),

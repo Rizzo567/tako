@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, bills } from '@tako/db'
-import { eq, and, asc, inArray } from 'drizzle-orm'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, bills, tableSessions } from '@tako/db'
+import { eq, and, asc, inArray, isNull, desc } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 
@@ -30,10 +30,18 @@ export async function customerRoutes(fastify: FastifyInstance) {
       aiEnabled: settings.aiEnabled ?? false,
     }
 
+    // Record QR scan session (fire and forget — don't block response)
+    const [session] = await db.insert(tableSessions).values({
+      restaurantId: table.restaurantId,
+      tableId: table.id,
+      tableNumber: table.number,
+    }).returning({ id: tableSessions.id })
+
     return {
       data: {
         restaurant: pub,
         table: { id: table.id, number: table.number, seats: table.seats, restaurantId: table.restaurantId },
+        sessionId: session?.id ?? null,
       },
     }
   })
@@ -200,6 +208,28 @@ export async function customerRoutes(fastify: FastifyInstance) {
           total: subtotal,
           status: 'open',
         })
+      }
+    }
+
+    // Mark first order on session (only if not already recorded)
+    if (body.data.tableId) {
+      const [session] = await db
+        .select()
+        .from(tableSessions)
+        .where(and(
+          eq(tableSessions.tableId, body.data.tableId),
+          eq(tableSessions.restaurantId, body.data.restaurantId),
+          isNull(tableSessions.firstOrderAt),
+        ))
+        .orderBy(desc(tableSessions.scannedAt))
+        .limit(1)
+
+      if (session) {
+        const elapsedSec = Math.round((Date.now() - session.scannedAt.getTime()) / 1000)
+        await db
+          .update(tableSessions)
+          .set({ firstOrderAt: new Date(), timeToFirstOrderSec: elapsedSec })
+          .where(eq(tableSessions.id, session.id))
       }
     }
 
