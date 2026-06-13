@@ -53,7 +53,11 @@ cd apps/web && pnpm dev
 
 ---
 
-## Istruzioni per agenti autonomi
+## Istruzioni per agenti autonomi (routine remota / schedulata)
+
+> Questo protocollo vale **solo** per la routine autonoma schedulata (un singolo agente che
+> pesca un task dal backlog senza supervisione). **Non** vincola l'orchestratore del team
+> multi-agente (vedi "## Team di agenti" sotto), che lavora più microtask in parallelo.
 
 Quando sei un agente che lavora su Tako in modo autonomo, segui questo protocollo:
 
@@ -74,3 +78,27 @@ Quando sei un agente che lavora su Tako in modo autonomo, segui questo protocoll
 - Non toccare `packages/db/schema` senza aver letto l'intera schema prima.
 - Non fare `pnpm install` di nuove dipendenze senza motivo chiaro.
 - Commit atomici: un commit per task, messaggio in italiano.
+
+---
+
+## Team di agenti (claude-agent-team)
+
+Tako ha installato il **team unificato** di 13 sottoagenti specialisti (architect, backend,
+database, frontend, integrations, testing, devops, refactor, security-review, docs, planner,
+verifier, ledger-writer — più `prompt-architect` come utility), allineato agli altri progetti.
+
+- **Contratto madre:** `.claude/CLAUDE.md` governa orchestratore + sottoagenti (modelli per
+  ruolo, Normal/Master mode, ownership file, regole di merge). Leggilo prima di orchestrare.
+- **Bus a file:** `.claude/comms/` — `TASK_LEDGER.json` (stato microtask), `contracts/*.contract.md`
+  (interfacce esposte), `handoffs/*.json` (passaggi), `AGENT-LOG.md` (log sessione). Ogni
+  specialista legge i contratti rilevanti **prima** e scrive il proprio **dopo**.
+- **Parallelismo:** microtask senza `depends_on` e su **file disgiunti** vanno in parallelo;
+  overlap sullo stesso file → l'orchestratore **serializza**.
+- **Modalità [MASTER]** (modifiche grosse/UI/architettura): Design → ⏸ gate (attendi OK di
+  Manuel) → Foundation → Build → QA. Merge su main: **solo Manuel**.
+- **Ownership Tako (monorepo):** frontend → `apps/web/src`, `apps/dashboard/src`; backend →
+  `apps/server/src/routes`, `apps/server/src/ai`, `apps/server/src/lib`; database →
+  `packages/db`; integrations → `apps/server/src` (socket, provider esterni). Aggiorna §8 del
+  contratto madre se cambiano.
+
+> La regola "un task per run" sopra **non** si applica qui: è propria della sola routine remota.
