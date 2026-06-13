@@ -5,6 +5,8 @@ import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, 
 import { eq, and, asc, inArray, isNull, desc } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
+import { autoPrintOrder } from '../lib/printer.js'
+import { registry, runAgentTurn, customerSystem, aiConfigured } from '../ai/index.js'
 
 export async function customerRoutes(fastify: FastifyInstance) {
   // Resolve table by QR token → return restaurant + table info
@@ -162,6 +164,13 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
     const payload = { ...order, items: insertedItems }
 
+    // Auto-print comanda (fire-and-forget — non blocca risposta al cliente)
+    autoPrintOrder({
+      restaurantId: body.data.restaurantId,
+      tableNumber: body.data.tableNumber,
+      items: insertedItems.map(i => ({ name: i.name, quantity: i.quantity, notes: i.notes ?? undefined })),
+    }).catch(() => {}) // errore stampante non deve rompere l'ordine
+
     // Emit to restaurant room (staff devices)
     io.to(`restaurant:${body.data.restaurantId}`).emit('order:new', payload)
 
@@ -260,53 +269,59 @@ export async function customerRoutes(fastify: FastifyInstance) {
     return { data: { success: true } }
   })
 
-  // AI chat
+  // AI chat — agentic assistant. Bound to this table/session: it can search the
+  // menu, fill the cart, place the order, check status and call the waiter.
   fastify.post('/ai-chat', async (req, reply) => {
     const aiChatSchema = z.object({
       restaurantId: z.string().uuid(),
       message: z.string().min(1).max(500),
+      tableId: z.string().uuid().optional(),
+      tableNumber: z.string().max(20).optional(),
+      sessionId: z.string().uuid().optional(),
       history: z.array(z.object({
         role: z.enum(['user', 'assistant']),
-        content: z.string().max(500),
-      })).max(10),
+        content: z.string().max(2000),
+      })).max(12).default([]),
     })
     const parsed = aiChatSchema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
-    const { restaurantId, message, history } = parsed.data
-
-    const OPENAI_KEY = process.env['GROQ_API_KEY']
-    if (!OPENAI_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
-
-    // Build menu context
-    const sections = await db.select().from(menuSections).innerJoin(menus, eq(menus.id, menuSections.menuId)).where(eq(menus.restaurantId, restaurantId))
-    const items = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))
-
-    const menuContext = items.map(i => `${i.name}: €${i.price}${i.description ? ` — ${i.description}` : ''}${i.allergens?.length ? ` [Allergeni: ${i.allergens.join(', ')}]` : ''}${i.tags?.length ? ` [${i.tags.join(', ')}]` : ''}`).join('\n')
+    const { restaurantId, message, tableId, tableNumber, sessionId, history } = parsed.data
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
 
-    const systemPrompt = `Sei Tako, l'assistente AI del ristorante "${restaurant?.name ?? 'questo ristorante'}". Sei gentile, disponibile e conosci il menu alla perfezione.
+    // Preferred path: agentic assistant (Claude). Falls back to read-only Groq
+    // Q&A when ANTHROPIC_API_KEY is absent.
+    if (aiConfigured()) {
+      try {
+        const result = await runAgentTurn({
+          scope: 'customer',
+          system: customerSystem({ restaurantName: restaurant?.name ?? 'questo ristorante', tableNumber: tableNumber ?? null }),
+          history,
+          message,
+          ctx: { restaurantId, tableId: tableId ?? null, tableNumber: tableNumber ?? null, sessionId: sessionId ?? null },
+          registry,
+        })
+        return { data: { message: result.message, actions: result.actions } }
+      } catch (err) {
+        req.log.error(err)
+        return reply.code(500).send({ error: { code: 'AI_ERROR', message: 'Errore assistente.' } })
+      }
+    }
 
-MENU DISPONIBILE:
-${menuContext}
+    const GROQ_KEY = process.env['GROQ_API_KEY']
+    if (!GROQ_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
 
-Rispondi sempre in italiano a meno che il cliente non scriva in un'altra lingua. Sii conciso (max 3 righe). Se non sai rispondere a qualcosa, suggerisci di chiedere al cameriere.`
-
+    // Fallback: menu-aware Q&A only (no actions).
+    const items = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))
+    const menuContext = items.map(i => `${i.name}: €${i.price}${i.description ? ` — ${i.description}` : ''}${i.allergens?.length ? ` [Allergeni: ${i.allergens.join(', ')}]` : ''}`).join('\n')
+    const systemPrompt = `Sei Tako, l'assistente del ristorante "${restaurant?.name ?? 'questo ristorante'}". Conosci il menu:\n${menuContext}\nRispondi in italiano, max 3 righe. Se non sai, suggerisci il cameriere.`
     const { OpenAI } = await import('openai')
-    const openai = new OpenAI({ apiKey: OPENAI_KEY, baseURL: 'https://api.groq.com/openai/v1' })
-
+    const openai = new OpenAI({ apiKey: GROQ_KEY, baseURL: 'https://api.groq.com/openai/v1' })
     const response = await openai.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...history.slice(-6),
-        { role: 'user', content: message },
-      ],
-      max_tokens: 300,
-      temperature: 0.7,
+      messages: [{ role: 'system', content: systemPrompt }, ...history.slice(-6).map(h => ({ role: h.role, content: h.content })), { role: 'user', content: message }],
+      max_tokens: 300, temperature: 0.7,
     })
-
-    const reply_text = response.choices[0]?.message?.content ?? 'Non ho capito, puoi ripetere?'
-    return { data: { message: reply_text } }
+    return { data: { message: response.choices[0]?.message?.content ?? 'Non ho capito, puoi ripetere?', actions: [] } }
   })
 }

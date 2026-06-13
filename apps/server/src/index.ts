@@ -22,6 +22,7 @@ import { uploadRoutes } from './routes/uploads.js'
 import { staffRoutes } from './routes/staff.js'
 import { insightsRoutes } from './routes/insights.js'
 import { printRoutes } from './routes/print.js'
+import { aiRoutes } from './routes/ai.js'
 
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET']
@@ -77,6 +78,7 @@ await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
 await fastify.register(staffRoutes, { prefix: '/api/staff' })
 await fastify.register(insightsRoutes, { prefix: '/api/insights' })
 await fastify.register(printRoutes, { prefix: '/api/print' })
+await fastify.register(aiRoutes, { prefix: '/api/ai' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()

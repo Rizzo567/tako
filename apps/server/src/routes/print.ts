@@ -1,48 +1,9 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { createConnection } from 'net'
 import { db, restaurants } from '@tako/db'
 import { eq } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
-
-function escposReceipt(lines: string[]): Buffer {
-  const ESC = 0x1b
-  const GS = 0x1d
-  const LF = 0x0a
-
-  const chunks: Buffer[] = []
-
-  // Init
-  chunks.push(Buffer.from([ESC, 0x40]))
-  // Bold on
-  chunks.push(Buffer.from([ESC, 0x45, 0x01]))
-  // Center
-  chunks.push(Buffer.from([ESC, 0x61, 0x01]))
-
-  for (const line of lines) {
-    chunks.push(Buffer.from(line + '\n', 'latin1'))
-  }
-
-  // Feed + cut
-  chunks.push(Buffer.from([LF, LF, LF, GS, 0x56, 0x41, 0x03]))
-
-  return Buffer.concat(chunks)
-}
-
-function sendToPrinter(ip: string, port: number, data: Buffer): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const client = createConnection({ host: ip, port }, () => {
-      client.write(data, (err) => {
-        if (err) return reject(err)
-        client.end()
-        resolve()
-      })
-    })
-    client.setTimeout(5000)
-    client.on('timeout', () => { client.destroy(); reject(new Error('Printer timeout')) })
-    client.on('error', reject)
-  })
-}
+import { buildEscposReceipt, sendToPrinter } from '../lib/printer.js'
 
 export async function printRoutes(fastify: FastifyInstance) {
   fastify.post('/order', { preHandler: requireAuth }, async (req, reply) => {
@@ -88,7 +49,7 @@ export async function printRoutes(fastify: FastifyInstance) {
     ]
 
     try {
-      await sendToPrinter(ip, port, escposReceipt(lines))
+      await sendToPrinter(ip, port, buildEscposReceipt(lines))
       return { data: { success: true } }
     } catch (err: any) {
       return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: err.message ?? 'Errore stampante' } })
