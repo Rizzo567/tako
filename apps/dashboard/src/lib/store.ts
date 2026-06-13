@@ -44,10 +44,10 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: 'tako',
+      theme: 'premium',
       setTheme: (theme) => set({ theme }),
     }),
-    { name: 'tako-theme' }
+    { name: 'tako-theme-v2' }
   )
 )
 

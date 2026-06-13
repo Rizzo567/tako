@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={`${nunito.variable} ${quicksand.variable} ${dmSerif.variable} ${dmSans.variable}`}>
-      <body className="font-body bg-cream text-ink antialiased">
+    <html lang="it" data-theme="premium" className={`${nunito.variable} ${quicksand.variable} ${dmSerif.variable} ${dmSans.variable}`}>
+      <body className="font-body bg-[#FBF8F4] text-ink antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

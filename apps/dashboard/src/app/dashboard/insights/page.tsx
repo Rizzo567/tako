@@ -13,7 +13,7 @@ const QUADRANT = {
   plowhorse:  { label: 'Plowhorse',  color: 'text-sky',   bg: 'bg-sky/10',   border: 'border-sky/30',   icon: TrendingUp },
   puzzle:     { label: 'Puzzle',     color: 'text-coral', bg: 'bg-coral/10', border: 'border-coral/30', icon: AlertTriangle },
   dog:        { label: 'Dog',        color: 'text-ink/40',bg: 'bg-ink/5',    border: 'border-ink/15',   icon: TrendingDown },
-  unknown:    { label: '—',          color: 'text-ink/30',bg: 'bg-ink/5',    border: 'border-ink/10',   icon: TrendingUp },
+  unknown:    { label: 'n/d',        color: 'text-ink/30',bg: 'bg-ink/5',    border: 'border-ink/10',   icon: TrendingUp },
 } as const
 
 const SUGGESTION_TYPE_COLOR: Record<string, string> = {
@@ -250,7 +250,7 @@ export default function InsightsPage() {
                               {item.marginPercent}%
                             </span>
                           ) : (
-                            <span className="text-ink/25 text-xs">—</span>
+                            <span className="text-ink/25 text-xs">n/d</span>
                           )}
                         </td>
                       </tr>

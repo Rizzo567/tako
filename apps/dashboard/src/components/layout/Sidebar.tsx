@@ -92,12 +92,12 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       {/* Logo */}
-      <div className="p-5 border-b border-white/10">
+      <div className="p-5 border-b border-ink/10">
         <div className="flex items-center gap-2">
-          <span className="font-display font-black text-2xl text-cream">Tako</span>
+          <span className="font-display font-black text-2xl text-ink">Tako</span>
           <span className="text-xs bg-coral px-2 py-0.5 rounded-full text-white font-black">PRO</span>
         </div>
-        <p className="text-xs text-cream/60 font-semibold mt-1 truncate">{restaurant?.name}</p>
+        <p className="text-xs text-ink/50 font-semibold mt-1 truncate">{restaurant?.name}</p>
       </div>
 
       {/* Nav */}
@@ -110,7 +110,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               key={href}
               href={href}
               onClick={onNavigate}
-              className={cn('sidebar-link', active ? 'active' : 'text-cream/70')}
+              className={cn('sidebar-link', active ? 'active' : 'text-ink/60')}
             >
               <Icon size={18} />
               <span>{label}</span>
@@ -124,7 +124,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             onClick={() => setSalaOpen((v) => !v)}
             className={cn(
               'sidebar-link w-full',
-              salaActive ? 'active' : 'text-cream/70',
+              salaActive ? 'active' : 'text-ink/60',
             )}
           >
             <Grid3X3 size={18} />
@@ -145,7 +145,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                     onClick={onNavigate}
                     className={cn(
                       'sidebar-link pl-8 text-sm',
-                      active ? 'active' : 'text-cream/60',
+                      active ? 'active' : 'text-ink/50',
                     )}
                   >
                     <span>{label}</span>
@@ -162,7 +162,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           onClick={onNavigate}
           className={cn(
             'sidebar-link',
-            pathname.startsWith('/comanda') ? 'active' : 'text-cream/70',
+            pathname.startsWith('/comanda') ? 'active' : 'text-ink/60',
           )}
         >
           <Smartphone size={18} />
@@ -177,7 +177,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               key={href}
               href={href}
               onClick={onNavigate}
-              className={cn('sidebar-link', active ? 'active' : 'text-cream/70')}
+              className={cn('sidebar-link', active ? 'active' : 'text-ink/60')}
             >
               <Icon size={18} />
               <span>{label}</span>
@@ -192,19 +192,19 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       {/* User */}
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-ink/10">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-8 rounded-full bg-coral grid place-items-center text-white font-black text-sm">
             {user?.name?.[0]?.toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-cream text-sm font-black truncate">{user?.name}</p>
-            <p className="text-cream/50 text-xs font-semibold capitalize">{user?.role}</p>
+            <p className="text-ink text-sm font-black truncate">{user?.name}</p>
+            <p className="text-ink/45 text-xs font-semibold capitalize">{user?.role}</p>
           </div>
         </div>
         <button
           onClick={clearAuth}
-          className="flex items-center gap-2 text-cream/60 hover:text-coral transition-colors text-sm font-bold"
+          className="flex items-center gap-2 text-ink/50 hover:text-coral transition-colors text-sm font-bold"
         >
           <LogOut size={14} /> Esci
         </button>
@@ -232,7 +232,7 @@ export function Sidebar() {
       {/* Sidebar panel */}
       <aside
         className={cn(
-          'w-64 min-h-screen bg-ink flex flex-col fixed left-0 top-0 z-40 transition-transform duration-300',
+          'w-64 min-h-screen bg-white border-r border-ink/10 flex flex-col fixed left-0 top-0 z-40 transition-transform duration-300',
           // Mobile: hidden by default, slide in when open
           'md:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',

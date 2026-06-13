@@ -230,4 +230,51 @@
 }
 
 [data-theme="premium"] .badge { font-weight: 500; letter-spacing: .02em; }
-[data-theme="premium"] .skeleton { border-radius: 8px; }
+
+/* ── Premium polish: focus, motion, materia ── */
+
+[data-theme="premium"] body { background-color: #FBF8F4; }
+
+[data-theme="premium"] .input:focus {
+  border-color: var(--coral);
+  box-shadow: 0 0 0 3px rgba(237,113,89,.22);
+}
+
+[data-theme="premium"] .btn-coral { transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s, background-color .18s; }
+[data-theme="premium"] .btn-coral:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,113,89,.32); }
+
+[data-theme="premium"] .card { transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s; }
+[data-theme="premium"] a .card:hover,
+[data-theme="premium"] button .card:hover,
+[data-theme="premium"] .card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(42,31,26,.10), 0 2px 8px rgba(42,31,26,.05);
+}
+
+/* Skeleton shimmer (replaces plain pulse) */
+[data-theme="premium"] .skeleton {
+  border-radius: 8px;
+  background: linear-gradient(100deg, #F1EBE3 30%, #F8F4EE 50%, #F1EBE3 70%);
+  background-size: 200% 100%;
+  animation: tako-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes tako-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Soft page enter */
+[data-theme="premium"] main { animation: tako-fade-up .28s cubic-bezier(.16,1,.3,1); }
+@keyframes tako-fade-up {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="premium"] .skeleton { animation: none; }
+  [data-theme="premium"] main { animation: none; }
+  [data-theme="premium"] .btn-coral,
+  [data-theme="premium"] .card { transition: none; }
+  [data-theme="premium"] .btn-coral:hover,
+  [data-theme="premium"] .card-hover:hover { transform: none; }
+}
