@@ -11,6 +11,25 @@ const getAI = () => {
   return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
+// Ownership guard helpers (anti-IDOR): verificano che la risorsa appartenga al
+// ristorante dell'utente autenticato prima di mutarla by-id.
+async function ownsMenu(menuId: string, restaurantId: string) {
+  const [row] = await db.select({ id: menus.id }).from(menus)
+    .where(and(eq(menus.id, menuId), eq(menus.restaurantId, restaurantId))).limit(1)
+  return !!row
+}
+async function ownsSection(sectionId: string, restaurantId: string) {
+  const [row] = await db.select({ id: menuSections.id }).from(menuSections)
+    .innerJoin(menus, eq(menuSections.menuId, menus.id))
+    .where(and(eq(menuSections.id, sectionId), eq(menus.restaurantId, restaurantId))).limit(1)
+  return !!row
+}
+async function ownsItem(itemId: string, restaurantId: string) {
+  const [row] = await db.select({ id: menuItems.id }).from(menuItems)
+    .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, restaurantId))).limit(1)
+  return !!row
+}
+
 export async function menuRoutes(fastify: FastifyInstance) {
   // Get all menus for restaurant
   fastify.get('/', { preHandler: requireAuth }, async (req) => {
@@ -54,6 +73,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({ name: z.string().min(1), description: z.string().optional() })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsMenu(menuId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
 
     const [section] = await db.insert(menuSections).values({ menuId, ...body.data }).returning()
     return reply.code(201).send({ data: section })
@@ -70,6 +90,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsSection(sectionId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     const [section] = await db.update(menuSections).set(body.data).where(eq(menuSections.id, sectionId)).returning()
     if (!section) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     return { data: section }
@@ -78,6 +99,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
   // Delete section
   fastify.delete('/sections/:sectionId', { preHandler: requireAuth }, async (req, reply) => {
     const { sectionId } = req.params as { sectionId: string }
+    if (!(await ownsSection(sectionId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     const items = await db.select({ id: menuItems.id }).from(menuItems).where(eq(menuItems.sectionId, sectionId))
     if (items.length > 0) {
       const ids = items.map(i => i.id)
@@ -104,6 +126,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsSection(sectionId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
 
     const [item] = await db.insert(menuItems).values({ sectionId, restaurantId: req.user!.restaurantId, ...body.data }).returning()
     return reply.code(201).send({ data: item })
@@ -141,7 +164,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
   fastify.patch('/items/:itemId/availability', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
     const { available } = req.body as { available: boolean }
-    const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(eq(menuItems.id, itemId)).returning()
+    const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
     return { data: item }
@@ -150,6 +173,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
   // Delete item
   fastify.delete('/items/:itemId', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, itemId))
     await db.delete(menuItems).where(eq(menuItems.id, itemId))
     return { data: { success: true } }
@@ -161,6 +185,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({ name: z.string().min(1), priceModifier: z.number().default(0) })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     const [variant] = await db.insert(itemVariants).values({ itemId, ...body.data }).returning()
     return reply.code(201).send({ data: variant })
   })
