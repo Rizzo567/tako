@@ -28,7 +28,16 @@ export async function billRoutes(fastify: FastifyInstance) {
     // Calculate subtotal from open orders on this table
     let subtotal = 0
     if (body.data.tableId) {
-      const tableOrders = await db.select().from(orders).where(and(eq(orders.tableId, body.data.tableId), inArray(orders.status, ['confirmed', 'preparing', 'ready', 'served'])))
+      // Anti cross-tenant: il tavolo deve appartenere al ristorante dell'utente.
+      const [table] = await db.select({ id: tables.id }).from(tables)
+        .where(and(eq(tables.id, body.data.tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
+      if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+
+      const tableOrders = await db.select().from(orders).where(and(
+        eq(orders.tableId, body.data.tableId),
+        eq(orders.restaurantId, req.user!.restaurantId),
+        inArray(orders.status, ['confirmed', 'preparing', 'ready', 'served']),
+      ))
       subtotal = tableOrders.reduce((sum, o) => sum + o.total, 0)
     }
 
