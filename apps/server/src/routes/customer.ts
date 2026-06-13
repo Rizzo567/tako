@@ -7,8 +7,31 @@ import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { registry, runAgentTurn, customerSystem, aiConfigured } from '../ai/index.js'
+import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
+
+interface TableSession { restaurantId: string; tableId: string; sessionId: string | null }
 
 export async function customerRoutes(fastify: FastifyInstance) {
+  // Verifica il JWT del tavolo (cookie HttpOnly emesso al resolve del QR) e lega
+  // l'azione al tavolo scansionato. Se il body porta restaurantId/tableId, devono
+  // combaciare col JWT (anti-spoofing).
+  async function requireTableSession(req: any, reply: any) {
+    const token = req.cookies?.[TABLE_COOKIE]
+    if (!token) return reply.code(401).send({ error: { code: 'NO_TABLE_SESSION', message: 'Scansiona di nuovo il QR del tavolo.' } })
+    let payload: TableSession
+    try {
+      payload = fastify.jwt.verify(token) as TableSession
+    } catch {
+      return reply.code(401).send({ error: { code: 'INVALID_TABLE_SESSION', message: 'Sessione tavolo scaduta. Riscansiona il QR.' } })
+    }
+    const body = (req.body ?? {}) as { restaurantId?: string; tableId?: string }
+    if ((body.restaurantId && body.restaurantId !== payload.restaurantId) ||
+        (body.tableId && body.tableId !== payload.tableId)) {
+      return reply.code(403).send({ error: { code: 'TABLE_MISMATCH', message: 'Azione non consentita per questo tavolo.' } })
+    }
+    req.tableSession = payload
+  }
+
   // Resolve table by QR token → return restaurant + table info
   fastify.get('/table/:token', async (req, reply) => {
     const { token } = req.params as { token: string }
@@ -38,6 +61,13 @@ export async function customerRoutes(fastify: FastifyInstance) {
       tableId: table.id,
       tableNumber: table.number,
     }).returning({ id: tableSessions.id })
+
+    // JWT legato al tavolo → cookie HttpOnly: lega le azioni cliente a questo tavolo.
+    const tableJwt = fastify.jwt.sign(
+      { restaurantId: table.restaurantId, tableId: table.id, sessionId: session?.id ?? null },
+      { expiresIn: '4h' },
+    )
+    reply.setCookie(TABLE_COOKIE, tableJwt, authCookieOptions(TABLE_SESSION_MAX_AGE, '/api/customer'))
 
     return {
       data: {
@@ -86,7 +116,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
   })
 
   // Submit order from customer
-  fastify.post('/orders', async (req, reply) => {
+  fastify.post('/orders', { preHandler: requireTableSession }, async (req, reply) => {
     const schema = z.object({
       restaurantId: z.string().uuid(),
       tableId: z.string().uuid().optional(),
@@ -255,7 +285,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
   })
 
   // Call waiter
-  fastify.post('/waiter-call', { config: { rateLimit: { max: 6, timeWindow: 60000 } } }, async (req, reply) => {
+  fastify.post('/waiter-call', { config: { rateLimit: { max: 6, timeWindow: 60000 } }, preHandler: requireTableSession }, async (req, reply) => {
     const schema = z.object({
       restaurantId: z.string().uuid(),
       tableId: z.string().uuid(),
@@ -271,7 +301,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
   // AI chat — agentic assistant. Bound to this table/session: it can search the
   // menu, fill the cart, place the order, check status and call the waiter.
-  fastify.post('/ai-chat', { config: { rateLimit: { max: 15, timeWindow: 60000 } } }, async (req, reply) => {
+  fastify.post('/ai-chat', { config: { rateLimit: { max: 15, timeWindow: 60000 } }, preHandler: requireTableSession }, async (req, reply) => {
     const aiChatSchema = z.object({
       restaurantId: z.string().uuid(),
       message: z.string().min(1).max(500),
