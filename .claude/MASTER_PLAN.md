@@ -1,146 +1,66 @@
-# MASTER_PLAN.md
+# MASTER_PLAN.md — Migrazione auth a cookie HttpOnly (T3, microtask 1+4)
 
-> Template prodotto dall'agente `architect` in [MASTER] mode.
-> Sostituire tutti i segnaposto `[...]` prima di procedere con la Fase 2.
-
----
-
-*Architect: claude-architect | Data: YYYY-MM-DD | Progetto: [NOME PROGETTO] | Revisione: 1*
+*Orchestratore (Opus 4.8) | 2026-06-13 | Tako | Revisione 1*
 
 ---
 
-## 1. Panoramica Architetturale
+## 1. Panoramica
+Spostare l'autenticazione da **token in localStorage + header Bearer** a **cookie HttpOnly**,
+sia staff sia cliente, e introdurre un **JWT legato alla sessione tavolo** (emesso al resolve del
+QR) che vincola le azioni del cliente al proprio tavolo. Chiude 2 P0 (token XSS-esposto;
+waiter-call/ai-chat senza auth) e prepara il binding sicuro dei tool AI cliente.
 
-[Descrizione del sistema in 3-5 frasi. Cosa fa il sistema, chi lo usa, quale problema risolve. NON come è implementato — quello viene nei paragrafi successivi.]
+## 2. Stato attuale
+- **Staff:** login/pin → token opaco `nanoid` (tabella `sessions`) nel body JSON → client in
+  `localStorage('tako_token')` → header `Authorization: Bearer`. `requireAuth` legge il Bearer.
+- **Cliente:** `/customer/table/:token` non emette nulla; `waiter-call`/`ai-chat` **non autenticati**.
+- **Proxy:** entrambe le app Next chiamano `/api` via rewrite verso `:3001` → dal **browser** è
+  **same-origin** con l'app. ⇒ i cookie HttpOnly funzionano in modo pulito (niente attriti SameSite/CORS).
+- `@fastify/cookie` **non installato**. CORS già `credentials:true` + origini esplicite.
 
-**Tipo sistema**: [Web app monolitica | API REST | Microservizi | Backend-only | Full-stack | ...]
-**Utenti target**: [Descrizione]
-**Scala prevista**: [Ordine di grandezza utenti/richieste/giorno]
+## 3. Design
 
----
+### 3a. Staff (cookie di sessione)
+- Registrare `@fastify/cookie` in `index.ts` (firmato con `JWT_SECRET`).
+- `auth.ts` login/register/pin → oltre (o invece) al body, **set cookie** `tako_session=<token opaco>`
+  `HttpOnly; SameSite=Lax; Path=/; Max-Age=<scadenza sessione>; Secure(in prod)`.
+- `middleware/auth.ts` `requireAuth`: legge il token da **`req.cookies.tako_session`**, con
+  **fallback al Bearer** durante la transizione (così nulla si rompe a metà).
+- Nuovo `POST /api/auth/logout`: cancella il cookie + elimina la riga `sessions`.
 
-## 2. Stack Tecnologico
+### 3b. Cliente (JWT legato al tavolo)
+- `/customer/table/:token`: oltre ai dati, **firma un JWT** `{restaurantId, tableId, sessionId, exp:+4h}`
+  (con `@fastify/jwt`, già registrato) e lo **set come cookie** `tako_table` `HttpOnly; SameSite=Lax;
+  Path=/api/customer`.
+- Nuovo preHandler `requireTableSession` su **`waiter-call`, `ai-chat`, `orders`**: verifica il JWT del
+  cookie e che `restaurantId`/`tableId` combacino con la richiesta (lega l'azione al tavolo scansionato).
 
-| Layer | Tecnologia | Versione | Note |
-|-------|-----------|---------|------|
-| Frontend | [React / Vue / Svelte / vanilla / N/A] | ... | |
-| Backend | [Node.js / Python / Go / ...] | ... | Framework: ... |
-| Database | [PostgreSQL / MySQL / MongoDB / SQLite / ...] | ... | ORM: ... |
-| Cache | [Redis / Memcached / N/A] | ... | |
-| Queue | [BullMQ / Celery / N/A] | ... | |
-| Infra | [Docker / K8s / Vercel / Railway / ...] | ... | |
-| CI/CD | [GitHub Actions / GitLab CI / N/A] | ... | |
+### 3c. Client
+- `apps/web/lib/api.ts` e `apps/dashboard/lib/api.ts`: `withCredentials: true`.
+- Dashboard: rimuovere la logica `localStorage`/Bearer (store: niente persist del token); logout →
+  chiama `/api/auth/logout`. Cliente: nessuna gestione token (cookie automatico).
 
----
+## 4. Sicurezza / note
+- **SameSite=Lax** basta in locale e in prod **stesso dominio**; per prod **cross-dominio** servirà
+  `SameSite=None; Secure` (documentato, non ora).
+- **CSRF:** Lax + same-origin proxy mitiga; token CSRF esplicito = follow-up (non bloccante locale).
+- `@fastify/cookie` è una **nuova dipendenza** (motivo chiaro: cookie auth). ⚠️ deroga alla regola
+  "no nuove deps senza motivo".
 
-## 3. Ownership dei File per Agente
+## 5. File toccati
+- **server:** `index.ts` (register cookie), `routes/auth.ts` (set/clear + logout), `middleware/auth.ts`
+  (legge cookie + fallback), `routes/customer.ts` (mint+set JWT tavolo, `requireTableSession`).
+- **web:** `lib/api.ts` (withCredentials).
+- **dashboard:** `lib/api.ts` (withCredentials, via Bearer), `lib/store.ts` (stop persist token), pagina login (logout).
 
-| Agente | Directory/File | Esclusivo | Note |
-|--------|---------------|---------|------|
-| frontend | `src/components/`, `src/pages/`, `src/styles/` | sì | |
-| backend | `src/api/`, `src/routes/`, `src/middleware/`, `src/services/`, `.env.example` | sì | |
-| database | `migrations/`, `seeds/`, `src/db/`, `schema.*` | sì | |
-| integrations | `src/integrations/`, `src/webhooks/`, `src/clients/`, `src/jobs/` | sì | |
-| testing | `tests/`, `__tests__/`, `spec/`, `fixtures/` | sì | |
-| devops | `.github/`, `Dockerfile`, `docker-compose.yml`, `Makefile`, `scripts/` | sì | |
-| docs | `README.md`, `CHANGELOG.md`, `docs/` | sì | |
+## 6. QA (prima di chiudere)
+- Login staff → cookie settato, richiesta autenticata OK, logout svuota il cookie.
+- Resolve QR → cookie `tako_table` settato; `waiter-call` con cookie = OK, **senza = 401**.
+- `tsc` verde su server + dashboard + web. Login dashboard non regredito.
 
-**Conflitti noti**: [Elenca eventuali sovrapposizioni e come vengono risolte per serializzazione]
-
----
-
-## 4. Contratti d'Interfaccia Previsti
-
-### 4.1 API REST / GraphQL
-
-| Endpoint | Metodo | Input | Output | Owner | Consumato da |
-|----------|--------|-------|--------|-------|-------------|
-| `/api/[resource]` | POST | `{...}` | `{id, ...}` | backend | frontend |
-| `/api/[resource]/:id` | GET | `id` (param) | `{...}` | backend | frontend |
-
-### 4.2 Schema Database (tabelle principali)
-
-| Tabella | Campi chiave | Relazioni | Indici |
-|---------|-------------|----------|-------|
-| `[tabella]` | id, ..., created_at | FK → [altra_tabella] | idx su email |
-
-### 4.3 Variabili ENV Richieste
-
-| Variabile | Owner | Richiesta in | Descrizione |
-|-----------|-------|-------------|-------------|
-| `DATABASE_URL` | database | prod, dev | Connection string DB |
-| `JWT_SECRET` | backend | prod, dev | Secret JWT, min 32 char |
-| `PORT` | backend | prod | Porta server HTTP |
-| `NODE_ENV` | backend | prod | `production` \| `development` |
-
-### 4.4 Eventi / Code (se applicabile)
-
-| Evento | Emesso da | Consumato da | Payload chiave |
-|--------|----------|-------------|---------------|
-| `[nome:evento]` | integrations | backend | `{id, data, timestamp}` |
-
----
-
-## 5. Strategia Branch
-
-| Branch | Agente | Base | Merge target | Note |
-|--------|--------|------|-------------|------|
-| `feat/database-[slug]-[date]` | database | main | develop | |
-| `feat/backend-[slug]-[date]` | backend | main | develop | dopo database |
-| `feat/integrations-[slug]-[date]` | integrations | main | develop | |
-| `feat/frontend-[slug]-[date]` | frontend | develop | develop | dopo backend |
-| `feat/devops-[slug]-[date]` | devops | main | develop | |
-
-**Merge su main**: SOLO Manuel, dopo QA e security-review.
-
----
-
-## 6. Grafo delle Dipendenze
-
-```
-database ──────────────────┐
-                           ▼
-integrations ──────────► backend ──────────► frontend
-                           │                     │
-                           └────────► testing ◄──┘
-                                          │
-                               security-review ◄── verifier
-```
-
-**Ordine di build Master Mode:**
-- Fase 2 (parallelo): `database`, `backend`, `integrations`
-- Fase 3 (sequenziale): `frontend` (dopo backend contracts), `docs` (dopo tutti)
-- Fase 4 (parallelo): `testing`, `security-review`, poi `verifier`
-
----
-
-## 7. Rischi e Mitigazioni
-
-| Rischio | Probabilità | Impatto | Mitigazione |
-|---------|------------|---------|-------------|
-| Schema DB incompatibile con ORM | media | alto | database espone contratto prima che backend inizi |
-| ENV mancanti in CI/CD | bassa | alto | devops verifica .env.example completo |
-| [Rischio specifico progetto] | ... | ... | ... |
-
----
-
-## 8. Gate di Approvazione
-
-- [ ] **Piano approvato da Manuel** (questo gate)
-- [ ] database ha esposto contratto schema
-- [ ] backend ha esposto contratto API
-- [ ] integrations ha esposto contratti eventi (se applicabile)
-- [ ] testing: tutti i test passano
-- [ ] security-review: nessun finding Critical o High non risolto
-- [ ] verifier: overall "pass"
-- [ ] **Merge su main autorizzato da Manuel**
-
----
-
-## 9. Note e Decisioni Architetturali
-
-[Decisioni prese durante la progettazione con motivazione. Es: "Usato UUID invece di integer per id → evita enumerazione, compatibile con future migrazioni multi-DB."]
-
----
-
-*Aggiornato da: architect | [DATA]*
+## 7. Microtask (build, dopo l'OK)
+1. `pnpm add @fastify/cookie` + register in index.ts.
+2. Staff: set/clear cookie in auth.ts + logout + requireAuth legge cookie (fallback Bearer).
+3. Cliente: JWT al resolve + `requireTableSession` su waiter-call/ai-chat/orders.
+4. Client: withCredentials (web+dashboard) + dashboard stop localStorage.
+5. QA manuale + tsc; commit atomici per layer.
