@@ -31,6 +31,24 @@ ALTER TABLE inventory_movements ENABLE ROW LEVEL SECURITY;
 -- INSERT/UPDATE checks in PostgreSQL 9.5+).
 -- ============================================================
 
+-- Idempotenza: rimuovi le policy se già presenti (es. ri-applicazione su DB vecchio).
+DROP POLICY IF EXISTS restaurant_isolation ON restaurants;
+DROP POLICY IF EXISTS restaurant_isolation ON users;
+DROP POLICY IF EXISTS restaurant_isolation ON sessions;
+DROP POLICY IF EXISTS restaurant_isolation ON menus;
+DROP POLICY IF EXISTS restaurant_isolation ON menu_sections;
+DROP POLICY IF EXISTS restaurant_isolation ON menu_items;
+DROP POLICY IF EXISTS restaurant_isolation ON item_variants;
+DROP POLICY IF EXISTS restaurant_isolation ON rooms;
+DROP POLICY IF EXISTS restaurant_isolation ON tables;
+DROP POLICY IF EXISTS restaurant_isolation ON orders;
+DROP POLICY IF EXISTS restaurant_isolation ON order_items;
+DROP POLICY IF EXISTS restaurant_isolation ON order_status_history;
+DROP POLICY IF EXISTS restaurant_isolation ON bills;
+DROP POLICY IF EXISTS restaurant_isolation ON bill_payments;
+DROP POLICY IF EXISTS restaurant_isolation ON inventory_items;
+DROP POLICY IF EXISTS restaurant_isolation ON inventory_movements;
+
 -- restaurants: owner table — id IS the restaurant_id
 CREATE POLICY restaurant_isolation ON restaurants
   USING (id = current_setting('app.current_restaurant_id', true)::uuid);
