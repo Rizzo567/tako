@@ -10,6 +10,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 import { useAuthStore } from '@/lib/store'
 import { useOrdersStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
+import { api } from '@/lib/api'
 
 // ─── Mobile menu context ──────────────────────────────────────────────────────
 
@@ -85,6 +86,12 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname()
   const { user, restaurant, clearAuth } = useAuthStore()
   const pendingCount = useOrdersStore((s) => s.pendingCount)
+
+  async function handleLogout() {
+    try { await api.post('/auth/logout') } catch { /* il cookie può già essere scaduto */ }
+    clearAuth()
+    window.location.href = '/login'
+  }
 
   const salaActive = pathname.startsWith('/dashboard/sala')
   const [salaOpen, setSalaOpen] = useState(salaActive)
@@ -203,7 +210,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           </div>
         </div>
         <button
-          onClick={clearAuth}
+          onClick={handleLogout}
           className="flex items-center gap-2 text-ink/50 hover:text-coral transition-colors text-sm font-bold"
         >
           <LogOut size={14} /> Esci

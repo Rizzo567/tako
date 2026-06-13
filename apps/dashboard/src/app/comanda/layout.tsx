@@ -1,26 +1,18 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/store'
 
 export default function ComandaLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const { user, _hasHydrated } = useAuthStore()
-  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const token = localStorage.getItem('tako_token')
-    if (!token) {
-      router.replace('/login')
-      return
-    }
-    setChecked(true)
-  }, [router])
+    if (_hasHydrated && !user) router.replace('/login')
+  }, [user, _hasHydrated, router])
 
-  if (!checked || !_hasHydrated) {
-    return <div className="min-h-screen bg-cream" />
-  }
+  if (!_hasHydrated) return <div className="min-h-screen bg-cream" />
+  if (!user) return null
 
   return (
     <div className="min-h-screen bg-cream">

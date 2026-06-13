@@ -18,19 +18,20 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       restaurant: null,
       _hasHydrated: false,
+      // Il token vive solo nel cookie HttpOnly (auth reale). Qui lo teniamo in
+      // memoria per la sessione corrente ma NON lo persistiamo: il segnale di
+      // "loggato" persistito è `user`.
       setAuth: (token, user, restaurant) => {
-        localStorage.setItem('tako_token', token)
         set({ token, user, restaurant })
       },
       clearAuth: () => {
-        localStorage.removeItem('tako_token')
         set({ token: null, user: null, restaurant: null })
       },
       setHasHydrated: (v) => set({ _hasHydrated: v }),
     }),
     {
       name: 'tako-auth',
-      partialize: (s) => ({ token: s.token, user: s.user, restaurant: s.restaurant }),
+      partialize: (s) => ({ user: s.user, restaurant: s.restaurant }),
       onRehydrateStorage: () => (state) => { state?.setHasHydrated(true) },
     }
   )
