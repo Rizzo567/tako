@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import { db, users, sessions, restaurants } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
+import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE } from '../lib/cookies.js'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -89,6 +90,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       await db.insert(sessions).values({ userId: user!.id, token, expiresAt })
 
+      reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
       return reply.code(201).send({
         data: {
           token,
@@ -130,6 +132,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, user.restaurantId!)).limit(1)
 
+    reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
     return { data: { token, user: { id: user.id, name: user.name, email: user.email, role: user.role }, restaurant } }
   })
 
@@ -158,6 +161,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     const expiresAt = new Date(Date.now() + 12 * 60 * 60 * 1000) // 12h for PIN sessions
     await db.insert(sessions).values({ userId: user.id, token, expiresAt })
 
+    reply.setCookie(SESSION_COOKIE, token, authCookieOptions(12 * 60 * 60))
     return { data: { token, user: { id: user.id, name: user.name, role: user.role } } }
   })
 
@@ -167,9 +171,10 @@ export async function authRoutes(fastify: FastifyInstance) {
   })
 
   // Logout
-  fastify.post('/logout', { preHandler: requireAuth }, async (req) => {
-    const token = req.headers.authorization?.replace('Bearer ', '')
+  fastify.post('/logout', { preHandler: requireAuth }, async (req, reply) => {
+    const token = req.cookies?.[SESSION_COOKIE] ?? req.headers.authorization?.replace('Bearer ', '')
     if (token) await db.delete(sessions).where(eq(sessions.token, token))
+    reply.clearCookie(SESSION_COOKIE, { path: '/' })
     return { data: { success: true } }
   })
 }

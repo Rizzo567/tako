@@ -1,6 +1,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
+import cookie from '@fastify/cookie'
 import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 import helmet from '@fastify/helmet'
@@ -59,6 +60,7 @@ await fastify.register(cors, {
 })
 
 await fastify.register(jwt, { secret: JWT_SECRET })
+await fastify.register(cookie, { secret: JWT_SECRET })
 await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
 
 const UPLOADS_DIR = resolve(process.env['UPLOADS_DIR'] ?? './uploads')

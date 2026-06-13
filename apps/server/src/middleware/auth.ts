@@ -1,9 +1,11 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import { db, sessions, users } from '@tako/db'
 import { eq, and, gt } from 'drizzle-orm'
+import { SESSION_COOKIE } from '../lib/cookies.js'
 
 export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
-  const token = req.headers.authorization?.replace('Bearer ', '')
+  // Preferisci il cookie HttpOnly; fallback al Bearer durante la transizione.
+  const token = req.cookies?.[SESSION_COOKIE] ?? req.headers.authorization?.replace('Bearer ', '')
   if (!token) return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Missing token' } })
 
   const [session] = await db
