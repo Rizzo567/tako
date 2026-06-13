@@ -255,7 +255,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
   })
 
   // Call waiter
-  fastify.post('/waiter-call', async (req, reply) => {
+  fastify.post('/waiter-call', { config: { rateLimit: { max: 6, timeWindow: 60000 } } }, async (req, reply) => {
     const schema = z.object({
       restaurantId: z.string().uuid(),
       tableId: z.string().uuid(),
@@ -271,7 +271,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
   // AI chat — agentic assistant. Bound to this table/session: it can search the
   // menu, fill the cart, place the order, check status and call the waiter.
-  fastify.post('/ai-chat', async (req, reply) => {
+  fastify.post('/ai-chat', { config: { rateLimit: { max: 15, timeWindow: 60000 } } }, async (req, reply) => {
     const aiChatSchema = z.object({
       restaurantId: z.string().uuid(),
       message: z.string().min(1).max(500),
