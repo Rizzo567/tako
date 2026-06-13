@@ -150,9 +150,8 @@ export async function authRoutes(fastify: FastifyInstance) {
     let user = null
     for (const candidate of candidates) {
       if (!candidate.pin) continue
-      const match = candidate.pin.startsWith('$2')
-        ? await bcrypt.compare(pin, candidate.pin)
-        : candidate.pin === pin
+      // Solo PIN hashati con bcrypt: niente più fallback plaintext legacy.
+      const match = candidate.pin.startsWith('$2') && await bcrypt.compare(pin, candidate.pin)
       if (match) { user = candidate; break }
     }
     if (!user) return reply.code(401).send({ error: { code: 'INVALID_PIN', message: 'Invalid PIN' } })
