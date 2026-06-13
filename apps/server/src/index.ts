@@ -30,8 +30,22 @@ if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
 
 const fastify = Fastify({ logger: { level: 'error' } })
 
-// Security headers
-await fastify.register(helmet, { contentSecurityPolicy: false })
+// Security headers. CSP su misura per un'API: nessuna sorgente di default, solo
+// immagini self+data (per /uploads). Niente upgrade-insecure-requests (romperebbe
+// l'http locale). CORP cross-origin così le app Next (origine diversa) caricano le
+// immagini di /uploads.
+await fastify.register(helmet, {
+  contentSecurityPolicy: {
+    useDefaults: false,
+    directives: {
+      defaultSrc: ["'none'"],
+      imgSrc: ["'self'", 'data:'],
+      frameAncestors: ["'none'"],
+      baseUri: ["'none'"],
+    },
+  },
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+})
 
 // CORS — solo origini note
 await fastify.register(cors, {
