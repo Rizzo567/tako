@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { HandHelping, ReceiptText, GlassWater } from 'lucide-react'
 import { api } from '@/lib/api'
 import { useSessionStore } from '@/lib/store'
 import { MenuView } from './MenuView'
@@ -9,6 +10,20 @@ import { OrderTracking } from './OrderTracking'
 import { AiChat } from './AiChat'
 
 type View = 'menu' | 'tracking' | 'chat'
+
+// Sets --brand and picks a readable text color (--on-brand) via WCAG relative luminance,
+// so CTAs stay legible whatever brand color a restaurant chooses (incl. light yellows).
+function applyBrand(color?: string | null) {
+  if (!color) return
+  const root = document.documentElement
+  root.style.setProperty('--brand', color)
+  const hex = color.trim().replace('#', '')
+  if (hex.length !== 6) return
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))
+  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+  root.style.setProperty('--on-brand', L > 0.5 ? '#2A1F1A' : '#FFFFFF')
+}
 
 export function CustomerApp({ restaurantId, token }: { restaurantId: string; token: string }) {
   const { setSession, orderId, logoUrl } = useSessionStore()
@@ -32,7 +47,7 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
           logoUrl: restaurant.logoUrl,
           sessionId: sessionId ?? null,
         })
-        document.documentElement.style.setProperty('--brand', restaurant.primaryColor)
+        applyBrand(restaurant.primaryColor)
       })
       .catch(() => setError('Tavolo non trovato. Riprova a scansionare il QR.'))
       .finally(() => setLoading(false))
@@ -46,41 +61,38 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
   }
 
   if (loading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-cream gap-4">
+    <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-4 bg-[var(--surface-base)]">
       <div
-        className="w-20 h-20 rounded-3xl bg-white border-2 border-ink/10 grid place-items-center"
-        style={{ boxShadow: '4px 4px 0 rgba(42,31,26,0.1)' }}
+        className="grid h-20 w-20 place-items-center bg-[var(--surface-raised)]"
+        style={{ borderRadius: 'var(--r-card)', boxShadow: 'var(--elev-2)' }}
       >
         {logoUrl
-          ? <img src={logoUrl} alt="logo" className="w-14 h-14 object-contain rounded-2xl" />
-          : <span className="font-display font-black text-3xl text-coral">T</span>
+          ? <img src={logoUrl} alt="logo" className="h-14 w-14 rounded-2xl object-contain" />
+          : <span className="font-serif text-3xl" style={{ color: 'var(--brand)' }}>T</span>
         }
       </div>
-      <div>
-        <div className="w-8 h-1 bg-coral rounded-full mx-auto animate-pulse" />
-      </div>
-      <p className="font-display font-black text-ink/40 text-sm">Carico menu...</p>
+      <div className="h-1 w-8 animate-pulse rounded-full" style={{ background: 'var(--brand)' }} />
+      <p className="text-sm font-semibold text-[var(--text-tertiary)]">Carico il menu...</p>
     </div>
   )
 
   if (error) return (
-    <div className="min-h-screen flex items-center justify-center bg-cream p-6 text-center">
+    <div className="flex min-h-[100dvh] items-center justify-center p-6 text-center">
       <div>
-        <p className="text-6xl mb-4">🐙</p>
-        <h1 className="font-display font-black text-2xl mb-2">Oops!</h1>
-        <p className="text-ink/60 font-semibold">{error}</p>
+        <h1 className="mb-2 font-serif text-2xl text-[var(--text-primary)]">Qualcosa non va</h1>
+        <p className="font-semibold text-[var(--text-secondary)]">{error}</p>
       </div>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-cream pb-24">
+    <div className="min-h-[100dvh] bg-[var(--surface-base)] pb-24">
       {/* Main views */}
       {view === 'menu' && (
         <MenuView onGoCart={() => setCartOpen(true)} onGoChat={() => setView('chat')} onWaiterCall={() => setWaiterSheet(true)} />
       )}
       {view === 'tracking' && <OrderTracking onBack={() => setView('menu')} onOrderAgain={() => setView('menu')} />}
-      {view === 'chat' && <AiChat onBack={() => setView('menu')} />}
+      {view === 'chat' && <AiChat onBack={() => setView('menu')} onOrderPlaced={() => setView('tracking')} />}
 
       {/* Cart bottom sheet overlay */}
       <div
@@ -89,7 +101,8 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
         onClick={() => setCartOpen(false)}
       >
         <div
-          className={`bg-cream rounded-t-3xl max-h-[88vh] overflow-y-auto w-full max-w-lg mx-auto transition-transform duration-300 ${cartOpen ? 'translate-y-0' : 'translate-y-full'}`}
+          className={`max-h-[88vh] w-full max-w-lg mx-auto overflow-y-auto bg-[var(--surface-base)] transition-transform duration-300 ${cartOpen ? 'translate-y-0' : 'translate-y-full'}`}
+          style={{ borderTopLeftRadius: 'var(--r-sheet)', borderTopRightRadius: 'var(--r-sheet)', boxShadow: 'var(--elev-3)' }}
           onClick={e => e.stopPropagation()}
         >
           <CartView
@@ -106,25 +119,31 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
       {waiterSheet && (
         <div
           className="fixed inset-0 z-50 flex items-end"
+          style={{ background: 'rgba(42,31,26,0.55)' }}
           onClick={() => setWaiterSheet(false)}
         >
           <div
-            className="bg-white rounded-t-3xl w-full max-w-lg mx-auto p-6 pb-10"
+            className="w-full max-w-lg mx-auto bg-[var(--surface-raised)] p-6 pb-10 safe-bottom"
+            style={{ borderTopLeftRadius: 'var(--r-sheet)', borderTopRightRadius: 'var(--r-sheet)', boxShadow: 'var(--elev-3)' }}
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="font-display font-black text-xl mb-5 text-center">Chiama cameriere</h3>
+            <div className="mx-auto mb-5 h-1 w-10 rounded-full" style={{ background: 'var(--border-default)' }} />
+            <h3 className="mb-5 text-center font-serif text-xl text-[var(--text-primary)]">Chiama il cameriere</h3>
             <div className="space-y-3">
               {[
-                { type: 'help', emoji: '👋', label: 'Ho bisogno di aiuto' },
-                { type: 'bill', emoji: '🧾', label: 'Vorrei il conto' },
-                { type: 'water', emoji: '💧', label: 'Acqua, per favore' },
-              ].map(({ type, emoji, label }) => (
+                { type: 'help', Icon: HandHelping, label: 'Ho bisogno di aiuto' },
+                { type: 'bill', Icon: ReceiptText, label: 'Vorrei il conto' },
+                { type: 'water', Icon: GlassWater, label: 'Acqua, per favore' },
+              ].map(({ type, Icon, label }) => (
                 <button
                   key={type}
                   onClick={() => callWaiter(type as 'help' | 'bill' | 'water')}
-                  className="w-full bg-cream border-2 border-ink/15 rounded-2xl p-4 flex items-center gap-4 font-display font-black text-lg active:scale-95 transition-transform"
+                  className="flex w-full items-center gap-4 bg-[var(--surface-sunken)] p-4 text-lg font-semibold text-[var(--text-primary)] transition-transform active:scale-[0.98]"
+                  style={{ borderRadius: 'var(--r-card)' }}
                 >
-                  <span className="text-3xl">{emoji}</span>
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-[var(--on-brand)]" style={{ background: 'var(--brand)' }}>
+                    <Icon size={20} strokeWidth={2.2} />
+                  </span>
                   <span>{label}</span>
                 </button>
               ))}
