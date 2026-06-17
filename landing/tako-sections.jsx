@@ -105,10 +105,37 @@ function Bubbles({ count = 12 }) {
   );
 }
 
+/* ——— Hand-holding-phone (live app iframe behind hand PNG) ——— */
+function HandPhone() {
+  const stageRef = useRef(null);
+  const slotRef = useRef(null);
+  const APP_W = 390;
+
+  useEffect(() => {
+    const stage = stageRef.current, slot = slotRef.current;
+    if (!stage || !slot) return;
+    const fit = () => stage.style.setProperty('--hp-scale', (slot.clientWidth / APP_W).toString());
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(slot);
+    window.addEventListener('resize', fit, { passive: true });
+    return () => { ro.disconnect(); window.removeEventListener('resize', fit); };
+  }, []);
+
+  return (
+    <div ref={stageRef} className="hp-stage sway">
+      <div ref={slotRef} className="hp-slot">
+        <iframe className="hp-live" src="hero-export/Tako App.html?bare=1&demo=1" scrolling="no" tabIndex="-1" title="App Tako — demo menù"></iframe>
+      </div>
+      <img className="hp-hand" src="hero-export/assets/hand-phone.png" alt="Mano che impugna lo smartphone con l'app Tako" />
+    </div>
+  );
+}
+
 /* ——— Hero ——— */
 function Hero() {
   return (
-    <section className="relative pt-32 pb-24 overflow-hidden" style={{ background: 'linear-gradient(180deg, #FFEEE8 0%, #FFF8F3 100%)' }}>
+    <section className="relative pt-32 pb-6 overflow-hidden" style={{ background: 'linear-gradient(180deg, #FFEEE8 0%, #FFF8F3 100%)' }}>
       {/* decorative blobs */}
       <div className="absolute -top-20 -left-32 w-[480px] h-[480px] blob-1" style={{ background: 'rgba(248,183,166,0.55)', filter: 'blur(2px)' }} />
       <div className="absolute top-40 -right-40 w-[520px] h-[520px] blob-2" style={{ background: 'rgba(189,217,232,0.45)', filter: 'blur(2px)' }} />
@@ -116,10 +143,6 @@ function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
         <div className="reveal-l">
-          <span className="chip mb-6">
-            <span className="dot" style={{ animation: 'none' }} />
-            Nuova versione 4.0 — AI integrata
-          </span>
           <h1 className="text-6xl md:text-7xl lg:text-[88px] leading-[0.95] mb-6">
             Il tuo ristorante,<br/>
             <span className="grad-text">più smart.</span>
@@ -149,20 +172,8 @@ function Hero() {
           </div>
         </div>
 
-        <div className="relative reveal-r">
-          {/* Pulse rings */}
-          <div className="absolute inset-0 grid place-items-center pointer-events-none">
-            <div className="w-80 h-80 rounded-full" style={{ background: 'rgba(237,113,89,0.18)', animation: 'pulse-ring 3s ease-out infinite' }} />
-            <div className="absolute w-80 h-80 rounded-full" style={{ background: 'rgba(237,113,89,0.18)', animation: 'pulse-ring 3s ease-out 1s infinite' }} />
-          </div>
-          <div className="relative float-y">
-            <img src="assets/tako-hello.png" alt="Tako waving" className="mascot-hero w-[520px] max-w-full mx-auto" style={{ mixBlendMode: 'multiply' }} />
-          </div>
-          {/* Floating sparkles instead of white cards */}
-          <svg className="absolute top-8 -left-2 w-8 h-8 float-soft hidden md:block" style={{ animationDelay: '-1s' }} viewBox="0 0 32 32"><path d="M16 0 L19 13 L32 16 L19 19 L16 32 L13 19 L0 16 L13 13 Z" fill="var(--coral)" opacity="0.85"/></svg>
-          <svg className="absolute top-32 right-2 w-6 h-6 float-soft hidden md:block" style={{ animationDelay: '-2.5s' }} viewBox="0 0 32 32"><path d="M16 0 L19 13 L32 16 L19 19 L16 32 L13 19 L0 16 L13 13 Z" fill="var(--sun)" opacity="0.85"/></svg>
-          <svg className="absolute bottom-20 -left-4 w-7 h-7 float-soft hidden md:block" style={{ animationDelay: '-3s' }} viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="var(--mint)" opacity="0.6"/></svg>
-          <svg className="absolute bottom-8 -right-2 w-10 h-10 float-soft hidden md:block" style={{ animationDelay: '-1.5s' }} viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="var(--coral)" strokeWidth="3" strokeDasharray="4 4"/></svg>
+        <div className="relative reveal-r" style={{ marginTop: -70 }}>
+          <HandPhone />
         </div>
       </div>
 
