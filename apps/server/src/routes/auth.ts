@@ -24,35 +24,37 @@ const registerSchema = z.object({
 const loginAttempts = new Map<string, { count: number; firstAttempt: number }>()
 const MAX_ATTEMPTS = 5
 const LOCKOUT_MS = 15 * 60 * 1000 // 15 minuti
+const MAX_TRACKED = 5000 // bound memoria: evita crescita illimitata della mappa
 
-function checkBruteForce(ip: string): boolean {
+// La chiave è ip+email: un dito storto su una mail non blocca tutto lo staff
+// dietro lo stesso IP (NAT del ristorante), e si limita comunque il credential stuffing.
+function bruteKey(ip: string, email: string) { return `${ip}::${email.toLowerCase()}` }
+
+function checkBruteForce(key: string): boolean {
   const now = Date.now()
-  const record = loginAttempts.get(ip)
+  const record = loginAttempts.get(key)
   if (!record) return true
-  if (now - record.firstAttempt > LOCKOUT_MS) { loginAttempts.delete(ip); return true }
+  if (now - record.firstAttempt > LOCKOUT_MS) { loginAttempts.delete(key); return true }
   return record.count < MAX_ATTEMPTS
 }
 
-function recordFailedLogin(ip: string) {
+function recordFailedLogin(key: string) {
   const now = Date.now()
-  const record = loginAttempts.get(ip)
+  // Pulizia opportunistica delle voci scadute quando la mappa cresce troppo.
+  if (loginAttempts.size > MAX_TRACKED) {
+    for (const [k, v] of loginAttempts) if (now - v.firstAttempt > LOCKOUT_MS) loginAttempts.delete(k)
+  }
+  const record = loginAttempts.get(key)
   if (!record || now - record.firstAttempt > LOCKOUT_MS) {
-    loginAttempts.set(ip, { count: 1, firstAttempt: now })
+    loginAttempts.set(key, { count: 1, firstAttempt: now })
   } else {
     record.count++
   }
 }
 
 export async function authRoutes(fastify: FastifyInstance) {
-  // Rate limit su auth: 10 req/min per IP
-  fastify.register(async (instance) => {
-    instance.addHook('onRequest', async (req, reply) => {
-      const ip = req.ip
-      if (!checkBruteForce(ip)) {
-        return reply.code(429).send({ error: { code: 'BRUTE_FORCE', message: 'Troppi tentativi. Riprova tra 15 minuti.' } })
-      }
-    })
-  })
+  // Il controllo brute-force è applicato direttamente in /login (per ip+email),
+  // dove l'email è disponibile. Vedi checkBruteForce/recordFailedLogin sopra.
 
   // Register new restaurant + owner
   fastify.post('/register', async (req, reply) => {
@@ -114,17 +116,26 @@ export async function authRoutes(fastify: FastifyInstance) {
     const body = loginSchema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
+    // Brute-force per (ip, email): blocca dopo 5 tentativi falliti in 15 min.
+    const key = bruteKey(req.ip, body.data.email)
+    if (!checkBruteForce(key)) {
+      return reply.code(429).send({ error: { code: 'BRUTE_FORCE', message: 'Troppi tentativi. Riprova tra 15 minuti.' } })
+    }
+
     const [user] = await db.select().from(users).where(eq(users.email, body.data.email)).limit(1)
     if (!user?.passwordHash) {
-      recordFailedLogin(req.ip)
+      recordFailedLogin(key)
       return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
     }
 
     const valid = await bcrypt.compare(body.data.password, user.passwordHash)
     if (!valid) {
-      recordFailedLogin(req.ip)
+      recordFailedLogin(key)
       return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
     }
+
+    // Login riuscito: azzera il contatore per questa coppia.
+    loginAttempts.delete(key)
 
     const token = nanoid(64)
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)

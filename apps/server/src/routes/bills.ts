@@ -4,6 +4,7 @@ import { db, bills, billPayments, orders, tables } from '@tako/db'
 import { eq, and, inArray, gte, desc } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
+import { round2, BILLABLE_STATUSES } from '../lib/billing.js'
 
 export async function billRoutes(fastify: FastifyInstance) {
   // Get open bills
@@ -17,15 +18,15 @@ export async function billRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       tableId: z.string().uuid().optional(),
       tableNumber: z.string().optional(),
-      covers: z.number().default(1),
-      discount: z.number().default(0),
-      discountNote: z.string().optional(),
-      tip: z.number().default(0),
+      covers: z.number().int().min(1).default(1),
+      discount: z.number().min(0).default(0),       // niente sconti negativi
+      discountNote: z.string().max(500).optional(),
+      tip: z.number().min(0).default(0),            // niente mance negative
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    // Calculate subtotal from open orders on this table
+    // Calculate subtotal from billable orders on this table
     let subtotal = 0
     if (body.data.tableId) {
       // Anti cross-tenant: il tavolo deve appartenere al ristorante dell'utente.
@@ -33,24 +34,59 @@ export async function billRoutes(fastify: FastifyInstance) {
         .where(and(eq(tables.id, body.data.tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
       if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
 
-      const tableOrders = await db.select().from(orders).where(and(
+      // Idempotenza: se esiste già un conto aperto per il tavolo, ritornalo
+      // invece di crearne un secondo (evita conti fantasma sullo stesso tavolo).
+      const [existing] = await db.select().from(bills).where(and(
+        eq(bills.restaurantId, req.user!.restaurantId), eq(bills.tableId, body.data.tableId), eq(bills.status, 'open'),
+      )).limit(1)
+      if (existing) return reply.code(200).send({ data: existing })
+
+      const tableOrders = await db.select({ total: orders.total }).from(orders).where(and(
         eq(orders.tableId, body.data.tableId),
         eq(orders.restaurantId, req.user!.restaurantId),
-        inArray(orders.status, ['confirmed', 'preparing', 'ready', 'served']),
+        inArray(orders.status, [...BILLABLE_STATUSES]),
       ))
-      subtotal = tableOrders.reduce((sum, o) => sum + o.total, 0)
+      subtotal = round2(tableOrders.reduce((sum, o) => sum + o.total, 0))
     }
 
-    const total = subtotal - (body.data.discount ?? 0) + (body.data.tip ?? 0)
+    // Lo sconto non può superare il subtotale (totale mai negativo).
+    const discount = Math.min(body.data.discount ?? 0, subtotal)
+    const total = round2(subtotal - discount + (body.data.tip ?? 0))
 
     const [bill] = await db.insert(bills).values({
       restaurantId: req.user!.restaurantId,
       ...body.data,
+      discount,
       subtotal,
       total,
     }).returning()
 
     return reply.code(201).send({ data: bill })
+  })
+
+  // Aggiorna sconto / mancia di un conto aperto (ricalcola il totale)
+  fastify.patch('/:billId', { preHandler: requireAuth }, async (req, reply) => {
+    const { billId } = req.params as { billId: string }
+    const schema = z.object({
+      discount: z.number().min(0).optional(),
+      discountNote: z.string().max(500).optional(),
+      tip: z.number().min(0).optional(),
+    })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+
+    const [bill] = await db.select().from(bills)
+      .where(and(eq(bills.id, billId), eq(bills.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Bill not found' } })
+
+    const discount = Math.min(body.data.discount ?? bill.discount ?? 0, bill.subtotal)
+    const tip = body.data.tip ?? bill.tip ?? 0
+    const total = round2(bill.subtotal - discount + tip)
+    const [updated] = await db.update(bills)
+      .set({ discount, tip, discountNote: body.data.discountNote ?? bill.discountNote, total })
+      .where(eq(bills.id, billId)).returning()
+
+    return { data: updated }
   })
 
   // Add payment to bill
@@ -66,14 +102,17 @@ export async function billRoutes(fastify: FastifyInstance) {
     // Verify bill belongs to this restaurant before accepting payment
     const [bill] = await db.select().from(bills).where(and(eq(bills.id, billId), eq(bills.restaurantId, req.user!.restaurantId))).limit(1)
     if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Bill not found' } })
+    // Non accettare pagamenti su un conto già chiuso/annullato: ri-processarlo
+    // ri-eseguirebbe la chiusura (tavolo→cleaning, ordini→served) e gonfierebbe i pagamenti.
+    if (bill.status !== 'open') return reply.code(409).send({ error: { code: 'BILL_NOT_OPEN', message: 'Il conto non è aperto.' } })
 
     const [payment] = await db.insert(billPayments).values({ billId, ...body.data, status: 'completed' }).returning()
 
-    // Check if bill is fully paid
+    // Check if bill is fully paid (confronto a centesimi: niente derive float)
     const allPayments = await db.select().from(billPayments).where(eq(billPayments.billId, billId))
-    const paidTotal = allPayments.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0)
+    const paidTotal = round2(allPayments.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0))
 
-    if (paidTotal >= bill.total) {
+    if (paidTotal >= round2(bill.total)) {
       await db.update(bills).set({ status: 'closed', closedAt: new Date(), closedBy: req.user!.id }).where(eq(bills.id, billId))
       // Free the table
       if (bill.tableId) {
@@ -97,6 +136,7 @@ export async function billRoutes(fastify: FastifyInstance) {
               .set({ status: 'served', servedAt })
               .where(eq(orders.id, order.id))
             io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId: order.id, status: 'served' })
+            if (bill.tableId) io.to(`table:${bill.tableId}`).emit('order:updated', { orderId: order.id, status: 'served' })
           }
         }
       }

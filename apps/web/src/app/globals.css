@@ -44,8 +44,50 @@
     --r-card: 18px;
     --r-sheet: 24px;
     --r-photo: 16px;
+
+    /* ════════════════════════════════════════════════════════════════
+       Design-handoff token aliases (PWA cliente — splash + menu redesign).
+       Nuovi nomi del bundle di design mappati ai token premium esistenti,
+       più i token mancanti. I componenti redisegnati usano questi; i
+       componenti legacy continuano a usare i nomi --surface-* / --text-*.
+       ════════════════════════════════════════════════════════════════ */
+    --surface: var(--surface-base);
+    --raised:  var(--surface-raised);
+    --sunken:  var(--surface-sunken);
+    --hairline:#ECE3D9;
+    --ink:     var(--text-primary);
+    --ink-2:   var(--text-secondary);
+    --ink-3:   var(--text-tertiary);
+    --ok:      var(--status-success);
+    --warn:    var(--status-warning);
+    --danger:  var(--status-danger);
+
+    /* brand ramp (handoff naming) */
+    --brand-deep: var(--brand-pressed);
+    --brand-wash: color-mix(in srgb, var(--brand) 10%, white);
+
+    /* ombre soft a livelli (handoff) */
+    --sh-1: 0 1px 2px rgba(42,31,26,.05), 0 2px 6px rgba(42,31,26,.04);
+    --sh-2: 0 2px 8px rgba(42,31,26,.06), 0 8px 24px rgba(42,31,26,.07);
+    --sh-3: 0 8px 24px rgba(42,31,26,.10), 0 20px 50px rgba(42,31,26,.14);
+    --sh-sheet: 0 -10px 40px rgba(42,31,26,.16);
+
+    --r-pill: 999px;
+
+    /* easing curves condivise col motion (Framer le rispecchia in JS) */
+    --spring: cubic-bezier(.34,1.56,.64,1);
+    --out:    cubic-bezier(.22,1,.36,1);
+
+    /* safe-area */
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+
+    /* altezza header dinamica (settata da Header via ResizeObserver) */
+    --header-h: 64px;
   }
 
+  /* Forza schema chiaro: niente auto-dark di Chrome/macOS che scurisce la UI. */
+  html { color-scheme: light; }
   body { -webkit-tap-highlight-color: transparent; background-color: var(--surface-base); }
   * { box-sizing: border-box; }
 }
@@ -159,8 +201,34 @@
   }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   Helper classes + keyframes (PWA cliente redesign — splash + menu).
+   ════════════════════════════════════════════════════════════════════ */
+@layer components {
+  .serif { font-family: var(--font-serif), Georgia, serif; font-weight: 400; letter-spacing: 0; }
+  .tnum  { font-variant-numeric: tabular-nums; }
+  .hairline { border: 0; border-top: 1px solid var(--hairline); margin: 0; }
+
+  /* press feedback per elementi non-motion (fallback CSS) */
+  .press { transition: transform .14s var(--spring); touch-action: manipulation; }
+  .press:active { transform: scale(.94); }
+  .press-sm:active { transform: scale(.97); }
+
+  /* mascotte idle loops */
+  .anim-bob   { animation: bob 3.4s ease-in-out infinite; transform-origin: 50% 90%; }
+  .anim-float { animation: float-soft 4s ease-in-out infinite; }
+}
+
+@keyframes bob        { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-6px) rotate(2deg)} }
+@keyframes float-soft { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+@keyframes pop-in     { 0%{transform:scale(.5);opacity:0} 70%{transform:scale(1.08);opacity:1} 100%{transform:scale(1)} }
+@keyframes pulse-ring { 0%{transform:scale(.7);opacity:.55} 100%{transform:scale(2.4);opacity:0} }
+@keyframes badge-pop  { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 100%{transform:scale(1)} }
+@keyframes bubble-rise{ 0%{transform:translateY(0) scale(.7);opacity:0} 14%{opacity:.5} 88%{opacity:.4} 100%{transform:translateY(-760px) scale(1.15);opacity:0} }
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton { animation: none; }
+  .anim-bob, .anim-float { animation: none !important; }
   .btn-coral, .item-card, .card { transition: none; }
   /* Kill decorative loops (pulse on stepper node / loading dot, bounce on typing dots).
      Functional spinners keep a slow spin so loading is still legible. */

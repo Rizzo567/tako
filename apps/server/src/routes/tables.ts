@@ -94,6 +94,18 @@ export async function tableRoutes(fastify: FastifyInstance) {
     return { data: table }
   })
 
+  // Risolvi una chiamata cameriere: lo staff la segna come gestita e l'evento
+  // waiter:resolved sincronizza TUTTI i device staff (il badge sparisce ovunque).
+  // Le chiamate non sono persistite: è una pura sincronizzazione real-time.
+  fastify.post('/:tableId/waiter-resolve', { preHandler: requireAuth }, async (req, reply) => {
+    const { tableId } = req.params as { tableId: string }
+    // SECURITY: il tavolo deve appartenere al ristorante dello staff.
+    const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    io.to(`restaurant:${req.user!.restaurantId}`).emit('waiter:resolved', { tableId })
+    return { data: { success: true } }
+  })
+
   // Get QR code as base64 PNG
   fastify.get('/:tableId/qr', { preHandler: requireAuth }, async (req, reply) => {
     const { tableId } = req.params as { tableId: string }

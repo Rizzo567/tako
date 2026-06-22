@@ -23,6 +23,8 @@ export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
 export function requireRole(...roles: string[]) {
   return async (req: FastifyRequest, reply: FastifyReply) => {
     await requireAuth(req, reply)
+    // requireAuth ha già risposto 401: non inviare un secondo reply (evita FST_ERR_REP_ALREADY_SENT).
+    if (reply.sent) return
     if (!req.user || !roles.includes(req.user.role)) {
       return reply.code(403).send({ error: { code: 'FORBIDDEN', message: 'Insufficient permissions' } })
     }

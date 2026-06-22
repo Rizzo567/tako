@@ -35,7 +35,17 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    const [updated] = await db.update(restaurants).set({ ...body.data, updatedAt: new Date() }).where(eq(restaurants.id, req.user!.restaurantId)).returning()
+    // settings è un blob jsonb unico: fai MERGE coi valori esistenti, altrimenti
+    // aggiornare una sola chiave (es. printerIp) cancellerebbe tutte le altre
+    // (vatRate, languages, timezone…).
+    const { settings, ...rest } = body.data
+    const updateData: Record<string, unknown> = { ...rest, updatedAt: new Date() }
+    if (settings) {
+      const [current] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
+      updateData.settings = { ...(current?.settings ?? {}), ...settings }
+    }
+
+    const [updated] = await db.update(restaurants).set(updateData).where(eq(restaurants.id, req.user!.restaurantId)).returning()
     return { data: updated }
   })
 }

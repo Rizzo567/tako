@@ -1,4 +1,4 @@
-import { db, menuItems, menuSections, menus, orders, orderItems, restaurants, tableSessions } from '@tako/db'
+import { db, menuItems, menuSections, menus, orders, orderItems, restaurants, tableSessions, tables } from '@tako/db'
 import { and, eq, asc, desc, isNull, ilike, or } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { io } from '../../index.js'
@@ -165,11 +165,16 @@ export const customerTools: ToolDef[] = [
         const m = menu.find((i) => i.name.toLowerCase() === r.name.toLowerCase()) ??
           menu.find((i) => i.name.toLowerCase().includes(r.name.toLowerCase()))
         if (!m) { notFound.push(r.name); continue }
-        lines.push({ menuItemId: m.id, name: m.name, quantity: Math.max(1, r.quantity), unitPrice: m.price, notes: r.notes, kitchenStation: m.kitchenStation })
+        // Stessi limiti anti-abuso del path REST: quantità per voce ≤ 20.
+        lines.push({ menuItemId: m.id, name: m.name, quantity: Math.min(20, Math.max(1, r.quantity)), unitPrice: m.price, notes: r.notes, kitchenStation: m.kitchenStation })
       }
       const total = Math.round(lines.reduce((s, l) => s + l.unitPrice * l.quantity, 0) * 100) / 100
       if (notFound.length) return { ok: false, reason: 'items_not_found', notFound }
       if (!lines.length) return { ok: false, reason: 'empty' }
+      // Limite voci e ristorante attivo (allineati al path REST).
+      if (lines.length > 15) return { ok: false, reason: 'too_many_items' }
+      const [rest] = await db.select({ active: restaurants.active }).from(restaurants).where(eq(restaurants.id, ctx.restaurantId)).limit(1)
+      if (!rest?.active) return { ok: false, reason: 'restaurant_inactive' }
 
       if (input['confirm'] !== true) {
         return { ok: false, needsConfirmation: true, preview: { items: lines.map((l) => ({ name: l.name, quantity: l.quantity, unitPrice: l.unitPrice })), total } }
@@ -210,6 +215,13 @@ export const customerTools: ToolDef[] = [
         items: lines.map((l) => ({ name: l.name, quantity: l.quantity, unitPrice: l.unitPrice })),
         createdAt: order!.createdAt,
       })
+
+      // Occupa il tavolo e notifica la Sala (come il path REST), così un ordine via
+      // assistente AI non lascia il tavolo "libero" sulla dashboard.
+      if (ctx.tableId) {
+        await db.update(tables).set({ status: 'occupied', openedAt: new Date() }).where(eq(tables.id, ctx.tableId))
+        io.to(`restaurant:${ctx.restaurantId}`).emit('table:updated', { tableId: ctx.tableId, status: 'occupied' })
+      }
 
       // Mark time-to-first-order on the active table session, if any.
       if (ctx.tableId) {

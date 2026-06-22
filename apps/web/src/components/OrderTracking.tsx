@@ -1,6 +1,6 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { io } from 'socket.io-client'
+import { useEffect, useRef, useState } from 'react'
+import { socket, joinTable } from '@/lib/socket'
 import { useSessionStore } from '@/lib/store'
 import { api } from '@/lib/api'
 import { formatEuro, cn } from '@/lib/utils'
@@ -18,25 +18,38 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
   const { orderId, tableId } = useSessionStore()
   const [order, setOrder] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const notifiedReady = useRef(false) // evita notifiche "pronto" doppie
 
   useEffect(() => {
-    if (!orderId) return
-    api.get(`/customer/orders/${orderId}`).then(r => setOrder(r.data.data)).finally(() => setLoading(false))
+    // Nessun ordine attivo: niente spinner infinito.
+    if (!orderId) { setLoading(false); setOrder(null); return }
+    setLoading(true); setError(false)
+    notifiedReady.current = false
+    api.get(`/customer/orders/${orderId}`)
+      .then(r => setOrder(r.data.data))
+      .catch(() => setError(true))
+      .finally(() => setLoading(false))
   }, [orderId])
 
   useEffect(() => {
     if (!tableId) return
-    const socket = io(process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3001', { autoConnect: true })
-    socket.emit('join:table', tableId)
-    socket.on('order:updated', ({ orderId: oid, status }) => {
-      if (oid === orderId) setOrder((o: any) => o ? { ...o, status } : o)
-      if (status === 'ready') {
+    // Singleton same-origin con re-join automatico: il tracking resta vivo anche
+    // dopo un drop di rete (niente disconnect su unmount, solo off del listener).
+    joinTable(tableId)
+    const onUpdated = ({ orderId: oid, status }: { orderId: string; status: string }) => {
+      if (oid !== orderId) return
+      setOrder((o: any) => o ? { ...o, status } : o)
+      // Notifica "pronto" SOLO alla prima transizione (più emit 'ready' possibili).
+      if (status === 'ready' && !notifiedReady.current) {
+        notifiedReady.current = true
         if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('Il tuo ordine e pronto', { body: 'Il cameriere sta arrivando.' })
+          new Notification('Il tuo ordine è pronto', { body: 'Il cameriere sta arrivando.' })
         }
       }
-    })
-    return () => { socket.disconnect() }
+    }
+    socket.on('order:updated', onUpdated)
+    return () => { socket.off('order:updated', onUpdated) }
   }, [tableId, orderId])
 
   useEffect(() => {
@@ -51,6 +64,15 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
   if (loading) return (
     <div className="flex min-h-[100dvh] items-center justify-center">
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-transparent" style={{ borderColor: 'var(--brand)', borderTopColor: 'transparent' }} />
+    </div>
+  )
+
+  // Nessun ordine (tab aperta senza aver ordinato) o errore di caricamento.
+  if (error || !order) return (
+    <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-8 text-center">
+      <p className="font-serif text-2xl text-[var(--text-primary)]">{error ? 'Errore di caricamento' : 'Nessun ordine attivo'}</p>
+      <p className="text-sm font-medium text-[var(--text-secondary)]">{error ? 'Non riesco a recuperare l\'ordine. Riprova.' : 'Quando ordini, qui vedrai lo stato in tempo reale.'}</p>
+      <button onClick={onOrderAgain} className="btn-coral mt-2 px-6 py-2.5 text-sm">Vai al menu</button>
     </div>
   )
 

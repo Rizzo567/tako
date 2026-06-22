@@ -1,18 +1,19 @@
-import { pgTable, text, uuid, timestamp, real, integer, index } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, integer, index } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { tables } from './tables.js'
 import { users } from './users.js'
+import { money } from './money.js'
 
 export const bills = pgTable('bills', {
   id: uuid('id').primaryKey().defaultRandom(),
   restaurantId: uuid('restaurant_id').notNull().references(() => restaurants.id),
   tableId: uuid('table_id').references(() => tables.id),
   tableNumber: text('table_number'),
-  subtotal: real('subtotal').notNull(),
-  discount: real('discount').default(0),
+  subtotal: money('subtotal').notNull(),
+  discount: money('discount').default(0),
   discountNote: text('discount_note'),
-  tip: real('tip').default(0),
-  total: real('total').notNull(),
+  tip: money('tip').default(0),
+  total: money('total').notNull(),
   covers: integer('covers').default(1),
   status: text('status', { enum: ['open', 'closed', 'refunded'] }).default('open').notNull(),
   closedBy: uuid('closed_by').references(() => users.id),
@@ -21,12 +22,13 @@ export const bills = pgTable('bills', {
 }, (t) => ({
   restaurantStatusIdx: index('bills_restaurant_status_idx').on(t.restaurantId, t.status),
   restaurantClosedAtIdx: index('bills_restaurant_closed_at_idx').on(t.restaurantId, t.closedAt),
+  restaurantTableStatusIdx: index('bills_restaurant_table_status_idx').on(t.restaurantId, t.tableId, t.status),
 }))
 
 export const billPayments = pgTable('bill_payments', {
   id: uuid('id').primaryKey().defaultRandom(),
   billId: uuid('bill_id').notNull().references(() => bills.id),
-  amount: real('amount').notNull(),
+  amount: money('amount').notNull(),
   method: text('method', { enum: ['cash', 'card', 'digital', 'split'] }).notNull(),
   stripePaymentIntentId: text('stripe_payment_intent_id'),
   status: text('status', { enum: ['pending', 'completed', 'failed', 'refunded'] }).default('pending').notNull(),

@@ -8,8 +8,9 @@ import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { registry, runAgentTurn, customerSystem, aiConfigured } from '../ai/index.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
+import { round2, BILLABLE_STATUSES } from '../lib/billing.js'
 
-interface TableSession { restaurantId: string; tableId: string; sessionId: string | null }
+interface TableSession { restaurantId: string; tableId: string; sessionId: string | null; tableNumber?: string | null }
 
 export async function customerRoutes(fastify: FastifyInstance) {
   // Verifica il JWT del tavolo (cookie HttpOnly emesso al resolve del QR) e lega
@@ -29,7 +30,10 @@ export async function customerRoutes(fastify: FastifyInstance) {
         (body.tableId && body.tableId !== payload.tableId)) {
       return reply.code(403).send({ error: { code: 'TABLE_MISMATCH', message: 'Azione non consentita per questo tavolo.' } })
     }
-    req.tableSession = payload
+    // Numero tavolo AUTORITATIVO dal DB (mai dal client): evita che un cliente
+    // attribuisca ordini/chiamate a un altro tavolo passando un tableNumber falso.
+    const [t] = await db.select({ number: tables.number }).from(tables).where(eq(tables.id, payload.tableId)).limit(1)
+    req.tableSession = { ...payload, tableNumber: t?.number ?? null }
   }
 
   // Resolve table by QR token → return restaurant + table info
@@ -88,7 +92,10 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const mainMenu = allMenus[0]!
     const sections = await db.select().from(menuSections).where(and(eq(menuSections.menuId, mainMenu.id), eq(menuSections.active, true))).orderBy(asc(menuSections.position))
     const items = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true))).orderBy(asc(menuItems.position))
-    const variants = await db.select().from(itemVariants)
+    // Perf: carica solo le varianti dei piatti di questo ristorante (prima leggeva
+    // l'intera tabella itemVariants di tutti i ristoranti).
+    const itemIds = items.map(i => i.id)
+    const variants = itemIds.length ? await db.select().from(itemVariants).where(inArray(itemVariants.itemId, itemIds)) : []
 
     const pub: PublicMenu = {
       id: mainMenu.id,
@@ -127,9 +134,9 @@ export async function customerRoutes(fastify: FastifyInstance) {
         variantId: z.string().uuid().optional(),
         quantity: z.number().int().positive(),
         notes: z.string().optional(),
-      })),
-      notes: z.string().optional(),
-      idempotencyKey: z.string(),
+      })).min(1), // niente ordini vuoti
+      notes: z.string().max(1000).optional(),
+      idempotencyKey: z.string().min(8).max(128),
     })
 
     const body = schema.safeParse(req.body)
@@ -152,31 +159,67 @@ export async function customerRoutes(fastify: FastifyInstance) {
     // SECURITY: prezzi sempre dal DB, mai dal client — previene price tampering
     const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, body.data.restaurantId), eq(menuItems.available, true)))
 
-    let total = 0
-    const resolvedItems = body.data.items.map(orderItem => {
-      const dbItem = dbItems.find(i => i.id === orderItem.menuItemId)
-      // SECURITY: item deve esistere e appartenere a questo ristorante
-      if (!dbItem) throw new Error(`Item non trovato o non disponibile`)
-      // SECURITY: quantità massima per voce (anti-spam)
-      if (orderItem.quantity > 20) throw new Error(`Quantità massima 20 per voce`)
-      const price = dbItem.price // prezzo SEMPRE dal DB
-      total += price * orderItem.quantity
-      return { ...orderItem, name: dbItem.name, unitPrice: price, kitchenStation: dbItem.kitchenStation }
-    })
-
     // SECURITY: max 15 voci per ordine
     if (body.data.items.length > 15) return reply.code(400).send({ error: { code: 'TOO_MANY_ITEMS', message: 'Massimo 15 voci per ordine' } })
 
-    const [order] = await db.insert(orders).values({
-      restaurantId: body.data.restaurantId,
-      tableId: body.data.tableId,
-      tableNumber: body.data.tableNumber,
-      type: body.data.type,
-      status: 'pending',
-      total,
-      notes: body.data.notes,
-      idempotencyKey: body.data.idempotencyKey,
-    }).returning()
+    // SECURITY: quantità massima per voce (anti-spam)
+    if (body.data.items.some(i => i.quantity > 20)) return reply.code(400).send({ error: { code: 'QTY_TOO_HIGH', message: 'Quantità massima 20 per voce' } })
+
+    // UX stellato: se una portata è diventata esaurita tra il caricamento del menu
+    // e l'invio, rispondi con un errore pulito (non un 500) elencando i piatti.
+    const unavailable = body.data.items.filter(oi => !dbItems.find(i => i.id === oi.menuItemId))
+    if (unavailable.length) {
+      return reply.code(409).send({ error: { code: 'ITEM_UNAVAILABLE', message: 'Alcuni piatti non sono più disponibili. Aggiorna il carrello.', items: unavailable.map(u => u.menuItemId) } })
+    }
+
+    // Varianti dal DB (es. "Litro +€13"): il priceModifier va aggiunto al prezzo,
+    // altrimenti l'ordine è sotto-fatturato. Carico solo le varianti dei piatti ordinati.
+    const orderedItemIds = body.data.items.map(i => i.menuItemId)
+    const dbVariants = orderedItemIds.length
+      ? await db.select().from(itemVariants).where(inArray(itemVariants.itemId, orderedItemIds))
+      : []
+
+    // SECURITY: una variantId passata deve esistere ED appartenere al suo piatto.
+    const badVariant = body.data.items.find(oi =>
+      oi.variantId && !dbVariants.find(v => v.id === oi.variantId && v.itemId === oi.menuItemId))
+    if (badVariant) {
+      return reply.code(409).send({ error: { code: 'VARIANT_INVALID', message: 'Variante non valida. Aggiorna il carrello.' } })
+    }
+
+    let total = 0
+    const resolvedItems = body.data.items.map(orderItem => {
+      const dbItem = dbItems.find(i => i.id === orderItem.menuItemId)! // garantito sopra
+      const variant = orderItem.variantId ? dbVariants.find(v => v.id === orderItem.variantId) : undefined
+      const unitPrice = round2(dbItem.price + (variant?.priceModifier ?? 0)) // prezzo + modificatore, dal DB
+      total = round2(total + unitPrice * orderItem.quantity)
+      return { ...orderItem, name: dbItem.name, unitPrice, kitchenStation: dbItem.kitchenStation }
+    })
+
+    let order: typeof orders.$inferSelect | undefined
+    try {
+      ;[order] = await db.insert(orders).values({
+        restaurantId: body.data.restaurantId,
+        tableId: body.data.tableId,
+        tableNumber: (req as any).tableSession?.tableNumber ?? body.data.tableNumber,
+        type: body.data.type,
+        status: 'pending',
+        total,
+        notes: body.data.notes,
+        idempotencyKey: body.data.idempotencyKey,
+      }).returning()
+    } catch (err: any) {
+      // Race del doppio-tap: due invii con lo stesso idempotencyKey arrivano
+      // insieme, entrambi superano il check iniziale, ma il vincolo UNIQUE blocca
+      // il secondo. Niente 500: ritorna l'ordine già creato (idempotenza reale).
+      if (err?.code === '23505') {
+        const [existingOrder] = await db.select().from(orders).where(eq(orders.idempotencyKey, body.data.idempotencyKey)).limit(1)
+        if (existingOrder) {
+          const items = await db.select().from(orderItems).where(eq(orderItems.orderId, existingOrder.id))
+          return reply.code(200).send({ data: { ...existingOrder, items } })
+        }
+      }
+      throw err
+    }
 
     const insertedItems = await db.insert(orderItems).values(
       resolvedItems.map(i => ({
@@ -210,43 +253,35 @@ export async function customerRoutes(fastify: FastifyInstance) {
       io.to(`restaurant:${body.data.restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
     }
 
-    // Lazy bill creation / update
+    // Lazy bill: crea il conto aperto se manca, altrimenti ricalcola.
     if (body.data.tableId) {
       const restaurantId = body.data.restaurantId
       const tableId = body.data.tableId
 
-      // Cerca bill aperto per questo tavolo
       const [existingBill] = await db
-        .select()
+        .select({ id: bills.id })
         .from(bills)
         .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open')))
         .limit(1)
 
-      // Calcola subtotale sommando tutti gli ordini attivi sul tavolo
+      // Subtotale dagli ordini fatturabili (stati canonici condivisi, a centesimi).
       const activeOrders = await db
-        .select()
+        .select({ total: orders.total })
         .from(orders)
         .where(and(
           eq(orders.restaurantId, restaurantId),
           eq(orders.tableId, tableId),
-          inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready', 'served'])
+          inArray(orders.status, [...BILLABLE_STATUSES])
         ))
-      const subtotal = activeOrders.reduce((sum, o) => sum + o.total, 0)
+      const subtotal = round2(activeOrders.reduce((sum, o) => sum + o.total, 0))
 
       if (existingBill) {
-        // Aggiorna subtotale e totale
+        const [b] = await db.select().from(bills).where(eq(bills.id, existingBill.id)).limit(1)
         await db.update(bills)
-          .set({ subtotal, total: subtotal - (existingBill.discount ?? 0) + (existingBill.tip ?? 0) })
+          .set({ subtotal, total: round2(subtotal - (b?.discount ?? 0) + (b?.tip ?? 0)) })
           .where(eq(bills.id, existingBill.id))
       } else {
-        // Crea nuovo bill
-        await db.insert(bills).values({
-          restaurantId,
-          tableId,
-          subtotal,
-          total: subtotal,
-          status: 'open',
-        })
+        await db.insert(bills).values({ restaurantId, tableId, subtotal, total: subtotal, status: 'open' })
       }
     }
 
@@ -275,10 +310,15 @@ export async function customerRoutes(fastify: FastifyInstance) {
     return reply.code(201).send({ data: payload })
   })
 
-  // Get order status (for customer tracking)
-  fastify.get('/orders/:orderId', async (req, reply) => {
+  // Get order status (for customer tracking). SECURITY: richiede la sessione del
+  // tavolo (cookie tako_table) e ritorna SOLO ordini del proprio tavolo —
+  // altrimenti chiunque potrebbe leggere ordini di qualsiasi ristorante by-id (IDOR).
+  fastify.get('/orders/:orderId', { preHandler: requireTableSession }, async (req: any, reply) => {
     const { orderId } = req.params as { orderId: string }
-    const [order] = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1)
+    const { restaurantId, tableId } = req.tableSession as TableSession
+    const [order] = await db.select().from(orders)
+      .where(and(eq(orders.id, orderId), eq(orders.restaurantId, restaurantId), eq(orders.tableId, tableId)))
+      .limit(1)
     if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
     const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
     return { data: { ...order, items } }
@@ -294,7 +334,9 @@ export async function customerRoutes(fastify: FastifyInstance) {
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
-    const { restaurantId, tableId, tableNumber, type } = body.data
+    const { restaurantId, tableId, type } = body.data
+    // tableNumber autoritativo dal JWT/tavolo, non dal client.
+    const tableNumber = (req as any).tableSession?.tableNumber ?? body.data.tableNumber
     io.to(`restaurant:${restaurantId}`).emit('waiter:called', { tableId, tableNumber, type })
     return { data: { success: true } }
   })
@@ -315,7 +357,13 @@ export async function customerRoutes(fastify: FastifyInstance) {
     })
     const parsed = aiChatSchema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
-    const { restaurantId, message, tableId, tableNumber, sessionId, history } = parsed.data
+    const { restaurantId, message, history } = parsed.data
+    // Identità tavolo AUTORITATIVA dal JWT (mai dal client): l'assistente AI può
+    // creare ordini/chiamare il cameriere, quindi deve agire solo sul proprio tavolo.
+    const session = (req as any).tableSession as TableSession
+    const tableId = session.tableId
+    const tableNumber = session.tableNumber ?? null
+    const sessionId = session.sessionId
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
 

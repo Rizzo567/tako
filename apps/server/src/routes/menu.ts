@@ -123,6 +123,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
       imageUrl: z.string().url().optional(),
       kitchenStation: z.string().optional(),
       prepTimeMinutes: z.number().default(10),
+      costPrice: z.number().min(0).optional(), // food cost (per margine/analisi menu)
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
@@ -146,6 +147,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
       kitchenStation: z.string().optional(),
       prepTimeMinutes: z.number().int().min(0).optional(),
       position: z.number().int().min(0).optional(),
+      costPrice: z.number().min(0).optional(), // food cost editabile
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
@@ -155,8 +157,9 @@ export async function menuRoutes(fastify: FastifyInstance) {
       .returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
 
-    // Broadcast menu change to all customers of this restaurant
+    // Broadcast menu change: dashboard staff (room privata) + clienti (room pubblica menu)
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
+    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
     return { data: item }
   })
 
@@ -167,6 +170,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
+    io.to(`menu:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
     return { data: item }
   })
 

@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, boolean, integer } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, boolean, integer, unique } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { users } from './users.js'
 
@@ -25,4 +25,7 @@ export const tables = pgTable('tables', {
   posX: integer('pos_x').default(0),
   posY: integer('pos_y').default(0),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => ({
+  // Niente due tavoli con lo stesso numero nello stesso ristorante.
+  restaurantNumberUnique: unique('tables_restaurant_number_unique').on(t.restaurantId, t.number),
+}))

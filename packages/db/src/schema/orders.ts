@@ -1,8 +1,9 @@
-import { pgTable, text, uuid, timestamp, real, integer, jsonb, index } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, integer, jsonb, index } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { tables } from './tables.js'
 import { menuItems, itemVariants } from './menu.js'
 import { users } from './users.js'
+import { money } from './money.js'
 
 export const orders = pgTable('orders', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -13,7 +14,7 @@ export const orders = pgTable('orders', {
   status: text('status', {
     enum: ['pending', 'confirmed', 'preparing', 'ready', 'served', 'paid', 'cancelled'],
   }).default('pending').notNull(),
-  total: real('total').notNull(),
+  total: money('total').notNull(),
   notes: text('notes'),
   customerName: text('customer_name'),
   assignedWaiterId: uuid('assigned_waiter_id').references(() => users.id),
@@ -25,6 +26,7 @@ export const orders = pgTable('orders', {
 }, (t) => ({
   restaurantStatusIdx: index('orders_restaurant_status_idx').on(t.restaurantId, t.status),
   restaurantCreatedAtIdx: index('orders_restaurant_created_at_idx').on(t.restaurantId, t.createdAt),
+  restaurantTableStatusIdx: index('orders_restaurant_table_status_idx').on(t.restaurantId, t.tableId, t.status),
 }))
 
 export const orderItems = pgTable('order_items', {
@@ -34,7 +36,7 @@ export const orderItems = pgTable('order_items', {
   variantId: uuid('variant_id').references(() => itemVariants.id),
   name: text('name').notNull(),
   quantity: integer('quantity').notNull(),
-  unitPrice: real('unit_price').notNull(),
+  unitPrice: money('unit_price').notNull(),
   notes: text('notes'),
   kitchenStation: text('kitchen_station'),
   status: text('status', {

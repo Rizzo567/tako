@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { DM_Sans, DM_Serif_Display } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
@@ -10,9 +10,18 @@ const dmSerif = DM_Serif_Display({ subsets: ['latin'], variable: '--font-serif',
 export const metadata: Metadata = {
   title: 'Tako',
   description: 'Ordina dal tavolo',
-  themeColor: '#ED7159',
   manifest: '/manifest.json',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Tako' },
+}
+
+// viewport-fit=cover abilita gli env(safe-area-inset-*) usati da header e bottom nav.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: 'cover',
+  colorScheme: 'light',
+  themeColor: '#ED7159',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

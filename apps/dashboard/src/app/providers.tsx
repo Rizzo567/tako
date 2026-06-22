@@ -3,12 +3,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { useState, useEffect } from 'react'
 import { useThemeStore } from '@/lib/store'
+import { useBrandStore } from '@/lib/brand-store'
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = useThemeStore((s) => s.theme)
+  const brand = useBrandStore((s) => s.brand)
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
+  // Palette brand del redesign: applica <html data-brand="…"> a runtime.
+  useEffect(() => {
+    document.documentElement.setAttribute('data-brand', brand)
+  }, [brand])
   return <>{children}</>
 }
 

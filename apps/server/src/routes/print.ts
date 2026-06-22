@@ -55,4 +55,33 @@ export async function printRoutes(fastify: FastifyInstance) {
       return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: err.message ?? 'Errore stampante' } })
     }
   })
+
+  // Stampa di prova (dalle Impostazioni)
+  fastify.post('/test', { preHandler: requireAuth }, async (req, reply) => {
+    const [restaurant] = await db.select({ settings: restaurants.settings, name: restaurants.name })
+      .from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
+    if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Restaurant not found' } })
+    const settings = restaurant.settings as any
+    const ip: string | undefined = settings?.printerIp
+    const port: number = settings?.printerPort ?? 9100
+    if (!ip) return reply.code(400).send({ error: { code: 'NO_PRINTER', message: 'Stampante non configurata nelle impostazioni' } })
+    const lines = [
+      '================================',
+      'TAKO - STAMPA DI PROVA',
+      restaurant.name,
+      new Date().toLocaleString('it-IT'),
+      '================================',
+      '',
+      'Se leggi questo, la stampante',
+      'e collegata correttamente.',
+      '',
+      '================================',
+    ]
+    try {
+      await sendToPrinter(ip, port, buildEscposReceipt(lines))
+      return { data: { success: true } }
+    } catch (err: any) {
+      return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: err.message ?? 'Errore stampante' } })
+    }
+  })
 }

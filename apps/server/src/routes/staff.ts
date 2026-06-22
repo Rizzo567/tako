@@ -55,7 +55,8 @@ export async function staffRoutes(fastify: FastifyInstance) {
 
     const [user] = await db.update(users).set(body.data).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning()
     if (!user) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })
-    return { data: user }
+    // Non esporre passwordHash/pin: ritorna solo i campi pubblici.
+    return { data: { id: user.id, name: user.name, email: user.email, role: user.role, active: user.active, phone: user.phone } }
   })
 
   fastify.delete('/:userId', { preHandler: requireRole('owner') }, async (req, reply) => {

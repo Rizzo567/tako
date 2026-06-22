@@ -2,12 +2,21 @@ import type { FastifyInstance } from 'fastify'
 import { db, orders, orderItems, menuItems, bills, tableSessions } from '@tako/db'
 import { eq, and, gte, lte, desc, sql, inArray, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
+import { round2 } from '../lib/billing.js'
+
+// Parsa una data dalla query; se assente o non valida usa il fallback (niente
+// "Invalid Date" che azzererebbe silenziosamente tutte le statistiche).
+function parseDate(value: string | undefined, fallback: Date): Date {
+  if (!value) return fallback
+  const d = new Date(value)
+  return isNaN(d.getTime()) ? fallback : d
+}
 
 export async function statsRoutes(fastify: FastifyInstance) {
   fastify.get('/dashboard', { preHandler: requireAuth }, async (req) => {
     const { from, to } = req.query as { from?: string; to?: string }
-    const startDate = from ? new Date(from) : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-    const endDate = to ? new Date(to) : new Date()
+    const startDate = parseDate(from, new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+    const endDate = parseDate(to, new Date())
 
     const restaurantId = req.user!.restaurantId
 
@@ -19,8 +28,8 @@ export async function statsRoutes(fastify: FastifyInstance) {
       lte(bills.closedAt!, endDate),
     ))
 
-    const revenue = closedBills.reduce((s, b) => s + b.total, 0)
-    const avgTicket = closedBills.length ? revenue / closedBills.length : 0
+    const revenue = round2(closedBills.reduce((s, b) => s + b.total, 0))
+    const avgTicket = closedBills.length ? round2(revenue / closedBills.length) : 0
     const totalCovers = closedBills.reduce((s, b) => s + (b.covers ?? 1), 0)
 
     // Today
@@ -33,6 +42,7 @@ export async function statsRoutes(fastify: FastifyInstance) {
       eq(orders.restaurantId, restaurantId),
       inArray(orders.status, ['served', 'paid']),
       gte(orders.createdAt, startDate),
+      lte(orders.createdAt, endDate), // stessa finestra del fatturato
     ))
 
     const allOrderItems = servedOrders.length

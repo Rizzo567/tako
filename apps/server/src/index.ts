@@ -28,6 +28,11 @@ import { aiRoutes } from './routes/ai.js'
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET']
 if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
+// Lo stesso segreto firma sessioni staff, JWT tavolo e cookie firmati: un valore
+// debole permette il forging. In produzione esigi ≥32 caratteri.
+if (process.env['NODE_ENV'] === 'production' && JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET deve essere lungo almeno 32 caratteri in produzione')
+}
 
 const fastify = Fastify({ logger: { level: 'error' } })
 
@@ -48,9 +53,11 @@ await fastify.register(helmet, {
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 })
 
-// CORS — solo origini note
+// CORS — in dev riflette qualsiasi origine (così l'app Expo web/desktop su
+// :8081 e i dispositivi in LAN possono accedere). In produzione: solo origini note.
+const corsDev = process.env['NODE_ENV'] !== 'production'
 await fastify.register(cors, {
-  origin: [
+  origin: corsDev ? true : [
     'http://localhost:3000',
     'http://localhost:3002',
     process.env['DASHBOARD_URL'] ?? 'http://localhost:3000',
@@ -67,11 +74,15 @@ const UPLOADS_DIR = resolve(process.env['UPLOADS_DIR'] ?? './uploads')
 mkdirSync(UPLOADS_DIR, { recursive: true })
 await fastify.register(fastifyStatic, { root: UPLOADS_DIR, prefix: '/uploads/', decorateReply: false })
 
-// Rate limiting globale
+// Rate limiting globale. In dev il loopback (test, dashboard locale, /health) è
+// esentato: il limite per-IP serve contro abusi esterni, non contro la macchina
+// stessa. In produzione resta attivo per tutti.
+const rlAllowList = process.env['NODE_ENV'] === 'production' ? [] : ['127.0.0.1', '::1']
 await fastify.register(rateLimit, {
   global: true,
   max: 100,          // max 100 req per finestra
   timeWindow: 60000, // 1 minuto
+  allowList: rlAllowList,
   errorResponseBuilder: () => ({
     error: { code: 'RATE_LIMIT', message: 'Troppe richieste. Riprova tra un minuto.' },
   }),
@@ -107,7 +118,7 @@ const allowedOrigins = [
 ]
 
 export const io = new SocketServer(fastify.server, {
-  cors: { origin: allowedOrigins, methods: ['GET', 'POST'] },
+  cors: { origin: corsDev ? true : allowedOrigins, methods: ['GET', 'POST'], credentials: true },
   pingTimeout: 60000,
 })
 setupSocketHandlers(io)

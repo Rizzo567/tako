@@ -24,3 +24,12 @@ landing/RESTAURANT-ECONOMICS.md
 
 # TypeScript build cache
 *.tsbuildinfo
+
+# Postgres portatile dev (dati locali, non versionare)
+packages/db/.pgdata/
+
+# App Expo / Tauri — build artifacts
+apps/app/.expo/
+apps/app/dist/
+apps/app/src-tauri/target/
+apps/app/src-tauri/gen/
