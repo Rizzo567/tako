@@ -17,6 +17,9 @@ export async function statsRoutes(fastify: FastifyInstance) {
     const { from, to } = req.query as { from?: string; to?: string }
     const startDate = parseDate(from, new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
     const endDate = parseDate(to, new Date())
+    // Una data 'YYYY-MM-DD' viene letta a mezzanotte: estendi a fine giornata,
+    // altrimenti i conti/ordini di OGGI (dopo mezzanotte) verrebbero esclusi.
+    if (to && /^\d{4}-\d{2}-\d{2}$/.test(to)) endDate.setHours(23, 59, 59, 999)
 
     const restaurantId = req.user!.restaurantId
 

@@ -1,14 +1,14 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, bills, tableSessions } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { registry, runAgentTurn, customerSystem, aiConfigured } from '../ai/index.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
-import { round2, BILLABLE_STATUSES } from '../lib/billing.js'
+import { round2, ensureOpenBill } from '../lib/billing.js'
 
 interface TableSession { restaurantId: string; tableId: string; sessionId: string | null; tableNumber?: string | null }
 
@@ -202,7 +202,8 @@ export async function customerRoutes(fastify: FastifyInstance) {
         tableId: body.data.tableId,
         tableNumber: (req as any).tableSession?.tableNumber ?? body.data.tableNumber,
         type: body.data.type,
-        status: 'pending',
+        // conferma automatica se attivata nelle impostazioni del ristorante
+        status: (restaurant?.settings as any)?.autoConfirm ? 'confirmed' : 'pending',
         total,
         notes: body.data.notes,
         idempotencyKey: body.data.idempotencyKey,
@@ -253,36 +254,10 @@ export async function customerRoutes(fastify: FastifyInstance) {
       io.to(`restaurant:${body.data.restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
     }
 
-    // Lazy bill: crea il conto aperto se manca, altrimenti ricalcola.
+    // Conto aperto get-or-create atomico (advisory lock per tavolo): evita conti
+    // duplicati e subtotali incoerenti quando più ordini arrivano insieme.
     if (body.data.tableId) {
-      const restaurantId = body.data.restaurantId
-      const tableId = body.data.tableId
-
-      const [existingBill] = await db
-        .select({ id: bills.id })
-        .from(bills)
-        .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open')))
-        .limit(1)
-
-      // Subtotale dagli ordini fatturabili (stati canonici condivisi, a centesimi).
-      const activeOrders = await db
-        .select({ total: orders.total })
-        .from(orders)
-        .where(and(
-          eq(orders.restaurantId, restaurantId),
-          eq(orders.tableId, tableId),
-          inArray(orders.status, [...BILLABLE_STATUSES])
-        ))
-      const subtotal = round2(activeOrders.reduce((sum, o) => sum + o.total, 0))
-
-      if (existingBill) {
-        const [b] = await db.select().from(bills).where(eq(bills.id, existingBill.id)).limit(1)
-        await db.update(bills)
-          .set({ subtotal, total: round2(subtotal - (b?.discount ?? 0) + (b?.tip ?? 0)) })
-          .where(eq(bills.id, existingBill.id))
-      } else {
-        await db.insert(bills).values({ restaurantId, tableId, subtotal, total: subtotal, status: 'open' })
-      }
+      await ensureOpenBill(body.data.restaurantId, body.data.tableId)
     }
 
     // Mark first order on session (only if not already recorded)

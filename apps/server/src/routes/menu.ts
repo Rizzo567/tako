@@ -117,7 +117,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       name: z.string().min(1),
       description: z.string().optional(),
-      price: z.number().positive(),
+      price: z.number().min(0),
       allergens: z.array(z.string()).default([]),
       tags: z.array(z.string()).default([]),
       imageUrl: z.string().url().optional(),
@@ -139,7 +139,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       name: z.string().min(1).optional(),
       description: z.string().optional(),
-      price: z.number().positive().optional(),
+      price: z.number().min(0).optional(),
       available: z.boolean().optional(),
       allergens: z.array(z.string()).optional(),
       tags: z.array(z.string()).optional(),

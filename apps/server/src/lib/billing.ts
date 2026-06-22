@@ -1,5 +1,5 @@
-import { db, bills, orders } from '@tako/db'
-import { and, eq, inArray } from 'drizzle-orm'
+import { db, bills, orders, tables } from '@tako/db'
+import { and, eq, inArray, sql } from 'drizzle-orm'
 
 // I soldi sono in colonne float (`real`): arrotonda SEMPRE a 2 decimali nelle
 // somme e nei confronti per evitare derive del tipo 30.299999... vs 30.30.
@@ -32,4 +32,32 @@ export async function recomputeOpenBill(restaurantId: string, tableId: string) {
 
   await db.update(bills).set({ subtotal, total }).where(eq(bills.id, bill.id))
   return { ...bill, subtotal, total }
+}
+
+// Get-or-create del conto aperto di un tavolo, ATOMICO e a prova di concorrenza.
+// Senza un vincolo unique sui conti aperti, due ordini paralleli sullo stesso
+// tavolo creavano conti duplicati con subtotali incoerenti: qui un advisory lock
+// Postgres per (ristorante,tavolo) serializza il check+insert+ricalcolo.
+export async function ensureOpenBill(restaurantId: string, tableId: string) {
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${restaurantId + ':' + tableId}))`)
+    const rows = await tx.select({ total: orders.total }).from(orders).where(and(
+      eq(orders.restaurantId, restaurantId),
+      eq(orders.tableId, tableId),
+      inArray(orders.status, [...BILLABLE_STATUSES]),
+    ))
+    const subtotal = round2(rows.reduce((s, o) => s + o.total, 0))
+    const [existing] = await tx.select().from(bills)
+      .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open')))
+      .orderBy(bills.createdAt).limit(1)
+    if (existing) {
+      const total = round2(subtotal - (existing.discount ?? 0) + (existing.tip ?? 0))
+      await tx.update(bills).set({ subtotal, total }).where(eq(bills.id, existing.id))
+      return existing.id
+    }
+    // numero tavolo sul conto (altrimenti la cassa mostra "Tavolo —")
+    const [tbl] = await tx.select({ number: tables.number }).from(tables).where(eq(tables.id, tableId)).limit(1)
+    const [created] = await tx.insert(bills).values({ restaurantId, tableId, tableNumber: tbl?.number ?? null, subtotal, total: subtotal, status: 'open' }).returning()
+    return created!.id
+  })
 }

@@ -1,17 +1,20 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { db, orders, orderItems, orderStatusHistory, menuItems, tables, bills } from '@tako/db'
+import { db, orders, orderItems, orderStatusHistory, menuItems, tables } from '@tako/db'
 import { eq, and, inArray, desc, gte } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { recomputeOpenBill, round2, BILLABLE_STATUSES } from '../lib/billing.js'
+import { recomputeOpenBill, round2, ensureOpenBill } from '../lib/billing.js'
 import type { OrderStatus } from '@tako/types'
 
 // Transizioni di stato ordine consentite. Impedisce di "resuscitare" ordini
 // pagati/annullati o di mandarli indietro in modo incoerente.
+// Si può sempre AVANZARE nel flusso (lo staff può saltare passaggi: es. "Segna
+// servito" da confermato, "Bump · Pronto" da attesa) e annullare se non pagato.
+// Indietro o resuscitare un ordine pagato/annullato resta vietato.
 const ALLOWED_TRANSITIONS: Record<string, OrderStatus[]> = {
-  pending: ['confirmed', 'preparing', 'cancelled'],
-  confirmed: ['preparing', 'ready', 'cancelled'],
+  pending: ['confirmed', 'preparing', 'ready', 'served', 'cancelled'],
+  confirmed: ['preparing', 'ready', 'served', 'cancelled'],
   preparing: ['ready', 'served', 'cancelled'],
   ready: ['served', 'cancelled'],
   served: ['paid'],
@@ -116,10 +119,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (body.data.tableId) {
       await db.update(tables).set({ status: 'occupied', openedAt: new Date() }).where(eq(tables.id, body.data.tableId))
       io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
-      const [existingBill] = await db.select({ id: bills.id }).from(bills)
-        .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, body.data.tableId), eq(bills.status, 'open'))).limit(1)
-      if (existingBill) await recomputeOpenBill(restaurantId, body.data.tableId)
-      else await db.insert(bills).values({ restaurantId, tableId: body.data.tableId, subtotal: total, total, status: 'open' })
+      await ensureOpenBill(restaurantId, body.data.tableId)
     }
 
     return reply.code(201).send({ data: payload })

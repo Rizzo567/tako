@@ -26,6 +26,15 @@ export async function billRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
+    // Se arriva solo il NUMERO del tavolo (es. "Nuovo conto" dalla cassa), risolvi
+    // il tableId reale: senza di esso il subtotale resterebbe a 0.
+    if (!body.data.tableId && body.data.tableNumber) {
+      const [t] = await db.select({ id: tables.id }).from(tables)
+        .where(and(eq(tables.restaurantId, req.user!.restaurantId), eq(tables.number, body.data.tableNumber))).limit(1)
+      if (!t) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
+      body.data.tableId = t.id
+    }
+
     // Calculate subtotal from billable orders on this table
     let subtotal = 0
     if (body.data.tableId) {

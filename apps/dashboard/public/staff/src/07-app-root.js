@@ -66,12 +66,13 @@ function App({ session }) {
   const [dataVersion, setDataVersion] = useState(0);
   const bump = () => setTick((t) => t + 1);
 
-  // refresh globale richiamabile dalle schermate dopo una scrittura
+  // refresh globale + navigazione richiamabili dalle schermate
   useEffect(() => {
     window.takoReload = async () => {
       try { await loadAll(); setOrders(window._ORDERS); setRooms(window._ROOMS); setBills(window._BILLS); setDataVersion((v) => v + 1); bump(); } catch (_) {}
     };
-    return () => { delete window.takoReload; };
+    window.takoGo = (id) => go(id);
+    return () => { delete window.takoReload; delete window.takoGo; };
   }, []);
 
   useEffect(() => save("route", route), [route]);
@@ -132,18 +133,20 @@ function App({ session }) {
     try { await TakoAPI.patch(`/tables/${tid}/status`, { status: TBL_UI2DB[stato] }); toast(`Tavolo ${n} → ${TABLE_STATUS[stato].label}`); } catch (e) { toast(e.message, { type: "error" }); refreshRooms(); }
     const call = calls.find((c) => c.tavolo === n); if (call) { try { await TakoAPI.post(`/tables/${tid}/waiter-resolve`); } catch (_) {} }
   };
-  const onCloseBill = async (id) => {
-    const b = bills.find((x) => x.id === id); if (!b) return;
-    setBills((bs) => bs.filter((x) => x.id !== id));
-    try { await TakoAPI.post(`/bills/${id}/payments`, { amount: b.total || b.subtotale, method: "cash" }); toast("Conto chiuso", { type: "success" }); refreshBills(); refreshRooms(); } catch (e) { toast(e.message, { type: "error" }); refreshBills(); }
-  };
+  // Il pagamento lo esegue il PaymentModal (metodo+mancia). Qui solo refresh.
+  const onCloseBill = async (id) => { setBills((bs) => bs.filter((x) => x.id !== id)); refreshBills(); refreshRooms(); };
   const onSetBrand = async (b) => { setBrand(b); try { await TakoAPI.patch("/restaurants/me", { primaryColor: BRAND_PALETTES[b].brand }); } catch (_) {} };
   const onSaveSettings = async (next) => {
     setSettings(next);
     try { await TakoAPI.patch("/restaurants/me", { name: next.nome, address: next.indirizzo, phone: next.telefono,
       settings: { currency: next.valuta, vatRate: Number(next.iva), timezone: next.fuso, defaultLanguage: next.linguaDefault, languages: next.lingue,
                   tableServiceEnabled: next.servizioTavolo, takeawayEnabled: next.asporto, payAtTableEnabled: next.pagaTavolo, aiEnabled: next.ai,
-                  printerIp: next.printerIp, printerPort: Number(next.printerPort) || 9100 } });
+                  printerIp: next.printerIp, printerPort: Number(next.printerPort) || 9100,
+                  // preferenze operative ora persistite sul backend
+                  coverCharge: Number(next.coperto) || 0, coverChargeEnabled: !!next.copertoOn, suggestedTips: !!next.manceSuggerite,
+                  orderSounds: !!next.suoniOrdini, autoConfirm: !!next.autoConferma, autoPrint: !!next.stampaAuto,
+                  kdsWarnMinutes: Number(next.kdsWarn) || 10, kdsLateMinutes: Number(next.kdsLate) || 15, kdsCompact: !!next.kdsCompatta,
+                  reservationsEnabled: !!next.prenotazioni, showOnboarding: !!next.mostraOnboarding } });
       toast("Impostazioni salvate", { type: "success" }); } catch (e) { toast(e.message, { type: "error" }); }
   };
 

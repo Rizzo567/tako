@@ -56,6 +56,8 @@ export async function tableRoutes(fastify: FastifyInstance) {
       seats: z.number().int().min(1).optional(),
       roomId: z.string().uuid().nullable().optional(),
       shape: z.enum(['round', 'square', 'rectangle']).optional(),
+      posX: z.number().min(0).max(100).optional(),   // posizione mappa sala (%)
+      posY: z.number().min(0).max(100).optional(),
     })
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
@@ -65,6 +67,8 @@ export async function tableRoutes(fastify: FastifyInstance) {
     if (parsed.data.seats !== undefined) updates['seats'] = parsed.data.seats
     if (parsed.data.roomId !== undefined) updates['roomId'] = parsed.data.roomId
     if (parsed.data.shape !== undefined) updates['shape'] = parsed.data.shape
+    if (parsed.data.posX !== undefined) updates['posX'] = parsed.data.posX
+    if (parsed.data.posY !== undefined) updates['posY'] = parsed.data.posY
 
     if (Object.keys(updates).length === 0) {
       return reply.code(400).send({ error: { code: 'VALIDATION', message: 'No fields to update' } })

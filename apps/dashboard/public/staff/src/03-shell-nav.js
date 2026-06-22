@@ -92,7 +92,9 @@ function Sidebar({ route, go, role, badges, live }) {
               <span style={{ fontFamily: "var(--f-display)", fontWeight: 800, fontSize: 13.5, color: "var(--nav-ink)", letterSpacing: ".005em" }}>{g.group}</span>
               <Icon name="chevD" size={15} style={{ marginLeft: "auto", color: "var(--nav-ink-2)", transform: isOpen ? "none" : "rotate(-90deg)", transition: "transform .2s" }} />
             </button>
-            {isOpen && g.items.map(NavBtn)}
+            <div style={{ overflow: "hidden", transition: "max-height .34s var(--out), opacity .26s ease", maxHeight: isOpen ? g.items.length * 40 + 4 : 0, opacity: isOpen ? 1 : 0 }}>
+              {g.items.map(NavBtn)}
+            </div>
             {isLast && <SidebarUser role={role} go={go} />}
           </div>
         );

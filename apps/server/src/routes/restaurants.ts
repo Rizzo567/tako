@@ -30,6 +30,18 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
         aiEnabled: z.boolean().optional(),
         printerIp: z.string().optional(),
         printerPort: z.number().int().min(1).max(65535).optional(),
+        // preferenze operative (prima solo localStorage) — ora persistite
+        coverCharge: z.number().min(0).optional(),        // coperto €
+        coverChargeEnabled: z.boolean().optional(),
+        suggestedTips: z.boolean().optional(),
+        orderSounds: z.boolean().optional(),
+        autoConfirm: z.boolean().optional(),              // conferma automatica ordini
+        autoPrint: z.boolean().optional(),
+        kdsWarnMinutes: z.number().int().min(0).optional(),
+        kdsLateMinutes: z.number().int().min(0).optional(),
+        kdsCompact: z.boolean().optional(),
+        reservationsEnabled: z.boolean().optional(),
+        showOnboarding: z.boolean().optional(),
       }).optional(),
     })
     const body = schema.safeParse(req.body)

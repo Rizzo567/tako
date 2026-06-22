@@ -186,6 +186,13 @@ async function loadAll() {
       servizioTavolo: rest.settings?.tableServiceEnabled ?? true, asporto: rest.settings?.takeawayEnabled ?? true,
       pagaTavolo: rest.settings?.payAtTableEnabled ?? true, ai: rest.settings?.aiEnabled ?? true,
       printerIp: rest.settings?.printerIp || "", printerPort: rest.settings?.printerPort || "9100",
+      // preferenze operative persistite (read-back)
+      coperto: rest.settings?.coverCharge ?? 2, copertoOn: rest.settings?.coverChargeEnabled ?? true,
+      manceSuggerite: rest.settings?.suggestedTips ?? true, suoniOrdini: rest.settings?.orderSounds ?? true,
+      autoConferma: rest.settings?.autoConfirm ?? false, stampaAuto: rest.settings?.autoPrint ?? true,
+      kdsWarn: rest.settings?.kdsWarnMinutes ?? 10, kdsLate: rest.settings?.kdsLateMinutes ?? 15,
+      kdsCompatta: rest.settings?.kdsCompact ?? false, prenotazioni: rest.settings?.reservationsEnabled ?? false,
+      mostraOnboarding: rest.settings?.showOnboarding ?? true,
     });
   }
   ORDERS = (active || []).map(mapOrder);
@@ -279,6 +286,11 @@ const TakoActions = {
   // AI (Groq)
   menuImportText: (menuId, text) => TakoAPI.post(`/menus/${menuId}/import-text`, { text }),
   menuImportConfirm: (menuId, sections) => TakoAPI.post(`/menus/${menuId}/import-confirm`, { sections }),
+  statsRange: async (days = 7) => {
+    const to = new Date(); const from = new Date(Date.now() - (days - 1) * 86400000);
+    const iso = (d) => d.toISOString().slice(0, 10);
+    return TakoAPI.get(`/stats/dashboard?from=${iso(from)}&to=${iso(to)}`);
+  },
   insightsAi: async (days = 30) => {
     const d = await TakoAPI.get(`/insights/menu?days=${days}`);
     if (!d.items || !d.items.length) return { suggestions: [] };

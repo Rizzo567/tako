@@ -9,6 +9,9 @@ function ScreenMenu({ mobile }) {
   const [text, setText] = useState("");
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [secOpen, setSecOpen] = useState(false);
+  const [secName, setSecName] = useState("");
+  const [secLoading, setSecLoading] = useState(false);
   const previewCount = preview ? preview.sections.reduce((a, s) => a + s.items.length, 0) : 0;
   const toggle = async (sez, nome) => {
     // trova il piatto reale per id prima dell'update ottimistico
@@ -31,6 +34,7 @@ function ScreenMenu({ mobile }) {
       <PageHead mobile={mobile} tako="dish" title="Menu" sub={`${menu.length} sezioni · ${menu.reduce((a, s) => a + s.piatti.length, 0)} piatti`}
         actions={<div style={{ display: "flex", gap: 8 }}>
           <Btn kind="soft" icon="sparkles" onClick={() => setImportOpen(true)}>Importa da testo</Btn>
+          <Btn kind="soft" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuova sezione</Btn>
           <Btn kind="brand" icon="plus" onClick={async () => {
           // Scelta: creo un piatto minimale sulla prima sezione e ricarico.
           // L'utente lo rifinisce poi dal modal di modifica. Tiene la UI invariata.
@@ -43,8 +47,8 @@ function ScreenMenu({ mobile }) {
           } catch (e) { toast(e.message, { type: "error" }); }
         }}>Nuovo piatto</Btn>
         </div>} />
-      {menu.map(s => (
-        <div key={s.sezione} style={{ marginBottom: 22 }}>
+      {menu.map((s, si) => (
+        <div key={s._id || si} style={{ marginBottom: 22 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <Icon name="more" size={16} style={{ color: "var(--ink-3)", transform: "rotate(90deg)" }} />
             <h3 style={{ fontSize: 17 }}>{s.sezione}</h3>
@@ -54,7 +58,7 @@ function ScreenMenu({ mobile }) {
             {s.piatti.map((p, i) => {
               const margine = Math.round((1 - p.costo / p.prezzo) * 100);
               return (
-                <div key={p.nome} style={{ display: "flex", alignItems: "center", gap: 12, padding: mobile ? "12px 14px" : "13px 16px", borderBottom: i < s.piatti.length - 1 ? "1px solid var(--hairline)" : "none", opacity: p.disp ? 1 : .55 }}>
+                <div key={p._id || i} style={{ display: "flex", alignItems: "center", gap: 12, padding: mobile ? "12px 14px" : "13px 16px", borderBottom: i < s.piatti.length - 1 ? "1px solid var(--hairline)" : "none", opacity: p.disp ? 1 : .55 }}>
                   <Icon name="more" size={16} style={{ color: "var(--ink-3)", transform: "rotate(90deg)", flex: "none" }} />
                   <div style={{ width: 44, height: 44, borderRadius: 11, flex: "none", background: "linear-gradient(135deg,var(--brand-tint),var(--sunken))", display: "grid", placeItems: "center", fontFamily: "var(--f-display)", fontWeight: 900, color: "var(--brand)" }}>{p.nome[0]}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -74,6 +78,34 @@ function ScreenMenu({ mobile }) {
       ))}
       <Overlay open={!!edit} onClose={() => setEdit(null)} anchor={mobile ? "center" : "right"}>
         {edit && <DishEditor dish={edit} mobile={mobile} onClose={() => setEdit(null)} />}
+      </Overlay>
+      <Overlay open={secOpen} onClose={() => { if (!secLoading) setSecOpen(false); }} anchor="center">
+        <div style={{ width: mobile ? 320 : 400, maxWidth: "100%", background: "var(--surface)", borderRadius: 24, overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
+            <h3 style={{ flex: 1, fontSize: 18 }}>Nuova sezione</h3>
+            <IconBtn name="x" tone="soft" onClick={() => { if (!secLoading) setSecOpen(false); }} />
+          </div>
+          <div style={{ padding: 20 }}>
+            <Field label="Nome sezione">
+              <input style={inputStyle} value={secName} autoFocus placeholder="Es. Antipasti"
+                onChange={e => setSecName(e.target.value)} />
+            </Field>
+          </div>
+          <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", gap: 10 }}>
+            <Btn kind="soft" full onClick={() => { if (!secLoading) setSecOpen(false); }}>Annulla</Btn>
+            <Btn kind="brand" full icon="plus" onClick={async () => {
+              if (!secName.trim()) { toast("Inserisci un nome", { type: "error" }); return; }
+              setSecLoading(true);
+              try {
+                await window.TakoActions.menuCreateSection(secName.trim());
+                toast("Sezione creata", { type: "success" });
+                await window.takoReload();
+                setSecOpen(false); setSecName("");
+              } catch (e) { toast(e.message, { type: "error" }); }
+              finally { setSecLoading(false); }
+            }}>{secLoading ? "Creo…" : "Crea"}</Btn>
+          </div>
+        </div>
       </Overlay>
       <Overlay open={importOpen} onClose={() => { if (!loading) setImportOpen(false); }} anchor="center">
         <div style={{ width: mobile ? 354 : 560, maxWidth: "100%", maxHeight: "calc(100% - 48px)", background: "var(--surface)", borderRadius: 24, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
@@ -151,6 +183,7 @@ function Field({ label, children }) {
 const inputStyle = { width: "100%", height: 44, padding: "0 13px", borderRadius: "var(--r-md)", border: "1px solid var(--hairline)", background: "var(--raised)", fontFamily: "var(--f-ui)", fontSize: 14.5, color: "var(--ink)", outline: "none" };
 function DishEditor({ dish, mobile, onClose }) {
   const [variants, setVariants] = useState([{ nome: "Porzione grande", mod: 3 }]);
+  const [confirmDel, setConfirmDel] = useState(false);
   return (
     <div style={{ width: mobile ? 354 : 420, maxWidth: "100%", height: mobile ? "auto" : "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 24 : 0, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: mobile ? "var(--sh-pop)" : "none" }}>
       <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
@@ -176,6 +209,21 @@ function DishEditor({ dish, mobile, onClose }) {
           ))}
         </div>
       </div>
+      <div style={{ padding: "0 20px 4px" }}>
+        <Btn kind="danger" full icon="trash" onClick={() => setConfirmDel(true)}>Elimina piatto</Btn>
+      </div>
+      <Confirm open={confirmDel} onClose={() => setConfirmDel(false)} danger
+        title="Eliminare il piatto?" body="Il piatto verrà rimosso dal menu." confirmLabel="Elimina"
+        onConfirm={async () => {
+          if (!dish._id) { setConfirmDel(false); return; }
+          try {
+            await window.TakoActions.menuDeleteItem(dish._id);
+            toast("Piatto eliminato", { type: "success" });
+            await window.takoReload();
+            setConfirmDel(false);
+            onClose();
+          } catch (e) { toast(e.message, { type: "error" }); setConfirmDel(false); }
+        }} />
       <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", gap: 10 }}>
         <Btn kind="soft" full onClick={onClose}>Annulla</Btn>
         <Btn kind="brand" full icon="check" onClick={async (ev) => {
@@ -216,37 +264,63 @@ function DishEditor({ dish, mobile, onClose }) {
 /* ═══════════════════ STATISTICHE ═══════════════════ */
 function ScreenStatistiche({ mobile }) {
   const [periodo, setPeriodo] = useState("7g");
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const d = await window.TakoActions.statsRange(periodo === "Oggi" ? 1 : periodo === "30g" ? 30 : 7);
+        if (alive) setStats(d);
+      } catch (e) {
+        if (alive) { setStats(null); toast(e.message, { type: "error" }); }
+      } finally { if (alive) setLoading(false); }
+    })();
+    return () => { alive = false; };
+  }, [periodo]);
+  // KPI reali dal periodo selezionato (— finché non arrivano i dati)
+  const kIncasso = stats ? euro(Number(periodo === "Oggi" ? (stats.todayRevenue ?? stats.revenue) : stats.revenue) || 0) : "—";
+  const kTicket = stats ? euro(Number(stats.avgTicket) || 0) : "—";
+  const kCoperti = stats ? String(stats.totalCovers || 0) : "—";
+  const kConti = stats ? String(stats.billsCount || 0) : "—";
+  // grafici dal periodo selezionato (fallback ai globali precaricati)
+  const DOW = ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"];
+  const week = stats && stats.dailyRevenue ? stats.dailyRevenue.map(d => ({ g: DOW[new Date(d.date).getDay()], v: Number(d.amount) || 0 })) : WEEK;
+  const peak = stats && stats.sessions && stats.sessions.scansPerHour ? stats.sessions.scansPerHour.map(s => ({ h: String(s.hour), v: s.count })) : PEAK_HOURS;
+  const top = stats && stats.topItems ? stats.topItems.map(t => ({ nome: t.name, n: t.qty })) : TOP_DISHES;
+  const chartTitle = periodo === "Oggi" ? "Incasso · oggi" : periodo === "30g" ? "Incasso · ultimi 30 giorni" : "Incasso · ultimi 7 giorni";
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="pay" title="Statistiche" sub="Performance del locale"
         actions={<div className="seg">{["Oggi", "7g", "30g"].map(p => <button key={p} className={periodo === p ? "on" : ""} onClick={() => setPeriodo(p)}>{p}</button>)}</div>} />
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr 1fr" : "repeat(4,1fr)", gap: mobile ? 12 : 16, marginBottom: 18 }}>
-        <Kpi label="Incasso" value={euro(17387)} icon="coins" accent="var(--brand)" trend="up" sub="▲ 8% sett. prec." />
-        <Kpi label="Ticket medio" value={euro(33.1)} icon="stats" accent="var(--ok)" />
-        <Kpi label="Coperti" value="525" icon="staff" accent="var(--info)" />
-        <Kpi label="Conti" value="158" icon="cassa" accent="var(--wait)" />
+        <Kpi label="Incasso" value={loading && !stats ? "…" : kIncasso} icon="coins" accent="var(--brand)" trend="up" />
+        <Kpi label="Ticket medio" value={loading && !stats ? "…" : kTicket} icon="stats" accent="var(--ok)" />
+        <Kpi label="Coperti" value={loading && !stats ? "…" : kCoperti} icon="staff" accent="var(--info)" />
+        <Kpi label="Conti" value={loading && !stats ? "…" : kConti} icon="cassa" accent="var(--wait)" />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1.5fr 1fr", gap: 16, marginBottom: 16 }}>
         <Card pad={mobile ? 16 : 22}>
-          <h3 style={{ fontSize: 16, marginBottom: 16 }}>Incasso · ultimi 7 giorni</h3>
-          <BarChart data={WEEK} h={mobile ? 130 : 180} fmt={(v) => "€" + (v / 1000).toFixed(1) + "k"} />
+          <h3 style={{ fontSize: 16, marginBottom: 16 }}>{chartTitle}</h3>
+          <BarChart data={week} h={mobile ? 130 : 180} fmt={(v) => "€" + (v / 1000).toFixed(1) + "k"} />
         </Card>
         <Card pad={mobile ? 16 : 22}>
           <h3 style={{ fontSize: 16, marginBottom: 16 }}>Orari di punta</h3>
-          <BarChart data={PEAK_HOURS} h={mobile ? 130 : 180} color="var(--info)" labelKey="h" valKey="v" fmt={(v) => v} />
+          <BarChart data={peak} h={mobile ? 130 : 180} color="var(--info)" labelKey="h" valKey="v" fmt={(v) => v} />
           <p style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 10, textAlign: "center" }}>Scansioni QR per ora</p>
         </Card>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 16 }}>
         <Card pad={mobile ? 16 : 22}>
           <h3 style={{ fontSize: 16, marginBottom: 14 }}>Piatti più venduti</h3>
-          {TOP_DISHES.map((d, i) => (
+          {top.length ? top.map((d, i) => (
             <div key={d.nome} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <span className="num" style={{ width: 26, color: "var(--brand)", fontSize: 16 }}>{i + 1}</span>
-              <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 600, marginBottom: 5 }}>{d.nome}</div><Progress value={(d.n / TOP_DISHES[0].n) * 100} /></div>
+              <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 600, marginBottom: 5 }}>{d.nome}</div><Progress value={top[0].n ? (d.n / top[0].n) * 100 : 0} /></div>
               <span className="num" style={{ fontSize: 15 }}>{d.n}</span>
             </div>
-          ))}
+          )) : <p style={{ fontSize: 13, color: "var(--ink-3)" }}>Nessun dato nel periodo.</p>}
         </Card>
         <Card pad={mobile ? 16 : 22}>
           <h3 style={{ fontSize: 16, marginBottom: 14 }}>Sessioni QR</h3>
@@ -467,10 +541,9 @@ function ScreenInventario({ mobile }) {
 /* ═══════════════════ STAFF ═══════════════════ */
 const ROLE_BADGE = { owner: ["brand", "Titolare"], cameriere: ["info", "Cameriere"], chef: ["wait", "Chef"], cassiere: ["ok", "Cassiere"] };
 function ScreenStaff({ mobile }) {
-  const online = STAFF.filter(m => m.online).length;
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="hello" title="Staff" sub={`${STAFF.length} membri · ${online} connessi ora`} actions={<Btn kind="brand" icon="plus" onClick={async () => {
+      <PageHead mobile={mobile} tako="hello" title="Staff" sub={`${STAFF.length} membri`} actions={<Btn kind="brand" icon="plus" onClick={async () => {
         // Nessun form in questa UI: creo un membro minimale e ricarico (l'utente lo rifinisce poi).
         try {
           await window.TakoActions.staffCreate({ name: "Nuovo membro", email: "nuovo+" + Date.now() + "@tako.local", role: "dipendente" });
@@ -485,21 +558,17 @@ function ScreenStaff({ mobile }) {
           return (
             <Card key={m.email} pad={16} style={{ opacity: m.attivo ? 1 : .55 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ position: "relative", flex: "none" }}>
+                <span style={{ flex: "none" }}>
                   <Avatar initials={m.nome.split(" ").map(w => w[0]).join("")} color={cols[m.ruolo]} size={46} />
-                  <span style={{ position: "absolute", bottom: -1, right: -1, width: 14, height: 14, borderRadius: 99, border: "2.5px solid var(--raised)", background: m.online ? "var(--ok)" : "var(--ink-3)" }} />
                 </span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 7 }}><span style={{ fontWeight: 700, fontSize: 15 }}>{m.nome}</span></div>
                   <div style={{ fontSize: 12.5, color: "var(--ink-3)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{m.email}</div>
                 </div>
-                {!m.attivo ? <Badge tone="muted">Disattivo</Badge> : m.online
-                  ? <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 99, background: "var(--ok-bg)", color: "var(--ok-deep)", fontSize: 12, fontWeight: 700 }}><span className="live-dot" style={{ width: 7, height: 7 }} />Connesso · Live</span>
-                  : <Badge tone="muted">Offline</Badge>}
+                {!m.attivo ? <Badge tone="muted">Disattivo</Badge> : <Badge tone={tone}>{label}</Badge>}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--hairline)" }}>
-                <Badge tone={tone}>{label}</Badge>
-                <span style={{ fontSize: 12.5, color: "var(--ink-2)" }} className="mono">{m.tel}</span>
+                <span style={{ fontSize: 12.5, color: "var(--ink-2)" }} className="mono">{m.tel || "—"}</span>
                 <span style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
                   <IconBtn name="edit" tone="ghost" onClick={async () => {
                     // Nessun form di modifica in questa UI: l'azione "edit" attiva/disattiva il membro

@@ -39,12 +39,20 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
     x = Math.max(5, Math.min(95, x)); y = Math.max(7, Math.min(93, y));
     setPos(p => ({ ...p, [roomId]: { ...(p[roomId] || {}), [d.n]: { x: Math.round(x), y: Math.round(y) } } }));
   };
-  const onUp = (e) => {
+  const onUp = async (e) => {
     const d = drag.current; if (!d) return;
     e.currentTarget?.releasePointerCapture?.(e.pointerId);
-    if (d.moved) { try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(posRef.current)); } catch (_) {} }
-    else { setSel(d.t); }
     drag.current = null;
+    if (d.moved) {
+      try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(posRef.current)); } catch (_) {}
+      const p = posRef.current[roomId]?.[d.n];
+      if (p) {
+        const posX = Math.max(0, Math.min(100, Math.round(p.x)));
+        const posY = Math.max(0, Math.min(100, Math.round(p.y)));
+        try { await window.TakoActions.tableUpdate(d.t._id, { posX, posY }); }
+        catch (err) { toast(err.message, { type: "error" }); }
+      }
+    } else { setSel(d.t); }
   };
   const resetLayout = () => { const n = { ...pos }; delete n[roomId]; setPos(n); try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(n)); } catch (_) {} toast("Disposizione ripristinata"); };
   const hasCustom = pos[roomId] && Object.keys(pos[roomId]).length > 0;
@@ -129,7 +137,7 @@ function TableDrawer({ table, mobile, onClose, onSetState }) {
         ))}
       </div>
       <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", flexDirection: "column", gap: 9 }}>
-        <Btn kind="brand" full icon="cassa" onClick={() => { onClose(); toast("Conto aperto in cassa", { type: "success", icon: "cassa" }); }}>Vai a Cassa</Btn>
+        <Btn kind="brand" full icon="cassa" onClick={() => { window.takoGo && window.takoGo('cassa'); onClose(); }}>Vai a Cassa</Btn>
         <div style={{ display: "flex", gap: 9 }}>
           <Btn kind="soft" full onClick={() => onSetState("libero")}>Segna libero</Btn>
           <Btn kind="soft" full onClick={() => onSetState("pulizia")}>Pulizia</Btn>
@@ -186,7 +194,19 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
   const perHead = total / split;
   const change = method === "contanti" && given ? Math.max(0, parseFloat(given) - total) : 0;
   const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "⌫"];
-  const confirmPay = async () => { try { if ((tip||0) > 0) await window.TakoActions.billUpdate(bill.id, { tip }); } catch(_){}; onDone(); };
+  const METHOD_MAP = { contanti: "cash", carta: "card", digitale: "digital", split: "split" };
+  const confirmPay = async () => {
+    const METHOD_BACKEND = METHOD_MAP[method] || "cash";
+    try {
+      if ((tip || 0) > 0) await window.TakoActions.billUpdate(bill.id, { tip });
+      await window.TakoActions.billPay(bill.id, total, METHOD_BACKEND);
+      toast("Conto chiuso", { type: "success" });
+      await window.takoReload();
+      onClose();
+    } catch (e) {
+      toast(e.message, { type: "error" });
+    }
+  };
 
   return (
     <div style={{ width: mobile ? 354 : 720, maxWidth: "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 24 : "var(--r-xl)", boxShadow: "var(--sh-pop)", display: "flex", flexDirection: mobile ? "column" : "row", overflow: mobile ? "auto" : "hidden" }}>
@@ -319,12 +339,12 @@ function ScreenComanda({ mobile }) {
       </div>
       <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
         <div className="scroll" style={{ flex: "none", width: mobile ? 96 : 150, overflowY: "auto", borderRight: "1px solid var(--hairline)", padding: 8, background: mobile ? "var(--surface)" : "transparent" }}>
-          {MENU.map(s => <button key={s.sezione} className="press" onClick={() => setSez(s.sezione)} style={{ width: "100%", padding: "11px 10px", borderRadius: 11, marginBottom: 4, fontSize: 13, fontWeight: 700, textAlign: "left", background: sez === s.sezione ? "var(--brand-tint)" : "transparent", color: sez === s.sezione ? "var(--brand-deep)" : "var(--ink-2)" }}>{s.sezione}</button>)}
+          {MENU.map((s, si) => <button key={s._id || si} className="press" onClick={() => setSez(s.sezione)} style={{ width: "100%", padding: "11px 10px", borderRadius: 11, marginBottom: 4, fontSize: 13, fontWeight: 700, textAlign: "left", background: sez === s.sezione ? "var(--brand-tint)" : "transparent", color: sez === s.sezione ? "var(--brand-deep)" : "var(--ink-2)" }}>{s.sezione}</button>)}
         </div>
         <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: mobile ? 12 : 20 }}>
           <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill,minmax(240px,1fr))", gap: 12 }}>
-            {section.piatti.map(p => (
-              <Card key={p.nome} pad={14} style={{ opacity: p.disp ? 1 : .5 }}>
+            {section.piatti.map((p, pi) => (
+              <Card key={p._id || pi} pad={14} style={{ opacity: p.disp ? 1 : .5 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><div style={{ fontWeight: 700, fontSize: 14.5 }}>{p.nome}</div><span className="num" style={{ color: "var(--brand)" }}>{euro(p.prezzo)}</span></div>
                 <p style={{ fontSize: 12.5, color: "var(--ink-3)", margin: "4px 0 12px", lineHeight: 1.4 }}>{p.desc}</p>
                 {p.disp ? (cart[p.nome] ? (
