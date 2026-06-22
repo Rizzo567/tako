@@ -31,10 +31,21 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
   const active = orders.filter(o => !["servito", "pagato", "annullato"].includes(o.stato)).length;
   const setupDone = SETUP.filter(s => s.done).length;
   const incomplete = setupDone < SETUP.length && settings.mostraOnboarding;
+  // variazione incasso oggi vs ieri, calcolata da WEEK (ultimo = oggi, penultimo = ieri)
+  const oggi = WEEK.length ? WEEK[WEEK.length - 1].v : 0;
+  const ieri = WEEK.length >= 2 ? WEEK[WEEK.length - 2].v : 0;
+  let incassoSub = null, incassoTrend = undefined;
+  if (ieri > 0) {
+    const pct = Math.round(((oggi - ieri) / ieri) * 100);
+    incassoTrend = pct >= 0 ? "up" : "down";
+    incassoSub = `${pct >= 0 ? "▲" : "▼"} ${Math.abs(pct)}% vs ieri`;
+  }
+  // ordini in attesa, contati dai dati reali in arrivo
+  const inAttesa = orders.filter(o => o.stato === "attesa").length;
   const kpiAll = [
-    { k: "incasso", el: <Kpi label="Incasso oggi" value={euro(KPI.incasso)} icon="coins" accent="var(--brand)" trend="up" sub="▲ 12% vs ieri" /> },
-    { k: "ordini", el: <Kpi label="Ordini attivi" value={active} icon="orders" accent="var(--info)" sub={`${KPI.inAttesa} in attesa`} /> },
-    { k: "ticket", el: <Kpi label="Ticket medio" value={euro(KPI.ticketMedio)} icon="stats" accent="var(--ok)" trend="up" sub="▲ €1,40" /> },
+    { k: "incasso", el: <Kpi label="Incasso oggi" value={euro(KPI.incasso)} icon="coins" accent="var(--brand)" trend={incassoTrend} sub={incassoSub} /> },
+    { k: "ordini", el: <Kpi label="Ordini attivi" value={active} icon="orders" accent="var(--info)" sub={`${inAttesa} in attesa`} /> },
+    { k: "ticket", el: <Kpi label="Ticket medio" value={euro(KPI.ticketMedio)} icon="stats" accent="var(--ok)" /> },
     { k: "coperti", el: <Kpi label="Coperti oggi" value={KPI.coperti} icon="staff" accent="var(--wait)" sub={`${KPI.conti} conti`} /> },
   ].filter(x => settings.kpi[x.k]);
   return (

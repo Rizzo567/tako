@@ -534,15 +534,6 @@ function ScreenTavoli({ mobile }) {
 }
 
 /* ═══════════════════ QR CODES ═══════════════════ */
-function QrTile({ n }) {
-  const cells = useMemo(() => Array.from({ length: 49 }, (_, i) => { const s = (n * 31 + i * 17) % 100; return s > 45; }), [n]);
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2, width: 84, height: 84, padding: 6, background: "#fff", borderRadius: 10, border: "1px solid var(--hairline)" }}>
-      {cells.map((on, i) => <span key={i} style={{ background: on ? "var(--ink)" : "transparent", borderRadius: 1 }} />)}
-    </div>
-  );
-}
-
 function QrCard({ t, onDownload, onDelete }) {
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [url, setUrl] = useState("");

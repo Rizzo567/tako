@@ -6,7 +6,6 @@ import { eq, and, asc, inArray, isNull, desc } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
-import { registry, runAgentTurn, customerSystem, aiConfigured } from '../ai/index.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill } from '../lib/billing.js'
 
@@ -342,25 +341,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
 
-    // Preferred path: agentic assistant (Claude). Falls back to read-only Groq
-    // Q&A when ANTHROPIC_API_KEY is absent.
-    if (aiConfigured()) {
-      try {
-        const result = await runAgentTurn({
-          scope: 'customer',
-          system: customerSystem({ restaurantName: restaurant?.name ?? 'questo ristorante', tableNumber: tableNumber ?? null }),
-          history,
-          message,
-          ctx: { restaurantId, tableId: tableId ?? null, tableNumber: tableNumber ?? null, sessionId: sessionId ?? null },
-          registry,
-        })
-        return { data: { message: result.message, actions: result.actions } }
-      } catch (err) {
-        req.log.error(err)
-        return reply.code(500).send({ error: { code: 'AI_ERROR', message: 'Errore assistente.' } })
-      }
-    }
-
+    // Assistente cliente: Q&A sul menu via Groq (provider unico del sistema).
     const GROQ_KEY = process.env['GROQ_API_KEY']
     if (!GROQ_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
 

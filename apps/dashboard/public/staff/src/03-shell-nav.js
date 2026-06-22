@@ -107,6 +107,7 @@ function Sidebar({ route, go, role, badges, live }) {
 function SidebarUser({ role, go }) {
   const r = ROLES[role];
   const [open, setOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
     if (!open) return;
@@ -116,10 +117,11 @@ function SidebarUser({ role, go }) {
   }, [open]);
   const items = [
     { label: "Impostazioni", icon: "settings", onClick: () => { go("impostazioni"); setOpen(false); } },
-    { label: "Notifiche", icon: "bell", onClick: () => { toast("Notifiche"); setOpen(false); } },
+    { label: "Notifiche", icon: "bell", onClick: () => { setNotifOpen(true); setOpen(false); } },
   ];
   return (
     <div ref={ref} style={{ position: "relative", paddingTop: 10, marginTop: 8, borderTop: "1px solid var(--nav-line)" }}>
+      <NotificationsSheet open={notifOpen} onClose={() => setNotifOpen(false)} />
       {open && (
         <div className="pop-in" style={{ position: "absolute", left: 0, right: 0, bottom: "calc(100% - 2px)", transformOrigin: "bottom", background: "var(--nav-2)", border: "1px solid var(--nav-line)", borderRadius: 14, boxShadow: "var(--sh-3)", padding: 6, marginBottom: 6 }}>
           {items.map(it => (
@@ -146,18 +148,35 @@ function SidebarUser({ role, go }) {
 }
 
 /* ───────────────── mobile chrome ───────────────── */
-const NOTIFICATIONS = [
-  { icon: "bell", tone: "brand", title: "Nuovo ordine · Tavolo 9", sub: "3 piatti · €47", time: "ora", unread: true },
-  { icon: "bell", tone: "info", title: "Tavolo 4 chiama il cameriere", sub: "Sala interna", time: "2 min", unread: true },
-  { icon: "alert", tone: "wait", title: "Scorta bassa · Polpo fresco", sub: "1,2 kg rimasti", time: "8 min", unread: true },
-  { icon: "check", tone: "ok", title: "Conto chiuso · Tavolo 2", sub: "€64 · contanti", time: "15 min", unread: false },
-  { icon: "sparkles", tone: "brand", title: "Nuova recensione · ★ 5", sub: "“Polpo top!”", time: "22 min", unread: false },
-  { icon: "orders", tone: "muted", title: "Ordine servito · Tavolo 14", sub: "Lasagna ×4", time: "31 min", unread: false },
-];
+/* notifiche derivate dai dati reali: ultimi ordini (per orario) + chiamate cameriere aperte */
+function buildNotifications() {
+  const items = [];
+  const orders = (window._ORDERS || []).slice();
+  const calls = (window._WAITER || []).slice();
+  for (const c of calls) {
+    items.push({ icon: "bell", tone: "info", title: `Tavolo ${c.tavolo} chiama il cameriere`, sub: c.motivo || "Chiamata in sala", min: typeof c.min === "number" ? c.min : 0, unread: true });
+  }
+  for (const o of orders) {
+    const piatti = (o.items || []).reduce((a, i) => a + (i.qty || 0), 0);
+    const dove = o.tipo === "asporto" ? "Asporto" : `Tavolo ${o.tavolo}`;
+    items.push({ icon: "orders", tone: o.stato === "pronto" ? "ok" : "brand", title: `${o.stato === "pronto" ? "Pronto" : "Nuovo ordine"} · ${dove}`, sub: `${piatti} piatti · ${o.orario}`, min: typeof o.min === "number" ? o.min : 0, unread: o.stato === "attesa" || o.stato === "pronto" });
+  }
+  // più recenti prima (min = minuti trascorsi), max 8
+  return items.sort((a, b) => a.min - b.min).slice(0, 8);
+}
+function relTime(min) {
+  if (min <= 0) return "ora";
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60);
+  return `${h}h`;
+}
 function NotificationsSheet({ open, onClose }) {
   const { mounted, active } = useMountTransition(open, 340);
+  const [dismissed, setDismissed] = useState(false);
+  useEffect(() => { if (open) setDismissed(false); }, [open]);
   if (!mounted) return null;
-  const unread = NOTIFICATIONS.filter(n => n.unread).length;
+  const list = dismissed ? [] : buildNotifications();
+  const unread = list.filter(n => n.unread).length;
   return ReactDOM.createPortal(
     <div style={{ position: "absolute", inset: 0, zIndex: 130, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(30,20,16,.45)", opacity: active ? 1 : 0, transition: "opacity .3s", backdropFilter: "blur(2px)" }} />
@@ -166,10 +185,16 @@ function NotificationsSheet({ open, onClose }) {
         <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 10, padding: "6px 18px 14px", borderBottom: "1px solid var(--hairline)" }}>
           <h3 style={{ fontSize: 19, fontWeight: 900, fontFamily: "var(--f-display)" }}>Notifiche</h3>
           {unread > 0 && <Badge tone="brand" solid>{unread} nuove</Badge>}
-          <button className="press" onClick={onClose} style={{ marginLeft: "auto", fontSize: 13, fontWeight: 700, color: "var(--brand)" }}>Segna lette</button>
+          {list.length > 0 && <button className="press" onClick={() => setDismissed(true)} style={{ marginLeft: "auto", fontSize: 13, fontWeight: 700, color: "var(--brand)" }}>Segna lette</button>}
         </div>
         <div className="scroll" style={{ overflowY: "auto", padding: "6px 12px 16px" }}>
-          {NOTIFICATIONS.map((n, i) => {
+          {list.length === 0 ? (
+            <div style={{ padding: "40px 16px", textAlign: "center", color: "var(--ink-3)" }}>
+              <Icon name="bell" size={30} style={{ color: "var(--ink-3)", margin: "0 auto 10px" }} />
+              <div style={{ fontSize: 14.5, fontWeight: 700, color: "var(--ink-2)" }}>Nessuna notifica</div>
+              <div style={{ fontSize: 12.5, marginTop: 4 }}>Gli ordini e le chiamate in arrivo compaiono qui.</div>
+            </div>
+          ) : list.map((n, i) => {
             const [bg, fg] = TONE[n.tone] || TONE.muted;
             return (
               <div key={i} className="press" style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 10px", borderRadius: 14, background: n.unread ? "var(--brand-wash)" : "transparent" }}>
@@ -179,7 +204,7 @@ function NotificationsSheet({ open, onClose }) {
                   <div style={{ fontSize: 12.5, color: "var(--ink-2)", marginTop: 2 }}>{n.sub}</div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6, flex: "none" }}>
-                  <span style={{ fontSize: 11.5, color: "var(--ink-3)" }} className="mono">{n.time}</span>
+                  <span style={{ fontSize: 11.5, color: "var(--ink-3)" }} className="mono">{relTime(n.min)}</span>
                   {n.unread && <span style={{ width: 8, height: 8, borderRadius: 99, background: "var(--brand)" }} />}
                 </div>
               </div>
