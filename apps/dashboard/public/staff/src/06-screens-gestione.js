@@ -350,6 +350,10 @@ function ScreenInsights({ mobile }) {
 /* ═══════════════════ INVENTARIO ═══════════════════ */
 function ScreenInventario({ mobile }) {
   const [inv, setInv] = useState(INVENTORY);
+  const [impOpen, setImpOpen] = useState(false);
+  const [impText, setImpText] = useState("");
+  const [impPreview, setImpPreview] = useState(null);
+  const [impLoading, setImpLoading] = useState(false);
   const move = async (nome, d) => {
     const x = inv.find(i => i.nome === nome);
     // update ottimistico locale (UI risponde subito)
@@ -366,14 +370,17 @@ function ScreenInventario({ mobile }) {
   const low = inv.filter(x => x.giac < x.min);
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="dishAlt" title="Inventario" sub={`${inv.length} ingredienti`} actions={<Btn kind="brand" icon="plus" onClick={async () => {
+      <PageHead mobile={mobile} tako="dishAlt" title="Inventario" sub={`${inv.length} ingredienti`} actions={<div style={{ display: "flex", gap: 8 }}>
+        <Btn kind="soft" icon="sparkles" onClick={() => setImpOpen(true)}>Importa da testo</Btn>
+        <Btn kind="brand" icon="plus" onClick={async () => {
         // Nessun form in questa UI: creo un ingrediente minimale e ricarico (l'utente lo rifinisce poi).
         try {
           await window.TakoActions.invCreate({ name: "Nuovo", unit: "kg", quantity: 0, minQuantity: 0 });
           toast("Ingrediente aggiunto", { type: "success" });
           await window.takoReload();
         } catch (e) { toast(e.message, { type: "error" }); }
-      }}>Aggiungi</Btn>} />
+      }}>Aggiungi</Btn>
+        </div>} />
       {low.length > 0 && (
         <Card pad={14} style={{ marginBottom: 16, border: "1.5px solid var(--danger)", background: "var(--danger-bg)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}><Icon name="alert" size={18} style={{ color: "var(--danger)" }} /><span style={{ fontWeight: 700, fontSize: 14, color: "var(--danger)" }}>{low.length} ingredienti sotto scorta: {low.map(x => x.nome).join(", ")}</span></div>
@@ -395,6 +402,64 @@ function ScreenInventario({ mobile }) {
           );
         })}
       </Card>
+      <Overlay open={impOpen} onClose={() => { if (!impLoading) setImpOpen(false); }} anchor="center">
+        <div style={{ width: mobile ? 354 : 560, maxWidth: "100%", maxHeight: "calc(100% - 48px)", background: "var(--surface)", borderRadius: 24, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
+            <h3 style={{ flex: 1, fontSize: 18 }}>{impPreview ? "Anteprima importazione" : "Importa ingredienti da testo"}</h3>
+            <IconBtn name="x" tone="soft" onClick={() => { if (!impLoading) setImpOpen(false); }} />
+          </div>
+          <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: 20 }}>
+            {!impPreview ? (<>
+              <p style={{ fontSize: 13, color: "var(--ink-2)", marginBottom: 12 }}>Incolla una lista di ingredienti/scorte: l'AI la struttura.</p>
+              <textarea
+                value={impText}
+                onChange={e => setImpText(e.target.value)}
+                placeholder="Incolla qui gli ingredienti (es. Mozzarella 5kg, Pomodoro 10kg, ...)…"
+                style={{ width: "100%", minHeight: 220, padding: 12, borderRadius: 12, border: "1px solid var(--hairline)", fontSize: 14, fontFamily: "var(--f-ui)", color: "var(--ink)", background: "var(--raised)", outline: "none", resize: "vertical" }}
+              />
+            </>) : (<>
+              <p style={{ fontSize: 13, color: "var(--ink-2)", marginBottom: 16 }}>{impPreview.items.length} ingredienti</p>
+              <Card pad={0} style={{ overflow: "hidden" }}>
+                {impPreview.items.map((it, ii) => (
+                  <div key={ii} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "11px 14px", borderBottom: ii < impPreview.items.length - 1 ? "1px solid var(--hairline)" : "none" }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: 14.5 }}>{it.name}</div>
+                      <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2 }}>giacenza {it.quantity} {it.unit} · min {it.minQuantity}{it.costPerUnit != null ? ` · €${it.costPerUnit}/${it.unit}` : ""}{it.supplier ? ` · ${it.supplier}` : ""}</div>
+                    </div>
+                  </div>
+                ))}
+              </Card>
+            </>)}
+          </div>
+          <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", gap: 10 }}>
+            {!impPreview ? (
+              <Btn kind="brand" full icon="sparkles" onClick={async () => {
+                if (!impText.trim()) { toast("Incolla prima un testo", { type: "error" }); return; }
+                setImpLoading(true);
+                try {
+                  const p = await window.TakoActions.invImportText(impText);
+                  setImpPreview(p);
+                } catch (e) {
+                  toast(e.code === "AI_UNAVAILABLE" ? "AI non disponibile (manca GROQ_API_KEY)" : e.message, { type: "error" });
+                } finally { setImpLoading(false); }
+              }}>{impLoading ? "Analizzo…" : "Analizza"}</Btn>
+            ) : (<>
+              <Btn kind="soft" full onClick={() => { if (!impLoading) setImpPreview(null); }}>Indietro</Btn>
+              <Btn kind="brand" full icon="check" onClick={async () => {
+                setImpLoading(true);
+                try {
+                  await window.TakoActions.invImportConfirm(impPreview.items);
+                  toast("Ingredienti importati", { type: "success" });
+                  setImpOpen(false); setImpText(""); setImpPreview(null);
+                  await window.takoReload();
+                } catch (e) {
+                  toast(e.message, { type: "error" });
+                } finally { setImpLoading(false); }
+              }}>{impLoading ? "Importo…" : "Conferma importazione"}</Btn>
+            </>)}
+          </div>
+        </div>
+      </Overlay>
     </ScreenScroll>
   );
 }

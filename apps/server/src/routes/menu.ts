@@ -275,9 +275,9 @@ Regole:
         name: z.string().min(1),
         items: z.array(z.object({
           name: z.string().min(1),
-          description: z.string().optional(),
+          description: z.string().nullable().optional(),
           price: z.number().min(0),
-          allergens: z.array(z.string()).default([]),
+          allergens: z.array(z.string()).nullable().optional(),
         })),
       })),
     })
@@ -299,9 +299,9 @@ Regole:
           sectionId: section!.id,
           restaurantId: (req.user as any).restaurantId,
           name: item.name,
-          description: item.description,
+          description: item.description ?? undefined,
           price: item.price,
-          allergens: item.allergens,
+          allergens: item.allergens ?? [],
           position: ii,
         })
         totalItems++

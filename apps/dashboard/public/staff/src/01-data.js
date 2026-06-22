@@ -255,6 +255,8 @@ const TakoActions = {
   // inventario
   invMove: (itemId, type, quantity, note) => TakoAPI.post(`/inventory/${itemId}/movements`, { type, quantity, note }),
   invCreate: (fields) => TakoAPI.post(`/inventory`, fields),
+  invImportText: (text) => TakoAPI.post(`/inventory/import-text`, { text }),
+  invImportConfirm: (items) => TakoAPI.post(`/inventory/import-confirm`, { items }),
   // staff
   staffCreate: (fields) => TakoAPI.post(`/staff`, fields),
   staffUpdate: (id, fields) => TakoAPI.patch(`/staff/${id}`, fields),

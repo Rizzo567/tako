@@ -1,5 +1,15 @@
 /* ───────────────── Tako Dashboard — sala, cassa, comanda, tavoli, QR ───────────────── */
 
+/* vetro smerigliato (glassmorphism) per i pannelli che si aprono: semi-trasparente,
+   sfoca ciò che c'è dietro + bordo/riflesso "specchio". */
+const GLASS = {
+  background: "rgba(251,248,244,0.62)",
+  backdropFilter: "blur(22px) saturate(180%)",
+  WebkitBackdropFilter: "blur(22px) saturate(180%)",
+  border: "1px solid rgba(255,255,255,0.55)",
+  boxShadow: "0 22px 60px -16px rgba(30,20,16,0.42), inset 0 1px 0 rgba(255,255,255,0.7)",
+};
+
 /* ═══════════════════ SALA LIVE ═══════════════════ */
 function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
   const [roomId, setRoomId] = useState(rooms[0].id);
@@ -103,7 +113,7 @@ function TableDrawer({ table, mobile, onClose, onSetState }) {
   const st = TABLE_STATUS[table.stato];
   const orders = ORDERS.filter(o => o.tavolo === table.n);
   return (
-    <div style={{ width: mobile ? 354 : 360, maxWidth: "100%", height: mobile ? "auto" : "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 24 : 0, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: mobile ? "var(--sh-pop)" : "none" }}>
+    <div style={{ width: mobile ? 354 : 360, maxWidth: "100%", height: mobile ? "auto" : "calc(100% - 24px)", maxHeight: "calc(100% - 24px)", margin: mobile ? 0 : 12, borderRadius: 20, display: "flex", flexDirection: "column", overflow: "hidden", ...GLASS }}>
       <div style={{ padding: "18px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
         <span className="num" style={{ width: 50, height: 50, borderRadius: 14, background: "var(--ink)", color: "#fff", display: "grid", placeItems: "center", fontSize: 24 }}>{table.n}</span>
         <div style={{ flex: 1 }}><h3 style={{ fontSize: 19 }}>Tavolo {table.n}</h3><div style={{ display: "flex", gap: 8, marginTop: 4 }}><Badge tone="muted" dot style={{ background: st.color + "22", color: st.color }}>{st.label}</Badge><Badge tone="muted">{table.posti} posti</Badge></div></div>
@@ -302,13 +312,13 @@ function ScreenComanda({ mobile }) {
 
   const section = MENU.find(s => s.sezione === sez);
   return (
-    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", paddingTop: mobile ? 104 : 0 }}>
-      <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 12, padding: mobile ? "12px 14px" : "18px 26px", borderBottom: "1px solid var(--hairline)", background: "var(--surface)" }}>
+    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden", paddingTop: mobile ? 104 : 0, margin: mobile ? 0 : 12, borderRadius: mobile ? 0 : 20, ...(mobile ? { background: "var(--surface)" } : GLASS) }}>
+      <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 12, padding: mobile ? "12px 14px" : "18px 26px", borderBottom: "1px solid var(--hairline)", background: mobile ? "var(--surface)" : "transparent" }}>
         <IconBtn name="chevL" tone="soft" onClick={() => { setTavolo(null); setCart({}); }} />
         <div style={{ flex: 1 }}><h3 style={{ fontSize: 18 }}>Comanda · Tavolo {tavolo}</h3><div style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{items.length} piatti · {euro(total)}</div></div>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
-        <div className="scroll" style={{ flex: "none", width: mobile ? 96 : 150, overflowY: "auto", borderRight: "1px solid var(--hairline)", padding: 8, background: "var(--surface)" }}>
+        <div className="scroll" style={{ flex: "none", width: mobile ? 96 : 150, overflowY: "auto", borderRight: "1px solid var(--hairline)", padding: 8, background: mobile ? "var(--surface)" : "transparent" }}>
           {MENU.map(s => <button key={s.sezione} className="press" onClick={() => setSez(s.sezione)} style={{ width: "100%", padding: "11px 10px", borderRadius: 11, marginBottom: 4, fontSize: 13, fontWeight: 700, textAlign: "left", background: sez === s.sezione ? "var(--brand-tint)" : "transparent", color: sez === s.sezione ? "var(--brand-deep)" : "var(--ink-2)" }}>{s.sezione}</button>)}
         </div>
         <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: mobile ? 12 : 20 }}>
@@ -328,7 +338,7 @@ function ScreenComanda({ mobile }) {
         </div>
       </div>
       {items.length > 0 && (
-        <div style={{ flex: "none", padding: mobile ? "14px 14px 92px" : "16px 26px", borderTop: "1px solid var(--hairline)", background: "var(--raised)", display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ flex: "none", padding: mobile ? "14px 14px 92px" : "16px 26px", borderTop: "1px solid var(--hairline)", background: mobile ? "var(--raised)" : "rgba(255,255,255,0.25)", display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ flex: 1 }}><div style={{ fontSize: 12, color: "var(--ink-2)" }}>{items.reduce((a, [, q]) => a + q, 0)} piatti</div><div className="num" style={{ fontSize: 22 }}>{euro(total)}</div></div>
           <Btn kind="brand" size="lg" icon="check" onClick={sendComanda}>Invia comanda</Btn>
         </div>
@@ -338,39 +348,136 @@ function ScreenComanda({ mobile }) {
 }
 
 /* ═══════════════════ GESTIONE TAVOLI ═══════════════════ */
+const INPUT_STYLE = { padding: "11px", borderRadius: 11, border: "1px solid var(--hairline)", fontSize: 14.5, width: "100%", background: "var(--sunken)", color: "var(--ink)", boxSizing: "border-box" };
+const FIELD_LABEL = { display: "block", fontSize: 12.5, fontWeight: 700, color: "var(--ink-2)", marginBottom: 6 };
+
+function TableFormModal({ open, onClose, table, rooms }) {
+  // table = null → nuovo; altrimenti modifica
+  const [numero, setNumero] = useState("");
+  const [posti, setPosti] = useState(4);
+  const [roomId, setRoomId] = useState(rooms[0] ? rooms[0].id : "");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    if (table) {
+      setNumero(String(table.n));
+      setPosti(table.posti);
+      setRoomId(table.roomId || (rooms[0] ? rooms[0].id : ""));
+    } else {
+      setNumero("");
+      setPosti(4);
+      setRoomId(rooms[0] ? rooms[0].id : "");
+    }
+  }, [open, table]);
+
+  const save = async () => {
+    if (saving) return;
+    if (!String(numero).trim()) { toast("Inserisci un numero tavolo", { type: "error" }); return; }
+    if (!roomId) { toast("Crea prima una sala", { type: "error" }); return; }
+    setSaving(true);
+    try {
+      if (table) {
+        await window.TakoActions.tableUpdate(table._id, { number: String(numero).trim(), seats: Number(posti) || table.posti, roomId });
+        toast("Tavolo " + String(numero).trim() + " aggiornato", { type: "success" });
+      } else {
+        await window.TakoActions.tableCreate({ number: String(numero).trim(), seats: Number(posti) || 4, roomId });
+        toast("Tavolo aggiunto", { type: "success" });
+      }
+      onClose();
+      await window.takoReload();
+    } catch (e) {
+      toast(e.message, { type: "error" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Overlay open={open} onClose={onClose} anchor="center">
+      <div style={{ width: 380, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 13, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="grid" size={22} /></div>
+          <h3 style={{ fontSize: 19, flex: 1 }}>{table ? "Modifica tavolo" : "Nuovo tavolo"}</h3>
+          <IconBtn name="x" tone="soft" onClick={onClose} />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={FIELD_LABEL}>Numero</label>
+          <input type="text" value={numero} onChange={(e) => setNumero(e.target.value)} style={INPUT_STYLE} placeholder="Es. 12" />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={FIELD_LABEL}>Posti</label>
+          <input type="number" min="1" value={posti} onChange={(e) => setPosti(e.target.value)} style={INPUT_STYLE} />
+        </div>
+        <div style={{ marginBottom: 22 }}>
+          <label style={FIELD_LABEL}>Sala</label>
+          <select value={roomId} onChange={(e) => setRoomId(e.target.value)} style={INPUT_STYLE}>
+            {rooms.map(r => <option key={r.id} value={r.id}>{r.nome}</option>)}
+          </select>
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <Btn kind="soft" full onClick={onClose}>Annulla</Btn>
+          <Btn kind="brand" full icon="check" onClick={save}>{saving ? "Salvataggio…" : "Salva"}</Btn>
+        </div>
+      </div>
+    </Overlay>
+  );
+}
+
+function RoomFormModal({ open, onClose }) {
+  const [nome, setNome] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => { if (open) setNome(""); }, [open]);
+
+  const save = async () => {
+    if (saving) return;
+    if (!String(nome).trim()) { toast("Inserisci un nome sala", { type: "error" }); return; }
+    setSaving(true);
+    try {
+      await window.TakoActions.roomCreate(String(nome).trim());
+      toast("Sala creata", { type: "success" });
+      onClose();
+      await window.takoReload();
+    } catch (e) {
+      toast(e.message, { type: "error" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Overlay open={open} onClose={onClose} anchor="center">
+      <div style={{ width: 360, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 13, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="grid" size={22} /></div>
+          <h3 style={{ fontSize: 19, flex: 1 }}>Nuova sala</h3>
+          <IconBtn name="x" tone="soft" onClick={onClose} />
+        </div>
+        <div style={{ marginBottom: 22 }}>
+          <label style={FIELD_LABEL}>Nome</label>
+          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} style={INPUT_STYLE} placeholder="Es. Sala interna" />
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <Btn kind="soft" full onClick={onClose}>Annulla</Btn>
+          <Btn kind="brand" full icon="check" onClick={save}>{saving ? "Salvataggio…" : "Crea sala"}</Btn>
+        </div>
+      </div>
+    </Overlay>
+  );
+}
+
 function ScreenTavoli({ mobile }) {
   const all = ROOMS.flatMap(r => r.tables.map(t => ({ ...t, room: r.nome, roomId: r.id })));
+  const rooms = ROOMS;
+  const [tableModal, setTableModal] = useState(null); // { table: null|t } quando aperto
+  const [roomModal, setRoomModal] = useState(false);
+  const [delTarget, setDelTarget] = useState(null);
 
-  const createTable = async () => {
+  const confirmDelete = async () => {
+    const t = delTarget;
+    if (!t) return;
     try {
-      const nums = all.map(t => parseInt(t.n, 10)).filter(x => !isNaN(x));
-      const next = (nums.length ? Math.max(...nums) : 0) + 1;
-      const roomId = ROOMS[0] ? ROOMS[0].id : undefined;
-      await window.TakoActions.tableCreate({ number: String(next), seats: 4, roomId });
-      toast("Tavolo aggiunto", { type: "success" });
-      await window.takoReload();
-    } catch (e) {
-      toast(e.message, { type: "error" });
-    }
-  };
-
-  const editTable = async (t) => {
-    try {
-      const input = window.prompt("Numero posti per Tavolo " + t.n, String(t.posti));
-      if (input === null) return;
-      const seats = parseInt(input, 10);
-      if (isNaN(seats) || seats < 1) throw new Error("Numero posti non valido");
-      await window.TakoActions.tableUpdate(t._id, { seats });
-      toast("Tavolo " + t.n + " aggiornato", { type: "success" });
-      await window.takoReload();
-    } catch (e) {
-      toast(e.message, { type: "error" });
-    }
-  };
-
-  const removeTable = async (t) => {
-    try {
-      if (!window.confirm("Eliminare il Tavolo " + t.n + "?")) return;
       await window.TakoActions.tableDelete(t._id);
       toast("Tavolo " + t.n + " eliminato", { type: "success" });
       await window.takoReload();
@@ -381,17 +488,27 @@ function ScreenTavoli({ mobile }) {
 
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} title="Gestione Tavoli" sub={`${all.length} tavoli · ${ROOMS.length} sale`} actions={<Btn kind="brand" icon="plus" onClick={createTable}>Nuovo tavolo</Btn>} />
+      <PageHead mobile={mobile} title="Gestione Tavoli" sub={`${all.length} tavoli · ${ROOMS.length} sale`}
+        actions={<div style={{ display: "flex", gap: 9 }}>
+          <Btn kind="soft" icon="plus" onClick={() => setRoomModal(true)}>Nuova sala</Btn>
+          <Btn kind="brand" icon="plus" onClick={() => setTableModal({ table: null })}>Nuovo tavolo</Btn>
+        </div>} />
       <Card pad={0} style={{ overflow: "hidden" }}>
         {all.map((t, i) => (
           <div key={t.n} style={{ display: "flex", alignItems: "center", gap: 14, padding: "13px 16px", borderBottom: i < all.length - 1 ? "1px solid var(--hairline)" : "none" }}>
             <span className="num" style={{ width: 40, height: 40, borderRadius: 11, background: "var(--sunken)", display: "grid", placeItems: "center", fontSize: 17 }}>{t.n}</span>
             <div style={{ flex: 1 }}><div style={{ fontWeight: 700, fontSize: 14.5 }}>Tavolo {t.n}</div><div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>{t.room} · {t.posti} posti</div></div>
-            <IconBtn name="edit" tone="ghost" onClick={() => editTable(t)} />
-            <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} onClick={() => removeTable(t)} />
+            <IconBtn name="edit" tone="ghost" onClick={() => setTableModal({ table: t })} />
+            <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} onClick={() => setDelTarget(t)} />
           </div>
         ))}
       </Card>
+
+      <TableFormModal open={!!tableModal} table={tableModal ? tableModal.table : null} rooms={rooms} onClose={() => setTableModal(null)} />
+      <RoomFormModal open={roomModal} onClose={() => setRoomModal(false)} />
+      <Confirm open={!!delTarget} onClose={() => setDelTarget(null)} onConfirm={confirmDelete} danger
+        title={delTarget ? "Eliminare il Tavolo " + delTarget.n + "?" : "Eliminare il tavolo?"}
+        body="Questa azione è definitiva e invalida il QR associato al tavolo." confirmLabel="Elimina" />
     </ScreenScroll>
   );
 }
@@ -405,12 +522,93 @@ function QrTile({ n }) {
     </div>
   );
 }
+
+function QrCard({ t, onDownload, onDelete }) {
+  const [qrDataUrl, setQrDataUrl] = useState("");
+  const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const q = await window.TakoActions.tableQr(t._id);
+      setQrDataUrl(q.qrDataUrl || "");
+      setUrl(q.url || "");
+    } catch (e) {
+      toast(e.message, { type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { load(); }, [t._id]);
+
+  const regen = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await window.TakoActions.tableQrRefresh(t._id);
+      await load();
+      toast("QR rigenerato", { type: "success" });
+    } catch (e) {
+      toast(e.message, { type: "error" });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const copyLink = async () => {
+    try { await navigator.clipboard.writeText(url); toast("Link copiato", { type: "success" }); }
+    catch (_) { toast(url || "Link non disponibile"); }
+  };
+  const openLink = () => { try { window.open(url, "_blank"); } catch (_) { toast("Impossibile aprire il link", { type: "error" }); } };
+
+  return (
+    <Card pad={16} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+      {loading ? (
+        <div style={{ width: 120, height: 120, borderRadius: 10, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 12 }}>…</div>
+      ) : qrDataUrl ? (
+        <img src={qrDataUrl} alt={`QR tavolo ${t.n}`} style={{ width: 120, height: 120, borderRadius: 10 }} />
+      ) : (
+        <div style={{ width: 120, height: 120, borderRadius: 10, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 12, textAlign: "center", padding: 8 }}>QR non disponibile</div>
+      )}
+      <div style={{ textAlign: "center", maxWidth: "100%" }}>
+        <div style={{ fontWeight: 800, fontFamily: "var(--f-display)" }}>Tavolo {t.n}</div>
+        <div className="mono" style={{ fontSize: 11.5, color: "var(--ink-3)", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={url}>{url || "—"}</div>
+      </div>
+      <div style={{ display: "flex", gap: 8, width: "100%" }}>
+        <Btn size="sm" kind="ghost" full icon="refresh" onClick={regen}>{busy ? "Rigenero…" : "Rigenera"}</Btn>
+        <Btn size="sm" kind="soft" full icon="download" onClick={() => onDownload(t, qrDataUrl)}>Scarica</Btn>
+      </div>
+      <div style={{ display: "flex", gap: 8, width: "100%", justifyContent: "center" }}>
+        <IconBtn name="qr" tone="soft" onClick={copyLink} title="Copia link" />
+        <IconBtn name="phone" tone="soft" onClick={openLink} title="Apri anteprima cliente" />
+        <IconBtn name="trash" tone="soft" style={{ color: "var(--danger)" }} onClick={() => onDelete(t)} title="Elimina tavolo + QR" />
+      </div>
+    </Card>
+  );
+}
+
 function ScreenQR({ mobile }) {
   const all = ROOMS.flatMap(r => r.tables);
+  const [delTarget, setDelTarget] = useState(null);
 
-  const downloadQr = async (t) => {
+  const confirmDelete = async () => {
+    const t = delTarget;
+    if (!t) return;
     try {
-      const { qrDataUrl } = await window.TakoActions.tableQr(t._id);
+      await window.TakoActions.tableDelete(t._id);
+      toast(`Tavolo ${t.n} eliminato`, { type: "success" });
+      await window.takoReload();
+    } catch (e) {
+      toast(e.message, { type: "error" });
+    }
+  };
+
+  const downloadQr = async (t, preloaded) => {
+    try {
+      const qrDataUrl = preloaded || (await window.TakoActions.tableQr(t._id)).qrDataUrl;
       if (!qrDataUrl) throw new Error("QR non disponibile");
       const a = document.createElement("a");
       a.href = qrDataUrl;
@@ -445,15 +643,15 @@ function ScreenQR({ mobile }) {
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="phone" title="QR Codes" sub="Genera e scarica i QR dei tavoli" actions={<Btn kind="brand" icon="download" onClick={downloadAll}>Scarica tutti</Btn>} />
-      <div style={{ display: "grid", gridTemplateColumns: mobile ? "repeat(2,1fr)" : "repeat(auto-fill,minmax(150px,1fr))", gap: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill,minmax(210px,1fr))", gap: 14 }}>
         {all.map(t => (
-          <Card key={t.n} pad={16} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-            <QrTile n={t.n} />
-            <div style={{ textAlign: "center" }}><div style={{ fontWeight: 800, fontFamily: "var(--f-display)" }}>Tavolo {t.n}</div><div style={{ fontSize: 11.5, color: "var(--ink-3)" }} className="mono">tako.it/t/{t.n}</div></div>
-            <Btn size="sm" kind="soft" full icon="download" onClick={() => downloadQr(t)}>Scarica</Btn>
-          </Card>
+          <QrCard key={t.n} t={t} onDownload={downloadQr} onDelete={setDelTarget} />
         ))}
       </div>
+      <Confirm open={!!delTarget} onClose={() => setDelTarget(null)} onConfirm={confirmDelete} danger
+        title={delTarget ? `Eliminare il Tavolo ${delTarget.n}?` : "Eliminare?"}
+        body="Il tavolo e il suo QR verranno rimossi. I clienti che scansionano il vecchio QR non potranno più ordinare."
+        confirmLabel="Elimina tavolo" />
     </ScreenScroll>
   );
 }
