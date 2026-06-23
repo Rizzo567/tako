@@ -12,13 +12,34 @@ import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import postgres from 'postgres'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync, unlinkSync } from 'node:fs'
 import { homedir } from 'node:os'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 const MIGRATIONS_DIR = join(currentDir, 'migrations')
 
 let instance: InstanceType<typeof EmbeddedPostgres> | null = null
+
+/**
+ * Se nella data dir c'è un postmaster.pid di un'istanza precedente, termina il
+ * processo orfano (se ancora vivo) e rimuove il lock. Sicuro nel nostro modello
+ * a istanza singola: un pid presente all'avvio è sempre di un run precedente.
+ */
+async function healStaleLock(databaseDir: string): Promise<void> {
+  const pidFile = join(databaseDir, 'postmaster.pid')
+  if (!existsSync(pidFile)) return
+  const isAlive = (pid: number) => { try { process.kill(pid, 0); return true } catch { return false } }
+  try {
+    const pid = parseInt((readFileSync(pidFile, 'utf8').split('\n')[0] ?? '').trim(), 10)
+    if (Number.isInteger(pid) && pid > 1 && isAlive(pid)) {
+      console.log(`[db] trovato Postgres orfano (pid ${pid}), lo termino`)
+      try { process.kill(pid, 'SIGTERM') } catch { /* ignore */ }
+      for (let i = 0; i < 8 && isAlive(pid); i++) await new Promise((r) => setTimeout(r, 400))
+      if (isAlive(pid)) { try { process.kill(pid, 'SIGKILL') } catch { /* ignore */ } }
+    }
+  } catch { /* best-effort */ }
+  try { unlinkSync(pidFile) } catch { /* best-effort */ }
+}
 
 /**
  * Avvia Postgres embedded se EMBEDDED_DB=1, altrimenti no-op (DB esterno).
@@ -37,6 +58,12 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   const database = process.env['PGDATABASE'] ?? 'takodb'
   // Data dir persistente in app-data utente (fuori dal repo, sopravvive agli update).
   const databaseDir = process.env['PGDATA_DIR'] ?? join(homedir(), '.tako', 'pgdata')
+
+  // Auto-guarigione: se un'istanza precedente è stata uccisa male (es. l'app chiusa
+  // con SIGKILL), può restare un postgres ORFANO che tiene la data dir + un
+  // postmaster.pid stantio → l'avvio fallirebbe con "lock file already exists".
+  // Qui terminiamo l'eventuale orfano e ripuliamo il lock prima di partire.
+  await healStaleLock(databaseDir)
 
   const pg = new EmbeddedPostgres({ databaseDir, user, password, port, persistent: true })
   instance = pg

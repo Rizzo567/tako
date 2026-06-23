@@ -49,6 +49,14 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
     if let Some(dir) = cwd {
         command.current_dir(dir);
     }
+    // Gruppo di processi dedicato: così alla chiusura possiamo terminare insieme
+    // node E il Postgres che ha generato (evita Postgres orfani che bloccano la
+    // data dir al riavvio).
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::CommandExt;
+        command.process_group(0);
+    }
     command
         .env("EMBEDDED_DB", "1")
         .env("PORT", TAKO_PORT)
@@ -96,7 +104,9 @@ pub fn run() {
         .expect("error while running tauri application");
 
     app.run(|app_handle, event| {
-        // Alla chiusura dell'app, termina il server figlio: niente processi orfani.
+        // Alla chiusura dell'app, termina con GRAZIA il gruppo del server: SIGTERM
+        // a node + Postgres così node può fermare Postgres pulito (no orfani).
+        // Su non-unix, kill diretto del figlio.
         if let RunEvent::ExitRequested { .. } = event {
             if let Some(mut child) = app_handle
                 .state::<ServerChild>()
@@ -105,7 +115,18 @@ pub fn run() {
                 .unwrap()
                 .take()
             {
-                let _ = child.kill();
+                #[cfg(unix)]
+                {
+                    let pid = child.id() as i32;
+                    // -pid = tutto il gruppo di processi (node + postgres)
+                    unsafe { libc::kill(-pid, libc::SIGTERM) };
+                }
+                #[cfg(not(unix))]
+                {
+                    let _ = child.kill();
+                }
+                // breve attesa per lo spegnimento pulito di Postgres
+                let _ = child.wait();
             }
         }
     });

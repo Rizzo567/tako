@@ -25,7 +25,9 @@
     fetch(HEALTH, { cache: "no-store" })
       .then(function (r) { if (r.ok) { location.replace(TARGET); return } throw 0 })
       .catch(function () {
-        if (tries > 80) document.getElementById("msg").textContent = "Il motore interno non risponde. Riavvia l'app."
+        var m = document.getElementById("msg")
+        if (tries === 12) m.textContent = "Preparazione del database (solo al primo avvio)…"
+        if (tries > 360) { m.textContent = "Il motore interno non risponde. Chiudi e riapri l'app."; return }
         setTimeout(poll, 500)
       })
   }
