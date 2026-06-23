@@ -71,7 +71,8 @@
 - [x] **F2 — Shell Tauri spawna il server** — `apps/app/src-tauri` avvia il server figlio all'apertura, lo termina alla chiusura (cargo check OK). — 2026-06-23
 - [x] **F3a — Zero-config rete** — mDNS `tako.local` + `GET /api/system/info` (IP LAN + QR collega-dispositivi). — 2026-06-23
 - [x] **Avvio unico `pnpm tako`** — tutto in un processo, segreto JWT persistente in `~/.tako`. — 2026-06-23
-- [ ] **F3b — UI onboarding obbligatorio + schermata "Collega dispositivi"** — rendere il wizard `SETUP` un flusso obbligatorio al primo avvio (tutorial per pagina) e aggiungere in dashboard una schermata che mostra QR + URL da `/api/system/info`. Backend pronto. Done: primo avvio guida step-by-step; owner vede QR per agganciare i tablet. | Owner: Frontend | ~3g
+- [x] **F3b.1 — Schermata "Collega dispositivi"** — voce menu owner + `ScreenCollega` che mostra QR + URL (tako.local/IP) da `/api/system/info`. — 2026-06-23
+- [ ] **F3b.2 — Onboarding obbligatorio primo avvio** — rendere il wizard `SETUP` un gate obbligatorio finché il setup non è completo (tutorial per pagina). Done: al primo avvio l'owner è guidato step-by-step prima di usare la dashboard. | Owner: Frontend | ~2g
 - [ ] **F4 — Packaging installer** — `tauri build` con node + server compilato + binari Postgres impacchettati come risorse Tauri; `spawn_server` punta alla risorsa `server/bootstrap.js`. Output `.exe`/`.dmg`/`.AppImage`. Firma/notarizzazione dove serve. Done: doppio click su installer → app che apre e opera. | Owner: DevOps | ~5g
 - [ ] **F-web — Consolida PWA cliente** — la rotta dinamica `apps/web` blocca lo static export; refactor per servirla dal Fastify (o secondo child). Toglie il processo Next `:3002`. Done: anche il menu cliente servito dal singolo processo. | Owner: Frontend | ~3g
 
