@@ -62,6 +62,21 @@
 
 ---
 
+## FASE DEPLOY — "Scarica, apri, opera" (app desktop)
+> Obiettivo: il ristorante scarica un'app, la apre ed è subito operativa, setup
+> connessione automatico. Modello AIKE. Piano completo in `docs/MASTER-PLAN.md`.
+
+- [x] **F0 — Un solo processo serve tutto** — Fastify serve API + Socket.io + dashboard staff statica (`/staff`, redirect `/`), same-origin. CSP reale presente. — 2026-06-23
+- [x] **F1 — Postgres embedded automatico** — `EMBEDDED_DB=1` avvia Postgres portatile + migrazioni idempotenti; bootstrap.ts imposta `DATABASE_URL` prima dell'import del client. — 2026-06-23
+- [x] **F2 — Shell Tauri spawna il server** — `apps/app/src-tauri` avvia il server figlio all'apertura, lo termina alla chiusura (cargo check OK). — 2026-06-23
+- [x] **F3a — Zero-config rete** — mDNS `tako.local` + `GET /api/system/info` (IP LAN + QR collega-dispositivi). — 2026-06-23
+- [x] **Avvio unico `pnpm tako`** — tutto in un processo, segreto JWT persistente in `~/.tako`. — 2026-06-23
+- [ ] **F3b — UI onboarding obbligatorio + schermata "Collega dispositivi"** — rendere il wizard `SETUP` un flusso obbligatorio al primo avvio (tutorial per pagina) e aggiungere in dashboard una schermata che mostra QR + URL da `/api/system/info`. Backend pronto. Done: primo avvio guida step-by-step; owner vede QR per agganciare i tablet. | Owner: Frontend | ~3g
+- [ ] **F4 — Packaging installer** — `tauri build` con node + server compilato + binari Postgres impacchettati come risorse Tauri; `spawn_server` punta alla risorsa `server/bootstrap.js`. Output `.exe`/`.dmg`/`.AppImage`. Firma/notarizzazione dove serve. Done: doppio click su installer → app che apre e opera. | Owner: DevOps | ~5g
+- [ ] **F-web — Consolida PWA cliente** — la rotta dinamica `apps/web` blocca lo static export; refactor per servirla dal Fastify (o secondo child). Toglie il processo Next `:3002`. Done: anche il menu cliente servito dal singolo processo. | Owner: Frontend | ~3g
+
+---
+
 ## Backlog tecnico (non product)
 
 - [ ] **Pagination ordini** — `/dashboard/ordini` carica tutto. Chunk da 50, scroll infinito. | ~1g
