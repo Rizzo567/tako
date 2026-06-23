@@ -32,3 +32,10 @@
 - File modificati: `apps/server/src/{bootstrap,index}.ts`, `apps/server/src/lib/{cookies,network,mdns}.ts`, `apps/server/src/routes/system.ts`, `apps/server/src/types/multicast-dns.d.ts`, `packages/db/src/embedded.ts`, `packages/db/*.mjs`, `apps/app/src-tauri/src/lib.rs`, `apps/app/src-tauri/tauri.conf.json`, `apps/app/package.json`, `apps/dashboard/public/sw.js`, `scripts/tako.mjs`, `package.json`, `docs/MASTER-PLAN.md`.
 - Stato: completato (F0–F3 verificati end-to-end: login 200 + render dashboard autenticata completa da `pnpm tako`).
 - Note: restano F4 (packaging installer Tauri con node+server+Postgres come risorse) e la UI onboarding/collega-dispositivi nella SPA — backend pronto. Vedi `docs/MASTER-PLAN.md`.
+
+## [2026-06-23] — F4: app desktop autosufficiente + installer (Tako.dmg)
+- Task: Tako come app vera (no redirect web), installer.
+- Azione: causa del bianco residuo trovata = `Tako.app` del 22 giu inchiodava a `http://localhost:3000` (porta morta), nessuna mia modifica dentro. Ricostruita la pipeline: `scripts/build-server-bundle.mjs` bundla SOLO il nostro codice (esbuild, server+`@tako/*`) e spedisce i pacchetti npm come node_modules reale (sharp, binari Postgres, client-dist socket.io intatti) + runtime Node. Reso bundle-friendly: client Drizzle LAZY (no import dinamico), `index.ts`→`startServer()`, bootstrap auto-provisiona JWT. La finestra Tauri carica una schermata d'avvio che attende il motore interno (no server esterno). Rust spawna il node impacchettato con dati in app-data.
+- File: `scripts/build-server-bundle.mjs`, `packages/db/src/client.ts`, `apps/server/src/{index,bootstrap}.ts`, `apps/app/src-tauri/{src/lib.rs,tauri.conf.json,.gitignore}`, `apps/app/standalone-dist/index.html`, `apps/app/package.json`, `apps/app/app/index.tsx`.
+- Stato: completato per macOS. Prodotti `Tako.app` (545M) + `Tako_0.1.0_aarch64.dmg` (181M). Verificato: server gira DALLA .app, endpoint 200, login 200, JWT auto-provisionato.
+- Note: app NON firmata (Gatekeeper blocca se scaricata → `xattr -cr Tako.app` o destro→Apri). Restano firma/notarizzazione + target Windows/Linux (F4.2) e onboarding-gate (F3b.2).
