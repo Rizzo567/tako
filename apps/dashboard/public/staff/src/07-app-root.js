@@ -7,19 +7,40 @@ function save(k, v) { try { localStorage.setItem("tako-dash-" + k, v); } catch (
 
 const HEX2BRAND = Object.fromEntries(Object.entries(BRAND_PALETTES).map(([k, p]) => [p.brand.toLowerCase(), k]));
 
-/* ── schermata login (on-brand, minimale) ── */
+/* ── slug url-safe dal nome ristorante (per /auth/register) ── */
+function slugifyName(s) {
+  const base = (s || "").toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return base.length >= 2 ? base : "ristorante-" + Math.floor(1000 + Math.random() * 9000);
+}
+
+/* ── schermata accesso/registrazione (on-brand, minimale) ── */
 function Login({ onDone }) {
+  const [mode, setMode] = useState("login");          // "login" | "register"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
+  const [name, setName] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const isReg = mode === "register";
   const submit = async (e) => {
-    e.preventDefault(); setErr(""); setBusy(true);
-    try { const d = await TakoAPI.post("/auth/login", { email: email.trim(), password }); onDone(d); }
-    catch (ex) { setErr(ex.status === 429 ? "Troppi tentativi, riprova tra qualche minuto." : "Email o password non validi."); }
-    finally { setBusy(false); }
+    e.preventDefault(); setErr("");
+    if (isReg && password.length < 8) { setErr("La password deve avere almeno 8 caratteri."); return; }
+    setBusy(true);
+    try {
+      const d = isReg
+        ? await TakoAPI.post("/auth/register", { restaurantName: restaurantName.trim(), restaurantSlug: slugifyName(restaurantName), name: name.trim(), email: email.trim(), password })
+        : await TakoAPI.post("/auth/login", { email: email.trim(), password });
+      onDone(d);
+    } catch (ex) {
+      if (isReg) setErr(ex.message && ex.status !== 500 ? ex.message : "Registrazione non riuscita. Controlla i dati o prova un'altra email.");
+      else setErr(ex.status === 429 ? "Troppi tentativi, riprova tra qualche minuto." : "Email o password non validi.");
+    } finally { setBusy(false); }
   };
   const p = BRAND_PALETTES.arancione;
+  const inp = { width: "100%", margin: "6px 0 14px", padding: "11px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" };
+  const lab = { fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" };
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
       "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on }}>
@@ -27,19 +48,31 @@ function Login({ onDone }) {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginBottom: 22 }}>
           <img src="assets/takos/arancione/piatto.png" alt="Tako" style={{ width: 76, height: 76, objectFit: "contain" }} />
           <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 24, color: "var(--ink,#2A1F1A)" }}>Tako</div>
-          <div style={{ fontSize: 13.5, color: "var(--ink3,#888)" }}>Accedi alla dashboard</div>
+          <div style={{ fontSize: 13.5, color: "var(--ink3,#888)" }}>{isReg ? "Crea il tuo ristorante" : "Accedi alla dashboard"}</div>
         </div>
-        <label style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" }}>Email</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoFocus required
-          style={{ width: "100%", margin: "6px 0 14px", padding: "11px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" }} />
-        <label style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" }}>Password</label>
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required
-          style={{ width: "100%", margin: "6px 0 6px", padding: "11px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" }} />
+        {isReg && (
+          <>
+            <label style={lab}>Nome del ristorante</label>
+            <input value={restaurantName} onChange={(e) => setRestaurantName(e.target.value)} type="text" autoFocus required minLength={2} style={inp} />
+            <label style={lab}>Il tuo nome</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} type="text" required minLength={2} style={inp} />
+          </>
+        )}
+        <label style={lab}>Email</label>
+        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoFocus={!isReg} required style={inp} />
+        <label style={lab}>Password</label>
+        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required minLength={isReg ? 8 : undefined} placeholder={isReg ? "almeno 8 caratteri" : undefined} style={{ ...inp, marginBottom: 6 }} />
         {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 13, margin: "8px 0" }}>{err}</div>}
         <button type="submit" disabled={busy}
           style={{ width: "100%", marginTop: 14, padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer", opacity: busy ? .6 : 1 }}>
-          {busy ? "Accesso…" : "Entra"}
+          {busy ? (isReg ? "Creazione…" : "Accesso…") : (isReg ? "Crea ristorante" : "Entra")}
         </button>
+        <div style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "var(--ink3,#888)" }}>
+          {isReg ? "Hai già un account? " : "Primo accesso? "}
+          <a href="#" onClick={(e) => { e.preventDefault(); setErr(""); setMode(isReg ? "login" : "register"); }} style={{ color: "var(--brand)", fontWeight: 700, textDecoration: "none" }}>
+            {isReg ? "Accedi" : "Registra il tuo ristorante"}
+          </a>
+        </div>
       </form>
     </div>
   );
