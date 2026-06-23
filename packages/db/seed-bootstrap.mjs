@@ -4,7 +4,7 @@
 import postgres from 'postgres'
 import bcrypt from 'bcryptjs'
 
-const sql = postgres('postgresql://tako:tako@localhost:5432/takodb')
+const sql = postgres(process.env.DATABASE_URL ?? 'postgresql://tako:tako@localhost:5432/takodb')
 
 const NINO = 'd1b96b1b-e4d4-4a64-bb8f-5f6f36d061fa'
 const PIZZA = '96ad8f24-9cf8-45b6-9ff4-ea6d925960ad'
