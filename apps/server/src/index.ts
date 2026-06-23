@@ -24,6 +24,8 @@ import { uploadRoutes } from './routes/uploads.js'
 import { staffRoutes } from './routes/staff.js'
 import { insightsRoutes } from './routes/insights.js'
 import { printRoutes } from './routes/print.js'
+import { systemRoutes } from './routes/system.js'
+import { startMdns } from './lib/mdns.js'
 
 const PORT = Number(process.env['PORT'] ?? 3001)
 const JWT_SECRET = process.env['JWT_SECRET']
@@ -117,6 +119,7 @@ await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
 await fastify.register(staffRoutes, { prefix: '/api/staff' })
 await fastify.register(insightsRoutes, { prefix: '/api/insights' })
 await fastify.register(printRoutes, { prefix: '/api/print' })
+await fastify.register(systemRoutes, { prefix: '/api/system' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
@@ -130,6 +133,8 @@ setupSocketHandlers(io)
 try {
   await fastify.listen({ port: PORT, host: '0.0.0.0' })
   console.log(`Tako server running on http://0.0.0.0:${PORT}`)
+  // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
+  startMdns()
 } catch (err) {
   console.error(err)
   process.exit(1)
