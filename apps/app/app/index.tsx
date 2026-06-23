@@ -6,13 +6,14 @@ import { WebView } from 'react-native-webview'
 // prototipo, collegata al backend) servita dal server Tako sulla rete locale.
 // Stessa identica UI del desktop (Tauri punta allo stesso URL).
 //
-// Su simulatore/stesso Mac va bene `localhost`. Su un telefono vero serve l'IP LAN
-// del mini-PC che fa girare Tako: impostalo in app.json -> expo.extra.serverUrl
-// (es. "http://192.168.1.34:3000") oppure via env EXPO_PUBLIC_SERVER_URL.
+// L'app DESKTOP (Tauri) è autosufficiente e serve Tako su :4317. Un telefono/tablet
+// non può ospitare Postgres: è per forza un thin-client verso l'host. Default a
+// tako.local:4317 (mDNS dell'host); override con app.json -> expo.extra.serverUrl
+// o env EXPO_PUBLIC_SERVER_URL se serve un IP specifico.
 const SERVER_URL =
   (Constants.expoConfig?.extra as any)?.serverUrl ||
   process.env.EXPO_PUBLIC_SERVER_URL ||
-  'http://localhost:3000'
+  'http://tako.local:4317'
 
 const STAFF_URL = `${SERVER_URL.replace(/\/$/, '')}/staff/index.html`
 
