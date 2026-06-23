@@ -10,7 +10,6 @@ import { resolve, dirname } from 'path'
 import { mkdirSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { Server as SocketServer } from 'socket.io'
-import { maybeStartEmbeddedDb } from '@tako/db/embedded'
 import { setupSocketHandlers } from './socket/handlers.js'
 import { authRoutes } from './routes/auth.js'
 import { restaurantRoutes } from './routes/restaurants.js'
@@ -35,10 +34,6 @@ if (process.env['NODE_ENV'] === 'production' && JWT_SECRET.length < 32) {
   throw new Error('JWT_SECRET deve essere lungo almeno 32 caratteri in produzione')
 }
 
-// DB embedded: con EMBEDDED_DB=1 avvia Postgres portatile + migrazioni PRIMA di
-// servire (così la prima query trova il DB pronto). No-op se si usa un DB esterno.
-await maybeStartEmbeddedDb()
-
 const fastify = Fastify({ logger: { level: 'error' } })
 
 // Security headers. Da quando il server serve anche la dashboard staff (stessa
@@ -62,18 +57,10 @@ await fastify.register(helmet, {
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 })
 
-// CORS — in dev riflette qualsiasi origine (così l'app Expo web/desktop su
-// :8081 e i dispositivi in LAN possono accedere). In produzione: solo origini note.
-const corsDev = process.env['NODE_ENV'] !== 'production'
-await fastify.register(cors, {
-  origin: corsDev ? true : [
-    'http://localhost:3000',
-    'http://localhost:3002',
-    process.env['DASHBOARD_URL'] ?? 'http://localhost:3000',
-    process.env['CLIENT_BASE_URL'] ?? 'http://localhost:3002',
-  ],
-  credentials: true,
-})
+// CORS — Tako è un'appliance locale: il server È l'origine di tutti i client
+// (dashboard same-origin, tablet/telefoni in LAN via tako.local o IP). Riflette
+// l'origine con credenziali; la portata resta limitata dalla rete locale/firewall.
+await fastify.register(cors, { origin: true, credentials: true })
 
 await fastify.register(jwt, { secret: JWT_SECRET })
 await fastify.register(cookie, { secret: JWT_SECRET })
@@ -134,15 +121,8 @@ await fastify.register(printRoutes, { prefix: '/api/print' })
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3002',
-  process.env['DASHBOARD_URL'] ?? 'http://localhost:3000',
-  process.env['CLIENT_BASE_URL'] ?? 'http://localhost:3002',
-]
-
 export const io = new SocketServer(fastify.server, {
-  cors: { origin: corsDev ? true : allowedOrigins, methods: ['GET', 'POST'], credentials: true },
+  cors: { origin: true, methods: ['GET', 'POST'], credentials: true },
   pingTimeout: 60000,
 })
 setupSocketHandlers(io)

@@ -29,7 +29,9 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   if (process.env['EMBEDDED_DB'] !== '1') return
   if (instance) return
 
-  const port = Number(process.env['PGPORT'] ?? 5432)
+  // Porta Tako-specifica di default: non si scontra con altri Postgres su 5432.
+  // Irrilevante per i client perché qui sotto impostiamo DATABASE_URL esplicitamente.
+  const port = Number(process.env['PGPORT'] ?? 54317)
   const user = process.env['PGUSER'] ?? 'tako'
   const password = process.env['PGPASSWORD'] ?? 'tako'
   const database = process.env['PGDATABASE'] ?? 'takodb'

@@ -40,7 +40,7 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
             match app.path().resource_dir() {
                 Ok(dir) => {
                     let mut c = Command::new("node");
-                    c.arg(dir.join("server").join("index.js"));
+                    c.arg(dir.join("server").join("bootstrap.js"));
                     c
                 }
                 Err(_) => return None,
