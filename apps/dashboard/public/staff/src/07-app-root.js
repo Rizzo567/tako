@@ -171,6 +171,7 @@ function App({ session }) {
     case "insights": Screen = <ScreenInsights key={"insights" + dataVersion} mobile={mobile} />; break;
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
     case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} brand={brand} setBrand={onSetBrand} settings={settings} setSettings={onSaveSettings} />; break;
+    case "collega": Screen = <ScreenCollega mobile={mobile} />; break;
     default: Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} />;
   }
 

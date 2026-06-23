@@ -12,6 +12,7 @@ const NAV = [
     { id: "sala", label: "Sala Live", icon: "map" },
     { id: "tavoli", label: "Gestione Tavoli", icon: "table" },
     { id: "qr", label: "QR Codes", icon: "qr" },
+    { id: "collega", label: "Collega dispositivi", icon: "qr" },
   ]},
   { group: "Gestione", items: [
     { id: "menu", label: "Menu", icon: "menu" },

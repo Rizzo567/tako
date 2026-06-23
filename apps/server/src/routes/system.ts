@@ -11,15 +11,18 @@ export const systemRoutes: FastifyPluginAsync = async (fastify) => {
     const primary = ips[0] ? `http://${ips[0]}:${port}` : `http://localhost:${port}`
     const dashboard = `${primary}/staff/index.html`
     const qrDataUrl = await QRCode.toDataURL(dashboard, { margin: 1, width: 220 })
+    // Envelope { data } come le altre route (TakoAPI scarta il wrapper).
     return {
-      port,
-      lanIPs: ips,
-      urls: {
-        primary,
-        dashboard,
-        mdns: `http://tako.local:${port}`,
+      data: {
+        port,
+        lanIPs: ips,
+        urls: {
+          primary,
+          dashboard,
+          mdns: `http://tako.local:${port}`,
+        },
+        qrDataUrl,
       },
-      qrDataUrl,
     }
   })
 }

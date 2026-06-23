@@ -765,4 +765,46 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
   );
 }
 
-Object.assign(window, { ScreenMenu, ScreenStatistiche, ScreenInsights, ScreenInventario, ScreenStaff, ScreenImpostazioni });
+/* ═══════════════════ COLLEGA DISPOSITIVI ═══════════════════ */
+/* Mostra a quale indirizzo i tablet/telefoni dello staff si collegano (mDNS +
+   IP LAN) e un QR pronto. Dati da GET /api/system/info. */
+function CopyRow({ label, value }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+      <span style={{ fontSize: 12, color: "var(--ink-3,#999)", minWidth: 70 }}>{label}</span>
+      <code style={{ fontSize: 13.5, fontWeight: 700, background: "var(--sunken,#f6f3ef)", padding: "5px 9px", borderRadius: 8 }}>{value}</code>
+      <Btn kind="soft" size="sm" onClick={() => { try { navigator.clipboard.writeText(value); toast("Copiato", { type: "ok" }); } catch (_) {} }}>Copia</Btn>
+    </div>
+  );
+}
+function ScreenCollega({ mobile }) {
+  const [info, setInfo] = useState(null);
+  const [err, setErr] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    TakoAPI.get("/system/info").then((d) => { if (alive) setInfo(d); }).catch(() => { if (alive) setErr(true); });
+    return () => { alive = false; };
+  }, []);
+  return (
+    <ScreenScroll mobile={mobile}>
+      <PageHead mobile={mobile} tako="serve" title="Collega dispositivi" sub="Apri Tako sui tablet e telefoni dello staff" />
+      <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580 }}>
+        {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 14 }}>Info non disponibili. Server raggiungibile?</div>}
+        {!err && !info && <div style={{ color: "var(--ink-2)", fontSize: 14 }}>Carico…</div>}
+        {info && (
+          <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 22, alignItems: mobile ? "stretch" : "center" }}>
+            {info.qrDataUrl && <img src={info.qrDataUrl} alt="QR collega" width={200} height={200} style={{ alignSelf: "center", borderRadius: 14, border: "1px solid var(--hairline,#eee)" }} />}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 14, minWidth: 0 }}>
+              <div>Sullo stesso WiFi, apri nel browser del dispositivo:</div>
+              {info.urls && info.urls.mdns && <CopyRow label="Indirizzo" value={info.urls.mdns} />}
+              {(info.lanIPs || []).map((ip) => <CopyRow key={ip} label="oppure IP" value={`http://${ip}:${info.port}`} />)}
+              <div style={{ fontSize: 12.5, color: "var(--ink-2)" }}>Scansiona il QR per aprire la dashboard. I clienti invece usano il QR del tavolo.</div>
+            </div>
+          </div>
+        )}
+      </Card>
+    </ScreenScroll>
+  );
+}
+
+Object.assign(window, { ScreenMenu, ScreenStatistiche, ScreenInsights, ScreenInventario, ScreenStaff, ScreenImpostazioni, ScreenCollega });
