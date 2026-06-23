@@ -6,9 +6,11 @@ import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 import helmet from '@fastify/helmet'
 import fastifyStatic from '@fastify/static'
-import { resolve } from 'path'
-import { mkdirSync } from 'fs'
+import { resolve, dirname } from 'path'
+import { mkdirSync, existsSync } from 'fs'
+import { fileURLToPath } from 'url'
 import { Server as SocketServer } from 'socket.io'
+import { maybeStartEmbeddedDb } from '@tako/db/embedded'
 import { setupSocketHandlers } from './socket/handlers.js'
 import { authRoutes } from './routes/auth.js'
 import { restaurantRoutes } from './routes/restaurants.js'
@@ -33,20 +35,28 @@ if (process.env['NODE_ENV'] === 'production' && JWT_SECRET.length < 32) {
   throw new Error('JWT_SECRET deve essere lungo almeno 32 caratteri in produzione')
 }
 
+// DB embedded: con EMBEDDED_DB=1 avvia Postgres portatile + migrazioni PRIMA di
+// servire (così la prima query trova il DB pronto). No-op se si usa un DB esterno.
+await maybeStartEmbeddedDb()
+
 const fastify = Fastify({ logger: { level: 'error' } })
 
-// Security headers. CSP su misura per un'API: nessuna sorgente di default, solo
-// immagini self+data (per /uploads). Niente upgrade-insecure-requests (romperebbe
-// l'http locale). CORP cross-origin così le app Next (origine diversa) caricano le
-// immagini di /uploads.
+// Security headers. Da quando il server serve anche la dashboard staff (stessa
+// origine), la CSP deve permettere alla SPA di girare: script self + inline/eval
+// (Babel-in-browser), stili inline, immagini data/blob, connessioni ws per il
+// realtime. Threat model locale (LAN, stessa origine). Le risposte API restano JSON.
 await fastify.register(helmet, {
   contentSecurityPolicy: {
     useDefaults: false,
     directives: {
-      defaultSrc: ["'none'"],
-      imgSrc: ["'self'", 'data:'],
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'blob:'],
+      fontSrc: ["'self'", 'data:'],
+      connectSrc: ["'self'", 'ws:', 'wss:', 'http:', 'https:'],
       frameAncestors: ["'none'"],
-      baseUri: ["'none'"],
+      baseUri: ["'self'"],
     },
   },
   crossOriginResourcePolicy: { policy: 'cross-origin' },
@@ -72,6 +82,22 @@ await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
 const UPLOADS_DIR = resolve(process.env['UPLOADS_DIR'] ?? './uploads')
 mkdirSync(UPLOADS_DIR, { recursive: true })
 await fastify.register(fastifyStatic, { root: UPLOADS_DIR, prefix: '/uploads/', decorateReply: false })
+
+// Dashboard staff statica servita DALLO STESSO server. Same-origin: /api, /socket.io
+// e /uploads sono sullo stesso host → niente reverse-proxy/rewrite Next. Nel bundle
+// desktop STAFF_DIR punta alle risorse impacchettate; in dev al sorgente dashboard.
+const currentDir = dirname(fileURLToPath(import.meta.url))
+const STAFF_DIR = process.env['STAFF_DIR']
+  ? resolve(process.env['STAFF_DIR'])
+  : resolve(currentDir, '../../dashboard/public/staff')
+if (existsSync(STAFF_DIR)) {
+  await fastify.register(fastifyStatic, { root: STAFF_DIR, prefix: '/staff/', decorateReply: false })
+  // La root manda alla dashboard (la stessa UX del Next shell, ora senza Next).
+  fastify.get('/', async (_req, reply) => reply.redirect('/staff/index.html'))
+  console.log(`Dashboard staff servita da ${STAFF_DIR} su /staff/`)
+} else {
+  console.warn(`STAFF_DIR non trovato (${STAFF_DIR}); dashboard statica non servita.`)
+}
 
 // Rate limiting globale. In dev il loopback (test, dashboard locale, /health) è
 // esentato: il limite per-IP serve contro abusi esterni, non contro la macchina
