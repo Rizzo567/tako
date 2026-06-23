@@ -10,7 +10,6 @@
     "windows": [
       {
         "title": "",
-        "url": "http://localhost:4317/staff/index.html",
         "width": 1280,
         "height": 840,
         "minWidth": 900,
@@ -29,6 +28,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "resources": ["resources/server/**/*"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

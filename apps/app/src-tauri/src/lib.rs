@@ -25,7 +25,8 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
 
     let mut command = match cmd_str {
         Some(line) => {
-            // "programma arg1 arg2 ..." — split su spazi (sufficiente per i nostri casi).
+            // DEV: "programma arg1 arg2 ..." iniettato dallo script `desktop`
+            // (es. node_modules/.bin/tsx src/bootstrap.ts), eseguito in TAKO_SERVER_CWD.
             let mut parts = line.split_whitespace();
             let prog = parts.next().unwrap_or("node").to_string();
             let mut c = Command::new(prog);
@@ -35,16 +36,13 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
             c
         }
         None => {
-            // Layout bundle (F4): risorsa "server/index.js" eseguita con node.
-            // Finché il packaging non è pronto, senza TAKO_SERVER_CMD non si avvia nulla.
-            match app.path().resource_dir() {
-                Ok(dir) => {
-                    let mut c = Command::new("node");
-                    c.arg(dir.join("server").join("bootstrap.js"));
-                    c
-                }
-                Err(_) => return None,
-            }
+            // BUNDLE: node impacchettato + server.mjs dalle risorse (F4).
+            let res = app.path().resource_dir().ok()?;
+            let server_dir = res.join("resources").join("server");
+            let node_bin = server_dir.join(if cfg!(windows) { "node.exe" } else { "node" });
+            let mut c = Command::new(node_bin);
+            c.arg(server_dir.join("server.mjs"));
+            c
         }
     };
 
@@ -54,19 +52,20 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
     command
         .env("EMBEDDED_DB", "1")
         .env("PORT", TAKO_PORT)
-        .env(
-            "JWT_SECRET",
-            std::env::var("JWT_SECRET")
-                .unwrap_or_else(|_| "tako-local-dev-secret-change-me-please".into()),
-        );
+        .env("NODE_ENV", "production");
+
+    // Dati scrivibili (DB, upload, segreto) in app-data utente, fuori dal bundle.
+    if let Ok(data) = app.path().app_data_dir() {
+        let _ = std::fs::create_dir_all(&data);
+        command
+            .env("TAKO_HOME", &data)
+            .env("PGDATA_DIR", data.join("pgdata"))
+            .env("UPLOADS_DIR", data.join("uploads"));
+    }
 
     match command.spawn() {
         Ok(child) => {
-            log::info!(
-                "server Tako avviato (pid {}) su porta {}",
-                child.id(),
-                TAKO_PORT
-            );
+            log::info!("server Tako avviato (pid {}) su porta {}", child.id(), TAKO_PORT);
             Some(child)
         }
         Err(e) => {

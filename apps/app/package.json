@@ -44,7 +44,8 @@
     "export:web": "expo export --platform web",
     "tauri": "tauri",
     "desktop": "TAKO_SERVER_CMD=\"node_modules/.bin/tsx src/bootstrap.ts\" TAKO_SERVER_CWD=\"../server\" tauri dev",
-    "desktop:build": "tauri build"
+    "bundle:server": "node ../../scripts/build-server-bundle.mjs",
+    "desktop:build": "node ../../scripts/build-server-bundle.mjs && tauri build"
   },
   "private": true
 }

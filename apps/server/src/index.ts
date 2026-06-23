@@ -27,16 +27,23 @@ import { printRoutes } from './routes/print.js'
 import { systemRoutes } from './routes/system.js'
 import { startMdns } from './lib/mdns.js'
 
-const PORT = Number(process.env['PORT'] ?? 3001)
-const JWT_SECRET = process.env['JWT_SECRET']
-if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
-// Lo stesso segreto firma sessioni staff, JWT tavolo e cookie firmati: un valore
-// debole permette il forging. In produzione esigi ≥32 caratteri.
-if (process.env['NODE_ENV'] === 'production' && JWT_SECRET.length < 32) {
-  throw new Error('JWT_SECRET deve essere lungo almeno 32 caratteri in produzione')
-}
+// Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
+// dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
+export let io: SocketServer
 
-const fastify = Fastify({ logger: { level: 'error' } })
+// Avvio del server. È una FUNZIONE (non codice top-level) così bootstrap.ts può
+// avviare prima il DB e poi chiamarla, con import statici (bundle-friendly).
+export async function startServer(): Promise<void> {
+  const PORT = Number(process.env['PORT'] ?? 3001)
+  const JWT_SECRET = process.env['JWT_SECRET']
+  if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
+  // Lo stesso segreto firma sessioni staff, JWT tavolo e cookie firmati: un valore
+  // debole permette il forging. In produzione esigi ≥32 caratteri.
+  if (process.env['NODE_ENV'] === 'production' && JWT_SECRET.length < 32) {
+    throw new Error('JWT_SECRET deve essere lungo almeno 32 caratteri in produzione')
+  }
+
+  const fastify = Fastify({ logger: { level: 'error' } })
 
 // Security headers. Da quando il server serve anche la dashboard staff (stessa
 // origine), la CSP deve permettere alla SPA di girare: script self + inline/eval
@@ -76,9 +83,14 @@ await fastify.register(fastifyStatic, { root: UPLOADS_DIR, prefix: '/uploads/', 
 // e /uploads sono sullo stesso host → niente reverse-proxy/rewrite Next. Nel bundle
 // desktop STAFF_DIR punta alle risorse impacchettate; in dev al sorgente dashboard.
 const currentDir = dirname(fileURLToPath(import.meta.url))
-const STAFF_DIR = process.env['STAFF_DIR']
-  ? resolve(process.env['STAFF_DIR'])
-  : resolve(currentDir, '../../dashboard/public/staff')
+// Candidati in ordine: env esplicito → risorsa accanto al server (bundle desktop)
+// → sorgente dashboard (dev). Il primo che esiste vince.
+const staffCandidates = [
+  process.env['STAFF_DIR'],
+  resolve(currentDir, 'staff'),
+  resolve(currentDir, '../../dashboard/public/staff'),
+].filter((p): p is string => !!p).map((p) => resolve(p))
+const STAFF_DIR = staffCandidates.find((p) => existsSync(p)) ?? staffCandidates[staffCandidates.length - 1]!
 if (existsSync(STAFF_DIR)) {
   await fastify.register(fastifyStatic, { root: STAFF_DIR, prefix: '/staff/', decorateReply: false })
   // La root manda alla dashboard (la stessa UX del Next shell, ora senza Next).
@@ -124,18 +136,19 @@ await fastify.register(systemRoutes, { prefix: '/api/system' })
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
 
-export const io = new SocketServer(fastify.server, {
-  cors: { origin: true, methods: ['GET', 'POST'], credentials: true },
-  pingTimeout: 60000,
-})
-setupSocketHandlers(io)
+  io = new SocketServer(fastify.server, {
+    cors: { origin: true, methods: ['GET', 'POST'], credentials: true },
+    pingTimeout: 60000,
+  })
+  setupSocketHandlers(io)
 
-try {
-  await fastify.listen({ port: PORT, host: '0.0.0.0' })
-  console.log(`Tako server running on http://0.0.0.0:${PORT}`)
-  // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
-  startMdns()
-} catch (err) {
-  console.error(err)
-  process.exit(1)
+  try {
+    await fastify.listen({ port: PORT, host: '0.0.0.0' })
+    console.log(`Tako server running on http://0.0.0.0:${PORT}`)
+    // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
+    startMdns()
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
 }
