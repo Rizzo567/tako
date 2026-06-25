@@ -777,6 +777,76 @@ function CopyRow({ label, value }) {
     </div>
   );
 }
+/* ── Pairing dell'appliance col control-plane cloud (account owner del sito) ──
+   Mostra lo stato; se non accoppiata e il cloud è configurato, permette di inserire
+   il device code (mostrato sul sito) + impostare la password owner LOCALE per
+   l'accesso offline. SEC-001: la password cloud non transita mai qui. */
+function CloudPairing({ mobile }) {
+  const [st, setSt] = useState(null);      // stato pairing dal backend
+  const [code, setCode] = useState("");
+  const [pw, setPw] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const [ok, setOk] = useState("");
+
+  const refresh = async () => { try { setSt(await TakoAPI.get("/setup/status")); } catch (_) { setSt({ configured: false }); } };
+  useEffect(() => { refresh(); }, []);
+
+  const submit = async (e) => {
+    e.preventDefault(); setErr(""); setOk("");
+    if (pw.length < 8) { setErr("La password locale deve avere almeno 8 caratteri."); return; }
+    setBusy(true);
+    try {
+      const d = await TakoAPI.post("/setup/pair", { code: code.trim(), localPassword: pw });
+      setOk(`Account ${d.owner?.email || ""} collegato. Ora puoi accedere offline con la password impostata.`);
+      setCode(""); setPw(""); await refresh();
+    } catch (ex) {
+      setErr(ex.message || "Pairing non riuscito. Controlla il codice e riprova.");
+    } finally { setBusy(false); }
+  };
+
+  const unpair = async () => {
+    if (!confirm("Scollegare questo locale dall'account cloud? Dovrai ri-accoppiarlo per l'accesso owner.")) return;
+    setBusy(true);
+    try { await TakoAPI.post("/setup/unpair"); await refresh(); toast("Locale scollegato", { type: "ok" }); }
+    catch (_) { toast("Errore nello scollegamento", { type: "error" }); }
+    finally { setBusy(false); }
+  };
+
+  if (!st) return null;
+  // Cloud non configurato su questa appliance: niente sezione (modo local puro).
+  if (!st.configured) return null;
+
+  const inp = { width: "100%", margin: "6px 0 12px", padding: "10px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" };
+  const lab = { fontSize: 12.5, fontWeight: 700, color: "var(--ink-2,#555)" };
+
+  return (
+    <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580, marginBottom: 18 }}>
+      <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 4 }}>Account proprietario (cloud)</div>
+      <div style={{ fontSize: 13, color: "var(--ink-2,#888)", marginBottom: 16 }}>
+        Collega questo locale al tuo account Tako del sito per accedere come titolare, anche offline.
+      </div>
+      {st.paired ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ fontSize: 14 }}>Collegato a <b>{st.ownerEmail || "—"}</b>{st.ownerName ? ` (${st.ownerName})` : ""}.</div>
+          <div style={{ fontSize: 12.5, color: "var(--ink-2,#888)" }}>Puoi accedere offline con la password owner locale impostata al pairing.</div>
+          <div><Btn kind="soft" size="sm" disabled={busy} onClick={unpair}>Scollega questo locale</Btn></div>
+        </div>
+      ) : (
+        <form onSubmit={submit}>
+          <label style={lab}>Codice di collegamento (dal sito Tako)</label>
+          <input value={code} onChange={(e) => setCode(e.target.value)} type="text" required minLength={8} placeholder="incolla qui il codice" style={inp} />
+          <label style={lab}>Password owner per l'accesso offline</label>
+          <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" required minLength={8} placeholder="almeno 8 caratteri" style={inp} />
+          {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 13, margin: "4px 0 8px" }}>{err}</div>}
+          <Btn kind="brand" disabled={busy} onClick={submit}>{busy ? "Collego…" : "Collega account"}</Btn>
+        </form>
+      )}
+      {ok && <div style={{ color: "var(--ok,#2F7D58)", fontSize: 13, marginTop: 10 }}>{ok}</div>}
+    </Card>
+  );
+}
+
 function ScreenCollega({ mobile }) {
   const [info, setInfo] = useState(null);
   const [err, setErr] = useState(false);
@@ -788,6 +858,7 @@ function ScreenCollega({ mobile }) {
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="serve" title="Collega dispositivi" sub="Apri Tako sui tablet e telefoni dello staff" />
+      <CloudPairing mobile={mobile} />
       <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580 }}>
         {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 14 }}>Info non disponibili. Server raggiungibile?</div>}
         {!err && !info && <div style={{ color: "var(--ink-2)", fontSize: 14 }}>Carico…</div>}

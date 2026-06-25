@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url'
 import { Server as SocketServer } from 'socket.io'
 import { setupSocketHandlers } from './socket/handlers.js'
 import { authRoutes } from './routes/auth.js'
+import { setupRoutes, startHeartbeatLoop } from './routes/setup.js'
 import { restaurantRoutes } from './routes/restaurants.js'
 import { menuRoutes } from './routes/menu.js'
 import { tableRoutes } from './routes/tables.js'
@@ -129,6 +130,8 @@ fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString()
 
 // Routes
 await fastify.register(authRoutes, { prefix: '/api/auth' })
+// Pairing appliance↔cloud (claim + credenziale owner offline). Solo modo local.
+await fastify.register(setupRoutes, { prefix: '/api/setup' })
 await fastify.register(restaurantRoutes, { prefix: '/api/restaurants' })
 await fastify.register(menuRoutes, { prefix: '/api/menus' })
 await fastify.register(tableRoutes, { prefix: '/api/tables' })
@@ -157,6 +160,8 @@ await fastify.ready()
     console.log(`Tako server running on http://0.0.0.0:${PORT}`)
     // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
     startMdns()
+    // Heartbeat periodica verso il cloud (best-effort, no-op se CLOUD_BASE_URL assente).
+    startHeartbeatLoop(fastify)
   } catch (err) {
     console.error(err)
     process.exit(1)
