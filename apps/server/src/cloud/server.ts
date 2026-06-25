@@ -8,8 +8,10 @@ import rateLimit from '@fastify/rate-limit'
 import helmet from '@fastify/helmet'
 import { Redis } from 'ioredis'
 import { cloudAuthRoutes } from '../routes/cloud/auth.js'
+import { cloudOAuthRoutes } from '../routes/cloud/oauth.js'
 import { cloudPairRoutes } from '../routes/cloud/pair.js'
 import { allowedOrigins, cookieMode } from './config.js'
+import { validateEmailConfig } from './email.js'
 
 export async function startCloudServer(): Promise<void> {
   const PORT = Number(process.env['PORT'] ?? 3001)
@@ -21,6 +23,9 @@ export async function startCloudServer(): Promise<void> {
   if (process.env['NODE_ENV'] === 'production' && SESSION_SECRET.length < 32) {
     throw new Error('SESSION_SECRET deve essere lungo almeno 32 caratteri in produzione')
   }
+
+  // Fail-fast sulla config email: se EMAIL_TRANSPORT=resend la RESEND_API_KEY è obbligatoria.
+  validateEmailConfig()
 
   // trustProxy: il cloud sta DIETRO un reverse proxy (Vercel/Fly/Nginx). req.ip va
   // derivato dall'header X-Forwarded-For SOLO se il proxy è fidato. TRUST_PROXY può
@@ -118,6 +123,10 @@ export async function startCloudServer(): Promise<void> {
   })
 
   await fastify.register(cloudAuthRoutes, { prefix: '/api/auth' })
+  // OAuth montato sotto lo stesso prefix /api/auth (start path /google,/github →
+  // /api/auth/google, callback → /api/auth/google/callback). Si registra solo se i
+  // provider sono configurati (client id/secret in env), altrimenti è un no-op.
+  await fastify.register(cloudOAuthRoutes, { prefix: '/api/auth' })
   await fastify.register(cloudPairRoutes, { prefix: '/api/pair' })
 
   try {

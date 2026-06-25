@@ -14,6 +14,18 @@ export type AuditEvent =
   | 'password_reset'
   | 'email_verified'
   | 'verification_resent'
+  // OAuth (Fase 2b)
+  | 'oauth_login_success'
+  | 'oauth_account_created'
+  | 'oauth_account_linked'
+  | 'oauth_link_refused'
+  | 'oauth_state_invalid'
+  | 'oauth_email_unverified'
+  // Pairing appliance↔cloud (Fase 2b)
+  | 'pair_code_generated'
+  | 'pair_claimed'
+  | 'pair_claim_refused'
+  | 'pair_heartbeat'
 
 interface AuditInput {
   event: AuditEvent

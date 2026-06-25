@@ -31,6 +31,33 @@ export function emailFrom(): string {
   return process.env['EMAIL_FROM'] ?? 'Tako <no-reply@example.com>'
 }
 
+// ─── OAuth (Google / GitHub) ─────────────────────────────────────────────────
+// Base URL pubblica su cui rientrano i callback OAuth (es. https://api.tako.app).
+// I redirect_uri si costruiscono SOLO da qui (env fissa), mai dall'header Host (SEC-013).
+export function oauthBaseUrl(): string {
+  const v = process.env['OAUTH_BASE_URL']
+  if (!v) throw new Error('OAUTH_BASE_URL è obbligatoria per le route OAuth')
+  return v.replace(/\/+$/, '')
+}
+
+export function oauthCallbackUri(provider: 'google' | 'github'): string {
+  return `${oauthBaseUrl()}/api/auth/${provider}/callback`
+}
+
+export interface OAuthProviderConfig {
+  clientId: string
+  clientSecret: string
+}
+
+/** Credenziali di un provider OAuth da env; null se non configurato (route disabilitata). */
+export function oauthProviderConfig(provider: 'google' | 'github'): OAuthProviderConfig | null {
+  const prefix = provider.toUpperCase()
+  const clientId = process.env[`${prefix}_CLIENT_ID`]
+  const clientSecret = process.env[`${prefix}_CLIENT_SECRET`]
+  if (!clientId || !clientSecret) return null
+  return { clientId, clientSecret }
+}
+
 // ─── Costruzione link (da env fisse, mai da Host) ────────────────────────────
 export function buildVerifyUrl(token: string): string {
   return `${siteBaseUrl()}/verify-email?token=${encodeURIComponent(token)}`

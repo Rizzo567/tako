@@ -18,24 +18,17 @@ import {
 import {
   hashToken,
   generateUrlToken,
-  generateSessionToken,
-  generateCsrfToken,
   hashPassword,
   verifyPassword,
   passwordPolicyError,
   normalizeEmail,
   EMAIL_VERIFICATION_TTL_MS,
   PASSWORD_RESET_TTL_MS,
-  SESSION_TTL_MS,
 } from '../../cloud/security.js'
+import { issueCloudSession } from '../../cloud/session.js'
 import { sendEmail, verifyEmailTemplate, resetPasswordTemplate } from '../../cloud/email.js'
 import { buildVerifyUrl, buildResetUrl, cookieMode } from '../../cloud/config.js'
-import {
-  CLOUD_SESSION_COOKIE,
-  CLOUD_CSRF_COOKIE,
-  cloudSessionCookieOptions,
-  csrfCookieOptions,
-} from '../../cloud/cookies.js'
+import { CLOUD_SESSION_COOKIE, CLOUD_CSRF_COOKIE } from '../../cloud/cookies.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
 import { audit } from '../../cloud/audit.js'
 
@@ -56,30 +49,6 @@ const resetSchema = z.object({ token: z.string().min(16).max(200), password: pas
 // Messaggio generico anti-enumeration: stessa risposta per email esistente o no.
 const GENERIC_EMAIL_SENT = {
   data: { message: 'Se l’indirizzo è registrato, riceverai un’email a breve.' },
-}
-
-// Imposta cookie di sessione (+ CSRF se crosssite) e ritorna il token opaco al client.
-async function issueSession(reply: import('fastify').FastifyReply, opts: {
-  ownerId: string
-  credentialsVersion: number
-  ip: string
-  userAgent: string | null
-}) {
-  const { token, tokenHash } = generateSessionToken()
-  const expiresAt = new Date(Date.now() + SESSION_TTL_MS)
-  await cloudDb.insert(cloudSessions).values({
-    ownerId: opts.ownerId,
-    tokenHash,
-    expiresAt,
-    userAgent: opts.userAgent,
-    ip: opts.ip,
-    credentialsVersion: opts.credentialsVersion,
-  })
-  reply.setCookie(CLOUD_SESSION_COOKIE, token, cloudSessionCookieOptions(Math.floor(SESSION_TTL_MS / 1000)))
-  if (cookieMode() === 'crosssite') {
-    const csrf = generateCsrfToken()
-    reply.setCookie(CLOUD_CSRF_COOKIE, csrf, csrfCookieOptions(Math.floor(SESSION_TTL_MS / 1000)))
-  }
 }
 
 // Crea un token di verifica email e invia (mock) il link. Best-effort sull'invio.
@@ -165,7 +134,7 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
       return reply.code(403).send({ error: { code: 'EMAIL_NOT_VERIFIED', message: 'Conferma la tua email per accedere.' } })
     }
 
-    await issueSession(reply, {
+    await issueCloudSession(reply, {
       ownerId: owner.id,
       credentialsVersion: owner.credentialsVersion,
       ip: req.ip,

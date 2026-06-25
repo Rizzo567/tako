@@ -1,7 +1,11 @@
-// Servizio email come INTERFACCIA (MASTER_PLAN-cloud-auth Fase 2a).
-// In Fase 2a esiste SOLO il transport `mock` (console): logga il contenuto e ritorna ok.
-// Il transport `resend` reale è Fase 2b (vedi TODO sotto).
-// Il selettore è l'env EMAIL_TRANSPORT (default 'mock').
+// Servizio email come INTERFACCIA (MASTER_PLAN-cloud-auth).
+// Due transport selezionati via env EMAIL_TRANSPORT:
+//  - 'mock' (default): logga il contenuto su console (test/dev end-to-end senza provider).
+//  - 'resend' (Fase 2b): invio reale via API Resend (RESEND_API_KEY + EMAIL_FROM).
+// In più: una quota/rate-limit LOGICA sull'invio (anti mail-bombing — §7bis) applicata a
+// monte di entrambi i transport, così Tako non può essere usato come amplificatore per
+// bombardare di email vittime terze.
+import { emailFrom } from './config.js'
 
 export interface EmailMessage {
   to: string
@@ -40,16 +44,52 @@ const mockTransport: EmailTransport = async (msg) => {
   return { ok: true, transport: 'mock' }
 }
 
-// ─── TODO Fase 2b: transport Resend ──────────────────────────────────────────
-// Implementare un `resendTransport` che usa RESEND_API_KEY e EMAIL_FROM:
-//   import { Resend } from 'resend'
-//   const resend = new Resend(process.env.RESEND_API_KEY)
-//   const { data } = await resend.emails.send({ from: EMAIL_FROM, to, subject, html })
-//   return { ok: true, transport: 'resend', id: data?.id }
-// Aggiungere `resend` come dipendenza e gestire errori/retry. Selezionare via
-// EMAIL_TRANSPORT=resend. NON loggare il body in produzione (privacy).
-const resendTransport: EmailTransport = async () => {
-  throw new Error('Transport email "resend" non implementato (Fase 2b)')
+// ─── Transport Resend (reale) ────────────────────────────────────────────────
+// Invio via API HTTP di Resend. Usiamo fetch nativo (Node 18+/20) per non aggiungere
+// dipendenze pesanti: l'endpoint è stabile e a payload semplice. La key si legge SOLO
+// da env (RESEND_API_KEY); se assente con EMAIL_TRANSPORT=resend → errore chiaro a monte
+// (validateEmailConfig). Timeout esplicito + niente leak: in caso di errore logghiamo lo
+// stato HTTP, MAI la key né il corpo dell'email (privacy/PII del destinatario).
+const RESEND_ENDPOINT = 'https://api.resend.com/emails'
+const RESEND_TIMEOUT_MS = 10_000
+
+function resendApiKey(): string {
+  const k = process.env['RESEND_API_KEY']
+  if (!k) {
+    throw new Error('RESEND_API_KEY è obbligatoria quando EMAIL_TRANSPORT=resend')
+  }
+  return k
+}
+
+const resendTransport: EmailTransport = async (msg) => {
+  const apiKey = resendApiKey()
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), RESEND_TIMEOUT_MS)
+  try {
+    const res = await fetch(RESEND_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: emailFrom(),
+        to: [msg.to],
+        subject: msg.subject,
+        html: msg.html,
+        ...(msg.text ? { text: msg.text } : {}),
+      }),
+      signal: controller.signal,
+    })
+    if (!res.ok) {
+      // NON includere il body dell'email; solo lo stato per la diagnostica.
+      throw new Error(`Resend ha risposto ${res.status}`)
+    }
+    const data = (await res.json().catch(() => ({}))) as { id?: string }
+    return { ok: true, transport: 'resend', id: data.id }
+  } finally {
+    clearTimeout(timer)
+  }
 }
 
 function selectTransport(): EmailTransport {
@@ -58,8 +98,60 @@ function selectTransport(): EmailTransport {
   return mockTransport
 }
 
-/** Invia un'email tramite il transport selezionato. Non lancia in mock. */
+/**
+ * Valida la configurazione email all'avvio del modo cloud: se EMAIL_TRANSPORT=resend
+ * la RESEND_API_KEY deve essere presente, altrimenti fail-fast con messaggio chiaro
+ * (meglio di fallire silenziosamente al primo invio). No-op per il transport mock.
+ */
+export function validateEmailConfig(): void {
+  if ((process.env['EMAIL_TRANSPORT'] ?? 'mock').toLowerCase() === 'resend') {
+    resendApiKey() // lancia se assente
+  }
+}
+
+// ─── Quota / rate-limit logico sull'invio (anti mail-bombing — §7bis) ─────────
+// Limita il numero di email che possiamo spedire a UN DATO destinatario in una
+// finestra temporale, a prescindere da quante richieste arrivano. Difende vittime
+// terze: anche se un attaccante spamma /register o /resend con l'email di un altro,
+// quell'indirizzo non riceve più di MAX_PER_WINDOW messaggi per finestra.
+// In-memory (per-istanza): sufficiente come freno anti-abuso; il rate-limit per-IP
+// condiviso (Redis) sta già davanti agli endpoint. Cleanup pigro per non crescere.
+const SEND_WINDOW_MS = 60 * 60 * 1000 // 1 ora
+const SEND_MAX_PER_WINDOW = 5
+const sendLog = new Map<string, number[]>()
+
+function quotaAllows(to: string): boolean {
+  const key = to.trim().toLowerCase()
+  const now = Date.now()
+  const recent = (sendLog.get(key) ?? []).filter((t) => now - t < SEND_WINDOW_MS)
+  if (recent.length >= SEND_MAX_PER_WINDOW) {
+    sendLog.set(key, recent)
+    return false
+  }
+  recent.push(now)
+  sendLog.set(key, recent)
+  // Cleanup pigro: ogni tanto sfoltisci le chiavi scadute per non far crescere la mappa.
+  if (sendLog.size > 5000) {
+    for (const [k, v] of sendLog) {
+      const live = v.filter((t) => now - t < SEND_WINDOW_MS)
+      if (live.length === 0) sendLog.delete(k)
+      else sendLog.set(k, live)
+    }
+  }
+  return true
+}
+
+/**
+ * Invia un'email tramite il transport selezionato.
+ * - Applica una quota per-destinatario (anti mail-bombing): oltre la soglia ritorna
+ *   `{ ok:false, transport:'throttled' }` SENZA inviare e senza lanciare.
+ * - In mock non lancia mai. In resend può lanciare su errore di rete/HTTP: i chiamanti
+ *   già fanno `.catch()` best-effort sui flussi anti-enumeration.
+ */
 export async function sendEmail(msg: EmailMessage): Promise<EmailResult> {
+  if (!quotaAllows(msg.to)) {
+    return { ok: false, transport: 'throttled' }
+  }
   const transport = selectTransport()
   return transport(msg)
 }
