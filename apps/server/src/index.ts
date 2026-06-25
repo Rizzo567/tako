@@ -26,6 +26,8 @@ import { insightsRoutes } from './routes/insights.js'
 import { printRoutes } from './routes/print.js'
 import { systemRoutes } from './routes/system.js'
 import { startMdns } from './lib/mdns.js'
+import { isCloudMode } from './cloud/config.js'
+import { startCloudServer } from './cloud/server.js'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
 // dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
@@ -34,6 +36,14 @@ export let io: SocketServer
 // Avvio del server. È una FUNZIONE (non codice top-level) così bootstrap.ts può
 // avviare prima il DB e poi chiamarla, con import statici (bundle-friendly).
 export async function startServer(): Promise<void> {
+  // Switch di modo: in TAKO_MODE=cloud montiamo il control-plane (route cloud,
+  // CORS allowlist, rate-limit Redis) e ci fermiamo qui. Il modo local (default)
+  // prosegue sotto INVARIATO.
+  if (isCloudMode()) {
+    await startCloudServer()
+    return
+  }
+
   const PORT = Number(process.env['PORT'] ?? 3001)
   const JWT_SECRET = process.env['JWT_SECRET']
   if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')

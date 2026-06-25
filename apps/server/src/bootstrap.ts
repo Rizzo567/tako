@@ -9,10 +9,14 @@ import { randomBytes } from 'node:crypto'
 import { maybeStartEmbeddedDb } from '@tako/db/embedded'
 import { startServer } from './index.js'
 
+// Modo CLOUD (control-plane): NON avvia il Postgres embedded locale e non auto-provvisiona
+// JWT_SECRET (il cloud usa SESSION_SECRET + CLOUD_DATABASE_URL gestite via env del deploy).
+const CLOUD_MODE = (process.env['TAKO_MODE'] ?? 'local').toLowerCase() === 'cloud'
+
 // Segreto JWT auto-provvisionato e persistente: l'app desktop non deve chiederlo.
 // Stabile tra i riavvii (le sessioni sopravvivono). TAKO_HOME è impostato dalla
 // shell Tauri (app-data utente); fallback ~/.tako.
-if (!process.env['JWT_SECRET']) {
+if (!CLOUD_MODE && !process.env['JWT_SECRET']) {
   const home = process.env['TAKO_HOME'] ?? join(homedir(), '.tako')
   mkdirSync(home, { recursive: true })
   const f = join(home, 'jwt-secret')
@@ -25,5 +29,5 @@ if (!process.env['JWT_SECRET']) {
   }
 }
 
-await maybeStartEmbeddedDb()
+if (!CLOUD_MODE) await maybeStartEmbeddedDb()
 await startServer()
