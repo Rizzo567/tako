@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Tako CONTROL-PLANE cloud (TAKO_MODE=cloud) — immagine di produzione.
+#
+# Distinto da apps/server/Dockerfile (appliance LOCALE): qui NON gira il Postgres
+# embedded, non si auto-provvisiona JWT_SECRET, i segreti arrivano da Fly secrets.
+#
+# NB build: @tako/db e @tako/types ESPORTANO TypeScript sorgente (vedi packages/db
+# package.json "exports": "./src/*.ts"), NON c'è un build TS→JS dei package workspace.
+# Di conseguenza il server gira con `tsx` a runtime anche in produzione (coerente con
+# apps/server/Dockerfile esistente). L'entrypoint cloud è src/cloud/entry.ts.
+#
+# Build DAL ROOT del monorepo (il context deve vedere pnpm-workspace.yaml + packages):
+#   docker build -f apps/server/deploy/Dockerfile.cloud -t tako-cloud .
+# Su Fly: fly.toml in questa cartella ha già `build.dockerfile` impostato.
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM node:20-slim AS base
+ENV NODE_ENV=production
+# pnpm via corepack (versione pinnata dal packageManager in package.json di root).
+RUN corepack enable
+WORKDIR /app
+
+# ─── deps: installa SOLO ciò che serve a @tako/server (+ workspace transitivi) ───
+FROM base AS deps
+# Manifesti workspace prima del codice → layer di install cacheabile finché i
+# package.json/lockfile non cambiano.
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY packages/db/package.json ./packages/db/package.json
+COPY packages/types/package.json ./packages/types/package.json
+COPY apps/server/package.json ./apps/server/package.json
+# `--filter @tako/server...` tira dentro anche @tako/db e @tako/types (workspace deps).
+# tsx è in devDependencies di @tako/server ma è il RUNTIME in prod → niente --prod.
+RUN pnpm install --frozen-lockfile --filter @tako/server...
+
+# ─── runtime ─────────────────────────────────────────────────────────────────
+FROM base AS runtime
+ENV TAKO_MODE=cloud \
+    PORT=3001 \
+    EMBEDDED_DB=0
+WORKDIR /app
+
+# node_modules risolti (hoisted in root + symlink workspace) dallo stage deps.
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
+# Codice sorgente: server + i package workspace consumati come .ts via tsx.
+# (.dockerignore esclude node_modules locali, .git, uploads, dist, ~/.tako, ecc.)
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY packages/db ./packages/db
+COPY packages/types ./packages/types
+COPY apps/server ./apps/server
+
+# Utente non-root: l'immagine node:* fornisce già l'utente `node` (uid 1000).
+USER node
+
+WORKDIR /app/apps/server
+EXPOSE 3001
+
+# Healthcheck applicativo: il control-plane espone GET /health (vedi cloud/server.ts).
+# Usa l'http nativo di node (niente curl nel base slim). Fallisce → container unhealthy.
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||3001)+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
+# Entrypoint cloud dedicato: NON importa @tako/db/embedded (niente embedded-postgres).
+# Env iniettate da Fly secrets / orchestratore (mai --env-file in prod).
+CMD ["pnpm", "exec", "tsx", "src/cloud/entry.ts"]

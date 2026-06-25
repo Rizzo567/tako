@@ -1,0 +1,46 @@
+# Fly.io — Tako CONTROL-PLANE cloud (TAKO_MODE=cloud).
+# Region EU (GDPR data residency, MASTER_PLAN §7bis): cdg=Parigi, fra=Francoforte.
+# Allinea la region a quella del Postgres Neon (vedi README-CLOUD-DEPLOY.md).
+#
+# Deploy dal ROOT del monorepo (il Dockerfile fa COPY di packages/* e apps/server):
+#   fly deploy -c apps/server/deploy/fly.toml
+# `app` va impostato da Manuel (o via `fly launch --no-deploy`).
+
+app = "tako-cloud"
+primary_region = "cdg"
+
+[build]
+  # Path RELATIVO al root del monorepo (= build context). NON spostare il context.
+  dockerfile = "apps/server/deploy/Dockerfile.cloud"
+
+[env]
+  # Non-segreti. I SEGRETI (SESSION_SECRET, CLOUD_DATABASE_URL, TOKEN_PEPPER,
+  # RESEND_API_KEY, *_CLIENT_SECRET, REDIS_URL) si impostano con `fly secrets set`.
+  TAKO_MODE = "cloud"
+  NODE_ENV = "production"
+  PORT = "3001"
+  EMBEDDED_DB = "0"
+  # Il control-plane sta dietro il proxy Fly (1 hop): req.ip dall'X-Forwarded-For.
+  TRUST_PROXY = "1"
+
+[http_service]
+  internal_port = 3001
+  # HTTPS forzato: il proxy Fly termina TLS e reindirizza http→https.
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  # Tieni almeno 1 macchina viva: gli endpoint auth devono rispondere subito.
+  min_machines_running = 1
+  processes = ["app"]
+
+  # Healthcheck HTTP sul control-plane (GET /health → {status:"ok", mode:"cloud"}).
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "20s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
