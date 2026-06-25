@@ -19,7 +19,7 @@ function useReveal() {
 }
 
 /* ——— Logo ——— */
-function TakoLogo({ size = 44 }) {
+function TakoLogo({ size = 44, collapseWord = false }) {
   return (
     <div className="flex items-center gap-2">
       <img
@@ -28,52 +28,193 @@ function TakoLogo({ size = 44 }) {
         style={{ width: size, height: size, objectFit: 'contain' }}
         className="logo-bob"
       />
-      <span className="font-display font-black text-2xl tracking-tight" style={{ color: 'var(--ink)' }}>Tako</span>
+      <span className={`tnav-word font-display font-black text-2xl tracking-tight ${collapseWord ? 'tnav-word-hidden' : ''}`} style={{ color: 'var(--ink)' }}>Tako</span>
     </div>
   );
 }
 
 /* ——— Sticky Navbar ——— */
+/* ——— Login modal (riquadro "Accedi") ——— */
+function LoginModal({ open, onClose, initialView = 'login' }) {
+  const [view, setView] = useState(initialView); // 'login' | 'register' | 'forgot'
+  const [sent, setSent] = useState(false);
+  useEffect(() => { if (open) { setView(initialView); setSent(false); } }, [open, initialView]);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+  }, [open, onClose]);
+  if (!open) return null;
+
+  const fieldStyle = { borderColor: 'rgba(42,31,26,.16)', background: '#FFFDFB' };
+  const Label = ({ children }) => <label className="block text-[13px] font-bold mb-1" style={{ color: 'var(--ink)' }}>{children}</label>;
+  const linkStyle = { color: 'var(--coral-deep)' };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      style={{ background: 'rgba(42,31,26,0.5)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+      onClick={onClose}
+    >
+      <div
+        className="chunky relative w-full max-w-md p-8 pop-in"
+        style={{ borderRadius: 28 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Chiudi"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full grid place-items-center text-xl leading-none border-2"
+          style={{ borderColor: 'var(--ink)', background: 'white', color: 'var(--ink)', fontWeight: 900 }}
+        >×</button>
+
+        {/* ——— LOGIN ——— */}
+        {view === 'login' && (
+          <>
+            <div className="text-center mb-6">
+              <img src="assets/tako-chef.png" alt="" className="w-20 h-20 mx-auto mb-3 logo-bob" style={{ objectFit: 'contain' }} />
+              <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>Bentornato!</h3>
+              <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>Accedi al tuo ristorante Tako</p>
+            </div>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <Label>Email</Label>
+              <input type="email" required placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+              <Label>Password</Label>
+              <input type="password" required placeholder="••••••••" className="w-full mb-2 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+              <div className="text-right mb-5">
+                <button type="button" onClick={() => { setSent(false); setView('forgot'); }} className="text-[13px] font-bold" style={linkStyle}>Password dimenticata?</button>
+              </div>
+              <button type="submit" className="btn-coral w-full py-3.5 text-lg">Accedi →</button>
+            </form>
+            <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+              Non hai un account?{' '}
+              <button type="button" onClick={() => setView('register')} className="font-bold" style={linkStyle}>Registrati ora</button>
+            </p>
+          </>
+        )}
+
+        {/* ——— REGISTER ——— */}
+        {view === 'register' && (
+          <>
+            <div className="text-center mb-6">
+              <img src="assets/tako-chef.png" alt="" className="w-20 h-20 mx-auto mb-3 logo-bob" style={{ objectFit: 'contain' }} />
+              <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>Registrati ora</h3>
+              <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>30 giorni di prova, senza carta</p>
+            </div>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <Label>Nome del ristorante</Label>
+              <input type="text" required placeholder="Trattoria da Mario" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+              <Label>Email</Label>
+              <input type="email" required placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+              <Label>Password</Label>
+              <input type="password" required placeholder="Almeno 8 caratteri" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+              <button type="submit" className="btn-coral w-full py-3.5 text-lg">Crea il mio Tako →</button>
+            </form>
+            <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+              Hai già un account?{' '}
+              <button type="button" onClick={() => setView('login')} className="font-bold" style={linkStyle}>Accedi</button>
+            </p>
+          </>
+        )}
+
+        {/* ——— FORGOT PASSWORD ——— */}
+        {view === 'forgot' && (
+          <>
+            <div className="text-center mb-6">
+              <img src="assets/tako-chef.png" alt="" className="w-20 h-20 mx-auto mb-3 logo-bob" style={{ objectFit: 'contain' }} />
+              <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>Password dimenticata</h3>
+              <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+                {sent ? 'Ti abbiamo inviato il link di reset' : 'Inserisci la tua email, ti inviamo il link'}
+              </p>
+            </div>
+            {sent ? (
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-full grid place-items-center text-3xl border-2" style={{ background: 'var(--coral-tint)', borderColor: 'var(--coral)', color: 'var(--coral-deep)', fontWeight: 900 }}>✓</div>
+                <p className="text-[15px] mb-6" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>Controlla la posta in arrivo e segui le istruzioni per reimpostare la password.</p>
+                <button type="button" onClick={() => setView('login')} className="btn-coral w-full py-3.5 text-lg">Torna all'accesso</button>
+              </div>
+            ) : (
+              <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+                <Label>Email</Label>
+                <input type="email" required placeholder="nome@ristorante.it" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                <button type="submit" className="btn-coral w-full py-3.5 text-lg">Invia il link →</button>
+              </form>
+            )}
+            <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+              <button type="button" onClick={() => setView('login')} className="font-bold" style={linkStyle}>← Torna all'accesso</button>
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+window.LoginModal = LoginModal;
+
 function Navbar({ page, setPage }) {
   const [scrolled, setScrolled] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const onScroll = () => {
+      const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      setScrolled(y > 30);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll, { capture: true });
+      document.removeEventListener('scroll', onScroll, { capture: true });
+    };
   }, []);
   const links = [
-    { id: 'home', label: 'Home' },
-    { id: 'how', label: 'Come funziona' },
-    { id: 'restaurant', label: 'Lato ristoratore' },
-    { id: 'customer', label: 'Lato cliente' },
+    { id: 'home', label: 'Home', icon: 'assets/nav/nav-home.png', anim: 'nav-bounce' },
+    { id: 'how', label: 'Come funziona', icon: 'assets/nav/nav-how.png', anim: 'nav-wiggle' },
+    { id: 'restaurant', label: 'Lato ristoratore', icon: 'assets/nav/nav-restaurant.png', anim: 'nav-tilt' },
+    { id: 'customer', label: 'Lato cliente', icon: 'assets/nav/nav-customer.png', anim: 'nav-swing' },
   ];
-  const go = (id) => (e) => { e.preventDefault(); setPage(id); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  // Cross-page aware: sulla landing setPage gestisce il routing SPA; sulle altre
+  // pagine setPage è assente e i link navigano alla landing con ?page=<id>.
+  const LANDING = 'Tako%20Landing.html';
+  const hrefFor = (id) => id === 'home' ? LANDING : (LANDING + '?page=' + id);
+  const go = (id) => (e) => {
+    if (typeof setPage === 'function') {
+      e.preventDefault();
+      setPage(id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // altrimenti lascia che l'<a href> navighi alla landing
+  };
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all ${scrolled ? 'glass py-3' : 'py-5'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#" onClick={go('home')} className="cursor-pointer"><TakoLogo /></a>
-        <nav className="hidden md:flex items-center gap-7 font-bold text-[15px]" style={{ color: 'var(--ink)' }}>
+    <>
+    <header className={`tnav fixed top-0 inset-x-0 z-50 ${scrolled ? 'tnav-scrolled' : ''}`}>
+      <div className="tnav-inner mx-auto flex items-center justify-between">
+        <a href={hrefFor('home')} onClick={go('home')} className="cursor-pointer"><TakoLogo collapseWord={scrolled} /></a>
+        <nav className="hidden md:flex items-end gap-1 font-bold text-[14px]">
           {links.map((l) => (
             <a
               key={l.id}
-              href="#"
+              href={hrefFor(l.id)}
               onClick={go(l.id)}
-              className="transition relative"
-              style={{ color: page === l.id ? 'var(--coral-deep)' : 'var(--ink)' }}
+              className={`tnav-link ${page === l.id ? 'is-active' : ''}`}
             >
-              {l.label}
-              {page === l.id && (
-                <span className="absolute -bottom-1.5 left-0 right-0 h-1 rounded-full" style={{ background: 'var(--coral)' }} />
-              )}
+              <span className="tnav-ico-wrap"><img src={l.icon} alt="" className={`tnav-ico ${l.anim}`} /></span>
+              <span className="tnav-label">{l.label}</span>
+              <span className="tnav-underline" />
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="#" className="hidden md:inline-block font-bold text-[15px]" style={{ color: 'var(--ink)' }}>Accedi</a>
-          <a href="#cta" onClick={go('home')} className="btn-coral px-5 py-2.5 text-[14px]">Prova gratis</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setLoginOpen(true); }} className="tnav-accedi hidden md:inline-block font-bold text-[15px] cursor-pointer">Accedi</a>
+          <a href="Tako%20Landing.html#cta" className="btn-coral px-5 py-2.5 text-[14px]">Contattaci</a>
         </div>
       </div>
     </header>
+    <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
+    </>
   );
 }
 
@@ -105,33 +246,6 @@ function Bubbles({ count = 12 }) {
   );
 }
 
-/* ——— Hand-holding-phone (live app iframe behind hand PNG) ——— */
-function HandPhone() {
-  const stageRef = useRef(null);
-  const slotRef = useRef(null);
-  const APP_W = 390;
-
-  useEffect(() => {
-    const stage = stageRef.current, slot = slotRef.current;
-    if (!stage || !slot) return;
-    const fit = () => stage.style.setProperty('--hp-scale', (slot.clientWidth / APP_W).toString());
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(slot);
-    window.addEventListener('resize', fit, { passive: true });
-    return () => { ro.disconnect(); window.removeEventListener('resize', fit); };
-  }, []);
-
-  return (
-    <div ref={stageRef} className="hp-stage sway">
-      <div ref={slotRef} className="hp-slot">
-        <iframe className="hp-live" src="hero-export/Tako App.html?bare=1&demo=1" scrolling="no" tabIndex="-1" title="App Tako — demo menù"></iframe>
-      </div>
-      <img className="hp-hand" src="hero-export/assets/hand-phone.png" alt="Mano che impugna lo smartphone con l'app Tako" />
-    </div>
-  );
-}
-
 /* ——— Hero ——— */
 function Hero() {
   return (
@@ -151,7 +265,7 @@ function Hero() {
             Tako gestisce ordini, menu digitali e risponde ai tuoi clienti 24/7 con un'AI che conosce ogni piatto. Otto tentacoli, mille superpoteri.
           </p>
           <div className="flex flex-wrap gap-4 mb-10">
-            <a href="#cta" className="btn-coral px-8 py-4 text-lg inline-flex items-center gap-2">
+            <a href="#cta" onClick={(e) => { e.preventDefault(); const el = document.getElementById('cta'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' }); }} className="btn-coral px-8 py-4 text-lg inline-flex items-center gap-2">
               Prova gratis 30 giorni
               <span aria-hidden>→</span>
             </a>
@@ -213,7 +327,7 @@ function Features() {
     { icon: '📊', title: 'Dashboard multi-device', desc: 'Da iPad, telefono o cassa: vedi tutto in tempo reale. Sincronizzato sempre.', color: '#EAF2F8' },
   ];
   return (
-    <section id="features" className="relative py-28 px-6">
+    <section id="features" className="relative py-16 md:py-28 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="chip mb-5 reveal">Perché Tako</span>
@@ -223,15 +337,15 @@ function Features() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {cards.map((c, i) => (
-            <div key={i} className="chunky p-7 hover-rise reveal-pop" style={{ transitionDelay: `${i*0.08}s` }}>
-              <div className="w-14 h-14 rounded-2xl grid place-items-center text-3xl mb-5 border-2" style={{ background: c.color, borderColor: 'var(--ink)' }}>
+            <div key={i} className="chunky p-4 md:p-7 hover-rise reveal-pop" style={{ transitionDelay: `${i*0.08}s` }}>
+              <div className="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl grid place-items-center text-2xl md:text-3xl mb-3 md:mb-5 border-2" style={{ background: c.color, borderColor: 'var(--ink)' }}>
                 {c.icon}
               </div>
-              <h3 className="text-2xl mb-2">{c.title}</h3>
-              <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>{c.desc}</p>
-              <a href="#" className="mt-5 inline-flex items-center gap-1 font-bold text-sm" style={{ color: 'var(--coral-deep)' }}>
+              <h3 className="text-lg md:text-2xl mb-1.5 md:mb-2 leading-tight">{c.title}</h3>
+              <p className="text-[13px] md:text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>{c.desc}</p>
+              <a href="#" className="mt-3 md:mt-5 inline-flex items-center gap-1 font-bold text-[13px] md:text-sm" style={{ color: 'var(--coral-deep)' }}>
                 Scopri di più <span aria-hidden>→</span>
               </a>
             </div>
@@ -239,7 +353,7 @@ function Features() {
         </div>
 
         {/* Connecting tentacle SVG decoration */}
-        <svg className="hidden lg:block absolute left-1/2 -translate-x-1/2 -bottom-10 w-[800px] pointer-events-none" viewBox="0 0 800 120">
+        <svg className="hidden lg:block absolute left-1/2 -translate-x-1/2 bottom-2 w-[800px] pointer-events-none" viewBox="0 0 800 120">
           <path className="tentacle-path" d="M50,60 Q200,10 400,60 T750,60" />
         </svg>
       </div>
@@ -348,6 +462,77 @@ function MenuSmart() {
   );
 }
 
+/* ——— Scroll-pinned card stack: un riquadro alla volta; scrollando i riquadri
+   escono verso l'alto e arriva il successivo (animazione guidata dallo scroll) ——— */
+function ScrollCardStack({ id, header, items, renderCard, accent, cardVh = 88 }) {
+  const sectionRef = useRef(null);
+  const cardRefs = useRef([]);
+  const dotRefs = useRef([]);
+  const n = items.length;
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const total = Math.max(section.offsetHeight - vh, 1);
+      const top = section.getBoundingClientRect().top;
+      const scrolled = Math.min(Math.max(-top, 0), total);
+      const progress = scrolled / total;            // 0..1
+      const focus = progress * (n - 1);             // 0..n-1
+      const active = Math.round(focus);
+      cardRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const d = focus - i;                        // <0 in arrivo, >0 già uscito
+        const ty = -d * 60;                         // vh
+        const op = Math.max(0, Math.min(1, 1.4 - Math.abs(d) * 1.85));
+        const sc = 1 - 0.1 * Math.min(Math.abs(d), 1.3);
+        const rot = Math.max(-6, Math.min(6, d * -4));
+        el.style.transform = `translate3d(0, ${ty}vh, 0) scale(${sc.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+        el.style.opacity = op.toFixed(3);
+        el.style.zIndex = String(100 - Math.round(Math.abs(d) * 10));
+        el.style.pointerEvents = Math.abs(d) < 0.5 ? 'auto' : 'none';
+      });
+      dotRefs.current.forEach((el, i) => {
+        if (!el) return;
+        el.style.opacity = i === active ? '1' : '0.28';
+        el.style.transform = i === active ? 'scale(1.35)' : 'scale(1)';
+      });
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [n]);
+  return (
+    <section ref={sectionRef} id={id} className="relative px-6" style={{ height: `${n * cardVh + 24}vh` }}>
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center" style={{ clipPath: 'inset(0 -100vw)' }}>
+        {header && <div className="text-center mb-6 md:mb-10 px-2 shrink-0">{header}</div>}
+        <div className="relative w-full shrink-0" style={{ height: 'min(60vh, 540px)' }}>
+          <div className="absolute inset-0 grid place-items-center">
+            {items.map((it, i) => (
+              <div key={i} ref={(el) => (cardRefs.current[i] = el)} style={{ gridArea: '1 / 1', width: '100%', willChange: 'transform, opacity' }}>
+                {renderCard(it, i)}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-2.5 mt-7 shrink-0">
+          {items.map((_, i) => (
+            <span key={i} ref={(el) => (dotRefs.current[i] = el)} className="w-2.5 h-2.5 rounded-full" style={{ background: accent || 'var(--coral)', transition: 'opacity .3s ease, transform .3s ease' }} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ——— How it works ——— */
 function HowItWorks() {
   const steps = [
@@ -355,36 +540,25 @@ function HowItWorks() {
     { n: '2', title: 'Scansiona & ordina', desc: 'I clienti scansionano il QR al tavolo, sfogliano il menu e ordinano. Tu ricevi tutto in cucina.', mascot: 'assets/tako-tablet.png', alt: 'Tako with tablet' },
     { n: '3', title: 'Servi e cresci', desc: 'Ordini gestiti, dati raccolti, clienti felici. Vedi cosa funziona e ottimizzi ogni settimana.', mascot: 'assets/tako-thumbsup.png', alt: 'Tako thumbs up' },
   ];
-
   return (
-    <section id="how" className="relative py-28 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <span className="chip mb-5 reveal">Come funziona</span>
-          <h2 className="text-5xl md:text-6xl reveal">Tre passi. <span className="grad-text">Zero stress.</span></h2>
+    <ScrollCardStack
+      id="how"
+      header={(
+        <>
+          <span className="chip mb-4">Come funziona</span>
+          <h2 className="text-4xl md:text-6xl">Tre passi. <span className="grad-text">Zero stress.</span></h2>
+        </>
+      )}
+      items={steps}
+      renderCard={(s) => (
+        <div className="chunky p-6 md:p-12 max-w-md md:max-w-xl mx-auto text-center" style={{ background: '#fff' }}>
+          <div className="step-num mx-auto mb-4 md:mb-5">{s.n}</div>
+          <img src={s.mascot} alt={s.alt} className="mascot w-28 md:w-40 mx-auto mb-4 float-y" />
+          <h3 className="text-2xl md:text-4xl mb-2 md:mb-3">{s.title}</h3>
+          <p className="text-[15px] md:text-lg" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>{s.desc}</p>
         </div>
-
-        <div className="relative grid md:grid-cols-3 gap-8">
-          {/* Curvy connecting line */}
-          <svg className="hidden md:block absolute top-16 left-0 w-full h-32 pointer-events-none" viewBox="0 0 1200 100" preserveAspectRatio="none">
-            <path className="tentacle-path" d="M180,50 Q400,0 600,50 T1020,50" stroke="#ED7159" strokeWidth="3" strokeDasharray="8 10" />
-          </svg>
-
-          {steps.map((s, i) => (
-            <div key={i} className="relative reveal" style={{ transitionDelay: `${i*0.15}s` }}>
-              <div className="flex flex-col items-center text-center">
-                <div className="step-num mb-6 z-10">{s.n}</div>
-                <div className="chunky p-6 w-full">
-                  <img src={s.mascot} alt={s.alt} className="mascot w-40 mx-auto float-y mb-4" style={{ animationDelay: `${i*0.6}s` }} />
-                  <h3 className="text-2xl mb-2">{s.title}</h3>
-                  <p style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>{s.desc}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+      )}
+    />
   );
 }
 
@@ -395,4 +569,5 @@ window.TrustTape = TrustTape;
 window.Features = Features;
 window.MenuSmart = MenuSmart;
 window.HowItWorks = HowItWorks;
+window.ScrollCardStack = ScrollCardStack;
 window.useReveal = useReveal;

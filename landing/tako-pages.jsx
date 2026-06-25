@@ -218,9 +218,11 @@ function HowPage() {
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl mb-4 reveal" style={{ color: 'var(--cream)' }}>Setup garantito in 30 minuti.</h2>
           <p className="text-lg opacity-80 mb-8 reveal">Se ci metti di più, ti rimborsiamo il primo mese.</p>
-          <a href="#" className="btn-coral px-8 py-4 text-lg inline-block reveal">Inizia ora →</a>
+          <a href="Tako%20Prova%20Gratis.html" className="btn-coral px-8 py-4 text-lg inline-block reveal">Inizia ora →</a>
         </div>
       </section>
+
+      <BookingBand />
     </>
   );
 }
@@ -488,6 +490,8 @@ function RestaurantPage() {
           </div>
         </div>
       </section>
+
+      <BookingBand title={<>Vuoi vederlo <span className="grad-text">nel tuo locale?</span></>} sub="Lasciaci i tuoi dati: ti mostriamo la dashboard dal vivo e rispondiamo a ogni domanda. Nessun impegno." mascot="assets/tako-tablet.png" />
     </>
   );
 }
@@ -779,6 +783,8 @@ function CustomerPage() {
           </div>
         </div>
       </section>
+
+      <BookingBand title={<>Offri questa esperienza <span className="grad-text">ai tuoi clienti.</span></>} sub="Richiedi informazioni o prenota una demo: ti spieghiamo come portare Tako ai tavoli del tuo ristorante." mascot="assets/tako-hello.png" />
     </>
   );
 }
