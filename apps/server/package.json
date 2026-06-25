@@ -7,7 +7,8 @@
     "dev": "tsx watch --env-file=.env src/bootstrap.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/bootstrap.js",
-    "start:cloud": "tsx src/cloud/entry.ts"
+    "start:cloud": "tsx src/cloud/entry.ts",
+    "test:cloud": "vitest run --config vitest.cloud.config.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
