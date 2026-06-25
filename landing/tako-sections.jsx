@@ -34,11 +34,91 @@ function TakoLogo({ size = 44, collapseWord = false }) {
 }
 
 /* ——— Sticky Navbar ——— */
-/* ——— Login modal (riquadro "Accedi") ——— */
+
+/* ——— Mappa codici errore backend → messaggi UI (italiano) ——— */
+const AUTH_ERROR_IT = {
+  VALIDATION: 'Controlla i dati inseriti.',
+  WEAK_PASSWORD: 'La password deve avere almeno 10 caratteri.',
+  INVALID_CREDENTIALS: 'Email o password non corretti.',
+  EMAIL_NOT_VERIFIED: 'Devi prima verificare la tua email.',
+  RATE_LIMIT: 'Troppi tentativi. Riprova tra qualche minuto.',
+  NETWORK: 'Impossibile contattare il server. Riprova.',
+  SERVER_ERROR: 'Errore del server. Riprova tra poco.',
+};
+function authErr(res) {
+  return (res.code && AUTH_ERROR_IT[res.code]) || res.error || 'Errore imprevisto.';
+}
+
+/* ——— Messaggi per i query param OAuth (?oauth_error=...) ——— */
+const OAUTH_ERROR_IT = {
+  '1': 'Accesso con il provider non riuscito. Riprova.',
+  email_unverified: "L'email del tuo account social non è verificata: verificala dal provider e riprova.",
+  verify_existing_account: 'Esiste già un account con questa email. Accedi con email e password (o verifica prima la tua email).',
+};
+
+/* ——— Bottoni OAuth condivisi (Google / GitHub) ——— */
+function OAuthButtons({ disabled }) {
+  const go = (provider) => () => {
+    const api = window.TakoAPI;
+    if (!api) return;
+    window.location.href = api.oauthUrl(provider);
+  };
+  const base = 'w-full py-3 rounded-xl border-2 font-bold text-[15px] inline-flex items-center justify-center gap-2.5 transition';
+  const style = { borderColor: 'var(--ink)', background: 'white', color: 'var(--ink)', boxShadow: '3px 3px 0 var(--ink)' };
+  return (
+    <div className="space-y-3">
+      <button type="button" onClick={go('google')} disabled={disabled} className={base} style={style} aria-label="Continua con Google">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continua con Google
+      </button>
+      <button type="button" onClick={go('github')} disabled={disabled} className={base} style={style} aria-label="Continua con GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/>
+        </svg>
+        Continua con GitHub
+      </button>
+    </div>
+  );
+}
+window.OAuthButtons = OAuthButtons;
+
+/* ——— Divisore "oppure" ——— */
+function OrDivider() {
+  return (
+    <div className="flex items-center gap-3 my-5" aria-hidden="true">
+      <span className="flex-1 h-px" style={{ background: 'rgba(42,31,26,.16)' }} />
+      <span className="text-[12px] font-bold" style={{ color: 'var(--ink-soft)' }}>oppure</span>
+      <span className="flex-1 h-px" style={{ background: 'rgba(42,31,26,.16)' }} />
+    </div>
+  );
+}
+
+/* ——— Login modal (riquadro "Accedi") — collegato al control-plane cloud ——— */
 function LoginModal({ open, onClose, initialView = 'login' }) {
   const [view, setView] = useState(initialView); // 'login' | 'register' | 'forgot'
-  const [sent, setSent] = useState(false);
-  useEffect(() => { if (open) { setView(initialView); setSent(false); } }, [open, initialView]);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');      // messaggio neutro/success generico
+  const [needVerify, setNeedVerify] = useState(false); // login → EMAIL_NOT_VERIFIED
+  const [resendDone, setResendDone] = useState(false);
+  const [done, setDone] = useState(false);        // schermata finale (register/forgot)
+
+  const reset = () => {
+    setEmail(''); setPassword(''); setName('');
+    setLoading(false); setError(''); setNotice('');
+    setNeedVerify(false); setResendDone(false); setDone(false);
+  };
+  const switchView = (v) => { setError(''); setNotice(''); setNeedVerify(false); setResendDone(false); setDone(false); setView(v); };
+
+  useEffect(() => { if (open) { reset(); setView(initialView); } }, [open, initialView]);
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -52,6 +132,68 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
   const fieldStyle = { borderColor: 'rgba(42,31,26,.16)', background: '#FFFDFB' };
   const Label = ({ children }) => <label className="block text-[13px] font-bold mb-1" style={{ color: 'var(--ink)' }}>{children}</label>;
   const linkStyle = { color: 'var(--coral-deep)' };
+  const api = () => window.TakoAPI;
+
+  /* ——— LOGIN ——— */
+  const submitLogin = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    setError(''); setNeedVerify(false);
+    setLoading(true);
+    const res = await api().apiPost('/api/auth/login', { email: email.trim(), password });
+    setLoading(false);
+    if (res.ok) {
+      // Sessione attiva. Confermiamo con /me (best-effort) e chiudiamo.
+      try { await api().apiGet('/api/auth/me'); } catch (_) {}
+      onClose();
+      // Ricarica per riflettere lo stato loggato (qui non c'è ancora un'area riservata sul sito).
+      window.location.reload();
+      return;
+    }
+    if (res.code === 'EMAIL_NOT_VERIFIED') { setNeedVerify(true); return; }
+    setError(authErr(res));
+  };
+
+  const resendVerification = async () => {
+    if (loading) return;
+    setError('');
+    setLoading(true);
+    const res = await api().apiPost('/api/auth/resend-verification', { email: email.trim() });
+    setLoading(false);
+    // Risposta sempre generica (anti-enumeration): mostriamo conferma comunque.
+    if (res.ok || res.status === 200) setResendDone(true);
+    else setError(authErr(res));
+  };
+
+  /* ——— REGISTER ——— */
+  const submitRegister = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    setError('');
+    if (password.length < 10) { setError('La password deve avere almeno 10 caratteri.'); return; }
+    setLoading(true);
+    const res = await api().apiPost('/api/auth/register', { name: name.trim(), email: email.trim(), password });
+    setLoading(false);
+    if (res.ok) { setDone(true); return; }
+    setError(authErr(res));
+  };
+
+  /* ——— FORGOT ——— */
+  const submitForgot = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    setError('');
+    setLoading(true);
+    const res = await api().apiPost('/api/auth/forgot-password', { email: email.trim() });
+    setLoading(false);
+    // 200 generico sempre.
+    if (res.ok || res.status === 200) setDone(true);
+    else setError(authErr(res));
+  };
+
+  const ErrorBox = () => error ? (
+    <div role="alert" className="mb-4 px-4 py-3 rounded-xl border-2 text-[14px] font-semibold" style={{ borderColor: 'var(--coral-deep)', background: '#FFF1ED', color: 'var(--coral-deep)' }}>{error}</div>
+  ) : null;
 
   return (
     <div
@@ -63,6 +205,8 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
         className="chunky relative w-full max-w-md p-8 pop-in"
         style={{ borderRadius: 28 }}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
       >
         <button
           onClick={onClose}
@@ -79,20 +223,43 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
               <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>Bentornato!</h3>
               <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>Accedi al tuo ristorante Tako</p>
             </div>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <Label>Email</Label>
-              <input type="email" required placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
-              <Label>Password</Label>
-              <input type="password" required placeholder="••••••••" className="w-full mb-2 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
-              <div className="text-right mb-5">
-                <button type="button" onClick={() => { setSent(false); setView('forgot'); }} className="text-[13px] font-bold" style={linkStyle}>Password dimenticata?</button>
+            <ErrorBox />
+            {needVerify ? (
+              <div className="px-4 py-4 rounded-xl border-2 mb-2" style={{ borderColor: 'var(--sun)', background: '#FFF8E8' }}>
+                <p className="text-[14px] font-bold mb-3" style={{ color: 'var(--ink)' }}>
+                  La tua email non è ancora verificata. Controlla la posta o richiedi un nuovo link.
+                </p>
+                {resendDone ? (
+                  <p className="text-[14px] font-semibold" style={{ color: 'var(--ink-soft)' }}>
+                    Se l'indirizzo esiste, ti abbiamo reinviato il link di verifica. ✓
+                  </p>
+                ) : (
+                  <button type="button" onClick={resendVerification} disabled={loading} className="btn-coral w-full py-3 text-[15px]">
+                    {loading ? 'Invio…' : 'Reinvia email di verifica'}
+                  </button>
+                )}
+                <button type="button" onClick={() => { setNeedVerify(false); setResendDone(false); }} className="block w-full text-center mt-3 text-[13px] font-bold" style={linkStyle}>← Torna all'accesso</button>
               </div>
-              <button type="submit" className="btn-coral w-full py-3.5 text-lg">Accedi →</button>
-            </form>
-            <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
-              Non hai un account?{' '}
-              <button type="button" onClick={() => setView('register')} className="font-bold" style={linkStyle}>Registrati ora</button>
-            </p>
+            ) : (
+              <>
+                <form onSubmit={submitLogin}>
+                  <Label>Email</Label>
+                  <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <Label>Password</Label>
+                  <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full mb-2 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <div className="text-right mb-5">
+                    <button type="button" onClick={() => switchView('forgot')} className="text-[13px] font-bold" style={linkStyle}>Password dimenticata?</button>
+                  </div>
+                  <button type="submit" disabled={loading} className="btn-coral w-full py-3.5 text-lg">{loading ? 'Accesso…' : 'Accedi →'}</button>
+                </form>
+                <OrDivider />
+                <OAuthButtons disabled={loading} />
+                <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+                  Non hai un account?{' '}
+                  <button type="button" onClick={() => switchView('register')} className="font-bold" style={linkStyle}>Registrati ora</button>
+                </p>
+              </>
+            )}
           </>
         )}
 
@@ -101,22 +268,37 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
           <>
             <div className="text-center mb-6">
               <img src="assets/tako-chef.png" alt="" className="w-20 h-20 mx-auto mb-3 logo-bob" style={{ objectFit: 'contain' }} />
-              <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>Registrati ora</h3>
-              <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>30 giorni di prova, senza carta</p>
+              <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>{done ? 'Controlla la tua email' : 'Registrati ora'}</h3>
+              <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>{done ? 'Ti abbiamo inviato un link di conferma' : '30 giorni di prova, senza carta'}</p>
             </div>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <Label>Nome del ristorante</Label>
-              <input type="text" required placeholder="Trattoria da Mario" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
-              <Label>Email</Label>
-              <input type="email" required placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
-              <Label>Password</Label>
-              <input type="password" required placeholder="Almeno 8 caratteri" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
-              <button type="submit" className="btn-coral w-full py-3.5 text-lg">Crea il mio Tako →</button>
-            </form>
-            <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
-              Hai già un account?{' '}
-              <button type="button" onClick={() => setView('login')} className="font-bold" style={linkStyle}>Accedi</button>
-            </p>
+            {done ? (
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-full grid place-items-center text-3xl border-2" style={{ background: 'var(--coral-tint)', borderColor: 'var(--coral)', color: 'var(--coral-deep)', fontWeight: 900 }}>✉️</div>
+                <p className="text-[15px] mb-6" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+                  Abbiamo inviato un'email a <b style={{ color: 'var(--ink)' }}>{email}</b>. Apri il link per attivare il tuo account, poi accedi.
+                </p>
+                <button type="button" onClick={() => switchView('login')} className="btn-coral w-full py-3.5 text-lg">Torna all'accesso</button>
+              </div>
+            ) : (
+              <>
+                <ErrorBox />
+                <form onSubmit={submitRegister}>
+                  <Label>Nome del ristorante</Label>
+                  <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Trattoria da Mario" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <Label>Email</Label>
+                  <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <Label>Password</Label>
+                  <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Almeno 10 caratteri" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <button type="submit" disabled={loading} className="btn-coral w-full py-3.5 text-lg">{loading ? 'Creazione…' : 'Crea il mio Tako →'}</button>
+                </form>
+                <OrDivider />
+                <OAuthButtons disabled={loading} />
+                <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+                  Hai già un account?{' '}
+                  <button type="button" onClick={() => switchView('login')} className="font-bold" style={linkStyle}>Accedi</button>
+                </p>
+              </>
+            )}
           </>
         )}
 
@@ -127,25 +309,28 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
               <img src="assets/tako-chef.png" alt="" className="w-20 h-20 mx-auto mb-3 logo-bob" style={{ objectFit: 'contain' }} />
               <h3 className="text-3xl mb-1" style={{ color: 'var(--ink)' }}>Password dimenticata</h3>
               <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
-                {sent ? 'Ti abbiamo inviato il link di reset' : 'Inserisci la tua email, ti inviamo il link'}
+                {done ? 'Controlla la tua posta' : 'Inserisci la tua email, ti inviamo il link'}
               </p>
             </div>
-            {sent ? (
+            {done ? (
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-5 rounded-full grid place-items-center text-3xl border-2" style={{ background: 'var(--coral-tint)', borderColor: 'var(--coral)', color: 'var(--coral-deep)', fontWeight: 900 }}>✓</div>
-                <p className="text-[15px] mb-6" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>Controlla la posta in arrivo e segui le istruzioni per reimpostare la password.</p>
-                <button type="button" onClick={() => setView('login')} className="btn-coral w-full py-3.5 text-lg">Torna all'accesso</button>
+                <p className="text-[15px] mb-6" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>Se l'email esiste, riceverai un link per reimpostare la password. Controlla la posta in arrivo.</p>
+                <button type="button" onClick={() => switchView('login')} className="btn-coral w-full py-3.5 text-lg">Torna all'accesso</button>
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
-                <Label>Email</Label>
-                <input type="email" required placeholder="nome@ristorante.it" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
-                <button type="submit" className="btn-coral w-full py-3.5 text-lg">Invia il link →</button>
-              </form>
+              <>
+                <ErrorBox />
+                <form onSubmit={submitForgot}>
+                  <Label>Email</Label>
+                  <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@ristorante.it" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <button type="submit" disabled={loading} className="btn-coral w-full py-3.5 text-lg">{loading ? 'Invio…' : 'Invia il link →'}</button>
+                </form>
+                <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+                  <button type="button" onClick={() => switchView('login')} className="font-bold" style={linkStyle}>← Torna all'accesso</button>
+                </p>
+              </>
             )}
-            <p className="text-center text-[14px] mt-5" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
-              <button type="button" onClick={() => setView('login')} className="font-bold" style={linkStyle}>← Torna all'accesso</button>
-            </p>
           </>
         )}
       </div>
@@ -153,6 +338,45 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
   );
 }
 window.LoginModal = LoginModal;
+
+/* ——— Banner globale: esiti redirect (?verified=1 / ?oauth_error=...) ——— */
+function AuthBanner() {
+  const [msg, setMsg] = useState(null); // { kind:'ok'|'err', text }
+  useEffect(() => {
+    const qs = new URLSearchParams(window.location.search);
+    let next = null;
+    if (qs.get('verified') === '1') {
+      next = { kind: 'ok', text: 'Email verificata! Ora puoi accedere.' };
+    } else if (qs.has('oauth_error')) {
+      const code = qs.get('oauth_error') || '1';
+      next = { kind: 'err', text: OAUTH_ERROR_IT[code] || OAUTH_ERROR_IT['1'] };
+    }
+    if (!next) return;
+    setMsg(next);
+    // Ripulisce i query param dall'URL senza ricaricare (evita ri-trigger al refresh).
+    try {
+      qs.delete('verified'); qs.delete('oauth_error');
+      const clean = window.location.pathname + (qs.toString() ? '?' + qs.toString() : '') + window.location.hash;
+      window.history.replaceState({}, '', clean);
+    } catch (_) {}
+    const t = setTimeout(() => setMsg(null), 9000);
+    return () => clearTimeout(t);
+  }, []);
+  if (!msg) return null;
+  const ok = msg.kind === 'ok';
+  return (
+    <div
+      role="status"
+      className="fixed top-4 left-1/2 z-[200] -translate-x-1/2 px-5 py-3.5 rounded-2xl border-2 font-bold text-[15px] flex items-center gap-3 pop-in max-w-[92vw]"
+      style={{ borderColor: 'var(--ink)', background: ok ? '#E8F4ED' : '#FFF1ED', color: 'var(--ink)', boxShadow: '4px 4px 0 var(--ink)' }}
+    >
+      <span aria-hidden="true">{ok ? '✓' : '⚠️'}</span>
+      <span>{msg.text}</span>
+      <button onClick={() => setMsg(null)} aria-label="Chiudi" className="ml-1 text-lg leading-none" style={{ color: 'var(--ink-soft)', fontWeight: 900 }}>×</button>
+    </div>
+  );
+}
+window.AuthBanner = AuthBanner;
 
 function Navbar({ page, setPage }) {
   const [scrolled, setScrolled] = useState(false);
@@ -214,6 +438,7 @@ function Navbar({ page, setPage }) {
       </div>
     </header>
     <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
+    <AuthBanner />
     </>
   );
 }
@@ -563,6 +788,7 @@ function HowItWorks() {
 }
 
 window.TakoLogo = TakoLogo;
+window.OrDivider = OrDivider;
 window.Navbar = Navbar;
 window.Hero = Hero;
 window.TrustTape = TrustTape;

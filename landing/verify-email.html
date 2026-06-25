@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- SEC-013: nessun referrer (il token viaggia in query string) -->
+<meta name="referrer" content="no-referrer" />
+<title>Tako — Verifica email</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #ED7159; --coral-deep: #D9533A; --coral-tint: #FFEEE8;
+    --cream: #FFF8F3; --ink: #2A1F1A; --ink-soft: #5C4A41; --mint: #7FC4A8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Quicksand', system-ui, sans-serif;
+    background: linear-gradient(180deg, #FFEEE8 0%, #FFF8F3 100%);
+    color: var(--ink); margin: 0; min-height: 100vh;
+    display: grid; place-items: center; padding: 24px;
+  }
+  h1, h2, h3 { font-family: 'Nunito', system-ui, sans-serif; font-weight: 900; letter-spacing: -0.02em; margin: 0; }
+  .chunky {
+    background: #fff; border-radius: 28px; border: 2px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink); padding: 40px; max-width: 440px; width: 100%; text-align: center;
+  }
+  .btn-coral {
+    background: var(--coral); color: #fff; border: 0; border-radius: 999px;
+    font-weight: 800; font-size: 18px; padding: 14px 28px; cursor: pointer;
+    box-shadow: 0 6px 0 var(--coral-deep), 0 12px 24px rgba(217,83,58,0.28);
+    transition: transform .18s, box-shadow .18s; font-family: inherit; display: inline-block; text-decoration: none;
+  }
+  .btn-coral:hover { transform: translateY(-2px); }
+  .btn-coral:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--coral-deep); }
+  .btn-coral:disabled { opacity: .6; cursor: default; transform: none; }
+  .grad-text { background: linear-gradient(90deg, var(--coral) 0%, var(--coral-deep) 60%, #B5391F 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .badge { width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 50%; display: grid; place-items: center; font-size: 34px; font-weight: 900; border: 2px solid; }
+  .badge-ok { background: var(--coral-tint); border-color: var(--coral); color: var(--coral-deep); }
+  .badge-err { background: #FFF1ED; border-color: var(--coral-deep); color: var(--coral-deep); }
+  .sub { color: var(--ink-soft); font-weight: 500; font-size: 15px; margin: 8px 0 24px; line-height: 1.5; }
+  .mascot { width: 84px; height: 84px; object-fit: contain; margin: 0 auto 12px; display: block; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- client cloud auth (script normale, deve precedere il .jsx) -->
+<script src="tako-api.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const LANDING = 'Tako%20Landing.html';
+
+/* SEC-013: la GET di verifica NON consuma il token (anti pre-fetch/scanner).
+   L'utente conferma con un click → POST /api/auth/verify-email → redirect a ?verified=1. */
+function VerifyEmail() {
+  const [status, setStatus] = useState('checking'); // checking | ready | invalid | confirming | done | error
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get('token') || '';
+    if (!t) { setStatus('invalid'); return; }
+    setToken(t);
+    (async () => {
+      const res = await window.TakoAPI.apiGet('/api/auth/verify-email?token=' + encodeURIComponent(t));
+      if (res.ok && res.data && res.data.valid) setStatus('ready');
+      else setStatus('invalid');
+    })();
+  }, []);
+
+  const confirm = async () => {
+    setStatus('confirming');
+    const res = await window.TakoAPI.apiPost('/api/auth/verify-email', { token });
+    if (res.ok) {
+      setStatus('done');
+      window.location.replace(LANDING + '?verified=1');
+    } else {
+      setStatus(res.code === 'INVALID_TOKEN' ? 'invalid' : 'error');
+    }
+  };
+
+  if (status === 'checking') {
+    return (
+      <div className="chunky">
+        <img className="mascot" src="assets/tako-chef.png" alt="" />
+        <h2 style={{ fontSize: 26 }}>Un attimo…</h2>
+        <p className="sub">Stiamo controllando il tuo link di verifica.</p>
+      </div>
+    );
+  }
+  if (status === 'invalid') {
+    return (
+      <div className="chunky">
+        <div className="badge badge-err">!</div>
+        <h2 style={{ fontSize: 26 }}>Link non valido</h2>
+        <p className="sub">Questo link di verifica è mancante, già usato o scaduto. Accedi e richiedi un nuovo link dalla schermata di login.</p>
+        <a className="btn-coral" href={LANDING}>Vai all'accesso →</a>
+      </div>
+    );
+  }
+  if (status === 'error') {
+    return (
+      <div className="chunky">
+        <div className="badge badge-err">!</div>
+        <h2 style={{ fontSize: 26 }}>Qualcosa è andato storto</h2>
+        <p className="sub">Non siamo riusciti a verificare l'email. Riprova tra poco.</p>
+        <button className="btn-coral" onClick={confirm}>Riprova</button>
+      </div>
+    );
+  }
+  // ready | confirming | done
+  return (
+    <div className="chunky">
+      <img className="mascot" src="assets/tako-hello.png" alt="" />
+      <h2 style={{ fontSize: 26 }}>Conferma la tua <span className="grad-text">email</span></h2>
+      <p className="sub">Clicca qui sotto per attivare il tuo account Tako.</p>
+      <button className="btn-coral" onClick={confirm} disabled={status !== 'ready'}>
+        {status === 'ready' ? 'Verifica la mia email →' : 'Verifica in corso…'}
+      </button>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<VerifyEmail />);
+</script>
+</body>
+</html>

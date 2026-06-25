@@ -276,21 +276,40 @@ function burstConfetti() {
   setTimeout(() => root.remove(), 2800);
 }
 
-/* ─────────── form di registrazione ─────────── */
+/* ─────────── form di registrazione ───────────
+   Collegato al control-plane cloud: POST /api/auth/register { name, email, password }.
+   Flusso "controlla la mail" (niente auto-login): il backend invia l'email di verifica
+   e l'account è attivabile solo dopo il click sul link. Aggiunta la password (policy min 10)
+   perché /register la richiede; resta coerente con il design del form (campo con icona). */
 function SignupForm({ confetti }) {
   const [email, setEmail] = tS('');
   const [rest, setRest] = tS('');
+  const [password, setPassword] = tS('');
   const [done, setDone] = tS(false);
   const [err, setErr] = tS('');
+  const [loading, setLoading] = tS(false);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     const okMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
     if (!rest.trim()) { setErr('Inserisci il nome del tuo ristorante.'); return; }
     if (!okMail) { setErr('Controlla la tua email.'); return; }
+    if (password.length < 10) { setErr('La password deve avere almeno 10 caratteri.'); return; }
     setErr('');
-    setDone(true);
-    if (confetti) burstConfetti();
+    const api = window.TakoAPI;
+    if (!api) { setErr('Servizio non disponibile. Riprova più tardi.'); return; }
+    setLoading(true);
+    const res = await api.apiPost('/api/auth/register', { name: rest.trim(), email: email.trim(), password });
+    setLoading(false);
+    if (res.ok || res.status === 200) {
+      // Risposta sempre generica (anti-enumeration): mostriamo "controlla la mail".
+      setDone(true);
+      if (confetti) burstConfetti();
+      return;
+    }
+    if (res.code === 'WEAK_PASSWORD') { setErr('La password deve avere almeno 10 caratteri.'); return; }
+    setErr(res.error || 'Registrazione non riuscita. Riprova.');
   };
 
   return (
@@ -336,10 +355,16 @@ function SignupForm({ confetti }) {
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="ciao@tuoristorante.it" />
                 </div>
 
+                <label className="fld-label">Password</label>
+                <div className="fld">
+                  <span className="fld-ic">🔒</span>
+                  <input type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Almeno 10 caratteri" />
+                </div>
+
                 {err && <div className="fld-err">{err}</div>}
 
-                <button type="submit" className="btn-coral w-full py-4 text-lg mt-2 inline-flex items-center justify-center gap-2">
-                  Inizia la prova gratis <span aria-hidden>→</span>
+                <button type="submit" disabled={loading} className="btn-coral w-full py-4 text-lg mt-2 inline-flex items-center justify-center gap-2">
+                  {loading ? 'Creazione…' : <>Inizia la prova gratis <span aria-hidden>→</span></>}
                 </button>
                 <p className="text-center mt-4 text-[13px]" style={{ color: 'var(--ink-soft)', fontWeight: 600 }}>
                   Registrandoti accetti i <a href="Tako%20Landing.html" style={{ color: 'var(--coral-deep)', fontWeight: 800 }}>Termini</a> e la Privacy.
@@ -348,15 +373,15 @@ function SignupForm({ confetti }) {
             ) : (
               <div className="success">
                 <img src="assets/tako-thumbsup.png" alt="Tako" className="success-mascot" />
-                <div className="success-check">✓</div>
-                <h3 className="text-3xl mt-2 mb-2" style={{ color: 'var(--ink)' }}>Benvenuto a bordo! 🎉</h3>
+                <div className="success-check">✉️</div>
+                <h3 className="text-3xl mt-2 mb-2" style={{ color: 'var(--ink)' }}>Controlla la tua email! 🐙</h3>
                 <p className="text-[16px] mb-1" style={{ color: 'var(--ink-soft)', fontWeight: 600 }}>
-                  Abbiamo spedito l'accesso a <b style={{ color: 'var(--ink)' }}>{email}</b>.
+                  Abbiamo inviato un link di conferma a <b style={{ color: 'var(--ink)' }}>{email}</b>.
                 </p>
                 <p className="text-[15px]" style={{ color: 'var(--ink-soft)', fontWeight: 600 }}>
-                  La prova di <b style={{ color: 'var(--coral-deep)' }}>{rest || 'il tuo locale'}</b> è attiva per 30 giorni.
+                  Apri il link per attivare <b style={{ color: 'var(--coral-deep)' }}>{rest || 'il tuo locale'}</b> e iniziare i 30 giorni di prova.
                 </p>
-                <button onClick={() => { setDone(false); setEmail(''); setRest(''); }} className="btn-ghost px-6 py-3 mt-6">Registra un altro locale</button>
+                <button onClick={() => { setDone(false); setEmail(''); setRest(''); setPassword(''); }} className="btn-ghost px-6 py-3 mt-6">Registra un altro locale</button>
               </div>
             )}
           </div>
