@@ -32,6 +32,7 @@ import {
 import { hashToken, generateSessionToken } from '../../cloud/security.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
 import { audit } from '../../cloud/audit.js'
+import { incrWithTtl, getCount, del as redisDel, checkMonotonicTs } from '../../cloud/redis.js'
 
 // TTL del device code: 10 minuti (MASTER_PLAN §3.3 / SEC-003).
 const PAIRING_CODE_TTL_MS = 10 * 60 * 1000
@@ -70,9 +71,15 @@ const TIMESTAMP_HEADER = 'x-tako-timestamp'
 // La pubkey salvata in cloud_appliances.pubkey è PEM SPKI. Vedi apps/server/src/lib/cloud-client.ts
 // (signPayload/heartbeat): qualunque modifica qui DEVE restare allineata byte-per-byte col client.
 
-// Finestra anti-replay del timestamp firmato. Tolleranza ampia (clock skew di un'appliance
-// headless senza NTP affidabile) ma finita: una heartbeat catturata non è riusabile a lungo.
-const HEARTBEAT_SKEW_MS = 5 * 60 * 1000 // ±5 minuti
+// Finestra anti-replay del timestamp firmato (NEW-04, FASE 5e). Ridotta da ±5min a ±90s:
+// abbastanza per il clock skew di un'appliance headless senza NTP perfetto, ma riduce
+// drasticamente la finestra in cui una heartbeat catturata sarebbe riusabile. In aggiunta,
+// se Redis è disponibile, tracciamo l'ultimo `ts` accettato PER-APPLIANCE e rifiutiamo i ts
+// non monotoni (nonce) → una firma già vista non è riusabile affatto. Senza Redis resta la
+// sola finestra (fallback documentato).
+const HEARTBEAT_SKEW_MS = 90 * 1000 // ±90 secondi
+// TTL del nonce/ts monotono per-appliance su Redis: copre la finestra anti-replay con margine.
+const HEARTBEAT_NONCE_TTL_S = Math.ceil((HEARTBEAT_SKEW_MS * 2) / 1000) + 10
 
 // Ricostruisce il payload canonico ESATTAMENTE come il client (ordine chiavi: applianceId, ts,
 // credentialsVersion). ts è number; credentialsVersion è il valore firmato (= quello del body).
@@ -95,18 +102,23 @@ function verifyEd25519(pubkeyPem: string, payload: string, signatureB64Url: stri
   }
 }
 
-// ─── Per-code lockout sul claim (SEC-003) ────────────────────────────────────
+// ─── Per-code lockout sul claim (SEC-003 / NEW-01 FASE 5e) ────────────────────
 // Oltre al rate-limit per-IP (Redis, davanti alla route) limitiamo i tentativi di claim
 // per SINGOLO code: un attaccante che prova a indovinare/forzare un code specifico viene
 // fermato indipendentemente dall'IP (rotazione proxy/botnet). Chiave = HMAC del code (mai
-// il code in chiaro in memoria). In-memory per-istanza, coerente con il brute-force di
-// auth.ts e la quota email.ts; per multi-replica vedi nota nel contratto (fallback Redis).
-const claimAttempts = new Map<string, { count: number; firstAttempt: number }>()
+// il code in chiaro). Lo stato vive su REDIS (`pair:claim:<codeHash>`, TTL 10min) così è
+// CONDIVISO tra repliche del control-plane; FALLBACK in-memory per-istanza quando Redis non
+// è disponibile (dev/test/single-istanza) — il comportamento osservabile resta identico.
 const CLAIM_MAX_ATTEMPTS = 5
 const CLAIM_LOCKOUT_MS = 10 * 60 * 1000 // allineato al TTL del code
+const CLAIM_LOCKOUT_S = CLAIM_LOCKOUT_MS / 1000
 const CLAIM_MAX_TRACKED = 5000
+const claimRedisKey = (codeHash: string) => `pair:claim:${codeHash}`
 
-function claimLockedOut(codeHash: string): boolean {
+// Fallback in-memory (usato SOLO se Redis assente).
+const claimAttempts = new Map<string, { count: number; firstAttempt: number }>()
+
+function memClaimLockedOut(codeHash: string): boolean {
   const now = Date.now()
   const rec = claimAttempts.get(codeHash)
   if (!rec) return false
@@ -114,7 +126,7 @@ function claimLockedOut(codeHash: string): boolean {
   return rec.count >= CLAIM_MAX_ATTEMPTS
 }
 
-function recordClaimFailure(codeHash: string): void {
+function memRecordClaimFailure(codeHash: string): void {
   const now = Date.now()
   if (claimAttempts.size > CLAIM_MAX_TRACKED) {
     for (const [k, v] of claimAttempts) if (now - v.firstAttempt > CLAIM_LOCKOUT_MS) claimAttempts.delete(k)
@@ -127,8 +139,28 @@ function recordClaimFailure(codeHash: string): void {
   }
 }
 
-function clearClaimAttempts(codeHash: string): void {
+function memClearClaimAttempts(codeHash: string): void {
   claimAttempts.delete(codeHash)
+}
+
+// Verifica il lockout PRIMA del tentativo. Su Redis: locked se il contatore ha già raggiunto
+// la soglia. Senza Redis: ramo in-memory.
+async function claimLockedOut(codeHash: string): Promise<boolean> {
+  const count = await getCount(claimRedisKey(codeHash))
+  if (count === null) return memClaimLockedOut(codeHash)
+  return count >= CLAIM_MAX_ATTEMPTS
+}
+
+// Registra un tentativo fallito (INCR atomico su Redis, fallback in-memory).
+async function recordClaimFailure(codeHash: string): Promise<void> {
+  const count = await incrWithTtl(claimRedisKey(codeHash), CLAIM_LOCKOUT_S)
+  if (count === null) memRecordClaimFailure(codeHash)
+}
+
+// Azzera i tentativi su un code dopo un claim riuscito (single-use → il code è comunque morto).
+async function clearClaimAttempts(codeHash: string): Promise<void> {
+  await redisDel(claimRedisKey(codeHash))
+  memClearClaimAttempts(codeHash)
 }
 
 export async function cloudPairRoutes(fastify: FastifyInstance) {
@@ -206,7 +238,7 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
     const codeHash = hashToken(parsed.data.code)
 
     // Per-code lockout (SEC-003): blocca il brute-force su un singolo code anche cambiando IP.
-    if (claimLockedOut(codeHash)) {
+    if (await claimLockedOut(codeHash)) {
       await audit({ event: 'pair_claim_refused', req, meta: { reason: 'code_locked_out' } })
       return reply.code(429).send({ error: { code: 'TOO_MANY_ATTEMPTS', message: 'Troppi tentativi per questo codice. Genera un nuovo codice.' } })
     }
@@ -223,12 +255,12 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
       .returning()
 
     if (!consumed) {
-      recordClaimFailure(codeHash)
+      await recordClaimFailure(codeHash)
       await audit({ event: 'pair_claim_refused', req, meta: { reason: 'invalid_or_expired' } })
       return reply.code(400).send({ error: { code: 'INVALID_CODE', message: 'Codice non valido, scaduto o già usato' } })
     }
     // Code valido e consumato: azzera i tentativi falliti registrati su questo code.
-    clearClaimAttempts(codeHash)
+    await clearClaimAttempts(codeHash)
     if (!consumed.approvedAt) {
       // Non dovrebbe accadere con l'auto-approve, ma difesa-in-profondità: code non approvato.
       await audit({ event: 'pair_claim_refused', ownerId: consumed.ownerId, req, meta: { reason: 'not_approved' } })
@@ -245,7 +277,33 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
     }
 
     const { token: applianceToken } = generateSessionToken()
-    // Registra l'appliance (pubkey unica). Se la pubkey è già nota → riusa il record (re-pairing).
+
+    // NEW-07 (FASE 5e): NON riattivare silenziosamente una pubkey REVOCATA. La revoca
+    // (`revoked_at`) è un'azione di sicurezza esplicita dell'owner: un claim con la stessa
+    // keypair NON deve resuscitare l'appliance bypassando la revoca. Scelta SICURA: se la
+    // pubkey esiste ed è revocata → RIFIUTO il claim (l'appliance deve generare una NUOVA
+    // keypair e ri-accoppiarsi). Il code è già stato consumato sopra (single-use): l'owner
+    // genera un nuovo code per il nuovo tentativo, coerente con la decisione di revocarla.
+    const [existingByPubkey] = await cloudDb
+      .select({ id: cloudAppliances.id, revokedAt: cloudAppliances.revokedAt, restaurantId: cloudAppliances.restaurantId })
+      .from(cloudAppliances)
+      .where(eq(cloudAppliances.pubkey, parsed.data.devicePubKey))
+      .limit(1)
+    if (existingByPubkey?.revokedAt) {
+      await audit({
+        event: 'pair_claim_refused',
+        ownerId: owner.id,
+        req,
+        meta: { reason: 'pubkey_revoked', restaurantId: restaurant.id, applianceId: existingByPubkey.id },
+      })
+      return reply.code(403).send({
+        error: { code: 'PUBKEY_REVOKED', message: 'Questa appliance è stata revocata. Genera una nuova identità sul dispositivo e riprova.' },
+      })
+    }
+
+    // Registra l'appliance (pubkey unica). Se la pubkey è già nota e NON revocata → riusa il
+    // record (re-pairing legittimo). Tracciamo un eventuale cambio di restaurant_id per audit.
+    const movedRestaurant = !!existingByPubkey && existingByPubkey.restaurantId !== restaurant.id
     const [appliance] = await cloudDb
       .insert(cloudAppliances)
       .values({
@@ -256,11 +314,13 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
       })
       .onConflictDoUpdate({
         target: cloudAppliances.pubkey,
-        set: { restaurantId: restaurant.id, lastSeenAt: new Date(), revokedAt: null },
+        // NON tocchiamo revoked_at qui: il ramo revocato è già stato rifiutato sopra, quindi
+        // un conflitto qui è sempre su un record NON revocato. Niente reset implicito.
+        set: { restaurantId: restaurant.id, lastSeenAt: new Date() },
       })
       .returning()
 
-    await audit({ event: 'pair_claimed', ownerId: owner.id, req, meta: { restaurantId: restaurant.id, applianceId: appliance!.id } })
+    await audit({ event: 'pair_claimed', ownerId: owner.id, req, meta: { restaurantId: restaurant.id, applianceId: appliance!.id, ...(movedRestaurant ? { movedFromRestaurantId: existingByPubkey!.restaurantId } : {}) } })
 
     // Bundle: snapshot NON segreto dell'owner (SEC-001). MAI password_hash.
     return reply.send({
@@ -294,7 +354,7 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
     const parsed = heartbeatSchema.safeParse(req.body ?? {})
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Dati non validi' } })
 
-    // Anti-replay: il ts firmato deve cadere nella finestra di tolleranza rispetto a ora.
+    // Anti-replay (NEW-04): il ts firmato deve cadere nella finestra ±90s rispetto a ora.
     const ts = Number(timestampRaw)
     if (!Number.isFinite(ts) || Math.abs(Date.now() - ts) > HEARTBEAT_SKEW_MS) {
       await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, reason: 'stale_timestamp' } })
@@ -321,6 +381,16 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
     if (!verifyEd25519(appliance.appliance.pubkey, payload, signature)) {
       await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, reason: 'invalid_signature' } })
       return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Firma non valida' } })
+    }
+
+    // Anti-replay forte (NEW-04): SOLO dopo aver verificato la firma (così richieste con firma
+    // non valida non possono avvelenare lo stato monotono dell'appliance reale). Se Redis è
+    // disponibile rifiutiamo un `ts` <= all'ultimo accettato per QUESTA appliance: una firma
+    // catturata (anche entro i ±90s) non è riusabile. Senza Redis resta la sola finestra.
+    const replay = await checkMonotonicTs(`pair:hb:${applianceId}`, ts, HEARTBEAT_NONCE_TTL_S)
+    if (replay === 'replay') {
+      await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, reason: 'replayed_timestamp' } })
+      return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Heartbeat già vista' } })
     }
 
     const cloudVersion = appliance.ownerVersion

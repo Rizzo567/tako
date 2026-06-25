@@ -17,10 +17,11 @@ Tutto vive SOLO in `TAKO_MODE=cloud`. Il modo `local` resta invariato.
   né il body (PII destinatario).
 - `validateEmailConfig()` (chiamata in `startCloudServer`): fail-fast se `EMAIL_TRANSPORT=resend`
   e `RESEND_API_KEY` assente.
-- **Quota anti mail-bombing (§7bis)**: `sendEmail` applica un limite logico per-destinatario
-  (max 5 email / 60 min, in-memory) PRIMA del transport. Oltre soglia ritorna
-  `{ ok:false, transport:'throttled' }` senza inviare e senza lanciare. Difende vittime terze
-  (register/resend con email altrui non bombardano l'indirizzo).
+- **Quota anti mail-bombing (§7bis / NEW-06 FASE 5e)**: `sendEmail` applica un limite logico
+  per-destinatario (max 5 email / 60 min) PRIMA del transport. Lo stato vive su **Redis**
+  (chiave `email:quota:<emailLower>`, INCR+EXPIRE atomico, TTL 60 min) → condiviso tra repliche;
+  **fallback in-memory** per-istanza quando `REDIS_URL` assente (comportamento identico). Oltre
+  soglia ritorna `{ ok:false, transport:'throttled' }` senza inviare e senza lanciare.
 
 ## 2. OAuth Google + GitHub — `apps/server/src/routes/cloud/oauth.ts` (montato sotto `/api/auth`)
 Dipendenza installata: **`@fastify/oauth2` 8.2.0**.
@@ -44,7 +45,11 @@ Dipendenza installata: **`@fastify/oauth2` 8.2.0**.
   - email == owner esistente **verificato** → link `cloud_oauth_accounts` (idempotente) → login.
   - email == owner esistente **NON verificato** → **RIFIUTO** (no merge silenzioso), redirect `?oauth_error=verify_existing_account`.
   - nessun owner → crea owner nuovo (`password_hash=null`, `email_verified=true` perché provider conferma) + link.
-- **SEC-005**: redirect post-callback SOLO via `safeRedirect(next)` (stessa origin di `SITE_BASE_URL`), mai token in URL.
+- **SEC-005 / NEW-05 (FASE 5e)**: redirect post-callback alla **home** dell'allowlist
+  `SITE_BASE_URL` via `safeRedirect(undefined)`. Il parametro `next` letto dalla query del
+  callback era morto e potenzialmente open-redirect (la query del callback contiene solo
+  `code`/`state` dal provider): RIMOSSO. Reintrodurre il `next` richiederebbe propagarlo DENTRO
+  lo `state` firmato del plugin (`generate/checkStateFunction`). Mai token in URL.
 - Errori (state invalido, token, rete provider) → redirect `SITE_BASE_URL/?oauth_error=1` + audit, mai stacktrace al client.
 
 ## 3. Pairing appliance↔cloud — `apps/server/src/routes/cloud/pair.ts` (prefix `/api/pair`)
@@ -54,8 +59,12 @@ Dipendenza installata: **`@fastify/oauth2` 8.2.0**.
 | GET | `/api/pair/status` | — | `{ enabled:true, phase:'2b' }` |
 | POST | `/api/pair/code` | sessione owner + CSRF | `{restaurantId}` (verifica ownership) → `{code, expiresInSeconds, restaurantId}` |
 | POST | `/api/pair/approve` | sessione owner + CSRF | `{code}` → ri-conferma idempotente (opzionale, non richiesta dal claim) |
-| POST | `/api/pair/claim` | device code (+ per-code lockout) | `{code, devicePubKey}` → bundle + applianceToken |
-| POST | `/api/pair/heartbeat` | `X-Tako-Appliance-Token`(=applianceId) + firma ed25519 verificata | `{credentialsVersion?}` → `{credentialsVersion, action}` |
+| POST | `/api/pair/claim` | device code (+ per-code lockout + rate-limit 30/min/IP) | `{code, devicePubKey}` → bundle + applianceToken |
+| POST | `/api/pair/heartbeat` | `X-Tako-Appliance-Token`(=applianceId) + firma ed25519 verificata (+ rate-limit 30/min/IP) | `{credentialsVersion?}` → `{credentialsVersion, action}` |
+
+**Rate-limit per-route (NEW-01 FASE 5e)**: tutte le route `/api/pair/*` mutanti
+(`claim`, `heartbeat`, `code`, `approve`) hanno rate-limit per-IP **30/min** (store Redis del
+control-plane, fallback in-memory). Gli endpoint auth sensibili restano a 10/min.
 
 ### Flusso di approvazione scelto: AUTO-APPROVE alla generazione
 `POST /api/pair/code` richiede già la **sessione owner autenticata** e verifica che il
@@ -70,14 +79,20 @@ NON lo richiede. Il claim verifica comunque `approved_at` (difesa in profondità
 ### `/claim` (SEC-001/003)
 - Consumo **atomico** del code (`UPDATE…WHERE consumed_at IS NULL AND not expired RETURNING`).
 - Registra `cloud_appliances` con la `devicePubKey` (proof-of-possession), unique su pubkey,
-  `onConflictDoUpdate` per re-pairing (resetta `revoked_at`).
+  `onConflictDoUpdate` per re-pairing legittimo (aggiorna `restaurant_id`/`last_seen_at`).
+- **NEW-07 (FASE 5e)**: una pubkey con `revoked_at` valorizzato NON viene riattivata
+  silenziosamente. Pre-check: se il record esiste ed è revocato → `403 PUBKEY_REVOKED` (l'appliance
+  deve generare una NUOVA keypair). Il conflitto non resetta più `revoked_at`. Un cambio di
+  `restaurant_id` nel re-pairing viene loggato (`pair_claimed.meta.movedFromRestaurantId`).
 - Emette `applianceToken` opaco legato all'appliance; a riposo si conserva la **pubkey**, non il token.
   Il binding token↔pubkey chiude il loop PoP: ogni heartbeat successiva DEVE firmare con la
   privkey corrispondente a quella pubkey (vedi sotto), quindi il token da solo non basta.
-- **Per-code lockout (SEC-003, Fase 5a)**: oltre al rate-limit per-IP (Redis, davanti alla route)
-  un limite per **singolo code** (`max 5 tentativi falliti / 10 min`, chiave = HMAC del code,
-  in-memory per-istanza). Tentativo fallito = code invalido/scaduto/già usato. Oltre soglia →
-  `429 TOO_MANY_ATTEMPTS`. Un claim riuscito azzera il contatore del code.
+- **Per-code lockout (SEC-003 / NEW-01 FASE 5e)**: oltre al rate-limit per-IP un limite per
+  **singolo code** (`max 5 tentativi falliti / 10 min`, chiave = HMAC del code). Lo stato vive su
+  **Redis** (`pair:claim:<codeHash>`, INCR+EXPIRE atomico, TTL 10 min) → condiviso tra repliche;
+  **fallback in-memory** per-istanza quando `REDIS_URL` assente (comportamento identico). Tentativo
+  fallito = code invalido/scaduto/già usato. Oltre soglia → `429 TOO_MANY_ATTEMPTS`. Un claim
+  riuscito azzera il contatore del code.
 - Bundle ritornato: `{ applianceToken, applianceId, restaurant{id,name,slug,plan},
   ownerSnapshot{cloud_owner_id, email, name}, credentialsVersion }`. **MAI `password_hash`** (SEC-001).
 
@@ -89,8 +104,11 @@ NON lo richiede. Il claim verifica comunque `approved_at` (difesa in profondità
     con ordine chiavi `applianceId, ts, credentialsVersion`. `ts` = number (ms) preso da
     `X-Tako-Timestamp`; `credentialsVersion` = quella inviata nel body (= quella firmata dal client).
     Allineato byte-per-byte con `signPayload`/`heartbeat` di `apps/server/src/lib/cloud-client.ts`.
-  - **Anti-replay**: `ts` deve cadere in una finestra `±5 min` da `Date.now()` (clock skew di
-    un'appliance headless). Fuori finestra → `401`. Una heartbeat catturata non è riusabile a lungo.
+  - **Anti-replay (NEW-04 FASE 5e)**: `ts` deve cadere in una finestra `±90 s` da `Date.now()`
+    (ridotta da ±5 min). Fuori finestra → `401`. In più, se Redis è disponibile, si traccia
+    l'ULTIMO `ts` accettato per-appliance (`pair:hb:<applianceId>`, EVAL Lua monotono, TTL ~190s)
+    DOPO la verifica della firma: un `ts` ≤ all'ultimo visto → `401` (firma catturata non
+    riusabile nemmeno entro la finestra). Senza Redis resta la sola finestra (fallback).
   - Firma/timestamp mancanti, ts non numerico/fuori finestra, o firma non valida → `401 UNAUTHORIZED`.
 - `last_seen_at` + `seen_credentials_version` aggiornati **SOLO** se la firma è valida.
 - Se `cloud.credentials_version > signedVersion` → `action:'refresh'`. Appliance revocata →
@@ -113,6 +131,7 @@ pair_claim_refused, pair_heartbeat`.
 | `OAUTH_BASE_URL` | sì per OAuth | base dei callback (es. `https://api.tako.app`) |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | per Google | abilita route Google |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | per GitHub | abilita route GitHub |
+| `REDIS_URL` | no (consigliata in prod) | store condiviso per rate-limit + lockout claim + quota email + anti-replay heartbeat. Assente → fallback in-memory per-istanza. |
 
 ## 6. File creati / modificati
 - Creati: `apps/server/src/routes/cloud/oauth.ts`, `apps/server/src/cloud/session.ts`.
@@ -121,6 +140,18 @@ pair_claim_refused, pair_heartbeat`.
   (helper OAuth), `apps/server/src/cloud/audit.ts` (eventi), `apps/server/src/cloud/server.ts` (monta oauth +
   validateEmailConfig), `apps/server/src/routes/cloud/auth.ts` (riusa `issueCloudSession`), `.env.example` (root + server).
 - Dipendenza installata: `@fastify/oauth2@8.2.0` (in `apps/server`).
+
+### Hardening FASE 5e (security-review)
+- Nuovo modulo `apps/server/src/cloud/redis.ts`: client Redis condiviso (singleton lazy +
+  `setRedis`/`getRedis`) e helper anti-abuso (`incrWithTtl`, `getCount`, `del`, `checkMonotonicTs`)
+  con fallback in-memory.
+- `apps/server/src/cloud/server.ts`: `bodyLimit=32KiB` (NEW-02); rate-limit per-route esteso a
+  `/api/pair/*` (30/min, NEW-01); estratto `buildCloudApp()` (build senza `listen`) da
+  `startCloudServer()` per testabilità (comportamento d'avvio invariato); inietta il client Redis
+  in `redis.ts`.
+- `apps/server/src/middleware/cloudAuth.ts`: confronto CSRF in tempo costante (NEW-03).
+- `apps/server/src/cloud/email.ts`: quota anti mail-bombing su Redis (NEW-06).
+- Test: `tests/cloud/pairing.test.ts` +2 casi (PUBKEY_REVOKED su NEW-07; finestra ±90s su NEW-04).
 
 ## 7. Note per altri agenti
 - **Frontend (Fase 3)**: i bottoni social fanno `location.href = {OAUTH_BASE_URL}/api/auth/google|github`.

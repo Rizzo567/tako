@@ -1,6 +1,7 @@
 // Middleware del modo cloud: risoluzione sessione owner + protezione CSRF.
 // SEPARATO da middleware/auth.ts (modo local), che resta invariato.
 import type { FastifyRequest, FastifyReply } from 'fastify'
+import { timingSafeEqual } from 'node:crypto'
 import { and, eq, gt } from 'drizzle-orm'
 import { cloudDb, cloudSessions, cloudOwners } from '../cloud/db.js'
 import { hashToken } from '../cloud/security.js'
@@ -58,6 +59,24 @@ export async function requireCloudAuth(req: FastifyRequest, reply: FastifyReply)
 const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
 
 /**
+ * Confronto CSRF in TEMPO COSTANTE (NEW-03). Evita un timing oracle sul token double-submit.
+ * `timingSafeEqual` richiede buffer di pari lunghezza: gestiamo lunghezze diverse senza throw
+ * (ritorno false) ma confrontando comunque per non rivelare la lunghezza via early-return.
+ */
+function csrfTokensMatch(header: string | undefined, cookie: string | undefined): boolean {
+  if (!header || !cookie) return false
+  const a = Buffer.from(header, 'utf8')
+  const b = Buffer.from(cookie, 'utf8')
+  if (a.length !== b.length) {
+    // Lunghezze diverse → sicuramente diversi. Eseguiamo comunque un confronto fittizio
+    // della stessa lunghezza per non introdurre un early-return dipendente dalla lunghezza.
+    timingSafeEqual(a, a)
+    return false
+  }
+  return timingSafeEqual(a, b)
+}
+
+/**
  * Protezione CSRF (double-submit) attiva SOLO in COOKIE_MODE=crosssite.
  * Sui metodi che mutano stato richiede l'header X-Tako-CSRF uguale al cookie CSRF.
  * In samesite è un no-op (SameSite=Lax basta). Va montato DOPO requireCloudAuth.
@@ -70,7 +89,7 @@ export async function requireCsrf(req: FastifyRequest, reply: FastifyReply) {
   const cookieToken = req.cookies?.[CLOUD_CSRF_COOKIE]
   const header = Array.isArray(headerToken) ? headerToken[0] : headerToken
 
-  if (!header || !cookieToken || header !== cookieToken) {
+  if (!csrfTokensMatch(header, cookieToken)) {
     return reply.code(403).send({ error: { code: 'CSRF', message: 'Token CSRF mancante o non valido' } })
   }
 }

@@ -6,6 +6,7 @@
 // monte di entrambi i transport, così Tako non può essere usato come amplificatore per
 // bombardare di email vittime terze.
 import { emailFrom } from './config.js'
+import { incrWithTtl } from './redis.js'
 
 export interface EmailMessage {
   to: string
@@ -109,18 +110,23 @@ export function validateEmailConfig(): void {
   }
 }
 
-// ─── Quota / rate-limit logico sull'invio (anti mail-bombing — §7bis) ─────────
-// Limita il numero di email che possiamo spedire a UN DATO destinatario in una
-// finestra temporale, a prescindere da quante richieste arrivano. Difende vittime
-// terze: anche se un attaccante spamma /register o /resend con l'email di un altro,
-// quell'indirizzo non riceve più di MAX_PER_WINDOW messaggi per finestra.
-// In-memory (per-istanza): sufficiente come freno anti-abuso; il rate-limit per-IP
-// condiviso (Redis) sta già davanti agli endpoint. Cleanup pigro per non crescere.
+// ─── Quota / rate-limit logico sull'invio (anti mail-bombing — §7bis / NEW-06) ─────────
+// Limita il numero di email che possiamo spedire a UN DATO destinatario in una finestra
+// temporale, a prescindere da quante richieste arrivano. Difende vittime terze: anche se un
+// attaccante spamma /register o /resend con l'email di un altro, quell'indirizzo non riceve
+// più di MAX_PER_WINDOW messaggi per finestra.
+// NEW-06: lo stato vive su REDIS (chiave `email:quota:<emailLower>`, TTL = finestra) così è
+// CONDIVISO tra repliche del control-plane; FALLBACK in-memory per-istanza quando Redis non è
+// disponibile (dev/test/single-istanza) — il comportamento osservabile resta identico.
 const SEND_WINDOW_MS = 60 * 60 * 1000 // 1 ora
+const SEND_WINDOW_S = SEND_WINDOW_MS / 1000
 const SEND_MAX_PER_WINDOW = 5
+const emailQuotaKey = (to: string) => `email:quota:${to.trim().toLowerCase()}`
+
+// Fallback in-memory (usato SOLO se Redis assente). Cleanup pigro per non crescere.
 const sendLog = new Map<string, number[]>()
 
-function quotaAllows(to: string): boolean {
+function memQuotaAllows(to: string): boolean {
   const key = to.trim().toLowerCase()
   const now = Date.now()
   const recent = (sendLog.get(key) ?? []).filter((t) => now - t < SEND_WINDOW_MS)
@@ -130,7 +136,6 @@ function quotaAllows(to: string): boolean {
   }
   recent.push(now)
   sendLog.set(key, recent)
-  // Cleanup pigro: ogni tanto sfoltisci le chiavi scadute per non far crescere la mappa.
   if (sendLog.size > 5000) {
     for (const [k, v] of sendLog) {
       const live = v.filter((t) => now - t < SEND_WINDOW_MS)
@@ -141,6 +146,15 @@ function quotaAllows(to: string): boolean {
   return true
 }
 
+async function quotaAllows(to: string): Promise<boolean> {
+  // INCR atomico su Redis (con EXPIRE alla prima email della finestra). Se Redis non è
+  // disponibile → ramo in-memory. La logica "consuma una unità e verifica la soglia" è la
+  // stessa dei due rami, così i test (senza Redis) restano verdi.
+  const count = await incrWithTtl(emailQuotaKey(to), SEND_WINDOW_S)
+  if (count === null) return memQuotaAllows(to)
+  return count <= SEND_MAX_PER_WINDOW
+}
+
 /**
  * Invia un'email tramite il transport selezionato.
  * - Applica una quota per-destinatario (anti mail-bombing): oltre la soglia ritorna
@@ -149,7 +163,7 @@ function quotaAllows(to: string): boolean {
  *   già fanno `.catch()` best-effort sui flussi anti-enumeration.
  */
 export async function sendEmail(msg: EmailMessage): Promise<EmailResult> {
-  if (!quotaAllows(msg.to)) {
+  if (!(await quotaAllows(msg.to))) {
     return { ok: false, transport: 'throttled' }
   }
   const transport = selectTransport()

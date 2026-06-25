@@ -271,7 +271,13 @@ async function finishCallback(
   else if (result.linked) await audit({ event: 'oauth_account_linked', ownerId: result.ownerId, req, meta: { provider } })
   await audit({ event: 'oauth_login_success', ownerId: result.ownerId, req, meta: { provider } })
 
-  // SEC-005: redirect solo verso l'allowlist SITE_BASE_URL (mai token in URL).
-  const next = (req.query as Record<string, unknown>)?.['next']
-  return reply.redirect(safeRedirect(typeof next === 'string' ? next : undefined))
+  // SEC-005 / NEW-05 (FASE 5e): redirect post-login alla HOME dell'allowlist SITE_BASE_URL.
+  // Il parametro `next` letto dalla query del callback era MORTO e potenzialmente pericoloso:
+  // la query del callback OAuth contiene solo `code`/`state` dal provider, non un `next` di
+  // nostra origine, e leggere un redirect target dalla query del callback è un vettore di
+  // open-redirect/token-leak. La start route è gestita dal plugin (`startRedirectPath`) e non
+  // cattura alcun `next`. Finché non c'è un meccanismo che propaghi `next` DENTRO lo `state`
+  // firmato del plugin (generate/checkState), il redirect va alla home (allowlist). `safeRedirect`
+  // resta come guardia: con argomento undefined ritorna la home di SITE_BASE_URL.
+  return reply.redirect(safeRedirect(undefined))
 }

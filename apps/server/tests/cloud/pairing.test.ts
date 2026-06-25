@@ -117,6 +117,26 @@ describe('/pair/claim — bundle senza password_hash (SEC-001) + single-use', ()
     // i primi 5 tentativi → 400; dal 6° → 429
     expect(last).toBe(429)
   })
+
+  it('re-claim con una pubkey REVOCATA → 403 PUBKEY_REVOKED (NEW-07, niente unrevoke silenzioso)', async () => {
+    const a = await makeOwnerWithRestaurant('claim-revoked@test.local')
+    const kp = newKeypair()
+    // 1) Primo pairing riuscito con questa keypair.
+    const code1 = (await genCode(a.sessionCookie, a.restaurantId)).json().data.code as string
+    const first = await ctx.app.inject({ url: '/api/pair/claim', ...body({ code: code1, devicePubKey: kp.publicKeyPem }) })
+    expect(first.statusCode).toBe(200)
+    const applianceId = first.json().data.applianceId as string
+    // 2) L'owner revoca l'appliance (azione di sicurezza esplicita).
+    await ctx.sql`update cloud_appliances set revoked_at = now() where id = ${applianceId}`
+    // 3) Nuovo code + re-claim con la STESSA pubkey revocata → deve essere RIFIUTATO.
+    const code2 = (await genCode(a.sessionCookie, a.restaurantId)).json().data.code as string
+    const reclaim = await ctx.app.inject({ url: '/api/pair/claim', ...body({ code: code2, devicePubKey: kp.publicKeyPem }) })
+    expect(reclaim.statusCode).toBe(403)
+    expect(reclaim.json().error.code).toBe('PUBKEY_REVOKED')
+    // 4) Il record resta revocato (nessun unrevoke implicito).
+    const row = await ctx.sql`select revoked_at from cloud_appliances where id = ${applianceId}`
+    expect(row[0]!.revoked_at).not.toBeNull()
+  })
 })
 
 describe('/pair/heartbeat — proof-of-possession ed25519 (SEC-003/007)', () => {
@@ -171,10 +191,17 @@ describe('/pair/heartbeat — proof-of-possession ed25519 (SEC-003/007)', () => 
     expect(res.statusCode).toBe(401)
   })
 
-  it('timestamp fuori finestra (±5 min) → 401 (anti-replay)', async () => {
+  it('timestamp fuori finestra → 401 (anti-replay)', async () => {
     const p = await pairedAppliance('hb-stale@test.local')
     const oldTs = Date.now() - 10 * 60 * 1000 // 10 minuti fa
     const res = await heartbeat(p.applianceId, p.kp, { ts: oldTs, credentialsVersion: 0 })
+    expect(res.statusCode).toBe(401)
+  })
+
+  it('timestamp a -3 min → 401 (finestra ristretta a ±90s, NEW-04)', async () => {
+    const p = await pairedAppliance('hb-window90@test.local')
+    const ts = Date.now() - 3 * 60 * 1000 // dentro i vecchi ±5min, fuori dai nuovi ±90s
+    const res = await heartbeat(p.applianceId, p.kp, { ts, credentialsVersion: 0 })
     expect(res.statusCode).toBe(401)
   })
 

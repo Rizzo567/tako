@@ -1,7 +1,11 @@
 // Avvio del CONTROL-PLANE cloud (TAKO_MODE=cloud). SEPARATO da index.ts (modo local),
 // che resta invariato. Monta CORS allowlist esatta, rate-limit con store Redis condiviso,
-// e le route cloud (/api/auth + placeholder /api/pair).
-import Fastify from 'fastify'
+// e le route cloud (/api/auth + /api/pair).
+//
+// FASE 5e: `buildCloudApp()` (costruisce e registra tutto, NIENTE listen) è estratto da
+// `startCloudServer()` (build + listen) per testabilità: un test può montare l'app reale
+// senza aprire un socket. Il comportamento d'avvio è invariato.
+import Fastify, { type FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
 import cookie from '@fastify/cookie'
 import rateLimit from '@fastify/rate-limit'
@@ -12,10 +16,35 @@ import { cloudOAuthRoutes } from '../routes/cloud/oauth.js'
 import { cloudPairRoutes } from '../routes/cloud/pair.js'
 import { allowedOrigins, cookieMode } from './config.js'
 import { validateEmailConfig } from './email.js'
+import { setRedis } from './redis.js'
 
-export async function startCloudServer(): Promise<void> {
-  const PORT = Number(process.env['PORT'] ?? 3001)
+// bodyLimit del control-plane (NEW-02): i payload JSON auth/pairing sono piccoli.
+const CLOUD_BODY_LIMIT = 32 * 1024 // 32 KiB
 
+// trustProxy: il cloud sta DIETRO un reverse proxy (Vercel/Fly/Nginx). req.ip va derivato
+// dall'header X-Forwarded-For SOLO se il proxy è fidato. TRUST_PROXY può essere 'true', un
+// hop count, o una lista di CIDR fidati. Default: 1 hop (il proxy immediato). NON usare
+// 'true' indiscriminato in produzione: consente lo spoofing dell'IP da parte del client se
+// non c'è un proxy che riscrive l'header.
+function resolveTrustProxy(): boolean | number | string {
+  const trustProxyEnv = process.env['TRUST_PROXY']
+  return trustProxyEnv === undefined ? 1
+    : trustProxyEnv === 'true' ? true
+    : /^\d+$/.test(trustProxyEnv) ? Number(trustProxyEnv)
+    : trustProxyEnv
+}
+
+function buildCloudFastify(trustProxy: boolean | number | string): FastifyInstance {
+  return Fastify({ logger: { level: 'error' }, trustProxy, bodyLimit: CLOUD_BODY_LIMIT })
+}
+
+/**
+ * Costruisce l'app cloud reale (CORS, cookie, helmet, rate-limit, error handler, route)
+ * SENZA chiamare `listen()`. Usata da `startCloudServer()` e disponibile per i test.
+ * Effetti collaterali: valida la config (SESSION_SECRET, email) e inietta il client Redis
+ * condiviso in `redis.ts` (così lockout/quota/nonce usano lo STESSO Redis del rate-limit).
+ */
+export async function buildCloudApp(): Promise<FastifyInstance> {
   // SESSION_SECRET firma i cookie (firma anti-tamper di @fastify/cookie). DISTINTO da
   // JWT_SECRET locale: il control-plane non condivide segreti con l'appliance.
   const SESSION_SECRET = process.env['SESSION_SECRET']
@@ -27,19 +56,7 @@ export async function startCloudServer(): Promise<void> {
   // Fail-fast sulla config email: se EMAIL_TRANSPORT=resend la RESEND_API_KEY è obbligatoria.
   validateEmailConfig()
 
-  // trustProxy: il cloud sta DIETRO un reverse proxy (Vercel/Fly/Nginx). req.ip va
-  // derivato dall'header X-Forwarded-For SOLO se il proxy è fidato. TRUST_PROXY può
-  // essere 'true', un hop count, o una lista di CIDR fidati. Default: 1 hop (il proxy
-  // immediato). NON usare 'true' indiscriminato in produzione: consente lo spoofing
-  // dell'IP da parte del client se non c'è un proxy che riscrive l'header.
-  const trustProxyEnv = process.env['TRUST_PROXY']
-  const trustProxy: boolean | number | string =
-    trustProxyEnv === undefined ? 1
-    : trustProxyEnv === 'true' ? true
-    : /^\d+$/.test(trustProxyEnv) ? Number(trustProxyEnv)
-    : trustProxyEnv
-
-  const fastify = Fastify({ logger: { level: 'error' }, trustProxy })
+  const fastify = buildCloudFastify(resolveTrustProxy())
 
   await fastify.register(helmet, {
     contentSecurityPolicy: {
@@ -68,14 +85,19 @@ export async function startCloudServer(): Promise<void> {
   await fastify.register(cookie, { secret: SESSION_SECRET })
 
   // Rate-limit con store Redis CONDIVISO (REDIS_URL): coerente tra più istanze/repliche
-  // del control-plane. La chiave è req.ip (derivato dal proxy fidato sopra).
+  // del control-plane. La chiave è req.ip (derivato dal proxy fidato sopra). Lo STESSO
+  // client viene iniettato in redis.ts per i freni anti-abuso (lockout/quota/nonce).
   const redisUrl = process.env['REDIS_URL']
   const redis = redisUrl ? new Redis(redisUrl, { connectTimeout: 5000, maxRetriesPerRequest: 1 }) : undefined
-  if (!redis) {
-    fastify.log.error('REDIS_URL non impostata: il rate-limit cloud userà un fallback in-memory (non condiviso).')
+  if (redis) {
+    redis.on('error', () => { /* swallow: il rate-limit/gli helper degradano */ })
+    setRedis(redis)
+  } else {
+    setRedis(null)
+    fastify.log.error('REDIS_URL non impostata: rate-limit/lockout cloud usano un fallback in-memory (non condiviso tra repliche).')
   }
   await fastify.register(rateLimit, {
-    global: false, // limiti per-route (vedi config.rateLimit sotto)
+    global: false, // limiti per-route (vedi onRoute hook sotto)
     redis,
     keyGenerator: (req) => req.ip,
     errorResponseBuilder: () => ({
@@ -98,11 +120,12 @@ export async function startCloudServer(): Promise<void> {
 
   fastify.get('/health', async () => ({ status: 'ok', mode: 'cloud', cookieMode: cookieMode(), ts: new Date().toISOString() }))
 
-  // Route cloud. I limiti per-endpoint sensibili sono dichiarati DENTRO le route via
-  // config.rateLimit? No: @fastify/rate-limit per-route si configura con un wrapper.
-  // Per semplicità e robustezza applichiamo un onRoute hook che imposta i limiti sugli
-  // endpoint auth sensibili.
-  const SENSITIVE = new Set([
+  // Rate-limit per-endpoint. Due classi (NEW-01 FASE 5e):
+  //  - SENSITIVE_AUTH: endpoint auth che spediscono email / verificano credenziali → 10/min.
+  //  - SENSITIVE_PAIR: endpoint pairing non autenticati o ad alta frequenza. claim/heartbeat
+  //    sono i più esposti (no sessione owner) → 30/min per-IP; code/approve passano comunque
+  //    dal rate-limit globale per-IP via questa classe (30/min) oltre alla sessione+CSRF.
+  const SENSITIVE_AUTH = new Set([
     'POST:/api/auth/login',
     'POST:/api/auth/register',
     'POST:/api/auth/forgot-password',
@@ -111,14 +134,21 @@ export async function startCloudServer(): Promise<void> {
     'POST:/api/auth/verify-email',
     'GET:/api/auth/verify-email',
   ])
+  const SENSITIVE_PAIR = new Set([
+    'POST:/api/pair/claim',
+    'POST:/api/pair/heartbeat',
+    'POST:/api/pair/code',
+    'POST:/api/pair/approve',
+  ])
   fastify.addHook('onRoute', (routeOptions) => {
     const methods = Array.isArray(routeOptions.method) ? routeOptions.method : [routeOptions.method]
-    const isSensitive = methods.some((m) => SENSITIVE.has(`${m}:${routeOptions.url}`))
-    if (isSensitive) {
-      routeOptions.config = {
-        ...(routeOptions.config ?? {}),
-        rateLimit: { max: 10, timeWindow: '1 minute' },
-      }
+    const keys = methods.map((m) => `${m}:${routeOptions.url}`)
+    if (keys.some((k) => SENSITIVE_AUTH.has(k))) {
+      routeOptions.config = { ...(routeOptions.config ?? {}), rateLimit: { max: 10, timeWindow: '1 minute' } }
+    } else if (keys.some((k) => SENSITIVE_PAIR.has(k))) {
+      // claim/heartbeat non hanno sessione: il per-IP è la prima linea di difesa (oltre al
+      // per-code lockout e al PoP ed25519). 30/min/IP è ampio per un'appliance legittima.
+      routeOptions.config = { ...(routeOptions.config ?? {}), rateLimit: { max: 30, timeWindow: '1 minute' } }
     }
   })
 
@@ -128,6 +158,14 @@ export async function startCloudServer(): Promise<void> {
   // provider sono configurati (client id/secret in env), altrimenti è un no-op.
   await fastify.register(cloudOAuthRoutes, { prefix: '/api/auth' })
   await fastify.register(cloudPairRoutes, { prefix: '/api/pair' })
+
+  return fastify
+}
+
+export async function startCloudServer(): Promise<void> {
+  const PORT = Number(process.env['PORT'] ?? 3001)
+  const fastify = await buildCloudApp()
+  const origins = allowedOrigins()
 
   try {
     await fastify.listen({ port: PORT, host: '0.0.0.0' })
