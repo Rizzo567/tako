@@ -30,13 +30,11 @@
   #stage{position:relative;width:1920px;height:1080px;transform-origin:center center;flex:none;}
   /* device cluster — restaurant-floor overview */
   .scene{position:absolute;inset:0;transform-origin:center center;transform:scale(1);}
-  /* device slots — dashboard (left, full size) + four phones in a 2×2 grid (right) */
+  /* device slots — dashboard (left, full size) + two phones (IT + EN) centered vertically beside the Mac (right) */
   .slot{position:absolute;}
   .slot.s-mac{left:71px;top:158px;transform:scale(.96);transform-origin:top left;z-index:4;}
-  .slot.s-p1{left:1336px;top:5px;transform:scale(.655);transform-origin:top left;z-index:7;}
-  .slot.s-p2{left:1645px;top:5px;transform:scale(.655);transform-origin:top left;z-index:7;}
-  .slot.s-p3{left:1336px;top:543px;transform:scale(.655);transform-origin:top left;z-index:7;}
-  .slot.s-p4{left:1645px;top:543px;transform:scale(.655);transform-origin:top left;z-index:7;}
+  .slot.s-p1{left:1336px;top:274px;transform:scale(.655);transform-origin:top left;z-index:7;}
+  .slot.s-p2{left:1645px;top:274px;transform:scale(.655);transform-origin:top left;z-index:7;}
 
   /* ───────── ambient background fx ───────── */
   .glow{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:0;}
@@ -271,7 +269,7 @@
         <img src="assets/tako-point-up.png" alt="Tako ti indica il Mac" />
       </div>
 
-      <!-- Tavolo 3 · iPhone (griglia, alto-sx) -->
+      <!-- Tavolo 3 · iPhone (IT) -->
       <div class="slot s-p1">
         <div class="phone">
           <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
@@ -282,7 +280,7 @@
         </div>
       </div>
 
-      <!-- Tavolo 7 · iPhone (griglia, alto-dx) -->
+      <!-- Tavolo 7 · iPhone (EN) -->
       <div class="slot s-p2">
         <div class="phone">
           <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
@@ -293,27 +291,6 @@
         </div>
       </div>
 
-      <!-- Tavolo 11 · iPhone (griglia, basso-sx) -->
-      <div class="slot s-p3">
-        <div class="phone">
-          <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
-            <div class="island"></div>
-            <iframe id="appFrame3" src="Tako%20App.html?bare&sync&table=11&delay=12000&lang=es" title="Tako App · Tavolo 11 (ES)" loading="eager"></iframe>
-            <div class="sheen"></div>
-          </div></div></div>
-        </div>
-      </div>
-
-      <!-- Tavolo 5 · iPhone (griglia, basso-dx) -->
-      <div class="slot s-p4">
-        <div class="phone">
-          <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
-            <div class="island"></div>
-            <iframe id="appFrame4" src="Tako%20App.html?bare&sync&table=5&delay=18000&lang=de" title="Tako App · Tavolo 5 (DE)" loading="eager"></iframe>
-            <div class="sheen"></div>
-          </div></div></div>
-        </div>
-      </div>
       </div>
     </div>
   </div>
