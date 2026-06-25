@@ -29,16 +29,16 @@
       return String(window.__TAKO_API__).replace(/\/+$/, '');
     }
     var host = (typeof location !== 'undefined' && location.hostname) || '';
-    if (host === 'tako.app' || host === 'www.tako.app') {
-      return 'https://api.tako.app';
+    if (host === 'takoitalia.com' || host === 'www.takoitalia.com') {
+      return 'https://api.takoitalia.com';
     }
     // Sviluppo locale: backend in modo cloud su 3001.
     if (host === 'localhost' || host === '127.0.0.1' || host === 'tako.local') {
       return 'http://localhost:3001';
     }
-    // Fallback staging (preview Cloudflare Pages, domini sconosciuti).
-    // Sovrascrivibile in qualsiasi momento con window.__TAKO_API__.
-    return 'https://api-staging.tako.app';
+    // Fallback (preview Cloudflare Pages *.pages.dev, domini sconosciuti):
+    // punta comunque all'API di produzione. Sovrascrivibile con window.__TAKO_API__.
+    return 'https://api.takoitalia.com';
   }
 
   var API_BASE = resolveApiBase();
