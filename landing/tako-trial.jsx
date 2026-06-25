@@ -5,7 +5,7 @@
 
 const { useState: tS, useEffect: tE, useRef: tR } = React;
 
-const TRIAL_LINK = 'Tako%20Prova%20Gratis.html';
+const TRIAL_LINK = 'demo.html';
 
 /* ─────────── reveal robusto (scroll + IO + in-view immediato + safety net) ───────────
    Il pannello di anteprima può "congelare" transition/animation e ritardare

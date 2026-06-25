@@ -218,7 +218,7 @@ function HowPage() {
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl mb-4 reveal" style={{ color: 'var(--cream)' }}>Setup garantito in 30 minuti.</h2>
           <p className="text-lg opacity-80 mb-8 reveal">Se ci metti di più, ti rimborsiamo il primo mese.</p>
-          <a href="Tako%20Prova%20Gratis.html" className="btn-coral px-8 py-4 text-lg inline-block reveal">Inizia ora →</a>
+          <a href="demo.html" className="btn-coral px-8 py-4 text-lg inline-block reveal">Inizia ora →</a>
         </div>
       </section>
 

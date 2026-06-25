@@ -225,7 +225,7 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <a href="Tako%20Prova%20Gratis.html"
+              <a href="demo.html"
                 className={`block text-center py-3 rounded-full font-black border-2 transition`}
                 style={p.highlight
                   ? { background: 'white', color: 'var(--coral-deep)', borderColor: 'white' }
