@@ -6,13 +6,16 @@
   "exports": {
     ".": "./src/index.ts",
     "./schema": "./src/schema/index.ts",
+    "./schema/cloud": "./src/schema/cloud/index.ts",
     "./client": "./src/client.ts",
     "./embedded": "./src/embedded.ts"
   },
   "scripts": {
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:generate:cloud": "drizzle-kit generate --config drizzle.cloud.config.ts",
+    "db:migrate:cloud": "drizzle-kit migrate --config drizzle.cloud.config.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.38.3",
