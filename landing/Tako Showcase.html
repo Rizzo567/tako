@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tako — Un sistema, due lati</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --coral:#ED7159; --coral-deep:#D9533A; --coral-soft:#FFB7A3;
+    --cream:#FBF6F0; --ink:#2A1F1A;
+    --sans:'DM Sans',system-ui,sans-serif;
+    --display:'Nunito',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    background:#0c0908; color:var(--cream); font-family:var(--sans);
+    overflow:hidden; -webkit-font-smoothing:antialiased;
+  }
+
+  /* ───────── viewport → fixed stage scaler ───────── */
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(1400px 900px at 50% -8%, #2a211b 0%, transparent 60%),
+      radial-gradient(1000px 800px at 12% 110%, #241a16 0%, transparent 55%),
+      #0c0908;}
+  #stage{position:relative;width:1920px;height:1080px;transform-origin:center center;flex:none;}
+  /* device cluster — restaurant-floor overview */
+  .scene{position:absolute;inset:0;transform-origin:center center;transform:scale(1);}
+  /* device slots — dashboard (left, full size) + four phones in a 2×2 grid (right) */
+  .slot{position:absolute;}
+  .slot.s-mac{left:71px;top:158px;transform:scale(.96);transform-origin:top left;z-index:4;}
+  .slot.s-p1{left:1336px;top:5px;transform:scale(.655);transform-origin:top left;z-index:7;}
+  .slot.s-p2{left:1645px;top:5px;transform:scale(.655);transform-origin:top left;z-index:7;}
+  .slot.s-p3{left:1336px;top:543px;transform:scale(.655);transform-origin:top left;z-index:7;}
+  .slot.s-p4{left:1645px;top:543px;transform:scale(.655);transform-origin:top left;z-index:7;}
+
+  /* ───────── ambient background fx ───────── */
+  .glow{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:0;}
+  .glow.g1{width:760px;height:760px;left:760px;top:90px;
+    background:radial-gradient(circle, rgba(237,113,89,.46), transparent 66%);
+    animation:glowPulse 7s ease-in-out infinite;}
+  .glow.g2{width:540px;height:540px;left:1320px;top:420px;
+    background:radial-gradient(circle, rgba(217,83,58,.36), transparent 66%);
+    animation:glowPulse 9s ease-in-out infinite reverse;}
+  @keyframes glowPulse{0%,100%{transform:scale(1);opacity:var(--glo,.85);}50%{transform:scale(1.12);opacity:calc(var(--glo,.85) * .7);}}
+  body.go .glow{opacity:.85;transition:opacity 1.2s ease;}
+  body.go .glow.g2{--glo:.7;}
+
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);background-size:5px 5px;
+    mix-blend-mode:overlay;}
+
+  .bubbles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+  .bubbles i{position:absolute;bottom:-60px;width:14px;height:14px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), rgba(237,113,89,.18) 60%, transparent 70%);
+    opacity:0;animation:bub linear infinite;}
+  @keyframes bub{0%{transform:translateY(0) scale(.6);opacity:0;}10%{opacity:.5;}90%{opacity:.45;}100%{transform:translateY(-1180px) scale(1.2);opacity:0;}}
+
+  /* floating mascots */
+  .mascot{position:absolute;pointer-events:none;opacity:0;filter:drop-shadow(0 24px 30px rgba(0,0,0,.45));}
+  body.go .mascot{opacity:1;transition:opacity 1s ease .9s;}
+  .mascot.m1{width:140px;left:70px;top:470px;animation:floaty 6s ease-in-out infinite;}
+  .mascot.m2{width:120px;left:1700px;top:170px;animation:floaty 7s ease-in-out infinite .6s;}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-22px) rotate(3deg);}}
+
+  /* ───────── header copy ───────── */
+  .head{position:absolute;left:0;right:0;top:54px;text-align:center;z-index:6;}
+  .kick{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--coral-soft);opacity:0;}
+  .title{font-family:var(--display);font-weight:900;font-size:62px;line-height:1.0;letter-spacing:-.02em;margin:14px 0 0;
+    text-shadow:0 8px 40px rgba(0,0,0,.5);}
+  .title .c{color:var(--coral);}
+  .title span.w{display:inline-block;opacity:0;transform:translateY(26px);}
+  body.go .kick{opacity:1;transform:translateY(0);transition:all .7s var(--out,cubic-bezier(.2,1,.3,1)) .15s;}
+  .kick{transform:translateY(14px);}
+  body.go .title span.w{opacity:1;transform:translateY(0);transition:all .75s cubic-bezier(.2,1,.3,1);}
+  body.go .title span.w:nth-child(1){transition-delay:.34s;}
+  body.go .title span.w:nth-child(2){transition-delay:.42s;}
+  body.go .title span.w:nth-child(3){transition-delay:.50s;}
+  body.go .title span.w:nth-child(4){transition-delay:.58s;}
+  body.go .title span.w:nth-child(5){transition-delay:.66s;}
+
+  /* ───────── MacBook Pro (dashboard) ───────── */
+  @keyframes live{0%{box-shadow:0 0 0 0 rgba(79,169,128,.55);}70%{box-shadow:0 0 0 7px rgba(79,169,128,0);}100%{box-shadow:0 0 0 0 rgba(79,169,128,0);}}
+  .macbook{position:relative;width:1212px;transform-origin:center left;}
+  body:not(.go) .macbook{opacity:0;transform:translateX(-60px) scale(.96);}
+  body.go .macbook{animation:mbIn 1.05s cubic-bezier(.18,1,.3,1) .35s both;}
+  @keyframes mbIn{from{opacity:0;transform:translateX(-60px) scale(.96);}to{opacity:1;transform:none;}}
+  .mb-lid{position:relative;width:1212px;height:770px;background:#0b0809;border-radius:22px;padding:15px;
+    box-shadow:0 50px 110px -30px rgba(0,0,0,.8), inset 0 0 0 2px rgba(255,255,255,.05);}
+  .mb-screen{position:relative;width:100%;height:100%;border-radius:7px;overflow:hidden;background:#F2EBE2;}
+  .mb-screen iframe{width:100%;height:100%;border:0;display:block;transform:translateZ(0);}
+  .mb-base{position:relative;width:1334px;margin-left:-61px;height:26px;
+    background:linear-gradient(180deg,#bcc1c7 0%,#9ca2a9 38%,#787e86 100%);
+    border-radius:2px 2px 13px 13px;box-shadow:0 34px 60px -22px rgba(0,0,0,.72);}
+  .mb-base::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;
+    background:linear-gradient(180deg,rgba(0,0,0,.4),transparent);border-radius:2px 2px 0 0;}
+  .mb-scoop{position:absolute;left:50%;top:0;transform:translateX(-50%);width:172px;height:12px;
+    background:linear-gradient(180deg,#777d84,#9aa0a7);border-radius:0 0 13px 13px;}
+
+  /* ───── chiusura del Mac (hero staged): coperchio giù, telefoni fuori, Mac al centro ───── */
+  .macbook{perspective:2200px;}
+  .mb-lid{transform-origin:50% 100%;transform-style:preserve-3d;
+    transition:transform .7s cubic-bezier(.62,0,.18,1), opacity .5s ease;}
+  /* spessore 3D del coperchio: stack di fette arrotondate → angoli stondati a ogni profondità */
+  .mb-lid .lid-slice{position:absolute;inset:0;border-radius:22px;pointer-events:none;}
+  /* il Mac si chiude solo a metà: interfaccia ancora visibile, oscurata dall'ombra */
+  body.staged.closed .mb-lid{transform:rotateX(-52deg);}
+  .mb-shade{position:absolute;inset:0;z-index:11;pointer-events:none;opacity:0;
+    background:linear-gradient(180deg, rgba(8,5,4,.10), rgba(8,5,4,.46));
+    transition:opacity .6s ease;}
+  body.staged.closed .mb-shade{opacity:1;}
+  /* zona cliccabile sulla base/tastiera del Mac (solo da rivelato) */
+  .mac-close{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);
+    width:72%;height:70px;border:0;background:transparent;cursor:pointer;z-index:14;}
+  body.staged:not(.revealed) .mac-close{pointer-events:none;}
+  /* telefoni: slide-out morbido durante la chiusura */
+  body.staged.closed .phone{transition:opacity .55s ease, transform .7s cubic-bezier(.62,0,.18,1);}
+
+  /* ───── Tako che indica il Mac: compare dopo il reveal, in basso a sinistra,
+     con fumetto che invita a cliccare la base per richiudere ───── */
+  .tako-guide{position:absolute;left:84px;top:792px;width:188px;z-index:9;pointer-events:none;
+    opacity:0;transform:translateY(14px);}
+  .tako-guide img{width:100%;display:block;filter:drop-shadow(0 18px 24px rgba(0,0,0,.3));}
+  .tako-bubble{position:absolute;left:112%;top:162px;width:300px;
+    background:#fff;color:#2A1F1A;border:2px solid #2A1F1A;border-radius:18px;padding:13px 18px;
+    font-family:var(--display);font-weight:800;font-size:21px;line-height:1.25;
+    box-shadow:0 8px 0 rgba(0,0,0,.16);}
+  .tako-bubble::after{content:"";position:absolute;left:-10px;top:22px;width:18px;height:18px;
+    background:#fff;border-left:2px solid #2A1F1A;border-bottom:2px solid #2A1F1A;
+    transform:rotate(45deg);border-radius:0 0 0 3px;}
+  body.staged.revealed .tako-guide{opacity:1;transform:translateY(0);
+    transition:opacity .5s ease 1.6s, transform .6s cubic-bezier(.34,1.56,.64,1) 1.6s;}
+  body.staged.revealed .tako-guide img{animation:guideBob 3.2s ease-in-out infinite;}
+  body.mobile-stage .tako-guide{display:none;}
+  @keyframes guideBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+  /* badge over dashboard */
+  .wintag{position:absolute;left:6px;top:-52px;z-index:12;display:flex;align-items:center;gap:9px;
+    background:rgba(20,14,9,.62);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14);
+    color:#fff;font-family:var(--display);font-weight:800;font-size:15px;padding:9px 15px;border-radius:11px;
+    opacity:0;}
+  body.go .wintag{opacity:1;transition:opacity .6s ease 1.5s;}
+  .wintag .d{width:9px;height:9px;border-radius:50%;background:#4FA980;animation:live 2.2s infinite;}
+
+  /* iPhone */
+  .phone{position:relative;width:380px;height:812px;transform-origin:center bottom;}
+  body:not(.go) .phone{opacity:0;transform:translateY(70px) scale(.94) rotate(3deg);}
+  body.go .phone{animation:phIn 1.1s cubic-bezier(.2,1.25,.4,1) .5s both;}
+  @keyframes phIn{from{opacity:0;transform:translateY(70px) scale(.94) rotate(3deg);}to{opacity:1;transform:none;}}
+  /* safety net: guarantee the final visible state even if the entrance animation is throttled */
+  body.settled .macbook, body.settled:not(.staged) .phone{opacity:1 !important;transform:none !important;animation:none !important;}
+  .phone-float{width:100%;height:100%;}
+  .phone-frame{position:absolute;inset:0;background:#0a0708;border-radius:62px;padding:13px;
+    box-shadow:0 60px 120px -28px rgba(0,0,0,.82), inset 0 0 0 2px rgba(255,255,255,.06),
+      inset 0 0 3px 3px rgba(255,255,255,.04);}
+  .phone-frame::before{content:"";position:absolute;left:-3px;top:140px;width:3px;height:64px;border-radius:3px;background:#16100d;}
+  .phone-frame::after{content:"";position:absolute;right:-3px;top:180px;width:3px;height:96px;border-radius:3px;background:#16100d;}
+  .phone-screen{position:relative;width:100%;height:100%;border-radius:50px;overflow:hidden;background:#FBF8F4;}
+  .phone-screen iframe{width:100%;height:100%;border:0;display:block;pointer-events:none;transform:translateZ(0);}
+  .island{position:absolute;left:50%;top:13px;transform:translateX(-50%);width:114px;height:33px;
+    background:#0a0708;border-radius:20px;z-index:10;}
+
+  /* glossy sheen sweep on devices */
+  .sheen{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit;z-index:9;}
+  .sheen::before{content:"";position:absolute;top:-40%;left:-60%;width:50%;height:180%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.16), transparent);
+    transform:rotate(8deg);animation:sheen 7s ease-in-out infinite;}
+  @keyframes sheen{0%{left:-60%;}18%,100%{left:160%;}}
+
+  /* ───────── order-flow arc ───────── */
+  .flow{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;}
+  body.go .flow{opacity:1;transition:opacity .8s ease 1.7s;}
+  .flow .trav{fill:#ED7159;filter:drop-shadow(0 0 10px rgba(237,113,89,.9));}
+  .flow-chip{position:absolute;z-index:8;left:1245px;top:372px;
+    background:var(--coral);color:#fff;font-family:var(--display);font-weight:800;font-size:15px;
+    padding:8px 14px;border-radius:11px;box-shadow:0 12px 26px rgba(217,83,58,.5);white-space:nowrap;
+    opacity:0;transform:translateY(8px) scale(.85);}
+  body.go .flow-chip{opacity:1;transform:translateY(0) scale(1);transition:all .5s var(--spring,cubic-bezier(.34,1.56,.64,1)) 1.9s;}
+  .flow-chip::after{content:"";position:absolute;right:18px;bottom:-7px;width:14px;height:14px;background:var(--coral);
+    transform:rotate(45deg);border-radius:2px;}
+
+  /* footer line */
+  .foot{position:absolute;left:0;right:0;bottom:30px;text-align:center;z-index:6;
+    font-family:var(--display);font-weight:700;font-size:18px;color:rgba(251,246,240,.62);opacity:0;}
+  body.go .foot{opacity:1;transition:opacity .8s ease 2.1s;}
+  .foot b{color:var(--coral-soft);font-weight:800;}
+
+  /* ───── staged mode: hero "apri la cassa" (pagina Prova Gratis) ─────
+     solo il Mac (centrato) → al reveal scivola a sinistra e i telefoni entrano da destra */
+  body.staged{background:transparent !important;}
+  body.staged #viewport{background:transparent !important;}
+  body.staged .slot.s-mac{transform:translateX(307px) scale(.96);transition:transform .92s cubic-bezier(.62,0,.18,1);will-change:transform;}
+  body.staged.revealed .slot.s-mac{transform:translateX(0) scale(.96);}
+  /* da chiuso il Mac si rimpicciolisce ancora; riaprendo torna alle dimensioni iniziali (zoom fluido) */
+  body.staged.closed .slot.s-mac{transform:translateX(307px) scale(.84);}
+  body.staged .phone{animation:none;will-change:transform,opacity;backface-visibility:hidden;}
+  body.staged:not(.revealed) .slot.s-p1,
+  body.staged:not(.revealed) .slot.s-p2,
+  body.staged:not(.revealed) .slot.s-p3,
+  body.staged:not(.revealed) .slot.s-p4{opacity:0;pointer-events:none;}
+  body.staged:not(.revealed) .phone{opacity:0;transform:translateX(520px) scale(.7) rotate(7deg);}
+  body.staged.revealed .slot.s-p1 .phone{animation:phonePop .9s cubic-bezier(.18,1.3,.32,1) .06s both;}
+  body.staged.revealed .slot.s-p2 .phone{animation:phonePop .9s cubic-bezier(.18,1.3,.32,1) .20s both;}
+  body.staged.revealed .slot.s-p3 .phone{animation:phonePop .9s cubic-bezier(.18,1.3,.32,1) .34s both;}
+  body.staged.revealed .slot.s-p4 .phone{animation:phonePop .9s cubic-bezier(.18,1.3,.32,1) .48s both;}
+  @keyframes phonePop{0%{opacity:0;transform:translateX(520px) scale(.7) rotate(7deg);}55%{opacity:1;}100%{opacity:1;transform:translateX(0) scale(1) rotate(0);}}
+  /* safety net post-reveal (anteprime con animazioni congelate) */
+  body.revealed-settled .slot.s-mac{transform:translateX(0) scale(.96) !important;transition:none !important;will-change:auto;}
+  body.revealed-settled .phone{opacity:1 !important;transform:none !important;animation:none !important;will-change:auto;}
+
+  /* mobile: niente ombra esterna sotto gli iPhone (creava una banda scura che
+     tagliava nettamente l'hero dalla sezione sotto) — resta solo il bordo del telaio */
+  body.mobile-stage .phone-frame{box-shadow:inset 0 0 0 2px rgba(255,255,255,.06), inset 0 0 3px 3px rgba(255,255,255,.04) !important;}
+
+  /* ───── mobile staged: Mac sale verso l'alto (≤ 50px, stessa dimensione); i telefoni entrano
+     due da destra (p2,p4) e due da sinistra (p1,p3). Stesse animazioni, direzioni diverse. ───── */
+  body.staged.mobile-stage #stage{transition:transform .9s cubic-bezier(.62,0,.18,1);will-change:transform;}
+  /* Mac centrato orizzontalmente, stessa dimensione iniziale (~371px), ancorato in alto */
+  body.staged.mobile-stage .slot.s-mac{left:184px;top:200px;transform:scale(1.28);transform-origin:top left;}
+  body.staged.mobile-stage.closed .slot.s-mac{transform:scale(1.12);}
+  /* fila di 4 iPhone SOTTO al Mac, senza sovrapposizioni */
+  /* in mobile mostriamo solo 2 iPhone (IT + EN), più grandi e centrati sotto al Mac */
+  body.staged.mobile-stage .slot.s-p3,
+  body.staged.mobile-stage .slot.s-p4{display:none !important;}
+  body.staged.mobile-stage .slot.s-p1{left:286px;top:1486px;transform:scale(1.42);transform-origin:top left;}
+  body.staged.mobile-stage .slot.s-p2{left:1090px;top:1486px;transform:scale(1.42);transform-origin:top left;}
+  /* entrata: i due telefoni salgono dal basso con leggero stagger */
+  body.staged.mobile-stage:not(.revealed) .slot.s-p1 .phone,
+  body.staged.mobile-stage:not(.revealed) .slot.s-p2 .phone{transform:translateY(240px) scale(.84);}
+  body.staged.mobile-stage.revealed .slot.s-p1 .phone{animation:phonePopUp .8s cubic-bezier(.18,1.3,.32,1) .10s both;}
+  body.staged.mobile-stage.revealed .slot.s-p2 .phone{animation:phonePopUp .8s cubic-bezier(.18,1.3,.32,1) .24s both;}
+  @keyframes phonePopUp{0%{opacity:0;transform:translateY(240px) scale(.84);}55%{opacity:1;}100%{opacity:1;transform:translateY(0) scale(1);}}
+  /* safety-net mobile: il Mac resta nella sua posizione/dimensione ritratto */
+  body.revealed-settled.mobile-stage .slot.s-mac{transform:scale(1.28) !important;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;}
+    .macbook{opacity:1 !important;transform:none !important;}
+    body:not(.staged) .phone, body.staged.revealed .phone{opacity:1 !important;transform:none !important;}
+  }
+</style>
+</head>
+<body>
+  <div id="viewport">
+    <div id="stage">
+
+      <div class="scene">
+      <!-- Postazione staff · MacBook (metà sinistra) -->
+      <div class="slot s-mac">
+        <div class="macbook">
+          <div class="mb-lid">
+            <div class="mb-screen">
+              <iframe id="dashFrame" src="Tako%20Dashboard.html?sync&lockscroll" title="Tako Dashboard" loading="eager" scrolling="no"></iframe>
+              <div class="sheen"></div>
+              <div class="mb-shade"></div>
+            </div>
+          </div>
+          <div class="mb-base"><div class="mb-scoop"></div></div>
+          <button class="mac-close" aria-label="Richiudi il Mac"></button>
+        </div>
+      </div>
+
+      <!-- Tako che indica il Mac (hero "Prova Gratis") -->
+      <div class="tako-guide">
+        <div class="tako-bubble">Clicca la base del Mac per richiuderlo ↓</div>
+        <img src="assets/tako-point-up.png" alt="Tako ti indica il Mac" />
+      </div>
+
+      <!-- Tavolo 3 · iPhone (griglia, alto-sx) -->
+      <div class="slot s-p1">
+        <div class="phone">
+          <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
+            <div class="island"></div>
+            <iframe id="appFrame" src="Tako%20App.html?bare&sync&table=3&delay=0&lang=it" title="Tako App · Tavolo 3 (IT)" loading="eager"></iframe>
+            <div class="sheen"></div>
+          </div></div></div>
+        </div>
+      </div>
+
+      <!-- Tavolo 7 · iPhone (griglia, alto-dx) -->
+      <div class="slot s-p2">
+        <div class="phone">
+          <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
+            <div class="island"></div>
+            <iframe id="appFrame2" src="Tako%20App.html?bare&sync&table=7&delay=6000&lang=en" title="Tako App · Tavolo 7 (EN)" loading="eager"></iframe>
+            <div class="sheen"></div>
+          </div></div></div>
+        </div>
+      </div>
+
+      <!-- Tavolo 11 · iPhone (griglia, basso-sx) -->
+      <div class="slot s-p3">
+        <div class="phone">
+          <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
+            <div class="island"></div>
+            <iframe id="appFrame3" src="Tako%20App.html?bare&sync&table=11&delay=12000&lang=es" title="Tako App · Tavolo 11 (ES)" loading="eager"></iframe>
+            <div class="sheen"></div>
+          </div></div></div>
+        </div>
+      </div>
+
+      <!-- Tavolo 5 · iPhone (griglia, basso-dx) -->
+      <div class="slot s-p4">
+        <div class="phone">
+          <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
+            <div class="island"></div>
+            <iframe id="appFrame4" src="Tako%20App.html?bare&sync&table=5&delay=18000&lang=de" title="Tako App · Tavolo 5 (DE)" loading="eager"></iframe>
+            <div class="sheen"></div>
+          </div></div></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // fit fixed 1920×1080 stage to viewport (desktop) — oppure layout ritratto in mobile-stage
+  (function(){
+    const stage=document.getElementById('stage');
+    // canvas-ritratto (lo #stage è centrato nel viewport → origine trasform di default = centro):
+    //  - idle: solo il Mac, centrato verticalmente
+    //  - revealed: Mac + fila di telefoni, il blocco si centra → il Mac sale verso l'alto
+    const SCENE_CY=540;          // centro verticale del canvas 1920×1080
+    const MAC_TOP=200;           // y del bordo superiore del Mac nel canvas
+    const MAC_CENTER=709;        // centro verticale del solo Mac (scala mobile 1.28)
+    const FULL_CENTER=1602.5;    // centro di Mac+2 telefoni grandi (scene y 200..3005)
+    function fit(){
+      if(document.body.classList.contains('mobile-stage')){
+        const k=window.innerWidth/1920;
+        const revealed=document.body.classList.contains('revealed');
+        // 'center' = punto-scena mappato al centro verticale del viewport.
+        // idle: Mac centrato.  revealed: center spostato così il bordo alto del Mac
+        // resta ~96px sotto l'header e i due iPhone stanno sotto, dentro lo schermo.
+        const center=revealed ? 1232 : MAC_CENTER;
+        const ty=-(center-SCENE_CY)*k;
+        stage.style.transform='translateY('+ty+'px) scale('+k+')';
+        return;
+      }
+      const s=Math.min(window.innerWidth/1920, window.innerHeight/1080);
+      stage.style.transform='scale('+s+')';
+    }
+    window.__takoFit=fit;
+    fit(); window.addEventListener('resize',fit);
+  })();
+
+  // bubbles
+  // (rimosse)
+
+  // relay: eventi inviati dall'iPhone → dashboard (ordine + chiamate cameriere)
+  (function(){
+    const dash=document.getElementById('dashFrame');
+    window.addEventListener('message',(e)=>{
+      const d=e.data;
+      if(!d || d.source!=='tako-app') return;
+      const w=dash && dash.contentWindow; if(!w) return;
+      if(d.type==='order-placed') w.postMessage({source:'tako-sync',type:'new-order',cycleStart:d.cycleStart,order:d.order},'*');
+      if(d.type==='waiter-call')  w.postMessage({source:'tako-sync',type:'waiter-call',call:d.call},'*');
+    });
+  })();
+
+  // spessore 3D del coperchio: genera uno stack di "fette" arrotondate dietro lo schermo.
+  // Ogni fetta mantiene il border-radius → l'angolo resta stondato a ogni profondità,
+  // anche sul retro (niente bordo spigoloso).
+  (function(){
+    const lid = document.querySelector('.s-mac .mb-lid');
+    if(!lid) return;
+    const DEPTH = 18, STEP = 1.6;
+    const front = [60,60,69], back = [9,9,12];
+    const frag = document.createDocumentFragment();
+    for(let z = STEP; z <= DEPTH + 0.01; z += STEP){
+      const t = Math.min(z / DEPTH, 1);
+      const c = front.map((a,i)=> Math.round(a + (back[i]-a)*t));
+      const s = document.createElement('div');
+      s.className = 'lid-slice';
+      s.style.background = 'rgb('+c[0]+','+c[1]+','+c[2]+')';
+      s.style.transform = 'translateZ(-'+z.toFixed(2)+'px)';
+      frag.appendChild(s);
+    }
+    lid.insertBefore(frag, lid.firstChild); // dietro al contenuto dello schermo
+  })();
+
+  // staged mode (pagina Prova Gratis): solo Mac → "reveal" fa entrare i telefoni.
+  // Cliccando la base del Mac (da rivelato) il Mac si chiude, i telefoni escono e
+  // il Mac torna al centro; un nuovo "reveal" riapre il Mac e rifà l'animazione.
+  (function(){
+    const SP = new URLSearchParams(location.search);
+    if(!SP.has('staged')) return;
+    const body = document.body;
+    body.classList.add('staged');
+    if(SP.has('mobile')) body.classList.add('mobile-stage');
+
+    function doReveal(){
+      if(body.classList.contains('revealed')) return;
+      body.classList.add('revealed');
+      if(window.__takoFit) window.__takoFit();
+      setTimeout(()=>body.classList.add('revealed-settled'), 1300);
+    }
+    function reveal(){
+      if(body.classList.contains('revealed')) return;
+      if(body.classList.contains('closed')){
+        body.classList.remove('closed');        // il Mac si apre (coperchio su)
+        if(window.__takoFit) window.__takoFit();
+        setTimeout(doReveal, 720);              // poi rifà l'animazione iniziale
+      } else {
+        doReveal();
+      }
+    }
+    function closeSim(){
+      if(!body.classList.contains('revealed')) return;
+      body.classList.remove('revealed');
+      body.classList.remove('revealed-settled');
+      body.classList.add('closed');             // coperchio giù + telefoni fuori + Mac al centro
+      if(window.__takoFit) window.__takoFit();
+      try{ parent.postMessage({source:'tako-sim', type:'closed'}, '*'); }catch(e){}
+    }
+
+    const closeBtn = document.querySelector('.s-mac .mac-close');
+    if(closeBtn) closeBtn.addEventListener('click', closeSim);
+
+    window.addEventListener('message',(e)=>{
+      const d=e.data; if(d && d.source==='tako-trial' && d.type==='reveal') reveal();
+    });
+  })();
+
+  // trigger entrance reliably — don't block on the heavy iframes
+  function takoGo(){ if(document.body.classList.contains('go')) return; document.body.classList.add('go'); setTimeout(()=>document.body.classList.add('settled'), 1800); }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', ()=>setTimeout(takoGo, 200)); }
+  else { setTimeout(takoGo, 200); }
+  window.addEventListener('load', ()=>setTimeout(takoGo, 200));
+  setTimeout(takoGo, 2500); // hard safety net
+</script>
+</body>
+</html>
