@@ -21,6 +21,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { and, eq, gt, isNull } from 'drizzle-orm'
+import { createPublicKey, verify as edVerify } from 'node:crypto'
 import {
   cloudDb,
   cloudOwners,
@@ -57,6 +58,78 @@ const approveSchema = z.object({ code: z.string().min(16).max(200) })
 const heartbeatSchema = z.object({ credentialsVersion: z.number().int().min(0).optional() })
 
 const APPLIANCE_TOKEN_HEADER = 'x-tako-appliance-token'
+const SIGNATURE_HEADER = 'x-tako-signature'
+const TIMESTAMP_HEADER = 'x-tako-timestamp'
+
+// ─── Proof-of-possession heartbeat (SEC-003) ─────────────────────────────────
+// L'appliance firma con ed25519 (privkey nello store cifrato) il payload CANONICO
+//   JSON.stringify({ applianceId, ts, credentialsVersion })
+// dove `ts = Date.now()` (ms) e `credentialsVersion` è quella locale dell'appliance
+// (lo STESSO valore inviato nel body). La firma è codificata base64url. Header:
+//   X-Tako-Appliance-Token = applianceId, X-Tako-Signature = sig, X-Tako-Timestamp = ts.
+// La pubkey salvata in cloud_appliances.pubkey è PEM SPKI. Vedi apps/server/src/lib/cloud-client.ts
+// (signPayload/heartbeat): qualunque modifica qui DEVE restare allineata byte-per-byte col client.
+
+// Finestra anti-replay del timestamp firmato. Tolleranza ampia (clock skew di un'appliance
+// headless senza NTP affidabile) ma finita: una heartbeat catturata non è riusabile a lungo.
+const HEARTBEAT_SKEW_MS = 5 * 60 * 1000 // ±5 minuti
+
+// Ricostruisce il payload canonico ESATTAMENTE come il client (ordine chiavi: applianceId, ts,
+// credentialsVersion). ts è number; credentialsVersion è il valore firmato (= quello del body).
+function canonicalHeartbeatPayload(applianceId: string, ts: number, credentialsVersion: number): string {
+  return JSON.stringify({ applianceId, ts, credentialsVersion })
+}
+
+// Verifica ed25519 in tempo costante (edVerify lo è) della firma base64url contro la pubkey PEM.
+// Difensivo: qualsiasi input malformato (pubkey non parsabile, sig non base64url) → false, mai throw.
+function verifyEd25519(pubkeyPem: string, payload: string, signatureB64Url: string): boolean {
+  try {
+    const sig = Buffer.from(signatureB64Url, 'base64url')
+    // ed25519: firma sempre 64 byte. Scartiamo subito lunghezze anomale.
+    if (sig.length !== 64) return false
+    const key = createPublicKey(pubkeyPem)
+    if (key.asymmetricKeyType !== 'ed25519') return false
+    return edVerify(null, Buffer.from(payload, 'utf8'), key, sig)
+  } catch {
+    return false
+  }
+}
+
+// ─── Per-code lockout sul claim (SEC-003) ────────────────────────────────────
+// Oltre al rate-limit per-IP (Redis, davanti alla route) limitiamo i tentativi di claim
+// per SINGOLO code: un attaccante che prova a indovinare/forzare un code specifico viene
+// fermato indipendentemente dall'IP (rotazione proxy/botnet). Chiave = HMAC del code (mai
+// il code in chiaro in memoria). In-memory per-istanza, coerente con il brute-force di
+// auth.ts e la quota email.ts; per multi-replica vedi nota nel contratto (fallback Redis).
+const claimAttempts = new Map<string, { count: number; firstAttempt: number }>()
+const CLAIM_MAX_ATTEMPTS = 5
+const CLAIM_LOCKOUT_MS = 10 * 60 * 1000 // allineato al TTL del code
+const CLAIM_MAX_TRACKED = 5000
+
+function claimLockedOut(codeHash: string): boolean {
+  const now = Date.now()
+  const rec = claimAttempts.get(codeHash)
+  if (!rec) return false
+  if (now - rec.firstAttempt > CLAIM_LOCKOUT_MS) { claimAttempts.delete(codeHash); return false }
+  return rec.count >= CLAIM_MAX_ATTEMPTS
+}
+
+function recordClaimFailure(codeHash: string): void {
+  const now = Date.now()
+  if (claimAttempts.size > CLAIM_MAX_TRACKED) {
+    for (const [k, v] of claimAttempts) if (now - v.firstAttempt > CLAIM_LOCKOUT_MS) claimAttempts.delete(k)
+  }
+  const rec = claimAttempts.get(codeHash)
+  if (!rec || now - rec.firstAttempt > CLAIM_LOCKOUT_MS) {
+    claimAttempts.set(codeHash, { count: 1, firstAttempt: now })
+  } else {
+    rec.count++
+  }
+}
+
+function clearClaimAttempts(codeHash: string): void {
+  claimAttempts.delete(codeHash)
+}
 
 export async function cloudPairRoutes(fastify: FastifyInstance) {
   // ─── STATUS (informativo) ────────────────────────────────────────────────────
@@ -131,6 +204,13 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
     }
 
     const codeHash = hashToken(parsed.data.code)
+
+    // Per-code lockout (SEC-003): blocca il brute-force su un singolo code anche cambiando IP.
+    if (claimLockedOut(codeHash)) {
+      await audit({ event: 'pair_claim_refused', req, meta: { reason: 'code_locked_out' } })
+      return reply.code(429).send({ error: { code: 'TOO_MANY_ATTEMPTS', message: 'Troppi tentativi per questo codice. Genera un nuovo codice.' } })
+    }
+
     // Consumo atomico: SOLO un code valido, NON consumato, NON scaduto e APPROVATO vince.
     const [consumed] = await cloudDb
       .update(cloudPairingCodes)
@@ -143,9 +223,12 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
       .returning()
 
     if (!consumed) {
+      recordClaimFailure(codeHash)
       await audit({ event: 'pair_claim_refused', req, meta: { reason: 'invalid_or_expired' } })
       return reply.code(400).send({ error: { code: 'INVALID_CODE', message: 'Codice non valido, scaduto o già usato' } })
     }
+    // Code valido e consumato: azzera i tentativi falliti registrati su questo code.
+    clearClaimAttempts(codeHash)
     if (!consumed.approvedAt) {
       // Non dovrebbe accadere con l'auto-approve, ma difesa-in-profondità: code non approvato.
       await audit({ event: 'pair_claim_refused', ownerId: consumed.ownerId, req, meta: { reason: 'not_approved' } })
@@ -192,16 +275,31 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
   })
 
   // ─── POST /heartbeat — appliance segnala la presenza e sincronizza credentials_version ──
-  // Autenticazione: header X-Tako-Appliance-Token che identifica il record appliance via il
-  // suo applianceId (passato nel body). NB: la verifica crittografica della FIRMA della
-  // heartbeat con la privkey dell'appliance è Fase 4; qui usiamo l'applianceId + pubkey come
-  // identificatore e confrontiamo le versioni. Ritorna se serve revoca/refresh.
+  // Autenticazione: header X-Tako-Appliance-Token = applianceId (identifica il record).
+  // PROOF-OF-POSSESSION (SEC-003): l'appliance prova di possedere la privkey ed25519 firmando
+  // il payload canonico {applianceId, ts, credentialsVersion}; il cloud verifica la firma con
+  // la pubkey salvata al claim. Anti-replay via finestra temporale sul ts firmato. Senza firma
+  // valida → 401. last_seen_at / seen_credentials_version aggiornati SOLO se la firma è valida.
   fastify.post('/heartbeat', async (req, reply) => {
     const applianceId = (req.headers[APPLIANCE_TOKEN_HEADER] as string | undefined) ?? undefined
     if (!applianceId) return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Appliance non identificata' } })
 
+    const signature = (req.headers[SIGNATURE_HEADER] as string | undefined) ?? undefined
+    const timestampRaw = (req.headers[TIMESTAMP_HEADER] as string | undefined) ?? undefined
+    if (!signature || !timestampRaw) {
+      await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, reason: 'missing_signature' } })
+      return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Firma mancante' } })
+    }
+
     const parsed = heartbeatSchema.safeParse(req.body ?? {})
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Dati non validi' } })
+
+    // Anti-replay: il ts firmato deve cadere nella finestra di tolleranza rispetto a ora.
+    const ts = Number(timestampRaw)
+    if (!Number.isFinite(ts) || Math.abs(Date.now() - ts) > HEARTBEAT_SKEW_MS) {
+      await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, reason: 'stale_timestamp' } })
+      return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Timestamp non valido o scaduto' } })
+    }
 
     const [appliance] = await cloudDb
       .select({ appliance: cloudAppliances, ownerVersion: cloudOwners.credentialsVersion })
@@ -216,6 +314,15 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
       return reply.code(403).send({ error: { code: 'REVOKED', message: 'Appliance revocata' }, data: { action: 'revoke' } })
     }
 
+    // Proof-of-possession: ricostruisci il payload canonico e verifica la firma ed25519.
+    // credentialsVersion firmata = quella locale dell'appliance (= valore inviato nel body).
+    const signedVersion = parsed.data.credentialsVersion ?? appliance.appliance.seenCredentialsVersion
+    const payload = canonicalHeartbeatPayload(applianceId, ts, signedVersion)
+    if (!verifyEd25519(appliance.appliance.pubkey, payload, signature)) {
+      await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, reason: 'invalid_signature' } })
+      return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Firma non valida' } })
+    }
+
     const cloudVersion = appliance.ownerVersion
     await cloudDb
       .update(cloudAppliances)
@@ -224,8 +331,8 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
 
     // Se il cloud ha bumpato credentials_version (reset/cambio pw) → l'appliance deve
     // aggiornare lo snapshot non-segreto e invalidare il login owner offline (SEC-007).
-    const local = parsed.data.credentialsVersion ?? appliance.appliance.seenCredentialsVersion
-    const needsRefresh = cloudVersion > local
+    // `signedVersion` è la versione locale dichiarata (e firmata) dall'appliance.
+    const needsRefresh = cloudVersion > signedVersion
 
     await audit({ event: 'pair_heartbeat', ownerId: null, req, meta: { applianceId, needsRefresh } })
     return reply.send({ data: { credentialsVersion: cloudVersion, action: needsRefresh ? 'refresh' : 'none' } })

@@ -54,8 +54,8 @@ Dipendenza installata: **`@fastify/oauth2` 8.2.0**.
 | GET | `/api/pair/status` | — | `{ enabled:true, phase:'2b' }` |
 | POST | `/api/pair/code` | sessione owner + CSRF | `{restaurantId}` (verifica ownership) → `{code, expiresInSeconds, restaurantId}` |
 | POST | `/api/pair/approve` | sessione owner + CSRF | `{code}` → ri-conferma idempotente (opzionale, non richiesta dal claim) |
-| POST | `/api/pair/claim` | device code | `{code, devicePubKey}` → bundle + applianceToken |
-| POST | `/api/pair/heartbeat` | header `X-Tako-Appliance-Token`(=applianceId) | `{credentialsVersion?}` → `{credentialsVersion, action}` |
+| POST | `/api/pair/claim` | device code (+ per-code lockout) | `{code, devicePubKey}` → bundle + applianceToken |
+| POST | `/api/pair/heartbeat` | `X-Tako-Appliance-Token`(=applianceId) + firma ed25519 verificata | `{credentialsVersion?}` → `{credentialsVersion, action}` |
 
 ### Flusso di approvazione scelto: AUTO-APPROVE alla generazione
 `POST /api/pair/code` richiede già la **sessione owner autenticata** e verifica che il
@@ -72,15 +72,29 @@ NON lo richiede. Il claim verifica comunque `approved_at` (difesa in profondità
 - Registra `cloud_appliances` con la `devicePubKey` (proof-of-possession), unique su pubkey,
   `onConflictDoUpdate` per re-pairing (resetta `revoked_at`).
 - Emette `applianceToken` opaco legato all'appliance; a riposo si conserva la **pubkey**, non il token.
+  Il binding token↔pubkey chiude il loop PoP: ogni heartbeat successiva DEVE firmare con la
+  privkey corrispondente a quella pubkey (vedi sotto), quindi il token da solo non basta.
+- **Per-code lockout (SEC-003, Fase 5a)**: oltre al rate-limit per-IP (Redis, davanti alla route)
+  un limite per **singolo code** (`max 5 tentativi falliti / 10 min`, chiave = HMAC del code,
+  in-memory per-istanza). Tentativo fallito = code invalido/scaduto/già usato. Oltre soglia →
+  `429 TOO_MANY_ATTEMPTS`. Un claim riuscito azzera il contatore del code.
 - Bundle ritornato: `{ applianceToken, applianceId, restaurant{id,name,slug,plan},
   ownerSnapshot{cloud_owner_id, email, name}, credentialsVersion }`. **MAI `password_hash`** (SEC-001).
 
-### `/heartbeat` (SEC-007)
-- Identifica l'appliance via header `X-Tako-Appliance-Token` = `applianceId` (la verifica
-  crittografica della FIRMA con la privkey appliance è **Fase 4**).
-- Aggiorna `last_seen_at` + `seen_credentials_version`. Se `cloud.credentials_version > local`
-  → `action:'refresh'` (l'appliance deve aggiornare lo snapshot e invalidare il login offline).
-  Se appliance revocata → `403 REVOKED` + `action:'revoke'`.
+### `/heartbeat` (SEC-003/007) — firma ed25519 VERIFICATA (Fase 5a)
+- Identifica l'appliance via header `X-Tako-Appliance-Token` = `applianceId`.
+- **Proof-of-possession ATTIVO**: il cloud verifica la firma ed25519 in `X-Tako-Signature`
+  (base64url, 64 byte) contro la `cloud_appliances.pubkey` (PEM SPKI salvata al claim).
+  - **Payload canonico firmato/verificato**: `JSON.stringify({ applianceId, ts, credentialsVersion })`
+    con ordine chiavi `applianceId, ts, credentialsVersion`. `ts` = number (ms) preso da
+    `X-Tako-Timestamp`; `credentialsVersion` = quella inviata nel body (= quella firmata dal client).
+    Allineato byte-per-byte con `signPayload`/`heartbeat` di `apps/server/src/lib/cloud-client.ts`.
+  - **Anti-replay**: `ts` deve cadere in una finestra `±5 min` da `Date.now()` (clock skew di
+    un'appliance headless). Fuori finestra → `401`. Una heartbeat catturata non è riusabile a lungo.
+  - Firma/timestamp mancanti, ts non numerico/fuori finestra, o firma non valida → `401 UNAUTHORIZED`.
+- `last_seen_at` + `seen_credentials_version` aggiornati **SOLO** se la firma è valida.
+- Se `cloud.credentials_version > signedVersion` → `action:'refresh'`. Appliance revocata →
+  `403 REVOKED` + `action:'revoke'`.
 
 ---
 

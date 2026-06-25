@@ -93,8 +93,11 @@ Aggiunta a `.env.example` (root + server).
   Se in futuro servono → richiesta a `database` agent, non modificati qui.
 
 ## 8. Resta per FASE 5 (QA/deploy)
-- Verifica crittografica della FIRMA heartbeat LATO CLOUD (oggi il cloud identifica via
-  applianceId; la firma è già inviata ma non verificata — vedi oauth-pairing contract §3).
+- ~~Verifica crittografica della FIRMA heartbeat LATO CLOUD~~ **FATTA in Fase 5a**: il cloud
+  ora verifica la firma ed25519 (`X-Tako-Signature`) contro `cloud_appliances.pubkey` sul payload
+  canonico `{applianceId, ts, credentialsVersion}` con anti-replay ±5 min, e applica un per-code
+  lockout sul `/claim` (SEC-003). Vedi `integrations-oauth-pairing.contract.md` §3. Il client
+  `cloud-client.ts` NON ha richiesto modifiche (formato firma già allineato).
 - Test e2e: pair (mock cloud) → login owner offline → bump credentials_version → refresh →
   relogin; unpair; box senza CLOUD_BASE_URL (local puro, login owner classico invariato).
 - TLS LAN per il login owner (SEC-017): `COOKIE_SECURE` dietro cert locale `tako.local`.
