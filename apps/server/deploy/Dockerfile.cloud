@@ -56,6 +56,11 @@ COPY packages/db ./packages/db
 COPY packages/types ./packages/types
 COPY apps/server ./apps/server
 
+# routes/uploads.ts fa `mkdirSync('./uploads')` al top-level (eseguito all'import,
+# anche in cloud): la cartella va creata e resa scrivibile dall'utente `node` PRIMA di
+# droppare i privilegi, altrimenti boot → EACCES: permission denied, mkdir './uploads'.
+RUN mkdir -p /app/apps/server/uploads && chown -R node:node /app/apps/server/uploads
+
 # Utente non-root: l'immagine node:* fornisce già l'utente `node` (uid 1000).
 USER node
 
