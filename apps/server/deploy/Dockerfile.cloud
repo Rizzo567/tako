@@ -42,8 +42,13 @@ ENV TAKO_MODE=cloud \
 WORKDIR /app
 
 # node_modules risolti (hoisted in root + symlink workspace) dallo stage deps.
+# Servono ANCHE i node_modules per-package: pnpm mette le deps di @tako/db (drizzle-orm,
+# postgres, ...) in packages/db/node_modules come symlink verso lo store in root/.pnpm.
+# Senza, al boot: ERR_MODULE_NOT_FOUND "Cannot find package 'drizzle-orm'".
+# (packages/types non ha dipendenze → niente node_modules da copiare.)
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
+COPY --from=deps /app/packages/db/node_modules ./packages/db/node_modules
 # Codice sorgente: server + i package workspace consumati come .ts via tsx.
 # (.dockerignore esclude node_modules locali, .git, uploads, dist, ~/.tako, ecc.)
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
