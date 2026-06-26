@@ -381,6 +381,31 @@ window.AuthBanner = AuthBanner;
 function Navbar({ page, setPage }) {
   const [scrolled, setScrolled] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  // Stato sessione: se /api/auth/me risponde ok l'utente è loggato → mostriamo
+  // l'avatar a cerchio (iniziale del ristorante) al posto della scritta "Accedi".
+  const [owner, setOwner] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    const api = window.TakoAPI;
+    if (!api) return;
+    api.apiGet('/api/auth/me')
+      .then((res) => { if (alive && res && res.ok && res.data && res.data.owner) setOwner(res.data.owner); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDoc = () => setMenuOpen(false);
+    document.addEventListener('click', onDoc);
+    return () => document.removeEventListener('click', onDoc);
+  }, [menuOpen]);
+  const logout = async () => {
+    try { await window.TakoAPI.apiPost('/api/auth/logout', {}); } catch (_) {}
+    setOwner(null); setMenuOpen(false);
+    window.location.reload();
+  };
+  const ownerInitial = owner && owner.name ? owner.name.trim().charAt(0).toUpperCase() : '·';
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -432,7 +457,30 @@ function Navbar({ page, setPage }) {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="#" onClick={(e) => { e.preventDefault(); setLoginOpen(true); }} className="tnav-accedi hidden md:inline-block font-bold text-[15px] cursor-pointer">Accedi</a>
+          {owner ? (
+            <div className="relative" onClick={(e) => e.stopPropagation()}>
+              <button
+                type="button"
+                aria-label="Il tuo account"
+                onClick={() => setMenuOpen((v) => !v)}
+                className="w-10 h-10 rounded-full border-2 grid place-items-center font-display font-black text-[17px] cursor-pointer select-none"
+                style={{ background: 'var(--coral)', borderColor: 'var(--ink)', color: '#fff' }}
+              >
+                {ownerInitial}
+              </button>
+              {menuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border-2 shadow-xl overflow-hidden" style={{ background: '#FFFDFB', borderColor: 'var(--ink)' }}>
+                  <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(42,31,26,.12)' }}>
+                    <div className="font-bold text-[14px] truncate" style={{ color: 'var(--ink)' }}>{owner.name || 'Il tuo ristorante'}</div>
+                    <div className="text-[12px] truncate" style={{ color: 'var(--ink-soft)' }}>{owner.email}</div>
+                  </div>
+                  <button type="button" onClick={logout} className="w-full text-left px-4 py-3 text-[14px] font-bold cursor-pointer hover:opacity-80" style={{ color: 'var(--coral-deep)' }}>Esci</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <a href="#" onClick={(e) => { e.preventDefault(); setLoginOpen(true); }} className="tnav-accedi hidden md:inline-block font-bold text-[15px] cursor-pointer">Accedi</a>
+          )}
           <a href="Tako%20Landing.html#cta" className="btn-coral px-5 py-2.5 text-[14px]">Contattaci</a>
         </div>
       </div>
