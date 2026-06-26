@@ -285,8 +285,29 @@ function Testimonials() {
 /* ——— Final CTA + Footer ——— */
 function CtaContactForm() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('');
   const field = { borderColor: 'rgba(42,31,26,.16)', background: '#FFFDFB' };
   const card = { background: '#fff', borderColor: '#2A1F1A', boxShadow: '0 10px 0 rgba(0,0,0,.18)' };
+  // Invio reale al control-plane: POST /api/contact → email al titolare di Tako.
+  const submit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    const f = e.target;
+    const payload = {
+      name: f.name.value.trim(),
+      email: f.email.value.trim(),
+      restaurant: f.restaurant.value.trim(),
+      message: f.message.value.trim(),
+      intent: 'info',
+    };
+    if (!payload.name || !payload.email || !payload.message) { setErr('Compila nome, email e messaggio.'); return; }
+    setErr(''); setLoading(true);
+    const res = await window.TakoAPI.apiPost('/api/contact', payload);
+    setLoading(false);
+    if (res.ok) { setSent(true); return; }
+    setErr(res.error || 'Invio non riuscito. Riprova.');
+  };
   return (
     <div className="max-w-xl mx-auto reveal">
       {sent ? (
@@ -296,14 +317,15 @@ function CtaContactForm() {
           <p style={{ color: 'var(--ink-soft)', fontWeight: 600 }}>Ti scriviamo via email entro un giorno lavorativo.</p>
         </div>
       ) : (
-        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="rounded-3xl p-7 md:p-8 text-left border-2" style={card}>
+        <form onSubmit={submit} className="rounded-3xl p-7 md:p-8 text-left border-2" style={card}>
           <div className="grid sm:grid-cols-2 gap-3">
-            <input required placeholder="Nome" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
-            <input required type="email" placeholder="Email" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+            <input name="name" required placeholder="Nome" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+            <input name="email" required type="email" placeholder="Email" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
           </div>
-          <input placeholder="Nome del ristorante" className="w-full mt-3 px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
-          <textarea required rows="3" placeholder="Come possiamo aiutarti?" className="w-full mt-3 px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
-          <button className="btn-coral w-full py-4 text-lg mt-4">Invia messaggio →</button>
+          <input name="restaurant" placeholder="Nome del ristorante" className="w-full mt-3 px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+          <textarea name="message" required rows="3" placeholder="Come possiamo aiutarti?" className="w-full mt-3 px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+          {err && <p className="mt-3 text-sm font-bold" style={{ color: '#C0392B' }}>{err}</p>}
+          <button disabled={loading} className="btn-coral w-full py-4 text-lg mt-4">{loading ? 'Invio…' : 'Invia messaggio →'}</button>
         </form>
       )}
     </div>
@@ -396,11 +418,29 @@ function BookingBand({
 } = {}) {
   const [sent, setSent] = useState(false);
   const [intent, setIntent] = useState('info');
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('');
   const field = { borderColor: 'rgba(42,31,26,.16)', background: '#FFFDFB' };
   const intents = [
     { id: 'info', label: 'Voglio informazioni' },
     { id: 'demo', label: 'Prenota una demo' },
   ];
+  // Invio reale al control-plane: POST /api/contact → email al titolare di Tako.
+  const submit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    const f = e.target;
+    const name = f.name.value.trim(), email = f.email.value.trim();
+    const message = f.message.value.trim() || (intent === 'demo' ? 'Richiesta di una demo.' : 'Richiesta di informazioni.');
+    if (!name || !email) { setErr('Compila nome ed email.'); return; }
+    setErr(''); setLoading(true);
+    const res = await window.TakoAPI.apiPost('/api/contact', {
+      name, email, phone: f.phone.value.trim(), restaurant: f.restaurant.value.trim(), message, intent,
+    });
+    setLoading(false);
+    if (res.ok) { setSent(true); return; }
+    setErr(res.error || 'Invio non riuscito. Riprova.');
+  };
   return (
     <section className="relative overflow-hidden py-20 px-6" style={{ background: 'linear-gradient(180deg,#FFF8F3 0%,#FFEEE8 100%)' }}>
       <div className="absolute -right-28 top-6 w-[360px] h-[360px] blob-2 pointer-events-none" style={{ background: 'rgba(248,183,166,0.18)' }} />
@@ -425,7 +465,7 @@ function BookingBand({
               <p style={{ color: 'var(--ink-soft)', fontWeight: 600 }}>Ti ricontattiamo via email o telefono entro un giorno lavorativo.</p>
             </div>
           ) : (
-            <form className="chunky p-7 md:p-8" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+            <form className="chunky p-7 md:p-8" onSubmit={submit}>
               <div className="mb-4">
                 <div className="text-sm font-bold mb-2" style={{ color: 'var(--ink)' }}>Cosa ti serve?</div>
                 <div className="flex gap-2">
@@ -443,15 +483,16 @@ function BookingBand({
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 gap-3">
-                <input required placeholder="Nome" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
-                <input required type="email" placeholder="Email" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+                <input name="name" required placeholder="Nome" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+                <input name="email" required type="email" placeholder="Email" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
               </div>
               <div className="grid sm:grid-cols-2 gap-3 mt-3">
-                <input type="tel" placeholder="Telefono" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
-                <input placeholder="Nome del ristorante" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+                <input name="phone" type="tel" placeholder="Telefono" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+                <input name="restaurant" placeholder="Nome del ristorante" className="px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
               </div>
-              <textarea rows="3" placeholder={intent === 'demo' ? 'Quando preferisci la demo? Raccontaci del tuo locale…' : 'Su cosa possiamo darti informazioni?'} className="w-full mt-3 px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
-              <button className="btn-coral w-full py-4 text-lg mt-4">{intent === 'demo' ? 'Prenota la demo →' : 'Invia richiesta →'}</button>
+              <textarea name="message" rows="3" placeholder={intent === 'demo' ? 'Quando preferisci la demo? Raccontaci del tuo locale…' : 'Su cosa possiamo darti informazioni?'} className="w-full mt-3 px-4 py-3 rounded-xl border-2 font-semibold" style={field} />
+              {err && <p className="mt-3 text-sm font-bold" style={{ color: '#C0392B' }}>{err}</p>}
+              <button disabled={loading} className="btn-coral w-full py-4 text-lg mt-4">{loading ? 'Invio…' : (intent === 'demo' ? 'Prenota la demo →' : 'Invia richiesta →')}</button>
             </form>
           )}
         </div>

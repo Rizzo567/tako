@@ -409,7 +409,9 @@ function TrialApp() {
       <main>
         <HeroStage />
         <Includes />
-        <SignupForm confetti={t.confetti} />
+        {/* Form CONTATTI (scrivici) — niente password: la registrazione vera è
+            altrove. Stesso form della homepage prima del footer. */}
+        <FinalCTA />
       </main>
       <Footer />
 
