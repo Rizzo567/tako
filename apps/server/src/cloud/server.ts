@@ -120,6 +120,11 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
 
   fastify.get('/health', async () => ({ status: 'ok', mode: 'cloud', cookieMode: cookieMode(), ts: new Date().toISOString() }))
 
+  // Favicon: il control-plane è un'API, ma i browser (e Google) chiedono /favicon.ico.
+  // Rimandiamo al logo Tako servito dal sito, così anche la scheda di api.takoitalia.com
+  // mostra l'icona Tako.
+  fastify.get('/favicon.ico', async (_req, reply) => reply.redirect('https://takoitalia.com/favicon.ico', 301))
+
   // Rate-limit per-endpoint. Due classi (NEW-01 FASE 5e):
   //  - SENSITIVE_AUTH: endpoint auth che spediscono email / verificano credenziali → 10/min.
   //  - SENSITIVE_PAIR: endpoint pairing non autenticati o ad alta frequenza. claim/heartbeat
