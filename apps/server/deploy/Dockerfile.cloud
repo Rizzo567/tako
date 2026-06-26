@@ -29,8 +29,10 @@ COPY packages/db/package.json ./packages/db/package.json
 COPY packages/types/package.json ./packages/types/package.json
 COPY apps/server/package.json ./apps/server/package.json
 # `--filter @tako/server...` tira dentro anche @tako/db e @tako/types (workspace deps).
-# tsx è in devDependencies di @tako/server ma è il RUNTIME in prod → niente --prod.
-RUN pnpm install --frozen-lockfile --filter @tako/server...
+# tsx è in devDependencies di @tako/server ma è il RUNTIME in prod (tsx esegue i .ts a
+# runtime). Lo stage base ha NODE_ENV=production → pnpm salterebbe le devDeps: forziamo
+# --prod=false per installarle, altrimenti al boot `pnpm exec tsx` → "Command tsx not found".
+RUN pnpm install --frozen-lockfile --prod=false --filter @tako/server...
 
 # ─── runtime ─────────────────────────────────────────────────────────────────
 FROM base AS runtime
