@@ -110,16 +110,16 @@ MERGE SU MAIN: SOLO l'utente (Manuel). Gli agenti lavorano su feature branch.
 
 ## 5. Remote Mode
 
-**Trigger**: routine schedulata legge `BACKLOG.md` e avvia pipeline automatica.
+**Trigger**: routine schedulata legge `TAKO.md` (§5 "Da fare") e avvia pipeline automatica.
 
 ### Comportamento
 
-1. Leggi `BACKLOG.md` (root), seleziona primo task non completato con priorità massima.
+1. Leggi `TAKO.md` (root, §5 "Da fare"), seleziona primo task non completato con priorità massima.
 2. Avvia Normal Mode pipeline per quel task.
 3. Specialista lavora su feature branch: `feat/remote-[slug]-[date]`. MAI su main.
 4. Dopo completamento: commit + push del branch.
-5. Appendi esito su `AGENT-LOG.md` (root) e su `.claude/comms/AGENT-LOG.md`.
-6. Marca task come `[x]` in `BACKLOG.md`.
+5. Appendi esito su `.claude/comms/AGENT-LOG.md`.
+6. Marca task come `[x]` in `TAKO.md` (§5).
 7. **Non toccare main, non aprire PR** (a meno di configurazione esplicita).
 
 ### Setup scheduler
@@ -194,7 +194,7 @@ Valori `type` in `interfaces_exposed`: `REST` | `GraphQL` | `DB_SCHEMA` | `TYPES
 | **security-review** | READ-ONLY su tutto | non scrive mai |
 | **docs** | `README.md`, `CHANGELOG.md`, `docs/`, commenti inline | src/api/, migrations/ |
 | **architect** | `.claude/MASTER_PLAN.md` | tutto il resto |
-| **ledger-writer** | `.claude/comms/TASK_LEDGER.json`, `.claude/comms/AGENT-LOG.md`, `AGENT-LOG.md` (root) | tutto il resto |
+| **ledger-writer** | `.claude/comms/TASK_LEDGER.json`, `.claude/comms/AGENT-LOG.md` | tutto il resto |
 
 **Regola anti-conflitto**: se due agenti hanno overlap su un file, l'orchestratore li serializza (non parallelizza). Il `refactor` va sempre serializzato rispetto agli altri agenti sugli stessi file.
 
@@ -217,6 +217,6 @@ Valori `type` in `interfaces_exposed`: `REST` | `GraphQL` | `DB_SCHEMA` | `TYPES
 | Task normale | Descrivi il task (orchestratore → planner → pipeline) |
 | Design completo | `[MASTER] descrizione progetto` |
 | Vedere stato task | Chiedi all'orchestratore di leggere `TASK_LEDGER.json` |
-| Vedere log | Chiedi all'orchestratore di leggere `AGENT-LOG.md` |
+| Vedere log | Chiedi all'orchestratore di leggere `.claude/comms/AGENT-LOG.md` |
 | Vedere contratti esposti | Chiedi all'orchestratore di listare `contracts/` |
-| Aggiungere task remoto | Scrivi in `BACKLOG.md` con priorità P0/P1/P2 |
+| Aggiungere task remoto | Scrivi in `TAKO.md` §5 "Da fare" con priorità P0/P1/P2 |
