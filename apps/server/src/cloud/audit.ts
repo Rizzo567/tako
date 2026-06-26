@@ -26,6 +26,8 @@ export type AuditEvent =
   | 'pair_claimed'
   | 'pair_claim_refused'
   | 'pair_heartbeat'
+  // Form contatti del sito
+  | 'contact'
 
 interface AuditInput {
   event: AuditEvent

@@ -14,6 +14,7 @@ import { Redis } from 'ioredis'
 import { cloudAuthRoutes } from '../routes/cloud/auth.js'
 import { cloudOAuthRoutes } from '../routes/cloud/oauth.js'
 import { cloudPairRoutes } from '../routes/cloud/pair.js'
+import { cloudContactRoutes } from '../routes/cloud/contact.js'
 import { allowedOrigins, cookieMode } from './config.js'
 import { validateEmailConfig } from './email.js'
 import { setRedis } from './redis.js'
@@ -138,6 +139,7 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
     'POST:/api/auth/reset-password',
     'POST:/api/auth/verify-email',
     'GET:/api/auth/verify-email',
+    'POST:/api/contact',
   ])
   const SENSITIVE_PAIR = new Set([
     'POST:/api/pair/claim',
@@ -163,6 +165,7 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
   // provider sono configurati (client id/secret in env), altrimenti è un no-op.
   await fastify.register(cloudOAuthRoutes, { prefix: '/api/auth' })
   await fastify.register(cloudPairRoutes, { prefix: '/api/pair' })
+  await fastify.register(cloudContactRoutes, { prefix: '/api' })
 
   return fastify
 }
