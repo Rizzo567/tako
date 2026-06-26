@@ -34,6 +34,9 @@ services:
         value: resend
       - key: EMAIL_FROM
         value: Tako <no-reply@takoitalia.com>
+      # Destinatario notifiche di nuova registrazione (lead dal sito).
+      - key: ADMIN_NOTIFY_EMAIL
+        value: manuelrizzo474@gmail.com
       # ── generati da Render (random sicuro) ──
       - key: SESSION_SECRET
         generateValue: true

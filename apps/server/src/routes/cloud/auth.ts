@@ -63,6 +63,22 @@ async function sendVerificationEmail(ownerId: string, ownerName: string | null, 
   await sendEmail({ to, subject: tpl.subject, html: tpl.html })
 }
 
+// Notifica al titolare di Tako (Manuel) ogni nuova registrazione dal sito = lead.
+// Destinatario configurabile via ADMIN_NOTIFY_EMAIL (default: indirizzo di Manuel).
+// Best-effort: un fallimento non deve mai rompere la registrazione dell'utente.
+async function notifyAdminNewRegistration(name: string | null, leadEmail: string): Promise<void> {
+  const admin = process.env['ADMIN_NOTIFY_EMAIL'] || 'manuelrizzo474@gmail.com'
+  const safeName = (name && name.trim()) || '(nessun nome)'
+  const html = `
+    <div style="font-family:system-ui,sans-serif;font-size:15px;color:#2A1F1A">
+      <h2>🐙 Nuovo ristorante registrato su Tako</h2>
+      <p><b>Nome locale:</b> ${safeName}</p>
+      <p><b>Email:</b> <a href="mailto:${leadEmail}">${leadEmail}</a></p>
+      <p style="color:#8a7d75">Registrazione dal sito takoitalia.com. L'utente ha ricevuto l'email di verifica.</p>
+    </div>`
+  await sendEmail({ to: admin, subject: `Nuovo lead Tako: ${safeName}`, html })
+}
+
 export async function cloudAuthRoutes(fastify: FastifyInstance) {
   // ─── REGISTER ──────────────────────────────────────────────────────────────
   // Anti-enumeration: risposta 200 generica anche se l'email esiste già; in quel
@@ -110,6 +126,7 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
     }
 
     await sendVerificationEmail(ownerId, ownerName, norm).catch((err) => req.log.error({ err }, 'verify email send failed'))
+    await notifyAdminNewRegistration(ownerName, norm).catch((err) => req.log.error({ err }, 'admin notify failed'))
     await audit({ event: 'register', ownerId, req })
     return reply.code(200).send(GENERIC_EMAIL_SENT)
   })
