@@ -2,12 +2,12 @@
 
 > Handoff del 2026-06-26. Stato: sito auth + cloud LIVE; restano azioni di deploy e SEO.
 
-## 🔴 PRIMA COSA — Manual Deploy su Render
-Il backend cloud ha codice nuovo NON ancora live (Render ha autoDeploy OFF).
-- **Render → servizio `tako-cloud` → Manual Deploy → Deploy latest commit (`8425e18`)**
-- Attiva 3 cose: **form contatti** (`/api/contact`), **notifica lead** a ogni registrazione, **favicon api**.
-- ⚠️ Finché non lo fai, il form "scrivici" del sito dà errore d'invio.
-- Dopo: testa → compila il form sul sito → deve arrivarti l'email a manuelrizzo474@gmail.com.
+## ✅ FATTO — Render deploy + form/login verificati live (2026-06-27)
+Verificato end-to-end: backend cloud HA già il commit `8425e18` deployato.
+- `/api/contact` → 200, email lead arriva a manuelrizzo474@gmail.com (testato, confermato).
+- `/api/auth/login` `/register` → vivi. `/api/auth/google` → 302 OAuth corretto.
+- Frontend sito (takoitalia.com + tutte le `.jsx`) live e cablato su `api.takoitalia.com`.
+- → NON serve nessun Manual Deploy. Form e login funzionano.
 
 ## 🟠 "Sito pericoloso" sul login Google
 Capire quale warning è (chiedere screenshot a Manuel):
