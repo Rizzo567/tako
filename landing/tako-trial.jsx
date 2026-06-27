@@ -367,7 +367,7 @@ function SignupForm({ confetti }) {
                   {loading ? 'Creazione…' : <>Inizia la prova gratis <span aria-hidden>→</span></>}
                 </button>
                 <p className="text-center mt-4 text-[13px]" style={{ color: 'var(--ink-soft)', fontWeight: 600 }}>
-                  Registrandoti accetti i <a href="Tako%20Landing.html" style={{ color: 'var(--coral-deep)', fontWeight: 800 }}>Termini</a> e la Privacy.
+                  Registrandoti accetti i <a href="/termini" style={{ color: 'var(--coral-deep)', fontWeight: 800 }}>Termini</a> e la <a href="/privacy" style={{ color: 'var(--coral-deep)', fontWeight: 800 }}>Privacy</a>.
                 </p>
               </form>
             ) : (

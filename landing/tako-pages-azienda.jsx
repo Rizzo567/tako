@@ -105,7 +105,7 @@ TAKO_PAGES['contatti'] = {
   ),
 };
 
-const LEGAL_INTRO = 'Questo documento è un fac-simile dimostrativo creato per il prototipo Tako e non costituisce un testo legale valido.';
+const LEGAL_INTRO = 'In questo documento spieghiamo in modo chiaro e semplice le nostre regole. Per qualsiasi dubbio puoi contattarci in qualsiasi momento.';
 
 TAKO_PAGES['privacy'] = {
   title: 'Privacy Policy',
@@ -115,7 +115,7 @@ TAKO_PAGES['privacy'] = {
       <Band tint="cream">
         <LegalDoc updated="Giugno 2026" sections={[
           { h: 'Premessa', p: LEGAL_INTRO + ' Tako Srl tratta i dati personali nel rispetto del Regolamento (UE) 2016/679 (GDPR).' },
-          { h: 'Titolare del trattamento', p: 'Il titolare è Tako Srl. Per qualsiasi richiesta sui tuoi dati scrivi a privacy@tako.it.' },
+          { h: 'Titolare del trattamento', p: 'Il titolare è Tako Srl. Per qualsiasi richiesta sui tuoi dati scrivi a privacy@takoitalia.com.' },
           { h: 'Dati raccolti', p: 'Raccogliamo i dati dell’account (nome, email, ristorante), i dati operativi (ordini, menu, tavoli) e dati tecnici di utilizzo necessari a far funzionare il servizio.' },
           { h: 'Finalità', p: 'Usiamo i dati per erogare il servizio, fornire assistenza, migliorare il prodotto e adempiere agli obblighi di legge. Non vendiamo i tuoi dati a terzi.' },
           { h: 'Conservazione', p: 'Conserviamo i dati per il tempo necessario alle finalità descritte e secondo gli obblighi fiscali. Alla chiusura dell’account puoi richiederne la cancellazione.' },
