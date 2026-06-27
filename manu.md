@@ -14,8 +14,15 @@ Era Safe Browsing: pagina rossa "Sito pericoloso/ingegneria sociale", flag a liv
 DOMINIO (nessuna URL specifica) su dominio nuovo. Falso positivo. Sito già legittimo
 (privacy+termini esistono in tako-pages-azienda.jsx).
 - ✅ Search Console: proprietà aggiunta, **revisione richiesta il 2026-06-27**.
+- ✅ Sito rinforzato e LIVE (2026-06-27): tolto disclaimer "documento fac-simile non valido"
+  dalle pagine legali, email → privacy@takoitalia.com, aggiunte pagine statiche reali
+  crawlabili `/privacy` e `/termini` (in sitemap), link legali nel form registrazione fixati.
+  Commit `0354be7` su main, deploy CF Pages auto OK.
 - ⏳ Attesa approvazione Google: da poche ore a 2-3 giorni → poi l'avviso sparisce solo.
-- Se RIGETTATA: rendere privacy/termini URL statici crawlabili + ri-richiedere.
+  Google ri-controllerà il sito (ora più solido) durante la revisione.
+- Se RIGETTATA: ri-richiedere (il sito è già a posto, niente altro da fare lato codice).
+- Nota: CF Pages builda anche i branch app (es. fase1) come Preview → quei build falliscono
+  (manca landing/), è rumore innocuo. Solo `main` conta (Production).
 
 ## 🟡 SEO — "Tako primo su Google"
 Base on-page GIÀ FATTA e live (meta description, Open Graph, JSON-LD, robots.txt, sitemap.xml, og-image).
