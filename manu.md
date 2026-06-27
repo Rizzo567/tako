@@ -9,12 +9,13 @@ Verificato end-to-end: backend cloud HA già il commit `8425e18` deployato.
 - Frontend sito (takoitalia.com + tutte le `.jsx`) live e cablato su `api.takoitalia.com`.
 - → NON serve nessun Manual Deploy. Form e login funzionano.
 
-## 🟠 "Sito pericoloso" sul login Google
-Capire quale warning è (chiedere screenshot a Manuel):
-- Se **pagina rossa "Sito ingannevole"** = Safe Browsing ha flaggato il dominio nuovo →
-  **Google Search Console** → aggiungi `takoitalia.com` → Sicurezza/azioni manuali → **richiedi revisione**.
-- Se **"App non verificata"** = OAuth consent screen →
-  **Google Cloud Console → OAuth consent screen** → home page + privacy policy + **pubblica in Production** + dominio autorizzato `takoitalia.com`.
+## 🟠→⏳ "Sito pericoloso" login Google — REVISIONE INVIATA (2026-06-27)
+Era Safe Browsing: pagina rossa "Sito pericoloso/ingegneria sociale", flag a livello
+DOMINIO (nessuna URL specifica) su dominio nuovo. Falso positivo. Sito già legittimo
+(privacy+termini esistono in tako-pages-azienda.jsx).
+- ✅ Search Console: proprietà aggiunta, **revisione richiesta il 2026-06-27**.
+- ⏳ Attesa approvazione Google: da poche ore a 2-3 giorni → poi l'avviso sparisce solo.
+- Se RIGETTATA: rendere privacy/termini URL statici crawlabili + ri-richiedere.
 
 ## 🟡 SEO — "Tako primo su Google"
 Base on-page GIÀ FATTA e live (meta description, Open Graph, JSON-LD, robots.txt, sitemap.xml, og-image).
