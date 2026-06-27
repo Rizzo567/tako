@@ -30,7 +30,8 @@ function useTick(ms = 1000) {
 function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
   const active = orders.filter(o => !["servito", "pagato", "annullato"].includes(o.stato)).length;
   const setupDone = SETUP.filter(s => s.done).length;
-  const incomplete = setupDone < SETUP.length && settings.mostraOnboarding;
+  const allDone = setupDone === SETUP.length;
+  const incomplete = settings.mostraOnboarding;
   // variazione incasso oggi vs ieri, calcolata da WEEK (ultimo = oggi, penultimo = ieri)
   const oggi = WEEK.length ? WEEK[WEEK.length - 1].v : 0;
   const ieri = WEEK.length >= 2 ? WEEK[WEEK.length - 2].v : 0;
@@ -81,7 +82,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
             <Card pad={18} style={{ background: "linear-gradient(135deg,#fff,var(--brand-wash))" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                 <Tako pose="serve" size={46} float={false} />
-                <div><h3 style={{ fontSize: 16 }}>Completa il setup</h3><p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{setupDone}/{SETUP.length} passi · ci siamo quasi</p></div>
+                <div><h3 style={{ fontSize: 16 }}>{allDone ? "Setup completato" : "Completa il setup"}</h3><p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{allDone ? "Tutto pronto · puoi nasconderlo dalle Impostazioni" : `${setupDone}/${SETUP.length} passi · ci siamo quasi`}</p></div>
               </div>
               <Progress value={(setupDone / SETUP.length) * 100} />
               <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 14 }}>
@@ -89,7 +90,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
                   <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: s.done ? "var(--ink-3)" : "var(--ink)" }}>
                     <span style={{ width: 20, height: 20, borderRadius: 99, display: "grid", placeItems: "center", background: s.done ? "var(--ok)" : "var(--ink)", color: "#fff" }}><Icon name="check" size={12} stroke={3} /></span>
                     <span style={{ textDecoration: s.done ? "line-through" : "none", fontWeight: s.done ? 500 : 600 }}>{s.k}</span>
-                    {!s.done && <span style={{ marginLeft: "auto" }}><Btn size="sm" kind="brand" style={{ height: 26, padding: "0 13px", fontSize: 12.5 }} onClick={() => go(s.k === "QR Code" ? "qr" : "staff")}>Vai</Btn></span>}
+                    {!s.done && <span style={{ marginLeft: "auto" }}><Btn size="sm" kind="brand" style={{ height: 26, padding: "0 13px", fontSize: 12.5 }} onClick={() => go(s.route || "impostazioni")}>Vai</Btn></span>}
                   </div>
                 ))}
               </div>

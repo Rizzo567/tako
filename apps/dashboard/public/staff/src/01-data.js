@@ -38,11 +38,11 @@ const BRAND_PALETTES = {
 const CUR = { sym: "€" };
 const CURRENCIES = { EUR: "€", USD: "$", GBP: "£", CHF: "CHF " };
 const SETUP = [
-  { k: "Dati ristorante", done: true },
-  { k: "Tavoli",          done: false },
-  { k: "Menu",            done: false },
-  { k: "QR Code",         done: false },
-  { k: "Team",            done: false },
+  { k: "Dati ristorante", done: false, route: "impostazioni" },
+  { k: "Tavoli",          done: false, route: "tavoli" },
+  { k: "Menu",            done: false, route: "menu" },
+  { k: "QR Code",         done: false, route: "qr" },
+  { k: "Team",            done: false, route: "staff" },
 ];
 const SETTINGS_DEFAULTS = {
   nome: "", indirizzo: "", telefono: "",
@@ -218,8 +218,11 @@ async function loadAll() {
   STAFF = (staff || []).map(mapStaff);
   if (insights) ENGINEERING = (insights.items || []).filter((i) => QUAD_DB2UI[i.quadrant]).map((i) => ({ nome: i.name, vol: i.totalQty, margine: Math.round(i.marginPercent || 0), cls: QUAD_DB2UI[i.quadrant] }));
 
-  // onboarding reale
-  SETUP[1].done = ROOMS.some((r) => r.tables.length); SETUP[2].done = MENU.some((s) => s.piatti.length);
+  // onboarding reale — ogni step riflette i dati veri
+  SETUP[0].done = !!(RESTAURANT.name && RESTAURANT.name.trim());
+  SETUP[1].done = ROOMS.some((r) => r.tables.length);
+  SETUP[2].done = MENU.some((s) => s.piatti.length);
+  SETUP[3].done = ROOMS.some((r) => r.tables.some((t) => t._qr));
   SETUP[4].done = STAFF.length > 1;
 
   syncGlobals();
