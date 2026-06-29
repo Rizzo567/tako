@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
     const api = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
     return [
       { source: '/api/:path*', destination: `${api}/api/:path*` },
+      // Immagini caricate (foto piatti) servite dal server API.
+      { source: '/uploads/:path*', destination: `${api}/uploads/:path*` },
       // Socket.io same-origin: il cliente si connette al proprio host (anche via
       // LAN/QR) e Next inoltra al server, evitando problemi di CORS cross-origin.
       { source: '/socket.io/', destination: `${api}/socket.io/` },

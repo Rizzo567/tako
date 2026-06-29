@@ -6,8 +6,7 @@ import { db, tables, rooms } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-
-const CLIENT_BASE_URL = process.env['CLIENT_BASE_URL'] ?? 'http://localhost:3002'
+import { clientBaseUrl } from '../lib/network.js'
 
 export async function tableRoutes(fastify: FastifyInstance) {
   // Get all rooms with tables
@@ -116,7 +115,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
 
-    const url = `${CLIENT_BASE_URL}/r/${req.user!.restaurantId}/t/${table.qrToken}`
+    const url = `${clientBaseUrl()}/r/${req.user!.restaurantId}/t/${table.qrToken}`
     const qrDataUrl = await QRCode.toDataURL(url, { width: 400, margin: 2, color: { dark: '#2A1F1A', light: '#FFF8F3' } })
     return { data: { qrDataUrl, url, tableNumber: table.number } }
   })

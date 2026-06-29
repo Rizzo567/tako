@@ -120,7 +120,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
       price: z.number().min(0),
       allergens: z.array(z.string()).default([]),
       tags: z.array(z.string()).default([]),
-      imageUrl: z.string().url().optional(),
+      imageUrl: z.string().min(1).refine((v) => v.startsWith('/uploads/') || /^https?:\/\//.test(v), 'URL immagine non valido').optional(),
       kitchenStation: z.string().optional(),
       prepTimeMinutes: z.number().default(10),
       costPrice: z.number().min(0).optional(), // food cost (per margine/analisi menu)
@@ -143,7 +143,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
       available: z.boolean().optional(),
       allergens: z.array(z.string()).optional(),
       tags: z.array(z.string()).optional(),
-      imageUrl: z.string().url().optional(),
+      imageUrl: z.string().min(1).refine((v) => v.startsWith('/uploads/') || /^https?:\/\//.test(v), 'URL immagine non valido').optional(),
       kitchenStation: z.string().optional(),
       prepTimeMinutes: z.number().int().min(0).optional(),
       position: z.number().int().min(0).optional(),

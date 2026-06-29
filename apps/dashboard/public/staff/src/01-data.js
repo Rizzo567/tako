@@ -154,7 +154,7 @@ async function loadMenu() {
     piatti: (s.items || []).map((it) => ({
       nome: it.name, prezzo: Number(it.price) || 0, costo: it.costPrice != null ? Number(it.costPrice) : 0,
       disp: !!it.available, station: it.kitchenStation || "Cucina", tag: it.tags || [], alg: it.allergens || [],
-      desc: it.description || "", _id: it.id, _sectionId: s.id,
+      desc: it.description || "", img: it.imageUrl || "", _id: it.id, _sectionId: s.id,
     })),
   }));
 }
@@ -278,6 +278,18 @@ const TakoActions = {
   roomCreate: (name) => TakoAPI.post(`/tables/rooms`, { name }),
   tableQr: (id) => TakoAPI.get(`/tables/${id}/qr`),
   tableQrRefresh: (id) => TakoAPI.post(`/tables/${id}/qr/refresh`),
+  // info rete: IP LAN corrente + base URL cliente usata nei QR (segue il WiFi)
+  systemInfo: () => TakoAPI.get(`/system/info`),
+  // upload immagine (multipart): NON usare TakoAPI.req (forza JSON). Il browser
+  // imposta da solo il boundary multipart. Ritorna { url }.
+  uploadImage: async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const r = await fetch("/api/uploads/image", { method: "POST", credentials: "include", body: fd });
+    let j = null; try { j = await r.json(); } catch (_) {}
+    if (!r.ok) { const e = new Error(j?.error?.message || r.statusText); e.code = j?.error?.code; throw e; }
+    return j ? j.data : null;
+  },
   // comanda (ordine creato dallo staff)
   staffOrder: (body) => TakoAPI.post(`/orders`, body),
   // conti / cassa

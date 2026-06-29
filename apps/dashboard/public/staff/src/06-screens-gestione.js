@@ -184,13 +184,42 @@ const inputStyle = { width: "100%", height: 44, padding: "0 13px", borderRadius:
 function DishEditor({ dish, mobile, onClose }) {
   const [variants, setVariants] = useState([{ nome: "Porzione grande", mod: 3 }]);
   const [confirmDel, setConfirmDel] = useState(false);
+  const [imageUrl, setImageUrl] = useState(dish.img || "");
+  const [uploading, setUploading] = useState(false);
+  const onPickImage = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = ""; // permette di ri-selezionare lo stesso file
+    if (!file) return;
+    setUploading(true);
+    try {
+      const res = await window.TakoActions.uploadImage(file);
+      setImageUrl(res.url);
+      toast("Immagine caricata", { type: "success" });
+    } catch (err) {
+      toast(err.message || "Upload immagine fallito", { type: "error" });
+    } finally {
+      setUploading(false);
+    }
+  };
   return (
     <div style={{ width: mobile ? 354 : 420, maxWidth: "100%", height: mobile ? "auto" : "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 24 : 0, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: mobile ? "var(--sh-pop)" : "none" }}>
       <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
         <h3 style={{ flex: 1, fontSize: 18 }}>Modifica piatto</h3><IconBtn name="x" tone="soft" onClick={onClose} />
       </div>
       <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: 20 }}>
-        <div style={{ height: 120, borderRadius: 14, border: "1.5px dashed var(--hairline)", display: "grid", placeItems: "center", color: "var(--ink-3)", marginBottom: 16, background: "var(--sunken)" }}><div style={{ textAlign: "center" }}><Icon name="download" size={24} style={{ margin: "0 auto 6px" }} /><span style={{ fontSize: 13, fontWeight: 600 }}>Carica immagine</span></div></div>
+        <label style={{ position: "relative", display: "block", height: 120, borderRadius: 14, border: "1.5px dashed var(--hairline)", overflow: "hidden", cursor: uploading ? "wait" : "pointer", color: "var(--ink-3)", marginBottom: 16, background: imageUrl ? "var(--surface)" : "var(--sunken)" }}>
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onPickImage} disabled={uploading} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "inherit" }} />
+          {imageUrl ? (
+            <img src={imageUrl} alt="Immagine piatto" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+              <div style={{ textAlign: "center" }}><Icon name="download" size={24} style={{ margin: "0 auto 6px" }} /><span style={{ fontSize: 13, fontWeight: 600 }}>{uploading ? "Carico…" : "Carica immagine"}</span></div>
+            </div>
+          )}
+          {imageUrl && !uploading && (
+            <span style={{ position: "absolute", right: 8, bottom: 8, background: "rgba(0,0,0,.55)", color: "#fff", fontSize: 11.5, fontWeight: 600, padding: "3px 8px", borderRadius: 8 }}>Cambia</span>
+          )}
+        </label>
         <Field label="Nome"><input style={inputStyle} defaultValue={dish.nome} /></Field>
         <div style={{ display: "flex", gap: 12 }}>
           <Field label="Prezzo (€)"><input style={inputStyle} type="number" defaultValue={dish.prezzo} /></Field>
@@ -250,6 +279,7 @@ function DishEditor({ dish, mobile, onClose }) {
               name, price: isNaN(price) ? undefined : price,
               costPrice: isNaN(costPrice) ? undefined : costPrice,
               description, kitchenStation,
+              imageUrl: imageUrl || undefined,
             });
             await window.takoReload();
             onClose();

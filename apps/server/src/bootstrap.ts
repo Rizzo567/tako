@@ -25,5 +25,18 @@ if (!process.env['JWT_SECRET']) {
   }
 }
 
+// Chiave Groq (import-da-testo AI) persistente: nell'app desktop l'env non è
+// caricato da .env, quindi come per JWT la leggiamo da un file in TAKO_HOME.
+// Precedenza all'env (dev con --env-file o launchd); fallback al file.
+if (!process.env['GROQ_API_KEY']) {
+  const home = process.env['TAKO_HOME'] ?? join(homedir(), '.tako')
+  mkdirSync(home, { recursive: true })
+  const gf = join(home, 'groq-key')
+  if (existsSync(gf)) {
+    const k = readFileSync(gf, 'utf8').trim()
+    if (k) process.env['GROQ_API_KEY'] = k
+  }
+}
+
 await maybeStartEmbeddedDb()
 await startServer()

@@ -604,6 +604,28 @@ function QrCard({ t, onDownload, onDelete }) {
 function ScreenQR({ mobile }) {
   const all = ROOMS.flatMap(r => r.tables);
   const [delTarget, setDelTarget] = useState(null);
+  const [net, setNet] = useState(null);
+  const [netKey, setNetKey] = useState(0);
+  const [netBusy, setNetBusy] = useState(false);
+
+  const loadNet = async () => {
+    try { setNet(await window.TakoActions.systemInfo()); }
+    catch (e) { setNet(null); }
+  };
+  useEffect(() => { loadNet(); }, []);
+
+  // Ricalcola la rete (IP corrente) e forza i QR a rigenerarsi con il nuovo IP.
+  const refreshNet = async () => {
+    if (netBusy) return;
+    setNetBusy(true);
+    try {
+      await loadNet();
+      setNetKey(k => k + 1); // rimonta le QrCard → nuova fetch /tables/:id/qr
+      toast("Rete aggiornata: QR rigenerati con l'IP corrente", { type: "success" });
+    } finally {
+      setNetBusy(false);
+    }
+  };
 
   const confirmDelete = async () => {
     const t = delTarget;
@@ -651,12 +673,32 @@ function ScreenQR({ mobile }) {
     }
   };
 
+  const clientUrl = net && (net.clientBaseUrl || (net.urls && net.urls.client));
+  const lanIP = net && (net.lanIP || (net.lanIPs && net.lanIPs[0]));
+
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="phone" title="QR Codes" sub="Genera e scarica i QR dei tavoli" actions={<Btn kind="brand" icon="download" onClick={downloadAll}>Scarica tutti</Btn>} />
+      <PageHead mobile={mobile} tako="phone" title="QR Codes" sub="Genera e scarica i QR dei tavoli" actions={
+        <div style={{ display: "flex", gap: 8 }}>
+          <Btn kind="soft" icon="qr" onClick={refreshNet} disabled={netBusy}>{netBusy ? "Aggiorno…" : "Aggiorna rete"}</Btn>
+          <Btn kind="brand" icon="download" onClick={downloadAll}>Scarica tutti</Btn>
+        </div>
+      } />
+      <Card style={{ marginBottom: 14, padding: 14, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+        <div style={{ flex: 1, minWidth: 200 }}>
+          <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 2 }}>Rete attuale del Mac — i QR puntano qui</div>
+          <div className="mono" style={{ fontSize: 13.5, color: "var(--ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {clientUrl || "Rilevamento rete…"}
+          </div>
+          <div style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 2 }}>
+            {lanIP ? `IP LAN: ${lanIP}` : "Nessun IP LAN rilevato"} · si aggiorna da solo al cambio WiFi
+          </div>
+        </div>
+        <Btn size="sm" kind="soft" icon="qr" onClick={refreshNet} disabled={netBusy}>{netBusy ? "Aggiorno…" : "Aggiorna ora"}</Btn>
+      </Card>
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill,minmax(210px,1fr))", gap: 14 }}>
         {all.map(t => (
-          <QrCard key={t.n} t={t} onDownload={downloadQr} onDelete={setDelTarget} />
+          <QrCard key={t.n + ":" + netKey} t={t} onDownload={downloadQr} onDelete={setDelTarget} />
         ))}
       </div>
       <Confirm open={!!delTarget} onClose={() => setDelTarget(null)} onConfirm={confirmDelete} danger
