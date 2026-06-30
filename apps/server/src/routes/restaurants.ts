@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, restaurants } from '@tako/db'
 import { eq } from 'drizzle-orm'
-import { requireAuth } from '../middleware/auth.js'
+import { requireAuth, requireRole } from '../middleware/auth.js'
 
 export async function restaurantRoutes(fastify: FastifyInstance) {
   fastify.get('/me', { preHandler: requireAuth }, async (req, reply) => {
@@ -11,7 +11,10 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
     return { data: r }
   })
 
-  fastify.patch('/me', { preHandler: requireAuth }, async (req, reply) => {
+  // Solo l'owner può riscrivere le impostazioni del ristorante: contengono campi
+  // sensibili (printerIp/printerPort → connessione TCP arbitraria/SSRF in LAN,
+  // vatRate, coverCharge, autoConfirm, payAtTableEnabled). GET /me resta requireAuth.
+  fastify.patch('/me', { preHandler: requireRole('owner') }, async (req, reply) => {
     const schema = z.object({
       name: z.string().optional(),
       address: z.string().optional(),
@@ -29,7 +32,8 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
         payAtTableEnabled: z.boolean().optional(),
         aiEnabled: z.boolean().optional(),
         printerIp: z.string().optional(),
-        printerPort: z.number().int().min(1).max(65535).optional(),
+        // solo porte raw-printing ESC/POS: evita port-probe verso servizi interni
+        printerPort: z.number().int().min(9100).max(9103).optional(),
         // preferenze operative (prima solo localStorage) — ora persistite
         coverCharge: z.number().min(0).optional(),        // coperto €
         coverChargeEnabled: z.boolean().optional(),

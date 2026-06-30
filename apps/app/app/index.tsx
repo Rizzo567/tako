@@ -15,16 +15,24 @@ const SERVER_URL =
   process.env.EXPO_PUBLIC_SERVER_URL ||
   'http://tako.local:4317'
 
-const STAFF_URL = `${SERVER_URL.replace(/\/$/, '')}/staff/index.html`
+const SERVER_ORIGIN = SERVER_URL.replace(/\/$/, '')
+const STAFF_URL = `${SERVER_ORIGIN}/staff/index.html`
+
+// Confina la WebView al solo origin del server Tako: nessuna navigazione off-host
+// può ereditare la sessione staff (mitiga MITM/redirect su LAN cleartext).
+const ALLOWED_ORIGINS = [SERVER_ORIGIN, 'http://tako.local:4317', 'http://127.0.0.1:4317']
 
 export default function Index() {
   return (
     <View style={{ flex: 1, backgroundColor: '#FBF8F4' }}>
       <WebView
         source={{ uri: STAFF_URL }}
-        originWhitelist={['*']}
+        originWhitelist={ALLOWED_ORIGINS}
+        onShouldStartLoadWithRequest={(req) =>
+          ALLOWED_ORIGINS.some((o) => req.url.startsWith(o))
+        }
         sharedCookiesEnabled
-        thirdPartyCookiesEnabled
+        thirdPartyCookiesEnabled={false}
         style={{ flex: 1, backgroundColor: '#FBF8F4' }}
         javaScriptEnabled
         domStorageEnabled

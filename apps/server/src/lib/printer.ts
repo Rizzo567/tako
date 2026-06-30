@@ -20,8 +20,33 @@ export function buildEscposReceipt(lines: string[]): Buffer {
   return Buffer.concat(chunks)
 }
 
+// Una stampante di rete sta SEMPRE su un IP LAN privato. Limitare il target a
+// quei range (e rifiutare loopback/link-local) impedisce di usare printerIp come
+// SSRF/port-knock verso host interni arbitrari.
+function isPrivateLanIPv4(ip: string): boolean {
+  const m = ip.trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/)
+  if (!m) return false
+  const o = m.slice(1).map(Number)
+  if (o.some(n => n > 255)) return false
+  const [a, b] = o as [number, number, number, number]
+  if (a === 10) return true                       // 10.0.0.0/8
+  if (a === 172 && b >= 16 && b <= 31) return true // 172.16.0.0/12
+  if (a === 192 && b === 168) return true          // 192.168.0.0/16
+  return false
+}
+
+// Porte raw-printing ESC/POS standard. Limitare il target a queste impedisce di
+// usare printerPort come port-knock/probe verso servizi interni (22, 5432, 6379…).
+const ALLOWED_PRINTER_PORTS = new Set([9100, 9101, 9102, 9103])
+
 export function sendToPrinter(ip: string, port: number, data: Buffer): Promise<void> {
   return new Promise((resolve, reject) => {
+    if (!isPrivateLanIPv4(ip)) {
+      return reject(new Error('Printer IP must be a private LAN address'))
+    }
+    if (!ALLOWED_PRINTER_PORTS.has(port)) {
+      return reject(new Error('Printer port must be a raw-printing port (9100-9103)'))
+    }
     const client = createConnection({ host: ip, port }, () => {
       client.write(data, (err) => {
         if (err) return reject(err)
