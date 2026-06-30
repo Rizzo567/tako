@@ -15,7 +15,7 @@ const GRID = [
   '..BBBBBBB..',
   '.BBBBBBBBB.',
   '.BBBBBBBBB.',
-  '.BBKBBBKBB.',
+  '.BBWBBBWBB.',
   '.BBBBBBBBB.',
   '.BBBBBBBBB.',
   '.BBBBBBBBB.',
@@ -25,10 +25,10 @@ const GRID = [
 const GRID_H = GRID.length
 const GRID_W = GRID[0]!.length
 
-// Palette coerente col brand Tako (corpo terracotta caldo, pupilla = dark del QR).
+// Bianco e nero: corpo nel dark del QR (#2A1F1A), occhi bianchi sul corpo scuro.
 const COLORS: Record<string, [number, number, number, number]> = {
-  B: [224, 120, 92, 255],
-  W: [255, 255, 255, 255],
+  B: [42, 31, 26, 255],    // corpo (= dark dei moduli QR)
+  W: [255, 255, 255, 255], // occhi
   K: [42, 31, 26, 255],
   '.': [0, 0, 0, 0],
 }
