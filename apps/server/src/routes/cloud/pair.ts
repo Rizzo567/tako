@@ -301,6 +301,25 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
       })
     }
 
+    // Cross-tenant guard (SEC): una pubkey già registrata può essere ri-accoppiata SOLO dallo
+    // stesso owner. La pubkey è un valore PUBBLICO: senza questo controllo un owner che la
+    // conosce potrebbe generare un code per il proprio ristorante e ri-puntare l'appliance
+    // altrui a sé (rebind cross-tenant). La proof-of-possession piena al claim (firma con la
+    // privkey) è Fase 4; qui blocchiamo il rebind confrontando l'owner del record esistente.
+    if (existingByPubkey && existingByPubkey.restaurantId !== restaurant.id) {
+      const [existingRestaurant] = await cloudDb
+        .select({ ownerId: cloudRestaurants.ownerId })
+        .from(cloudRestaurants)
+        .where(eq(cloudRestaurants.id, existingByPubkey.restaurantId))
+        .limit(1)
+      if (existingRestaurant && existingRestaurant.ownerId !== owner.id) {
+        await audit({ event: 'pair_claim_refused', ownerId: owner.id, req, meta: { reason: 'cross_owner_rebind', applianceId: existingByPubkey.id } })
+        return reply.code(403).send({
+          error: { code: 'PUBKEY_OWNED', message: 'Questa identità dispositivo appartiene a un altro account. Genera una nuova identità sul dispositivo e riprova.' },
+        })
+      }
+    }
+
     // Registra l'appliance (pubkey unica). Se la pubkey è già nota e NON revocata → riusa il
     // record (re-pairing legittimo). Tracciamo un eventuale cambio di restaurant_id per audit.
     const movedRestaurant = !!existingByPubkey && existingByPubkey.restaurantId !== restaurant.id
@@ -343,6 +362,11 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
   fastify.post('/heartbeat', async (req, reply) => {
     const applianceId = (req.headers[APPLIANCE_TOKEN_HEADER] as string | undefined) ?? undefined
     if (!applianceId) return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Appliance non identificata' } })
+    // applianceId è una colonna uuid: un valore non-UUID causerebbe un cast-error Postgres (500)
+    // e farebbe da oracolo (malformed vs sconosciuto). Validalo come UUID → 401 uniforme.
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(applianceId)) {
+      return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Appliance non identificata' } })
+    }
 
     const signature = (req.headers[SIGNATURE_HEADER] as string | undefined) ?? undefined
     const timestampRaw = (req.headers[TIMESTAMP_HEADER] as string | undefined) ?? undefined

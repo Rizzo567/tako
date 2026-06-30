@@ -73,6 +73,12 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash)
 }
 
+// Hash cost-12 di una stringa fittizia (NON è un segreto: è l'hash di un valore buttato).
+// Serve per equalizzare i tempi su account inesistenti / senza password (solo OAuth): si
+// esegue comunque un bcrypt.compare contro questo hash così login e registrazione non
+// rivelano l'esistenza di un account via timing.
+export const DUMMY_PASSWORD_HASH = '$2b$12$a67y2K9h4FKtn73NLtOhFuK/RH1U0uBeTJS.Y7/qMoBEDt5CnSA6S'
+
 // ─── Email ───────────────────────────────────────────────────────────────────
 /** Normalizza l'email: trim + lowercase (SEC-015). Coerente con l'unique index DB. */
 export function normalizeEmail(email: string): string {

@@ -20,6 +20,7 @@ import {
   generateUrlToken,
   hashPassword,
   verifyPassword,
+  DUMMY_PASSWORD_HASH,
   passwordPolicyError,
   normalizeEmail,
   EMAIL_VERIFICATION_TTL_MS,
@@ -31,6 +32,7 @@ import { buildVerifyUrl, buildResetUrl, cookieMode } from '../../cloud/config.js
 import { CLOUD_SESSION_COOKIE, CLOUD_CSRF_COOKIE } from '../../cloud/cookies.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
 import { audit } from '../../cloud/audit.js'
+import { incrWithTtl, getCount, del as redisDel } from '../../cloud/redis.js'
 
 // ─── Schemi di validazione (zod) ─────────────────────────────────────────────
 const emailField = z.string().trim().toLowerCase().email().max(254)
@@ -79,6 +81,37 @@ async function notifyAdminNewRegistration(name: string | null, leadEmail: string
   await sendEmail({ to: admin, subject: `Nuovo lead Tako: ${safeName}`, html })
 }
 
+// ─── Throttle per-ACCOUNT sul login (anti brute-force) ───────────────────────
+// Il rate-limit per-IP (server.ts) non ferma uno spray distribuito su un singolo account.
+// Aggiungiamo un contatore per email normalizzata, condiviso su Redis (fallback in-memory).
+// Finestra breve e soglia generosa: alza il costo del brute-force SENZA diventare un
+// lockout permanente sfruttabile per DoS mirato (la chiave scade da sola).
+const LOGIN_MAX_FAILS = 12
+const LOGIN_WINDOW_S = 600 // 10 min
+const loginFails = new Map<string, { count: number; exp: number }>()
+function loginRedisKey(norm: string): string { return `cloud:login:fail:${norm}` }
+async function loginLockedOut(norm: string): Promise<boolean> {
+  const count = await getCount(loginRedisKey(norm))
+  if (count === null) {
+    const e = loginFails.get(norm)
+    if (!e || e.exp < Date.now()) return false
+    return e.count >= LOGIN_MAX_FAILS
+  }
+  return count >= LOGIN_MAX_FAILS
+}
+async function recordLoginFailure(norm: string): Promise<void> {
+  const count = await incrWithTtl(loginRedisKey(norm), LOGIN_WINDOW_S)
+  if (count === null) {
+    const e = loginFails.get(norm)
+    if (!e || e.exp < Date.now()) loginFails.set(norm, { count: 1, exp: Date.now() + LOGIN_WINDOW_S * 1000 })
+    else e.count++
+  }
+}
+async function clearLoginAttempts(norm: string): Promise<void> {
+  await redisDel(loginRedisKey(norm))
+  loginFails.delete(norm)
+}
+
 export async function cloudAuthRoutes(fastify: FastifyInstance) {
   // ─── REGISTER ──────────────────────────────────────────────────────────────
   // Anti-enumeration: risposta 200 generica anche se l'email esiste già; in quel
@@ -95,6 +128,10 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
     const [existing] = await cloudDb.select().from(cloudOwners).where(eq(cloudOwners.email, norm)).limit(1)
 
     if (existing) {
+      // Lavoro costante: il ramo "nuovo account" esegue un bcrypt.hash (cost 12). Qui
+      // facciamo un bcrypt.compare contro l'hash dummy così la registrazione non rivela
+      // via timing se l'email esiste già (anti-enumeration).
+      await verifyPassword(password, DUMMY_PASSWORD_HASH)
       // Non rivelare l'esistenza: se non verificato, reinvia silenziosamente la verifica.
       if (!existing.emailVerified) {
         await sendVerificationEmail(existing.id, existing.name, norm).catch(() => {})
@@ -139,12 +176,24 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Dati non validi' } })
     const norm = normalizeEmail(parsed.data.email)
 
+    // Throttle per-account PRIMA del bcrypt: blocca lo spray su un singolo account.
+    if (await loginLockedOut(norm)) {
+      await audit({ event: 'login_failed', ownerId: null, req, meta: { reason: 'account_throttled' } })
+      return reply.code(429).send({ error: { code: 'TOO_MANY_ATTEMPTS', message: 'Troppi tentativi. Riprova tra qualche minuto.' } })
+    }
+
     const [owner] = await cloudDb.select().from(cloudOwners).where(eq(cloudOwners.email, norm)).limit(1)
-    const ok = owner?.passwordHash ? await verifyPassword(parsed.data.password, owner.passwordHash) : false
-    if (!owner || !ok) {
+    // Lavoro costante: esegui SEMPRE un bcrypt.compare (contro l'hash reale o il dummy) così
+    // account inesistenti / solo-OAuth non si distinguono via timing (anti-enumeration).
+    const ok = await verifyPassword(parsed.data.password, owner?.passwordHash ?? DUMMY_PASSWORD_HASH)
+    if (!owner || !owner.passwordHash || !ok) {
+      await recordLoginFailure(norm)
       await audit({ event: 'login_failed', ownerId: owner?.id ?? null, req })
       return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Email o password non corretti' } })
     }
+
+    // Password corretta → azzera i tentativi falliti dell'account.
+    await clearLoginAttempts(norm)
 
     if (!owner.emailVerified) {
       await audit({ event: 'login_email_not_verified', ownerId: owner.id, req })

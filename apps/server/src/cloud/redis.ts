@@ -50,15 +50,22 @@ export function __resetRedisForTests(): void {
 }
 
 // ─── Helper: contatore con scadenza (lockout/quota) ──────────────────────────────
-// INCR atomico + EXPIRE alla prima occorrenza. Ritorna il conteggio corrente, o null se
-// Redis non disponibile (il chiamante usa il fallback in-memory).
+// INCR + EXPIRE ATOMICI via Lua: se INCR ed EXPIRE fossero due round-trip separati, un crash
+// (o errore Redis) tra i due lascerebbe la chiave SENZA TTL → contatore permanente = lockout
+// che non scade mai. Lo script applica l'EXPIRE alla prima occorrenza nello stesso passo.
+const INCR_TTL_LUA = `
+local count = redis.call('INCR', KEYS[1])
+if count == 1 then
+  redis.call('EXPIRE', KEYS[1], tonumber(ARGV[1]))
+end
+return count
+`
+// Ritorna il conteggio corrente, o null se Redis non disponibile (→ fallback in-memory).
 export async function incrWithTtl(key: string, ttlSeconds: number): Promise<number | null> {
   const redis = getRedis()
   if (!redis) return null
   try {
-    const count = await redis.incr(key)
-    if (count === 1) await redis.expire(key, ttlSeconds)
-    return count
+    return (await redis.eval(INCR_TTL_LUA, 1, key, String(ttlSeconds))) as number
   } catch {
     return null
   }

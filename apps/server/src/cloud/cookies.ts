@@ -13,7 +13,12 @@ export const CLOUD_CSRF_COOKIE = 'tako_cloud_csrf'       // token CSRF double-su
 export const CSRF_HEADER = 'x-tako-csrf'
 
 // In crosssite i cookie DEVONO essere Secure (i browser rifiutano SameSite=None senza Secure).
-const cookieSecure = process.env['COOKIE_SECURE'] === '1' || cookieMode() === 'crosssite'
+// In produzione il deploy è SEMPRE su https (Render/*.takoitalia.com): forziamo Secure anche
+// in modo 'samesite', altrimenti il cookie di sessione viaggerebbe senza Secure su https.
+const cookieSecure =
+  process.env['COOKIE_SECURE'] === '1' ||
+  cookieMode() === 'crosssite' ||
+  process.env['NODE_ENV'] === 'production'
 
 /** Opzioni del cookie di sessione (HttpOnly). SameSite dipende da COOKIE_MODE. */
 export function cloudSessionCookieOptions(maxAgeSeconds: number): CookieSerializeOptions {
