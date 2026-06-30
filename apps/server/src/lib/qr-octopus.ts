@@ -7,25 +7,23 @@
 // centrale non rompe la scansione.
 import sharp from 'sharp'
 
-// Griglia 16×16. B = corpo polpo, W = bianco occhio, K = pupilla, '.' = trasparente.
+// Griglia pixel-art del polpo. Pochi pixel = blocchi grandi, look chunky.
+// B = corpo polpo, W = bianco occhio, K = pupilla, '.' = trasparente.
 const GRID = [
-  '................',
-  '.....BBBBBB.....',
-  '....BBBBBBBB....',
-  '...BBBBBBBBBB...',
-  '..BBBBBBBBBBBB..',
-  '..BBBBBBBBBBBB..',
-  '..BBWWBBBBWWBB..',
-  '..BBWKBBBBKWBB..',
-  '..BBBBBBBBBBBB..',
-  '..BBBBBBBBBBBB..',
-  '..BBBBBBBBBBBB..',
-  '.BBBBBBBBBBBBBB.',
-  '.BBBBBBBBBBBBBB.',
-  '.BB.BB.BB.BB.BB.',
-  '.B..B..B..B..B..',
-  '................',
+  '...........',
+  '...BBBBB...',
+  '..BBBBBBB..',
+  '.BBBBBBBBB.',
+  '.BBBBBBBBB.',
+  '.BBKBBBKBB.',
+  '.BBBBBBBBB.',
+  '.BBBBBBBBB.',
+  '.BBBBBBBBB.',
+  '.B.B.B.B.B.',
+  '...........',
 ]
+const GRID_H = GRID.length
+const GRID_W = GRID[0]!.length
 
 // Palette coerente col brand Tako (corpo terracotta caldo, pupilla = dark del QR).
 const COLORS: Record<string, [number, number, number, number]> = {
@@ -35,14 +33,14 @@ const COLORS: Record<string, [number, number, number, number]> = {
   '.': [0, 0, 0, 0],
 }
 
-// Costruisce il buffer RGBA grezzo 16×16 dello sprite.
+// Costruisce il buffer RGBA grezzo dello sprite (dimensioni dalla griglia).
 function octopusRaw(): Buffer {
-  const buf = Buffer.alloc(16 * 16 * 4)
-  for (let y = 0; y < 16; y++) {
+  const buf = Buffer.alloc(GRID_W * GRID_H * 4)
+  for (let y = 0; y < GRID_H; y++) {
     const row = GRID[y]!
-    for (let x = 0; x < 16; x++) {
+    for (let x = 0; x < GRID_W; x++) {
       const [r, g, b, a] = COLORS[row[x]!] ?? COLORS['.']!
-      const i = (y * 16 + x) * 4
+      const i = (y * GRID_W + x) * 4
       buf[i] = r; buf[i + 1] = g; buf[i + 2] = b; buf[i + 3] = a
     }
   }
@@ -65,7 +63,7 @@ export function octopusBadge(size = 96): Promise<Buffer> {
 async function buildBadge(size: number): Promise<Buffer> {
   const inner = Math.round(size * 0.78) // il polpo non tocca i bordi del pad
   // Resize NEAREST per mantenere i pixel netti (no anti-aliasing → vero pixel-art).
-  const octo = await sharp(octopusRaw(), { raw: { width: 16, height: 16, channels: 4 } })
+  const octo = await sharp(octopusRaw(), { raw: { width: GRID_W, height: GRID_H, channels: 4 } })
     .resize(inner, inner, { kernel: 'nearest' })
     .png()
     .toBuffer()
@@ -91,7 +89,7 @@ export async function qrWithOctopus(url: string, width = 400): Promise<string> {
     margin: 2,
     color: { dark: '#2A1F1A', light: '#FFF8F3' },
   })
-  const badge = await octopusBadge(Math.round(width * 0.24))
+  const badge = await octopusBadge(Math.round(width * 0.28))
   const out = await sharp(qrBuf).composite([{ input: badge, gravity: 'center' }]).png().toBuffer()
   return `data:image/png;base64,${out.toString('base64')}`
 }
