@@ -3,6 +3,7 @@ const { useState, useEffect, useRef, useMemo, useCallback, createContext, useCon
 
 /* icone Lucide-style, stroke 2, viewBox 24 */
 const IC = {
+  copy:'M10 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zM4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
   home:'M3 10.5 12 3l9 7.5M5 9.5V21h5v-6h4v6h5V9.5',
   orders:'M5 3h11l3 3v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1zM8 8h8M8 12h8M8 16h5',
   kitchen:'M5 11h14v1a7 7 0 0 1-14 0zM3 11h18M5 12H3M19 12h2M8.3 6c.6-.8.2-1.9-.3-2.6M12 6c.6-.8.2-1.9-.3-2.6M15.7 6c.6-.8.2-1.9-.3-2.6',

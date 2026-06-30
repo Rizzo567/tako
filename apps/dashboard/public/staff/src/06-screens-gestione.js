@@ -799,11 +799,23 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
 /* Mostra a quale indirizzo i tablet/telefoni dello staff si collegano (mDNS +
    IP LAN) e un QR pronto. Dati da GET /api/system/info. */
 function CopyRow({ label, value }) {
+  const [done, setDone] = useState(false);
+  const copy = () => {
+    try {
+      navigator.clipboard.writeText(value);
+      setDone(true);
+      toast("Copiato", { type: "ok" });
+      setTimeout(() => setDone(false), 1400);
+    } catch (_) {}
+  };
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-      <span style={{ fontSize: 12, color: "var(--ink-3,#999)", minWidth: 70 }}>{label}</span>
-      <code style={{ fontSize: 13.5, fontWeight: 700, background: "var(--sunken,#f6f3ef)", padding: "5px 9px", borderRadius: 8 }}>{value}</code>
-      <Btn kind="soft" size="sm" onClick={() => { try { navigator.clipboard.writeText(value); toast("Copiato", { type: "ok" }); } catch (_) {} }}>Copia</Btn>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "var(--sunken)", border: "1px solid var(--hairline)", borderRadius: 14 }}>
+      <Tako pose="logoMark" size={34} float={false} style={{ flex: "none" }} />
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-3)", textTransform: "uppercase", letterSpacing: ".05em" }}>{label}</span>
+        <code style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--f-mono, ui-monospace, monospace)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
+      </div>
+      <IconBtn name={done ? "check" : "copy"} onClick={copy} tone={done ? "brand" : "raised"} size={42} iconSize={19} label="Copia indirizzo" style={{ flex: "none" }} />
     </div>
   );
 }
