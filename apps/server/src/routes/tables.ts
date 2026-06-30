@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import QRCode from 'qrcode'
 import { db, tables, rooms } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { clientBaseUrl } from '../lib/network.js'
+import { qrWithOctopus } from '../lib/qr-octopus.js'
 
 export async function tableRoutes(fastify: FastifyInstance) {
   // Get all rooms with tables
@@ -42,6 +42,13 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
+    // Anti cross-tenant: una room indicata deve appartenere al ristorante dell'utente.
+    if (body.data.roomId) {
+      const [room] = await db.select({ id: rooms.id }).from(rooms)
+        .where(and(eq(rooms.id, body.data.roomId), eq(rooms.restaurantId, req.user!.restaurantId))).limit(1)
+      if (!room) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Room not found' } })
+    }
+
     const qrToken = nanoid(24)
     const [table] = await db.insert(tables).values({ restaurantId: req.user!.restaurantId, qrToken, ...body.data }).returning()
     return reply.code(201).send({ data: table })
@@ -60,6 +67,14 @@ export async function tableRoutes(fastify: FastifyInstance) {
     })
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+
+    // Anti cross-tenant: una room indicata (non-null) deve appartenere al ristorante.
+    // roomId === null (scollegamento) e undefined (campo non toccato) restano consentiti.
+    if (parsed.data.roomId) {
+      const [room] = await db.select({ id: rooms.id }).from(rooms)
+        .where(and(eq(rooms.id, parsed.data.roomId), eq(rooms.restaurantId, req.user!.restaurantId))).limit(1)
+      if (!room) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Room not found' } })
+    }
 
     const updates: Record<string, unknown> = {}
     if (parsed.data.number !== undefined) updates['number'] = parsed.data.number
@@ -116,7 +131,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
 
     const url = `${clientBaseUrl()}/r/${req.user!.restaurantId}/t/${table.qrToken}`
-    const qrDataUrl = await QRCode.toDataURL(url, { width: 400, margin: 2, color: { dark: '#2A1F1A', light: '#FFF8F3' } })
+    const qrDataUrl = await qrWithOctopus(url, 400)
     return { data: { qrDataUrl, url, tableNumber: table.number } }
   })
 
