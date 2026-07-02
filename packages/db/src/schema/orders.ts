@@ -1,6 +1,7 @@
 import { pgTable, text, uuid, timestamp, integer, jsonb, index } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { tables } from './tables.js'
+import { bills } from './bills.js'
 import { menuItems, itemVariants } from './menu.js'
 import { users } from './users.js'
 import { money } from './money.js'
@@ -11,6 +12,13 @@ export const orders = pgTable('orders', {
   tableId: uuid('table_id').references(() => tables.id),
   tableNumber: text('table_number'),
   type: text('type', { enum: ['table', 'takeaway'] }).default('table').notNull(),
+  // ASPORTO: id univoco della sessione takeaway (JWT) che ha creato l'ordine.
+  // Chiude l'IDOR su GET /customer/orders/:id — la sessione asporto legge SOLO i
+  // propri ordini (filtro per sid), non qualsiasi ordine takeaway del ristorante.
+  takeawaySessionId: uuid('takeaway_session_id'),
+  // ASPORTO: conto dedicato dell'ordine (1 ordine asporto = 1 conto). Null per gli
+  // ordini al tavolo, che restano fatturati sul conto del tavolo via tableId.
+  billId: uuid('bill_id').references(() => bills.id),
   status: text('status', {
     enum: ['pending', 'confirmed', 'preparing', 'ready', 'served', 'paid', 'cancelled'],
   }).default('pending').notNull(),

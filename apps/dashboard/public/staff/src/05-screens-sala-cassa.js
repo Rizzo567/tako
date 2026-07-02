@@ -240,8 +240,8 @@ function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
         {bills.map(b => (
           <Card key={b.id} pad={16} className="press" style={{ cursor: "pointer" }} onClick={() => setPay(b)}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-              <span className="num" style={{ width: 46, height: 46, borderRadius: 12, background: "var(--brand-tint)", color: "var(--brand-deep)", display: "grid", placeItems: "center", fontSize: 20 }}>{b.tavolo}</span>
-              <div style={{ flex: 1 }}><div style={{ fontWeight: 800, fontFamily: "var(--f-display)", fontSize: 16 }}>Tavolo {b.tavolo}</div><div style={{ fontSize: 12, color: "var(--ink-3)" }} className="mono">{b.id} · {b.coperti} coperti · {b.apertura}</div></div>
+              <span className="num" style={{ width: 46, height: 46, borderRadius: 12, background: "var(--brand-tint)", color: "var(--brand-deep)", display: "grid", placeItems: "center", fontSize: b.takeaway ? 13 : 20, fontWeight: 800 }}>{b.takeaway ? "ASP" : b.tavolo}</span>
+              <div style={{ flex: 1 }}><div style={{ fontWeight: 800, fontFamily: "var(--f-display)", fontSize: 16 }}>{b.takeaway ? ("Asporto" + (b.customerName ? " · " + b.customerName : "")) : ("Tavolo " + b.tavolo)}</div><div style={{ fontSize: 12, color: "var(--ink-3)" }} className="mono">{b.id} · {b.takeaway ? "al ritiro" : (b.coperti + " coperti")} · {b.apertura}</div></div>
             </div>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
               <div><div style={{ fontSize: 12, color: "var(--ink-2)" }}>Totale</div><div className="num" style={{ fontSize: 26 }}>{euro(b.total != null ? b.total : b.subtotale)}</div></div>
@@ -252,7 +252,7 @@ function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
       </div>
 
       <Overlay open={!!pay} onClose={() => setPay(null)} anchor="center">
-        {pay && <PaymentModal bill={pay} mobile={mobile} settings={settings} onClose={() => setPay(null)} onDone={() => { setPay(null); onClose(pay.id); toast(`Conto T${pay.tavolo} chiuso`, { type: "success", icon: "check" }); }} />}
+        {pay && <PaymentModal bill={pay} mobile={mobile} settings={settings} onClose={() => setPay(null)} onDone={() => { setPay(null); onClose(pay.id); toast(`${pay.takeaway ? "Asporto" : "Conto T" + pay.tavolo} chiuso`, { type: "success", icon: "check" }); }} />}
       </Overlay>
       <NewBillModal open={newOpen} onClose={() => setNewOpen(false)} />
     </ScreenScroll>

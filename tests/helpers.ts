@@ -78,9 +78,10 @@ export async function seedTestEnv(): Promise<{ env: TestEnv; close: () => Promis
   const env: TestEnv = { restaurantId, userId, staffToken, tableId, tableNumber, qrToken, menuItemId, itemPrice, variantId, variantModifier }
   const close = async () => {
     // bills/orders non hanno ON DELETE CASCADE dal ristorante: cancella prima i figli.
+    // Ordine FK: bill_payments → orders (orders.bill_id → bills, quindi PRIMA di bills) → bills.
     await sql`delete from bill_payments where bill_id in (select id from bills where restaurant_id = ${restaurantId})`
-    await sql`delete from bills where restaurant_id = ${restaurantId}`
     await sql`delete from orders where restaurant_id = ${restaurantId}`
+    await sql`delete from bills where restaurant_id = ${restaurantId}`
     await sql`delete from menu_items where restaurant_id = ${restaurantId}`
     await sql`delete from table_sessions where restaurant_id = ${restaurantId}`
     await sql`delete from restaurants where id = ${restaurantId}`

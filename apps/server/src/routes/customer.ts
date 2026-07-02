@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
+import { randomUUID } from 'node:crypto'
 import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
@@ -16,7 +17,12 @@ import { runAssistant } from '../lib/ai-actions.js'
 // `visitStart` = istante (ms) di emissione del JWT: è il perno di M6 (revoca per-visita):
 // se un conto del tavolo viene CHIUSO dopo questo istante, il JWT è considerato scaduto
 // (il cliente precedente se n'è andato) senza dover ruotare il qrToken stampato.
-interface TableSession { restaurantId: string; tableId: string | null; sessionId: string | null; qrToken?: string; tableNumber?: string | null; kind?: 'table' | 'takeaway'; visitStart?: number }
+// `sid` = identificativo univoco della VISITA asporto (uuid random, emesso alla
+// creazione della sessione takeaway). Gli ordini asporto lo memorizzano
+// (orders.takeawaySessionId): GET /orders/:id filtra anche per sid, così una
+// sessione asporto legge SOLO i propri ordini (fix IDOR), non qualsiasi ordine
+// takeaway del ristorante conoscendone l'UUID.
+interface TableSession { restaurantId: string; tableId: string | null; sessionId: string | null; qrToken?: string; tableNumber?: string | null; kind?: 'table' | 'takeaway'; visitStart?: number; sid?: string }
 
 // Tetto giornaliero aggregato per ristorante sulle chiamate AI (Groq): impedisce
 // l'amplificazione di costo via QR-scan ripetuti (cookie multipli) che bypassano
@@ -59,6 +65,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
       if (!r || !r.active || ((r.settings as any)?.takeawayEnabled ?? false) !== true) {
         return reply.code(403).send({ error: { code: 'TAKEAWAY_DISABLED', message: 'Ordini da asporto non disponibili.' } })
       }
+      // Preserva `sid` dal JWT: è il perno del filtro anti-IDOR su GET /orders/:id.
       req.tableSession = { ...payload, tableId: null, kind: 'takeaway', tableNumber: null }
       return
     }
@@ -180,8 +187,12 @@ export async function customerRoutes(fastify: FastifyInstance) {
       aiEnabled: settings.aiEnabled ?? false,
     }
 
+    // `sid` univoco per questa visita asporto: lega gli ordini creati da QUESTA
+    // sessione (orders.takeawaySessionId) e permette a GET /orders/:id di ritornare
+    // solo i propri (fix IDOR: senza sid, chiunque con una sessione asporto leggeva
+    // qualsiasi ordine takeaway del ristorante conoscendone l'UUID).
     const takeawayJwt = fastify.jwt.sign(
-      { restaurantId: restaurant.id, tableId: null, sessionId: null, kind: 'takeaway', visitStart: Date.now() },
+      { restaurantId: restaurant.id, tableId: null, sessionId: null, kind: 'takeaway', visitStart: Date.now(), sid: randomUUID() },
       { expiresIn: '4h' },
     )
     reply.setCookie(TABLE_COOKIE, takeawayJwt, authCookieOptions(TABLE_SESSION_MAX_AGE, '/'))
@@ -333,6 +344,8 @@ export async function customerRoutes(fastify: FastifyInstance) {
         tableNumber: isTakeaway ? null : ((req as any).tableSession?.tableNumber ?? body.data.tableNumber),
         type,
         customerName: isTakeaway ? (body.data.customerName ?? null) : null,
+        // ASPORTO: lega l'ordine alla VISITA asporto (sid dal JWT) per il fix IDOR.
+        takeawaySessionId: isTakeaway ? (session.sid ?? null) : null,
         // conferma automatica se attivata nelle impostazioni del ristorante
         status: (restaurant?.settings as any)?.autoConfirm ? 'confirmed' : 'pending',
         total,
@@ -366,6 +379,28 @@ export async function customerRoutes(fastify: FastifyInstance) {
         status: 'pending' as const,
       }))
     ).returning()
+
+    // ── ASPORTO: 1 ordine = 1 CONTO = 1 pagamento al ritiro. ──────────────────
+    // L'ordine takeaway (senza tavolo) genera un conto dedicato (tableId null) che
+    // compare in Cassa come ticket asporto (GET /bills/open ritorna anche i no-table).
+    // Il cliente paga AL BANCO col flusso pagamenti esistente (POST /bills/:id/payments):
+    // quella chiusura fa la cascade dell'ordine → 'paid', che così entra in
+    // incasso/statistiche come un tavolo. Niente coperto sull'asporto: total = subtotale.
+    if (isTakeaway && order) {
+      const [takeawayBill] = await db.insert(bills).values({
+        restaurantId,
+        tableId: null,
+        tableNumber: null,
+        covers: 1,
+        subtotal: total,
+        total,
+        status: 'open',
+      }).returning({ id: bills.id })
+      if (takeawayBill) {
+        await db.update(orders).set({ billId: takeawayBill.id }).where(eq(orders.id, order.id))
+        order.billId = takeawayBill.id
+      }
+    }
 
     const payload = { ...order, items: insertedItems }
 
@@ -423,11 +458,14 @@ export async function customerRoutes(fastify: FastifyInstance) {
   // altrimenti chiunque potrebbe leggere ordini di qualsiasi ristorante by-id (IDOR).
   fastify.get('/orders/:orderId', { preHandler: requireTableSession }, async (req: any, reply) => {
     const { orderId } = req.params as { orderId: string }
-    const { restaurantId, tableId, kind } = req.tableSession as TableSession
+    const { restaurantId, tableId, kind, sid } = req.tableSession as TableSession
     // Sessione al tavolo → solo ordini del proprio tavolo (anti-IDOR). Sessione
-    // asporto (tableId null) → solo ordini takeaway del ristorante, per id.
+    // asporto (tableId null) → solo ordini takeaway creati da QUESTA visita (sid),
+    // NON qualsiasi ordine takeaway del ristorante: senza il filtro sid chiunque con
+    // una sessione asporto poteva leggere l'ordine altrui conoscendone l'UUID (IDOR).
+    // sid mancante (token asporto legacy pre-migrazione) → nessun match → 404.
     const scopeFilter = kind === 'takeaway' || tableId == null
-      ? and(eq(orders.restaurantId, restaurantId), eq(orders.type, 'takeaway'))
+      ? and(eq(orders.restaurantId, restaurantId), eq(orders.type, 'takeaway'), eq(orders.takeawaySessionId, sid ?? '00000000-0000-0000-0000-000000000000'))
       : and(eq(orders.restaurantId, restaurantId), eq(orders.tableId, tableId))
     const [order] = await db.select().from(orders)
       .where(and(eq(orders.id, orderId), scopeFilter))

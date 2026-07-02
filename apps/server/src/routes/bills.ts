@@ -7,10 +7,26 @@ import { io } from '../index.js'
 import { round2, BILLABLE_STATUSES, coverUnit, restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
 
 export async function billRoutes(fastify: FastifyInstance) {
-  // Get open bills
+  // Get open bills. Ritorna anche i conti SENZA tavolo (asporto / conto libero):
+  // la Cassa li vede e li può incassare. Per i no-table, allega l'eventuale ordine
+  // asporto collegato (orders.billId) così la SPA li etichetta "Asporto · <nome>"
+  // invece di "Tavolo —" (campi extra `takeaway`/`customerName`, additivi).
   fastify.get('/open', { preHandler: requireAuth }, async (req) => {
     const open = await db.select().from(bills).where(and(eq(bills.restaurantId, req.user!.restaurantId), eq(bills.status, 'open'))).orderBy(desc(bills.createdAt))
-    return { data: open }
+    const noTableIds = open.filter(b => b.tableId == null).map(b => b.id)
+    if (noTableIds.length === 0) return { data: open }
+    const linked = await db
+      .select({ billId: orders.billId, customerName: orders.customerName, type: orders.type })
+      .from(orders)
+      .where(inArray(orders.billId, noTableIds))
+    const byBill = new Map(linked.map(o => [o.billId, o]))
+    return {
+      data: open.map(b => {
+        if (b.tableId != null) return b
+        const o = byBill.get(b.id)
+        return o ? { ...b, takeaway: o.type === 'takeaway', customerName: o.customerName } : b
+      }),
+    }
   })
 
   // Create bill for table
@@ -211,6 +227,25 @@ export async function billRoutes(fastify: FastifyInstance) {
               paidOrderIds.push(order.id)
             }
           }
+        } else {
+          // Conto ASPORTO (senza tavolo): la cascade non può passare per tableId.
+          // Gli ordini takeaway sono collegati a QUESTO conto via orders.billId
+          // (1 ordine asporto = 1 conto). Portarli 'paid' li fa entrare in
+          // incasso/statistiche esattamente come un tavolo pagato.
+          const takeawayOrders = await tx
+            .select({ id: orders.id })
+            .from(orders)
+            .where(and(
+              eq(orders.billId, billId),
+              inArray(orders.status, [...BILLABLE_STATUSES]),
+            ))
+          if (takeawayOrders.length > 0) {
+            const paidAt = new Date()
+            for (const order of takeawayOrders) {
+              await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, order.id))
+              paidOrderIds.push(order.id)
+            }
+          }
         }
       }
       return { conflict: false as const, payment, closedTableId, paidOrderIds }
@@ -221,10 +256,12 @@ export async function billRoutes(fastify: FastifyInstance) {
     // Emit DOPO il commit (stato consistente per i client).
     if (result.closedTableId) {
       io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: result.closedTableId, status: 'cleaning' })
-      for (const orderId of result.paidOrderIds) {
-        io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'paid' })
-        io.to(`table:${result.closedTableId}`).emit('order:updated', { orderId, status: 'paid' })
-      }
+    }
+    // order:updated per OGNI ordine pagato — anche asporto (senza tavolo): la Cassa
+    // deve veder sparire il ticket. La room table:* si emette solo se c'è un tavolo.
+    for (const orderId of result.paidOrderIds) {
+      io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'paid' })
+      if (result.closedTableId) io.to(`table:${result.closedTableId}`).emit('order:updated', { orderId, status: 'paid' })
     }
 
     return reply.code(201).send({ data: result.payment })

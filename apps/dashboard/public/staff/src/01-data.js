@@ -132,7 +132,8 @@ function mapRoom(r) {
 function mapBill(b) {
   return { id: b.id, tavolo: b.tableNumber != null ? String(b.tableNumber) : null, coperti: b.covers || 0,
            subtotale: Number(b.subtotal) || 0, apertura: hhmm(b.createdAt),
-           total: Number(b.total) || 0, tip: Number(b.tip) || 0, _raw: b };
+           total: Number(b.total) || 0, tip: Number(b.tip) || 0,
+           takeaway: !!b.takeaway, customerName: b.customerName || null, _raw: b };
 }
 function mapInventory(i) {
   return { nome: i.name, unita: i.unit, giac: Number(i.quantity) || 0, min: Number(i.minQuantity) || 0,
