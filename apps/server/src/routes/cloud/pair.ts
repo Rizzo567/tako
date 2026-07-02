@@ -31,6 +31,7 @@ import {
 } from '../../cloud/db.js'
 import { hashToken, generateSessionToken } from '../../cloud/security.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
+import { isPrivateLanIPv4 } from '../../lib/network.js'
 import { audit } from '../../cloud/audit.js'
 import { incrWithTtl, getCount, del as redisDel, checkMonotonicTs } from '../../cloud/redis.js'
 
@@ -56,7 +57,16 @@ const claimSchema = z.object({
   devicePubKey: pubkeySchema,
 })
 const approveSchema = z.object({ code: z.string().min(16).max(200) })
-const heartbeatSchema = z.object({ credentialsVersion: z.number().int().min(0).optional() })
+// Il body può includere la rete LAN corrente per il resolver del QR stabile (/t/:applianceId).
+// I campi net NON entrano nel payload firmato (integrità via TLS); lanIp è ri-validato
+// RFC1918 sotto (open-redirect guard). lanHost accettato solo come nome mDNS `*.local`.
+const lanHostRe = /^[a-z0-9-]{1,40}\.local$/i
+const heartbeatSchema = z.object({
+  credentialsVersion: z.number().int().min(0).optional(),
+  lanIp: z.string().min(7).max(15).optional(),
+  clientPort: z.number().int().min(1).max(65535).optional(),
+  lanHost: z.string().min(3).max(64).optional(),
+})
 
 const APPLIANCE_TOKEN_HEADER = 'x-tako-appliance-token'
 const SIGNATURE_HEADER = 'x-tako-signature'
@@ -417,10 +427,23 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
       return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Heartbeat già vista' } })
     }
 
+    // Rete LAN pubblicata: memorizzata SOLO se valida. lanIp deve essere RFC1918 (mai un IP
+    // pubblico → niente open-redirect nel resolver). Campi assenti/invalidi non sovrascrivono
+    // l'ultimo valore noto (un'appliance vecchia che non li invia mantiene lo stato).
+    const lanIp = parsed.data.lanIp && isPrivateLanIPv4(parsed.data.lanIp) ? parsed.data.lanIp : null
+    const lanHost = parsed.data.lanHost && lanHostRe.test(parsed.data.lanHost) ? parsed.data.lanHost.toLowerCase() : null
+    const clientPort = parsed.data.clientPort ?? null
+
     const cloudVersion = appliance.ownerVersion
     await cloudDb
       .update(cloudAppliances)
-      .set({ lastSeenAt: new Date(), seenCredentialsVersion: cloudVersion })
+      .set({
+        lastSeenAt: new Date(),
+        seenCredentialsVersion: cloudVersion,
+        ...(lanIp ? { lanIp } : {}),
+        ...(lanHost ? { lanHost } : {}),
+        ...(clientPort ? { clientPort } : {}),
+      })
       .where(eq(cloudAppliances.id, applianceId))
 
     // Se il cloud ha bumpato credentials_version (reset/cambio pw) → l'appliance deve

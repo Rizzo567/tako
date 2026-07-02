@@ -25,6 +25,7 @@
 //     `loadDeviceSecret()` senza toccare il resto.
 import { join } from 'node:path'
 import { homedir } from 'node:os'
+import { primaryLanIPv4, clientPort, mdnsHost } from './network.js'
 import {
   existsSync,
   mkdirSync,
@@ -172,6 +173,14 @@ export function getDevicePublicKey(): string {
   return loadStore().publicKeyPem
 }
 
+/**
+ * applianceId assegnato dal cloud al pairing (null se non accoppiata). Serve a costruire
+ * il QR stabile del tavolo `${publicBaseUrl}/t/<applianceId>/...` (vedi lib/network.ts).
+ */
+export function getApplianceId(): string | null {
+  return loadStore().applianceId
+}
+
 /** Stato sintetico per la dashboard (nessun segreto esposto). */
 export function pairingState() {
   const s = loadStore()
@@ -306,6 +315,20 @@ export async function heartbeat(): Promise<HeartbeatResult> {
   const payload = JSON.stringify({ applianceId: s.applianceId, ts, credentialsVersion: s.credentialsVersion })
   const signature = signPayload(payload)
 
+  // Pubblica la rete LAN CORRENTE così il resolver cloud (/t/:applianceId) sa dove
+  // reindirizzare il QR stabile del tavolo. NON è nel payload firmato: il body viaggia
+  // su TLS verso api.takoitalia.com (integrità garantita dal TLS) e lato cloud lanIp è
+  // ri-validato come RFC1918 (chiude l'open-redirect). Un'appliance può aggiornare solo
+  // la PROPRIA riga (identificata dalla firma) → nessun impatto cross-tenant.
+  const lanIp = primaryLanIPv4()
+  const hbBody: {
+    credentialsVersion: number
+    clientPort: number
+    lanHost: string
+    lanIp?: string
+  } = { credentialsVersion: s.credentialsVersion, clientPort: clientPort(), lanHost: mdnsHost() }
+  if (lanIp) hbBody.lanIp = lanIp
+
   let res: Response
   try {
     res = await cloudFetch('/api/pair/heartbeat', {
@@ -316,7 +339,7 @@ export async function heartbeat(): Promise<HeartbeatResult> {
         'x-tako-signature': signature,
         'x-tako-timestamp': String(ts),
       },
-      body: JSON.stringify({ credentialsVersion: s.credentialsVersion }),
+      body: JSON.stringify(hbBody),
     })
   } catch {
     return { ok: false, action: 'offline' }

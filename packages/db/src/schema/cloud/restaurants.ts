@@ -23,6 +23,13 @@ export const cloudAppliances = pgTable('cloud_appliances', {
   publicLabel: text('public_label'),
   // Ultima credentials_version vista dall'appliance (heartbeat).
   seenCredentialsVersion: integer('seen_credentials_version').default(0).notNull(),
+  // Rete LAN CORRENTE pubblicata dall'appliance via heartbeat: il resolver pubblico
+  // `/t/:applianceId` reindirizza qui il QR stabile del tavolo. lanIp è validato RFC1918
+  // in scrittura (heartbeat) e in lettura (resolver) → nessun open-redirect. lanHost è il
+  // nome mDNS stabile (`tako.local`) usato come fallback LAN indipendente dall'IP.
+  lanIp: text('lan_ip'),
+  clientPort: integer('client_port'),
+  lanHost: text('lan_host'),
   pairedAt: timestamp('paired_at', { withTimezone: true }).defaultNow().notNull(),
   lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
   revokedAt: timestamp('revoked_at', { withTimezone: true }),

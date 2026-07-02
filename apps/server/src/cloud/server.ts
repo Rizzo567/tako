@@ -14,6 +14,7 @@ import { Redis } from 'ioredis'
 import { cloudAuthRoutes } from '../routes/cloud/auth.js'
 import { cloudOAuthRoutes } from '../routes/cloud/oauth.js'
 import { cloudPairRoutes } from '../routes/cloud/pair.js'
+import { cloudResolveRoutes } from '../routes/cloud/resolve.js'
 import { cloudContactRoutes } from '../routes/cloud/contact.js'
 import { allowedOrigins, cookieMode } from './config.js'
 import { validateEmailConfig } from './email.js'
@@ -166,6 +167,8 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
   await fastify.register(cloudOAuthRoutes, { prefix: '/api/auth' })
   await fastify.register(cloudPairRoutes, { prefix: '/api/pair' })
   await fastify.register(cloudContactRoutes, { prefix: '/api' })
+  // Resolver pubblico del QR stabile: GET /t/:applianceId/* (nessun prefix /api).
+  await fastify.register(cloudResolveRoutes)
 
   return fastify
 }
