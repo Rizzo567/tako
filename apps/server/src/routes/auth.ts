@@ -254,6 +254,12 @@ export async function authRoutes(fastify: FastifyInstance) {
   // id+nome+ruolo dei membri attivi con PIN impostato — nessuna email/hash/pin.
   // Il brute-force resta gestito da /pin-login (per-IP + per-utente).
   fastify.get('/pin-roster', async (req, reply) => {
+    // Solo appliance mono-ristorante (login-tablet in LAN). In multi-tenant l'endpoint
+    // pubblico permetterebbe di enumerare nomi+userId+ruolo dello staff conoscendo un
+    // restaurantId → disabilitato (usare un flusso autenticato).
+    if (process.env['TAKO_MULTI_TENANT'] === '1') {
+      return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Non disponibile' } })
+    }
     const q = req.query as { restaurantId?: string }
     let restaurantId = q.restaurantId
     if (!restaurantId) {

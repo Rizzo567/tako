@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, staffShifts, users } from '@tako/db'
-import { eq, and, isNull, gte, lt, desc } from 'drizzle-orm'
+import { eq, and, isNull, gte, lt, desc, sql } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { io } from '../index.js'
 
@@ -93,20 +93,25 @@ export async function shiftRoutes(fastify: FastifyInstance) {
       .where(and(eq(users.id, targetId), eq(users.restaurantId, req.user!.restaurantId))).limit(1)
     if (!member) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Membro non trovato' } })
 
-    // Niente doppio turno aperto per lo stesso membro.
-    const [open] = await db.select({ id: staffShifts.id }).from(staffShifts)
-      .where(and(eq(staffShifts.restaurantId, req.user!.restaurantId), eq(staffShifts.userId, targetId), isNull(staffShifts.endsAt)))
-      .limit(1)
-    if (open) return reply.code(409).send({ error: { code: 'ALREADY_CLOCKED_IN', message: 'Il membro è già in turno' } })
-
-    const [shift] = await db.insert(staffShifts).values({
-      restaurantId: req.user!.restaurantId,
-      userId: targetId,
-      startsAt: new Date(),
-      endsAt: null,
-      role: body.data.role ?? member.role,
-      notes: body.data.notes,
-    }).returning()
+    // Check "turno aperto" + insert atomici sotto advisory lock (ristorante,membro):
+    // due clock-in concorrenti dello stesso membro non possono creare due turni aperti.
+    const shift = await db.transaction(async (tx) => {
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${'shift:' + req.user!.restaurantId + ':' + targetId}))`)
+      const [open] = await tx.select({ id: staffShifts.id }).from(staffShifts)
+        .where(and(eq(staffShifts.restaurantId, req.user!.restaurantId), eq(staffShifts.userId, targetId), isNull(staffShifts.endsAt)))
+        .limit(1)
+      if (open) return null
+      const [s] = await tx.insert(staffShifts).values({
+        restaurantId: req.user!.restaurantId,
+        userId: targetId,
+        startsAt: new Date(),
+        endsAt: null,
+        role: body.data.role ?? member.role,
+        notes: body.data.notes,
+      }).returning()
+      return s!
+    })
+    if (!shift) return reply.code(409).send({ error: { code: 'ALREADY_CLOCKED_IN', message: 'Il membro è già in turno' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('shift:updated', { userId: targetId, action: 'clock-in' })
     return reply.code(201).send({ data: shift })
   })
@@ -153,14 +158,28 @@ export async function shiftRoutes(fastify: FastifyInstance) {
       .where(and(eq(users.id, body.data.userId), eq(users.restaurantId, req.user!.restaurantId))).limit(1)
     if (!member) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Membro non trovato' } })
 
-    const [shift] = await db.insert(staffShifts).values({
-      restaurantId: req.user!.restaurantId,
-      userId: body.data.userId,
-      startsAt: body.data.startsAt,
-      endsAt: body.data.endsAt ?? null,
-      role: body.data.role ?? member.role,
-      notes: body.data.notes,
-    }).returning()
+    const isOpen = !body.data.endsAt // turno senza fine = "in corso"
+    // Se si crea un turno APERTO, sotto lock verifica che non ce ne sia già uno
+    // aperto per lo stesso membro (coerente col clock-in, evita doppio turno aperto).
+    const shift = await db.transaction(async (tx) => {
+      if (isOpen) {
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${'shift:' + req.user!.restaurantId + ':' + body.data.userId}))`)
+        const [open] = await tx.select({ id: staffShifts.id }).from(staffShifts)
+          .where(and(eq(staffShifts.restaurantId, req.user!.restaurantId), eq(staffShifts.userId, body.data.userId), isNull(staffShifts.endsAt)))
+          .limit(1)
+        if (open) return null
+      }
+      const [s] = await tx.insert(staffShifts).values({
+        restaurantId: req.user!.restaurantId,
+        userId: body.data.userId,
+        startsAt: body.data.startsAt,
+        endsAt: body.data.endsAt ?? null,
+        role: body.data.role ?? member.role,
+        notes: body.data.notes,
+      }).returning()
+      return s!
+    })
+    if (!shift) return reply.code(409).send({ error: { code: 'ALREADY_CLOCKED_IN', message: 'Il membro ha già un turno aperto' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('shift:updated', { userId: body.data.userId, action: 'create' })
     return reply.code(201).send({ data: shift })
   })

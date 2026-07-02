@@ -1,8 +1,9 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, reservations, tables } from '@tako/db'
-import { eq, and, gte, lt, ne, asc } from 'drizzle-orm'
+import { eq, and, gte, lt, ne, asc, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
+import { restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
 import { io } from '../index.js'
 
 const STATUSES = ['requested', 'confirmed', 'seated', 'no_show', 'cancelled'] as const
@@ -10,13 +11,26 @@ const STATUSES = ['requested', 'confirmed', 'seated', 'no_show', 'cancelled'] as
 /* durata di una prenotazione in millisecondi */
 const durMs = (min: number) => min * 60_000
 
+/* Esecutore db o transazione (per usare findOverlap dentro/fuori tx). */
+type Exec = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0]
+
+/**
+ * Advisory lock per (ristorante, tavolo) — serializza check-overlap + insert/update
+ * così due richieste concorrenti sullo stesso tavolo non possono creare una doppia
+ * prenotazione (TOCTOU). Namespace "resv:" distinto da quello dei conti (bills).
+ */
+async function lockTable(tx: Exec, restaurantId: string, tableId: string) {
+  await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${'resv:' + restaurantId + ':' + tableId}))`)
+}
+
 /**
  * Anti-overbooking: verifica che nessun'altra prenotazione NON annullata sullo
  * stesso tavolo si sovrapponga alla finestra [startsAt, startsAt+durationMin).
  * Ritorna la prenotazione in conflitto se esiste, altrimenti null.
- * `excludeId` esclude la prenotazione stessa (utile in update/assegnazione).
+ * DA CHIAMARE dentro una transazione che ha già preso lockTable().
  */
 async function findOverlap(
+  exec: Exec,
   restaurantId: string,
   tableId: string,
   startsAt: Date,
@@ -31,11 +45,10 @@ async function findOverlap(
     ne(reservations.status, 'cancelled'),
   ]
   if (excludeId) conds.push(ne(reservations.id, excludeId))
-  const rows = await db.select().from(reservations).where(and(...conds))
+  const rows = await exec.select().from(reservations).where(and(...conds))
   for (const r of rows) {
     const exStart = new Date(r.startsAt).getTime()
     const exEnd = exStart + durMs(r.durationMin)
-    // sovrapposizione se inizia prima che l'altra finisca e finisce dopo che l'altra inizia
     if (newStart < exEnd && exStart < newEnd) return r
   }
   return null
@@ -53,13 +66,16 @@ function withTableNumber(r: typeof reservations.$inferSelect, numByTable: Map<st
   return { ...r, tableNumber: r.tableId ? (numByTable.get(r.tableId) ?? null) : null }
 }
 
+const OVERLAP = { code: 'RESERVATION_OVERLAP', message: 'Il tavolo è già prenotato in quella fascia oraria.' }
+
 export async function reservationRoutes(fastify: FastifyInstance) {
-  // Lista prenotazioni per giorno. ?date=YYYY-MM-DD (default: oggi, ora locale del server).
+  // Lista prenotazioni per giorno. ?date=YYYY-MM-DD (default: oggi nel fuso del ristorante).
   fastify.get('/', { preHandler: requireAuth }, async (req, reply) => {
     const q = z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).safeParse(req.query)
     if (!q.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: q.error.message } })
-    const dateStr = q.data.date ?? new Date().toLocaleDateString('en-CA') // en-CA → YYYY-MM-DD
-    const dayStart = new Date(`${dateStr}T00:00:00`)
+    const tz = await restaurantTimezone(req.user!.restaurantId)
+    const dateStr = q.data.date ?? dayKeyInTz(new Date(), tz)
+    const dayStart = dayStartInTz(dateStr, tz)
     if (isNaN(dayStart.getTime())) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Data non valida' } })
     const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
 
@@ -95,16 +111,9 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const startsAt = new Date(body.data.startsAt)
     if (isNaN(startsAt.getTime())) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'startsAt non valido' } })
     const durationMin = body.data.durationMin ?? 90
-
-    if (body.data.tableId) {
-      if (!(await tableBelongs(req.user!.restaurantId, body.data.tableId)))
-        return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
-      const clash = await findOverlap(req.user!.restaurantId, body.data.tableId, startsAt, durationMin)
-      if (clash) return reply.code(409).send({ error: { code: 'RESERVATION_OVERLAP', message: 'Il tavolo è già prenotato in quella fascia oraria.' } })
-    }
-
-    const [row] = await db.insert(reservations).values({
-      restaurantId: req.user!.restaurantId,
+    const restaurantId = req.user!.restaurantId
+    const values = {
+      restaurantId,
       tableId: body.data.tableId ?? null,
       customerName: body.data.customerName,
       customerPhone: body.data.customerPhone,
@@ -113,10 +122,28 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       durationMin,
       status: body.data.status ?? 'requested',
       notes: body.data.notes ?? null,
-    }).returning()
+    }
 
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('reservation:changed', { id: row!.id })
-    return reply.code(201).send({ data: row })
+    // Senza tavolo: nessun overbooking possibile, insert diretto.
+    if (!body.data.tableId) {
+      const [row] = await db.insert(reservations).values(values).returning()
+      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: row!.id })
+      return reply.code(201).send({ data: row })
+    }
+
+    if (!(await tableBelongs(restaurantId, body.data.tableId)))
+      return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
+
+    // Check-overlap + insert atomici sotto advisory lock del tavolo.
+    const res = await db.transaction(async (tx) => {
+      await lockTable(tx, restaurantId, body.data.tableId!)
+      if (await findOverlap(tx, restaurantId, body.data.tableId!, startsAt, durationMin)) return { clash: true as const }
+      const [row] = await tx.insert(reservations).values(values).returning()
+      return { row: row! }
+    })
+    if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
+    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: res.row.id })
+    return reply.code(201).send({ data: res.row })
   })
 
   // Modifica prenotazione (dati anagrafici + orario/durata/tavolo/note).
@@ -133,9 +160,10 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     })
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    const restaurantId = req.user!.restaurantId
 
     const [existing] = await db.select().from(reservations)
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, req.user!.restaurantId))).limit(1)
+      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).limit(1)
     if (!existing) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Prenotazione non trovata' } })
 
     const updates: Record<string, unknown> = { updatedAt: new Date() }
@@ -154,24 +182,31 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const durationMin = parsed.data.durationMin ?? existing.durationMin
     if (parsed.data.durationMin !== undefined) updates['durationMin'] = parsed.data.durationMin
 
-    // tableId: undefined = non toccato; null = scollega; uuid = assegna (con controlli).
     let tableId = existing.tableId
     if (parsed.data.tableId !== undefined) {
-      if (parsed.data.tableId && !(await tableBelongs(req.user!.restaurantId, parsed.data.tableId)))
+      if (parsed.data.tableId && !(await tableBelongs(restaurantId, parsed.data.tableId)))
         return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
       tableId = parsed.data.tableId
       updates['tableId'] = parsed.data.tableId
     }
 
-    // Anti-overbooking se la prenotazione ha (o riceve) un tavolo e cambia tavolo/orario/durata.
+    // Se resta/diventa su un tavolo: check-overlap + update atomici sotto lock.
     if (tableId) {
-      const clash = await findOverlap(req.user!.restaurantId, tableId, startsAt, durationMin, id)
-      if (clash) return reply.code(409).send({ error: { code: 'RESERVATION_OVERLAP', message: 'Il tavolo è già prenotato in quella fascia oraria.' } })
+      const res = await db.transaction(async (tx) => {
+        await lockTable(tx, restaurantId, tableId!)
+        if (await findOverlap(tx, restaurantId, tableId!, startsAt, durationMin, id)) return { clash: true as const }
+        const [row] = await tx.update(reservations).set(updates)
+          .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+        return { row: row! }
+      })
+      if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
+      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+      return { data: res.row }
     }
 
     const [row] = await db.update(reservations).set(updates)
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, req.user!.restaurantId))).returning()
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('reservation:changed', { id })
+      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
     return { data: row }
   })
 
@@ -180,10 +215,31 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const { id } = req.params as { id: string }
     const parsed = z.object({ status: z.enum(STATUSES) }).safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
-    const [row] = await db.update(reservations).set({ status: parsed.data.status, updatedAt: new Date() })
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, req.user!.restaurantId))).returning()
-    if (!row) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Prenotazione non trovata' } })
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('reservation:changed', { id })
+    const restaurantId = req.user!.restaurantId
+    const status = parsed.data.status
+
+    const [existing] = await db.select().from(reservations)
+      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).limit(1)
+    if (!existing) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Prenotazione non trovata' } })
+
+    // RIATTIVAZIONE: passare da cancelled a uno stato attivo deve ri-verificare
+    // l'anti-overbooking (nel frattempo lo slot potrebbe essere stato riassegnato).
+    if (status !== 'cancelled' && existing.status === 'cancelled' && existing.tableId) {
+      const res = await db.transaction(async (tx) => {
+        await lockTable(tx, restaurantId, existing.tableId!)
+        if (await findOverlap(tx, restaurantId, existing.tableId!, new Date(existing.startsAt), existing.durationMin, id)) return { clash: true as const }
+        const [row] = await tx.update(reservations).set({ status, updatedAt: new Date() })
+          .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+        return { row: row! }
+      })
+      if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
+      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+      return { data: res.row }
+    }
+
+    const [row] = await db.update(reservations).set({ status, updatedAt: new Date() })
+      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
     return { data: row }
   })
 
@@ -192,22 +248,32 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const { id } = req.params as { id: string }
     const parsed = z.object({ tableId: z.string().uuid().nullable() }).safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    const restaurantId = req.user!.restaurantId
 
     const [existing] = await db.select().from(reservations)
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, req.user!.restaurantId))).limit(1)
+      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).limit(1)
     if (!existing) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Prenotazione non trovata' } })
 
-    if (parsed.data.tableId) {
-      if (!(await tableBelongs(req.user!.restaurantId, parsed.data.tableId)))
-        return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
-      const clash = await findOverlap(req.user!.restaurantId, parsed.data.tableId, new Date(existing.startsAt), existing.durationMin, id)
-      if (clash) return reply.code(409).send({ error: { code: 'RESERVATION_OVERLAP', message: 'Il tavolo è già prenotato in quella fascia oraria.' } })
+    if (!parsed.data.tableId) {
+      const [row] = await db.update(reservations).set({ tableId: null, updatedAt: new Date() })
+        .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+      return { data: row }
     }
 
-    const [row] = await db.update(reservations).set({ tableId: parsed.data.tableId, updatedAt: new Date() })
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, req.user!.restaurantId))).returning()
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('reservation:changed', { id })
-    return { data: row }
+    if (!(await tableBelongs(restaurantId, parsed.data.tableId)))
+      return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
+
+    const res = await db.transaction(async (tx) => {
+      await lockTable(tx, restaurantId, parsed.data.tableId!)
+      if (await findOverlap(tx, restaurantId, parsed.data.tableId!, new Date(existing.startsAt), existing.durationMin, id)) return { clash: true as const }
+      const [row] = await tx.update(reservations).set({ tableId: parsed.data.tableId, updatedAt: new Date() })
+        .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+      return { row: row! }
+    })
+    if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
+    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+    return { data: res.row }
   })
 
   // Elimina definitivamente una prenotazione.

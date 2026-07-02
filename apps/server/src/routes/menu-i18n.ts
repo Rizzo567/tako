@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify'
-import { db, restaurants, menuItemTranslations } from '@tako/db'
+import { db, restaurants, menuItemTranslations, menuItems } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 
 /**
@@ -41,10 +41,17 @@ export async function menuI18nRoutes(fastify: FastifyInstance) {
     if (!restaurantId || !lang) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'restaurantId and lang required' } })
     const langNorm = String(lang).toLowerCase()
 
+    // Solo traduzioni di piatti DISPONIBILI: come il menu pubblico (customer.ts filtra
+    // available=true), non esporre nomi/descrizioni tradotti di piatti esauriti/bozza.
     const rows = await db
       .select({ itemId: menuItemTranslations.itemId, name: menuItemTranslations.name, description: menuItemTranslations.description })
       .from(menuItemTranslations)
-      .where(and(eq(menuItemTranslations.restaurantId, restaurantId), eq(menuItemTranslations.lang, langNorm)))
+      .innerJoin(menuItems, eq(menuItems.id, menuItemTranslations.itemId))
+      .where(and(
+        eq(menuItemTranslations.restaurantId, restaurantId),
+        eq(menuItemTranslations.lang, langNorm),
+        eq(menuItems.available, true),
+      ))
 
     return { data: rows }
   })

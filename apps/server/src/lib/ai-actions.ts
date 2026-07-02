@@ -65,13 +65,22 @@ async function resolveItem(restaurantId: string, name: string, onlyAvailable: bo
   const where = onlyAvailable
     ? and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true))
     : eq(menuItems.restaurantId, restaurantId)
-  const items = await db.select().from(menuItems).where(where)
-  return (
-    items.find(i => i.name.toLowerCase() === q) ??
-    items.find(i => i.name.toLowerCase().startsWith(q)) ??
-    items.find(i => i.name.toLowerCase().includes(q)) ??
-    items.find(i => q.includes(i.name.toLowerCase()))
-  )
+  const items = (await db.select().from(menuItems).where(where))
+    .sort((a, b) => a.name.localeCompare(b.name)) // ordine deterministico
+  // Per ogni tier: risolvi SOLO se il match è univoco. Più candidati → ambiguo →
+  // undefined (l'AI dirà "non trovato/specifica meglio" invece di agire a caso).
+  const tiers = [
+    (i: typeof items[number]) => i.name.toLowerCase() === q,
+    (i: typeof items[number]) => i.name.toLowerCase().startsWith(q),
+    (i: typeof items[number]) => i.name.toLowerCase().includes(q),
+    (i: typeof items[number]) => q.includes(i.name.toLowerCase()),
+  ]
+  for (const pred of tiers) {
+    const hits = items.filter(pred)
+    if (hits.length === 1) return hits[0]
+    if (hits.length > 1) return undefined // ambiguo: non indovinare
+  }
+  return undefined
 }
 
 // ─────────────────────────────── REGISTRO AZIONI ───────────────────────────────
