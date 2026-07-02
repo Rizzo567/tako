@@ -3,7 +3,7 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
 import { db, users, sessions, restaurants, menus } from '@tako/db'
-import { eq, and, sql } from 'drizzle-orm'
+import { eq, and, sql, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE } from '../lib/cookies.js'
 
@@ -248,6 +248,25 @@ export async function authRoutes(fastify: FastifyInstance) {
   // Get current user
   fastify.get('/me', { preHandler: requireAuth }, async (req) => {
     return { data: req.user }
+  })
+
+  // Roster per il login PIN del tablet condiviso (pubblico, no auth): espone SOLO
+  // id+nome+ruolo dei membri attivi con PIN impostato — nessuna email/hash/pin.
+  // Il brute-force resta gestito da /pin-login (per-IP + per-utente).
+  fastify.get('/pin-roster', async (req, reply) => {
+    const q = req.query as { restaurantId?: string }
+    let restaurantId = q.restaurantId
+    if (!restaurantId) {
+      // Appliance mono-ristorante: risolvi l'unico ristorante. In multi-tenant serve ?restaurantId.
+      const rows = await db.select({ id: restaurants.id }).from(restaurants).limit(2)
+      if (rows.length !== 1) return reply.code(404).send({ error: { code: 'NEEDS_RESTAURANT', message: 'restaurantId richiesto' } })
+      restaurantId = rows[0]!.id
+    }
+    const [rest] = await db.select({ id: restaurants.id, name: restaurants.name }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    if (!rest) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
+    const members = await db.select({ id: users.id, name: users.name, role: users.role }).from(users)
+      .where(and(eq(users.restaurantId, restaurantId), eq(users.active, true), isNotNull(users.pin)))
+    return { data: { restaurantId, restaurant: rest, members } }
   })
 
   // Logout

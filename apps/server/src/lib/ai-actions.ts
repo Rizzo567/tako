@@ -1,0 +1,402 @@
+// ─────────────────────────────── Tako — MOTORE AZIONI AI ───────────────────────────────
+// Un unico registro di "tool" che l'AI (Groq function-calling) può invocare, condiviso
+// da due personalità con permessi diversi:
+//   • assistente CLIENTE  (scope 'customer') — agisce solo sul proprio tavolo/carrello
+//   • copilot OWNER        (scope 'owner')    — opera su menu/statistiche/tavoli
+//
+// Principi di sicurezza (allineati alle route esistenti):
+//   1. Ogni azione è SCOPED per restaurantId (e per tableId lato cliente): l'AI non può
+//      mai toccare un altro tenant o un altro tavolo.
+//   2. I prezzi/verità vengono SEMPRE dal DB, mai dal modello (add_to_cart risolve i piatti
+//      per nome sul DB e restituisce prezzi autoritativi; il checkout li ricalcola comunque).
+//   3. Le azioni sono classificate per "kind":
+//        - 'read'     → sola lettura, esecuzione immediata
+//        - 'action'   → effetto collaterale sicuro e reversibile (es. chiama cameriere)
+//        - 'client'   → il server RISOLVE/valida, ma l'effetto lo applica il client (carrello PWA)
+//        - 'mutation' → cambia dati persistenti: MAI eseguita durante la chat. Viene proposta
+//                       e richiede conferma esplicita umana (endpoint /execute separato).
+//   4. Nessuna azione distruttiva (delete) è esposta al modello.
+//
+// Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
+// validazione delle route (ownership per restaurantId, emit socket identici).
+
+import { db, restaurants, menus, menuSections, menuItems, orders, tables, bills } from '@tako/db'
+import { eq, and, asc, desc, gte, inArray } from 'drizzle-orm'
+import { io } from '../index.js'
+import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz } from './billing.js'
+
+export type ActionScope = 'customer' | 'owner'
+export type ActionKind = 'read' | 'action' | 'client' | 'mutation'
+
+export interface ActionContext {
+  restaurantId: string
+  tableId?: string | null
+  tableNumber?: string | null
+  role?: string
+}
+
+export interface ActionResult {
+  ok: boolean
+  summary: string            // testo per il modello + eventuale UI
+  clientAction?: any         // per kind 'client'/'action': op che il client applica
+  data?: any
+}
+
+export interface ActionDef {
+  name: string
+  scope: ActionScope[]
+  kind: ActionKind
+  description: string
+  parameters: Record<string, any>   // JSON schema per il function-calling
+  label: (args: any) => string      // etichetta umana (conferma owner)
+  execute: (ctx: ActionContext, args: any) => Promise<ActionResult>
+}
+
+const ORDER_STATUS_IT: Record<string, string> = {
+  pending: 'in attesa', confirmed: 'confermato', preparing: 'in preparazione',
+  ready: 'pronto', served: 'servito', paid: 'pagato', cancelled: 'annullato',
+}
+
+// Risolve un piatto per nome sul DB, scoped al ristorante. Match esatto → prefisso →
+// contiene. Ritorna undefined se ambiguo/assente. `onlyAvailable` per l'ordine cliente.
+async function resolveItem(restaurantId: string, name: string, onlyAvailable: boolean) {
+  const q = (name ?? '').toString().toLowerCase().trim()
+  if (!q) return undefined
+  const where = onlyAvailable
+    ? and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true))
+    : eq(menuItems.restaurantId, restaurantId)
+  const items = await db.select().from(menuItems).where(where)
+  return (
+    items.find(i => i.name.toLowerCase() === q) ??
+    items.find(i => i.name.toLowerCase().startsWith(q)) ??
+    items.find(i => i.name.toLowerCase().includes(q)) ??
+    items.find(i => q.includes(i.name.toLowerCase()))
+  )
+}
+
+// ─────────────────────────────── REGISTRO AZIONI ───────────────────────────────
+const ACTIONS: ActionDef[] = [
+  // ── CLIENTE ────────────────────────────────────────────────────────────────
+  {
+    name: 'search_menu',
+    scope: ['customer', 'owner'],
+    kind: 'read',
+    description: 'Cerca piatti nel menu del ristorante per nome, ingrediente o categoria. Usalo per consigliare o verificare disponibilità/prezzi.',
+    parameters: { type: 'object', properties: { query: { type: 'string', description: 'Testo da cercare (es. "pesce", "senza glutine", "margherita")' } }, required: ['query'] },
+    label: (a) => `Cerca "${a?.query ?? ''}"`,
+    execute: async (ctx, args) => {
+      const q = (args?.query ?? '').toString().toLowerCase().trim()
+      const items = await db.select().from(menuItems)
+        .where(and(eq(menuItems.restaurantId, ctx.restaurantId), eq(menuItems.available, true)))
+      const matches = (q
+        ? items.filter(i => i.name.toLowerCase().includes(q) || (i.description ?? '').toLowerCase().includes(q)
+            || (i.tags ?? []).some(t => t.toLowerCase().includes(q)) || (i.allergens ?? []).some(t => t.toLowerCase().includes(q)))
+        : items).slice(0, 8)
+      const top = matches.map(i => ({ id: i.id, name: i.name, price: i.price, description: i.description ?? undefined, allergens: i.allergens ?? [] }))
+      return { ok: true, data: top, summary: top.length ? top.map(t => `${t.name} (€${t.price})`).join('; ') : 'Nessun piatto corrispondente.' }
+    },
+  },
+  {
+    name: 'add_to_cart',
+    scope: ['customer'],
+    kind: 'client',
+    description: 'Prepara l\'aggiunta di uno o più piatti al carrello del cliente. Il server risolve i piatti sul menu reale; il cliente poi conferma l\'ordine dal carrello.',
+    parameters: {
+      type: 'object',
+      properties: {
+        items: {
+          type: 'array', description: 'Piatti da aggiungere',
+          items: { type: 'object', properties: { name: { type: 'string' }, quantity: { type: 'integer', minimum: 1, maximum: 20 } }, required: ['name'] },
+        },
+      },
+      required: ['items'],
+    },
+    label: (a) => `Aggiungi al carrello (${(a?.items ?? []).length} voci)`,
+    execute: async (ctx, args) => {
+      const reqItems = Array.isArray(args?.items) ? args.items.slice(0, 15) : []
+      const resolved: any[] = []
+      const missing: string[] = []
+      for (const it of reqItems) {
+        const qty = Math.min(Math.max(parseInt(String(it?.quantity ?? 1), 10) || 1, 1), 20)
+        const match = await resolveItem(ctx.restaurantId, it?.name, true)
+        if (!match) { missing.push(String(it?.name ?? '?')); continue }
+        // prezzo AUTORITATIVO dal DB (mai dal modello); il checkout lo ricalcola comunque.
+        resolved.push({ menuItemId: match.id, name: match.name, unitPrice: match.price, quantity: qty })
+      }
+      if (!resolved.length) return { ok: false, summary: `Non ho trovato a menu: ${missing.join(', ') || 'niente'}.` }
+      return {
+        ok: true,
+        clientAction: { type: 'add_to_cart', items: resolved },
+        summary: `Aggiungo: ${resolved.map(r => `${r.quantity}× ${r.name}`).join(', ')}${missing.length ? ` (non trovati: ${missing.join(', ')})` : ''}. Il cliente conferma dal carrello.`,
+      }
+    },
+  },
+  {
+    name: 'call_waiter',
+    scope: ['customer'],
+    kind: 'action',
+    description: 'Chiama un cameriere al tavolo del cliente. Motivo: help (aiuto), bill (il conto), water (acqua/pane).',
+    parameters: { type: 'object', properties: { reason: { type: 'string', enum: ['help', 'bill', 'water'] } }, required: ['reason'] },
+    label: (a) => `Chiama cameriere (${a?.reason ?? 'help'})`,
+    execute: async (ctx, args) => {
+      if (!ctx.tableId) return { ok: false, summary: 'La chiamata al cameriere è disponibile solo con una sessione al tavolo.' }
+      const reason = ['help', 'bill', 'water'].includes(args?.reason) ? args.reason : 'help'
+      io.to(`restaurant:${ctx.restaurantId}`).emit('waiter:called', { tableId: ctx.tableId, tableNumber: ctx.tableNumber, type: reason })
+      return { ok: true, clientAction: { type: 'waiter_called', reason }, summary: 'Ho avvisato il cameriere, arriva subito.' }
+    },
+  },
+  {
+    name: 'order_status',
+    scope: ['customer'],
+    kind: 'read',
+    description: 'Riporta lo stato dell\'ultimo ordine del tavolo del cliente.',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Stato ordine',
+    execute: async (ctx) => {
+      if (!ctx.tableId) return { ok: false, summary: 'Nessun tavolo attivo per tracciare un ordine.' }
+      const [o] = await db.select().from(orders)
+        .where(and(eq(orders.restaurantId, ctx.restaurantId), eq(orders.tableId, ctx.tableId)))
+        .orderBy(desc(orders.createdAt)).limit(1)
+      if (!o) return { ok: true, summary: 'Non risultano ordini per questo tavolo.' }
+      return { ok: true, data: { id: o.id, status: o.status }, summary: `Il tuo ultimo ordine è "${ORDER_STATUS_IT[o.status] ?? o.status}".` }
+    },
+  },
+
+  // ── OWNER ──────────────────────────────────────────────────────────────────
+  {
+    name: 'get_today_revenue',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Incasso, mance, numero conti e ticket medio di OGGI (fuso del ristorante).',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Incasso di oggi',
+    execute: async (ctx) => {
+      const tz = await restaurantTimezone(ctx.restaurantId)
+      const start = dayStartInTz(dayKeyInTz(new Date(), tz), tz)
+      const closed = await db.select().from(bills)
+        .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.status, 'closed'), gte(bills.closedAt!, start)))
+      const revenue = round2(closed.reduce((s, b) => s + b.total, 0))
+      const tips = round2(closed.reduce((s, b) => s + (b.tip ?? 0), 0))
+      const avg = closed.length ? round2(revenue / closed.length) : 0
+      return {
+        ok: true,
+        data: { revenue, tips, billsCount: closed.length, avgTicket: avg },
+        summary: `Oggi: incasso €${revenue}, ${closed.length} conti, mance €${tips}, ticket medio €${avg}.`,
+      }
+    },
+  },
+  {
+    name: 'get_stats',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Statistiche degli ultimi N giorni: incasso, conti chiusi, ordini attivi ora, conti aperti ora.',
+    parameters: { type: 'object', properties: { days: { type: 'integer', minimum: 1, maximum: 90, description: 'Giorni (default 7)' } } },
+    label: (a) => `Statistiche ${a?.days ?? 7}gg`,
+    execute: async (ctx, args) => {
+      const days = Math.min(Math.max(parseInt(String(args?.days ?? 7), 10) || 7, 1), 90)
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+      const closed = await db.select().from(bills)
+        .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.status, 'closed'), gte(bills.closedAt!, since)))
+      const revenue = round2(closed.reduce((s, b) => s + b.total, 0))
+      const active = await db.select({ id: orders.id }).from(orders)
+        .where(and(eq(orders.restaurantId, ctx.restaurantId), inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready'])))
+      const openBills = await db.select({ id: bills.id }).from(bills)
+        .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.status, 'open')))
+      return {
+        ok: true,
+        data: { days, revenue, billsClosed: closed.length, activeOrders: active.length, openBills: openBills.length },
+        summary: `Ultimi ${days} giorni: incasso €${revenue} su ${closed.length} conti. Ora: ${active.length} ordini attivi, ${openBills.length} conti aperti.`,
+      }
+    },
+  },
+  {
+    name: 'table_status',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Panoramica dei tavoli per stato (liberi/occupati/…) e numero conti aperti.',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Stato tavoli',
+    execute: async (ctx) => {
+      const ts = await db.select({ status: tables.status }).from(tables)
+        .where(and(eq(tables.restaurantId, ctx.restaurantId), eq(tables.active, true)))
+      const counts: Record<string, number> = {}
+      for (const t of ts) counts[t.status] = (counts[t.status] ?? 0) + 1
+      const openBills = await db.select({ id: bills.id }).from(bills)
+        .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.status, 'open')))
+      const it: Record<string, string> = { free: 'liberi', occupied: 'occupati', waiting: 'in attesa', cleaning: 'in pulizia', reserved: 'prenotati' }
+      const parts = Object.entries(counts).map(([k, v]) => `${v} ${it[k] ?? k}`)
+      return { ok: true, data: { counts, openBills: openBills.length }, summary: `Tavoli: ${parts.join(', ') || 'nessuno'}. Conti aperti: ${openBills.length}.` }
+    },
+  },
+  {
+    name: 'set_item_availability',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Segna un piatto come ESAURITO (available=false) o di nuovo DISPONIBILE (available=true).',
+    parameters: {
+      type: 'object',
+      properties: { itemName: { type: 'string', description: 'Nome del piatto' }, available: { type: 'boolean', description: 'true=disponibile, false=esaurito' } },
+      required: ['itemName', 'available'],
+    },
+    label: (a) => `${a?.available ? 'Rendi disponibile' : 'Segna esaurito'}: "${a?.itemName ?? ''}"`,
+    execute: async (ctx, args) => {
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato nel menu.` }
+      const available = args?.available === true
+      const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() })
+        .where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId))).returning()
+      if (!item) return { ok: false, summary: 'Aggiornamento non riuscito.' }
+      // stessi emit della route menu.ts (dashboard + room pubblica menu)
+      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:item_availability', { itemId: item.id, available })
+      io.to(`menu:${ctx.restaurantId}`).emit('menu:item_availability', { itemId: item.id, available })
+      return { ok: true, data: { id: item.id, name: item.name, available }, summary: `"${item.name}" ora è ${available ? 'disponibile' : 'esaurito'}.` }
+    },
+  },
+  {
+    name: 'create_menu_item',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Crea un nuovo piatto nel menu. Se la sezione non esiste viene creata.',
+    parameters: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        price: { type: 'number', minimum: 0 },
+        sectionName: { type: 'string', description: 'Sezione del menu (es. "Primi"). Opzionale.' },
+        description: { type: 'string' },
+      },
+      required: ['name', 'price'],
+    },
+    label: (a) => `Crea piatto "${a?.name ?? ''}" a €${a?.price ?? '?'}`,
+    execute: async (ctx, args) => {
+      const name = (args?.name ?? '').toString().trim()
+      const price = Number(args?.price)
+      if (!name || !Number.isFinite(price) || price < 0) return { ok: false, summary: 'Nome o prezzo non valido.' }
+      // menu del ristorante (primo attivo, altrimenti il primo)
+      const menusRows = await db.select().from(menus).where(eq(menus.restaurantId, ctx.restaurantId)).orderBy(asc(menus.position))
+      const menu = menusRows.find(m => m.active) ?? menusRows[0]
+      if (!menu) return { ok: false, summary: 'Nessun menu configurato. Crea prima un menu dalla dashboard.' }
+      const sections = await db.select().from(menuSections).where(eq(menuSections.menuId, menu.id)).orderBy(asc(menuSections.position))
+      const wanted = (args?.sectionName ?? '').toString().toLowerCase().trim()
+      let section = wanted ? sections.find(s => s.name.toLowerCase().includes(wanted)) : sections[0]
+      if (!section) {
+        const [created] = await db.insert(menuSections).values({ menuId: menu.id, name: (args?.sectionName ?? 'Varie').toString().slice(0, 60), position: sections.length }).returning()
+        section = created
+      }
+      if (!section) return { ok: false, summary: 'Impossibile determinare la sezione.' }
+      const [item] = await db.insert(menuItems).values({
+        sectionId: section.id, restaurantId: ctx.restaurantId, name: name.slice(0, 120), price,
+        description: args?.description ? String(args.description).slice(0, 500) : undefined,
+      }).returning()
+      if (!item) return { ok: false, summary: 'Creazione non riuscita.' }
+      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:updated', { itemId: item.id, item })
+      return { ok: true, data: { id: item.id, name: item.name, price: item.price, section: section.name }, summary: `Creato "${item.name}" a €${item.price} in "${section.name}".` }
+    },
+  },
+]
+
+const BY_NAME = new Map(ACTIONS.map(a => [a.name, a]))
+
+export function getAction(name: string): ActionDef | undefined { return BY_NAME.get(name) }
+
+export function actionsForScope(scope: ActionScope, allow?: string[]): ActionDef[] {
+  return ACTIONS.filter(a => a.scope.includes(scope) && (!allow || allow.includes(a.name)))
+}
+
+// Tool schema in formato OpenAI/Groq function-calling per lo scope indicato.
+export function toolSchemas(scope: ActionScope, allow?: string[]): any[] {
+  return actionsForScope(scope, allow).map(a => ({
+    type: 'function',
+    function: { name: a.name, description: a.description, parameters: a.parameters },
+  }))
+}
+
+// Esegue un'azione con guardie di scope/kind. `allowMutation` deve essere true SOLO
+// dopo conferma umana esplicita (endpoint /execute dell'owner).
+export async function executeAction(
+  name: string, args: any, ctx: ActionContext, scope: ActionScope, opts?: { allowMutation?: boolean },
+): Promise<ActionResult> {
+  const def = BY_NAME.get(name)
+  if (!def) return { ok: false, summary: `Azione sconosciuta: ${name}` }
+  if (!def.scope.includes(scope)) return { ok: false, summary: 'Azione non consentita per questo ruolo.' }
+  if (def.kind === 'mutation' && !opts?.allowMutation) {
+    return { ok: false, summary: 'Questa azione modifica dati e richiede conferma esplicita.' }
+  }
+  return def.execute(ctx, args ?? {})
+}
+
+// ─────────────────────────── Loop Groq con tool-calling ───────────────────────────
+// Ritorna: message finale, azioni già eseguite/da applicare lato client, e le mutation
+// PROPOSTE (non eseguite) in attesa di conferma umana.
+export interface AssistantTurn {
+  message: string
+  actions: any[]                                   // clientAction già prodotte (add_to_cart, waiter_called…)
+  pending: { name: string; args: any; label: string }[]  // mutation proposte, da confermare
+}
+
+let _openaiClient: any = null
+async function groqClient() {
+  const key = process.env['GROQ_API_KEY']
+  if (!key) throw Object.assign(new Error('GROQ_API_KEY not set'), { code: 'AI_UNAVAILABLE' })
+  if (_openaiClient) return _openaiClient
+  const { default: OpenAI } = await import('openai')
+  _openaiClient = new OpenAI({ apiKey: key, baseURL: 'https://api.groq.com/openai/v1' })
+  return _openaiClient
+}
+
+export async function runAssistant(opts: {
+  scope: ActionScope
+  ctx: ActionContext
+  systemPrompt: string
+  history: { role: 'user' | 'assistant'; content: string }[]
+  userMessage: string
+  allow?: string[]
+  model?: string
+}): Promise<AssistantTurn> {
+  const openai = await groqClient()
+  const tools = toolSchemas(opts.scope, opts.allow)
+  const model = opts.model ?? 'llama-3.3-70b-versatile'
+  const messages: any[] = [
+    { role: 'system', content: opts.systemPrompt },
+    ...opts.history.slice(-6).map(h => ({ role: h.role, content: h.content })),
+    { role: 'user', content: opts.userMessage },
+  ]
+  const actions: any[] = []
+  const pending: { name: string; args: any; label: string }[] = []
+
+  for (let iter = 0; iter < 4; iter++) {
+    const resp = await openai.chat.completions.create({
+      model, messages, tools: tools.length ? tools : undefined,
+      tool_choice: tools.length ? 'auto' : undefined,
+      temperature: 0.4, max_tokens: 500,
+    })
+    const msg = resp.choices?.[0]?.message
+    const toolCalls = msg?.tool_calls
+    if (!toolCalls || !toolCalls.length) {
+      return { message: (msg?.content ?? '').trim() || 'Fatto.', actions, pending }
+    }
+    // registra il turno assistant con le tool_calls
+    messages.push({ role: 'assistant', content: msg.content ?? '', tool_calls: toolCalls })
+    for (const tc of toolCalls) {
+      let args: any = {}
+      try { args = JSON.parse(tc.function?.arguments || '{}') } catch { args = {} }
+      const def = BY_NAME.get(tc.function?.name ?? '')
+      let content = ''
+      if (!def || !def.scope.includes(opts.scope)) {
+        content = 'Azione non disponibile.'
+      } else if (def.kind === 'mutation') {
+        // MAI eseguita in chat: proposta in attesa di conferma umana.
+        pending.push({ name: def.name, args, label: def.label(args) })
+        content = `Proposta registrata: "${def.label(args)}". In attesa di conferma esplicita dell'owner (non ancora eseguita).`
+      } else {
+        const res = await executeAction(def.name, args, opts.ctx, opts.scope)
+        if (res.clientAction) actions.push(res.clientAction)
+        content = res.summary
+      }
+      messages.push({ role: 'tool', tool_call_id: tc.id, content })
+    }
+  }
+  // safety net: chiusura senza altri tool
+  const final = await openai.chat.completions.create({ model, messages, temperature: 0.4, max_tokens: 400 })
+  return { message: (final.choices?.[0]?.message?.content ?? '').trim() || 'Fatto.', actions, pending }
+}

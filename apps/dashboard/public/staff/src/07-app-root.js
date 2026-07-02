@@ -211,6 +211,8 @@ function App({ session }) {
     case "comanda": Screen = <ScreenComanda key={"comanda" + dataVersion} mobile={mobile} />; break;
     case "sala": Screen = <ScreenSala mobile={mobile} rooms={rooms} calls={calls} onSetTableState={onSetTableState} />; break;
     case "tavoli": Screen = <ScreenTavoli key={"tavoli" + dataVersion} mobile={mobile} />; break;
+    case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} />; break;
+    case "turni": Screen = <ScreenTurni key={"turni" + dataVersion} mobile={mobile} />; break;
     case "qr": Screen = <ScreenQR key={"qr" + dataVersion} mobile={mobile} />; break;
     case "menu": Screen = <ScreenMenu key={"menu" + dataVersion} mobile={mobile} />; break;
     case "inventario": Screen = <ScreenInventario key={"inv" + dataVersion} mobile={mobile} />; break;
@@ -270,7 +272,7 @@ function Root() {
   }, []);
   const onLogin = async (d) => { await loadAll(); setState({ phase: "app", session: { user: d.user, restaurant: d.restaurant } }); };
   if (state.phase === "loading") return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF8F4", color: "#aaa" }}>Caricamento…</div>;
-  if (state.phase === "login") return <Login onDone={onLogin} />;
+  if (state.phase === "login") return <LoginGate onDone={onLogin} />;
   return <App session={state.session} />;
 }
 

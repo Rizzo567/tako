@@ -1,15 +1,22 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill } from '../lib/billing.js'
+import { runAssistant } from '../lib/ai-actions.js'
 
-interface TableSession { restaurantId: string; tableId: string; sessionId: string | null; qrToken?: string; tableNumber?: string | null }
+// Sessione cliente incapsulata nel JWT del cookie tako_table.
+//  • kind 'table'    → legata a un tavolo scansionato (tableId reale).
+//  • kind 'takeaway' → asporto senza tavolo (tableId null); scoped solo al ristorante.
+// `visitStart` = istante (ms) di emissione del JWT: è il perno di M6 (revoca per-visita):
+// se un conto del tavolo viene CHIUSO dopo questo istante, il JWT è considerato scaduto
+// (il cliente precedente se n'è andato) senza dover ruotare il qrToken stampato.
+interface TableSession { restaurantId: string; tableId: string | null; sessionId: string | null; qrToken?: string; tableNumber?: string | null; kind?: 'table' | 'takeaway'; visitStart?: number }
 
 // Tetto giornaliero aggregato per ristorante sulle chiamate AI (Groq): impedisce
 // l'amplificazione di costo via QR-scan ripetuti (cookie multipli) che bypassano
@@ -43,14 +50,46 @@ export async function customerRoutes(fastify: FastifyInstance) {
         (body.tableId && body.tableId !== payload.tableId)) {
       return reply.code(403).send({ error: { code: 'TABLE_MISMATCH', message: 'Azione non consentita per questo tavolo.' } })
     }
+
+    // Asporto (kind 'takeaway'): nessun tavolo. Validiamo solo che il ristorante sia
+    // attivo e l'asporto abilitato; niente qrToken/visita da verificare.
+    if (payload.kind === 'takeaway' || payload.tableId == null) {
+      const [r] = await db.select({ id: restaurants.id, settings: restaurants.settings, active: restaurants.active })
+        .from(restaurants).where(eq(restaurants.id, payload.restaurantId)).limit(1)
+      if (!r || !r.active || ((r.settings as any)?.takeawayEnabled ?? false) !== true) {
+        return reply.code(403).send({ error: { code: 'TAKEAWAY_DISABLED', message: 'Ordini da asporto non disponibili.' } })
+      }
+      req.tableSession = { ...payload, tableId: null, kind: 'takeaway', tableNumber: null }
+      return
+    }
+
     // Numero tavolo AUTORITATIVO dal DB (mai dal client): evita che un cliente
     // attribuisca ordini/chiamate a un altro tavolo passando un tableNumber falso.
-    // Legge anche qrToken: il JWT è valido solo finché combacia col qrToken CORRENTE
-    // del tavolo, così la rotazione del QR (chiusura conto / refresh) revoca i token vecchi.
+    // Legge anche qrToken: difesa aggiuntiva per la rotazione MANUALE del QR (/qr/refresh).
     const [t] = await db.select({ number: tables.number, qrToken: tables.qrToken }).from(tables).where(eq(tables.id, payload.tableId)).limit(1)
     if (!t || t.qrToken !== payload.qrToken) {
       return reply.code(401).send({ error: { code: 'INVALID_TABLE_SESSION', message: 'Sessione tavolo scaduta. Riscansiona il QR.' } })
     }
+
+    // ── M6: revoca per-VISITA senza toccare il qrToken stampato. ──────────────
+    // Il JWT muore quando la VISITA finisce, cioè quando un conto del tavolo viene
+    // chiuso DOPO l'emissione del token (visitStart). Il prossimo cliente riscansiona
+    // lo stesso QR fisico e ottiene un token con visitStart più recente → valido.
+    // Il conto chiuso è di per sé il marcatore di revoca (bills.closedAt), niente
+    // stato extra e niente rotazione del qrToken.
+    if (payload.visitStart) {
+      const [closedSince] = await db.select({ id: bills.id }).from(bills)
+        .where(and(
+          eq(bills.restaurantId, payload.restaurantId),
+          eq(bills.tableId, payload.tableId),
+          eq(bills.status, 'closed'),
+          gte(bills.closedAt!, new Date(payload.visitStart)),
+        )).limit(1)
+      if (closedSince) {
+        return reply.code(401).send({ error: { code: 'VISIT_ENDED', message: 'Sessione tavolo terminata. Riscansiona il QR.' } })
+      }
+    }
+
     req.tableSession = { ...payload, tableNumber: t.number ?? null }
   }
 
@@ -97,8 +136,10 @@ export async function customerRoutes(fastify: FastifyInstance) {
     }).returning({ id: tableSessions.id }))[0]
 
     // JWT legato al tavolo → cookie HttpOnly: lega le azioni cliente a questo tavolo.
+    // `visitStart` (ms) àncora la validità alla VISITA corrente (M6): alla chiusura
+    // del conto il token si invalida da solo, senza ruotare il qrToken stampato.
     const tableJwt = fastify.jwt.sign(
-      { restaurantId: table.restaurantId, tableId: table.id, sessionId: session?.id ?? null, qrToken: table.qrToken },
+      { restaurantId: table.restaurantId, tableId: table.id, sessionId: session?.id ?? null, qrToken: table.qrToken, kind: 'table', visitStart: Date.now() },
       { expiresIn: '4h' },
     )
     // Path '/' (non '/api/customer'): copre comunque le route customer ma permette
@@ -113,6 +154,38 @@ export async function customerRoutes(fastify: FastifyInstance) {
         sessionId: session?.id ?? null,
       },
     }
+  })
+
+  // Apri una sessione ASPORTO (ordine-ahead / takeaway) senza tavolo. Emette un JWT
+  // tako_table scoped SOLO al ristorante (tableId null, kind 'takeaway'): permette
+  // al cliente di ordinare prima di arrivare, senza scansionare un QR tavolo.
+  // Rate-limit di route: uno scan/apertura + qualche reload sono sotto soglia.
+  fastify.post('/takeaway/:restaurantId/session', { config: { rateLimit: { max: 20, timeWindow: 60000 } } }, async (req, reply) => {
+    const { restaurantId } = req.params as { restaurantId: string }
+    const [restaurant] = await db.select().from(restaurants).where(and(eq(restaurants.id, restaurantId), eq(restaurants.active, true))).limit(1)
+    if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
+    const settings = restaurant.settings as any ?? {}
+    if ((settings.takeawayEnabled ?? false) !== true) {
+      return reply.code(403).send({ error: { code: 'TAKEAWAY_DISABLED', message: 'Asporto non disponibile per questo ristorante.' } })
+    }
+
+    const pub: PublicRestaurant = {
+      id: restaurant.id,
+      name: restaurant.name,
+      slug: restaurant.slug,
+      logoUrl: restaurant.logoUrl ?? undefined,
+      primaryColor: restaurant.primaryColor ?? '#ED7159',
+      defaultLanguage: settings.defaultLanguage ?? 'it',
+      languages: settings.languages ?? ['it'],
+      aiEnabled: settings.aiEnabled ?? false,
+    }
+
+    const takeawayJwt = fastify.jwt.sign(
+      { restaurantId: restaurant.id, tableId: null, sessionId: null, kind: 'takeaway', visitStart: Date.now() },
+      { expiresIn: '4h' },
+    )
+    reply.setCookie(TABLE_COOKIE, takeawayJwt, authCookieOptions(TABLE_SESSION_MAX_AGE, '/'))
+    return { data: { restaurant: pub, takeaway: true } }
   })
 
   // Get public menu for restaurant
@@ -175,6 +248,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
         notes: z.string().optional(),
       })).min(1), // niente ordini vuoti
       notes: z.string().max(1000).optional(),
+      customerName: z.string().max(80).optional(),   // asporto: nome per il ritiro
       idempotencyKey: z.string().min(8).max(128),
     })
 
@@ -182,14 +256,16 @@ export async function customerRoutes(fastify: FastifyInstance) {
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     // SECURITY: identità tavolo/ristorante AUTORITATIVA dal JWT del tavolo (mai dal
-    // client). Se il client omette tableId nel body, requireTableSession non lo
-    // confronta col JWT: prendendolo dal body un ordine "table" resterebbe svincolato
-    // dal conto (ensureOpenBill gated su tableId) e finirebbe in cucina mai fatturato.
-    // Derivandolo dal JWT, un ordine type='table' è SEMPRE legato a un tableId valido.
+    // client). Il TIPO ordine è derivato dal KIND della sessione, non dal body: un
+    // cliente SEDUTO ordina sempre 'table' (i suoi ordini finiscono sul conto del
+    // tavolo) — non può marcare 'takeaway' per sfuggire alla fatturazione. Una
+    // sessione asporto (kind 'takeaway') produce sempre ordini takeaway senza tableId.
     const session = (req as any).tableSession as TableSession
     const restaurantId = session.restaurantId
-    const tableId = body.data.type === 'takeaway' ? null : session.tableId
-    if (body.data.type === 'table' && !tableId) {
+    const isTakeaway = session.kind === 'takeaway'
+    const type: 'table' | 'takeaway' = isTakeaway ? 'takeaway' : 'table'
+    const tableId = isTakeaway ? null : session.tableId
+    if (type === 'table' && !tableId) {
       return reply.code(400).send({ error: { code: 'NO_TABLE', message: 'Sessione tavolo non valida.' } })
     }
 
@@ -253,8 +329,10 @@ export async function customerRoutes(fastify: FastifyInstance) {
       ;[order] = await db.insert(orders).values({
         restaurantId,
         tableId,
-        tableNumber: (req as any).tableSession?.tableNumber ?? body.data.tableNumber,
-        type: body.data.type,
+        // tableNumber solo per ordini al tavolo (autoritativo dal JWT/DB); null per asporto.
+        tableNumber: isTakeaway ? null : ((req as any).tableSession?.tableNumber ?? body.data.tableNumber),
+        type,
+        customerName: isTakeaway ? (body.data.customerName ?? null) : null,
         // conferma automatica se attivata nelle impostazioni del ristorante
         status: (restaurant?.settings as any)?.autoConfirm ? 'confirmed' : 'pending',
         total,
@@ -345,9 +423,14 @@ export async function customerRoutes(fastify: FastifyInstance) {
   // altrimenti chiunque potrebbe leggere ordini di qualsiasi ristorante by-id (IDOR).
   fastify.get('/orders/:orderId', { preHandler: requireTableSession }, async (req: any, reply) => {
     const { orderId } = req.params as { orderId: string }
-    const { restaurantId, tableId } = req.tableSession as TableSession
+    const { restaurantId, tableId, kind } = req.tableSession as TableSession
+    // Sessione al tavolo → solo ordini del proprio tavolo (anti-IDOR). Sessione
+    // asporto (tableId null) → solo ordini takeaway del ristorante, per id.
+    const scopeFilter = kind === 'takeaway' || tableId == null
+      ? and(eq(orders.restaurantId, restaurantId), eq(orders.type, 'takeaway'))
+      : and(eq(orders.restaurantId, restaurantId), eq(orders.tableId, tableId))
     const [order] = await db.select().from(orders)
-      .where(and(eq(orders.id, orderId), eq(orders.restaurantId, restaurantId), eq(orders.tableId, tableId)))
+      .where(and(eq(orders.id, orderId), scopeFilter))
       .limit(1)
     if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ordine non trovato' } })
     const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
@@ -393,7 +476,6 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const session = (req as any).tableSession as TableSession
     const tableId = session.tableId
     const tableNumber = session.tableNumber ?? null
-    const sessionId = session.sessionId
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
     if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
@@ -410,22 +492,33 @@ export async function customerRoutes(fastify: FastifyInstance) {
       return reply.code(429).send({ error: { code: 'AI_QUOTA', message: 'Assistente non disponibile, riprova più tardi.' } })
     }
 
-    // Assistente cliente: Q&A sul menu via Groq (provider unico del sistema).
-    const GROQ_KEY = process.env['GROQ_API_KEY']
-    if (!GROQ_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
+    // Assistente cliente AGENTICO su Groq: oltre a consigliare, può aggiungere al
+    // carrello (azione applicata dalla PWA), chiamare il cameriere e leggere lo stato
+    // ordine — tutto scoped a QUESTO tavolo via il motore azioni condiviso.
+    if (!process.env['GROQ_API_KEY']) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
 
-    // Fallback: menu-aware Q&A only (no actions). menuContext troncato a 60 voci:
-    // il prompt non cresce illimitatamente col menu (costo per-chiamata limitato).
+    // menuContext troncato a 60 voci: il prompt non cresce illimitatamente col menu
+    // (riduce anche i tool-call di ricerca per le richieste più comuni).
     const items = (await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))).slice(0, 60)
     const menuContext = items.map(i => `${i.name}: €${i.price}${i.description ? ` — ${i.description}` : ''}${i.allergens?.length ? ` [Allergeni: ${i.allergens.join(', ')}]` : ''}`).join('\n')
-    const systemPrompt = `Sei Tako, l'assistente del ristorante "${restaurant?.name ?? 'questo ristorante'}". Conosci il menu:\n${menuContext}\nRispondi in italiano, max 3 righe. Se non sai, suggerisci il cameriere.`
-    const { OpenAI } = await import('openai')
-    const openai = new OpenAI({ apiKey: GROQ_KEY, baseURL: 'https://api.groq.com/openai/v1' })
-    const response = await openai.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [{ role: 'system', content: systemPrompt }, ...history.slice(-6).map(h => ({ role: h.role, content: h.content })), { role: 'user', content: message }],
-      max_tokens: 300, temperature: 0.7,
-    })
-    return { data: { message: response.choices[0]?.message?.content ?? 'Non ho capito, puoi ripetere?', actions: [] } }
+    const isTakeaway = session.kind === 'takeaway'
+    const systemPrompt = `Sei Tako, l'assistente del ristorante "${restaurant?.name ?? 'questo ristorante'}".
+Aiuti il cliente e puoi AGIRE con gli strumenti: cerca nel menu, aggiungi piatti al carrello${isTakeaway ? '' : ', chiama il cameriere, controlla lo stato dell\'ordine'}.
+Regole: rispondi in italiano, cordiale e breve (max 3 righe). Se il cliente vuole ordinare, usa add_to_cart (poi conferma lui dal carrello). Non inventare piatti né prezzi: usa solo il menu qui sotto.
+Menu:\n${menuContext}`
+    const allow = isTakeaway ? ['search_menu', 'add_to_cart'] : ['search_menu', 'add_to_cart', 'call_waiter', 'order_status']
+
+    try {
+      const turn = await runAssistant({
+        scope: 'customer',
+        ctx: { restaurantId, tableId, tableNumber, role: 'customer' },
+        systemPrompt, history, userMessage: message, allow,
+      })
+      return { data: { message: turn.message, actions: turn.actions } }
+    } catch (err: any) {
+      if (err?.code === 'AI_UNAVAILABLE') return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI non configurata' } })
+      fastify.log.error(err, 'customer ai-chat error')
+      return reply.code(502).send({ error: { code: 'AI_ERROR', message: 'Assistente non disponibile, riprova.' } })
+    }
   })
 }

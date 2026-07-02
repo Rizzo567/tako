@@ -11,6 +11,11 @@ import { formatEuro } from '@/lib/utils'
 import { SPRING, SPRING_SOFT, EASE_OUT, flyToCart, useCountUp } from '@/lib/motion'
 import { Dish, dishGradient } from './ui/Dish'
 import { Sheet } from './ui/Sheet'
+import { LanguageSelector } from './LanguageSelector'
+
+// Persistenza scelta lingua cliente (localStorage): sopravvive a reload/riscansione.
+const LANG_KEY = 'tako-lang'
+type ItemTranslation = { itemId: string; name: string; description?: string | null }
 
 // 12 allergeni del prototipo: emoji per i badge + label per il filtro.
 const ALLERGENS: { id: string; emoji: string; label: string }[] = [
@@ -280,6 +285,11 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
   const animTotal = useCountUp(total)
 
   const [menu, setMenu] = useState<PublicMenu | null>(null)
+  // Multilingua: lingue del ristorante, lingua scelta, mappa itemId → traduzione.
+  const [languages, setLanguages] = useState<string[]>([])
+  const [defaultLang, setDefaultLang] = useState<string>('it')
+  const [lang, setLang] = useState<string>('')
+  const [trMap, setTrMap] = useState<Record<string, ItemTranslation>>({})
   const [active, setActive] = useState<string | null>(null)
   const [excluded, setExcluded] = useState<Set<string>>(new Set())
   const [filterOpen, setFilterOpen] = useState(false)
@@ -299,6 +309,59 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
       setActive(m.sections[0]?.id ?? null)
     }).catch(() => toast.error('Menu non disponibile al momento. Riprova.'))
   }, [restaurantId])
+
+  // Multilingua: carica le lingue del ristorante (endpoint pubblico dedicato, non
+  // customer.ts) e sceglie la lingua iniziale: quella salvata se valida, altrimenti default.
+  useEffect(() => {
+    if (!restaurantId) return
+    api.get(`/customer/menu-languages?restaurantId=${restaurantId}`).then(r => {
+      const langs: string[] = (r.data.data.languages ?? ['it']).map((l: string) => l.toLowerCase())
+      const def: string = (r.data.data.defaultLanguage ?? langs[0] ?? 'it').toLowerCase()
+      setLanguages(langs)
+      setDefaultLang(def)
+      const saved = typeof window !== 'undefined' ? localStorage.getItem(LANG_KEY)?.toLowerCase() : null
+      setLang(saved && langs.includes(saved) ? saved : def)
+    }).catch(() => { setLanguages([]); setLang('it'); setDefaultLang('it') })
+  }, [restaurantId])
+
+  // Carica le traduzioni quando la lingua scelta ≠ default. In default (o lingua
+  // assente) svuota la mappa → si mostra sempre l'originale.
+  useEffect(() => {
+    if (!restaurantId || !lang || lang === defaultLang) { setTrMap({}); return }
+    let alive = true
+    api.get(`/customer/menu-translations?restaurantId=${restaurantId}&lang=${encodeURIComponent(lang)}`).then(r => {
+      if (!alive) return
+      const rows: ItemTranslation[] = r.data.data ?? []
+      const map: Record<string, ItemTranslation> = {}
+      for (const t of rows) map[t.itemId] = t
+      setTrMap(map)
+    }).catch(() => { if (alive) setTrMap({}) })
+    return () => { alive = false }
+  }, [restaurantId, lang, defaultLang])
+
+  function chooseLang(next: string) {
+    setLang(next)
+    if (typeof window !== 'undefined') localStorage.setItem(LANG_KEY, next)
+  }
+
+  // Applica le traduzioni al menu ricevuto: sostituisce name/description per itemId
+  // se esiste una traduzione, altrimenti fallback all'originale. L'id resta invariato,
+  // così carrello/ordine (per menuItemId) e i prezzi dal server non cambiano.
+  const localizedMenu = useMemo<PublicMenu | null>(() => {
+    if (!menu) return null
+    if (!lang || lang === defaultLang || Object.keys(trMap).length === 0) return menu
+    return {
+      ...menu,
+      sections: menu.sections.map(s => ({
+        ...s,
+        items: s.items.map(it => {
+          const t = trMap[it.id]
+          if (!t) return it
+          return { ...it, name: t.name || it.name, description: t.description ?? it.description }
+        }),
+      })),
+    }
+  }, [menu, lang, defaultLang, trMap])
 
   // Menu live: il ristorante segna un piatto esaurito o ne cambia prezzo/nome →
   // il menu del cliente si aggiorna da solo (room pubblica menu:{restaurantId}).
@@ -328,11 +391,11 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
   }, [restaurantId])
 
   const sections = useMemo(() => {
-    if (!menu) return []
-    return menu.sections
+    if (!localizedMenu) return []
+    return localizedMenu.sections
       .map(s => ({ ...s, items: s.items.filter(it => !it.allergens.some(a => excluded.has(a))) }))
       .filter(s => s.items.length)
-  }, [menu, excluded])
+  }, [localizedMenu, excluded])
 
   const availableAllergens = useMemo(
     () => Array.from(new Set(menu?.sections.flatMap(s => s.items.flatMap(i => i.allergens)) ?? [])),
@@ -400,6 +463,9 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
               </button>
             )
           })}
+          {languages.length > 1 && lang && (
+            <LanguageSelector languages={languages} value={lang} onChange={chooseLang} />
+          )}
           <button onClick={() => setFilterOpen(true)} aria-label="Filtra allergeni"
             className="relative z-[1] flex flex-none items-center gap-1.5 rounded-full px-3.5 py-2 text-[14px] font-bold active:scale-[0.97]"
             style={{

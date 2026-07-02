@@ -88,6 +88,7 @@ const TakoAPI = {
   },
   get(p) { return this.req("GET", p); },
   post(p, b) { return this.req("POST", p, b); },
+  put(p, b) { return this.req("PUT", p, b); },
   patch(p, b) { return this.req("PATCH", p, b); },
   del(p) { return this.req("DELETE", p); },
 };
@@ -159,6 +160,8 @@ async function loadMenu() {
       desc: it.description || "", img: it.imageUrl || "", _id: it.id, _sectionId: s.id,
       // varianti reali dal backend (itemVariants): { _id, nome, mod }
       varianti: (it.variants || []).map((v) => ({ _id: v.id, nome: v.name, mod: Number(v.priceModifier) || 0 })),
+      // traduzioni multilingua: [{ lang, name, description }]
+      traduzioni: it.translations || [],
     })),
   }));
 }
@@ -268,6 +271,8 @@ const TakoActions = {
   // menu
   menuToggle: (itemId, available) => TakoAPI.patch(`/menus/items/${itemId}/availability`, { available }),
   menuSaveItem: (itemId, fields) => TakoAPI.patch(`/menus/items/${itemId}`, fields),
+  translationSave: (itemId, lang, fields) => TakoAPI.put(`/menus/items/${itemId}/translations/${lang}`, fields),
+  translationDelete: (itemId, lang) => TakoAPI.del(`/menus/items/${itemId}/translations/${lang}`),
   menuCreateItem: (sectionId, fields) => TakoAPI.post(`/menus/sections/${sectionId}/items`, fields),
   menuDeleteItem: (itemId) => TakoAPI.del(`/menus/items/${itemId}`),
   menuCreateSection: (name) => TakoAPI.post(`/menus/${window.__menuId}/sections`, { name }),

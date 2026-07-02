@@ -183,11 +183,15 @@ export async function billRoutes(fastify: FastifyInstance) {
           // Chiusura conto: tavolo → pulizia, visita chiusa (openedAt reset).
           // NB: NON ruotiamo qui il qrToken — è il token stampato/plastificato sul
           // tavolo (customer route risolve GET /table/:token via tables.qrToken), e
-          // rigenerarlo a ogni chiusura renderebbe morto il QR fisico. La revoca dei
-          // JWT del cliente uscito va fatta per-visita (vedi TODO M6 sotto), non
-          // ruotando il token permanente. La rotazione manuale resta su /qr/refresh.
-          // TODO(M6): revocare i JWT tavolo legandoli alla visita (sessionId/epoch)
-          // invece che al qrToken permanente, senza toccare il token stampato.
+          // rigenerarlo a ogni chiusura renderebbe morto il QR fisico.
+          // ── M6 RISOLTO (revoca per-visita, senza toccare il qrToken): ──────────
+          // Questa chiusura scrive bills.closedAt = adesso. I JWT tavolo del cliente
+          // uscito contengono `visitStart` (istante di emissione). requireTableSession
+          // (customer.ts) e join:table (handlers.ts) rifiutano ogni JWT per cui esiste
+          // un conto CHIUSO del tavolo con closedAt > visitStart. Quindi CHIUDERE il
+          // conto revoca da solo i token della visita, mentre il prossimo cliente che
+          // riscansiona lo stesso QR fisico ottiene un JWT con visitStart più recente
+          // (nessun conto chiuso successivo) → valido. Nessuno stato extra da scrivere.
           await tx.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, locked.tableId))
           closedTableId = locked.tableId
           // Auto-cascade: TUTTI gli ordini fatturabili del tavolo (incl. 'served') → paid.

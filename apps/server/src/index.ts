@@ -11,6 +11,7 @@ import { mkdirSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { Server as SocketServer } from 'socket.io'
 import { setupSocketHandlers } from './socket/handlers.js'
+import { setupDictationNamespace } from './socket/dictation.js'
 import { authRoutes } from './routes/auth.js'
 import { restaurantRoutes } from './routes/restaurants.js'
 import { menuRoutes } from './routes/menu.js'
@@ -25,6 +26,10 @@ import { staffRoutes } from './routes/staff.js'
 import { insightsRoutes } from './routes/insights.js'
 import { printRoutes } from './routes/print.js'
 import { systemRoutes } from './routes/system.js'
+import { reservationRoutes } from './routes/reservations.js'
+import { shiftRoutes } from './routes/shifts.js'
+import { menuI18nRoutes } from './routes/menu-i18n.js'
+import { aiOwnerRoutes } from './routes/ai-owner.js'
 import { startMdns } from './lib/mdns.js'
 import { getLanIPv4s } from './lib/network.js'
 
@@ -173,6 +178,10 @@ await fastify.register(staffRoutes, { prefix: '/api/staff' })
 await fastify.register(insightsRoutes, { prefix: '/api/insights' })
 await fastify.register(printRoutes, { prefix: '/api/print' })
 await fastify.register(systemRoutes, { prefix: '/api/system' })
+await fastify.register(reservationRoutes, { prefix: '/api/reservations' })
+await fastify.register(shiftRoutes, { prefix: '/api/shifts' })
+await fastify.register(menuI18nRoutes, { prefix: '/api/customer' })
+await fastify.register(aiOwnerRoutes, { prefix: '/api/ai/owner' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
@@ -186,6 +195,8 @@ await fastify.ready()
     pingTimeout: 60000,
   })
   setupSocketHandlers(io, fastify)
+  // Namespace dedicato per la dettatura vocale (streaming audio → ASR).
+  setupDictationNamespace(io)
 
   try {
     await fastify.listen({ port: PORT, host: '0.0.0.0' })

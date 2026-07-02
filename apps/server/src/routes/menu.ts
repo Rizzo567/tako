@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { db, menus, menuSections, menuItems, itemVariants, orderItems } from '@tako/db'
+import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemTranslations } from '@tako/db'
 import { eq, and, asc, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
@@ -56,12 +56,21 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const sections = await db.select().from(menuSections).where(eq(menuSections.menuId, menuId)).orderBy(asc(menuSections.position))
     const items = await db.select().from(menuItems).where(eq(menuItems.restaurantId, req.user!.restaurantId)).orderBy(asc(menuItems.position))
     const variants = await db.select().from(itemVariants)
+    // Traduzioni menu (multilingua): tutte le traduzioni dei piatti di questo ristorante,
+    // raggruppate per itemId così lo staff editor le mostra pre-compilate per lingua.
+    const translations = await db.select().from(menuItemTranslations).where(eq(menuItemTranslations.restaurantId, req.user!.restaurantId))
 
     const sectionsWithItems = sections.map(s => ({
       ...s,
       items: items
         .filter(i => i.sectionId === s.id)
-        .map(i => ({ ...i, variants: variants.filter(v => v.itemId === i.id) })),
+        .map(i => ({
+          ...i,
+          variants: variants.filter(v => v.itemId === i.id),
+          translations: translations
+            .filter(t => t.itemId === i.id)
+            .map(t => ({ lang: t.lang, name: t.name, description: t.description })),
+        })),
     }))
 
     return { data: { ...menu, sections: sectionsWithItems } }
@@ -219,6 +228,50 @@ export async function menuRoutes(fastify: FastifyInstance) {
       .where(and(eq(itemVariants.id, variantId), eq(itemVariants.itemId, itemId)))
       .returning()
     if (!deleted.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Variant not found' } })
+    return { data: { success: true } }
+  })
+
+  // ─────────────────── Traduzioni piatto (multilingua) ───────────────────
+  // Lo staff inserisce name/description tradotti per le lingue in settings.languages.
+  // Il cliente PWA li legge dall'endpoint pubblico in menu-i18n.ts (senza toccare customer.ts).
+
+  // Lista traduzioni di un piatto
+  fastify.get('/items/:itemId/translations', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string }
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    const rows = await db.select().from(menuItemTranslations).where(eq(menuItemTranslations.itemId, itemId))
+    return { data: rows.map(t => ({ lang: t.lang, name: t.name, description: t.description })) }
+  })
+
+  // Upsert traduzione per (item, lingua) — una sola per coppia (vincolo UNIQUE)
+  fastify.put('/items/:itemId/translations/:lang', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string; lang: string }
+    // Normalizzo la lingua a minuscolo: staff e cliente devono usare la stessa chiave
+    // indipendentemente dal casing salvato in settings.languages (es. 'EN' vs 'en').
+    const lang = String((req.params as any).lang || '').toLowerCase().slice(0, 10)
+    if (!lang) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'lang required' } })
+    const schema = z.object({ name: z.string().min(1), description: z.string().nullish() })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+
+    const [row] = await db.insert(menuItemTranslations)
+      .values({ restaurantId: req.user!.restaurantId, itemId, lang, name: body.data.name, description: body.data.description ?? null })
+      .onConflictDoUpdate({
+        target: [menuItemTranslations.itemId, menuItemTranslations.lang],
+        set: { name: body.data.name, description: body.data.description ?? null, updatedAt: new Date() },
+      })
+      .returning()
+    return { data: row }
+  })
+
+  // Elimina una traduzione (torna al fallback originale)
+  fastify.delete('/items/:itemId/translations/:lang', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string; lang: string }
+    const lang = String((req.params as any).lang || '').toLowerCase().slice(0, 10)
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    await db.delete(menuItemTranslations)
+      .where(and(eq(menuItemTranslations.itemId, itemId), eq(menuItemTranslations.lang, lang), eq(menuItemTranslations.restaurantId, req.user!.restaurantId)))
     return { data: { success: true } }
   })
 

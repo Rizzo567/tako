@@ -11,6 +11,7 @@ const NAV = [
   { group: "Sala", items: [
     { id: "sala", label: "Sala Live", icon: "map" },
     { id: "tavoli", label: "Gestione Tavoli", icon: "table" },
+    { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
     { id: "qr", label: "QR Codes", icon: "qr" },
     { id: "collega", label: "Collega dispositivi", icon: "qr" },
   ]},
@@ -20,15 +21,16 @@ const NAV = [
     { id: "statistiche", label: "Statistiche", icon: "stats" },
     { id: "insights", label: "Analisi Menu", icon: "insights" },
     { id: "staff", label: "Staff", icon: "staff" },
+    { id: "turni", label: "Turni", icon: "clock" },
   ]},
 ];
 
 /* accesso per ruolo (owner = tutto) */
 const ROLE_ACCESS = {
   owner: null,
-  cameriere: ["dashboard", "ordini", "sala", "tavoli", "comanda", "cassa", "menu"],
-  chef: ["dashboard", "kds", "ordini", "menu", "inventario"],
-  cassiere: ["dashboard", "cassa", "ordini", "sala"],
+  cameriere: ["dashboard", "ordini", "sala", "tavoli", "prenotazioni", "comanda", "cassa", "menu", "turni"],
+  chef: ["dashboard", "kds", "ordini", "menu", "inventario", "turni"],
+  cassiere: ["dashboard", "cassa", "ordini", "sala", "prenotazioni", "turni"],
 };
 /* schermata d'ingresso per ruolo */
 const ROLE_HOME = { owner: "dashboard", cameriere: "sala", chef: "kds", cassiere: "cassa" };

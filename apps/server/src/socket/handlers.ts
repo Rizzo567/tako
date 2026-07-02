@@ -1,7 +1,7 @@
 import type { Server, Socket } from 'socket.io'
 import type { FastifyInstance } from 'fastify'
-import { db, sessions, users, tables } from '@tako/db'
-import { eq, gt, and } from 'drizzle-orm'
+import { db, sessions, users, tables, bills } from '@tako/db'
+import { eq, gt, gte, and } from 'drizzle-orm'
 import { SESSION_COOKIE, TABLE_COOKIE } from '../lib/cookies.js'
 
 // Cap di room per-socket: un socket legittimo entra in al massimo 1-3 room
@@ -72,26 +72,52 @@ export function setupSocketHandlers(io: Server, fastify: FastifyInstance) {
       if (socket.rooms.size >= MAX_ROOMS_PER_SOCKET) return
       const token = cookieFromHandshake(socket, TABLE_COOKIE)
       if (!token) return
-      let payload: { tableId?: string; qrToken?: string }
+      let payload: { restaurantId?: string; tableId?: string; qrToken?: string; visitStart?: number }
       try {
-        payload = fastify.jwt.verify(token) as { tableId?: string; qrToken?: string }
+        payload = fastify.jwt.verify(token) as { restaurantId?: string; tableId?: string; qrToken?: string; visitStart?: number }
       } catch {
         return
       }
-      if (payload.tableId !== tableId) return // solo la propria room
-      // Il JWT è valido solo finché combacia col qrToken CORRENTE del tavolo: la
-      // rotazione del QR (chiusura conto / refresh) revoca i token vecchi anche qui.
-      const [table] = await db.select({ qrToken: tables.qrToken }).from(tables).where(eq(tables.id, tableId)).limit(1)
+      if (payload.tableId !== tableId) return // solo la propria room (le sessioni asporto non hanno tableId)
+      // Difesa aggiuntiva: il qrToken del JWT deve combaciare con quello CORRENTE del
+      // tavolo (copre la rotazione MANUALE via /qr/refresh).
+      const [table] = await db.select({ qrToken: tables.qrToken, restaurantId: tables.restaurantId }).from(tables).where(eq(tables.id, tableId)).limit(1)
       if (!table || table.qrToken !== payload.qrToken) return
+      // M6: revoca per-VISITA senza toccare il qrToken stampato. Se un conto del tavolo
+      // è stato chiuso DOPO l'emissione di questo JWT (visitStart), la visita è finita
+      // → il cliente precedente non deve più ricevere gli eventi order:updated.
+      if (payload.visitStart) {
+        const [closedSince] = await db.select({ id: bills.id }).from(bills)
+          .where(and(
+            eq(bills.restaurantId, table.restaurantId),
+            eq(bills.tableId, tableId),
+            eq(bills.status, 'closed'),
+            gte(bills.closedAt!, new Date(payload.visitStart)),
+          )).limit(1)
+        if (closedSince) return
+      }
       socket.join(`table:${tableId}`)
-      // Rivalida periodicamente il JWT del tavolo: alla scadenza (4h) fastify.jwt.verify
-      // lancia → il socket esce dalla room e viene chiuso entro ~60s, così l'iscrizione
-      // non sopravvive al token né viene condivisa col cliente successivo dello stesso tavolo.
+      // Rivalida periodicamente: (a) scadenza JWT (4h) e (b) M6 fine-visita (conto
+      // chiuso dopo visitStart). In entrambi i casi il socket esce dalla room e viene
+      // chiuso entro ~60s, così l'iscrizione non sopravvive al token né viene condivisa
+      // col cliente successivo dello stesso tavolo (che riscansiona e ottiene un nuovo JWT).
       socket.data.tableToken = token
+      socket.data.tableVisitStart = payload.visitStart
+      socket.data.tableRestaurantId = table.restaurantId
       if (!socket.data.revalidate) {
-        socket.data.revalidate = setInterval(() => {
+        socket.data.revalidate = setInterval(async () => {
           try {
             fastify.jwt.verify(socket.data.tableToken)
+            if (socket.data.tableVisitStart) {
+              const [closedSince] = await db.select({ id: bills.id }).from(bills)
+                .where(and(
+                  eq(bills.restaurantId, socket.data.tableRestaurantId),
+                  eq(bills.tableId, tableId),
+                  eq(bills.status, 'closed'),
+                  gte(bills.closedAt!, new Date(socket.data.tableVisitStart)),
+                )).limit(1)
+              if (closedSince) { socket.leave(`table:${tableId}`); socket.disconnect(true) }
+            }
           } catch {
             socket.leave(`table:${tableId}`)
             socket.disconnect(true)
