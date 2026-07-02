@@ -1,5 +1,9 @@
 // Migrazione 0006: soldi real(float)→numeric(10,2), indici sulle query calde,
 // unique sul numero tavolo. Idempotente. Run: node migrate-0006.mjs
+// NOTA: ora esiste anche come migrazione Drizzle ufficiale
+// (src/migrations/0006_money_numeric_and_constraints.sql, nel journal): le
+// installazioni nuove la ricevono da migrate(). Questo script resta come utility
+// manuale (es. per aggiungere l'unique dopo aver risolto tavoli duplicati).
 import postgres from 'postgres'
 
 const sql = postgres(process.env.DATABASE_URL ?? 'postgresql://tako:tako@localhost:5432/takodb')

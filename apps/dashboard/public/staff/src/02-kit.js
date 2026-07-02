@@ -212,7 +212,33 @@ function useLiveNotif(handler) { useEffect(() => { _live.subs.add(handler); retu
 const _scroll = { down: false, subs: new Set() };
 function setScrollDown(v) { if (_scroll.down !== v) { _scroll.down = v; _scroll.subs.forEach(f => f()); } }
 function useScrollDown() { const [, f] = useState(0); useEffect(() => { const cb = () => f(x => x + 1); _scroll.subs.add(cb); return () => _scroll.subs.delete(cb); }, []); return _scroll.down; }
+/* traduzione messaggi d'errore che il server restituisce ancora in inglese
+   (non tocchiamo il server: normalizziamo qui, nel layer toast) */
+const MSG_IT = {
+  "Invalid email or password": "Email o password non validi",
+  "User not found": "Utente non trovato",
+  "Table not found": "Tavolo non trovato",
+  "Bill not found": "Conto non trovato",
+  "Item not found": "Piatto non trovato",
+  "Variant not found": "Variante non trovata",
+  "Menu not found": "Menu non trovato",
+  "Order not found": "Ordine non trovato",
+  "Not found": "Elemento non trovato",
+  "Cannot delete yourself": "Non puoi eliminare te stesso",
+  "Unauthorized": "Non autorizzato",
+  "Forbidden": "Operazione non permessa",
+};
+function translateMsg(m) {
+  if (!m || typeof m !== "string") return m;
+  if (MSG_IT[m]) return MSG_IT[m];
+  if (/invalid email or password/i.test(m)) return "Email o password non validi";
+  if (/not found/i.test(m)) return "Elemento non trovato";
+  if (/forbidden/i.test(m)) return "Operazione non permessa";
+  if (/unauthorized/i.test(m)) return "Non autorizzato";
+  return m;
+}
 function toast(msg, opts = {}) {
+  msg = translateMsg(msg);
   const id = ++_toast.id;
   _toast.list = [..._toast.list, { id, msg, type: opts.type || "default", icon: opts.icon, sub: opts.sub, dur: opts.duration || 3600 }];
   _toast.subs.forEach(f => f());

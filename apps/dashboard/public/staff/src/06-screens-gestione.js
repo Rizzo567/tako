@@ -56,14 +56,16 @@ function ScreenMenu({ mobile }) {
           </div>
           <Card pad={0} style={{ overflow: "hidden" }}>
             {s.piatti.map((p, i) => {
-              const margine = Math.round((1 - p.costo / p.prezzo) * 100);
+              // Guardia divisione per zero: con prezzo 0 il margine è indefinito → "—".
+              const hasMargin = p.prezzo > 0;
+              const margine = hasMargin ? Math.round((1 - p.costo / p.prezzo) * 100) : null;
               return (
                 <div key={p._id || i} style={{ display: "flex", alignItems: "center", gap: 12, padding: mobile ? "12px 14px" : "13px 16px", borderBottom: i < s.piatti.length - 1 ? "1px solid var(--hairline)" : "none", opacity: p.disp ? 1 : .55 }}>
                   <Icon name="more" size={16} style={{ color: "var(--ink-3)", transform: "rotate(90deg)", flex: "none" }} />
                   <div style={{ width: 44, height: 44, borderRadius: 11, flex: "none", background: "linear-gradient(135deg,var(--brand-tint),var(--sunken))", display: "grid", placeItems: "center", fontFamily: "var(--f-display)", fontWeight: 900, color: "var(--brand)" }}>{p.nome[0]}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}><span style={{ fontWeight: 700, fontSize: 14.5 }}>{p.nome}</span>{p.tag.map(t => <Badge key={t} tone={t === "Top" ? "brand" : t === "Piccante" ? "danger" : "muted"} style={{ fontSize: 10.5, padding: "2px 7px" }}>{t}</Badge>)}</div>
-                    {!mobile && <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.desc} · <span style={{ color: margine > 60 ? "var(--ok-deep)" : "var(--wait)" }}>margine {margine}%</span> · {p.station}</div>}
+                    {!mobile && <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.desc} · <span style={{ color: hasMargin && margine > 60 ? "var(--ok-deep)" : "var(--wait)" }}>margine {hasMargin ? margine + "%" : "—"}</span> · {p.station}</div>}
                   </div>
                   <span className="num" style={{ fontSize: 16, flex: "none" }}>{euro(p.prezzo)}</span>
                   <button className="press" onClick={() => toggle(s.sezione, p.nome)} title="Disponibilità" style={{ width: 46, height: 26, borderRadius: 99, flex: "none", background: p.disp ? "var(--ok)" : "var(--ink-3)", position: "relative", transition: "background .2s" }}>
@@ -182,10 +184,20 @@ function Field({ label, children }) {
 }
 const inputStyle = { width: "100%", height: 44, padding: "0 13px", borderRadius: "var(--r-md)", border: "1px solid var(--hairline)", background: "var(--raised)", fontFamily: "var(--f-ui)", fontSize: 14.5, color: "var(--ink)", outline: "none" };
 function DishEditor({ dish, mobile, onClose }) {
-  const [variants, setVariants] = useState([{ nome: "Porzione grande", mod: 3 }]);
+  // Campi controllati (niente più DOM-scraping per posizione: fragile e ambiguo con le varianti).
+  const [name, setName] = useState(dish.nome || "");
+  const [price, setPrice] = useState(dish.prezzo != null ? dish.prezzo : 0);
+  const [cost, setCost] = useState(dish.costo != null ? dish.costo : 0);
+  const [desc, setDesc] = useState(dish.desc || "");
+  const [station, setStation] = useState(dish.station || STATIONS[0]);
+  // Varianti REALI dal backend (dish.varianti = [{ _id, nome, mod }]).
+  const [variants, setVariants] = useState(() => (dish.varianti || []).map(v => ({ _id: v._id, nome: v.nome, mod: v.mod })));
+  const origVariants = useRef((dish.varianti || []).map(v => ({ _id: v._id, nome: v.nome, mod: v.mod })));
   const [confirmDel, setConfirmDel] = useState(false);
   const [imageUrl, setImageUrl] = useState(dish.img || "");
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const setV = (i, key, val) => setVariants(vs => vs.map((v, k) => k === i ? { ...v, [key]: val } : v));
   const onPickImage = async (e) => {
     const file = e.target.files && e.target.files[0];
     e.target.value = ""; // permette di ri-selezionare lo stesso file
@@ -200,6 +212,35 @@ function DishEditor({ dish, mobile, onClose }) {
     } finally {
       setUploading(false);
     }
+  };
+  const save = async () => {
+    if (saving) return;
+    if (!dish._id) { onClose(); toast("Piatto salvato", { type: "success" }); return; }
+    setSaving(true);
+    try {
+      await window.TakoActions.menuSaveItem(dish._id, {
+        name, price: isNaN(parseFloat(price)) ? undefined : Number(price),
+        costPrice: isNaN(parseFloat(cost)) ? undefined : Number(cost),
+        description: desc, kitchenStation: station,
+        imageUrl: imageUrl || undefined,
+      });
+      // Varianti: il backend espone solo POST/DELETE (niente PATCH) → "modifica" = elimina + ricrea.
+      const cur = variants.filter(v => String(v.nome || "").trim());
+      const orig = origVariants.current;
+      for (const o of orig) {
+        if (o._id && !cur.some(v => v._id === o._id)) await window.TakoActions.variantDelete(dish._id, o._id);
+      }
+      for (const v of cur) {
+        const o = v._id ? orig.find(x => x._id === v._id) : null;
+        const changed = o && (o.nome !== v.nome || Number(o.mod) !== Number(v.mod));
+        if (!v._id) await window.TakoActions.variantCreate(dish._id, v.nome.trim(), Number(v.mod) || 0);
+        else if (changed) { await window.TakoActions.variantDelete(dish._id, v._id); await window.TakoActions.variantCreate(dish._id, v.nome.trim(), Number(v.mod) || 0); }
+      }
+      await window.takoReload();
+      onClose();
+      toast("Piatto salvato", { type: "success" });
+    } catch (e) { toast(e.message, { type: "error" }); }
+    finally { setSaving(false); }
   };
   return (
     <div style={{ width: mobile ? 354 : 420, maxWidth: "100%", height: mobile ? "auto" : "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 24 : 0, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: mobile ? "var(--sh-pop)" : "none" }}>
@@ -220,19 +261,20 @@ function DishEditor({ dish, mobile, onClose }) {
             <span style={{ position: "absolute", right: 8, bottom: 8, background: "rgba(0,0,0,.55)", color: "#fff", fontSize: 11.5, fontWeight: 600, padding: "3px 8px", borderRadius: 8 }}>Cambia</span>
           )}
         </label>
-        <Field label="Nome"><input style={inputStyle} defaultValue={dish.nome} /></Field>
+        <Field label="Nome"><input style={inputStyle} value={name} onChange={e => setName(e.target.value)} /></Field>
         <div style={{ display: "flex", gap: 12 }}>
-          <Field label="Prezzo (€)"><input style={inputStyle} type="number" defaultValue={dish.prezzo} /></Field>
-          <Field label="Food cost (€)"><input style={inputStyle} type="number" defaultValue={dish.costo} /></Field>
+          <Field label="Prezzo (€)"><input style={inputStyle} type="number" value={price} onChange={e => setPrice(e.target.value)} /></Field>
+          <Field label="Food cost (€)"><input style={inputStyle} type="number" value={cost} onChange={e => setCost(e.target.value)} /></Field>
         </div>
-        <Field label="Descrizione"><textarea style={{ ...inputStyle, height: 70, padding: 13, resize: "none" }} defaultValue={dish.desc} /></Field>
-        <Field label="Stazione cucina"><select style={inputStyle} defaultValue={dish.station}>{STATIONS.map(s => <option key={s}>{s}</option>)}</select></Field>
+        <Field label="Descrizione"><textarea style={{ ...inputStyle, height: 70, padding: 13, resize: "none" }} value={desc} onChange={e => setDesc(e.target.value)} /></Field>
+        <Field label="Stazione cucina"><select style={inputStyle} value={station} onChange={e => setStation(e.target.value)}>{STATIONS.map(s => <option key={s}>{s}</option>)}</select></Field>
         <div style={{ marginBottom: 14 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}><span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink-2)" }}>Varianti</span><Btn size="sm" kind="soft" icon="plus" onClick={() => setVariants(v => [...v, { nome: "Nuova variante", mod: 0 }])}>Aggiungi</Btn></div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}><span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink-2)" }}>Varianti</span><Btn size="sm" kind="soft" icon="plus" onClick={() => setVariants(v => [...v, { nome: "", mod: 0 }])}>Aggiungi</Btn></div>
+          {variants.length === 0 && <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 7 }}>Nessuna variante. Es. “Porzione grande” con modificatore di prezzo.</div>}
           {variants.map((v, i) => (
-            <div key={i} style={{ display: "flex", gap: 8, marginBottom: 7 }}>
-              <input style={{ ...inputStyle, flex: 1 }} defaultValue={v.nome} />
-              <input style={{ ...inputStyle, width: 80 }} defaultValue={"+" + v.mod} />
+            <div key={v._id || ("new" + i)} style={{ display: "flex", gap: 8, marginBottom: 7 }}>
+              <input style={{ ...inputStyle, flex: 1 }} placeholder="Nome variante" value={v.nome} onChange={e => setV(i, "nome", e.target.value)} />
+              <input style={{ ...inputStyle, width: 90 }} type="number" step="0.5" placeholder="+€" value={v.mod} onChange={e => setV(i, "mod", e.target.value)} />
               <IconBtn name="trash" tone="soft" style={{ color: "var(--danger)" }} onClick={() => setVariants(vs => vs.filter((_, k) => k !== i))} />
             </div>
           ))}
@@ -255,37 +297,7 @@ function DishEditor({ dish, mobile, onClose }) {
         }} />
       <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", gap: 10 }}>
         <Btn kind="soft" full onClick={onClose}>Annulla</Btn>
-        <Btn kind="brand" full icon="check" onClick={async (ev) => {
-          // Inputs uncontrolled (defaultValue): leggo i valori dal DOM senza toccare il JSX.
-          // Risalgo al contenitore dell'editor dal bottone e interrogo i campi per posizione.
-          const root = ev.currentTarget.closest("div").parentElement; // pannello editor
-          const scroll = root && root.querySelector(".scroll");
-          // ordine campi input: [0]=Nome, [1]=Prezzo, [2]=Food cost (le varianti vengono dopo);
-          // [textarea]=Descrizione, [select]=Stazione
-          const get = (sel, i) => { const els = scroll.querySelectorAll(sel); return els[i] ? els[i].value : undefined; };
-          const name = scroll ? get("input", 0) : dish.nome;
-          const price = scroll ? parseFloat(get("input", 1)) : dish.prezzo;
-          const costPrice = scroll ? parseFloat(get("input", 2)) : dish.costo;
-          const description = scroll ? (scroll.querySelector("textarea") || {}).value : dish.desc;
-          const kitchenStation = scroll ? (scroll.querySelector("select") || {}).value : dish.station;
-          if (!dish._id) {
-            // niente id reale: mantengo il comportamento locale
-            onClose();
-            toast("Piatto salvato", { type: "success" });
-            return;
-          }
-          try {
-            await window.TakoActions.menuSaveItem(dish._id, {
-              name, price: isNaN(price) ? undefined : price,
-              costPrice: isNaN(costPrice) ? undefined : costPrice,
-              description, kitchenStation,
-              imageUrl: imageUrl || undefined,
-            });
-            await window.takoReload();
-            onClose();
-            toast("Piatto salvato", { type: "success" });
-          } catch (e) { toast(e.message, { type: "error" }); }
-        }}>Salva</Btn>
+        <Btn kind="brand" full icon="check" onClick={save}>{saving ? "Salvo…" : "Salva"}</Btn>
       </div>
     </div>
   );
@@ -570,17 +582,92 @@ function ScreenInventario({ mobile }) {
 
 /* ═══════════════════ STAFF ═══════════════════ */
 const ROLE_BADGE = { owner: ["brand", "Titolare"], cameriere: ["info", "Cameriere"], chef: ["wait", "Chef"], cassiere: ["ok", "Cassiere"] };
+/* ruoli assegnabili dallo staff (il backend NON accetta 'owner' in create/patch) */
+const STAFF_ROLE_OPTS = [["cameriere", "Cameriere"], ["chef", "Chef"], ["cassiere", "Cassiere"]];
+/* Modale form membro staff — creazione e modifica (campi reali di /staff). */
+function StaffFormModal({ open, onClose, member }) {
+  const isEdit = !!member;
+  const isOwner = isEdit && member.ruolo === "owner";
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [ruolo, setRuolo] = useState("cameriere");
+  const [tel, setTel] = useState("");
+  const [pin, setPin] = useState("");
+  const [password, setPassword] = useState("");
+  const [active, setActive] = useState(true);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    if (member) { setNome(member.nome || ""); setEmail(member.email || ""); setRuolo(member.ruolo === "owner" ? "cameriere" : (member.ruolo || "cameriere")); setTel(member.tel || ""); setPin(""); setPassword(""); setActive(!!member.attivo); }
+    else { setNome(""); setEmail(""); setRuolo("cameriere"); setTel(""); setPin(""); setPassword(""); setActive(true); }
+  }, [open, member]);
+  const save = async () => {
+    if (saving) return;
+    if (nome.trim().length < 2) { toast("Inserisci il nome (min 2 caratteri)", { type: "error" }); return; }
+    if (!isEdit && !/.+@.+\..+/.test(email.trim())) { toast("Inserisci un'email valida", { type: "error" }); return; }
+    if (pin && !/^\d{4}$/.test(pin)) { toast("Il PIN deve avere 4 cifre", { type: "error" }); return; }
+    if (!isEdit && password && password.length < 6) { toast("La password deve avere almeno 6 caratteri", { type: "error" }); return; }
+    setSaving(true);
+    try {
+      const roleDb = ROLE_UI2DB[ruolo] || "dipendente";
+      if (isEdit) {
+        const fields = { name: nome.trim(), active, phone: tel.trim() };
+        if (!isOwner) fields.role = roleDb;  // il ruolo owner non è modificabile dal backend
+        if (pin) fields.pin = pin;
+        await window.TakoActions.staffUpdate(member._id, fields);
+        toast("Membro aggiornato", { type: "success" });
+      } else {
+        const fields = { name: nome.trim(), email: email.trim(), role: roleDb };
+        if (tel.trim()) fields.phone = tel.trim();
+        if (pin) fields.pin = pin;
+        if (password) fields.password = password;
+        await window.TakoActions.staffCreate(fields);
+        toast("Membro aggiunto", { type: "success" });
+      }
+      onClose();
+      await window.takoReload();
+    } catch (e) { toast(e.message, { type: "error" }); }
+    finally { setSaving(false); }
+  };
+  return (
+    <Overlay open={open} onClose={onClose} anchor="center">
+      <div style={{ width: 400, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 24, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="staff" size={20} /></div>
+          <h3 style={{ fontSize: 18, flex: 1 }}>{isEdit ? "Modifica membro" : "Nuovo membro"}</h3>
+          <IconBtn name="x" tone="soft" onClick={onClose} />
+        </div>
+        <div className="scroll" style={{ padding: 20, overflowY: "auto" }}>
+          <Field label="Nome"><input style={inputStyle} value={nome} autoFocus onChange={e => setNome(e.target.value)} placeholder="Es. Marco Rossi" /></Field>
+          <Field label="Email">
+            <input style={{ ...inputStyle, opacity: isEdit ? .6 : 1 }} type="email" value={email} disabled={isEdit} onChange={e => setEmail(e.target.value)} placeholder="nome@ristorante.it" />
+          </Field>
+          {isEdit && <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: -8, marginBottom: 12 }}>L'email non è modificabile.</div>}
+          <Field label="Ruolo">
+            <select style={inputStyle} value={ruolo} disabled={isOwner} onChange={e => setRuolo(e.target.value)}>
+              {STAFF_ROLE_OPTS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+            </select>
+          </Field>
+          {isOwner && <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: -8, marginBottom: 12 }}>Il ruolo del titolare non è modificabile.</div>}
+          <Field label="Telefono (opzionale)"><input style={inputStyle} value={tel} onChange={e => setTel(e.target.value)} placeholder="+39…" /></Field>
+          <Field label="PIN (opzionale, 4 cifre)"><input style={inputStyle} value={pin} inputMode="numeric" maxLength={4} onChange={e => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="Per l'accesso rapido" /></Field>
+          {!isEdit && <Field label="Password (opzionale)"><input style={inputStyle} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Almeno 6 caratteri" /></Field>}
+          {isEdit && <Row label="Attivo" sub="Un membro disattivo non può accedere"><Toggle on={active} set={setActive} /></Row>}
+        </div>
+        <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", gap: 10 }}>
+          <Btn kind="soft" full onClick={onClose}>Annulla</Btn>
+          <Btn kind="brand" full icon="check" onClick={save}>{saving ? "Salvo…" : (isEdit ? "Salva" : "Crea membro")}</Btn>
+        </div>
+      </div>
+    </Overlay>
+  );
+}
 function ScreenStaff({ mobile }) {
+  const [formOpen, setFormOpen] = useState(false);
+  const [editMember, setEditMember] = useState(null);
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="hello" title="Staff" sub={`${STAFF.length} membri`} actions={<Btn kind="brand" icon="plus" onClick={async () => {
-        // Nessun form in questa UI: creo un membro minimale e ricarico (l'utente lo rifinisce poi).
-        try {
-          await window.TakoActions.staffCreate({ name: "Nuovo membro", email: "nuovo+" + Date.now() + "@tako.local", role: "dipendente" });
-          toast("Membro aggiunto", { type: "success" });
-          await window.takoReload();
-        } catch (e) { toast(e.message, { type: "error" }); }
-      }}>Aggiungi membro</Btn>} />
+      <PageHead mobile={mobile} tako="hello" title="Staff" sub={`${STAFF.length} membri`} actions={<Btn kind="brand" icon="plus" onClick={() => { setEditMember(null); setFormOpen(true); }}>Aggiungi membro</Btn>} />
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill,minmax(300px,1fr))", gap: 14 }}>
         {STAFF.map(m => {
           const [tone, label] = ROLE_BADGE[m.ruolo];
@@ -600,15 +687,9 @@ function ScreenStaff({ mobile }) {
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--hairline)" }}>
                 <span style={{ fontSize: 12.5, color: "var(--ink-2)" }} className="mono">{m.tel || "—"}</span>
                 <span style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-                  <IconBtn name="edit" tone="ghost" onClick={async () => {
-                    // Nessun form di modifica in questa UI: l'azione "edit" attiva/disattiva il membro
-                    // via staffUpdate (azione reale e reversibile). Mappa ruolo DB: cameriere->dipendente.
-                    if (!m._id) { toast("Modifica " + m.nome.split(" ")[0]); return; }
-                    try {
-                      await window.TakoActions.staffUpdate(m._id, { active: !m.attivo });
-                      toast(m.attivo ? "Membro disattivato" : "Membro riattivato", { type: "success" });
-                      await window.takoReload();
-                    } catch (e) { toast(e.message, { type: "error" }); }
+                  <IconBtn name="edit" tone="ghost" onClick={() => {
+                    if (!m._id) { toast("Membro non modificabile"); return; }
+                    setEditMember(m); setFormOpen(true);
                   }} />
                   <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} onClick={async () => {
                     if (!m._id) { toast("Disattiva " + m.nome.split(" ")[0]); return; }
@@ -624,6 +705,7 @@ function ScreenStaff({ mobile }) {
           );
         })}
       </div>
+      <StaffFormModal open={formOpen} member={editMember} onClose={() => setFormOpen(false)} />
     </ScreenScroll>
   );
 }
@@ -706,7 +788,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <Row label="Servizio al tavolo" sub="Ordini dai QR ai tavoli"><Toggle on={settings.servizioTavolo} set={v => set("servizioTavolo", v)} /></Row>
               <Row label="Asporto" sub="Ordini da ritirare"><Toggle on={settings.asporto} set={v => set("asporto", v)} /></Row>
               <Row label="Paga al tavolo" sub="Pagamento dal telefono del cliente"><Toggle on={settings.pagaTavolo} set={v => set("pagaTavolo", v)} /></Row>
-              <Row label="Prenotazioni" sub="Accetta prenotazioni online"><Toggle on={settings.prenotazioni} set={v => set("prenotazioni", v)} /></Row>
+              {/* TODO: riattivare quando esistono le prenotazioni (feature non ancora implementata) */}
               <Row label="Assistente AI" sub="Suggerimenti e risposte ai clienti"><Toggle on={settings.ai} set={v => set("ai", v)} /></Row>
               <Row label="Coperto" sub="Aggiunto automaticamente al conto"><div style={{ display: "flex", alignItems: "center", gap: 10 }}>{settings.copertoOn && <input type="number" step="0.5" style={numStyle} value={settings.coperto} onChange={e => set("coperto", parseFloat(e.target.value) || 0)} />}<Toggle on={settings.copertoOn} set={v => set("copertoOn", v)} /></div></Row>
               <Row label="Mance suggerite" sub="Mostra 5/10/15% in cassa"><Toggle on={settings.manceSuggerite} set={v => set("manceSuggerite", v)} /></Row>
@@ -760,7 +842,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
                 <Field label="Indirizzo IP"><input style={inputStyle} value={settings.printerIp} onChange={e => set("printerIp", e.target.value)} /></Field>
                 <Field label="Porta"><input style={{ ...inputStyle, width: 110 }} value={settings.printerPort} onChange={e => set("printerPort", e.target.value)} /></Field>
               </div>
-              <Row label="Stato" sub={`${settings.printerIp} : ${settings.printerPort}`}><Badge tone="ok" dot>Connessa</Badge></Row>
+              <Row label="Stato" sub={settings.printerIp ? `${settings.printerIp} : ${settings.printerPort}` : "Imposta un indirizzo IP per collegarla"}>{settings.printerIp ? <Badge tone="ok" dot>Configurata</Badge> : <Badge tone="muted">Non configurata</Badge>}</Row>
               <div style={{ marginTop: 14 }}><Btn kind="soft" icon="printer" onClick={async () => {
                 try {
                   if (window.TakoActions.printTest) {

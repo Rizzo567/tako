@@ -1,12 +1,13 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, tables, rooms } from '@tako/db'
-import { eq, and } from 'drizzle-orm'
+import { db, tables, rooms, bills, orders } from '@tako/db'
+import { eq, and, inArray } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { clientBaseUrl } from '../lib/network.js'
 import { qrWithOctopus } from '../lib/qr-octopus.js'
+import { BILLABLE_STATUSES } from '../lib/billing.js'
 
 export async function tableRoutes(fastify: FastifyInstance) {
   // Get all rooms with tables
@@ -46,7 +47,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     if (body.data.roomId) {
       const [room] = await db.select({ id: rooms.id }).from(rooms)
         .where(and(eq(rooms.id, body.data.roomId), eq(rooms.restaurantId, req.user!.restaurantId))).limit(1)
-      if (!room) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Room not found' } })
+      if (!room) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Sala non trovata' } })
     }
 
     const qrToken = nanoid(24)
@@ -73,7 +74,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     if (parsed.data.roomId) {
       const [room] = await db.select({ id: rooms.id }).from(rooms)
         .where(and(eq(rooms.id, parsed.data.roomId), eq(rooms.restaurantId, req.user!.restaurantId))).limit(1)
-      if (!room) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Room not found' } })
+      if (!room) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Sala non trovata' } })
     }
 
     const updates: Record<string, unknown> = {}
@@ -89,7 +90,12 @@ export async function tableRoutes(fastify: FastifyInstance) {
     }
 
     const [table] = await db.update(tables).set(updates).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).returning()
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
+    // B2: la mappa sala deve aggiornarsi live su tutti i device staff quando cambia
+    // la posizione di un tavolo (drag&drop).
+    if (parsed.data.posX !== undefined || parsed.data.posY !== undefined) {
+      io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId, posX: table.posX, posY: table.posY })
+    }
     return { data: table }
   })
 
@@ -101,12 +107,26 @@ export async function tableRoutes(fastify: FastifyInstance) {
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
     const { status } = parsed.data
 
+    // M7: non liberare/ripulire un tavolo che ha ancora un conto aperto o ordini
+    // fatturabili — prima si incassa o si annulla (altrimenti si perde traccia del conto).
+    if (status === 'free' || status === 'cleaning') {
+      const [openBill] = await db.select({ id: bills.id }).from(bills)
+        .where(and(eq(bills.restaurantId, req.user!.restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open'))).limit(1)
+      let blocked = !!openBill
+      if (!blocked) {
+        const [ord] = await db.select({ id: orders.id }).from(orders)
+          .where(and(eq(orders.restaurantId, req.user!.restaurantId), eq(orders.tableId, tableId), inArray(orders.status, [...BILLABLE_STATUSES]))).limit(1)
+        blocked = !!ord
+      }
+      if (blocked) return reply.code(409).send({ error: { code: 'TABLE_HAS_OPEN_BILL', message: 'Il tavolo ha un conto aperto: incassa o annulla prima di liberarlo.' } })
+    }
+
     const [table] = await db.update(tables).set({
       status,
       openedAt: status === 'occupied' ? new Date() : status === 'free' ? null : undefined,
     }).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).returning()
 
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
     io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId, status })
     return { data: table }
@@ -119,7 +139,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const { tableId } = req.params as { tableId: string }
     // SECURITY: il tavolo deve appartenere al ristorante dello staff.
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('waiter:resolved', { tableId })
     return { data: { success: true } }
   })
@@ -128,7 +148,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
   fastify.get('/:tableId/qr', { preHandler: requireAuth }, async (req, reply) => {
     const { tableId } = req.params as { tableId: string }
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
     const url = `${clientBaseUrl()}/r/${req.user!.restaurantId}/t/${table.qrToken}`
     const qrDataUrl = await qrWithOctopus(url, 400)
@@ -140,7 +160,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const { tableId } = req.params as { tableId: string }
     const newToken = nanoid(24)
     const [table] = await db.update(tables).set({ qrToken: newToken }).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).returning()
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
     return { data: { qrToken: newToken } }
   })
 
@@ -151,7 +171,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
       .set({ active: false })
       .where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId)))
       .returning()
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
     return { data: { success: true } }
   })
 }

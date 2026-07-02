@@ -83,9 +83,12 @@ export async function inventoryRoutes(fastify: FastifyInstance) {
   })
 
   // Parse lista ingredienti da testo con AI (Groq) → anteprima (nessuna scrittura)
-  fastify.post('/import-text', { preHandler: requireAuth }, async (req, reply) => {
-    const { text } = req.body as { text?: string }
-    if (!text?.trim()) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required' } })
+  fastify.post('/import-text', { config: { rateLimit: { max: 10, timeWindow: 60000 } }, preHandler: requireAuth }, async (req, reply) => {
+    // Cap di lunghezza (50k): copre un inventario reale ma evita payload enormi
+    // verso Groq (saturazione context + costi amplificati).
+    const parsedBody = z.object({ text: z.string().trim().min(1).max(50000) }).safeParse(req.body)
+    if (!parsedBody.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required (max 50000 caratteri)' } })
+    const { text } = parsedBody.data
     let completion: any
     try {
       const openai = getAI()

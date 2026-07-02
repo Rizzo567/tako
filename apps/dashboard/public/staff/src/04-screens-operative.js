@@ -244,7 +244,7 @@ function ScreenKDS({ mobile, orders, onAdvanceItem, onBump, settings = SETTINGS_
                 </div>
                 <div style={{ padding: "8px 14px" }}>
                   {items.map((it, k) => (
-                    <button key={k} className="press" onClick={() => onAdvanceItem(o.id, it.nome)} style={{ width: "100%", display: "flex", gap: 10, alignItems: "flex-start", padding: compact ? "7px 0" : "9px 0", borderBottom: k < items.length - 1 ? "1px solid var(--hairline)" : "none", textAlign: "left", opacity: it.stato === "pronto" ? .5 : 1 }}>
+                    <button key={k} className="press" onClick={() => onAdvanceItem(o.id, it._id, it.nome)} style={{ width: "100%", display: "flex", gap: 10, alignItems: "flex-start", padding: compact ? "7px 0" : "9px 0", borderBottom: k < items.length - 1 ? "1px solid var(--hairline)" : "none", textAlign: "left", opacity: it.stato === "pronto" ? .5 : 1 }}>
                       <span className="num" style={{ color: "var(--brand)", fontSize: 16, minWidth: 26 }}>{it.qty}×</span>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: compact ? 14 : 15.5, fontWeight: 700, color: "var(--ink)", textDecoration: it.stato === "pronto" ? "line-through" : "none" }}>{it.nome}</div>

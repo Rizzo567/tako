@@ -157,9 +157,22 @@ export async function menuRoutes(fastify: FastifyInstance) {
       .returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
 
-    // Broadcast menu change: dashboard staff (room privata) + clienti (room pubblica menu)
+    // Broadcast menu change: dashboard staff (room privata) riceve la riga COMPLETA;
+    // la room pubblica menu:{id} (anonima, joinabile da chiunque) riceve solo i campi
+    // pubblici — MAI costPrice (food cost/margine) né altri campi interni.
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
-    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
+    const publicItem = {
+      id: item.id,
+      sectionId: item.sectionId,
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      imageUrl: item.imageUrl,
+      allergens: item.allergens,
+      tags: item.tags,
+      available: item.available,
+    }
+    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item: publicItem })
     return { data: item }
   })
 
@@ -199,15 +212,24 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const { itemId, variantId } = req.params as { itemId: string; variantId: string }
     const [item] = await db.select({ id: menuItems.id }).from(menuItems).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).limit(1)
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
-    await db.delete(itemVariants).where(eq(itemVariants.id, variantId))
+    // Anti-IDOR: la variante deve appartenere all'item già verificato come di proprietà.
+    // itemVariants non ha restaurantId, quindi senza questo vincolo la delete attraverserebbe
+    // il confine tenant cancellando varianti di un altro ristorante by-id.
+    const deleted = await db.delete(itemVariants)
+      .where(and(eq(itemVariants.id, variantId), eq(itemVariants.itemId, itemId)))
+      .returning()
+    if (!deleted.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Variant not found' } })
     return { data: { success: true } }
   })
 
   // Parse raw menu text with AI → return preview (no DB write)
-  fastify.post('/:menuId/import-text', { preHandler: requireAuth }, async (req, reply) => {
+  fastify.post('/:menuId/import-text', { config: { rateLimit: { max: 10, timeWindow: 60000 } }, preHandler: requireAuth }, async (req, reply) => {
     const { menuId } = req.params as { menuId: string }
-    const { text } = req.body as { text?: string }
-    if (!text?.trim()) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required' } })
+    // Cap di lunghezza: 50k caratteri coprono un menu reale ma evitano di saturare
+    // la context window di Groq e amplificarne i costi con payload enormi.
+    const parsedBody = z.object({ text: z.string().trim().min(1).max(50000) }).safeParse(req.body)
+    if (!parsedBody.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required (max 50000 caratteri)' } })
+    const { text } = parsedBody.data
 
     const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
     if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })

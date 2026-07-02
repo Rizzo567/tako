@@ -52,7 +52,9 @@ export async function printRoutes(fastify: FastifyInstance) {
       await sendToPrinter(ip, port, buildEscposReceipt(lines))
       return { data: { success: true } }
     } catch (err: any) {
-      return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: err.message ?? 'Errore stampante' } })
+      // Non riflettere la stringa d'errore di rete al client (info-leak su IP/host interni).
+      req.log.error({ err }, 'printer error')
+      return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: 'Errore stampante' } })
     }
   })
 
@@ -81,7 +83,9 @@ export async function printRoutes(fastify: FastifyInstance) {
       await sendToPrinter(ip, port, buildEscposReceipt(lines))
       return { data: { success: true } }
     } catch (err: any) {
-      return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: err.message ?? 'Errore stampante' } })
+      // Non riflettere la stringa d'errore di rete al client (info-leak su IP/host interni).
+      req.log.error({ err }, 'printer error')
+      return reply.code(502).send({ error: { code: 'PRINTER_ERROR', message: 'Errore stampante' } })
     }
   })
 }

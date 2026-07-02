@@ -4,11 +4,10 @@ import { useCartStore, useSessionStore } from '@/lib/store'
 import { formatEuro } from '@/lib/utils'
 import { ChevronDown, Minus, Plus, Trash2, Send, ShoppingBag } from 'lucide-react'
 import { api } from '@/lib/api'
-import { nanoid } from 'nanoid'
 import toast from 'react-hot-toast'
 
 export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrderPlaced: (orderId: string) => void }) {
-  const { items, updateQty, remove, clear, total } = useCartStore()
+  const { items, updateQty, remove, clear, total, ensureCheckoutKey } = useCartStore()
   const { restaurantId, tableId, tableNumber, setOrderId } = useSessionStore()
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,6 +16,10 @@ export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrde
     if (!items.length || !restaurantId) return
     setLoading(true)
     try {
+      // Stessa chiave su ogni retry dello stesso carrello: un reinvio umano dopo
+      // un timeout non crea un ordine doppio (il server deduplica per idempotencyKey).
+      // clear() al successo azzera la chiave; ogni modifica al carrello pure.
+      const idempotencyKey = ensureCheckoutKey()
       const { data } = await api.post('/customer/orders', {
         restaurantId,
         tableId,
@@ -24,7 +27,7 @@ export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrde
         type: 'table',
         items: items.map(i => ({ menuItemId: i.menuItemId, variantId: i.variantId, quantity: i.quantity, notes: i.notes })),
         notes: notes || undefined,
-        idempotencyKey: nanoid(),
+        idempotencyKey,
       })
       setOrderId(data.data.id)
       clear()

@@ -17,7 +17,10 @@ const ALLOWED_TRANSITIONS: Record<string, OrderStatus[]> = {
   confirmed: ['preparing', 'ready', 'served', 'cancelled'],
   preparing: ['ready', 'served', 'cancelled'],
   ready: ['served', 'cancelled'],
-  served: ['paid'],
+  // served→paid NON è una transizione manuale: portare 'paid' qui escluderebbe
+  // l'ordine da BILLABLE_STATUSES senza registrare alcun pagamento (frode). Il
+  // passaggio a 'paid' avviene solo nel flusso pagamenti (bills.ts /payments).
+  served: [],
   paid: [],
   cancelled: [],
 }
@@ -69,7 +72,8 @@ export async function orderRoutes(fastify: FastifyInstance) {
   fastify.post('/', { preHandler: requireAuth }, async (req, reply) => {
     const schema = z.object({
       tableId: z.string().uuid().optional(),
-      tableNumber: z.string().optional(),
+      // La SPA cassa invia tableNumber come Number → coerce a stringa (evita 400).
+      tableNumber: z.coerce.string().optional(),
       type: z.enum(['table', 'takeaway']).default('table'),
       items: z.array(z.object({
         menuItemId: z.string().uuid(),
@@ -134,7 +138,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
     const { status } = parsed.data as { status: OrderStatus }
 
     const [current] = await db.select().from(orders).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!current) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
+    if (!current) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ordine non trovato' } })
 
     // Guardia transizioni: niente salti incoerenti o ordini pagati/annullati riaperti.
     if (status !== current.status && !(ALLOWED_TRANSITIONS[current.status] ?? []).includes(status)) {
@@ -145,7 +149,13 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (status === 'served') updateData.servedAt = new Date()
     if (status === 'paid') updateData.paidAt = new Date()
 
-    const [updated] = await db.update(orders).set(updateData).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).returning()
+    // Guardia di concorrenza: aggiorna SOLO se lo stato è ancora quello letto. Due
+    // PATCH concorrenti che leggono lo stesso stato non passano entrambe: la seconda
+    // trova rowcount 0 → 409 (niente doppia transizione/incasso).
+    const [updated] = await db.update(orders).set(updateData)
+      .where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId), eq(orders.status, current.status)))
+      .returning()
+    if (!updated) return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Lo stato dell\'ordine è cambiato, riprova.' } })
 
     await db.insert(orderStatusHistory).values({
       orderId,
@@ -153,6 +163,11 @@ export async function orderRoutes(fastify: FastifyInstance) {
       toStatus: status,
       changedBy: req.user!.id,
     })
+
+    // Annullamento via /status: il conto deve scendere come nella route /cancel.
+    if (status === 'cancelled' && current.tableId) {
+      await recomputeOpenBill(req.user!.restaurantId, current.tableId)
+    }
 
     // Broadcast to all connected clients in this restaurant
     io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status })
@@ -175,10 +190,15 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
     // Verify the order belongs to this restaurant before updating its items
     const [order] = await db.select().from(orders).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
+    if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ordine non trovato' } })
+    // Il bump di una portata non deve "resuscitare" un ordine pagato/annullato
+    // riscrivendone lo stato derivato (frode/incoerenza).
+    if (order.status === 'paid' || order.status === 'cancelled') {
+      return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: `Ordine ${order.status}: non modificabile.` } })
+    }
 
     const [item] = await db.update(orderItems).set({ status }).where(and(eq(orderItems.id, itemId), eq(orderItems.orderId, orderId))).returning()
-    if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Voce non trovata' } })
 
     // Derive order-level status from all items
     const allItems = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
@@ -204,7 +224,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
   fastify.patch('/:orderId/cancel', { preHandler: requireAuth }, async (req, reply) => {
     const { orderId } = req.params as { orderId: string }
     const [current] = await db.select().from(orders).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!current) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
+    if (!current) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ordine non trovato' } })
     // Non si annulla un ordine già pagato (falserebbe incassi/served).
     if (current.status === 'paid') return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Un ordine pagato non può essere annullato.' } })
     if (current.status === 'cancelled') return { data: current }

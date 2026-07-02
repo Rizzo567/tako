@@ -98,7 +98,11 @@ export default function Splash() {
         <FauxQR />
       </motion.div>
 
-      <motion.p className="mt-6 text-[12.5px] text-[var(--ink-3)]" style={{ zIndex: 1 }} {...rise(0.54)}>
+      <motion.p className="mt-5 max-w-[280px] text-[12.5px] leading-relaxed text-[var(--ink-3)]" style={{ zIndex: 1 }} {...rise(0.54)}>
+        Connettiti al <b className="text-[var(--ink-2)]">Wi-Fi del locale</b> se la pagina non si carica.
+      </motion.p>
+
+      <motion.p className="mt-4 text-[12.5px] text-[var(--ink-3)]" style={{ zIndex: 1 }} {...rise(0.62)}>
         Tako · sistema operativo del ristorante
       </motion.p>
     </div>

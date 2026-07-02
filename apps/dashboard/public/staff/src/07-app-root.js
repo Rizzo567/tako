@@ -83,9 +83,21 @@ function App({ session }) {
   ROLES[role0] = { ...ROLES[role0], name: session.user.name, initials: (session.user.name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() };
   const [route, setRoute] = useState(() => { const r = load("route", ROLE_HOME[role0] || "dashboard"); const allow = ROLE_ACCESS[role0]; return (!allow || allow.includes(r)) ? r : (ROLE_HOME[role0] || "dashboard"); });
   const [brand, setBrand] = useState(() => HEX2BRAND[(RESTAURANT.brand || "").toLowerCase()] || load("brand", "arancione"));
-  const [settings, setSettings] = useState(() => ({ ...SETTINGS_DEFAULTS, ...(() => { try { return JSON.parse(localStorage.getItem("tako-dash-settings") || "{}"); } catch (_) { return {}; } })() }));
+  const [settings, setSettings] = useState(() => {
+    let ls = {}; try { ls = JSON.parse(localStorage.getItem("tako-dash-settings") || "{}"); } catch (_) { ls = {}; }
+    // Backend vince: SETTINGS_DEFAULTS è già stato popolato dal backend in loadAll().
+    // localStorage serve solo come cache di fallback quando il backend NON ha risposto.
+    // Unica preferenza solo-client non gestita dal backend: `kpi` (visibilità widget home).
+    return window.__settings_raw
+      ? { ...SETTINGS_DEFAULTS, kpi: ls.kpi || SETTINGS_DEFAULTS.kpi }
+      : { ...SETTINGS_DEFAULTS, ...ls };
+  });
   const settingsRef = useRef(settings); settingsRef.current = settings;
   const role = role0;
+  // Esposto per componenti che non ricevono `role` via prop (es. PaymentModal in
+  // 05): il PATCH coperti/sconto è owner/cassiere, così la UI evita azioni che
+  // darebbero 403 al cameriere.
+  window.__takoRole = role;
   const [drawer, setDrawer] = useState(false);
   const [frame, setFrame] = useState(() => (typeof window !== "undefined" && window.innerWidth < 900 ? "mobile" : "desktop"));
   const mobile = frame === "mobile";
@@ -134,7 +146,7 @@ function App({ session }) {
         if (mobileRef.current && window.pushLiveNotif) pushLiveNotif(payload); else if (window.toast) toast(payload.title, { type: "info", icon: "orders", sub: payload.sub });
       } else if (ev === "order:updated") { refreshOrders(); }
       else if (ev === "table:updated") { refreshRooms(); }
-      else if (ev === "waiter:called") { setCalls((c) => [...c.filter((x) => x._id !== p.tableId), { tavolo: Number(p.tableNumber), motivo: CALL_TYPE_LABEL[p.type] || "Chiamata", min: 0, _id: p.tableId, _t: Date.now() }]); if (settingsRef.current.suoniOrdini) playBeep(); if (window.toast) toast(`Tavolo ${p.tableNumber} chiama`, { type: "warn", icon: "bell" }); }
+      else if (ev === "waiter:called") { setCalls((c) => [...c.filter((x) => x._id !== p.tableId), { tavolo: String(p.tableNumber), motivo: CALL_TYPE_LABEL[p.type] || "Chiamata", min: 0, _id: p.tableId, _t: Date.now() }]); if (settingsRef.current.suoniOrdini) playBeep(); if (window.toast) toast(`Tavolo ${p.tableNumber} chiama`, { type: "warn", icon: "bell" }); }
       else if (ev === "waiter:resolved") { setCalls((c) => c.filter((x) => x._id !== p.tableId)); }
       else if (ev === "menu:updated" || ev === "menu:item_availability") { loadAll().then(bump); }
       else if (ev === "inventory:alert") { loadAll().then(bump); if (window.toast) toast(`Scorta bassa · ${p.name}`, { type: "warn" }); }
@@ -152,11 +164,13 @@ function App({ session }) {
   const onServe = async (id) => { patchOrderLocal(id, (o) => ({ ...o, stato: "servito" })); try { await TakoAPI.patch(`/orders/${rid(id)}/status`, { status: "served" }); toast("Ordine servito", { type: "success", icon: "check" }); } catch (e) { toast(e.message, { type: "error" }); refreshOrders(); } };
   const onCancel = async (id) => { patchOrderLocal(id, (o) => ({ ...o, stato: "annullato" })); try { await TakoAPI.patch(`/orders/${rid(id)}/cancel`); toast("Ordine annullato", { type: "error" }); refreshOrders(); } catch (e) { toast(e.message, { type: "error" }); refreshOrders(); } };
   const onBump = async (id) => { patchOrderLocal(id, (o) => ({ ...o, stato: "pronto", items: o.items.map((it) => ({ ...it, stato: "pronto" })) })); try { await TakoAPI.patch(`/orders/${rid(id)}/status`, { status: "ready" }); toast("Ordine pronto", { type: "success", icon: "check" }); } catch (e) { toast(e.message, { type: "error" }); refreshOrders(); } };
-  const onAdvanceItem = async (id, nome) => {
+  const onAdvanceItem = async (id, itemId, nome) => {
     const o = orders.find((x) => x.id === id); if (!o) return;
-    const it = o.items.find((i) => i.nome === nome); if (!it || !it._id) return;
+    // Avanza per ID item (univoco), non per nome: due righe con lo stesso piatto non collidono.
+    const it = itemId ? o.items.find((i) => i._id === itemId) : o.items.find((i) => i.nome === nome);
+    if (!it || !it._id) return;
     const next = it.stato === "attesa" ? "prep" : "pronto";
-    patchOrderLocal(id, (oo) => { const items = oo.items.map((i) => i.nome === nome ? { ...i, stato: next } : i); const allReady = items.every((i) => i.stato === "pronto"); return { ...oo, items, stato: allReady ? "pronto" : (oo.stato === "attesa" ? "prep" : oo.stato) }; });
+    patchOrderLocal(id, (oo) => { const items = oo.items.map((i) => i._id === it._id ? { ...i, stato: next } : i); const allReady = items.every((i) => i.stato === "pronto"); return { ...oo, items, stato: allReady ? "pronto" : (oo.stato === "attesa" ? "prep" : oo.stato) }; });
     try { await TakoAPI.patch(`/orders/${o._id}/items/${it._id}/status`, { status: ITEM_UI2DB[next] }); } catch (e) { toast(e.message, { type: "error" }); refreshOrders(); }
   };
   const onSetTableState = async (n, stato) => {
@@ -260,4 +274,46 @@ function Root() {
   return <App session={state.session} />;
 }
 
-ReactDOM.createRoot(document.getElementById("stage")).render(<Root />);
+/* ── schermata di crash (italiana) mostrata dall'ErrorBoundary ── */
+function CrashScreen({ onReload, onHome }) {
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF8F4", padding: 24 }}>
+      <div style={{ width: 400, maxWidth: "100%", background: "#fff", borderRadius: 20, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid #eee", textAlign: "center" }}>
+        <img src="assets/takos/arancione/pollice_in_su.png" alt="Tako" style={{ width: 84, height: 84, objectFit: "contain", margin: "0 auto 10px" }} />
+        <div style={{ fontWeight: 900, fontSize: 21, color: "#2A1F1A", marginBottom: 8 }}>Qualcosa è andato storto</div>
+        <div style={{ fontSize: 14, color: "#8a8079", lineHeight: 1.5, marginBottom: 22 }}>
+          Si è verificato un errore imprevisto nella dashboard. Puoi ricaricare la pagina oppure tornare alla Dashboard.
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={onHome} style={{ flex: 1, padding: "12px", borderRadius: 12, border: "1.5px solid #ddd", background: "#fff", color: "#2A1F1A", fontWeight: 700, fontSize: 14.5, cursor: "pointer" }}>Torna alla Dashboard</button>
+          <button onClick={onReload} style={{ flex: 1, padding: "12px", borderRadius: 12, border: "none", background: "#ED7159", color: "#fff", fontWeight: 800, fontSize: 14.5, cursor: "pointer" }}>Ricarica</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Error boundary globale: evita il muro bianco e il crash-loop da route salvata ── */
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  componentDidCatch(error, info) { try { console.error("Tako crash", error, info); } catch (_) {} }
+  render() {
+    if (this.state.error) {
+      return (
+        <CrashScreen
+          onReload={() => { try { location.reload(); } catch (_) {} }}
+          onHome={() => {
+            // Reset della route persistita: se il crash arriva da una schermata salvata
+            // in localStorage, riaprirla ricadrebbe subito nel loop. Torniamo alla dashboard.
+            try { localStorage.removeItem("tako-dash-route"); } catch (_) {}
+            try { location.reload(); } catch (_) {}
+          }}
+        />
+      );
+    }
+    return this.props.children;
+  }
+}
+
+ReactDOM.createRoot(document.getElementById("stage")).render(<ErrorBoundary><Root /></ErrorBoundary>);

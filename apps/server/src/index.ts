@@ -26,6 +26,7 @@ import { insightsRoutes } from './routes/insights.js'
 import { printRoutes } from './routes/print.js'
 import { systemRoutes } from './routes/system.js'
 import { startMdns } from './lib/mdns.js'
+import { getLanIPv4s } from './lib/network.js'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
 // dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
@@ -44,6 +45,46 @@ export async function startServer(): Promise<void> {
   }
 
   const fastify = Fastify({ logger: { level: 'error' } })
+
+  // Error handler globale: logga l'errore completo server-side e sanifica i 5xx
+  // (gli errori Postgres/Drizzle non incapsulati trapelerebbero nomi colonne,
+  // constraint e dettagli di query). I 4xx legittimi (jwt 401, multipart 413,
+  // validazioni) portano statusCode<500 e message benigni → restano invariati.
+  fastify.setErrorHandler((error, request, reply) => {
+    const e = error as { statusCode?: number; code?: string; message?: string }
+    const status = e.statusCode ?? 500
+    request.log.error({ err: error }, 'unhandled route error')
+    if (status < 500) {
+      return reply.code(status).send({ error: { code: e.code ?? 'BAD_REQUEST', message: e.message } })
+    }
+    return reply.code(500).send({ error: { code: 'INTERNAL', message: 'Errore interno' } })
+  })
+
+  // CORS: allowlist invece di reflection arbitraria. Consente solo l'appliance
+  // (tako.local + IP LAN correnti) e localhost, sulle porte server/client. Senza
+  // questo, qualunque sito visitato dalla vittima sulla stessa LAN poteva leggere
+  // gli endpoint anonimi cross-origin con credenziali.
+  const PORT_NUM = Number(process.env['PORT'] ?? 3001)
+  const CLIENT_PORT = process.env['CLIENT_PORT'] ?? '3002'
+  const allowedHosts = () => new Set<string>([
+    'tako.local', 'localhost', '127.0.0.1', '[::1]',
+    ...getLanIPv4s(),
+  ])
+  const allowedPorts = new Set([String(PORT_NUM), String(CLIENT_PORT)])
+  function isAllowedOrigin(origin?: string): boolean {
+    if (!origin) return true // same-origin / client non-browser (curl, app native) senza header Origin
+    try {
+      const u = new URL(origin)
+      return allowedHosts().has(u.hostname) &&
+             (u.port === '' || allowedPorts.has(u.port))
+    } catch { return false }
+  }
+  // Override opzionale per reverse-proxy/dominio fisso: CORS_ORIGINS=https://a.com,https://b.com
+  const corsAllowlist = (process.env['CORS_ORIGINS'] ?? '').split(',').map(s => s.trim()).filter(Boolean)
+  const resolveCorsOrigin = (origin?: string): boolean => {
+    if (corsAllowlist.length && origin && corsAllowlist.includes(origin)) return true
+    return isAllowedOrigin(origin)
+  }
 
 // Security headers. Da quando il server serve anche la dashboard staff (stessa
 // origine), la CSP deve permettere alla SPA di girare: script self + inline/eval
@@ -69,7 +110,7 @@ await fastify.register(helmet, {
 // CORS — Tako è un'appliance locale: il server È l'origine di tutti i client
 // (dashboard same-origin, tablet/telefoni in LAN via tako.local o IP). Riflette
 // l'origine con credenziali; la portata resta limitata dalla rete locale/firewall.
-await fastify.register(cors, { origin: true, credentials: true })
+await fastify.register(cors, { origin: (origin, cb) => cb(null, resolveCorsOrigin(origin)), credentials: true })
 
 await fastify.register(jwt, { secret: JWT_SECRET })
 await fastify.register(cookie, { secret: JWT_SECRET })
@@ -137,10 +178,14 @@ await fastify.register(systemRoutes, { prefix: '/api/system' })
 await fastify.ready()
 
   io = new SocketServer(fastify.server, {
-    cors: { origin: true, methods: ['GET', 'POST'], credentials: true },
+    cors: {
+      origin: (origin, cb) => cb(null, resolveCorsOrigin(origin ?? undefined)),
+      methods: ['GET', 'POST'],
+      credentials: true,
+    },
     pingTimeout: 60000,
   })
-  setupSocketHandlers(io)
+  setupSocketHandlers(io, fastify)
 
   try {
     await fastify.listen({ port: PORT, host: '0.0.0.0' })

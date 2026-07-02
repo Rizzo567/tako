@@ -16,8 +16,12 @@ use tauri::{Manager, RunEvent};
 /// per ridurre i conflitti su una macchina ristorante.
 const TAKO_PORT: &str = "4317";
 
-/// Handle al processo server, per poterlo terminare alla chiusura dell'app.
-struct ServerChild(Mutex<Option<Child>>);
+/// Porta dell'app CLIENTE (Next standalone): i telefoni la raggiungono via QR
+/// sulla LAN (http://<IP-Mac>:3002/...). Coerente con CLIENT_PORT lato server.
+const WEB_PORT: &str = "3002";
+
+/// Handle ai processi figli (API server + web cliente), terminati alla chiusura.
+struct ServerChild(Mutex<Vec<Child>>);
 
 fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
     let cmd_str = std::env::var("TAKO_SERVER_CMD").ok();
@@ -83,11 +87,54 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
     }
 }
 
+/// Avvia l'app CLIENTE (Next standalone) come 2º processo figlio sulla porta 3002,
+/// così i telefoni aprono il menu via QR sulla LAN. Solo in modalità BUNDLE: in dev
+/// (TAKO_SERVER_CMD impostato) il web si avvia a parte con `pnpm dev`.
+fn spawn_web(app: &tauri::AppHandle) -> Option<Child> {
+    if std::env::var("TAKO_SERVER_CMD").is_ok() {
+        return None;
+    }
+    let res = app.path().resource_dir().ok()?;
+    let web_root = res.join("resources").join("web");
+    let node_bin = res
+        .join("resources")
+        .join("server")
+        .join(if cfg!(windows) { "node.exe" } else { "node" });
+    let entry = web_root.join("apps").join("web").join("server.js");
+    if !entry.exists() {
+        log::error!("web cliente: server.js mancante ({:?})", entry);
+        return None;
+    }
+    let mut command = Command::new(node_bin);
+    command.arg(&entry).current_dir(&web_root);
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::CommandExt;
+        command.process_group(0);
+    }
+    command
+        .env("PORT", WEB_PORT)
+        .env("HOSTNAME", "0.0.0.0")
+        .env("NODE_ENV", "production")
+        .env("NEXT_PUBLIC_API_URL", format!("http://127.0.0.1:{TAKO_PORT}"));
+
+    match command.spawn() {
+        Ok(child) => {
+            log::info!("web cliente avviato (pid {}) su porta {}", child.id(), WEB_PORT);
+            Some(child)
+        }
+        Err(e) => {
+            log::error!("impossibile avviare il web cliente: {e}");
+            None
+        }
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_http::init())
-        .manage(ServerChild(Mutex::new(None)))
+        .manage(ServerChild(Mutex::new(Vec::new())))
         .setup(|app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(
@@ -96,36 +143,39 @@ pub fn run() {
                         .build(),
                 )?;
             }
-            let child = spawn_server(app.handle());
-            *app.state::<ServerChild>().0.lock().unwrap() = child;
+            let mut children: Vec<Child> = Vec::new();
+            if let Some(c) = spawn_server(app.handle()) {
+                children.push(c);
+            }
+            if let Some(c) = spawn_web(app.handle()) {
+                children.push(c);
+            }
+            *app.state::<ServerChild>().0.lock().unwrap() = children;
             Ok(())
         })
         .build(tauri::generate_context!())
         .expect("error while running tauri application");
 
     app.run(|app_handle, event| {
-        // Alla chiusura dell'app, termina con GRAZIA il gruppo del server: SIGTERM
-        // a node + Postgres così node può fermare Postgres pulito (no orfani).
-        // Su non-unix, kill diretto del figlio.
+        // Alla chiusura dell'app, termina con GRAZIA i gruppi dei figli: SIGTERM al
+        // gruppo del server (node + Postgres, spegnimento pulito) e a quello del web.
+        // Su non-unix, kill diretto.
         if let RunEvent::ExitRequested { .. } = event {
-            if let Some(mut child) = app_handle
-                .state::<ServerChild>()
-                .0
-                .lock()
-                .unwrap()
-                .take()
-            {
+            let children: Vec<Child> = std::mem::take(
+                &mut *app_handle.state::<ServerChild>().0.lock().unwrap(),
+            );
+            for mut child in children {
                 #[cfg(unix)]
                 {
                     let pid = child.id() as i32;
-                    // -pid = tutto il gruppo di processi (node + postgres)
+                    // -pid = tutto il gruppo di processi (es. node + postgres)
                     unsafe { libc::kill(-pid, libc::SIGTERM) };
                 }
                 #[cfg(not(unix))]
                 {
                     let _ = child.kill();
                 }
-                // breve attesa per lo spegnimento pulito di Postgres
+                // breve attesa per lo spegnimento pulito
                 let _ = child.wait();
             }
         }

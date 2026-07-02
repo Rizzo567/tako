@@ -30,6 +30,25 @@ async function dashboardSocket(): Promise<Socket> {
   return socket
 }
 
+// Connette un socket "cliente" col cookie JWT tavolo (tako_table) nell'handshake e
+// lo fa entrare nella room del proprio tavolo. `join:table` è vincolato al JWT
+// (scoped a tableId/restaurantId): senza cookie il join viene ignorato, quindi il
+// cookie va passato negli extraHeaders come per il socket dashboard.
+async function customerTableSocket(cookie: string): Promise<Socket> {
+  const socket = io(SERVER, {
+    transports: ['websocket'],
+    extraHeaders: { Cookie: cookie },
+  })
+  await new Promise<void>((res, rej) => {
+    socket.on('connect', () => res())
+    socket.on('connect_error', rej)
+    setTimeout(() => rej(new Error('customer connect timeout')), 5000)
+  })
+  socket.emit('join:table', env.tableId)
+  await new Promise(r => setTimeout(r, 400)) // lascia completare il join
+  return socket
+}
+
 async function placeOrder(cookie: string, opts: Partial<{ quantity: number; idem: string }> = {}) {
   return fetch(`${SERVER}/api/customer/orders`, {
     method: 'POST',
@@ -122,14 +141,11 @@ describe('Real-time cliente → dashboard', () => {
 
 describe('Real-time dashboard → cliente', () => {
   it('un cambio di stato in cucina arriva live al tavolo del cliente (order:updated)', async () => {
-    // 1) cliente entra nella room del tavolo
-    const customer = io(SERVER, { transports: ['websocket'] })
-    await new Promise<void>((res, rej) => { customer.on('connect', () => res()); setTimeout(() => rej(new Error('customer connect timeout')), 5000) })
-    customer.emit('join:table', env.tableId)
-    await new Promise(r => setTimeout(r, 400))
+    // 1) cliente entra nella room del tavolo (socket autenticato col cookie tavolo)
+    const cookie = await getTableCookie(env.qrToken)
+    const customer = await customerTableSocket(cookie)
     try {
       // 2) crea un ordine
-      const cookie = await getTableCookie(env.qrToken)
       const order = (await (await placeOrder(cookie)).json()).data
       // 3) lo staff cambia stato → il cliente deve riceverlo
       const evP = waitForEvent(customer, 'order:updated')
@@ -147,12 +163,9 @@ describe('Real-time dashboard → cliente', () => {
 
 describe('Real-time staff → dashboard (menu/cucina)', () => {
   it('lo stato di una singola portata avanza il tracking del cliente (order:updated al tavolo)', async () => {
-    const customer = io(SERVER, { transports: ['websocket'] })
-    await new Promise<void>((res, rej) => { customer.on('connect', () => res()); setTimeout(() => rej(new Error('connect timeout')), 5000) })
-    customer.emit('join:table', env.tableId)
-    await new Promise(r => setTimeout(r, 400))
+    const cookie = await getTableCookie(env.qrToken)
+    const customer = await customerTableSocket(cookie)
     try {
-      const cookie = await getTableCookie(env.qrToken)
       const order = (await (await placeOrder(cookie)).json()).data
       const itemId = order.items[0].id
       const evP = waitForEvent(customer, 'order:updated')
@@ -168,12 +181,9 @@ describe('Real-time staff → dashboard (menu/cucina)', () => {
   })
 
   it('l\'annullamento di un ordine arriva live al tavolo del cliente', async () => {
-    const customer = io(SERVER, { transports: ['websocket'] })
-    await new Promise<void>((res, rej) => { customer.on('connect', () => res()); setTimeout(() => rej(new Error('connect timeout')), 5000) })
-    customer.emit('join:table', env.tableId)
-    await new Promise(r => setTimeout(r, 400))
+    const cookie = await getTableCookie(env.qrToken)
+    const customer = await customerTableSocket(cookie)
     try {
-      const cookie = await getTableCookie(env.qrToken)
       const order = (await (await placeOrder(cookie)).json()).data
       const evP = waitForEvent(customer, 'order:updated')
       const res = await fetch(`${SERVER}/api/orders/${order.id}/cancel`, {

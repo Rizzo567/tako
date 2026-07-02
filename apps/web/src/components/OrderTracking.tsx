@@ -48,8 +48,17 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
         }
       }
     }
+    // Ad ogni (ri)connessione del socket rifetcha lo stato reale: un telefono
+    // risvegliato/riconnesso può aver perso emit 'order:updated' mentre dormiva.
+    const onReconnect = () => {
+      if (!orderId) return
+      api.get(`/customer/orders/${orderId}`)
+        .then(r => setOrder(r.data.data))
+        .catch(() => {})
+    }
     socket.on('order:updated', onUpdated)
-    return () => { socket.off('order:updated', onUpdated) }
+    socket.on('connect', onReconnect)
+    return () => { socket.off('order:updated', onUpdated); socket.off('connect', onReconnect) }
   }, [tableId, orderId])
 
   useEffect(() => {
@@ -58,7 +67,11 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
     }
   }, [])
 
-  const stepIdx = STEPS.findIndex(s => s.key === order?.status)
+  const isCancelled = order?.status === 'cancelled'
+  // 'paid' è uno stato finale positivo non presente in STEPS: mappalo all'ultimo
+  // step ('served') così lo stepper risulta completo invece di ripartire da 0.
+  const effectiveStatus = order?.status === 'paid' ? 'served' : order?.status
+  const stepIdx = STEPS.findIndex(s => s.key === effectiveStatus)
   const currentIdx = stepIdx < 0 ? 0 : stepIdx
 
   if (loading) return (
@@ -73,6 +86,27 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
       <p className="font-serif text-2xl text-[var(--text-primary)]">{error ? 'Errore di caricamento' : 'Nessun ordine attivo'}</p>
       <p className="text-sm font-medium text-[var(--text-secondary)]">{error ? 'Non riesco a recuperare l\'ordine. Riprova.' : 'Quando ordini, qui vedrai lo stato in tempo reale.'}</p>
       <button onClick={onOrderAgain} className="btn-coral mt-2 px-6 py-2.5 text-sm">Vai al menu</button>
+    </div>
+  )
+
+  // Ordine annullato: stato terminale negativo, esplicito e senza stepper.
+  if (isCancelled) return (
+    <div className="min-h-[100dvh] bg-[var(--surface-base)]">
+      <div className="sticky top-0 z-40 flex items-center gap-3 border-b border-[var(--border-subtle)] bg-[var(--surface-raised)]/90 px-4 py-3 backdrop-blur-xl">
+        <button onClick={onBack} aria-label="Indietro" className="grid h-9 w-9 place-items-center rounded-full border border-[var(--border-default)] text-[var(--text-primary)] active:scale-95"><ArrowLeft size={18} strokeWidth={2.4} /></button>
+        <h1 className="font-serif text-xl text-[var(--text-primary)]">Il tuo ordine</h1>
+      </div>
+      <div className="p-4">
+        <div
+          className="p-6 text-center"
+          style={{ borderRadius: 'var(--r-card)', background: 'color-mix(in srgb, var(--status-danger) 8%, var(--surface-raised))', border: '1px solid color-mix(in srgb, var(--status-danger) 30%, transparent)', boxShadow: 'var(--elev-1)' }}
+        >
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--status-danger)' }}>Stato ordine</p>
+          <p className="font-serif text-3xl" style={{ color: 'var(--status-danger)' }}>Annullato</p>
+          <p className="mt-2 text-sm font-medium text-[var(--text-secondary)]">Ordine annullato — chiedi allo staff per assistenza.</p>
+          <button onClick={onOrderAgain} className="btn-coral mt-5 px-6 py-2.5 text-sm">Vai al menu</button>
+        </div>
+      </div>
     </div>
   )
 

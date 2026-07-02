@@ -1,10 +1,10 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, bills, billPayments, orders, tables } from '@tako/db'
-import { eq, and, inArray, gte, desc } from 'drizzle-orm'
-import { requireAuth } from '../middleware/auth.js'
+import { eq, and, inArray, gte, desc, sql } from 'drizzle-orm'
+import { requireAuth, requireRole } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { round2, BILLABLE_STATUSES } from '../lib/billing.js'
+import { round2, BILLABLE_STATUSES, coverUnit, restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
 
 export async function billRoutes(fastify: FastifyInstance) {
   // Get open bills
@@ -18,81 +18,113 @@ export async function billRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       tableId: z.string().uuid().optional(),
       tableNumber: z.string().optional(),
-      covers: z.number().int().min(1).default(1),
+      covers: z.number().int().min(1).optional(),   // default = posti del tavolo
       discount: z.number().min(0).default(0),       // niente sconti negativi
       discountNote: z.string().max(500).optional(),
       tip: z.number().min(0).default(0),            // niente mance negative
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    const restaurantId = req.user!.restaurantId
 
     // Se arriva solo il NUMERO del tavolo (es. "Nuovo conto" dalla cassa), risolvi
     // il tableId reale: senza di esso il subtotale resterebbe a 0.
     if (!body.data.tableId && body.data.tableNumber) {
       const [t] = await db.select({ id: tables.id }).from(tables)
-        .where(and(eq(tables.restaurantId, req.user!.restaurantId), eq(tables.number, body.data.tableNumber))).limit(1)
+        .where(and(eq(tables.restaurantId, restaurantId), eq(tables.number, body.data.tableNumber))).limit(1)
       if (!t) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
       body.data.tableId = t.id
     }
 
-    // Calculate subtotal from billable orders on this table
-    let subtotal = 0
-    if (body.data.tableId) {
+    const tableId = body.data.tableId
+    if (tableId) {
       // Anti cross-tenant: il tavolo deve appartenere al ristorante dell'utente.
-      const [table] = await db.select({ id: tables.id }).from(tables)
-        .where(and(eq(tables.id, body.data.tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
-      if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+      const [table] = await db.select({ id: tables.id, seats: tables.seats }).from(tables)
+        .where(and(eq(tables.id, tableId), eq(tables.restaurantId, restaurantId))).limit(1)
+      if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
-      // Idempotenza: se esiste già un conto aperto per il tavolo, ritornalo
-      // invece di crearne un secondo (evita conti fantasma sullo stesso tavolo).
-      const [existing] = await db.select().from(bills).where(and(
-        eq(bills.restaurantId, req.user!.restaurantId), eq(bills.tableId, body.data.tableId), eq(bills.status, 'open'),
-      )).limit(1)
-      if (existing) return reply.code(200).send({ data: existing })
+      const unit = await coverUnit(restaurantId)
+      // Advisory lock per (ristorante,tavolo) — STESSA chiave di ensureOpenBill: così
+      // POST /bills e l'auto-apertura da ordine non possono creare due conti aperti sullo
+      // stesso tavolo. Check(oldest)+insert serializzati.
+      const result = await db.transaction(async (tx) => {
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${restaurantId + ':' + tableId}))`)
+        const [existing] = await tx.select().from(bills).where(and(
+          eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open'),
+        )).orderBy(bills.createdAt).limit(1)
+        if (existing) return { bill: existing, created: false }
 
-      const tableOrders = await db.select({ total: orders.total }).from(orders).where(and(
-        eq(orders.tableId, body.data.tableId),
-        eq(orders.restaurantId, req.user!.restaurantId),
-        inArray(orders.status, [...BILLABLE_STATUSES]),
-      ))
-      subtotal = round2(tableOrders.reduce((sum, o) => sum + o.total, 0))
+        const tableOrders = await tx.select({ total: orders.total }).from(orders).where(and(
+          eq(orders.tableId, tableId),
+          eq(orders.restaurantId, restaurantId),
+          inArray(orders.status, [...BILLABLE_STATUSES]),
+        ))
+        const subtotal = round2(tableOrders.reduce((sum, o) => sum + o.total, 0))
+        const covers = body.data.covers ?? table.seats ?? 1
+        const discount = Math.min(body.data.discount ?? 0, subtotal)
+        const coverCharge = round2(covers * unit)
+        const total = round2(subtotal - discount + (body.data.tip ?? 0) + coverCharge)
+        const [created] = await tx.insert(bills).values({
+          restaurantId, tableId, tableNumber: body.data.tableNumber,
+          covers, discount, discountNote: body.data.discountNote, tip: body.data.tip ?? 0, subtotal, total,
+        }).returning()
+        return { bill: created!, created: true }
+      })
+      return reply.code(result.created ? 201 : 200).send({ data: result.bill })
     }
 
-    // Lo sconto non può superare il subtotale (totale mai negativo).
-    const discount = Math.min(body.data.discount ?? 0, subtotal)
-    const total = round2(subtotal - discount + (body.data.tip ?? 0))
-
+    // Nessun tavolo (conto libero): niente lock, subtotale 0.
+    const discount = Math.min(body.data.discount ?? 0, 0)
+    const total = round2(0 - discount + (body.data.tip ?? 0))
     const [bill] = await db.insert(bills).values({
-      restaurantId: req.user!.restaurantId,
-      ...body.data,
-      discount,
-      subtotal,
-      total,
+      restaurantId,
+      tableNumber: body.data.tableNumber,
+      covers: body.data.covers ?? 1,
+      discount, discountNote: body.data.discountNote, tip: body.data.tip ?? 0,
+      subtotal: 0, total,
     }).returning()
 
     return reply.code(201).send({ data: bill })
   })
 
-  // Aggiorna sconto / mancia di un conto aperto (ricalcola il totale)
-  fastify.patch('/:billId', { preHandler: requireAuth }, async (req, reply) => {
+  // Aggiorna sconto / mancia di un conto aperto (ricalcola il totale).
+  // requireRole('owner','cassiere'): lo sconto-a-zero (total=0) è il vero vettore di
+  // frode — un dipendente/chef non deve poter azzerare un conto. La presa pagamenti
+  // (POST /:billId/payments) resta requireAuth per non bloccare i camerieri.
+  fastify.patch('/:billId', { preHandler: requireRole('owner', 'cassiere') }, async (req, reply) => {
     const { billId } = req.params as { billId: string }
     const schema = z.object({
       discount: z.number().min(0).optional(),
       discountNote: z.string().max(500).optional(),
       tip: z.number().min(0).optional(),
+      covers: z.number().int().min(1).optional(),   // coperti reali → coperto nel totale
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     const [bill] = await db.select().from(bills)
       .where(and(eq(bills.id, billId), eq(bills.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Bill not found' } })
+    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Conto non trovato' } })
 
-    const discount = Math.min(body.data.discount ?? bill.discount ?? 0, bill.subtotal)
+    // Tetto sconto server-side: il cassiere è limitato al 30% del subtotale, sconti
+    // oltre soglia restano prerogativa dell'owner. Lo sconto esistente non viene
+    // ri-clampato se questa PATCH non lo modifica (es. aggiorna solo la mancia).
+    const MAX_DISCOUNT_PCT = 0.30
+    let discount = bill.discount ?? 0
+    if (body.data.discount !== undefined) {
+      const cap = req.user!.role === 'owner' ? bill.subtotal : round2(bill.subtotal * MAX_DISCOUNT_PCT)
+      discount = Math.min(body.data.discount, cap)
+    }
+    discount = Math.min(discount, bill.subtotal) // total mai negativo
     const tip = body.data.tip ?? bill.tip ?? 0
-    const total = round2(bill.subtotal - discount + tip)
+    const covers = body.data.covers ?? bill.covers ?? 1
+    // Coperto = coperti × unitario (impostazioni). Nessuna colonna dedicata: solo nel totale.
+    const coverCharge = round2(covers * (await coverUnit(req.user!.restaurantId)))
+    const total = round2(bill.subtotal - discount + tip + coverCharge)
+    // Audit: tracciabilità di chi modifica sconti sui conti.
+    req.log.info({ userId: req.user!.id, billId, discount }, 'bill.discount')
     const [updated] = await db.update(bills)
-      .set({ discount, tip, discountNote: body.data.discountNote ?? bill.discountNote, total })
+      .set({ discount, tip, covers, discountNote: body.data.discountNote ?? bill.discountNote, total })
       .where(eq(bills.id, billId)).returning()
 
     return { data: updated }
@@ -104,68 +136,111 @@ export async function billRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       amount: z.number().positive(),
       method: z.enum(['cash', 'card', 'digital', 'split']),
+      // M3: il cameriere (requireAuth su questa route) non può usare PATCH /bills/:id
+      // (owner/cassiere). Permettergli la mancia QUI evita che il pagamento abortisca.
+      tip: z.number().min(0).optional(),
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     // Verify bill belongs to this restaurant before accepting payment
     const [bill] = await db.select().from(bills).where(and(eq(bills.id, billId), eq(bills.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Bill not found' } })
+    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Conto non trovato' } })
     // Non accettare pagamenti su un conto già chiuso/annullato: ri-processarlo
-    // ri-eseguirebbe la chiusura (tavolo→cleaning, ordini→served) e gonfierebbe i pagamenti.
+    // ri-eseguirebbe la chiusura (tavolo→cleaning, ordini→paid) e gonfierebbe i pagamenti.
     if (bill.status !== 'open') return reply.code(409).send({ error: { code: 'BILL_NOT_OPEN', message: 'Il conto non è aperto.' } })
 
-    const [payment] = await db.insert(billPayments).values({ billId, ...body.data, status: 'completed' }).returning()
+    // Transazione + advisory lock per-conto: serializza ri-check stato + insert
+    // pagamento + ricalcolo + chiusura/cascade, eliminando la TOCTOU di doppia
+    // chiusura / doppio pagamento (coerente con ensureOpenBill).
+    const { tip: tipInput, ...paymentData } = body.data
+    const result = await db.transaction(async (tx) => {
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${billId}))`)
 
-    // Check if bill is fully paid (confronto a centesimi: niente derive float)
-    const allPayments = await db.select().from(billPayments).where(eq(billPayments.billId, billId))
-    const paidTotal = round2(allPayments.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0))
+      // Ri-leggi lo stato DENTRO il lock: un'altra richiesta potrebbe aver appena chiuso il conto.
+      const [locked] = await tx.select().from(bills).where(eq(bills.id, billId)).limit(1)
+      if (!locked || locked.status !== 'open') return { conflict: true as const }
 
-    if (paidTotal >= round2(bill.total)) {
-      await db.update(bills).set({ status: 'closed', closedAt: new Date(), closedBy: req.user!.id }).where(eq(bills.id, billId))
-      // Free the table
-      if (bill.tableId) {
-        await db.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, bill.tableId))
-        io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: bill.tableId, status: 'cleaning' })
+      // M3: mancia passata col pagamento (il cameriere non può usare PATCH /bills).
+      // Sostituisce la mancia esistente e aggiorna il totale su cui si valuta la chiusura.
+      let effectiveTotal = round2(locked.total)
+      if (tipInput !== undefined) {
+        effectiveTotal = round2(locked.total - (locked.tip ?? 0) + tipInput)
+        await tx.update(bills).set({ tip: tipInput, total: effectiveTotal }).where(eq(bills.id, billId))
       }
-      // Auto-cascade: tutti gli ordini attivi del tavolo → served
-      if (bill.tableId) {
-        const activeOrders = await db
-          .select({ id: orders.id })
-          .from(orders)
-          .where(and(
-            eq(orders.tableId, bill.tableId),
-            inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready'])
-          ))
 
-        if (activeOrders.length > 0) {
-          const servedAt = new Date()
-          for (const order of activeOrders) {
-            await db.update(orders)
-              .set({ status: 'served', servedAt })
-              .where(eq(orders.id, order.id))
-            io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId: order.id, status: 'served' })
-            if (bill.tableId) io.to(`table:${bill.tableId}`).emit('order:updated', { orderId: order.id, status: 'served' })
+      const [payment] = await tx.insert(billPayments).values({ billId, ...paymentData, status: 'completed' }).returning()
+
+      // Check if bill is fully paid (confronto a centesimi: niente derive float)
+      const allPayments = await tx.select().from(billPayments).where(eq(billPayments.billId, billId))
+      const paidTotal = round2(allPayments.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0))
+
+      let closedTableId: string | null = null
+      const paidOrderIds: string[] = []
+      if (paidTotal >= effectiveTotal) {
+        await tx.update(bills).set({ status: 'closed', closedAt: new Date(), closedBy: req.user!.id }).where(eq(bills.id, billId))
+        if (locked.tableId) {
+          // Chiusura conto: tavolo → pulizia, visita chiusa (openedAt reset).
+          // NB: NON ruotiamo qui il qrToken — è il token stampato/plastificato sul
+          // tavolo (customer route risolve GET /table/:token via tables.qrToken), e
+          // rigenerarlo a ogni chiusura renderebbe morto il QR fisico. La revoca dei
+          // JWT del cliente uscito va fatta per-visita (vedi TODO M6 sotto), non
+          // ruotando il token permanente. La rotazione manuale resta su /qr/refresh.
+          // TODO(M6): revocare i JWT tavolo legandoli alla visita (sessionId/epoch)
+          // invece che al qrToken permanente, senza toccare il token stampato.
+          await tx.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, locked.tableId))
+          closedTableId = locked.tableId
+          // Auto-cascade: TUTTI gli ordini fatturabili del tavolo (incl. 'served') → paid.
+          // Marcarli 'paid' li esclude da BILLABLE_STATUSES, così non vengono ri-sommati
+          // nel conto del prossimo cliente dello stesso tavolo (ri-fatturazione di cibo già pagato).
+          const activeOrders = await tx
+            .select({ id: orders.id })
+            .from(orders)
+            .where(and(
+              eq(orders.tableId, locked.tableId),
+              inArray(orders.status, [...BILLABLE_STATUSES]),
+            ))
+          if (activeOrders.length > 0) {
+            const paidAt = new Date()
+            for (const order of activeOrders) {
+              await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, order.id))
+              paidOrderIds.push(order.id)
+            }
           }
         }
       }
+      return { conflict: false as const, payment, closedTableId, paidOrderIds }
+    })
+
+    if (result.conflict) return reply.code(409).send({ error: { code: 'BILL_NOT_OPEN', message: 'Il conto non è aperto.' } })
+
+    // Emit DOPO il commit (stato consistente per i client).
+    if (result.closedTableId) {
+      io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: result.closedTableId, status: 'cleaning' })
+      for (const orderId of result.paidOrderIds) {
+        io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'paid' })
+        io.to(`table:${result.closedTableId}`).emit('order:updated', { orderId, status: 'paid' })
+      }
     }
 
-    return reply.code(201).send({ data: payment })
+    return reply.code(201).send({ data: result.payment })
   })
 
   // Get bill with payments
   fastify.get('/:billId', { preHandler: requireAuth }, async (req, reply) => {
     const { billId } = req.params as { billId: string }
     const [bill] = await db.select().from(bills).where(and(eq(bills.id, billId), eq(bills.restaurantId, req.user!.restaurantId))).limit(1)
-    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Bill not found' } })
+    if (!bill) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Conto non trovato' } })
     const payments = await db.select().from(billPayments).where(eq(billPayments.billId, billId))
     return { data: { ...bill, payments } }
   })
 
   // Today summary
   fastify.get('/summary/today', { preHandler: requireAuth }, async (req) => {
-    const start = new Date(); start.setHours(0, 0, 0, 0)
+    // "Oggi" nel fuso del ristorante (setting timezone, default Europe/Rome): allineato
+    // a stats.ts così le due viste non divergono sul confine di mezzanotte.
+    const tz = await restaurantTimezone(req.user!.restaurantId)
+    const start = dayStartInTz(dayKeyInTz(new Date(), tz), tz)
     const closed = await db.select().from(bills).where(and(eq(bills.restaurantId, req.user!.restaurantId), eq(bills.status, 'closed'), gte(bills.closedAt!, start)))
     const revenue = closed.reduce((s, b) => s + b.total, 0)
     const tips = closed.reduce((s, b) => s + (b.tip ?? 0), 0)

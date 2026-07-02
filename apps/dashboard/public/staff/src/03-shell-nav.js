@@ -288,7 +288,7 @@ function MobileHeader({ route, openDrawer, live, role, badges, nome, dark, go })
           <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 21, lineHeight: 1.05, color: fg, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{intro.title}</div>
         </div>
         {route === "cassa" && (
-          <button className="press" onClick={async () => { const n = window.prompt('Numero tavolo per il nuovo conto?'); if(!n) return; try { await window.TakoActions.billCreate({ tableNumber: String(n).trim(), covers: 2 }); toast('Conto creato', {type:'success'}); await window.takoReload(); } catch(e){ toast(e.message, {type:'error'}); } }} style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 6, height: 40, padding: "0 14px", borderRadius: 12, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 700, fontSize: 13.5, fontFamily: "var(--f-ui)", boxShadow: "0 6px 16px -6px var(--brand)" }}>
+          <button className="press" onClick={() => { if (window.__openNewBill) window.__openNewBill(); else window.takoGo && window.takoGo('cassa'); }} style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 6, height: 40, padding: "0 14px", borderRadius: 12, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 700, fontSize: 13.5, fontFamily: "var(--f-ui)", boxShadow: "0 6px 16px -6px var(--brand)" }}>
             <Icon name="plus" size={17} />Nuovo conto
           </button>
         )}

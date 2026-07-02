@@ -43,7 +43,10 @@ export const orderItems = pgTable('order_items', {
     enum: ['pending', 'preparing', 'ready', 'served'],
   }).default('pending').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-})
+}, (t) => ({
+  // JOIN order_items↔orders (insights /menu): senza indice era un seq scan.
+  orderIdIdx: index('order_items_order_id_idx').on(t.orderId),
+}))
 
 export const orderStatusHistory = pgTable('order_status_history', {
   id: uuid('id').primaryKey().defaultRandom(),

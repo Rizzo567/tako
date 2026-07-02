@@ -12,18 +12,43 @@ const GLASS = {
 
 /* ═══════════════════ SALA LIVE ═══════════════════ */
 function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
-  const [roomId, setRoomId] = useState(rooms[0].id);
+  // Guardia array vuoto: niente rooms[0].id su lista vuota. I hook restano SEMPRE
+  // chiamati (nessun return anticipato prima degli hook): l'empty-state esce dopo.
+  const [roomId, setRoomId] = useState(() => (rooms[0] ? rooms[0].id : null));
   const [sel, setSel] = useState(null);
   const [pos, setPos] = useState(() => { try { return JSON.parse(localStorage.getItem("tako-dash-tablepos") || "{}"); } catch (_) { return {}; } });
   const posRef = useRef(pos); posRef.current = pos;
+  const pending = useRef({}); // posizioni in attesa di conferma dal server dopo un drag locale
   const mapRef = useRef(null);
   const drag = useRef(null);
-  const room = rooms.find(r => r.id === roomId);
+  // se la sala selezionata sparisce o non è ancora impostata, riallinea alla prima disponibile
+  useEffect(() => { if (rooms.length && (roomId == null || !rooms.some(r => r.id === roomId))) setRoomId(rooms[0].id); }, [rooms]);
+  const room = rooms.find(r => r.id === roomId) || rooms[0];
   const counts = useMemo(() => {
     const all = rooms.flatMap(r => r.tables);
     return { occ: all.filter(t => t.stato === "occupato").length, free: all.filter(t => t.stato === "libero").length, tot: all.length };
   }, [rooms]);
-  const xy = (t) => pos[roomId]?.[t.n] || { x: t.x, y: t.y };
+  // Le posizioni del SERVER vincono sul localStorage (sync cross-dispositivo). Durante un
+  // drag attivo, o finché il server non conferma l'ultimo spostamento locale, usa il locale.
+  const xy = (t) => {
+    const local = pos[roomId] && pos[roomId][t.n];
+    if (drag.current && drag.current.n === t.n && local) return local;
+    const pend = pending.current[roomId] && pending.current[roomId][t.n];
+    if (pend && !(t._hasPos && Math.abs(t.x - pend.x) <= 1 && Math.abs(t.y - pend.y) <= 1)) return pend;
+    if (t._hasPos) return { x: t.x, y: t.y };
+    return local || { x: t.x != null ? t.x : 10, y: t.y != null ? t.y : 10 };
+  };
+
+  if (!rooms || rooms.length === 0) {
+    return (
+      <ScreenScroll mobile={mobile}>
+        <PageHead mobile={mobile} tako="serve" title="Sala Live" />
+        <Empty tako="neutral" title="Nessuna sala ancora — creane una per iniziare"
+          sub="Aggiungi una sala e i suoi tavoli per gestire la pianta del locale."
+          action={<Btn kind="brand" icon="plus" onClick={() => window.takoGo && window.takoGo("tavoli")}>Crea una sala</Btn>} />
+      </ScreenScroll>
+    );
+  }
 
   const onDown = (e, t) => {
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -49,6 +74,9 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
       if (p) {
         const posX = Math.max(0, Math.min(100, Math.round(p.x)));
         const posY = Math.max(0, Math.min(100, Math.round(p.y)));
+        // segna la posizione come "in attesa": evita il flicker al vecchio valore server
+        // nell'attimo tra il rilascio e l'arrivo dell'evento table:updated.
+        pending.current[roomId] = { ...(pending.current[roomId] || {}), [d.n]: { x: posX, y: posY } };
         try { await window.TakoActions.tableUpdate(d.t._id, { posX, posY }); }
         catch (err) { toast(err.message, { type: "error" }); }
       }
@@ -148,12 +176,57 @@ function TableDrawer({ table, mobile, onClose, onSetState }) {
 }
 
 /* ═══════════════════ CASSA ═══════════════════ */
+/* Modale "Nuovo conto" — sostituisce window.prompt (non funziona in WKWebView/Tauri). */
+function NewBillModal({ open, onClose }) {
+  const [numero, setNumero] = useState("");
+  const [coperti, setCoperti] = useState(2);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => { if (open) { setNumero(""); setCoperti(2); } }, [open]);
+  const save = async () => {
+    if (saving) return;
+    if (!String(numero).trim()) { toast("Inserisci un numero tavolo", { type: "error" }); return; }
+    setSaving(true);
+    try {
+      await window.TakoActions.billCreate({ tableNumber: String(numero).trim(), covers: Number(coperti) || 1 });
+      toast("Conto creato", { type: "success" });
+      onClose();
+      await window.takoReload();
+    } catch (e) { toast(e.message, { type: "error" }); }
+    finally { setSaving(false); }
+  };
+  return (
+    <Overlay open={open} onClose={onClose} anchor="center">
+      <div style={{ width: 360, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 13, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="cassa" size={22} /></div>
+          <h3 style={{ fontSize: 19, flex: 1 }}>Nuovo conto</h3>
+          <IconBtn name="x" tone="soft" onClick={onClose} />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={FIELD_LABEL}>Numero tavolo</label>
+          <input type="text" value={numero} autoFocus onChange={(e) => setNumero(e.target.value)} style={INPUT_STYLE} placeholder="Es. 12" />
+        </div>
+        <div style={{ marginBottom: 22 }}>
+          <label style={FIELD_LABEL}>Coperti</label>
+          <input type="number" min="1" value={coperti} onChange={(e) => setCoperti(e.target.value)} style={INPUT_STYLE} />
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <Btn kind="soft" full onClick={onClose}>Annulla</Btn>
+          <Btn kind="brand" full icon="check" onClick={save}>{saving ? "Creo…" : "Crea conto"}</Btn>
+        </div>
+      </div>
+    </Overlay>
+  );
+}
 function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
   const [pay, setPay] = useState(null);
+  const [newOpen, setNewOpen] = useState(false);
+  // Ponte per il pulsante "Nuovo conto" nell'header desktop (03-shell-nav): apre questa modale.
+  useEffect(() => { window.__openNewBill = () => setNewOpen(true); return () => { delete window.__openNewBill; }; }, []);
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="pay" title="Cassa" sub={`${bills.length} conti aperti`}
-        actions={!mobile && <Btn kind="brand" icon="plus" onClick={async () => { const n = window.prompt('Numero tavolo per il nuovo conto?'); if(!n) return; try { await window.TakoActions.billCreate({ tableNumber: String(n).trim(), covers: 2 }); toast('Conto creato', {type:'success'}); await window.takoReload(); } catch(e){ toast(e.message, {type:'error'}); } }}>Nuovo conto</Btn>} />
+        actions={!mobile && <Btn kind="brand" icon="plus" onClick={() => setNewOpen(true)}>Nuovo conto</Btn>} />
 
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr 1fr" : "repeat(4,1fr)", gap: mobile ? 12 : 16, marginBottom: 18 }}>
         <Kpi label="Incasso oggi" value={euro(CASSA_OGGI.incasso)} icon="coins" accent="var(--brand)" />
@@ -171,7 +244,7 @@ function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
               <div style={{ flex: 1 }}><div style={{ fontWeight: 800, fontFamily: "var(--f-display)", fontSize: 16 }}>Tavolo {b.tavolo}</div><div style={{ fontSize: 12, color: "var(--ink-3)" }} className="mono">{b.id} · {b.coperti} coperti · {b.apertura}</div></div>
             </div>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
-              <div><div style={{ fontSize: 12, color: "var(--ink-2)" }}>Totale</div><div className="num" style={{ fontSize: 26 }}>{euro(b.subtotale)}</div></div>
+              <div><div style={{ fontSize: 12, color: "var(--ink-2)" }}>Totale</div><div className="num" style={{ fontSize: 26 }}>{euro(b.total != null ? b.total : b.subtotale)}</div></div>
               <Btn size="sm" kind="brand" icon="banknote">Incassa</Btn>
             </div>
           </Card>
@@ -179,8 +252,9 @@ function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
       </div>
 
       <Overlay open={!!pay} onClose={() => setPay(null)} anchor="center">
-        {pay && <PaymentModal bill={pay} mobile={mobile} settings={settings} onClose={() => setPay(null)} onDone={() => { setPay(null); onClose(pay.id); toast(`Conto T${pay.tavolo} chiuso`, { type: "success", icon: "check" }); if (settings.stampaAuto) setTimeout(() => toast("Scontrino stampato", { icon: "printer" }), 400); }} />}
+        {pay && <PaymentModal bill={pay} mobile={mobile} settings={settings} onClose={() => setPay(null)} onDone={() => { setPay(null); onClose(pay.id); toast(`Conto T${pay.tavolo} chiuso`, { type: "success", icon: "check" }); }} />}
       </Overlay>
+      <NewBillModal open={newOpen} onClose={() => setNewOpen(false)} />
     </ScreenScroll>
   );
 }
@@ -189,20 +263,38 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
   const [split, setSplit] = useState(1);
   const [given, setGiven] = useState("");
   const [tip, setTip] = useState(0);
-  const cop = settings.copertoOn ? settings.coperto * bill.coperti : 0;
-  const total = bill.subtotale + cop + tip;
+  // Il totale del server include GIÀ il coperto (coverCharge calcolato server-side):
+  // la UI NON somma più il coperto client-side. `srvTotal` = bill.total del server.
+  const [srvTotal, setSrvTotal] = useState(bill.total != null ? bill.total : (bill.subtotale || 0));
+  const [coperti, setCoperti] = useState(bill.coperti || 0);
+  const [covBusy, setCovBusy] = useState(false);
+  // Coperto mostrato = differenza tra totale server e subtotale (verità server, non ricalcolo).
+  const cop = Math.max(0, Math.round((srvTotal - bill.subtotale) * 100) / 100);
+  const total = srvTotal + tip;
   const perHead = total / split;
   const change = method === "contanti" && given ? Math.max(0, parseFloat(given) - total) : 0;
   const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "⌫"];
   const METHOD_MAP = { contanti: "cash", carta: "card", digitale: "digital", split: "split" };
+  // Cambio coperti → PATCH /bills/:id {covers}, poi rilegge il bill per il nuovo totale server.
+  const changeCovers = async (n) => {
+    const v = Math.max(1, Math.round(n)); // il backend richiede covers >= 1
+    if (v === coperti || covBusy) return;
+    setCoperti(v);
+    setCovBusy(true);
+    try {
+      await window.TakoActions.billUpdate(bill.id, { covers: v });
+      const fresh = await window.TakoAPI.get("/bills/" + bill.id);
+      if (fresh && fresh.total != null) setSrvTotal(Number(fresh.total) || 0);
+    } catch (e) { toast(e.message, { type: "error" }); }
+    finally { setCovBusy(false); }
+  };
   const confirmPay = async () => {
     const METHOD_BACKEND = METHOD_MAP[method] || "cash";
     try {
-      if ((tip || 0) > 0) await window.TakoActions.billUpdate(bill.id, { tip });
-      await window.TakoActions.billPay(bill.id, total, METHOD_BACKEND);
-      toast("Conto chiuso", { type: "success" });
+      // La mancia viaggia dentro il POST /payments (niente PATCH separato → niente 403 cameriere).
+      await window.TakoActions.billPay(bill.id, total, METHOD_BACKEND, tip || 0);
       await window.takoReload();
-      onClose();
+      if (onDone) onDone(); else onClose();
     } catch (e) {
       toast(e.message, { type: "error" });
     }
@@ -217,13 +309,27 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
           {mobile && <IconBtn name="x" tone="ghost" style={{ color: "#fff" }} onClick={onClose} />}
         </div>
         <div style={{ margin: mobile ? "14px 0 8px" : "22px 0 10px" }}>
-          {(cop > 0 || tip > 0) && (
-            <div style={{ paddingBottom: 10, marginBottom: 6, borderBottom: "1px solid var(--nav-line)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "var(--nav-ink-2)", marginBottom: 5 }}><span>Subtotale</span><span>{euro(bill.subtotale)}</span></div>
-              {cop > 0 && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "var(--nav-ink-2)", marginBottom: 5 }}><span>Coperto · {bill.coperti}×{euro(settings.coperto)}</span><span>{euro(cop)}</span></div>}
-              {tip > 0 && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "var(--nav-ink-2)" }}><span>Mancia</span><span>{euro(tip)}</span></div>}
+          <div style={{ paddingBottom: 10, marginBottom: 6, borderBottom: "1px solid var(--nav-line)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "var(--nav-ink-2)", marginBottom: 5 }}><span>Subtotale</span><span>{euro(bill.subtotale)}</span></div>
+            {/* Coperti: il cambio fa PATCH /bills {covers} (owner/cassiere). Il cameriere
+                ha accesso alla Cassa ma non al PATCH → per lui è read-only (niente 403). */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12.5, color: "var(--nav-ink-2)", marginBottom: 5 }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                Coperti
+                {(window.__takoRole === "owner" || window.__takoRole === "cassiere") ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                    <button className="press" onClick={() => changeCovers(coperti - 1)} disabled={covBusy || coperti <= 1} style={{ width: 22, height: 22, borderRadius: 7, background: "rgba(255,255,255,.12)", color: "#fff", fontWeight: 800, lineHeight: 1 }}>−</button>
+                    <span className="num" style={{ minWidth: 16, textAlign: "center", color: "#fff" }}>{coperti}</span>
+                    <button className="press" onClick={() => changeCovers(coperti + 1)} disabled={covBusy} style={{ width: 22, height: 22, borderRadius: 7, background: "rgba(255,255,255,.12)", color: "#fff", fontWeight: 800, lineHeight: 1 }}>+</button>
+                  </span>
+                ) : (
+                  <span className="num" style={{ minWidth: 16, textAlign: "center", color: "#fff" }}>{coperti}</span>
+                )}
+              </span>
+              <span>{cop > 0 ? euro(cop) : "—"}</span>
             </div>
-          )}
+            {tip > 0 && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "var(--nav-ink-2)" }}><span>Mancia</span><span>{euro(tip)}</span></div>}
+          </div>
           <div style={{ fontSize: 12.5, color: "var(--nav-ink-2)" }}>Totale da pagare</div>
         </div>
         <div className="num" style={{ fontSize: mobile ? 34 : 46, color: "#fff", lineHeight: 1 }}>{euro(total)}</div>
@@ -231,7 +337,7 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
           <div style={{ marginTop: mobile ? 12 : 18 }}>
             <div style={{ fontSize: 12.5, color: "var(--nav-ink-2)", marginBottom: 8 }}>Mancia suggerita</div>
             <div style={{ display: "flex", gap: 7 }}>
-              {[0, 5, 10, 15].map(p => { const amt = Math.round((bill.subtotale + cop) * p) / 100; const on = tip === amt; return <button key={p} className="press" onClick={() => setTip(amt)} style={{ flex: 1, padding: "8px 0", borderRadius: 10, fontWeight: 700, fontSize: 13, background: on ? "var(--brand)" : "rgba(255,255,255,.1)", color: on ? "var(--on-brand)" : "#EDE2D6" }}>{p ? p + "%" : "No"}</button>; })}
+              {[0, 5, 10, 15].map(p => { const amt = Math.round(srvTotal * p) / 100; const on = tip === amt; return <button key={p} className="press" onClick={() => setTip(amt)} style={{ flex: 1, padding: "8px 0", borderRadius: 10, fontWeight: 700, fontSize: 13, background: on ? "var(--brand)" : "rgba(255,255,255,.1)", color: on ? "var(--on-brand)" : "#EDE2D6" }}>{p ? p + "%" : "No"}</button>; })}
             </div>
           </div>
         )}
@@ -240,7 +346,7 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
           <div style={{ display: "flex", alignItems: "center", gap: mobile ? 8 : 10, flex: 1 }}>
             <IconBtn name="minus" tone="ghost" size={mobile ? 32 : 36} style={{ background: "rgba(255,255,255,.1)", color: "#fff" }} onClick={() => setSplit(s => Math.max(1, s - 1))} />
             <div style={{ flex: 1, textAlign: "center" }}><div className="num" style={{ fontSize: mobile ? 18 : 22, color: "var(--brand)" }}>{euro(perHead)}</div><div style={{ fontSize: 11, color: "var(--nav-ink-2)" }}>{split}× a testa</div></div>
-            <IconBtn name="plus" tone="ghost" size={mobile ? 32 : 36} style={{ background: "rgba(255,255,255,.1)", color: "#fff" }} onClick={() => setSplit(s => Math.min(bill.coperti, s + 1))} />
+            <IconBtn name="plus" tone="ghost" size={mobile ? 32 : 36} style={{ background: "rgba(255,255,255,.1)", color: "#fff" }} onClick={() => setSplit(s => Math.min(Math.max(1, coperti), s + 1))} />
           </div>
         </div>
       </div>
@@ -283,7 +389,8 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
 function ScreenComanda({ mobile }) {
   const [tavolo, setTavolo] = useState(null);
   const [cart, setCart] = useState({});
-  const [sez, setSez] = useState(MENU[0].sezione);
+  // Guardia menu vuoto: niente MENU[0].sezione su lista vuota (hook sempre chiamati).
+  const [sez, setSez] = useState(() => (MENU[0] ? MENU[0].sezione : null));
   const [sending, setSending] = useState(false);
   const freeTables = ROOMS.flatMap(r => r.tables);
   const add = (nome) => setCart(c => ({ ...c, [nome]: (c[nome] || 0) + 1 }));
@@ -303,7 +410,7 @@ function ScreenComanda({ mobile }) {
       if (!orderItems.length) throw new Error("Nessun piatto selezionato");
       const tav = ROOMS.flatMap(r => r.tables).find(t => t.n === tavolo);
       if (!tav) throw new Error("Tavolo non trovato");
-      await window.TakoActions.staffOrder({ tableId: tav._id, tableNumber: tav.n, type: "table", items: orderItems });
+      await window.TakoActions.staffOrder({ tableId: tav._id, tableNumber: String(tav.n), type: "table", items: orderItems });
       const tNum = tavolo;
       setCart({});
       setTavolo(null);
@@ -315,6 +422,17 @@ function ScreenComanda({ mobile }) {
       setSending(false);
     }
   };
+
+  if (!MENU.length) {
+    return (
+      <ScreenScroll mobile={mobile}>
+        <PageHead mobile={mobile} tako="phone" title="Comanda" />
+        <Empty tako="dish" title="Il menu è vuoto — aggiungi piatti da Menu"
+          sub="Servono dei piatti a menu per poter prendere una comanda."
+          action={<Btn kind="brand" icon="menu" onClick={() => window.takoGo && window.takoGo("menu")}>Vai a Menu</Btn>} />
+      </ScreenScroll>
+    );
+  }
 
   if (!tavolo) {
     return (
@@ -330,7 +448,7 @@ function ScreenComanda({ mobile }) {
     );
   }
 
-  const section = MENU.find(s => s.sezione === sez);
+  const section = MENU.find(s => s.sezione === sez) || MENU[0];
   return (
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden", paddingTop: mobile ? 104 : 0, margin: mobile ? 0 : 12, borderRadius: mobile ? 0 : 20, ...(mobile ? { background: "var(--surface)" } : GLASS) }}>
       <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 12, padding: mobile ? "12px 14px" : "18px 26px", borderBottom: "1px solid var(--hairline)", background: mobile ? "var(--surface)" : "transparent" }}>
@@ -351,7 +469,7 @@ function ScreenComanda({ mobile }) {
                   <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "space-between", background: "var(--sunken)", borderRadius: 99, padding: 4 }}>
                     <IconBtn name="minus" tone="raised" size={34} onClick={() => sub(p.nome)} /><span className="num" style={{ fontSize: 17 }}>{cart[p.nome]}</span><IconBtn name="plus" tone="brand" size={34} onClick={() => add(p.nome)} />
                   </div>
-                ) : <Btn size="sm" kind="soft" full icon="plus" onClick={() => add(p.nome)}>Aggiungi</Btn>) : <Badge tone="danger">Esaurito · 86</Badge>}
+                ) : <Btn size="sm" kind="soft" full icon="plus" onClick={() => add(p.nome)}>Aggiungi</Btn>) : <Badge tone="danger">Esaurito</Badge>}
               </Card>
             ))}
           </div>

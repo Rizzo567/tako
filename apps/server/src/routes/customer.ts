@@ -2,14 +2,28 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
 import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions } from '@tako/db'
-import { eq, and, asc, inArray, isNull, desc } from 'drizzle-orm'
+import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill } from '../lib/billing.js'
 
-interface TableSession { restaurantId: string; tableId: string; sessionId: string | null; tableNumber?: string | null }
+interface TableSession { restaurantId: string; tableId: string; sessionId: string | null; qrToken?: string; tableNumber?: string | null }
+
+// Tetto giornaliero aggregato per ristorante sulle chiamate AI (Groq): impedisce
+// l'amplificazione di costo via QR-scan ripetuti (cookie multipli) che bypassano
+// il rate-limit per-tavolo. In-memory (reset al riavvio): è un freno economico,
+// non un contatore contabile. Override via AI_DAILY_CAP.
+const DAILY_AI_CAP = Number(process.env['AI_DAILY_CAP'] ?? 2000)
+const aiDailyUsage = new Map<string, { day: string; count: number }>()
+function bumpAiUsage(restaurantId: string): number {
+  const day = new Date().toISOString().slice(0, 10)
+  const rec = aiDailyUsage.get(restaurantId)
+  if (!rec || rec.day !== day) { aiDailyUsage.set(restaurantId, { day, count: 1 }); return 1 }
+  rec.count++
+  return rec.count
+}
 
 export async function customerRoutes(fastify: FastifyInstance) {
   // Verifica il JWT del tavolo (cookie HttpOnly emesso al resolve del QR) e lega
@@ -31,19 +45,26 @@ export async function customerRoutes(fastify: FastifyInstance) {
     }
     // Numero tavolo AUTORITATIVO dal DB (mai dal client): evita che un cliente
     // attribuisca ordini/chiamate a un altro tavolo passando un tableNumber falso.
-    const [t] = await db.select({ number: tables.number }).from(tables).where(eq(tables.id, payload.tableId)).limit(1)
-    req.tableSession = { ...payload, tableNumber: t?.number ?? null }
+    // Legge anche qrToken: il JWT è valido solo finché combacia col qrToken CORRENTE
+    // del tavolo, così la rotazione del QR (chiusura conto / refresh) revoca i token vecchi.
+    const [t] = await db.select({ number: tables.number, qrToken: tables.qrToken }).from(tables).where(eq(tables.id, payload.tableId)).limit(1)
+    if (!t || t.qrToken !== payload.qrToken) {
+      return reply.code(401).send({ error: { code: 'INVALID_TABLE_SESSION', message: 'Sessione tavolo scaduta. Riscansiona il QR.' } })
+    }
+    req.tableSession = { ...payload, tableNumber: t.number ?? null }
   }
 
-  // Resolve table by QR token → return restaurant + table info
-  fastify.get('/table/:token', async (req, reply) => {
+  // Resolve table by QR token → return restaurant + table info.
+  // Rate-limit di route (allineato a waiter-call/ai-chat): uno scan + qualche reload
+  // sono ampiamente sotto soglia, ma si taglia lo spamming di sessioni/JWT.
+  fastify.get('/table/:token', { config: { rateLimit: { max: 30, timeWindow: 60000 } } }, async (req, reply) => {
     const { token } = req.params as { token: string }
 
     const [table] = await db.select().from(tables).where(eq(tables.qrToken, token)).limit(1)
-    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Table not found' } })
+    if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, table.restaurantId)).limit(1)
-    if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Restaurant not found' } })
+    if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
 
     const settings = restaurant.settings as any ?? {}
 
@@ -58,19 +79,32 @@ export async function customerRoutes(fastify: FastifyInstance) {
       aiEnabled: settings.aiEnabled ?? false,
     }
 
-    // Record QR scan session (fire and forget — don't block response)
-    const [session] = await db.insert(tableSessions).values({
+    // Record QR scan session, ma in modo IDEMPOTENTE per finestra: un reload/riapertura
+    // della PWA entro 10 min non crea una nuova riga (evita bloat e inquinamento delle
+    // metriche time-to-first-order). Si riusa l'ultima sessione recente non convertita.
+    const [recent] = await db.select({ id: tableSessions.id }).from(tableSessions)
+      .where(and(
+        eq(tableSessions.tableId, table.id),
+        isNull(tableSessions.firstOrderAt),
+        gte(tableSessions.scannedAt, new Date(Date.now() - 10 * 60 * 1000)),
+      ))
+      .orderBy(desc(tableSessions.scannedAt))
+      .limit(1)
+    const session = recent ?? (await db.insert(tableSessions).values({
       restaurantId: table.restaurantId,
       tableId: table.id,
       tableNumber: table.number,
-    }).returning({ id: tableSessions.id })
+    }).returning({ id: tableSessions.id }))[0]
 
     // JWT legato al tavolo → cookie HttpOnly: lega le azioni cliente a questo tavolo.
     const tableJwt = fastify.jwt.sign(
-      { restaurantId: table.restaurantId, tableId: table.id, sessionId: session?.id ?? null },
+      { restaurantId: table.restaurantId, tableId: table.id, sessionId: session?.id ?? null, qrToken: table.qrToken },
       { expiresIn: '4h' },
     )
-    reply.setCookie(TABLE_COOKIE, tableJwt, authCookieOptions(TABLE_SESSION_MAX_AGE, '/api/customer'))
+    // Path '/' (non '/api/customer'): copre comunque le route customer ma permette
+    // di inviare il cookie anche sull'handshake /socket.io, così join:table può
+    // verificare il JWT del tavolo. Resta HttpOnly + SameSite=Lax.
+    reply.setCookie(TABLE_COOKIE, tableJwt, authCookieOptions(TABLE_SESSION_MAX_AGE, '/'))
 
     return {
       data: {
@@ -86,7 +120,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const { restaurantId } = req.params as { restaurantId: string }
 
     const allMenus = await db.select().from(menus).where(and(eq(menus.restaurantId, restaurantId), eq(menus.active, true))).orderBy(asc(menus.position))
-    if (!allMenus.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'No active menu' } })
+    if (!allMenus.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Nessun menu attivo' } })
 
     const mainMenu = allMenus[0]!
     const sections = await db.select().from(menuSections).where(and(eq(menuSections.menuId, mainMenu.id), eq(menuSections.active, true))).orderBy(asc(menuSections.position))
@@ -121,8 +155,14 @@ export async function customerRoutes(fastify: FastifyInstance) {
     return { data: pub }
   })
 
-  // Submit order from customer
-  fastify.post('/orders', { preHandler: requireTableSession }, async (req, reply) => {
+  // Submit order from customer.
+  // Rate-limit per-route keyed sulla sessione tavolo (cookie), non per-IP: clienti
+  // legittimi dietro lo stesso NAT/WiFi del ristorante non si strozzano a vicenda,
+  // ma un singolo tavolo non può floodare stampa/cucina (autoPrint, emit, ensureOpenBill).
+  fastify.post('/orders', {
+    config: { rateLimit: { max: 8, timeWindow: 60000, keyGenerator: (req: any) => req.cookies?.[TABLE_COOKIE] ?? req.ip } },
+    preHandler: requireTableSession,
+  }, async (req, reply) => {
     const schema = z.object({
       restaurantId: z.string().uuid(),
       tableId: z.string().uuid().optional(),
@@ -141,22 +181,35 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    // Idempotency check
-    const [existing] = await db.select().from(orders).where(eq(orders.idempotencyKey, body.data.idempotencyKey)).limit(1)
+    // SECURITY: identità tavolo/ristorante AUTORITATIVA dal JWT del tavolo (mai dal
+    // client). Se il client omette tableId nel body, requireTableSession non lo
+    // confronta col JWT: prendendolo dal body un ordine "table" resterebbe svincolato
+    // dal conto (ensureOpenBill gated su tableId) e finirebbe in cucina mai fatturato.
+    // Derivandolo dal JWT, un ordine type='table' è SEMPRE legato a un tableId valido.
+    const session = (req as any).tableSession as TableSession
+    const restaurantId = session.restaurantId
+    const tableId = body.data.type === 'takeaway' ? null : session.tableId
+    if (body.data.type === 'table' && !tableId) {
+      return reply.code(400).send({ error: { code: 'NO_TABLE', message: 'Sessione tavolo non valida.' } })
+    }
+
+    // Idempotency check — scoped al ristorante: una chiave non deve mai risolvere
+    // a un ordine di un altro tenant.
+    const [existing] = await db.select().from(orders).where(and(eq(orders.idempotencyKey, body.data.idempotencyKey), eq(orders.restaurantId, restaurantId))).limit(1)
     if (existing) return { data: existing }
 
     // SECURITY: verifica che il ristorante esista e sia attivo
-    const [restaurant] = await db.select().from(restaurants).where(and(eq(restaurants.id, body.data.restaurantId), eq(restaurants.active, true))).limit(1)
+    const [restaurant] = await db.select().from(restaurants).where(and(eq(restaurants.id, restaurantId), eq(restaurants.active, true))).limit(1)
     if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
 
     // SECURITY: verifica che il tavolo appartenga al ristorante (previene ordini cross-ristorante)
-    if (body.data.tableId) {
-      const [table] = await db.select().from(tables).where(and(eq(tables.id, body.data.tableId), eq(tables.restaurantId, body.data.restaurantId))).limit(1)
+    if (tableId) {
+      const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, restaurantId))).limit(1)
       if (!table) return reply.code(403).send({ error: { code: 'FORBIDDEN', message: 'Tavolo non valido' } })
     }
 
     // SECURITY: prezzi sempre dal DB, mai dal client — previene price tampering
-    const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, body.data.restaurantId), eq(menuItems.available, true)))
+    const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))
 
     // SECURITY: max 15 voci per ordine
     if (body.data.items.length > 15) return reply.code(400).send({ error: { code: 'TOO_MANY_ITEMS', message: 'Massimo 15 voci per ordine' } })
@@ -191,14 +244,15 @@ export async function customerRoutes(fastify: FastifyInstance) {
       const variant = orderItem.variantId ? dbVariants.find(v => v.id === orderItem.variantId) : undefined
       const unitPrice = round2(dbItem.price + (variant?.priceModifier ?? 0)) // prezzo + modificatore, dal DB
       total = round2(total + unitPrice * orderItem.quantity)
-      return { ...orderItem, name: dbItem.name, unitPrice, kitchenStation: dbItem.kitchenStation }
+      // Nome variante nel nome della voce → arriva a cucina/stampa e nel payload socket.
+      return { ...orderItem, name: variant ? `${dbItem.name} (${variant.name})` : dbItem.name, unitPrice, kitchenStation: dbItem.kitchenStation }
     })
 
     let order: typeof orders.$inferSelect | undefined
     try {
       ;[order] = await db.insert(orders).values({
-        restaurantId: body.data.restaurantId,
-        tableId: body.data.tableId,
+        restaurantId,
+        tableId,
         tableNumber: (req as any).tableSession?.tableNumber ?? body.data.tableNumber,
         type: body.data.type,
         // conferma automatica se attivata nelle impostazioni del ristorante
@@ -212,7 +266,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
       // insieme, entrambi superano il check iniziale, ma il vincolo UNIQUE blocca
       // il secondo. Niente 500: ritorna l'ordine già creato (idempotenza reale).
       if (err?.code === '23505') {
-        const [existingOrder] = await db.select().from(orders).where(eq(orders.idempotencyKey, body.data.idempotencyKey)).limit(1)
+        const [existingOrder] = await db.select().from(orders).where(and(eq(orders.idempotencyKey, body.data.idempotencyKey), eq(orders.restaurantId, restaurantId))).limit(1)
         if (existingOrder) {
           const items = await db.select().from(orderItems).where(eq(orderItems.orderId, existingOrder.id))
           return reply.code(200).send({ data: { ...existingOrder, items } })
@@ -237,36 +291,38 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
     const payload = { ...order, items: insertedItems }
 
-    // Auto-print comanda (fire-and-forget — non blocca risposta al cliente)
+    // Auto-print comanda (fire-and-forget — non blocca risposta al cliente).
+    // tableNumber AUTORITATIVO dal JWT/DB (come l'insert), non dal client: evita
+    // spoof del ticket di cucina con un tavolo altrui.
     autoPrintOrder({
-      restaurantId: body.data.restaurantId,
-      tableNumber: body.data.tableNumber,
+      restaurantId,
+      tableNumber: (req as any).tableSession?.tableNumber ?? body.data.tableNumber,
       items: insertedItems.map(i => ({ name: i.name, quantity: i.quantity, notes: i.notes ?? undefined })),
     }).catch(() => {}) // errore stampante non deve rompere l'ordine
 
     // Emit to restaurant room (staff devices)
-    io.to(`restaurant:${body.data.restaurantId}`).emit('order:new', payload)
+    io.to(`restaurant:${restaurantId}`).emit('order:new', payload)
 
     // Update table status
-    if (body.data.tableId) {
-      await db.update(tables).set({ status: 'occupied', openedAt: new Date() }).where(eq(tables.id, body.data.tableId))
-      io.to(`restaurant:${body.data.restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
+    if (tableId) {
+      await db.update(tables).set({ status: 'occupied', openedAt: new Date() }).where(eq(tables.id, tableId))
+      io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId, status: 'occupied' })
     }
 
     // Conto aperto get-or-create atomico (advisory lock per tavolo): evita conti
     // duplicati e subtotali incoerenti quando più ordini arrivano insieme.
-    if (body.data.tableId) {
-      await ensureOpenBill(body.data.restaurantId, body.data.tableId)
+    if (tableId) {
+      await ensureOpenBill(restaurantId, tableId)
     }
 
     // Mark first order on session (only if not already recorded)
-    if (body.data.tableId) {
+    if (tableId) {
       const [session] = await db
         .select()
         .from(tableSessions)
         .where(and(
-          eq(tableSessions.tableId, body.data.tableId),
-          eq(tableSessions.restaurantId, body.data.restaurantId),
+          eq(tableSessions.tableId, tableId),
+          eq(tableSessions.restaurantId, restaurantId),
           isNull(tableSessions.firstOrderAt),
         ))
         .orderBy(desc(tableSessions.scannedAt))
@@ -293,13 +349,13 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const [order] = await db.select().from(orders)
       .where(and(eq(orders.id, orderId), eq(orders.restaurantId, restaurantId), eq(orders.tableId, tableId)))
       .limit(1)
-    if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Order not found' } })
+    if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ordine non trovato' } })
     const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
     return { data: { ...order, items } }
   })
 
   // Call waiter
-  fastify.post('/waiter-call', { config: { rateLimit: { max: 6, timeWindow: 60000 } }, preHandler: requireTableSession }, async (req, reply) => {
+  fastify.post('/waiter-call', { config: { rateLimit: { max: 6, timeWindow: 60000, keyGenerator: (req: any) => req.cookies?.[TABLE_COOKIE] ?? req.ip } }, preHandler: requireTableSession }, async (req, reply) => {
     const schema = z.object({
       restaurantId: z.string().uuid(),
       tableId: z.string().uuid(),
@@ -317,7 +373,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
   // AI chat — agentic assistant. Bound to this table/session: it can search the
   // menu, fill the cart, place the order, check status and call the waiter.
-  fastify.post('/ai-chat', { config: { rateLimit: { max: 15, timeWindow: 60000 } }, preHandler: requireTableSession }, async (req, reply) => {
+  fastify.post('/ai-chat', { config: { rateLimit: { max: 15, timeWindow: 60000, keyGenerator: (req: any) => req.cookies?.[TABLE_COOKIE] ?? req.ip } }, preHandler: requireTableSession }, async (req, reply) => {
     const aiChatSchema = z.object({
       restaurantId: z.string().uuid(),
       message: z.string().min(1).max(500),
@@ -340,13 +396,27 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const sessionId = session.sessionId
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
+    // Gate server-side sul setting amministrativo: il pulsante AI lato client dipende
+    // da aiEnabled (esposto in PublicRestaurant), ma senza questo controllo una
+    // chiamata diretta forzerebbe Groq anche con AI disattivata dall'owner.
+    if (((restaurant.settings as any)?.aiEnabled ?? false) !== true) {
+      return reply.code(403).send({ error: { code: 'AI_DISABLED', message: 'AI non abilitata per questo ristorante' } })
+    }
+
+    // Tetto giornaliero aggregato per ristorante: chiude il bypass via cookie multipli
+    // (QR-scan ripetuti) che eluderebbe il rate-limit per-tavolo.
+    if (bumpAiUsage(restaurantId) > DAILY_AI_CAP) {
+      return reply.code(429).send({ error: { code: 'AI_QUOTA', message: 'Assistente non disponibile, riprova più tardi.' } })
+    }
 
     // Assistente cliente: Q&A sul menu via Groq (provider unico del sistema).
     const GROQ_KEY = process.env['GROQ_API_KEY']
     if (!GROQ_KEY) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI not configured' } })
 
-    // Fallback: menu-aware Q&A only (no actions).
-    const items = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))
+    // Fallback: menu-aware Q&A only (no actions). menuContext troncato a 60 voci:
+    // il prompt non cresce illimitatamente col menu (costo per-chiamata limitato).
+    const items = (await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))).slice(0, 60)
     const menuContext = items.map(i => `${i.name}: €${i.price}${i.description ? ` — ${i.description}` : ''}${i.allergens?.length ? ` [Allergeni: ${i.allergens.join(', ')}]` : ''}`).join('\n')
     const systemPrompt = `Sei Tako, l'assistente del ristorante "${restaurant?.name ?? 'questo ristorante'}". Conosci il menu:\n${menuContext}\nRispondi in italiano, max 3 righe. Se non sai, suggerisci il cameriere.`
     const { OpenAI } = await import('openai')

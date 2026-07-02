@@ -46,7 +46,7 @@ const SETUP = [
 ];
 const SETTINGS_DEFAULTS = {
   nome: "", indirizzo: "", telefono: "",
-  servizioTavolo: true, asporto: true, pagaTavolo: true, ai: true, prenotazioni: false,
+  servizioTavolo: true, asporto: true, pagaTavolo: true, ai: false, prenotazioni: false,
   copertoOn: true, coperto: 2, manceSuggerite: true,
   suoniOrdini: true, autoConferma: false, stampaAuto: true,
   kdsWarn: 10, kdsLate: 15, kdsCompatta: false,
@@ -102,7 +102,7 @@ function mapOrder(o) {
   return {
     id: `${o.tableNumber != null ? "T" + String(o.tableNumber).padStart(2, "0") : "AS"}-${short}`,
     _id: o.id,
-    tavolo: o.tableNumber != null ? Number(o.tableNumber) : null,
+    tavolo: o.tableNumber != null ? String(o.tableNumber) : null,
     tipo: TYPE_DB2UI[o.type] || "tavolo",
     stato: ORD_DB2UI[o.status] || "attesa",
     orario: hhmm(o.createdAt),
@@ -120,14 +120,16 @@ function mapOrder(o) {
 function mapRoom(r) {
   return {
     id: r.id, nome: r.name,
+    // Numero tavolo come STRINGA end-to-end + sort naturale (10 dopo 9, non dopo 1).
     tables: (r.tables || []).map((t) => ({
-      n: Number(t.number), posti: t.seats, stato: TBL_DB2UI[t.status] || "libero",
-      x: t.posX ?? 10, y: t.posY ?? 10, _id: t.id, _qr: t.qrToken,
-    })),
+      n: String(t.number), posti: t.seats, stato: TBL_DB2UI[t.status] || "libero",
+      x: t.posX != null ? t.posX : 10, y: t.posY != null ? t.posY : 10,
+      _hasPos: t.posX != null && t.posY != null, _id: t.id, _qr: t.qrToken,
+    })).sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true })),
   };
 }
 function mapBill(b) {
-  return { id: b.id, tavolo: b.tableNumber != null ? Number(b.tableNumber) : null, coperti: b.covers || 0,
+  return { id: b.id, tavolo: b.tableNumber != null ? String(b.tableNumber) : null, coperti: b.covers || 0,
            subtotale: Number(b.subtotal) || 0, apertura: hhmm(b.createdAt),
            total: Number(b.total) || 0, tip: Number(b.tip) || 0, _raw: b };
 }
@@ -155,6 +157,8 @@ async function loadMenu() {
       nome: it.name, prezzo: Number(it.price) || 0, costo: it.costPrice != null ? Number(it.costPrice) : 0,
       disp: !!it.available, station: it.kitchenStation || "Cucina", tag: it.tags || [], alg: it.allergens || [],
       desc: it.description || "", img: it.imageUrl || "", _id: it.id, _sectionId: s.id,
+      // varianti reali dal backend (itemVariants): { _id, nome, mod }
+      varianti: (it.variants || []).map((v) => ({ _id: v.id, nome: v.name, mod: Number(v.priceModifier) || 0 })),
     })),
   }));
 }
@@ -184,7 +188,7 @@ async function loadAll() {
       valuta: rest.settings?.currency || "EUR", iva: rest.settings?.vatRate ?? 10, fuso: rest.settings?.timezone || "Europe/Rome",
       lingue: rest.settings?.languages || ["IT"], linguaDefault: rest.settings?.defaultLanguage || "IT",
       servizioTavolo: rest.settings?.tableServiceEnabled ?? true, asporto: rest.settings?.takeawayEnabled ?? true,
-      pagaTavolo: rest.settings?.payAtTableEnabled ?? true, ai: rest.settings?.aiEnabled ?? true,
+      pagaTavolo: rest.settings?.payAtTableEnabled ?? true, ai: rest.settings?.aiEnabled ?? false,
       printerIp: rest.settings?.printerIp || "", printerPort: rest.settings?.printerPort || "9100",
       // preferenze operative persistite (read-back)
       coperto: rest.settings?.coverCharge ?? 2, copertoOn: rest.settings?.coverChargeEnabled ?? true,
@@ -244,7 +248,14 @@ let _socket = null;
 function connectSocket(restaurantId, onEvent) {
   if (!window.io) return null;
   _socket = window.io({ withCredentials: true, transports: ["websocket", "polling"] });
-  _socket.on("connect", () => _socket.emit("join:restaurant", restaurantId));
+  let _firstConnect = true;
+  _socket.on("connect", () => {
+    _socket.emit("join:restaurant", restaurantId);
+    // Riconnessione: ricarica tutti i dati per colmare gli eventi persi mentre offline.
+    // (Salta il primo connect: loadAll è già stato eseguito all'avvio.)
+    if (!_firstConnect && window.takoReload) { try { window.takoReload(); } catch (_) {} }
+    _firstConnect = false;
+  });
   const fwd = (ev) => _socket.on(ev, (p) => onEvent(ev, p));
   ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","inventory:alert"].forEach(fwd);
   return _socket;
@@ -295,7 +306,9 @@ const TakoActions = {
   // conti / cassa
   billCreate: (body) => TakoAPI.post(`/bills`, body),
   billUpdate: (id, fields) => TakoAPI.patch(`/bills/${id}`, fields),
-  billPay: (id, amount, method) => TakoAPI.post(`/bills/${id}/payments`, { amount, method }),
+  // La mancia viaggia dentro il POST /payments (requireAuth: il cameriere può incassare),
+  // non più con un PATCH separato che dava 403 al cameriere.
+  billPay: (id, amount, method, tip) => TakoAPI.post(`/bills/${id}/payments`, tip ? { amount, method, tip } : { amount, method }),
   // chiamate cameriere
   waiterResolve: (tableId) => TakoAPI.post(`/tables/${tableId}/waiter-resolve`),
   // AI (Groq)

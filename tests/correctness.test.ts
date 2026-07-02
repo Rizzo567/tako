@@ -52,10 +52,17 @@ describe('Integrità stati ordine', () => {
   it('un ordine pagato non può essere annullato → 409', async () => {
     const cookie = await getTableCookie(env.qrToken)
     const o = (await (await order(cookie, [{ menuItemId: env.menuItemId, quantity: 1 }])).json()).data
-    for (const s of ['preparing', 'served', 'paid']) {
+    // Transizioni manuali consentite fino a 'served'.
+    for (const s of ['preparing', 'served']) {
       const r = await fetch(`${SERVER}/api/orders/${o.id}/status`, { method: 'PATCH', headers: staff(), body: JSON.stringify({ status: s }) })
       expect(r.status).toBe(200)
     }
+    // 'paid' NON è una transizione manuale (anti-frode): si raggiunge solo dal flusso
+    // pagamenti. Chiudere il conto fa il cascade degli ordini fatturabili → paid.
+    const bill = (await (await fetch(`${SERVER}/api/bills`, { method: 'POST', headers: staff(), body: JSON.stringify({ tableId: env.tableId }) })).json()).data
+    const pay = await fetch(`${SERVER}/api/bills/${bill.id}/payments`, { method: 'POST', headers: staff(), body: JSON.stringify({ amount: bill.total, method: 'cash' }) })
+    expect(pay.status).toBe(201)
+    // Ora l'ordine è 'paid' (cascade alla chiusura): non annullabile.
     const cancel = await fetch(`${SERVER}/api/orders/${o.id}/cancel`, { method: 'PATCH', headers: staff(), body: '{}' })
     expect(cancel.status).toBe(409)
   })

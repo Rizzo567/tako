@@ -145,6 +145,9 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
           logoUrl: restaurant.logoUrl,
           sessionId: sessionId ?? null,
         })
+        // Scoping carrello: se cambia tavolo/ristorante o è scaduto, si azzera
+        // (evita che riappaiano gli item del pranzo precedente).
+        useCartStore.getState().ensureScope(`${restaurant.id}:${table.id}`)
         applyBrand(restaurant.primaryColor)
       })
       .catch(() => setError('Tavolo non trovato. Riprova a scansionare il QR.'))
@@ -182,6 +185,7 @@ export function CustomerApp({ restaurantId, token }: { restaurantId: string; tok
       <div>
         <h1 className="mb-2 font-serif text-2xl text-[var(--ink)]">Qualcosa non va</h1>
         <p className="font-semibold text-[var(--ink-2)]">{error}</p>
+        <p className="mt-3 text-sm font-medium text-[var(--ink-3)]">Connettiti al Wi-Fi del locale se la pagina non carica.</p>
       </div>
     </div>
   )
