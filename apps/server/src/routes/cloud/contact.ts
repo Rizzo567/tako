@@ -29,7 +29,14 @@ export async function cloudContactRoutes(fastify: FastifyInstance) {
       return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Compila nome, email e messaggio.' } })
     }
     const { name, email, restaurant, phone, message, intent } = parsed.data
-    const admin = process.env['ADMIN_NOTIFY_EMAIL'] || 'manuelrizzo474@gmail.com'
+    const admin = process.env['ADMIN_NOTIFY_EMAIL']
+    if (!admin) {
+      // Nessun fallback hardcoded: se manca la env, logga e non inviare, ma non
+      // bloccare l'utente (risposta 200 come nel caso di invio riuscito).
+      req.log.warn('[cloud/contact] ADMIN_NOTIFY_EMAIL non configurata: notifica contatto saltata.')
+      await audit({ event: 'contact', req, meta: { intent, skipped: 'no_admin_email' } }).catch(() => {})
+      return reply.code(200).send({ data: { message: 'Messaggio inviato. Ti rispondiamo via email entro un giorno lavorativo.' } })
+    }
     const subject = intent === 'demo'
       ? `Richiesta demo Tako: ${name}`
       : `Nuovo messaggio dal sito Tako: ${name}`

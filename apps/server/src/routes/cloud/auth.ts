@@ -65,20 +65,32 @@ async function sendVerificationEmail(ownerId: string, ownerName: string | null, 
   await sendEmail({ to, subject: tpl.subject, html: tpl.html })
 }
 
+// Escape HTML (stessa logica di contact.ts, replicata: là è locale non esportata).
+// Impedisce injection nell'email admin quando interpoliamo dati controllati dall'utente.
+function esc(s: string): string {
+  return s.replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
+}
+
 // Notifica al titolare di Tako (Manuel) ogni nuova registrazione dal sito = lead.
-// Destinatario configurabile via ADMIN_NOTIFY_EMAIL (default: indirizzo di Manuel).
+// Destinatario configurabile via ADMIN_NOTIFY_EMAIL. Nessun fallback hardcoded: se
+// la env manca, logga un warning e SALTA l'invio (non blocca la registrazione).
 // Best-effort: un fallimento non deve mai rompere la registrazione dell'utente.
 async function notifyAdminNewRegistration(name: string | null, leadEmail: string): Promise<void> {
-  const admin = process.env['ADMIN_NOTIFY_EMAIL'] || 'manuelrizzo474@gmail.com'
+  const admin = process.env['ADMIN_NOTIFY_EMAIL']
+  if (!admin) {
+    console.warn('[cloud/auth] ADMIN_NOTIFY_EMAIL non configurata: notifica nuovo lead saltata.')
+    return
+  }
   const safeName = (name && name.trim()) || '(nessun nome)'
   const html = `
     <div style="font-family:system-ui,sans-serif;font-size:15px;color:#2A1F1A">
       <h2>🐙 Nuovo ristorante registrato su Tako</h2>
-      <p><b>Nome locale:</b> ${safeName}</p>
-      <p><b>Email:</b> <a href="mailto:${leadEmail}">${leadEmail}</a></p>
+      <p><b>Nome locale:</b> ${esc(safeName)}</p>
+      <p><b>Email:</b> <a href="mailto:${esc(leadEmail)}">${esc(leadEmail)}</a></p>
       <p style="color:#8a7d75">Registrazione dal sito takoitalia.com. L'utente ha ricevuto l'email di verifica.</p>
     </div>`
-  await sendEmail({ to: admin, subject: `Nuovo lead Tako: ${safeName}`, html })
+  await sendEmail({ to: admin, subject: `Nuovo lead Tako: ${esc(safeName)}`, html })
 }
 
 // ─── Throttle per-ACCOUNT sul login (anti brute-force) ───────────────────────
