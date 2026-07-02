@@ -1,4 +1,4 @@
-import Fastify from 'fastify'
+import Fastify, { type FastifyServerOptions } from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import cookie from '@fastify/cookie'
@@ -32,6 +32,7 @@ import { menuI18nRoutes } from './routes/menu-i18n.js'
 import { aiOwnerRoutes } from './routes/ai-owner.js'
 import { startMdns } from './lib/mdns.js'
 import { getLanIPv4s } from './lib/network.js'
+import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
 // dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
@@ -49,7 +50,19 @@ export async function startServer(): Promise<void> {
     throw new Error('JWT_SECRET deve essere lungo almeno 32 caratteri in produzione')
   }
 
-  const fastify = Fastify({ logger: { level: 'error' } })
+  // HTTPS opt-in (TAKO_HTTPS=1): l'appliance serve https/wss così il tablet ottiene un
+  // "secure context" e sblocca getUserMedia (dettatura vocale). Cert self-signed locale
+  // generato/persistito in ~/.tako/tls (vedi lib/tls.ts). Default OFF → dev e i test di
+  // integrazione continuano su http://localhost:3001 invariati. Porta e resto identici.
+  const useHttps = httpsEnabled()
+  const fastifyOptions: FastifyServerOptions = { logger: { level: 'error' } }
+  if (useHttps) {
+    // `https` è passato a node https.createServer (key/cert Buffer). Lo attacchiamo via
+    // cast: il tipo restituito resta l'istanza http di default → tutte le .register/.get
+    // sotto mantengono un tipo uniforme, mentre a runtime nasce un server https/wss.
+    ;(fastifyOptions as FastifyServerOptions & { https: unknown }).https = ensureTlsMaterial()
+  }
+  const fastify = Fastify(fastifyOptions)
 
   // Error handler globale: logga l'errore completo server-side e sanifica i 5xx
   // (gli errori Postgres/Drizzle non incapsulati trapelerebbero nomi colonne,
@@ -200,7 +213,9 @@ await fastify.ready()
 
   try {
     await fastify.listen({ port: PORT, host: '0.0.0.0' })
-    console.log(`Tako server running on http://0.0.0.0:${PORT}`)
+    const scheme = useHttps ? 'https' : 'http'
+    console.log(`Tako server running on ${scheme}://0.0.0.0:${PORT}`)
+    if (useHttps) console.log(`[tls] HTTPS attivo (cert self-signed) → apri https://tako.local:${PORT}`)
     // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
     startMdns()
   } catch (err) {
