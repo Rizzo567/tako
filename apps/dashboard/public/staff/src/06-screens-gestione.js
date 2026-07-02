@@ -197,6 +197,17 @@ function DishEditor({ dish, mobile, onClose }) {
   const [imageUrl, setImageUrl] = useState(dish.img || "");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  // Traduzioni multilingua: lingue configurate diverse dalla default (SETTINGS_DEFAULTS).
+  const extraLangs = (SETTINGS_DEFAULTS.lingue || []).filter(l => String(l).toUpperCase() !== String(SETTINGS_DEFAULTS.linguaDefault || "IT").toUpperCase());
+  const [trans, setTrans] = useState(() => {
+    const m = {};
+    for (const l of extraLangs) {
+      const t = (dish.traduzioni || []).find(x => String(x.lang).toLowerCase() === String(l).toLowerCase());
+      m[l] = { name: t ? (t.name || "") : "", description: t ? (t.description || "") : "" };
+    }
+    return m;
+  });
+  const setTr = (lang, key, val) => setTrans(m => ({ ...m, [lang]: { ...(m[lang] || {}), [key]: val } }));
   const setV = (i, key, val) => setVariants(vs => vs.map((v, k) => k === i ? { ...v, [key]: val } : v));
   const onPickImage = async (e) => {
     const file = e.target.files && e.target.files[0];
@@ -235,6 +246,14 @@ function DishEditor({ dish, mobile, onClose }) {
         const changed = o && (o.nome !== v.nome || Number(o.mod) !== Number(v.mod));
         if (!v._id) await window.TakoActions.variantCreate(dish._id, v.nome.trim(), Number(v.mod) || 0);
         else if (changed) { await window.TakoActions.variantDelete(dish._id, v._id); await window.TakoActions.variantCreate(dish._id, v.nome.trim(), Number(v.mod) || 0); }
+      }
+      // Traduzioni: upsert per ogni lingua non-default; se svuotate → elimina.
+      for (const l of extraLangs) {
+        const tr = trans[l] || { name: "", description: "" };
+        const hasContent = String(tr.name || "").trim() || String(tr.description || "").trim();
+        const had = (dish.traduzioni || []).some(x => String(x.lang).toLowerCase() === String(l).toLowerCase());
+        if (hasContent) await window.TakoActions.translationSave(dish._id, String(l).toLowerCase(), { name: (tr.name || "").trim(), description: (tr.description || "").trim() || undefined });
+        else if (had) await window.TakoActions.translationDelete(dish._id, String(l).toLowerCase());
       }
       await window.takoReload();
       onClose();
@@ -279,6 +298,18 @@ function DishEditor({ dish, mobile, onClose }) {
             </div>
           ))}
         </div>
+        {dish._id && extraLangs.length > 0 && (
+          <div style={{ marginBottom: 4 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink-2)", marginBottom: 8 }}>Traduzioni menu</div>
+            {extraLangs.map(l => (
+              <div key={l} style={{ marginBottom: 10, padding: 10, background: "var(--sunken)", borderRadius: 12 }}>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--ink-3)", marginBottom: 6 }}>{String(l).toUpperCase()}</div>
+                <input style={{ ...inputStyle, marginBottom: 7 }} placeholder={"Nome — " + (name || "originale")} value={trans[l] ? trans[l].name : ""} onChange={e => setTr(l, "name", e.target.value)} />
+                <textarea style={{ ...inputStyle, height: 54, padding: 11, resize: "none" }} placeholder="Descrizione (opzionale)" value={trans[l] ? trans[l].description : ""} onChange={e => setTr(l, "description", e.target.value)} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div style={{ padding: "0 20px 4px" }}>
         <Btn kind="danger" full icon="trash" onClick={() => setConfirmDel(true)}>Elimina piatto</Btn>
