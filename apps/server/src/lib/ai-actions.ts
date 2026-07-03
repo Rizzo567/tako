@@ -15,12 +15,13 @@
 //        - 'client'   → il server RISOLVE/valida, ma l'effetto lo applica il client (carrello PWA)
 //        - 'mutation' → cambia dati persistenti: MAI eseguita durante la chat. Viene proposta
 //                       e richiede conferma esplicita umana (endpoint /execute separato).
-//   4. Nessuna azione distruttiva (delete) è esposta al modello.
+//   4. Le azioni distruttive (delete piatto/sezione) sono esposte SOLO come 'mutation':
+//      passano sempre dalla card di conferma dell'owner, mai eseguite dal modello da solo.
 //
 // Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
 // validazione delle route (ownership per restaurantId, emit socket identici).
 
-import { db, restaurants, menus, menuSections, menuItems, orders, tables, bills } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, orders, orderItems, tables, bills } from '@tako/db'
 import { eq, and, asc, desc, gte, inArray } from 'drizzle-orm'
 import { io } from '../index.js'
 import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz } from './billing.js'
@@ -81,6 +82,30 @@ async function resolveItem(restaurantId: string, name: string, onlyAvailable: bo
     if (hits.length > 1) return undefined // ambiguo: non indovinare
   }
   return undefined
+}
+
+// Risolve una sezione per nome tra i menu del ristorante (ownership: section →
+// menu → restaurantId). Stessa politica di resolveItem: match univoco o niente.
+// Ritorna sempre l'elenco sezioni, così il chiamante può elencarle se ambiguo.
+async function resolveSection(restaurantId: string, name: string) {
+  const menusRows = await db.select({ id: menus.id }).from(menus).where(eq(menus.restaurantId, restaurantId))
+  const menuIds = menusRows.map(m => m.id)
+  if (!menuIds.length) return { section: undefined, sections: [] as { id: string; name: string }[] }
+  const sections = (await db.select().from(menuSections).where(inArray(menuSections.menuId, menuIds)))
+    .sort((a, b) => a.name.localeCompare(b.name))
+  const q = (name ?? '').toString().toLowerCase().trim()
+  if (!q) return { section: undefined, sections }
+  const tiers = [
+    (s: typeof sections[number]) => s.name.toLowerCase() === q,
+    (s: typeof sections[number]) => s.name.toLowerCase().startsWith(q),
+    (s: typeof sections[number]) => s.name.toLowerCase().includes(q),
+  ]
+  for (const pred of tiers) {
+    const hits = sections.filter(pred)
+    if (hits.length === 1) return { section: hits[0], sections }
+    if (hits.length > 1) return { section: undefined, sections } // ambiguo: elenca, non indovinare
+  }
+  return { section: undefined, sections }
 }
 
 // ─────────────────────────────── REGISTRO AZIONI ───────────────────────────────
@@ -302,6 +327,132 @@ const ACTIONS: ActionDef[] = [
       return { ok: true, data: { id: item.id, name: item.name, price: item.price, section: section.name }, summary: `Creato "${item.name}" a €${item.price} in "${section.name}".` }
     },
   },
+  {
+    name: 'update_menu_item',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Modifica un piatto esistente: prezzo e/o nome e/o descrizione. Indica solo i campi da cambiare.',
+    parameters: {
+      type: 'object',
+      properties: {
+        itemName: { type: 'string', description: 'Nome attuale del piatto da modificare' },
+        price: { type: 'number', minimum: 0, description: 'Nuovo prezzo in euro (opzionale)' },
+        name: { type: 'string', description: 'Nuovo nome (opzionale)' },
+        description: { type: 'string', description: 'Nuova descrizione (opzionale)' },
+      },
+      required: ['itemName'],
+    },
+    label: (a) => {
+      const parts: string[] = []
+      if (a?.price != null) parts.push(`prezzo €${a.price}`)
+      if (a?.name) parts.push(`nome "${a.name}"`)
+      if (a?.description) parts.push('descrizione')
+      return `Modifica "${a?.itemName ?? ''}"${parts.length ? ` → ${parts.join(', ')}` : ''}`
+    },
+    execute: async (ctx, args) => {
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato nel menu (o nome ambiguo: specifica meglio).` }
+      const set: Record<string, any> = {}
+      const changes: string[] = []
+      if (args?.price != null) {
+        const price = Number(args.price)
+        if (!Number.isFinite(price) || price < 0) return { ok: false, summary: 'Prezzo non valido.' }
+        set['price'] = price; changes.push(`prezzo €${match.price} → €${price}`)
+      }
+      if (args?.name != null && String(args.name).trim()) {
+        set['name'] = String(args.name).trim().slice(0, 120); changes.push(`nome "${match.name}" → "${set['name']}"`)
+      }
+      if (args?.description != null && String(args.description).trim()) {
+        set['description'] = String(args.description).trim().slice(0, 500); changes.push('descrizione aggiornata')
+      }
+      if (!changes.length) return { ok: false, summary: 'Nessuna modifica indicata: specifica prezzo, nome o descrizione.' }
+      const [item] = await db.update(menuItems).set({ ...set, updatedAt: new Date() })
+        .where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId))).returning()
+      if (!item) return { ok: false, summary: 'Aggiornamento non riuscito.' }
+      // stessi emit della PATCH /items/:id: riga completa alla dashboard, campi
+      // pubblici (MAI costPrice) alla room menu pubblica.
+      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:updated', { itemId: item.id, item })
+      io.to(`menu:${ctx.restaurantId}`).emit('menu:updated', { itemId: item.id, item: {
+        id: item.id, sectionId: item.sectionId, name: item.name, description: item.description,
+        price: item.price, imageUrl: item.imageUrl, allergens: item.allergens, tags: item.tags, available: item.available,
+      } })
+      return { ok: true, data: { id: item.id, name: item.name, price: item.price }, summary: `Aggiornato "${item.name}": ${changes.join(', ')}.` }
+    },
+  },
+  {
+    name: 'delete_menu_item',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'ELIMINA definitivamente un piatto dal menu (non solo esaurito: lo rimuove). Per segnare esaurito usa set_item_availability.',
+    parameters: {
+      type: 'object',
+      properties: { itemName: { type: 'string', description: 'Nome del piatto da eliminare' } },
+      required: ['itemName'],
+    },
+    label: (a) => `Elimina piatto "${a?.itemName ?? ''}"`,
+    execute: async (ctx, args) => {
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato nel menu (o nome ambiguo: specifica meglio).` }
+      // stessa sequenza della DELETE /items/:id: prima si scollega lo storico
+      // ordini (orderItems.menuItemId → null), poi si cancella il piatto.
+      await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, match.id))
+      await db.delete(menuItems).where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId)))
+      return { ok: true, data: { id: match.id, name: match.name }, summary: `Piatto "${match.name}" eliminato.` }
+    },
+  },
+  {
+    name: 'delete_menu_section',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'ELIMINA definitivamente una sezione del menu e tutti i suoi piatti (es. "Antipasti"). Azione irreversibile.',
+    parameters: {
+      type: 'object',
+      properties: { sectionName: { type: 'string', description: 'Nome della sezione da eliminare' } },
+      required: ['sectionName'],
+    },
+    label: (a) => `Elimina sezione "${a?.sectionName ?? ''}" (con i suoi piatti)`,
+    execute: async (ctx, args) => {
+      const { section, sections } = await resolveSection(ctx.restaurantId, args?.sectionName)
+      if (!section) {
+        const list = sections.map(s => `"${s.name}"`).join(', ')
+        return { ok: false, summary: `Sezione "${args?.sectionName ?? ''}" non trovata o ambigua. Sezioni presenti: ${list || 'nessuna'}.` }
+      }
+      // stessa sequenza della DELETE /sections/:id: scollega gli ordini dai
+      // piatti della sezione, poi cancella la sezione (i piatti cascano).
+      const items = await db.select({ id: menuItems.id }).from(menuItems).where(eq(menuItems.sectionId, section.id))
+      for (const it of items) {
+        await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, it.id))
+      }
+      await db.delete(menuSections).where(eq(menuSections.id, section.id))
+      return { ok: true, data: { id: section.id, name: section.name, itemsRemoved: items.length }, summary: `Sezione "${section.name}" eliminata (${items.length} piatti rimossi).` }
+    },
+  },
+  {
+    name: 'rename_menu_section',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Rinomina una sezione del menu (es. "Antipasti" → "Per iniziare").',
+    parameters: {
+      type: 'object',
+      properties: {
+        sectionName: { type: 'string', description: 'Nome attuale della sezione' },
+        newName: { type: 'string', description: 'Nuovo nome' },
+      },
+      required: ['sectionName', 'newName'],
+    },
+    label: (a) => `Rinomina sezione "${a?.sectionName ?? ''}" → "${a?.newName ?? ''}"`,
+    execute: async (ctx, args) => {
+      const newName = (args?.newName ?? '').toString().trim().slice(0, 60)
+      if (!newName) return { ok: false, summary: 'Nuovo nome non valido.' }
+      const { section, sections } = await resolveSection(ctx.restaurantId, args?.sectionName)
+      if (!section) {
+        const list = sections.map(s => `"${s.name}"`).join(', ')
+        return { ok: false, summary: `Sezione "${args?.sectionName ?? ''}" non trovata o ambigua. Sezioni presenti: ${list || 'nessuna'}.` }
+      }
+      await db.update(menuSections).set({ name: newName }).where(eq(menuSections.id, section.id))
+      return { ok: true, data: { id: section.id, name: newName }, summary: `Sezione "${section.name}" rinominata in "${newName}".` }
+    },
+  },
 ]
 
 const BY_NAME = new Map(ACTIONS.map(a => [a.name, a]))
@@ -395,8 +546,13 @@ export async function runAssistant(opts: {
         content = 'Azione non disponibile.'
       } else if (def.kind === 'mutation') {
         // MAI eseguita in chat: proposta in attesa di conferma umana.
-        pending.push({ name: def.name, args, label: def.label(args) })
-        content = `Proposta registrata: "${def.label(args)}". In attesa di conferma esplicita dell'owner (non ancora eseguita).`
+        // Dedup: il modello tende a richiamare lo stesso tool a ogni iterazione
+        // (il tool risponde "in attesa") → senza dedup l'owner vedrebbe N card identiche.
+        const key = def.name + JSON.stringify(args ?? {})
+        if (!pending.some(p => p.name + JSON.stringify(p.args ?? {}) === key)) {
+          pending.push({ name: def.name, args, label: def.label(args) })
+        }
+        content = `Proposta registrata: "${def.label(args)}". In attesa di conferma esplicita dell'owner. NON richiamare di nuovo questo strumento: rispondi all'utente che la proposta è pronta da confermare.`
       } else {
         const res = await executeAction(def.name, args, opts.ctx, opts.scope)
         if (res.clientAction) actions.push(res.clientAction)

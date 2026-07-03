@@ -4,7 +4,8 @@
 //   POST /ai/owner/chat    → l'AI risponde e PROPONE le azioni mutanti (non le esegue).
 //   POST /ai/owner/execute → esegue UNA azione confermata esplicitamente dall'owner.
 // Le letture (incasso, stats, stato tavoli, ricerca menu) girano subito nella chat;
-// le modifiche (segna esaurito, crea piatto) richiedono la conferma umana.
+// le modifiche (segna esaurito, crea/modifica/elimina piatto, elimina/rinomina
+// sezione) richiedono la conferma umana.
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, restaurants } from '@tako/db'
@@ -29,8 +30,8 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
     const restaurantId = req.user!.restaurantId
     const [restaurant] = await db.select({ name: restaurants.name }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
 
-    const systemPrompt = `Sei il copilot operativo di "${restaurant?.name ?? 'questo ristorante'}" per lo staff.
-Puoi LEGGERE dati reali (incasso di oggi, statistiche, stato tavoli, cercare piatti) e PROPORRE modifiche al menu (segnare un piatto esaurito o disponibile, creare un piatto).
+    const systemPrompt = `Sei Tako, il copilot operativo di "${restaurant?.name ?? 'questo ristorante'}" per lo staff.
+Puoi LEGGERE dati reali (incasso di oggi, statistiche, stato tavoli, cercare piatti) e PROPORRE modifiche al menu: segnare un piatto esaurito o disponibile, creare un piatto, MODIFICARE un piatto (prezzo, nome, descrizione), ELIMINARE un piatto, ELIMINARE o RINOMINARE una sezione.
 Le azioni che MODIFICANO dati non vengono eseguite subito: le proponi con lo strumento e l'owner le conferma dalla dashboard. Le letture invece falle subito.
 Rispondi in italiano, conciso e operativo. Non inventare numeri o piatti: usa sempre gli strumenti.`
 
