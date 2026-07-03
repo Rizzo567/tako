@@ -11,6 +11,8 @@ import { mkdirSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { Server as SocketServer } from 'socket.io'
 import { setupSocketHandlers } from './socket/handlers.js'
+import { setupDictationNamespace } from './socket/dictation.js'
+import { warmupAsr } from './lib/asr.js'
 import { authRoutes } from './routes/auth.js'
 import { restaurantRoutes } from './routes/restaurants.js'
 import { menuRoutes } from './routes/menu.js'
@@ -207,6 +209,10 @@ await fastify.ready()
     pingTimeout: 60000,
   })
   setupSocketHandlers(io, fastify)
+  // Dettatura vocale (Cmd+K): namespace dedicato + warmup del motore locale
+  // in background (il primo uso non paga il cold start del modello).
+  setupDictationNamespace(io)
+  warmupAsr()
 
   try {
     await fastify.listen({ port: PORT, host: '0.0.0.0' })

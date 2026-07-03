@@ -54,9 +54,12 @@ await build({
 })
 
 // 2) Risorse lette a runtime.
-console.log('▶ copia migrations + staff')
+console.log('▶ copia migrations + staff + worker ASR')
 cpSync(join(root, 'packages', 'db', 'src', 'migrations'), join(out, 'migrations'), { recursive: true })
 cpSync(join(root, 'apps', 'dashboard', 'public', 'staff'), join(out, 'staff'), { recursive: true })
+// Worker Python della dettatura (mlx-whisper): asr-local.ts lo cerca accanto
+// al bundle (resources/server/asr/asr_worker.py). Il venv sta in ~/.tako.
+cpSync(join(root, 'apps', 'server', 'asr'), join(out, 'asr'), { recursive: true })
 
 // 2b) App CLIENTE (apps/web, Next standalone): server Node autosufficiente avviato
 // come 2° figlio dall'app desktop sulla porta 3002. I clienti aprono il menu via

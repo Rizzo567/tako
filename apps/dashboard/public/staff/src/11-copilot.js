@@ -1,6 +1,7 @@
 /* ═══════════════════════ Tako — OWNER COPILOT (Cmd+K) ═══════════════════════
    Pannello AI globale per l'owner/staff: si apre con ⌘K / Ctrl+K (o window.openCopilot()).
-   Chiede in linguaggio naturale e l'AI:
+   Chiede in linguaggio naturale (o DETTA: Cmd+K avvia/ferma la dettatura,
+   window.DictationButton in 08-dictation.js) e l'AI:
      • LEGGE dati reali (incasso di oggi, statistiche, stato tavoli, cerca piatti)
      • PROPONE modifiche al menu (segna esaurito/disponibile, crea piatto) → richiedono
        CONFERMA esplicita prima di essere eseguite (POST /ai/owner/execute).
@@ -78,11 +79,25 @@
     const [busy, setBusy] = useState(false);
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
+    const openRef = useRef(false);
+    useEffect(() => { openRef.current = open; }, [open]);
+    const DictBtn = window.DictationButton;
 
-    // ⌘K / Ctrl+K per aprire, Esc per chiudere. Esposto anche come window.openCopilot.
+    // ⌘K / Ctrl+K = DETTATURA: se il copilot è chiuso lo apre E avvia la
+    // registrazione; se è aperto, avvia/ferma la dettatura (allo stop il testo
+    // trascritto+pulito finisce nel campo). Esc chiude (e libera il mic).
     useEffect(() => {
       const onKey = (e) => {
-        if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) { e.preventDefault(); setOpen((o) => !o); }
+        if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
+          e.preventDefault();
+          if (!openRef.current) {
+            setOpen(true);
+            // il bottone mic registra window.takoDictationToggle al mount
+            setTimeout(() => { window.takoDictationToggle && window.takoDictationToggle(); }, 150);
+          } else {
+            window.takoDictationToggle && window.takoDictationToggle();
+          }
+        }
         else if (e.key === "Escape") setOpen(false);
       };
       window.addEventListener("keydown", onKey);
@@ -173,12 +188,13 @@
             {busy && <div style={{ fontSize: 13, color: "var(--ink3,#9a8f86)", padding: "4px 2px" }}>Sto pensando…</div>}
           </div>
 
-          {/* Composer */}
+          {/* Composer + microfono (dettatura Cmd+K) */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 12, borderTop: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
+            {DictBtn && <DictBtn onText={(seg) => setInput((v) => (v ? v + " " : "") + seg)} size={44} />}
             <input ref={inputRef} value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); send(); } }}
-              placeholder="Chiedi… (es. incasso di oggi)"
+              placeholder="Chiedi o detta con Cmd+K… (es. incasso di oggi)"
               style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--hairline,#e6ded6)", background: "var(--sunken,#FBF8F4)", fontSize: 14.5, outline: "none" }} />
             <button onClick={() => send()} disabled={!input.trim() || busy}
               style={{ width: 44, height: 44, borderRadius: 12, border: "none", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", cursor: "pointer", display: "grid", placeItems: "center", opacity: (!input.trim() || busy) ? .5 : 1 }}>

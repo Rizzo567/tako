@@ -29,8 +29,9 @@ export async function seedTestEnv(): Promise<{ env: TestEnv; close: () => Promis
   const staleIds = stale.map((r) => r.id as string)
   if (staleIds.length) {
     await sql`delete from bill_payments where bill_id in (select id from bills where restaurant_id in ${sql(staleIds)})`
-    await sql`delete from bills where restaurant_id in ${sql(staleIds)}`
+    // orders PRIMA di bills: orders.bill_id → bills.id (FK senza cascade)
     await sql`delete from orders where restaurant_id in ${sql(staleIds)}`
+    await sql`delete from bills where restaurant_id in ${sql(staleIds)}`
     await sql`delete from menu_items where restaurant_id in ${sql(staleIds)}`
     await sql`delete from table_sessions where restaurant_id in ${sql(staleIds)}`
     await sql`delete from restaurants where id in ${sql(staleIds)}`
