@@ -91,7 +91,39 @@ const pnpmDir = join(webOut, 'node_modules', '.pnpm')
 const nextEntry = existsSync(pnpmDir) ? readdirSync(pnpmDir).find((d) => d.startsWith('next@')) : null
 if (nextEntry) {
   console.log('▶ appiattisco le dipendenze di next (fix pnpm/standalone)')
-  cpSync(join(pnpmDir, nextEntry, 'node_modules'), join(webOut, 'apps', 'web', 'node_modules'), { recursive: true, dereference: true })
+  const nextNm = join(pnpmDir, nextEntry, 'node_modules')
+  const webNm = join(webOut, 'apps', 'web', 'node_modules')
+  // Alcuni sibling di next (react/react-dom) sono symlink verso il tree di
+  // Next standalone, che è POTATO (manca jsx-runtime.js) → dereferenziarli
+  // in blocco crasha. Copiamo dep-per-dep: per ogni pacchetto preferiamo la
+  // copia COMPLETA dello store .pnpm (dep@ver/node_modules/dep); ricadiamo sul
+  // symlink di next solo se lo store non ce l'ha. Le rotte le saltiamo.
+  const storeSrc = (dep) => {
+    const entry = readdirSync(pnpmDir).find((d) => d.startsWith(dep.replace('/', '+') + '@'))
+    if (!entry) return null
+    const p = join(pnpmDir, entry, 'node_modules', dep)
+    return existsSync(p) ? p : null
+  }
+  const copyDep = (dep, srcDir) => {
+    const dest = join(webNm, dep)
+    const src = storeSrc(dep) || join(srcDir, dep)
+    try {
+      mkdirSync(join(dest, '..'), { recursive: true })
+      // il dest può già esistere come symlink potato (da .next/standalone):
+      // rimuovilo, altrimenti cpSync fallisce con ERR_FS_CP_DIR_TO_NON_DIR
+      rmSync(dest, { recursive: true, force: true })
+      cpSync(src, dest, { recursive: true, dereference: true, force: true })
+    } catch (e) {
+      console.warn(`⚠ flatten: salto ${dep} (${e.code || e.message})`)
+    }
+  }
+  for (const name of readdirSync(nextNm)) {
+    if (name.startsWith('@')) {
+      for (const sub of readdirSync(join(nextNm, name))) copyDep(`${name}/${sub}`, nextNm)
+    } else {
+      copyDep(name, nextNm)
+    }
+  }
 } else {
   console.warn('⚠ next@* non trovato in .pnpm: salto il flatten (verifica la web)')
 }
