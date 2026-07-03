@@ -2,6 +2,7 @@
 
 const NAV = [
   { group: "Operatività", items: [
+    { id: "cowork", label: "Cowork", icon: "sparkles" },
     { id: "dashboard", label: "Dashboard", icon: "home" },
     { id: "ordini", label: "Ordini", icon: "orders", badge: true },
     { id: "kds", label: "Cucina", icon: "kitchen" },
@@ -221,6 +222,7 @@ function NotificationsSheet({ open, onClose }) {
 /* intro contestuale per ogni sezione (mascotte + titolo) */
 function routeIntro(route) {
   const m = {
+    cowork: { pose: "hello", title: "Tako" },
     dashboard: { pose: "hello", title: `Buonasera, ${ROLES.owner.name.split(" ")[0]}!` },
     ordini: { pose: "phone", title: "Ordini live" },
     kds: { pose: "chef", title: "Cucina" },

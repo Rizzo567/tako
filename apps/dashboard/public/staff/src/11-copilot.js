@@ -70,25 +70,23 @@
     );
   }
 
-  function Copilot() {
-    const [open, setOpen] = useState(false);
+  // Schermata "Cowork": la chat con Tako vive QUI (sezione della sidebar),
+  // riempie l'area principale. Nessun overlay, nessun launcher flottante.
+  function TakoChat({ mobile }) {
     const [messages, setMessages] = useState([
-      { role: "assistant", content: "Ciao! Sono Tako. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare un piatto esaurito o crearne uno nuovo." },
+      { role: "assistant", content: "Ciao! Sono Tako. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare/eliminare/modificare un piatto. Scrivi o premi ⌘K per dettare." },
     ]);
     const [input, setInput] = useState("");
     const [busy, setBusy] = useState(false);
     const [dictState, setDictState] = useState("idle"); // idle | rec | busy
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
-    const openRef = useRef(false);
     const inputValRef = useRef("");
-    useEffect(() => { openRef.current = open; }, [open]);
     useEffect(() => { inputValRef.current = input; }, [input]);
     const DictBtn = window.DictationButton;
     const DictWave = window.TakoDictationWave;
 
-    // Inserimento del trascritto LETTERA-PER-LETTERA (typewriter veloce ~11ms/car),
-    // come richiesto: il testo "scorre" nel campo appena arriva dalla dettatura.
+    // Inserimento del trascritto LETTERA-PER-LETTERA (typewriter veloce ~11ms/car).
     const typeInto = (seg) => {
       const base = inputValRef.current ? inputValRef.current + " " : "";
       let i = 1;
@@ -100,34 +98,7 @@
       tick();
     };
 
-    // ⌘K / Ctrl+K = DETTATURA: se il copilot è chiuso lo apre E avvia la
-    // registrazione; se è aperto, avvia/ferma la dettatura (allo stop il testo
-    // trascritto+pulito finisce nel campo). Esc chiude (e libera il mic).
-    useEffect(() => {
-      const onKey = (e) => {
-        if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
-          e.preventDefault();
-          if (!openRef.current) {
-            setOpen(true);
-            // il bottone mic registra window.takoDictationToggle al mount
-            setTimeout(() => { window.takoDictationToggle && window.takoDictationToggle(); }, 150);
-          } else {
-            window.takoDictationToggle && window.takoDictationToggle();
-          }
-        }
-        else if (e.key === "Escape") {
-          // Esc annulla PRIMA la dettatura in corso (come Wispr Flow); solo se
-          // non sta registrando chiude il pannello.
-          if (window.takoDictationCancel) { e.preventDefault(); window.takoDictationCancel(); }
-          else setOpen(false);
-        }
-      };
-      window.addEventListener("keydown", onKey);
-      window.openCopilot = () => setOpen(true);
-      return () => { window.removeEventListener("keydown", onKey); delete window.openCopilot; };
-    }, []);
-
-    useEffect(() => { if (open && inputRef.current) setTimeout(() => inputRef.current.focus(), 60); }, [open]);
+    useEffect(() => { if (inputRef.current) setTimeout(() => { try { inputRef.current.focus(); } catch (_) {} }, 80); }, []);
     useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages, busy]);
 
     const send = async (override) => {
@@ -149,44 +120,26 @@
       }
     };
 
-    if (!open) {
-      // Launcher flottante (utilizzabile anche senza voce di menu).
-      return (
-        <button onClick={() => setOpen(true)} title="Tako (⌘K)"
-          style={{ position: "fixed", right: 16, bottom: "calc(14px + env(safe-area-inset-bottom))", zIndex: 3500,
-            width: 66, height: 66, borderRadius: 18, border: "none", cursor: "pointer",
-            background: "transparent", padding: 0, display: "grid", placeItems: "center" }}>
-          <img src="assets/takos/arancione/logo.png" alt="Tako"
-            style={{ width: 62, height: 62, objectFit: "contain", filter: "drop-shadow(0 8px 16px rgba(42,31,26,.28))" }} draggable={false} />
-        </button>
-      );
-    }
-
+    const PAD = mobile ? 16 : 24;
     return (
-      <div style={{ position: "fixed", inset: 0, zIndex: 3500, display: "flex", alignItems: "flex-start", justifyContent: "center",
-        background: "rgba(30,20,16,.42)", backdropFilter: "blur(3px)", padding: "10vh 16px 16px" }}
-        onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}>
-        <div style={{ width: "min(620px, 100%)", display: "flex", flexDirection: "column", gap: 12, maxHeight: "84vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", flex: "1 1 auto", minHeight: 0,
-          background: "var(--bg,#FBF8F4)", borderRadius: 20, overflow: "hidden", boxShadow: "0 24px 70px rgba(40,20,10,.34)", border: "1px solid #0000000f" }}>
-          {/* Header */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
-            <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
-              style={{ width: 40, height: 40, objectFit: "contain", flex: "none", filter: "drop-shadow(0 4px 8px rgba(42,31,26,.16))" }} />
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 900, fontSize: 15.5, color: "var(--ink,#2A1F1A)" }}>Tako</div>
-              <div style={{ fontSize: 12, color: "var(--ink3,#9a8f86)" }}>⌘K</div>
-            </div>
-            <button onClick={() => setOpen(false)} title="Chiudi"
-              style={{ width: 32, height: 32, borderRadius: 9, border: "none", background: "var(--sunken,#F2ECE6)", color: "var(--ink2,#8a7f76)", fontSize: 15, cursor: "pointer" }}>✕</button>
+      <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0, background: "var(--bg,#FBF8F4)" }}>
+        {/* Header di sezione (su mobile lo mostra già il MobileHeader) */}
+        {!mobile && <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "18px 24px", borderBottom: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
+          <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
+            style={{ width: mobile ? 42 : 48, height: mobile ? 42 : 48, objectFit: "contain", flex: "none", filter: "drop-shadow(0 5px 10px rgba(42,31,26,.16))" }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 900, fontSize: mobile ? 18 : 21, color: "var(--ink,#2A1F1A)" }}>Tako</div>
+            <div style={{ fontSize: 12.5, color: "var(--ink3,#9a8f86)" }}>Assistente operativo · ⌘K per dettare</div>
           </div>
+        </div>}
 
-          {/* Conversazione */}
-          <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: 16 }}>
+        {/* Conversazione (centrata, leggibile su schermi larghi) */}
+        <div ref={scrollRef} style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: PAD }}>
+          <div style={{ maxWidth: 760, margin: "0 auto" }}>
             {messages.map((m, i) => (
               <div key={i} style={{ marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                  <div style={{ maxWidth: "86%", padding: "10px 13px", borderRadius: 16,
+                  <div style={{ maxWidth: "86%", padding: "11px 14px", borderRadius: 16,
                     background: m.role === "user" ? "var(--brand,#ED7159)" : "var(--surface,#fff)",
                     color: m.role === "user" ? "var(--on-brand,#fff)" : "var(--ink,#2A1F1A)",
                     border: m.role === "user" ? "none" : "1px solid var(--hairline,#eee)",
@@ -211,14 +164,39 @@
             )}
             {busy && <div style={{ fontSize: 13, color: "var(--ink3,#9a8f86)", padding: "4px 2px" }}>Sto pensando…</div>}
           </div>
+        </div>
 
-          {/* Composer + microfono (dettatura Cmd+K) */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 12, borderTop: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
+        {/* Waveform in un RIQUADRO SEPARATO sopra il composer (stile Wispr Flow) */}
+        {DictWave && (dictState === "rec" || dictState === "busy") && (
+          <div style={{ padding: `0 ${PAD}px ${mobile ? 10 : 12}px`, background: "var(--surface,#fff)" }}>
+            <div style={{ maxWidth: 760, margin: "0 auto", height: 92, borderRadius: 21, overflow: "hidden", position: "relative",
+              background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
+              border: "1px solid #0000000f", boxShadow: "0 10px 30px rgba(30,20,12,.20), inset 0 1.5px 0 rgba(255,255,255,.75)" }}>
+              <DictWave />
+              {dictState === "rec" && (
+                <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,
+                  color: "#B4453F", display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />
+                  In ascolto · Esc per annullare
+                </div>
+              )}
+              {dictState === "busy" && (
+                <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3, color: "#9a8f86" }}>
+                  Trascrivo…
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Composer + microfono */}
+        <div style={{ borderTop: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)", padding: mobile ? 12 : `12px ${PAD}px 14px` }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, maxWidth: 760, margin: "0 auto" }}>
             {DictBtn && <DictBtn onText={(seg) => typeInto(seg)} onStateChange={setDictState} size={44} />}
             <input ref={inputRef} value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); send(); } }}
-              placeholder="Chiedi o detta con Cmd+K… (es. incasso di oggi)"
+              placeholder="Chiedi o detta con ⌘K… (es. incasso di oggi)"
               style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--hairline,#e6ded6)", background: "var(--sunken,#FBF8F4)", fontSize: 14.5, outline: "none" }} />
             <button onClick={() => send()} disabled={!input.trim() || busy}
               style={{ width: 44, height: 44, borderRadius: 12, border: "none", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", cursor: "pointer", display: "grid", placeItems: "center", opacity: (!input.trim() || busy) ? .5 : 1 }}>
@@ -226,43 +204,41 @@
             </button>
           </div>
         </div>
-
-        {/* Waveform in un RIQUADRO SEPARATO sotto la chat (stile Wispr Flow):
-            box a sé, angoli morbidi, linea a pennello che ondeggia con la voce. */}
-        {DictWave && (dictState === "rec" || dictState === "busy") && (
-          <div style={{ height: 92, borderRadius: 21, overflow: "hidden", position: "relative",
-            background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
-            border: "1px solid #0000000f", boxShadow: "0 14px 38px rgba(30,20,12,.26), inset 0 1.5px 0 rgba(255,255,255,.75)" }}>
-            <DictWave />
-            {dictState === "rec" && (
-              <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,
-                color: "#B4453F", display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />
-                In ascolto · Esc per annullare
-              </div>
-            )}
-            {dictState === "busy" && (
-              <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3, color: "#9a8f86" }}>
-                Trascrivo…
-              </div>
-            )}
-          </div>
-        )}
-        </div>
       </div>
     );
   }
 
-  /* Self-mount in un container dedicato sotto <body> (non tocca #stage). */
+  // Hotkey globali (headless): ⌘K → vai alla sezione Cowork e avvia la dettatura;
+  // Esc → annulla la dettatura in corso. Vive sempre, indipendente dalla schermata.
+  function TakoHotkeys() {
+    useEffect(() => {
+      const onKey = (e) => {
+        if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
+          e.preventDefault();
+          const onCowork = !!window.takoDictationToggle; // il bottone è montato solo su Cowork
+          if (window.takoGo) window.takoGo("cowork");
+          setTimeout(() => { window.takoDictationToggle && window.takoDictationToggle(); }, onCowork ? 0 : 220);
+        } else if (e.key === "Escape") {
+          if (window.takoDictationCancel) { e.preventDefault(); window.takoDictationCancel(); }
+        }
+      };
+      window.addEventListener("keydown", onKey);
+      window.openCopilot = () => window.takoGo && window.takoGo("cowork");
+      return () => { window.removeEventListener("keydown", onKey); delete window.openCopilot; };
+    }, []);
+    return null;
+  }
+  window.ScreenCowork = TakoChat;
+
+  /* Monta SOLO le hotkey globali (nessuna UI): la chat è la schermata Cowork,
+     renderizzata dall'app dentro <main>. */
   function mount() {
-    if (window.__copilotMounted) return;
-    window.__copilotMounted = true;
+    if (window.__takoHotkeysMounted) return;
+    window.__takoHotkeysMounted = true;
     const el = document.createElement("div");
-    el.id = "tako-copilot";
-    // Eredita il colore brand corrente (i brandVars vivono sul div dell'app, non su :root).
-    try { el.style.setProperty("--brand", (window.RESTAURANT && RESTAURANT.brand) || "#ED7159"); } catch (_) {}
+    el.id = "tako-hotkeys";
     document.body.appendChild(el);
-    ReactDOM.createRoot(el).render(<Copilot />);
+    ReactDOM.createRoot(el).render(<TakoHotkeys />);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
   else mount();

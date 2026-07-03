@@ -204,6 +204,7 @@ function App({ session }) {
 
   let Screen;
   switch (route) {
+    case "cowork": Screen = window.ScreenCowork ? React.createElement(window.ScreenCowork, { key: "cowork", mobile }) : null; break;
     case "dashboard": Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} />; break;
     case "ordini": Screen = <ScreenOrdini mobile={mobile} orders={orders} onConfirm={onConfirm} onServe={onServe} onCancel={onCancel} go={go} />; break;
     case "kds": Screen = <ScreenKDS mobile={mobile} orders={orders} onAdvanceItem={onAdvanceItem} onBump={onBump} settings={settings} />; break;
