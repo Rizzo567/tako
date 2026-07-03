@@ -31,7 +31,7 @@ async function verifyStaffToken(token: string): Promise<{ restaurantId: string }
     .select({ restaurantId: users.restaurantId })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
-    .where(and(eq(sessions.token, token), gt(sessions.expiresAt, new Date())))
+    .where(and(eq(sessions.token, token), gt(sessions.expiresAt, new Date()), eq(users.active, true)))
     .limit(1)
   if (!session?.restaurantId) return null
   return { restaurantId: session.restaurantId }

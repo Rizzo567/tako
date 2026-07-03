@@ -20,6 +20,14 @@
     "Statistiche degli ultimi 7 giorni",
   ];
 
+  const CHAT_INTRO = { role: "assistant", content: "Ciao! Sono Tako. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare/eliminare/modificare un piatto. Scrivi o premi ⌘K per dettare." };
+
+  // Stato chat PERSISTENTE finché l'app resta aperta: vive a livello modulo (non in
+  // localStorage/DB), quindi sopravvive a unmount/remount della schermata Cowork
+  // (navigazione via e ritorno) ma si AZZERA al riavvio dell'app (il webview
+  // ricarica lo script → questa variabile torna al valore iniziale).
+  let __coworkChat = { messages: [CHAT_INTRO], input: "" };
+
   function SparkIcon({ size = 18 }) {
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -73,16 +81,18 @@
   // Schermata "Cowork": la chat con Tako vive QUI (sezione della sidebar),
   // riempie l'area principale. Nessun overlay, nessun launcher flottante.
   function TakoChat({ mobile }) {
-    const [messages, setMessages] = useState([
-      { role: "assistant", content: "Ciao! Sono Tako. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare/eliminare/modificare un piatto. Scrivi o premi ⌘K per dettare." },
-    ]);
-    const [input, setInput] = useState("");
+    // Ripristina lo stato dalla sessione app-aperta (module store).
+    const [messages, setMessages] = useState(() => __coworkChat.messages);
+    const [input, setInput] = useState(() => __coworkChat.input);
     const [busy, setBusy] = useState(false);
     const [dictState, setDictState] = useState("idle"); // idle | rec | busy
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
     const inputValRef = useRef("");
     useEffect(() => { inputValRef.current = input; }, [input]);
+    // Persisti a ogni cambio: alla prossima apertura di Cowork (stessa sessione app)
+    // la conversazione è ancora qui.
+    useEffect(() => { __coworkChat = { messages, input }; }, [messages, input]);
     const DictBtn = window.DictationButton;
     const DictWave = window.TakoDictationWave;
 

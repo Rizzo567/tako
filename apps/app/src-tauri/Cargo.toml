@@ -24,6 +24,10 @@ log = "0.4"
 tauri = { version = "2.11.3", features = [] }
 tauri-plugin-log = "2"
 tauri-plugin-http = "2"
+# Impedisce una SECONDA istanza dell'app: un doppio avvio corromperebbe il
+# Postgres embedded (due server sullo stesso pgdata). La 2ª istanza esce subito
+# e porta in primo piano la finestra già aperta.
+tauri-plugin-single-instance = "2"
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"

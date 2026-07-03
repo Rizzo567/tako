@@ -133,6 +133,16 @@ fn spawn_web(app: &tauri::AppHandle) -> Option<Child> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app = tauri::Builder::default()
+        // DEVE essere il PRIMO plugin: se l'app è già aperta, la 2ª istanza esce
+        // subito (prima di avviare un 2º server/Postgres sullo stesso pgdata, che
+        // corromperebbe i dati) e porta in primo piano la finestra esistente.
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            if let Some(w) = app.get_webview_window("main") {
+                let _ = w.show();
+                let _ = w.unminimize();
+                let _ = w.set_focus();
+            }
+        }))
         .plugin(tauri_plugin_http::init())
         .manage(ServerChild(Mutex::new(Vec::new())))
         .setup(|app| {

@@ -14,7 +14,9 @@ async function verifyStaffToken(token: string): Promise<{ restaurantId: string }
     .select({ restaurantId: users.restaurantId })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
-    .where(and(eq(sessions.token, token), gt(sessions.expiresAt, new Date())))
+    // active=true: una sessione residua di un utente disattivato/licenziato viene
+    // rifiutata subito (il loop di rivalidazione del socket chiude la connessione).
+    .where(and(eq(sessions.token, token), gt(sessions.expiresAt, new Date()), eq(users.active, true)))
     .limit(1)
   if (!session?.restaurantId) return null
   return { restaurantId: session.restaurantId }

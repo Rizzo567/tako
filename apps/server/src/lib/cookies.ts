@@ -22,5 +22,12 @@ export function authCookieOptions(maxAgeSeconds: number, path = '/'): CookieSeri
   }
 }
 
-export const STAFF_SESSION_MAX_AGE = 60 * 60 * 24 * 7 // 7 giorni
+// Sessione staff LONG-LIVED con refresh rolling (vedi middleware/auth.ts): su un
+// appliance desktop personale il login deve "restare". La scadenza viene rinnovata
+// a ogni uso, quindi finché usi Tako non ti disconnette. Il cookie WKWebView di
+// Tauri è persistente → sopravvive ai riavvii dell'app.
+export const STAFF_SESSION_MAX_AGE = 60 * 60 * 24 * 90 // 90 giorni
+// Ogni quanto (al massimo) rinnovare la scadenza di una sessione staff attiva:
+// evita una UPDATE a ogni richiesta, rinnova al più una volta al giorno.
+export const SESSION_REFRESH_AFTER_MS = 60 * 60 * 24 * 1000 // 1 giorno
 export const TABLE_SESSION_MAX_AGE = 60 * 60 * 4       // 4 ore

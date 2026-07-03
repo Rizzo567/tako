@@ -12,7 +12,8 @@ import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import postgres from 'postgres'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { existsSync, readFileSync, unlinkSync } from 'node:fs'
+import { existsSync, readFileSync, unlinkSync, cpSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { homedir } from 'node:os'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
@@ -29,9 +30,18 @@ async function healStaleLock(databaseDir: string): Promise<void> {
   const pidFile = join(databaseDir, 'postmaster.pid')
   if (!existsSync(pidFile)) return
   const isAlive = (pid: number) => { try { process.kill(pid, 0); return true } catch { return false } }
+  // Difesa da PID-reuse: uccidi SOLO se il processo è davvero un postgres. Tra un
+  // crash e il rilancio il vecchio PID potrebbe essere stato riassegnato a un
+  // processo estraneo; senza questo check lo ucciamo per errore.
+  const isPostgres = (pid: number) => {
+    try {
+      const comm = execFileSync('ps', ['-p', String(pid), '-o', 'comm='], { encoding: 'utf8', timeout: 2000 })
+      return /postgres|postmaster/i.test(comm)
+    } catch { return false }
+  }
   try {
     const pid = parseInt((readFileSync(pidFile, 'utf8').split('\n')[0] ?? '').trim(), 10)
-    if (Number.isInteger(pid) && pid > 1 && isAlive(pid)) {
+    if (Number.isInteger(pid) && pid > 1 && isAlive(pid) && isPostgres(pid)) {
       console.log(`[db] trovato Postgres orfano (pid ${pid}), lo termino`)
       try { process.kill(pid, 'SIGTERM') } catch { /* ignore */ }
       for (let i = 0; i < 8 && isAlive(pid); i++) await new Promise((r) => setTimeout(r, 400))
@@ -39,6 +49,44 @@ async function healStaleLock(databaseDir: string): Promise<void> {
     }
   } catch { /* best-effort */ }
   try { unlinkSync(pidFile) } catch { /* best-effort */ }
+}
+
+// Numero di backup a copia fredda da conservare (rotazione).
+const KEEP_BACKUPS = Number(process.env['TAKO_DB_KEEP_BACKUPS'] ?? 5)
+
+/**
+ * Backup a COPIA FREDDA della data dir, eseguito all'avvio PRIMA di far partire
+ * Postgres (la dir non è in uso → copia consistente; nessun bisogno di pg_dump,
+ * che la build embedded non include). Ruota conservando gli ultimi KEEP_BACKUPS.
+ * Best-effort: un errore qui non deve mai impedire l'avvio del DB.
+ * Restore manuale: chiudi Tako, sostituisci `pgdata` con una cartella `backups/pgdata-*`.
+ */
+function backupDataDirColdCopy(databaseDir: string): void {
+  try {
+    if (!existsSync(join(databaseDir, 'PG_VERSION'))) return // niente da salvare (dir fresca)
+    if (process.env['TAKO_DB_BACKUP'] === '0' || KEEP_BACKUPS <= 0) return
+    const backupsRoot = join(dirname(databaseDir), 'backups')
+    mkdirSync(backupsRoot, { recursive: true })
+    // timestamp ordinabile YYYYMMDD-HHMMSS (senza Date.now: uso ISO locale)
+    const d = new Date()
+    const p = (n: number) => String(n).padStart(2, '0')
+    const ts = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`
+    const dest = join(backupsRoot, `pgdata-${ts}`)
+    // salta il file di lock (non serve nel backup) copiando la dir e rimuovendolo dopo
+    cpSync(databaseDir, dest, { recursive: true })
+    try { unlinkSync(join(dest, 'postmaster.pid')) } catch { /* ok */ }
+    console.log(`[db] backup a copia fredda: ${dest}`)
+    // rotazione: tieni solo gli ultimi KEEP_BACKUPS
+    const dirs = readdirSync(backupsRoot)
+      .filter((n) => n.startsWith('pgdata-'))
+      .map((n) => ({ n, t: statSync(join(backupsRoot, n)).mtimeMs }))
+      .sort((a, b) => b.t - a.t)
+    for (const old of dirs.slice(KEEP_BACKUPS)) {
+      try { rmSync(join(backupsRoot, old.n), { recursive: true, force: true }) } catch { /* ok */ }
+    }
+  } catch (e) {
+    console.log('[db] backup saltato:', (e as Error).message)
+  }
 }
 
 /**
@@ -64,6 +112,10 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   // postmaster.pid stantio → l'avvio fallirebbe con "lock file already exists".
   // Qui terminiamo l'eventuale orfano e ripuliamo il lock prima di partire.
   await healStaleLock(databaseDir)
+
+  // Backup a copia fredda PRIMA di avviare Postgres: la dir non è ancora in uso,
+  // quindi la copia è consistente. Recovery = sostituisci pgdata con un backup.
+  backupDataDirColdCopy(databaseDir)
 
   const pg = new EmbeddedPostgres({ databaseDir, user, password, port, persistent: true })
   instance = pg

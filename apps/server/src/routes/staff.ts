@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
-import { db, users } from '@tako/db'
+import { db, users, sessions } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 
@@ -58,6 +58,9 @@ export async function staffRoutes(fastify: FastifyInstance) {
     const updates = { ...rest, ...(pin ? { pin: await bcrypt.hash(pin, 10) } : {}) }
     const [user] = await db.update(users).set(updates).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning()
     if (!user) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })
+    // Disattivazione = revoca immediata: cancella tutte le sessioni dell'utente
+    // così non può più autenticarsi (né via HTTP né via socket).
+    if (body.data.active === false) await db.delete(sessions).where(eq(sessions.userId, userId))
     // Non esporre passwordHash/pin: ritorna solo i campi pubblici.
     return { data: { id: user.id, name: user.name, email: user.email, role: user.role, active: user.active, phone: user.phone } }
   })
@@ -66,6 +69,8 @@ export async function staffRoutes(fastify: FastifyInstance) {
     const { userId } = req.params as { userId: string }
     if (userId === req.user!.id) return reply.code(400).send({ error: { code: 'SELF_DELETE', message: 'Cannot delete yourself' } })
     await db.update(users).set({ active: false }).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId)))
+    // Revoca immediata: elimina le sessioni attive del membro rimosso.
+    await db.delete(sessions).where(eq(sessions.userId, userId))
     return { data: { success: true } }
   })
 }
