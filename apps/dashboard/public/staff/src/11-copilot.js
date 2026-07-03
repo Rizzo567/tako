@@ -98,7 +98,12 @@
             window.takoDictationToggle && window.takoDictationToggle();
           }
         }
-        else if (e.key === "Escape") setOpen(false);
+        else if (e.key === "Escape") {
+          // Esc annulla PRIMA la dettatura in corso (come Wispr Flow); solo se
+          // non sta registrando chiude il pannello.
+          if (window.takoDictationCancel) { e.preventDefault(); window.takoDictationCancel(); }
+          else setOpen(false);
+        }
       };
       window.addEventListener("keydown", onKey);
       window.openCopilot = () => setOpen(true);

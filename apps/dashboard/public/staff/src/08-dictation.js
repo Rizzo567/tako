@@ -47,15 +47,23 @@
       this._startedAt = 0;
       this._floor = 0.003;         // noise floor adattivo
       this._endTimer = null;
+      this._level = 0;             // livello audio smussato 0..1 (per la waveform)
     }
 
-    // Un frame Float32 dal thread audio: accumula + endpointing.
+    // Livello audio corrente 0..1 per la visualizzazione (waveform reattiva).
+    getLevel() { return this._level; }
+
+    // Un frame Float32 dal thread audio: accumula + endpointing + livello.
     _ingest(frame) {
       if (!this.recording) return;
       this.chunks.push(frame);
       let sum = 0;
       for (let i = 0; i < frame.length; i++) sum += frame[i] * frame[i];
       const rms = Math.sqrt(sum / frame.length);
+      // Livello per la UI: gain + smoothing asimmetrico (attacco veloce, rilascio
+      // lento) → barre vivaci che scattano sulla voce e scendono morbide.
+      const target = Math.min(1, rms * 9);
+      this._level = target > this._level ? this._level * 0.4 + target * 0.6 : this._level * 0.82 + target * 0.18;
       // floor: scende subito sui frame quieti, sale lentissimo (evita di
       // "imparare" la voce come rumore)
       this._floor = rms < this._floor ? rms : this._floor * 1.002;
@@ -133,6 +141,7 @@
       this._spokeAt = 0;
       this._startedAt = Date.now();
       this._floor = 0.003;
+      this._level = 0;
       this._autoStop = setTimeout(() => { this.onSpeechEnd && this.onSpeechEnd(); }, MAX_RECORD_MS);
 
       // Watchdog frames: se dopo 2.5s non è arrivato NESSUN frame audio, il
@@ -238,6 +247,28 @@
   /* ── Bottone mic autonomo (React) ────────────────────────────────────────── */
   // Stati: idle → rec (pulsante rosso) → busy (trascrizione) → idle.
   // Registra window.takoDictationToggle mentre è montato (usata da Cmd+K).
+  // Errori NOMINATI (come Wispr Flow): messaggi specifici invece di uno
+  // generico, così l'utente sa esattamente cosa fare.
+  function micErrorMessage(e) {
+    const name = e && e.name;
+    const msg = (e && e.message) || String(e || "");
+    if (name === "NotAllowedError" || name === "SecurityError")
+      return "Microfono negato. Consenti il microfono a Tako in Impostazioni → Privacy → Microfono.";
+    if (name === "NotReadableError" || name === "AbortError")
+      return "Microfono occupato da un'altra app. Chiudila e riprova.";
+    if (name === "NotFoundError" || name === "OverconstrainedError")
+      return "Nessun microfono trovato. Collega un microfono e riprova.";
+    if (/login scaduto|sessione staff/i.test(msg))
+      return "Sessione scaduta: rientra e riprova la dettatura.";
+    if (/nessun motore/i.test(msg))
+      return "Nessun motore vocale disponibile: né locale né cloud raggiungibili.";
+    if (/timeout/i.test(msg))
+      return "La trascrizione ci ha messo troppo. Riprova con una frase più breve.";
+    if (/nessun audio|non ho sentito/i.test(msg))
+      return "Non ti ho sentito: parla più vicino al microfono e riprova.";
+    return "Dettatura fallita: " + (name ? name + " — " : "") + msg;
+  }
+
   // Diagnostica: ogni errore client finisce anche nel log del server (via
   // socket 'clientlog') — così i problemi in-app sono visibili da terminale.
   function reportClientError(rec, where, e) {
@@ -247,6 +278,45 @@
         where, name: e && e.name, message: (e && e.message) || String(e),
       });
     } catch (_) {}
+  }
+
+  // Waveform reattiva: 5 barre le cui altezze seguono il livello audio (come la
+  // tastiera iOS di Wispr Flow). Legge rec.getLevel() via requestAnimationFrame.
+  const N_BARS = 5;
+  function Waveform({ recRef, px }) {
+    const { useRef, useEffect } = React;
+    const barsRef = useRef([]);
+    useEffect(() => {
+      let raf = 0;
+      const phases = [0.0, 1.1, 2.2, 3.3, 4.4]; // offset → onda che "respira"
+      const tick = () => {
+        const rec = recRef.current;
+        const lvl = rec ? rec.getLevel() : 0;
+        const t = Date.now() / 220;
+        for (let i = 0; i < N_BARS; i++) {
+          const el = barsRef.current[i];
+          if (!el) continue;
+          // barre centrali più alte; modulazione sinusoidale per vivacità
+          const center = 1 - Math.abs(i - (N_BARS - 1) / 2) / N_BARS;
+          const wob = 0.55 + 0.45 * Math.sin(t + phases[i]);
+          const h = Math.max(0.14, Math.min(1, lvl * (0.6 + center) * wob + 0.12));
+          el.style.transform = "scaleY(" + h.toFixed(3) + ")";
+        }
+        raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(raf);
+    }, []);
+    const bw = Math.max(2, px * 0.06);
+    return React.createElement("div", {
+      style: { display: "flex", alignItems: "center", justifyContent: "center", gap: bw * 0.7, height: px * 0.5 },
+    }, Array.from({ length: N_BARS }, (_, i) =>
+      React.createElement("span", {
+        key: i,
+        ref: (el) => { barsRef.current[i] = el; },
+        style: { display: "block", width: bw, height: px * 0.5, borderRadius: bw, background: "#fff", transformOrigin: "center", transform: "scaleY(0.14)", transition: "transform .06s linear" },
+      })
+    ));
   }
 
   function DictationButton({ onText, onStateChange, size }) {
@@ -267,13 +337,19 @@
       try {
         const r = await rec.stop();
         if (r && r.text) onText && onText(r.text, r);
-        else window.toast && window.toast("Non ho sentito nulla: riprova parlando più vicino al microfono.", "error");
+        else window.toast && window.toast("Non ti ho sentito: parla più vicino al microfono e riprova.", "error");
       } catch (e) {
         reportClientError(rec, "stop", e);
-        window.toast && window.toast("Dettatura fallita: " + ((e && e.name ? e.name + " — " : "") + (e.message || e)), "error");
+        window.toast && window.toast(micErrorMessage(e), "error");
       } finally {
         set("idle");
       }
+    };
+
+    // Annulla la registrazione SENZA trascrivere (Esc / click su annulla).
+    const cancel = () => {
+      const rec = recRef.current;
+      if (rec && stateRef.current === "rec") { rec.cancel(); set("idle"); }
     };
 
     const toggle = async () => {
@@ -297,10 +373,7 @@
         catch (e) {
           set("idle");
           reportClientError(rec, "start", e);
-          const denied = e && (e.name === "NotAllowedError" || e.name === "SecurityError");
-          window.toast && window.toast(denied
-            ? "Microfono negato. Consenti il microfono a Tako in Impostazioni → Privacy → Microfono."
-            : "Impossibile avviare il microfono: " + ((e && e.name ? e.name + " — " : "") + (e.message || e)), "error");
+          window.toast && window.toast(micErrorMessage(e), "error");
         }
         return;
       }
@@ -313,19 +386,28 @@
     // clientlog). Il toggle legge stateRef, quindi non soffre di stale state.
     useEffect(() => {
       window.takoDictationToggle = toggle;
+      // Esposta SOLO durante la registrazione: il copilot usa la sua presenza
+      // per decidere se Esc annulla la dettatura o chiude il pannello.
       return () => {
         if (window.takoDictationToggle === toggle) delete window.takoDictationToggle;
-        // smontaggio REALE a metà registrazione → libera il mic
         if (recRef.current && recRef.current.recording) recRef.current.cancel();
       };
     }, []);
 
-    const bg = state === "rec" ? "#E5484D" : state === "busy" ? "#F5D90A" : "var(--surface2,#F4EFE8)";
+    useEffect(() => {
+      if (state === "rec") window.takoDictationCancel = cancel;
+      else if (window.takoDictationCancel === cancel) delete window.takoDictationCancel;
+    }, [state]);
+
+    const bg = state === "rec" ? "#E5484D" : state === "busy" ? "var(--surface2,#F4EFE8)" : "var(--surface2,#F4EFE8)";
     const fg = state === "rec" ? "#fff" : "#2A1F1A";
+    const title = state === "rec" ? "Ferma e trascrivi · Esc per annullare"
+      : state === "busy" ? "Trascrizione in corso…" : "Detta (Cmd+K)";
     return React.createElement("button", {
       onClick: toggle,
-      title: state === "rec" ? "Ferma e trascrivi (Cmd+K)" : "Detta (Cmd+K)",
+      title: title,
       "aria-label": "Dettatura vocale",
+      "aria-busy": state === "busy",
       style: {
         width: px, height: px, minWidth: px, borderRadius: "50%", border: "1px solid var(--hairline,#E5DDD3)",
         background: bg, color: fg, cursor: state === "busy" ? "wait" : "pointer",
@@ -334,21 +416,29 @@
         transition: "background .15s",
       },
     },
-      state === "busy"
-        ? React.createElement("span", { style: { fontSize: px * 0.42 } }, "…")
-        : React.createElement("svg", { width: px * 0.5, height: px * 0.5, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
-            React.createElement("rect", { x: 9, y: 2, width: 6, height: 12, rx: 3 }),
-            React.createElement("path", { d: "M5 10v1a7 7 0 0 0 14 0v-1" }),
-            React.createElement("line", { x1: 12, y1: 18, x2: 12, y2: 22 }),
-          )
+      state === "rec"
+        ? React.createElement(Waveform, { recRef, px })
+        : state === "busy"
+          ? React.createElement("span", { className: "tako-dict-shimmer", style: { display: "inline-flex", gap: px * 0.06 } },
+              React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out infinite" } }),
+              React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out .16s infinite" } }),
+              React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out .32s infinite" } }),
+            )
+          : React.createElement("svg", { width: px * 0.5, height: px * 0.5, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
+              React.createElement("rect", { x: 9, y: 2, width: 6, height: 12, rx: 3 }),
+              React.createElement("path", { d: "M5 10v1a7 7 0 0 0 14 0v-1" }),
+              React.createElement("line", { x1: 12, y1: 18, x2: 12, y2: 22 }),
+            )
     );
   }
 
-  // keyframes del pulse (una volta sola)
+  // keyframes (una volta sola): pulse dell'anello rosso + rimbalzo dei dot shimmer
   if (!document.getElementById("tako-dict-style")) {
     const st = document.createElement("style");
     st.id = "tako-dict-style";
-    st.textContent = "@keyframes takoDictPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.45)}50%{box-shadow:0 0 0 10px rgba(229,72,77,0)}}";
+    st.textContent =
+      "@keyframes takoDictPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.45)}50%{box-shadow:0 0 0 10px rgba(229,72,77,0)}}" +
+      "@keyframes takoDictDot{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-30%);opacity:1}}";
     document.head.appendChild(st);
   }
 
