@@ -12,6 +12,8 @@ function ScreenMenu({ mobile }) {
   const [secOpen, setSecOpen] = useState(false);
   const [secName, setSecName] = useState("");
   const [secLoading, setSecLoading] = useState(false);
+  const [delSez, setDelSez] = useState(null);   // sezione da eliminare {_id, sezione, piatti}
+  const [delDish, setDelDish] = useState(null);  // piatto da eliminare {_id, nome}
   const previewCount = preview ? preview.sections.reduce((a, s) => a + s.items.length, 0) : 0;
   const toggle = async (sez, nome) => {
     // trova il piatto reale per id prima dell'update ottimistico
@@ -33,6 +35,7 @@ function ScreenMenu({ mobile }) {
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="dish" title="Menu" sub={`${menu.length} sezioni · ${menu.reduce((a, s) => a + s.piatti.length, 0)} piatti`}
         actions={<div style={{ display: "flex", gap: 8 }}>
+          <Btn kind="soft" icon="insights" onClick={() => window.takoGo && window.takoGo("insights")}>Analisi menu</Btn>
           <Btn kind="soft" icon="sparkles" onClick={() => setImportOpen(true)}>Importa da testo</Btn>
           <Btn kind="soft" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuova sezione</Btn>
           <Btn kind="brand" icon="plus" onClick={async () => {
@@ -53,6 +56,9 @@ function ScreenMenu({ mobile }) {
             <Icon name="more" size={16} style={{ color: "var(--ink-3)", transform: "rotate(90deg)" }} />
             <h3 style={{ fontSize: 17 }}>{s.sezione}</h3>
             <Badge tone="muted">{s.piatti.length}</Badge>
+            <div style={{ flex: 1 }} />
+            <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} title="Elimina sezione"
+              onClick={() => setDelSez(s)} />
           </div>
           <Card pad={0} style={{ overflow: "hidden" }}>
             {s.piatti.map((p, i) => {
@@ -72,12 +78,40 @@ function ScreenMenu({ mobile }) {
                     <span style={{ position: "absolute", top: 3, left: p.disp ? 23 : 3, width: 20, height: 20, borderRadius: 99, background: "#fff", transition: "left .2s var(--spring)" }} />
                   </button>
                   <IconBtn name="edit" tone="ghost" onClick={() => setEdit(p)} />
+                  <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} title="Elimina piatto" onClick={() => setDelDish(p)} />
                 </div>
               );
             })}
           </Card>
         </div>
       ))}
+      <Confirm open={!!delSez} onClose={() => setDelSez(null)} danger
+        title={delSez ? `Eliminare la sezione "${delSez.sezione}"?` : "Eliminare la sezione?"}
+        body={delSez && delSez.piatti.length ? `La sezione e i suoi ${delSez.piatti.length} piatti verranno rimossi dal menu.` : "La sezione verrà rimossa dal menu."}
+        confirmLabel="Elimina"
+        onConfirm={async () => {
+          const sez = delSez;
+          if (!sez || !sez._id) { setDelSez(null); return; }
+          try {
+            await window.TakoActions.menuDeleteSection(sez._id);
+            toast("Sezione eliminata", { type: "success" });
+            await window.takoReload();
+          } catch (e) { toast(e.message, { type: "error" }); }
+          finally { setDelSez(null); }
+        }} />
+      <Confirm open={!!delDish} onClose={() => setDelDish(null)} danger
+        title={delDish ? `Eliminare "${delDish.nome}"?` : "Eliminare il piatto?"}
+        body="Il piatto verrà rimosso dal menu." confirmLabel="Elimina"
+        onConfirm={async () => {
+          const p = delDish;
+          if (!p || !p._id) { setDelDish(null); return; }
+          try {
+            await window.TakoActions.menuDeleteItem(p._id);
+            toast("Piatto eliminato", { type: "success" });
+            await window.takoReload();
+          } catch (e) { toast(e.message, { type: "error" }); }
+          finally { setDelDish(null); }
+        }} />
       <Overlay open={!!edit} onClose={() => setEdit(null)} anchor={mobile ? "center" : "right"}>
         {edit && <DishEditor dish={edit} mobile={mobile} onClose={() => setEdit(null)} />}
       </Overlay>

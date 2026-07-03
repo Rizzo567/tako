@@ -277,6 +277,7 @@ const TakoActions = {
   menuCreateItem: (sectionId, fields) => TakoAPI.post(`/menus/sections/${sectionId}/items`, fields),
   menuDeleteItem: (itemId) => TakoAPI.del(`/menus/items/${itemId}`),
   menuCreateSection: (name) => TakoAPI.post(`/menus/${window.__menuId}/sections`, { name }),
+  menuDeleteSection: (sectionId) => TakoAPI.del(`/menus/sections/${sectionId}`),
   variantCreate: (itemId, name, priceModifier) => TakoAPI.post(`/menus/items/${itemId}/variants`, { name, priceModifier }),
   variantDelete: (itemId, variantId) => TakoAPI.del(`/menus/items/${itemId}/variants/${variantId}`),
   // inventario

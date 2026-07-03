@@ -153,11 +153,11 @@
       // Launcher flottante (utilizzabile anche senza voce di menu).
       return (
         <button onClick={() => setOpen(true)} title="Tako (⌘K)"
-          style={{ position: "fixed", right: 18, bottom: "calc(18px + env(safe-area-inset-bottom))", zIndex: 3500,
-            width: 54, height: 54, borderRadius: 16, border: "none", cursor: "pointer",
-            background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", display: "grid", placeItems: "center",
-            boxShadow: "0 10px 30px rgba(237,113,89,.45)" }}>
-          <SparkIcon size={22} />
+          style={{ position: "fixed", right: 16, bottom: "calc(14px + env(safe-area-inset-bottom))", zIndex: 3500,
+            width: 66, height: 66, borderRadius: 18, border: "none", cursor: "pointer",
+            background: "transparent", padding: 0, display: "grid", placeItems: "center" }}>
+          <img src="assets/takos/arancione/logo.png" alt="Tako"
+            style={{ width: 62, height: 62, objectFit: "contain", filter: "drop-shadow(0 8px 16px rgba(42,31,26,.28))" }} draggable={false} />
         </button>
       );
     }
@@ -166,11 +166,13 @@
       <div style={{ position: "fixed", inset: 0, zIndex: 3500, display: "flex", alignItems: "flex-start", justifyContent: "center",
         background: "rgba(30,20,16,.42)", backdropFilter: "blur(3px)", padding: "10vh 16px 16px" }}
         onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}>
-        <div style={{ width: "min(620px, 100%)", maxHeight: "78vh", display: "flex", flexDirection: "column",
+        <div style={{ width: "min(620px, 100%)", display: "flex", flexDirection: "column", gap: 12, maxHeight: "84vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", flex: "1 1 auto", minHeight: 0,
           background: "var(--bg,#FBF8F4)", borderRadius: 20, overflow: "hidden", boxShadow: "0 24px 70px rgba(40,20,10,.34)", border: "1px solid #0000000f" }}>
           {/* Header */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
-            <span style={{ width: 34, height: 34, borderRadius: 10, display: "grid", placeItems: "center", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)" }}><SparkIcon size={18} /></span>
+            <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
+              style={{ width: 40, height: 40, objectFit: "contain", flex: "none", filter: "drop-shadow(0 4px 8px rgba(42,31,26,.16))" }} />
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 900, fontSize: 15.5, color: "var(--ink,#2A1F1A)" }}>Tako</div>
               <div style={{ fontSize: 12, color: "var(--ink3,#9a8f86)" }}>⌘K</div>
@@ -223,30 +225,29 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
             </button>
           </div>
+        </div>
 
-          {/* Waveform fluida SOTTO la chat: visibile mentre detti / elabora
-              (stile Wispr Flow — linea a pennello che ondeggia con la voce). */}
-          {DictWave && (dictState === "rec" || dictState === "busy") && (
-            <div style={{ padding: "0 12px 12px", background: "var(--surface,#fff)" }}>
-              <div style={{ height: 64, borderRadius: 14, overflow: "hidden",
-                background: "var(--surface2,#F1ECE3)", border: "1px solid var(--hairline,#e6ded6)",
-                boxShadow: "inset 0 1px 3px rgba(0,0,0,.05)", position: "relative" }}>
-                <DictWave />
-                {dictState === "rec" && (
-                  <div style={{ position: "absolute", left: 12, top: 8, fontSize: 11, fontWeight: 700, letterSpacing: .3,
-                    color: "#B4453F", display: "flex", alignItems: "center", gap: 5 }}>
-                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />
-                    In ascolto · Esc per annullare
-                  </div>
-                )}
-                {dictState === "busy" && (
-                  <div style={{ position: "absolute", left: 12, top: 8, fontSize: 11, fontWeight: 700, letterSpacing: .3, color: "#9a8f86" }}>
-                    Trascrivo…
-                  </div>
-                )}
+        {/* Waveform in un RIQUADRO SEPARATO sotto la chat (stile Wispr Flow):
+            box a sé, angoli morbidi, linea a pennello che ondeggia con la voce. */}
+        {DictWave && (dictState === "rec" || dictState === "busy") && (
+          <div style={{ height: 92, borderRadius: 22, overflow: "hidden", position: "relative",
+            background: "linear-gradient(180deg,#F3EEE4,#ECE6DA)",
+            border: "1px solid #00000014", boxShadow: "0 12px 34px rgba(40,20,10,.22), inset 0 1px 2px rgba(255,255,255,.6)" }}>
+            <DictWave />
+            {dictState === "rec" && (
+              <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,
+                color: "#B4453F", display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />
+                In ascolto · Esc per annullare
               </div>
-            </div>
-          )}
+            )}
+            {dictState === "busy" && (
+              <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3, color: "#9a8f86" }}>
+                Trascrivo…
+              </div>
+            )}
+          </div>
+        )}
         </div>
       </div>
     );

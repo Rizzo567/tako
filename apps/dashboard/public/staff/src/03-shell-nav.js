@@ -19,7 +19,6 @@ const NAV = [
     { id: "menu", label: "Menu", icon: "menu" },
     { id: "inventario", label: "Inventario", icon: "inventory" },
     { id: "statistiche", label: "Statistiche", icon: "stats" },
-    { id: "insights", label: "Analisi Menu", icon: "insights" },
     { id: "staff", label: "Staff", icon: "staff" },
     { id: "turni", label: "Turni", icon: "clock" },
   ]},
