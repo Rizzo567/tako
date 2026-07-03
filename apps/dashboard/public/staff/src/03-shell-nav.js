@@ -13,8 +13,7 @@ const NAV = [
     { id: "sala", label: "Sala Live", icon: "map" },
     { id: "tavoli", label: "Gestione Tavoli", icon: "table" },
     { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
-    { id: "qr", label: "QR Codes", icon: "qr" },
-    { id: "collega", label: "Collega dispositivi", icon: "qr" },
+    { id: "dispositivi", label: "Dispositivi", icon: "qr" },
   ]},
   { group: "Gestione", items: [
     { id: "menu", label: "Menu", icon: "menu" },
@@ -231,6 +230,7 @@ function routeIntro(route) {
     sala: { pose: "serve", title: "Sala Live" },
     tavoli: { pose: "serve", title: "Gestione Tavoli" },
     qr: { pose: "phone", title: "QR Codes" },
+    dispositivi: { pose: "phone", title: "Dispositivi" },
     menu: { pose: "dish", title: "Menu" },
     inventario: { pose: "dishAlt", title: "Inventario" },
     statistiche: { pose: "pay", title: "Statistiche" },

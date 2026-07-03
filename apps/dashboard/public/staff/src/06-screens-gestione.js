@@ -996,4 +996,28 @@ function ScreenCollega({ mobile }) {
   );
 }
 
-Object.assign(window, { ScreenMenu, ScreenStatistiche, ScreenInsights, ScreenInventario, ScreenStaff, ScreenImpostazioni, ScreenCollega });
+/* ═══════════════════ DISPOSITIVI (QR + Collega, unificate) ═══════════════════ */
+/* Raccoglie in un'unica voce di sidebar due schermate affini (owner-only). */
+function ScreenDispositivi({ mobile }) {
+  const [tab, setTab] = React.useState("qr");
+  const QR = window.ScreenQR, Collega = window.ScreenCollega;
+  const tabs = [["qr", "QR Codes"], ["collega", "Collega dispositivi"]];
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+      <div style={{ display: "flex", gap: 8, padding: mobile ? "12px 16px 4px" : "16px 24px 4px", flex: "none" }}>
+        {tabs.map(([id, label]) => (
+          <button key={id} onClick={() => setTab(id)}
+            style={{ padding: "8px 15px", borderRadius: 999, border: "1px solid var(--hairline)", fontWeight: 700, fontSize: 13.5, cursor: "pointer",
+              background: tab === id ? "var(--brand)" : "transparent", color: tab === id ? "var(--on-brand)" : "var(--ink-2)" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+      <div style={{ flex: 1, minHeight: 0 }}>
+        {tab === "qr" ? (QR ? <QR mobile={mobile} /> : null) : (Collega ? <Collega mobile={mobile} /> : null)}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { ScreenMenu, ScreenStatistiche, ScreenInsights, ScreenInventario, ScreenStaff, ScreenImpostazioni, ScreenCollega, ScreenDispositivi });

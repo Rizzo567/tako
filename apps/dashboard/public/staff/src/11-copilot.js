@@ -120,90 +120,122 @@
       }
     };
 
-    const PAD = mobile ? 16 : 24;
-    return (
-      <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0, background: "var(--bg,#FBF8F4)" }}>
-        {/* Header di sezione (su mobile lo mostra già il MobileHeader) */}
-        {!mobile && <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "18px 24px", borderBottom: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
-          <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
-            style={{ width: mobile ? 42 : 48, height: mobile ? 42 : 48, objectFit: "contain", flex: "none", filter: "drop-shadow(0 5px 10px rgba(42,31,26,.16))" }} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 900, fontSize: mobile ? 18 : 21, color: "var(--ink,#2A1F1A)" }}>Tako</div>
-            <div style={{ fontSize: 12.5, color: "var(--ink3,#9a8f86)" }}>Assistente operativo · ⌘K per dettare</div>
-          </div>
-        </div>}
+    // Textarea auto-crescente (fino a ~200px)
+    useEffect(() => {
+      const el = inputRef.current;
+      if (el) { el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight, 200) + "px"; }
+    }, [input]);
 
-        {/* Conversazione (centrata, leggibile su schermi larghi) */}
-        <div ref={scrollRef} style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: PAD }}>
-          <div style={{ maxWidth: 760, margin: "0 auto" }}>
-            {messages.map((m, i) => (
-              <div key={i} style={{ marginBottom: 12 }}>
-                <div style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                  <div style={{ maxWidth: "86%", padding: "11px 14px", borderRadius: 16,
-                    background: m.role === "user" ? "var(--brand,#ED7159)" : "var(--surface,#fff)",
-                    color: m.role === "user" ? "var(--on-brand,#fff)" : "var(--ink,#2A1F1A)",
-                    border: m.role === "user" ? "none" : "1px solid var(--hairline,#eee)",
-                    fontSize: 14.5, lineHeight: 1.45, fontWeight: 500, whiteSpace: "pre-wrap" }}>
-                    {m.content}
-                  </div>
-                </div>
-                {m.role === "assistant" && m.pending && m.pending.map((p, pi) => (
-                  <PendingCard key={pi} item={p} onDone={() => {}} />
-                ))}
-              </div>
-            ))}
-            {messages.length === 1 && !busy && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
-                {SUGGESTIONS.map((s) => (
-                  <button key={s} onClick={() => send(s)}
-                    style={{ padding: "8px 12px", borderRadius: 999, border: "1px solid var(--hairline,#e6ded6)", background: "var(--surface,#fff)", color: "var(--ink2,#6a5f56)", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-                    {s}
-                  </button>
-                ))}
-              </div>
-            )}
-            {busy && <div style={{ fontSize: 13, color: "var(--ink3,#9a8f86)", padding: "4px 2px" }}>Sto pensando…</div>}
-          </div>
-        </div>
+    const hasConvo = messages.some((m) => m.role === "user");
+    const hour = new Date().getHours();
+    const greet = hour < 12 ? "Buongiorno" : hour < 18 ? "Buon pomeriggio" : "Buonasera";
+    const owner = (window.RESTAURANT && (RESTAURANT.owner || RESTAURANT.name)) || "";
+    const canSend = !!input.trim() && !busy;
 
-        {/* Waveform in un RIQUADRO SEPARATO sopra il composer (stile Wispr Flow) */}
+    // Composer stile Claude: box arrotondato, textarea, mic a sinistra, invio a destra.
+    const composer = (
+      <div style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
+        {/* Waveform durante la dettatura (pennellata Wispr) */}
         {DictWave && (dictState === "rec" || dictState === "busy") && (
-          <div style={{ padding: `0 ${PAD}px ${mobile ? 10 : 12}px`, background: "var(--surface,#fff)" }}>
-            <div style={{ maxWidth: 760, margin: "0 auto", height: 92, borderRadius: 21, overflow: "hidden", position: "relative",
-              background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
-              border: "1px solid #0000000f", boxShadow: "0 10px 30px rgba(30,20,12,.20), inset 0 1.5px 0 rgba(255,255,255,.75)" }}>
-              <DictWave />
-              {dictState === "rec" && (
-                <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,
-                  color: "#B4453F", display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />
-                  In ascolto · Esc per annullare
-                </div>
-              )}
-              {dictState === "busy" && (
-                <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3, color: "#9a8f86" }}>
-                  Trascrivo…
-                </div>
-              )}
+          <div style={{ marginBottom: 10, height: 84, borderRadius: 20, overflow: "hidden", position: "relative",
+            background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
+            border: "1px solid #0000000f", boxShadow: "0 8px 24px rgba(30,20,12,.16), inset 0 1.5px 0 rgba(255,255,255,.7)" }}>
+            <DictWave />
+            <div style={{ position: "absolute", left: 15, top: 10, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,
+              color: dictState === "rec" ? "#B4453F" : "#9a8f86", display: "flex", alignItems: "center", gap: 6 }}>
+              {dictState === "rec" && <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />}
+              {dictState === "rec" ? "In ascolto · Esc per annullare" : "Trascrivo…"}
             </div>
           </div>
         )}
 
-        {/* Composer + microfono */}
-        <div style={{ borderTop: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)", padding: mobile ? 12 : `12px ${PAD}px 14px` }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, maxWidth: 760, margin: "0 auto" }}>
-            {DictBtn && <DictBtn onText={(seg) => typeInto(seg)} onStateChange={setDictState} size={44} />}
-            <input ref={inputRef} value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); send(); } }}
-              placeholder="Chiedi o detta con ⌘K… (es. incasso di oggi)"
-              style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--hairline,#e6ded6)", background: "var(--sunken,#FBF8F4)", fontSize: 14.5, outline: "none" }} />
-            <button onClick={() => send()} disabled={!input.trim() || busy}
-              style={{ width: 44, height: 44, borderRadius: 12, border: "none", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", cursor: "pointer", display: "grid", placeItems: "center", opacity: (!input.trim() || busy) ? .5 : 1 }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
+        <div style={{ borderRadius: 24, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E5E5)",
+          boxShadow: "0 1px 2px rgba(0,0,0,.06), 0 12px 32px rgba(30,20,10,.07)", padding: "14px 16px 10px" }}>
+          <textarea ref={inputRef} value={input} rows={1}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+            placeholder="Come posso aiutarti? Scrivi o premi ⌘K per dettare…"
+            style={{ width: "100%", border: "none", outline: "none", resize: "none", background: "transparent",
+              fontSize: 16, lineHeight: 1.5, color: "var(--ink,#1F1E1D)", maxHeight: 200, overflowY: "auto",
+              fontFamily: "inherit", display: "block", padding: "2px 2px 0" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
+            {DictBtn && <DictBtn onText={(seg) => typeInto(seg)} onStateChange={setDictState} size={36} />}
+            <div style={{ flex: 1 }} />
+            <button onClick={() => send()} disabled={!canSend} aria-label="Invia"
+              style={{ width: 36, height: 36, borderRadius: 12, border: "none", display: "grid", placeItems: "center",
+                cursor: canSend ? "pointer" : "default", color: "#fff", transition: "background .15s, opacity .15s",
+                background: canSend ? "var(--brand,#D97757)" : "var(--brand,#D97757)", opacity: canSend ? 1 : .32 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5" /><path d="M5 12l7-7 7 7" /></svg>
             </button>
           </div>
         </div>
+        <p style={{ textAlign: "center", marginTop: 12, fontSize: 12, color: "var(--ink-3,#999)" }}>
+          Tako può sbagliare. Verifica le informazioni importanti.
+        </p>
+      </div>
+    );
+
+    return (
+      <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0, background: "var(--bg,#FAF9F5)" }}>
+        {hasConvo ? (
+          <>
+            <div ref={scrollRef} style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: mobile ? "16px" : "24px 24px 8px" }}>
+              <div style={{ maxWidth: 720, margin: "0 auto" }}>
+                {messages.map((m, i) => (
+                  <div key={i} style={{ marginBottom: 12 }}>
+                    <div style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+                      <div style={{ maxWidth: "86%", padding: "11px 14px", borderRadius: 16,
+                        background: m.role === "user" ? "var(--brand,#ED7159)" : "var(--surface,#fff)",
+                        color: m.role === "user" ? "var(--on-brand,#fff)" : "var(--ink,#2A1F1A)",
+                        border: m.role === "user" ? "none" : "1px solid var(--hairline,#eee)",
+                        fontSize: 14.5, lineHeight: 1.45, fontWeight: 500, whiteSpace: "pre-wrap" }}>
+                        {m.content}
+                      </div>
+                    </div>
+                    {m.role === "assistant" && m.pending && m.pending.map((p, pi) => (
+                      <PendingCard key={pi} item={p} onDone={() => {}} />
+                    ))}
+                  </div>
+                ))}
+                {busy && <div style={{ fontSize: 13, color: "var(--ink3,#9a8f86)", padding: "4px 2px" }}>Sto pensando…</div>}
+              </div>
+            </div>
+            <div style={{ padding: mobile ? "0 12px 14px" : "4px 24px 20px" }}>{composer}</div>
+          </>
+        ) : (
+          <div style={{ flex: 1, minHeight: 0, overflowY: "auto", display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center", padding: mobile ? "24px 16px" : "24px", gap: 8 }}>
+            <div style={{ textAlign: "center", marginBottom: 26 }}>
+              <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
+                style={{ width: 80, height: 80, objectFit: "contain", margin: "0 auto 16px", filter: "drop-shadow(0 10px 20px rgba(42,31,26,.18))" }} />
+              <h1 style={{ fontSize: mobile ? 27 : 34, fontWeight: 400, color: "var(--ink,#2A1F1A)", letterSpacing: "-.5px", lineHeight: 1.1 }}>
+                {greet}{owner ? ", " : ""}
+                {owner && (
+                  <span style={{ position: "relative", display: "inline-block", fontWeight: 600, paddingBottom: 6 }}>
+                    {owner}
+                    <svg style={{ position: "absolute", width: "140%", height: 18, bottom: -2, left: "-20%", color: "var(--brand,#D97757)" }}
+                      viewBox="0 0 140 24" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                      <path d="M6 16 Q 70 24, 134 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
+                    </svg>
+                  </span>
+                )}
+              </h1>
+            </div>
+            {composer}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginTop: 8, maxWidth: 640 }}>
+              {SUGGESTIONS.map((s) => (
+                <button key={s} onClick={() => send(s)}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", fontSize: 13.5,
+                    color: "var(--ink2,#6a5f56)", background: "transparent", border: "1px solid var(--hairline,#e6ded6)",
+                    borderRadius: 999, cursor: "pointer", transition: "background .15s, color .15s" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "var(--surface2,#F0EEE6)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

@@ -215,6 +215,7 @@ function App({ session }) {
     case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} />; break;
     case "turni": Screen = <ScreenTurni key={"turni" + dataVersion} mobile={mobile} />; break;
     case "qr": Screen = <ScreenQR key={"qr" + dataVersion} mobile={mobile} />; break;
+    case "dispositivi": Screen = <ScreenDispositivi key={"disp" + dataVersion} mobile={mobile} />; break;
     case "menu": Screen = <ScreenMenu key={"menu" + dataVersion} mobile={mobile} />; break;
     case "inventario": Screen = <ScreenInventario key={"inv" + dataVersion} mobile={mobile} />; break;
     case "statistiche": Screen = <ScreenStatistiche key={"stats" + dataVersion} mobile={mobile} />; break;
