@@ -230,9 +230,9 @@
         {/* Waveform in un RIQUADRO SEPARATO sotto la chat (stile Wispr Flow):
             box a sé, angoli morbidi, linea a pennello che ondeggia con la voce. */}
         {DictWave && (dictState === "rec" || dictState === "busy") && (
-          <div style={{ height: 92, borderRadius: 22, overflow: "hidden", position: "relative",
-            background: "linear-gradient(180deg,#F3EEE4,#ECE6DA)",
-            border: "1px solid #00000014", boxShadow: "0 12px 34px rgba(40,20,10,.22), inset 0 1px 2px rgba(255,255,255,.6)" }}>
+          <div style={{ height: 92, borderRadius: 21, overflow: "hidden", position: "relative",
+            background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
+            border: "1px solid #0000000f", boxShadow: "0 14px 38px rgba(30,20,12,.26), inset 0 1.5px 0 rgba(255,255,255,.75)" }}>
             <DictWave />
             {dictState === "rec" && (
               <div style={{ position: "absolute", left: 16, top: 11, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,

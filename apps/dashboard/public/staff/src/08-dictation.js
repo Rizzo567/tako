@@ -291,11 +291,13 @@
     } catch (_) {}
   }
 
-  // ── Waveform FLUIDA (canvas) stile Wispr Flow ────────────────────────────────
-  // Linea orizzontale "a pennello": più tratti sottili sovrapposti che ondeggiano
-  // e si gonfiano con la voce (ampiezza = livello audio smussato). Legge il
-  // recorder condiviso window.__takoDictRec. Va montata in un riquardo arrotondato
-  // sotto la chat.
+  // ── Waveform "pennello d'inchiostro" (canvas) stile Wispr Flow ───────────────
+  // UNA pennellata grafite su crema: un filo principale netto + decine di ciocche
+  // finissime semitrasparenti che gli si stringono attorno (texture "pelosa").
+  // Silhouette fissa (come il riferimento): coda sottile sx → piccola gobba →
+  // AVVALLAMENTO profondo a ~0.37 (dove le frange si aprono) → risalita → gobba
+  // dolce a ~0.55 → ondina → lunga coda destra che si assottiglia a punta.
+  // La voce (window.__takoDictRec.getLevel()) amplifica ampiezza e frange.
   function TakoDictationWave(props) {
     const { useRef, useEffect } = React;
     const canvasRef = useRef(null);
@@ -313,36 +315,84 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       };
       resize();
-      const STROKES = 11;
+
+      const g = (nx, c, wdt) => Math.exp(-((nx - c) / wdt) * ((nx - c) / wdt));
+      const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+      // Silhouette del riferimento, in unità di h (y positivo = verso il basso).
+      const baseShape = (nx) =>
+        -0.13 * g(nx, 0.12, 0.075)   // piccola gobba a sinistra
+        + 0.46 * g(nx, 0.37, 0.080)  // avvallamento profondo (il tratto dominante)
+        - 0.21 * g(nx, 0.55, 0.085)  // gobba dolce centro-destra
+        + 0.07 * g(nx, 0.71, 0.090)  // ondina discendente
+        - 0.06 * g(nx, 0.85, 0.090); // lieve risalita prima della coda
+      // Dove il pennello è "carico": frange folte all'avvallamento e sulla gobba.
+      const spreadShape = (nx) => 0.5 + 4.4 * g(nx, 0.37, 0.10) + 1.8 * g(nx, 0.55, 0.12);
+      // margine laterale: le punte vivono DENTRO il box, come nel riferimento
+      const X0 = 0.045, X1 = 0.955;
+
+      const STRANDS = 64;
+      // proprietà per-ciocca stabili (niente random per frame: il moto è di fase)
+      const strands = [];
+      for (let s = 0; s < STRANDS; s++) {
+        const u = (s / (STRANDS - 1)) * 2 - 1;                 // -1..1 (sopra..sotto)
+        strands.push({ u, seed: s * 0.618 % 1, ph: s * 2.399 });
+      }
+
       const draw = () => {
         if (!running) return;
         const w = canvas.clientWidth || 300, h = canvas.clientHeight || 64, midY = h / 2;
         const rec = window.__takoDictRec;
         const target = (active !== false && rec && rec.recording) ? rec.getLevel() : 0;
-        // attacco veloce, rilascio morbido → la linea "respira" con la voce
         lvl = target > lvl ? lvl * 0.5 + target * 0.5 : lvl * 0.9 + target * 0.1;
         ctx.clearRect(0, 0, w, h);
         const t = (Date.now() - t0) / 1000;
-        const amp = (0.05 + lvl * 1.1) * (h * 0.4);   // ampiezza segue la voce
-        for (let s = 0; s < STROKES; s++) {
-          const off = s - (STROKES - 1) / 2;
-          const alpha = 0.045 + 0.06 * (1 - Math.abs(off) / STROKES);
+        const ampScale = h * 0.72 * (0.55 + lvl * 0.5);        // silhouette a riposo, cresce con la voce (senza sbordare)
+        const STEP = 3;
+
+        for (let s = 0; s < STRANDS; s++) {
+          const st = strands[s];
+          const centerW = Math.exp(-(st.u * 1.35) * (st.u * 1.35)); // ciocche centrali più scure
+          const alpha = 0.03 + 0.08 * centerW;
           ctx.beginPath();
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = "rgba(58,51,46," + alpha.toFixed(3) + ")";
-          const phase = t * 1.7 + s * 0.28;
-          for (let x = 0; x <= w; x += 2) {
-            const nx = x / w;
-            const env = Math.sin(Math.PI * nx);      // affusola agli estremi (pennello)
-            const y = midY
-              + Math.sin(nx * 6.2832 * 1.0 + phase) * amp * 0.6 * env
-              + Math.sin(nx * 6.2832 * 2.3 + phase * 1.7) * amp * 0.28 * env
-              + Math.sin(nx * 6.2832 * 0.5 - phase * 0.6) * amp * 0.45 * env
-              + off * (1.0 + lvl * 2.2) * env;        // spread verticale dei tratti
-            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          ctx.lineWidth = 0.7;
+          ctx.lineCap = "round";
+          ctx.strokeStyle = "rgba(66,60,53," + alpha.toFixed(3) + ")";
+          let first = true;
+          for (let px = 0; px <= w; px += STEP) {
+            const nx = px / w;
+            if (nx < X0 || nx > X1) continue;               // margine: dentro il box
+            const u01 = (nx - X0) / (X1 - X0);              // 0..1 sul tratto visibile
+            // code affusolate: sinistra corta, destra che si assottiglia a punta
+            const env = smooth(0, 0.09, u01) * (1 - smooth(0.86, 1.0, u01) * 0.9);
+            const base = baseShape(u01) * ampScale;
+            // frange: si aprono dove il pennello è carico; quelle sotto pendono
+            // di più nell'avvallamento (come nel riferimento)
+            let spread = spreadShape(u01) * (1 + lvl * 1.5);
+            if (st.u > 0) spread *= 1 + 1.4 * g(u01, 0.37, 0.09);
+            // vita lenta: micro-onde di fase diverse per ciocca (flow, non nervoso)
+            const wob = Math.sin(u01 * 9.5 + st.ph + t * 0.55) * 0.55
+                      + Math.sin(u01 * 4.2 - st.ph * 0.7 + t * 0.38) * 0.45;
+            const y = midY - h * 0.03 + (base + st.u * spread + wob * (0.4 + lvl * 1.4)) * env;
+            if (first) { ctx.moveTo(px, y); first = false; } else ctx.lineTo(px, y);
           }
           ctx.stroke();
         }
+        // filo principale: il tratto netto che si legge come "la" linea
+        ctx.beginPath();
+        ctx.lineWidth = 1.2;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "rgba(56,50,43,0.62)";
+        let firstM = true;
+        for (let px = 0; px <= w; px += 2) {
+          const nx = px / w;
+          if (nx < X0 || nx > X1) continue;
+          const u01 = (nx - X0) / (X1 - X0);
+          const env = smooth(0, 0.09, u01) * (1 - smooth(0.86, 1.0, u01) * 0.9);
+          const wob = Math.sin(u01 * 9.5 + t * 0.55) * 0.4 + Math.sin(u01 * 4.2 + t * 0.38) * 0.35;
+          const y = midY - h * 0.03 + (baseShape(u01) * ampScale + wob * (0.3 + lvl * 1.2)) * env;
+          if (firstM) { ctx.moveTo(px, y); firstM = false; } else ctx.lineTo(px, y);
+        }
+        ctx.stroke();
         raf = requestAnimationFrame(draw);
       };
       draw();
