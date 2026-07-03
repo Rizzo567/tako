@@ -45,7 +45,7 @@
     "tauri": "tauri",
     "desktop": "TAKO_SERVER_CMD=\"node_modules/.bin/tsx src/bootstrap.ts\" TAKO_SERVER_CWD=\"../server\" tauri dev",
     "bundle:server": "node ../../scripts/build-server-bundle.mjs",
-    "desktop:build": "node ../../scripts/build-server-bundle.mjs && tauri build"
+    "desktop:build": "node ../../scripts/build-server-bundle.mjs && tauri build --bundles app"
   },
   "private": true
 }
