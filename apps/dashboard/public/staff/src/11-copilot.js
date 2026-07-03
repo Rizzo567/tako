@@ -1,14 +1,13 @@
 /* ═══════════════════════ Tako — OWNER COPILOT (Cmd+K) ═══════════════════════
    Pannello AI globale per l'owner/staff: si apre con ⌘K / Ctrl+K (o window.openCopilot()).
-   Chiede in linguaggio naturale (o DETTA col microfono, window.DictationButton) e l'AI:
+   Chiede in linguaggio naturale e l'AI:
      • LEGGE dati reali (incasso di oggi, statistiche, stato tavoli, cerca piatti)
      • PROPONE modifiche al menu (segna esaurito/disponibile, crea piatto) → richiedono
        CONFERMA esplicita prima di essere eseguite (POST /ai/owner/execute).
    Riusa il motore azioni server (lib/ai-actions) via /api/ai/owner/*.
 
    Self-mount: crea un proprio container sotto <body> (non tocca #stage/07-app-root).
-   Dipende a runtime da: React, window.TakoAPI, window.toast, window.takoReload,
-   window.DictationButton. Nessuna dipendenza di ordine a compile-time.
+   Dipende a runtime da: React, window.TakoAPI, window.toast, window.takoReload.
    ─────────────────────────────────────────────────────────────────────────── */
 (function () {
   const { useState, useRef, useEffect } = React;
@@ -79,7 +78,6 @@
     const [busy, setBusy] = useState(false);
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
-    const DictBtn = window.DictationButton;
 
     // ⌘K / Ctrl+K per aprire, Esc per chiudere. Esposto anche come window.openCopilot.
     useEffect(() => {
@@ -175,13 +173,12 @@
             {busy && <div style={{ fontSize: 13, color: "var(--ink3,#9a8f86)", padding: "4px 2px" }}>Sto pensando…</div>}
           </div>
 
-          {/* Composer + microfono */}
+          {/* Composer */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 12, borderTop: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
-            {DictBtn && <DictBtn onText={(seg) => setInput((v) => (v ? v + " " : "") + seg)} size={44} />}
             <input ref={inputRef} value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); send(); } }}
-              placeholder="Chiedi o detta… (es. incasso di oggi)"
+              placeholder="Chiedi… (es. incasso di oggi)"
               style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--hairline,#e6ded6)", background: "var(--sunken,#FBF8F4)", fontSize: 14.5, outline: "none" }} />
             <button onClick={() => send()} disabled={!input.trim() || busy}
               style={{ width: 44, height: 44, borderRadius: 12, border: "none", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", cursor: "pointer", display: "grid", placeItems: "center", opacity: (!input.trim() || busy) ? .5 : 1 }}>
