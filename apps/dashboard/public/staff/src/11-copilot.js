@@ -145,17 +145,12 @@
     // Composer stile Claude: box arrotondato, textarea, mic a sinistra, invio a destra.
     const composer = (
       <div style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
-        {/* Waveform durante la dettatura (pennellata Wispr) */}
+        {/* Waveform durante la dettatura (pennellata Wispr) — compatta, senza testo */}
         {DictWave && (dictState === "rec" || dictState === "busy") && (
-          <div style={{ marginBottom: 10, height: 84, borderRadius: 20, overflow: "hidden", position: "relative",
+          <div style={{ marginBottom: 10, height: 54, borderRadius: 16, overflow: "hidden", position: "relative",
             background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
             border: "1px solid #0000000f", boxShadow: "0 8px 24px rgba(30,20,12,.16), inset 0 1.5px 0 rgba(255,255,255,.7)" }}>
             <DictWave />
-            <div style={{ position: "absolute", left: 15, top: 10, fontSize: 11.5, fontWeight: 700, letterSpacing: .3,
-              color: dictState === "rec" ? "#B4453F" : "#9a8f86", display: "flex", alignItems: "center", gap: 6 }}>
-              {dictState === "rec" && <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />}
-              {dictState === "rec" ? "In ascolto · Esc per annullare" : "Trascrivo…"}
-            </div>
           </div>
         )}
 
