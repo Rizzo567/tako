@@ -68,12 +68,19 @@ export function setupDictationNamespace(io: Server): void {
       socket.data.restaurantId = staff.restaurantId
 
       const status = getAsrStatus()
+      console.log(`[dettatura] connesso (rist ${staff.restaurantId.slice(0, 8)}…) — engine: ${status.engine}, local: ${status.local}, cloud: ${status.cloud}`)
       socket.emit('ready', status)
       if (status.engine === 'none') {
         socket.emit('asr:error', {
           message: 'Nessun motore vocale disponibile: installa il motore locale (setup-local-asr) o configura la chiave Groq.',
         })
       }
+
+      // Errori del client (WKWebView) loggati qui: visibili da terminale senza
+      // devtools nella webview.
+      socket.on('clientlog', (m: { where?: string; name?: string; message?: string }) => {
+        console.warn(`[dettatura][client] ${m?.where ?? '?'}: ${m?.name ?? ''} ${m?.message ?? ''}`)
+      })
 
       // Una sola trascrizione in volo per socket: il push-to-talk è seriale.
       let inFlight = false
@@ -105,6 +112,7 @@ export function setupDictationNamespace(io: Server): void {
               return
             }
             const clean = await cleanupText(asr.text)
+            console.log(`[dettatura] ok — asr=${asr.engine}(${asr.ms}ms) cleanup=${clean.engine}(${clean.ms}ms) "${clean.text.slice(0, 60)}"`)
             socket.emit('result', {
               raw: asr.text,
               text: clean.text,
@@ -118,6 +126,7 @@ export function setupDictationNamespace(io: Server): void {
           }
         } catch (e) {
           inFlight = false
+          console.warn(`[dettatura] errore: ${(e as Error).message}`)
           socket.emit('asr:error', { message: (e as Error).message })
         }
       })
