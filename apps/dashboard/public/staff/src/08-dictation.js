@@ -80,20 +80,27 @@
       }
     }
 
+    _clog(where, message) {
+      try { this.socket && this.socket.emit("clientlog", { where, message: String(message) }); } catch (_) {}
+    }
+
     _ensureSocket() {
       if (this.socket) return this.socket;
       this.socket = window.io("/dictation", { withCredentials: true, transports: ["websocket", "polling"] });
-      this.socket.on("ready", (s) => { this.status = s; });
-      this.socket.on("disconnect", () => { this.status = null; });  // ri-attende ready dopo reconnect
+      this.socket.on("ready", (s) => { this.status = s; this._clog("socket", "ready engine=" + (s && s.engine)); });
+      this.socket.on("disconnect", (r) => { this.status = null; this._clog("socket", "disconnect " + r); });
+      this.socket.on("connect", () => { this._clog("socket", "connect id=" + this.socket.id); });
+      this.socket.on("connect_error", (e) => { this._clog("socket", "connect_error " + (e && e.message)); });
       return this.socket;
     }
 
     // Il server attacca il listener 'finalize' solo DOPO l'auth (evento 'ready'):
     // emettere prima = evento perso. Attendiamo 'ready' (max 8s) prima di inviare.
     _waitReady(socket) {
+      this._clog("waitReady", "enter status=" + (this.status ? "set" : "null") + " connected=" + socket.connected);
       if (this.status) return Promise.resolve();
       return new Promise((resolve, reject) => {
-        const t = setTimeout(() => { cleanup(); reject(new Error("Server dettatura non pronto (login scaduto?).")); }, 8000);
+        const t = setTimeout(() => { cleanup(); this._clog("waitReady", "TIMEOUT"); reject(new Error("Connessione al motore vocale non pronta.")); }, 8000);
         const onReady = () => { cleanup(); resolve(); };
         const onErr = (e) => { cleanup(); reject(new Error((e && e.message) || "Errore dettatura")); };
         const cleanup = () => { clearTimeout(t); socket.off("ready", onReady); socket.off("asr:error", onErr); };
@@ -204,8 +211,10 @@
       if (total === 0) throw new Error("Nessun audio registrato.");
 
       const pcm = downsampleToPcm16(all, srcRate, TARGET_SR);
+      this._clog("stop", "frames=" + total + " pcmBytes=" + pcm.byteLength + " srcRate=" + srcRate);
       const socket = this._ensureSocket();
       await this._waitReady(socket);
+      this._clog("stop", "emit finalize");
       return new Promise((resolve, reject) => {
         const timer = setTimeout(() => {
           cleanupHandlers();
@@ -258,8 +267,10 @@
       return "Microfono occupato da un'altra app. Chiudila e riprova.";
     if (name === "NotFoundError" || name === "OverconstrainedError")
       return "Nessun microfono trovato. Collega un microfono e riprova.";
-    if (/login scaduto|sessione staff/i.test(msg))
+    if (/sessione staff/i.test(msg))
       return "Sessione scaduta: rientra e riprova la dettatura.";
+    if (/non pronta|non pronto/i.test(msg))
+      return "Connessione non pronta: riprova tra un istante.";
     if (/nessun motore/i.test(msg))
       return "Nessun motore vocale disponibile: né locale né cloud raggiungibili.";
     if (/timeout/i.test(msg))
@@ -280,43 +291,65 @@
     } catch (_) {}
   }
 
-  // Waveform reattiva: 5 barre le cui altezze seguono il livello audio (come la
-  // tastiera iOS di Wispr Flow). Legge rec.getLevel() via requestAnimationFrame.
-  const N_BARS = 5;
-  function Waveform({ recRef, px }) {
+  // ── Waveform FLUIDA (canvas) stile Wispr Flow ────────────────────────────────
+  // Linea orizzontale "a pennello": più tratti sottili sovrapposti che ondeggiano
+  // e si gonfiano con la voce (ampiezza = livello audio smussato). Legge il
+  // recorder condiviso window.__takoDictRec. Va montata in un riquardo arrotondato
+  // sotto la chat.
+  function TakoDictationWave(props) {
     const { useRef, useEffect } = React;
-    const barsRef = useRef([]);
+    const canvasRef = useRef(null);
+    const active = props && props.active;
     useEffect(() => {
-      let raf = 0;
-      const phases = [0.0, 1.1, 2.2, 3.3, 4.4]; // offset → onda che "respira"
-      const tick = () => {
-        const rec = recRef.current;
-        const lvl = rec ? rec.getLevel() : 0;
-        const t = Date.now() / 220;
-        for (let i = 0; i < N_BARS; i++) {
-          const el = barsRef.current[i];
-          if (!el) continue;
-          // barre centrali più alte; modulazione sinusoidale per vivacità
-          const center = 1 - Math.abs(i - (N_BARS - 1) / 2) / N_BARS;
-          const wob = 0.55 + 0.45 * Math.sin(t + phases[i]);
-          const h = Math.max(0.14, Math.min(1, lvl * (0.6 + center) * wob + 0.12));
-          el.style.transform = "scaleY(" + h.toFixed(3) + ")";
-        }
-        raf = requestAnimationFrame(tick);
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = window.devicePixelRatio || 1;
+      let raf = 0, lvl = 0, running = true;
+      const t0 = Date.now();
+      const resize = () => {
+        const w = canvas.clientWidth || 300, h = canvas.clientHeight || 64;
+        canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       };
-      raf = requestAnimationFrame(tick);
-      return () => cancelAnimationFrame(raf);
+      resize();
+      const STROKES = 11;
+      const draw = () => {
+        if (!running) return;
+        const w = canvas.clientWidth || 300, h = canvas.clientHeight || 64, midY = h / 2;
+        const rec = window.__takoDictRec;
+        const target = (active !== false && rec && rec.recording) ? rec.getLevel() : 0;
+        // attacco veloce, rilascio morbido → la linea "respira" con la voce
+        lvl = target > lvl ? lvl * 0.5 + target * 0.5 : lvl * 0.9 + target * 0.1;
+        ctx.clearRect(0, 0, w, h);
+        const t = (Date.now() - t0) / 1000;
+        const amp = (0.05 + lvl * 1.1) * (h * 0.4);   // ampiezza segue la voce
+        for (let s = 0; s < STROKES; s++) {
+          const off = s - (STROKES - 1) / 2;
+          const alpha = 0.045 + 0.06 * (1 - Math.abs(off) / STROKES);
+          ctx.beginPath();
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = "rgba(58,51,46," + alpha.toFixed(3) + ")";
+          const phase = t * 1.7 + s * 0.28;
+          for (let x = 0; x <= w; x += 2) {
+            const nx = x / w;
+            const env = Math.sin(Math.PI * nx);      // affusola agli estremi (pennello)
+            const y = midY
+              + Math.sin(nx * 6.2832 * 1.0 + phase) * amp * 0.6 * env
+              + Math.sin(nx * 6.2832 * 2.3 + phase * 1.7) * amp * 0.28 * env
+              + Math.sin(nx * 6.2832 * 0.5 - phase * 0.6) * amp * 0.45 * env
+              + off * (1.0 + lvl * 2.2) * env;        // spread verticale dei tratti
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+        raf = requestAnimationFrame(draw);
+      };
+      draw();
+      window.addEventListener("resize", resize);
+      return () => { running = false; cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
     }, []);
-    const bw = Math.max(2, px * 0.06);
-    return React.createElement("div", {
-      style: { display: "flex", alignItems: "center", justifyContent: "center", gap: bw * 0.7, height: px * 0.5 },
-    }, Array.from({ length: N_BARS }, (_, i) =>
-      React.createElement("span", {
-        key: i,
-        ref: (el) => { barsRef.current[i] = el; },
-        style: { display: "block", width: bw, height: px * 0.5, borderRadius: bw, background: "#fff", transformOrigin: "center", transform: "scaleY(0.14)", transition: "transform .06s linear" },
-      })
-    ));
+    return React.createElement("canvas", { ref: canvasRef, style: { width: "100%", height: "100%", display: "block" } });
   }
 
   function DictationButton({ onText, onStateChange, size }) {
@@ -353,19 +386,8 @@
     };
 
     const toggle = async () => {
-      if (!recRef.current) {
-        recRef.current = new TakoDictationRecorder({
-          onSpeechEnd: () => stopAndTranscribe(),          // silenzio → fine frase
-          onNoSpeech: () => {                              // mai parlato → annulla
-            const rec = recRef.current;
-            if (rec && stateRef.current === "rec") {
-              rec.cancel(); set("idle");
-              window.toast && window.toast("Nessuna voce rilevata: microfono muto o troppo lontano.", "error");
-            }
-          },
-        });
-      }
       const rec = recRef.current;
+      if (!rec) return;
       if (stateRef.current === "busy") return;
       if (stateRef.current === "idle") {
         set("busy"); // anti doppio-avvio mentre getUserMedia/permessi sono in volo
@@ -380,17 +402,29 @@
       await stopAndTranscribe();
     };
 
-    // Deps [] OBBLIGATORIE: senza, il cleanup gira a OGNI render e appena lo
-    // stato passa a "rec" (re-render) cancella la registrazione appena partita
-    // → "Dettatura fallita: Nessuna registrazione in corso." (bug trovato via
-    // clientlog). Il toggle legge stateRef, quindi non soffre di stale state.
+    // Crea il recorder al MOUNT e PRE-CONNETTE il socket: così l'evento 'ready'
+    // (auth) è quasi sempre già arrivato quando l'utente smette di parlare →
+    // niente falso "sessione scaduta" per chi detta una frase breve subito.
+    // Deps [] OBBLIGATORIE (vedi bug useEffter-cleanup a ogni render).
     useEffect(() => {
+      const rec = new TakoDictationRecorder({
+        onSpeechEnd: () => stopAndTranscribe(),
+        onNoSpeech: () => {
+          if (recRef.current && stateRef.current === "rec") {
+            recRef.current.cancel(); set("idle");
+            window.toast && window.toast("Nessuna voce rilevata: microfono muto o troppo lontano.", "error");
+          }
+        },
+      });
+      recRef.current = rec;
+      window.__takoDictRec = rec;                 // condiviso con la waveform del copilot
+      try { rec._ensureSocket(); } catch (_) {}   // pre-connessione (auth in anticipo)
       window.takoDictationToggle = toggle;
-      // Esposta SOLO durante la registrazione: il copilot usa la sua presenza
-      // per decidere se Esc annulla la dettatura o chiude il pannello.
       return () => {
         if (window.takoDictationToggle === toggle) delete window.takoDictationToggle;
-        if (recRef.current && recRef.current.recording) recRef.current.cancel();
+        if (rec.recording) rec.cancel();
+        try { rec.socket && rec.socket.close(); } catch (_) {}
+        if (window.__takoDictRec === rec) delete window.__takoDictRec;
       };
     }, []);
 
@@ -399,7 +433,9 @@
       else if (window.takoDictationCancel === cancel) delete window.takoDictationCancel;
     }, [state]);
 
-    const bg = state === "rec" ? "#E5484D" : state === "busy" ? "var(--surface2,#F4EFE8)" : "var(--surface2,#F4EFE8)";
+    // Il bottone: mic idle · quadrato rosso "stop" pulsante in registrazione ·
+    // shimmer in elaborazione. La waveform vera è il pannello sotto la chat.
+    const bg = state === "rec" ? "#E5484D" : "var(--surface2,#F4EFE8)";
     const fg = state === "rec" ? "#fff" : "#2A1F1A";
     const title = state === "rec" ? "Ferma e trascrivi · Esc per annullare"
       : state === "busy" ? "Trascrizione in corso…" : "Detta (Cmd+K)";
@@ -416,14 +452,14 @@
         transition: "background .15s",
       },
     },
-      state === "rec"
-        ? React.createElement(Waveform, { recRef, px })
-        : state === "busy"
-          ? React.createElement("span", { className: "tako-dict-shimmer", style: { display: "inline-flex", gap: px * 0.06 } },
-              React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out infinite" } }),
-              React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out .16s infinite" } }),
-              React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out .32s infinite" } }),
-            )
+      state === "busy"
+        ? React.createElement("span", { style: { display: "inline-flex", gap: px * 0.06 } },
+            React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out infinite" } }),
+            React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out .16s infinite" } }),
+            React.createElement("i", { style: { width: px * 0.1, height: px * 0.1, borderRadius: "50%", background: "#B9AEA1", animation: "takoDictDot 1s ease-in-out .32s infinite" } }),
+          )
+        : state === "rec"
+          ? React.createElement("span", { style: { width: px * 0.32, height: px * 0.32, borderRadius: px * 0.08, background: "#fff" } })
           : React.createElement("svg", { width: px * 0.5, height: px * 0.5, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
               React.createElement("rect", { x: 9, y: 2, width: 6, height: 12, rx: 3 }),
               React.createElement("path", { d: "M5 10v1a7 7 0 0 0 14 0v-1" }),
@@ -444,4 +480,5 @@
 
   window.TakoDictationRecorder = TakoDictationRecorder;
   window.DictationButton = DictationButton;
+  window.TakoDictationWave = TakoDictationWave;
 })();

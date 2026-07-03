@@ -73,15 +73,32 @@
   function Copilot() {
     const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState([
-      { role: "assistant", content: "Ciao! Sono il copilot. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare un piatto esaurito o crearne uno nuovo." },
+      { role: "assistant", content: "Ciao! Sono Tako. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare un piatto esaurito o crearne uno nuovo." },
     ]);
     const [input, setInput] = useState("");
     const [busy, setBusy] = useState(false);
+    const [dictState, setDictState] = useState("idle"); // idle | rec | busy
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
     const openRef = useRef(false);
+    const inputValRef = useRef("");
     useEffect(() => { openRef.current = open; }, [open]);
+    useEffect(() => { inputValRef.current = input; }, [input]);
     const DictBtn = window.DictationButton;
+    const DictWave = window.TakoDictationWave;
+
+    // Inserimento del trascritto LETTERA-PER-LETTERA (typewriter veloce ~11ms/car),
+    // come richiesto: il testo "scorre" nel campo appena arriva dalla dettatura.
+    const typeInto = (seg) => {
+      const base = inputValRef.current ? inputValRef.current + " " : "";
+      let i = 1;
+      const tick = () => {
+        setInput(base + seg.slice(0, i));
+        if (i < seg.length) { i++; setTimeout(tick, 11); }
+        else if (inputRef.current) { try { inputRef.current.focus(); } catch (_) {} }
+      };
+      tick();
+    };
 
     // ⌘K / Ctrl+K = DETTATURA: se il copilot è chiuso lo apre E avvia la
     // registrazione; se è aperto, avvia/ferma la dettatura (allo stop il testo
@@ -125,7 +142,7 @@
         const data = await TakoAPI.post("/ai/owner/chat", { message: text, history });
         setMessages((m) => [...m, { role: "assistant", content: data.message || "Fatto.", pending: Array.isArray(data.pending) ? data.pending : [] }]);
       } catch (ex) {
-        const m = ex && ex.status === 503 ? "AI non configurata su questo server." : "Copilot non disponibile, riprova.";
+        const m = ex && ex.status === 503 ? "AI non configurata su questo server." : "Tako non disponibile, riprova.";
         setMessages((mm) => [...mm, { role: "assistant", content: m }]);
       } finally {
         setBusy(false);
@@ -135,7 +152,7 @@
     if (!open) {
       // Launcher flottante (utilizzabile anche senza voce di menu).
       return (
-        <button onClick={() => setOpen(true)} title="Copilot AI (⌘K)"
+        <button onClick={() => setOpen(true)} title="Tako (⌘K)"
           style={{ position: "fixed", right: 18, bottom: "calc(18px + env(safe-area-inset-bottom))", zIndex: 3500,
             width: 54, height: 54, borderRadius: 16, border: "none", cursor: "pointer",
             background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", display: "grid", placeItems: "center",
@@ -155,8 +172,8 @@
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
             <span style={{ width: 34, height: 34, borderRadius: 10, display: "grid", placeItems: "center", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)" }}><SparkIcon size={18} /></span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 900, fontSize: 15.5, color: "var(--ink,#2A1F1A)" }}>Copilot</div>
-              <div style={{ fontSize: 12, color: "var(--ink3,#9a8f86)" }}>⌘K · assistente operativo</div>
+              <div style={{ fontWeight: 900, fontSize: 15.5, color: "var(--ink,#2A1F1A)" }}>Tako</div>
+              <div style={{ fontSize: 12, color: "var(--ink3,#9a8f86)" }}>⌘K</div>
             </div>
             <button onClick={() => setOpen(false)} title="Chiudi"
               style={{ width: 32, height: 32, borderRadius: 9, border: "none", background: "var(--sunken,#F2ECE6)", color: "var(--ink2,#8a7f76)", fontSize: 15, cursor: "pointer" }}>✕</button>
@@ -195,7 +212,7 @@
 
           {/* Composer + microfono (dettatura Cmd+K) */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 12, borderTop: "1px solid var(--hairline,#eee)", background: "var(--surface,#fff)" }}>
-            {DictBtn && <DictBtn onText={(seg) => setInput((v) => (v ? v + " " : "") + seg)} size={44} />}
+            {DictBtn && <DictBtn onText={(seg) => typeInto(seg)} onStateChange={setDictState} size={44} />}
             <input ref={inputRef} value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); send(); } }}
@@ -206,6 +223,30 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
             </button>
           </div>
+
+          {/* Waveform fluida SOTTO la chat: visibile mentre detti / elabora
+              (stile Wispr Flow — linea a pennello che ondeggia con la voce). */}
+          {DictWave && (dictState === "rec" || dictState === "busy") && (
+            <div style={{ padding: "0 12px 12px", background: "var(--surface,#fff)" }}>
+              <div style={{ height: 64, borderRadius: 14, overflow: "hidden",
+                background: "var(--surface2,#F1ECE3)", border: "1px solid var(--hairline,#e6ded6)",
+                boxShadow: "inset 0 1px 3px rgba(0,0,0,.05)", position: "relative" }}>
+                <DictWave />
+                {dictState === "rec" && (
+                  <div style={{ position: "absolute", left: 12, top: 8, fontSize: 11, fontWeight: 700, letterSpacing: .3,
+                    color: "#B4453F", display: "flex", alignItems: "center", gap: 5 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#E5484D", animation: "takoDictPulse 1.2s ease-in-out infinite" }} />
+                    In ascolto · Esc per annullare
+                  </div>
+                )}
+                {dictState === "busy" && (
+                  <div style={{ position: "absolute", left: 12, top: 8, fontSize: 11, fontWeight: 700, letterSpacing: .3, color: "#9a8f86" }}>
+                    Trascrivo…
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
