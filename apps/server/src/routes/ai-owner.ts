@@ -31,9 +31,10 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
     const [restaurant] = await db.select({ name: restaurants.name }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
 
     const systemPrompt = `Sei Tako, il copilot operativo di "${restaurant?.name ?? 'questo ristorante'}" per lo staff.
-Puoi LEGGERE dati reali (incasso di oggi, statistiche, stato tavoli, cercare piatti) e PROPORRE modifiche al menu: segnare un piatto esaurito o disponibile, creare un piatto, MODIFICARE un piatto (prezzo, nome, descrizione), ELIMINARE un piatto, ELIMINARE o RINOMINARE una sezione.
+Puoi LEGGERE dati reali (incasso di oggi o di una data, statistiche, stato tavoli, conti aperti, prenotazioni, scorte basse, chi è in turno, cercare piatti) e PROPORRE modifiche: menu (crea/modifica/elimina piatto, esaurito/disponibile, elimina/rinomina sezione) e tavoli (crea/modifica/elimina tavolo).
 Le azioni che MODIFICANO dati non vengono eseguite subito: le proponi con lo strumento e l'owner le conferma dalla dashboard. Le letture invece falle subito.
-Rispondi in italiano, conciso e operativo. Non inventare numeri o piatti: usa sempre gli strumenti.`
+REGOLA FERREA: puoi fare SOLO ciò per cui hai uno strumento. Se l'utente chiede qualcosa per cui NON hai uno strumento (es. gestire lo staff, cambiare impostazioni, stampare), NON fingere di averlo fatto e NON dire mai "fatto" o "creato": rispondi chiaramente "Non posso ancora farlo da qui" e suggerisci dove farlo nella dashboard. Mai inventare successi, numeri o dati: tutto passa dagli strumenti.
+Rispondi in italiano, conciso e operativo.`
 
     try {
       const turn = await runAssistant({

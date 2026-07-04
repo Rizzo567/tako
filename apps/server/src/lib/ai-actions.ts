@@ -21,8 +21,9 @@
 // Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
 // validazione delle route (ownership per restaurantId, emit socket identici).
 
-import { db, restaurants, menus, menuSections, menuItems, orders, orderItems, tables, bills } from '@tako/db'
-import { eq, and, asc, desc, gte, inArray } from 'drizzle-orm'
+import { db, restaurants, menus, menuSections, menuItems, orders, orderItems, tables, rooms, bills, reservations, inventoryItems, staffShifts, users } from '@tako/db'
+import { eq, and, asc, desc, gte, lt, lte, inArray, isNull } from 'drizzle-orm'
+import { nanoid } from 'nanoid'
 import { io } from '../index.js'
 import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz } from './billing.js'
 
@@ -106,6 +107,16 @@ async function resolveSection(restaurantId: string, name: string) {
     if (hits.length > 1) return { section: undefined, sections } // ambiguo: elenca, non indovinare
   }
   return { section: undefined, sections }
+}
+
+// Risolve un TAVOLO per numero (es. "12"), scoped al ristorante, solo attivi.
+async function resolveTable(restaurantId: string, number: string) {
+  const num = (number ?? '').toString().trim()
+  if (!num) return undefined
+  const [t] = await db.select().from(tables)
+    .where(and(eq(tables.restaurantId, restaurantId), eq(tables.number, num), eq(tables.active, true)))
+    .limit(1)
+  return t
 }
 
 // ─────────────────────────────── REGISTRO AZIONI ───────────────────────────────
@@ -453,6 +464,212 @@ const ACTIONS: ActionDef[] = [
       return { ok: true, data: { id: section.id, name: newName }, summary: `Sezione "${section.name}" rinominata in "${newName}".` }
     },
   },
+
+  // ── OWNER · TAVOLI ─────────────────────────────────────────────────────────
+  {
+    name: 'create_table',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Crea un nuovo tavolo con numero e posti (es. tavolo 12 da 4). Opzionale: nome della sala.',
+    parameters: {
+      type: 'object',
+      properties: {
+        number: { type: 'string', description: 'Numero/nome del tavolo (es. "12")' },
+        seats: { type: 'integer', minimum: 1, maximum: 40, description: 'Posti (default 4)' },
+        roomName: { type: 'string', description: 'Sala in cui metterlo (opzionale)' },
+      },
+      required: ['number'],
+    },
+    label: (a) => `Crea tavolo ${a?.number ?? '?'}${a?.seats ? ` (${a.seats} posti)` : ''}${a?.roomName ? ` in "${a.roomName}"` : ''}`,
+    execute: async (ctx, args) => {
+      const number = (args?.number ?? '').toString().trim()
+      if (!number) return { ok: false, summary: 'Numero del tavolo mancante.' }
+      const existing = await resolveTable(ctx.restaurantId, number)
+      if (existing) return { ok: false, summary: `Esiste già un tavolo "${number}".` }
+      const seats = Math.min(Math.max(parseInt(String(args?.seats ?? 4), 10) || 4, 1), 40)
+      // sala per nome (opzionale): match sulle sale attive del ristorante
+      let roomId: string | undefined
+      if (args?.roomName) {
+        const wanted = String(args.roomName).toLowerCase().trim()
+        const allRooms = await db.select().from(rooms)
+          .where(and(eq(rooms.restaurantId, ctx.restaurantId), eq(rooms.active, true)))
+        const room = allRooms.find(r => r.name.toLowerCase() === wanted) ?? allRooms.find(r => r.name.toLowerCase().includes(wanted))
+        if (!room) return { ok: false, summary: `Sala "${args.roomName}" non trovata. Sale: ${allRooms.map(r => `"${r.name}"`).join(', ') || 'nessuna'}.` }
+        roomId = room.id
+      }
+      // stessa creazione della POST /tables: qrToken nuovo, ownership dal contesto
+      const qrToken = nanoid(24)
+      const [table] = await db.insert(tables).values({ restaurantId: ctx.restaurantId, qrToken, number, seats, ...(roomId ? { roomId } : {}) }).returning()
+      if (!table) return { ok: false, summary: 'Creazione non riuscita.' }
+      return { ok: true, data: { id: table.id, number: table.number, seats: table.seats }, summary: `Tavolo ${table.number} creato (${table.seats} posti). QR generato.` }
+    },
+  },
+  {
+    name: 'delete_table',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'ELIMINA un tavolo per numero (soft delete: lo storico ordini/conti resta). Invalida il QR.',
+    parameters: {
+      type: 'object',
+      properties: { number: { type: 'string', description: 'Numero del tavolo da eliminare' } },
+      required: ['number'],
+    },
+    label: (a) => `Elimina tavolo ${a?.number ?? '?'}`,
+    execute: async (ctx, args) => {
+      const t = await resolveTable(ctx.restaurantId, args?.number)
+      if (!t) return { ok: false, summary: `Tavolo "${args?.number ?? ''}" non trovato.` }
+      // non eliminare un tavolo con conto aperto (coerente con la logica cassa)
+      const [openBill] = await db.select({ id: bills.id }).from(bills)
+        .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.tableId, t.id), eq(bills.status, 'open'))).limit(1)
+      if (openBill) return { ok: false, summary: `Il tavolo ${t.number} ha un conto aperto: incassa o annulla prima di eliminarlo.` }
+      await db.update(tables).set({ active: false }).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
+      return { ok: true, data: { id: t.id, number: t.number }, summary: `Tavolo ${t.number} eliminato.` }
+    },
+  },
+  {
+    name: 'update_table',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Modifica un tavolo esistente: nuovo numero/nome e/o numero di posti.',
+    parameters: {
+      type: 'object',
+      properties: {
+        number: { type: 'string', description: 'Numero attuale del tavolo' },
+        newNumber: { type: 'string', description: 'Nuovo numero/nome (opzionale)' },
+        seats: { type: 'integer', minimum: 1, maximum: 40, description: 'Nuovi posti (opzionale)' },
+      },
+      required: ['number'],
+    },
+    label: (a) => {
+      const parts: string[] = []
+      if (a?.newNumber) parts.push(`numero → ${a.newNumber}`)
+      if (a?.seats != null) parts.push(`${a.seats} posti`)
+      return `Modifica tavolo ${a?.number ?? '?'}${parts.length ? ` (${parts.join(', ')})` : ''}`
+    },
+    execute: async (ctx, args) => {
+      const t = await resolveTable(ctx.restaurantId, args?.number)
+      if (!t) return { ok: false, summary: `Tavolo "${args?.number ?? ''}" non trovato.` }
+      const set: Record<string, unknown> = {}
+      const changes: string[] = []
+      if (args?.newNumber != null && String(args.newNumber).trim()) {
+        const nn = String(args.newNumber).trim()
+        const clash = await resolveTable(ctx.restaurantId, nn)
+        if (clash && clash.id !== t.id) return { ok: false, summary: `Esiste già un tavolo "${nn}".` }
+        set['number'] = nn; changes.push(`numero ${t.number} → ${nn}`)
+      }
+      if (args?.seats != null) {
+        const seats = Math.min(Math.max(parseInt(String(args.seats), 10) || t.seats, 1), 40)
+        set['seats'] = seats; changes.push(`posti → ${seats}`)
+      }
+      if (!changes.length) return { ok: false, summary: 'Nessuna modifica indicata: specifica nuovo numero o posti.' }
+      await db.update(tables).set(set).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
+      return { ok: true, data: { id: t.id }, summary: `Tavolo ${t.number} aggiornato: ${changes.join(', ')}.` }
+    },
+  },
+
+  // ── OWNER · LETTURE OPERATIVE ──────────────────────────────────────────────
+  {
+    name: 'todays_reservations',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Prenotazioni di oggi (o di una data specifica YYYY-MM-DD): ora, nome, persone, tavolo, stato.',
+    parameters: { type: 'object', properties: { date: { type: 'string', description: 'Data YYYY-MM-DD (default oggi)' } } },
+    label: (a) => `Prenotazioni ${a?.date ?? 'di oggi'}`,
+    execute: async (ctx, args) => {
+      const tz = await restaurantTimezone(ctx.restaurantId)
+      const dateStr = (args?.date && /^\d{4}-\d{2}-\d{2}$/.test(String(args.date))) ? String(args.date) : dayKeyInTz(new Date(), tz)
+      const dayStart = dayStartInTz(dateStr, tz)
+      if (isNaN(dayStart.getTime())) return { ok: false, summary: 'Data non valida.' }
+      const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
+      const rows = await db.select().from(reservations)
+        .where(and(eq(reservations.restaurantId, ctx.restaurantId), gte(reservations.startsAt, dayStart), lt(reservations.startsAt, dayEnd)))
+        .orderBy(asc(reservations.startsAt))
+      const allTables = await db.select({ id: tables.id, number: tables.number }).from(tables).where(eq(tables.restaurantId, ctx.restaurantId))
+      const numByTable = new Map(allTables.map(t => [t.id, t.number]))
+      const fmt = rows.map(r => {
+        const hh = new Intl.DateTimeFormat('it-IT', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(r.startsAt)
+        return `${hh} ${r.customerName} x${r.partySize}${r.tableId ? ` (tav ${numByTable.get(r.tableId) ?? '?'})` : ''} [${r.status}]`
+      })
+      return { ok: true, data: rows.map(r => ({ id: r.id, at: r.startsAt, name: r.customerName, partySize: r.partySize, status: r.status, table: r.tableId ? numByTable.get(r.tableId) : null })), summary: rows.length ? `${rows.length} prenotazioni il ${dateStr}: ${fmt.join('; ')}` : `Nessuna prenotazione il ${dateStr}.` }
+    },
+  },
+  {
+    name: 'low_stock',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Scorte basse in inventario: ingredienti con quantità sotto la soglia minima.',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Scorte basse',
+    execute: async (ctx) => {
+      const alerts = await db.select().from(inventoryItems).where(and(
+        eq(inventoryItems.restaurantId, ctx.restaurantId),
+        lte(inventoryItems.quantity, inventoryItems.minQuantity),
+      ))
+      const fmt = alerts.map(a => `${a.name}: ${a.quantity}${a.unit} (min ${a.minQuantity})`)
+      return { ok: true, data: alerts.map(a => ({ name: a.name, quantity: a.quantity, unit: a.unit, min: a.minQuantity })), summary: alerts.length ? `${alerts.length} scorte basse: ${fmt.join('; ')}.` : 'Nessuna scorta sotto soglia.' }
+    },
+  },
+  {
+    name: 'open_bills',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Conti APERTI adesso: tavolo, totale, da quanto tempo.',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Conti aperti',
+    execute: async (ctx) => {
+      const open = await db.select().from(bills)
+        .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.status, 'open'))).orderBy(desc(bills.createdAt))
+      const allTables = await db.select({ id: tables.id, number: tables.number }).from(tables).where(eq(tables.restaurantId, ctx.restaurantId))
+      const numByTable = new Map(allTables.map(t => [t.id, t.number]))
+      const fmt = open.map(b => `${b.tableId ? `tav ${numByTable.get(b.tableId) ?? '?'}` : 'asporto'}: €${b.total}`)
+      return { ok: true, data: open.map(b => ({ id: b.id, table: b.tableId ? numByTable.get(b.tableId) : null, total: b.total })), summary: open.length ? `${open.length} conti aperti — ${fmt.join('; ')}.` : 'Nessun conto aperto.' }
+    },
+  },
+  {
+    name: 'staff_on_shift',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Chi è in turno ADESSO (turni aperti, non ancora chiusi).',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'In turno ora',
+    execute: async (ctx) => {
+      const rows = await db.select({ name: users.name, role: staffShifts.role, startsAt: staffShifts.startsAt })
+        .from(staffShifts)
+        .innerJoin(users, eq(staffShifts.userId, users.id))
+        .where(and(eq(staffShifts.restaurantId, ctx.restaurantId), isNull(staffShifts.endsAt)))
+        .orderBy(desc(staffShifts.startsAt))
+      const tz = await restaurantTimezone(ctx.restaurantId)
+      const fmt = rows.map(r => `${r.name}${r.role ? ` (${r.role})` : ''} dalle ${new Intl.DateTimeFormat('it-IT', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(r.startsAt)}`)
+      return { ok: true, data: rows, summary: rows.length ? `In turno ora: ${fmt.join('; ')}.` : 'Nessuno in turno al momento.' }
+    },
+  },
+  {
+    name: 'revenue_for_date',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Incasso di una DATA specifica (YYYY-MM-DD): totale, numero conti, ticket medio.',
+    parameters: {
+      type: 'object',
+      properties: { date: { type: 'string', description: 'Data YYYY-MM-DD (es. 2026-07-01)' } },
+      required: ['date'],
+    },
+    label: (a) => `Incasso del ${a?.date ?? '?'}`,
+    execute: async (ctx, args) => {
+      const dateStr = String(args?.date ?? '')
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return { ok: false, summary: 'Data non valida: usa il formato YYYY-MM-DD.' }
+      const tz = await restaurantTimezone(ctx.restaurantId)
+      const dayStart = dayStartInTz(dateStr, tz)
+      if (isNaN(dayStart.getTime())) return { ok: false, summary: 'Data non valida.' }
+      const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
+      const closed = await db.select().from(bills).where(and(
+        eq(bills.restaurantId, ctx.restaurantId), eq(bills.status, 'closed'),
+        gte(bills.closedAt!, dayStart), lt(bills.closedAt!, dayEnd),
+      ))
+      const revenue = round2(closed.reduce((s, b) => s + b.total, 0))
+      const avg = closed.length ? round2(revenue / closed.length) : 0
+      return { ok: true, data: { date: dateStr, revenue, billsCount: closed.length, avgTicket: avg }, summary: `Il ${dateStr}: incasso €${revenue}, ${closed.length} conti, ticket medio €${avg}.` }
+    },
+  },
 ]
 
 const BY_NAME = new Map(ACTIONS.map(a => [a.name, a]))
@@ -515,7 +732,22 @@ export async function runAssistant(opts: {
 }): Promise<AssistantTurn> {
   const openai = await groqClient()
   const tools = toolSchemas(opts.scope, opts.allow)
-  const model = opts.model ?? 'llama-3.3-70b-versatile'
+  let model = opts.model ?? 'llama-3.3-70b-versatile'
+  // Fallback su rate-limit: le quote Groq sono PER MODELLO. Se il 70b esaurisce
+  // i token del giorno (TPD), il copilot non deve morire: ripiega sull'8b-instant
+  // (quota separata, più capiente) per il resto del turno.
+  const FALLBACK_MODEL = 'llama-3.1-8b-instant'
+  const create = async (params: any) => {
+    try {
+      return await openai.chat.completions.create(params)
+    } catch (e: any) {
+      if (e?.status === 429 && params.model !== FALLBACK_MODEL) {
+        model = FALLBACK_MODEL
+        return await openai.chat.completions.create({ ...params, model: FALLBACK_MODEL })
+      }
+      throw e
+    }
+  }
   const messages: any[] = [
     { role: 'system', content: opts.systemPrompt },
     ...opts.history.slice(-6).map(h => ({ role: h.role, content: h.content })),
@@ -525,7 +757,7 @@ export async function runAssistant(opts: {
   const pending: { name: string; args: any; label: string }[] = []
 
   for (let iter = 0; iter < 4; iter++) {
-    const resp = await openai.chat.completions.create({
+    const resp = await create({
       model, messages, tools: tools.length ? tools : undefined,
       tool_choice: tools.length ? 'auto' : undefined,
       temperature: 0.4, max_tokens: 500,
@@ -562,6 +794,6 @@ export async function runAssistant(opts: {
     }
   }
   // safety net: chiusura senza altri tool
-  const final = await openai.chat.completions.create({ model, messages, temperature: 0.4, max_tokens: 400 })
+  const final = await create({ model, messages, temperature: 0.4, max_tokens: 400 })
   return { message: (final.choices?.[0]?.message?.content ?? '').trim() || 'Fatto.', actions, pending }
 }
