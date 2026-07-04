@@ -123,7 +123,7 @@ function mapRoom(r) {
     id: r.id, nome: r.name,
     // Numero tavolo come STRINGA end-to-end + sort naturale (10 dopo 9, non dopo 1).
     tables: (r.tables || []).map((t) => ({
-      n: String(t.number), posti: t.seats, stato: TBL_DB2UI[t.status] || "libero",
+      n: String(t.number), posti: t.seats, stato: TBL_DB2UI[t.status] || "libero", shape: t.shape,
       x: t.posX != null ? t.posX : 10, y: t.posY != null ? t.posY : 10,
       _hasPos: t.posX != null && t.posY != null, _id: t.id, _qr: t.qrToken,
     })).sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true })),

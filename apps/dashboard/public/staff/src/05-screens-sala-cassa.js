@@ -10,6 +10,20 @@ const GLASS = {
   boxShadow: "0 22px 60px -16px rgba(30,20,16,0.42), inset 0 1px 0 rgba(255,255,255,0.7)",
 };
 
+/* Sceglie l'illustrazione 2D del tavolo (assets/tables/*.png) da forma + posti.
+   Fallback sui soli posti se la forma non è nota (tavoli legacy senza `shape`). */
+function tableAsset(t) {
+  const s = t.shape;
+  const p = t.posti || 4;
+  if (s === "square") return "square-4";
+  if (s === "rectangle") return p >= 7 ? "rect-8" : "rect-6";
+  if (s === "round") return p <= 2 ? "round-2" : "round-4";
+  if (p <= 2) return "round-2";
+  if (p >= 7) return "rect-8";
+  if (p >= 5) return "rect-6";
+  return "round-4"; // 3-4 posti senza forma dichiarata
+}
+
 /* ═══════════════════ SALA LIVE ═══════════════════ */
 function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
   // Guardia array vuoto: niente rooms[0].id su lista vuota. I hook restano SEMPRE
@@ -120,14 +134,21 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
             const st = TABLE_STATUS[t.stato];
             const p = xy(t);
             const dragging = drag.current && drag.current.n === t.n;
+            const sz = mobile ? 62 : 80;
+            // Alone morbido colorato = stato: `drop-shadow` segue la sagoma reale del
+            // tavolo (tondo/quadrato/rettangolo), niente anello rigido. Numero al
+            // centro (con velo bianco per leggibilità sul legno) + pallino di stato.
             return (
               <button key={t.n} onPointerDown={(e) => onDown(e, t)} onPointerMove={onMove} onPointerUp={onUp}
-                style={{ position: "absolute", left: p.x + "%", top: p.y + "%", width: mobile ? 54 : 68, height: mobile ? 54 : 68, borderRadius: t.posti >= 6 ? 14 : "50%", transform: "translate(-50%,-50%)",
-                  background: "var(--raised)", border: `3px solid ${st.color}`, boxShadow: dragging ? "var(--sh-3)" : "var(--sh-1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1,
+                style={{ position: "absolute", left: p.x + "%", top: p.y + "%", width: sz, height: sz, transform: "translate(-50%,-50%)",
+                  background: "transparent", border: "none", padding: 0, display: "grid", placeItems: "center",
                   cursor: "grab", zIndex: dragging ? 5 : 1, touchAction: "none", userSelect: "none" }}>
-                <span className="num" style={{ fontSize: mobile ? 17 : 20, color: "var(--ink)" }}>{t.n}</span>
-                <span style={{ fontSize: 9.5, color: "var(--ink-3)", fontWeight: 700 }}>{t.posti}p</span>
-                <span style={{ position: "absolute", top: -4, right: -4, width: 14, height: 14, borderRadius: 99, background: st.color, border: "2px solid var(--raised)" }} />
+                <img src={`assets/tables/${tableAsset(t)}.png`} alt="" draggable={false}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none",
+                    filter: `drop-shadow(0 0 ${dragging ? 8 : 5}px ${st.color}) drop-shadow(0 0 2px ${st.color}) drop-shadow(0 3px 5px rgba(30,20,16,.22))` }} />
+                <span className="num" style={{ position: "relative", fontSize: mobile ? 16 : 19, color: "var(--ink)", pointerEvents: "none",
+                  textShadow: "0 1px 2px rgba(255,255,255,.85), 0 0 4px rgba(255,255,255,.7)" }}>{t.n}</span>
+                <span style={{ position: "absolute", top: 2, right: 2, width: 14, height: 14, borderRadius: 99, background: st.color, border: "2px solid var(--raised)", boxShadow: "0 1px 3px rgba(30,20,16,.28)" }} />
               </button>
             );
           })}
