@@ -119,11 +119,16 @@
       setMessages(next);
       setBusy(true);
       try {
-        const history = next.slice(-12).map((m) => ({ role: m.role, content: m.content }));
-        const data = await TakoAPI.post("/ai/owner/chat", { message: text, history });
+        // History = conversazione PRECEDENTE (senza il messaggio corrente: il server
+        // lo aggiunge già come userMessage — includerlo qui lo duplicava nel prompt).
+        // Contenuti troncati per non sforare i limiti del server.
+        const history = messages.slice(-12).map((m) => ({ role: m.role, content: String(m.content || "").slice(0, 1900) }));
+        const data = await TakoAPI.post("/ai/owner/chat", { message: text.slice(0, 3900), history });
         setMessages((m) => [...m, { role: "assistant", content: data.message || "Fatto.", pending: Array.isArray(data.pending) ? data.pending : [] }]);
       } catch (ex) {
-        const m = ex && ex.status === 503 ? "AI non configurata su questo server." : "Tako non disponibile, riprova.";
+        const m = ex && ex.status === 503 ? "AI non configurata su questo server."
+          : ex && ex.status === 429 ? "Troppe richieste: aspetta qualche secondo e riprova."
+          : "Tako non disponibile, riprova.";
         setMessages((mm) => [...mm, { role: "assistant", content: m }]);
       } finally {
         setBusy(false);

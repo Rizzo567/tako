@@ -167,6 +167,9 @@ async function resolveReservation(restaurantId: string, customerName: string, da
   const dayStart = dayStartInTz(dateStr, tz)
   const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
   const q = (customerName ?? '').toString().toLowerCase().trim()
+  // Nome vuoto → nessun match: con `includes('')` OGNI prenotazione matcherebbe e,
+  // se il giorno ne ha una sola, un cancel_reservation senza nome la cancellerebbe.
+  if (!q) return { resv: undefined, hits: [], dateStr }
   const rows = await db.select().from(reservations).where(and(
     eq(reservations.restaurantId, restaurantId),
     gte(reservations.startsAt, dayStart), lt(reservations.startsAt, dayEnd),
@@ -391,7 +394,24 @@ const ACTIONS: ActionDef[] = [
       if (!menu) return { ok: false, summary: 'Nessun menu configurato. Crea prima un menu dalla dashboard.' }
       const sections = await db.select().from(menuSections).where(eq(menuSections.menuId, menu.id)).orderBy(asc(menuSections.position))
       const wanted = (args?.sectionName ?? '').toString().toLowerCase().trim()
-      let section = wanted ? sections.find(s => s.name.toLowerCase().includes(wanted)) : sections[0]
+      // Stessa politica di resolveSection: esatto → prefisso → contiene, e SOLO se
+      // il match è univoco (prima si prendeva il primo `.includes()` → piatto nella
+      // sezione sbagliata con nomi simili, es. "Pizze" vs "Pizze speciali").
+      let section = sections[0]
+      if (wanted) {
+        section = undefined as typeof section
+        for (const pred of [
+          (s: typeof sections[number]) => s.name.toLowerCase() === wanted,
+          (s: typeof sections[number]) => s.name.toLowerCase().startsWith(wanted),
+          (s: typeof sections[number]) => s.name.toLowerCase().includes(wanted),
+        ]) {
+          const hits = sections.filter(pred)
+          if (hits.length === 1) { section = hits[0]; break }
+          if (hits.length > 1) {
+            return { ok: false, summary: `Più sezioni corrispondono a "${args?.sectionName}": ${hits.map(s => `"${s.name}"`).join(', ')}. Specifica quale.` }
+          }
+        }
+      }
       if (!section) {
         const [created] = await db.insert(menuSections).values({ menuId: menu.id, name: (args?.sectionName ?? 'Varie').toString().slice(0, 60), position: sections.length }).returning()
         section = created
@@ -1143,12 +1163,12 @@ const ACTIONS: ActionDef[] = [
     name: 'create_staff',
     scope: ['owner'],
     kind: 'mutation',
-    description: 'Aggiunge un membro dello staff: nome, ruolo (dipendente/chef/cassiere), PIN a 4 cifre per il tablet (opzionale).',
+    description: 'Aggiunge un membro dello staff: nome, ruolo (cameriere/dipendente/chef/cassiere), PIN a 4 cifre per il tablet (opzionale).',
     parameters: {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        role: { type: 'string', enum: ['dipendente', 'chef', 'cassiere'] },
+        role: { type: 'string', enum: ['cameriere', 'dipendente', 'chef', 'cassiere'] },
         pin: { type: 'string', description: '4 cifre (opzionale)' },
         phone: { type: 'string' },
       },
@@ -1157,7 +1177,12 @@ const ACTIONS: ActionDef[] = [
     label: (a) => `Aggiungi ${a?.name ?? '?'} come ${a?.role ?? '?'}`,
     execute: async (ctx, args) => {
       const name = (args?.name ?? '').toString().trim()
-      const role = ['dipendente', 'chef', 'cassiere'].includes(args?.role) ? args.role : null
+      // "cameriere"/"sala" sono il modo naturale di dirlo: il DB usa 'dipendente'
+      // (stessa mappa ROLE_UI2DB della dashboard). Normalizziamo qui.
+      const ROLE_SYNONYMS: Record<string, string> = { cameriere: 'dipendente', sala: 'dipendente', cuoco: 'chef' }
+      const rawRole = (args?.role ?? '').toString().toLowerCase().trim()
+      const normalized = ROLE_SYNONYMS[rawRole] ?? rawRole
+      const role = ['dipendente', 'chef', 'cassiere'].includes(normalized) ? normalized : null
       if (!name || name.length < 2 || !role) return { ok: false, summary: 'Servono nome (min 2 caratteri) e ruolo valido.' }
       if (args?.pin && !/^\d{4}$/.test(String(args.pin))) return { ok: false, summary: 'Il PIN deve essere di 4 cifre.' }
       // email tecnica auto-generata (la tabella la richiede unica; il login del
@@ -1430,6 +1455,13 @@ export async function runAssistant(opts: {
   // i token del giorno (TPD), il copilot non deve morire: ripiega sull'8b-instant
   // (quota separata, più capiente) per il resto del turno.
   const FALLBACK_MODEL = 'llama-3.1-8b-instant'
+  // I modelli llama su Groq ogni tanto emettono un tool-call malformato → l'API
+  // risponde 400 "tool_use_failed". Senza retry il turno moriva in un 502 generico
+  // ("Tako non disponibile"). Strategia: riprova una volta (temperature>0 → uscita
+  // diversa), poi ripiega sul modello di riserva, e come ultima risorsa rispondi
+  // SENZA tool (meglio una risposta senza azioni che un errore).
+  const isToolUseFailure = (e: any) =>
+    e?.status === 400 && /tool(_| )use|tool call|function call/i.test(JSON.stringify(e?.error ?? e?.message ?? ''))
   const create = async (params: any) => {
     try {
       return await openai.chat.completions.create(params)
@@ -1437,6 +1469,32 @@ export async function runAssistant(opts: {
       if (e?.status === 429 && params.model !== FALLBACK_MODEL) {
         model = FALLBACK_MODEL
         return await openai.chat.completions.create({ ...params, model: FALLBACK_MODEL })
+      }
+      // 413 "Request too large": il budget token-per-minuto del tier Groq non copre
+      // la richiesta (succede sull'8b di riserva: TPM 6000 ≈ system + 37 tool schema
+      // + history). Alleggerisci (system + ultimo scambio) e riprova una volta; se
+      // non basta l'errore risale e la route lo mappa in un 429 leggibile.
+      if (e?.status === 413 && Array.isArray(params.messages) && params.messages.length > 3) {
+        const slim = [params.messages[0], ...params.messages.slice(-2)]
+        return await openai.chat.completions.create({ ...params, messages: slim })
+      }
+      if (isToolUseFailure(e)) {
+        try {
+          return await openai.chat.completions.create(params) // retry: uscita non deterministica
+        } catch (e2: any) {
+          if (!isToolUseFailure(e2)) throw e2
+          if (params.model !== FALLBACK_MODEL) {
+            model = FALLBACK_MODEL
+            try {
+              return await openai.chat.completions.create({ ...params, model: FALLBACK_MODEL })
+            } catch (e3: any) {
+              if (!isToolUseFailure(e3)) throw e3
+            }
+          }
+          // ultima risorsa: niente tool, almeno il copilot risponde
+          const { tools: _t, tool_choice: _tc, ...rest } = params
+          return await openai.chat.completions.create(rest)
+        }
       }
       throw e
     }
@@ -1453,7 +1511,9 @@ export async function runAssistant(opts: {
     const resp = await create({
       model, messages, tools: tools.length ? tools : undefined,
       tool_choice: tools.length ? 'auto' : undefined,
-      temperature: 0.4, max_tokens: 500,
+      // 700: un max_tokens troppo basso TRONCA il JSON dei tool-call (args vuoti →
+      // card "Crea tavolo ?" che poi fallisce all'esecuzione).
+      temperature: 0.4, max_tokens: 700,
     })
     const msg = resp.choices?.[0]?.message
     const toolCalls = msg?.tool_calls

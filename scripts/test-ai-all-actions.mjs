@@ -234,6 +234,26 @@ try {
   const ao1 = await exec('active_orders', {}, A.token)
   check('X5. active_orders risponde', ao1.status === 200, ao1.json?.data?.summary)
 
+  /* ═══ ROBUSTEZZA CHAT (regressioni 2026-07-04) ═══ */
+  // Messaggi lunghi (dettatura) e history con risposte lunghe NON devono dare 400:
+  // il server tronca invece di rifiutare (prima la chat restava rotta finché la
+  // risposta lunga non usciva dalla finestra delle 12 battute).
+  // Accettati 200 (ok) o 429 (quota Groq del momento, mappata in modo leggibile):
+  // la regressione da bloccare è il 400 VALIDATION / 502 generico.
+  const longMsg = 'Vorrei un riepilogo dettagliato della giornata al ristorante per favore. '.repeat(10)
+  const lm1 = await chat(longMsg, A.token)
+  check('B1. messaggio lungo (dettatura ~700 char) non dà 400/502', [200, 429].includes(lm1.status), `status=${lm1.status}`)
+  const bigHistory = [{ role: 'assistant', content: 'Prenotazioni: ' + 'Mario Rossi x4 alle 20:00; '.repeat(90) }]
+  const lh1 = await api('/ai/owner/chat', { message: 'quanti tavoli ho?', history: bigHistory }, A.token)
+  check('B2. history con contenuto >2000 char non dà 400/502', [200, 429].includes(lh1.status), `status=${lh1.status}`)
+  // "cameriere" è il ruolo detto a voce: va accettato e mappato a 'dipendente'
+  const cam1 = await exec('create_staff', { name: 'Piero Cameriere', role: 'cameriere' }, A.token)
+  const [camRow] = await sql`select role from users where restaurant_id = ${A.rid} and name = 'Piero Cameriere'`
+  check('B3. create_staff accetta "cameriere" → dipendente', cam1.status === 200 && camRow?.role === 'dipendente', cam1.json?.data?.summary ?? cam1.json?.error?.message)
+  // cancel_reservation senza nome NON deve cancellare l'unica prenotazione del giorno
+  const cr1 = await exec('cancel_reservation', { customerName: '' }, A.token)
+  check('B4. cancel_reservation senza nome rifiutata', cr1.status === 422, `status=${cr1.status}`)
+
   /* ═══ ANTI-CONFABULAZIONE ═══ */
   const c2 = await chat('Spegni le luci della sala principale', A.token)
   const msg2 = (c2.json?.data?.message ?? '').toLowerCase()
