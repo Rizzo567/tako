@@ -39,6 +39,10 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
   const pending = useRef({}); // posizioni in attesa di conferma dal server dopo un drag locale
   const mapRef = useRef(null);
   const drag = useRef(null);
+  const [trayDragT, setTrayDragT] = useState(null); // tavolo trascinato DAL vassoio verso la pianta
+  const trayDrag = useRef(null);
+  const trayGhostRef = useRef(null);
+  const unplaced = useRef({}); // tavoli tolti dalla pianta (in attesa di conferma server) → vassoio
   // se la sala selezionata sparisce o non è ancora impostata, riallinea alla prima disponibile
   useEffect(() => { if (rooms.length && (roomId == null || !rooms.some(r => r.id === roomId))) setRoomId(rooms[0].id); }, [rooms]);
   const room = rooms.find(r => r.id === roomId) || rooms[0];
@@ -48,15 +52,22 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
   }, [rooms]);
   // Le posizioni del SERVER vincono sul localStorage (sync cross-dispositivo). Durante un
   // drag attivo, o finché il server non conferma l'ultimo spostamento locale, usa il locale.
+  // Posizione EFFETTIVA sulla pianta, oppure null se il tavolo non è ancora piazzato
+  // (→ finisce nel vassoio "Da posizionare"). NIENTE default in alto a sinistra: un
+  // tavolo appena creato non ha posX/posY sul server, quindi rawPos è null e va nel vassoio.
+  const rawPos = (t) => {
+    if (unplaced.current[roomId] && unplaced.current[roomId][t.n]) return null; // tolto dalla pianta
+    const pend = pending.current[roomId] && pending.current[roomId][t.n];
+    if (pend && !(t._hasPos && Math.abs(t.x - pend.x) <= 1 && Math.abs(t.y - pend.y) <= 1)) return pend;
+    if (t._hasPos) return { x: t.x, y: t.y };
+    const local = pos[roomId] && pos[roomId][t.n];
+    return local || null;
+  };
   const xy = (t) => {
     // Durante il drag la posizione viva sta in drag.current (aggiornata via DOM, non
     // in state): se un re-render capita a metà trascinamento il tavolo NON salta.
     if (drag.current && drag.current.n === t.n) return { x: drag.current.x, y: drag.current.y };
-    const local = pos[roomId] && pos[roomId][t.n];
-    const pend = pending.current[roomId] && pending.current[roomId][t.n];
-    if (pend && !(t._hasPos && Math.abs(t.x - pend.x) <= 1 && Math.abs(t.y - pend.y) <= 1)) return pend;
-    if (t._hasPos) return { x: t.x, y: t.y };
-    return local || { x: t.x != null ? t.x : 10, y: t.y != null ? t.y : 10 };
+    return rawPos(t) || { x: 50, y: 50 };
   };
 
   if (!rooms || rooms.length === 0) {
@@ -99,20 +110,70 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
     e.currentTarget?.releasePointerCapture?.(e.pointerId);
     if (d.el) { d.el.style.zIndex = ""; d.el.style.cursor = "grab"; d.el.style.willChange = ""; }
     drag.current = null;
-    if (d.moved) {
-      const fx = Math.round(d.x), fy = Math.round(d.y);
-      // commit UNA volta sola, al rilascio (non durante il movimento)
-      setPos(p => ({ ...p, [roomId]: { ...(p[roomId] || {}), [d.n]: { x: fx, y: fy } } }));
-      const merged = { ...posRef.current, [roomId]: { ...(posRef.current[roomId] || {}), [d.n]: { x: fx, y: fy } } };
-      try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(merged)); } catch (_) {}
-      // segna "in attesa": evita il flicker al vecchio valore server prima dell'evento table:updated
-      pending.current[roomId] = { ...(pending.current[roomId] || {}), [d.n]: { x: fx, y: fy } };
-      try { await window.TakoActions.tableUpdate(d.t._id, { posX: fx, posY: fy }); }
-      catch (err) { toast(err.message, { type: "error" }); }
-    } else { setSel(d.t); }
+    if (d.moved) { await place(d.t, Math.round(d.x), Math.round(d.y)); }
+    else { setSel(d.t); }
+  };
+
+  // Piazza un tavolo sulla pianta a (fx,fy)% e persiste sul server (posX/posY): la
+  // posizione resta anche riavviando l'app. Usato sia dal drag sulla pianta sia dal
+  // rilascio di un tavolo trascinato dal vassoio.
+  const place = async (t, fx, fy) => {
+    if (unplaced.current[roomId]) delete unplaced.current[roomId][t.n];
+    setPos(p => ({ ...p, [roomId]: { ...(p[roomId] || {}), [t.n]: { x: fx, y: fy } } }));
+    const merged = { ...posRef.current, [roomId]: { ...(posRef.current[roomId] || {}), [t.n]: { x: fx, y: fy } } };
+    try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(merged)); } catch (_) {}
+    pending.current[roomId] = { ...(pending.current[roomId] || {}), [t.n]: { x: fx, y: fy } };
+    try { await window.TakoActions.tableUpdate(t._id, { posX: fx, posY: fy }); }
+    catch (err) { toast(err.message, { type: "error" }); }
+  };
+
+  // Toglie un tavolo dalla pianta → torna nel vassoio (posX/posY = null sul server).
+  const unplace = async (t) => {
+    unplaced.current[roomId] = { ...(unplaced.current[roomId] || {}), [t.n]: true };
+    setPos(p => { const r = { ...(p[roomId] || {}) }; delete r[t.n]; return { ...p, [roomId]: r }; });
+    if (pending.current[roomId]) delete pending.current[roomId][t.n];
+    const merged = { ...posRef.current, [roomId]: { ...(posRef.current[roomId] || {}) } };
+    delete merged[roomId][t.n];
+    try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(merged)); } catch (_) {}
+    try { await window.TakoActions.tableUpdate(t._id, { posX: null, posY: null }); }
+    catch (err) { toast(err.message, { type: "error" }); }
+  };
+
+  // ── Drag di un tavolo DAL vassoio verso la pianta (ghost che segue il puntatore) ──
+  const onTrayDown = (e, t) => {
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    trayDrag.current = { t, cx: e.clientX, cy: e.clientY, moved: false };
+    setTrayDragT(t); // monta il ghost
+  };
+  const onTrayMove = (e) => {
+    const d = trayDrag.current; if (!d) return;
+    if (!d.moved && Math.hypot(e.clientX - d.cx, e.clientY - d.cy) < 4) return;
+    d.moved = true; d.cx = e.clientX; d.cy = e.clientY;
+    if (trayGhostRef.current) { trayGhostRef.current.style.left = e.clientX + "px"; trayGhostRef.current.style.top = e.clientY + "px"; }
+  };
+  const onTrayUp = async (e) => {
+    const d = trayDrag.current; if (!d) return;
+    e.currentTarget?.releasePointerCapture?.(e.pointerId);
+    trayDrag.current = null;
+    setTrayDragT(null);
+    const r = mapRef.current && mapRef.current.getBoundingClientRect();
+    // rilasciato DENTRO la pianta → piazza lì; altrimenti resta nel vassoio
+    if (d.moved && r && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+      let x = ((e.clientX - r.left) / r.width) * 100;
+      let y = ((e.clientY - r.top) / r.height) * 100;
+      x = Math.max(5, Math.min(95, x)); y = Math.max(7, Math.min(93, y));
+      await place(d.t, Math.round(x), Math.round(y));
+    } else if (!d.moved) {
+      setSel(d.t); // tap sul chip → apri il dettaglio tavolo
+    }
   };
   const resetLayout = () => { const n = { ...pos }; delete n[roomId]; setPos(n); try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(n)); } catch (_) {} toast("Disposizione ripristinata"); };
   const hasCustom = pos[roomId] && Object.keys(pos[roomId]).length > 0;
+
+  // Piazzati (sulla pianta) vs da posizionare (vassoio): un tavolo senza posizione
+  // salvata non finisce più in alto a sinistra, ma nel vassoio sotto la pianta.
+  const placedTables = [], trayTables = [];
+  for (const t of (room ? room.tables : [])) { (rawPos(t) ? placedTables : trayTables).push(t); }
 
   return (
     <ScreenScroll mobile={mobile}>
@@ -145,7 +206,12 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
       <Card pad={mobile ? 14 : 22}>
         <div ref={mapRef}
           style={{ position: "relative", width: "100%", aspectRatio: mobile ? "1 / 1.15" : "16 / 8", background: "radial-gradient(var(--hairline) 1px, transparent 1px) 0 0/22px 22px, var(--sunken)", borderRadius: 14, border: "1px dashed var(--hairline)" }}>
-          {room.tables.map(t => {
+          {placedTables.length === 0 && (
+            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center", color: "var(--ink-3)", fontSize: 13, fontWeight: 600, pointerEvents: "none", padding: 20 }}>
+              Trascina qui i tavoli dal riquadro "Da posizionare" qui sotto
+            </div>
+          )}
+          {placedTables.map(t => {
             const st = TABLE_STATUS[t.stato];
             const p = xy(t);
             const sz = mobile ? 62 : 80;
@@ -176,13 +242,48 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
         </div>
       </Card>
 
+      {/* Vassoio "Da posizionare": i tavoli senza posizione salvata. Si trascinano nella pianta. */}
+      {trayTables.length > 0 && (
+        <Card pad={mobile ? 14 : 18} style={{ marginTop: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+            <Icon name="grid" size={16} style={{ color: "var(--ink-2)" }} />
+            <h3 style={{ fontSize: 14.5 }}>Da posizionare</h3>
+            <span style={{ fontSize: 12.5, color: "var(--ink-3)", fontWeight: 600 }}>· trascina un tavolo nella pianta qui sopra</span>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            {trayTables.map(t => {
+              const st = TABLE_STATUS[t.stato];
+              return (
+                <button key={t.n} onPointerDown={(e) => onTrayDown(e, t)} onPointerMove={onTrayMove} onPointerUp={onTrayUp}
+                  title={`Tavolo ${t.n} · ${t.posti} posti`}
+                  style={{ position: "relative", width: 76, height: 76, borderRadius: 14, border: "1px dashed var(--hairline)", background: "var(--sunken)", display: "grid", placeItems: "center", cursor: "grab", touchAction: "none", userSelect: "none", padding: 0 }}>
+                  <img src={`assets/tables/${tableAsset(t)}.png`} alt="" draggable={false} style={{ width: "80%", height: "80%", objectFit: "contain", pointerEvents: "none", filter: "drop-shadow(0 2px 3px rgba(30,20,16,.2))" }} />
+                  <span className="num" style={{ position: "absolute", fontSize: 15, color: "var(--ink)", pointerEvents: "none", textShadow: "0 1px 2px rgba(255,255,255,.9)" }}>{t.n}</span>
+                  <span style={{ position: "absolute", top: 3, right: 3, width: 11, height: 11, borderRadius: 99, background: st.color, border: "2px solid var(--raised)" }} />
+                </button>
+              );
+            })}
+          </div>
+        </Card>
+      )}
+
+      {/* Ghost che segue il puntatore mentre trascini un tavolo dal vassoio */}
+      {trayDragT && (
+        <div ref={trayGhostRef} style={{ position: "fixed", left: (trayDrag.current ? trayDrag.current.cx : 0), top: (trayDrag.current ? trayDrag.current.cy : 0), width: mobile ? 62 : 80, height: mobile ? 62 : 80, transform: "translate(-50%,-50%)", pointerEvents: "none", zIndex: 9999, opacity: 0.92 }}>
+          <img src={`assets/tables/${tableAsset(trayDragT)}.png`} alt="" style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 6px 10px rgba(30,20,16,.4))" }} />
+        </div>
+      )}
+
       <Overlay open={!!sel} onClose={() => setSel(null)} anchor={mobile ? "center" : "right"}>
-        {sel && <TableDrawer table={sel} mobile={mobile} onClose={() => setSel(null)} onSetState={(s) => { onSetTableState(sel.n, s); setSel(null); }} />}
+        {sel && <TableDrawer table={sel} mobile={mobile} onClose={() => setSel(null)}
+          placed={!!rawPos(sel)}
+          onUnplace={() => { unplace(sel); setSel(null); }}
+          onSetState={(s) => { onSetTableState(sel.n, s); setSel(null); }} />}
       </Overlay>
     </ScreenScroll>
   );
 }
-function TableDrawer({ table, mobile, onClose, onSetState }) {
+function TableDrawer({ table, mobile, onClose, onSetState, placed, onUnplace }) {
   const st = TABLE_STATUS[table.stato];
   const orders = ORDERS.filter(o => o.tavolo === table.n);
   return (
@@ -207,6 +308,9 @@ function TableDrawer({ table, mobile, onClose, onSetState }) {
           <Btn kind="soft" full onClick={() => onSetState("libero")}>Segna libero</Btn>
           <Btn kind="soft" full onClick={() => onSetState("pulizia")}>Pulizia</Btn>
         </div>
+        {placed && onUnplace && (
+          <Btn kind="ghost" full icon="move" onClick={onUnplace}>Rimetti nel vassoio</Btn>
+        )}
       </div>
     </div>
   );

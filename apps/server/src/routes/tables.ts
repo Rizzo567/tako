@@ -63,8 +63,8 @@ export async function tableRoutes(fastify: FastifyInstance) {
       seats: z.number().int().min(1).optional(),
       roomId: z.string().uuid().nullable().optional(),
       shape: z.enum(['round', 'square', 'rectangle']).optional(),
-      posX: z.number().min(0).max(100).optional(),   // posizione mappa sala (%)
-      posY: z.number().min(0).max(100).optional(),
+      posX: z.number().min(0).max(100).nullable().optional(),   // posizione mappa sala (%); null = tolto dalla pianta (vassoio)
+      posY: z.number().min(0).max(100).nullable().optional(),
     })
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
