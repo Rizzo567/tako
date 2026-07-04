@@ -21,11 +21,12 @@
 // Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
 // validazione delle route (ownership per restaurantId, emit socket identici).
 
-import { db, restaurants, menus, menuSections, menuItems, orders, orderItems, tables, rooms, bills, reservations, inventoryItems, staffShifts, users } from '@tako/db'
-import { eq, and, asc, desc, gte, lt, lte, inArray, isNull } from 'drizzle-orm'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions } from '@tako/db'
+import { eq, and, asc, desc, gte, lt, lte, ne, inArray, isNull, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
+import bcrypt from 'bcryptjs'
 import { io } from '../index.js'
-import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz } from './billing.js'
+import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz, coverUnit, recomputeOpenBill, BILLABLE_STATUSES } from './billing.js'
 
 export type ActionScope = 'customer' | 'owner'
 export type ActionKind = 'read' | 'action' | 'client' | 'mutation'
@@ -117,6 +118,73 @@ async function resolveTable(restaurantId: string, number: string) {
     .where(and(eq(tables.restaurantId, restaurantId), eq(tables.number, num), eq(tables.active, true)))
     .limit(1)
   return t
+}
+
+// Risolve un MEMBRO dello staff per nome (attivi), match univoco o niente.
+async function resolveStaff(restaurantId: string, name: string, includeInactive = false) {
+  const q = (name ?? '').toString().toLowerCase().trim()
+  if (!q) return { user: undefined, all: [] as { id: string; name: string }[] }
+  const where = includeInactive
+    ? eq(users.restaurantId, restaurantId)
+    : and(eq(users.restaurantId, restaurantId), eq(users.active, true))
+  const all = (await db.select().from(users).where(where)).sort((a, b) => a.name.localeCompare(b.name))
+  const tiers = [
+    (u: typeof all[number]) => u.name.toLowerCase() === q,
+    (u: typeof all[number]) => u.name.toLowerCase().startsWith(q),
+    (u: typeof all[number]) => u.name.toLowerCase().includes(q),
+  ]
+  for (const pred of tiers) {
+    const hits = all.filter(pred)
+    if (hits.length === 1) return { user: hits[0], all }
+    if (hits.length > 1) return { user: undefined, all }
+  }
+  return { user: undefined, all }
+}
+
+// Risolve un INGREDIENTE d'inventario per nome, match univoco o niente.
+async function resolveInventory(restaurantId: string, name: string) {
+  const q = (name ?? '').toString().toLowerCase().trim()
+  if (!q) return undefined
+  const all = (await db.select().from(inventoryItems).where(eq(inventoryItems.restaurantId, restaurantId)))
+    .sort((a, b) => a.name.localeCompare(b.name))
+  const tiers = [
+    (i: typeof all[number]) => i.name.toLowerCase() === q,
+    (i: typeof all[number]) => i.name.toLowerCase().startsWith(q),
+    (i: typeof all[number]) => i.name.toLowerCase().includes(q),
+  ]
+  for (const pred of tiers) {
+    const hits = all.filter(pred)
+    if (hits.length === 1) return hits[0]
+    if (hits.length > 1) return undefined
+  }
+  return undefined
+}
+
+// Risolve una PRENOTAZIONE per nome cliente in una data (default oggi), non cancellata.
+async function resolveReservation(restaurantId: string, customerName: string, date?: string) {
+  const tz = await restaurantTimezone(restaurantId)
+  const dateStr = (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) ? date : dayKeyInTz(new Date(), tz)
+  const dayStart = dayStartInTz(dateStr, tz)
+  const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
+  const q = (customerName ?? '').toString().toLowerCase().trim()
+  const rows = await db.select().from(reservations).where(and(
+    eq(reservations.restaurantId, restaurantId),
+    gte(reservations.startsAt, dayStart), lt(reservations.startsAt, dayEnd),
+    ne(reservations.status, 'cancelled'),
+  ))
+  const hits = rows.filter(r => r.customerName.toLowerCase().includes(q))
+  if (hits.length === 1) return { resv: hits[0], hits, dateStr }
+  return { resv: undefined, hits, dateStr }
+}
+
+// Conto APERTO del tavolo indicato per numero (per sconto/incasso).
+async function openBillForTable(restaurantId: string, tableNumber: string) {
+  const t = await resolveTable(restaurantId, tableNumber)
+  if (!t) return { table: undefined, bill: undefined }
+  const [bill] = await db.select().from(bills)
+    .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, t.id), eq(bills.status, 'open')))
+    .orderBy(desc(bills.createdAt)).limit(1)
+  return { table: t, bill }
 }
 
 // ─────────────────────────────── REGISTRO AZIONI ───────────────────────────────
@@ -676,6 +744,623 @@ const ACTIONS: ActionDef[] = [
       const revenue = round2(closed.reduce((s, b) => s + b.total, 0))
       const avg = closed.length ? round2(revenue / closed.length) : 0
       return { ok: true, data: { date: dateStr, revenue, billsCount: closed.length, avgTicket: avg }, summary: `Il ${dateStr}: incasso €${revenue}, ${closed.length} conti, ticket medio €${avg}.` }
+    },
+  },
+
+  // ── OWNER · PRENOTAZIONI ───────────────────────────────────────────────────
+  {
+    name: 'create_reservation',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Crea una prenotazione: nome cliente, persone, data e ora (es. "2026-07-04 20:00"), telefono e tavolo opzionali.',
+    parameters: {
+      type: 'object',
+      properties: {
+        customerName: { type: 'string' },
+        partySize: { type: 'integer', minimum: 1, maximum: 60 },
+        when: { type: 'string', description: 'Data e ora "YYYY-MM-DD HH:mm" (24h, ora locale del ristorante)' },
+        customerPhone: { type: 'string', description: 'Telefono (opzionale)' },
+        tableNumber: { type: 'string', description: 'Tavolo (opzionale)' },
+        notes: { type: 'string' },
+      },
+      required: ['customerName', 'partySize', 'when'],
+    },
+    label: (a) => `Prenota ${a?.customerName ?? '?'} x${a?.partySize ?? '?'} ${a?.when ?? ''}${a?.tableNumber ? ` (tav ${a.tableNumber})` : ''}`,
+    execute: async (ctx, args) => {
+      const name = (args?.customerName ?? '').toString().trim()
+      const partySize = Math.min(Math.max(parseInt(String(args?.partySize ?? 0), 10) || 0, 1), 60)
+      const whenStr = (args?.when ?? '').toString().trim()
+      if (!name || !whenStr) return { ok: false, summary: 'Servono nome cliente, persone e data/ora.' }
+      // "YYYY-MM-DD HH:mm" interpretato nel fuso del RISTORANTE (non del server):
+      // costruiamo l'istante dal giorno-inizio-tz + ore/minuti.
+      const m = whenStr.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{1,2}):(\d{2})/)
+      if (!m) return { ok: false, summary: 'Data/ora non valida: usa "YYYY-MM-DD HH:mm" (es. 2026-07-04 20:00).' }
+      const tz = await restaurantTimezone(ctx.restaurantId)
+      const dayStart = dayStartInTz(m[1]!, tz)
+      if (isNaN(dayStart.getTime())) return { ok: false, summary: 'Data non valida.' }
+      const startsAt = new Date(dayStart.getTime() + (parseInt(m[2]!, 10) * 60 + parseInt(m[3]!, 10)) * 60_000)
+      if (startsAt.getTime() < Date.now() - 60_000) return { ok: false, summary: 'La data/ora è nel passato.' }
+      const durationMin = 90
+      let tableId: string | null = null
+      if (args?.tableNumber) {
+        const t = await resolveTable(ctx.restaurantId, String(args.tableNumber))
+        if (!t) return { ok: false, summary: `Tavolo "${args.tableNumber}" non trovato.` }
+        tableId = t.id
+      }
+      const values = {
+        restaurantId: ctx.restaurantId, tableId, customerName: name.slice(0, 120),
+        customerPhone: (args?.customerPhone ? String(args.customerPhone) : 'n/d').slice(0, 40),
+        partySize, startsAt, durationMin, status: 'confirmed' as const,
+        notes: args?.notes ? String(args.notes).slice(0, 500) : null,
+      }
+      // Con tavolo: anti-overbooking sotto advisory lock (stessa logica della route).
+      if (tableId) {
+        const res = await db.transaction(async (tx) => {
+          await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${'resv:' + ctx.restaurantId + ':' + tableId}))`)
+          const others = await tx.select().from(reservations).where(and(
+            eq(reservations.restaurantId, ctx.restaurantId), eq(reservations.tableId, tableId),
+            ne(reservations.status, 'cancelled'),
+          ))
+          const newStart = startsAt.getTime(), newEnd = newStart + durationMin * 60_000
+          for (const r of others) {
+            const exStart = new Date(r.startsAt).getTime(), exEnd = exStart + r.durationMin * 60_000
+            if (newStart < exEnd && exStart < newEnd) return { clash: true as const }
+          }
+          const [row] = await tx.insert(reservations).values(values).returning()
+          return { row: row! }
+        })
+        if ('clash' in res) return { ok: false, summary: 'Il tavolo è già prenotato in quella fascia oraria.' }
+        io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: res.row.id })
+        const hh = new Intl.DateTimeFormat('it-IT', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(startsAt)
+        return { ok: true, data: { id: res.row.id }, summary: `Prenotazione: ${name} x${partySize} il ${m[1]} alle ${hh} (tav ${args.tableNumber}).` }
+      }
+      const [row] = await db.insert(reservations).values(values).returning()
+      io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: row!.id })
+      const hh = new Intl.DateTimeFormat('it-IT', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(startsAt)
+      return { ok: true, data: { id: row!.id }, summary: `Prenotazione: ${name} x${partySize} il ${m[1]} alle ${hh} (senza tavolo assegnato).` }
+    },
+  },
+  {
+    name: 'cancel_reservation',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Annulla la prenotazione di un cliente (per nome; data opzionale, default oggi).',
+    parameters: {
+      type: 'object',
+      properties: {
+        customerName: { type: 'string' },
+        date: { type: 'string', description: 'YYYY-MM-DD (default oggi)' },
+      },
+      required: ['customerName'],
+    },
+    label: (a) => `Annulla prenotazione di ${a?.customerName ?? '?'}${a?.date ? ` (${a.date})` : ''}`,
+    execute: async (ctx, args) => {
+      const { resv, hits, dateStr } = await resolveReservation(ctx.restaurantId, args?.customerName, args?.date)
+      if (!resv) {
+        const list = hits.map(h => `${h.customerName} x${h.partySize}`).join('; ')
+        return { ok: false, summary: hits.length ? `Più prenotazioni corrispondono il ${dateStr}: ${list}. Specifica meglio.` : `Nessuna prenotazione di "${args?.customerName}" il ${dateStr}.` }
+      }
+      await db.update(reservations).set({ status: 'cancelled', updatedAt: new Date() }).where(eq(reservations.id, resv.id))
+      io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: resv.id })
+      return { ok: true, data: { id: resv.id }, summary: `Prenotazione di ${resv.customerName} (x${resv.partySize}) annullata.` }
+    },
+  },
+  {
+    name: 'set_reservation_status',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Cambia lo stato di una prenotazione: confirmed (confermata), seated (accomodati), no_show (non presentati).',
+    parameters: {
+      type: 'object',
+      properties: {
+        customerName: { type: 'string' },
+        status: { type: 'string', enum: ['confirmed', 'seated', 'no_show'] },
+        date: { type: 'string', description: 'YYYY-MM-DD (default oggi)' },
+      },
+      required: ['customerName', 'status'],
+    },
+    label: (a) => `Prenotazione ${a?.customerName ?? '?'} → ${a?.status ?? '?'}`,
+    execute: async (ctx, args) => {
+      const status = ['confirmed', 'seated', 'no_show'].includes(args?.status) ? args.status : null
+      if (!status) return { ok: false, summary: 'Stato non valido.' }
+      const { resv, hits, dateStr } = await resolveReservation(ctx.restaurantId, args?.customerName, args?.date)
+      if (!resv) {
+        const list = hits.map(h => `${h.customerName} x${h.partySize}`).join('; ')
+        return { ok: false, summary: hits.length ? `Più prenotazioni corrispondono il ${dateStr}: ${list}.` : `Nessuna prenotazione di "${args?.customerName}" il ${dateStr}.` }
+      }
+      await db.update(reservations).set({ status, updatedAt: new Date() }).where(eq(reservations.id, resv.id))
+      io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: resv.id })
+      const it: Record<string, string> = { confirmed: 'confermata', seated: 'accomodati', no_show: 'non presentati' }
+      return { ok: true, data: { id: resv.id, status }, summary: `Prenotazione di ${resv.customerName}: ${it[status] ?? status}.` }
+    },
+  },
+
+  // ── OWNER · ORDINI ─────────────────────────────────────────────────────────
+  {
+    name: 'active_orders',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Ordini ATTIVI adesso (in attesa/confermati/in preparazione/pronti), con tavolo e numero piatti.',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Ordini attivi',
+    execute: async (ctx) => {
+      const active = await db.select().from(orders).where(and(
+        eq(orders.restaurantId, ctx.restaurantId),
+        inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready']),
+      )).orderBy(desc(orders.createdAt))
+      const allTables = await db.select({ id: tables.id, number: tables.number }).from(tables).where(eq(tables.restaurantId, ctx.restaurantId))
+      const numByTable = new Map(allTables.map(t => [t.id, t.number]))
+      const items = await db.select({ orderId: orderItems.orderId }).from(orderItems)
+        .where(inArray(orderItems.orderId, active.length ? active.map(o => o.id) : ['00000000-0000-0000-0000-000000000000']))
+      const countByOrder = new Map<string, number>()
+      for (const it of items) countByOrder.set(it.orderId, (countByOrder.get(it.orderId) ?? 0) + 1)
+      const fmt = active.map(o => `${o.tableId ? `tav ${numByTable.get(o.tableId) ?? '?'}` : 'asporto'}: ${countByOrder.get(o.id) ?? 0} piatti [${ORDER_STATUS_IT[o.status] ?? o.status}]`)
+      return { ok: true, data: active.map(o => ({ id: o.id, table: o.tableId ? numByTable.get(o.tableId) : null, status: o.status })), summary: active.length ? `${active.length} ordini attivi — ${fmt.join('; ')}.` : 'Nessun ordine attivo.' }
+    },
+  },
+  {
+    name: 'cancel_order',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Annulla l\'ordine attivo di un tavolo (l\'ultimo, se più di uno). Un ordine già pagato non si può annullare.',
+    parameters: {
+      type: 'object',
+      properties: { tableNumber: { type: 'string', description: 'Numero del tavolo' } },
+      required: ['tableNumber'],
+    },
+    label: (a) => `Annulla ordine del tavolo ${a?.tableNumber ?? '?'}`,
+    execute: async (ctx, args) => {
+      const t = await resolveTable(ctx.restaurantId, args?.tableNumber)
+      if (!t) return { ok: false, summary: `Tavolo "${args?.tableNumber ?? ''}" non trovato.` }
+      const [current] = await db.select().from(orders).where(and(
+        eq(orders.restaurantId, ctx.restaurantId), eq(orders.tableId, t.id),
+        inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready', 'served']),
+      )).orderBy(desc(orders.createdAt)).limit(1)
+      if (!current) return { ok: false, summary: `Nessun ordine attivo sul tavolo ${t.number}.` }
+      // stessa transizione della route PATCH /orders/:id/cancel
+      const [updated] = await db.update(orders).set({ status: 'cancelled', updatedAt: new Date() })
+        .where(and(eq(orders.id, current.id), eq(orders.restaurantId, ctx.restaurantId))).returning()
+      if (updated!.tableId) await recomputeOpenBill(ctx.restaurantId, updated!.tableId)
+      io.to(`restaurant:${ctx.restaurantId}`).emit('order:updated', { orderId: current.id, status: 'cancelled' })
+      if (updated!.tableId) io.to(`table:${updated!.tableId}`).emit('order:updated', { orderId: current.id, status: 'cancelled' })
+      return { ok: true, data: { id: current.id }, summary: `Ordine del tavolo ${t.number} annullato (il conto è stato ricalcolato).` }
+    },
+  },
+
+  // ── OWNER · CASSA ──────────────────────────────────────────────────────────
+  {
+    name: 'apply_bill_discount',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Applica uno SCONTO in euro al conto aperto di un tavolo (il totale viene ricalcolato).',
+    parameters: {
+      type: 'object',
+      properties: {
+        tableNumber: { type: 'string' },
+        discount: { type: 'number', minimum: 0, description: 'Sconto in euro' },
+        note: { type: 'string', description: 'Motivo (opzionale)' },
+      },
+      required: ['tableNumber', 'discount'],
+    },
+    label: (a) => `Sconto €${a?.discount ?? '?'} al tavolo ${a?.tableNumber ?? '?'}`,
+    execute: async (ctx, args) => {
+      const { table, bill } = await openBillForTable(ctx.restaurantId, args?.tableNumber)
+      if (!table) return { ok: false, summary: `Tavolo "${args?.tableNumber ?? ''}" non trovato.` }
+      if (!bill) return { ok: false, summary: `Il tavolo ${table.number} non ha un conto aperto.` }
+      const raw = Number(args?.discount)
+      if (!Number.isFinite(raw) || raw < 0) return { ok: false, summary: 'Sconto non valido.' }
+      // stessi vincoli della PATCH /bills: cap 30% per non-owner, mai totale negativo
+      const cap = ctx.role === 'owner' ? bill.subtotal : round2(bill.subtotal * 0.30)
+      const discount = Math.min(round2(raw), cap, bill.subtotal)
+      const coverCharge = round2((bill.covers ?? 1) * (await coverUnit(ctx.restaurantId)))
+      const total = round2(bill.subtotal - discount + (bill.tip ?? 0) + coverCharge)
+      await db.update(bills).set({ discount, discountNote: args?.note ? String(args.note).slice(0, 500) : bill.discountNote, total }).where(eq(bills.id, bill.id))
+      return { ok: true, data: { billId: bill.id, discount, total }, summary: `Sconto €${discount} applicato al tavolo ${table.number}: nuovo totale €${total}.` }
+    },
+  },
+  {
+    name: 'close_bill',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'INCASSA e chiude il conto aperto di un tavolo: registra il pagamento del residuo (contanti/carta/digitale), libera il tavolo in pulizia.',
+    parameters: {
+      type: 'object',
+      properties: {
+        tableNumber: { type: 'string' },
+        method: { type: 'string', enum: ['cash', 'card', 'digital'], description: 'cash=contanti, card=carta' },
+      },
+      required: ['tableNumber', 'method'],
+    },
+    label: (a) => `Incassa tavolo ${a?.tableNumber ?? '?'} (${a?.method === 'cash' ? 'contanti' : a?.method === 'card' ? 'carta' : a?.method ?? '?'})`,
+    execute: async (ctx, args) => {
+      const method = ['cash', 'card', 'digital'].includes(args?.method) ? args.method : null
+      if (!method) return { ok: false, summary: 'Metodo di pagamento non valido (contanti/carta/digitale).' }
+      const { table, bill } = await openBillForTable(ctx.restaurantId, args?.tableNumber)
+      if (!table) return { ok: false, summary: `Tavolo "${args?.tableNumber ?? ''}" non trovato.` }
+      if (!bill) return { ok: false, summary: `Il tavolo ${table.number} non ha un conto aperto.` }
+      // Stessa transazione della POST /bills/:id/payments: lock per-conto, ri-check,
+      // pagamento del residuo, chiusura + cascade tavolo→cleaning e ordini→paid.
+      const result = await db.transaction(async (tx) => {
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${bill.id}))`)
+        const [locked] = await tx.select().from(bills).where(eq(bills.id, bill.id)).limit(1)
+        if (!locked || locked.status !== 'open') return { conflict: true as const }
+        const prev = await tx.select().from(billPayments).where(eq(billPayments.billId, bill.id))
+        const paidSoFar = round2(prev.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0))
+        const residuo = round2(Math.max(locked.total - paidSoFar, 0))
+        if (residuo <= 0) return { conflict: true as const }
+        await tx.insert(billPayments).values({ billId: bill.id, amount: residuo, method, status: 'completed' })
+        await tx.update(bills).set({ status: 'closed', closedAt: new Date() }).where(eq(bills.id, bill.id))
+        const paidOrderIds: string[] = []
+        if (locked.tableId) {
+          await tx.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, locked.tableId))
+          const activeOrders = await tx.select({ id: orders.id }).from(orders).where(and(
+            eq(orders.tableId, locked.tableId), inArray(orders.status, [...BILLABLE_STATUSES]),
+          ))
+          const paidAt = new Date()
+          for (const o of activeOrders) {
+            await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, o.id))
+            paidOrderIds.push(o.id)
+          }
+        }
+        return { conflict: false as const, residuo, tableId: locked.tableId, paidOrderIds }
+      })
+      if (result.conflict) return { ok: false, summary: 'Il conto non è (più) aperto o è già saldato.' }
+      // emit post-commit, come la route
+      if (result.tableId) io.to(`restaurant:${ctx.restaurantId}`).emit('table:updated', { tableId: result.tableId, status: 'cleaning' })
+      for (const orderId of result.paidOrderIds) {
+        io.to(`restaurant:${ctx.restaurantId}`).emit('order:updated', { orderId, status: 'paid' })
+        if (result.tableId) io.to(`table:${result.tableId}`).emit('order:updated', { orderId, status: 'paid' })
+      }
+      const mIt: Record<string, string> = { cash: 'contanti', card: 'carta', digital: 'digitale' }
+      return { ok: true, data: { billId: bill.id, amount: result.residuo }, summary: `Incassati €${result.residuo} (${mIt[method]}) dal tavolo ${table.number}. Conto chiuso, tavolo in pulizia.` }
+    },
+  },
+
+  // ── OWNER · INVENTARIO ─────────────────────────────────────────────────────
+  {
+    name: 'create_inventory_item',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Crea un ingrediente in inventario: nome, unità (kg/l/pz…), quantità iniziale e soglia minima.',
+    parameters: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        unit: { type: 'string', description: 'kg, l, pz…' },
+        quantity: { type: 'number', minimum: 0 },
+        minQuantity: { type: 'number', minimum: 0, description: 'Soglia sotto cui scatta l\'avviso scorte' },
+      },
+      required: ['name', 'unit'],
+    },
+    label: (a) => `Crea ingrediente "${a?.name ?? '?'}" (${a?.quantity ?? 0} ${a?.unit ?? ''})`,
+    execute: async (ctx, args) => {
+      const name = (args?.name ?? '').toString().trim()
+      const unit = (args?.unit ?? '').toString().trim()
+      if (!name || !unit) return { ok: false, summary: 'Servono nome e unità di misura.' }
+      const existing = await resolveInventory(ctx.restaurantId, name)
+      if (existing && existing.name.toLowerCase() === name.toLowerCase()) return { ok: false, summary: `"${existing.name}" esiste già in inventario.` }
+      const [item] = await db.insert(inventoryItems).values({
+        restaurantId: ctx.restaurantId, name: name.slice(0, 120), unit: unit.slice(0, 20),
+        quantity: Math.max(Number(args?.quantity) || 0, 0), minQuantity: Math.max(Number(args?.minQuantity) || 0, 0),
+      }).returning()
+      return { ok: true, data: { id: item!.id, name: item!.name }, summary: `Ingrediente "${item!.name}" creato: ${item!.quantity}${item!.unit} (soglia ${item!.minQuantity}).` }
+    },
+  },
+  {
+    name: 'adjust_stock',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Registra un movimento d\'inventario per un ingrediente: load (carico/arrivo merce), unload (scarico), waste (spreco).',
+    parameters: {
+      type: 'object',
+      properties: {
+        itemName: { type: 'string' },
+        type: { type: 'string', enum: ['load', 'unload', 'waste'], description: 'load=arrivo merce, unload=scarico, waste=spreco' },
+        quantity: { type: 'number', minimum: 0.001 },
+        note: { type: 'string' },
+      },
+      required: ['itemName', 'type', 'quantity'],
+    },
+    label: (a) => `${a?.type === 'load' ? 'Carico' : a?.type === 'waste' ? 'Spreco' : 'Scarico'} ${a?.quantity ?? '?'} di "${a?.itemName ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const type = ['load', 'unload', 'waste'].includes(args?.type) ? args.type : null
+      const quantity = Number(args?.quantity)
+      if (!type || !Number.isFinite(quantity) || quantity <= 0) return { ok: false, summary: 'Tipo o quantità non validi.' }
+      const item = await resolveInventory(ctx.restaurantId, args?.itemName)
+      if (!item) return { ok: false, summary: `Ingrediente "${args?.itemName ?? ''}" non trovato in inventario (o nome ambiguo).` }
+      const delta = type === 'load' ? Math.abs(quantity) : -Math.abs(quantity)
+      // stessa transazione della route movements: ledger + stock atomici, mai sotto zero
+      const { updated } = await db.transaction(async (tx) => {
+        await tx.insert(inventoryMovements).values({ itemId: item.id, type, quantity, note: args?.note ? String(args.note).slice(0, 500) : undefined })
+        const [updated] = await tx.update(inventoryItems).set({
+          quantity: sql`GREATEST(0, ${inventoryItems.quantity} + ${delta})`,
+          updatedAt: new Date(),
+        }).where(and(eq(inventoryItems.id, item.id), eq(inventoryItems.restaurantId, ctx.restaurantId))).returning()
+        return { updated: updated! }
+      })
+      const verb = type === 'load' ? 'caricati' : type === 'waste' ? 'segnati come spreco' : 'scaricati'
+      return { ok: true, data: { id: item.id, quantity: updated.quantity }, summary: `${quantity}${item.unit} di "${item.name}" ${verb}: ora ${updated.quantity}${item.unit}.` }
+    },
+  },
+
+  // ── OWNER · TURNI ──────────────────────────────────────────────────────────
+  {
+    name: 'clock_in_staff',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Fa iniziare il turno a un membro dello staff (per nome), adesso.',
+    parameters: {
+      type: 'object',
+      properties: { staffName: { type: 'string' }, role: { type: 'string', description: 'Mansione nel turno (opzionale, es. cameriere)' } },
+      required: ['staffName'],
+    },
+    label: (a) => `Inizio turno: ${a?.staffName ?? '?'}${a?.role ? ` (${a.role})` : ''}`,
+    execute: async (ctx, args) => {
+      const { user, all } = await resolveStaff(ctx.restaurantId, args?.staffName)
+      if (!user) return { ok: false, summary: all.length ? `Nome ambiguo o non trovato. Staff: ${all.map(u => u.name).join(', ')}.` : 'Nessun membro dello staff trovato.' }
+      const [open] = await db.select({ id: staffShifts.id }).from(staffShifts)
+        .where(and(eq(staffShifts.restaurantId, ctx.restaurantId), eq(staffShifts.userId, user.id), isNull(staffShifts.endsAt))).limit(1)
+      if (open) return { ok: false, summary: `${user.name} ha già un turno aperto.` }
+      await db.insert(staffShifts).values({ restaurantId: ctx.restaurantId, userId: user.id, startsAt: new Date(), role: args?.role ? String(args.role).slice(0, 40) : user.role })
+      return { ok: true, data: { userId: user.id }, summary: `Turno iniziato per ${user.name}.` }
+    },
+  },
+  {
+    name: 'clock_out_staff',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Chiude il turno aperto di un membro dello staff (per nome), adesso.',
+    parameters: { type: 'object', properties: { staffName: { type: 'string' } }, required: ['staffName'] },
+    label: (a) => `Fine turno: ${a?.staffName ?? '?'}`,
+    execute: async (ctx, args) => {
+      const { user, all } = await resolveStaff(ctx.restaurantId, args?.staffName)
+      if (!user) return { ok: false, summary: all.length ? `Nome ambiguo o non trovato. Staff: ${all.map(u => u.name).join(', ')}.` : 'Nessun membro dello staff trovato.' }
+      const [open] = await db.select().from(staffShifts)
+        .where(and(eq(staffShifts.restaurantId, ctx.restaurantId), eq(staffShifts.userId, user.id), isNull(staffShifts.endsAt)))
+        .orderBy(desc(staffShifts.startsAt)).limit(1)
+      if (!open) return { ok: false, summary: `${user.name} non ha un turno aperto.` }
+      await db.update(staffShifts).set({ endsAt: new Date() }).where(eq(staffShifts.id, open.id))
+      return { ok: true, data: { userId: user.id }, summary: `Turno chiuso per ${user.name}.` }
+    },
+  },
+
+  // ── OWNER · STAFF ──────────────────────────────────────────────────────────
+  {
+    name: 'list_staff',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Elenco dei membri dello staff con ruolo e stato (attivo/disattivato).',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Elenco staff',
+    execute: async (ctx) => {
+      const staff = await db.select({ id: users.id, name: users.name, role: users.role, active: users.active })
+        .from(users).where(eq(users.restaurantId, ctx.restaurantId)).orderBy(asc(users.name))
+      const fmt = staff.map(s => `${s.name} (${s.role}${s.active ? '' : ', disattivato'})`)
+      return { ok: true, data: staff, summary: staff.length ? `${staff.length} membri: ${fmt.join('; ')}.` : 'Nessun membro.' }
+    },
+  },
+  {
+    name: 'create_staff',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Aggiunge un membro dello staff: nome, ruolo (dipendente/chef/cassiere), PIN a 4 cifre per il tablet (opzionale).',
+    parameters: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        role: { type: 'string', enum: ['dipendente', 'chef', 'cassiere'] },
+        pin: { type: 'string', description: '4 cifre (opzionale)' },
+        phone: { type: 'string' },
+      },
+      required: ['name', 'role'],
+    },
+    label: (a) => `Aggiungi ${a?.name ?? '?'} come ${a?.role ?? '?'}`,
+    execute: async (ctx, args) => {
+      const name = (args?.name ?? '').toString().trim()
+      const role = ['dipendente', 'chef', 'cassiere'].includes(args?.role) ? args.role : null
+      if (!name || name.length < 2 || !role) return { ok: false, summary: 'Servono nome (min 2 caratteri) e ruolo valido.' }
+      if (args?.pin && !/^\d{4}$/.test(String(args.pin))) return { ok: false, summary: 'Il PIN deve essere di 4 cifre.' }
+      // email tecnica auto-generata (la tabella la richiede unica; il login del
+      // dipendente avviene via PIN sul tablet)
+      const email = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '.').replace(/^\.|\.$/g, '')}+${nanoid(6).toLowerCase()}@tako.local`
+      const pinHash = args?.pin ? await bcrypt.hash(String(args.pin), 10) : undefined
+      const [user] = await db.insert(users).values({
+        restaurantId: ctx.restaurantId, name: name.slice(0, 120), email, role,
+        pin: pinHash, phone: args?.phone ? String(args.phone).slice(0, 40) : undefined,
+      }).returning()
+      return { ok: true, data: { id: user!.id, name: user!.name, role: user!.role }, summary: `${user!.name} aggiunto come ${role}${args?.pin ? ' (PIN impostato per il tablet)' : ''}.` }
+    },
+  },
+  {
+    name: 'set_staff_active',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Disattiva (o riattiva) un membro dello staff. Disattivare revoca subito i suoi accessi.',
+    parameters: {
+      type: 'object',
+      properties: { staffName: { type: 'string' }, active: { type: 'boolean', description: 'false=disattiva, true=riattiva' } },
+      required: ['staffName', 'active'],
+    },
+    label: (a) => `${a?.active ? 'Riattiva' : 'Disattiva'} ${a?.staffName ?? '?'}`,
+    execute: async (ctx, args) => {
+      const active = args?.active === true
+      const { user, all } = await resolveStaff(ctx.restaurantId, args?.staffName, true)
+      if (!user) return { ok: false, summary: all.length ? `Nome ambiguo o non trovato. Staff: ${all.map(u => u.name).join(', ')}.` : 'Nessun membro trovato.' }
+      if (user.role === 'owner') return { ok: false, summary: 'Non puoi disattivare l\'owner.' }
+      await db.update(users).set({ active }).where(and(eq(users.id, user.id), eq(users.restaurantId, ctx.restaurantId)))
+      // revoca immediata come staff.ts: le sessioni residue non autenticano più
+      if (!active) await db.delete(sessions).where(eq(sessions.userId, user.id))
+      return { ok: true, data: { id: user.id, active }, summary: `${user.name} ${active ? 'riattivato' : 'disattivato (accessi revocati)'}.` }
+    },
+  },
+
+  // ── OWNER · SALE / STATO TAVOLO / QR ───────────────────────────────────────
+  {
+    name: 'create_room',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Crea una nuova sala (es. "Terrazza").',
+    parameters: { type: 'object', properties: { name: { type: 'string' } }, required: ['name'] },
+    label: (a) => `Crea sala "${a?.name ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const name = (args?.name ?? '').toString().trim()
+      if (!name) return { ok: false, summary: 'Nome sala mancante.' }
+      const existing = await db.select().from(rooms).where(and(eq(rooms.restaurantId, ctx.restaurantId), eq(rooms.active, true)))
+      if (existing.some(r => r.name.toLowerCase() === name.toLowerCase())) return { ok: false, summary: `La sala "${name}" esiste già.` }
+      const [room] = await db.insert(rooms).values({ restaurantId: ctx.restaurantId, name: name.slice(0, 60) }).returning()
+      return { ok: true, data: { id: room!.id, name: room!.name }, summary: `Sala "${room!.name}" creata.` }
+    },
+  },
+  {
+    name: 'set_table_status',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Cambia lo stato di un tavolo: free (libero), occupied (occupato), cleaning (in pulizia). Un tavolo con conto aperto non si può liberare.',
+    parameters: {
+      type: 'object',
+      properties: {
+        tableNumber: { type: 'string' },
+        status: { type: 'string', enum: ['free', 'occupied', 'cleaning'] },
+      },
+      required: ['tableNumber', 'status'],
+    },
+    label: (a) => `Tavolo ${a?.tableNumber ?? '?'} → ${a?.status === 'free' ? 'libero' : a?.status === 'occupied' ? 'occupato' : 'in pulizia'}`,
+    execute: async (ctx, args) => {
+      const status = ['free', 'occupied', 'cleaning'].includes(args?.status) ? args.status : null
+      if (!status) return { ok: false, summary: 'Stato non valido.' }
+      const t = await resolveTable(ctx.restaurantId, args?.tableNumber)
+      if (!t) return { ok: false, summary: `Tavolo "${args?.tableNumber ?? ''}" non trovato.` }
+      // M7 come la route: non liberare un tavolo con conto/ordini fatturabili
+      if (status === 'free' || status === 'cleaning') {
+        const [openBill] = await db.select({ id: bills.id }).from(bills)
+          .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.tableId, t.id), eq(bills.status, 'open'))).limit(1)
+        let blocked = !!openBill
+        if (!blocked) {
+          const [ord] = await db.select({ id: orders.id }).from(orders)
+            .where(and(eq(orders.restaurantId, ctx.restaurantId), eq(orders.tableId, t.id), inArray(orders.status, [...BILLABLE_STATUSES]))).limit(1)
+          blocked = !!ord
+        }
+        if (blocked) return { ok: false, summary: `Il tavolo ${t.number} ha un conto aperto: incassa o annulla prima di liberarlo.` }
+      }
+      await db.update(tables).set({
+        status,
+        openedAt: status === 'occupied' ? new Date() : status === 'free' ? null : undefined,
+      }).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
+      io.to(`restaurant:${ctx.restaurantId}`).emit('table:updated', { tableId: t.id, status })
+      const it: Record<string, string> = { free: 'libero', occupied: 'occupato', cleaning: 'in pulizia' }
+      return { ok: true, data: { id: t.id, status }, summary: `Tavolo ${t.number} ora è ${it[status]}.` }
+    },
+  },
+  {
+    name: 'refresh_table_qr',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Rigenera il QR di un tavolo (il QR stampato precedente smette di funzionare).',
+    parameters: { type: 'object', properties: { tableNumber: { type: 'string' } }, required: ['tableNumber'] },
+    label: (a) => `Rigenera QR del tavolo ${a?.tableNumber ?? '?'}`,
+    execute: async (ctx, args) => {
+      const t = await resolveTable(ctx.restaurantId, args?.tableNumber)
+      if (!t) return { ok: false, summary: `Tavolo "${args?.tableNumber ?? ''}" non trovato.` }
+      const newToken = nanoid(24)
+      await db.update(tables).set({ qrToken: newToken }).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
+      return { ok: true, data: { id: t.id }, summary: `QR del tavolo ${t.number} rigenerato: ristampa e sostituisci quello sul tavolo.` }
+    },
+  },
+
+  // ── OWNER · ANALISI & IMPOSTAZIONI ─────────────────────────────────────────
+  {
+    name: 'menu_performance',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Rendimento del menu negli ultimi N giorni: piatti più/meno venduti con margine (prezzo vs food cost).',
+    parameters: { type: 'object', properties: { days: { type: 'integer', minimum: 7, maximum: 365, description: 'Giorni (default 30)' } } },
+    label: (a) => `Analisi menu ${a?.days ?? 30}gg`,
+    execute: async (ctx, args) => {
+      const days = Math.min(Math.max(parseInt(String(args?.days ?? 30), 10) || 30, 7), 365)
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+      // vendite per piatto (ordini non annullati del periodo)
+      const sold = await db.select({ menuItemId: orderItems.menuItemId, qty: sql<number>`sum(${orderItems.quantity})::int` })
+        .from(orderItems)
+        .innerJoin(orders, eq(orderItems.orderId, orders.id))
+        .where(and(eq(orders.restaurantId, ctx.restaurantId), gte(orders.createdAt, since), ne(orders.status, 'cancelled')))
+        .groupBy(orderItems.menuItemId)
+      const items = await db.select().from(menuItems).where(eq(menuItems.restaurantId, ctx.restaurantId))
+      const byId = new Map(items.map(i => [i.id, i]))
+      const rows = sold.filter(s => s.menuItemId && byId.has(s.menuItemId)).map(s => {
+        const i = byId.get(s.menuItemId!)!
+        const cost = Number(i.costPrice ?? 0)
+        const marginPct = i.price > 0 ? Math.round((1 - cost / i.price) * 100) : null
+        return { name: i.name, qty: s.qty, price: i.price, marginPct }
+      }).sort((a, b) => b.qty - a.qty)
+      if (!rows.length) return { ok: true, data: [], summary: `Nessuna vendita negli ultimi ${days} giorni.` }
+      const top = rows.slice(0, 5).map(r => `${r.name} x${r.qty}${r.marginPct != null ? ` (margine ${r.marginPct}%)` : ''}`)
+      const flop = rows.slice(-3).reverse().map(r => `${r.name} x${r.qty}`)
+      return { ok: true, data: rows, summary: `Ultimi ${days}gg — Più venduti: ${top.join('; ')}. Meno venduti: ${flop.join('; ')}.` }
+    },
+  },
+  {
+    name: 'set_food_cost',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Imposta il food cost (costo ingredienti in euro) di un piatto, per calcolarne il margine.',
+    parameters: {
+      type: 'object',
+      properties: { itemName: { type: 'string' }, cost: { type: 'number', minimum: 0 } },
+      required: ['itemName', 'cost'],
+    },
+    label: (a) => `Food cost di "${a?.itemName ?? '?'}" → €${a?.cost ?? '?'}`,
+    execute: async (ctx, args) => {
+      const cost = Number(args?.cost)
+      if (!Number.isFinite(cost) || cost < 0) return { ok: false, summary: 'Costo non valido.' }
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o ambiguo).` }
+      await db.update(menuItems).set({ costPrice: cost, updatedAt: new Date() })
+        .where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId)))
+      const marginPct = match.price > 0 ? Math.round((1 - cost / match.price) * 100) : null
+      return { ok: true, data: { id: match.id, cost }, summary: `Food cost di "${match.name}": €${cost}${marginPct != null ? ` → margine ${marginPct}%` : ''}.` }
+    },
+  },
+  {
+    name: 'set_cover_charge',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Imposta il coperto per persona in euro (0 = disattivato).',
+    parameters: { type: 'object', properties: { amount: { type: 'number', minimum: 0, maximum: 20 } }, required: ['amount'] },
+    label: (a) => `Coperto → €${a?.amount ?? '?'}`,
+    execute: async (ctx, args) => {
+      const amount = Number(args?.amount)
+      if (!Number.isFinite(amount) || amount < 0 || amount > 20) return { ok: false, summary: 'Importo non valido (0-20€).' }
+      // merge nei settings come PATCH /restaurants/me (mai replace del jsonb intero)
+      const [current] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, ctx.restaurantId)).limit(1)
+      const settings = { ...(current?.settings ?? {}), coverCharge: round2(amount), coverChargeEnabled: amount > 0 }
+      await db.update(restaurants).set({ settings, updatedAt: new Date() }).where(eq(restaurants.id, ctx.restaurantId))
+      return { ok: true, data: { coverCharge: amount }, summary: amount > 0 ? `Coperto impostato a €${round2(amount)} a persona.` : 'Coperto disattivato.' }
+    },
+  },
+  {
+    name: 'add_dish_variant',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Aggiunge una variante a un piatto (es. "Piccante" +1€). priceModifier può essere 0 o negativo.',
+    parameters: {
+      type: 'object',
+      properties: {
+        itemName: { type: 'string' },
+        variantName: { type: 'string' },
+        priceModifier: { type: 'number', description: 'Differenza di prezzo in euro (default 0)' },
+      },
+      required: ['itemName', 'variantName'],
+    },
+    label: (a) => `Variante "${a?.variantName ?? '?'}" a "${a?.itemName ?? '?'}"${a?.priceModifier ? ` (${a.priceModifier > 0 ? '+' : ''}€${a.priceModifier})` : ''}`,
+    execute: async (ctx, args) => {
+      const variantName = (args?.variantName ?? '').toString().trim()
+      if (!variantName) return { ok: false, summary: 'Nome variante mancante.' }
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o ambiguo).` }
+      const mod = Number(args?.priceModifier) || 0
+      const [v] = await db.insert(itemVariants).values({ itemId: match.id, name: variantName.slice(0, 80), priceModifier: round2(mod) }).returning()
+      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:updated', { itemId: match.id })
+      return { ok: true, data: { id: v!.id }, summary: `Variante "${variantName}" aggiunta a "${match.name}"${mod ? ` (${mod > 0 ? '+' : ''}€${round2(mod)})` : ''}.` }
     },
   },
 ]

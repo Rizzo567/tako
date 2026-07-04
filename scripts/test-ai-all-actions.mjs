@@ -55,14 +55,18 @@ async function seed(tag) {
 async function cleanup(e) {
   await sql`delete from staff_shifts where restaurant_id = ${e.rid}`.catch(() => {})
   await sql`delete from reservations where restaurant_id = ${e.rid}`.catch(() => {})
+  await sql`delete from inventory_movements where item_id in (select id from inventory_items where restaurant_id = ${e.rid})`.catch(() => {})
   await sql`delete from inventory_items where restaurant_id = ${e.rid}`.catch(() => {})
+  await sql`delete from bill_payments where bill_id in (select id from bills where restaurant_id = ${e.rid})`.catch(() => {})
+  await sql`delete from orders where restaurant_id = ${e.rid}`.catch(() => {})
   await sql`delete from bills where restaurant_id = ${e.rid}`.catch(() => {})
   await sql`delete from tables where restaurant_id = ${e.rid}`
   await sql`delete from menu_items where restaurant_id = ${e.rid}`
   await sql`delete from menu_sections where menu_id = ${e.menuId}`
   await sql`delete from menus where id = ${e.menuId}`
-  await sql`delete from sessions where user_id = ${e.uid}`
-  await sql`delete from users where id = ${e.uid}`
+  await sql`delete from rooms where restaurant_id = ${e.rid}`.catch(() => {})
+  await sql`delete from sessions where user_id in (select id from users where restaurant_id = ${e.rid})`
+  await sql`delete from users where restaurant_id = ${e.rid}`
   await sql`delete from restaurants where id = ${e.rid}`
 }
 
@@ -147,6 +151,88 @@ try {
   const m3 = await exec('delete_menu_item', { itemName: 'NuovoDolce' }, A.token)
   const dolce3 = await sql`select id from menu_items where restaurant_id = ${A.rid} and name = 'NuovoDolce'`
   check('M3. delete_menu_item rimosso dal DB', m3.status === 200 && dolce3.length === 0)
+
+  /* ═══ PRENOTAZIONI (scrittura) ═══ */
+  const tomorrow = new Date(Date.now() + 24 * 3600 * 1000)
+  const tomStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`
+  const p1 = await exec('create_reservation', { customerName: 'Bianchi', partySize: 2, when: `${tomStr} 20:00`, tableNumber: '5' }, A.token)
+  const resvRow = await sql`select id, status, table_id from reservations where restaurant_id = ${A.rid} and customer_name = 'Bianchi'`
+  check('P1. create_reservation nel DB (confirmed, tavolo assegnato)', p1.status === 200 && resvRow.length === 1 && resvRow[0].status === 'confirmed' && !!resvRow[0].table_id, p1.json?.data?.summary)
+  const p2 = await exec('create_reservation', { customerName: 'Overlap', partySize: 2, when: `${tomStr} 20:30`, tableNumber: '5' }, A.token)
+  check('P2. anti-overbooking: slot sovrapposto rifiutato', p2.status === 422, p2.json?.error?.message)
+  const p3 = await exec('set_reservation_status', { customerName: 'Bianchi', status: 'seated', date: tomStr }, A.token)
+  const [resv2] = await sql`select status from reservations where restaurant_id = ${A.rid} and customer_name = 'Bianchi'`
+  check('P3. set_reservation_status → seated nel DB', p3.status === 200 && resv2.status === 'seated')
+  const p4 = await exec('cancel_reservation', { customerName: 'Bianchi', date: tomStr }, A.token)
+  const [resv3] = await sql`select status from reservations where restaurant_id = ${A.rid} and customer_name = 'Bianchi'`
+  check('P4. cancel_reservation → cancelled nel DB', p4.status === 200 && resv3.status === 'cancelled')
+
+  /* ═══ CASSA ═══ */
+  const d1 = await exec('apply_bill_discount', { tableNumber: '5', discount: 5 }, A.token)
+  const [billD] = await sql`select discount, total from bills where restaurant_id = ${A.rid} and status = 'open'`
+  check('K1. apply_bill_discount: sconto 5 e totale ricalcolato', d1.status === 200 && Number(billD.discount) === 5 && Number(billD.total) === 37, `disc=${billD.discount} tot=${billD.total}`)
+  const k1 = await exec('close_bill', { tableNumber: '5', method: 'cash' }, A.token)
+  const [billC] = await sql`select status from bills where restaurant_id = ${A.rid} and table_id = ${tav.id} order by created_at desc limit 1`
+  const payRows = await sql`select amount, method from bill_payments bp join bills b on b.id = bp.bill_id where b.restaurant_id = ${A.rid}`
+  const [tavAfter] = await sql`select status from tables where id = ${tav.id}`
+  check('K2. close_bill: conto chiuso, pagamento contanti €37, tavolo in pulizia', k1.status === 200 && billC.status === 'closed' && payRows.length === 1 && Number(payRows[0].amount) === 37 && payRows[0].method === 'cash' && tavAfter.status === 'cleaning', k1.json?.data?.summary)
+
+  /* ═══ INVENTARIO (scrittura) ═══ */
+  const i1 = await exec('create_inventory_item', { name: 'Farina 00', unit: 'kg', quantity: 20, minQuantity: 5 }, A.token)
+  const invRow = await sql`select id, quantity from inventory_items where restaurant_id = ${A.rid} and name = 'Farina 00'`
+  check('I1. create_inventory_item nel DB', i1.status === 200 && invRow.length === 1 && Number(invRow[0].quantity) === 20)
+  const i2 = await exec('adjust_stock', { itemName: 'Farina 00', type: 'load', quantity: 10 }, A.token)
+  const [inv2] = await sql`select quantity from inventory_items where restaurant_id = ${A.rid} and name = 'Farina 00'`
+  const movs = await sql`select type, quantity from inventory_movements where item_id = ${invRow[0].id}`
+  check('I2. adjust_stock load +10 → 30 e movimento a ledger', i2.status === 200 && Number(inv2.quantity) === 30 && movs.length === 1 && movs[0].type === 'load')
+  const i3 = await exec('adjust_stock', { itemName: 'Farina 00', type: 'waste', quantity: 3 }, A.token)
+  const [inv3] = await sql`select quantity from inventory_items where restaurant_id = ${A.rid} and name = 'Farina 00'`
+  check('I3. adjust_stock waste -3 → 27', i3.status === 200 && Number(inv3.quantity) === 27)
+
+  /* ═══ STAFF + TURNI ═══ */
+  const s1 = await exec('create_staff', { name: 'Giulia Verdi', role: 'cassiere', pin: '1234' }, A.token)
+  const staffRow = await sql`select id, role, pin, active from users where restaurant_id = ${A.rid} and name = 'Giulia Verdi'`
+  check('S1. create_staff nel DB (cassiere, PIN hashato bcrypt)', s1.status === 200 && staffRow.length === 1 && staffRow[0].role === 'cassiere' && String(staffRow[0].pin).startsWith('$2'))
+  const s2 = await exec('clock_in_staff', { staffName: 'Giulia' }, A.token)
+  const shiftRow = await sql`select id, ends_at from staff_shifts where restaurant_id = ${A.rid} and user_id = ${staffRow[0].id}`
+  check('S2. clock_in_staff: turno aperto nel DB', s2.status === 200 && shiftRow.length === 1 && shiftRow[0].ends_at === null)
+  const s2b = await exec('clock_in_staff', { staffName: 'Giulia' }, A.token)
+  check('S3. doppio clock-in rifiutato', s2b.status === 422)
+  const s3 = await exec('clock_out_staff', { staffName: 'Giulia' }, A.token)
+  const [shift2] = await sql`select ends_at from staff_shifts where id = ${shiftRow[0].id}`
+  check('S4. clock_out_staff: turno chiuso', s3.status === 200 && shift2.ends_at !== null)
+  const s4 = await exec('set_staff_active', { staffName: 'Giulia', active: false }, A.token)
+  const [staff2] = await sql`select active from users where id = ${staffRow[0].id}`
+  check('S5. set_staff_active false nel DB', s4.status === 200 && staff2.active === false)
+  const s5 = await exec('list_staff', {}, A.token)
+  check('S6. list_staff vede Giulia disattivata', s5.status === 200 && /Giulia Verdi.*disattivat/.test(s5.json?.data?.summary ?? ''), s5.json?.data?.summary)
+
+  /* ═══ SALE / STATO TAVOLO / QR ═══ */
+  const rm1 = await exec('create_room', { name: 'Terrazza' }, A.token)
+  const roomNew = await sql`select id from rooms where restaurant_id = ${A.rid} and name = 'Terrazza' and active = true`
+  check('G1. create_room nel DB', rm1.status === 200 && roomNew.length === 1)
+  const st1 = await exec('set_table_status', { tableNumber: '5', status: 'free' }, A.token)
+  const [tavFree] = await sql`select status from tables where id = ${tav.id}`
+  check('G2. set_table_status → free (conto ormai chiuso)', st1.status === 200 && tavFree.status === 'free')
+  const [qrBefore] = await sql`select qr_token from tables where id = ${tav.id}`
+  const qr1 = await exec('refresh_table_qr', { tableNumber: '5' }, A.token)
+  const [qrAfter] = await sql`select qr_token from tables where id = ${tav.id}`
+  check('G3. refresh_table_qr: token cambiato', qr1.status === 200 && qrBefore.qr_token !== qrAfter.qr_token)
+
+  /* ═══ ANALISI / IMPOSTAZIONI / VARIANTI ═══ */
+  const fc1 = await exec('set_food_cost', { itemName: 'PiattoA', cost: 3.5 }, A.token)
+  const [dish2] = await sql`select cost_price from menu_items where restaurant_id = ${A.rid} and name = 'PiattoA'`
+  check('X1. set_food_cost nel DB', fc1.status === 200 && Number(dish2.cost_price) === 3.5)
+  const cc1 = await exec('set_cover_charge', { amount: 2 }, A.token)
+  const [restRow] = await sql`select settings from restaurants where id = ${A.rid}`
+  check('X2. set_cover_charge nei settings (merge)', cc1.status === 200 && restRow.settings?.coverCharge === 2 && restRow.settings?.coverChargeEnabled === true)
+  const v1 = await exec('add_dish_variant', { itemName: 'PiattoA', variantName: 'Piccante', priceModifier: 1 }, A.token)
+  const varRow = await sql`select iv.name, iv.price_modifier from item_variants iv join menu_items mi on mi.id = iv.item_id where mi.restaurant_id = ${A.rid}`
+  check('X3. add_dish_variant nel DB (+1€)', v1.status === 200 && varRow.length === 1 && Number(varRow[0].price_modifier) === 1)
+  const mp1 = await exec('menu_performance', { days: 30 }, A.token)
+  check('X4. menu_performance risponde', mp1.status === 200, mp1.json?.data?.summary)
+  const ao1 = await exec('active_orders', {}, A.token)
+  check('X5. active_orders risponde', ao1.status === 200, ao1.json?.data?.summary)
 
   /* ═══ ANTI-CONFABULAZIONE ═══ */
   const c2 = await chat('Spegni le luci della sala principale', A.token)
