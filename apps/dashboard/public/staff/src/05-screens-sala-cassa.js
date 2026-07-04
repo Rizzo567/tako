@@ -10,18 +10,22 @@ const GLASS = {
   boxShadow: "0 22px 60px -16px rgba(30,20,16,0.42), inset 0 1px 0 rgba(255,255,255,0.7)",
 };
 
-/* Sceglie l'illustrazione 2D del tavolo (assets/tables/*.png) da forma + posti.
-   Fallback sui soli posti se la forma non è nota (tavoli legacy senza `shape`). */
+/* Sceglie l'illustrazione 2D del tavolo (assets/tables/*.png).
+   La TAGLIA la danno i POSTI (così i tavoli legacy — tutti `square` di default in DB —
+   restano vari e corretti senza migrazione); la FORMA rifinisce solo tondo↔quadrato
+   nella fascia 3-4 posti, l'unica dove esistono entrambe le varianti nel set. */
 function tableAsset(t) {
-  const s = t.shape;
   const p = t.posti || 4;
-  if (s === "square") return "square-4";
-  if (s === "rectangle") return p >= 7 ? "rect-8" : "rect-6";
+  const s = t.shape;
+  // Forma scelta ESPLICITAMENTE dall'utente → onorala, taglia dai posti.
   if (s === "round") return p <= 2 ? "round-2" : "round-4";
+  if (s === "rectangle") return p >= 7 ? "rect-8" : "rect-6";
+  // `square` (anche il default DB dei tavoli legacy) o assente → taglia dai posti;
+  // quadrato solo nella fascia 3-4, dove è la forma plausibile.
   if (p <= 2) return "round-2";
   if (p >= 7) return "rect-8";
   if (p >= 5) return "rect-6";
-  return "round-4"; // 3-4 posti senza forma dichiarata
+  return "square-4";
 }
 
 /* ═══════════════════ SALA LIVE ═══════════════════ */
@@ -510,10 +514,20 @@ function ScreenComanda({ mobile }) {
 const INPUT_STYLE = { padding: "11px", borderRadius: 11, border: "1px solid var(--hairline)", fontSize: 14.5, width: "100%", background: "var(--sunken)", color: "var(--ink)", boxSizing: "border-box" };
 const FIELD_LABEL = { display: "block", fontSize: 12.5, fontWeight: 700, color: "var(--ink-2)", marginBottom: 6 };
 
+// Forma di default suggerita dai posti (per i nuovi tavoli e i legacy senza forma
+// esplicita): coerente con la taglia che poi disegna tableAsset().
+function shapeFromSeats(p) {
+  const n = Number(p) || 4;
+  if (n <= 2) return "round";
+  if (n >= 5) return "rectangle";
+  return "square"; // 3-4
+}
+
 function TableFormModal({ open, onClose, table, rooms }) {
   // table = null → nuovo; altrimenti modifica
   const [numero, setNumero] = useState("");
   const [posti, setPosti] = useState(4);
+  const [forma, setForma] = useState("square");
   const [roomId, setRoomId] = useState(rooms[0] ? rooms[0].id : "");
   const [saving, setSaving] = useState(false);
 
@@ -522,10 +536,14 @@ function TableFormModal({ open, onClose, table, rooms }) {
     if (table) {
       setNumero(String(table.n));
       setPosti(table.posti);
+      // I tavoli legacy sono tutti `square` di default: se combacia col default-da-posti
+      // lo trattiamo come "non scelto" e proponiamo la forma dai posti.
+      setForma(table.shape && table.shape !== "square" ? table.shape : shapeFromSeats(table.posti));
       setRoomId(table.roomId || (rooms[0] ? rooms[0].id : ""));
     } else {
       setNumero("");
       setPosti(4);
+      setForma("square");
       setRoomId(rooms[0] ? rooms[0].id : "");
     }
   }, [open, table]);
@@ -537,10 +555,10 @@ function TableFormModal({ open, onClose, table, rooms }) {
     setSaving(true);
     try {
       if (table) {
-        await window.TakoActions.tableUpdate(table._id, { number: String(numero).trim(), seats: Number(posti) || table.posti, roomId });
+        await window.TakoActions.tableUpdate(table._id, { number: String(numero).trim(), seats: Number(posti) || table.posti, roomId, shape: forma });
         toast("Tavolo " + String(numero).trim() + " aggiornato", { type: "success" });
       } else {
-        await window.TakoActions.tableCreate({ number: String(numero).trim(), seats: Number(posti) || 4, roomId });
+        await window.TakoActions.tableCreate({ number: String(numero).trim(), seats: Number(posti) || 4, roomId, shape: forma });
         toast("Tavolo aggiunto", { type: "success" });
       }
       onClose();
@@ -567,6 +585,19 @@ function TableFormModal({ open, onClose, table, rooms }) {
         <div style={{ marginBottom: 14 }}>
           <label style={FIELD_LABEL}>Posti</label>
           <input type="number" min="1" value={posti} onChange={(e) => setPosti(e.target.value)} style={INPUT_STYLE} />
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={FIELD_LABEL}>Forma</label>
+          <div style={{ display: "flex", gap: 8 }}>
+            {[["round", "Tondo"], ["square", "Quadrato"], ["rectangle", "Rettangolo"]].map(([val, lab]) => (
+              <button key={val} type="button" onClick={() => setForma(val)}
+                style={{ flex: 1, padding: "9px 6px", borderRadius: 11, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
+                  border: `1px solid ${forma === val ? "var(--brand)" : "var(--hairline)"}`,
+                  background: forma === val ? "var(--brand-tint)" : "var(--sunken)",
+                  color: forma === val ? "var(--brand-deep)" : "var(--ink-2)" }}>{lab}</button>
+            ))}
+          </div>
+          <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 6 }}>La grandezza segue i posti; la forma sceglie l'illustrazione del tavolo.</div>
         </div>
         <div style={{ marginBottom: 22 }}>
           <label style={FIELD_LABEL}>Sala</label>
