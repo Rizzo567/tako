@@ -78,11 +78,15 @@ try {
   const t12Before = await sql`select id from tables where restaurant_id = ${A.rid} and number = '12' and active = true`
   check('T2. /chat NON crea il tavolo (DB intatto)', t12Before.length === 0)
 
-  // 2. /execute crea DAVVERO
+  // 2. /execute crea DAVVERO — e SEMPRE dentro una sala (senza sala il tavolo
+  //    sarebbe invisibile in Gestione Tavoli, bug segnalato da Manuel)
   const e1 = await exec('create_table', { number: '12', seats: 6 }, A.token)
-  const t12 = await sql`select id, seats, qr_token from tables where restaurant_id = ${A.rid} and number = '12' and active = true`
+  const t12 = await sql`select id, seats, qr_token, room_id from tables where restaurant_id = ${A.rid} and number = '12' and active = true`
   check('T3. /execute create_table ok', e1.status === 200 && e1.json?.data?.ok === true, e1.json?.data?.summary)
   check('T4. tavolo REALE nel DB (seats=6, qr presente)', t12.length === 1 && t12[0].seats === 6 && !!t12[0].qr_token)
+  check('T4b. tavolo SEMPRE in una sala (room_id non null → visibile in UI)', t12.length === 1 && !!t12[0].room_id)
+  const roomRow = await sql`select name, active from rooms where id = ${t12[0].room_id}`
+  check('T4c. la sala esiste ed è attiva (auto-creata se mancava)', roomRow.length === 1 && roomRow[0].active === true, roomRow[0]?.name)
 
   // 3. duplicato rifiutato
   const e2 = await exec('create_table', { number: '12' }, A.token)

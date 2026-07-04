@@ -487,21 +487,29 @@ const ACTIONS: ActionDef[] = [
       const existing = await resolveTable(ctx.restaurantId, number)
       if (existing) return { ok: false, summary: `Esiste già un tavolo "${number}".` }
       const seats = Math.min(Math.max(parseInt(String(args?.seats ?? 4), 10) || 4, 1), 40)
-      // sala per nome (opzionale): match sulle sale attive del ristorante
-      let roomId: string | undefined
+      // SEMPRE una sala: la UI (Gestione Tavoli / Sala Live) mostra i tavoli
+      // raggruppati per sala — un tavolo con roomId null sarebbe INVISIBILE.
+      // Se l'utente indica la sala la risolviamo per nome; altrimenti la prima
+      // attiva; se non esistono sale ne creiamo una di default.
+      const allRooms = await db.select().from(rooms)
+        .where(and(eq(rooms.restaurantId, ctx.restaurantId), eq(rooms.active, true)))
+      let room = allRooms[0]
       if (args?.roomName) {
         const wanted = String(args.roomName).toLowerCase().trim()
-        const allRooms = await db.select().from(rooms)
-          .where(and(eq(rooms.restaurantId, ctx.restaurantId), eq(rooms.active, true)))
-        const room = allRooms.find(r => r.name.toLowerCase() === wanted) ?? allRooms.find(r => r.name.toLowerCase().includes(wanted))
-        if (!room) return { ok: false, summary: `Sala "${args.roomName}" non trovata. Sale: ${allRooms.map(r => `"${r.name}"`).join(', ') || 'nessuna'}.` }
-        roomId = room.id
+        const found = allRooms.find(r => r.name.toLowerCase() === wanted) ?? allRooms.find(r => r.name.toLowerCase().includes(wanted))
+        if (!found) return { ok: false, summary: `Sala "${args.roomName}" non trovata. Sale: ${allRooms.map(r => `"${r.name}"`).join(', ') || 'nessuna'}.` }
+        room = found
       }
+      if (!room) {
+        const [created] = await db.insert(rooms).values({ restaurantId: ctx.restaurantId, name: 'Sala principale' }).returning()
+        room = created
+      }
+      if (!room) return { ok: false, summary: 'Impossibile determinare la sala.' }
       // stessa creazione della POST /tables: qrToken nuovo, ownership dal contesto
       const qrToken = nanoid(24)
-      const [table] = await db.insert(tables).values({ restaurantId: ctx.restaurantId, qrToken, number, seats, ...(roomId ? { roomId } : {}) }).returning()
+      const [table] = await db.insert(tables).values({ restaurantId: ctx.restaurantId, qrToken, number, seats, roomId: room.id }).returning()
       if (!table) return { ok: false, summary: 'Creazione non riuscita.' }
-      return { ok: true, data: { id: table.id, number: table.number, seats: table.seats }, summary: `Tavolo ${table.number} creato (${table.seats} posti). QR generato.` }
+      return { ok: true, data: { id: table.id, number: table.number, seats: table.seats, room: room.name }, summary: `Tavolo ${table.number} creato (${table.seats} posti) in "${room.name}". QR generato.` }
     },
   },
   {
