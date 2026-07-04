@@ -145,9 +145,9 @@
     // Composer stile Claude: box arrotondato, textarea, mic a sinistra, invio a destra.
     const composer = (
       <div style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
-        {/* Waveform durante la dettatura (pennellata Wispr) — compatta, senza testo */}
+        {/* Waveform durante la dettatura (pennellata Wispr) — larga ~1/3, centrata, senza testo */}
         {DictWave && (dictState === "rec" || dictState === "busy") && (
-          <div style={{ marginBottom: 10, height: 54, borderRadius: 16, overflow: "hidden", position: "relative",
+          <div style={{ width: "34%", maxWidth: 240, margin: "0 auto 10px", height: 84, borderRadius: 20, overflow: "hidden", position: "relative",
             background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
             border: "1px solid #0000000f", boxShadow: "0 8px 24px rgba(30,20,12,.16), inset 0 1.5px 0 rgba(255,255,255,.7)" }}>
             <DictWave />
