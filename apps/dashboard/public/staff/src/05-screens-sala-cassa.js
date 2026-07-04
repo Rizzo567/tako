@@ -49,8 +49,10 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
   // Le posizioni del SERVER vincono sul localStorage (sync cross-dispositivo). Durante un
   // drag attivo, o finché il server non conferma l'ultimo spostamento locale, usa il locale.
   const xy = (t) => {
+    // Durante il drag la posizione viva sta in drag.current (aggiornata via DOM, non
+    // in state): se un re-render capita a metà trascinamento il tavolo NON salta.
+    if (drag.current && drag.current.n === t.n) return { x: drag.current.x, y: drag.current.y };
     const local = pos[roomId] && pos[roomId][t.n];
-    if (drag.current && drag.current.n === t.n && local) return local;
     const pend = pending.current[roomId] && pending.current[roomId][t.n];
     if (pend && !(t._hasPos && Math.abs(t.x - pend.x) <= 1 && Math.abs(t.y - pend.y) <= 1)) return pend;
     if (t._hasPos) return { x: t.x, y: t.y };
@@ -70,34 +72,43 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
 
   const onDown = (e, t) => {
     e.currentTarget.setPointerCapture?.(e.pointerId);
-    drag.current = { n: t.n, t, startX: e.clientX, startY: e.clientY, moved: false };
+    const start = xy(t);
+    drag.current = { n: t.n, t, el: e.currentTarget, startX: e.clientX, startY: e.clientY, x: start.x, y: start.y, moved: false };
+    // solleva il tavolo trascinato sopra gli altri, senza re-render
+    e.currentTarget.style.zIndex = "6";
+    e.currentTarget.style.cursor = "grabbing";
+    e.currentTarget.style.willChange = "left, top";
   };
   const onMove = (e) => {
-    const d = drag.current; if (!d || !mapRef.current) return;
-    if (!d.moved && Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 5) return;
+    const d = drag.current; if (!d || !mapRef.current || !d.el) return;
+    if (!d.moved && Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 4) return;
     d.moved = true;
     const r = mapRef.current.getBoundingClientRect();
+    // coordinate frazionarie (niente Math.round) → movimento continuo, non a scatti
     let x = ((e.clientX - r.left) / r.width) * 100;
     let y = ((e.clientY - r.top) / r.height) * 100;
     x = Math.max(5, Math.min(95, x)); y = Math.max(7, Math.min(93, y));
-    setPos(p => ({ ...p, [roomId]: { ...(p[roomId] || {}), [d.n]: { x: Math.round(x), y: Math.round(y) } } }));
+    d.x = x; d.y = y;
+    // Aggiorna il DOM DIRETTAMENTE: nessun setState → nessun re-render dei tavoli a
+    // ogni pixel. È questo che rende il trascinamento fluido a 60fps.
+    d.el.style.left = x + "%";
+    d.el.style.top = y + "%";
   };
   const onUp = async (e) => {
     const d = drag.current; if (!d) return;
     e.currentTarget?.releasePointerCapture?.(e.pointerId);
+    if (d.el) { d.el.style.zIndex = ""; d.el.style.cursor = "grab"; d.el.style.willChange = ""; }
     drag.current = null;
     if (d.moved) {
-      try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(posRef.current)); } catch (_) {}
-      const p = posRef.current[roomId]?.[d.n];
-      if (p) {
-        const posX = Math.max(0, Math.min(100, Math.round(p.x)));
-        const posY = Math.max(0, Math.min(100, Math.round(p.y)));
-        // segna la posizione come "in attesa": evita il flicker al vecchio valore server
-        // nell'attimo tra il rilascio e l'arrivo dell'evento table:updated.
-        pending.current[roomId] = { ...(pending.current[roomId] || {}), [d.n]: { x: posX, y: posY } };
-        try { await window.TakoActions.tableUpdate(d.t._id, { posX, posY }); }
-        catch (err) { toast(err.message, { type: "error" }); }
-      }
+      const fx = Math.round(d.x), fy = Math.round(d.y);
+      // commit UNA volta sola, al rilascio (non durante il movimento)
+      setPos(p => ({ ...p, [roomId]: { ...(p[roomId] || {}), [d.n]: { x: fx, y: fy } } }));
+      const merged = { ...posRef.current, [roomId]: { ...(posRef.current[roomId] || {}), [d.n]: { x: fx, y: fy } } };
+      try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(merged)); } catch (_) {}
+      // segna "in attesa": evita il flicker al vecchio valore server prima dell'evento table:updated
+      pending.current[roomId] = { ...(pending.current[roomId] || {}), [d.n]: { x: fx, y: fy } };
+      try { await window.TakoActions.tableUpdate(d.t._id, { posX: fx, posY: fy }); }
+      catch (err) { toast(err.message, { type: "error" }); }
     } else { setSel(d.t); }
   };
   const resetLayout = () => { const n = { ...pos }; delete n[roomId]; setPos(n); try { localStorage.setItem("tako-dash-tablepos", JSON.stringify(n)); } catch (_) {} toast("Disposizione ripristinata"); };
@@ -137,21 +148,22 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
           {room.tables.map(t => {
             const st = TABLE_STATUS[t.stato];
             const p = xy(t);
-            const dragging = drag.current && drag.current.n === t.n;
             const sz = mobile ? 62 : 80;
-            // Alone morbido colorato = stato: `drop-shadow` segue la sagoma reale del
-            // tavolo (tondo/quadrato/rettangolo), niente anello rigido. Numero al
-            // centro (con velo bianco per leggibilità sul legno) + pallino di stato.
+            // Stato = alone RADIALE morbido e diffuso dietro il tavolo (nessun contorno
+            // sui lati dritti: il vecchio drop-shadow lasciava righe verdi). Numero al
+            // centro (velo bianco per leggibilità sul legno) + pallino di stato.
             return (
               <button key={t.n} onPointerDown={(e) => onDown(e, t)} onPointerMove={onMove} onPointerUp={onUp}
                 style={{ position: "absolute", left: p.x + "%", top: p.y + "%", width: sz, height: sz, transform: "translate(-50%,-50%)",
                   background: "transparent", border: "none", padding: 0, display: "grid", placeItems: "center",
-                  cursor: "grab", zIndex: dragging ? 5 : 1, touchAction: "none", userSelect: "none" }}>
+                  cursor: "grab", zIndex: 1, touchAction: "none", userSelect: "none" }}>
+                <span aria-hidden style={{ position: "absolute", inset: mobile ? -9 : -13, borderRadius: "50%", pointerEvents: "none",
+                  background: `radial-gradient(closest-side, ${st.color} 0%, ${st.color} 20%, transparent 74%)`, opacity: 0.5, filter: "blur(4px)" }} />
                 <img src={`assets/tables/${tableAsset(t)}.png`} alt="" draggable={false}
                   style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none",
-                    filter: `drop-shadow(0 0 ${dragging ? 8 : 5}px ${st.color}) drop-shadow(0 0 2px ${st.color}) drop-shadow(0 3px 5px rgba(30,20,16,.22))` }} />
+                    filter: "drop-shadow(0 3px 4px rgba(30,20,16,.26))" }} />
                 <span className="num" style={{ position: "relative", fontSize: mobile ? 16 : 19, color: "var(--ink)", pointerEvents: "none",
-                  textShadow: "0 1px 2px rgba(255,255,255,.85), 0 0 4px rgba(255,255,255,.7)" }}>{t.n}</span>
+                  textShadow: "0 1px 2px rgba(255,255,255,.9), 0 0 5px rgba(255,255,255,.75)" }}>{t.n}</span>
                 <span style={{ position: "absolute", top: 2, right: 2, width: 14, height: 14, borderRadius: 99, background: st.color, border: "2px solid var(--raised)", boxShadow: "0 1px 3px rgba(30,20,16,.28)" }} />
               </button>
             );
