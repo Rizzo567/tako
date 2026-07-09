@@ -96,7 +96,7 @@
   .mb-lid{position:relative;width:1212px;height:770px;background:#0b0809;border-radius:22px;padding:15px;
     box-shadow:0 50px 110px -30px rgba(0,0,0,.8), inset 0 0 0 2px rgba(255,255,255,.05);}
   .mb-screen{position:relative;width:100%;height:100%;border-radius:7px;overflow:hidden;background:#F2EBE2;}
-  .mb-screen iframe{width:100%;height:100%;border:0;display:block;transform:translateZ(0);}
+  .mb-screen iframe,.mb-screen img,.mb-screen video{width:100%;height:100%;border:0;display:block;transform:translateZ(0);object-fit:cover;object-position:top left;}
   .mb-base{position:relative;width:1334px;margin-left:-61px;height:26px;
     background:linear-gradient(180deg,#bcc1c7 0%,#9ca2a9 38%,#787e86 100%);
     border-radius:2px 2px 13px 13px;box-shadow:0 34px 60px -22px rgba(0,0,0,.72);}
@@ -164,7 +164,7 @@
   .phone-frame::before{content:"";position:absolute;left:-3px;top:140px;width:3px;height:64px;border-radius:3px;background:#16100d;}
   .phone-frame::after{content:"";position:absolute;right:-3px;top:180px;width:3px;height:96px;border-radius:3px;background:#16100d;}
   .phone-screen{position:relative;width:100%;height:100%;border-radius:50px;overflow:hidden;background:#FBF8F4;}
-  .phone-screen iframe{width:100%;height:100%;border:0;display:block;pointer-events:none;transform:translateZ(0);}
+  .phone-screen iframe,.phone-screen img,.phone-screen video{width:100%;height:100%;border:0;display:block;pointer-events:none;transform:translateZ(0);object-fit:cover;object-position:top center;}
   .island{position:absolute;left:50%;top:13px;transform:translateX(-50%);width:114px;height:33px;
     background:#0a0708;border-radius:20px;z-index:10;}
 
@@ -258,7 +258,7 @@
         <div class="macbook">
           <div class="mb-lid">
             <div class="mb-screen">
-              <iframe id="dashFrame" src="Tako%20Dashboard.html?sync&lockscroll" title="Tako Dashboard" loading="eager" scrolling="no"></iframe>
+              <iframe id="dashFrame" data-src="Tako%20Dashboard.html?sync&lockscroll" title="Tako Dashboard" loading="eager" scrolling="no"></iframe>
               <div class="sheen"></div>
               <div class="mb-shade"></div>
             </div>
@@ -279,7 +279,7 @@
         <div class="phone">
           <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
             <div class="island"></div>
-            <iframe id="appFrame" src="Tako%20App.html?bare&sync&table=3&delay=0&lang=it" title="Tako App · Tavolo 3 (IT)" loading="eager"></iframe>
+            <iframe id="appFrame" data-src="Tako%20App.html?bare&sync&table=3&delay=0&lang=it" title="Tako App · Tavolo 3 (IT)" loading="eager"></iframe>
             <div class="sheen"></div>
           </div></div></div>
         </div>
@@ -290,7 +290,7 @@
         <div class="phone">
           <div class="phone-float"><div class="phone-frame"><div class="phone-screen">
             <div class="island"></div>
-            <iframe id="appFrame2" src="Tako%20App.html?bare&sync&table=7&delay=6000&lang=en" title="Tako App · Tavolo 7 (EN)" loading="eager"></iframe>
+            <iframe id="appFrame2" data-src="Tako%20App.html?bare&sync&table=7&delay=6000&lang=en" title="Tako App · Tavolo 7 (EN)" loading="eager"></iframe>
             <div class="sheen"></div>
           </div></div></div>
         </div>
@@ -301,6 +301,70 @@
   </div>
 
 <script>
+  // MOBILE: sostituisci gli iframe live (dashboard + 2 app, ognuno React+Babel a
+  // runtime) con screenshot STATICI. Su iOS quei 3 contesti annidati — dentro la
+  // pagina demo, già React+Babel — sfondavano il limite di memoria per-tab: WebKit
+  // uccideva e ricaricava la scheda all'infinito (grigio + refresh continuo) già al
+  // caricamento. Con le immagini il layout, le cornici e l'animazione hold→reveal
+  // restano IDENTICI, ma a zero contesti annidati. Su desktop gli iframe si caricano
+  // normalmente dal data-src (nessun cambiamento).
+  // Rilevamento mobile ROBUSTO e conservativo: usa gli iframe live SOLO su un desktop
+  // sicuro (puntatore fine + viewport largo). In OGNI altro caso (param &mobile, touch,
+  // pointer coarse, viewport piccolo, o rilevamento non disponibile) → screenshot
+  // statici. Meglio un'immagine statica in più su un desktop borderline che il crash di
+  // memoria su un telefono. Esposto come window.__takoMobile per riusarlo sotto.
+  // LOGICA INVERTITA (a prova di errore): di DEFAULT si usano gli screenshot statici.
+  // Gli iframe live (pesanti: React+Babel ×3) si caricano SOLO se è un desktop CERTO —
+  // puntatore FINE + capacità di HOVER + viewport largo. Un telefono/tablet non può
+  // soddisfare queste condizioni (iOS Safari: pointer coarse, hover none) → resterà
+  // sempre statico → impossibile saturare la memoria e crashare. Override manuali:
+  // ?mobile forza statico, ?desktop forza live (per debug).
+  window.__takoMobile = (function(){
+    try {
+      var SP = new URLSearchParams(location.search);
+      if (SP.has('desktop')) return false;
+      if (SP.has('mobile')) return true;
+      var mm = window.matchMedia;
+      if (!mm) return true; // niente matchMedia → non posso confermare desktop → statico
+      var isDesktop = mm('(pointer: fine)').matches
+                   && mm('(hover: hover)').matches
+                   && (window.innerWidth || 0) >= 1000;
+      return !isDesktop;
+    } catch (e) { return true; } // in dubbio: statico (sicuro)
+  })();
+  (function(){
+    var isMobile = window.__takoMobile;
+    // VIDEO mp4 H.264 (streaming, decodifica hardware): a differenza di iframe React
+    // e di WebP/GIF animate — che tengono tutto in memoria e crashavano iOS — il video
+    // scorre pochi frame per volta → memoria bassa, animazione vera, zero crash.
+    // Autoplay muto inline (requisiti iOS: muted + playsinline). Se un browser non
+    // autoplayasse, resta il primo frame (poster implicito).
+    var SHOTS = {
+      dashFrame: 'assets/showcase-dash.mp4',
+      appFrame:  'assets/showcase-app-it.mp4',
+      appFrame2: 'assets/showcase-app-en.mp4'
+    };
+    var frames = document.querySelectorAll('iframe[data-src]');
+    for (var i = 0; i < frames.length; i++){
+      var f = frames[i];
+      if (isMobile && SHOTS[f.id]){
+        var v = document.createElement('video');
+        v.muted = true; v.defaultMuted = true;
+        v.autoplay = true; v.loop = true; v.playsInline = true;
+        v.setAttribute('muted', ''); v.setAttribute('autoplay', '');
+        v.setAttribute('loop', ''); v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', ''); v.setAttribute('preload', 'auto');
+        v.setAttribute('disablepictureinpicture', '');
+        v.src = SHOTS[f.id];
+        v.id = f.id;
+        f.parentNode.replaceChild(v, f);
+        var pr = v.play(); if (pr && pr.catch) pr.catch(function(){});
+      } else {
+        f.src = f.getAttribute('data-src');
+      }
+    }
+  })();
+
   // fit fixed 1920×1080 stage to viewport (desktop) — oppure layout ritratto in mobile-stage
   (function(){
     const stage=document.getElementById('stage');
@@ -374,7 +438,10 @@
     if(!SP.has('staged')) return;
     const body = document.body;
     body.classList.add('staged');
-    if(SP.has('mobile')) body.classList.add('mobile-stage');
+    // Layout mobile (Mac in alto, telefoni sotto) con lo STESSO rilevamento robusto
+    // usato per lo swap iframe→immagini, così look e contenuto restano coerenti anche
+    // se il parent non passa &mobile (es. viewport/innerWidth anomali).
+    if(window.__takoMobile) body.classList.add('mobile-stage');
 
     function doReveal(){
       if(body.classList.contains('revealed')) return;

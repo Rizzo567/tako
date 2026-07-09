@@ -114,6 +114,7 @@ function HeroStage() {
   const btnRef = tR(null);
   const ringRef = tR(null);
   const hold = tR({ raf: 0, start: 0, active: false, done: false });
+  const [dbg, setDbg] = tS(null); // pannello diagnostico (solo con ?debug nell'URL)
 
   const setRing = (p) => { if (ringRef.current) ringRef.current.style.strokeDashoffset = String(100 * (1 - p)); };
 
@@ -174,11 +175,48 @@ function HeroStage() {
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
+  // Diagnostica opzionale (?debug): mostra i valori reali di rilevamento sul dispositivo,
+  // incl. window.__takoMobile letto DENTRO l'iframe Showcase (same-origin). Serve a
+  // capire, su un telefono fisico, perché eventualmente venga scelto il ramo sbagliato.
+  tE(() => {
+    if (!/[?&]debug/.test(location.search)) return;
+    const mm = window.matchMedia;
+    const read = () => {
+      let sc = '(non ancora)';
+      try { const w = frameRef.current && frameRef.current.contentWindow; if (w && 'undefined' !== typeof w.__takoMobile) sc = String(w.__takoMobile); }
+      catch (e) { sc = 'cross-origin?'; }
+      let loads = '?';
+      try { loads = sessionStorage.__dl || '1'; } catch (e) {}
+      setDbg({
+        iw: window.innerWidth, ih: window.innerHeight,
+        coarse: mm ? mm('(pointer: coarse)').matches : '?',
+        fine: mm ? mm('(pointer: fine)').matches : '?',
+        hover: mm ? mm('(hover: hover)').matches : '?',
+        parentMobile: mobile, showcase: sc, loads: loads,
+      });
+    };
+    read();
+    const iv = setInterval(read, 700);
+    return () => clearInterval(iv);
+  }, []);
+
+  // NB: su mobile lo Showcase incorporato qui NON carica più iframe live (dashboard +
+  // 2 app): in mobile-stage li sostituisce con screenshot statici (vedi Tako
+  // Showcase.html) → il design resta identico ma senza i contesti React+Babel annidati
+  // che su iOS causavano crash di memoria + reload loop. L'animazione hold→reveal resta.
   return (
     <section className={`sim-wrap ${revealed ? 'is-revealed' : 'is-idle'}`} id="hero" data-screen-label="Hero — Simulazione">
       <div className="sim-stage">
         <iframe ref={frameRef} className="sim-frame" src={`Tako%20Showcase.html?sync&staged${mobile ? '&mobile' : ''}`} title="Simulazione Tako — dashboard interattiva e tavoli" loading="eager" scrolling="no" />
       </div>
+
+      {dbg && (
+        <div style={{ position: 'fixed', left: 8, bottom: 8, zIndex: 99999, background: 'rgba(0,0,0,.88)', color: '#3f6', font: '11px/1.5 monospace', padding: '8px 10px', borderRadius: 8, maxWidth: '94vw', pointerEvents: 'none' }}>
+          <div>DEMO-DEBUG · iw={dbg.iw} ih={dbg.ih} · <b style={{ color: '#fd6' }}>loads={String(dbg.loads)}</b></div>
+          <div>coarse={String(dbg.coarse)} fine={String(dbg.fine)} hover={String(dbg.hover)}</div>
+          <div>parentMobile={String(dbg.parentMobile)} · showcase.__takoMobile=<b>{String(dbg.showcase)}</b></div>
+        </div>
+      )}
 
       {!revealed && (
         <div className="open-zone">

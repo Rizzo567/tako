@@ -9,6 +9,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tako — Demo</title>
+<!-- Contatore di caricamenti per-scheda: se la pagina va in reload loop, cresce.
+     Letto dal pannello ?debug (DEMO-DEBUG) per distinguere reale-loop da immagine-lenta. -->
+<script>try{sessionStorage.__dl=(+sessionStorage.__dl||0)+1;}catch(e){}</script>
 <link rel="stylesheet" href="tako-header.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -497,7 +500,7 @@
        mobile-stage: niente zoom dal parent, altrimenti raddoppia la scala */
     .sim-stage{transform:none !important;}
     /* hero più corto → ~200px in meno di spazio prima della sezione 1 */
-    .sim-wrap{height:calc(100vh - 200px);min-height:480px;}
+    .sim-wrap{height:calc(100vh - 185px);min-height:495px;}
     /* pulsante "Prova ora" ancorato in basso (sempre interamente visibile, mai tagliato) */
     .open-zone{align-items:flex-end;padding-top:0;padding-bottom:16px;}
     /* sezione 1: card compatte (2 colonne) */
@@ -513,8 +516,11 @@
 <body>
 <div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<!-- React PRODUCTION (build minificato, ~metà memoria/CPU della dev): riduce il picco
+     su iOS mobile dove la pagina, con Babel-standalone che compila i .jsx, andava in
+     crash di memoria + reload loop. (integrity rimossa: URL diverso dalla dev.) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <!-- client cloud auth (script normale, deve precedere i .jsx) -->
