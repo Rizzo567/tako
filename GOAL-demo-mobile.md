@@ -1,51 +1,59 @@
-# GOAL — Pagina demo (Tako Demo) mobile: zero crash, zero reload loop
+# GOAL — Pagina demo (Tako Demo) mobile: no crash + interfacce animate
 
-**Stato: RISOLTO nel codice (branch `feat/site-auth-20260625`, commit 31b531f). Da validare da Manuel su iPhone reale via tunnel, poi merge→main per la produzione.**
+Branch: `feat/site-auth-20260625` (worktree `~/Projects/Tako-site-auth`).
+Ultimo commit: **a101b49** (video mp4). NON mergiato su `main` → il LIVE non ha nulla di questo.
 
-## Problema
-Su mobile (iOS Safari), aprendo `https://www.takoitalia.com/Tako%20Demo`, la pagina
-diventa grigia e si ricarica in loop infinito già al caricamento: si vede il Mac, ma
-prima ancora che l'interfaccia dentro il Mac finisca di caricare, la scheda si ricarica.
+## ✅ FATTO (crash risolto, confermato su iPhone reale di Manuel: `loads=1`)
+- **Causa crash**: pagina demo (React+Babel) annidava lo Showcase → dashboard + 2 app
+  iframe, ognuno di nuovo React *dev* + Babel = 4 contesti annidati → memoria iOS
+  sfondata → grigio + reload loop già al load.
+- **Fix**:
+  - `Tako Showcase.html`: iframe con `data-src`; `window.__takoMobile` ROBUSTO —
+    default STATICO, carica gli iframe live SOLO su desktop certo (`pointer:fine` +
+    `hover:hover` + `innerWidth>=1000`); un telefono non può soddisfarlo. Su mobile
+    sostituisce gli iframe con media statici/animati. Stesso flag guida `mobile-stage`.
+  - `Tako Demo.html`: React *dev* → *production* (metà memoria); hero mobile **+15px**
+    (`.sim-wrap` height `calc(100vh - 185px)`); contatore reload + pannello `?debug`
+    (in `tako-trial.jsx`, mostra iw/coarse/fine/hover/__takoMobile/loads).
+  - **Animazione**: WebP animata PROVATA e SCARTATA (teneva tutti i frame in RAM ~100MB
+    → ricrashava). Passato a **VIDEO mp4 H.264** (streaming = memoria bassa): swap crea
+    `<video autoplay muted loop playsinline>` da `assets/showcase-{dash,app-it,app-en}.mp4`.
+    Video generati con **AVFoundation/AVAssetWriter in Swift** (`/tmp/mkvideo.swift`,
+    niente ffmpeg). Server di test con supporto **Range 206** (necessario a iOS per i video).
 
-## Causa radice
-La pagina demo (React + Babel-standalone) incorpora `Tako Showcase.html`, che carica
-**3 iframe live** (dashboard + 2 app), ognuno di nuovo React *development* +
-Babel-standalone a runtime. Totale = **4 contesti React/Babel annidati** su una scheda.
-Su iOS il limite di memoria per-tab viene sfondato → WebKit uccide e ricarica la scheda
-→ ricrash → **loop**. (Nessun reload da JS: gli unici `location.reload()` sono in
-handler di login; nessun service worker; nessun meta-refresh.)
+## 🔴 APERTO — prossimo passo (dove ci siamo fermati)
+Manuel: «sul Mac non arrivano le notifiche degli ordini e delle chiamate ai camerieri».
+Giusto: il video attuale del Mac è una dissolvenza tra 2 stati "pieni", NON mostra
+l'ARRIVO di ordini/chiamate (il bello del demo live).
 
-Confondenti scoperti strada facendo:
-1. Il **live non ha il fix** (è su branch, non su `main`/Cloudflare Pages) → Manuel
-   vedeva sempre la versione vecchia.
-2. Il tunnel `deploy-mobile` usa **browser-sync**, il cui live-reload può ricaricare da
-   solo sul tunnel → confondeva il test. Sostituito con tunnel **statico puro**.
-3. Primo tentativo di rilevamento mobile con `Math.min(innerWidth,innerHeight)<=900`:
-   **bug**, i desktop hanno viewport alto ~900px → venivano trattati come mobile.
-   Corretto: discrimina per **larghezza** (`innerWidth<=820`) e **puntatore coarse**.
+**Soluzione in corso (non ancora eseguita):** registratore Swift **WKWebView**
+`/tmp/recweb.swift` (SCRITTO, non compilato/testato) che:
+1. carica la vera `Tako Dashboard.html?sync` in una WKWebView (1280×800, desktop → toast),
+2. inietta via `evaluateJavaScript` gli eventi del relay a tempo:
+   `window.postMessage({source:'tako-sync',type:'new-order',order:{tavolo:N,items:[{name,qty}]}},'*')`
+   e `{type:'waiter-call',call:{tavolo:N,motivo:'...'}}` (vedi `dashboard/app.jsx:96-127`),
+3. cattura i frame in continuo (takeSnapshot) → **mp4** con AVAssetWriter → si vedono
+   ordini e chiamate ARRIVARE con la notifica toast + card `isNew`.
 
-## Fix
-Preserva IDENTICO il design (Mac + dashboard + telefoni + hold→reveal), ma su mobile
-sostituisce gli iframe live con **screenshot statici** → zero contesti annidati.
-- `Tako Showcase.html`: gli iframe usano `data-src`; `window.__takoMobile` (robusto:
-  `?mobile` OR pointer coarse OR `innerWidth<=820`, con fallback "statico" in caso di
-  errore) decide. Se mobile → sostituisce ogni iframe con `<img>` (assets/showcase-dash,
-  showcase-app-it, showcase-app-en). Se desktop → carica gli iframe dal `data-src`.
-  Stesso flag guida anche la classe di layout `mobile-stage`.
-- `tako-trial.jsx`: rimosso il tentativo provvisorio (hero mobile a 1 solo iPhone, che
-  snaturava la sezione); torna a incorporare lo Showcase (ora leggero su mobile).
-- Screenshot generati con Chrome headless dalle pagine reali (dashboard + app IT/EN).
+**TODO prossima sessione:**
+- [ ] `swiftc -O /tmp/recweb.swift -o /tmp/recweb` e lanciarlo:
+      `/tmp/recweb "http://localhost:8080/Tako%20Dashboard.html?sync" /tmp/dash2.mp4 1280 800 14 12 dash`
+      (serve il server statico :8080 attivo — vedi sotto). Verificare che i toast/ordini
+      si vedano (WKWebView offscreen potrebbe dare snapshot vuoti → se sì, `cfg.afterScreenUpdates=true`).
+- [ ] Sostituire `landing/assets/showcase-dash.mp4` col nuovo.
+- [ ] (opzionale) Video telefoni: cliente che ordina (App.html?sync mostra menù→ordine).
+      Per ora i 2 video app sono dissolvenze tra 2 frame (ok ma statiche).
+- [ ] Ricaricare tunnel, far testare a Manuel (animazione + stabilità).
+- [ ] Prima della produzione: rimuovere il pannello `?debug` (in `tako-trial.jsx`).
+- [ ] **Produzione**: merge `feat/site-auth-20260625` → `main` (SOLO Manuel) → deploy Cloudflare Pages.
 
-## Verifica (Chrome headless, server statico :8080)
-- [x] Showcase 390px (senza `&mobile`): `<body>` ha `mobile-stage`, **0 iframe**, **3 img**.
-- [x] Showcase 1440px desktop: **niente** `mobile-stage`, iframe live caricati.
-- [x] Reload-probe: la pagina demo a 390px si carica **1 volta** in 9s → nessun loop JS.
-- [x] Tunnel statico serve il fix, **nessuna** iniezione browser-sync.
-- [ ] Validazione su iPhone reale di Manuel (via tunnel statico).
-- [ ] (produzione) merge `feat/site-auth-20260625` → `main` → deploy Cloudflare Pages.
+## Ambiente di test (EFFIMERO — va riavviato)
+- Server statico no-store + Range: `python3 /tmp/nostore_server.py` (serve `~/Projects/Tako-site-auth/landing` su :8080).
+- Tunnel: `~/.local/bin/cloudflared tunnel --url http://localhost:8080` → URL usa-e-getta.
+- URL sessione (probabilmente morto): `https://kept-holidays-gateway-hunting.trycloudflare.com/Tako%20Demo.html`
+- Screenshot/verifica: Chrome headless `/Applications/Google Chrome.app/...`, con `perl -e 'alarm N; exec @ARGV'` come timeout (macOS non ha `timeout`), `--autoplay-policy=no-user-gesture-required` per i video.
 
-## Note di certezza
-Il crash di memoria iOS non è riproducibile su Chrome desktop; la certezza deriva dal
-fatto che su mobile **non viene più caricato alcun contesto React/Babel annidato** (solo
-immagini statiche), quindi non c'è nulla che possa saturare la memoria, e il reload-probe
-esclude un loop lato codice. Manca solo la conferma sul device fisico.
+## Note tecniche utili
+- macOS: no ffmpeg/cv2/imageio; SÌ Pillow 11.3 (webp anim), Swift 6.3 (AVFoundation), `/usr/bin/avconvert`.
+- Encoder frame→mp4: `/tmp/mkvideo.swift` (compilato `/tmp/mkvideo`). Registratore live: `/tmp/recweb.swift`.
+- Frame sorgente catturati in `/tmp/fr` (dash), `/tmp/app` (c,d=IT; e,f=EN).
