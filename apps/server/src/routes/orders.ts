@@ -81,10 +81,24 @@ export async function orderRoutes(fastify: FastifyInstance) {
         notes: z.string().max(500).optional(),
       })).min(1),
       notes: z.string().max(1000).optional(),
+      // Idempotenza opzionale dal client (doppio-tap "Invia comanda"): due invii con
+      // la stessa chiave NON creano due ordini (che raddoppierebbero il conto). Se
+      // assente, si genera una chiave server-side (comportamento retro-compatibile).
+      idempotencyKey: z.string().min(8).max(128).optional(),
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
     const restaurantId = req.user!.restaurantId
+
+    // Se il client fornisce una chiave e un ordine con quella chiave esiste già in
+    // questo ristorante, ritornalo (idempotenza reale, come la route cliente).
+    if (body.data.idempotencyKey) {
+      const [dup] = await db.select().from(orders).where(and(eq(orders.idempotencyKey, body.data.idempotencyKey), eq(orders.restaurantId, restaurantId))).limit(1)
+      if (dup) {
+        const items = await db.select().from(orderItems).where(eq(orderItems.orderId, dup.id))
+        return reply.code(200).send({ data: { ...dup, items } })
+      }
+    }
 
     const ids = body.data.items.map(i => i.menuItemId)
     const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), inArray(menuItems.id, ids)))
@@ -106,11 +120,26 @@ export async function orderRoutes(fastify: FastifyInstance) {
       tableNumber = t.number
     }
 
-    const [order] = await db.insert(orders).values({
-      restaurantId, tableId: body.data.tableId, tableNumber, type: body.data.type,
-      status: 'pending', total, notes: body.data.notes,
-      idempotencyKey: `staff-${restaurantId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    }).returning()
+    const idempotencyKey = body.data.idempotencyKey ?? `staff-${restaurantId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    let order: typeof orders.$inferSelect | undefined
+    try {
+      ;[order] = await db.insert(orders).values({
+        restaurantId, tableId: body.data.tableId, tableNumber, type: body.data.type,
+        status: 'pending', total, notes: body.data.notes,
+        idempotencyKey,
+      }).returning()
+    } catch (err: any) {
+      // Race del doppio-tap: due invii con la stessa chiave superano il check iniziale,
+      // il vincolo UNIQUE blocca il secondo → ritorna l'ordine già creato (no 500).
+      if (err?.code === '23505' && body.data.idempotencyKey) {
+        const [existingOrder] = await db.select().from(orders).where(and(eq(orders.idempotencyKey, idempotencyKey), eq(orders.restaurantId, restaurantId))).limit(1)
+        if (existingOrder) {
+          const items = await db.select().from(orderItems).where(eq(orderItems.orderId, existingOrder.id))
+          return reply.code(200).send({ data: { ...existingOrder, items } })
+        }
+      }
+      throw err
+    }
     if (!order) return reply.code(500).send({ error: { code: 'DB', message: 'Creazione ordine fallita.' } })
 
     const insertedItems = await db.insert(orderItems).values(
@@ -176,6 +205,8 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (current.tableId) {
       io.to(`table:${current.tableId}`).emit('order:updated', { orderId, status })
     }
+    // Cliente ASPORTO (senza tavolo): riceve il tracking dalla room del proprio ordine.
+    io.to(`order:${orderId}`).emit('order:updated', { orderId, status })
 
     return { data: updated }
   })
@@ -217,6 +248,8 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (order.tableId) {
       io.to(`table:${order.tableId}`).emit('order:updated', { orderId, status: derivedStatus })
     }
+    // Cliente ASPORTO: stesso aggiornamento sulla room del proprio ordine.
+    io.to(`order:${orderId}`).emit('order:updated', { orderId, status: derivedStatus })
     return { data: { item, orderStatus: derivedStatus } }
   })
 
@@ -229,12 +262,20 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (current.status === 'paid') return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Un ordine pagato non può essere annullato.' } })
     if (current.status === 'cancelled') return { data: current }
 
-    const [updated] = await db.update(orders).set({ status: 'cancelled', updatedAt: new Date() }).where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId))).returning()
+    // Guardia di concorrenza (come PATCH /status): annulla SOLO se lo stato è ancora
+    // quello letto. Senza, un annullamento su lettura stantìa poteva sovrascrivere un
+    // ordine appena passato a 'paid' dalla cascade di chiusura conto → incasso
+    // registrato ma ordine 'cancelled' (riconciliazione rotta).
+    const [updated] = await db.update(orders).set({ status: 'cancelled', updatedAt: new Date() })
+      .where(and(eq(orders.id, orderId), eq(orders.restaurantId, req.user!.restaurantId), eq(orders.status, current.status))).returning()
+    if (!updated) return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Lo stato dell\'ordine è cambiato, riprova.' } })
     // Il conto deve scendere: ricalcola il bill aperto del tavolo escludendo l'annullato.
-    if (updated!.tableId) await recomputeOpenBill(req.user!.restaurantId, updated!.tableId)
+    if (updated.tableId) await recomputeOpenBill(req.user!.restaurantId, updated.tableId)
     io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'cancelled' })
     // Avvisa anche il cliente al tavolo: il tracking riflette l'annullamento.
-    if (updated!.tableId) io.to(`table:${updated!.tableId}`).emit('order:updated', { orderId, status: 'cancelled' })
+    if (updated.tableId) io.to(`table:${updated.tableId}`).emit('order:updated', { orderId, status: 'cancelled' })
+    // Cliente ASPORTO: annullamento visibile sulla room del proprio ordine.
+    io.to(`order:${orderId}`).emit('order:updated', { orderId, status: 'cancelled' })
     return { data: updated }
   })
 }

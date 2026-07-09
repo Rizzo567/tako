@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, staffShifts, users } from '@tako/db'
-import { eq, and, isNull, gte, lt, desc, sql } from 'drizzle-orm'
+import { eq, ne, and, isNull, gte, lt, desc, sql } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { io } from '../index.js'
 
@@ -215,9 +215,25 @@ export async function shiftRoutes(fastify: FastifyInstance) {
       return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Nessun campo da aggiornare' } })
     }
 
-    const [shift] = await db.update(staffShifts).set(updates)
-      .where(and(eq(staffShifts.id, shiftId), eq(staffShifts.restaurantId, req.user!.restaurantId))).returning()
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('shift:updated', { userId: shift!.userId, action: 'update' })
+    // Se questa modifica RENDE il turno "aperto" (endsAt=null), verifica sotto lock che
+    // non esista già un altro turno aperto dello stesso membro: senza, si potevano avere
+    // DUE turni aperti (clock-out ne chiude uno solo → ore/paga raddoppiate). Coerente
+    // con clock-in e con POST /shifts.
+    const willBeOpen = nextEnd == null
+    const shift = await db.transaction(async (tx) => {
+      if (willBeOpen) {
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${'shift:' + req.user!.restaurantId + ':' + existing.userId}))`)
+        const [open] = await tx.select({ id: staffShifts.id }).from(staffShifts)
+          .where(and(eq(staffShifts.restaurantId, req.user!.restaurantId), eq(staffShifts.userId, existing.userId), isNull(staffShifts.endsAt), ne(staffShifts.id, shiftId)))
+          .limit(1)
+        if (open) return null
+      }
+      const [s] = await tx.update(staffShifts).set(updates)
+        .where(and(eq(staffShifts.id, shiftId), eq(staffShifts.restaurantId, req.user!.restaurantId))).returning()
+      return s!
+    })
+    if (!shift) return reply.code(409).send({ error: { code: 'ALREADY_CLOCKED_IN', message: 'Il membro ha già un turno aperto' } })
+    io.to(`restaurant:${req.user!.restaurantId}`).emit('shift:updated', { userId: shift.userId, action: 'update' })
     return { data: shift }
   })
 

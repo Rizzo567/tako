@@ -4,7 +4,7 @@ import { db, bills, billPayments, orders, tables } from '@tako/db'
 import { eq, and, inArray, gte, desc, sql } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { round2, BILLABLE_STATUSES, coverUnit, restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
+import { round2, BILLABLE_STATUSES, coverUnit, billTotalsFromOrders, restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
 
 export async function billRoutes(fastify: FastifyInstance) {
   // Get open bills. Ritorna anche i conti SENZA tavolo (asporto / conto libero):
@@ -126,22 +126,37 @@ export async function billRoutes(fastify: FastifyInstance) {
     // oltre soglia restano prerogativa dell'owner. Lo sconto esistente non viene
     // ri-clampato se questa PATCH non lo modifica (es. aggiorna solo la mancia).
     const MAX_DISCOUNT_PCT = 0.30
-    let discount = bill.discount ?? 0
-    if (body.data.discount !== undefined) {
-      const cap = req.user!.role === 'owner' ? bill.subtotal : round2(bill.subtotal * MAX_DISCOUNT_PCT)
-      discount = Math.min(body.data.discount, cap)
-    }
-    discount = Math.min(discount, bill.subtotal) // total mai negativo
-    const tip = body.data.tip ?? bill.tip ?? 0
-    const covers = body.data.covers ?? bill.covers ?? 1
-    // Coperto = coperti × unitario (impostazioni). Nessuna colonna dedicata: solo nel totale.
-    const coverCharge = round2(covers * (await coverUnit(req.user!.restaurantId)))
-    const total = round2(bill.subtotal - discount + tip + coverCharge)
-    // Audit: tracciabilità di chi modifica sconti sui conti.
-    req.log.info({ userId: req.user!.id, billId, discount }, 'bill.discount')
-    const [updated] = await db.update(bills)
-      .set({ discount, tip, covers, discountNote: body.data.discountNote ?? bill.discountNote, total })
-      .where(eq(bills.id, billId)).returning()
+    const unit = await coverUnit(req.user!.restaurantId)
+    // Advisory lock sulla STESSA chiave di ensureOpenBill (ristorante:tavolo): senza,
+    // questa PATCH riscriveva `total` da un `subtotal` stantìo e cancellava il ricalcolo
+    // di un ordine arrivato in parallelo (mancia +€5 mentre entra un ordine da €30 →
+    // total tornava a 55 e gli €30 sparivano). Asporto: lock sul conto.
+    const lockKey = bill.tableId ? `${bill.restaurantId}:${bill.tableId}` : billId
+    const updated = await db.transaction(async (tx) => {
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${lockKey}))`)
+      const [locked] = await tx.select().from(bills).where(eq(bills.id, billId)).limit(1)
+      if (!locked) return null
+      // Subtotale FRESCO dagli ordini fatturabili sotto il lock.
+      const base = await billTotalsFromOrders(tx, { ...locked, discount: 0, tip: 0 }, unit)
+      const subtotal = base.subtotal
+      let discount = locked.discount ?? 0
+      if (body.data.discount !== undefined) {
+        const cap = req.user!.role === 'owner' ? subtotal : round2(subtotal * MAX_DISCOUNT_PCT)
+        discount = Math.min(body.data.discount, cap)
+      }
+      discount = Math.min(discount, subtotal) // total mai negativo
+      const tip = body.data.tip ?? locked.tip ?? 0
+      const covers = body.data.covers ?? locked.covers ?? 1
+      const coverCharge = locked.tableId ? round2(covers * unit) : 0
+      const total = round2(subtotal - discount + tip + coverCharge)
+      // Audit: tracciabilità di chi modifica sconti sui conti.
+      req.log.info({ userId: req.user!.id, billId, discount }, 'bill.discount')
+      const [u] = await tx.update(bills)
+        .set({ subtotal, discount, tip, covers, discountNote: body.data.discountNote ?? locked.discountNote, total })
+        .where(eq(bills.id, billId)).returning()
+      return u
+    })
+    if (!updated) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Conto non trovato' } })
 
     return { data: updated }
   })
@@ -170,20 +185,29 @@ export async function billRoutes(fastify: FastifyInstance) {
     // pagamento + ricalcolo + chiusura/cascade, eliminando la TOCTOU di doppia
     // chiusura / doppio pagamento (coerente con ensureOpenBill).
     const { tip: tipInput, ...paymentData } = body.data
+    // Lock sulla STESSA chiave di ensureOpenBill (ristorante:tavolo) per i conti al
+    // tavolo: così un ordine in arrivo non può committare tra il ricalcolo del totale
+    // e la chiusura del conto. Prima il pagamento lockava su hashtext(billId) mentre il
+    // ricalcolo del totale gira sotto il lock del tavolo → un ordine appena inserito ma
+    // non ancora sommato veniva comunque marcato 'paid' dalla cascade (cibo regalato).
+    // Asporto (senza tavolo): nessun ordine tardivo, lock sul conto.
+    const lockKey = bill.tableId ? `${bill.restaurantId}:${bill.tableId}` : billId
+    const unit = await coverUnit(req.user!.restaurantId)
     const result = await db.transaction(async (tx) => {
-      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${billId}))`)
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${lockKey}))`)
 
       // Ri-leggi lo stato DENTRO il lock: un'altra richiesta potrebbe aver appena chiuso il conto.
       const [locked] = await tx.select().from(bills).where(eq(bills.id, billId)).limit(1)
       if (!locked || locked.status !== 'open') return { conflict: true as const }
 
       // M3: mancia passata col pagamento (il cameriere non può usare PATCH /bills).
-      // Sostituisce la mancia esistente e aggiorna il totale su cui si valuta la chiusura.
-      let effectiveTotal = round2(locked.total)
-      if (tipInput !== undefined) {
-        effectiveTotal = round2(locked.total - (locked.tip ?? 0) + tipInput)
-        await tx.update(bills).set({ tip: tipInput, total: effectiveTotal }).where(eq(bills.id, billId))
-      }
+      const tip = tipInput !== undefined ? tipInput : (locked.tip ?? 0)
+      // Ricalcola il totale dagli ordini fatturabili REALI sotto il lock: non fidarsi
+      // di locked.total, che un ordine appena inserito potrebbe non riflettere ancora.
+      // Persiste subtotal/discount/tip così la Cassa vede il valore corretto.
+      const t = await billTotalsFromOrders(tx, { ...locked, tip }, unit)
+      const effectiveTotal = t.total
+      await tx.update(bills).set({ subtotal: t.subtotal, discount: t.discount, tip, total: effectiveTotal }).where(eq(bills.id, billId))
 
       const [payment] = await tx.insert(billPayments).values({ billId, ...paymentData, status: 'completed' }).returning()
 
@@ -210,41 +234,18 @@ export async function billRoutes(fastify: FastifyInstance) {
           // (nessun conto chiuso successivo) → valido. Nessuno stato extra da scrivere.
           await tx.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, locked.tableId))
           closedTableId = locked.tableId
-          // Auto-cascade: TUTTI gli ordini fatturabili del tavolo (incl. 'served') → paid.
-          // Marcarli 'paid' li esclude da BILLABLE_STATUSES, così non vengono ri-sommati
-          // nel conto del prossimo cliente dello stesso tavolo (ri-fatturazione di cibo già pagato).
-          const activeOrders = await tx
-            .select({ id: orders.id })
-            .from(orders)
-            .where(and(
-              eq(orders.tableId, locked.tableId),
-              inArray(orders.status, [...BILLABLE_STATUSES]),
-            ))
-          if (activeOrders.length > 0) {
-            const paidAt = new Date()
-            for (const order of activeOrders) {
-              await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, order.id))
-              paidOrderIds.push(order.id)
-            }
-          }
-        } else {
-          // Conto ASPORTO (senza tavolo): la cascade non può passare per tableId.
-          // Gli ordini takeaway sono collegati a QUESTO conto via orders.billId
-          // (1 ordine asporto = 1 conto). Portarli 'paid' li fa entrare in
-          // incasso/statistiche esattamente come un tavolo pagato.
-          const takeawayOrders = await tx
-            .select({ id: orders.id })
-            .from(orders)
-            .where(and(
-              eq(orders.billId, billId),
-              inArray(orders.status, [...BILLABLE_STATUSES]),
-            ))
-          if (takeawayOrders.length > 0) {
-            const paidAt = new Date()
-            for (const order of takeawayOrders) {
-              await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, order.id))
-              paidOrderIds.push(order.id)
-            }
+        }
+        // Auto-cascade: marca 'paid' ESATTAMENTE gli ordini sommati in effectiveTotal
+        // (t.orderIds), non una ri-selezione dei billable del tavolo. Così un ordine
+        // committato dopo il calcolo del totale (e quindi NON coperto dal pagamento)
+        // non viene mai marcato paid: resta billable e finirà su un nuovo conto via
+        // ensureOpenBill (che attende questo stesso lock). Marcarli 'paid' li esclude
+        // da BILLABLE_STATUSES → niente ri-fatturazione di cibo già pagato.
+        if (t.orderIds.length > 0) {
+          const paidAt = new Date()
+          for (const oid of t.orderIds) {
+            await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, oid))
+            paidOrderIds.push(oid)
           }
         }
       }
@@ -262,6 +263,8 @@ export async function billRoutes(fastify: FastifyInstance) {
     for (const orderId of result.paidOrderIds) {
       io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'paid' })
       if (result.closedTableId) io.to(`table:${result.closedTableId}`).emit('order:updated', { orderId, status: 'paid' })
+      // Cliente ASPORTO (senza tavolo): "pagato/ritirato" arriva sulla room dell'ordine.
+      io.to(`order:${orderId}`).emit('order:updated', { orderId, status: 'paid' })
     }
 
     return reply.code(201).send({ data: result.payment })

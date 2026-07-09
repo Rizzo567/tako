@@ -551,7 +551,10 @@ function ScreenComanda({ mobile }) {
       if (!orderItems.length) throw new Error("Nessun piatto selezionato");
       const tav = ROOMS.flatMap(r => r.tables).find(t => t.n === tavolo);
       if (!tav) throw new Error("Tavolo non trovato");
-      await window.TakoActions.staffOrder({ tableId: tav._id, tableNumber: String(tav.n), type: "table", items: orderItems });
+      // Idempotenza: un doppio-tap / retry di rete non crea due comande (che
+      // raddoppierebbero il conto del tavolo). Una chiave per azione di invio.
+      const idempotencyKey = (self.crypto && crypto.randomUUID) ? crypto.randomUUID() : `staff-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      await window.TakoActions.staffOrder({ tableId: tav._id, tableNumber: String(tav.n), type: "table", items: orderItems, idempotencyKey });
       const tNum = tavolo;
       setCart({});
       setTavolo(null);

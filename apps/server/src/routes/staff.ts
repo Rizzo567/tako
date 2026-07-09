@@ -68,8 +68,12 @@ export async function staffRoutes(fastify: FastifyInstance) {
   fastify.delete('/:userId', { preHandler: requireRole('owner') }, async (req, reply) => {
     const { userId } = req.params as { userId: string }
     if (userId === req.user!.id) return reply.code(400).send({ error: { code: 'SELF_DELETE', message: 'Cannot delete yourself' } })
-    await db.update(users).set({ active: false }).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId)))
-    // Revoca immediata: elimina le sessioni attive del membro rimosso.
+    const [deactivated] = await db.update(users).set({ active: false })
+      .where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning({ id: users.id })
+    // Solo se il membro appartiene DAVVERO a questo ristorante: senza il guard, la
+    // delete delle sessioni girava incondizionatamente e un owner con lo UUID di un
+    // utente di un ALTRO tenant poteva forzarne il logout (revoca sessioni cross-tenant).
+    if (!deactivated) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })
     await db.delete(sessions).where(eq(sessions.userId, userId))
     return { data: { success: true } }
   })

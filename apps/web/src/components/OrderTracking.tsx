@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { socket, joinTable } from '@/lib/socket'
+import { socket, joinTable, joinOrder } from '@/lib/socket'
 import { useSessionStore } from '@/lib/store'
 import { api } from '@/lib/api'
 import { formatEuro, cn } from '@/lib/utils'
@@ -33,10 +33,14 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
   }, [orderId])
 
   useEffect(() => {
-    if (!tableId) return
+    // Serve un ordine da tracciare (al tavolo O asporto). L'asporto non ha tableId:
+    // in quel caso ci si iscrive alla room del PROPRIO ordine (join:order), altrimenti
+    // il tracking restava congelato su "Ricevuto" per sempre.
+    if (!orderId) return
     // Singleton same-origin con re-join automatico: il tracking resta vivo anche
     // dopo un drop di rete (niente disconnect su unmount, solo off del listener).
-    joinTable(tableId)
+    if (tableId) joinTable(tableId)
+    else joinOrder(orderId)
     const onUpdated = ({ orderId: oid, status }: { orderId: string; status: string }) => {
       if (oid !== orderId) return
       setOrder((o: any) => o ? { ...o, status } : o)

@@ -26,7 +26,7 @@ import { eq, and, asc, desc, gte, lt, lte, ne, inArray, isNull, sql } from 'driz
 import { nanoid } from 'nanoid'
 import bcrypt from 'bcryptjs'
 import { io } from '../index.js'
-import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz, coverUnit, recomputeOpenBill, BILLABLE_STATUSES } from './billing.js'
+import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz, coverUnit, billTotalsFromOrders, recomputeOpenBill, BILLABLE_STATUSES } from './billing.js'
 
 export type ActionScope = 'customer' | 'owner'
 export type ActionKind = 'read' | 'action' | 'client' | 'mutation'
@@ -49,6 +49,12 @@ export interface ActionDef {
   name: string
   scope: ActionScope[]
   kind: ActionKind
+  // Ruoli staff ammessi a ESEGUIRE l'azione (default: qualunque staff autenticato,
+  // come le route REST protette da requireAuth). Va valorizzato SOLO sulle azioni che
+  // le route REST restringono davvero — gestione staff (owner), sconti/incasso
+  // (owner/cassiere), impostazioni ristorante (owner), turni altrui (owner/cassiere) —
+  // altrimenti un dipendente col copilot ottiene privilegi che via HTTP non ha.
+  roles?: string[]
   description: string
   parameters: Record<string, any>   // JSON schema per il function-calling
   label: (args: any) => string      // etichetta umana (conferma owner)
@@ -951,6 +957,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'apply_bill_discount',
     scope: ['owner'],
+    roles: ['owner', 'cassiere'],   // parità con PATCH /api/bills (sconto = vettore frode)
     kind: 'mutation',
     description: 'Applica uno SCONTO in euro al conto aperto di un tavolo (il totale viene ricalcolato).',
     parameters: {
@@ -981,6 +988,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'close_bill',
     scope: ['owner'],
+    roles: ['owner', 'cassiere'],   // incasso/chiusura conto: prerogativa cassa/owner
     kind: 'mutation',
     description: 'INCASSA e chiude il conto aperto di un tavolo: registra il pagamento del residuo (contanti/carta/digitale), libera il tavolo in pulizia.',
     parameters: {
@@ -998,29 +1006,36 @@ const ACTIONS: ActionDef[] = [
       const { table, bill } = await openBillForTable(ctx.restaurantId, args?.tableNumber)
       if (!table) return { ok: false, summary: `Tavolo "${args?.tableNumber ?? ''}" non trovato.` }
       if (!bill) return { ok: false, summary: `Il tavolo ${table.number} non ha un conto aperto.` }
-      // Stessa transazione della POST /bills/:id/payments: lock per-conto, ri-check,
+      // Stessa transazione della POST /bills/:id/payments: lock sulla chiave di
+      // ensureOpenBill (ristorante:tavolo), ricalcolo del totale dagli ordini reali
+      // sotto il lock (non fidarsi di locked.total: un ordine appena inserito potrebbe
+      // non esservi riflesso → residuo sottostimato → cascade che regala cibo), poi
       // pagamento del residuo, chiusura + cascade tavolo→cleaning e ordini→paid.
+      const unit = await coverUnit(ctx.restaurantId)
+      const lockKey = bill.tableId ? `${ctx.restaurantId}:${bill.tableId}` : bill.id
       const result = await db.transaction(async (tx) => {
-        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${bill.id}))`)
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${lockKey}))`)
         const [locked] = await tx.select().from(bills).where(eq(bills.id, bill.id)).limit(1)
         if (!locked || locked.status !== 'open') return { conflict: true as const }
+        const t = await billTotalsFromOrders(tx, locked, unit)
+        await tx.update(bills).set({ subtotal: t.subtotal, discount: t.discount, total: t.total }).where(eq(bills.id, bill.id))
         const prev = await tx.select().from(billPayments).where(eq(billPayments.billId, bill.id))
         const paidSoFar = round2(prev.filter(p => p.status === 'completed').reduce((s, p) => s + p.amount, 0))
-        const residuo = round2(Math.max(locked.total - paidSoFar, 0))
+        const residuo = round2(Math.max(t.total - paidSoFar, 0))
         if (residuo <= 0) return { conflict: true as const }
         await tx.insert(billPayments).values({ billId: bill.id, amount: residuo, method, status: 'completed' })
         await tx.update(bills).set({ status: 'closed', closedAt: new Date() }).where(eq(bills.id, bill.id))
-        const paidOrderIds: string[] = []
         if (locked.tableId) {
           await tx.update(tables).set({ status: 'cleaning', openedAt: null }).where(eq(tables.id, locked.tableId))
-          const activeOrders = await tx.select({ id: orders.id }).from(orders).where(and(
-            eq(orders.tableId, locked.tableId), inArray(orders.status, [...BILLABLE_STATUSES]),
-          ))
-          const paidAt = new Date()
-          for (const o of activeOrders) {
-            await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, o.id))
-            paidOrderIds.push(o.id)
-          }
+        }
+        // Marca 'paid' ESATTAMENTE gli ordini sommati nel totale saldato (t.orderIds),
+        // non una ri-selezione: un ordine committato dopo il calcolo non è coperto dal
+        // residuo → non va marcato paid (resta billable su un nuovo conto).
+        const paidOrderIds: string[] = []
+        const paidAt = new Date()
+        for (const oid of t.orderIds) {
+          await tx.update(orders).set({ status: 'paid', paidAt }).where(eq(orders.id, oid))
+          paidOrderIds.push(oid)
         }
         return { conflict: false as const, residuo, tableId: locked.tableId, paidOrderIds }
       })
@@ -1107,6 +1122,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'clock_in_staff',
     scope: ['owner'],
+    roles: ['owner', 'cassiere'],   // turno di ALTRI membri: parità con requireManager
     kind: 'mutation',
     description: 'Fa iniziare il turno a un membro dello staff (per nome), adesso.',
     parameters: {
@@ -1128,6 +1144,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'clock_out_staff',
     scope: ['owner'],
+    roles: ['owner', 'cassiere'],   // turno di ALTRI membri: parità con requireManager
     kind: 'mutation',
     description: 'Chiude il turno aperto di un membro dello staff (per nome), adesso.',
     parameters: { type: 'object', properties: { staffName: { type: 'string' } }, required: ['staffName'] },
@@ -1162,6 +1179,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'create_staff',
     scope: ['owner'],
+    roles: ['owner'],   // parità con POST /api/staff (requireRole('owner'))
     kind: 'mutation',
     description: 'Aggiunge un membro dello staff: nome, ruolo (cameriere/dipendente/chef/cassiere), PIN a 4 cifre per il tablet (opzionale).',
     parameters: {
@@ -1199,6 +1217,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'set_staff_active',
     scope: ['owner'],
+    roles: ['owner'],   // parità con PATCH/DELETE /api/staff (requireRole('owner'))
     kind: 'mutation',
     description: 'Disattiva (o riattiva) un membro dello staff. Disattivare revoca subito i suoi accessi.',
     parameters: {
@@ -1348,6 +1367,7 @@ const ACTIONS: ActionDef[] = [
   {
     name: 'set_cover_charge',
     scope: ['owner'],
+    roles: ['owner'],   // impostazione ristorante: parità con PATCH /api/restaurants/me
     kind: 'mutation',
     description: 'Imposta il coperto per persona in euro (0 = disattivato).',
     parameters: { type: 'object', properties: { amount: { type: 'number', minimum: 0, maximum: 20 } }, required: ['amount'] },
@@ -1414,6 +1434,13 @@ export async function executeAction(
   const def = BY_NAME.get(name)
   if (!def) return { ok: false, summary: `Azione sconosciuta: ${name}` }
   if (!def.scope.includes(scope)) return { ok: false, summary: 'Azione non consentita per questo ruolo.' }
+  // Autorizzazione per-RUOLO: il copilot owner è esposto a qualsiasi staff autenticato
+  // (requireAuth), ma le azioni sensibili (staff, sconti, incasso, impostazioni, turni
+  // altrui) devono rispettare gli stessi ruoli delle route REST. Senza questo gate un
+  // dipendente poteva chiamare /ai/owner/execute e creare account o azzerare conti.
+  if (def.roles && !def.roles.includes(ctx.role ?? '')) {
+    return { ok: false, summary: 'Questa azione richiede un ruolo autorizzato (owner/cassa). Non puoi eseguirla.' }
+  }
   if (def.kind === 'mutation' && !opts?.allowMutation) {
     return { ok: false, summary: 'Questa azione modifica dati e richiede conferma esplicita.' }
   }

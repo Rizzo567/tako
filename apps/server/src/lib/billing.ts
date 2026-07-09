@@ -89,6 +89,33 @@ export async function recomputeOpenBill(restaurantId: string, tableId: string) {
   return { ...bill, subtotal, discount, total }
 }
 
+// Ricalcola subtotale/sconto/coperto/totale di un conto DENTRO una transazione già
+// in advisory lock, a partire dagli ordini fatturabili REALI. Serve a pagamento,
+// PATCH e chiusura per NON fidarsi del `total` memorizzato: un ordine appena inserito
+// potrebbe non esservi ancora riflesso (il ricalcolo di ensureOpenBill gira sotto lo
+// stesso lock, ma solo se il chiamante lo prende — vedi lockKey per-tavolo).
+// Conti al tavolo → aggrega per (ristorante,tavolo); asporto → per billId (1 ordine =
+// 1 conto). Nessun coperto sull'asporto (total = subtotale − sconto + mancia).
+export async function billTotalsFromOrders(
+  tx: { select: typeof db.select },
+  bill: { id: string; restaurantId: string; tableId: string | null; discount: number | null; tip: number | null; covers: number | null },
+  coverUnitAmount: number,
+): Promise<{ subtotal: number; discount: number; coverCharge: number; total: number; orderIds: string[] }> {
+  const where = bill.tableId
+    ? and(eq(orders.restaurantId, bill.restaurantId), eq(orders.tableId, bill.tableId), inArray(orders.status, [...BILLABLE_STATUSES]))
+    : and(eq(orders.billId, bill.id), inArray(orders.status, [...BILLABLE_STATUSES]))
+  const rows = await tx.select({ id: orders.id, total: orders.total }).from(orders).where(where)
+  const subtotal = round2(rows.reduce((s: number, o: { total: number }) => s + o.total, 0))
+  const discount = Math.min(bill.discount ?? 0, subtotal)
+  const coverCharge = bill.tableId ? round2((bill.covers ?? 1) * coverUnitAmount) : 0
+  const total = round2(subtotal - discount + (bill.tip ?? 0) + coverCharge)
+  // Restituisce anche gli ID ordine SOMMATI in questo totale: la cascade di chiusura
+  // deve marcare 'paid' ESATTAMENTE questi, non ri-selezionare i billable del tavolo
+  // (un ordine committato tra questo SELECT e la cascade non è coperto dal pagamento →
+  // non va marcato paid, altrimenti = cibo regalato; resterà billable su un nuovo conto).
+  return { subtotal, discount, coverCharge, total, orderIds: rows.map((o: { id: string }) => o.id) }
+}
+
 // Get-or-create del conto aperto di un tavolo, ATOMICO e a prova di concorrenza.
 // Senza un vincolo unique sui conti aperti, due ordini paralleli sullo stesso
 // tavolo creavano conti duplicati con subtotali incoerenti: qui un advisory lock

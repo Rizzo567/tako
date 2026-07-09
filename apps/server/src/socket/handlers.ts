@@ -1,6 +1,6 @@
 import type { Server, Socket } from 'socket.io'
 import type { FastifyInstance } from 'fastify'
-import { db, sessions, users, tables, bills } from '@tako/db'
+import { db, sessions, users, tables, bills, orders } from '@tako/db'
 import { eq, gt, gte, and } from 'drizzle-orm'
 import { SESSION_COOKIE, TABLE_COOKIE } from '../lib/cookies.js'
 
@@ -126,6 +126,32 @@ export function setupSocketHandlers(io: Server, fastify: FastifyInstance) {
           }
         }, 60_000)
       }
+    })
+
+    // Customer ASPORTO: join della room del PROPRIO ordine per il tracking realtime.
+    // L'asporto non ha tavolo (niente table:{id}), quindi senza questo l'ordine restava
+    // "Ricevuto" per sempre. Autorizzato dal JWT asporto (cookie tako_table, kind
+    // 'takeaway'): l'ordine deve appartenere alla stessa VISITA (takeawaySessionId = sid),
+    // così un cliente non può iscriversi all'ordine asporto di un altro.
+    socket.on('join:order', async (orderId: string) => {
+      if (typeof orderId !== 'string' || orderId.length > 100) return
+      if (socket.rooms.size >= MAX_ROOMS_PER_SOCKET) return
+      const token = cookieFromHandshake(socket, TABLE_COOKIE)
+      if (!token) return
+      let payload: { restaurantId?: string; kind?: string; sid?: string }
+      try {
+        payload = fastify.jwt.verify(token) as { restaurantId?: string; kind?: string; sid?: string }
+      } catch {
+        return
+      }
+      if (payload.kind !== 'takeaway' || !payload.sid || !payload.restaurantId) return
+      const [order] = await db.select({ id: orders.id }).from(orders).where(and(
+        eq(orders.id, orderId),
+        eq(orders.restaurantId, payload.restaurantId),
+        eq(orders.takeawaySessionId, payload.sid),
+      )).limit(1)
+      if (!order) return
+      socket.join(`order:${orderId}`)
     })
 
     // Customer: join the PUBLIC menu room of a restaurant. Riceve solo eventi menu

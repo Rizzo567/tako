@@ -16,10 +16,12 @@ export const socket: Socket = io(ORIGIN, {
 
 let joinedTableId: string | null = null
 let joinedMenuRestaurantId: string | null = null
+let joinedOrderId: string | null = null
 
 function emitJoin() {
   if (joinedTableId) socket.emit('join:table', joinedTableId)
   if (joinedMenuRestaurantId) socket.emit('join:menu', joinedMenuRestaurantId)
+  if (joinedOrderId) socket.emit('join:order', joinedOrderId)
 }
 
 if (typeof window !== 'undefined') {
@@ -40,8 +42,17 @@ export function joinMenu(restaurantId: string) {
   else emitJoin()
 }
 
+// Entra nella room del PROPRIO ordine asporto (nessun tavolo → nessuna table room).
+// Il server autorizza via JWT asporto (sid). Idempotente; re-join a ogni riconnessione.
+export function joinOrder(orderId: string) {
+  joinedOrderId = orderId
+  if (!socket.connected) socket.connect()
+  else emitJoin()
+}
+
 export function leaveTableSocket() {
   joinedTableId = null
   joinedMenuRestaurantId = null
+  joinedOrderId = null
   socket.disconnect()
 }
