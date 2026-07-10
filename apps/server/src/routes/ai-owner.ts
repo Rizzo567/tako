@@ -8,10 +8,13 @@
 // sezione) richiedono la conferma umana.
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { db, restaurants } from '@tako/db'
-import { eq } from 'drizzle-orm'
+import { db, restaurants, rooms } from '@tako/db'
+import { eq, and } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
-import { runAssistant, executeAction, getAction } from '../lib/ai-actions.js'
+import { runAssistant, runAssistantStream, executeAction, getAction } from '../lib/ai-actions.js'
+// Prompt di sistema del copilot owner — spostato in un modulo condiviso così anche il
+// canale WhatsApp (lib/whatsapp.ts) usa ESATTAMENTE lo stesso prompt e le stesse regole.
+import { ownerSystemPrompt } from '../lib/owner-prompt.js'
 
 export async function aiOwnerRoutes(fastify: FastifyInstance) {
   // Chat del copilot. Rate-limit per-ristorante (Groq costoso).
@@ -36,13 +39,8 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
     const restaurantId = req.user!.restaurantId
     const [restaurant] = await db.select({ name: restaurants.name }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
 
-    const systemPrompt = `Sei Tako, il copilot operativo di "${restaurant?.name ?? 'questo ristorante'}" per lo staff.
-Puoi LEGGERE dati reali: incassi (oggi/data), statistiche, rendimento menu, stato tavoli, ordini attivi, conti aperti, prenotazioni, scorte basse, chi è in turno, elenco staff, ricerca piatti.
-Puoi PROPORRE modifiche (l'owner le conferma dalla dashboard): MENU (crea/modifica/elimina piatto, esaurito/disponibile, sezioni, varianti, food cost) · TAVOLI e SALE (crea/modifica/elimina tavolo, crea sala, stato libero/occupato/pulizia, rigenera QR) · PRENOTAZIONI (crea, annulla, cambia stato) · ORDINI (annulla) · CASSA (sconto, incassa e chiudi conto) · INVENTARIO (crea ingrediente, carico/scarico/spreco) · TURNI (inizio/fine per un membro) · STAFF (aggiungi, disattiva/riattiva) · coperto.
-Le letture eseguile subito; le modifiche proponile con lo strumento e di' che attendono conferma.
-REGOLA FERREA: puoi fare SOLO ciò per cui hai uno strumento. Senza strumento adatto NON fingere di aver fatto nulla, mai dire "fatto/creato": rispondi "Non posso ancora farlo da qui" e indica dove farlo nella dashboard. Mai inventare numeri o dati.
-Se una richiesta è AMBIGUA (più piatti/tavoli/persone corrispondono, o mancano dati essenziali come l'orario di una prenotazione), NON tirare a indovinare: fai UNA domanda di chiarimento breve, elencando le opzioni se le conosci.
-Rispondi in italiano, conciso e operativo.`
+    const activeRooms = await db.select({ name: rooms.name }).from(rooms).where(and(eq(rooms.restaurantId, restaurantId), eq(rooms.active, true)))
+    const systemPrompt = ownerSystemPrompt(restaurant?.name, activeRooms.map(r => r.name))
 
     try {
       const turn = await runAssistant({
@@ -62,6 +60,68 @@ Rispondi in italiano, conciso e operativo.`
       }
       fastify.log.error(err, 'owner copilot chat error')
       return reply.code(502).send({ error: { code: 'AI_ERROR', message: 'Copilot non disponibile, riprova.' } })
+    }
+  })
+
+  // Chat in STREAMING (SSE): stessi dati/logica di /chat, ma la risposta finale
+  // arriva token-per-token (percezione istantanea). Eventi:
+  //   {type:'token', text}  → append al testo dell'assistente
+  //   {type:'reset'}        → scarta il testo finora (tool-call dopo testo, raro)
+  //   {type:'done', message, actions, pending} → fine turno + azioni proposte
+  //   {type:'error', code, message} → errore leggibile
+  fastify.post('/chat/stream', {
+    preHandler: requireAuth,
+    config: { rateLimit: { max: 20, timeWindow: 60000, keyGenerator: (req: any) => req.user?.restaurantId ?? req.ip } },
+  }, async (req, reply) => {
+    const schema = z.object({
+      message: z.string().min(1).max(8000),
+      history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(20000) })).max(24).default([]),
+    })
+    const parsed = schema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
+    if (!process.env['GROQ_API_KEY']) return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI non configurata' } })
+
+    const message = parsed.data.message.slice(0, 4000)
+    const history = parsed.data.history.slice(-12).map(h => ({ role: h.role, content: h.content.slice(0, 2000) }))
+    const restaurantId = req.user!.restaurantId
+    const [restaurant] = await db.select({ name: restaurants.name }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    const activeRooms = await db.select({ name: rooms.name }).from(rooms).where(and(eq(rooms.restaurantId, restaurantId), eq(rooms.active, true)))
+    const systemPrompt = ownerSystemPrompt(restaurant?.name, activeRooms.map(r => r.name))
+
+    // Prendiamo il controllo della risposta grezza per lo stream SSE.
+    reply.hijack()
+    const res = reply.raw
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
+    })
+    const send = (obj: any) => { try { res.write(`data: ${JSON.stringify(obj)}\n\n`) } catch { /* client chiuso */ } }
+    // heartbeat: alcuni proxy chiudono connessioni SSE inattive
+    const hb = setInterval(() => { try { res.write(': ping\n\n') } catch { /* noop */ } }, 15000)
+
+    try {
+      const turn = await runAssistantStream({
+        scope: 'owner',
+        ctx: { restaurantId, role: req.user!.role },
+        systemPrompt,
+        history,
+        userMessage: message,
+      }, (ev) => send(ev))
+      send({ type: 'done', message: turn.message, actions: turn.actions, pending: turn.pending })
+    } catch (err: any) {
+      if (err?.status === 429 || err?.status === 413 || err?.code === 'rate_limit_exceeded') {
+        send({ type: 'error', code: 'AI_RATE_LIMITED', message: 'Copilot al limite di utilizzo: riprova tra un minuto.' })
+      } else if (err?.code === 'AI_UNAVAILABLE') {
+        send({ type: 'error', code: 'AI_UNAVAILABLE', message: 'AI non configurata su questo server.' })
+      } else {
+        fastify.log.error(err, 'owner copilot chat stream error')
+        send({ type: 'error', code: 'AI_ERROR', message: 'Tako non disponibile, riprova.' })
+      }
+    } finally {
+      clearInterval(hb)
+      try { res.end() } catch { /* noop */ }
     }
   })
 

@@ -1426,6 +1426,75 @@ export function toolSchemas(scope: ActionScope, allow?: string[]): any[] {
   }))
 }
 
+// ─────────────────── Sottoinsieme di tool per messaggio (latenza + rate limit) ───────────────────
+// Inviare TUTTI i ~40 tool-schema ad ogni turno costa ~5k token/richiesta: sul tier
+// Groq free il 70b (100k token/giorno) muore in ~20 messaggi, e l'8b con 40 tool
+// sbaglia il function-call ("Failed to call a function"). Selezioniamo solo i tool
+// pertinenti al messaggio (per keyword) + un piccolo CORE di letture sempre presenti:
+// meno token → il 70b dura molto di più E l'8b (poche funzioni) produce tool-call validi.
+const TOOL_CATEGORIES: Record<string, string[]> = {
+  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'menu_performance', 'set_food_cost', 'add_dish_variant'],
+  tables: ['table_status', 'create_table', 'delete_table', 'update_table', 'create_room', 'set_table_status', 'refresh_table_qr', 'set_cover_charge'],
+  bills: ['open_bills', 'apply_bill_discount', 'close_bill', 'set_cover_charge'],
+  orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],
+  reservations: ['todays_reservations', 'create_reservation', 'cancel_reservation', 'set_reservation_status'],
+  inventory: ['low_stock', 'create_inventory_item', 'adjust_stock'],
+  staff: ['staff_on_shift', 'clock_in_staff', 'clock_out_staff', 'list_staff', 'create_staff', 'set_staff_active'],
+  stats: ['get_today_revenue', 'get_stats', 'revenue_for_date', 'menu_performance'],
+}
+const CORE_TOOLS = ['get_today_revenue', 'get_stats', 'table_status']
+const CATEGORY_KEYWORDS: [RegExp, string][] = [
+  [/menu|piatt|carbonar|pizz|prim[oi]|second[oi]|dolc|antipast|bevand|esaurit|disponibil|sezion|variant|food ?cost|prezz|cost[oa]\b|quanto viene|c'è (?:la|il|l')/, 'menu'],
+  [/tavol|sala|sale|pianta|\bqr\b|copert/, 'tables'],
+  [/cont[oi]|cassa|scontrin|sconto|chiud|incass|paga|pagat|saldo/, 'bills'],
+  [/ordin|comand|cameriere/, 'orders'],
+  [/prenotaz|prenot/, 'reservations'],
+  [/scort|inventar|magazzin|ingredient|carico|scarico|spreco|stock/, 'inventory'],
+  [/staff|turn|dipendent|personale/, 'staff'],
+  [/incass|statistic|rendiment|vend\w*|fatturat|andament|quant[oi]|meglio|peggio|guadagn/, 'stats'],
+]
+
+// Ritorna i nomi dei tool pertinenti, o null se il messaggio non matcha nessuna
+// categoria (→ chiamante usa TUTTI i tool, caso raro e correttezza-first).
+function pickToolNames(message: string): Set<string> | null {
+  const m = (message || '').toLowerCase()
+  // SOLO i tool delle categorie che matchano: aggiungere sempre il CORE (es.
+  // table_status) confondeva i modelli piccoli ("quanto ho fatto oggi?" → stato
+  // tavoli invece dell'incasso). Le categorie contengono già le letture giuste.
+  const names = new Set<string>()
+  for (const [re, cat] of CATEGORY_KEYWORDS) {
+    if (re.test(m)) for (const n of TOOL_CATEGORIES[cat]!) names.add(n)
+  }
+  return names.size ? names : null
+}
+
+// Il messaggio matcha una categoria di tool? (segnale forte che SERVE chiamare un
+// tool: usato per tool_choice 'required' alla prima iterazione — i modelli piccoli
+// altrimenti "rispondono a voce" inventando i dati invece di leggere dal DB).
+export function hasToolHint(message: string): boolean {
+  return pickToolNames(message) !== null
+}
+
+// toolSchemas ristretto ai tool pertinenti al messaggio (fallback: tutti).
+export function toolSchemasFor(scope: ActionScope, message: string, allow?: string[]): any[] {
+  const defs = actionsForScope(scope, allow)
+  const names = pickToolNames(message)
+  const sel = names ? defs.filter(d => names.has(d.name)) : defs
+  const use = sel.length ? sel : defs
+  return use.map(a => ({
+    type: 'function',
+    function: { name: a.name, description: a.description, parameters: a.parameters },
+  }))
+}
+
+// Riconosce il 400 "tool_use_failed" di Groq (llama emette un function-call malformato).
+export function isGroqToolUseFailure(e: any): boolean {
+  // All'handshake Groq risponde 400; ma se il guasto emerge MID-STREAM l'SDK solleva
+  // un APIError con status undefined → non vincolare lo status, basta il pattern.
+  if (e?.status !== undefined && e?.status !== 400) return false
+  return /tool(_| )use|tool call|function call|failed to call a function|validation failed|did not match schema/i.test(JSON.stringify(e?.error ?? e?.message ?? ''))
+}
+
 // Esegue un'azione con guardie di scope/kind. `allowMutation` deve essere true SOLO
 // dopo conferma umana esplicita (endpoint /execute dell'owner).
 export async function executeAction(
@@ -1462,7 +1531,10 @@ async function groqClient() {
   if (!key) throw Object.assign(new Error('GROQ_API_KEY not set'), { code: 'AI_UNAVAILABLE' })
   if (_openaiClient) return _openaiClient
   const { default: OpenAI } = await import('openai')
-  _openaiClient = new OpenAI({ apiKey: key, baseURL: 'https://api.groq.com/openai/v1' })
+  // maxRetries: 0 — il retry automatico dell'SDK su 429 aspetta secondi (backoff)
+  // prima di riprovare LO STESSO modello: la chat sembrava morta (>10s). Meglio
+  // fallire SUBITO e ripiegare immediatamente sull'altro modello (openStream/create).
+  _openaiClient = new OpenAI({ apiKey: key, baseURL: 'https://api.groq.com/openai/v1', maxRetries: 0, timeout: 30000 })
   return _openaiClient
 }
 
@@ -1475,9 +1547,14 @@ export async function runAssistant(opts: {
   allow?: string[]
   model?: string
 }): Promise<AssistantTurn> {
+  // PRE-GATE deterministico (come nello streaming): "crea tavolo" senza LLM.
+  if (opts.scope === 'owner' && isCreateTableFlow(opts.userMessage, opts.history)) {
+    const gate = await createTableGate(opts)
+    if (gate) return gate
+  }
   const openai = await groqClient()
-  const tools = toolSchemas(opts.scope, opts.allow)
-  let model = opts.model ?? 'llama-3.3-70b-versatile'
+  const tools = toolSchemasFor(opts.scope, opts.userMessage, opts.allow)
+  let model = opts.model ?? pickModel(opts.userMessage)
   // Fallback su rate-limit: le quote Groq sono PER MODELLO. Se il 70b esaurisce
   // i token del giorno (TPD), il copilot non deve morire: ripiega sull'8b-instant
   // (quota separata, più capiente) per il resto del turno.
@@ -1493,9 +1570,14 @@ export async function runAssistant(opts: {
     try {
       return await openai.chat.completions.create(params)
     } catch (e: any) {
-      if (e?.status === 429 && params.model !== FALLBACK_MODEL) {
-        model = FALLBACK_MODEL
-        return await openai.chat.completions.create({ ...params, model: FALLBACK_MODEL })
+      if (e?.status === 429) {
+        // catena di failover: prova subito i modelli successivi (quote separate)
+        for (const nm of MODEL_CHAIN) {
+          if (nm === params.model) continue
+          try { model = nm; return await openai.chat.completions.create({ ...params, model: nm }) }
+          catch (e2: any) { if (e2?.status !== 429) throw e2 }
+        }
+        throw e
       }
       // 413 "Request too large": il budget token-per-minuto del tier Groq non copre
       // la richiesta (succede sull'8b di riserva: TPM 6000 ≈ system + 37 tool schema
@@ -1534,21 +1616,49 @@ export async function runAssistant(opts: {
   const actions: any[] = []
   const pending: { name: string; args: any; label: string }[] = []
 
+  let badOutputRetried = false // un solo retry per output inutilizzabile
   for (let iter = 0; iter < 4; iter++) {
     const resp = await create({
       model, messages, tools: tools.length ? tools : undefined,
-      tool_choice: tools.length ? 'auto' : undefined,
+      // 'required' alla 1ª iterazione quando il messaggio matcha una categoria di
+      // tool: i modelli piccoli altrimenti rispondono a voce inventando i dati.
+      tool_choice: tools.length ? (iter === 0 && hasToolHint(opts.userMessage) ? 'required' : 'auto') : undefined,
       // 700: un max_tokens troppo basso TRONCA il JSON dei tool-call (args vuoti →
       // card "Crea tavolo ?" che poi fallisce all'esecuzione).
       temperature: 0.4, max_tokens: 700,
     })
     const msg = resp.choices?.[0]?.message
-    const toolCalls = msg?.tool_calls
+    let toolCalls = msg?.tool_calls
     if (!toolCalls || !toolCalls.length) {
-      return { message: (msg?.content ?? '').trim() || 'Fatto.', actions, pending }
+      // pseudo-XML al posto del function-call (artefatto llama) → convertilo
+      const rawContent = String(msg?.content ?? '').trim()
+      const pseudo = rawContent.match(/^<(?:function[=\s]+)?([a-zA-Z_][a-zA-Z0-9_]{2,40})>?/)
+      if (pseudo && pseudo[1] && BY_NAME.has(pseudo[1])) {
+        toolCalls = [{ id: `pseudo_${iter}`, type: 'function', function: { name: pseudo[1], arguments: '{}' } } as any]
+        msg.content = ''
+      } else if (!badOutputRetried && rawContent && (
+        // pseudo-tag ignoto o meta-parlato: risposta inutilizzabile → un retry
+        // con modello più capace (come nel loop streaming)
+        (pseudo && pseudo[1] && !BY_NAME.has(pseudo[1])) ||
+        /\b(?:lo strumento|utilizzo lo strumento|posso (?:proporre|utilizzare)|devo utilizzare|uso lo strumento)\b/i.test(rawContent)
+      )) {
+        badOutputRetried = true
+        const nm = ['openai/gpt-oss-120b', 'meta-llama/llama-4-scout-17b-16e-instruct'].find(m => m !== model)
+        if (nm) model = nm
+        iter--
+        continue
+      } else {
+        return { message: rawContent || 'Fatto.', actions, pending }
+      }
     }
     // registra il turno assistant con le tool_calls
     messages.push({ role: 'assistant', content: msg.content ?? '', tool_calls: toolCalls })
+    // Come nel loop streaming: se l'iterazione produce SOLO mutation (proposte o
+    // guardia), la risposta la compone il server (short-circuit, niente 2° giro LLM).
+    let iterAsk: string | null = null
+    const iterProposals: string[] = []
+    let iterHadRead = false
+    let lastReadSummary = ''
     for (const tc of toolCalls) {
       let args: any = {}
       try { args = JSON.parse(tc.function?.arguments || '{}') } catch { args = {} }
@@ -1558,22 +1668,447 @@ export async function runAssistant(opts: {
         content = 'Azione non disponibile.'
       } else if (def.kind === 'mutation') {
         // MAI eseguita in chat: proposta in attesa di conferma umana.
-        // Dedup: il modello tende a richiamare lo stesso tool a ogni iterazione
-        // (il tool risponde "in attesa") → senza dedup l'owner vedrebbe N card identiche.
-        const key = def.name + JSON.stringify(args ?? {})
-        if (!pending.some(p => p.name + JSON.stringify(p.args ?? {}) === key)) {
-          pending.push({ name: def.name, args, label: def.label(args) })
+        let askTable: string | null = null
+        if (def.name === 'create_table') {
+          // stessa guardia data-aware del loop streaming (vedi runAssistantStream)
+          const allRooms = await db.select({ name: rooms.name }).from(rooms)
+            .where(and(eq(rooms.restaurantId, opts.ctx.restaurantId), eq(rooms.active, true)))
+          const roomNames = allRooms.map(r => r.name)
+          const userText = [...opts.history.filter(h => h.role === 'user').slice(-3).map(h => h.content), opts.userMessage].join('\n')
+          const missing = missingTableInfo(userText, roomNames)
+          if (missing.length) {
+            askTable = `DATI MANCANTI: chiedi all'utente ${missing.join(', ')}.`
+            iterAsk = askTableQuestion(missing, roomNames)
+          }
         }
-        content = `Proposta registrata: "${def.label(args)}". In attesa di conferma esplicita dell'owner. NON richiamare di nuovo questo strumento: rispondi all'utente che la proposta è pronta da confermare.`
+        if (askTable) {
+          content = askTable
+        } else {
+          // Dedup: il modello tende a richiamare lo stesso tool a ogni iterazione
+          // (il tool risponde "in attesa") → senza dedup l'owner vedrebbe N card identiche.
+          const key = def.name + JSON.stringify(args ?? {})
+          if (!pending.some(p => p.name + JSON.stringify(p.args ?? {}) === key)) {
+            pending.push({ name: def.name, args, label: def.label(args) })
+            iterProposals.push(def.label(args))
+          }
+          content = `Proposta registrata: "${def.label(args)}". In attesa di conferma esplicita dell'owner. NON richiamare di nuovo questo strumento: rispondi all'utente che la proposta è pronta da confermare.`
+        }
       } else {
         const res = await executeAction(def.name, args, opts.ctx, opts.scope)
         if (res.clientAction) actions.push(res.clientAction)
         content = res.summary
+        iterHadRead = true
+        lastReadSummary = res.summary || ''
       }
       messages.push({ role: 'tool', tool_call_id: tc.id, content })
+    }
+    if (!iterHadRead && (iterAsk || iterProposals.length)) {
+      const m = iterAsk
+        ?? (iterProposals.length === 1
+          ? `Proposta pronta: ${iterProposals[0]}. Confermala qui sotto.`
+          : `Proposte pronte: ${iterProposals.join(' · ')}. Confermale qui sotto.`)
+      return { message: m, actions, pending }
+    }
+    if (iter === 0 && iterHadRead && toolCalls.length === 1 && !iterAsk && !iterProposals.length
+        && lastReadSummary && lastReadSummary.length >= 10 && lastReadSummary.length <= 400) {
+      return { message: lastReadSummary, actions, pending }
     }
   }
   // safety net: chiusura senza altri tool
   const final = await create({ model, messages, temperature: 0.4, max_tokens: 400 })
   return { message: (final.choices?.[0]?.message?.content ?? '').trim() || 'Fatto.', actions, pending }
+}
+
+// ─────────────────────── Routing modello (qualità + latenza) ───────────────────────
+// MUTATION e richieste d'azione → gpt-oss-120b: nei test è l'unico che chiama i tool
+// giusti con costanza (8b/70b "meta-parlano": descrivono lo strumento invece di
+// usarlo) restando sotto il secondo. LETTURE semplici e chit-chat → 8b-instant
+// (velocissimo; lo short-circuit sul summary fa il resto).
+export function pickModel(msg: string): string {
+  const m = (msg || '').toLowerCase()
+  const MUT = /\b(segna|metti|mettiamo|togli|rimetti|crea|creiamo|aggiungi|elimin|cancell|modific|cambia|rinomin|imposta|annull|sconto|sconta|chiudi|incassa|rigenera|disattiv|riattiv|carico|scarico|spreco|prenota|prenotazion[ei]|blocca|libera|occupa|esaurit|finit[oa]|terminat)\w*\b/
+  if (MUT.test(m)) return 'openai/gpt-oss-120b'
+  return 'llama-3.1-8b-instant'
+}
+
+// CATENA di failover su 429: le quote Groq (RPM/TPM/TPD) sono PER MODELLO — quando
+// uno satura si passa SUBITO al successivo (maxRetries=0, niente attese). Con 5
+// modelli il budget per-minuto aggregato regge anche raffiche di messaggi.
+const MODEL_CHAIN = [
+  'llama-3.1-8b-instant',
+  'openai/gpt-oss-120b',
+  'meta-llama/llama-4-scout-17b-16e-instruct',
+  'openai/gpt-oss-20b',
+  'llama-3.3-70b-versatile',
+]
+
+// ESTRAZIONE dati tavolo da ciò che l'utente ha DAVVERO scritto (messaggio corrente
+// + suoi ultimi turni). I modelli piccoli inventano i valori invece di chiedere e
+// allucinano nomi di sala ("Sala A/B/C") → i valori li estraiamo NOI, le sale
+// vengono dal DB. Copre anche le risposte "sciolte" alla nostra domanda: "12 e 3
+// posti" → numero=12, posti=3.
+// Numeri IN LETTERE → cifre ("tre posti" → "3 posti"): la dettatura vocale produce
+// spesso numeri scritti in parole, e l'estrazione lavora su \d+. Ordine: prima i
+// composti (venticinque) poi i semplici, per non spezzarli.
+const NUMBER_WORDS: [RegExp, string][] = [
+  [/\bventicinque\b/g, '25'], [/\bventiquattro\b/g, '24'], [/\bventitr[eé]\b/g, '23'], [/\bventidue\b/g, '22'], [/\bventuno\b/g, '21'],
+  [/\bventi\b/g, '20'], [/\bdiciannove\b/g, '19'], [/\bdiciotto\b/g, '18'], [/\bdiciassette\b/g, '17'], [/\bsedici\b/g, '16'],
+  [/\bquindici\b/g, '15'], [/\bquattordici\b/g, '14'], [/\btredici\b/g, '13'], [/\bdodici\b/g, '12'], [/\bundici\b/g, '11'],
+  [/\bdieci\b/g, '10'], [/\bnove\b/g, '9'], [/\botto\b/g, '8'], [/\bsette\b/g, '7'], [/\bsei\b/g, '6'],
+  [/\bcinque\b/g, '5'], [/\bquattro\b/g, '4'], [/\btre\b/g, '3'], [/\bdue\b/g, '2'], [/\b(?:uno|un|una)\b/g, '1'],
+]
+export function normalizeNumberWords(text: string): string {
+  let t = text
+  for (const [re, digit] of NUMBER_WORDS) t = t.replace(re, digit)
+  return t
+}
+
+export function extractTableInfo(userText: string, roomNames: string[]): { number: string | null; seats: number | null; roomName: string | null } {
+  const m = normalizeNumberWords((userText || '').toLowerCase())
+  // sala: nome REALE citato (match esatto o contenuto), o "sala X" da risolvere poi
+  let roomName: string | null = null
+  for (const r of roomNames) { if (r && m.includes(r.toLowerCase())) { roomName = r; break } }
+  // posti: "3 posti", "da 3", "per 3 (persone)"
+  let seats: number | null = null
+  const seatM = m.match(/(\d+)\s*post/) ?? m.match(/\bda\s+(\d+)\b/) ?? m.match(/\bper\s+(\d+)\s*(?:person|copert)/)
+  if (seatM?.[1]) seats = parseInt(seatM[1], 10)
+  // numero tavolo: "tavolo 12", "numero 12"; fallback = un numero NON usato per i posti
+  let number: string | null = null
+  const numM = m.match(/tavolo\s*(?:n[°.]?\s*)?(\d+)/) ?? m.match(/numero\s*(?:del\s+tavolo\s*)?(\d+)/)
+  if (numM?.[1]) number = numM[1]
+  if (!number) {
+    const all = (m.match(/\d+/g) || [])
+    const leftover = all.filter(n => seats === null || n !== String(seats))
+    if (leftover.length === 1) number = leftover[0]!
+    else if (leftover.length > 1 && seats !== null) number = leftover[0]!  // "12 e 3 posti" → 12
+  }
+  return { number, seats, roomName }
+}
+
+// Campi ancora mancanti per creare il tavolo (wrapper di extractTableInfo).
+export function missingTableInfo(userText: string, roomNames: string[]): string[] {
+  const x = extractTableInfo(userText, roomNames)
+  const missing: string[] = []
+  if (!x.number) missing.push('numero del tavolo')
+  if (!x.seats) missing.push('numero di posti')
+  if (!x.roomName && !/\bsala\s+\S+/.test((userText || '').toLowerCase())) missing.push('sala')
+  return missing
+}
+
+// Il messaggio (o l'ultima domanda dell'assistente) riguarda la creazione tavolo?
+// Usato dal PRE-GATE deterministico: l'intero flusso "crea tavolo" gira senza LLM.
+// Intent STRETTO: "tavolo" deve seguire subito il verbo (max un articolo in mezzo) —
+// "crea un ordine per il tavolo 12" NON deve scattare (l'oggetto è l'ordine).
+export function isCreateTableFlow(userMessage: string, history: { role: string; content: string }[]): boolean {
+  const m = (userMessage || '').toLowerCase()
+  if (/\b(?:crea(?:re)?|creiamo|aggiung(?:i|iamo|ere)|metti(?:amo)?|mettere|inseri(?:sci|re)|fa(?:i|re)|nuov[oa])\s+(?:un[oa]?\s+|il\s+|la\s+|nuov[oa]\s+|altro\s+)?tavol/.test(m)) return true
+  const lastAssistant = [...history].reverse().find(h => h.role === 'assistant')
+  return !!lastAssistant && lastAssistant.content.startsWith('Per creare il tavolo mi serve ancora')
+}
+
+// Domanda deterministica per i dati mancanti del tavolo (short-circuit: la formula
+// il server, senza un secondo giro LLM — vedi sotto).
+export function askTableQuestion(missing: string[], roomNames: string[]): string {
+  const dati = missing.length === 1 ? missing[0] : missing.slice(0, -1).join(', ') + ' e ' + missing[missing.length - 1]
+  const sale = roomNames.length ? ` Le sale sono: ${roomNames.map(n => `"${n}"`).join(', ')}.` : ''
+  return `Per creare il tavolo mi serve ancora: ${dati}.${sale}`
+}
+
+// PRE-GATE "crea tavolo": l'INTERO flusso (domanda dati → proposta) gira senza LLM.
+// Latenza ~50ms garantita e zero possibilità di valori inventati. Ritorna null solo
+// se qualcosa non torna (→ si passa al normale giro LLM).
+async function createTableGate(opts: {
+  ctx: ActionContext
+  history: { role: 'user' | 'assistant'; content: string }[]
+  userMessage: string
+}): Promise<AssistantTurn | null> {
+  const def = BY_NAME.get('create_table')
+  if (!def) return null
+  const allRooms = await db.select({ name: rooms.name }).from(rooms)
+    .where(and(eq(rooms.restaurantId, opts.ctx.restaurantId), eq(rooms.active, true)))
+  const roomNames = allRooms.map(r => r.name)
+
+  // Considera SOLO il flusso corrente: i turni utente DOPO l'ultima proposta
+  // conclusa ("Proposta pronta: …") appartengono a questo tavolo; quelli prima
+  // erano di un flusso già chiuso e inquinerebbero l'estrazione (es. ricreare
+  // subito il tavolo precedente con i vecchi dati).
+  let start = 0
+  for (let i = opts.history.length - 1; i >= 0; i--) {
+    const h = opts.history[i]!
+    if (h.role === 'assistant' && h.content.startsWith('Proposta pronta:')) { start = i + 1; break }
+  }
+  const prevUserText = opts.history.slice(start).filter(h => h.role === 'user').slice(-4).map(h => h.content).join('\n')
+
+  // PRIORITÀ AL MESSAGGIO CORRENTE: se l'utente corregge ("sala esterna" dopo aver
+  // detto "interna" due turni fa), vince l'ultimo messaggio; i turni precedenti
+  // riempiono solo i buchi.
+  const cur = extractTableInfo(opts.userMessage, roomNames)
+  const prev = extractTableInfo(prevUserText, roomNames)
+  const x = {
+    number: cur.number ?? prev.number,
+    seats: cur.seats ?? prev.seats,
+    roomName: cur.roomName ?? prev.roomName,
+  }
+
+  // Numeri "sciolti" in risposta alla NOSTRA domanda ("12 3" → tavolo 12, 3 posti):
+  // l'ordine segue la domanda (prima il numero del tavolo, poi i posti).
+  const lastAssistant = [...opts.history].reverse().find(h => h.role === 'assistant')
+  const isFollowUp = !!lastAssistant && lastAssistant.content.startsWith('Per creare il tavolo mi serve ancora')
+  if (isFollowUp) {
+    const nums = ((normalizeNumberWords((opts.userMessage || '').toLowerCase())).match(/\d+/g) || [])
+    const unused = nums.filter(n => n !== String(cur.seats ?? '') && n !== (cur.number ?? ''))
+    if (!x.number && !x.seats && unused.length === 2) { x.number = unused[0]!; x.seats = parseInt(unused[1]!, 10) }
+    else if (!x.number && x.seats && unused.length === 1) { x.number = unused[0]! }
+    else if (x.number && !x.seats && unused.length === 1) { x.seats = parseInt(unused[0]!, 10) }
+  }
+
+  // qui la sala deve essere UNA DI QUELLE REALI (se esistono sale)
+  const missing: string[] = []
+  if (!x.number) missing.push('numero del tavolo')
+  if (!x.seats) missing.push('numero di posti')
+  if (!x.roomName && roomNames.length) missing.push('sala')
+  if (missing.length) return { message: askTableQuestion(missing, roomNames), actions: [], pending: [] }
+  const args: any = { number: x.number, seats: x.seats }
+  if (x.roomName) args.roomName = x.roomName
+  const label = def.label(args)
+  return { message: `Proposta pronta: ${label}. Confermala qui sotto.`, actions: [], pending: [{ name: 'create_table', args, label }] }
+}
+
+export type StreamEvent =
+  | { type: 'token'; text: string }
+  | { type: 'reset' }
+
+// ─────────────────────── Variante STREAMING del loop tool-calling ───────────────────────
+// Identica a runAssistant nella logica (loop tool → mutation proposte → letture eseguite),
+// ma la RISPOSTA finale è emessa token-per-token via `emit` (percezione istantanea).
+// I token dell'iterazione finale (quella senza tool-call) vanno live; se un'iterazione
+// intermedia emette testo E poi chiama un tool (raro con llama), si invia un 'reset' per
+// scartare quel testo lato client. Ritorna comunque l'AssistantTurn completo.
+export async function runAssistantStream(opts: {
+  scope: ActionScope
+  ctx: ActionContext
+  systemPrompt: string
+  history: { role: 'user' | 'assistant'; content: string }[]
+  userMessage: string
+  allow?: string[]
+  model?: string
+}, emit: (ev: StreamEvent) => void): Promise<AssistantTurn> {
+  // PRE-GATE deterministico: il flusso "crea tavolo" non passa dall'LLM.
+  if (opts.scope === 'owner' && isCreateTableFlow(opts.userMessage, opts.history)) {
+    const gate = await createTableGate(opts)
+    if (gate) { emit({ type: 'token', text: gate.message }); return gate }
+  }
+  const openai = await groqClient()
+  // Solo i tool pertinenti al messaggio (meno token → 70b dura di più, 8b affidabile).
+  const tools = toolSchemasFor(opts.scope, opts.userMessage, opts.allow)
+  const FALLBACK_MODEL = 'llama-3.1-8b-instant'
+  let model = opts.model ?? pickModel(opts.userMessage)
+
+  // Apre lo stream con un timeout GENEROSO sull'handshake (create): impedisce hang
+  // infiniti senza però abortire chiamate lente ma valide. Sul 429 (quota giornaliera
+  // del 70b esaurita, tipico sul free tier) ripiega sull'8b; sul 400 tool_use_failed
+  // riprova senza tool (almeno una risposta); sul 413 alleggerisce la history.
+  const attemptStream = async (p: any): Promise<any> => {
+    const ac = new AbortController()
+    const to = setTimeout(() => ac.abort(new Error('groq-open-timeout')), 45000)
+    try { return await openai.chat.completions.create({ ...p, stream: true }, { signal: ac.signal }) }
+    finally { clearTimeout(to) }
+  }
+  const openStream = async (params: any): Promise<any> => {
+    const tried = new Set<string>([params.model])
+    let p: any = { ...params }
+    let slimmed = false
+    let noTools = false
+    for (let i = 0; i < 8; i++) {
+      try {
+        return await attemptStream(p)
+      } catch (e: any) {
+        if (e?.status === 429) {
+          // quota sul modello corrente → passa SUBITO al prossimo della catena
+          const nm = MODEL_CHAIN.find(m => !tried.has(m))
+          if (nm) { tried.add(nm); model = nm; p = { ...p, model: nm }; continue }
+          throw e
+        }
+        if (e?.status === 413 && !slimmed && Array.isArray(p.messages) && p.messages.length > 3) {
+          slimmed = true
+          p = { ...p, messages: [p.messages[0], ...p.messages.slice(-2)] }
+          continue
+        }
+        if (isGroqToolUseFailure(e) && !noTools) {
+          // function-call sbagliato → riprova con un modello più capace non ancora
+          // provato; esauriti quelli, rispondi senza tool (mai un errore secco)
+          const nm = ['openai/gpt-oss-120b', 'meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.3-70b-versatile'].find(m => !tried.has(m))
+          if (nm) { tried.add(nm); model = nm; p = { ...p, model: nm }; continue }
+          noTools = true
+          const { tools: _t, tool_choice: _tc, ...rest } = p
+          p = rest
+          continue
+        }
+        throw e
+      }
+    }
+    throw new Error('groq: tentativi esauriti')
+  }
+
+  const messages: any[] = [
+    { role: 'system', content: opts.systemPrompt },
+    ...opts.history.slice(-6).map(h => ({ role: h.role, content: h.content })),
+    { role: 'user', content: opts.userMessage },
+  ]
+  const actions: any[] = []
+  const pending: { name: string; args: any; label: string }[] = []
+
+  let badOutputRetried = false // un solo retry per output inutilizzabile (pseudo-tag ignoto / meta-parlato)
+  for (let iter = 0; iter < 4; iter++) {
+    // Dopo la prima iterazione, il modello VELOCE (8b) risponde SENZA tool-schema:
+    // la lettura è già stata eseguita, servono solo i token della risposta — e senza
+    // gli schema si resta sotto il TPM stretto dell'8b (niente hang) ed è più rapido.
+    // I modelli più grandi reggono il payload e tengono i tool su tutte le iterazioni.
+    const useTools = tools.length > 0 && (iter === 0 || model !== 'llama-3.1-8b-instant')
+    const stream = await openStream({
+      model, messages,
+      tools: useTools ? tools : undefined,
+      tool_choice: useTools ? (iter === 0 && hasToolHint(opts.userMessage) ? 'required' : 'auto') : undefined,
+      temperature: 0.4, max_tokens: 700,
+    })
+    let content = ''
+    let emittedThisIter = false
+    const tcAcc: any[] = []
+    try {
+      for await (const chunk of stream) {
+        const delta = chunk?.choices?.[0]?.delta
+        if (!delta) continue
+        if (delta.content) { content += delta.content; emit({ type: 'token', text: delta.content }); emittedThisIter = true }
+        if (Array.isArray(delta.tool_calls)) {
+          for (const t of delta.tool_calls) {
+            const idx = t.index ?? 0
+            if (!tcAcc[idx]) tcAcc[idx] = { id: t.id, type: 'function', function: { name: '', arguments: '' } }
+            if (t.id) tcAcc[idx].id = t.id
+            if (t.function?.name) tcAcc[idx].function.name += t.function.name
+            if (t.function?.arguments) tcAcc[idx].function.arguments += t.function.arguments
+          }
+        }
+      }
+    } catch (e: any) {
+      // Groq può validare il tool-call a fine stream (es. l'8b passa `seats` come
+      // stringa → "tool call validation failed"). In tal caso: scarta il parziale e
+      // rispondi SENZA tool, così il copilot dà comunque una risposta a parole.
+      if (!isGroqToolUseFailure(e)) throw e
+      if (emittedThisIter) emit({ type: 'reset' })
+      const s2 = await openStream({ model, messages, temperature: 0.4, max_tokens: 400 })
+      let c = ''
+      for await (const chunk of s2) { const d = chunk?.choices?.[0]?.delta; if (d?.content) { c += d.content; emit({ type: 'token', text: d.content }) } }
+      if (!c.trim()) { emit({ type: 'token', text: 'Non riesco a farlo da qui: fallo dalla dashboard.' }); c = 'Non riesco a farlo da qui: fallo dalla dashboard.' }
+      return { message: c.trim(), actions, pending }
+    }
+    const toolCalls = tcAcc.filter(Boolean)
+    // Artefatto llama: a volte il modello scrive il tool come PSEUDO-XML nel testo
+    // ("<table_status></table_status>") invece di un vero function-call → in chat
+    // arriverebbe il tag grezzo. Riconoscilo e convertilo in tool-call reale.
+    if (!toolCalls.length) {
+      const pseudo = content.trim().match(/^<(?:function[=\s]+)?([a-zA-Z_][a-zA-Z0-9_]{2,40})>?/)
+      if (pseudo && pseudo[1] && BY_NAME.has(pseudo[1])) {
+        toolCalls.push({ id: `pseudo_${iter}`, type: 'function', function: { name: pseudo[1], arguments: '{}' } })
+        if (emittedThisIter) { emit({ type: 'reset' }); emittedThisIter = false }
+        content = ''
+      } else if (!badOutputRetried && content.trim() && (
+        // pseudo-tag di un tool INESISTENTE ("<brave_search>") o "meta-parlato":
+        // il modello DESCRIVE lo strumento invece di chiamarlo. In entrambi i casi
+        // la risposta è inutilizzabile → scarta e ripeti l'iterazione con un
+        // modello più capace (una sola volta, poi si accetta ciò che arriva).
+        (pseudo && pseudo[1] && !BY_NAME.has(pseudo[1])) ||
+        /\b(?:lo strumento|utilizzo lo strumento|posso (?:proporre|utilizzare)|devo utilizzare|uso lo strumento)\b/i.test(content)
+      )) {
+        badOutputRetried = true
+        const nm = ['openai/gpt-oss-120b', 'meta-llama/llama-4-scout-17b-16e-instruct'].find(m => m !== model)
+        if (nm) model = nm
+        if (emittedThisIter) emit({ type: 'reset' })
+        iter--
+        continue
+      }
+    }
+    if (!toolCalls.length) {
+      if (!content.trim()) { emit({ type: 'token', text: 'Fatto.' }); content = 'Fatto.' }
+      return { message: content.trim(), actions, pending }
+    }
+    // L'iterazione ha chiamato tool: se aveva già emesso testo, scartalo lato client.
+    if (emittedThisIter) emit({ type: 'reset' })
+    messages.push({ role: 'assistant', content: content ?? '', tool_calls: toolCalls })
+    // Traccia cosa produce QUESTA iterazione: se sono solo mutation (proposte o
+    // guardia dati-mancanti) la risposta la componiamo NOI senza un secondo giro
+    // LLM (short-circuit) → latenza dimezzata. Le letture invece hanno bisogno
+    // del modello per sintetizzare i numeri.
+    let iterAsk: string | null = null
+    const iterProposals: string[] = []
+    let iterHadRead = false
+    let lastReadSummary = ''
+    for (const tc of toolCalls) {
+      let args: any = {}
+      try { args = JSON.parse(tc.function?.arguments || '{}') } catch { args = {} }
+      const def = BY_NAME.get(tc.function?.name ?? '')
+      let out = ''
+      if (!def || !def.scope.includes(opts.scope)) {
+        out = 'Azione non disponibile.'
+      } else if (def.kind === 'mutation') {
+        let askTable: string | null = null
+        if (def.name === 'create_table') {
+          // sale REALI dal DB (mai dal modello) + campi davvero forniti dall'utente
+          const allRooms = await db.select({ name: rooms.name }).from(rooms)
+            .where(and(eq(rooms.restaurantId, opts.ctx.restaurantId), eq(rooms.active, true)))
+          const roomNames = allRooms.map(r => r.name)
+          const userText = [...opts.history.filter(h => h.role === 'user').slice(-3).map(h => h.content), opts.userMessage].join('\n')
+          const missing = missingTableInfo(userText, roomNames)
+          if (missing.length) {
+            askTable = `DATI MANCANTI: chiedi all'utente ${missing.join(', ')}.`
+            iterAsk = askTableQuestion(missing, roomNames)
+          }
+        }
+        if (askTable) {
+          out = askTable // niente proposta: mancano dati (la domanda la manda il server)
+        } else {
+          const key = def.name + JSON.stringify(args ?? {})
+          if (!pending.some(p => p.name + JSON.stringify(p.args ?? {}) === key)) {
+            pending.push({ name: def.name, args, label: def.label(args) })
+            iterProposals.push(def.label(args))
+          }
+          out = `Proposta registrata: "${def.label(args)}". In attesa di conferma esplicita dell'owner. NON richiamare di nuovo questo strumento: rispondi all'utente che la proposta è pronta da confermare.`
+        }
+      } else {
+        const res = await executeAction(def.name, args, opts.ctx, opts.scope)
+        if (res.clientAction) actions.push(res.clientAction)
+        out = res.summary
+        iterHadRead = true
+        lastReadSummary = res.summary || ''
+      }
+      messages.push({ role: 'tool', tool_call_id: tc.id, content: out })
+    }
+    // SHORT-CIRCUIT: solo mutation in questa iterazione → risposta deterministica
+    // immediata dal server (nessun secondo giro LLM).
+    if (!iterHadRead && (iterAsk || iterProposals.length)) {
+      const msg = iterAsk
+        ?? (iterProposals.length === 1
+          ? `Proposta pronta: ${iterProposals[0]}. Confermala qui sotto.`
+          : `Proposte pronte: ${iterProposals.join(' · ')}. Confermale qui sotto.`)
+      emit({ type: 'token', text: msg })
+      return { message: msg, actions, pending }
+    }
+    // SHORT-CIRCUIT letture semplici: UNA sola lettura, summary leggibile e
+    // AUTOSUFFICIENTE (20–400 char: sotto i 20 è quasi certamente un frammento
+    // fuori contesto, es. il solo nome di una sala) → rispondi col summary del
+    // tool (i numeri veri), senza il giro LLM di sintesi.
+    if (iter === 0 && iterHadRead && toolCalls.length === 1 && !iterAsk && !iterProposals.length
+        && lastReadSummary && lastReadSummary.length >= 10 && lastReadSummary.length <= 400) {
+      emit({ type: 'token', text: lastReadSummary })
+      return { message: lastReadSummary, actions, pending }
+    }
+  }
+  // safety net: chiusura in streaming, senza altri tool
+  const stream = await openStream({ model, messages, temperature: 0.4, max_tokens: 400 })
+  let content = ''
+  for await (const chunk of stream) {
+    const d = chunk?.choices?.[0]?.delta
+    if (d?.content) { content += d.content; emit({ type: 'token', text: d.content }) }
+  }
+  if (!content.trim()) { emit({ type: 'token', text: 'Fatto.' }); content = 'Fatto.' }
+  return { message: content.trim(), actions, pending }
 }

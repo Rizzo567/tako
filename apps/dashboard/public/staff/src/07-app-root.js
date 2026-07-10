@@ -202,6 +202,13 @@ function App({ session }) {
   const badges = { ordini: activeOrders };
   KPI.ordiniAttivi = activeOrders;
 
+  // Pubblica lo stato live (ordini + sala + badge) per consumatori esterni al tree di App
+  // — es. l'anteprima "Streaming" nella sidebar del Cowork, che renderizza ScreenOrdini
+  // o ScreenSala in miniatura. `rooms`/`calls` servono all'anteprima della Sala live
+  // (target dinamico del widget). L'evento notifica i mount che leggono window.__takoLive
+  // fuori da React.
+  useEffect(() => { window.__takoLive = { orders, badges, rooms, calls }; window.dispatchEvent(new Event("tako-live")); }, [orders, activeOrders, rooms, calls]);
+
   let Screen;
   switch (route) {
     case "cowork": Screen = window.ScreenCowork ? React.createElement(window.ScreenCowork, { key: "cowork", mobile }) : null; break;
