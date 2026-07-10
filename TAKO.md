@@ -43,7 +43,7 @@ cassiere (cassa/conti), cliente (PWA da QR).
 ```bash
 pnpm dev                                  # dalla root, avvia tutto
 pnpm tako                                 # avvio unico (un processo, Postgres embedded)
-cd apps/server && node_modules/.bin/tsx src/index.ts   # solo server
+cd apps/server && node_modules/.bin/tsx src/bootstrap.ts   # solo server (index.ts esporta soltanto startServer)
 ```
 Porte: server 3001, dashboard 3000 (anche da server su `/staff`), PWA 3002.
 Test integrazione: stack vivo (`EMBEDDED_DB=1 PGPORT=5432 PORT=3001`) + `npx vitest run` — a freddo falliscono tutti, non è una regressione.
@@ -156,16 +156,26 @@ Pagamenti digitali/Stripe, RT/corrispettivi/SDI, WhatsApp/SMS marketing, login a
 
 ---
 
-## 5. 🗺️ Prossimo giro — piano A (deciso con Manuel il 2026-07-10)
+## 5. 🗺️ Piano A — stato (eseguito in autonomia la sera del 2026-07-10)
 
-1. Commit del pendente (5 atomici) + `.env.local` cleanup → tree pulito.
-2. **Merge+push cloud-auth→main INSIEME a Manuel** (§6-C) — P0: il prod su Render gira da un
-   branch che esiste solo su questo Mac. Prima consolidare fase1.
-3. **Verifica email obbligatoria appliance** (§4 sicurezza) → sblocca anche la **newsletter**
-   (Resend Audience).
-4. **RLS runtime** (§6-A) — ultimo buco sicurezza pre-vendita.
-5. Poi: QR cloud live (§6-B), onboarding gate, notarizzazione, icone 3D (§6-D), analytics P1.
-Riferimento: `brain/decisioni/2026-07-10-tako-email-verifica-newsletter`.
+1. ✅ Commit pendente (5 atomici) + `.env.local` rimosso (conteneva solo una var morta).
+2. ✅ Push di tutti i branch + **merge fase1→main (`31d4373`) e cloud-auth→main (`a933e5d`)**,
+   entrambi pushati. `landing/` preservata byte-per-byte (fase1 l'aveva cancellata).
+   **main è ORA la linea di prodotto completa** (appliance + cloud + sito). Il worktree
+   `~/Projects/Tako` è su main. Conflitti risolti: migrazione identity rinumerata 0006→0009,
+   QR = URL stabile cloud + rendering qrWithOctopus, bootstrap con guardie CLOUD_MODE.
+3. ✅ **Verifica email obbligatoria appliance** (commit `c5e7301`) + **newsletter Resend
+   Audience** (cloud `2fd81c1`, sito `271d871`). Gate attivo solo con `CLOUD_BASE_URL`
+   sull'appliance; owner esistenti grandfathered (migrazione 0010). Test: 72/72 locali,
+   71/71 cloud (4 nuovi newsletter). Fix bonus: migrazione cloud 0001 (colonne LAN,
+   sbloccati 11 test pairing rossi da sempre — trappola 1 del piano QR-cloud, `cb82d1d`).
+4. ⛔ **RLS runtime** (§6-A) — prossimo giro.
+5. Poi: QR cloud live (§6-B, resta solo deploy+azioni Manuel), onboarding gate,
+   notarizzazione, icone 3D (§6-D), analytics P1.
+
+**Per ATTIVARE il tutto (azioni Manuel, dettagli in manu.md):** deploy Render da main +
+migrazioni su Supabase prod + `RESEND_AUDIENCE_ID` su Render + `CLOUD_BASE_URL` sull'appliance
++ e2e del flusso. Riferimento: `brain/decisioni/2026-07-10-tako-email-verifica-newsletter`.
 
 ---
 

@@ -1,18 +1,38 @@
 # manu.md — Azioni di Manuel (Tako)
 
-> Aggiornato 2026-07-10 (dopo lint completo). Qui SOLO le cose che deve fare Manuel a mano
-> o decidere. Tutto il resto (stato, backlog, piani) è in `TAKO.md`.
+> Aggiornato 2026-07-10 sera (piano A eseguito: merge su main FATTO, verifica email +
+> newsletter FATTE nel codice). Qui SOLO le cose che devi fare tu. Il resto è in `TAKO.md`.
+
+## 🔴 Per ATTIVARE verifica email + newsletter + QR cloud (in ordine)
+1. **Render → deploy da main**: servizio `tako-cloud` → Settings → branch da
+   `feat/cloud-auth-20260625` a `main` → Manual Deploy. (main contiene tutto il branch cloud
+   + newsletter + fix migrazioni; autoDeploy resta OFF.)
+2. **Supabase prod → 4 ALTER** (idempotenti; il file `~/Documents/tako creds/…/tako-render-incolla.txt`
+   ha una CLOUD_DATABASE_URL STANTIA — "tenant not found" — prendi quella vera da Render → Environment,
+   e aggiorna il file). SQL Editor di Supabase:
+   ```sql
+   ALTER TABLE "cloud_appliances" ADD COLUMN IF NOT EXISTS "lan_ip" text;
+   ALTER TABLE "cloud_appliances" ADD COLUMN IF NOT EXISTS "client_port" integer;
+   ALTER TABLE "cloud_appliances" ADD COLUMN IF NOT EXISTS "lan_host" text;
+   ALTER TABLE "cloud_owners" ADD COLUMN IF NOT EXISTS "newsletter_opt_in" boolean NOT NULL DEFAULT false;
+   ```
+3. **Resend → crea una Audience** (dashboard Resend → Audiences) e metti l'id su Render come
+   env `RESEND_AUDIENCE_ID`. Senza, l'opt-in si salva ma nessuno viene iscritto (skip loggato).
+4. **Appliance → attiva il gate**: env `CLOUD_BASE_URL=https://api.takoitalia.com` al server
+   dell'app (per l'app desktop: va aggiunta al bundle/launch env — dimmelo e lo cablo io).
+   Spegnimento d'emergenza: `TAKO_EMAIL_VERIFICATION=0`.
+5. **E2E del flusso**: registrazione dall'app con una tua email vera → arriva l'email → click
+   → login → dentro. Poi verifica il contatto nella Audience Resend.
 
 ## 🔴 Decisioni aperte
-1. **Merge `feat/cloud-auth-20260625` → main** — non fatto. È basato su fase1 → trascina ~54
-   commit. Proposta consigliata: mergiare PRIMA `fase1-consolidamento` su main (è la linea di
-   prodotto reale), poi cloud-auth diventa un merge piccolo. Il dossier conflitti lo prepara
-   l'agente (TAKO.md §6-C.4); il merge lo esegui solo tu.
-2. **Login cloud + email per chi usa la dashboard** — oggi la dashboard ha login solo locale;
-   l'identità cloud (Supabase DB + Resend) vive sul sito. Se lo vuoi dentro l'app: serve piano
-   nuovo, dipende dal pairing/merge cloud-auth. Decidere se e quando.
-3. **Sorte del worktree `Tako-site-auth`** — il branch è mergiato su main (0 commit unici):
-   si può rimuovere worktree + branch? Serve il tuo ok.
+1. **Login cloud + email per chi usa la dashboard** — oggi la dashboard ha login solo locale;
+   l'identità cloud vive sul sito. Il gate email ora copre la registrazione; il login cloud
+   completo in-app resta da decidere (dipende dal pairing).
+2. **Sorte del worktree `Tako-site-auth`** — i suoi commit sono su main? NO: ha 2 commit
+   (fix demo mobile `a101b49` + GOAL doc) non ancora mergiati su main. Decidere merge (porta
+   il fix demo mobile LIVE) e poi eventuale rimozione worktree.
+3. **Branch morti da cancellare** (0 commit unici): `fix/stats-top-items-query`,
+   `perf/orders-parallel-queries`. Altri con 1-2 commit unici da valutare (tabella su richiesta).
 
 ## 🟠 Verifiche in sospeso
 - **WhatsApp↔copilot**: mai testato e2e — apri Impostazioni → pannello WhatsApp → scansiona il
