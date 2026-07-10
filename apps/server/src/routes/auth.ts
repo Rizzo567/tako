@@ -6,6 +6,7 @@ import { db, users, sessions, restaurants, menus } from '@tako/db'
 import { eq, and, sql, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE } from '../lib/cookies.js'
+import { emailVerificationEnabled, cloudRegisterOwner, cloudLoginProbe, cloudResendVerification } from '../lib/cloud-verify.js'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -18,6 +19,8 @@ const registerSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(8),
+  // Opt-in newsletter: inoltrato al cloud, iscrizione Resend Audience alla verifica.
+  newsletter: z.boolean().optional(),
 })
 
 // In-memory brute force tracker (per IP)
@@ -85,7 +88,22 @@ export async function authRoutes(fastify: FastifyInstance) {
     const body = registerSchema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    const { restaurantName, restaurantSlug, name, email, password } = body.data
+    const { restaurantName, restaurantSlug, name, email, password, newsletter } = body.data
+
+    // Verifica email OBBLIGATORIA (decisione 2026-07-10), attiva solo con CLOUD_BASE_URL:
+    // PRIMA della transazione locale registriamo l'owner sul cloud, che invia l'email di
+    // verifica via Resend. Se il cloud è giù NON creiamo il tenant (la registrazione
+    // sull'appliance è one-shot: un tenant senza email di verifica resterebbe murato).
+    const verifyGate = emailVerificationEnabled()
+    if (verifyGate) {
+      const sync = await cloudRegisterOwner({ email: email.toLowerCase(), password, name, newsletter })
+      if (sync === 'unreachable') {
+        return reply.code(503).send({ error: { code: 'VERIFY_UNAVAILABLE', message: 'Verifica email non disponibile: controlla la connessione internet e riprova.' } })
+      }
+      if (sync === 'error') {
+        return reply.code(400).send({ error: { code: 'CLOUD_REJECTED', message: 'Registrazione rifiutata: usa una password più lunga (min 10 caratteri).' } })
+      }
+    }
 
     try {
       // Check slug unique
@@ -131,10 +149,21 @@ export async function authRoutes(fastify: FastifyInstance) {
           role: 'owner',
         }).returning()
 
-        await tx.insert(sessions).values({ userId: user!.id, token, expiresAt })
+        // Col gate attivo NIENTE sessione: si entra solo dal login, dopo la verifica.
+        if (!verifyGate) await tx.insert(sessions).values({ userId: user!.id, token, expiresAt })
 
         return { restaurant, user }
       })
+
+      if (verifyGate) {
+        return reply.code(201).send({
+          data: {
+            pendingVerification: true,
+            email: user!.email,
+            message: 'Ti abbiamo inviato un\'email di verifica: conferma e poi accedi.',
+          },
+        })
+      }
 
       reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
       return reply.code(201).send({
@@ -195,6 +224,20 @@ export async function authRoutes(fastify: FastifyInstance) {
     // naturalmente (15 min) anziché ricaricare il budget di uno spraying in corso.
     loginAttempts.delete(key)
 
+    // Gate verifica email (solo owner, solo registrazioni post-gate: gli owner storici
+    // sono grandfathered dalla migrazione 0010, i pairati dal cloud arrivano già
+    // verificati da setup.ts). Il probe usa le credenziali appena validate — mai salvate.
+    if (user.role === 'owner' && !user.emailVerified && emailVerificationEnabled()) {
+      const probe = await cloudLoginProbe(user.email, body.data.password)
+      if (probe === 'verified') {
+        await db.update(users).set({ emailVerified: true }).where(eq(users.id, user.id))
+      } else if (probe === 'unreachable') {
+        return reply.code(503).send({ error: { code: 'VERIFY_UNAVAILABLE', message: 'Impossibile controllare la verifica email (nessuna connessione). Riprova.' } })
+      } else {
+        return reply.code(403).send({ error: { code: 'EMAIL_NOT_VERIFIED', message: 'Conferma la tua email: controlla la posta (anche lo spam).' } })
+      }
+    }
+
     const token = nanoid(64)
     // Sessione DB allineata alla maxAge del cookie (7g), vedi /register.
     const expiresAt = new Date(Date.now() + STAFF_SESSION_MAX_AGE * 1000)
@@ -204,6 +247,16 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
     return { data: { user: { id: user.id, name: user.name, email: user.email, role: user.role }, restaurant } }
+  })
+
+  // Reinvia l'email di verifica (proxy del resend cloud). Risposta SEMPRE generica
+  // (anti-enumeration, come sul cloud). Rate-limit stretto: è un endpoint anonimo.
+  fastify.post('/resend-verification', { config: { rateLimit: { max: 3, timeWindow: 3600000 } } }, async (req) => {
+    const body = z.object({ email: z.string().email() }).safeParse(req.body)
+    if (body.success && emailVerificationEnabled()) {
+      await cloudResendVerification(body.data.email.toLowerCase())
+    }
+    return { data: { message: 'Se l\'indirizzo è registrato, riceverai un\'email a breve.' } }
   })
 
   // PIN login (for shared tablets)

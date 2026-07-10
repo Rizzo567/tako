@@ -38,6 +38,9 @@ function Login({ onDone }) {
   const [password, setPassword] = useState("");
   const [restaurantName, setRestaurantName] = useState("");
   const [name, setName] = useState("");
+  const [newsletter, setNewsletter] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState("");   // se valorizzata → schermata "conferma email"
+  const [info, setInfo] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
   const isReg = mode === "register";
@@ -47,17 +50,58 @@ function Login({ onDone }) {
     setBusy(true);
     try {
       const d = isReg
-        ? await TakoAPI.post("/auth/register", { restaurantName: restaurantName.trim(), restaurantSlug: slugifyName(restaurantName), name: name.trim(), email: email.trim(), password })
+        ? await TakoAPI.post("/auth/register", { restaurantName: restaurantName.trim(), restaurantSlug: slugifyName(restaurantName), name: name.trim(), email: email.trim(), password, newsletter })
         : await TakoAPI.post("/auth/login", { email: email.trim(), password });
+      // Gate verifica email attivo: la registrazione NON apre sessione — mostra
+      // la schermata "conferma la tua email" e si entra dal login dopo il click.
+      if (d && d.pendingVerification) { setInfo(""); setVerifyEmail(d.email || email.trim()); return; }
       onDone(d);
     } catch (ex) {
+      if (ex.code === "EMAIL_NOT_VERIFIED") { setInfo(""); setVerifyEmail(email.trim()); return; }
+      if (ex.code === "VERIFY_UNAVAILABLE") { setErr(ex.message || "Serve la connessione internet per completare la verifica email."); return; }
       if (isReg) setErr(ex.message && ex.status !== 500 ? ex.message : "Registrazione non riuscita. Controlla i dati o prova un'altra email.");
       else setErr(ex.status === 429 ? "Troppi tentativi, riprova tra qualche minuto." : "Email o password non validi.");
     } finally { setBusy(false); }
   };
+  const resend = async () => {
+    setBusy(true); setInfo("");
+    try { await TakoAPI.post("/auth/resend-verification", { email: verifyEmail }); setInfo("Email inviata di nuovo: controlla la posta (anche lo spam)."); }
+    catch (_) { setInfo("Email inviata di nuovo: controlla la posta (anche lo spam)."); }
+    finally { setBusy(false); }
+  };
   const p = BRAND_PALETTES.arancione;
   const inp = { width: "100%", margin: "6px 0 14px", padding: "11px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" };
   const lab = { fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" };
+  const wrapStyle = { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
+    "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on };
+  const cardStyle = { width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 20, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" };
+
+  // Schermata "conferma la tua email" (gate verifica attivo): niente sessione finché
+  // il link nell'email non è stato cliccato; si entra dal pulsante Accedi.
+  if (verifyEmail) {
+    return (
+      <div style={wrapStyle}>
+        <div style={{ ...cardStyle, textAlign: "center" }}>
+          <div style={{ fontSize: 44, marginBottom: 10 }} aria-hidden="true">📬</div>
+          <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 21, color: "var(--ink,#2A1F1A)", marginBottom: 8 }}>Conferma la tua email</div>
+          <div style={{ fontSize: 14, color: "var(--ink2,#555)", lineHeight: 1.5, marginBottom: 4 }}>
+            Ti abbiamo inviato un link di verifica a<br /><b style={{ color: "var(--ink,#2A1F1A)" }}>{verifyEmail}</b>
+          </div>
+          <div style={{ fontSize: 12.5, color: "var(--ink3,#888)", marginBottom: 18 }}>Controlla anche la cartella spam.</div>
+          {info && <div style={{ fontSize: 13, color: "var(--brand)", fontWeight: 700, margin: "0 0 12px" }}>{info}</div>}
+          <button type="button" disabled={busy} onClick={() => { setVerifyEmail(""); setMode("login"); setErr(""); setInfo(""); }}
+            style={{ width: "100%", padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
+            Ho confermato — Accedi
+          </button>
+          <button type="button" disabled={busy} onClick={resend}
+            style={{ width: "100%", marginTop: 10, padding: "11px", borderRadius: 12, border: "1px solid var(--hairline,#ddd)", background: "var(--sunken,#fafafa)", color: "var(--ink2,#555)", fontWeight: 700, fontSize: 14, cursor: "pointer", opacity: busy ? .6 : 1 }}>
+            Reinvia email
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
       "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on }}>
@@ -81,6 +125,12 @@ function Login({ onDone }) {
         <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoFocus={!isReg} required style={inp} />
         <label style={lab}>Password</label>
         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required minLength={isReg ? 8 : undefined} placeholder={isReg ? "almeno 8 caratteri" : undefined} style={{ ...inp, marginBottom: 6 }} />
+        {isReg && (
+          <label style={{ display: "flex", alignItems: "flex-start", gap: 8, margin: "10px 0 2px", fontSize: 12.5, color: "var(--ink3,#888)", cursor: "pointer", userSelect: "none" }}>
+            <input type="checkbox" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} style={{ marginTop: 2, accentColor: "var(--brand)" }} />
+            <span>Voglio ricevere novità e consigli per il mio ristorante (facoltativo, annullabile quando vuoi)</span>
+          </label>
+        )}
         {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 13, margin: "8px 0" }}>{err}</div>}
         <button type="submit" disabled={busy}
           style={{ width: "100%", marginTop: 14, padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer", opacity: busy ? .6 : 1 }}>
