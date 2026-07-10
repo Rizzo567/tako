@@ -6,7 +6,7 @@ Sei il master orchestratore del progetto Tako. Hai accesso a 3 sottoagenti paral
 
 - Caveman mode SEMPRE attivo per tutta la sessione
 - Dangerously skip permissions SEMPRE attivo
-- Prima di ogni task leggi CLAUDE.md e UI-REVISION-PLAN.md
+- Prima di ogni task leggi CLAUDE.md e TAKO.md (§5 "Da fare")
 - Usa i 3 sottoagenti in parallelo quando i task sono indipendenti
 - Commit atomici dopo ogni task completato
 - Push automatico su GitHub dopo ogni commit
@@ -43,4 +43,4 @@ cd apps/web && pnpm dev
 
 ## Piano corrente
 
-Leggi UI-REVISION-PLAN.md per i task attivi. Inizia sempre dal primo task non completato.
+Leggi TAKO.md (§5 "Da fare") per i task attivi. Inizia sempre dal primo task non completato.

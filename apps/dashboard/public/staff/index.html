@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tako — Dashboard Ristoratore</title>
+<style>*{box-sizing:border-box}html,body{margin:0;padding:0;height:100%;background:#FBF8F4;-webkit-font-smoothing:antialiased}
+#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:system-ui,-apple-system,sans-serif;color:#2A1F1A;text-align:center;padding:24px}
+#boot .sp{width:38px;height:38px;border:3px solid #ED715933;border-top-color:#ED7159;border-radius:50%;animation:spin .9s linear infinite}
+#boot b{font-size:17px;font-weight:800}#boot small{color:#8a8079;font-size:13px;max-width:320px}
+#boot button{margin-top:8px;padding:10px 18px;border:none;border-radius:11px;background:#ED7159;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+@keyframes spin{to{transform:rotate(360deg)}}</style>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Primo paint visibile: mai schermo bianco. #boot vive DENTRO #stage così
+     React lo rimuove al mount (createRoot().render svuota il container). Se
+     qualcosa fallisce (script non caricato, errore Babel, server giù) il
+     watchdog/handler qui sotto mostra una diagnosi al posto del muro bianco. -->
+<div id="stage"><div id="boot"><div class="sp"></div><b>Avvio Tako…</b><small>Se resta così, il server potrebbe non essere raggiungibile.</small></div></div>
+<script>
+(function () {
+  var shown = false
+  function panel(msg) {
+    if (shown) return; shown = true
+    var boot = document.getElementById('boot')
+    if (!boot) return
+    boot.innerHTML =
+      '<b>Tako non si è avviato</b>' +
+      '<small>' + (msg || '') + '</small>' +
+      '<small>Avvia con <code>pnpm tako</code> e apri <b>http://localhost:4317</b> (o <b>http://tako.local:4317</b> dai dispositivi).</small>' +
+      '<button onclick="location.reload()">Ricarica</button>'
+  }
+  // Errori di caricamento/compilazione (es. SyntaxError Babel, script mancante):
+  // mostriamoli invece del bianco.
+  window.addEventListener('error', function (e) {
+    var m = (e && e.message) || 'Errore di caricamento'
+    if ((e && e.filename) || /Babel|Unexpected|is not defined|SyntaxError|import|export/i.test(m)) panel(m)
+  })
+  // Watchdog: se dopo 12s React non ha montato (il #boot è ancora lì), aiuta.
+  setTimeout(function () {
+    if (document.getElementById('boot')) panel('Il server non risponde o la pagina non si è caricata.')
+  }, 12000)
+})()
+</script>
+<script src="lib/react.js"></script>
+<script src="lib/react-dom.js"></script>
+<script src="lib/babel.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/babel" src="src/01-data.js"></script>
+<script type="text/babel" src="src/02-kit.js"></script>
+<script type="text/babel" src="src/03-shell-nav.js"></script>
+<script type="text/babel" src="src/04-screens-operative.js"></script>
+<script type="text/babel" src="src/05-screens-sala-cassa.js"></script>
+<script type="text/babel" src="src/06-screens-gestione.js"></script>
+<script type="text/babel" src="src/08-dictation.js"></script>
+<script type="text/babel" src="src/09-reservations.js"></script>
+<script type="text/babel" src="src/10-shifts.js"></script>
+<script type="text/babel" src="src/11-copilot.js"></script>
+<script type="text/babel" src="src/12-pin-login.js"></script>
+<script type="text/babel" src="src/07-app-root.js"></script>
+</body>
+</html>

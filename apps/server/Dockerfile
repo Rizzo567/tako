@@ -1,24 +1,28 @@
-FROM node:22-alpine AS base
-RUN npm install -g pnpm
-
-FROM base AS deps
-WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
-COPY packages/db/package.json ./packages/db/
-COPY packages/types/package.json ./packages/types/
-COPY apps/server/package.json ./apps/server/
-RUN pnpm install --frozen-lockfile
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN pnpm --filter @tako/server build
-
-FROM node:22-alpine AS runner
-WORKDIR /app
+# Tako server — immagine di produzione.
+# NB: @tako/db e @tako/types esportano TypeScript sorgente (niente build step),
+# quindi il server gira con `tsx` anche in produzione (non `node dist/`).
+# Build dal ROOT del monorepo:
+#   docker build -f apps/server/Dockerfile -t tako-server .
+FROM node:20-slim AS base
 ENV NODE_ENV=production
-COPY --from=builder /app/apps/server/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+RUN corepack enable
+WORKDIR /app
+
+# Manifesti workspace prima → layer di install cacheabile.
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY packages/db/package.json ./packages/db/package.json
+COPY packages/types/package.json ./packages/types/package.json
+COPY apps/server/package.json ./apps/server/package.json
+
+# Dipendenze del server + workspace che usa (tsx incluso: è il runtime in prod).
+RUN pnpm install --frozen-lockfile --filter @tako/server...
+
+# Codice sorgente (server + package workspace, consumati come .ts via tsx).
+COPY packages/db ./packages/db
+COPY packages/types ./packages/types
+COPY apps/server ./apps/server
+
+WORKDIR /app/apps/server
 EXPOSE 3001
-CMD ["node", "dist/index.js"]
+# Env iniettate dal container/orchestratore (NON usare --env-file in prod).
+CMD ["pnpm", "exec", "tsx", "src/index.ts"]

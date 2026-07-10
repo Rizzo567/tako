@@ -27,14 +27,17 @@ import { db } from './client.js'
  */
 export async function withRestaurantContext<T>(
   restaurantId: string,
-  fn: () => Promise<T>,
+  fn: (tx: Parameters<Parameters<typeof db.transaction>[0]>[0]) => Promise<T>,
 ): Promise<T> {
   return db.transaction(async (tx) => {
     // SET LOCAL is scoped to the current transaction — safe for connection pooling
     await tx.execute(
       sql`SET LOCAL app.current_restaurant_id = ${restaurantId}`,
     )
-    return fn()
+    // IMPORTANT: pass `tx` so the caller's queries run inside THIS transaction.
+    // Using the global `db` here would open a different pooled connection where the
+    // SET LOCAL above does not apply, leaving RLS policies inert.
+    return fn(tx)
   })
 }
 

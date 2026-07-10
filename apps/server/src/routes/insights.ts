@@ -2,12 +2,12 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, orders, orderItems, menuItems } from '@tako/db'
 import { eq, and, gte, inArray, sql } from 'drizzle-orm'
-import { requireAuth } from '../middleware/auth.js'
+import { requireAuth, requireRole } from '../middleware/auth.js'
 import OpenAI from 'openai'
 
 const getOpenAI = () => {
-  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set')
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -68,16 +68,30 @@ function median(nums: number[]): number {
 export async function insightsRoutes(fastify: FastifyInstance) {
 
   // GET /insights/menu?days=30
-  fastify.get('/menu', { preHandler: requireAuth }, async (req, reply) => {
+  // Rate-limit di rotta (per-ristorante): l'aggregazione su fino a 365 giorni è
+  // costosa; il globale per-IP non basta a evitarne l'abuso ripetuto.
+  fastify.get('/menu', {
+    preHandler: requireAuth,
+    config: { rateLimit: { max: 10, timeWindow: 60000, keyGenerator: (req: any) => req.user?.restaurantId ?? req.ip } },
+  }, async (req, reply) => {
     const { days: daysStr } = req.query as { days?: string }
     const days = Math.min(Math.max(parseInt(daysStr ?? '30', 10) || 30, 7), 365)
     const restaurantId = req.user!.restaurantId
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
 
-    // Fetch served/paid orders in period
-    const servedOrders = await db
-      .select({ id: orders.id })
-      .from(orders)
+    // Aggregazione UNICA con JOIN orders↔order_items: niente materializzazione di
+    // tutti gli orderId del periodo né IN-list gigante. Filtra direttamente sugli
+    // ordini (usa orders_restaurant_created_at_idx + order_items_order_id_idx).
+    const rawItems = await db
+      .select({
+        menuItemId: orderItems.menuItemId,
+        name: orderItems.name,
+        totalQty: sql<number>`SUM(${orderItems.quantity})::int`.as('total_qty'),
+        totalRevenue: sql<number>`SUM(${orderItems.quantity} * ${orderItems.unitPrice})::float`.as('total_revenue'),
+        avgPrice: sql<number>`AVG(${orderItems.unitPrice})::float`.as('avg_price'),
+      })
+      .from(orderItems)
+      .innerJoin(orders, eq(orderItems.orderId, orders.id))
       .where(
         and(
           eq(orders.restaurantId, restaurantId),
@@ -85,33 +99,16 @@ export async function insightsRoutes(fastify: FastifyInstance) {
           gte(orders.createdAt, since),
         ),
       )
-
-    if (!servedOrders.length) {
-      return { data: { items: [], periodDays: days, totalRevenue: 0 } }
-    }
-
-    const orderIds = servedOrders.map(o => o.id)
-
-    // Aggregate order items
-    const rawItems = await db
-      .select({
-        menuItemId: orderItems.menuItemId,
-        name: orderItems.name,
-        totalQty: sql<number>`SUM(${orderItems.quantity})`.as('total_qty'),
-        totalRevenue: sql<number>`SUM(${orderItems.quantity} * ${orderItems.unitPrice})`.as('total_revenue'),
-        avgPrice: sql<number>`AVG(${orderItems.unitPrice})`.as('avg_price'),
-      })
-      .from(orderItems)
-      .where(inArray(orderItems.orderId, orderIds))
       .groupBy(orderItems.menuItemId, orderItems.name)
-      .orderBy(sql`total_revenue DESC`)
+      .orderBy(sql`SUM(${orderItems.quantity} * ${orderItems.unitPrice}) DESC`)
 
     if (!rawItems.length) {
       return { data: { items: [], periodDays: days, totalRevenue: 0 } }
     }
 
     // Fetch menu items for costPrice + featured
-    const itemIds = rawItems.map(r => r.menuItemId)
+    const filteredItems = rawItems.filter(r => r.menuItemId != null) as (typeof rawItems[number] & { menuItemId: string })[]
+    const itemIds = filteredItems.map(r => r.menuItemId)
     const dbItems = await db
       .select({
         id: menuItems.id,
@@ -130,7 +127,7 @@ export async function insightsRoutes(fastify: FastifyInstance) {
     const totalRevenue = rawItems.reduce((s, i) => s + i.totalRevenue, 0)
 
     // Build metrics (without quadrant first)
-    const metrics: Omit<MenuItemMetrics, 'quadrant'>[] = rawItems.map(r => {
+    const metrics: Omit<MenuItemMetrics, 'quadrant'>[] = filteredItems.map(r => {
       const dbItem = dbItemMap.get(r.menuItemId)
       const costPrice = dbItem?.costPrice ?? null
       const marginPercent = costPrice != null && r.avgPrice > 0
@@ -172,12 +169,17 @@ export async function insightsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  // POST /insights/menu/ai
-  fastify.post('/menu/ai', { preHandler: requireAuth }, async (req, reply) => {
+  // POST /insights/menu/ai — solo owner (Groq costoso, max_tokens alto) + rate-limit
+  // per-ristorante. Le stringhe client-controlled hanno un cap di lunghezza: senza,
+  // qualunque ruolo poteva pompare prompt enormi nel modello.
+  fastify.post('/menu/ai', {
+    preHandler: requireRole('owner'),
+    config: { rateLimit: { max: 5, timeWindow: 60000, keyGenerator: (req: any) => req.user?.restaurantId ?? req.ip } },
+  }, async (req, reply) => {
     const schema = z.object({
       items: z.array(z.object({
-        menuItemId: z.string(),
-        name: z.string(),
+        menuItemId: z.string().max(64),
+        name: z.string().max(120),
         totalQty: z.number(),
         totalRevenue: z.number(),
         avgPrice: z.number(),
@@ -186,7 +188,7 @@ export async function insightsRoutes(fastify: FastifyInstance) {
         costPrice: z.number().nullable(),
         marginPercent: z.number().nullable(),
         isFeatured: z.boolean(),
-        quadrant: z.string(),
+        quadrant: z.enum(['star', 'plowhorse', 'puzzle', 'dog', 'unknown']),
       })).min(1).max(50),
       periodDays: z.number().default(30),
       totalRevenue: z.number(),
@@ -241,7 +243,7 @@ Produci i suggerimenti.`
     try {
       const openai = getOpenAI()
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: userMessage },
@@ -267,7 +269,7 @@ Produci i suggerimenti.`
       return { data: { suggestions: suggestions.slice(0, 5) } }
     } catch (err: any) {
       if (err.message?.includes('OPENAI_API_KEY')) {
-        return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'OPENAI_API_KEY non configurata' } })
+        return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'GROQ_API_KEY non configurata' } })
       }
       fastify.log.error(err, 'insights AI error')
       return reply.code(502).send({ error: { code: 'AI_ERROR', message: 'Errore AI temporaneo' } })

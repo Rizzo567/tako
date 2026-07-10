@@ -34,7 +34,8 @@
     --radius-xl: 24px;
   }
 
-  html { scroll-behavior: smooth; }
+  /* Forza schema chiaro: niente auto-dark di Chrome/macOS che scurisce la UI. */
+  html { scroll-behavior: smooth; color-scheme: light; }
   * { box-sizing: border-box; }
   body { -webkit-tap-highlight-color: transparent; }
 
@@ -230,4 +231,132 @@
 }
 
 [data-theme="premium"] .badge { font-weight: 500; letter-spacing: .02em; }
-[data-theme="premium"] .skeleton { border-radius: 8px; }
+
+/* ── Premium polish: focus, motion, materia ── */
+
+[data-theme="premium"] body { background-color: #FBF8F4; }
+
+[data-theme="premium"] .input:focus {
+  border-color: var(--coral);
+  box-shadow: 0 0 0 3px rgba(237,113,89,.22);
+}
+
+[data-theme="premium"] .btn-coral { transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s, background-color .18s; }
+[data-theme="premium"] .btn-coral:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,113,89,.32); }
+
+[data-theme="premium"] .card { transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s; }
+[data-theme="premium"] a .card:hover,
+[data-theme="premium"] button .card:hover,
+[data-theme="premium"] .card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(42,31,26,.10), 0 2px 8px rgba(42,31,26,.05);
+}
+
+/* Skeleton shimmer (replaces plain pulse) */
+[data-theme="premium"] .skeleton {
+  border-radius: 8px;
+  background: linear-gradient(100deg, #F1EBE3 30%, #F8F4EE 50%, #F1EBE3 70%);
+  background-size: 200% 100%;
+  animation: tako-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes tako-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Soft page enter */
+[data-theme="premium"] main { animation: tako-fade-up .28s cubic-bezier(.16,1,.3,1); }
+@keyframes tako-fade-up {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="premium"] .skeleton { animation: none; }
+  [data-theme="premium"] main { animation: none; }
+  [data-theme="premium"] .btn-coral,
+  [data-theme="premium"] .card { transition: none; }
+  [data-theme="premium"] .btn-coral:hover,
+  [data-theme="premium"] .card-hover:hover { transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   TAKO REDESIGN — design system dal handoff (additivo, namespace --brand/--bg…)
+   I nuovi componenti usano questi token; le pagine legacy restano sui vecchi
+   finché non vengono ricostruite. Palette brand override-abile via [data-brand].
+   ════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* brand (default Arancione; override per palette sotto) */
+  --brand: #ED7159; --brand-deep: #D9533A; --brand-tint: #FCE7DF; --brand-wash: #FBF1ED; --on-brand: #FFFFFF;
+
+  /* superfici & testo — bianco/neutro pulito (no beige) */
+  --bg: #F7F8FA; --surface: #FFFFFF; --raised: #FFFFFF; --sunken: #F2F3F5; --hairline: #E7E8EC;
+  --nav: #25262A; --nav-2: #313338; --nav-line: rgba(255,255,255,.09); --nav-ink: #E6E6EA; --nav-ink-2: #9B9CA4;
+  --ink: #2A1F1A; --ink-2: #6B5A50; --ink-3: #9A8B82;
+
+  /* semantici / stati */
+  --ok: #4FA980; --ok-bg: #E4F2EB; --ok-deep: #2F7D58;
+  --wait: #E0A23C; --wait-bg: #FAEFD8;
+  --info: #5B8DB8; --info-bg: #E2EDF4;
+  --danger: #D9534A; --danger-bg: #FAE6E4;
+  --muted: #9A8B82; --muted-bg: #EFE8E0;
+
+  /* stati tavolo */
+  --st-free: #4FA980; --st-busy: #ED7159; --st-wait: #E0A23C; --st-ready: #5B8DB8; --st-clean: #94A7B5; --st-resv: #A98FCB;
+
+  /* radii */
+  --r-xs: 8px; --r-sm: 10px; --r-md: 14px; --r-lg: 18px; --r-xl: 24px; --r-pill: 999px;
+
+  /* ombre */
+  --sh-1: 0 1px 2px rgba(42,31,26,.05), 0 1px 3px rgba(42,31,26,.04);
+  --sh-2: 0 2px 6px rgba(42,31,26,.06), 0 8px 22px rgba(42,31,26,.07);
+  --sh-3: 0 10px 30px rgba(42,31,26,.12), 0 24px 60px rgba(42,31,26,.16);
+  --sh-pop: 0 18px 50px rgba(42,31,26,.22);
+
+  /* motion */
+  --spring: cubic-bezier(.34,1.56,.64,1);
+  --out: cubic-bezier(.22,1,.36,1);
+
+  /* font */
+  --f-display: var(--font-nunito), system-ui, sans-serif;
+  --f-ui: var(--font-dm-sans), system-ui, sans-serif;
+  --f-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+/* 5 palette selezionabili a runtime (Impostazioni) */
+[data-brand="arancione"] { --brand:#ED7159; --brand-deep:#D9533A; --brand-tint:#FCE7DF; --brand-wash:#FBF1ED; --on-brand:#FFFFFF; }
+[data-brand="blu"]       { --brand:#3E7BD0; --brand-deep:#2C5FA8; --brand-tint:#E4ECF9; --brand-wash:#EFF4FB; --on-brand:#FFFFFF; }
+[data-brand="giallo"]    { --brand:#F0B429; --brand-deep:#CE9410; --brand-tint:#FBF0D2; --brand-wash:#FBF7EA; --on-brand:#2A1F1A; }
+[data-brand="verde"]     { --brand:#4FA980; --brand-deep:#2F7D58; --brand-tint:#E1F1E9; --brand-wash:#EEF6F1; --on-brand:#FFFFFF; }
+[data-brand="rosa"]      { --brand:#E86FA6; --brand-deep:#C9497F; --brand-tint:#FBE4EF; --brand-wash:#FBF0F6; --on-brand:#FFFFFF; }
+
+/* helper tipografici del redesign */
+.num  { font-family: var(--f-display); font-weight: 900; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.mono { font-family: var(--f-mono); }
+.press { transition: transform .12s var(--spring); touch-action: manipulation; }
+.press:active { transform: scale(.95); }
+.scrollbar-thin { scrollbar-width: thin; }
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: 99px; }
+
+/* keyframes redesign */
+@keyframes tako-bob { 0%,100%{transform:translateY(0) rotate(-1deg);} 50%{transform:translateY(-7px) rotate(1deg);} }
+@keyframes nb-bell { 0%,100%{transform:rotate(0);} 12%{transform:rotate(-22deg);} 26%{transform:rotate(18deg);} 40%{transform:rotate(-13deg);} 54%{transform:rotate(9deg);} 70%{transform:rotate(-5deg);} 84%{transform:rotate(2deg);} }
+@keyframes nb-glow { 0%{transform:scale(.6);opacity:.55;} 70%{opacity:0;} 100%{transform:scale(1.7);opacity:0;} }
+@keyframes nb-tako { 0%{transform:scale(1) rotate(0);} 20%{transform:scale(1.18) rotate(-8deg);} 45%{transform:scale(.96) rotate(6deg);} 70%{transform:scale(1.06) rotate(-3deg);} 100%{transform:scale(1) rotate(0);} }
+@keyframes nb-sheen { 0%{transform:translateX(-130%) skewX(-18deg);} 100%{transform:translateX(360%) skewX(-18deg);} }
+@keyframes nb-pop { 0%{transform:scale(0);} 60%{transform:scale(1.35);} 100%{transform:scale(1);} }
+@keyframes nb-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
+@keyframes nb-textin { from{opacity:0;transform:translateX(8px);} to{opacity:1;transform:translateX(0);} }
+@keyframes ds-toast-in { 0%{opacity:0;transform:translateX(120%) scale(.9);} 70%{transform:translateX(-6px) scale(1.02);} 100%{opacity:1;transform:translateX(0) scale(1);} }
+@keyframes ds-prog { from{transform:scaleX(1);} to{transform:scaleX(0);} }
+@keyframes ds-toast-icon { 0%{transform:scale(0) rotate(-30deg);} 60%{transform:scale(1.25) rotate(8deg);} 100%{transform:scale(1) rotate(0);} }
+@keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(79,169,128,.5);} 70%{box-shadow:0 0 0 7px rgba(79,169,128,0);} 100%{box-shadow:0 0 0 0 rgba(79,169,128,0);} }
+@keyframes pop-in { 0%{transform:scale(.6);opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1);opacity:1;} }
+@keyframes slide-in-row { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
+@keyframes rise-fade { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+@keyframes ico-pop { 0%{transform:translateY(0) rotate(0);} 30%{transform:translateY(-3px) rotate(-9deg);} 60%{transform:translateY(0) rotate(7deg);} 100%{transform:translateY(0) rotate(0);} }
+.pop-in { animation: pop-in .26s var(--spring); }
+.rise-fade { animation: rise-fade .4s var(--out) both; }
+.tako-float { animation: tako-bob 3.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .tako-float, .press { animation: none; } }

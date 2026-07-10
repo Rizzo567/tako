@@ -1,0 +1,63 @@
+# Tako — core di produzione (API + dati). Le 2 app Next (dashboard :3000, web :3002)
+# si buildano a parte (next build/start o hosting statico/serverless) — vedi RUNBOOK.
+# Avvio:  docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tako}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?serve POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-takodb}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Esposto solo su localhost dell'host: il DB non va su rete pubblica.
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tako} -d ${POSTGRES_DB:-takodb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1"]
+    volumes:
+      - redisdata:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      # In prod punta al ruolo NON-superuser tako_app per attivare la RLS (vedi RUNBOOK).
+      DATABASE_URL: ${DATABASE_URL:?serve DATABASE_URL}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      JWT_SECRET: ${JWT_SECRET:?serve JWT_SECRET}
+      GROQ_API_KEY: ${GROQ_API_KEY:?serve GROQ_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      UPLOADS_DIR: /data/uploads
+      DASHBOARD_URL: ${DASHBOARD_URL:?serve DASHBOARD_URL}
+      CLIENT_BASE_URL: ${CLIENT_BASE_URL:?serve CLIENT_BASE_URL}
+    volumes:
+      - uploads:/data/uploads
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

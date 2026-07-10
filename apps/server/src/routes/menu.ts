@@ -1,14 +1,33 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { db, menus, menuSections, menuItems, itemVariants } from '@tako/db'
-import { eq, and, asc } from 'drizzle-orm'
+import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemTranslations } from '@tako/db'
+import { eq, and, asc, isNotNull } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import OpenAI from 'openai'
 
-const getOpenAI = () => {
-  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set')
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const getAI = () => {
+  if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
+}
+
+// Ownership guard helpers (anti-IDOR): verificano che la risorsa appartenga al
+// ristorante dell'utente autenticato prima di mutarla by-id.
+async function ownsMenu(menuId: string, restaurantId: string) {
+  const [row] = await db.select({ id: menus.id }).from(menus)
+    .where(and(eq(menus.id, menuId), eq(menus.restaurantId, restaurantId))).limit(1)
+  return !!row
+}
+async function ownsSection(sectionId: string, restaurantId: string) {
+  const [row] = await db.select({ id: menuSections.id }).from(menuSections)
+    .innerJoin(menus, eq(menuSections.menuId, menus.id))
+    .where(and(eq(menuSections.id, sectionId), eq(menus.restaurantId, restaurantId))).limit(1)
+  return !!row
+}
+async function ownsItem(itemId: string, restaurantId: string) {
+  const [row] = await db.select({ id: menuItems.id }).from(menuItems)
+    .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, restaurantId))).limit(1)
+  return !!row
 }
 
 export async function menuRoutes(fastify: FastifyInstance) {
@@ -37,12 +56,21 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const sections = await db.select().from(menuSections).where(eq(menuSections.menuId, menuId)).orderBy(asc(menuSections.position))
     const items = await db.select().from(menuItems).where(eq(menuItems.restaurantId, req.user!.restaurantId)).orderBy(asc(menuItems.position))
     const variants = await db.select().from(itemVariants)
+    // Traduzioni menu (multilingua): tutte le traduzioni dei piatti di questo ristorante,
+    // raggruppate per itemId così lo staff editor le mostra pre-compilate per lingua.
+    const translations = await db.select().from(menuItemTranslations).where(eq(menuItemTranslations.restaurantId, req.user!.restaurantId))
 
     const sectionsWithItems = sections.map(s => ({
       ...s,
       items: items
         .filter(i => i.sectionId === s.id)
-        .map(i => ({ ...i, variants: variants.filter(v => v.itemId === i.id) })),
+        .map(i => ({
+          ...i,
+          variants: variants.filter(v => v.itemId === i.id),
+          translations: translations
+            .filter(t => t.itemId === i.id)
+            .map(t => ({ lang: t.lang, name: t.name, description: t.description })),
+        })),
     }))
 
     return { data: { ...menu, sections: sectionsWithItems } }
@@ -54,6 +82,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({ name: z.string().min(1), description: z.string().optional() })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsMenu(menuId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
 
     const [section] = await db.insert(menuSections).values({ menuId, ...body.data }).returning()
     return reply.code(201).send({ data: section })
@@ -70,9 +99,25 @@ export async function menuRoutes(fastify: FastifyInstance) {
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsSection(sectionId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     const [section] = await db.update(menuSections).set(body.data).where(eq(menuSections.id, sectionId)).returning()
     if (!section) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
     return { data: section }
+  })
+
+  // Delete section
+  fastify.delete('/sections/:sectionId', { preHandler: requireAuth }, async (req, reply) => {
+    const { sectionId } = req.params as { sectionId: string }
+    if (!(await ownsSection(sectionId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
+    const items = await db.select({ id: menuItems.id }).from(menuItems).where(eq(menuItems.sectionId, sectionId))
+    if (items.length > 0) {
+      const ids = items.map(i => i.id)
+      for (const id of ids) {
+        await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, id))
+      }
+    }
+    await db.delete(menuSections).where(eq(menuSections.id, sectionId))
+    return { data: { success: true } }
   })
 
   // Create item
@@ -81,15 +126,17 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       name: z.string().min(1),
       description: z.string().optional(),
-      price: z.number().positive(),
+      price: z.number().min(0),
       allergens: z.array(z.string()).default([]),
       tags: z.array(z.string()).default([]),
-      imageUrl: z.string().url().optional(),
+      imageUrl: z.string().min(1).refine((v) => v.startsWith('/uploads/') || /^https?:\/\//.test(v), 'URL immagine non valido').optional(),
       kitchenStation: z.string().optional(),
       prepTimeMinutes: z.number().default(10),
+      costPrice: z.number().min(0).optional(), // food cost (per margine/analisi menu)
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsSection(sectionId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Section not found' } })
 
     const [item] = await db.insert(menuItems).values({ sectionId, restaurantId: req.user!.restaurantId, ...body.data }).returning()
     return reply.code(201).send({ data: item })
@@ -101,14 +148,15 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       name: z.string().min(1).optional(),
       description: z.string().optional(),
-      price: z.number().positive().optional(),
+      price: z.number().min(0).optional(),
       available: z.boolean().optional(),
       allergens: z.array(z.string()).optional(),
       tags: z.array(z.string()).optional(),
-      imageUrl: z.string().url().optional(),
+      imageUrl: z.string().min(1).refine((v) => v.startsWith('/uploads/') || /^https?:\/\//.test(v), 'URL immagine non valido').optional(),
       kitchenStation: z.string().optional(),
       prepTimeMinutes: z.number().int().min(0).optional(),
       position: z.number().int().min(0).optional(),
+      costPrice: z.number().min(0).optional(), // food cost editabile
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
@@ -118,8 +166,22 @@ export async function menuRoutes(fastify: FastifyInstance) {
       .returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
 
-    // Broadcast menu change to all customers of this restaurant
+    // Broadcast menu change: dashboard staff (room privata) riceve la riga COMPLETA;
+    // la room pubblica menu:{id} (anonima, joinabile da chiunque) riceve solo i campi
+    // pubblici — MAI costPrice (food cost/margine) né altri campi interni.
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
+    const publicItem = {
+      id: item.id,
+      sectionId: item.sectionId,
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      imageUrl: item.imageUrl,
+      allergens: item.allergens,
+      tags: item.tags,
+      available: item.available,
+    }
+    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item: publicItem })
     return { data: item }
   })
 
@@ -127,15 +189,18 @@ export async function menuRoutes(fastify: FastifyInstance) {
   fastify.patch('/items/:itemId/availability', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
     const { available } = req.body as { available: boolean }
-    const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(eq(menuItems.id, itemId)).returning()
+    const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
+    io.to(`menu:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
     return { data: item }
   })
 
   // Delete item
   fastify.delete('/items/:itemId', { preHandler: requireAuth }, async (req, reply) => {
     const { itemId } = req.params as { itemId: string }
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, itemId))
     await db.delete(menuItems).where(eq(menuItems.id, itemId))
     return { data: { success: true } }
   })
@@ -146,27 +211,92 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const schema = z.object({ name: z.string().min(1), priceModifier: z.number().default(0) })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
     const [variant] = await db.insert(itemVariants).values({ itemId, ...body.data }).returning()
     return reply.code(201).send({ data: variant })
   })
 
+  // Delete variant
+  fastify.delete('/items/:itemId/variants/:variantId', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId, variantId } = req.params as { itemId: string; variantId: string }
+    const [item] = await db.select({ id: menuItems.id }).from(menuItems).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).limit(1)
+    if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    // Anti-IDOR: la variante deve appartenere all'item già verificato come di proprietà.
+    // itemVariants non ha restaurantId, quindi senza questo vincolo la delete attraverserebbe
+    // il confine tenant cancellando varianti di un altro ristorante by-id.
+    const deleted = await db.delete(itemVariants)
+      .where(and(eq(itemVariants.id, variantId), eq(itemVariants.itemId, itemId)))
+      .returning()
+    if (!deleted.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Variant not found' } })
+    return { data: { success: true } }
+  })
+
+  // ─────────────────── Traduzioni piatto (multilingua) ───────────────────
+  // Lo staff inserisce name/description tradotti per le lingue in settings.languages.
+  // Il cliente PWA li legge dall'endpoint pubblico in menu-i18n.ts (senza toccare customer.ts).
+
+  // Lista traduzioni di un piatto
+  fastify.get('/items/:itemId/translations', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string }
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    const rows = await db.select().from(menuItemTranslations).where(eq(menuItemTranslations.itemId, itemId))
+    return { data: rows.map(t => ({ lang: t.lang, name: t.name, description: t.description })) }
+  })
+
+  // Upsert traduzione per (item, lingua) — una sola per coppia (vincolo UNIQUE)
+  fastify.put('/items/:itemId/translations/:lang', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string; lang: string }
+    // Normalizzo la lingua a minuscolo: staff e cliente devono usare la stessa chiave
+    // indipendentemente dal casing salvato in settings.languages (es. 'EN' vs 'en').
+    const lang = String((req.params as any).lang || '').toLowerCase().slice(0, 10)
+    if (!lang) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'lang required' } })
+    const schema = z.object({ name: z.string().min(1), description: z.string().nullish() })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+
+    const [row] = await db.insert(menuItemTranslations)
+      .values({ restaurantId: req.user!.restaurantId, itemId, lang, name: body.data.name, description: body.data.description ?? null })
+      .onConflictDoUpdate({
+        target: [menuItemTranslations.itemId, menuItemTranslations.lang],
+        set: { name: body.data.name, description: body.data.description ?? null, updatedAt: new Date() },
+      })
+      .returning()
+    return { data: row }
+  })
+
+  // Elimina una traduzione (torna al fallback originale)
+  fastify.delete('/items/:itemId/translations/:lang', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string; lang: string }
+    const lang = String((req.params as any).lang || '').toLowerCase().slice(0, 10)
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    await db.delete(menuItemTranslations)
+      .where(and(eq(menuItemTranslations.itemId, itemId), eq(menuItemTranslations.lang, lang), eq(menuItemTranslations.restaurantId, req.user!.restaurantId)))
+    return { data: { success: true } }
+  })
+
   // Parse raw menu text with AI → return preview (no DB write)
-  fastify.post('/:menuId/import-text', { preHandler: requireAuth }, async (req, reply) => {
+  fastify.post('/:menuId/import-text', { config: { rateLimit: { max: 10, timeWindow: 60000 } }, preHandler: requireAuth }, async (req, reply) => {
     const { menuId } = req.params as { menuId: string }
-    const { text } = req.body as { text?: string }
-    if (!text?.trim()) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required' } })
+    // Cap di lunghezza: 50k caratteri coprono un menu reale ma evitano di saturare
+    // la context window di Groq e amplificarne i costi con payload enormi.
+    const parsedBody = z.object({ text: z.string().trim().min(1).max(50000) }).safeParse(req.body)
+    if (!parsedBody.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'text required (max 50000 caratteri)' } })
+    const { text } = parsedBody.data
 
     const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
     if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
 
-    const openai = getOpenAI()
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      messages: [
-        {
-          role: 'system',
-          content: `Sei un parser di menu ristorante. Estrai la struttura dal testo grezzo e restituisci JSON valido con questa forma esatta:
+    let completion: Awaited<ReturnType<ReturnType<typeof getAI>['chat']['completions']['create']>>
+    try {
+      const openai = getAI()
+      completion = await openai.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        response_format: { type: 'json_object' },
+        messages: [
+          {
+            role: 'system',
+            content: `Sei un parser di menu ristorante. Estrai la struttura dal testo grezzo e restituisci JSON valido con questa forma esatta:
 {
   "sections": [
     {
@@ -189,10 +319,13 @@ Regole:
 - description: solo se presente nel testo
 - Raggruppa i piatti per sezione naturale (Antipasti, Primi, Secondi, Dolci, Bevande, ecc.)
 - Se non ci sono sezioni esplicite, crea una sezione "Menu"`,
-        },
-        { role: 'user', content: text },
-      ],
-    })
+          },
+          { role: 'user', content: text },
+        ],
+      })
+    } catch (err: any) {
+      return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'Servizio AI non disponibile. Verifica la chiave OpenAI.' } })
+    }
 
     const raw = completion.choices[0]?.message?.content ?? '{}'
     let parsed: any
@@ -217,9 +350,9 @@ Regole:
         name: z.string().min(1),
         items: z.array(z.object({
           name: z.string().min(1),
-          description: z.string().optional(),
+          description: z.string().nullable().optional(),
           price: z.number().min(0),
-          allergens: z.array(z.string()).default([]),
+          allergens: z.array(z.string()).nullable().optional(),
         })),
       })),
     })
@@ -241,9 +374,9 @@ Regole:
           sectionId: section!.id,
           restaurantId: (req.user as any).restaurantId,
           name: item.name,
-          description: item.description,
+          description: item.description ?? undefined,
           price: item.price,
-          allergens: item.allergens,
+          allergens: item.allergens ?? [],
           position: ii,
         })
         totalItems++

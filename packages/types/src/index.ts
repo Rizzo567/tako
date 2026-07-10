@@ -2,7 +2,7 @@
 
 export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready' | 'served' | 'paid' | 'cancelled'
 export type TableStatus = 'free' | 'occupied' | 'waiting' | 'cleaning' | 'reserved'
-export type UserRole = 'owner' | 'manager' | 'waiter' | 'chef' | 'cashier'
+export type UserRole = 'owner' | 'dipendente' | 'chef' | 'cassiere'
 
 export interface SocketEvents {
   // Server → Client

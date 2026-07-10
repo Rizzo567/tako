@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
-import { db, users } from '@tako/db'
+import { db, users, sessions } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 
@@ -9,18 +9,19 @@ export async function staffRoutes(fastify: FastifyInstance) {
   fastify.get('/', { preHandler: requireAuth }, async (req) => {
     const staff = await db.select({
       id: users.id, name: users.name, email: users.email, role: users.role,
-      active: users.active, lastLoginAt: users.lastLoginAt, avatarUrl: users.avatarUrl,
+      active: users.active, lastLoginAt: users.lastLoginAt, avatarUrl: users.avatarUrl, phone: users.phone,
     }).from(users).where(eq(users.restaurantId, req.user!.restaurantId))
     return { data: staff }
   })
 
-  fastify.post('/', { preHandler: requireRole('owner', 'manager') }, async (req, reply) => {
+  fastify.post('/', { preHandler: requireRole('owner') }, async (req, reply) => {
     const schema = z.object({
       name: z.string().min(2),
       email: z.string().email(),
-      role: z.enum(['manager', 'waiter', 'chef', 'cashier']),
+      role: z.enum(['dipendente', 'chef', 'cassiere']),
       pin: z.string().length(4).optional(),
       password: z.string().min(6).optional(),
+      phone: z.string().optional(),
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
@@ -34,31 +35,46 @@ export async function staffRoutes(fastify: FastifyInstance) {
       role: body.data.role,
       pin: pinHash,
       passwordHash,
+      phone: body.data.phone,
     }).returning()
 
     return reply.code(201).send({ data: { id: user!.id, name: user!.name, email: user!.email, role: user!.role } })
   })
 
-  fastify.patch('/:userId', { preHandler: requireRole('owner', 'manager') }, async (req, reply) => {
+  fastify.patch('/:userId', { preHandler: requireRole('owner') }, async (req, reply) => {
     const { userId } = req.params as { userId: string }
     const schema = z.object({
       name: z.string().optional(),
-      role: z.enum(['manager', 'waiter', 'chef', 'cashier']).optional(),
+      role: z.enum(['dipendente', 'chef', 'cassiere']).optional(),
       pin: z.string().length(4).optional(),
       active: z.boolean().optional(),
+      phone: z.string().optional(),
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    const [user] = await db.update(users).set(body.data).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning()
+    // Hash del PIN come nel POST: mai scrivere il PIN grezzo in users.pin.
+    const { pin, ...rest } = body.data
+    const updates = { ...rest, ...(pin ? { pin: await bcrypt.hash(pin, 10) } : {}) }
+    const [user] = await db.update(users).set(updates).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning()
     if (!user) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })
-    return { data: user }
+    // Disattivazione = revoca immediata: cancella tutte le sessioni dell'utente
+    // così non può più autenticarsi (né via HTTP né via socket).
+    if (body.data.active === false) await db.delete(sessions).where(eq(sessions.userId, userId))
+    // Non esporre passwordHash/pin: ritorna solo i campi pubblici.
+    return { data: { id: user.id, name: user.name, email: user.email, role: user.role, active: user.active, phone: user.phone } }
   })
 
-  fastify.delete('/:userId', { preHandler: requireRole('owner', 'manager') }, async (req, reply) => {
+  fastify.delete('/:userId', { preHandler: requireRole('owner') }, async (req, reply) => {
     const { userId } = req.params as { userId: string }
     if (userId === req.user!.id) return reply.code(400).send({ error: { code: 'SELF_DELETE', message: 'Cannot delete yourself' } })
-    await db.update(users).set({ active: false }).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId)))
+    const [deactivated] = await db.update(users).set({ active: false })
+      .where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning({ id: users.id })
+    // Solo se il membro appartiene DAVVERO a questo ristorante: senza il guard, la
+    // delete delle sessioni girava incondizionatamente e un owner con lo UUID di un
+    // utente di un ALTRO tenant poteva forzarne il logout (revoca sessioni cross-tenant).
+    if (!deactivated) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })
+    await db.delete(sessions).where(eq(sessions.userId, userId))
     return { data: { success: true } }
   })
 }

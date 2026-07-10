@@ -6,5 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatEuro(n: number) {
-  return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n)
+  // Evita "NaN €" se un valore arriva undefined/NaN dall'API.
+  const v = Number.isFinite(n) ? n : 0
+  return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(v)
 }

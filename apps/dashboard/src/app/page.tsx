@@ -1,20 +1,7 @@
-'use client'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/lib/store'
-
+// La root reindirizza alla SPA staff (vedi redirect in next.config.ts). Questo
+// componente è un fallback nel caso il redirect non scatti.
 export default function RootPage() {
-  const { token, _hasHydrated } = useAuthStore()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!_hasHydrated) return
-    if (token) {
-      router.replace('/dashboard')
-    } else {
-      router.replace('/login')
-    }
-  }, [token, _hasHydrated, router])
-
-  return <div className="min-h-screen bg-cream" />
+  return (
+    <meta httpEquiv="refresh" content="0; url=/staff/index.html" />
+  )
 }

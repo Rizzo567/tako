@@ -1,5 +1,6 @@
-import { pgTable, text, uuid, timestamp, boolean, integer, real, jsonb } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, boolean, integer, jsonb, index } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
+import { money } from './money.js'
 
 export const menus = pgTable('menus', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -31,7 +32,7 @@ export const menuItems = pgTable('menu_items', {
   nameTranslations: jsonb('name_translations').default({}).$type<Record<string, string>>(),
   description: text('description'),
   descriptionTranslations: jsonb('description_translations').default({}).$type<Record<string, string>>(),
-  price: real('price').notNull(),
+  price: money('price').notNull(),
   imageUrl: text('image_url'),
   allergens: text('allergens').array().default([]),
   tags: text('tags').array().default([]),
@@ -41,15 +42,17 @@ export const menuItems = pgTable('menu_items', {
   position: integer('position').default(0).notNull(),
   kitchenStation: text('kitchen_station'),
   prepTimeMinutes: integer('prep_time_minutes').default(10),
-  costPrice: real('cost_price'),
+  costPrice: money('cost_price'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
+}, (t) => ({
+  restaurantAvailableIdx: index('menu_items_restaurant_available_idx').on(t.restaurantId, t.available),
+}))
 
 export const itemVariants = pgTable('item_variants', {
   id: uuid('id').primaryKey().defaultRandom(),
   itemId: uuid('item_id').notNull().references(() => menuItems.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
-  priceModifier: real('price_modifier').default(0).notNull(),
+  priceModifier: money('price_modifier').default(0).notNull(),
   available: boolean('available').default(true).notNull(),
 })

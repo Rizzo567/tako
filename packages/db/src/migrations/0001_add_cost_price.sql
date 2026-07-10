@@ -1,1 +1,1 @@
-ALTER TABLE "menu_items" ADD COLUMN "cost_price" real;
+ALTER TABLE "menu_items" ADD COLUMN IF NOT EXISTS "cost_price" real;

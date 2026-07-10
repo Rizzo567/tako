@@ -1,6 +1,7 @@
 import { pgTable, text, uuid, timestamp, real, boolean } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { users } from './users.js'
+import { money } from './money.js'
 
 export const inventoryItems = pgTable('inventory_items', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -9,7 +10,7 @@ export const inventoryItems = pgTable('inventory_items', {
   unit: text('unit').notNull(),
   quantity: real('quantity').default(0).notNull(),
   minQuantity: real('min_quantity').default(0).notNull(),
-  costPerUnit: real('cost_per_unit'),
+  costPerUnit: money('cost_per_unit'),
   supplier: text('supplier'),
   active: boolean('active').default(true).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
