@@ -108,6 +108,7 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');      // messaggio neutro/success generico
   const [needVerify, setNeedVerify] = useState(false); // login → EMAIL_NOT_VERIFIED
+  const [newsletter, setNewsletter] = useState(false);   // opt-in Resend Audience (attivo alla verifica)
   const [resendDone, setResendDone] = useState(false);
   const [done, setDone] = useState(false);        // schermata finale (register/forgot)
 
@@ -172,7 +173,7 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
     setError('');
     if (password.length < 10) { setError('La password deve avere almeno 10 caratteri.'); return; }
     setLoading(true);
-    const res = await api().apiPost('/api/auth/register', { name: name.trim(), email: email.trim(), password });
+    const res = await api().apiPost('/api/auth/register', { name: name.trim(), email: email.trim(), password, newsletter });
     setLoading(false);
     if (res.ok) { setDone(true); return; }
     setError(authErr(res));
@@ -288,7 +289,11 @@ function LoginModal({ open, onClose, initialView = 'login' }) {
                   <Label>Email</Label>
                   <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@ristorante.it" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
                   <Label>Password</Label>
-                  <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Almeno 10 caratteri" className="w-full mb-5 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Almeno 10 caratteri" className="w-full mb-4 px-4 py-3 rounded-xl border-2 font-semibold" style={fieldStyle} />
+                  <label className="flex items-start gap-2 mb-5 text-[13px] cursor-pointer select-none" style={{ color: 'var(--ink-soft)', fontWeight: 500 }}>
+                    <input type="checkbox" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} className="mt-0.5" style={{ accentColor: 'var(--coral)' }} />
+                    <span>Voglio ricevere novità e consigli per il mio ristorante (facoltativo, annullabile quando vuoi)</span>
+                  </label>
                   <button type="submit" disabled={loading} className="btn-coral w-full py-3.5 text-lg">{loading ? 'Creazione…' : 'Crea il mio Tako →'}</button>
                 </form>
                 <OrDivider />
