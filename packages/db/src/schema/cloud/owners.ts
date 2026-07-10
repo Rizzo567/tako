@@ -10,6 +10,9 @@ export const cloudOwners = pgTable('cloud_owners', {
   passwordHash: text('password_hash'),
   name: text('name'),
   emailVerified: boolean('email_verified').default(false).notNull(),
+  // Opt-in newsletter espresso alla registrazione (sito o appliance). L'iscrizione
+  // alla Resend Audience avviene SOLO dopo la verifica email (double opt-in di fatto).
+  newsletterOptIn: boolean('newsletter_opt_in').default(false).notNull(),
   // Bump su reset/cambio-pw/unlink → invalida sessioni e login offline appliance (SEC-007).
   credentialsVersion: integer('credentials_version').default(0).notNull(),
   lastLoginAt: timestamp('last_login_at', { withTimezone: true }),

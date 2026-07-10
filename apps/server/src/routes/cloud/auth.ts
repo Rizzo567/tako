@@ -32,6 +32,7 @@ import { buildVerifyUrl, buildResetUrl, cookieMode } from '../../cloud/config.js
 import { CLOUD_SESSION_COOKIE, CLOUD_CSRF_COOKIE } from '../../cloud/cookies.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
 import { audit } from '../../cloud/audit.js'
+import { subscribeToNewsletter } from '../../cloud/newsletter.js'
 import { incrWithTtl, getCount, del as redisDel } from '../../cloud/redis.js'
 
 // ─── Schemi di validazione (zod) ─────────────────────────────────────────────
@@ -42,6 +43,9 @@ const registerSchema = z.object({
   email: emailField,
   password: passwordField,
   name: z.string().trim().min(1).max(120).optional(),
+  // Opt-in newsletter (checkbox alla registrazione, sito o appliance). L'iscrizione
+  // alla Resend Audience parte solo alla verifica email (double opt-in di fatto).
+  newsletter: z.boolean().optional(),
 })
 const loginSchema = z.object({ email: emailField, password: z.string().min(1).max(200) })
 const emailOnlySchema = z.object({ email: emailField })
@@ -131,7 +135,7 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
   fastify.post('/register', async (req, reply) => {
     const parsed = registerSchema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Dati non validi' } })
-    const { email, password, name } = parsed.data
+    const { email, password, name, newsletter } = parsed.data
 
     const pwErr = passwordPolicyError(password)
     if (pwErr) return reply.code(400).send({ error: { code: 'WEAK_PASSWORD', message: pwErr } })
@@ -146,6 +150,10 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
       await verifyPassword(password, DUMMY_PASSWORD_HASH)
       // Non rivelare l'esistenza: se non verificato, reinvia silenziosamente la verifica.
       if (!existing.emailVerified) {
+        // Se stavolta ha spuntato la newsletter, registra l'opt-in (si attiva alla verifica).
+        if (newsletter && !existing.newsletterOptIn) {
+          await cloudDb.update(cloudOwners).set({ newsletterOptIn: true, updatedAt: new Date() }).where(eq(cloudOwners.id, existing.id)).catch(() => {})
+        }
         await sendVerificationEmail(existing.id, existing.name, norm).catch(() => {})
       }
       await audit({ event: 'register', ownerId: existing.id, req, meta: { duplicate: true } })
@@ -161,6 +169,7 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
         passwordHash,
         name: name ?? null,
         emailVerified: false,
+        newsletterOptIn: !!newsletter,
       }).returning()
       ownerId = owner!.id
       ownerName = owner!.name
@@ -279,8 +288,13 @@ export async function cloudAuthRoutes(fastify: FastifyInstance) {
 
     if (!consumed) return reply.code(400).send({ error: { code: 'INVALID_TOKEN', message: 'Link non valido o scaduto' } })
 
-    await cloudDb.update(cloudOwners).set({ emailVerified: true, updatedAt: new Date() }).where(eq(cloudOwners.id, consumed.ownerId))
+    const [verified] = await cloudDb.update(cloudOwners).set({ emailVerified: true, updatedAt: new Date() }).where(eq(cloudOwners.id, consumed.ownerId)).returning()
     await audit({ event: 'email_verified', ownerId: consumed.ownerId, req })
+    // Newsletter: iscrizione alla Resend Audience SOLO ora che l'email è verificata
+    // (double opt-in di fatto). Best-effort: mai bloccare la verifica.
+    if (verified?.newsletterOptIn) {
+      await subscribeToNewsletter(verified.email, verified.name).catch(() => {})
+    }
     return reply.send({ data: { verified: true } })
   })
 
