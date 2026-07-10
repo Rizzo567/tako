@@ -3,6 +3,6 @@
 /target/
 /gen/schemas
 
-# Bundle server autosufficiente (rigenerato da scripts/build-server-bundle.mjs):
-# ~370MB (node runtime + binari Postgres + node_modules). Mai committare.
-/resources/server/
+# Bundle autosufficiente (rigenerato da scripts/build-server-bundle.mjs):
+# ~487MB (node runtime + binari Postgres + node_modules + web standalone). Mai committare.
+/resources/

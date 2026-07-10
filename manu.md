@@ -1,53 +1,44 @@
-# manu.md — Da fare prossima sessione (Tako)
+# manu.md — Azioni di Manuel (Tako)
 
-> Handoff del 2026-06-26. Stato: sito auth + cloud LIVE; restano azioni di deploy e SEO.
+> Aggiornato 2026-07-10 (dopo lint completo). Qui SOLO le cose che deve fare Manuel a mano
+> o decidere. Tutto il resto (stato, backlog, piani) è in `TAKO.md`.
 
-## ✅ FATTO — Render deploy + form/login verificati live (2026-06-27)
-Verificato end-to-end: backend cloud HA già il commit `8425e18` deployato.
-- `/api/contact` → 200, email lead arriva a manuelrizzo474@gmail.com (testato, confermato).
-- `/api/auth/login` `/register` → vivi. `/api/auth/google` → 302 OAuth corretto.
-- Frontend sito (takoitalia.com + tutte le `.jsx`) live e cablato su `api.takoitalia.com`.
-- → NON serve nessun Manual Deploy. Form e login funzionano.
+## 🔴 Decisioni aperte
+1. **Merge `feat/cloud-auth-20260625` → main** — non fatto. È basato su fase1 → trascina ~54
+   commit. Proposta consigliata: mergiare PRIMA `fase1-consolidamento` su main (è la linea di
+   prodotto reale), poi cloud-auth diventa un merge piccolo. Il dossier conflitti lo prepara
+   l'agente (TAKO.md §6-C.4); il merge lo esegui solo tu.
+2. **Login cloud + email per chi usa la dashboard** — oggi la dashboard ha login solo locale;
+   l'identità cloud (Supabase DB + Resend) vive sul sito. Se lo vuoi dentro l'app: serve piano
+   nuovo, dipende dal pairing/merge cloud-auth. Decidere se e quando.
+3. **Sorte del worktree `Tako-site-auth`** — il branch è mergiato su main (0 commit unici):
+   si può rimuovere worktree + branch? Serve il tuo ok.
 
-## 🟠→⏳ "Sito pericoloso" login Google — REVISIONE INVIATA (2026-06-27)
-Era Safe Browsing: pagina rossa "Sito pericoloso/ingegneria sociale", flag a livello
-DOMINIO (nessuna URL specifica) su dominio nuovo. Falso positivo. Sito già legittimo
-(privacy+termini esistono in tako-pages-azienda.jsx).
-- ✅ Search Console: proprietà aggiunta, **revisione richiesta il 2026-06-27**.
-- ✅ Sito rinforzato e LIVE (2026-06-27): tolto disclaimer "documento fac-simile non valido"
-  dalle pagine legali, email → privacy@takoitalia.com, aggiunte pagine statiche reali
-  crawlabili `/privacy` e `/termini` (in sitemap), link legali nel form registrazione fixati.
-  Commit `0354be7` su main, deploy CF Pages auto OK.
-- ⏳ Attesa approvazione Google: da poche ore a 2-3 giorni → poi l'avviso sparisce solo.
-  Google ri-controllerà il sito (ora più solido) durante la revisione.
-- Se RIGETTATA: ri-richiedere (il sito è già a posto, niente altro da fare lato codice).
-- Nota: CF Pages builda anche i branch app (es. fase1) come Preview → quei build falliscono
-  (manca landing/), è rumore innocuo. Solo `main` conta (Production).
+## 🟠 Verifiche in sospeso
+- **Google Safe Browsing**: revisione richiesta il 2026-06-27 — controllare se l'avviso è
+  sparito; se rigettata, ri-richiedere (lato codice è già tutto a posto).
+- **Stampante termica**: codice ESC/POS fatto, mai provato su stampante fisica.
+- **Test browser e2e sito**: click link verifica email → login → OAuth Google/GitHub.
 
-## 🟡 SEO — "Tako primo su Google"
-Base on-page GIÀ FATTA e live (meta description, Open Graph, JSON-LD, robots.txt, sitemap.xml, og-image).
-Resta (azioni di Manuel, serve login Google):
-- **Search Console**: aggiungi proprietà `takoitalia.com`, verifica (TXT su Cloudflare), **invia sitemap** `https://takoitalia.com/sitemap.xml`.
-- Costruire autorità: Google Business Profile "Tako", backlink (da Aike/social), contenuti.
-- Realismo: «tako» secco è competitivo (takoyaki/polpo). Puntare a «tako ristorante / gestionale / italia».
+## 🟡 SEO / presenza (serve login Google)
+- Search Console: verifica TXT su Cloudflare + invio `https://takoitalia.com/sitemap.xml`.
+- Google Business Profile "Tako" + backlink (da Aike/social) + contenuti.
+- URL home pulito su `/` (oggi redirect a `Tako Landing.html` con spazio — male per SEO).
+- Realismo keyword: «tako» secco è competitivo (takoyaki/polpo) → puntare a «tako ristorante /
+  gestionale / italia».
 
-## 🟢 Offerte in sospeso (Manuel deve scegliere)
-- **a)** Sistemare struttura URL: home ora è dietro redirect a `Tako Landing.html` (con spazio) → servirla pulita su `/` (meglio per SEO).
-- **b)** Aggiungere pagine **Privacy** e **Termini** (servono per OAuth + legittimità dominio).
+## 🧹 Pulizie account/servizi
+- Revocare il token Cloudflare temporaneo dell'audit (My Profile → API Tokens).
+- Cancellare account di test nel DB cloud: `manuelrizzo474+takotest@gmail.com`,
+  `manuelrizzo474+e2etest@gmail.com`.
 
-## ⚙️ Decisioni / pulizie aperte
-- **Merge `feat/cloud-auth-20260625` → main**: NON fatto. È basato su `fase1-consolidamento` → trascina 54 commit di fase1. Decisione di Manuel. Non urgente (backend gira dal branch su Render).
-- **Revocare il token Cloudflare** temporaneo creato per l'audit (Cloudflare → My Profile → API Tokens). File locale già cancellato.
-- **Pulire account di test** nel DB cloud: `manuelrizzo474+takotest@gmail.com`, `manuelrizzo474+e2etest@gmail.com`.
-- **Test browser end-to-end**: click link verifica email → login → OAuth Google/GitHub.
+## ⚙️ Quando si va in produzione appliance
+- Password reale del ruolo `tako_app` (`ALTER ROLE tako_app WITH PASSWORD '…'`) + `DATABASE_URL`
+  col ruolo `tako_app` (attiva davvero la RLS — TAKO.md §6-A).
+- Firma + notarizzazione Apple dell'app desktop (serve Apple Developer account).
 
-## 🗺️ Dove sta tutto (worktree dello stesso repo)
-- Sito → `/Users/manuel/Projects/Tako-site-auth/landing/` (branch `feat/site-auth-20260625`; va live su Pages da `main`)
-- Backend cloud → `/Users/manuel/Projects/Tako-cloud-auth/` (branch `feat/cloud-auth-20260625`; gira su Render)
-- App/dashboard/server locale → `/Users/manuel/Projects/Tako/` (branch `feat/fase1-consolidamento`; qui NON c'è landing/)
-- Doc di progetto consolidate in `TAKO.md`. Credenziali in `~/Desktop/Tako-Credenziali/`.
-
-## ✅ Fatto in questa sessione (per contesto)
-Deploy cloud live (Render+Supabase+Cloudflare+Resend+Upstash) · sito takoitalia.com+www+api ·
-avatar a cerchio post-login · favicon Tako sui domini · form contatti reali + notifica lead ·
-demo senza password · SEO base · doc consolidate in TAKO.md.
+## 🗺️ Dove sta tutto
+- Appliance/app → `~/Projects/Tako` (branch `feat/fase1-consolidamento`; NON contiene `landing/`)
+- Backend cloud → `~/Projects/Tako-cloud-auth` (branch `feat/cloud-auth-20260625`, gira su Render)
+- Sito → `~/Projects/Tako-site-auth/landing/` (live su CF Pages da `main`)
+- Credenziali → `~/Desktop/Tako-Credenziali/` (MAI nel repo)
