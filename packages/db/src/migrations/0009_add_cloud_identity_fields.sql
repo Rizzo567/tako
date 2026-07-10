@@ -1,4 +1,4 @@
--- Migration 0006: estensioni users per identità unificata sito<->app (cloud control-plane)
+-- Migration 0009 (ex 0006 su cloud-auth): estensioni users per identità unificata sito<->app (cloud control-plane)
 -- Vedi MASTER_PLAN-cloud-auth §3.2. NON crea tabelle cloud_* nel DB locale.
 
 ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "email_verified" boolean NOT NULL DEFAULT false;
