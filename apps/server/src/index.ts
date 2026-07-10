@@ -31,6 +31,8 @@ import { reservationRoutes } from './routes/reservations.js'
 import { shiftRoutes } from './routes/shifts.js'
 import { menuI18nRoutes } from './routes/menu-i18n.js'
 import { aiOwnerRoutes } from './routes/ai-owner.js'
+import { whatsappRoutes } from './routes/whatsapp.js'
+import { startWhatsApp } from './lib/whatsapp.js'
 import { startMdns } from './lib/mdns.js'
 import { getLanIPv4s } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
@@ -196,6 +198,7 @@ await fastify.register(reservationRoutes, { prefix: '/api/reservations' })
 await fastify.register(shiftRoutes, { prefix: '/api/shifts' })
 await fastify.register(menuI18nRoutes, { prefix: '/api/customer' })
 await fastify.register(aiOwnerRoutes, { prefix: '/api/ai/owner' })
+await fastify.register(whatsappRoutes, { prefix: '/api/whatsapp' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
@@ -213,6 +216,26 @@ await fastify.ready()
   // in background (il primo uso non paga il cold start del modello).
   setupDictationNamespace(io)
   warmupAsr()
+
+  // Canale WhatsApp (opt-in): parte solo se già abilitato in config o via TAKO_WHATSAPP=1.
+  // In try/catch — se Baileys esplode NON deve tirare giù il server (è un extra, non il core).
+  try {
+    const { readFileSync } = await import('node:fs')
+    const { join } = await import('node:path')
+    const { homedir } = await import('node:os')
+    let waEnabled = process.env['TAKO_WHATSAPP'] === '1'
+    if (!waEnabled) {
+      try {
+        const cfgPath = join(process.env['TAKO_HOME'] ?? join(homedir(), '.tako'), 'whatsapp-config.json')
+        waEnabled = JSON.parse(readFileSync(cfgPath, 'utf8'))?.enabled === true
+      } catch { /* config assente → resta OFF */ }
+    }
+    if (waEnabled) {
+      startWhatsApp().catch(err => console.error('[whatsapp] avvio automatico fallito:', err))
+    }
+  } catch (err) {
+    console.error('[whatsapp] bootstrap saltato:', err)
+  }
 
   try {
     await fastify.listen({ port: PORT, host: '0.0.0.0' })

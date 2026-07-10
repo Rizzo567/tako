@@ -788,13 +788,125 @@ const SET_SECTIONS = [
   ["cucina", "Ordini & Cucina", "kitchen"],
   ["dashboard", "Dashboard", "home"],
   ["generali", "Generali", "euro"],
+  // 4° elemento = owner-only: il canale WhatsApp ha privilegi pieni, lo gestisce solo il titolare.
+  ["whatsapp", "WhatsApp", "phone", true],
   ["stampante", "Stampante", "printer"],
 ];
 const numStyle = { ...inputStyle, width: 92, textAlign: "right" };
+
+/* ═══════════════════ WHATSAPP (owner) ═══════════════════ */
+/* Collega il numero WhatsApp del ristorante al copilot owner: attiva/disattiva,
+   mostra QR di collegamento e stato. Polling status ogni 3s finché non connesso.
+   Dati da /api/whatsapp/{status,enable,disable,numbers}. */
+function WhatsAppPanel({ mobile }) {
+  const [status, setStatus] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [numInput, setNumInput] = useState("");
+
+  useEffect(() => {
+    let alive = true;
+    const tick = async () => {
+      try { const s = await TakoAPI.get("/whatsapp/status"); if (alive) setStatus(s); } catch (_) {}
+    };
+    tick();
+    // Poll solo finché il pannello è aperto e NON ancora connesso (per il QR che ruota).
+    const t = setInterval(() => { setStatus((cur) => { if (!cur || !cur.connected) tick(); return cur; }); }, 3000);
+    return () => { alive = false; clearInterval(t); };
+  }, []);
+
+  const toggle = async (on) => {
+    setBusy(true);
+    try {
+      const s = await TakoAPI.post(on ? "/whatsapp/enable" : "/whatsapp/disable", {});
+      setStatus(s);
+      toast(on ? "WhatsApp attivato" : "WhatsApp disattivato", { type: "success" });
+    } catch (e) {
+      toast(e.message || "Operazione non riuscita", { type: "error" });
+    } finally { setBusy(false); }
+  };
+
+  const saveNumbers = async (numbers) => {
+    try {
+      const r = await TakoAPI.post("/whatsapp/numbers", { numbers });
+      setStatus((s) => ({ ...(s || {}), allowedNumbers: r.allowedNumbers }));
+    } catch (e) { toast(e.message || "Salvataggio numeri non riuscito", { type: "error" }); }
+  };
+  const addNumber = () => {
+    const n = numInput.replace(/\D/g, "");
+    if (!n) return;
+    const next = Array.from(new Set([...((status && status.allowedNumbers) || []), n]));
+    saveNumbers(next); setNumInput("");
+  };
+  const removeNumber = (n) => saveNumbers(((status && status.allowedNumbers) || []).filter((x) => x !== n));
+
+  const enabled = status && status.enabled;
+  const connected = status && status.connected;
+  const allowed = (status && status.allowedNumbers) || [];
+
+  return (
+    <>
+      <Card pad={20}>
+        <h3 style={{ fontSize: 16, marginBottom: 4 }}>WhatsApp copilot</h3>
+        <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 8 }}>
+          Comanda la dashboard scrivendo su WhatsApp al numero collegato. Stesso motore AI del copilot: leggi incassi, segna esaurito, crea tavoli e prenotazioni. Le modifiche richiedono un "SÌ" di conferma via chat.
+        </p>
+        <Row label="Attiva canale WhatsApp" sub={enabled ? "Il canale è attivo" : "Spento — nessun messaggio viene letto"}>
+          <Toggle on={!!enabled} set={(v) => { if (!busy) toggle(v); }} />
+        </Row>
+        <Row label="Stato">
+          {connected
+            ? <Badge tone="ok" dot>Connesso{status.me ? ` · +${status.me}` : ""}</Badge>
+            : enabled
+              ? <Badge tone="wait" dot>In attesa di scansione</Badge>
+              : <Badge tone="muted">Spento</Badge>}
+        </Row>
+      </Card>
+
+      {enabled && !connected && (
+        <Card pad={20}>
+          <h3 style={{ fontSize: 16, marginBottom: 6 }}>Collega il telefono</h3>
+          {status && status.qrDataUrl ? (
+            <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 20, alignItems: mobile ? "stretch" : "center" }}>
+              <img src={status.qrDataUrl} alt="QR WhatsApp" width={210} height={210} style={{ alignSelf: "center", borderRadius: 14, border: "1px solid var(--hairline)", background: "#fff", padding: 8 }} />
+              <ol style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7, paddingLeft: 18, margin: 0 }}>
+                <li>Apri <b>WhatsApp</b> sul telefono del ristorante</li>
+                <li>Vai su <b>Impostazioni → Dispositivi collegati</b></li>
+                <li>Tocca <b>Collega un dispositivo</b></li>
+                <li>Inquadra questo codice QR</li>
+              </ol>
+            </div>
+          ) : (
+            <div style={{ fontSize: 14, color: "var(--ink-2)" }}>Genero il codice QR… attendi qualche secondo.</div>
+          )}
+        </Card>
+      )}
+
+      {enabled && (
+        <Card pad={20}>
+          <h3 style={{ fontSize: 16, marginBottom: 4 }}>Numeri autorizzati</h3>
+          <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 12 }}>
+            Solo questi numeri possono comandare. {allowed.length === 0 && "Lista vuota: il primo numero che scrive \"collega tako\" diventa il titolare."}
+          </p>
+          {allowed.map((n) => (
+            <Row key={n} label={`+${n}`}>
+              <IconBtn name="trash" onClick={() => removeNumber(n)} tone="raised" size={38} iconSize={17} label="Rimuovi numero" />
+            </Row>
+          ))}
+          <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+            <input style={{ ...inputStyle, flex: 1 }} placeholder="Es. 393401234567 (con prefisso)" value={numInput} onChange={(e) => setNumInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") addNumber(); }} />
+            <Btn kind="soft" icon="plus" onClick={addNumber}>Aggiungi</Btn>
+          </div>
+        </Card>
+      )}
+    </>
+  );
+}
 function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAULTS, setSettings = () => {} }) {
   const [sec, setSec] = useState("aspetto");
   const set = (k, v) => setSettings(s => ({ ...s, [k]: v }));
   const setKpi = (k, v) => setSettings(s => ({ ...s, kpi: { ...s.kpi, [k]: v } }));
+  // Sezioni visibili: quelle owner-only (4° elemento truthy) solo per il titolare.
+  const visibleSections = SET_SECTIONS.filter(([, , , ownerOnly]) => !ownerOnly || window.__takoRole === "owner");
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="bowtie" title="Impostazioni" sub="Personalizza la dashboard del tuo ristorante"
@@ -808,11 +920,11 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
       <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: mobile ? 14 : 24, alignItems: "flex-start" }}>
         {mobile ? (
           <div className="scroll" style={{ display: "flex", gap: 8, overflowX: "auto", width: "100%", paddingBottom: 2 }}>
-            {SET_SECTIONS.map(([k, l]) => <button key={k} className="press" onClick={() => setSec(k)} style={{ flex: "none", padding: "9px 15px", borderRadius: 99, fontSize: 13.5, fontWeight: 700, background: sec === k ? "var(--brand)" : "var(--sunken)", color: sec === k ? "var(--on-brand)" : "var(--ink-2)" }}>{l}</button>)}
+            {visibleSections.map(([k, l]) => <button key={k} className="press" onClick={() => setSec(k)} style={{ flex: "none", padding: "9px 15px", borderRadius: 99, fontSize: 13.5, fontWeight: 700, background: sec === k ? "var(--brand)" : "var(--sunken)", color: sec === k ? "var(--on-brand)" : "var(--ink-2)" }}>{l}</button>)}
           </div>
         ) : (
           <div style={{ flex: "none", width: 224, display: "flex", flexDirection: "column", gap: 4 }}>
-            {SET_SECTIONS.map(([k, l, ic]) => { const on = sec === k; return (
+            {visibleSections.map(([k, l, ic]) => { const on = sec === k; return (
               <button key={k} className="press" onClick={() => setSec(k)} style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 14px", borderRadius: 12, fontSize: 14.5, fontWeight: on ? 700 : 600, textAlign: "left", background: on ? "var(--raised)" : "transparent", color: on ? "var(--ink)" : "var(--ink-2)", boxShadow: on ? "var(--sh-1)" : "none" }}><Icon name={ic} size={18} style={{ color: on ? "var(--brand)" : "var(--ink-3)" }} />{l}</button>
             ); })}
           </div>
@@ -899,6 +1011,8 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <Row label="Lingue menu" sub="Lingue disponibili per i clienti"><div style={{ display: "flex", gap: 6 }}>{settings.lingue.map(l => <Badge key={l} tone="muted">{l}</Badge>)}</div></Row>
             </Card>
           )}
+
+          {sec === "whatsapp" && window.__takoRole === "owner" && <WhatsAppPanel mobile={mobile} />}
 
           {sec === "stampante" && (
             <Card pad={20}>
