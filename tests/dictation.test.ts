@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, vi } from 'vitest'
 import { pcm16ToWav, getAsrStatus, transcribePcm16 } from '../apps/server/src/lib/asr.js'
-import { localAsrAvailable } from '../apps/server/src/lib/asr-local.js'
+import { whisperAvailable } from '../apps/server/src/lib/asr-whisper.js'
 import { cleanupText } from '../apps/server/src/lib/cleanup.js'
 
 // Unit test PURI della pipeline dettatura (nessun server/DB richiesto):
@@ -29,13 +29,16 @@ describe('pcm16ToWav', () => {
 })
 
 describe('disponibilità motori ASR', () => {
-  it('locale non disponibile se il python del venv non esiste', () => {
-    vi.stubEnv('TAKO_ASR_PYTHON', '/nonexistent/python')
-    expect(localAsrAvailable()).toBe(false)
+  // whisper-server locale forzato OFF via env autoritativo (path inesistente).
+  const noLocal = () => { vi.stubEnv('TAKO_WHISPER_BIN', '/nonexistent/whisper-server'); vi.stubEnv('TAKO_WHISPER_MODEL', '/nonexistent/model.bin') }
+
+  it('locale non disponibile se binario/modello non esistono', () => {
+    noLocal()
+    expect(whisperAvailable()).toBe(false)
   })
 
   it('engine none senza locale né cloud', () => {
-    vi.stubEnv('TAKO_ASR_PYTHON', '/nonexistent/python')
+    noLocal()
     vi.stubEnv('GROQ_API_KEY', '')
     const s = getAsrStatus()
     expect(s.local).toBe(false)
@@ -44,7 +47,7 @@ describe('disponibilità motori ASR', () => {
   })
 
   it('cloud-first quando il locale manca e la chiave Groq c\'è', () => {
-    vi.stubEnv('TAKO_ASR_PYTHON', '/nonexistent/python')
+    noLocal()
     vi.stubEnv('GROQ_API_KEY', 'gsk_test')
     const s = getAsrStatus()
     expect(s.local).toBe(false)
@@ -53,7 +56,7 @@ describe('disponibilità motori ASR', () => {
   })
 
   it('transcribePcm16 rifiuta con messaggio chiaro se nessun motore', async () => {
-    vi.stubEnv('TAKO_ASR_PYTHON', '/nonexistent/python')
+    noLocal()
     vi.stubEnv('GROQ_API_KEY', '')
     await expect(transcribePcm16(Buffer.alloc(320))).rejects.toThrow(/Nessun motore ASR/)
   })

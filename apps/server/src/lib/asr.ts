@@ -2,8 +2,9 @@
 // ASR dual-mode per la DETTATURA VOCALE di Tako.
 //
 // Due backend, fallback automatico in entrambe le direzioni:
-//   • LOCALE — mlx-whisper (large-v3-turbo) via worker Python (asr-local.ts).
-//     Offline, GPU Apple, nessun dato lascia la macchina.
+//   • LOCALE — whisper.cpp `whisper-server` (large-v3-turbo, motore di HearFlow
+//     importato in Tako, asr-whisper.ts). Offline, GPU Apple/Metal, nessun dato
+//     lascia la macchina.
 //   • CLOUD  — Groq whisper-large-v3 (chiave da env o ~/.tako-app-data/groq-key,
 //     caricata in bootstrap.ts). Veloce quando online.
 //
@@ -12,9 +13,9 @@
 // Groq via pacchetto `openai` già presente (baseURL Groq, come routes/insights.ts).
 // ─────────────────────────────────────────────────────────────────────────────
 import OpenAI, { toFile } from 'openai'
-import { localAsrAvailable, transcribeLocalWav, warmupLocalAsr } from './asr-local.js'
+import { whisperAvailable, transcribeWhisperWav, warmupWhisper } from './asr-whisper.js'
 
-export type AsrEngine = 'mlx-local' | 'groq'
+export type AsrEngine = 'whisper-local' | 'groq'
 
 export interface TranscribeOptions {
   sampleRate?: number          // default 16000
@@ -80,13 +81,13 @@ async function transcribeGroq(wav: Buffer, language: string): Promise<string> {
 
 // ── API pubblica ─────────────────────────────────────────────────────────────
 export function getAsrStatus(): { local: boolean; cloud: boolean; engine: AsrEngine | 'none' } {
-  const local = localAsrAvailable()
+  const local = whisperAvailable()
   const cloud = !!process.env['GROQ_API_KEY']
   const preferred = engineOrder()[0]
   const engine: AsrEngine | 'none' =
-    preferred === 'mlx-local' && local ? 'mlx-local'
+    preferred === 'whisper-local' && local ? 'whisper-local'
     : cloud ? 'groq'
-    : local ? 'mlx-local'
+    : local ? 'whisper-local'
     : 'none'
   return { local, cloud, engine }
 }
@@ -94,17 +95,17 @@ export function getAsrStatus(): { local: boolean; cloud: boolean; engine: AsrEng
 function engineOrder(prefer?: AsrEngine): AsrEngine[] {
   const pref = prefer
     ?? (process.env['TAKO_ASR_PREFER'] === 'cloud' ? 'groq'
-      : process.env['TAKO_ASR_PREFER'] === 'local' ? 'mlx-local'
+      : process.env['TAKO_ASR_PREFER'] === 'local' ? 'whisper-local'
       : undefined)
-  if (pref === 'groq') return ['groq', 'mlx-local']
-  if (pref === 'mlx-local') return ['mlx-local', 'groq']
+  if (pref === 'groq') return ['groq', 'whisper-local']
+  if (pref === 'whisper-local') return ['whisper-local', 'groq']
   // default: local-first se installato (privacy/offline), altrimenti cloud-first
-  return localAsrAvailable() ? ['mlx-local', 'groq'] : ['groq', 'mlx-local']
+  return whisperAvailable() ? ['whisper-local', 'groq'] : ['groq', 'whisper-local']
 }
 
 /** Pre-avvia il motore locale in background (chiamare all'avvio del server). */
 export function warmupAsr(): void {
-  warmupLocalAsr()
+  warmupWhisper()
 }
 
 /**
@@ -119,21 +120,21 @@ export async function transcribePcm16(
   const wav = pcm16ToWav(pcm, sampleRate)
   const started = Date.now()
 
-  const local = localAsrAvailable()
+  const local = whisperAvailable()
   const cloud = !!process.env['GROQ_API_KEY']
   if (!local && !cloud) {
     throw new Error(
-      'Nessun motore ASR disponibile: motore locale non installato (scripts/setup-local-asr.sh) ' +
-      'e GROQ_API_KEY non configurata.',
+      'Nessun motore ASR disponibile: whisper-server locale non installato ' +
+      '(binario asr/whisper + modello in ~/.tako/models) e GROQ_API_KEY non configurata.',
     )
   }
 
   const errors: string[] = []
   for (const engine of engineOrder(opts.prefer)) {
     try {
-      if (engine === 'mlx-local') {
+      if (engine === 'whisper-local') {
         if (!local) continue
-        const text = await transcribeLocalWav(wav, language)
+        const text = await transcribeWhisperWav(wav, language)
         return { text, engine, ms: Date.now() - started }
       } else {
         if (!cloud) continue
