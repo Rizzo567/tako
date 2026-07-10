@@ -1,0 +1,59 @@
+# Render Blueprint — Tako control-plane cloud (TAKO_MODE=cloud).
+# Deploy via Docker (Dockerfile.cloud, build context = root del monorepo).
+# I segreti (sync:false) si inseriscono nella dashboard Render al primo deploy;
+# SESSION_SECRET e TOKEN_PEPPER li genera Render in automatico (generateValue).
+services:
+  - type: web
+    name: tako-cloud
+    runtime: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./apps/server/deploy/Dockerfile.cloud
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      # ── non segreti ──
+      - key: TAKO_MODE
+        value: cloud
+      - key: NODE_ENV
+        value: production
+      - key: EMBEDDED_DB
+        value: "0"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: COOKIE_MODE
+        value: samesite
+      - key: SITE_BASE_URL
+        value: https://takoitalia.com
+      - key: OAUTH_BASE_URL
+        value: https://api.takoitalia.com
+      - key: ALLOWED_ORIGINS
+        value: https://takoitalia.com,https://www.takoitalia.com
+      - key: EMAIL_TRANSPORT
+        value: resend
+      - key: EMAIL_FROM
+        value: Tako <no-reply@takoitalia.com>
+      # Destinatario notifiche di nuova registrazione (lead dal sito).
+      - key: ADMIN_NOTIFY_EMAIL
+        value: manuelrizzo474@gmail.com
+      # ── generati da Render (random sicuro) ──
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TOKEN_PEPPER
+        generateValue: true
+      # ── segreti: inserire nella dashboard Render (presi dal file Desktop) ──
+      - key: CLOUD_DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false

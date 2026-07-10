@@ -14,6 +14,7 @@ import { setupSocketHandlers } from './socket/handlers.js'
 import { setupDictationNamespace } from './socket/dictation.js'
 import { warmupAsr } from './lib/asr.js'
 import { authRoutes } from './routes/auth.js'
+import { setupRoutes, startHeartbeatLoop } from './routes/setup.js'
 import { restaurantRoutes } from './routes/restaurants.js'
 import { menuRoutes } from './routes/menu.js'
 import { tableRoutes } from './routes/tables.js'
@@ -36,6 +37,8 @@ import { startWhatsApp } from './lib/whatsapp.js'
 import { startMdns } from './lib/mdns.js'
 import { getLanIPv4s } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
+import { isCloudMode } from './cloud/config.js'
+import { startCloudServer } from './cloud/server.js'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
 // dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
@@ -44,6 +47,14 @@ export let io: SocketServer
 // Avvio del server. È una FUNZIONE (non codice top-level) così bootstrap.ts può
 // avviare prima il DB e poi chiamarla, con import statici (bundle-friendly).
 export async function startServer(): Promise<void> {
+  // Switch di modo: in TAKO_MODE=cloud montiamo il control-plane (route cloud,
+  // CORS allowlist, rate-limit Redis) e ci fermiamo qui. Il modo local (default)
+  // prosegue sotto INVARIATO.
+  if (isCloudMode()) {
+    await startCloudServer()
+    return
+  }
+
   const PORT = Number(process.env['PORT'] ?? 3001)
   const JWT_SECRET = process.env['JWT_SECRET']
   if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
@@ -181,6 +192,8 @@ fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString()
 
 // Routes
 await fastify.register(authRoutes, { prefix: '/api/auth' })
+// Pairing appliance↔cloud (claim + credenziale owner offline). Solo modo local.
+await fastify.register(setupRoutes, { prefix: '/api/setup' })
 await fastify.register(restaurantRoutes, { prefix: '/api/restaurants' })
 await fastify.register(menuRoutes, { prefix: '/api/menus' })
 await fastify.register(tableRoutes, { prefix: '/api/tables' })
@@ -244,6 +257,8 @@ await fastify.ready()
     if (useHttps) console.log(`[tls] HTTPS attivo (cert self-signed) → apri https://tako.local:${PORT}`)
     // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
     startMdns()
+    // Heartbeat periodica verso il cloud (best-effort, no-op se CLOUD_BASE_URL assente).
+    startHeartbeatLoop(fastify)
   } catch (err) {
     console.error(err)
     process.exit(1)

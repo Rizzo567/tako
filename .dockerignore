@@ -1,0 +1,45 @@
+# Context di build = ROOT del monorepo (sia per apps/server/Dockerfile che per
+# apps/server/deploy/Dockerfile.cloud). Escludiamo tutto ciò che non serve nell'immagine:
+# dipendenze reinstallate dentro l'immagine, build artifact, segreti, dati locali.
+
+# Dipendenze: reinstallate nell'immagine con pnpm --frozen-lockfile.
+**/node_modules
+
+# Git e metadati repo
+.git
+.gitignore
+.gitattributes
+
+# Segreti e ambiente locale — MAI dentro l'immagine (i secret arrivano da Fly).
+**/.env
+**/.env.*
+!**/.env.example
+
+# Build artifact / cache
+**/dist
+**/.next
+**/.turbo
+**/.expo
+*.tsbuildinfo
+apps/app/src-tauri/target
+apps/app/src-tauri/gen
+
+# Dati locali appliance / store ~/.tako / Postgres portatile (mai nel cloud)
+packages/db/.pgdata
+**/uploads
+.tako
+
+# Tooling agenti / docs strategiche / artefatti macchina
+.claude
+.claude.bak
+.superpowers
+strategia-vendita
+**/*.log
+.DS_Store
+Thumbs.db
+
+# Altre app non necessarie al control-plane cloud (immagine = solo apps/server + packages).
+apps/web
+apps/dashboard
+apps/app
+"Tako Dashboard App"

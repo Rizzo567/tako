@@ -168,14 +168,22 @@ export async function authRoutes(fastify: FastifyInstance) {
       return reply.code(429).send({ error: { code: 'BRUTE_FORCE', message: 'Troppi tentativi. Riprova tra 15 minuti.' } })
     }
 
-    const [user] = await db.select().from(users).where(eq(users.email, body.data.email)).limit(1)
-    if (!user?.passwordHash) {
+    const [user] = await db.select().from(users).where(eq(users.email, body.data.email.toLowerCase())).limit(1)
+    // Un utente è autenticabile se ha una password locale classica (staff/owner storico)
+    // OPPURE, per l'owner sincronizzato dal cloud, una credenziale owner LOCALE dedicata
+    // (local_owner_secret_hash) impostata al pairing per l'accesso OFFLINE (SEC-001).
+    // Il login offline non richiede mai il password_hash cloud (che non è sul box).
+    if (!user || (!user.passwordHash && !user.localOwnerSecretHash)) {
       recordFailedLogin(key)
       recordFailedLogin(ipKey)
       return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
     }
 
-    const valid = await bcrypt.compare(body.data.password, user.passwordHash)
+    // Confronto contro entrambe le credenziali disponibili. L'owner cloud-synced può
+    // avere SOLO local_owner_secret_hash (nessun passwordHash classico).
+    const matchClassic = user.passwordHash ? await bcrypt.compare(body.data.password, user.passwordHash) : false
+    const matchLocalOwner = user.localOwnerSecretHash ? await bcrypt.compare(body.data.password, user.localOwnerSecretHash) : false
+    const valid = matchClassic || matchLocalOwner
     if (!valid) {
       recordFailedLogin(key)
       recordFailedLogin(ipKey)

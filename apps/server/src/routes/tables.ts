@@ -5,7 +5,8 @@ import { db, tables, rooms, bills, orders } from '@tako/db'
 import { eq, and, inArray } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { clientBaseUrl } from '../lib/network.js'
+import { stableTableUrl, lanTableUrl } from '../lib/network.js'
+import { getApplianceId } from '../lib/cloud-client.js'
 import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { BILLABLE_STATUSES } from '../lib/billing.js'
 
@@ -150,9 +151,14 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
-    const url = `${clientBaseUrl()}/r/${req.user!.restaurantId}/t/${table.qrToken}`
+    // URL STABILE (mai l'IP): se l'appliance è accoppiata, punta al resolver cloud
+    // /t/<applianceId>/... che reindirizza all'IP LAN corrente. `lanUrl` è il QR di BACKUP
+    // mDNS (tako.local) per l'accesso offline-first col cloud giù. Vedi lib/network.ts.
+    // Il rendering resta qrWithOctopus (mascotte al centro, error correction H).
+    const url = stableTableUrl(getApplianceId(), req.user!.restaurantId, table.qrToken)
+    const lanUrl = lanTableUrl(req.user!.restaurantId, table.qrToken)
     const qrDataUrl = await qrWithOctopus(url, 400)
-    return { data: { qrDataUrl, url, tableNumber: table.number } }
+    return { data: { qrDataUrl, url, lanUrl, tableNumber: table.number } }
   })
 
   // Refresh QR token (invalidates old)
