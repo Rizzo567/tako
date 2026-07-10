@@ -26,6 +26,106 @@ function useTick(ms = 1000) {
   useEffect(() => { const t = setInterval(() => set(x => x + 1), ms); return () => clearInterval(t); }, [ms]);
 }
 
+/* ── Coriandoli celebrativi (nessuna libreria: Web Animations API) ────────────
+   Burst dall'alto della card al completamento del setup. Si autodistrugge. */
+function Confetti({ onDone, duration = 1500 }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const host = ref.current; if (!host) return;
+    const colors = ["#ED7159", "#F2B705", "#3CB371", "#4F86C6", "#E86A92", "#8E7DBE", "#FF8C42"];
+    const pieces = [];
+    const N = 90;
+    for (let i = 0; i < N; i++) {
+      const el = document.createElement("i");
+      const c = colors[i % colors.length];
+      const w = 6 + Math.random() * 7, h = w * (0.5 + Math.random() * 0.4);
+      el.style.cssText = `position:absolute;top:-6px;left:${8 + Math.random() * 84}%;width:${w}px;height:${h}px;background:${c};border-radius:${Math.random() < .35 ? "50%" : "2px"};will-change:transform,opacity;`;
+      host.appendChild(el);
+      const dx = (Math.random() - 0.5) * 300;
+      const dy = 200 + Math.random() * 300;
+      const rot = (Math.random() - 0.5) * 1000;
+      el.animate(
+        [{ transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+         { transform: `translate(${dx}px,${dy}px) rotate(${rot}deg)`, opacity: 0 }],
+        { duration: 1100 + Math.random() * 900, delay: Math.random() * 220, easing: "cubic-bezier(.15,.6,.35,1)", fill: "forwards" }
+      );
+      pieces.push(el);
+    }
+    const t = setTimeout(() => onDone && onDone(), duration);
+    return () => { clearTimeout(t); pieces.forEach(p => p.remove()); };
+  }, []);
+  return <div ref={ref} aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "visible", pointerEvents: "none", zIndex: 6 }} />;
+}
+
+/* ── Card scorciatoia Cowork: sostituisce il setup una volta completato ──────── */
+function CoworkCard({ go, entering }) {
+  const [shown, setShown] = useState(!entering);
+  useEffect(() => { if (entering) { const r = requestAnimationFrame(() => setShown(true)); return () => cancelAnimationFrame(r); } }, [entering]);
+  return (
+    <Card pad={18} style={{ background: "linear-gradient(135deg,#fff,var(--brand-wash))",
+      transform: shown ? "scale(1)" : "scale(.86)", opacity: shown ? 1 : 0,
+      transition: "transform .42s cubic-bezier(.34,1.56,.5,1), opacity .32s ease" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+        <Tako pose="hello" size={46} float={false} />
+        <div>
+          <h3 style={{ fontSize: 16 }}>Tako Cowork</h3>
+          <p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>Chiedi incassi, stato tavoli — o detta un comando</p>
+        </div>
+      </div>
+      <button className="press" onClick={() => go("cowork")}
+        style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 13, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 14.5, boxShadow: "0 8px 20px -8px var(--brand)" }}>
+        <Icon name="sparkles" size={18} />Apri Cowork
+        <span style={{ marginLeft: 4, fontSize: 12, fontWeight: 700, opacity: .8, padding: "2px 7px", borderRadius: 7, background: "rgba(255,255,255,.22)" }}>⌘K</span>
+      </button>
+    </Card>
+  );
+}
+
+/* ── Slot onboarding → celebrazione → Cowork ──────────────────────────────────
+   Stati: "setup" (checklist) · "celebrate" (coriandoli + pop-out) · "cowork".
+   Se il setup è GIÀ completo al mount → parte diretto su "cowork" (nessuna festa).
+   Quando l'ultima spunta si completa in sessione (allDone: false→true) → festa. */
+function SetupSlot({ go, setupDone, allDone }) {
+  const [phase, setPhase] = useState(() => (allDone ? "cowork" : "setup"));
+  const prevAllDone = useRef(allDone);
+  useEffect(() => {
+    if (allDone && !prevAllDone.current && phase === "setup") setPhase("celebrate");
+    prevAllDone.current = allDone;
+  }, [allDone, phase]);
+  useEffect(() => {
+    if (phase !== "celebrate") return;
+    const t = setTimeout(() => setPhase("cowork"), 1150); // pop-out finita → entra Cowork
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  if (phase === "cowork") return <CoworkCard go={go} entering={prevAllDone.current === true && phase === "cowork"} />;
+
+  const leaving = phase === "celebrate";
+  return (
+    <div style={{ position: "relative" }}>
+      {leaving && <Confetti duration={1500} />}
+      <Card pad={18} style={{ background: "linear-gradient(135deg,#fff,var(--brand-wash))",
+        transformOrigin: "center", transform: leaving ? "scale(.72)" : "scale(1)", opacity: leaving ? 0 : 1,
+        transition: leaving ? "transform .5s cubic-bezier(.5,-0.4,.7,.4), opacity .42s ease .12s" : "none" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+          <Tako pose="serve" size={46} float={false} />
+          <div><h3 style={{ fontSize: 16 }}>{allDone ? "Setup completato" : "Completa il setup"}</h3><p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{allDone ? "Tutto pronto!" : `${setupDone}/${SETUP.length} passi · ci siamo quasi`}</p></div>
+        </div>
+        <Progress value={(setupDone / SETUP.length) * 100} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 14 }}>
+          {SETUP.map(s => (
+            <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: s.done ? "var(--ink-3)" : "var(--ink)" }}>
+              <span style={{ width: 20, height: 20, borderRadius: 99, display: "grid", placeItems: "center", background: s.done ? "var(--ok)" : "var(--ink)", color: "#fff" }}><Icon name="check" size={12} stroke={3} /></span>
+              <span style={{ textDecoration: s.done ? "line-through" : "none", fontWeight: s.done ? 500 : 600 }}>{s.k}</span>
+              {!s.done && <span style={{ marginLeft: "auto" }}><Btn size="sm" kind="brand" style={{ height: 26, padding: "0 13px", fontSize: 12.5 }} onClick={() => go(s.route || "impostazioni")}>Vai</Btn></span>}
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
 /* ═══════════════════ DASHBOARD HOME ═══════════════════ */
 function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
   const active = orders.filter(o => !["servito", "pagato", "annullato"].includes(o.stato)).length;
@@ -78,24 +178,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
         </Card>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {incomplete && (
-            <Card pad={18} style={{ background: "linear-gradient(135deg,#fff,var(--brand-wash))" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                <Tako pose="serve" size={46} float={false} />
-                <div><h3 style={{ fontSize: 16 }}>{allDone ? "Setup completato" : "Completa il setup"}</h3><p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{allDone ? "Tutto pronto · puoi nasconderlo dalle Impostazioni" : `${setupDone}/${SETUP.length} passi · ci siamo quasi`}</p></div>
-              </div>
-              <Progress value={(setupDone / SETUP.length) * 100} />
-              <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 14 }}>
-                {SETUP.map(s => (
-                  <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: s.done ? "var(--ink-3)" : "var(--ink)" }}>
-                    <span style={{ width: 20, height: 20, borderRadius: 99, display: "grid", placeItems: "center", background: s.done ? "var(--ok)" : "var(--ink)", color: "#fff" }}><Icon name="check" size={12} stroke={3} /></span>
-                    <span style={{ textDecoration: s.done ? "line-through" : "none", fontWeight: s.done ? 500 : 600 }}>{s.k}</span>
-                    {!s.done && <span style={{ marginLeft: "auto" }}><Btn size="sm" kind="brand" style={{ height: 26, padding: "0 13px", fontSize: 12.5 }} onClick={() => go(s.route || "impostazioni")}>Vai</Btn></span>}
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
+          {incomplete && <SetupSlot go={go} setupDone={setupDone} allDone={allDone} />}
           <Card pad={18}>
             <h3 style={{ fontSize: 16, marginBottom: 12 }}>Scorciatoie</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }}>
