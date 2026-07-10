@@ -15,10 +15,15 @@
    si può rimuovere worktree + branch? Serve il tuo ok.
 
 ## 🟠 Verifiche in sospeso
+- **WhatsApp↔copilot**: mai testato e2e — apri Impostazioni → pannello WhatsApp → scansiona il
+  QR col telefono, poi prova un comando dal tuo numero (whitelist).
 - **Google Safe Browsing**: revisione richiesta il 2026-06-27 — controllare se l'avviso è
   sparito; se rigettata, ri-richiedere (lato codice è già tutto a posto).
 - **Stampante termica**: codice ESC/POS fatto, mai provato su stampante fisica.
 - **Test browser e2e sito**: click link verifica email → login → OAuth Google/GitHub.
+- **Demo mobile sito**: fix crash iOS è su branch `site-auth` (`a101b49`), il LIVE non ce l'ha →
+  merge site-auth→main (tuo) + togliere `?debug`. Video showcase Mac incompleto: handoff in
+  `~/Projects/Tako-site-auth/GOAL-demo-mobile.md`.
 
 ## 🟡 SEO / presenza (serve login Google)
 - Search Console: verifica TXT su Cloudflare + invio `https://takoitalia.com/sitemap.xml`.

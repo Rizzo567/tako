@@ -53,7 +53,8 @@ App desktop: build+deploy in place con `sh scripts/deploy-desktop.sh` (mai elimi
 
 ## 3. ✅ Fatto (verificato sul codice, lint 2026-07-10)
 
-**Backend** — Fastify+Socket.io+Drizzle, 37/37 test integrazione verdi (al 2026-07-02). Route
+**Backend** — Fastify+Socket.io+Drizzle, **72/72 test integrazione verdi** (2026-07-09, incl.
+`tests/review-fixes.test.ts`) + 31/31 E2E guidati dal vivo. Route
 complete: auth, restaurants, menus, tables, orders, bills, inventory, stats, customer, staff,
 shifts, reservations, insights, print, ai, ai-owner, uploads. Error handler globale JSON
 strutturato (`index.ts:74`). Simulazione "ristorante pieno" verde.
@@ -61,7 +62,9 @@ strutturato (`index.ts:74`). Simulazione "ristorante pieno" verde.
 **Sicurezza (chiusa)** — PIN bcrypt, JWT startup assertion, cookie HttpOnly staff+tavolo,
 `requireTableSession` su route customer, CSP reale, rate-limit AI per tavolo, IDOR/leak
 cross-tenant chiusi, magic-bytes upload. Pentest 2026-05-07 findings chiusi. Revisione
-pre-vendita 2026-07-02 (`fd7ba39`): race soldi, privilegi copilot, concorrenza.
+app 2026-07-09 (`fd7ba39`): privilege escalation copilot chiusa (gate ruoli in `executeAction`),
+race totale conto (lock unificato + `billTotalsFromOrders` con `orderIds` espliciti), cancel
+ottimistico, idempotency ordini staff, DELETE staff scoped.
 
 **Dashboard staff** — prototipo "Tako Dashboard" verbatim come SPA (`public/staff/`), wirata al
 backend reale su tutte le schermate. Edit staff esistente (PATCH `staff.ts:44` + modale). UI
@@ -90,14 +93,19 @@ stampante fisica in campo mancante).
    (`tests/dictation.test.ts`). Binario `asr/whisper/whisper-server` NON va in git (ignorato).
 2. **WhatsApp ↔ copilot owner**: `lib/whatsapp.ts` + `routes/whatsapp.ts` (Baileys, whitelist
    numeri, mutation solo con "SÌ", OFF di default, auth in `~/.tako/whatsapp-auth`); pannello
-   QR owner-only in `06-screens-gestione.js`.
+   QR owner-only in `06-screens-gestione.js`. **NON testato e2e** (serve scan QR di Manuel).
 3. **owner-prompt condiviso**: `lib/owner-prompt.ts` — stesso system prompt per dashboard e WhatsApp.
-4. **Copilot streaming SSE**: `POST /api/ai/owner/chat/stream` + UI a rendering incrementale
-   (`11-copilot.js`), fallback non-streaming. Nessun test sul percorso streaming.
+4. **Copilot streaming SSE + routing modello**: `POST /api/ai/owner/chat/stream`, routing
+   mutation→gpt-oss-120b / letture→8b, failover 5 modelli su 429, pre-gate deterministico
+   crea-tavolo, UI a rendering incrementale + sidebar multi-chat + widget Streaming
+   (`11-copilot.js`). Batteria "da ristoratore" 18/20, risposte ≤1s. Nessun test sul percorso SSE.
 5. **UI Cowork/setup**: Confetti, CoworkCard, SetupSlot (`04-screens-operative.js`).
 
-→ Da committare in 5 commit atomici (feature per feature). I binari/artifact restano fuori
-(gitignore sistemati il 2026-07-10).
+Tutto già deployato in place su `/Applications/Tako.app` e verificato live; il DB dell'app è su
+porta 54317 in `~/Library/Application Support/com.tako.dashboard/pgdata` (NON `~/.tako/pgdata`,
+che è del dev server). → Da committare in 5 commit atomici (feature per feature). Binari/artifact
+restano fuori (gitignore sistemati 2026-07-10; il binario whisper-server e il modello q8 834MB
+vivono solo su questo Mac / in `~/.tako/models`).
 
 ---
 
@@ -109,6 +117,8 @@ stampante fisica in campo mancante).
 
 ### Sicurezza / robustezza
 - [ ] **RLS runtime**: `withRestaurantContext()` (`packages/db/src/rls.ts:28`) ha ZERO chiamanti — isolamento tenant solo applicativo. Piano pronto: §6-A.
+- [ ] **Verifica email obbligatoria appliance** (piano A 2026-07-10): `routes/auth.ts` di fase1 valida solo il FORMATO email → email inesistenti passano. Flusso deciso: registrazione locale → sync `cloud_owners` (Supabase, schema già su cloud-auth) → email Resend (`no-reply@takoitalia.com`, live) → dashboard gated finché non confermata. Dipende dal merge cloud-auth.
+- [ ] Residui revisione 2026-07-09 (media/bassa): ledger inventario (clamp GREATEST divergente) · chiamate cameriere effimere non persistite · `window._WAITER` sempre vuoto · `delete_table` non invalida QR · `menu.ts:189` toggle senza validazione · prenotazione `no_show` blocca slot · brute-force PIN · rate-limit cookie-rotation · rolling session eterna. Dettaglio: `brain/decisioni/2026-07-09-tako-revisione-fix-critici`.
 - [ ] Test sul percorso streaming SSE del copilot (`runAssistantStream`).
 - [ ] Test coverage server >70%.
 
@@ -123,6 +133,10 @@ stampante fisica in campo mancante).
 - [ ] Tempo medio permanenza tavolo (oggi solo tempo al primo ordine, `stats.ts:108`).
 - [ ] Export CSV statistiche (`GET /api/stats/export?from=&to=`).
 - [ ] Report settimanale email (nodemailer assente dal progetto).
+
+### Crescita
+- [ ] Newsletter (piano A 2026-07-10): opt-in checkbox alla registrazione → Resend Audience → broadcast dalla dashboard Resend (zero codice invio).
+- [ ] Demo mobile sito: fix crash iOS committato su `feat/site-auth-20260625` (`a101b49`) ma il LIVE non ce l'ha (serve merge site-auth→main, solo Manuel, + togliere `?debug`). Aperto: video showcase Mac senza ordini/chiamate in arrivo — handoff completo in `~/Projects/Tako-site-auth/GOAL-demo-mobile.md` (`/tmp/recweb.swift` scritto, non testato).
 
 ### Differenziatori (P2)
 - [ ] Assegnazione cameriere a tavolo (`assignedWaiterId` solo in schema, zero usi).
@@ -142,13 +156,16 @@ Pagamenti digitali/Stripe, RT/corrispettivi/SDI, WhatsApp/SMS marketing, login a
 
 ---
 
-## 5. 🗺️ Prossimo giro consigliato (ordine)
+## 5. 🗺️ Prossimo giro — piano A (deciso con Manuel il 2026-07-10)
 
-1. Commit del pendente (5 atomici) → tree pulito.
-2. `.env.local` cleanup (1 min, stesso giro).
-3. **RLS runtime** (§6-A) — ultimo buco sicurezza pre-vendita.
-4. Igiene repo (§6-C) — push (il canonico di produzione esiste solo su questo Mac!).
-5. Poi a scelta: QR cloud live (§6-B), icone 3D (§6-D), analytics P1.
+1. Commit del pendente (5 atomici) + `.env.local` cleanup → tree pulito.
+2. **Merge+push cloud-auth→main INSIEME a Manuel** (§6-C) — P0: il prod su Render gira da un
+   branch che esiste solo su questo Mac. Prima consolidare fase1.
+3. **Verifica email obbligatoria appliance** (§4 sicurezza) → sblocca anche la **newsletter**
+   (Resend Audience).
+4. **RLS runtime** (§6-A) — ultimo buco sicurezza pre-vendita.
+5. Poi: QR cloud live (§6-B), onboarding gate, notarizzazione, icone 3D (§6-D), analytics P1.
+Riferimento: `brain/decisioni/2026-07-10-tako-email-verifica-newsletter`.
 
 ---
 
