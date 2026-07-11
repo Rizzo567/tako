@@ -21,6 +21,7 @@ import { db, restaurants, rooms } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { runAssistant, executeAction } from './ai-actions.js'
 import { ownerSystemPrompt } from './owner-prompt.js'
+import { saveImageBuffer } from './image-store.js'
 
 // ─────────────────────────── Percorsi & config su disco ───────────────────────────
 // TAKO_HOME è impostato dalla shell desktop; fallback ~/.tako (stesso schema di bootstrap.ts).
@@ -106,6 +107,23 @@ function rememberSent(id?: string | null): void {
   if (sentIds.size > 300) { const first = sentIds.values().next().value; if (first) sentIds.delete(first) }
 }
 
+// downloadMediaMessage di Baileys (impostato all'avvio del socket): scarica i byte di
+// un'immagine ricevuta. Serve per assegnare la foto a un piatto.
+let downloadMedia: ((msg: any, type: 'buffer', opts: any, ctx: any) => Promise<Buffer>) | null = null
+
+// Foto ricevuta in attesa del piatto a cui assegnarla (se l'owner manda l'immagine senza
+// dire il piatto). Il messaggio di testo successivo = nome del piatto. TTL 10 minuti.
+const pendingImageByNumber = new Map<string, { url: string; at: number }>()
+const PENDING_IMAGE_TTL_MS = 10 * 60 * 1000
+function getPendingImage(number: string): { url: string; at: number } | null {
+  const p = pendingImageByNumber.get(number)
+  if (!p) return null
+  if (Date.now() - p.at > PENDING_IMAGE_TTL_MS) { pendingImageByNumber.delete(number); return null }
+  return p
+}
+function setPendingImage(number: string, url: string): void { pendingImageByNumber.set(number, { url, at: Date.now() }) }
+function clearPendingImage(number: string): void { pendingImageByNumber.delete(number) }
+
 // Proposte di mutation in attesa di conferma, per numero. TTL 10 minuti.
 interface PendingProposal { name: string; args: any; label: string; at: number }
 const pendingByNumber = new Map<string, PendingProposal>()
@@ -176,6 +194,7 @@ export async function startWhatsApp(): Promise<void> {
   try {
     const makeWASocket = baileys.default ?? baileys.makeWASocket
     const { useMultiFileAuthState, DisconnectReason } = baileys
+    downloadMedia = baileys.downloadMediaMessage ?? null
     const { state, saveCreds } = await useMultiFileAuthState(authDir())
 
     sock = makeWASocket({
@@ -275,8 +294,9 @@ async function handleIncoming(msg: any): Promise<void> {
     number = jidNum
   }
 
+  const imageMsg = msg.message?.imageMessage
   const text = extractText(msg).trim()
-  if (!text) return
+  if (!text && !imageMsg) return   // niente da fare (nessun testo né immagine)
 
   // Autorizzazione: bootstrap se whitelist vuota, altrimenti whitelist stretta.
   const cfg = readConfig()
@@ -285,7 +305,7 @@ async function handleIncoming(msg: any): Promise<void> {
     if (/^collega\s+tako$/i.test(text)) {
       const next = setAllowedNumbers([number])
       console.log(`[whatsapp] bootstrap owner registrato: ${number}`)
-      await reply(jid, `✅ Tako collegato a questo numero. Ora puoi comandare la dashboard da qui.\nEsempi: "incasso di oggi", "segna esaurito la carbonara", "crea tavolo 12 da 4 in sala principale".`)
+      await reply(jid, `✅ Tako collegato a questo numero. Ora puoi comandare la dashboard da qui.\nEsempi: "incasso di oggi", "segna esaurito la carbonara", "assegna questa foto alla carbonara" (allegando una foto).`)
       allowedNumbers = next
     }
     // Whitelist vuota e messaggio diverso da "collega tako": ignora in silenzio.
@@ -293,6 +313,18 @@ async function handleIncoming(msg: any): Promise<void> {
   }
   if (!allowedNumbers.includes(number)) {
     console.log(`[whatsapp] messaggio da numero NON autorizzato ignorato: ${number}`)
+    return
+  }
+
+  // ── Immagine allegata → assegnala a un piatto (caption = nome del piatto) ──
+  if (imageMsg) { await handleIncomingImage(msg, jid, number, text); return }
+
+  // ── Foto già ricevuta in attesa del piatto → questo testo È il nome del piatto ──
+  const pendingImg = getPendingImage(number)
+  if (pendingImg) {
+    if (CANCEL_RE.test(text)) { clearPendingImage(number); await reply(jid, '❌ Assegnazione foto annullata.'); return }
+    clearPendingImage(number)
+    await assignImageToDish(jid, number, pendingImg.url, text)
     return
   }
 
@@ -313,6 +345,46 @@ async function handleIncoming(msg: any): Promise<void> {
   }
 
   await runOwnerTurn(jid, number, text)
+}
+
+// Immagine ricevuta: scarica i byte, salvala (stessa pipeline degli upload), poi assegna
+// al piatto indicato nella caption. Senza caption → resta in attesa del nome del piatto.
+async function handleIncomingImage(msg: any, jid: string, number: string, caption: string): Promise<void> {
+  const restaurantId = await primaryRestaurantId()
+  if (!restaurantId) { await reply(jid, 'Nessun ristorante configurato.'); return }
+  if (!downloadMedia || !sock) { await reply(jid, 'Ricezione immagini non disponibile in questo momento.'); return }
+  let buf: Buffer
+  try {
+    buf = await downloadMedia(msg, 'buffer', {}, { reuploadRequest: sock.updateMediaMessage })
+  } catch (err) {
+    console.error('[whatsapp] download immagine fallito:', err)
+    await reply(jid, 'Non sono riuscito a scaricare l\'immagine, riprova.')
+    return
+  }
+  const saved = await saveImageBuffer(restaurantId, buf)
+  if ('error' in saved) { await reply(jid, `⚠️ ${saved.error}`); return }
+  await assignImageToDish(jid, number, saved.url, caption)
+}
+
+// Assegna una foto (già salvata, url) al piatto `dishName`. Se il piatto non è indicato o
+// non è trovato, mette la foto IN ATTESA e chiede il nome del piatto.
+async function assignImageToDish(jid: string, number: string, url: string, dishName: string): Promise<void> {
+  const restaurantId = await primaryRestaurantId()
+  if (!restaurantId) { await reply(jid, 'Nessun ristorante configurato.'); return }
+  const name = (dishName || '').trim()
+  if (!name) {
+    setPendingImage(number, url)
+    await reply(jid, '📷 Foto ricevuta. A quale piatto la assegno? Scrivi il nome (o "annulla").')
+    return
+  }
+  const res = await executeAction('set_dish_image', { itemName: name, imageUrl: url }, { restaurantId, role: 'owner' }, 'owner', { allowMutation: true })
+  if (res.ok) {
+    pushHistory(number, 'assistant', res.summary)
+    await reply(jid, `✅ ${res.summary}`)
+  } else {
+    setPendingImage(number, url)
+    await reply(jid, `⚠️ ${res.summary}\nScrivi il nome esatto del piatto a cui assegnare la foto (o "annulla").`)
+  }
 }
 
 // Estrae il testo da un messaggio Baileys (conversation o extendedTextMessage).

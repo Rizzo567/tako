@@ -28,6 +28,7 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
     // Accettiamo largo e TRONCHIAMO, invece di rifiutare.
     const schema = z.object({
       message: z.string().min(1).max(8000),
+      imageUrl: z.string().max(500).optional(),
       history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(20000) })).max(24).default([]),
     })
     const parsed = schema.safeParse(req.body)
@@ -49,6 +50,7 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
         systemPrompt,
         history,
         userMessage: message,
+        pendingImageUrl: parsed.data.imageUrl,
       })
       return { data: { message: turn.message, actions: turn.actions, pending: turn.pending } }
     } catch (err: any) {
@@ -75,6 +77,7 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
   }, async (req, reply) => {
     const schema = z.object({
       message: z.string().min(1).max(8000),
+      imageUrl: z.string().max(500).optional(),
       history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(20000) })).max(24).default([]),
     })
     const parsed = schema.safeParse(req.body)
@@ -108,6 +111,7 @@ export async function aiOwnerRoutes(fastify: FastifyInstance) {
         systemPrompt,
         history,
         userMessage: message,
+        pendingImageUrl: parsed.data.imageUrl,
       }, (ev) => send(ev))
       send({ type: 'done', message: turn.message, actions: turn.actions, pending: turn.pending })
     } catch (err: any) {

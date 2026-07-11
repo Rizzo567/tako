@@ -633,6 +633,22 @@
     const messages = active.messages;
 
     const [input, setInput] = useState("");
+    // Immagine allegata (per assegnarla a un piatto): caricata subito, l'URL viaggia col
+    // messaggio. Il server la assegna al piatto nominato nel testo (pre-gate deterministico).
+    const [attachedImage, setAttachedImage] = useState(null);
+    const [imgBusy, setImgBusy] = useState(false);
+    const onPickCopilotImage = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = "";
+      if (!file) return;
+      setImgBusy(true);
+      try {
+        const res = await window.TakoActions.uploadImage(file);
+        setAttachedImage({ url: res.url });
+      } catch (err) {
+        if (window.toast) window.toast(err.message || "Upload immagine fallito", { type: "error" });
+      } finally { setImgBusy(false); }
+    };
     const [busy, setBusy] = useState(false);
     const [dictState, setDictState] = useState("idle"); // idle | rec | busy
     const [drawer, setDrawer] = useState(false);         // pannello storico su mobile
@@ -685,20 +701,25 @@
 
     const send = async (override) => {
       const text = (override != null ? override : input).trim();
-      if (!text || busy) return;
+      const img = attachedImage;
+      if ((!text && !img) || busy) return;
       setInput("");
+      setAttachedImage(null);
       // History = conversazione PRECEDENTE (senza il messaggio corrente: il server
       // lo aggiunge già come userMessage — includerlo qui lo duplicava nel prompt).
       const history = messages.slice(-12).map((m) => ({ role: m.role, content: String(m.content || "").slice(0, 1900) }));
+      // Con immagine ma senza testo, mandiamo comunque un messaggio (min 1 char lato server);
+      // il pre-gate immagine risolve il piatto dal testo. Con foto → suggerisci di nominarlo.
+      const msgOut = (text || "foto").slice(0, 3900);
       // Aggiungo il turno utente + un placeholder assistente da riempire in streaming.
-      setMessages((m) => [...m, { role: "user", content: text }, { role: "assistant", content: "", pending: [], streaming: true }]);
+      setMessages((m) => [...m, { role: "user", content: text || "📷 (immagine)", image: img ? img.url : undefined }, { role: "assistant", content: "", pending: [], streaming: true }]);
       setBusy(true);
       focusInput(0); // mantieni il focus sul composer dopo l'invio
       try {
         const r = await fetch("/api/ai/owner/chat/stream", {
           method: "POST", credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text.slice(0, 3900), history }),
+          body: JSON.stringify({ message: msgOut, history, imageUrl: img ? img.url : undefined }),
         });
         if (!r.ok || !r.body) throw Object.assign(new Error("no-stream"), { status: r.status });
         const reader = r.body.getReader();
@@ -727,7 +748,7 @@
         // Fallback: una volta sulla versione NON-streaming (SSE assente/proxy, oppure
         // evento error dal server — es. quota esaurita sul modello grande).
         try {
-          const data = await TakoAPI.post("/ai/owner/chat", { message: text.slice(0, 3900), history });
+          const data = await TakoAPI.post("/ai/owner/chat", { message: msgOut, history, imageUrl: img ? img.url : undefined });
           patchLast((a) => ({ ...a, content: data.message || "Fatto.", pending: Array.isArray(data.pending) ? data.pending : [], streaming: false }));
         } catch (ex2) {
           const ev = (ex && ex.ev) || { code: ex2 && ex2.status === 503 ? "AI_UNAVAILABLE" : ex2 && ex2.status === 429 ? "AI_RATE_LIMITED" : "" };
@@ -803,7 +824,7 @@
     const hour = new Date().getHours();
     const greet = hour < 12 ? "Buongiorno" : hour < 18 ? "Buon pomeriggio" : "Buonasera";
     const owner = (window.RESTAURANT && (RESTAURANT.owner || RESTAURANT.name)) || "";
-    const canSend = !!input.trim() && !busy;
+    const canSend = (!!input.trim() || !!attachedImage) && !busy;
 
     // Composer stile Claude: box arrotondato, textarea, mic a sinistra, invio a destra.
     const composer = (
@@ -819,6 +840,13 @@
 
         <div style={{ borderRadius: 24, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E5E5)",
           boxShadow: "0 1px 2px rgba(0,0,0,.06), 0 12px 32px rgba(30,20,10,.07)", padding: "14px 16px 10px" }}>
+          {attachedImage && (
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "5px 8px 5px 5px", borderRadius: 12, background: "var(--sunken,#F4F0E7)", border: "1px solid var(--hairline,#E5E5E5)" }}>
+              <img src={attachedImage.url} alt="allegato" style={{ width: 34, height: 34, borderRadius: 8, objectFit: "cover" }} />
+              <span style={{ fontSize: 12.5, color: "var(--ink-2,#666)" }}>Foto pronta — scrivi a quale piatto assegnarla</span>
+              <button onClick={() => setAttachedImage(null)} aria-label="Rimuovi" style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--ink-3,#999)", fontSize: 16, lineHeight: 1, padding: "0 2px" }}>×</button>
+            </div>
+          )}
           <textarea ref={inputRef} value={input} rows={1}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
@@ -828,6 +856,13 @@
               fontFamily: "inherit", display: "block", padding: "2px 2px 0" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
             {DictBtn && <DictBtn onText={(seg) => typeInto(seg)} onStateChange={setDictState} size={36} />}
+            <label aria-label="Allega immagine" title="Allega una foto da assegnare a un piatto"
+              style={{ width: 36, height: 36, borderRadius: 12, display: "grid", placeItems: "center", cursor: imgBusy ? "wait" : "pointer", color: "var(--ink-2,#666)", border: "1px solid var(--hairline,#E5E5E5)", background: "transparent" }}>
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onPickCopilotImage} disabled={imgBusy} style={{ position: "absolute", width: 0, height: 0, opacity: 0 }} />
+              {imgBusy
+                ? <span style={{ fontSize: 12 }}>…</span>
+                : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>}
+            </label>
             <div style={{ flex: 1 }} />
             <button onClick={() => send()} disabled={!canSend} aria-label="Invia"
               style={{ width: 36, height: 36, borderRadius: 12, border: "none", display: "grid", placeItems: "center",
@@ -856,6 +891,7 @@
                     color: m.role === "user" ? "var(--on-brand,#fff)" : "var(--ink,#2A1F1A)",
                     border: m.role === "user" ? "none" : "1px solid var(--hairline,#eee)",
                     fontSize: 14.5, lineHeight: 1.45, fontWeight: 500, whiteSpace: "pre-wrap" }}>
+                    {m.image && <img src={m.image} alt="allegato" style={{ display: "block", maxWidth: 180, borderRadius: 10, marginBottom: m.content ? 8 : 0 }} />}
                     {m.content || (m.streaming ? "…" : "")}
                     {m.streaming && m.content ? <span style={{ display: "inline-block", width: 6, height: 14, marginLeft: 3, borderRadius: 2, background: "var(--brand,#ED7159)", verticalAlign: "-2px", opacity: .55 }} /> : null}
                   </div>

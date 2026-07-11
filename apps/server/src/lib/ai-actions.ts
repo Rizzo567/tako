@@ -59,6 +59,10 @@ export interface ActionDef {
   parameters: Record<string, any>   // JSON schema per il function-calling
   label: (args: any) => string      // etichetta umana (conferma owner)
   execute: (ctx: ActionContext, args: any) => Promise<ActionResult>
+  // Azione INTERNA: eseguibile via executeAction ma MAI offerta all'LLM (che
+  // inventerebbe i parametri). Es. set_dish_image: l'URL viene dal file caricato, non
+  // dal modello → la pilotiamo noi in modo deterministico (WhatsApp/copilot).
+  hidden?: boolean
 }
 
 const ORDER_STATUS_IT: Record<string, string> = {
@@ -167,6 +171,17 @@ function emitMenuChanged(restaurantId: string): void {
     io.to(`restaurant:${restaurantId}`).emit('menu:updated', {})
     io.to(`menu:${restaurantId}`).emit('menu:updated', {})
   } catch { /* socket best-effort */ }
+}
+
+// Menu attivo del ristorante, creandone uno di default se non esiste ancora. Permette di
+// costruire il menu da zero via chat ("crea la sezione Antipasti") senza dover prima
+// aprire la dashboard.
+async function ensureMenu(restaurantId: string) {
+  const rows = await db.select().from(menus).where(eq(menus.restaurantId, restaurantId)).orderBy(asc(menus.position))
+  const existing = rows.find(m => m.active) ?? rows[0]
+  if (existing) return existing
+  const [created] = await db.insert(menus).values({ restaurantId, name: 'Menu' }).returning()
+  return created!
 }
 
 // Risolve un MEMBRO dello staff per nome (attivi), match univoco o niente.
@@ -442,10 +457,8 @@ const ACTIONS: ActionDef[] = [
       const name = (args?.name ?? '').toString().trim()
       const price = Number(args?.price)
       if (!name || !Number.isFinite(price) || price < 0) return { ok: false, summary: 'Nome o prezzo non valido.' }
-      // menu del ristorante (primo attivo, altrimenti il primo)
-      const menusRows = await db.select().from(menus).where(eq(menus.restaurantId, ctx.restaurantId)).orderBy(asc(menus.position))
-      const menu = menusRows.find(m => m.active) ?? menusRows[0]
-      if (!menu) return { ok: false, summary: 'Nessun menu configurato. Crea prima un menu dalla dashboard.' }
+      // menu del ristorante (attivo; creato al volo se non esiste ancora)
+      const menu = await ensureMenu(ctx.restaurantId)
       const sections = await db.select().from(menuSections).where(eq(menuSections.menuId, menu.id)).orderBy(asc(menuSections.position))
       const wanted = (args?.sectionName ?? '').toString().toLowerCase().trim()
       // Stessa politica di resolveSection: esatto → prefisso → contiene, e SOLO se
@@ -478,6 +491,45 @@ const ACTIONS: ActionDef[] = [
       if (!item) return { ok: false, summary: 'Creazione non riuscita.' }
       emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: item.id, name: item.name, price: item.price, section: section.name }, summary: `Creato "${item.name}" a €${item.price} in "${section.name}".` }
+    },
+  },
+  {
+    name: 'create_menu_section',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Crea una nuova sezione/categoria del menu (es. "Antipasti", "Primi", "Dolci").',
+    parameters: { type: 'object', properties: { name: { type: 'string' } }, required: ['name'] },
+    label: (a) => `Crea sezione menu "${a?.name ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const name = (args?.name ?? '').toString().trim()
+      if (!name) return { ok: false, summary: 'Nome sezione mancante.' }
+      const menu = await ensureMenu(ctx.restaurantId)
+      const sections = await db.select().from(menuSections).where(eq(menuSections.menuId, menu.id))
+      if (sections.some(s => s.name.toLowerCase() === name.toLowerCase())) return { ok: false, summary: `La sezione "${name}" esiste già.` }
+      const [section] = await db.insert(menuSections).values({ menuId: menu.id, name: name.slice(0, 60), position: sections.length }).returning()
+      emitMenuChanged(ctx.restaurantId)
+      return { ok: true, data: { id: section!.id, name: section!.name }, summary: `Sezione "${section!.name}" creata.` }
+    },
+  },
+  {
+    // INTERNA (hidden): l'URL viene dal file caricato (WhatsApp/copilot), non dal modello.
+    name: 'set_dish_image',
+    scope: ['owner'],
+    kind: 'mutation',
+    hidden: true,
+    description: 'Assegna una foto già caricata a un piatto del menu.',
+    parameters: { type: 'object', properties: { itemName: { type: 'string' }, imageUrl: { type: 'string' } }, required: ['itemName', 'imageUrl'] },
+    label: (a) => `Foto → "${a?.itemName ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const url = String(args?.imageUrl ?? '').trim()
+      if (!url.startsWith('/uploads/')) return { ok: false, summary: 'Immagine non valida.' }
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo: specifica meglio).` }
+      const [item] = await db.update(menuItems).set({ imageUrl: url, updatedAt: new Date() })
+        .where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId))).returning()
+      if (!item) return { ok: false, summary: 'Assegnazione non riuscita.' }
+      emitMenuChanged(ctx.restaurantId)
+      return { ok: true, data: { id: item.id, imageUrl: url }, summary: `Foto assegnata a "${item.name}".` }
     },
   },
   {
@@ -1516,7 +1568,7 @@ const BY_NAME = new Map(ACTIONS.map(a => [a.name, a]))
 export function getAction(name: string): ActionDef | undefined { return BY_NAME.get(name) }
 
 export function actionsForScope(scope: ActionScope, allow?: string[]): ActionDef[] {
-  return ACTIONS.filter(a => a.scope.includes(scope) && (!allow || allow.includes(a.name)))
+  return ACTIONS.filter(a => a.scope.includes(scope) && !a.hidden && (!allow || allow.includes(a.name)))
 }
 
 // Tool schema in formato OpenAI/Groq function-calling per lo scope indicato.
@@ -1534,7 +1586,7 @@ export function toolSchemas(scope: ActionScope, allow?: string[]): any[] {
 // pertinenti al messaggio (per keyword) + un piccolo CORE di letture sempre presenti:
 // meno token → il 70b dura molto di più E l'8b (poche funzioni) produce tool-call validi.
 const TOOL_CATEGORIES: Record<string, string[]> = {
-  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'menu_performance', 'set_food_cost', 'add_dish_variant'],
+  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'create_menu_section', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'menu_performance', 'set_food_cost', 'add_dish_variant'],
   tables: ['table_status', 'create_table', 'delete_table', 'update_table', 'create_room', 'set_table_status', 'refresh_table_qr', 'set_cover_charge'],
   bills: ['open_bills', 'apply_bill_discount', 'close_bill', 'set_cover_charge'],
   orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],
@@ -1639,6 +1691,21 @@ async function groqClient() {
   return _openaiClient
 }
 
+// PRE-GATE assegnazione FOTO: quando arriva un'immagine (WhatsApp media o upload copilot)
+// il suo URL è passato in pendingImageUrl. L'immagine NON va all'LLM: risolviamo il piatto
+// dal messaggio e assegniamo in modo deterministico (come per WhatsApp). Ritorna null se
+// non c'è un'immagine → si prosegue col normale flusso LLM.
+async function assignImageGate(opts: { ctx: ActionContext; userMessage: string; pendingImageUrl?: string }): Promise<AssistantTurn | null> {
+  const url = opts.pendingImageUrl
+  if (!url || !url.startsWith('/uploads/')) return null
+  const match = await resolveItem(opts.ctx.restaurantId, opts.userMessage, false)
+  if (!match) {
+    return { message: '📷 Immagine ricevuta, ma non ho capito a quale piatto assegnarla. Riprova indicando il nome esatto del piatto insieme alla foto.', actions: [], pending: [] }
+  }
+  const res = await executeAction('set_dish_image', { itemName: match.name, imageUrl: url }, opts.ctx, 'owner', { allowMutation: true })
+  return { message: res.ok ? `✅ ${res.summary}` : `⚠️ ${res.summary}`, actions: [], pending: [] }
+}
+
 export async function runAssistant(opts: {
   scope: ActionScope
   ctx: ActionContext
@@ -1647,7 +1714,13 @@ export async function runAssistant(opts: {
   userMessage: string
   allow?: string[]
   model?: string
+  pendingImageUrl?: string
 }): Promise<AssistantTurn> {
+  // PRE-GATE immagine: se è allegata una foto, assegnala al piatto (niente LLM).
+  if (opts.scope === 'owner' && opts.pendingImageUrl) {
+    const gate = await assignImageGate(opts)
+    if (gate) return gate
+  }
   // PRE-GATE deterministico (come nello streaming): "crea tavolo" senza LLM.
   if (opts.scope === 'owner' && isCreateTableFlow(opts.userMessage, opts.history)) {
     const gate = await createTableGate(opts)
@@ -1959,6 +2032,9 @@ const CONFAB_SPEC: Record<string, { field: string; kind: ConfabKind; label: stri
   create_room: [
     { field: 'name', kind: 'literal', label: 'nome della sala' },
   ],
+  create_menu_section: [
+    { field: 'name', kind: 'literal', label: 'nome della sezione' },
+  ],
   // Distruttive/di modifica su un tavolo per numero: se l'LLM inventa un numero che per
   // caso esiste, agirebbe su un tavolo mai indicato. Il numero deve venire dall'utente.
   delete_table: [
@@ -2126,7 +2202,13 @@ export async function runAssistantStream(opts: {
   userMessage: string
   allow?: string[]
   model?: string
+  pendingImageUrl?: string
 }, emit: (ev: StreamEvent) => void): Promise<AssistantTurn> {
+  // PRE-GATE immagine: foto allegata → assegnala al piatto senza LLM.
+  if (opts.scope === 'owner' && opts.pendingImageUrl) {
+    const gate = await assignImageGate(opts)
+    if (gate) { emit({ type: 'token', text: gate.message }); return gate }
+  }
   // PRE-GATE deterministico: il flusso "crea tavolo" non passa dall'LLM.
   if (opts.scope === 'owner' && isCreateTableFlow(opts.userMessage, opts.history)) {
     const gate = await createTableGate(opts)
