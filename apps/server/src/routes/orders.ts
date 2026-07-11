@@ -5,6 +5,7 @@ import { eq, and, inArray, desc, gte } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { recomputeOpenBill, round2, ensureOpenBill } from '../lib/billing.js'
+import { deductStockForOrder } from '../lib/stock-deduct.js'
 import type { OrderStatus } from '@tako/types'
 
 // Transizioni di stato ordine consentite. Impedisce di "resuscitare" ordini
@@ -196,6 +197,14 @@ export async function orderRoutes(fastify: FastifyInstance) {
     // Annullamento via /status: il conto deve scendere come nella route /cancel.
     if (status === 'cancelled' && current.tableId) {
       await recomputeOpenBill(req.user!.restaurantId, current.tableId)
+    }
+
+    // Scarico automatico magazzino da ricetta (gated dal flag autoStockDeductEnabled,
+    // best-effort: non lancia mai). Solo al PASSAGGIO a 'confirmed' (current.status era
+    // diverso), così si deduce una sola volta per ordine. La guardia di concorrenza
+    // sopra garantisce che questa transizione avvenga una volta sola.
+    if (status === 'confirmed' && current.status !== 'confirmed') {
+      await deductStockForOrder(req.user!.restaurantId, orderId)
     }
 
     // Broadcast to all connected clients in this restaurant

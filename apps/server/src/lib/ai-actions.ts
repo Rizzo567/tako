@@ -21,7 +21,7 @@
 // Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
 // validazione delle route (ownership per restaurantId, emit socket identici).
 
-import { db, restaurants, menus, menuSections, menuItems, menuItemTranslations, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, menuItemTranslations, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions, loyaltyAccounts, recipes } from '@tako/db'
 import { eq, and, asc, desc, gte, lt, lte, ne, inArray, isNull, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import bcrypt from 'bcryptjs'
@@ -247,6 +247,17 @@ async function resolveReservation(restaurantId: string, customerName: string, da
   const hits = rows.filter(r => r.customerName.toLowerCase().includes(q))
   if (hits.length === 1) return { resv: hits[0], hits, dateStr }
   return { resv: undefined, hits, dateStr }
+}
+
+// Legge un feature-flag booleano dai settings del ristorante (default false).
+async function restaurantFlag(restaurantId: string, flag: string): Promise<boolean> {
+  const [row] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+  return (row?.settings as any)?.[flag] === true
+}
+
+// Normalizza un numero di telefono a sole cifre (chiave della fedeltà).
+function normalizePhone(v: unknown): string {
+  return (v ?? '').toString().replace(/\D+/g, '')
 }
 
 // Conto APERTO del tavolo indicato per numero (per sconto/incasso).
@@ -1660,6 +1671,188 @@ const ACTIONS: ActionDef[] = [
       return { ok: true, data: { id: v!.id }, summary: `Variante "${variantName}" aggiunta a "${match.name}"${mod ? ` (${mod > 0 ? '+' : ''}€${round2(mod)})` : ''}.` }
     },
   },
+
+  // ── OWNER · FEDELTÀ / PUNTI ────────────────────────────────────────────────
+  // Fedeltà a punti per numero di telefono, pilotata dallo staff via copilot. Tutte e
+  // tre gated dal flag settings.loyaltyEnabled: a flag OFF ritornano ok:false con invito
+  // ad attivarla. NESSUN hook automatico sul pagamento (non tocca il flusso conti).
+  {
+    name: 'add_loyalty_points',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Aggiunge punti fedeltà al numero di telefono di un cliente (crea l\'account se non esiste). Usa il nome se fornito.',
+    parameters: {
+      type: 'object',
+      properties: {
+        phone: { type: 'string', description: 'Numero di telefono del cliente' },
+        points: { type: 'integer', minimum: 1, description: 'Punti da aggiungere' },
+        name: { type: 'string', description: 'Nome del cliente (opzionale)' },
+      },
+      required: ['phone', 'points'],
+    },
+    label: (a) => `Aggiungi ${a?.points ?? '?'} punti a ${a?.phone ?? '?'}`,
+    execute: async (ctx, args) => {
+      if (!(await restaurantFlag(ctx.restaurantId, 'loyaltyEnabled'))) return { ok: false, summary: 'La fedeltà non è attiva. Attivala in Impostazioni → Funzionalità.' }
+      const phone = normalizePhone(args?.phone)
+      if (!phone) return { ok: false, summary: 'Numero di telefono mancante o non valido.' }
+      const points = Math.floor(Number(args?.points))
+      if (!Number.isFinite(points) || points <= 0 || points > 1_000_000) return { ok: false, summary: 'Punti non validi.' }
+      const name = args?.name ? String(args.name).slice(0, 120) : null
+      const [acc] = await db.insert(loyaltyAccounts)
+        .values({ restaurantId: ctx.restaurantId, phone, name: name ?? undefined, points })
+        .onConflictDoUpdate({
+          target: [loyaltyAccounts.restaurantId, loyaltyAccounts.phone],
+          set: {
+            points: sql`${loyaltyAccounts.points} + ${points}`,
+            // aggiorna il nome SOLO se fornito ora (COALESCE del nuovo sul vecchio)
+            name: sql`COALESCE(${name}, ${loyaltyAccounts.name})`,
+            updatedAt: new Date(),
+          },
+        })
+        .returning()
+      return { ok: true, data: { phone, points: acc!.points }, summary: `+${points} punti a ${phone}${acc!.name ? ` (${acc!.name})` : ''}: saldo ${acc!.points}.` }
+    },
+  },
+  {
+    name: 'loyalty_balance',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Mostra il saldo punti fedeltà di un numero di telefono (0 se il cliente non è registrato).',
+    parameters: {
+      type: 'object',
+      properties: { phone: { type: 'string', description: 'Numero di telefono del cliente' } },
+      required: ['phone'],
+    },
+    label: (a) => `Saldo punti di ${a?.phone ?? '?'}`,
+    execute: async (ctx, args) => {
+      if (!(await restaurantFlag(ctx.restaurantId, 'loyaltyEnabled'))) return { ok: false, summary: 'La fedeltà non è attiva. Attivala in Impostazioni → Funzionalità.' }
+      const phone = normalizePhone(args?.phone)
+      if (!phone) return { ok: false, summary: 'Numero di telefono mancante o non valido.' }
+      const [acc] = await db.select().from(loyaltyAccounts)
+        .where(and(eq(loyaltyAccounts.restaurantId, ctx.restaurantId), eq(loyaltyAccounts.phone, phone))).limit(1)
+      const points = acc?.points ?? 0
+      return { ok: true, data: { phone, points }, summary: `${phone}${acc?.name ? ` (${acc.name})` : ''}: ${points} punti.` }
+    },
+  },
+  {
+    name: 'redeem_loyalty_points',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Riscatta (sottrae) punti fedeltà dal numero di telefono di un cliente. Fallisce se il saldo è insufficiente.',
+    parameters: {
+      type: 'object',
+      properties: {
+        phone: { type: 'string', description: 'Numero di telefono del cliente' },
+        points: { type: 'integer', minimum: 1, description: 'Punti da riscattare' },
+      },
+      required: ['phone', 'points'],
+    },
+    label: (a) => `Riscatta ${a?.points ?? '?'} punti da ${a?.phone ?? '?'}`,
+    execute: async (ctx, args) => {
+      if (!(await restaurantFlag(ctx.restaurantId, 'loyaltyEnabled'))) return { ok: false, summary: 'La fedeltà non è attiva. Attivala in Impostazioni → Funzionalità.' }
+      const phone = normalizePhone(args?.phone)
+      if (!phone) return { ok: false, summary: 'Numero di telefono mancante o non valido.' }
+      const points = Math.floor(Number(args?.points))
+      if (!Number.isFinite(points) || points <= 0 || points > 1_000_000) return { ok: false, summary: 'Punti non validi.' }
+      const [acc] = await db.select().from(loyaltyAccounts)
+        .where(and(eq(loyaltyAccounts.restaurantId, ctx.restaurantId), eq(loyaltyAccounts.phone, phone))).limit(1)
+      const current = acc?.points ?? 0
+      if (current < points) return { ok: false, data: { phone, points: current }, summary: `Saldo insufficiente: ${phone} ha ${current} punti, richiesti ${points}.` }
+      // Sottrai condizionatamente (mai sotto 0): l'UPDATE con guardia points >= :points
+      // evita di scendere sotto zero anche in caso di riscatti concorrenti.
+      const [updated] = await db.update(loyaltyAccounts)
+        .set({ points: sql`${loyaltyAccounts.points} - ${points}`, updatedAt: new Date() })
+        .where(and(eq(loyaltyAccounts.restaurantId, ctx.restaurantId), eq(loyaltyAccounts.phone, phone), gte(loyaltyAccounts.points, points)))
+        .returning()
+      if (!updated) {
+        const [fresh] = await db.select().from(loyaltyAccounts).where(and(eq(loyaltyAccounts.restaurantId, ctx.restaurantId), eq(loyaltyAccounts.phone, phone))).limit(1)
+        return { ok: false, data: { phone, points: fresh?.points ?? 0 }, summary: `Saldo insufficiente: ${phone} ha ${fresh?.points ?? 0} punti.` }
+      }
+      return { ok: true, data: { phone, points: updated.points }, summary: `-${points} punti a ${phone}: saldo ${updated.points}.` }
+    },
+  },
+
+  // ── OWNER · RICETTE (distinta ingredienti per piatto) ──────────────────────
+  // set_recipe_ingredient e get_recipe/remove NON sono gated: la ricetta si configura anche
+  // a flag OFF. Lo SCARICO automatico (deductStockForOrder) è invece gated da
+  // autoStockDeductEnabled e avviene alla conferma ordine.
+  {
+    name: 'set_recipe_ingredient',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Imposta la quantità di un ingrediente d\'inventario nella ricetta di un piatto (quantità per 1 unità di piatto). Crea o aggiorna la riga.',
+    parameters: {
+      type: 'object',
+      properties: {
+        dishName: { type: 'string', description: 'Nome del piatto' },
+        ingredientName: { type: 'string', description: 'Nome dell\'ingrediente in inventario' },
+        quantity: { type: 'number', minimum: 0.0001, description: 'Quantità di ingrediente per 1 piatto' },
+      },
+      required: ['dishName', 'ingredientName', 'quantity'],
+    },
+    label: (a) => `Ricetta "${a?.dishName ?? '?'}": ${a?.quantity ?? '?'} di "${a?.ingredientName ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const quantity = Number(args?.quantity)
+      if (!Number.isFinite(quantity) || quantity <= 0 || quantity > 100_000) return { ok: false, summary: 'Quantità non valida.' }
+      const dish = await resolveItem(ctx.restaurantId, args?.dishName, false)
+      if (!dish) return { ok: false, summary: `Piatto "${args?.dishName ?? ''}" non trovato (o ambiguo).` }
+      const ing = await resolveInventory(ctx.restaurantId, args?.ingredientName)
+      if (!ing) return { ok: false, summary: `Ingrediente "${args?.ingredientName ?? ''}" non trovato in inventario (o ambiguo).` }
+      await db.insert(recipes)
+        .values({ restaurantId: ctx.restaurantId, menuItemId: dish.id, inventoryItemId: ing.id, quantity })
+        .onConflictDoUpdate({ target: [recipes.menuItemId, recipes.inventoryItemId], set: { quantity } })
+      return { ok: true, data: { dishId: dish.id, ingredientId: ing.id, quantity }, summary: `Ricetta di "${dish.name}": ${quantity}${ing.unit} di "${ing.name}" per piatto.` }
+    },
+  },
+  {
+    name: 'get_recipe',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Elenca gli ingredienti (con quantità) della ricetta di un piatto.',
+    parameters: {
+      type: 'object',
+      properties: { dishName: { type: 'string', description: 'Nome del piatto' } },
+      required: ['dishName'],
+    },
+    label: (a) => `Ricetta di "${a?.dishName ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const dish = await resolveItem(ctx.restaurantId, args?.dishName, false)
+      if (!dish) return { ok: false, summary: `Piatto "${args?.dishName ?? ''}" non trovato (o ambiguo).` }
+      const rows = await db.select({ quantity: recipes.quantity, name: inventoryItems.name, unit: inventoryItems.unit })
+        .from(recipes)
+        .innerJoin(inventoryItems, eq(recipes.inventoryItemId, inventoryItems.id))
+        .where(and(eq(recipes.restaurantId, ctx.restaurantId), eq(recipes.menuItemId, dish.id)))
+      if (!rows.length) return { ok: true, data: { dish: dish.name, ingredients: [] }, summary: `"${dish.name}" non ha ancora una ricetta.` }
+      const list = rows.map(r => ({ name: r.name, quantity: r.quantity, unit: r.unit }))
+      return { ok: true, data: { dish: dish.name, ingredients: list }, summary: `Ricetta di "${dish.name}": ${list.map(r => `${r.quantity}${r.unit} ${r.name}`).join(', ')}.` }
+    },
+  },
+  {
+    name: 'remove_recipe_ingredient',
+    scope: ['owner'],
+    kind: 'mutation',
+    description: 'Rimuove un ingrediente dalla ricetta di un piatto.',
+    parameters: {
+      type: 'object',
+      properties: {
+        dishName: { type: 'string', description: 'Nome del piatto' },
+        ingredientName: { type: 'string', description: 'Nome dell\'ingrediente da rimuovere' },
+      },
+      required: ['dishName', 'ingredientName'],
+    },
+    label: (a) => `Rimuovi "${a?.ingredientName ?? '?'}" dalla ricetta di "${a?.dishName ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const dish = await resolveItem(ctx.restaurantId, args?.dishName, false)
+      if (!dish) return { ok: false, summary: `Piatto "${args?.dishName ?? ''}" non trovato (o ambiguo).` }
+      const ing = await resolveInventory(ctx.restaurantId, args?.ingredientName)
+      if (!ing) return { ok: false, summary: `Ingrediente "${args?.ingredientName ?? ''}" non trovato in inventario (o ambiguo).` }
+      const deleted = await db.delete(recipes)
+        .where(and(eq(recipes.restaurantId, ctx.restaurantId), eq(recipes.menuItemId, dish.id), eq(recipes.inventoryItemId, ing.id)))
+        .returning({ id: recipes.id })
+      if (!deleted.length) return { ok: false, summary: `"${ing.name}" non è nella ricetta di "${dish.name}".` }
+      return { ok: true, data: { dishId: dish.id, ingredientId: ing.id }, summary: `"${ing.name}" rimosso dalla ricetta di "${dish.name}".` }
+    },
+  },
 ]
 
 const BY_NAME = new Map(ACTIONS.map(a => [a.name, a]))
@@ -1691,6 +1884,8 @@ const TOOL_CATEGORIES: Record<string, string[]> = {
   orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],
   reservations: ['todays_reservations', 'create_reservation', 'cancel_reservation', 'set_reservation_status'],
   inventory: ['low_stock', 'create_inventory_item', 'adjust_stock'],
+  ricette: ['set_recipe_ingredient', 'get_recipe', 'remove_recipe_ingredient'],
+  fedelta: ['add_loyalty_points', 'loyalty_balance', 'redeem_loyalty_points'],
   staff: ['staff_on_shift', 'clock_in_staff', 'clock_out_staff', 'list_staff', 'create_staff', 'set_staff_active'],
   stats: ['get_today_revenue', 'get_stats', 'revenue_for_date', 'menu_performance'],
 }
@@ -1702,6 +1897,8 @@ const CATEGORY_KEYWORDS: [RegExp, string][] = [
   [/ordin|comand|cameriere/, 'orders'],
   [/prenotaz|prenot/, 'reservations'],
   [/scort|inventar|magazzin|ingredient|carico|scarico|spreco|stock/, 'inventory'],
+  [/ricett|distinta|ingredient/, 'ricette'],
+  [/fedelt|punt[oi]|tesser|loyalty|raccolta punti|premi/, 'fedelta'],
   [/staff|turn|dipendent|personale/, 'staff'],
   [/incass|statistic|rendiment|vend\w*|fatturat|andament|quant[oi]|meglio|peggio|guadagn/, 'stats'],
 ]

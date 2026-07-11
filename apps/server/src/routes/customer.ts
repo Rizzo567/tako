@@ -10,6 +10,7 @@ import { autoPrintOrder } from '../lib/printer.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill, restaurantTimezone, dayStartInTz } from '../lib/billing.js'
 import { runAssistant } from '../lib/ai-actions.js'
+import { deductStockForOrder } from '../lib/stock-deduct.js'
 
 // Sessione cliente incapsulata nel JWT del cookie tako_table.
 //  • kind 'table'    → legata a un tavolo scansionato (tableId reale).
@@ -439,6 +440,15 @@ export async function customerRoutes(fastify: FastifyInstance) {
         await db.update(orders).set({ billId: takeawayBill.id }).where(eq(orders.id, order.id))
         order.billId = takeawayBill.id
       }
+    }
+
+    // Scarico automatico magazzino da ricetta: se il ristorante auto-conferma gli ordini
+    // cliente (settings.autoConfirm), l'ordine nasce già 'confirmed' e NON passa dalla
+    // PATCH /orders/:id/status → aggancia qui il passaggio a confirmed. Gated dal flag
+    // autoStockDeductEnabled + best-effort (non lancia mai). Deduce una sola volta:
+    // l'ordine è confermato alla creazione, quindi nessuna PATCH successiva lo ri-conferma.
+    if (order && order.status === 'confirmed') {
+      await deductStockForOrder(restaurantId, order.id)
     }
 
     const payload = { ...order, items: insertedItems }
