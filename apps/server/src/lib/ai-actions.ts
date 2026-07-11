@@ -21,7 +21,7 @@
 // Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
 // validazione delle route (ownership per restaurantId, emit socket identici).
 
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, menuItemTranslations, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions } from '@tako/db'
 import { eq, and, asc, desc, gte, lt, lte, ne, inArray, isNull, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import bcrypt from 'bcryptjs'
@@ -558,6 +558,77 @@ const ACTIONS: ActionDef[] = [
       if (!item) return { ok: false, summary: 'Salvataggio descrizione non riuscito.' }
       emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: item.id, description: desc }, summary: `Descrizione di "${item.name}" aggiornata: ${desc}` }
+    },
+  },
+  {
+    // Traduzione AI di un piatto (nome+descrizione) → salvata per il menu multilingua.
+    name: 'translate_menu_item',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Traduce con l\'AI un piatto (nome e descrizione) in una lingua e salva la traduzione per il menu multilingua.',
+    parameters: { type: 'object', properties: { itemName: { type: 'string' }, lang: { type: 'string', description: 'lingua target, es. "en", "de", "fr", "es"' } }, required: ['itemName', 'lang'] },
+    label: (a) => `Traduci "${a?.itemName ?? '?'}" in ${a?.lang ?? '?'}`,
+    execute: async (ctx, args) => {
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo).` }
+      const lang = String(args?.lang ?? '').toLowerCase().trim().slice(0, 5)
+      if (!lang) return { ok: false, summary: 'Indica la lingua di destinazione (es. "en").' }
+      const LANG_NAMES: Record<string, string> = { en: 'inglese', de: 'tedesco', fr: 'francese', es: 'spagnolo', pt: 'portoghese', zh: 'cinese', ru: 'russo', ar: 'arabo', ja: 'giapponese', nl: 'olandese' }
+      const langName = LANG_NAMES[lang] ?? lang
+      let out: string
+      try {
+        out = await groqComplete(
+          'Sei un traduttore professionale di menù di ristorante. Traduci fedelmente e in modo appetitoso. Rispondi ESATTAMENTE in due righe, senza altro:\nNOME: <nome tradotto>\nDESC: <descrizione tradotta, lascia vuoto se assente>',
+          `Lingua di destinazione: ${langName}.\nNOME: ${match.name}\nDESC: ${match.description ?? ''}`,
+          280,
+        )
+      } catch { return { ok: false, summary: 'Traduzione AI non disponibile in questo momento, riprova.' } }
+      const tName = (out.match(/NOME:\s*(.+)/i)?.[1] ?? '').trim().slice(0, 120) || match.name
+      const tDesc = (out.match(/DESC:\s*([\s\S]*)/i)?.[1] ?? '').trim().slice(0, 500) || null
+      await db.insert(menuItemTranslations)
+        .values({ restaurantId: ctx.restaurantId, itemId: match.id, lang, name: tName, description: tDesc })
+        .onConflictDoUpdate({ target: [menuItemTranslations.itemId, menuItemTranslations.lang], set: { name: tName, description: tDesc, updatedAt: new Date() } })
+      emitMenuChanged(ctx.restaurantId)
+      return { ok: true, data: { itemId: match.id, lang, name: tName }, summary: `"${match.name}" tradotto in ${langName}: ${tName}${tDesc ? ` — ${tDesc}` : ''}` }
+    },
+  },
+  {
+    // Menu engineering: classifica i piatti per popolarità × margine (matrice classica).
+    name: 'menu_engineering',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Classifica i piatti (menu engineering): stelle (popolari+redditizi), cavalli (popolari poco redditizi), enigmi (redditizi poco popolari), cani (scarsi su entrambi).',
+    parameters: { type: 'object', properties: { days: { type: 'integer', minimum: 7, maximum: 365, description: 'Giorni (default 30)' } } },
+    label: (a) => `Menu engineering ${a?.days ?? 30}gg`,
+    execute: async (ctx, args) => {
+      const days = Math.min(Math.max(parseInt(String(args?.days ?? 30), 10) || 30, 7), 365)
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+      const sold = await db.select({ menuItemId: orderItems.menuItemId, qty: sql<number>`sum(${orderItems.quantity})::int` })
+        .from(orderItems).innerJoin(orders, eq(orderItems.orderId, orders.id))
+        .where(and(eq(orders.restaurantId, ctx.restaurantId), gte(orders.createdAt, since), ne(orders.status, 'cancelled')))
+        .groupBy(orderItems.menuItemId)
+      const items = await db.select().from(menuItems).where(eq(menuItems.restaurantId, ctx.restaurantId))
+      const byId = new Map(items.map(i => [i.id, i]))
+      const rows = sold.filter(s => s.menuItemId && byId.has(s.menuItemId)).map(s => {
+        const i = byId.get(s.menuItemId!)!
+        const margin = i.price - Number(i.costPrice ?? 0)
+        return { name: i.name, qty: s.qty, margin }
+      })
+      if (rows.length < 2) return { ok: true, data: rows, summary: `Dati insufficienti per il menu engineering (servono più vendite negli ultimi ${days}gg).` }
+      const median = (a: number[]) => { const s = [...a].sort((x, y) => x - y); const m = Math.floor(s.length / 2); return s.length % 2 ? s[m]! : (s[m - 1]! + s[m]!) / 2 }
+      const medQty = median(rows.map(r => r.qty))
+      const medMargin = median(rows.map(r => r.margin))
+      const cls = { stelle: [] as string[], cavalli: [] as string[], enigmi: [] as string[], cani: [] as string[] }
+      for (const r of rows) {
+        const pop = r.qty >= medQty, red = r.margin >= medMargin
+        const bucket = pop && red ? 'stelle' : pop && !red ? 'cavalli' : !pop && red ? 'enigmi' : 'cani'
+        cls[bucket].push(`${r.name} (x${r.qty}, €${r.margin.toFixed(2)})`)
+      }
+      const fmt = (k: keyof typeof cls) => cls[k].length ? `${cls[k].join(', ')}` : '—'
+      return {
+        ok: true, data: cls,
+        summary: `Menu engineering ${days}gg:\n⭐ Stelle (tieni e promuovi): ${fmt('stelle')}\n🐎 Cavalli (popolari, alza il margine): ${fmt('cavalli')}\n❓ Enigmi (redditizi, spingi le vendite): ${fmt('enigmi')}\n🐶 Cani (valuta di togliere): ${fmt('cani')}`,
+      }
     },
   },
   {
@@ -1614,7 +1685,7 @@ export function toolSchemas(scope: ActionScope, allow?: string[]): any[] {
 // pertinenti al messaggio (per keyword) + un piccolo CORE di letture sempre presenti:
 // meno token → il 70b dura molto di più E l'8b (poche funzioni) produce tool-call validi.
 const TOOL_CATEGORIES: Record<string, string[]> = {
-  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'create_menu_section', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'generate_dish_description', 'menu_performance', 'set_food_cost', 'add_dish_variant'],
+  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'create_menu_section', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'generate_dish_description', 'translate_menu_item', 'menu_performance', 'menu_engineering', 'set_food_cost', 'add_dish_variant'],
   tables: ['table_status', 'create_table', 'delete_table', 'update_table', 'create_room', 'set_table_status', 'refresh_table_qr', 'set_cover_charge'],
   bills: ['open_bills', 'apply_bill_discount', 'close_bill', 'set_cover_charge'],
   orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],

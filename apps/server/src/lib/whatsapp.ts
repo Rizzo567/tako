@@ -254,6 +254,7 @@ export async function startWhatsApp(): Promise<void> {
       }
     })
 
+    ensureBriefingScheduler()
     console.log('[whatsapp] socket avviato, in attesa di connessione/QR')
   } catch (err) {
     sock = null
@@ -385,6 +386,47 @@ async function assignImageToDish(jid: string, number: string, url: string, dishN
     setPendingImage(number, url)
     await reply(jid, `⚠️ ${res.summary}\nScrivi il nome esatto del piatto a cui assegnare la foto (o "annulla").`)
   }
+}
+
+// ─────────────────────────── Briefing giornaliero (WhatsApp) ───────────────────────────
+// Feature flag `dailyBriefingEnabled` (default OFF): all'ora configurata invia un
+// riepilogo automatico ai numeri autorizzati. Riusa le read del copilot (incasso di ieri,
+// prenotazioni di oggi, scorte basse). Scheduler: controllo al minuto, una volta al giorno.
+let lastBriefingDay: string | null = null
+async function buildDailyBriefing(restaurantId: string): Promise<string> {
+  const ctx = { restaurantId, role: 'owner' as const }
+  const y = new Date(Date.now() - 24 * 60 * 60 * 1000)
+  const yStr = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(y)
+  const parts: string[] = ['☀️ Buongiorno! Riepilogo Tako:']
+  try { const r = await executeAction('revenue_for_date', { date: yStr }, ctx, 'owner'); parts.push(`\n📊 Ieri — ${r.summary}`) } catch { /* skip */ }
+  try { const r = await executeAction('todays_reservations', {}, ctx, 'owner'); parts.push(`\n📅 ${r.summary}`) } catch { /* skip */ }
+  try { const r = await executeAction('low_stock', {}, ctx, 'owner'); parts.push(`\n📦 ${r.summary}`) } catch { /* skip */ }
+  return parts.join('\n')
+}
+async function maybeSendBriefing(): Promise<void> {
+  try {
+    if (!connected || !sock) return
+    const restaurantId = await primaryRestaurantId()
+    if (!restaurantId) return
+    const [r] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    const s = (r?.settings ?? {}) as any
+    if (!s.dailyBriefingEnabled) return
+    const hour = Number.isFinite(s.dailyBriefingHour) ? Number(s.dailyBriefingHour) : 9
+    const tz = s.timezone || 'Europe/Rome'
+    const p = new Intl.DateTimeFormat('en-CA', { timeZone: tz, hour12: false, hour: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date())
+    const get = (t: string) => p.find(x => x.type === t)?.value
+    const dayKey = `${get('year')}-${get('month')}-${get('day')}`
+    if (Number(get('hour')) !== hour || lastBriefingDay === dayKey) return
+    lastBriefingDay = dayKey
+    const text = await buildDailyBriefing(restaurantId)
+    for (const n of (readConfig().allowedNumbers || [])) await reply(`${n}@s.whatsapp.net`, text)
+    console.log('[whatsapp] briefing giornaliero inviato')
+  } catch (e) { console.error('[whatsapp] briefing fallito:', e) }
+}
+let briefingTimer: ReturnType<typeof setInterval> | null = null
+function ensureBriefingScheduler(): void {
+  if (briefingTimer) return
+  briefingTimer = setInterval(() => { void maybeSendBriefing() }, 60_000)
 }
 
 // Estrae il testo da un messaggio Baileys (conversation o extendedTextMessage).
