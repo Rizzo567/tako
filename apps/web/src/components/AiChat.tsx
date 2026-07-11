@@ -1,199 +1,201 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { useSessionStore, useCartStore } from '@/lib/store'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import { formatEuro } from '@/lib/utils'
-import { ArrowLeft, Send, Sparkles, ShoppingBag, Plus, Check, Bell } from 'lucide-react'
+import { Send, ShoppingBag, Check, Bell, Clock } from 'lucide-react'
+import { useI18n, type Lang } from '@/lib/i18n'
+import { Confetti } from './ui/Confetti'
+import { SPRING } from '@/lib/motion'
 
-// Azioni che l'assistente può restituire e che la PWA applica.
-interface CartAction { type: 'add_to_cart'; items: { menuItemId: string; variantId?: string; name: string; unitPrice: number; quantity: number }[] }
-interface WaiterAction { type: 'waiter_called'; reason?: string }
-type ChatAction = CartAction | WaiterAction
+// Azioni ritornate da /customer/ai-chat. Il tipo è parsato in modo difensivo perché
+// il contratto lato server può evolvere.
+interface CartAction { type: 'add_to_cart' | 'cart_add'; items: { menuItemId: string; variantId?: string; name: string; unitPrice: number; quantity: number }[] }
+interface WaiterAction { type: 'waiter_called'; reason?: string; label?: string }
+interface OrderPlacedAction { type: 'order_placed'; orderId?: string; total?: number }
+type ChatAction = CartAction | WaiterAction | OrderPlacedAction
 
 interface Message { role: 'user' | 'assistant'; content: string; actions?: ChatAction[] }
 
-// L'assistente ora è AGENTICO: consiglia, aggiunge al carrello, chiama il cameriere,
-// controlla lo stato dell'ordine. I suggerimenti riflettono ciò che sa fare davvero.
-const SUGGESTIONS = [
-  'Cosa mi consigli di leggero?',
-  'Aggiungi due margherite al carrello',
-  'Avete piatti senza glutine?',
-  'A che punto è il mio ordine?',
-]
+const CHIPS: Record<Lang, string[]> = {
+  it: ['Cosa mi consigli?', 'Avete piatti senza glutine?', 'Ordina una margherita e due birre', 'A che punto è il mio ordine?'],
+  en: ['What do you recommend?', 'Any gluten-free dishes?', 'Order a margherita and two beers', 'How is my order doing?'],
+  es: ['¿Qué me recomiendas?', '¿Tenéis platos sin gluten?', 'Pide una margarita y dos cervezas', '¿Cómo va mi pedido?'],
+  de: ['Was empfiehlst du?', 'Habt ihr glutenfreie Gerichte?', 'Bestelle eine Margherita und zwei Bier', 'Wie steht es um meine Bestellung?'],
+}
 
-/* ─────────────── ActionCard: applica in-app le azioni tornate dall'AI ─────────────── */
-function ActionCard({ action }: { action: ChatAction }) {
+/* ─────────────── action cards ─────────────── */
+function ActionCard({ action, onTrack }: { action: ChatAction; onTrack: () => void }) {
+  const { t } = useI18n()
   const add = useCartStore((s) => s.add)
-  const [applied, setApplied] = useState(false)
+  const applied = useRef(false)
+
+  // cart_add: aggiunge davvero al carrello (una volta), poi mostra la conferma.
+  useEffect(() => {
+    if ((action.type === 'add_to_cart' || action.type === 'cart_add') && !applied.current) {
+      applied.current = true
+      for (const it of action.items) {
+        add({ menuItemId: it.menuItemId, variantId: it.variantId, name: it.name, quantity: it.quantity, unitPrice: it.unitPrice })
+      }
+      toast.success(t('addedToCart'))
+    }
+  }, [action, add, t])
+
+  const pop = { initial: { scale: 0.5, opacity: 0 }, animate: { scale: [0.5, 1.06, 1], opacity: 1 }, transition: SPRING }
 
   if (action.type === 'waiter_called') {
     return (
-      <div className="mt-2 flex items-center gap-2 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-3.5 py-2.5 text-[13px] font-semibold text-[var(--text-primary)] shadow-[var(--elev-1)]">
-        <span className="grid h-7 w-7 place-items-center rounded-full text-[var(--on-brand)]" style={{ background: 'var(--brand)' }}><Bell size={15} /></span>
-        Cameriere avvisato
-      </div>
+      <motion.div {...pop} className="flex items-center gap-3 rounded-2xl p-3.5" style={{ background: 'var(--raised)', boxShadow: 'inset 0 0 0 1.5px var(--brand)' }}>
+        <span className="grid h-[38px] w-[38px] flex-none place-items-center rounded-xl" style={{ background: 'var(--brand-tint)', color: 'var(--brand)' }}><Bell size={20} /></span>
+        <div>
+          <p className="text-[14.5px] font-bold text-[var(--ink)]">{action.label ?? t('hdrWaiter')}</p>
+          <p className="text-[13px] text-[var(--ink-2)]">{t('waiterNotified')}</p>
+        </div>
+      </motion.div>
     )
   }
 
-  const total = action.items.reduce((s, i) => s + i.unitPrice * i.quantity, 0)
-  const applyToCart = () => {
-    if (applied) return
-    for (const it of action.items) {
-      add({ menuItemId: it.menuItemId, variantId: it.variantId, name: it.name, quantity: it.quantity, unitPrice: it.unitPrice })
-    }
-    setApplied(true)
-    toast.success('Aggiunto al carrello')
+  if (action.type === 'order_placed') {
+    return (
+      <motion.div {...pop} className="relative overflow-hidden rounded-2xl p-4 text-white" style={{ background: 'var(--ok)' }}>
+        <Confetti n={12} />
+        <div className="flex items-center gap-2 text-[15px] font-bold"><Check size={20} strokeWidth={2.6} /> {t('orderSent')}</div>
+        <p className="mb-3 mt-1 text-[13px] opacity-90">{action.orderId ? `#${action.orderId.slice(-5)} · ` : ''}{action.total != null ? formatEuro(action.total) : ''}</p>
+        <button onClick={onTrack} className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-[14px] font-bold text-[var(--ink)] active:scale-95" style={{ background: '#fff' }}>
+          <Clock size={17} /> {t('trackOrder')}
+        </button>
+      </motion.div>
+    )
   }
 
+  // cart_add
+  const total = action.items.reduce((s, i) => s + i.unitPrice * i.quantity, 0)
   return (
-    <div className="mt-2 max-w-[88%] rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-3 shadow-[var(--elev-1)]">
-      <div className="mb-2 flex items-center gap-2 text-[12px] font-bold uppercase tracking-wide text-[var(--text-secondary)]">
-        <ShoppingBag size={14} /> Proposta ordine
+    <motion.div {...pop} className="rounded-2xl p-3.5" style={{ background: 'var(--raised)', boxShadow: 'inset 0 0 0 1.5px var(--ok)' }}>
+      <div className="mb-2 flex items-center gap-2 text-[13.5px] font-bold" style={{ color: 'var(--ok)' }}>
+        <ShoppingBag size={17} /> {t('addedToCart')}
       </div>
-      <div className="space-y-1">
-        {action.items.map((it, i) => (
-          <div key={i} className="flex items-center justify-between gap-3 text-[14px] font-medium text-[var(--text-primary)]">
-            <span className="min-w-0 truncate">{it.quantity}× {it.name}</span>
-            <span className="shrink-0 tabular-nums text-[var(--text-secondary)]">{formatEuro(it.unitPrice * it.quantity)}</span>
-          </div>
-        ))}
+      {action.items.map((it, i) => (
+        <div key={i} className="mb-1.5 flex items-baseline justify-between gap-3 text-[14px] text-[var(--ink)]">
+          <span className="min-w-0 truncate"><b>{it.quantity}×</b> {it.name}</span>
+          <span className="tnum flex-none text-[var(--ink-2)]">{formatEuro(it.unitPrice * it.quantity)}</span>
+        </div>
+      ))}
+      <div className="mt-1 flex justify-between border-t pt-2 font-bold text-[var(--ink)]" style={{ borderColor: 'var(--hairline)' }}>
+        <span>{t('total')}</span><span className="tnum">{formatEuro(total)}</span>
       </div>
-      <div className="mt-2 flex items-center justify-between border-t border-[var(--border-subtle)] pt-2">
-        <span className="text-[13px] font-semibold text-[var(--text-secondary)]">Totale</span>
-        <span className="text-[15px] font-bold tabular-nums text-[var(--text-primary)]">{formatEuro(total)}</span>
-      </div>
-      <button
-        onClick={applyToCart}
-        disabled={applied}
-        className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-[14px] font-bold text-[var(--on-brand)] transition-transform active:scale-95 disabled:opacity-70"
-        style={{ background: applied ? 'var(--status-success)' : 'var(--brand)' }}
-      >
-        {applied ? <><Check size={16} /> Aggiunto</> : <><Plus size={16} /> Aggiungi al carrello</>}
-      </button>
-    </div>
+    </motion.div>
   )
 }
 
-export function AiChat({ onBack }: { onBack: () => void; onOrderPlaced?: () => void }) {
-  const { restaurantId, tableId, tableNumber, sessionId, restaurantName } = useSessionStore()
+export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: () => void }) {
+  const { t, lang } = useI18n()
+  const { restaurantId, tableId, tableNumber, sessionId, restaurantName, setOrderId } = useSessionStore()
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: `Ciao! Sono l'assistente di ${restaurantName ?? 'questo locale'}. Posso consigliarti, aggiungere piatti al carrello e chiamare il cameriere. Dimmi pure.` },
   ])
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [typing, setTyping] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, typing])
 
   async function send(overrideText?: string) {
     const text = (overrideText ?? input).trim()
-    if (!text || loading) return
+    if (!text || typing) return
     setInput('')
     const next: Message[] = [...messages, { role: 'user', content: text }]
     setMessages(next)
-    setLoading(true)
+    setTyping(true)
     try {
       const history = next.slice(-10).map((m) => ({ role: m.role, content: m.content }))
       const { data } = await api.post('/customer/ai-chat', { restaurantId, message: text, tableId, tableNumber, sessionId, history })
       const actions: ChatAction[] = Array.isArray(data.data.actions) ? data.data.actions : []
+      // order_placed: aggiorna lo store così il tracking mostra il nuovo ordine.
+      const placed = actions.find((a): a is OrderPlacedAction => a.type === 'order_placed')
+      if (placed?.orderId) setOrderId(placed.orderId)
       setMessages((m) => [...m, { role: 'assistant', content: data.data.message, actions }])
     } catch {
-      setMessages((m) => [...m, { role: 'assistant', content: 'Scusa, ho avuto un intoppo. Riprova tra un attimo.' }])
+      setMessages((m) => [...m, { role: 'assistant', content: t('chatError') }])
     } finally {
-      setLoading(false)
+      setTyping(false)
     }
   }
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-[var(--surface-base)]">
-      {/* Header */}
-      <header className="sticky top-0 z-40 flex items-center gap-3 border-b border-[var(--border-subtle)] bg-[var(--surface-raised)]/90 px-4 py-3 backdrop-blur-xl">
-        <button onClick={onBack} aria-label="Indietro" className="grid h-10 w-10 place-items-center rounded-full border border-[var(--border-default)] text-[var(--text-primary)] active:scale-95">
-          <ArrowLeft size={18} strokeWidth={2.4} />
-        </button>
-        <div className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-full text-[var(--on-brand)]" style={{ background: 'var(--brand)' }}>
-            <Sparkles size={17} strokeWidth={2.2} />
-          </div>
-          <div className="leading-tight">
-            <p className="font-display text-[15px] font-bold text-[var(--text-primary)]">Assistente</p>
-            <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--status-success)]">
-              <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--status-success)' }} /> in linea
-            </p>
-          </div>
+    <div className="flex min-h-[calc(100dvh_-_var(--header-h)_-_96px)] flex-col">
+      {/* sub-header assistente */}
+      <div className="flex items-center gap-3 px-5 pb-3 pt-1">
+        <div className="relative h-[42px] w-[42px] flex-none">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/tako/tako-chef.png" alt="" className="h-[42px] w-[42px] object-contain" />
+          <span className="absolute -right-px bottom-0 h-3 w-3 rounded-full" style={{ background: 'var(--ok)', boxShadow: '0 0 0 2.5px var(--surface)' }} />
         </div>
-      </header>
+        <div className="leading-tight">
+          <p className="text-[16px] font-bold text-[var(--ink)]">{t('navAssistant')}</p>
+          <p className="text-[12.5px] font-semibold" style={{ color: 'var(--ok)' }}>{t('chatOnline')}</p>
+        </div>
+      </div>
+      <hr className="hairline" />
 
-      {/* Conversation */}
-      <div className="flex-1 space-y-4 overflow-y-auto px-4 py-5 pb-28">
+      {/* messaggi */}
+      <div className="flex flex-1 flex-col gap-3 px-4 py-4">
         {messages.map((m, i) => (
-          <div key={i} className="space-y-2">
-            <div className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
-              <div
-                className={
-                  m.role === 'user'
-                    ? 'max-w-[82%] rounded-[20px] rounded-br-md px-4 py-2.5 text-[15px] font-medium leading-snug text-[var(--on-brand)]'
-                    : 'max-w-[88%] rounded-[20px] rounded-bl-md border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 py-2.5 text-[15px] font-medium leading-snug text-[var(--text-primary)] shadow-[var(--elev-1)]'
-                }
-                style={m.role === 'user' ? { background: 'var(--brand)' } : undefined}
+          <div key={i} className={`flex flex-col gap-2 ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+            {m.content && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={SPRING}
+                className="max-w-[86%] whitespace-pre-line px-4 py-2.5 text-[14.5px] font-medium leading-snug"
+                style={m.role === 'user'
+                  ? { background: 'var(--brand)', color: 'var(--on-brand)', borderRadius: '18px 18px 6px 18px' }
+                  : { background: 'var(--raised)', color: 'var(--ink)', borderRadius: '18px 18px 18px 6px', boxShadow: 'var(--sh-1)' }}
               >
                 {m.content}
-              </div>
-            </div>
-            {m.role === 'assistant' && m.actions && m.actions.length > 0 && (
-              <div className="flex flex-col items-start">
-                {m.actions.map((a, ai) => <ActionCard key={ai} action={a} />)}
-              </div>
+              </motion.div>
             )}
+            {m.role === 'assistant' && m.actions?.map((a, ai) => (
+              <div key={ai} className="w-[86%]"><ActionCard action={a} onTrack={() => onOrderPlaced?.()} /></div>
+            ))}
           </div>
         ))}
 
-        {messages.length === 1 && !loading && (
-          <div className="flex flex-wrap gap-2 pt-1">
-            {SUGGESTIONS.map((s) => (
-              <button
-                key={s}
-                onClick={() => send(s)}
-                className="rounded-full border border-[var(--border-default)] bg-[var(--surface-raised)] px-3.5 py-2 text-[13px] font-semibold text-[var(--text-secondary)] active:scale-95"
-              >
+        {messages.length === 1 && !typing && (
+          <div className="scrollbar-hide flex gap-2 overflow-x-auto pt-1">
+            {CHIPS[(['it', 'en', 'es', 'de'].includes(lang) ? lang : 'it') as Lang].map((s) => (
+              <button key={s} onClick={() => send(s)}
+                className="flex-none whitespace-nowrap rounded-full px-3.5 py-2 text-[13.5px] font-semibold text-[var(--ink-2)] active:scale-95"
+                style={{ background: 'var(--raised)', boxShadow: 'var(--sh-1)' }}>
                 {s}
               </button>
             ))}
           </div>
         )}
 
-        {loading && (
-          <div className="flex justify-start">
-            <div className="flex items-center gap-1.5 rounded-[20px] rounded-bl-md border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 py-3.5 shadow-[var(--elev-1)]">
-              {[0, 1, 2].map((i) => (
-                <span key={i} className="h-2 w-2 animate-bounce rounded-full" style={{ background: 'var(--brand)', opacity: 0.55, animationDelay: `${i * 140}ms` }} />
-              ))}
-            </div>
+        {typing && (
+          <div className="flex items-center gap-1.5 self-start rounded-[18px] rounded-bl-md px-4 py-3.5" style={{ background: 'var(--raised)', boxShadow: 'var(--sh-1)' }}>
+            <span className="tdot" /><span className="tdot" /><span className="tdot" />
           </div>
         )}
         <div ref={bottomRef} />
       </div>
 
-      {/* Composer */}
-      <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-lg border-t border-[var(--border-subtle)] bg-[var(--surface-raised)]/95 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl">
-        <form onSubmit={(e) => { e.preventDefault(); send() }} className="flex items-center gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Scrivi un messaggio..."
-            className="flex-1 rounded-full border border-[var(--border-default)] bg-[var(--surface-base)] px-4 py-3 text-[15px] font-medium text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--brand)]"
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || loading}
-            aria-label="Invia"
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-[var(--on-brand)] transition-transform active:scale-90 disabled:opacity-40"
-            style={{ background: 'var(--brand)' }}
-          >
-            <Send size={19} strokeWidth={2.2} />
-          </button>
-        </form>
+      {/* composer fisso */}
+      <div className="sticky bottom-0 flex items-center gap-2.5 border-t px-4 py-3"
+        style={{ background: 'var(--surface)', borderColor: 'var(--hairline)', paddingBottom: 'calc(var(--safe-b) + 84px)' }}>
+        <input
+          value={input} onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send() } }}
+          placeholder={t('chatPlaceholder')}
+          className="h-[46px] flex-1 rounded-full px-[18px] text-[15px] text-[var(--ink)] outline-none"
+          style={{ background: 'var(--raised)', boxShadow: 'inset 0 0 0 1.5px var(--hairline)' }}
+        />
+        <button onClick={() => send()} disabled={!input.trim() || typing} aria-label="Invia"
+          className="grid h-[46px] w-[46px] flex-none place-items-center rounded-full transition-colors active:scale-90"
+          style={{ background: input.trim() ? 'var(--brand)' : 'var(--sunken)', color: input.trim() ? 'var(--on-brand)' : 'var(--ink-3)' }}>
+          <Send size={20} strokeWidth={2.2} />
+        </button>
       </div>
     </div>
   )

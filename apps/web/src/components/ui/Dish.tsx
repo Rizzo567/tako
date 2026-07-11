@@ -40,7 +40,7 @@ export const Dish = forwardRef<HTMLDivElement, DishProps>(function Dish(
     >
       {imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
       ) : (
         <span className="serif" style={{ fontSize: size * 0.42, color: 'rgba(255,255,255,.92)', lineHeight: 1 }}>
           {initial(name)}

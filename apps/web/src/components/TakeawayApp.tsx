@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Utensils, Clock, Sparkles, PackageCheck } from 'lucide-react'
 import { api } from '@/lib/api'
 import { useSessionStore, useCartStore } from '@/lib/store'
-import { SPRING, SPRING_SHEET, EASE_OUT } from '@/lib/motion'
+import { SPRING, EASE_OUT } from '@/lib/motion'
 import { MenuView } from './MenuView'
 import { CartView } from './CartView'
 import { OrderTracking } from './OrderTracking'
 import { AiChat } from './AiChat'
+import { Sheet } from './ui/Sheet'
+import { I18nProvider, useI18n } from '@/lib/i18n'
 
 // ─────────────────── PWA ASPORTO / ORDINE-AHEAD (senza tavolo) ───────────────────
 // Flusso separato dal tavolo: apre una sessione 'takeaway' (cookie tako_table scoped
@@ -96,7 +98,8 @@ function BottomNav({ view, setView, aiEnabled, orderActive }: { view: View; setV
   )
 }
 
-export function TakeawayApp({ restaurantId }: { restaurantId: string }) {
+function TakeawayShell({ restaurantId }: { restaurantId: string }) {
+  const { t } = useI18n()
   const { setSession, orderId, logoUrl } = useSessionStore()
   const count = useCartStore(s => s.items.reduce((n, i) => n + i.quantity, 0))
   const [view, setView] = useState<View>('menu')
@@ -166,23 +169,20 @@ export function TakeawayApp({ restaurantId }: { restaurantId: string }) {
 
       <BottomNav view={view} setView={setView} aiEnabled={aiEnabled} orderActive={!!orderId} />
 
-      <AnimatePresence>
-        {cartOpen && (
-          <div className="fixed inset-0 z-50 flex items-end justify-center">
-            <motion.div className="absolute inset-0" style={{ background: 'rgba(30,20,16,.42)', backdropFilter: 'blur(2px)' }}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: EASE_OUT }}
-              onClick={() => setCartOpen(false)} />
-            <motion.div className="relative mx-auto max-h-[88vh] w-full max-w-lg overflow-y-auto"
-              style={{ background: 'var(--surface)', borderTopLeftRadius: 'var(--r-sheet)', borderTopRightRadius: 'var(--r-sheet)', boxShadow: 'var(--sh-sheet)' }}
-              initial={{ y: '101%' }} animate={{ y: 0 }} exit={{ y: '101%' }} transition={SPRING_SHEET}>
-              <CartView
-                onBack={() => setCartOpen(false)}
-                onOrderPlaced={() => { setCartOpen(false); setView('tracking') }}
-              />
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <Sheet open={cartOpen} onClose={() => setCartOpen(false)} title={t('yourOrder')} leadIcon={<span className="text-[18px]">🛍️</span>} maxH="90%">
+        <CartView
+          onBack={() => setCartOpen(false)}
+          onOrderPlaced={() => { setCartOpen(false); setView('tracking') }}
+        />
+      </Sheet>
     </div>
+  )
+}
+
+export function TakeawayApp({ restaurantId }: { restaurantId: string }) {
+  return (
+    <I18nProvider restaurantId={restaurantId}>
+      <TakeawayShell restaurantId={restaurantId} />
+    </I18nProvider>
   )
 }

@@ -1,28 +1,29 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { Check, Clock, Plus } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { socket, joinTable, joinOrder } from '@/lib/socket'
 import { useSessionStore } from '@/lib/store'
 import { api } from '@/lib/api'
-import { formatEuro, cn } from '@/lib/utils'
-import { ArrowLeft, Check, Plus } from 'lucide-react'
+import { formatEuro } from '@/lib/utils'
+import { useCountUp, EASE_OUT } from '@/lib/motion'
+import { useI18n, ORDER_STEPS, stepIndexForStatus, trStep } from '@/lib/i18n'
+import { Confetti } from './ui/Confetti'
 
-const STEPS = [
-  { key: 'pending', label: 'Ricevuto', desc: 'Tako ha ricevuto il tuo ordine' },
-  { key: 'confirmed', label: 'Confermato', desc: 'Il ristorante ha confermato' },
-  { key: 'preparing', label: 'In cucina', desc: 'Lo chef sta preparando' },
-  { key: 'ready', label: 'Pronto', desc: 'In arrivo al tuo tavolo' },
-  { key: 'served', label: 'Servito', desc: 'Buon appetito' },
-]
+interface OrderItem { id?: string; name: string; quantity: number; unitPrice: number; notes?: string }
+interface Order { id?: string; status: string; items?: OrderItem[]; total: number; notes?: string }
 
 export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; onOrderAgain: () => void }) {
+  const { t, lang } = useI18n()
   const { orderId, tableId } = useSessionStore()
-  const [order, setOrder] = useState<any>(null)
+  const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const notifiedReady = useRef(false) // evita notifiche "pronto" doppie
+  const notifiedReady = useRef(false)
+  const animTotal = useCountUp(order?.total ?? 0)
 
   useEffect(() => {
-    // Nessun ordine attivo: niente spinner infinito.
     if (!orderId) { setLoading(false); setOrder(null); return }
     setLoading(true); setError(false)
     notifiedReady.current = false
@@ -33,37 +34,28 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
   }, [orderId])
 
   useEffect(() => {
-    // Serve un ordine da tracciare (al tavolo O asporto). L'asporto non ha tableId:
-    // in quel caso ci si iscrive alla room del PROPRIO ordine (join:order), altrimenti
-    // il tracking restava congelato su "Ricevuto" per sempre.
     if (!orderId) return
-    // Singleton same-origin con re-join automatico: il tracking resta vivo anche
-    // dopo un drop di rete (niente disconnect su unmount, solo off del listener).
     if (tableId) joinTable(tableId)
     else joinOrder(orderId)
     const onUpdated = ({ orderId: oid, status }: { orderId: string; status: string }) => {
       if (oid !== orderId) return
-      setOrder((o: any) => o ? { ...o, status } : o)
-      // Notifica "pronto" SOLO alla prima transizione (più emit 'ready' possibili).
+      setOrder((o) => o ? { ...o, status } : o)
       if (status === 'ready' && !notifiedReady.current) {
         notifiedReady.current = true
+        toast.success(t('toastOrderReady'))
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('Il tuo ordine è pronto', { body: 'Il cameriere sta arrivando.' })
         }
       }
     }
-    // Ad ogni (ri)connessione del socket rifetcha lo stato reale: un telefono
-    // risvegliato/riconnesso può aver perso emit 'order:updated' mentre dormiva.
     const onReconnect = () => {
       if (!orderId) return
-      api.get(`/customer/orders/${orderId}`)
-        .then(r => setOrder(r.data.data))
-        .catch(() => {})
+      api.get(`/customer/orders/${orderId}`).then(r => setOrder(r.data.data)).catch(() => {})
     }
     socket.on('order:updated', onUpdated)
     socket.on('connect', onReconnect)
     return () => { socket.off('order:updated', onUpdated); socket.off('connect', onReconnect) }
-  }, [tableId, orderId])
+  }, [tableId, orderId, t])
 
   useEffect(() => {
     if ('Notification' in window && Notification.permission === 'default') {
@@ -71,135 +63,129 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
     }
   }, [])
 
-  const isCancelled = order?.status === 'cancelled'
-  // 'paid' è uno stato finale positivo non presente in STEPS: mappalo all'ultimo
-  // step ('served') così lo stepper risulta completo invece di ripartire da 0.
-  const effectiveStatus = order?.status === 'paid' ? 'served' : order?.status
-  const stepIdx = STEPS.findIndex(s => s.key === effectiveStatus)
-  const currentIdx = stepIdx < 0 ? 0 : stepIdx
-
   if (loading) return (
-    <div className="flex min-h-[100dvh] items-center justify-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-transparent" style={{ borderColor: 'var(--brand)', borderTopColor: 'transparent' }} />
     </div>
   )
 
-  // Nessun ordine (tab aperta senza aver ordinato) o errore di caricamento.
+  // Nessun ordine attivo o errore → empty state con mascotte.
   if (error || !order) return (
-    <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-8 text-center">
-      <p className="font-serif text-2xl text-[var(--text-primary)]">{error ? 'Errore di caricamento' : 'Nessun ordine attivo'}</p>
-      <p className="text-sm font-medium text-[var(--text-secondary)]">{error ? 'Non riesco a recuperare l\'ordine. Riprova.' : 'Quando ordini, qui vedrai lo stato in tempo reale.'}</p>
-      <button onClick={onOrderAgain} className="btn-coral mt-2 px-6 py-2.5 text-sm">Vai al menu</button>
+    <div className="flex min-h-[62vh] flex-col items-center justify-center gap-3 p-8 text-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/tako/tako-cloche.png" alt="" className="anim-float w-[150px]" style={{ filter: 'drop-shadow(0 16px 26px rgba(217,83,58,.18))' }} />
+      <h3 className="text-[20px] font-bold text-[var(--ink)]">{error ? 'Errore di caricamento' : t('noActiveOrder')}</h3>
+      <p className="mb-2 text-[14px] text-[var(--ink-2)]">{error ? 'Non riesco a recuperare l’ordine. Riprova.' : t('noActiveOrderSub')}</p>
+      <button onClick={onOrderAgain}
+        className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-[var(--on-brand)] active:scale-95"
+        style={{ background: 'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
+        {t('goToMenu')}
+      </button>
     </div>
   )
 
-  // Ordine annullato: stato terminale negativo, esplicito e senza stepper.
-  if (isCancelled) return (
-    <div className="min-h-[100dvh] bg-[var(--surface-base)]">
-      <div className="sticky top-0 z-40 flex items-center gap-3 border-b border-[var(--border-subtle)] bg-[var(--surface-raised)]/90 px-4 py-3 backdrop-blur-xl">
-        <button onClick={onBack} aria-label="Indietro" className="grid h-9 w-9 place-items-center rounded-full border border-[var(--border-default)] text-[var(--text-primary)] active:scale-95"><ArrowLeft size={18} strokeWidth={2.4} /></button>
-        <h1 className="font-serif text-xl text-[var(--text-primary)]">Il tuo ordine</h1>
-      </div>
-      <div className="p-4">
-        <div
-          className="p-6 text-center"
-          style={{ borderRadius: 'var(--r-card)', background: 'color-mix(in srgb, var(--status-danger) 8%, var(--surface-raised))', border: '1px solid color-mix(in srgb, var(--status-danger) 30%, transparent)', boxShadow: 'var(--elev-1)' }}
-        >
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--status-danger)' }}>Stato ordine</p>
-          <p className="font-serif text-3xl" style={{ color: 'var(--status-danger)' }}>Annullato</p>
-          <p className="mt-2 text-sm font-medium text-[var(--text-secondary)]">Ordine annullato — chiedi allo staff per assistenza.</p>
-          <button onClick={onOrderAgain} className="btn-coral mt-5 px-6 py-2.5 text-sm">Vai al menu</button>
-        </div>
+  const cancelled = order.status === 'cancelled'
+  const cur = stepIndexForStatus(order.status)
+  const ready = order.status === 'ready'
+  const served = order.status === 'served' || order.status === 'paid'
+  const step = ORDER_STEPS[cur]
+  const stepTr = trStep(step.id, lang)
+
+  if (cancelled) return (
+    <div className="p-4">
+      <div className="p-6 text-center" style={{ borderRadius: 'var(--r-card)', background: 'color-mix(in srgb, var(--danger) 8%, var(--raised))', border: '1px solid color-mix(in srgb, var(--danger) 30%, transparent)', boxShadow: 'var(--sh-1)' }}>
+        <p className="mb-1 text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--danger)' }}>{t('orderWord')}</p>
+        <p className="serif text-[28px]" style={{ color: 'var(--danger)' }}>Annullato</p>
+        <p className="mt-2 text-[14px] font-medium text-[var(--ink-2)]">Ordine annullato — chiedi allo staff per assistenza.</p>
+        <button onClick={onOrderAgain} className="mt-5 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[15px] font-bold text-[var(--on-brand)]" style={{ background: 'var(--brand)' }}>{t('goToMenu')}</button>
       </div>
     </div>
   )
 
   return (
-    <div className="min-h-[100dvh] bg-[var(--surface-base)]">
-      <div className="sticky top-0 z-40 flex items-center gap-3 border-b border-[var(--border-subtle)] bg-[var(--surface-raised)]/90 px-4 py-3 backdrop-blur-xl">
-        <button onClick={onBack} aria-label="Indietro" className="grid h-9 w-9 place-items-center rounded-full border border-[var(--border-default)] text-[var(--text-primary)] active:scale-95"><ArrowLeft size={18} strokeWidth={2.4} /></button>
-        <h1 className="font-serif text-xl text-[var(--text-primary)]">Il tuo ordine</h1>
-      </div>
-
-      <div className="p-4">
-        {/* Status card */}
-        <div
-          className="mb-6 p-6 text-center"
-          style={{ borderRadius: 'var(--r-card)', background: 'var(--surface-raised)', boxShadow: 'var(--elev-2)' }}
-        >
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">Stato ordine</p>
-          <p className="font-serif text-3xl text-[var(--text-primary)]">{STEPS[currentIdx]?.label ?? 'In lavorazione'}</p>
-          <p className="mt-1 text-sm font-medium text-[var(--text-secondary)]">{STEPS[currentIdx]?.desc}</p>
-        </div>
-
-        {/* Vertical stepper */}
-        <div
-          className="mb-4 p-5"
-          style={{ borderRadius: 'var(--r-card)', background: 'var(--surface-raised)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--elev-1)' }}
-        >
-          {STEPS.slice(0, -1).map((step, i) => {
-            const done = i < currentIdx
-            const current = i === currentIdx
-            const isLast = i === STEPS.length - 2
-            return (
-              <div key={step.key} className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={cn(
-                      'grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold transition-all duration-500',
-                      current && 'animate-pulse',
-                    )}
-                    style={{
-                      background: done || current ? 'var(--brand)' : 'var(--surface-sunken)',
-                      color: done || current ? 'var(--on-brand)' : 'var(--text-tertiary)',
-                    }}
-                  >
-                    {done ? <Check size={16} strokeWidth={2.6} /> : i + 1}
-                  </div>
-                  {!isLast && (
-                    <div
-                      className="my-1 h-8 w-0.5 transition-all duration-500"
-                      style={{ background: done ? 'var(--brand)' : 'var(--border-default)' }}
-                    />
-                  )}
-                </div>
-                <div className="pb-4 last:pb-0">
-                  <p className={cn('text-sm font-semibold', done || current ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)]')}>{step.label}</p>
-                  <p className="text-xs font-medium text-[var(--text-tertiary)]">{step.desc}</p>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Order summary */}
-        {order?.items && (
-          <div
-            className="p-5"
-            style={{ borderRadius: 'var(--r-card)', background: 'var(--surface-raised)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--elev-1)' }}
-          >
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">Riepilogo ordine</p>
-            {order.items.map((item: any) => (
-              <div key={item.id} className="flex justify-between border-b border-dashed border-[var(--border-subtle)] py-2 last:border-0">
-                <span className="text-sm font-medium text-[var(--text-primary)]"><span className="tabular-nums">{item.quantity}×</span> {item.name}</span>
-                <span className="text-sm font-semibold tabular-nums text-[var(--text-primary)]">{formatEuro(item.unitPrice * item.quantity)}</span>
-              </div>
-            ))}
-            <div className="mt-3 flex justify-between border-t border-[var(--border-default)] pt-3">
-              <span className="font-serif text-lg text-[var(--text-primary)]">Totale</span>
-              <span className="font-serif text-lg tabular-nums" style={{ color: 'var(--brand)' }}>{formatEuro(order.total)}</span>
-            </div>
-
-            <button
-              onClick={onOrderAgain}
-              className="mt-4 flex w-full items-center justify-center gap-2 py-4 font-semibold text-[var(--text-primary)] transition-transform active:scale-[0.98]"
-              style={{ borderRadius: 'var(--r-card)', background: 'var(--surface-sunken)' }}
-            >
-              <Plus size={18} strokeWidth={2.4} /> Aggiungi altro
-            </button>
+    <div className="px-4 pb-6 pt-2">
+      {/* current status hero (colore = stato) */}
+      <motion.div
+        key={order.status}
+        className="relative overflow-hidden text-white"
+        style={{ borderRadius: 'var(--r-card)', padding: '20px 18px', marginTop: 4, background: ready ? 'var(--ok)' : served ? 'var(--ink)' : 'var(--brand)', boxShadow: 'var(--sh-2)' }}
+        initial={{ opacity: 0, y: 14, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.5, ease: EASE_OUT }}
+      >
+        {(ready || served) && <Confetti n={16} />}
+        <div className="flex items-center gap-3.5">
+          <div className="relative h-[52px] w-[52px] flex-none">
+            {!ready && !served && <span className="absolute inset-0 rounded-full" style={{ background: 'rgba(255,255,255,.5)', animation: 'pulse-ring 2.4s ease-out infinite' }} />}
+            <span className="relative grid h-[52px] w-[52px] place-items-center rounded-full" style={{ background: 'rgba(255,255,255,.2)' }}>
+              {ready || served ? <Check size={26} strokeWidth={2.4} /> : <Clock size={26} strokeWidth={2.4} className="anim-spin" />}
+            </span>
           </div>
-        )}
+          <div className="flex-1">
+            <p className="text-[12px] font-bold uppercase tracking-[.08em] opacity-80">{t('orderWord')} #{order.id?.slice(-5) ?? ''}</p>
+            <h2 className="serif mt-0.5 text-[28px] leading-none">{stepTr.label}</h2>
+            <p className="mt-1 text-[14px] opacity-90">{stepTr.desc}</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* vertical stepper */}
+      <div className="mt-3" style={{ background: 'var(--raised)', borderRadius: 'var(--r-card)', padding: '18px 18px 6px', boxShadow: 'var(--sh-1)' }}>
+        {ORDER_STEPS.map((s, i) => {
+          const done = i < cur
+          const on = i === cur
+          const sTr = trStep(s.id, lang)
+          return (
+            <div key={s.id} className="flex gap-3.5">
+              <div className="flex flex-none flex-col items-center">
+                <div className="grid h-[30px] w-[30px] flex-none place-items-center rounded-full transition-all duration-500"
+                  style={{
+                    background: done || on ? 'var(--brand)' : 'var(--surface)',
+                    color: done || on ? 'var(--on-brand)' : 'var(--ink-3)',
+                    boxShadow: on ? '0 0 0 5px var(--brand-tint)' : done ? 'none' : 'inset 0 0 0 2px var(--hairline)',
+                  }}>
+                  {done ? <Check size={17} strokeWidth={2.8} style={{ animation: 'check-pop .4s var(--spring)' }} />
+                    : on ? <span className="h-[9px] w-[9px] rounded-full" style={{ background: '#fff', animation: 'badge-pop 1.6s ease-in-out infinite' }} />
+                    : <span className="text-[13px] font-bold">{i + 1}</span>}
+                </div>
+                {i < ORDER_STEPS.length - 1 && (
+                  <div className="my-1 w-[3px] flex-1" style={{ minHeight: 26, borderRadius: 99, background: i < cur ? 'var(--brand)' : 'var(--hairline)', transition: 'background .5s var(--out)' }} />
+                )}
+              </div>
+              <div className="pb-4 pt-0.5" style={{ opacity: done || on ? 1 : 0.5, transition: 'opacity .4s' }}>
+                <p className="text-[15.5px] font-bold text-[var(--ink)]">{sTr.label}</p>
+                <p className="mt-0.5 text-[13px] text-[var(--ink-2)]">{sTr.desc}</p>
+              </div>
+            </div>
+          )
+        })}
       </div>
+
+      {/* order summary */}
+      {order.items && order.items.length > 0 && (
+        <div className="mt-3" style={{ background: 'var(--raised)', borderRadius: 'var(--r-card)', padding: '16px 18px', boxShadow: 'var(--sh-1)' }}>
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">{t('summary')}</p>
+          {order.items.map((it, i) => (
+            <div key={it.id ?? i} className="mb-2.5 flex items-center gap-2.5">
+              <span className="tnum grid h-[26px] min-w-[26px] place-items-center rounded-lg text-[13px] font-bold text-[var(--ink)]" style={{ background: 'var(--sunken)' }}>{it.quantity}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[14.5px] font-semibold text-[var(--ink)]">{it.name}</p>
+                {it.notes && <p className="text-[12px] italic text-[var(--ink-3)]">“{it.notes}”</p>}
+              </div>
+              <span className="tnum text-[14px] font-semibold text-[var(--ink-2)]">{formatEuro(it.unitPrice * it.quantity)}</span>
+            </div>
+          ))}
+          {order.notes && <p className="border-t pt-2.5 text-[12.5px] italic text-[var(--ink-2)]" style={{ borderColor: 'var(--hairline)' }}>{t('notePre')} {order.notes}</p>}
+          <div className="mt-1 flex items-baseline justify-between border-t pt-3" style={{ borderColor: 'var(--hairline)' }}>
+            <span className="font-bold text-[var(--ink)]">{t('total')}</span>
+            <span className="serif tnum text-[23px] text-[var(--ink)]">{formatEuro(animTotal)}</span>
+          </div>
+        </div>
+      )}
+
+      <button onClick={onOrderAgain}
+        className="mt-3.5 flex w-full items-center justify-center gap-2 py-3.5 text-[15px] font-bold text-[var(--ink)] active:scale-[0.98]"
+        style={{ borderRadius: 'var(--r-card)', background: 'var(--sunken)' }}>
+        <Plus size={18} strokeWidth={2.4} /> {t('addMore')}
+      </button>
     </div>
   )
 }

@@ -9,12 +9,10 @@ import { joinMenu, socket } from '@/lib/socket'
 import { useSessionStore, useCartStore } from '@/lib/store'
 import { formatEuro } from '@/lib/utils'
 import { SPRING, SPRING_SOFT, EASE_OUT, flyToCart, useCountUp } from '@/lib/motion'
+import { useI18n, trTag, trAllergen } from '@/lib/i18n'
 import { Dish, dishGradient } from './ui/Dish'
 import { Sheet } from './ui/Sheet'
-import { LanguageSelector } from './LanguageSelector'
 
-// Persistenza scelta lingua cliente (localStorage): sopravvive a reload/riscansione.
-const LANG_KEY = 'tako-lang'
 type ItemTranslation = { itemId: string; name: string; description?: string | null }
 
 // 12 allergeni del prototipo: emoji per i badge + label per il filtro.
@@ -34,9 +32,9 @@ const ALLERGENS: { id: string; emoji: string; label: string }[] = [
 ]
 const ALLERGEN_MAP = Object.fromEntries(ALLERGENS.map(a => [a.id, a]))
 const allergenEmoji = (a: string) => ALLERGEN_MAP[a.toLowerCase()]?.emoji ?? '⚠️'
-const allergenLabel = (a: string) => ALLERGEN_MAP[a.toLowerCase()]?.label ?? a
 
 function Tag({ children }: { children: string }) {
+  const { lang } = useI18n()
   const danger = children === 'Piccante'
   const novita = children === 'Novità'
   return (
@@ -47,15 +45,17 @@ function Tag({ children }: { children: string }) {
         color: danger ? 'var(--danger)' : novita ? 'var(--brand-deep)' : 'var(--ink-2)',
       }}
     >
-      {children}
+      {trTag(children, lang)}
     </span>
   )
 }
 
 function AllergenDot({ id, withLabel }: { id: string; withLabel?: boolean }) {
+  const { lang } = useI18n()
+  const label = trAllergen(id, lang, ALLERGEN_MAP[id.toLowerCase()]?.label ?? id)
   return (
     <span
-      title={allergenLabel(id)}
+      title={label}
       className="inline-flex items-center gap-1.5 font-semibold"
       style={{
         fontSize: withLabel ? 12.5 : 13,
@@ -66,7 +66,7 @@ function AllergenDot({ id, withLabel }: { id: string; withLabel?: boolean }) {
       }}
     >
       <span style={{ fontSize: 14 }}>{allergenEmoji(id)}</span>
-      {withLabel && allergenLabel(id)}
+      {withLabel && label}
     </span>
   )
 }
@@ -93,6 +93,7 @@ function Qty({ value, onChange, min = 1 }: { value: number; onChange: (n: number
 
 /* ───────────────── item detail sheet ───────────────── */
 function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boolean; onClose: () => void }) {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const add = useCartStore(s => s.add)
   const [qty, setQty] = useState(1)
@@ -124,19 +125,17 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
     })
     flyToCart(heroRef.current, dishGradient(item.name))
     onClose()
-    toast.success(`${qty}× ${item.name} aggiunto`)
+    toast.success(`${qty}× ${item.name} ${t('added')}`)
   }
 
   return (
     <Sheet open={open} onClose={onClose} maxH="92vh">
       <div className="pb-[18px]">
-        {/* hero (entrata pop-soft) */}
+        {/* hero (shared-element: cresce dalla tile lista via layoutId) */}
         <div className="px-5">
           <motion.div
             ref={heroRef}
-            initial={reduce ? undefined : { scale: 0.7, opacity: 0 }}
-            animate={reduce ? undefined : { scale: [0.7, 1.06, 1], opacity: 1 }}
-            transition={reduce ? undefined : { duration: 0.55, ease: EASE_OUT }}
+            layoutId={reduce ? undefined : `dish-${item.id}`}
             className="relative grid h-[188px] w-full place-items-center overflow-hidden"
             style={{ borderRadius: 20, background: item.imageUrl ? 'var(--sunken)' : dishGradient(item.name) }}
           >
@@ -164,7 +163,7 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
 
           {item.allergens.length > 0 && (
             <div className="mt-4">
-              <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">Allergeni</p>
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">{t('allergens')}</p>
               <div className="flex flex-wrap gap-[7px]">
                 {item.allergens.map(a => <AllergenDot key={a} id={a} withLabel />)}
               </div>
@@ -173,7 +172,7 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
 
           {item.variants && item.variants.length > 0 && (
             <div className="mt-5">
-              <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">Scegli la porzione</p>
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">{t('choosePortion')}</p>
               <div className="flex flex-col gap-2">
                 {item.variants.map(opt => {
                   const on = variantId === opt.id
@@ -189,7 +188,7 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
                       <span className="text-[15px] font-semibold text-[var(--ink)]">{opt.name}</span>
                       <span className="tnum text-[14px] font-bold"
                         style={{ color: opt.priceModifier ? 'var(--brand-deep)' : 'var(--ink-3)' }}>
-                        {opt.priceModifier ? `+ ${formatEuro(opt.priceModifier)}` : 'incluso'}
+                        {opt.priceModifier ? `+ ${formatEuro(opt.priceModifier)}` : t('included')}
                       </span>
                     </button>
                   )
@@ -199,10 +198,10 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
           )}
 
           <div className="mt-5">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">Note per la cucina</p>
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">{t('kitchenNotes')}</p>
             <textarea
               value={notes} onChange={e => setNotes(e.target.value)} rows={2}
-              placeholder="Es. senza cipolla, ben cotto…"
+              placeholder={t('notesPh')}
               className="w-full resize-none rounded-[var(--r-input)] px-3.5 py-3 text-[14.5px] text-[var(--ink)] outline-none"
               style={{ background: 'var(--surface)', boxShadow: 'inset 0 0 0 1.5px var(--hairline)' }}
             />
@@ -217,7 +216,7 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
         <button onClick={handleAdd}
           className="flex h-[54px] flex-1 items-center justify-between rounded-2xl px-5 text-[16px] font-bold text-[var(--on-brand)] active:scale-[0.98]"
           style={{ background: 'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
-          <span>Aggiungi</span>
+          <span>{t('add')}</span>
           <span className="tnum">{formatEuro(unit * qty)}</span>
         </button>
       </div>
@@ -232,6 +231,7 @@ function FilterSheet({
   open: boolean; onClose: () => void; available: string[]
   excluded: Set<string>; setExcluded: (s: Set<string>) => void
 }) {
+  const { t, lang } = useI18n()
   const list = ALLERGENS.filter(a => available.includes(a.id))
   const toggle = (id: string) => {
     const next = new Set(excluded)
@@ -239,8 +239,8 @@ function FilterSheet({
     setExcluded(next)
   }
   return (
-    <Sheet open={open} onClose={onClose} title="Filtra per allergeni"
-      sub="Nascondi i piatti che li contengono" leadIcon={<Filter size={20} />}>
+    <Sheet open={open} onClose={onClose} title={t('filterTitle')}
+      sub={t('filterSub')} leadIcon={<Filter size={20} />}>
       <div className="grid grid-cols-2 gap-2.5 px-5 pb-[18px] pt-1">
         {list.map(a => {
           const on = excluded.has(a.id)
@@ -253,7 +253,7 @@ function FilterSheet({
                 boxShadow: on ? 'none' : 'inset 0 0 0 1.5px var(--hairline)',
               }}>
               <span className="text-[18px]">{a.emoji}</span>
-              <span className="flex-1 text-[13.5px] font-semibold">{a.label}</span>
+              <span className="flex-1 text-[13.5px] font-semibold">{trAllergen(a.id, lang, a.label)}</span>
               {on && <X size={15} />}
             </button>
           )
@@ -264,12 +264,12 @@ function FilterSheet({
         {excluded.size > 0 && (
           <button onClick={() => setExcluded(new Set())}
             className="h-[54px] rounded-2xl px-5 text-[16px] font-bold text-[var(--ink)]"
-            style={{ boxShadow: 'inset 0 0 0 1.5px var(--hairline)' }}>Azzera</button>
+            style={{ boxShadow: 'inset 0 0 0 1.5px var(--hairline)' }}>{t('reset')}</button>
         )}
         <button onClick={onClose}
           className="h-[54px] flex-1 rounded-2xl text-[16px] font-bold text-[var(--on-brand)] active:scale-[0.98]"
           style={{ background: 'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
-          {excluded.size ? 'Mostra piatti' : 'Fatto'}
+          {excluded.size ? t('showDishes') : t('done')}
         </button>
       </div>
     </Sheet>
@@ -277,7 +277,8 @@ function FilterSheet({
 }
 
 /* ───────────────── menu view ───────────────── */
-export function MenuView({ onGoCart }: { onGoCart: () => void }) {
+export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?: boolean }) {
+  const { t, lang, defaultLang } = useI18n()
   const restaurantId = useSessionStore(s => s.restaurantId)
   const items = useCartStore(s => s.items)
   const count = useMemo(() => items.reduce((n, i) => n + i.quantity, 0), [items])
@@ -286,10 +287,6 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
 
   const [menu, setMenu] = useState<PublicMenu | null>(null)
   const [features, setFeatures] = useState<{ restaurantName?: string; reservationsEnabled?: boolean; reviewUrl?: string } | null>(null)
-  // Multilingua: lingue del ristorante, lingua scelta, mappa itemId → traduzione.
-  const [languages, setLanguages] = useState<string[]>([])
-  const [defaultLang, setDefaultLang] = useState<string>('it')
-  const [lang, setLang] = useState<string>('')
   const [trMap, setTrMap] = useState<Record<string, ItemTranslation>>({})
   const [active, setActive] = useState<string | null>(null)
   const [excluded, setExcluded] = useState<Set<string>>(new Set())
@@ -312,22 +309,7 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
     }).catch(() => toast.error('Menu non disponibile al momento. Riprova.'))
   }, [restaurantId])
 
-  // Multilingua: carica le lingue del ristorante (endpoint pubblico dedicato, non
-  // customer.ts) e sceglie la lingua iniziale: quella salvata se valida, altrimenti default.
-  useEffect(() => {
-    if (!restaurantId) return
-    api.get(`/customer/menu-languages?restaurantId=${restaurantId}`).then(r => {
-      const langs: string[] = (r.data.data.languages ?? ['it']).map((l: string) => l.toLowerCase())
-      const def: string = (r.data.data.defaultLanguage ?? langs[0] ?? 'it').toLowerCase()
-      setLanguages(langs)
-      setDefaultLang(def)
-      const saved = typeof window !== 'undefined' ? localStorage.getItem(LANG_KEY)?.toLowerCase() : null
-      setLang(saved && langs.includes(saved) ? saved : def)
-    }).catch(() => { setLanguages([]); setLang('it'); setDefaultLang('it') })
-  }, [restaurantId])
-
-  // Carica le traduzioni quando la lingua scelta ≠ default. In default (o lingua
-  // assente) svuota la mappa → si mostra sempre l'originale.
+  // Traduzioni piatti: quando la lingua ≠ default, rifetch/merge per itemId (solo display).
   useEffect(() => {
     if (!restaurantId || !lang || lang === defaultLang) { setTrMap({}); return }
     let alive = true
@@ -341,14 +323,8 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
     return () => { alive = false }
   }, [restaurantId, lang, defaultLang])
 
-  function chooseLang(next: string) {
-    setLang(next)
-    if (typeof window !== 'undefined') localStorage.setItem(LANG_KEY, next)
-  }
-
-  // Applica le traduzioni al menu ricevuto: sostituisce name/description per itemId
-  // se esiste una traduzione, altrimenti fallback all'originale. L'id resta invariato,
-  // così carrello/ordine (per menuItemId) e i prezzi dal server non cambiano.
+  // Applica le traduzioni (name/description) per itemId; l'id resta invariato → il
+  // carrello/ordine usa sempre il nome canonico italiano dei dati originali.
   const localizedMenu = useMemo<PublicMenu | null>(() => {
     if (!menu) return null
     if (!lang || lang === defaultLang || Object.keys(trMap).length === 0) return menu
@@ -357,16 +333,15 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
       sections: menu.sections.map(s => ({
         ...s,
         items: s.items.map(it => {
-          const t = trMap[it.id]
-          if (!t) return it
-          return { ...it, name: t.name || it.name, description: t.description ?? it.description }
+          const tr = trMap[it.id]
+          if (!tr) return it
+          return { ...it, name: tr.name || it.name, description: tr.description ?? it.description }
         }),
       })),
     }
   }, [menu, lang, defaultLang, trMap])
 
-  // Menu live: il ristorante segna un piatto esaurito o ne cambia prezzo/nome →
-  // il menu del cliente si aggiorna da solo (room pubblica menu:{restaurantId}).
+  // Menu live (disponibilità/prezzi/nuovi piatti).
   useEffect(() => {
     if (!restaurantId) return
     joinMenu(restaurantId)
@@ -379,9 +354,6 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
         })),
       } : m)
     const onAvail = ({ itemId, available }: { itemId: string; available: boolean }) => patchItem(itemId, { available })
-    // Refetch completo: gestisce TUTTI i cambi menu (nuovo piatto, modifica, eliminazione
-    // piatto/sezione, rinomina) — prima si patchava solo per id, quindi add/delete/rename
-    // non comparivano mai live ai clienti. La disponibilità (onAvail) resta patch veloce.
     const onUpdated = () => api.get(`/customer/restaurant/${restaurantId}/menu`)
       .then(r => setMenu(r.data.data)).catch(() => {})
     socket.on('menu:item_availability', onAvail)
@@ -444,6 +416,8 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
     setItemOpen(true)
   }
 
+  const reduce = useReducedMotion()
+
   return (
     <div className="relative">
       {/* sticky tabs + filtro */}
@@ -462,10 +436,7 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
               </button>
             )
           })}
-          {languages.length > 1 && lang && (
-            <LanguageSelector languages={languages} value={lang} onChange={chooseLang} />
-          )}
-          <button onClick={() => setFilterOpen(true)} aria-label="Filtra allergeni"
+          <button onClick={() => setFilterOpen(true)} aria-label={t('filterTitle')}
             className="relative z-[1] flex flex-none items-center gap-1.5 rounded-full px-3.5 py-2 text-[14px] font-bold active:scale-[0.97]"
             style={{
               background: excluded.size ? 'var(--brand)' : 'var(--raised)',
@@ -480,7 +451,7 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
       {excluded.size > 0 && (
         <div className="mx-4 mb-1 flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-[12.5px] font-semibold"
           style={{ background: 'var(--brand-wash)', color: 'var(--brand-deep)' }}>
-          <Info size={15} /> Nascondo i piatti con {Array.from(excluded).map(a => allergenLabel(a).toLowerCase()).join(', ')}.
+          <Info size={15} /> {t('hidingWith')} {Array.from(excluded).map(a => trAllergen(a, lang, a).toLowerCase()).join(', ')}.
         </div>
       )}
 
@@ -517,10 +488,12 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
                     </div>
                   </div>
                   <div className="relative flex-none">
-                    <Dish name={it.name} imageUrl={it.imageUrl} size={86} radius={14} />
+                    <motion.div layoutId={reduce || !it.available ? undefined : `dish-${it.id}`}>
+                      <Dish name={it.name} imageUrl={it.imageUrl} size={86} radius={14} />
+                    </motion.div>
                     {!it.available ? (
                       <span className="absolute inset-0 grid place-items-center rounded-[14px] text-[11.5px] font-bold tracking-wide text-white"
-                        style={{ background: 'rgba(42,31,26,.66)' }}>Esaurito</span>
+                        style={{ background: 'rgba(42,31,26,.66)' }}>{t('soldOut')}</span>
                     ) : (
                       <span className="absolute -bottom-1.5 -right-1.5 grid h-[30px] w-[30px] place-items-center rounded-full text-[var(--on-brand)]"
                         style={{ background: 'var(--brand)', boxShadow: 'var(--sh-2)' }}>
@@ -546,7 +519,7 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
         {count > 0 && (
           <motion.div
             className="fixed inset-x-0 z-30 mx-auto max-w-lg px-4"
-            style={{ bottom: 'calc(var(--safe-b) + 70px)' }}
+            style={{ bottom: compact ? 'calc(var(--safe-b) + 72px)' : 'calc(var(--safe-b) + 88px)' }}
             initial={{ y: 120, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 120, opacity: 0, scale: 0.95 }}
@@ -557,8 +530,8 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
               <motion.span key={count}
                 className="grid h-[26px] min-w-[26px] place-items-center rounded-lg text-[14px] font-bold"
                 style={{ background: 'rgba(255,255,255,.22)' }}
-                initial={{ scale: 0.7 }} animate={{ scale: 1 }} transition={SPRING}>{count}</motion.span>
-              <span className="flex-1 text-left text-[16px] font-bold">Vedi carrello</span>
+                initial={{ scale: 0.7 }} animate={{ scale: [1, 1.4, 1] }} transition={SPRING}>{count}</motion.span>
+              <span className="flex-1 text-left text-[16px] font-bold">{t('viewCart')}</span>
               <span className="tnum rounded-xl px-3.5 py-2 text-[16px] font-bold" style={{ background: 'rgba(255,255,255,.16)' }}>
                 {formatEuro(animTotal)}
               </span>
@@ -570,10 +543,10 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
       {features && (features.reservationsEnabled || features.reviewUrl) && (
         <div className="mx-auto flex max-w-2xl flex-col gap-2.5 px-5 pb-28 pt-3">
           {features.reservationsEnabled && (
-            <a href={`/prenota/${restaurantId}`} className="block rounded-2xl border border-[var(--hairline,#e5e5e5)] bg-[var(--sunken,#f6f3ec)] px-4 py-3.5 text-center text-[15px] font-bold text-[var(--ink,#2a1f1a)]">📅 Prenota un tavolo</a>
+            <a href={`/prenota/${restaurantId}`} className="block rounded-2xl border border-[var(--hairline)] bg-[var(--sunken)] px-4 py-3.5 text-center text-[15px] font-bold text-[var(--ink)]">📅 Prenota un tavolo</a>
           )}
           {features.reviewUrl && (
-            <a href={features.reviewUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-[var(--hairline,#e5e5e5)] px-4 py-3.5 text-center text-[15px] font-semibold text-[var(--ink-2,#666)]">⭐ Lascia una recensione</a>
+            <a href={features.reviewUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-[var(--hairline)] px-4 py-3.5 text-center text-[15px] font-semibold text-[var(--ink-2)]">⭐ Lascia una recensione</a>
           )}
         </div>
       )}

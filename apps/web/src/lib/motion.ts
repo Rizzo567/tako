@@ -17,6 +17,32 @@ function prefersReducedMotion() {
 }
 
 /**
+ * Burst di coriandoli a tutto schermo (WAAPI, si autodistrugge). Usato alla
+ * conferma dell'ordine. No-op in reduced-motion.
+ */
+export function confettiBurst(x?: number, y?: number, n = 26) {
+  if (typeof document === 'undefined' || prefersReducedMotion() || !document.body.animate) return
+  const cols = ['#ED7159', '#F4B860', '#4FA882', '#D9533A', '#FCE7DF', '#E0A23C']
+  const cx = x ?? window.innerWidth / 2
+  const cy = y ?? window.innerHeight * 0.62
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('div')
+    const w = 6 + Math.random() * 5, h = 9 + Math.random() * 6
+    p.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;width:${w}px;height:${h}px;border-radius:2px;background:${cols[i % cols.length]};z-index:9999;pointer-events:none;`
+    document.body.appendChild(p)
+    const ang = Math.random() * Math.PI * 2, v = 90 + Math.random() * 170
+    const dx = Math.cos(ang) * v, dy = Math.sin(ang) * v - 130 - Math.random() * 90
+    const rot = Math.random() * 720 - 360
+    const an = p.animate([
+      { transform: 'translate(0,0) rotate(0deg) scale(1)', opacity: 1 },
+      { transform: `translate(${dx}px,${dy}px) rotate(${rot * 0.5}deg) scale(1)`, opacity: 1, offset: 0.45 },
+      { transform: `translate(${dx * 1.25}px,${dy + 260 + Math.random() * 120}px) rotate(${rot}deg) scale(.85)`, opacity: 0 },
+    ], { duration: 1050 + Math.random() * 500, easing: 'cubic-bezier(.22,.9,.35,1)', fill: 'forwards' })
+    an.onfinish = () => p.remove()
+  }
+}
+
+/**
  * Count-up animato di un valore numerico (totali carrello/tracking).
  * Rispetta prefers-reduced-motion (salta direttamente al valore finale).
  */
