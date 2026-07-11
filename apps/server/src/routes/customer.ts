@@ -2,13 +2,13 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
 import { randomUUID } from 'node:crypto'
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills, reservations } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
-import { round2, ensureOpenBill } from '../lib/billing.js'
+import { round2, ensureOpenBill, restaurantTimezone, dayStartInTz } from '../lib/billing.js'
 import { runAssistant } from '../lib/ai-actions.js'
 
 // Sessione cliente incapsulata nel JWT del cookie tako_table.
@@ -200,6 +200,41 @@ export async function customerRoutes(fastify: FastifyInstance) {
   })
 
   // Get public menu for restaurant
+  // PRENOTAZIONE self-service (pubblica, gated da settings.reservationsEnabled). Crea una
+  // prenotazione in stato 'requested' (senza tavolo) → l'owner la vede live in dashboard
+  // (emit reservation:changed) e la conferma/assegna. Rate-limit stretto (anti-spam).
+  fastify.post('/restaurant/:restaurantId/reservation', { config: { rateLimit: { max: 6, timeWindow: 60000 } } }, async (req, reply) => {
+    const { restaurantId } = req.params as { restaurantId: string }
+    const schema = z.object({
+      customerName: z.string().min(1).max(120),
+      customerPhone: z.string().min(3).max(40),
+      partySize: z.number().int().min(1).max(60),
+      date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      time: z.string().regex(/^\d{1,2}:\d{2}$/),
+      notes: z.string().max(500).optional(),
+    })
+    const parsed = schema.safeParse(req.body)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Dati prenotazione non validi.' } })
+    const [restaurant] = await db.select({ settings: restaurants.settings, active: restaurants.active })
+      .from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    if (!restaurant || !restaurant.active || ((restaurant.settings as any)?.reservationsEnabled ?? false) !== true) {
+      return reply.code(404).send({ error: { code: 'NOT_AVAILABLE', message: 'Le prenotazioni online non sono attive per questo ristorante.' } })
+    }
+    const { customerName, customerPhone, partySize, date, time, notes } = parsed.data
+    const tz = await restaurantTimezone(restaurantId)
+    const m = time.match(/^(\d{1,2}):(\d{2})$/)!
+    const dayStart = dayStartInTz(date, tz)
+    if (isNaN(dayStart.getTime())) return reply.code(400).send({ error: { code: 'BAD_DATE', message: 'Data non valida.' } })
+    const startsAt = new Date(dayStart.getTime() + (parseInt(m[1]!, 10) * 60 + parseInt(m[2]!, 10)) * 60_000)
+    if (startsAt.getTime() < Date.now() - 60_000) return reply.code(400).send({ error: { code: 'PAST', message: 'La data e ora sono nel passato.' } })
+    const [row] = await db.insert(reservations).values({
+      restaurantId, tableId: null, customerName: customerName.trim().slice(0, 120), customerPhone: customerPhone.trim().slice(0, 40),
+      partySize, startsAt, durationMin: 90, status: 'requested', notes: notes ? notes.slice(0, 500) : null,
+    }).returning()
+    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: row!.id })
+    return { data: { id: row!.id, status: 'requested' } }
+  })
+
   fastify.get('/restaurant/:restaurantId/menu', async (req, reply) => {
     const { restaurantId } = req.params as { restaurantId: string }
 
