@@ -16,7 +16,7 @@
 
 import { join } from 'node:path'
 import { homedir } from 'node:os'
-import { mkdirSync, existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, existsSync, readFileSync, writeFileSync, rmSync } from 'node:fs'
 import { db, restaurants, rooms } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { runAssistant, executeAction } from './ai-actions.js'
@@ -31,6 +31,19 @@ function authDir(): string {
   const d = join(takoHome(), 'whatsapp-auth')
   mkdirSync(d, { recursive: true })
   return d
+}
+// Cancella le credenziali salvate: serve dopo un LOGOUT (dispositivo scollegato dal
+// telefono). Senza pulizia, Baileys ricaricherebbe creds morte e WhatsApp rifiuterebbe
+// la connessione all'infinito → nessun QR nuovo. Pulendo, il prossimo avvio riparte da
+// zero ed emette un QR fresco.
+function clearAuthDir(): void {
+  try {
+    rmSync(join(takoHome(), 'whatsapp-auth'), { recursive: true, force: true })
+    mkdirSync(join(takoHome(), 'whatsapp-auth'), { recursive: true })
+    console.log('[whatsapp] credenziali azzerate (logout) → pronto per nuovo QR')
+  } catch (err) {
+    console.error('[whatsapp] pulizia auth dir fallita:', err)
+  }
 }
 function configPath(): string {
   return join(takoHome(), 'whatsapp-config.json')
@@ -78,7 +91,20 @@ let starting = false
 let connected = false
 let lastQr: string | null = null
 let me: string | null = null
+// LID (linked-id) del NOSTRO account: su WhatsApp recenti la chat "messaggia te stesso"
+// arriva con remoteJid = <nostro-lid>@lid invece del numero. Serve per riconoscerla.
+let myLid: string | null = null
 let allowedNumbers: string[] = []
+
+// ID dei messaggi INVIATI da Tako: nella chat "messaggia te stesso" i nostri stessi
+// messaggi tornano come eventi fromMe → li filtriamo per ID per non rispondere a noi
+// stessi (anti-loop). Set con cap FIFO per non crescere all'infinito.
+const sentIds = new Set<string>()
+function rememberSent(id?: string | null): void {
+  if (!id) return
+  sentIds.add(id)
+  if (sentIds.size > 300) { const first = sentIds.values().next().value; if (first) sentIds.delete(first) }
+}
 
 // Proposte di mutation in attesa di conferma, per numero. TTL 10 minuti.
 interface PendingProposal { name: string; args: any; label: string; at: number }
@@ -171,15 +197,26 @@ export async function startWhatsApp(): Promise<void> {
         connected = true
         lastQr = null
         me = normalizeNumber(sock?.user?.id ?? '') || null
-        console.log(`[whatsapp] connesso come ${me ?? '?'}`)
+        myLid = normalizeNumber(sock?.user?.lid ?? '') || null
+        console.log(`[whatsapp] connesso come ${me ?? '?'} (lid ${myLid ?? '?'})`)
       } else if (connection === 'close') {
         connected = false
         const statusCode = lastDisconnect?.error?.output?.statusCode
         const loggedOut = statusCode === DisconnectReason.loggedOut
         console.log(`[whatsapp] connessione chiusa (code ${statusCode ?? '?'})${loggedOut ? ' — logout, richiede nuova scansione' : ''}`)
         sock = null
-        // Riconnetti se NON è un logout esplicito.
-        if (!loggedOut && readConfig().enabled) {
+        if (loggedOut) {
+          // Dispositivo scollegato dal telefono → creds morte. Le azzeriamo e, se il
+          // canale è ancora attivo, ripartiamo pulito così viene emesso un QR NUOVO
+          // (senza pulizia resteremmo bloccati: Baileys ricaricherebbe le creds morte).
+          me = null
+          lastQr = null
+          clearAuthDir()
+          if (readConfig().enabled) {
+            setTimeout(() => { startWhatsApp().catch(e => console.error('[whatsapp] restart post-logout fallito:', e)) }, 1500)
+          }
+        } else if (readConfig().enabled) {
+          // Disconnessione transitoria → riconnetti con le stesse creds.
           setTimeout(() => { startWhatsApp().catch(e => console.error('[whatsapp] riconnessione fallita:', e)) }, 3000)
         } else {
           me = null
@@ -210,13 +247,33 @@ export async function startWhatsApp(): Promise<void> {
 
 // ─────────────────────────── Gestione messaggio in arrivo ───────────────────────────
 async function handleIncoming(msg: any): Promise<void> {
-  // Ignora i messaggi propri e quelli senza mittente.
-  if (!msg?.key || msg.key.fromMe) return
+  if (!msg?.key) return
   const jid: string = msg.key.remoteJid ?? ''
-  // Solo chat 1:1 (numeri): niente gruppi/broadcast/status.
-  if (!jid.endsWith('@s.whatsapp.net')) return
-  const number = normalizeNumber(jid)
-  if (!number) return
+  const isLid = jid.endsWith('@lid')
+  const isPn = jid.endsWith('@s.whatsapp.net')
+  // Solo chat 1:1 (numero o lid): niente gruppi (@g.us)/broadcast/status.
+  if (!isPn && !isLid) return
+  const jidNum = normalizeNumber(jid)
+  if (!jidNum) return
+
+  // `number` = chiave autorizzativa (il numero di telefono). Per la self-chat che su
+  // WhatsApp recenti arriva via @lid, la mappiamo al NOSTRO numero (`me`) così
+  // whitelist / cronologia / pending restano coerenti tra i turni.
+  let number: string
+  if (msg.key.fromMe) {
+    // Messaggio dell'account collegato: accettato SOLO se è la chat "messaggia te
+    // stesso" (owner ↔ Tako) — jid uguale al NOSTRO account: lid == myLid oppure
+    // numero == me. Un fromMe verso un CONTATTO (owner che scrive a terzi) → ignorato.
+    // Filtriamo anche gli ECHI dei messaggi che Tako stesso invia (per ID) → no loop.
+    const isSelf = (isLid && myLid != null && jidNum === myLid) || (isPn && me != null && jidNum === me)
+    if (!isSelf) return
+    if (msg.key.id && sentIds.has(msg.key.id)) return
+    number = me ?? jidNum
+  } else {
+    // In arrivo da un contatto: per ora solo jid-numero (i lid altrui non li mappiamo).
+    if (!isPn) return
+    number = jidNum
+  }
 
   const text = extractText(msg).trim()
   if (!text) return
@@ -333,7 +390,10 @@ async function primaryRestaurantId(): Promise<string | null> {
 
 async function reply(jid: string, text: string): Promise<void> {
   try {
-    if (sock) await sock.sendMessage(jid, { text })
+    if (sock) {
+      const sent = await sock.sendMessage(jid, { text })
+      rememberSent(sent?.key?.id)
+    }
   } catch (err) {
     console.error('[whatsapp] invio risposta fallito:', err)
   }

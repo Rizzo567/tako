@@ -126,6 +126,25 @@ async function resolveTable(restaurantId: string, number: string) {
   return t
 }
 
+// Prossimo numero di tavolo LIBERO, scoped al ristorante. L'owner non deve indicare
+// il numero: se non lo dice, l'assistente lo assegna da solo. Regola: il PIÙ PICCOLO
+// intero positivo non ancora usato (riempie i buchi, "in sequenza"), NON max+1 — così
+// un tavolo con numero anomalo (es. un "324" da typo) non spinge i nuovi a 325. I
+// numeri non numerici (nomi tavolo) sono ignorati. Considera anche gli inattivi come
+// occupati, per non "resuscitare" il numero di un tavolo eliminato.
+async function nextTableNumber(restaurantId: string): Promise<string> {
+  const rows = await db.select({ number: tables.number }).from(tables)
+    .where(eq(tables.restaurantId, restaurantId))
+  const used = new Set<number>()
+  for (const r of rows) {
+    const n = parseInt(String(r.number), 10)
+    if (Number.isFinite(n) && n > 0) used.add(n)
+  }
+  let n = 1
+  while (used.has(n)) n++
+  return String(n)
+}
+
 // Risolve un MEMBRO dello staff per nome (attivi), match univoco o niente.
 async function resolveStaff(restaurantId: string, name: string, includeInactive = false) {
   const q = (name ?? '').toString().toLowerCase().trim()
@@ -564,20 +583,21 @@ const ACTIONS: ActionDef[] = [
     name: 'create_table',
     scope: ['owner'],
     kind: 'mutation',
-    description: 'Crea un nuovo tavolo con numero e posti (es. tavolo 12 da 4). Opzionale: nome della sala.',
+    description: 'Crea un nuovo tavolo con posti (es. tavolo da 4). Numero e sala opzionali: se il numero non è indicato viene assegnato automaticamente (prossimo libero).',
     parameters: {
       type: 'object',
       properties: {
-        number: { type: 'string', description: 'Numero/nome del tavolo (es. "12")' },
+        number: { type: 'string', description: 'Numero/nome del tavolo (es. "12"). OPZIONALE: se omesso viene assegnato il prossimo libero.' },
         seats: { type: 'integer', minimum: 1, maximum: 40, description: 'Posti (default 4)' },
         roomName: { type: 'string', description: 'Sala in cui metterlo (opzionale)' },
       },
-      required: ['number'],
+      required: [],
     },
-    label: (a) => `Crea tavolo ${a?.number ?? '?'}${a?.seats ? ` (${a.seats} posti)` : ''}${a?.roomName ? ` in "${a.roomName}"` : ''}`,
+    label: (a) => `Crea tavolo ${a?.number ?? '(auto)'}${a?.seats ? ` (${a.seats} posti)` : ''}${a?.roomName ? ` in "${a.roomName}"` : ''}`,
     execute: async (ctx, args) => {
-      const number = (args?.number ?? '').toString().trim()
-      if (!number) return { ok: false, summary: 'Numero del tavolo mancante.' }
+      // Numero OPZIONALE: se l'owner non lo indica, assegna il prossimo libero.
+      let number = (args?.number ?? '').toString().trim()
+      if (!number) number = await nextTableNumber(ctx.restaurantId)
       const existing = await resolveTable(ctx.restaurantId, number)
       if (existing) return { ok: false, summary: `Esiste già un tavolo "${number}".` }
       const seats = Math.min(Math.max(parseInt(String(args?.seats ?? 4), 10) || 4, 1), 40)
@@ -1755,7 +1775,9 @@ const NUMBER_WORDS: [RegExp, string][] = [
   [/\bventi\b/g, '20'], [/\bdiciannove\b/g, '19'], [/\bdiciotto\b/g, '18'], [/\bdiciassette\b/g, '17'], [/\bsedici\b/g, '16'],
   [/\bquindici\b/g, '15'], [/\bquattordici\b/g, '14'], [/\btredici\b/g, '13'], [/\bdodici\b/g, '12'], [/\bundici\b/g, '11'],
   [/\bdieci\b/g, '10'], [/\bnove\b/g, '9'], [/\botto\b/g, '8'], [/\bsette\b/g, '7'], [/\bsei\b/g, '6'],
-  [/\bcinque\b/g, '5'], [/\bquattro\b/g, '4'], [/\btre\b/g, '3'], [/\bdue\b/g, '2'], [/\b(?:uno|un|una)\b/g, '1'],
+  // "un/uno/una" = 1 SOLO come quantità, non come articolo di "un tavolo" (altrimenti
+  // "creiamo un tavolo" → numero tavolo fantasma "1"). Lookahead: non davanti a "tavol*".
+  [/\bcinque\b/g, '5'], [/\bquattro\b/g, '4'], [/\btre\b/g, '3'], [/\bdue\b/g, '2'], [/\b(?:uno|un|una)\b(?!\s+tavol)/g, '1'],
 ]
 export function normalizeNumberWords(text: string): string {
   let t = text
@@ -1768,9 +1790,10 @@ export function extractTableInfo(userText: string, roomNames: string[]): { numbe
   // sala: nome REALE citato (match esatto o contenuto), o "sala X" da risolvere poi
   let roomName: string | null = null
   for (const r of roomNames) { if (r && m.includes(r.toLowerCase())) { roomName = r; break } }
-  // posti: "3 posti", "da 3", "per 3 (persone)"
+  // posti: "3 posti", "posti 3" / "posti: 3" / "numero posti 3", "da 3", "per 3 (persone)"
+  // la cifra può stare PRIMA o DOPO la parola "post*" (l'utente scrive in entrambi i modi).
   let seats: number | null = null
-  const seatM = m.match(/(\d+)\s*post/) ?? m.match(/\bda\s+(\d+)\b/) ?? m.match(/\bper\s+(\d+)\s*(?:person|copert)/)
+  const seatM = m.match(/(\d+)\s*post/) ?? m.match(/\bpost\w*\s*:?\s*(\d+)/) ?? m.match(/\bda\s+(\d+)\b/) ?? m.match(/\bper\s+(\d+)\s*(?:person|copert)/)
   if (seatM?.[1]) seats = parseInt(seatM[1], 10)
   // numero tavolo: "tavolo 12", "numero 12"; fallback = un numero NON usato per i posti
   let number: string | null = null
@@ -1786,10 +1809,11 @@ export function extractTableInfo(userText: string, roomNames: string[]): { numbe
 }
 
 // Campi ancora mancanti per creare il tavolo (wrapper di extractTableInfo).
+// NB: il numero del tavolo NON è più obbligatorio — se l'owner non lo indica viene
+// assegnato in automatico (prossimo libero). Chiediamo solo posti e sala.
 export function missingTableInfo(userText: string, roomNames: string[]): string[] {
   const x = extractTableInfo(userText, roomNames)
   const missing: string[] = []
-  if (!x.number) missing.push('numero del tavolo')
   if (!x.seats) missing.push('numero di posti')
   if (!x.roomName && !/\bsala\s+\S+/.test((userText || '').toLowerCase())) missing.push('sala')
   return missing
@@ -1851,24 +1875,39 @@ async function createTableGate(opts: {
   }
 
   // Numeri "sciolti" in risposta alla NOSTRA domanda ("12 3" → tavolo 12, 3 posti):
-  // l'ordine segue la domanda (prima il numero del tavolo, poi i posti).
+  // li assegniamo ai SOLI campi che la domanda ha chiesto, nell'ordine della domanda
+  // (prima "numero del tavolo", poi "numero di posti"). Così un "3" in risposta a "mi
+  // serve il numero di posti" va sui POSTI e non sul numero del tavolo (il fallback
+  // greedy di extractTableInfo lo aveva preso come numero → loop). Le keyword esplicite
+  // nel messaggio corrente ("tavolo 12", "3 posti") vincono comunque.
   const lastAssistant = [...opts.history].reverse().find(h => h.role === 'assistant')
   const isFollowUp = !!lastAssistant && lastAssistant.content.startsWith('Per creare il tavolo mi serve ancora')
   if (isFollowUp) {
-    const nums = ((normalizeNumberWords((opts.userMessage || '').toLowerCase())).match(/\d+/g) || [])
-    const unused = nums.filter(n => n !== String(cur.seats ?? '') && n !== (cur.number ?? ''))
-    if (!x.number && !x.seats && unused.length === 2) { x.number = unused[0]!; x.seats = parseInt(unused[1]!, 10) }
-    else if (!x.number && x.seats && unused.length === 1) { x.number = unused[0]! }
-    else if (x.number && !x.seats && unused.length === 1) { x.seats = parseInt(unused[0]!, 10) }
+    const q = lastAssistant!.content
+    const um = normalizeNumberWords((opts.userMessage || '').toLowerCase())
+    const kwSeats = (um.match(/(\d+)\s*post/) ?? um.match(/\bpost\w*\s*:?\s*(\d+)/) ?? um.match(/\bda\s+(\d+)\b/) ?? um.match(/\bper\s+(\d+)\s*(?:person|copert)/))?.[1] ?? null
+    const kwNumber = (um.match(/tavolo\s*(?:n[°.]?\s*)?(\d+)/) ?? um.match(/numero\s+del\s+tavolo[^\d]*(\d+)/))?.[1] ?? null
+    const lone = (um.match(/\d+/g) || []).filter(n => n !== kwSeats && n !== kwNumber)
+    const slots: ('number' | 'seats')[] = []
+    if (q.includes('numero del tavolo')) slots.push('number')
+    if (q.includes('numero di posti')) slots.push('seats')
+    const pick: Record<string, string> = {}
+    for (let i = 0; i < slots.length && i < lone.length; i++) pick[slots[i]!] = lone[i]!
+    const num = kwNumber ?? pick['number'] ?? prev.number ?? null
+    const seat = kwSeats ?? pick['seats'] ?? (prev.seats != null ? String(prev.seats) : null)
+    x.number = num
+    x.seats = seat != null ? parseInt(seat, 10) : null
   }
 
   // qui la sala deve essere UNA DI QUELLE REALI (se esistono sale)
+  // NUMERO NON obbligatorio: se l'owner non lo dà, lo assegniamo noi (prossimo libero).
+  // Così spariscono le domande ambigue ("3" = numero o posti?) — chiediamo solo posti+sala.
   const missing: string[] = []
-  if (!x.number) missing.push('numero del tavolo')
   if (!x.seats) missing.push('numero di posti')
   if (!x.roomName && roomNames.length) missing.push('sala')
   if (missing.length) return { message: askTableQuestion(missing, roomNames), actions: [], pending: [] }
-  const args: any = { number: x.number, seats: x.seats }
+  const number = x.number ?? await nextTableNumber(opts.ctx.restaurantId)
+  const args: any = { number, seats: x.seats }
   if (x.roomName) args.roomName = x.roomName
   const label = def.label(args)
   return { message: `Proposta pronta: ${label}. Confermala qui sotto.`, actions: [], pending: [{ name: 'create_table', args, label }] }
