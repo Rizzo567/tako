@@ -261,7 +261,7 @@ function connectSocket(restaurantId, onEvent) {
     _firstConnect = false;
   });
   const fwd = (ev) => _socket.on(ev, (p) => onEvent(ev, p));
-  ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","inventory:alert"].forEach(fwd);
+  ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","inventory:alert","reservation:changed"].forEach(fwd);
   return _socket;
 }
 

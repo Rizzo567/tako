@@ -377,14 +377,11 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
         })),
       } : m)
     const onAvail = ({ itemId, available }: { itemId: string; available: boolean }) => patchItem(itemId, { available })
-    const onUpdated = ({ itemId, item }: { itemId: string; item: any }) => {
-      if (!item) return
-      patchItem(itemId, {
-        name: item.name, description: item.description ?? undefined, price: item.price,
-        available: item.available, imageUrl: item.imageUrl ?? undefined,
-        allergens: item.allergens ?? [], tags: item.tags ?? [],
-      })
-    }
+    // Refetch completo: gestisce TUTTI i cambi menu (nuovo piatto, modifica, eliminazione
+    // piatto/sezione, rinomina) — prima si patchava solo per id, quindi add/delete/rename
+    // non comparivano mai live ai clienti. La disponibilità (onAvail) resta patch veloce.
+    const onUpdated = () => api.get(`/customer/restaurant/${restaurantId}/menu`)
+      .then(r => setMenu(r.data.data)).catch(() => {})
     socket.on('menu:item_availability', onAvail)
     socket.on('menu:updated', onUpdated)
     return () => { socket.off('menu:item_availability', onAvail); socket.off('menu:updated', onUpdated) }

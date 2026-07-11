@@ -219,6 +219,7 @@ function App({ session }) {
       else if (ev === "waiter:resolved") { setCalls((c) => c.filter((x) => x._id !== p.tableId)); }
       else if (ev === "menu:updated" || ev === "menu:item_availability") { loadAll().then(bump); }
       else if (ev === "inventory:alert") { loadAll().then(bump); if (window.toast) toast(`Scorta bassa · ${p.name}`, { type: "warn" }); }
+      else if (ev === "reservation:changed") { setDataVersion((v) => v + 1); }
     });
     return () => { try { s && s.disconnect(); } catch (_) {} };
   }, []);

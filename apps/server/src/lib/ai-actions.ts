@@ -153,6 +153,22 @@ function emitTablesChanged(restaurantId: string, tableId?: string): void {
   try { io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId: tableId ?? null }) } catch { /* socket best-effort */ }
 }
 
+// Coercizione booleana robusta per i flag che arrivano dall'LLM (true/"true"/1/"sì").
+// Serve dove label ed execute DEVONO concordare (es. set_staff_active).
+function flagTrue(v: unknown): boolean {
+  return v === true || v === 1 || v === '1' || v === 'true' || v === 'si' || v === 'sì'
+}
+
+// Notifica un cambiamento del menu a: dashboard owner (room restaurant → loadAll) E menu
+// pubblico dei clienti (room menu → refetch). Serve per create/delete/rename/variant, che
+// altrimenti non comparirebbero live né in dashboard né sul menu QR dei clienti.
+function emitMenuChanged(restaurantId: string): void {
+  try {
+    io.to(`restaurant:${restaurantId}`).emit('menu:updated', {})
+    io.to(`menu:${restaurantId}`).emit('menu:updated', {})
+  } catch { /* socket best-effort */ }
+}
+
 // Risolve un MEMBRO dello staff per nome (attivi), match univoco o niente.
 async function resolveStaff(restaurantId: string, name: string, includeInactive = false) {
   const q = (name ?? '').toString().toLowerCase().trim()
@@ -196,18 +212,23 @@ async function resolveInventory(restaurantId: string, name: string) {
 // Risolve una PRENOTAZIONE per nome cliente in una data (default oggi), non cancellata.
 async function resolveReservation(restaurantId: string, customerName: string, date?: string) {
   const tz = await restaurantTimezone(restaurantId)
-  const dateStr = (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) ? date : dayKeyInTz(new Date(), tz)
-  const dayStart = dayStartInTz(dateStr, tz)
-  const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
+  const hasDate = !!(date && /^\d{4}-\d{2}-\d{2}$/.test(date))
+  const dateStr = hasDate ? date! : dayKeyInTz(new Date(), tz)
   const q = (customerName ?? '').toString().toLowerCase().trim()
   // Nome vuoto → nessun match: con `includes('')` OGNI prenotazione matcherebbe e,
   // se il giorno ne ha una sola, un cancel_reservation senza nome la cancellerebbe.
   if (!q) return { resv: undefined, hits: [], dateStr }
-  const rows = await db.select().from(reservations).where(and(
-    eq(reservations.restaurantId, restaurantId),
-    gte(reservations.startsAt, dayStart), lt(reservations.startsAt, dayEnd),
-    ne(reservations.status, 'cancelled'),
-  ))
+  // Con data → finestra di quel giorno. SENZA data (il modello spesso non la fornisce)
+  // → NON limitare a oggi: cerca da inizio giornata di oggi IN AVANTI (prenotazioni
+  // future comprese), altrimenti una prenotazione di domani risulterebbe inesistente.
+  const conds = [eq(reservations.restaurantId, restaurantId), ne(reservations.status, 'cancelled')]
+  if (hasDate) {
+    const dayStart = dayStartInTz(dateStr, tz)
+    conds.push(gte(reservations.startsAt, dayStart), lt(reservations.startsAt, new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)))
+  } else {
+    conds.push(gte(reservations.startsAt, dayStartInTz(dayKeyInTz(new Date(), tz), tz)))
+  }
+  const rows = await db.select().from(reservations).where(and(...conds)).orderBy(asc(reservations.startsAt))
   const hits = rows.filter(r => r.customerName.toLowerCase().includes(q))
   if (hits.length === 1) return { resv: hits[0], hits, dateStr }
   return { resv: undefined, hits, dateStr }
@@ -455,7 +476,7 @@ const ACTIONS: ActionDef[] = [
         description: args?.description ? String(args.description).slice(0, 500) : undefined,
       }).returning()
       if (!item) return { ok: false, summary: 'Creazione non riuscita.' }
-      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:updated', { itemId: item.id, item })
+      emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: item.id, name: item.name, price: item.price, section: section.name }, summary: `Creato "${item.name}" a €${item.price} in "${section.name}".` }
     },
   },
@@ -529,6 +550,7 @@ const ACTIONS: ActionDef[] = [
       // ordini (orderItems.menuItemId → null), poi si cancella il piatto.
       await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, match.id))
       await db.delete(menuItems).where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId)))
+      emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: match.id, name: match.name }, summary: `Piatto "${match.name}" eliminato.` }
     },
   },
@@ -556,6 +578,7 @@ const ACTIONS: ActionDef[] = [
         await db.update(orderItems).set({ menuItemId: null }).where(eq(orderItems.menuItemId, it.id))
       }
       await db.delete(menuSections).where(eq(menuSections.id, section.id))
+      emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: section.id, name: section.name, itemsRemoved: items.length }, summary: `Sezione "${section.name}" eliminata (${items.length} piatti rimossi).` }
     },
   },
@@ -582,6 +605,7 @@ const ACTIONS: ActionDef[] = [
         return { ok: false, summary: `Sezione "${args?.sectionName ?? ''}" non trovata o ambigua. Sezioni presenti: ${list || 'nessuna'}.` }
       }
       await db.update(menuSections).set({ name: newName }).where(eq(menuSections.id, section.id))
+      emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: section.id, name: newName }, summary: `Sezione "${section.name}" rinominata in "${newName}".` }
     },
   },
@@ -606,8 +630,12 @@ const ACTIONS: ActionDef[] = [
       // Numero OPZIONALE: se l'owner non lo indica, assegna il prossimo libero.
       let number = (args?.number ?? '').toString().trim()
       if (!number) number = await nextTableNumber(ctx.restaurantId)
-      const existing = await resolveTable(ctx.restaurantId, number)
-      if (existing) return { ok: false, summary: `Esiste già un tavolo "${number}".` }
+      // Il vincolo UNIQUE(restaurantId, number) include gli inattivi: cerchiamo QUALSIASI
+      // tavolo con quel numero, non solo gli attivi. Se attivo → conflitto; se soft-deleted
+      // → lo RIATTIVIAMO (un insert fallirebbe con unique violation, "bruciando" il numero).
+      const [anyExisting] = await db.select().from(tables)
+        .where(and(eq(tables.restaurantId, ctx.restaurantId), eq(tables.number, number))).limit(1)
+      if (anyExisting?.active) return { ok: false, summary: `Esiste già un tavolo "${number}".` }
       const seats = Math.min(Math.max(parseInt(String(args?.seats ?? 4), 10) || 4, 1), 40)
       // SEMPRE una sala: la UI (Gestione Tavoli / Sala Live) mostra i tavoli
       // raggruppati per sala — un tavolo con roomId null sarebbe INVISIBILE.
@@ -627,9 +655,13 @@ const ACTIONS: ActionDef[] = [
         room = created
       }
       if (!room) return { ok: false, summary: 'Impossibile determinare la sala.' }
-      // stessa creazione della POST /tables: qrToken nuovo, ownership dal contesto
+      // qrToken nuovo, ownership dal contesto. Se esisteva un tavolo soft-deleted con
+      // questo numero, lo riattiviamo (reuse della riga) invece di inserire.
       const qrToken = nanoid(24)
-      const [table] = await db.insert(tables).values({ restaurantId: ctx.restaurantId, qrToken, number, seats, roomId: room.id }).returning()
+      const [table] = anyExisting
+        ? await db.update(tables).set({ active: true, seats, roomId: room.id, qrToken, status: 'free', openedAt: null })
+            .where(eq(tables.id, anyExisting.id)).returning()
+        : await db.insert(tables).values({ restaurantId: ctx.restaurantId, qrToken, number, seats, roomId: room.id }).returning()
       if (!table) return { ok: false, summary: 'Creazione non riuscita.' }
       emitTablesChanged(ctx.restaurantId, table.id)
       return { ok: true, data: { id: table.id, number: table.number, seats: table.seats, room: room.name }, summary: `Tavolo ${table.number} creato (${table.seats} posti) in "${room.name}". QR generato.` }
@@ -685,8 +717,13 @@ const ACTIONS: ActionDef[] = [
       const changes: string[] = []
       if (args?.newNumber != null && String(args.newNumber).trim()) {
         const nn = String(args.newNumber).trim()
-        const clash = await resolveTable(ctx.restaurantId, nn)
-        if (clash && clash.id !== t.id) return { ok: false, summary: `Esiste già un tavolo "${nn}".` }
+        // UNIQUE(restaurantId, number) include gli inattivi → controlla QUALSIASI tavolo,
+        // non solo gli attivi (altrimenti l'update crasherebbe con unique violation).
+        const [clash] = await db.select({ id: tables.id, active: tables.active }).from(tables)
+          .where(and(eq(tables.restaurantId, ctx.restaurantId), eq(tables.number, nn))).limit(1)
+        if (clash && clash.id !== t.id) {
+          return { ok: false, summary: clash.active ? `Esiste già un tavolo "${nn}".` : `Il numero "${nn}" è già usato da un tavolo eliminato: scegline un altro.` }
+        }
         set['number'] = nn; changes.push(`numero ${t.number} → ${nn}`)
       }
       if (args?.seats != null) {
@@ -825,9 +862,11 @@ const ACTIONS: ActionDef[] = [
     label: (a) => `Prenota ${a?.customerName ?? '?'} x${a?.partySize ?? '?'} ${a?.when ?? ''}${a?.tableNumber ? ` (tav ${a.tableNumber})` : ''}`,
     execute: async (ctx, args) => {
       const name = (args?.customerName ?? '').toString().trim()
-      const partySize = Math.min(Math.max(parseInt(String(args?.partySize ?? 0), 10) || 0, 1), 60)
+      const rawParty = parseInt(String(args?.partySize ?? 0), 10)
       const whenStr = (args?.when ?? '').toString().trim()
-      if (!name || !whenStr) return { ok: false, summary: 'Servono nome cliente, persone e data/ora.' }
+      // partySize DEVE essere fornito (prima veniva silenziosamente forzato a 1)
+      if (!name || !whenStr || !Number.isFinite(rawParty) || rawParty < 1) return { ok: false, summary: 'Servono nome cliente, persone e data/ora.' }
+      const partySize = Math.min(rawParty, 60)
       // "YYYY-MM-DD HH:mm" interpretato nel fuso del RISTORANTE (non del server):
       // costruiamo l'istante dal giorno-inizio-tz + ore/minuti.
       const m = whenStr.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{1,2}):(\d{2})/)
@@ -1007,13 +1046,29 @@ const ACTIONS: ActionDef[] = [
       if (!bill) return { ok: false, summary: `Il tavolo ${table.number} non ha un conto aperto.` }
       const raw = Number(args?.discount)
       if (!Number.isFinite(raw) || raw < 0) return { ok: false, summary: 'Sconto non valido.' }
-      // stessi vincoli della PATCH /bills: cap 30% per non-owner, mai totale negativo
-      const cap = ctx.role === 'owner' ? bill.subtotal : round2(bill.subtotal * 0.30)
-      const discount = Math.min(round2(raw), cap, bill.subtotal)
-      const coverCharge = round2((bill.covers ?? 1) * (await coverUnit(ctx.restaurantId)))
-      const total = round2(bill.subtotal - discount + (bill.tip ?? 0) + coverCharge)
-      await db.update(bills).set({ discount, discountNote: args?.note ? String(args.note).slice(0, 500) : bill.discountNote, total }).where(eq(bills.id, bill.id))
-      return { ok: true, data: { billId: bill.id, discount, total }, summary: `Sconto €${discount} applicato al tavolo ${table.number}: nuovo totale €${total}.` }
+      // Stessa transazione della PATCH /bills / close_bill: advisory lock + subtotale
+      // RICALCOLATO dagli ordini reali sotto lock. Prima ci si fidava di bill.subtotal
+      // (stale, senza lock) → un ordine arrivato in parallelo veniva cancellato dal total.
+      const unit = await coverUnit(ctx.restaurantId)
+      const lockKey = bill.tableId ? `${ctx.restaurantId}:${bill.tableId}` : bill.id
+      const res = await db.transaction(async (tx) => {
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${lockKey}))`)
+        const [locked] = await tx.select().from(bills).where(eq(bills.id, bill.id)).limit(1)
+        if (!locked || locked.status !== 'open') return { conflict: true as const }
+        const base = await billTotalsFromOrders(tx, { ...locked, discount: 0 }, unit)
+        // vincoli PATCH /bills: cap 30% per non-owner, mai oltre il subtotale
+        const cap = ctx.role === 'owner' ? base.subtotal : round2(base.subtotal * 0.30)
+        const discount = Math.min(round2(raw), cap, base.subtotal)
+        const t = await billTotalsFromOrders(tx, { ...locked, discount }, unit)
+        await tx.update(bills).set({
+          subtotal: t.subtotal, discount,
+          discountNote: args?.note ? String(args.note).slice(0, 500) : locked.discountNote,
+          total: t.total,
+        }).where(eq(bills.id, bill.id))
+        return { conflict: false as const, discount, total: t.total }
+      })
+      if (res.conflict) return { ok: false, summary: `Il tavolo ${table.number} non ha (più) un conto aperto.` }
+      return { ok: true, data: { billId: bill.id, discount: res.discount, total: res.total }, summary: `Sconto €${res.discount} applicato al tavolo ${table.number}: nuovo totale €${res.total}.` }
     },
   },
   {
@@ -1131,7 +1186,8 @@ const ACTIONS: ActionDef[] = [
     execute: async (ctx, args) => {
       const type = ['load', 'unload', 'waste'].includes(args?.type) ? args.type : null
       const quantity = Number(args?.quantity)
-      if (!type || !Number.isFinite(quantity) || quantity <= 0) return { ok: false, summary: 'Tipo o quantità non validi.' }
+      // stesso cap della route movements (evita quantità confabulate enormi)
+      if (!type || !Number.isFinite(quantity) || quantity <= 0 || quantity > 100_000) return { ok: false, summary: 'Tipo o quantità non validi.' }
       const item = await resolveInventory(ctx.restaurantId, args?.itemName)
       if (!item) return { ok: false, summary: `Ingrediente "${args?.itemName ?? ''}" non trovato in inventario (o nome ambiguo).` }
       const delta = type === 'load' ? Math.abs(quantity) : -Math.abs(quantity)
@@ -1144,6 +1200,11 @@ const ACTIONS: ActionDef[] = [
         }).where(and(eq(inventoryItems.id, item.id), eq(inventoryItems.restaurantId, ctx.restaurantId))).returning()
         return { updated: updated! }
       })
+      // come la route: se sotto la soglia, avvisa la dashboard (badge scorte + toast)
+      const minQ = (item as any).minQuantity
+      if (minQ != null && Number(updated.quantity) <= Number(minQ)) {
+        io.to(`restaurant:${ctx.restaurantId}`).emit('inventory:alert', { itemId: item.id, name: item.name, quantity: updated.quantity })
+      }
       const verb = type === 'load' ? 'caricati' : type === 'waste' ? 'segnati come spreco' : 'scaricati'
       return { ok: true, data: { id: item.id, quantity: updated.quantity }, summary: `${quantity}${item.unit} di "${item.name}" ${verb}: ora ${updated.quantity}${item.unit}.` }
     },
@@ -1234,6 +1295,12 @@ const ACTIONS: ActionDef[] = [
       const role = ['dipendente', 'chef', 'cassiere'].includes(normalized) ? normalized : null
       if (!name || name.length < 2 || !role) return { ok: false, summary: 'Servono nome (min 2 caratteri) e ruolo valido.' }
       if (args?.pin && !/^\d{4}$/.test(String(args.pin))) return { ok: false, summary: 'Il PIN deve essere di 4 cifre.' }
+      // anti-duplicato: senza questo ogni riproposta creava un membro fantasma omonimo
+      const existingStaff = await db.select({ name: users.name }).from(users)
+        .where(and(eq(users.restaurantId, ctx.restaurantId), eq(users.active, true)))
+      if (existingStaff.some(u => u.name.toLowerCase() === name.toLowerCase())) {
+        return { ok: false, summary: `Esiste già un membro "${name}". Per un omonimo aggiungi un dettaglio al nome.` }
+      }
       // email tecnica auto-generata (la tabella la richiede unica; il login del
       // dipendente avviene via PIN sul tablet)
       const email = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '.').replace(/^\.|\.$/g, '')}+${nanoid(6).toLowerCase()}@tako.local`
@@ -1256,9 +1323,11 @@ const ACTIONS: ActionDef[] = [
       properties: { staffName: { type: 'string' }, active: { type: 'boolean', description: 'false=disattiva, true=riattiva' } },
       required: ['staffName', 'active'],
     },
-    label: (a) => `${a?.active ? 'Riattiva' : 'Disattiva'} ${a?.staffName ?? '?'}`,
+    label: (a) => `${flagTrue(a?.active) ? 'Riattiva' : 'Disattiva'} ${a?.staffName ?? '?'}`,
     execute: async (ctx, args) => {
-      const active = args?.active === true
+      // COERENZA label↔execute: l'LLM può mandare true/"true"/1. Con `=== true` la label
+      // diceva "Riattiva" ma l'execute DISATTIVAVA (+ revoca sessioni). Stessa coercizione.
+      const active = flagTrue(args?.active)
       const { user, all } = await resolveStaff(ctx.restaurantId, args?.staffName, true)
       if (!user) return { ok: false, summary: all.length ? `Nome ambiguo o non trovato. Staff: ${all.map(u => u.name).join(', ')}.` : 'Nessun membro trovato.' }
       if (user.role === 'owner') return { ok: false, summary: 'Non puoi disattivare l\'owner.' }
@@ -1283,6 +1352,7 @@ const ACTIONS: ActionDef[] = [
       const existing = await db.select().from(rooms).where(and(eq(rooms.restaurantId, ctx.restaurantId), eq(rooms.active, true)))
       if (existing.some(r => r.name.toLowerCase() === name.toLowerCase())) return { ok: false, summary: `La sala "${name}" esiste già.` }
       const [room] = await db.insert(rooms).values({ restaurantId: ctx.restaurantId, name: name.slice(0, 60) }).returning()
+      emitTablesChanged(ctx.restaurantId)
       return { ok: true, data: { id: room!.id, name: room!.name }, summary: `Sala "${room!.name}" creata.` }
     },
   },
@@ -1435,7 +1505,7 @@ const ACTIONS: ActionDef[] = [
       if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o ambiguo).` }
       const mod = Number(args?.priceModifier) || 0
       const [v] = await db.insert(itemVariants).values({ itemId: match.id, name: variantName.slice(0, 80), priceModifier: round2(mod) }).returning()
-      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:updated', { itemId: match.id })
+      emitMenuChanged(ctx.restaurantId)
       return { ok: true, data: { id: v!.id }, summary: `Variante "${variantName}" aggiunta a "${match.name}"${mod ? ` (${mod > 0 ? '+' : ''}€${round2(mod)})` : ''}.` }
     },
   },
@@ -1712,6 +1782,16 @@ export async function runAssistant(opts: {
             iterAsk = askTableQuestion(missing, roomNames)
           }
         }
+        // Guardia anti-confabulazione per le ALTRE creazioni (prenotazioni, piatti…):
+        // se l'LLM ha inventato campi obbligatori non presenti nel messaggio, chiedi.
+        if (!askTable) {
+          const userText = [...opts.history.filter(h => h.role === 'user').slice(-3).map(h => h.content), opts.userMessage].join('\n')
+          const confMiss = confabulatedFields(def.name, args, userText)
+          if (confMiss.length) {
+            askTable = `DATI MANCANTI: chiedi all'utente ${confMiss.join(', ')}. NON inventare i valori.`
+            iterAsk = askCreationQuestion(def.name, confMiss)
+          }
+        }
         if (askTable) {
           content = askTable
         } else {
@@ -1847,6 +1927,110 @@ export function askTableQuestion(missing: string[], roomNames: string[]): string
   const dati = missing.length === 1 ? missing[0] : missing.slice(0, -1).join(', ') + ' e ' + missing[missing.length - 1]
   const sale = roomNames.length ? ` Le sale sono: ${roomNames.map(n => `"${n}"`).join(', ')}.` : ''
   return `Per creare il tavolo mi serve ancora: ${dati}.${sale}`
+}
+
+// ─────────────────────── GUARDIA ANTI-CONFABULAZIONE (creazioni) ───────────────────────
+// I modelli piccoli INVENTANO i campi obbligatori delle creazioni: "crea una
+// prenotazione" (senza dati) → propone nome/data/persone tutti inventati. Per le
+// creazioni con campi semantici verifichiamo che il valore proposto dall'LLM sia
+// EVIDENZIATO nel messaggio dell'utente; se non lo è, lo trattiamo come inventato e
+// CHIEDIAMO invece di proporre. (create_table ha la sua guardia dedicata, vedi sopra.)
+type ConfabKind = 'literal' | 'party' | 'datetime' | 'money'
+const CONFAB_SPEC: Record<string, { field: string; kind: ConfabKind; label: string }[]> = {
+  create_reservation: [
+    { field: 'customerName', kind: 'literal', label: 'nome cliente' },
+    { field: 'partySize', kind: 'party', label: 'numero di persone' },
+    { field: 'when', kind: 'datetime', label: 'data e ora' },
+  ],
+  create_menu_item: [
+    { field: 'name', kind: 'literal', label: 'nome del piatto' },
+    { field: 'price', kind: 'money', label: 'prezzo' },
+  ],
+  add_dish_variant: [
+    { field: 'name', kind: 'literal', label: 'nome della variante' },
+    { field: 'price', kind: 'money', label: 'prezzo' },
+  ],
+  create_inventory_item: [
+    { field: 'name', kind: 'literal', label: 'nome articolo' },
+  ],
+  create_staff: [
+    { field: 'name', kind: 'literal', label: 'nome del membro dello staff' },
+  ],
+  create_room: [
+    { field: 'name', kind: 'literal', label: 'nome della sala' },
+  ],
+  // Distruttive/di modifica su un tavolo per numero: se l'LLM inventa un numero che per
+  // caso esiste, agirebbe su un tavolo mai indicato. Il numero deve venire dall'utente.
+  delete_table: [
+    { field: 'number', kind: 'literal', label: 'numero del tavolo da eliminare' },
+  ],
+  update_table: [
+    { field: 'number', kind: 'literal', label: 'numero del tavolo da modificare' },
+  ],
+}
+
+// La stringa contiene un riferimento a data/ora? (accetta forme naturali italiane, non
+// solo l'ISO che l'LLM produce: "domani alle 20", "sabato sera", "15/07 21:30", ecc.)
+function textHasDatetime(t: string): boolean {
+  const m = (t || '').toLowerCase()
+  return /\b\d{1,2}[:.]\d{2}\b/.test(m)
+    || /\b(?:alle|ore)\s+\d{1,2}\b/.test(m)
+    || /\b\d{1,2}[\/\-.]\d{1,2}(?:[\/\-.]\d{2,4})?\b/.test(m)
+    || /\d{4}-\d{2}-\d{2}/.test(m)
+    || /\b(oggi|stasera|stanotte|domani|dopodomani|dopo\s?domani|weekend|stamattina|mezzogiorno)\b/.test(m)
+    || /\b(luned|marted|mercoled|gioved|venerd|sabato|domenica)/.test(m)
+}
+// La stringa indica un numero di persone? (pattern specifici, per non scambiare un orario
+// "alle 20" per il numero di coperti.)
+function textHasParty(t: string): boolean {
+  const m = normalizeNumberWords((t || '').toLowerCase())
+  return /\b(?:per|siamo(?:\s+in)?|in|x)\s*\d+\b/.test(m)
+    || /\b\d+\s*(?:person|copert|ospit|client|posti|adult|bambin)/.test(m)
+    || /\btavolo\s+da\s+\d+\b/.test(m)
+}
+// La stringa contiene un prezzo/importo? ("12", "12,50", "€12", "12 euro")
+function textHasMoney(t: string): boolean {
+  const m = normalizeNumberWords((t || '').toLowerCase())
+  return /\d+(?:[.,]\d{1,2})?\s*(?:€|eur|euro)\b/.test(m) || /(?:€|eur|euro)\s*\d/.test(m) || /\d+[.,]\d{1,2}\b/.test(m) || /\ba\s+\d+\b/.test(m)
+}
+// Il valore (una o più parole) compare nel testo dell'utente? (>=3 char per parola)
+function textHasLiteral(val: unknown, t: string): boolean {
+  const v = String(val ?? '').toLowerCase().trim()
+  if (!v) return false
+  const text = (t || '').toLowerCase()
+  const words = v.split(/\s+/).filter(w => w.length >= 3)
+  if (!words.length) return text.includes(v)
+  return words.some(w => text.includes(w))
+}
+
+// Campi obbligatori (probabilmente) INVENTATI dall'LLM per un'azione di creazione, in
+// forma di etichette da chiedere. [] se l'azione non è coperta o tutto è evidenziato.
+export function confabulatedFields(name: string, args: any, userText: string): string[] {
+  const spec = CONFAB_SPEC[name]
+  if (!spec) return []
+  const t = userText || ''
+  const missing: string[] = []
+  for (const s of spec) {
+    const raw = args?.[s.field]
+    const present = raw != null && String(raw).trim() !== ''
+    let ok = false
+    if (s.kind === 'literal') ok = present && textHasLiteral(raw, t)
+    else if (s.kind === 'party') ok = textHasParty(t)
+    else if (s.kind === 'datetime') ok = textHasDatetime(t)
+    else if (s.kind === 'money') ok = textHasMoney(t)
+    if (!ok) missing.push(s.label)
+  }
+  return missing
+}
+
+export function askCreationQuestion(name: string, missing: string[]): string {
+  const OBJ: Record<string, string> = {
+    create_reservation: 'la prenotazione', create_menu_item: 'il piatto', add_dish_variant: 'la variante',
+    create_inventory_item: "l'articolo", create_staff: 'il membro dello staff', create_room: 'la sala',
+  }
+  const obj = OBJ[name] ?? 'la creazione'
+  const dati = missing.length === 1 ? missing[0] : missing.slice(0, -1).join(', ') + ' e ' + missing[missing.length - 1]
+  return `Per creare ${obj} mi serve ancora: ${dati}.`
 }
 
 // PRE-GATE "crea tavolo": l'INTERO flusso (domanda dati → proposta) gira senza LLM.
@@ -2111,6 +2295,16 @@ export async function runAssistantStream(opts: {
           if (missing.length) {
             askTable = `DATI MANCANTI: chiedi all'utente ${missing.join(', ')}.`
             iterAsk = askTableQuestion(missing, roomNames)
+          }
+        }
+        // Guardia anti-confabulazione per le ALTRE creazioni (prenotazioni, piatti…):
+        // se l'LLM ha inventato campi obbligatori non presenti nel messaggio, chiedi.
+        if (!askTable) {
+          const userText = [...opts.history.filter(h => h.role === 'user').slice(-3).map(h => h.content), opts.userMessage].join('\n')
+          const confMiss = confabulatedFields(def.name, args, userText)
+          if (confMiss.length) {
+            askTable = `DATI MANCANTI: chiedi all'utente ${confMiss.join(', ')}. NON inventare i valori.`
+            iterAsk = askCreationQuestion(def.name, confMiss)
           }
         }
         if (askTable) {
