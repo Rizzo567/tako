@@ -263,7 +263,10 @@ function App({ session }) {
                   coverCharge: Number(next.coperto) || 0, coverChargeEnabled: !!next.copertoOn, suggestedTips: !!next.manceSuggerite,
                   orderSounds: !!next.suoniOrdini, autoConfirm: !!next.autoConferma, autoPrint: !!next.stampaAuto,
                   kdsWarnMinutes: Number(next.kdsWarn) || 10, kdsLateMinutes: Number(next.kdsLate) || 15, kdsCompact: !!next.kdsCompatta,
-                  reservationsEnabled: !!next.prenotazioni, showOnboarding: !!next.mostraOnboarding } });
+                  reservationsEnabled: !!next.prenotazioni, showOnboarding: !!next.mostraOnboarding,
+                  loyaltyEnabled: !!next.fedelta, reviewRequestEnabled: !!next.recensioni, reviewUrl: next.recensioniUrl || "",
+                  autoStockDeductEnabled: !!next.scaricoAuto, dailyBriefingEnabled: !!next.briefingWa,
+                  dailyBriefingHour: Number(next.briefingOra) || 9, aiContentEnabled: !!next.aiContenuti, menuEngineeringEnabled: !!next.menuEngineering } });
       toast("Impostazioni salvate", { type: "success" }); } catch (e) { toast(e.message, { type: "error" }); }
   };
 

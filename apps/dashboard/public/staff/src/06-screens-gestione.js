@@ -304,7 +304,7 @@ function DishEditor({ dish, mobile, onClose }) {
         <label style={{ position: "relative", display: "block", height: 120, borderRadius: 14, border: "1.5px dashed var(--hairline)", overflow: "hidden", cursor: uploading ? "wait" : "pointer", color: "var(--ink-3)", marginBottom: 16, background: imageUrl ? "var(--surface)" : "var(--sunken)" }}>
           <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onPickImage} disabled={uploading} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "inherit" }} />
           {imageUrl ? (
-            <img src={imageUrl} alt="Immagine piatto" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={imageUrl} alt="Immagine piatto" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
           ) : (
             <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
               <div style={{ textAlign: "center" }}><Icon name="download" size={24} style={{ margin: "0 auto 6px" }} /><span style={{ fontSize: 13, fontWeight: 600 }}>{uploading ? "Carico…" : "Carica immagine"}</span></div>
@@ -788,6 +788,7 @@ const SET_SECTIONS = [
   ["cucina", "Ordini & Cucina", "kitchen"],
   ["dashboard", "Dashboard", "home"],
   ["generali", "Generali", "euro"],
+  ["funzionalita", "Funzionalità", "sparkles", true],
   // 4° elemento = owner-only: il canale WhatsApp ha privilegi pieni, lo gestisce solo il titolare.
   ["whatsapp", "WhatsApp", "phone", true],
   ["stampante", "Stampante", "printer"],
@@ -971,6 +972,26 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <Row label="Mance suggerite" sub="Mostra 5/10/15% in cassa"><Toggle on={settings.manceSuggerite} set={v => set("manceSuggerite", v)} /></Row>
             </Card>
           )}
+
+          {sec === "funzionalita" && (<>
+            <Card pad={20}>
+              <h3 style={{ fontSize: 16, marginBottom: 4 }}>Funzionalità extra</h3>
+              <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 12 }}>Attiva solo ciò che serve al tuo ristorante. Disattivate di default.</p>
+              <Row label="Prenotazioni self-service" sub="I clienti prenotano da soli dal menu online"><Toggle on={settings.prenotazioni} set={v => set("prenotazioni", v)} /></Row>
+              <Row label="Fedeltà / punti" sub="Accumulo punti sui pagamenti"><Toggle on={settings.fedelta} set={v => set("fedelta", v)} /></Row>
+              <Row label="Richiesta recensione" sub="Dopo il pagamento invita a lasciare una recensione"><Toggle on={settings.recensioni} set={v => set("recensioni", v)} /></Row>
+              {settings.recensioni && (
+                <Field label="Link recensione (es. Google)"><input style={inputStyle} value={settings.recensioniUrl} placeholder="https://g.page/r/..." onChange={e => set("recensioniUrl", e.target.value)} /></Field>
+              )}
+              <Row label="Scarico automatico magazzino" sub="Cala lo stock in base alla ricetta quando vendi"><Toggle on={settings.scaricoAuto} set={v => set("scaricoAuto", v)} /></Row>
+            </Card>
+            <Card pad={20}>
+              <h3 style={{ fontSize: 16, marginBottom: 6 }}>Assistente & AI</h3>
+              <Row label="Briefing WhatsApp mattutino" sub="Riepilogo automatico ogni giorno sul canale WhatsApp"><div style={{ display: "flex", alignItems: "center", gap: 10 }}>{settings.briefingWa && <><input type="number" min="0" max="23" style={numStyle} value={settings.briefingOra} onChange={e => set("briefingOra", parseInt(e.target.value) || 0)} /><span style={{ fontSize: 13, color: "var(--ink-3)" }}>h</span></>}<Toggle on={settings.briefingWa} set={v => set("briefingWa", v)} /></div></Row>
+              <Row label="Contenuti AI (descrizioni/traduzioni)" sub="Genera descrizioni e traduzioni piatti — consigliata attiva"><Toggle on={settings.aiContenuti} set={v => set("aiContenuti", v)} /></Row>
+              <Row label="Menu engineering" sub="Analisi profitto/popolarità dei piatti — consigliata attiva"><Toggle on={settings.menuEngineering} set={v => set("menuEngineering", v)} /></Row>
+            </Card>
+          </>)}
 
           {sec === "cucina" && (
             <Card pad={20}>

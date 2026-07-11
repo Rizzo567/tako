@@ -46,6 +46,15 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
         kdsCompact: z.boolean().optional(),
         reservationsEnabled: z.boolean().optional(),
         showOnboarding: z.boolean().optional(),
+        // Feature flag configurabili (default OFF salvo aiContent/menuEngineering)
+        loyaltyEnabled: z.boolean().optional(),
+        reviewRequestEnabled: z.boolean().optional(),
+        reviewUrl: z.string().max(500).optional(),
+        autoStockDeductEnabled: z.boolean().optional(),
+        dailyBriefingEnabled: z.boolean().optional(),
+        dailyBriefingHour: z.number().int().min(0).max(23).optional(),
+        aiContentEnabled: z.boolean().optional(),
+        menuEngineeringEnabled: z.boolean().optional(),
       }).optional(),
     })
     const body = schema.safeParse(req.body)

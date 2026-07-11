@@ -533,6 +533,34 @@ const ACTIONS: ActionDef[] = [
     },
   },
   {
+    // kind 'read' → esegue subito e mostra il testo generato (una mutation chiederebbe
+    // conferma "alla cieca"). Genera + salva la descrizione. Sempre attiva.
+    name: 'generate_dish_description',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Genera con l\'AI una descrizione appetitosa per un piatto del menu e la salva.',
+    parameters: { type: 'object', properties: { itemName: { type: 'string' }, style: { type: 'string', description: 'tono opzionale (es. "elegante", "informale", "gourmet")' } }, required: ['itemName'] },
+    label: (a) => `Descrizione AI per "${a?.itemName ?? '?'}"`,
+    execute: async (ctx, args) => {
+      const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
+      if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo).` }
+      let desc: string
+      try {
+        desc = await groqComplete(
+          'Sei un copywriter di menù per ristoranti italiani. Scrivi UNA sola descrizione breve (max 200 caratteri), appetitosa e concreta (ingredienti/preparazione), in italiano. NIENTE virgolette, niente ripetere il nome del piatto all\'inizio, niente prezzo. Solo la descrizione.',
+          `Piatto: "${match.name}"${args?.style ? ` — tono: ${args.style}` : ''}.`,
+          160,
+        )
+      } catch { return { ok: false, summary: 'Generazione AI non disponibile in questo momento, riprova tra poco.' } }
+      desc = desc.replace(/^["'\s]+|["'\s]+$/g, '').slice(0, 300)
+      const [item] = await db.update(menuItems).set({ description: desc, updatedAt: new Date() })
+        .where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId))).returning()
+      if (!item) return { ok: false, summary: 'Salvataggio descrizione non riuscito.' }
+      emitMenuChanged(ctx.restaurantId)
+      return { ok: true, data: { id: item.id, description: desc }, summary: `Descrizione di "${item.name}" aggiornata: ${desc}` }
+    },
+  },
+  {
     name: 'update_menu_item',
     scope: ['owner'],
     kind: 'mutation',
@@ -1586,7 +1614,7 @@ export function toolSchemas(scope: ActionScope, allow?: string[]): any[] {
 // pertinenti al messaggio (per keyword) + un piccolo CORE di letture sempre presenti:
 // meno token → il 70b dura molto di più E l'8b (poche funzioni) produce tool-call validi.
 const TOOL_CATEGORIES: Record<string, string[]> = {
-  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'create_menu_section', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'menu_performance', 'set_food_cost', 'add_dish_variant'],
+  menu: ['search_menu', 'set_item_availability', 'create_menu_item', 'create_menu_section', 'update_menu_item', 'delete_menu_item', 'delete_menu_section', 'rename_menu_section', 'generate_dish_description', 'menu_performance', 'set_food_cost', 'add_dish_variant'],
   tables: ['table_status', 'create_table', 'delete_table', 'update_table', 'create_room', 'set_table_status', 'refresh_table_qr', 'set_cover_charge'],
   bills: ['open_bills', 'apply_bill_discount', 'close_bill', 'set_cover_charge'],
   orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],
@@ -1689,6 +1717,24 @@ async function groqClient() {
   // fallire SUBITO e ripiegare immediatamente sull'altro modello (openStream/create).
   _openaiClient = new OpenAI({ apiKey: key, baseURL: 'https://api.groq.com/openai/v1', maxRetries: 0, timeout: 30000 })
   return _openaiClient
+}
+
+// Completamento one-shot (no tool loop): per generazione contenuti (descrizioni piatti,
+// traduzioni). Prova un modello capace, ripiega sull'8b veloce. Ritorna il testo pulito.
+async function groqComplete(system: string, user: string, maxTokens = 220): Promise<string> {
+  const openai = await groqClient()
+  let lastErr: any
+  for (const model of ['openai/gpt-oss-120b', 'llama-3.1-8b-instant']) {
+    try {
+      const r = await openai.chat.completions.create({
+        model, temperature: 0.7, max_tokens: maxTokens,
+        messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+      })
+      const txt = r.choices?.[0]?.message?.content
+      if (txt && txt.trim()) return txt.trim()
+    } catch (e) { lastErr = e }
+  }
+  throw lastErr ?? new Error('AI vuota')
 }
 
 // PRE-GATE assegnazione FOTO: quando arriva un'immagine (WhatsApp media o upload copilot)

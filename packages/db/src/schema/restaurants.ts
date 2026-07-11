@@ -27,7 +27,18 @@ export type RestaurantSettings = {
   tableServiceEnabled?: boolean
   takeawayEnabled?: boolean
   payAtTableEnabled?: boolean
+  reservationsEnabled?: boolean          // prenotazioni self-service dai clienti
   aiEnabled?: boolean
   printerIp?: string
   printerPort?: number
+  autoPrint?: boolean                    // stampa automatica comande/ricevute
+  // ── Feature flag (default OFF salvo dove indicato): il ristorante le attiva a scelta ──
+  loyaltyEnabled?: boolean               // fedeltà / punti
+  reviewRequestEnabled?: boolean         // richiesta recensione post-pagamento
+  reviewUrl?: string                     // link recensione (es. Google) per la richiesta
+  autoStockDeductEnabled?: boolean       // scarico automatico magazzino da ricetta
+  dailyBriefingEnabled?: boolean         // briefing proattivo WhatsApp programmato
+  dailyBriefingHour?: number             // ora del briefing (0-23, default 9)
+  aiContentEnabled?: boolean             // generazione AI descrizioni/traduzioni (default ON)
+  menuEngineeringEnabled?: boolean       // analisi menu engineering (default ON)
 }

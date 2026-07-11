@@ -201,6 +201,15 @@ async function loadAll() {
       kdsWarn: rest.settings?.kdsWarnMinutes ?? 10, kdsLate: rest.settings?.kdsLateMinutes ?? 15,
       kdsCompatta: rest.settings?.kdsCompact ?? false, prenotazioni: rest.settings?.reservationsEnabled ?? false,
       mostraOnboarding: rest.settings?.showOnboarding ?? true,
+      // Feature flag (default OFF salvo aiContenuti/menuEngineering ON)
+      fedelta: rest.settings?.loyaltyEnabled ?? false,
+      recensioni: rest.settings?.reviewRequestEnabled ?? false,
+      recensioniUrl: rest.settings?.reviewUrl || "",
+      scaricoAuto: rest.settings?.autoStockDeductEnabled ?? false,
+      briefingWa: rest.settings?.dailyBriefingEnabled ?? false,
+      briefingOra: rest.settings?.dailyBriefingHour ?? 9,
+      aiContenuti: rest.settings?.aiContentEnabled ?? true,
+      menuEngineering: rest.settings?.menuEngineeringEnabled ?? true,
     });
   }
   ORDERS = (active || []).map(mapOrder);
