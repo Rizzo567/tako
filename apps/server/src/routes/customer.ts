@@ -271,7 +271,11 @@ export async function customerRoutes(fastify: FastifyInstance) {
       })),
     }
 
-    return { data: pub }
+    // Flag pubblici per il menu cliente: mostrare il bottone "Prenota" e la CTA recensione.
+    const [rest] = await db.select({ name: restaurants.name, settings: restaurants.settings })
+      .from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    const rs = (rest?.settings ?? {}) as any
+    return { data: pub, features: { restaurantName: rest?.name ?? '', reservationsEnabled: rs.reservationsEnabled ?? false, reviewUrl: rs.reviewUrl || '' } }
   })
 
   // Submit order from customer.

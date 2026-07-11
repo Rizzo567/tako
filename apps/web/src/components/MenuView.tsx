@@ -142,7 +142,7 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
           >
             {item.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={item.imageUrl} alt="" className="h-full w-full object-cover" />
+              <img src={item.imageUrl} alt="" className="h-full w-full object-cover object-center" />
             ) : (
               <span className="serif" style={{ fontSize: 90, color: 'rgba(255,255,255,.9)', lineHeight: 1 }}>
                 {item.name[0].toUpperCase()}
@@ -285,6 +285,7 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
   const animTotal = useCountUp(total)
 
   const [menu, setMenu] = useState<PublicMenu | null>(null)
+  const [features, setFeatures] = useState<{ restaurantName?: string; reservationsEnabled?: boolean; reviewUrl?: string } | null>(null)
   // Multilingua: lingue del ristorante, lingua scelta, mappa itemId → traduzione.
   const [languages, setLanguages] = useState<string[]>([])
   const [defaultLang, setDefaultLang] = useState<string>('it')
@@ -307,6 +308,7 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
       const m: PublicMenu = r.data.data
       setMenu(m)
       setActive(m.sections[0]?.id ?? null)
+      setFeatures(r.data.features || null)
     }).catch(() => toast.error('Menu non disponibile al momento. Riprova.'))
   }, [restaurantId])
 
@@ -564,6 +566,17 @@ export function MenuView({ onGoCart }: { onGoCart: () => void }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {features && (features.reservationsEnabled || features.reviewUrl) && (
+        <div className="mx-auto flex max-w-2xl flex-col gap-2.5 px-5 pb-28 pt-3">
+          {features.reservationsEnabled && (
+            <a href={`/prenota/${restaurantId}`} className="block rounded-2xl border border-[var(--hairline,#e5e5e5)] bg-[var(--sunken,#f6f3ec)] px-4 py-3.5 text-center text-[15px] font-bold text-[var(--ink,#2a1f1a)]">📅 Prenota un tavolo</a>
+          )}
+          {features.reviewUrl && (
+            <a href={features.reviewUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-[var(--hairline,#e5e5e5)] px-4 py-3.5 text-center text-[15px] font-semibold text-[var(--ink-2,#666)]">⭐ Lascia una recensione</a>
+          )}
+        </div>
+      )}
 
       <ItemSheet item={selected} open={itemOpen} onClose={() => setItemOpen(false)} />
       <FilterSheet open={filterOpen} onClose={() => setFilterOpen(false)}
