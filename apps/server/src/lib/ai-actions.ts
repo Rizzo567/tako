@@ -145,6 +145,14 @@ async function nextTableNumber(restaurantId: string): Promise<string> {
   return String(n)
 }
 
+// Notifica le dashboard aperte che i tavoli sono cambiati → refetch live (Sala/Gestione
+// Tavoli ascoltano 'table:updated' e rifanno GET /tables/rooms). Le mutation via copilot
+// o WhatsApp NON passano dalle route HTTP, quindi senza questo il tavolo comparirebbe
+// solo dopo un reload manuale.
+function emitTablesChanged(restaurantId: string, tableId?: string): void {
+  try { io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId: tableId ?? null }) } catch { /* socket best-effort */ }
+}
+
 // Risolve un MEMBRO dello staff per nome (attivi), match univoco o niente.
 async function resolveStaff(restaurantId: string, name: string, includeInactive = false) {
   const q = (name ?? '').toString().toLowerCase().trim()
@@ -623,6 +631,7 @@ const ACTIONS: ActionDef[] = [
       const qrToken = nanoid(24)
       const [table] = await db.insert(tables).values({ restaurantId: ctx.restaurantId, qrToken, number, seats, roomId: room.id }).returning()
       if (!table) return { ok: false, summary: 'Creazione non riuscita.' }
+      emitTablesChanged(ctx.restaurantId, table.id)
       return { ok: true, data: { id: table.id, number: table.number, seats: table.seats, room: room.name }, summary: `Tavolo ${table.number} creato (${table.seats} posti) in "${room.name}". QR generato.` }
     },
   },
@@ -645,6 +654,7 @@ const ACTIONS: ActionDef[] = [
         .where(and(eq(bills.restaurantId, ctx.restaurantId), eq(bills.tableId, t.id), eq(bills.status, 'open'))).limit(1)
       if (openBill) return { ok: false, summary: `Il tavolo ${t.number} ha un conto aperto: incassa o annulla prima di eliminarlo.` }
       await db.update(tables).set({ active: false }).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
+      emitTablesChanged(ctx.restaurantId, t.id)
       return { ok: true, data: { id: t.id, number: t.number }, summary: `Tavolo ${t.number} eliminato.` }
     },
   },
@@ -685,6 +695,7 @@ const ACTIONS: ActionDef[] = [
       }
       if (!changes.length) return { ok: false, summary: 'Nessuna modifica indicata: specifica nuovo numero o posti.' }
       await db.update(tables).set(set).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
+      emitTablesChanged(ctx.restaurantId, t.id)
       return { ok: true, data: { id: t.id }, summary: `Tavolo ${t.number} aggiornato: ${changes.join(', ')}.` }
     },
   },

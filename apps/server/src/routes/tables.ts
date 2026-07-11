@@ -53,6 +53,8 @@ export async function tableRoutes(fastify: FastifyInstance) {
 
     const qrToken = nanoid(24)
     const [table] = await db.insert(tables).values({ restaurantId: req.user!.restaurantId, qrToken, ...body.data }).returning()
+    // Notifica gli altri dispositivi (Sala/Gestione Tavoli fanno refetch su 'table:updated').
+    io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: table?.id ?? null })
     return reply.code(201).send({ data: table })
   })
 
