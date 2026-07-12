@@ -6,6 +6,24 @@
 // via env GEMINI_IMAGE_MODEL). Best-effort: qualsiasi errore → si tiene la foto originale.
 import { db, restaurants } from '@tako/db'
 import { eq } from 'drizzle-orm'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { homedir } from 'node:os'
+
+// La chiave Gemini: da env GEMINI_API_KEY, oppure (comodo sull'app pacchettizzata dove
+// non si settano env) da un file `gemini-key.txt` in TAKO_HOME. Così basta incollare la
+// chiave in quel file — nessuna configurazione di sistema.
+function geminiKey(): string | null {
+  const env = process.env['GEMINI_API_KEY']
+  if (env && env.trim()) return env.trim()
+  // Nessuna cache: così se incolli la chiave nel file mentre il server è già su, viene
+  // raccolta senza riavvio (la lettura è economica e la generazione è comunque rara).
+  try {
+    const home = process.env['TAKO_HOME'] ?? join(homedir(), '.tako')
+    const k = readFileSync(join(home, 'gemini-key.txt'), 'utf8').trim()
+    return k || null
+  } catch { return null }
+}
 
 // Stile FISSO applicato a ogni piatto → coerenza visiva su tutto il menù.
 const STYLE_PROMPT = [
@@ -20,7 +38,7 @@ const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models'
 
 // true se il ristorante ha attivato aiPhotoEnabled E c'è una chiave Gemini configurata.
 export async function aiPhotoEnabledFor(restaurantId: string): Promise<boolean> {
-  if (!process.env['GEMINI_API_KEY']) return false
+  if (!geminiKey()) return false
   try {
     const [r] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
     return (r?.settings as any)?.aiPhotoEnabled === true
@@ -29,7 +47,7 @@ export async function aiPhotoEnabledFor(restaurantId: string): Promise<boolean> 
 
 // Genera la versione stilizzata; ritorna il Buffer PNG/JPEG o null (best-effort).
 export async function generateStyledDishImage(buf: Buffer, mimeType: string): Promise<Buffer | null> {
-  const key = process.env['GEMINI_API_KEY']
+  const key = geminiKey()
   if (!key) return null
   const model = process.env['GEMINI_IMAGE_MODEL'] ?? 'gemini-2.5-flash-image'
   const ac = new AbortController()
