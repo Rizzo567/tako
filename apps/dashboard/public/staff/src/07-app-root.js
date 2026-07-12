@@ -271,7 +271,8 @@ function App({ session }) {
                   loyaltyEnabled: !!next.fedelta, reviewRequestEnabled: !!next.recensioni, reviewUrl: next.recensioniUrl || "",
                   autoStockDeductEnabled: !!next.scaricoAuto, dailyBriefingEnabled: !!next.briefingWa,
                   dailyBriefingHour: Number(next.briefingOra) || 9, aiContentEnabled: !!next.aiContenuti,
-                  aiPhotoEnabled: !!next.fotoAi, menuEngineeringEnabled: !!next.menuEngineering } });
+                  aiPhotoEnabled: !!next.fotoAi, aiPhotoProCode: next.fotoAiCodice || "",
+                  menuEngineeringEnabled: !!next.menuEngineering } });
       toast("Impostazioni salvate", { type: "success" }); } catch (e) { toast(e.message, { type: "error" }); }
   };
 

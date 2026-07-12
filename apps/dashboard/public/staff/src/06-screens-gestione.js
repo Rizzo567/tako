@@ -1016,7 +1016,10 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <h3 style={{ fontSize: 16, marginBottom: 6 }}>Assistente & AI</h3>
               <Row label="Briefing WhatsApp mattutino" sub="Riepilogo automatico ogni giorno sul canale WhatsApp"><div style={{ display: "flex", alignItems: "center", gap: 10 }}>{settings.briefingWa && <><input type="number" min="0" max="23" style={numStyle} value={settings.briefingOra} onChange={e => set("briefingOra", parseInt(e.target.value) || 0)} /><span style={{ fontSize: 13, color: "var(--ink-3)" }}>h</span></>}<Toggle on={settings.briefingWa} set={v => set("briefingWa", v)} /></div></Row>
               <Row label="Contenuti AI (descrizioni/traduzioni)" sub="Genera descrizioni e traduzioni piatti — consigliata attiva"><Toggle on={settings.aiContenuti} set={v => set("aiContenuti", v)} /></Row>
-              <Row label="Foto AI piatti (Nano Banana Pro)" sub="Carichi una foto → stile da menù professionale coerente (richiede chiave Gemini configurata)"><Toggle on={settings.fotoAi} set={v => set("fotoAi", v)} /></Row>
+              <Row label="Foto AI piatti" sub="Carichi una foto → stile da menù professionale coerente (richiede chiave Gemini configurata)"><Toggle on={settings.fotoAi} set={v => set("fotoAi", v)} /></Row>
+              {settings.fotoAi && (
+                <Field label="Codice Pro (opzionale)"><input style={inputStyle} value={settings.fotoAiCodice} placeholder="Sblocca la qualità Pro — richiedilo al fornitore" onChange={e => set("fotoAiCodice", e.target.value)} /></Field>
+              )}
               <Row label="Menu engineering" sub="Analisi profitto/popolarità dei piatti — consigliata attiva"><Toggle on={settings.menuEngineering} set={v => set("menuEngineering", v)} /></Row>
             </Card>
           </>)}

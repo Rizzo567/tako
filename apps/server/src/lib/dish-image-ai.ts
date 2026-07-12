@@ -9,6 +9,31 @@ import { eq } from 'drizzle-orm'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
+import { createPublicKey, verify as edVerify } from 'node:crypto'
+
+// ─────────────────── Sblocco PRO (Nano Banana Pro) — a prova di crack ───────────────────
+// Il modello Pro (più costoso, qualità max) si sblocca SOLO con un CODICE firmato da Manuel
+// con la sua chiave PRIVATA (offline, mai nell'appliance). Qui c'è solo la chiave PUBBLICA:
+// verifica la firma ma non può crearne → il ristoratore, anche con accesso completo al Mac
+// (DB, config, bundle), NON può forgiare un codice valido. Il codice è legato al restaurantId
+// (non copiabile tra ristoranti) e la firma si verifica AD OGNI generazione (un flag nel DB
+// non basta). Senza codice valido → modello base (flash). Con codice valido → Pro.
+const PRO_PUBLIC_KEY_B64 = 'MCowBQYDK2VwAyEAOAvH9O4XyeH41pNy0ybofIQd8StR+PYWTpMaTUyaVsM='
+let _pub: ReturnType<typeof createPublicKey> | null = null
+function proPublicKey() {
+  if (!_pub) _pub = createPublicKey({ key: Buffer.from(PRO_PUBLIC_KEY_B64, 'base64'), format: 'der', type: 'spki' })
+  return _pub
+}
+// true se `code` è una firma Ed25519 valida di `restaurantId` (fatta con la privata di Manuel).
+export function verifyProCode(restaurantId: string, code: string | undefined | null): boolean {
+  if (!code || !restaurantId) return false
+  try {
+    return edVerify(null, Buffer.from(restaurantId, 'utf8'), proPublicKey(), Buffer.from(String(code).trim(), 'base64'))
+  } catch { return false }
+}
+
+const MODEL_PRO = 'gemini-3-pro-image'      // Nano Banana Pro (solo con codice valido)
+const MODEL_BASE = 'gemini-2.5-flash-image' // base (flash), col solo toggle attivo
 
 // La chiave Gemini: da env GEMINI_API_KEY, oppure (comodo sull'app pacchettizzata dove
 // non si settano env) da un file `gemini-key.txt` in TAKO_HOME. Così basta incollare la
@@ -45,12 +70,10 @@ export async function aiPhotoEnabledFor(restaurantId: string): Promise<boolean> 
   } catch { return false }
 }
 
-// Genera la versione stilizzata; ritorna il Buffer PNG/JPEG o null (best-effort).
-export async function generateStyledDishImage(buf: Buffer, mimeType: string): Promise<Buffer | null> {
+// Genera la versione stilizzata col MODELLO indicato; ritorna il Buffer o null (best-effort).
+export async function generateStyledDishImage(buf: Buffer, mimeType: string, model: string): Promise<Buffer | null> {
   const key = geminiKey()
   if (!key) return null
-  // Default = Nano Banana Pro (gemini-3-pro-image); override via env GEMINI_IMAGE_MODEL.
-  const model = process.env['GEMINI_IMAGE_MODEL'] ?? 'gemini-3-pro-image'
   const ac = new AbortController()
   const to = setTimeout(() => ac.abort(), 45_000)
   try {
@@ -81,12 +104,16 @@ export async function generateStyledDishImage(buf: Buffer, mimeType: string): Pr
   } finally { clearTimeout(to) }
 }
 
-// Applica lo stile SE il flag è attivo e la chiave c'è; altrimenti ritorna l'originale.
-// Sempre non-lanciante: la foto originale è il fallback garantito.
+// Applica lo stile SE il flag è attivo e la chiave c'è; sceglie il modello: Pro solo con
+// codice firmato valido, altrimenti base (flash). Sempre non-lanciante: originale = fallback.
 export async function maybeStyleDishImage(restaurantId: string, buf: Buffer, mimeType: string): Promise<Buffer> {
   try {
-    if (!(await aiPhotoEnabledFor(restaurantId))) return buf
-    const styled = await generateStyledDishImage(buf, mimeType)
+    if (!geminiKey()) return buf
+    const [r] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    const s = (r?.settings ?? {}) as any
+    if (s.aiPhotoEnabled !== true) return buf
+    const model = verifyProCode(restaurantId, s.aiPhotoProCode) ? MODEL_PRO : MODEL_BASE
+    const styled = await generateStyledDishImage(buf, mimeType, model)
     return styled ?? buf
   } catch { return buf }
 }
