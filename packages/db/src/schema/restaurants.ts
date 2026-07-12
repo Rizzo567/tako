@@ -40,5 +40,6 @@ export type RestaurantSettings = {
   dailyBriefingEnabled?: boolean         // briefing proattivo WhatsApp programmato
   dailyBriefingHour?: number             // ora del briefing (0-23, default 9)
   aiContentEnabled?: boolean             // generazione AI descrizioni/traduzioni (default ON)
+  aiPhotoEnabled?: boolean               // foto piatto stilizzata AI (Nano Banana/Gemini, richiede GEMINI_API_KEY)
   menuEngineeringEnabled?: boolean       // analisi menu engineering (default ON)
 }

@@ -54,6 +54,7 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
         dailyBriefingEnabled: z.boolean().optional(),
         dailyBriefingHour: z.number().int().min(0).max(23).optional(),
         aiContentEnabled: z.boolean().optional(),
+        aiPhotoEnabled: z.boolean().optional(),
         menuEngineeringEnabled: z.boolean().optional(),
       }).optional(),
     })

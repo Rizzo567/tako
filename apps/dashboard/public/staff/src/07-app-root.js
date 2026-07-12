@@ -270,7 +270,8 @@ function App({ session }) {
                   reservationsEnabled: !!next.prenotazioni, showOnboarding: !!next.mostraOnboarding,
                   loyaltyEnabled: !!next.fedelta, reviewRequestEnabled: !!next.recensioni, reviewUrl: next.recensioniUrl || "",
                   autoStockDeductEnabled: !!next.scaricoAuto, dailyBriefingEnabled: !!next.briefingWa,
-                  dailyBriefingHour: Number(next.briefingOra) || 9, aiContentEnabled: !!next.aiContenuti, menuEngineeringEnabled: !!next.menuEngineering } });
+                  dailyBriefingHour: Number(next.briefingOra) || 9, aiContentEnabled: !!next.aiContenuti,
+                  aiPhotoEnabled: !!next.fotoAi, menuEngineeringEnabled: !!next.menuEngineering } });
       toast("Impostazioni salvate", { type: "success" }); } catch (e) { toast(e.message, { type: "error" }); }
   };
 

@@ -23,6 +23,7 @@ import { eq, and } from 'drizzle-orm'
 import { runAssistant, executeAction } from './ai-actions.js'
 import { ownerSystemPrompt } from './owner-prompt.js'
 import { saveImageBuffer } from './image-store.js'
+import { maybeStyleDishImage } from './dish-image-ai.js'
 
 // ─────────────────────────── Percorsi & config su disco ───────────────────────────
 // TAKO_HOME è impostato dalla shell desktop; fallback ~/.tako (stesso schema di bootstrap.ts).
@@ -408,6 +409,8 @@ async function handleIncomingImage(msg: any, jid: string, number: string, captio
     await reply(jid, 'Non sono riuscito a scaricare l\'immagine, riprova.')
     return
   }
+  // Stile AI coerente (Nano Banana Pro) se attivo per il ristorante; altrimenti originale.
+  buf = await maybeStyleDishImage(restaurantId, buf, msg.message?.imageMessage?.mimetype || 'image/jpeg')
   const saved = await saveImageBuffer(restaurantId, buf)
   if ('error' in saved) { await reply(jid, `⚠️ ${saved.error}`); return }
   await assignImageToDish(jid, number, saved.url, caption)

@@ -209,6 +209,7 @@ async function loadAll() {
       briefingWa: rest.settings?.dailyBriefingEnabled ?? false,
       briefingOra: rest.settings?.dailyBriefingHour ?? 9,
       aiContenuti: rest.settings?.aiContentEnabled ?? true,
+      fotoAi: rest.settings?.aiPhotoEnabled ?? false,
       menuEngineering: rest.settings?.menuEngineeringEnabled ?? true,
     });
   }
