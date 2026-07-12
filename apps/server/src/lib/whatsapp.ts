@@ -17,6 +17,7 @@
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { mkdirSync, existsSync, readFileSync, writeFileSync, rmSync } from 'node:fs'
+import { randomInt } from 'node:crypto'
 import { db, restaurants, rooms } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { runAssistant, executeAction } from './ai-actions.js'
@@ -53,6 +54,10 @@ function configPath(): string {
 interface WhatsAppConfig {
   enabled: boolean
   allowedNumbers: string[]
+  // Codice di collegamento (opzione B): mostrato SOLO nella dashboard. Il primo numero
+  // deve scrivere "collega tako <codice>" → lega il bootstrap a (accesso dashboard +
+  // possesso del numero). Consumato appena la whitelist si popola.
+  bootstrapCode?: string
 }
 
 function readConfig(): WhatsAppConfig {
@@ -62,10 +67,27 @@ function readConfig(): WhatsAppConfig {
     return {
       enabled: j?.enabled === true,
       allowedNumbers: Array.isArray(j?.allowedNumbers) ? j.allowedNumbers.map(normalizeNumber).filter(Boolean) : [],
+      bootstrapCode: typeof j?.bootstrapCode === 'string' ? j.bootstrapCode : undefined,
     }
   } catch {
     return { enabled: false, allowedNumbers: [] }
   }
+}
+
+// Codice di collegamento a 6 cifre (crypto-random). ensure = crealo se la whitelist è
+// vuota e non c'è già; regenerate = forzane uno nuovo (pulsante dashboard).
+function ensureBootstrapCode(): string | null {
+  const cfg = readConfig()
+  if (cfg.allowedNumbers.length) return null            // già collegato: nessun codice
+  if (cfg.bootstrapCode) return cfg.bootstrapCode
+  const code = String(randomInt(0, 1_000_000)).padStart(6, '0')
+  writeConfig({ bootstrapCode: code })
+  return code
+}
+export function regenerateBootstrapCode(): string {
+  const code = String(randomInt(0, 1_000_000)).padStart(6, '0')
+  writeConfig({ bootstrapCode: code })
+  return code
 }
 
 function writeConfig(patch: Partial<WhatsAppConfig>): WhatsAppConfig {
@@ -143,13 +165,17 @@ const CONFIRM_RE = /^(s[iì]|ok(ay)?|conferma|vai|procedi|yes|👍)$/i
 const CANCEL_RE = /^(no|annulla|cancella|stop|👎)$/i
 
 // ─────────────────────────── API pubblica ───────────────────────────
-export function getWhatsAppStatus(): { enabled: boolean; connected: boolean; qr: string | null; me: string | null; allowedNumbers: string[] } {
+export function getWhatsAppStatus(): { enabled: boolean; connected: boolean; qr: string | null; me: string | null; allowedNumbers: string[]; bootstrapCode: string | null } {
+  const cfg = readConfig()
+  const nums = allowedNumbers.length ? allowedNumbers : cfg.allowedNumbers
   return {
-    enabled: readConfig().enabled || process.env['TAKO_WHATSAPP'] === '1',
+    enabled: cfg.enabled || process.env['TAKO_WHATSAPP'] === '1',
     connected,
     qr: connected ? null : lastQr,
     me,
-    allowedNumbers: allowedNumbers.length ? allowedNumbers : readConfig().allowedNumbers,
+    allowedNumbers: nums,
+    // codice mostrato SOLO quando serve il collegamento (whitelist vuota); se manca, lo crea
+    bootstrapCode: nums.length ? null : ensureBootstrapCode(),
   }
 }
 
@@ -319,13 +345,17 @@ async function handleIncoming(msg: any): Promise<void> {
   const cfg = readConfig()
   allowedNumbers = cfg.allowedNumbers
   if (!allowedNumbers.length) {
-    if (/^collega\s+tako$/i.test(text)) {
+    // Collegamento SICURO (opzione B): serve "collega tako <codice>" col codice mostrato
+    // SOLO nella dashboard → lega il bootstrap ad accesso dashboard + possesso del numero.
+    // Niente più "primo che scrive vince". Codice errato/assente → ignora in silenzio.
+    const m = text.match(/^collega\s+tako\s+(\d{4,8})$/i)
+    if (m && cfg.bootstrapCode && m[1] === cfg.bootstrapCode) {
       const next = setAllowedNumbers([number])
-      console.log(`[whatsapp] bootstrap owner registrato: ${number}`)
+      writeConfig({ bootstrapCode: undefined })   // codice usa-e-getta, consumato
+      console.log(`[whatsapp] bootstrap owner registrato (codice ok): ${number}`)
       await reply(jid, `✅ Tako collegato a questo numero. Ora puoi comandare la dashboard da qui.\nEsempi: "incasso di oggi", "segna esaurito la carbonara", "assegna questa foto alla carbonara" (allegando una foto).`)
       allowedNumbers = next
     }
-    // Whitelist vuota e messaggio diverso da "collega tako": ignora in silenzio.
     return
   }
   if (!allowedNumbers.includes(number)) {

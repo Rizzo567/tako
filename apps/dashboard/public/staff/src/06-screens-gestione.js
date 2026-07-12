@@ -810,8 +810,9 @@ function WhatsAppPanel({ mobile }) {
       try { const s = await TakoAPI.get("/whatsapp/status"); if (alive) setStatus(s); } catch (_) {}
     };
     tick();
-    // Poll solo finché il pannello è aperto e NON ancora connesso (per il QR che ruota).
-    const t = setInterval(() => { setStatus((cur) => { if (!cur || !cur.connected) tick(); return cur; }); }, 3000);
+    // Poll finché NON connesso (QR che ruota) O finché nessun numero è collegato (per
+    // catturare quando il codice viene usato → la card codice sparisce da sola).
+    const t = setInterval(() => { setStatus((cur) => { if (!cur || !cur.connected || ((cur.allowedNumbers || []).length === 0)) tick(); return cur; }); }, 3000);
     return () => { alive = false; clearInterval(t); };
   }, []);
 
@@ -839,10 +840,18 @@ function WhatsAppPanel({ mobile }) {
     saveNumbers(next); setNumInput("");
   };
   const removeNumber = (n) => saveNumbers(((status && status.allowedNumbers) || []).filter((x) => x !== n));
+  const regenCode = async () => {
+    try {
+      const r = await TakoAPI.post("/whatsapp/bootstrap-code", {});
+      setStatus((s) => ({ ...(s || {}), bootstrapCode: r.bootstrapCode }));
+      toast("Nuovo codice generato", { type: "success" });
+    } catch (e) { toast(e.message || "Impossibile generare il codice", { type: "error" }); }
+  };
 
   const enabled = status && status.enabled;
   const connected = status && status.connected;
   const allowed = (status && status.allowedNumbers) || [];
+  const bootstrapCode = status && status.bootstrapCode;
 
   return (
     <>
@@ -882,11 +891,29 @@ function WhatsAppPanel({ mobile }) {
         </Card>
       )}
 
+      {enabled && connected && allowed.length === 0 && bootstrapCode && (
+        <Card pad={20}>
+          <h3 style={{ fontSize: 16, marginBottom: 4 }}>Collega il tuo numero</h3>
+          <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 12 }}>
+            Dal <b>tuo</b> telefono, scrivi su WhatsApp al numero del ristorante:
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+            <div style={{ flex: 1, padding: "12px 16px", borderRadius: 12, background: "var(--sunken)", border: "1px solid var(--hairline)", fontFamily: "var(--f-ui)", fontSize: 15 }}>
+              collega tako <b style={{ fontFamily: "var(--f-display)", fontSize: 20, letterSpacing: 2, color: "var(--brand)" }}>{bootstrapCode}</b>
+            </div>
+          </div>
+          <p style={{ fontSize: 12, color: "var(--ink-3)", marginBottom: 10 }}>
+            Solo chi vede questo codice (tu, dalla dashboard) può collegarsi. Usa-e-getta: si consuma al primo collegamento.
+          </p>
+          <Btn kind="soft" icon="refresh" onClick={regenCode}>Rigenera codice</Btn>
+        </Card>
+      )}
+
       {enabled && (
         <Card pad={20}>
           <h3 style={{ fontSize: 16, marginBottom: 4 }}>Numeri autorizzati</h3>
           <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 12 }}>
-            Solo questi numeri possono comandare. {allowed.length === 0 && "Lista vuota: il primo numero che scrive \"collega tako\" diventa il titolare."}
+            Solo questi numeri possono comandare. {allowed.length === 0 && "Nessun numero collegato: usa il codice qui sopra per collegare il tuo."}
           </p>
           {allowed.map((n) => (
             <Row key={n} label={`+${n}`}>

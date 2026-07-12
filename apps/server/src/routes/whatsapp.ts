@@ -6,7 +6,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import QRCode from 'qrcode'
 import { requireAuth } from '../middleware/auth.js'
-import { startWhatsApp, stopWhatsApp, getWhatsAppStatus, setAllowedNumbers } from '../lib/whatsapp.js'
+import { startWhatsApp, stopWhatsApp, getWhatsAppStatus, setAllowedNumbers, regenerateBootstrapCode } from '../lib/whatsapp.js'
 
 export async function whatsappRoutes(fastify: FastifyInstance) {
   // Gate owner-only comune a tutte le route del canale.
@@ -26,6 +26,16 @@ export async function whatsappRoutes(fastify: FastifyInstance) {
       try { qrDataUrl = await QRCode.toDataURL(status.qr) } catch { qrDataUrl = null }
     }
     return { data: { ...status, qrDataUrl } }
+  })
+
+  // Rigenera il codice di collegamento (opzione B). Owner-only: solo chi ha la dashboard
+  // può vederlo/rigenerarlo → il collegamento WhatsApp resta legato all'autenticazione owner.
+  fastify.post('/bootstrap-code', { preHandler: ownerOnly }, async (_req, reply) => {
+    const status = getWhatsAppStatus()
+    if (status.allowedNumbers.length) {
+      return reply.code(409).send({ error: { code: 'ALREADY_LINKED', message: 'Un numero è già collegato. Rimuovilo dalla whitelist per rigenerare il codice.' } })
+    }
+    return { data: { bootstrapCode: regenerateBootstrapCode() } }
   })
 
   // Attiva il canale (avvia Baileys). Baileys è import dinamico + try/catch: un guasto
