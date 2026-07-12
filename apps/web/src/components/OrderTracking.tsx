@@ -16,7 +16,7 @@ interface Order { id?: string; status: string; items?: OrderItem[]; total: numbe
 
 export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; onOrderAgain: () => void }) {
   const { t, lang } = useI18n()
-  const { orderId, tableId } = useSessionStore()
+  const { orderId, tableId, setOrderId } = useSessionStore()
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -29,7 +29,14 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
     notifiedReady.current = false
     api.get(`/customer/orders/${orderId}`)
       .then(r => setOrder(r.data.data))
-      .catch(() => setError(true))
+      .catch((e) => {
+        // Ordine non recuperabile (tipico: id stantìo di una sessione/ordine precedente)
+        // → NON è un errore per l'utente: è "nessun ordine attivo". Pulisci l'id stantìo
+        // così non riprova all'infinito. Solo un guasto di rete vero mostra il retry.
+        const status = e?.response?.status
+        if (status === 404 || status === 403 || status === 401) { setOrderId(null); setOrder(null) }
+        else setError(true)
+      })
       .finally(() => setLoading(false))
   }, [orderId])
 

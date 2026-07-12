@@ -287,7 +287,7 @@ function CustomerShell({ token }: { token: string }) {
     <div className="min-h-[100dvh]" style={{ background: 'var(--surface)' }}>
       <Header count={count} compact={compact} onCart={() => setCartOpen(true)} onWaiter={() => setWaiterSheet(true)} onLang={() => setLangSheet(true)} />
 
-      <main style={{ paddingBottom: 'calc(var(--safe-b) + 96px)' }}>
+      <main style={{ paddingBottom: view === 'chat' ? 0 : 'calc(var(--safe-b) + 96px)' }}>
         <AnimatePresence mode="wait">
           <motion.div key={view}
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}

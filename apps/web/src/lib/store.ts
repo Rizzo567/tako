@@ -93,7 +93,7 @@ interface SessionState {
   orderId: string | null
   sessionId: string | null
   setSession: (data: Partial<SessionState>) => void
-  setOrderId: (id: string) => void
+  setOrderId: (id: string | null) => void
 }
 
 export const useSessionStore = create<SessionState>()(

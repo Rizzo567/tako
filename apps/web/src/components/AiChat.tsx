@@ -125,7 +125,7 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh_-_var(--header-h)_-_96px)] flex-col">
+    <div className="flex flex-col overflow-hidden" style={{ height: 'calc(100dvh - var(--header-h) - 96px)' }}>
       {/* sub-header assistente */}
       <div className="flex items-center gap-3 px-5 pb-3 pt-1">
         <div className="relative h-[42px] w-[42px] flex-none">
@@ -140,8 +140,8 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
       </div>
       <hr className="hairline" />
 
-      {/* messaggi */}
-      <div className="flex flex-1 flex-col gap-3 px-4 py-4">
+      {/* messaggi (scroll INTERNO: la pagina non scrolla → niente salto al focus) */}
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4">
         {messages.map((m, i) => (
           <div key={i} className={`flex flex-col gap-2 ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
             {m.content && (
@@ -181,9 +181,9 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
         <div ref={bottomRef} />
       </div>
 
-      {/* composer fisso */}
-      <div className="sticky bottom-0 flex items-center gap-2.5 border-t px-4 py-3"
-        style={{ background: 'var(--surface)', borderColor: 'var(--hairline)', paddingBottom: 'calc(var(--safe-b) + 84px)' }}>
+      {/* composer in fondo al pannello (altezza fissa), subito sopra la bottom nav */}
+      <div className="flex flex-none items-center gap-2.5 border-t px-4 pt-3"
+        style={{ background: 'var(--surface)', borderColor: 'var(--hairline)', paddingBottom: 'calc(var(--safe-b) + 12px)' }}>
         <input
           value={input} onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send() } }}

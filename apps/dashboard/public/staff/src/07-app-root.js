@@ -253,7 +253,11 @@ function App({ session }) {
   // Il pagamento lo esegue il PaymentModal (metodo+mancia). Qui solo refresh.
   const onCloseBill = async (id) => { setBills((bs) => bs.filter((x) => x.id !== id)); refreshBills(); refreshRooms(); };
   const onSetBrand = async (b) => { setBrand(b); try { await TakoAPI.patch("/restaurants/me", { primaryColor: BRAND_PALETTES[b].brand }); } catch (_) {} };
-  const onSaveSettings = async (next) => {
+  const onSaveSettings = async (nextOrFn) => {
+    // I toggle chiamano set(k,v) → setSettings(s => ({...s,[k]:v})): qui arriva una
+    // FUNZIONE updater, non un oggetto. Risolvila contro lo stato corrente, altrimenti
+    // next.nome/next.iva… sono undefined → vatRate NaN→null → 400 di validazione.
+    const next = typeof nextOrFn === "function" ? nextOrFn(settings) : nextOrFn;
     setSettings(next);
     try { await TakoAPI.patch("/restaurants/me", { name: next.nome, address: next.indirizzo, phone: next.telefono,
       settings: { currency: next.valuta, vatRate: Number(next.iva), timezone: next.fuso, defaultLanguage: next.linguaDefault, languages: next.lingue,
