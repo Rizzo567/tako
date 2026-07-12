@@ -49,7 +49,8 @@ export async function aiPhotoEnabledFor(restaurantId: string): Promise<boolean> 
 export async function generateStyledDishImage(buf: Buffer, mimeType: string): Promise<Buffer | null> {
   const key = geminiKey()
   if (!key) return null
-  const model = process.env['GEMINI_IMAGE_MODEL'] ?? 'gemini-2.5-flash-image'
+  // Default = Nano Banana Pro (gemini-3-pro-image); override via env GEMINI_IMAGE_MODEL.
+  const model = process.env['GEMINI_IMAGE_MODEL'] ?? 'gemini-3-pro-image'
   const ac = new AbortController()
   const to = setTimeout(() => ac.abort(), 45_000)
   try {
