@@ -2,12 +2,10 @@
 import { Check } from 'lucide-react'
 import { Languages } from 'lucide-react'
 import { Sheet } from './ui/Sheet'
-import { useI18n } from '@/lib/i18n'
+import { useI18n, LANG_NATIVE, type Lang } from '@/lib/i18n'
 
-const LANG_NAME: Record<string, string> = {
-  it: 'Italiano', en: 'English', es: 'Español', de: 'Deutsch',
-  fr: 'Français', pt: 'Português', nl: 'Nederlands', zh: '中文',
-}
+const nativeName = (code: string): string =>
+  LANG_NATIVE[code.toLowerCase() as Lang] ?? code.toUpperCase()
 
 // Sheet lingua aperto dal pulsante "Language" nell'header. Cambia lingua SENZA reload
 // (aggiorna il context i18n → tutta la UI e il rifetch traduzioni del menu).
@@ -38,7 +36,7 @@ export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () =>
               >
                 {code.toUpperCase()}
               </span>
-              <span className="flex-1 text-[15.5px] font-semibold text-[var(--ink)]">{LANG_NAME[code.toLowerCase()] ?? code.toUpperCase()}</span>
+              <span className="min-w-0 flex-1 truncate text-[15.5px] font-semibold text-[var(--ink)]">{nativeName(code)}</span>
               {on && <Check size={18} style={{ color: 'var(--brand-deep)' }} />}
             </button>
           )

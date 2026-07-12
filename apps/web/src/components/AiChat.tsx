@@ -6,7 +6,7 @@ import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import { formatEuro } from '@/lib/utils'
 import { Send, ShoppingBag, Check, Bell, Clock } from 'lucide-react'
-import { useI18n, type Lang } from '@/lib/i18n'
+import { useI18n, coerceLang, type Lang } from '@/lib/i18n'
 import { Confetti } from './ui/Confetti'
 import { SPRING } from '@/lib/motion'
 
@@ -24,6 +24,16 @@ const CHIPS: Record<Lang, string[]> = {
   en: ['What do you recommend?', 'Any gluten-free dishes?', 'Order a margherita and two beers', 'How is my order doing?'],
   es: ['¿Qué me recomiendas?', '¿Tenéis platos sin gluten?', 'Pide una margarita y dos cervezas', '¿Cómo va mi pedido?'],
   de: ['Was empfiehlst du?', 'Habt ihr glutenfreie Gerichte?', 'Bestelle eine Margherita und zwei Bier', 'Wie steht es um meine Bestellung?'],
+  fr: ['Que me recommandez-vous ?', 'Avez-vous des plats sans gluten ?', 'Commande une margherita et deux bières', 'Où en est ma commande ?'],
+  pt: ['O que me recomenda?', 'Têm pratos sem glúten?', 'Pede uma margherita e duas cervejas', 'Como está o meu pedido?'],
+  nl: ['Wat raad je aan?', 'Hebben jullie glutenvrije gerechten?', 'Bestel een margherita en twee biertjes', 'Hoe staat het met mijn bestelling?'],
+  pl: ['Co polecasz?', 'Macie dania bezglutenowe?', 'Zamów margheritę i dwa piwa', 'Co z moim zamówieniem?'],
+  ru: ['Что посоветуете?', 'Есть блюда без глютена?', 'Закажи маргариту и два пива', 'Как там мой заказ?'],
+  tr: ['Ne önerirsin?', 'Glutensiz yemekleriniz var mı?', 'Bir margherita ve iki bira söyle', 'Siparişim ne durumda?'],
+  ar: ['بماذا تنصحني؟', 'هل لديكم أطباق خالية من الغلوتين؟', 'اطلب بيتزا مارغريتا وبيرتين', 'ما حالة طلبي؟'],
+  zh: ['有什么推荐？', '有没有无麸质的菜？', '点一份玛格丽塔披萨和两杯啤酒', '我的订单进展如何？'],
+  ja: ['おすすめは？', 'グルテンフリーの料理はありますか？', 'マルゲリータ一枚とビール二杯を注文', '注文の状況は？'],
+  ko: ['추천 메뉴는?', '글루텐 프리 요리 있나요?', '마르게리타 한 판과 맥주 두 잔 주문해줘', '제 주문 어떻게 되고 있나요?'],
 }
 
 /* ─────────────── action cards ─────────────── */
@@ -163,7 +173,7 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
 
         {messages.length === 1 && !typing && (
           <div className="scrollbar-hide flex gap-2 overflow-x-auto pt-1">
-            {CHIPS[(['it', 'en', 'es', 'de'].includes(lang) ? lang : 'it') as Lang].map((s) => (
+            {CHIPS[coerceLang(lang)].map((s) => (
               <button key={s} onClick={() => send(s)}
                 className="flex-none whitespace-nowrap rounded-full px-3.5 py-2 text-[13.5px] font-semibold text-[var(--ink-2)] active:scale-95"
                 style={{ background: 'var(--raised)', boxShadow: 'var(--sh-1)' }}>

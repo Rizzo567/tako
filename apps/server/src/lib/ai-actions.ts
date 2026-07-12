@@ -595,7 +595,7 @@ const ACTIONS: ActionDef[] = [
       if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo).` }
       const lang = String(args?.lang ?? '').toLowerCase().trim().slice(0, 5)
       if (!lang) return { ok: false, summary: 'Indica la lingua di destinazione (es. "en").' }
-      const LANG_NAMES: Record<string, string> = { en: 'inglese', de: 'tedesco', fr: 'francese', es: 'spagnolo', pt: 'portoghese', zh: 'cinese', ru: 'russo', ar: 'arabo', ja: 'giapponese', nl: 'olandese' }
+      const LANG_NAMES: Record<string, string> = { en: 'inglese', de: 'tedesco', fr: 'francese', es: 'spagnolo', pt: 'portoghese', zh: 'cinese', ru: 'russo', ar: 'arabo', ja: 'giapponese', nl: 'olandese', pl: 'polacco', tr: 'turco', ko: 'coreano', it: 'italiano' }
       const langName = LANG_NAMES[lang] ?? lang
       let out: string
       try {
