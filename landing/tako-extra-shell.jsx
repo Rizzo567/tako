@@ -5,9 +5,9 @@
 
 const { useState: xS, useEffect: xE } = React;
 
-const LANDING = 'Tako%20Landing.html';
-const TRIAL = 'Tako%20Demo.html';
-const pageUrl = (slug) => 'Tako%20Pagine.html?p=' + slug;
+const LANDING = 'home.html';
+const TRIAL = 'demo.html';
+const pageUrl = (slug) => 'pagine.html?p=' + slug;
 
 window.TAKO_PAGES = window.TAKO_PAGES || {};
 

@@ -432,7 +432,7 @@ function Navbar({ page, setPage }) {
   ];
   // Cross-page aware: sulla landing setPage gestisce il routing SPA; sulle altre
   // pagine setPage è assente e i link navigano alla landing con ?page=<id>.
-  const LANDING = 'Tako%20Landing.html';
+  const LANDING = 'home.html';
   const hrefFor = (id) => id === 'home' ? LANDING : (LANDING + '?page=' + id);
   const go = (id) => (e) => {
     if (typeof setPage === 'function') {
@@ -486,7 +486,7 @@ function Navbar({ page, setPage }) {
           ) : (
             <a href="#" onClick={(e) => { e.preventDefault(); setLoginOpen(true); }} className="tnav-accedi hidden md:inline-block font-bold text-[15px] cursor-pointer">Accedi</a>
           )}
-          <a href="Tako%20Landing.html#cta" className="btn-coral px-5 py-2.5 text-[14px]">Contattaci</a>
+          <a href="home.html#cta" className="btn-coral px-5 py-2.5 text-[14px]">Contattaci</a>
         </div>
       </div>
     </header>
@@ -547,7 +547,7 @@ function Hero() {
               Prova gratis 30 giorni
               <span aria-hidden>→</span>
             </a>
-            <a href="Tako%20Demo.html" className="btn-ghost px-8 py-4 text-lg">Guarda la demo</a>
+            <a href="demo.html" className="btn-ghost px-8 py-4 text-lg">Guarda la demo</a>
           </div>
           <div className="flex items-center gap-5 text-sm font-semibold" style={{ color: 'var(--ink-soft)' }}>
             <div className="flex -space-x-2">

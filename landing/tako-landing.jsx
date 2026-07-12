@@ -27,7 +27,7 @@ function HandPhone() {
   return (
     <div ref={stageRef} className="hp-stage sway">
       <div ref={slotRef} className="hp-slot">
-        <iframe className="hp-live" src="Tako App.html?bare=1&demo=1" scrolling="no" tabIndex="-1" title="App Tako — demo menù"></iframe>
+        <iframe className="hp-live" src="app.html?bare=1&demo=1" scrolling="no" tabIndex="-1" title="App Tako — demo menù"></iframe>
       </div>
       <img className="hp-hand" src="assets/hand-phone.png" alt="Mano che impugna lo smartphone con l'app Tako" />
     </div>

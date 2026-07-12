@@ -1,11 +1,11 @@
 /* global React */
 /* tako-trial.jsx — pagina "Prova Gratis": hero = simulazione a tutto schermo
-   (iframe → Tako Showcase.html) con titolo + CTA sovrapposti, sezione benefici
+   (iframe → funzionalita.html) con titolo + CTA sovrapposti, sezione benefici
    "cosa include la prova", form di registrazione inline. Massimo movimento. */
 
 const { useState: tS, useEffect: tE, useRef: tR } = React;
 
-const TRIAL_LINK = 'Tako%20Demo.html';
+const TRIAL_LINK = 'demo.html';
 
 /* ─────────── reveal robusto (scroll + IO + in-view immediato + safety net) ───────────
    Il pannello di anteprima può "congelare" transition/animation e ritardare
@@ -74,15 +74,15 @@ function TrialNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   const links = [
-    { href: 'Tako%20Landing.html', label: 'Home' },
-    { href: 'Tako%20Landing.html#how', label: 'Come funziona' },
-    { href: 'Tako%20Landing.html', label: 'Lato ristoratore' },
-    { href: 'Tako%20Landing.html', label: 'Lato cliente' },
+    { href: 'home.html', label: 'Home' },
+    { href: 'home.html#how', label: 'Come funziona' },
+    { href: 'home.html', label: 'Lato ristoratore' },
+    { href: 'home.html', label: 'Lato cliente' },
   ];
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all ${scrolled ? 'glass-dark py-3' : 'py-5'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="Tako%20Landing.html" className="cursor-pointer flex items-center gap-2">
+        <a href="home.html" className="cursor-pointer flex items-center gap-2">
           <img src="assets/tako-chef.png" alt="Tako" style={{ width: 44, height: 44, objectFit: 'contain' }} className="logo-bob" />
           <span className="font-display font-black text-2xl tracking-tight" style={{ color: 'var(--ink)' }}>Tako</span>
         </a>
@@ -92,7 +92,7 @@ function TrialNav() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="Tako%20Landing.html" className="hidden md:inline-block font-bold text-[15px]" style={{ color: 'var(--ink)' }}>Accedi</a>
+          <a href="home.html" className="hidden md:inline-block font-bold text-[15px]" style={{ color: 'var(--ink)' }}>Accedi</a>
           <button onClick={() => smoothTo('form')} className="btn-coral px-5 py-2.5 text-[14px]">Prova gratis</button>
         </div>
       </div>
@@ -177,7 +177,7 @@ function HeroStage() {
   return (
     <section className={`sim-wrap ${revealed ? 'is-revealed' : 'is-idle'}`} id="hero" data-screen-label="Hero — Simulazione">
       <div className="sim-stage">
-        <iframe ref={frameRef} className="sim-frame" src={`Tako%20Showcase.html?sync&staged${mobile ? '&mobile' : ''}`} title="Simulazione Tako — dashboard interattiva e tavoli" loading="eager" scrolling="no" />
+        <iframe ref={frameRef} className="sim-frame" src={`funzionalita.html?sync&staged${mobile ? '&mobile' : ''}`} title="Simulazione Tako — dashboard interattiva e tavoli" loading="eager" scrolling="no" />
       </div>
 
       {!revealed && (

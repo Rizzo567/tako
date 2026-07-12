@@ -4,7 +4,7 @@
    chiama POST /api/auth/reset-password { token, password }. Gestisce
    successo / errore / token mancante o scaduto.
    SEC-013: la pagina che ospita questo componente imposta Referrer-Policy: no-referrer
-   (meta nell'head di Tako Pagine.html) per non perdere il token nel referrer. */
+   (meta nell'head di pagine.html) per non perdere il token nel referrer. */
 
 const { useState: rS, useEffect: rE } = React;
 
@@ -24,7 +24,7 @@ function ResetPasswordPage() {
   }, []);
 
   const fieldStyle = { borderColor: 'rgba(42,31,26,.16)', background: '#FFFDFB' };
-  const LANDING = (typeof window !== 'undefined' && window.LANDING_URL) || 'Tako%20Landing.html';
+  const LANDING = (typeof window !== 'undefined' && window.LANDING_URL) || 'home.html';
 
   const submit = async (e) => {
     e.preventDefault();

@@ -53,7 +53,7 @@ function AIAssistant() {
 
           <div className="phone w-[340px] mx-auto relative z-10">
             <div className="phone-screen" style={{ height: 680 }}>
-              <iframe src="Tako App.html?bare&demo" title="App Tako — assistente AI" loading="lazy" scrolling="no" className="ai-frame" style={{ width: '100%', height: '100%', border: 0, display: 'block' }} />
+              <iframe src="app.html?bare&demo" title="App Tako — assistente AI" loading="lazy" scrolling="no" className="ai-frame" style={{ width: '100%', height: '100%', border: 0, display: 'block' }} />
             </div>
           </div>
         </div>
@@ -148,7 +148,7 @@ function DashboardPreview() {
                 <span className="ml-3 text-xs font-bold" style={{ color: 'rgba(255,255,255,0.55)' }}>dashboard.tako.it · Trattoria da Nino</span>
               </div>
               <div ref={dashRef} style={{ position: 'relative', width: '100%', height: Math.round(1000 * dashScale), overflow: 'hidden', background: '#F2EBE2' }}>
-                <iframe src="Tako Dashboard.html?lockscroll" title="Dashboard Tako live" loading="lazy" scrolling="no" style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 1000, border: 0, pointerEvents: 'none', transformOrigin: 'top left', transform: 'scale(' + dashScale + ')' }} />
+                <iframe src="dashboard.html?lockscroll" title="Dashboard Tako live" loading="lazy" scrolling="no" style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 1000, border: 0, pointerEvents: 'none', transformOrigin: 'top left', transform: 'scale(' + dashScale + ')' }} />
               </div>
             </div>
           </div>
@@ -225,7 +225,7 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <a href="Tako%20Demo.html"
+              <a href="demo.html"
                 className={`block text-center py-3 rounded-full font-black border-2 transition`}
                 style={p.highlight
                   ? { background: 'white', color: 'var(--coral-deep)', borderColor: 'white' }
@@ -257,7 +257,7 @@ function Testimonials() {
         <>
           <span className="chip mb-4">Recensioni</span>
           <h2 className="text-4xl md:text-6xl">2.400 ristoratori,<br/><span className="grad-text">e contando.</span></h2>
-          <a href="Tako%20Pagine.html?p=blog" className="inline-flex items-center gap-2 mt-5 font-bold text-lg group" style={{ color: 'var(--coral-deep)' }}>
+          <a href="pagine.html?p=blog" className="inline-flex items-center gap-2 mt-5 font-bold text-lg group" style={{ color: 'var(--coral-deep)' }}>
             Vai alle recensioni
             <span aria-hidden style={{ transition: 'transform .2s' }} className="group-hover:translate-x-1">→</span>
           </a>
@@ -377,7 +377,7 @@ function Footer() {
             <div key={i}>
               <div className="font-display font-black mb-4">{c.t}</div>
               <ul className="space-y-2 text-sm opacity-70">
-                {c.items.map((it, j) => (<li key={j}><a href={`Tako%20Pagine.html?p=${it[1]}`} className="hover:opacity-100 hover:text-[color:var(--coral)] transition">{it[0]}</a></li>))}
+                {c.items.map((it, j) => (<li key={j}><a href={`pagine.html?p=${it[1]}`} className="hover:opacity-100 hover:text-[color:var(--coral)] transition">{it[0]}</a></li>))}
               </ul>
             </div>
           ))}
