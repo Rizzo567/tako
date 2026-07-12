@@ -96,6 +96,9 @@ let me: string | null = null
 // arriva con remoteJid = <nostro-lid>@lid invece del numero. Serve per riconoscerla.
 let myLid: string | null = null
 let allowedNumbers: string[] = []
+// Timer di riconnessione IN VOLO: vanno cancellati da stopWhatsApp, altrimenti un
+// /disable seguito da un reconnect schedulato riaccenderebbe il canale appena spento.
+let reconnectTimers: ReturnType<typeof setTimeout>[] = []
 
 // ID dei messaggi INVIATI da Tako: nella chat "messaggia te stesso" i nostri stessi
 // messaggi tornano come eventi fromMe → li filtriamo per ID per non rispondere a noi
@@ -160,6 +163,10 @@ export function setAllowedNumbers(numbers: string[]): string[] {
 
 export async function stopWhatsApp(): Promise<void> {
   writeConfig({ enabled: false })
+  // Annulla ogni riconnessione schedulata: senza questo un timer in volo (creato prima
+  // del /disable) riavvierebbe il canale subito dopo lo stop.
+  for (const t of reconnectTimers) clearTimeout(t)
+  reconnectTimers = []
   try {
     if (sock) {
       // logout NON viene chiamato di proposito: vogliamo poter riattivare senza riscansionare.
@@ -232,11 +239,20 @@ export async function startWhatsApp(): Promise<void> {
           lastQr = null
           clearAuthDir()
           if (readConfig().enabled) {
-            setTimeout(() => { startWhatsApp().catch(e => console.error('[whatsapp] restart post-logout fallito:', e)) }, 1500)
+            const timer = setTimeout(() => {
+              reconnectTimers = reconnectTimers.filter(t => t !== timer)
+              // Riparti solo se nel frattempo il canale non è stato disattivato.
+              if (readConfig().enabled === true) startWhatsApp().catch(e => console.error('[whatsapp] restart post-logout fallito:', e))
+            }, 1500)
+            reconnectTimers.push(timer)
           }
         } else if (readConfig().enabled) {
           // Disconnessione transitoria → riconnetti con le stesse creds.
-          setTimeout(() => { startWhatsApp().catch(e => console.error('[whatsapp] riconnessione fallita:', e)) }, 3000)
+          const timer = setTimeout(() => {
+            reconnectTimers = reconnectTimers.filter(t => t !== timer)
+            if (readConfig().enabled === true) startWhatsApp().catch(e => console.error('[whatsapp] riconnessione fallita:', e))
+          }, 3000)
+          reconnectTimers.push(timer)
         } else {
           me = null
         }

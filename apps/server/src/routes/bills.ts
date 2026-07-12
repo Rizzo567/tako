@@ -286,8 +286,11 @@ export async function billRoutes(fastify: FastifyInstance) {
     const tz = await restaurantTimezone(req.user!.restaurantId)
     const start = dayStartInTz(dayKeyInTz(new Date(), tz), tz)
     const closed = await db.select().from(bills).where(and(eq(bills.restaurantId, req.user!.restaurantId), eq(bills.status, 'closed'), gte(bills.closedAt!, start)))
-    const revenue = closed.reduce((s, b) => s + b.total, 0)
+    // La MANCIA è pass-through allo staff, NON ricavo del ristorante: escludila da incasso
+    // e ticket medio. total = subtotal − sconto + mancia + coperto → ricavo = total − mancia
+    // (mantiene il coperto, che è ricavo). La mancia resta esposta nel suo campo dedicato.
     const tips = closed.reduce((s, b) => s + (b.tip ?? 0), 0)
-    return { data: { revenue, tips, billsCount: closed.length, avgTicket: closed.length ? revenue / closed.length : 0 } }
+    const revenue = round2(closed.reduce((s, b) => s + (b.total - (b.tip ?? 0)), 0))
+    return { data: { revenue, tips, billsCount: closed.length, avgTicket: closed.length ? round2(revenue / closed.length) : 0 } }
   })
 }

@@ -35,6 +35,11 @@ async function healStaleLock(databaseDir: string): Promise<void> {
   // processo estraneo; senza questo check lo ucciamo per errore.
   const isPostgres = (pid: number) => {
     try {
+      if (process.platform === 'win32') {
+        // Windows non ha `ps`: interroga tasklist per il PID e controlla l'immagine.
+        const out = execFileSync('tasklist', ['/FI', `PID eq ${pid}`, '/FO', 'CSV', '/NH'], { encoding: 'utf8', timeout: 2000 })
+        return /postgres/i.test(out)
+      }
       const comm = execFileSync('ps', ['-p', String(pid), '-o', 'comm='], { encoding: 'utf8', timeout: 2000 })
       return /postgres|postmaster/i.test(comm)
     } catch { return false }
@@ -128,6 +133,16 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   await pg.start()
   console.log(`[db] Postgres embedded in ascolto su 127.0.0.1:${port}`)
 
+  // Handler di shutdown registrati SUBITO dopo start() (prima di createDatabase/migrate):
+  // se una fase successiva fallisce e il processo esce, Postgres viene comunque fermato e
+  // non resta un'istanza orfana che tiene la data dir + postmaster.pid stantio.
+  const stop = async () => {
+    try { await pg.stop() } catch { /* best-effort */ }
+  }
+  process.once('SIGINT', async () => { await stop(); process.exit(0) })
+  process.once('SIGTERM', async () => { await stop(); process.exit(0) })
+  process.once('beforeExit', stop)
+
   if (fresh) {
     try {
       await pg.createDatabase(database)
@@ -141,21 +156,22 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   const url = `postgresql://${user}:${password}@127.0.0.1:${port}/${database}`
   process.env['DATABASE_URL'] = url
 
-  // Migrazioni idempotenti: drizzle traccia quelle già applicate.
+  // Migrazioni idempotenti: drizzle traccia quelle già applicate. Se falliscono, chiudi
+  // Postgres PRIMA di rilanciare, così un fallimento di migrate() non lascia il DB orfano
+  // (gli handler di shutdown sono già registrati sopra, ma qui spegniamo in modo esplicito).
   const migrationClient = postgres(url, { max: 1 })
   try {
     await migrate(drizzle(migrationClient), { migrationsFolder: MIGRATIONS_DIR })
     console.log('[db] migrazioni applicate')
-  } finally {
-    await migrationClient.end()
-  }
-
-  const stop = async () => {
+  } catch (err) {
+    console.error('[db] migrazioni fallite, spengo Postgres embedded:', (err as Error)?.message ?? err)
+    try { await migrationClient.end() } catch { /* best-effort */ }
     try { await pg.stop() } catch { /* best-effort */ }
+    instance = null
+    throw err
+  } finally {
+    try { await migrationClient.end() } catch { /* best-effort */ }
   }
-  process.once('SIGINT', async () => { await stop(); process.exit(0) })
-  process.once('SIGTERM', async () => { await stop(); process.exit(0) })
-  process.once('beforeExit', stop)
 }
 
 /** Ferma il Postgres embedded (se attivo). Per spegnimento esplicito/test. */

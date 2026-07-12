@@ -5,6 +5,7 @@ import { api } from '@/lib/api'
 import { useSessionStore, useCartStore } from '@/lib/store'
 import { SPRING, EASE_OUT } from '@/lib/motion'
 import { I18nProvider, useI18n } from '@/lib/i18n'
+import { useOrderReadyNotifier } from '@/lib/useOrderReadyNotifier'
 import { MenuView } from './MenuView'
 import { CartView } from './CartView'
 import { OrderTracking } from './OrderTracking'
@@ -216,6 +217,8 @@ function CustomerShell({ token }: { token: string }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const reduce = useReducedMotion()
+  // Notifica "ordine pronto" a livello di shell: arriva anche mentre il cliente è su menu/chat.
+  useOrderReadyNotifier()
 
   useEffect(() => {
     api.get(`/customer/table/${token}`)

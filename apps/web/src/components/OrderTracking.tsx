@@ -1,8 +1,7 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Clock, Plus } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { socket, joinTable, joinOrder } from '@/lib/socket'
 import { useSessionStore } from '@/lib/store'
 import { api } from '@/lib/api'
@@ -20,13 +19,11 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const notifiedReady = useRef(false)
   const animTotal = useCountUp(order?.total ?? 0)
 
   useEffect(() => {
     if (!orderId) { setLoading(false); setOrder(null); return }
     setLoading(true); setError(false)
-    notifiedReady.current = false
     api.get(`/customer/orders/${orderId}`)
       .then(r => setOrder(r.data.data))
       .catch((e) => {
@@ -46,14 +43,9 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
     else joinOrder(orderId)
     const onUpdated = ({ orderId: oid, status }: { orderId: string; status: string }) => {
       if (oid !== orderId) return
+      // Solo rendering: il toast + Web Notification di "pronto" sono centralizzati nello
+      // shell (useOrderReadyNotifier), attivi anche quando questo componente è smontato.
       setOrder((o) => o ? { ...o, status } : o)
-      if (status === 'ready' && !notifiedReady.current) {
-        notifiedReady.current = true
-        toast.success(t('toastOrderReady'))
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('Il tuo ordine è pronto', { body: 'Il cameriere sta arrivando.' })
-        }
-      }
     }
     const onReconnect = () => {
       if (!orderId) return

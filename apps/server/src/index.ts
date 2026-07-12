@@ -68,13 +68,20 @@ export async function startServer(): Promise<void> {
   // "secure context" e sblocca getUserMedia (dettatura vocale). Cert self-signed locale
   // generato/persistito in ~/.tako/tls (vedi lib/tls.ts). Default OFF → dev e i test di
   // integrazione continuano su http://localhost:3001 invariati. Porta e resto identici.
-  const useHttps = httpsEnabled()
+  let useHttps = httpsEnabled()
   const fastifyOptions: FastifyServerOptions = { logger: { level: 'error' } }
   if (useHttps) {
     // `https` è passato a node https.createServer (key/cert Buffer). Lo attacchiamo via
     // cast: il tipo restituito resta l'istanza http di default → tutte le .register/.get
     // sotto mantengono un tipo uniforme, mentre a runtime nasce un server https/wss.
-    ;(fastifyOptions as FastifyServerOptions & { https: unknown }).https = ensureTlsMaterial()
+    // Se la preparazione del materiale TLS fallisce (openssl assente, permessi, cert
+    // corrotto), NON far crashare l'avvio: si ripiega su http così il server resta vivo.
+    try {
+      ;(fastifyOptions as FastifyServerOptions & { https: unknown }).https = ensureTlsMaterial()
+    } catch (err) {
+      console.warn('[tls] preparazione TLS fallita, ripiego su http:', (err as Error)?.message ?? err)
+      useHttps = false
+    }
   }
   const fastify = Fastify(fastifyOptions)
 

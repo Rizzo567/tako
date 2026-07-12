@@ -224,6 +224,9 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const { customerName, customerPhone, partySize, date, time, notes } = parsed.data
     const tz = await restaurantTimezone(restaurantId)
     const m = time.match(/^(\d{1,2}):(\d{2})$/)!
+    // La regex accetta ore>23 / minuti>59 ("29:99"): validali PRIMA di comporre startsAt,
+    // altrimenti l'orario traboccherebbe in un giorno successivo o assurdo.
+    if (parseInt(m[1]!, 10) > 23 || parseInt(m[2]!, 10) > 59) return reply.code(400).send({ error: { code: 'BAD_TIME', message: 'Orario non valido.' } })
     const dayStart = dayStartInTz(date, tz)
     if (isNaN(dayStart.getTime())) return reply.code(400).send({ error: { code: 'BAD_DATE', message: 'Data non valida.' } })
     const startsAt = new Date(dayStart.getTime() + (parseInt(m[1]!, 10) * 60 + parseInt(m[2]!, 10)) * 60_000)
@@ -276,7 +279,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const [rest] = await db.select({ name: restaurants.name, settings: restaurants.settings })
       .from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
     const rs = (rest?.settings ?? {}) as any
-    return { data: pub, features: { restaurantName: rest?.name ?? '', reservationsEnabled: rs.reservationsEnabled ?? false, reviewUrl: rs.reviewUrl || '' } }
+    return { data: pub, features: { restaurantName: rest?.name ?? '', reservationsEnabled: rs.reservationsEnabled ?? false, reviewUrl: (rs.reviewRequestEnabled && rs.reviewUrl) ? rs.reviewUrl : '' } }
   })
 
   // Submit order from customer.

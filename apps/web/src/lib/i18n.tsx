@@ -65,6 +65,7 @@ export const UI = {
   toastWaiter:      { it: 'Cameriere avvisato! 🔔', en: 'Waiter notified! 🔔', es: '¡Camarero avisado! 🔔', de: 'Kellner benachrichtigt! 🔔' },
   waiterError:      { it: 'Impossibile chiamare il cameriere. Riprova.', en: 'Could not call the waiter. Try again.', es: 'No se pudo llamar al camarero. Inténtalo de nuevo.', de: 'Kellner konnte nicht gerufen werden. Erneut versuchen.' },
   orderError:       { it: "Errore nell'invio. Riprova.", en: 'Sending failed. Try again.', es: 'Error al enviar. Inténtalo de nuevo.', de: 'Senden fehlgeschlagen. Erneut versuchen.' },
+  orderItemsUnavailable: { it: 'Alcuni piatti non sono più disponibili: aggiorna il carrello.', en: 'Some dishes are no longer available: update your cart.', es: 'Algunos platos ya no están disponibles: actualiza el carrito.', de: 'Einige Gerichte sind nicht mehr verfügbar: Warenkorb aktualisieren.' },
   // chat
   chatOnline:       { it: 'online · risponde subito', en: 'online · replies instantly', es: 'en línea · responde al instante', de: 'online · antwortet sofort' },
   chatPlaceholder:  { it: 'Scrivi un messaggio…', en: 'Write a message…', es: 'Escribe un mensaje…', de: 'Nachricht schreiben…' },

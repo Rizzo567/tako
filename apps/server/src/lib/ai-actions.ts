@@ -255,6 +255,13 @@ async function restaurantFlag(restaurantId: string, flag: string): Promise<boole
   return (row?.settings as any)?.[flag] === true
 }
 
+// Come restaurantFlag ma con default ON: attivo se il valore NON è esplicitamente false
+// (undefined/true = attivo). Per i flag ON-by-default come aiContentEnabled.
+async function restaurantFlagDefaultOn(restaurantId: string, flag: string): Promise<boolean> {
+  const [row] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+  return (row?.settings as any)?.[flag] !== false
+}
+
 // Normalizza un numero di telefono a sole cifre (chiave della fedeltà).
 function normalizePhone(v: unknown): string {
   return (v ?? '').toString().replace(/\D+/g, '')
@@ -533,7 +540,9 @@ const ACTIONS: ActionDef[] = [
     label: (a) => `Foto → "${a?.itemName ?? '?'}"`,
     execute: async (ctx, args) => {
       const url = String(args?.imageUrl ?? '').trim()
-      if (!url.startsWith('/uploads/')) return { ok: false, summary: 'Immagine non valida.' }
+      // Scope tenant + anti path-traversal: l'URL deve puntare alla cartella upload di
+      // QUESTO ristorante, mai a /uploads/<altroTenant>/ (IDOR) né risalire con '..'.
+      if (!url.startsWith('/uploads/' + ctx.restaurantId + '/') || url.includes('..')) return { ok: false, summary: 'Immagine non valida.' }
       const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
       if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo: specifica meglio).` }
       const [item] = await db.update(menuItems).set({ imageUrl: url, updatedAt: new Date() })
@@ -553,6 +562,7 @@ const ACTIONS: ActionDef[] = [
     parameters: { type: 'object', properties: { itemName: { type: 'string' }, style: { type: 'string', description: 'tono opzionale (es. "elegante", "informale", "gourmet")' } }, required: ['itemName'] },
     label: (a) => `Descrizione AI per "${a?.itemName ?? '?'}"`,
     execute: async (ctx, args) => {
+      if (!(await restaurantFlagDefaultOn(ctx.restaurantId, 'aiContentEnabled'))) return { ok: false, summary: 'La generazione AI dei contenuti è disattivata (Impostazioni → Funzionalità).' }
       const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
       if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo).` }
       let desc: string
@@ -580,6 +590,7 @@ const ACTIONS: ActionDef[] = [
     parameters: { type: 'object', properties: { itemName: { type: 'string' }, lang: { type: 'string', description: 'lingua target, es. "en", "de", "fr", "es"' } }, required: ['itemName', 'lang'] },
     label: (a) => `Traduci "${a?.itemName ?? '?'}" in ${a?.lang ?? '?'}`,
     execute: async (ctx, args) => {
+      if (!(await restaurantFlagDefaultOn(ctx.restaurantId, 'aiContentEnabled'))) return { ok: false, summary: 'La generazione AI dei contenuti è disattivata (Impostazioni → Funzionalità).' }
       const match = await resolveItem(ctx.restaurantId, args?.itemName, false)
       if (!match) return { ok: false, summary: `Piatto "${args?.itemName ?? ''}" non trovato (o nome ambiguo).` }
       const lang = String(args?.lang ?? '').toLowerCase().trim().slice(0, 5)
@@ -1175,10 +1186,13 @@ const ACTIONS: ActionDef[] = [
         inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready', 'served']),
       )).orderBy(desc(orders.createdAt)).limit(1)
       if (!current) return { ok: false, summary: `Nessun ordine attivo sul tavolo ${t.number}.` }
-      // stessa transizione della route PATCH /orders/:id/cancel
+      // stessa transizione della route PATCH /orders/:id/status: guardia ottimistica
+      // sullo stato letto (eq(orders.status, current.status)), così se l'ordine cambia
+      // tra select e update (pagato/servito da un altro operatore) l'update NON scatta.
       const [updated] = await db.update(orders).set({ status: 'cancelled', updatedAt: new Date() })
-        .where(and(eq(orders.id, current.id), eq(orders.restaurantId, ctx.restaurantId))).returning()
-      if (updated!.tableId) await recomputeOpenBill(ctx.restaurantId, updated!.tableId)
+        .where(and(eq(orders.id, current.id), eq(orders.restaurantId, ctx.restaurantId), eq(orders.status, current.status))).returning()
+      if (!updated) return { ok: false, summary: 'L\'ordine è cambiato nel frattempo, ricontrolla.' }
+      if (updated.tableId) await recomputeOpenBill(ctx.restaurantId, updated.tableId)
       io.to(`restaurant:${ctx.restaurantId}`).emit('order:updated', { orderId: current.id, status: 'cancelled' })
       if (updated!.tableId) io.to(`table:${updated!.tableId}`).emit('order:updated', { orderId: current.id, status: 'cancelled' })
       return { ok: true, data: { id: current.id }, summary: `Ordine del tavolo ${t.number} annullato (il conto è stato ricalcolato).` }
@@ -2333,9 +2347,12 @@ const CONFAB_SPEC: Record<string, { field: string; kind: ConfabKind; label: stri
     { field: 'name', kind: 'literal', label: 'nome del piatto' },
     { field: 'price', kind: 'money', label: 'prezzo' },
   ],
+  // I parametri reali dell'azione sono itemName + variantName (obbligatori) e
+  // priceModifier (OPZIONALE, default 0). I vecchi campi name/price non esistono →
+  // confabulatedFields li dava SEMPRE per mancanti, bloccando ogni creazione. Guardiamo
+  // solo variantName (nome semantico inventabile); priceModifier è opzionale → fuori dal confab.
   add_dish_variant: [
-    { field: 'name', kind: 'literal', label: 'nome della variante' },
-    { field: 'price', kind: 'money', label: 'prezzo' },
+    { field: 'variantName', kind: 'literal', label: 'nome della variante' },
   ],
   create_inventory_item: [
     { field: 'name', kind: 'literal', label: 'nome articolo' },
@@ -2381,7 +2398,9 @@ function textHasParty(t: string): boolean {
 // La stringa contiene un prezzo/importo? ("12", "12,50", "€12", "12 euro")
 function textHasMoney(t: string): boolean {
   const m = normalizeNumberWords((t || '').toLowerCase())
-  return /\d+(?:[.,]\d{1,2})?\s*(?:€|eur|euro)\b/.test(m) || /(?:€|eur|euro)\s*\d/.test(m) || /\d+[.,]\d{1,2}\b/.test(m) || /\ba\s+\d+\b/.test(m)
+  // intero senza simbolo ma vicino a una parola-prezzo ("a 6", "costa 6", "prezzo 6",
+  // "€6", "6 euro"): riconosce il prezzo intero senza allargare alle quantità ("3 porzioni").
+  return /\d+(?:[.,]\d{1,2})?\s*(?:€|eur|euro)\b/.test(m) || /(?:€|eur|euro)\s*\d/.test(m) || /\d+[.,]\d{1,2}\b/.test(m) || /\b(?:a|€|eur|euro|costa|costano|prezzo)\s*\d+/.test(m)
 }
 // Il valore (una o più parole) compare nel testo dell'utente? (>=3 char per parola)
 function textHasLiteral(val: unknown, t: string): boolean {

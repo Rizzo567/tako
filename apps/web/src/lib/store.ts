@@ -102,7 +102,13 @@ export const useSessionStore = create<SessionState>()(
       restaurantId: null, tableId: null, tableNumber: null,
       restaurantName: null, primaryColor: '#ED7159', aiEnabled: false, orderId: null,
       sessionId: null,
-      setSession: (data) => set(data),
+      // Se cambia il ristorante o il tavolo rispetto a quello corrente, azzera orderId:
+      // altrimenti l'ordine di una visita precedente riaffiorerebbe su un tavolo/locale diverso.
+      setSession: (data) => set((prev) => {
+        const changedScope = (data.restaurantId !== undefined && data.restaurantId !== prev.restaurantId)
+          || (data.tableId !== undefined && data.tableId !== prev.tableId)
+        return changedScope && data.orderId === undefined ? { ...data, orderId: null } : data
+      }),
       setOrderId: (id) => set({ orderId: id }),
     }),
     { name: 'tako-session' }

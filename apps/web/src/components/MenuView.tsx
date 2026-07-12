@@ -144,7 +144,7 @@ function ItemSheet({ item, open, onClose }: { item: PublicItem | null; open: boo
               <img src={item.imageUrl} alt="" className="h-full w-full object-cover object-center" />
             ) : (
               <span className="serif" style={{ fontSize: 90, color: 'rgba(255,255,255,.9)', lineHeight: 1 }}>
-                {item.name[0].toUpperCase()}
+                {(item.name.trim()[0] || '·').toUpperCase()}
               </span>
             )}
             {item.tags && item.tags.length > 0 && (

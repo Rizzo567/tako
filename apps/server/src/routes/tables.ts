@@ -37,7 +37,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
   fastify.post('/', { preHandler: requireAuth }, async (req, reply) => {
     const schema = z.object({
       number: z.string().min(1),
-      seats: z.number().default(4),
+      seats: z.number().int().min(1).max(50).default(4),
       roomId: z.string().uuid().optional(),
       shape: z.enum(['round', 'square', 'rectangle']).default('square'),
     })
@@ -52,7 +52,14 @@ export async function tableRoutes(fastify: FastifyInstance) {
     }
 
     const qrToken = nanoid(24)
-    const [table] = await db.insert(tables).values({ restaurantId: req.user!.restaurantId, qrToken, ...body.data }).returning()
+    let table
+    try {
+      [table] = await db.insert(tables).values({ restaurantId: req.user!.restaurantId, qrToken, ...body.data }).returning()
+    } catch (err: any) {
+      // UNIQUE(restaurantId, number) violato → 409 leggibile invece di un 500 generico.
+      if (err?.code === '23505') return reply.code(409).send({ error: { code: 'TABLE_NUMBER_TAKEN', message: 'Numero tavolo già in uso.' } })
+      throw err
+    }
     // Notifica gli altri dispositivi (Sala/Gestione Tavoli fanno refetch su 'table:updated').
     io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: table?.id ?? null })
     return reply.code(201).send({ data: table })
@@ -92,7 +99,14 @@ export async function tableRoutes(fastify: FastifyInstance) {
       return reply.code(400).send({ error: { code: 'VALIDATION', message: 'No fields to update' } })
     }
 
-    const [table] = await db.update(tables).set(updates).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).returning()
+    let table
+    try {
+      [table] = await db.update(tables).set(updates).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).returning()
+    } catch (err: any) {
+      // UNIQUE(restaurantId, number) violato (rinomina su un numero già usato) → 409 leggibile.
+      if (err?.code === '23505') return reply.code(409).send({ error: { code: 'TABLE_NUMBER_TAKEN', message: 'Numero tavolo già in uso.' } })
+      throw err
+    }
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
     // B2: la mappa sala deve aggiornarsi live su tutti i device staff quando cambia
     // la posizione di un tavolo (drag&drop).

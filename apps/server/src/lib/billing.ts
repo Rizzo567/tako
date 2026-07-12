@@ -61,32 +61,40 @@ export function dayEndInTz(dayKey: string, tz: string): Date {
 // ordini fatturabili. Va richiamata ad ogni evento che cambia gli importi:
 // nuovo ordine, annullamento, cambio voci. Ritorna il bill aggiornato o null.
 export async function recomputeOpenBill(restaurantId: string, tableId: string) {
-  // Conto aperto più VECCHIO del tavolo (coerente con ensureOpenBill): se per un
-  // qualsiasi motivo ne esistessero due, si opera sempre sullo stesso.
-  const [bill] = await db.select().from(bills)
-    .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open')))
-    .orderBy(bills.createdAt)
-    .limit(1)
-  if (!bill) return null
+  // Coperto unitario letto FUORI dalla transazione (le impostazioni cambiano di rado).
+  const unit = await coverUnit(restaurantId)
+  // Advisory lock per (ristorante,tavolo) — STESSA chiave di ensureOpenBill — così il
+  // read-modify-write sul conto è serializzato con gli altri writer concorrenti (ordini
+  // paralleli sullo stesso tavolo) e non si perdono aggiornamenti sugli importi.
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${restaurantId + ':' + tableId}))`)
+    // Conto aperto più VECCHIO del tavolo (coerente con ensureOpenBill): se per un
+    // qualsiasi motivo ne esistessero due, si opera sempre sullo stesso. Riletto SOTTO lock.
+    const [bill] = await tx.select().from(bills)
+      .where(and(eq(bills.restaurantId, restaurantId), eq(bills.tableId, tableId), eq(bills.status, 'open')))
+      .orderBy(bills.createdAt)
+      .limit(1)
+    if (!bill) return null
 
-  const activeOrders = await db.select({ total: orders.total }).from(orders)
-    .where(and(
-      eq(orders.restaurantId, restaurantId),
-      eq(orders.tableId, tableId),
-      inArray(orders.status, [...BILLABLE_STATUSES]),
-    ))
-  const subtotal = round2(activeOrders.reduce((s, o) => s + o.total, 0))
-  // Riclampa lo sconto al subtotale RICALCOLATO: se gli ordini vengono annullati e
-  // il subtotale scende sotto lo sconto salvato, senza riclamp il totale diventerebbe
-  // NEGATIVO. Persistiamo anche lo sconto clampato per coerenza.
-  const discount = Math.min(bill.discount ?? 0, subtotal)
-  // Coperto = coperti × unitario (dalle impostazioni). Nessuna colonna dedicata:
-  // entra solo nel totale (vedi coverUnit).
-  const coverCharge = round2((bill.covers ?? 1) * (await coverUnit(restaurantId)))
-  const total = round2(subtotal - discount + (bill.tip ?? 0) + coverCharge)
+    const activeOrders = await tx.select({ total: orders.total }).from(orders)
+      .where(and(
+        eq(orders.restaurantId, restaurantId),
+        eq(orders.tableId, tableId),
+        inArray(orders.status, [...BILLABLE_STATUSES]),
+      ))
+    const subtotal = round2(activeOrders.reduce((s, o) => s + o.total, 0))
+    // Riclampa lo sconto al subtotale RICALCOLATO: se gli ordini vengono annullati e
+    // il subtotale scende sotto lo sconto salvato, senza riclamp il totale diventerebbe
+    // NEGATIVO. Persistiamo anche lo sconto clampato per coerenza.
+    const discount = Math.min(bill.discount ?? 0, subtotal)
+    // Coperto = coperti × unitario (dalle impostazioni). Nessuna colonna dedicata:
+    // entra solo nel totale (vedi coverUnit).
+    const coverCharge = round2((bill.covers ?? 1) * unit)
+    const total = round2(subtotal - discount + (bill.tip ?? 0) + coverCharge)
 
-  await db.update(bills).set({ subtotal, discount, total }).where(eq(bills.id, bill.id))
-  return { ...bill, subtotal, discount, total }
+    await tx.update(bills).set({ subtotal, discount, total }).where(eq(bills.id, bill.id))
+    return { ...bill, subtotal, discount, total }
+  })
 }
 
 // Ricalcola subtotale/sconto/coperto/totale di un conto DENTRO una transazione già

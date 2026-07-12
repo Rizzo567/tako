@@ -11,6 +11,7 @@ import { OrderTracking } from './OrderTracking'
 import { AiChat } from './AiChat'
 import { Sheet } from './ui/Sheet'
 import { I18nProvider, useI18n } from '@/lib/i18n'
+import { useOrderReadyNotifier } from '@/lib/useOrderReadyNotifier'
 
 // ─────────────────── PWA ASPORTO / ORDINE-AHEAD (senza tavolo) ───────────────────
 // Flusso separato dal tavolo: apre una sessione 'takeaway' (cookie tako_table scoped
@@ -106,6 +107,8 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
   const [cartOpen, setCartOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // Notifica "ordine pronto" a livello di shell (asporto): arriva anche su menu/chat.
+  useOrderReadyNotifier()
 
   useEffect(() => {
     api.post(`/customer/takeaway/${restaurantId}/session`, {})

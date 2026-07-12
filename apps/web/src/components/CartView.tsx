@@ -32,7 +32,7 @@ function LineQty({ value, onChange }: { value: number; onChange: (n: number) => 
 
 export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrderPlaced: (orderId: string) => void }) {
   const { t } = useI18n()
-  const { items, updateQty, clear, total, ensureCheckoutKey } = useCartStore()
+  const { items, updateQty, remove, clear, total, ensureCheckoutKey } = useCartStore()
   const { restaurantId, tableId, tableNumber, setOrderId } = useSessionStore()
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
@@ -59,8 +59,18 @@ export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrde
       // Richiedi il permesso notifiche: il tracking avvisa quando l'ordine è pronto.
       try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission() } catch { /* noop */ }
       onOrderPlaced(data.data.id)
-    } catch {
-      toast.error(t('orderError'))
+    } catch (e: any) {
+      // 409 ITEM_UNAVAILABLE: alcuni piatti sono stati esauriti tra il caricamento del
+      // menu e l'invio. Il server risponde con la lista di menuItemId non più disponibili
+      // → li rimuoviamo dal carrello e mostriamo un messaggio chiaro (non un errore generico).
+      const err = e?.response?.data?.error
+      if (e?.response?.status === 409 && err?.code === 'ITEM_UNAVAILABLE') {
+        const ids: string[] = Array.isArray(err.items) ? err.items : []
+        for (const id of ids) remove(id)
+        toast.error(t('orderItemsUnavailable'))
+      } else {
+        toast.error(t('orderError'))
+      }
     } finally {
       setLoading(false)
     }
