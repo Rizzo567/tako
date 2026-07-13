@@ -1,0 +1,159 @@
+# Release Tako desktop — build firmato per macOS (arm64 + Intel) e Windows (x64),
+# artifact updater firmati (minisign), pubblicazione su Cloudflare per l'auto-update.
+#
+# Trigger: push di un tag vX.Y.Z. La versione DEVE combaciare con quella in
+# apps/app/src-tauri/tauri.conf.json (bump manuale del file + tag).
+#
+# Secrets richiesti (Settings → Secrets and variables → Actions):
+#   TAURI_SIGNING_PRIVATE_KEY            contenuto di tako-updater.key (firma updater, OBBLIGATORIO)
+#   TAURI_SIGNING_PRIVATE_KEY_PASSWORD   password della key ("" se senza password)
+#   CLOUDFLARE_API_TOKEN                 token con permesso R2 write (per pubblicare gli update)
+#   CLOUDFLARE_ACCOUNT_ID                account id Cloudflare
+# Opzionali (se assenti → build non firmata dall'OS, updater funziona comunque):
+#   macOS  : APPLE_CERTIFICATE, APPLE_CERTIFICATE_PASSWORD, APPLE_SIGNING_IDENTITY,
+#            APPLE_ID, APPLE_PASSWORD, APPLE_TEAM_ID
+#   Windows: (Authenticode) configurabile in seguito via signCommand nel bundle.
+
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: macos-14, target: aarch64-apple-darwin, os: mac }
+          - { runner: macos-13, target: x86_64-apple-darwin, os: mac }
+          - { runner: windows-latest, target: x86_64-pc-windows-msvc, os: win }
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: apps/app/src-tauri
+
+      - name: Install deps (workspace)
+        run: pnpm install --frozen-lockfile
+
+      # Bundle server autosufficiente: node del runner (arch giusta) + Postgres
+      # embedded (npm scarica il binario per la piattaforma) + web cliente Next.
+      - name: Build server bundle
+        run: node scripts/build-server-bundle.mjs
+
+      - name: Tauri build (firmato updater)
+        run: pnpm --filter app exec tauri build --target ${{ matrix.target }}
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          # macOS notarization (usati solo se i secrets esistono):
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          mkdir -p dist
+          B="apps/app/src-tauri/target/${{ matrix.target }}/release/bundle"
+          if [ "${{ matrix.os }}" = "mac" ]; then
+            # Il bundle updater di Tauri su macOS è "<ProductName>.app.tar.gz" SENZA
+            # arch nel nome: arm64 (macos-14) e Intel (macos-13) produrrebbero lo
+            # stesso file e, appiattendo gli artifact nel job publish, uno
+            # sovrascriverebbe l'altro. Inseriamo l'arch nel nome così i file
+            # restano univoci e make-latest-json riconosce la piattaforma.
+            arch="${{ matrix.target }}"   # es. aarch64-apple-darwin / x86_64-apple-darwin
+            archshort="${arch%%-*}"       # aarch64 | x86_64
+            for f in "$B"/macos/*.app.tar.gz; do
+              [ -e "$f" ] || continue
+              base="$(basename "$f" .app.tar.gz)"
+              cp "$f"      "dist/${base}-${archshort}.app.tar.gz"
+              cp "$f.sig"  "dist/${base}-${archshort}.app.tar.gz.sig" 2>/dev/null || true
+            done
+            # I DMG di Tauri contengono già arch+versione nel nome → nessuna collisione.
+            cp "$B"/dmg/*.dmg dist/ 2>/dev/null || true
+          else
+            # NSIS: il nome contiene già versione+arch (x64) → univoco per piattaforma.
+            cp "$B"/nsis/*.nsis.zip     dist/ 2>/dev/null || true
+            cp "$B"/nsis/*.nsis.zip.sig dist/ 2>/dev/null || true
+            cp "$B"/nsis/*-setup.exe    dist/ 2>/dev/null || true
+          fi
+          ls -la dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: collected
+
+      - name: Flatten artifacts
+        shell: bash
+        run: |
+          mkdir -p dist
+          find collected -type f -exec cp {} dist/ \;
+          ls -la dist
+
+      - name: Build latest.json
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          node scripts/make-latest-json.mjs dist "$VERSION" "https://updates.takoitalia.com"
+          cat dist/latest.json
+
+      # Pubblica su R2 SOLO se i secret Cloudflare esistono. Senza (modello USB
+      # hands-on), gli installer restano scaricabili dagli artifact del run.
+      - name: Publish to Cloudflare R2
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "⏭  CLOUDFLARE_API_TOKEN assente → salto la pubblica su R2."
+            echo "   Scarica gli installer dagli Artifacts di questo run (modello USB)."
+            exit 0
+          fi
+          for f in dist/*; do
+            name="$(basename "$f")"
+            echo "▶ upload $name"
+            npx --yes wrangler@3 r2 object put "tako-updates/$name" --file "$f" --remote
+          done
+
+      # Rendi gli installer scaricabili direttamente dal run (per install da chiavetta).
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installers
+          path: |
+            dist/*.dmg
+            dist/*-setup.exe
+          if-no-files-found: warn

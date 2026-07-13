@@ -28,6 +28,12 @@ tauri-plugin-http = "2"
 # Postgres embedded (due server sullo stesso pgdata). La 2ª istanza esce subito
 # e porta in primo piano la finestra già aperta.
 tauri-plugin-single-instance = "2"
+# Auto-update in-app: controlla all'avvio un latest.json su Cloudflare, verifica la
+# firma minisign e installa+riavvia su conferma dell'owner. Firma updater = GRATIS
+# (keypair minisign locale), separata dai certificati OS a pagamento.
+tauri-plugin-updater = "2"
+# Dialogo nativo per chiedere all'owner se installare l'aggiornamento ora.
+tauri-plugin-dialog = "2"
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
