@@ -9,7 +9,8 @@ export const inventoryItems = pgTable('inventory_items', {
   name: text('name').notNull(),
   unit: text('unit').notNull(),
   quantity: real('quantity').default(0).notNull(),
-  minQuantity: real('min_quantity').default(0).notNull(),
+  minQuantity: real('min_quantity').default(0).notNull(),   // soglia di alert (sotto = da riordinare)
+  parLevel: real('par_level'),                              // scorta obiettivo: quanto riportare a magazzino al riordino
   costPerUnit: money('cost_per_unit'),
   supplier: text('supplier'),
   active: boolean('active').default(true).notNull(),

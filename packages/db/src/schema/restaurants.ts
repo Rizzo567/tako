@@ -43,4 +43,17 @@ export type RestaurantSettings = {
   aiPhotoEnabled?: boolean               // foto piatto stilizzata AI (base/flash) — richiede GEMINI_API_KEY
   aiPhotoProCode?: string                // codice Pro firmato (Ed25519) → sblocca il modello Nano Banana Pro
   menuEngineeringEnabled?: boolean       // analisi menu engineering (default ON)
+  // ── Coperto / cassa / UX ──
+  coverCharge?: number                   // coperto a persona (€)
+  coverChargeEnabled?: boolean           // coperto attivo
+  suggestedTips?: boolean                // mostra mance suggerite in cassa
+  orderSounds?: boolean                  // suoni nuovi ordini
+  autoConfirm?: boolean                  // ordini cliente nascono già 'confirmed'
+  kdsWarnMinutes?: number                // KDS: soglia "in ritardo" (warn)
+  kdsLateMinutes?: number                // KDS: soglia "molto in ritardo"
+  kdsCompact?: boolean                   // KDS layout compatto
+  showOnboarding?: boolean               // mostra la checklist di onboarding
+  // ── Resilienza rete ──
+  qrMode?: 'lan' | 'cloud'               // QR tavolo: 'lan' (default, tako.local, resiliente a internet giù) | 'cloud' (resolver pubblico)
+  customerOrderingEnabled?: boolean      // self-service ordini cliente (default ON); spegnilo se la rete non regge → menu in sola lettura
 }
