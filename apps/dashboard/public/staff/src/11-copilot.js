@@ -198,11 +198,13 @@
           Conferma richiesta
         </div>
         <div style={{ fontSize: 14.5, fontWeight: 600, color: "var(--ink,#2A1F1A)" }}>{item.label}</div>
-        {state === "done" || state === "error"
-          ? <div style={{ marginTop: 8, fontSize: 13, color: state === "error" ? "var(--danger,#d9533a)" : "var(--ink-2,#6a5f56)" }}>{msg}</div>
+        {state === "done" || state === "error" || state === "cancelled"
+          ? <div style={{ marginTop: 8, fontSize: 13, display: "flex", alignItems: "center", gap: 6, color: state === "error" ? "var(--danger,#d9533a)" : state === "cancelled" ? "var(--ink-3,#9a8f86)" : "var(--ink-2,#6a5f56)" }}>
+              {state === "cancelled" && <Icon name="x" size={14} />}{state === "cancelled" ? "Annullato" : msg}
+            </div>
           : (
             <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-              <button onClick={() => setState("done")} disabled={state === "running"}
+              <button onClick={() => { setState("cancelled"); if (window.toast) toast("Annullato", { type: "info" }); }} disabled={state === "running"}
                 style={{ flex: "0 0 auto", padding: "9px 14px", borderRadius: 11, border: "1px solid var(--hairline,#e6ded6)", background: "var(--surface,#fff)", color: "var(--ink-2,#6a5f56)", fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}>
                 Annulla
               </button>
@@ -533,14 +535,22 @@
         try { window.takoGo && window.takoGo(tgt); } catch (_) {}
         setOverlay(null); animRef.current = false;
         onExpandEnd && onExpandEnd();
+        // NB: lo slide-in della sidebar sinistra parte all'INIZIO dell'espansione
+        // (in flipExpand), non qui: così sidebar + overlay si muovono insieme.
       };
-      const flipExpand = () => {                 // fase 3 → espansione FLIP full-page
+      const flipExpand = () => {                 // fase 3 → espansione FLIP nell'area main
         const el = cardRef.current;
         if (!el) { finish(); return; }
         const r = el.getBoundingClientRect();    // rect nella posizione in alto
-        const vw = window.innerWidth, vh = window.innerHeight;
-        const start = `translate(${r.left}px, ${r.top}px) scale(${r.width / vw}, ${r.height / vh})`;
-        setOverlay({ start, grown: false });
+        // Espande nel RETTANGOLO del <main> (area destra), NON a tutto lo schermo: a fine
+        // espansione l'overlay combacia pixel-a-pixel con la schermata reale, quindi la
+        // parte destra non "scatta" da full-width a larghezza-con-sidebar. La sidebar
+        // sinistra scivola dentro CONTEMPORANEAMENTE nella sua striscia a sinistra.
+        const mainEl = document.querySelector("main");
+        const m = mainEl ? mainEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+        const start = `translate(${r.left - m.left}px, ${r.top - m.top}px) scale(${r.width / m.width}, ${r.height / m.height})`;
+        setOverlay({ start, grown: false, box: { left: m.left, top: m.top, width: m.width, height: m.height } });
+        try { window.dispatchEvent(new Event("tako-nav-slidein")); } catch (_) {} // sidebar in parallelo
         requestAnimationFrame(() => requestAnimationFrame(() => setOverlay((o) => (o ? { ...o, grown: true } : o))));
         setTimeout(finish, 470);
       };
@@ -609,11 +619,11 @@
             → anima a inset:0. Espansione GEOMETRICA PURA: transita solo transform e
             border-radius, nessuna opacity/fade/ombra. */}
         {overlay && ReactDOM.createPortal(
-          <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: 300, transformOrigin: "top left",
+          <div style={{ position: "fixed", left: overlay.box.left, top: overlay.box.top, width: overlay.box.width, height: overlay.box.height, zIndex: 300, transformOrigin: "top left",
             overflow: "hidden", background: "var(--bg,#FAF9F5)", borderRadius: overlay.grown ? 0 : 12,
             transform: overlay.grown ? "none" : overlay.start,
             transition: "transform .45s cubic-bezier(.22,.9,.24,1), border-radius .45s ease" }}>
-            <div style={{ width: "100vw", height: "100vh", overflow: "hidden", display: "flex", flexDirection: "column", pointerEvents: "none" }}>
+            <div style={{ width: overlay.box.width, height: overlay.box.height, overflow: "hidden", display: "flex", flexDirection: "column", pointerEvents: "none" }}>
               <PreviewBoundary fallback={<PreviewPlaceholder text="Anteprima non disponibile" />}>
                 {renderTarget()}
               </PreviewBoundary>
@@ -650,6 +660,9 @@
       } finally { setImgBusy(false); }
     };
     const [busy, setBusy] = useState(false);
+    // Transizione "primo messaggio": tiene il layout vuoto per ~460ms mentre i suggerimenti
+    // si dissolvono e la barra slitta in basso, poi passa alla chat attiva.
+    const [leaving, setLeaving] = useState(false);
     const [dictState, setDictState] = useState("idle"); // idle | rec | busy
     const [drawer, setDrawer] = useState(false);         // pannello storico su mobile
     const [streamExpanding, setStreamExpanding] = useState(false); // anteprima Streaming in espansione (desktop)
@@ -703,6 +716,8 @@
       const text = (override != null ? override : input).trim();
       const img = attachedImage;
       if ((!text && !img) || busy) return;
+      // Primo messaggio: si passa direttamente al layout chat (barra in basso), senza
+      // animazione di transizione.
       setInput("");
       setAttachedImage(null);
       // History = conversazione PRECEDENTE (senza il messaggio corrente: il server
@@ -823,7 +838,28 @@
     const hasConvo = messages.some((m) => m.role === "user");
     const hour = new Date().getHours();
     const greet = hour < 12 ? "Buongiorno" : hour < 18 ? "Buon pomeriggio" : "Buonasera";
-    const owner = (window.RESTAURANT && (RESTAURANT.owner || RESTAURANT.name)) || "";
+    // Suggerimenti DINAMICI: le richieste più frequenti fatte dal ristoratore in cowork
+    // (aggregate dallo storico chat locale). Sotto una certa soglia usa i default.
+    const freqSug = (() => {
+      try {
+        const counts = new Map();
+        (store.sessions || []).forEach((s) => (s.messages || []).forEach((m) => {
+          if (!m || m.role !== "user") return;
+          const t = String(m.content || "").trim();
+          if (t.length < 5 || t.length > 72 || t.startsWith("📷")) return;
+          const k = t.toLowerCase().replace(/\s+/g, " ");
+          const e = counts.get(k) || { text: t, n: 0 };
+          e.n += 1; counts.set(k, e);
+        }));
+        const arr = [...counts.values()].sort((a, b) => b.n - a.n).map((e) => e.text);
+        return arr.length >= 3 ? arr.slice(0, 5) : SUGGESTIONS;
+      } catch (_) { return SUGGESTIONS; }
+    })();
+    // Saluto rivolto all'UTENTE loggato (nome per ruolo), non al nome del ristorante:
+    // "Buonasera, Marco" e non "Buonasera, Pizzeria da Marco".
+    const _role = window.__takoRole || "owner";
+    const _uname = (window.ROLES && ROLES[_role] && ROLES[_role].name) || "";
+    const owner = (_uname && _uname !== "—") ? _uname.split(" ")[0] : "";
     const canSend = (!!input.trim() || !!attachedImage) && !busy;
 
     // Composer stile Claude: box arrotondato, textarea, mic a sinistra, invio a destra.
@@ -879,7 +915,7 @@
     );
 
     // Area chat vera e propria (condivisa desktop/mobile).
-    const chatArea = hasConvo ? (
+    const chatArea = (hasConvo && !leaving) ? (
       <>
         <div ref={scrollRef} style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: mobile ? "16px" : "24px 24px 8px" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
@@ -908,8 +944,8 @@
       </>
     ) : (
       <div style={{ flex: 1, minHeight: 0, overflowY: "auto", display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center", padding: mobile ? "24px 16px" : "24px", gap: 8 }}>
-        <div style={{ textAlign: "center", marginBottom: 26 }}>
+        alignItems: "center", justifyContent: "center", padding: mobile ? "24px 16px" : "24px", gap: 8, pointerEvents: leaving ? "none" : "auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 26, transition: "opacity .24s ease, transform .34s cubic-bezier(.4,0,1,1)", opacity: leaving ? 0 : 1, transform: leaving ? "translateY(-22px) scale(.96)" : "none" }}>
           <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
             style={{ width: 80, height: 80, objectFit: "contain", margin: "0 auto 16px", filter: "drop-shadow(0 10px 20px rgba(42,31,26,.18))" }} />
           <h1 style={{ fontSize: mobile ? 27 : 34, fontWeight: 400, color: "var(--ink,#2A1F1A)", letterSpacing: "-.5px", lineHeight: 1.1 }}>
@@ -925,9 +961,9 @@
             )}
           </h1>
         </div>
-        {composer}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginTop: 8, maxWidth: 640 }}>
-          {SUGGESTIONS.map((s) => (
+        <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>{composer}</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginTop: 8, maxWidth: 640, transition: "opacity .18s ease, transform .24s cubic-bezier(.4,0,1,1), filter .2s", opacity: leaving ? 0 : 1, transform: leaving ? "translateY(22px) scale(.9)" : "none", filter: leaving ? "blur(3px)" : "none" }}>
+          {freqSug.map((s) => (
             <button key={s} onClick={() => send(s)}
               style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", fontSize: 13.5,
                 color: "var(--ink-2,#6a5f56)", background: "transparent", border: "1px solid var(--hairline,#e6ded6)",

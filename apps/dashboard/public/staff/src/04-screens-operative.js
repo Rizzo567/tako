@@ -85,7 +85,7 @@ function CoworkCard({ go, entering }) {
    Stati: "setup" (checklist) · "celebrate" (coriandoli + pop-out) · "cowork".
    Se il setup è GIÀ completo al mount → parte diretto su "cowork" (nessuna festa).
    Quando l'ultima spunta si completa in sessione (allDone: false→true) → festa. */
-function SetupSlot({ go, setupDone, allDone }) {
+function SetupSlot({ go, setupDone, allDone, role = "owner" }) {
   const [phase, setPhase] = useState(() => (allDone ? "cowork" : "setup"));
   const prevAllDone = useRef(allDone);
   useEffect(() => {
@@ -98,7 +98,11 @@ function SetupSlot({ go, setupDone, allDone }) {
     return () => clearTimeout(t);
   }, [phase]);
 
-  if (phase === "cowork") return <CoworkCard go={go} entering={prevAllDone.current === true && phase === "cowork"} />;
+  // Il Cowork (copilot owner) è riservato al titolare: ai non-owner non mostriamo la card
+  // (e go('cowork') è comunque bloccato lato App). Setup completo + non-owner → niente card.
+  if (phase === "cowork") return role === "owner"
+    ? <CoworkCard go={go} entering={prevAllDone.current === true && phase === "cowork"} />
+    : null;
 
   const leaving = phase === "celebrate";
   return (
@@ -127,8 +131,13 @@ function SetupSlot({ go, setupDone, allDone }) {
 }
 
 /* ═══════════════════ DASHBOARD HOME ═══════════════════ */
-function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
+function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, role = "owner" }) {
   const active = orders.filter(o => !["servito", "pagato", "annullato"].includes(o.stato)).length;
+  // Saluto derivato dall'ora + nome dell'utente loggato per il suo ruolo (non fisso su owner).
+  const _hour = new Date().getHours();
+  const _greet = _hour < 12 ? "Buongiorno" : _hour < 18 ? "Buon pomeriggio" : "Buonasera";
+  const _r = (ROLES[role] || ROLES.owner);
+  const _first = (_r.name && _r.name !== "—") ? _r.name.split(" ")[0] : "";
   const setupDone = SETUP.filter(s => s.done).length;
   const allDone = setupDone === SETUP.length;
   const incomplete = settings.mostraOnboarding;
@@ -155,7 +164,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18, padding: "0" }}>
           <Tako pose="hello" size={78} />
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 900 }}>Buonasera, {ROLES.owner.name.split(" ")[0]}!</h1>
+            <h1 style={{ fontSize: 26, fontWeight: 900 }}>{_greet}{_first ? ", " + _first : ""}!</h1>
             <p style={{ fontSize: 14, color: "var(--ink-2)", marginTop: 4 }}>{settings.nome} · {new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })}</p>
           </div>
           <span style={{ marginLeft: "auto" }}><Badge tone="ok" dot>Servizio in corso</Badge></span>
@@ -178,7 +187,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS }) {
         </Card>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {incomplete && <SetupSlot go={go} setupDone={setupDone} allDone={allDone} />}
+          {incomplete && <SetupSlot go={go} setupDone={setupDone} allDone={allDone} role={role} />}
           <Card pad={18}>
             <h3 style={{ fontSize: 16, marginBottom: 12 }}>Scorciatoie</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }}>

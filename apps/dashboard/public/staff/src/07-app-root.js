@@ -178,7 +178,17 @@ function App({ session }) {
   const [calls, setCalls] = useState([]);
   const [, setTick] = useState(0);
   const [dataVersion, setDataVersion] = useState(0);
+  // Stato INTERNET del Mac (non della LAN): guida il badge globale "Offline".
+  const [online, setOnline] = useState(true);
   const bump = () => setTick((t) => t + 1);
+
+  // Stato iniziale connettività internet: fetch una tantum, poi aggiornato live
+  // dall'evento socket `connectivity`. Il core resta usabile: è solo un avviso.
+  useEffect(() => {
+    let alive = true;
+    TakoAPI.get("/system/connectivity").then((d) => { if (alive && d) setOnline(d.online !== false); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
 
   // refresh globale + navigazione richiamabili dalle schermate
   useEffect(() => {
@@ -195,7 +205,12 @@ function App({ session }) {
   useEffect(() => { const onR = () => setFrame(window.innerWidth < 900 ? "mobile" : "desktop"); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, []);
   useEffect(() => { const allow = ROLE_ACCESS[role]; if (allow && !allow.includes(route)) setRoute(ROLE_HOME[role]); }, [role]);
 
-  const go = (id) => { setRoute(id); setDrawer(false); };
+  const go = (id) => {
+    // Guardia ruolo: il Cowork (copilot owner) è owner-only. Un non-owner che tenta
+    // go('cowork') (es. da una scorciatoia) viene rediretto alla sua home, non aperto.
+    if (id === "cowork" && role !== "owner") id = ROLE_HOME[role] || "dashboard";
+    setRoute(id); setDrawer(false);
+  };
   const playBeep = () => { try { const ac = new (window.AudioContext || window.webkitAudioContext)(); const o = ac.createOscillator(), g = ac.createGain(); o.connect(g); g.connect(ac.destination); o.type = "sine"; o.frequency.value = 880; g.gain.setValueAtTime(0.0001, ac.currentTime); g.gain.exponentialRampToValueAtTime(0.18, ac.currentTime + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.25); o.start(); o.stop(ac.currentTime + 0.26); } catch (_) {} };
 
   // ── refresh dati dal backend ──
@@ -220,6 +235,7 @@ function App({ session }) {
       else if (ev === "menu:updated" || ev === "menu:item_availability") { loadAll().then(bump); }
       else if (ev === "inventory:alert") { loadAll().then(bump); if (window.toast) toast(`Scorta bassa · ${p.name}`, { type: "warn" }); }
       else if (ev === "reservation:changed") { setDataVersion((v) => v + 1); }
+      else if (ev === "connectivity") { setOnline(!!(p && p.online)); }
     });
     return () => { try { s && s.disconnect(); } catch (_) {} };
   }, []);
@@ -272,7 +288,8 @@ function App({ session }) {
                   autoStockDeductEnabled: !!next.scaricoAuto, dailyBriefingEnabled: !!next.briefingWa,
                   dailyBriefingHour: Number(next.briefingOra) || 9, aiContentEnabled: !!next.aiContenuti,
                   aiPhotoEnabled: !!next.fotoAi, aiPhotoProCode: next.fotoAiCodice || "",
-                  menuEngineeringEnabled: !!next.menuEngineering } });
+                  menuEngineeringEnabled: !!next.menuEngineering,
+                  customerOrderingEnabled: next.ordiniClienti !== false, qrMode: next.qrMode === "cloud" ? "cloud" : "lan" } });
       toast("Impostazioni salvate", { type: "success" }); } catch (e) { toast(e.message, { type: "error" }); }
   };
 
@@ -290,8 +307,8 @@ function App({ session }) {
 
   let Screen;
   switch (route) {
-    case "cowork": Screen = window.ScreenCowork ? React.createElement(window.ScreenCowork, { key: "cowork", mobile }) : null; break;
-    case "dashboard": Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} />; break;
+    case "cowork": Screen = (role === "owner" && window.ScreenCowork) ? React.createElement(window.ScreenCowork, { key: "cowork", mobile }) : <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />; break;
+    case "dashboard": Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />; break;
     case "ordini": Screen = <ScreenOrdini mobile={mobile} orders={orders} onConfirm={onConfirm} onServe={onServe} onCancel={onCancel} go={go} />; break;
     case "kds": Screen = <ScreenKDS mobile={mobile} orders={orders} onAdvanceItem={onAdvanceItem} onBump={onBump} settings={settings} />; break;
     case "cassa": Screen = <ScreenCassa mobile={mobile} bills={bills} onClose={onCloseBill} settings={settings} />; break;
@@ -309,7 +326,7 @@ function App({ session }) {
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
     case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} brand={brand} setBrand={onSetBrand} settings={settings} setSettings={onSaveSettings} />; break;
     case "collega": Screen = <ScreenCollega mobile={mobile} />; break;
-    default: Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} />;
+    default: Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />;
   }
 
   const p = BRAND_PALETTES[brand] || BRAND_PALETTES.arancione;
@@ -318,6 +335,14 @@ function App({ session }) {
   return (
     <TakoCtx.Provider value={brand}>
       <WindowDragStrip />
+      {!online && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, display: "flex", justifyContent: "center", pointerEvents: "none", paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}>
+          <div style={{ pointerEvents: "auto", display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 15px", borderRadius: 99, background: "var(--danger)", color: "#fff", fontSize: 13, fontWeight: 700, boxShadow: "0 8px 24px rgba(0,0,0,.20)" }}>
+            <Icon name="alert" size={16} stroke={2.4} />
+            Offline — funzioni internet non disponibili
+          </div>
+        </div>
+      )}
       {mobile ? (
         <div className="screen app-live mobile" style={{ ...brandVars, width: "100vw", height: "100vh" }}>
           <div style={{ width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--surface)" }}>

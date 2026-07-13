@@ -53,6 +53,8 @@ const SETTINGS_DEFAULTS = {
   mostraOnboarding: true, kpi: { incasso: true, ordini: true, ticket: true, coperti: true },
   valuta: "EUR", iva: 10, fuso: "Europe/Rome", lingue: ["IT", "EN", "FR"], linguaDefault: "IT",
   printerIp: "", printerPort: "9100",
+  // rete / connessione
+  ordiniClienti: true, qrMode: "lan",
 };
 
 /* dati dinamici (riempiti dal backend) — forme identiche al prototipo */
@@ -68,6 +70,11 @@ const ORD_DB2UI = { pending:"attesa", confirmed:"confermato", preparing:"prep", 
 const ORD_UI2DB = { attesa:"pending", confermato:"confirmed", prep:"preparing", pronto:"ready", servito:"served", pagato:"paid", annullato:"cancelled" };
 const ITEM_DB2UI = { pending:"attesa", preparing:"prep", ready:"pronto", served:"servito" };
 const ITEM_UI2DB = { attesa:"pending", prep:"preparing", pronto:"ready", servito:"served" };
+// L'enum DB dei tavoli è ['free','occupied','waiting','cleaning','reserved']: NON esiste
+// uno stato "ready"/"pronto" lato server. "pronto" è quindi un overlay SOLO-UI (derivato
+// dagli ordini pronti) che, se persistito, ricade su "occupied" e NON fa round-trip:
+// dopo un refresh un tavolo "pronto" torna "occupato". Limite noto e voluto finché il
+// backend non aggiunge lo stato dedicato — non c'è mappatura inversa possibile per "pronto".
 const TBL_DB2UI = { free:"libero", occupied:"occupato", waiting:"attesa", cleaning:"pulizia", reserved:"prenotato" };
 const TBL_UI2DB = { libero:"free", occupato:"occupied", attesa:"waiting", pulizia:"cleaning", prenotato:"reserved", pronto:"occupied" };
 const TYPE_DB2UI = { table:"tavolo", takeaway:"asporto" };
@@ -212,6 +219,9 @@ async function loadAll() {
       fotoAi: rest.settings?.aiPhotoEnabled ?? false,
       fotoAiCodice: rest.settings?.aiPhotoProCode || "",
       menuEngineering: rest.settings?.menuEngineeringEnabled ?? true,
+      // rete / connessione
+      ordiniClienti: rest.settings?.customerOrderingEnabled ?? true,
+      qrMode: rest.settings?.qrMode || "lan",
     });
   }
   ORDERS = (active || []).map(mapOrder);
@@ -272,7 +282,7 @@ function connectSocket(restaurantId, onEvent) {
     _firstConnect = false;
   });
   const fwd = (ev) => _socket.on(ev, (p) => onEvent(ev, p));
-  ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","inventory:alert","reservation:changed"].forEach(fwd);
+  ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","inventory:alert","reservation:changed","connectivity"].forEach(fwd);
   return _socket;
 }
 
@@ -296,6 +306,13 @@ const TakoActions = {
   invCreate: (fields) => TakoAPI.post(`/inventory`, fields),
   invImportText: (text) => TakoAPI.post(`/inventory/import-text`, { text }),
   invImportConfirm: (items) => TakoAPI.post(`/inventory/import-confirm`, { items }),
+  // inventario — gestionale magazzino (letture ricche + modifica/elimina/storico)
+  inventoryList: () => TakoAPI.get(`/inventory`),
+  inventoryStats: () => TakoAPI.get(`/inventory/stats`),
+  inventoryReorder: () => TakoAPI.get(`/inventory/reorder`),
+  inventoryMovements: (itemId) => TakoAPI.get(`/inventory/${itemId}/movements`),
+  inventoryUpdate: (itemId, fields) => TakoAPI.patch(`/inventory/${itemId}`, fields),
+  inventoryDelete: (itemId) => TakoAPI.del(`/inventory/${itemId}`),
   // staff
   staffCreate: (fields) => TakoAPI.post(`/staff`, fields),
   staffUpdate: (id, fields) => TakoAPI.patch(`/staff/${id}`, fields),
@@ -309,6 +326,9 @@ const TakoActions = {
   tableQrRefresh: (id) => TakoAPI.post(`/tables/${id}/qr/refresh`),
   // info rete: IP LAN corrente + base URL cliente usata nei QR (segue il WiFi)
   systemInfo: () => TakoAPI.get(`/system/info`),
+  // stato internet del Mac (online/offline) e qualità rete locale (LAN/WiFi)
+  connectivity: () => TakoAPI.get(`/system/connectivity`),
+  netHealth: () => TakoAPI.get(`/system/net-health`),
   // upload immagine (multipart): NON usare TakoAPI.req (forza JSON). Il browser
   // imposta da solo il boundary multipart. Ritorna { url }.
   uploadImage: async (file) => {

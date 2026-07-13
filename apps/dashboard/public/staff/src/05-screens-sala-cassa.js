@@ -377,6 +377,11 @@ function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
       </div>
 
       <h3 style={{ fontSize: 16, marginBottom: 12 }}>Conti aperti</h3>
+      {bills.length === 0 ? (
+        <Empty tako="pay" title="Nessun conto aperto"
+          sub="I conti aperti compaiono qui. Aprine uno con «Nuovo conto» o dalla scheda del tavolo in Sala."
+          action={<Btn kind="brand" icon="plus" onClick={() => setNewOpen(true)}>Nuovo conto</Btn>} />
+      ) : (
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill,minmax(280px,1fr))", gap: 14 }}>
         {bills.map(b => (
           <Card key={b.id} pad={16} className="press" style={{ cursor: "pointer" }} onClick={() => setPay(b)}>
@@ -391,6 +396,7 @@ function ScreenCassa({ mobile, bills, onClose, settings = SETTINGS_DEFAULTS }) {
           </Card>
         ))}
       </div>
+      )}
 
       <Overlay open={!!pay} onClose={() => setPay(null)} anchor="center">
         {pay && <PaymentModal bill={pay} mobile={mobile} settings={settings} onClose={() => setPay(null)} onDone={() => { setPay(null); onClose(pay.id); toast(`${pay.takeaway ? "Asporto" : "Conto T" + pay.tavolo} chiuso`, { type: "success", icon: "check" }); }} />}
@@ -446,7 +452,7 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
       {/* left: summary */}
       <div style={{ flex: mobile ? "none" : "0 0 280px", padding: mobile ? "16px 18px" : 22, background: "var(--nav)", color: "var(--nav-ink)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}><span className="num" style={{ width: 40, height: 40, borderRadius: 11, background: "var(--brand)", color: "#fff", display: "grid", placeItems: "center", fontSize: 18 }}>{bill.tavolo}</span><div><div style={{ fontWeight: 800, color: "#fff" }}>Tavolo {bill.tavolo}</div><div style={{ fontSize: 11.5, color: "var(--nav-ink-2)" }} className="mono">{bill.id}</div></div></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}><span className="num" style={{ width: 40, height: 40, borderRadius: 11, background: "var(--brand)", color: "#fff", display: "grid", placeItems: "center", fontSize: bill.takeaway ? 13 : 18 }}>{bill.takeaway ? "ASP" : bill.tavolo}</span><div><div style={{ fontWeight: 800, color: "#fff" }}>{bill.takeaway ? ("Asporto" + (bill.customerName ? " · " + bill.customerName : "")) : ("Tavolo " + bill.tavolo)}</div><div style={{ fontSize: 11.5, color: "var(--nav-ink-2)" }} className="mono">{bill.id}</div></div></div>
           {mobile && <IconBtn name="x" tone="ghost" style={{ color: "#fff" }} onClick={onClose} />}
         </div>
         <div style={{ margin: mobile ? "14px 0 8px" : "22px 0 10px" }}>
@@ -514,7 +520,7 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
           </div>
         ) : (
           <div style={{ flex: 1, display: "grid", placeItems: "center", textAlign: "center", color: "var(--ink-2)", border: "1.5px dashed var(--hairline)", borderRadius: 14, padding: 24 }}>
-            <div><Icon name={method === "carta" ? "card" : "smartphone"} size={44} style={{ color: "var(--brand)", margin: "0 auto 12px" }} /><div style={{ fontWeight: 700, color: "var(--ink)", fontSize: 16 }}>{method === "carta" ? "Avvicina la carta al POS" : "Mostra il QR al cliente"}</div><div style={{ fontSize: 13.5, marginTop: 6 }}>In attesa di {euro(total)}…</div></div>
+            <div><Icon name={method === "carta" ? "card" : "smartphone"} size={44} style={{ color: "var(--brand)", margin: "0 auto 12px" }} /><div style={{ fontWeight: 700, color: "var(--ink)", fontSize: 16 }}>{method === "carta" ? "Pagamento con carta" : "Pagamento digitale"}</div><div style={{ fontSize: 13.5, marginTop: 6 }}>Registra l'incasso di {euro(total)} — conferma manuale</div></div>
           </div>
         )}
 
@@ -533,7 +539,10 @@ function ScreenComanda({ mobile }) {
   // Guardia menu vuoto: niente MENU[0].sezione su lista vuota (hook sempre chiamati).
   const [sez, setSez] = useState(() => (MENU[0] ? MENU[0].sezione : null));
   const [sending, setSending] = useState(false);
-  const freeTables = ROOMS.flatMap(r => r.tables);
+  // Tavoli selezionabili per una comanda: TUTTI i tavoli reali, non solo i liberi.
+  // Una comanda si prende anche su un tavolo OCCUPATO (portate successive), quindi il
+  // vecchio nome "freeTables" era fuorviante: qui non filtriamo per stato libero.
+  const selectableTables = ROOMS.flatMap(r => r.tables);
   const add = (nome) => setCart(c => ({ ...c, [nome]: (c[nome] || 0) + 1 }));
   const sub = (nome) => setCart(c => { const n = { ...c }; if (n[nome] > 1) n[nome]--; else delete n[nome]; return n; });
   const items = Object.entries(cart);
@@ -582,12 +591,18 @@ function ScreenComanda({ mobile }) {
     return (
       <ScreenScroll mobile={mobile}>
         <PageHead mobile={mobile} tako="phone" title="Comanda" sub="Seleziona il tavolo per cui prendere l'ordine" />
+        {selectableTables.length === 0 ? (
+          <Empty tako="neutral" title="Nessun tavolo ancora — creane uno per iniziare"
+            sub="Aggiungi una sala e i suoi tavoli per poter prendere una comanda."
+            action={<Btn kind="brand" icon="plus" onClick={() => window.takoGo && window.takoGo("tavoli")}>Gestisci tavoli</Btn>} />
+        ) : (
         <div style={{ display: "grid", gridTemplateColumns: mobile ? "repeat(3,1fr)" : "repeat(auto-fill,minmax(110px,1fr))", gap: 12 }}>
-          {freeTables.map(t => {
+          {selectableTables.map(t => {
             const st = TABLE_STATUS[t.stato];
             return <button key={t.n} className="press" onClick={() => setTavolo(t.n)} style={{ aspectRatio: "1", borderRadius: 16, background: "var(--raised)", border: `2px solid ${st.color}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, boxShadow: "var(--sh-1)" }}><span className="num" style={{ fontSize: 26 }}>{t.n}</span><span style={{ fontSize: 11, color: "var(--ink-3)", fontWeight: 600 }}>{t.posti} posti</span></button>;
           })}
         </div>
+        )}
       </ScreenScroll>
     );
   }
@@ -802,6 +817,13 @@ function ScreenTavoli({ mobile }) {
           <Btn kind="soft" icon="plus" onClick={() => setRoomModal(true)}>Nuova sala</Btn>
           <Btn kind="brand" icon="plus" onClick={() => setTableModal({ table: null })}>Nuovo tavolo</Btn>
         </div>} />
+      {all.length === 0 ? (
+        <Empty tako="neutral" title={ROOMS.length === 0 ? "Nessuna sala ancora — creane una per iniziare" : "Nessun tavolo in questa sala"}
+          sub={ROOMS.length === 0 ? "Crea prima una sala, poi aggiungi i tavoli con i loro posti." : "Aggiungi il primo tavolo con «Nuovo tavolo»."}
+          action={ROOMS.length === 0
+            ? <Btn kind="brand" icon="plus" onClick={() => setRoomModal(true)}>Nuova sala</Btn>
+            : <Btn kind="brand" icon="plus" onClick={() => setTableModal({ table: null })}>Nuovo tavolo</Btn>} />
+      ) : (
       <Card pad={0} style={{ overflow: "hidden" }}>
         {all.map((t, i) => (
           <div key={t.n} style={{ display: "flex", alignItems: "center", gap: 14, padding: "13px 16px", borderBottom: i < all.length - 1 ? "1px solid var(--hairline)" : "none" }}>
@@ -812,6 +834,7 @@ function ScreenTavoli({ mobile }) {
           </div>
         ))}
       </Card>
+      )}
 
       <TableFormModal open={!!tableModal} table={tableModal ? tableModal.table : null} rooms={rooms} onClose={() => setTableModal(null)} />
       <RoomFormModal open={roomModal} onClose={() => setRoomModal(false)} />
@@ -823,9 +846,29 @@ function ScreenTavoli({ mobile }) {
 }
 
 /* ═══════════════════ QR CODES ═══════════════════ */
+// Copia un URL negli appunti con feedback (checkmark) — usato per gli URL alternativi del QR.
+function QrAltRow({ label, hint, value }) {
+  const [done, setDone] = useState(false);
+  if (!value) return null;
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(value); setDone(true); toast("Copiato", { type: "success" }); setTimeout(() => setDone(false), 1300); }
+    catch (_) { toast(value); }
+  };
+  return (
+    <button className="press" onClick={copy} title={value} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", textAlign: "left", padding: "7px 9px", borderRadius: 10, background: "var(--sunken)", border: "1px solid var(--hairline)" }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-2)" }}>{label} <span style={{ color: "var(--ink-3)", fontWeight: 500 }}>· {hint}</span></div>
+        <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</div>
+      </div>
+      <Icon name={done ? "check" : "copy"} size={15} style={{ flex: "none", color: done ? "var(--ok-deep)" : "var(--ink-3)" }} />
+    </button>
+  );
+}
 function QrCard({ t, onDownload, onDelete }) {
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [url, setUrl] = useState("");
+  const [mode, setMode] = useState("lan");
+  const [alts, setAlts] = useState({ lanUrl: "", cloudUrl: "", ipUrl: "" });
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
 
@@ -835,6 +878,8 @@ function QrCard({ t, onDownload, onDelete }) {
       const q = await window.TakoActions.tableQr(t._id);
       setQrDataUrl(q.qrDataUrl || "");
       setUrl(q.url || "");
+      setMode(q.mode || "lan");
+      setAlts({ lanUrl: q.lanUrl || "", cloudUrl: q.cloudUrl || "", ipUrl: q.ipUrl || "" });
     } catch (e) {
       toast(e.message, { type: "error" });
     } finally {
@@ -865,7 +910,7 @@ function QrCard({ t, onDownload, onDelete }) {
   const openLink = () => { try { window.open(url, "_blank"); } catch (_) { toast("Impossibile aprire il link", { type: "error" }); } };
 
   return (
-    <Card pad={16} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+    <Card pad={16} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%", minWidth: 0, overflow: "hidden" }}>
       {loading ? (
         <div style={{ width: 120, height: 120, borderRadius: 10, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 12 }}>…</div>
       ) : qrDataUrl ? (
@@ -874,12 +919,23 @@ function QrCard({ t, onDownload, onDelete }) {
         <div style={{ width: 120, height: 120, borderRadius: 10, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 12, textAlign: "center", padding: 8 }}>QR non disponibile</div>
       )}
       <div style={{ textAlign: "center", maxWidth: "100%" }}>
-        <div style={{ fontWeight: 800, fontFamily: "var(--f-display)" }}>Tavolo {t.n}</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+          <span style={{ fontWeight: 800, fontFamily: "var(--f-display)" }}>Tavolo {t.n}</span>
+          <Badge tone={mode === "cloud" ? "info" : "ok"}>{mode === "cloud" ? "Cloud" : "LAN"}</Badge>
+        </div>
         <div className="mono" style={{ fontSize: 11.5, color: "var(--ink-3)", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={url}>{url || "—"}</div>
       </div>
-      <div style={{ display: "flex", gap: 8, width: "100%" }}>
-        <Btn size="sm" kind="ghost" full icon="refresh" onClick={regen}>{busy ? "Rigenero…" : "Rigenera"}</Btn>
-        <Btn size="sm" kind="soft" full icon="download" onClick={() => onDownload(t, qrDataUrl)}>Scarica</Btn>
+      {/* URL alternativi: il QR usa `mode`, ma qui puoi copiare gli altri accessi. */}
+      {(alts.lanUrl || alts.cloudUrl || alts.ipUrl) && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
+          <QrAltRow label="tako.local" hint="offline" value={alts.lanUrl} />
+          <QrAltRow label="Cloud" hint="accesso da fuori" value={alts.cloudUrl} />
+          <QrAltRow label="IP diretto" hint="telefoni senza mDNS" value={alts.ipUrl} />
+        </div>
+      )}
+      <div style={{ display: "flex", gap: 8, width: "100%", flexWrap: "wrap" }}>
+        <Btn size="sm" kind="ghost" icon="refresh" onClick={regen} style={{ flex: "1 1 90px", minWidth: 0 }}>{busy ? "Rigenero…" : "Rigenera"}</Btn>
+        <Btn size="sm" kind="soft" icon="download" onClick={() => onDownload(t, qrDataUrl)} style={{ flex: "1 1 90px", minWidth: 0 }}>Scarica</Btn>
       </div>
       <div style={{ display: "flex", gap: 8, width: "100%", justifyContent: "center" }}>
         <IconBtn name="qr" tone="soft" onClick={copyLink} title="Copia link" />
@@ -968,7 +1024,7 @@ function ScreenQR({ mobile }) {
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="phone" title="QR Codes" sub="Genera e scarica i QR dei tavoli" actions={
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
           <Btn kind="soft" icon="qr" onClick={refreshNet} disabled={netBusy}>{netBusy ? "Aggiorno…" : "Aggiorna rete"}</Btn>
           <Btn kind="brand" icon="download" onClick={downloadAll}>Scarica tutti</Btn>
         </div>

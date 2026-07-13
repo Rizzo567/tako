@@ -55,6 +55,26 @@ function Sidebar({ route, go, role, badges, live }) {
   const groups = navAllowed(role);
   const [collapsed, setCollapsed] = useState({});
   const toggle = (k) => setCollapsed(c => ({ ...c, [k]: !c[k] }));
+  // Slide-in morbido da sinistra: quando si atterra qui dopo un'espansione "Streaming"
+  // del Cowork, il Cowork emette `tako-nav-slidein` SOLO a espansione conclusa (la
+  // richiesta precedente è finita) → la sidebar scivola in posizione invece di comparire
+  // di colpo. Web Animations API: nessun transform residuo, niente layout thrash.
+  const asideRef = useRef(null);
+  useEffect(() => {
+    const slideIn = () => {
+      const el = asideRef.current;
+      if (!el || typeof el.animate !== "function") return;
+      el.style.willChange = "transform";
+      const a = el.animate([
+        { transform: "translateX(-105%)", opacity: 0, offset: 0 },
+        { transform: "translateX(0)", opacity: 1, offset: 1 },
+      ], { duration: 620, easing: "cubic-bezier(.32,.72,0,1)", fill: "backwards" });
+      const clear = () => { try { el.style.willChange = ""; } catch (_) {} };
+      a.onfinish = clear; a.oncancel = clear;
+    };
+    window.addEventListener("tako-nav-slidein", slideIn);
+    return () => window.removeEventListener("tako-nav-slidein", slideIn);
+  }, []);
   const NavBtn = (it) => {
     const on = route === it.id;
     return (
@@ -73,7 +93,7 @@ function Sidebar({ route, go, role, badges, live }) {
   const boxStyle = { background: "var(--nav)", color: "var(--nav-ink)", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none" };
 
   return (
-    <aside className="scroll" style={{ width: 238, flex: "none", margin: "5px 12px 12px 5px", height: "calc(100% - 17px)", display: "flex", flexDirection: "column", gap: 10, overflowY: "auto" }}>
+    <aside ref={asideRef} className="scroll" style={{ width: 238, flex: "none", margin: "5px 12px 12px 5px", height: "calc(100% - 17px)", display: "flex", flexDirection: "column", gap: 10, overflowY: "auto" }}>
       {groups.map((g, gi) => {
         const isFirst = gi === 0;
         const isLast = gi === groups.length - 1;
@@ -219,10 +239,14 @@ function NotificationsSheet({ open, onClose }) {
   );
 }
 /* intro contestuale per ogni sezione (mascotte + titolo) */
-function routeIntro(route) {
+function routeIntro(route, role = "owner") {
+  const _hour = new Date().getHours();
+  const _greet = _hour < 12 ? "Buongiorno" : _hour < 18 ? "Buon pomeriggio" : "Buonasera";
+  const _r = ROLES[role] || ROLES.owner;
+  const _first = (_r.name && _r.name !== "—") ? _r.name.split(" ")[0] : "";
   const m = {
     cowork: { pose: "hello", title: "Tako" },
-    dashboard: { pose: "hello", title: `Buonasera, ${ROLES.owner.name.split(" ")[0]}!` },
+    dashboard: { pose: "hello", title: `${_greet}${_first ? ", " + _first : ""}!` },
     ordini: { pose: "phone", title: "Ordini live" },
     kds: { pose: "chef", title: "Cucina" },
     cassa: { pose: "pay", title: "Cassa" },
@@ -241,7 +265,7 @@ function routeIntro(route) {
   return m[route] || { pose: "neutral", title: findItem(route).label };
 }
 function MobileHeader({ route, openDrawer, live, role, badges, nome, dark, go }) {
-  const intro = routeIntro(route);
+  const intro = routeIntro(route, role);
   const fg = dark ? "#fff" : "var(--ink)";
   const [notifOpen, setNotifOpen] = useState(false);
   const [anim, setAnim] = useState(null); // { n, phase }
