@@ -364,6 +364,38 @@ const ACTIONS: ActionDef[] = [
       return { ok: true, data: { id: o.id, status: o.status }, summary: `Il tuo ultimo ordine è "${ORDER_STATUS_IT[o.status] ?? o.status}".` }
     },
   },
+  {
+    name: 'show_buttons',
+    scope: ['customer'],
+    kind: 'client',
+    // Mostra pulsanti-azione che il cliente TOCCA (nessun effetto lato server qui): l'azione
+    // vera parte dalla PWA al tap. Le etichette sono localizzate dal client → il modello sceglie
+    // solo QUALI pulsanti mostrare (funziona identico in tutte le lingue).
+    description: 'Mostra al cliente dei pulsanti-azione da toccare. Usalo quando è utile offrire un\'azione: send_order (invia l\'ordine) e view_cart (vedi il carrello) dopo aver aggiunto piatti o quando il cliente vuole ordinare; call_waiter (chiama il cameriere); reserve (prenota un tavolo); track_order (segui l\'ordine). Elenca SOLO i pulsanti pertinenti al contesto.',
+    parameters: {
+      type: 'object',
+      properties: {
+        actions: {
+          type: 'array',
+          description: 'Azioni da proporre come pulsanti (in ordine di rilevanza)',
+          items: { type: 'string', enum: ['send_order', 'view_cart', 'call_waiter', 'reserve', 'track_order'] },
+        },
+      },
+      required: ['actions'],
+    },
+    label: (a) => `Pulsanti (${(a?.actions ?? []).length})`,
+    execute: async (_ctx, args) => {
+      const ALLOWED = ['send_order', 'view_cart', 'call_waiter', 'reserve', 'track_order']
+      const seen = new Set<string>()
+      const buttons = (Array.isArray(args?.actions) ? args.actions : [])
+        .map((a: any) => String(a))
+        .filter((a: string) => ALLOWED.includes(a) && !seen.has(a) && (seen.add(a), true))
+        .slice(0, 4)
+        .map((action: string) => ({ action }))
+      if (!buttons.length) return { ok: false, summary: 'Nessun pulsante pertinente da mostrare.' }
+      return { ok: true, clientAction: { type: 'buttons', buttons }, summary: `Mostro i pulsanti: ${buttons.map((b: { action: string }) => b.action).join(', ')}.` }
+    },
+  },
 
   // ── OWNER ──────────────────────────────────────────────────────────────────
   {
@@ -950,6 +982,29 @@ const ACTIONS: ActionDef[] = [
       ))
       const fmt = alerts.map(a => `${a.name}: ${a.quantity}${a.unit} (min ${a.minQuantity})`)
       return { ok: true, data: alerts.map(a => ({ name: a.name, quantity: a.quantity, unit: a.unit, min: a.minQuantity })), summary: alerts.length ? `${alerts.length} scorte basse: ${fmt.join('; ')}.` : 'Nessuna scorta sotto soglia.' }
+    },
+  },
+  {
+    name: 'reorder_list',
+    scope: ['owner'],
+    kind: 'read',
+    description: 'Lista di riordino: cosa comprare per riportare a scorta gli ingredienti sotto soglia, con quantità suggerita e fornitore.',
+    parameters: { type: 'object', properties: {} },
+    label: () => 'Lista riordino',
+    execute: async (ctx) => {
+      const items = await db.select().from(inventoryItems).where(and(
+        eq(inventoryItems.restaurantId, ctx.restaurantId),
+        eq(inventoryItems.active, true),
+        lte(inventoryItems.quantity, inventoryItems.minQuantity),
+      ))
+      if (!items.length) return { ok: true, data: [], summary: 'Niente da riordinare: tutte le scorte sono a posto.' }
+      const rows = items.map(i => {
+        const target = i.parLevel != null && i.parLevel > 0 ? i.parLevel : Math.max(i.minQuantity * 2, i.minQuantity + 1)
+        const suggested = Math.max(0, Math.round((target - i.quantity) * 100) / 100)
+        return { name: i.name, unit: i.unit, suggested, supplier: i.supplier ?? null }
+      })
+      const fmt = rows.map(r => `${r.name}: ${r.suggested}${r.unit}${r.supplier ? ` (${r.supplier})` : ''}`)
+      return { ok: true, data: rows, summary: `Da riordinare (${rows.length}): ${fmt.join('; ')}.` }
     },
   },
   {
@@ -1897,13 +1952,12 @@ const TOOL_CATEGORIES: Record<string, string[]> = {
   bills: ['open_bills', 'apply_bill_discount', 'close_bill', 'set_cover_charge'],
   orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],
   reservations: ['todays_reservations', 'create_reservation', 'cancel_reservation', 'set_reservation_status'],
-  inventory: ['low_stock', 'create_inventory_item', 'adjust_stock'],
+  inventory: ['low_stock', 'reorder_list', 'create_inventory_item', 'adjust_stock'],
   ricette: ['set_recipe_ingredient', 'get_recipe', 'remove_recipe_ingredient'],
   fedelta: ['add_loyalty_points', 'loyalty_balance', 'redeem_loyalty_points'],
   staff: ['staff_on_shift', 'clock_in_staff', 'clock_out_staff', 'list_staff', 'create_staff', 'set_staff_active'],
   stats: ['get_today_revenue', 'get_stats', 'revenue_for_date', 'menu_performance'],
 }
-const CORE_TOOLS = ['get_today_revenue', 'get_stats', 'table_status']
 const CATEGORY_KEYWORDS: [RegExp, string][] = [
   [/menu|piatt|carbonar|pizz|prim[oi]|second[oi]|dolc|antipast|bevand|esaurit|disponibil|sezion|variant|food ?cost|prezz|cost[oa]\b|quanto viene|c'è (?:la|il|l')/, 'menu'],
   [/tavol|sala|sale|pianta|\bqr\b|copert/, 'tables'],
@@ -2003,7 +2057,7 @@ async function groqClient() {
 
 // Completamento one-shot (no tool loop): per generazione contenuti (descrizioni piatti,
 // traduzioni). Prova un modello capace, ripiega sull'8b veloce. Ritorna il testo pulito.
-async function groqComplete(system: string, user: string, maxTokens = 220): Promise<string> {
+export async function groqComplete(system: string, user: string, maxTokens = 220): Promise<string> {
   const openai = await groqClient()
   let lastErr: any
   for (const model of ['openai/gpt-oss-120b', 'llama-3.1-8b-instant']) {
@@ -2043,6 +2097,10 @@ export async function runAssistant(opts: {
   allow?: string[]
   model?: string
   pendingImageUrl?: string
+  // Se true, NON usa lo short-circuit sul summary del tool: fa comporre SEMPRE la risposta
+  // finale al modello (necessario per il cliente, che deve rispondere nella sua lingua e non
+  // col summary italiano hardcoded dell'azione).
+  composeReply?: boolean
 }): Promise<AssistantTurn> {
   // PRE-GATE immagine: se è allegata una foto, assegnala al piatto (niente LLM).
   if (opts.scope === 'owner' && opts.pendingImageUrl) {
@@ -2221,7 +2279,7 @@ export async function runAssistant(opts: {
           : `Proposte pronte: ${iterProposals.join(' · ')}. Confermale qui sotto.`)
       return { message: m, actions, pending }
     }
-    if (iter === 0 && iterHadRead && toolCalls.length === 1 && !iterAsk && !iterProposals.length
+    if (!opts.composeReply && iter === 0 && iterHadRead && toolCalls.length === 1 && !iterAsk && !iterProposals.length
         && lastReadSummary && lastReadSummary.length >= 10 && lastReadSummary.length <= 400) {
       return { message: lastReadSummary, actions, pending }
     }
@@ -2382,7 +2440,7 @@ function textHasDatetime(t: string): boolean {
   const m = (t || '').toLowerCase()
   return /\b\d{1,2}[:.]\d{2}\b/.test(m)
     || /\b(?:alle|ore)\s+\d{1,2}\b/.test(m)
-    || /\b\d{1,2}[\/\-.]\d{1,2}(?:[\/\-.]\d{2,4})?\b/.test(m)
+    || /\b\d{1,2}[/\-.]\d{1,2}(?:[/\-.]\d{2,4})?\b/.test(m)
     || /\d{4}-\d{2}-\d{2}/.test(m)
     || /\b(oggi|stasera|stanotte|domani|dopodomani|dopo\s?domani|weekend|stamattina|mezzogiorno)\b/.test(m)
     || /\b(luned|marted|mercoled|gioved|venerd|sabato|domenica)/.test(m)
@@ -2550,7 +2608,6 @@ export async function runAssistantStream(opts: {
   const openai = await groqClient()
   // Solo i tool pertinenti al messaggio (meno token → 70b dura di più, 8b affidabile).
   const tools = toolSchemasFor(opts.scope, opts.userMessage, opts.allow)
-  const FALLBACK_MODEL = 'llama-3.1-8b-instant'
   let model = opts.model ?? pickModel(opts.userMessage)
 
   // Apre lo stream con un timeout GENEROSO sull'handshake (create): impedisce hang

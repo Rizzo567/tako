@@ -6,10 +6,12 @@
 // via env GEMINI_IMAGE_MODEL). Best-effort: qualsiasi errore → si tiene la foto originale.
 import { db, restaurants } from '@tako/db'
 import { eq } from 'drizzle-orm'
-import { readFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { createPublicKey, verify as edVerify } from 'node:crypto'
+import { UPLOADS_DIR } from './image-store.js'
+import { isOnline } from './connectivity.js'
 
 // ─────────────────── Sblocco PRO (Nano Banana Pro) — a prova di crack ───────────────────
 // Il modello Pro (più costoso, qualità max) si sblocca SOLO con un CODICE firmato da Manuel
@@ -59,10 +61,43 @@ const STYLE_PROMPT = [
   'Nessun testo, nessun logo, nessun watermark, nessuna persona.',
 ].join(' ')
 
+// Prompt usato quando c'è un'IMMAGINE DI RIFERIMENTO per il ristorante: la prima immagine
+// definisce lo stile (luce, sfondo, angolo, mood), la seconda è il piatto reale da rifotografare.
+const STYLE_PROMPT_REF = [
+  'Hai DUE immagini. La PRIMA è la SCENA/STILE di riferimento (tipo di piatto, superficie del tavolo,',
+  'illuminazione, angolo di ripresa, atmosfera). La SECONDA mostra il CIBO reale da usare.',
+  'Ricrea da zero una fotografia professionale del CIBO della seconda immagine, ma impiattato e',
+  'fotografato ESATTAMENTE nella scena della PRIMA immagine: STESSO tipo di piatto (forma e colore),',
+  'STESSA superficie/tovaglia, STESSA illuminazione direzionale morbida, STESSO angolo e mood editoriale fine-dining.',
+  'Sostituisci completamente il piatto e lo sfondo dell\'originale con quelli del riferimento.',
+  'MANTIENI fedeli SOLO gli ingredienti e il tipo di pietanza della seconda immagine: non inventare cibo diverso',
+  'e NON copiare il cibo della prima immagine. Nessun testo, nessun logo, nessun watermark, nessuna persona.',
+].join(' ')
+
+// Immagine di riferimento per-ristorante (ancora di stile): <UPLOADS_DIR>/<rid>/_style_ref.jpg.
+// Si tara con ogni proprietario finché lo stile in output lo convince; da lì tutti i piatti
+// vengono uniformati a quella reference. Opzionale: senza reference si usa lo STYLE_PROMPT fisso.
+function styleRefPath(restaurantId: string): string {
+  return join(UPLOADS_DIR, restaurantId, '_style_ref.jpg')
+}
+export function hasStyleRef(restaurantId: string): boolean {
+  try { return existsSync(styleRefPath(restaurantId)) } catch { return false }
+}
+function loadStyleRef(restaurantId: string): Buffer | null {
+  try { const p = styleRefPath(restaurantId); return existsSync(p) ? readFileSync(p) : null } catch { return null }
+}
+// Imposta/aggiorna la reference del ristorante (il buffer è già validato+re-encodato a monte).
+export function setStyleRef(restaurantId: string, buf: Buffer): void {
+  const dir = join(UPLOADS_DIR, restaurantId)
+  mkdirSync(dir, { recursive: true })
+  writeFileSync(styleRefPath(restaurantId), buf)
+}
+
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models'
 
 // true se il ristorante ha attivato aiPhotoEnabled E c'è una chiave Gemini configurata.
 export async function aiPhotoEnabledFor(restaurantId: string): Promise<boolean> {
+  if (!isOnline()) return false // fast-fail: senza internet niente styling (evita il "sto migliorando" a vuoto)
   if (!geminiKey()) return false
   try {
     const [r] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
@@ -71,21 +106,29 @@ export async function aiPhotoEnabledFor(restaurantId: string): Promise<boolean> 
 }
 
 // Genera la versione stilizzata col MODELLO indicato; ritorna il Buffer o null (best-effort).
-export async function generateStyledDishImage(buf: Buffer, mimeType: string, model: string): Promise<Buffer | null> {
+export async function generateStyledDishImage(buf: Buffer, mimeType: string, model: string, refBuf?: Buffer | null): Promise<Buffer | null> {
   const key = geminiKey()
   if (!key) return null
   const ac = new AbortController()
   const to = setTimeout(() => ac.abort(), 45_000)
   try {
+    // Con reference: [testo, RIFERIMENTO, piatto]. Senza: [testo, piatto].
+    const reqParts = refBuf
+      ? [
+          { text: STYLE_PROMPT_REF },
+          { inline_data: { mime_type: 'image/jpeg', data: refBuf.toString('base64') } },
+          { inline_data: { mime_type: mimeType, data: buf.toString('base64') } },
+        ]
+      : [
+          { text: STYLE_PROMPT },
+          { inline_data: { mime_type: mimeType, data: buf.toString('base64') } },
+        ]
     const res = await fetch(`${GEMINI_URL}/${model}:generateContent?key=${encodeURIComponent(key)}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: ac.signal,
       body: JSON.stringify({
-        contents: [{ parts: [
-          { text: STYLE_PROMPT },
-          { inline_data: { mime_type: mimeType, data: buf.toString('base64') } },
-        ] }],
+        contents: [{ parts: reqParts }],
         generationConfig: { responseModalities: ['IMAGE'] },
       }),
     })
@@ -108,12 +151,18 @@ export async function generateStyledDishImage(buf: Buffer, mimeType: string, mod
 // codice firmato valido, altrimenti base (flash). Sempre non-lanciante: originale = fallback.
 export async function maybeStyleDishImage(restaurantId: string, buf: Buffer, mimeType: string): Promise<Buffer> {
   try {
+    if (!isOnline()) return buf // fast-fail offline: niente attese sui timeout di rete
     if (!geminiKey()) return buf
     const [r] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
     const s = (r?.settings ?? {}) as any
     if (s.aiPhotoEnabled !== true) return buf
-    const model = verifyProCode(restaurantId, s.aiPhotoProCode) ? MODEL_PRO : MODEL_BASE
-    const styled = await generateStyledDishImage(buf, mimeType, model)
+    // La reference (style-transfer da immagine) funziona SOLO col modello Pro: flash è un
+    // editor e o ignora la reference o ne copia il cibo → su flash NON passiamo la reference
+    // (usa lo STYLE_PROMPT testuale, che dà comunque una foto pulita). Pro + reference = Michelin.
+    const isPro = verifyProCode(restaurantId, s.aiPhotoProCode)
+    const model = isPro ? MODEL_PRO : MODEL_BASE
+    const ref = isPro ? loadStyleRef(restaurantId) : null
+    const styled = await generateStyledDishImage(buf, mimeType, model, ref)
     return styled ?? buf
   } catch { return buf }
 }

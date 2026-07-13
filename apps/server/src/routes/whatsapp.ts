@@ -19,7 +19,7 @@ export async function whatsappRoutes(fastify: FastifyInstance) {
   }
 
   // Stato del canale + QR (dataURL) se in attesa di scansione.
-  fastify.get('/status', { preHandler: ownerOnly }, async (_req, reply) => {
+  fastify.get('/status', { preHandler: ownerOnly }, async (_req, _reply) => {
     const status = getWhatsAppStatus()
     let qrDataUrl: string | null = null
     if (status.qr) {

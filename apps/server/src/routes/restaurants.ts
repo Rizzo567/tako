@@ -20,7 +20,9 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
       address: z.string().optional(),
       phone: z.string().optional(),
       primaryColor: z.string().optional(),
-      logoUrl: z.string().url().optional().nullable(),
+      // Accetta URL assoluti O path relativo /uploads/ (coerente con imageUrl dei piatti):
+      // l'upload logo restituisce /uploads/... e va servito same-origin anche sulla PWA cliente.
+      logoUrl: z.string().refine((v) => v.startsWith('/uploads/') || /^https?:\/\//.test(v), 'URL logo non valido').optional().nullable(),
       settings: z.object({
         currency: z.string().optional(),
         timezone: z.string().optional(),
@@ -57,6 +59,8 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
         aiPhotoEnabled: z.boolean().optional(),
         aiPhotoProCode: z.string().max(500).optional(),
         menuEngineeringEnabled: z.boolean().optional(),
+        qrMode: z.enum(['lan', 'cloud']).optional(),
+        customerOrderingEnabled: z.boolean().optional(),
       }).optional(),
     })
     const body = schema.safeParse(req.body)

@@ -1,11 +1,11 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, tables, rooms, bills, orders } from '@tako/db'
+import { db, tables, rooms, bills, orders, restaurants } from '@tako/db'
 import { eq, and, inArray } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { stableTableUrl, lanTableUrl } from '../lib/network.js'
+import { stableTableUrl, lanTableUrl, ipTableUrl, tableQrUrl, type QrMode } from '../lib/network.js'
 import { getApplianceId } from '../lib/cloud-client.js'
 import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { BILLABLE_STATUSES } from '../lib/billing.js'
@@ -167,14 +167,19 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
-    // URL STABILE (mai l'IP): se l'appliance è accoppiata, punta al resolver cloud
-    // /t/<applianceId>/... che reindirizza all'IP LAN corrente. `lanUrl` è il QR di BACKUP
-    // mDNS (tako.local) per l'accesso offline-first col cloud giù. Vedi lib/network.ts.
-    // Il rendering resta qrWithOctopus (mascotte al centro, error correction H).
-    const url = stableTableUrl(getApplianceId(), req.user!.restaurantId, table.qrToken)
+    // Modalità QR del ristorante (default 'lan' = LAN-first, resiliente a internet giù):
+    //  - 'lan'   → QR = tako.local:3002 (mDNS): il menu si apre anche senza uplink internet.
+    //  - 'cloud' → QR = resolver pubblico /t/<applianceId>/... (richiede internet, no mDNS).
+    // Restituisco SEMPRE tutte le varianti così la dashboard può mostrare/scaricare le alternative
+    // (lanUrl mDNS, cloudUrl resolver, ipUrl per telefoni senza mDNS). Rendering qrWithOctopus (EC=H).
+    const [rest] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
+    const mode: QrMode = (rest?.settings as any)?.qrMode === 'cloud' ? 'cloud' : 'lan'
+    const url = tableQrUrl(mode, getApplianceId(), req.user!.restaurantId, table.qrToken)
     const lanUrl = lanTableUrl(req.user!.restaurantId, table.qrToken)
+    const cloudUrl = stableTableUrl(getApplianceId(), req.user!.restaurantId, table.qrToken)
+    const ipUrl = ipTableUrl(req.user!.restaurantId, table.qrToken)
     const qrDataUrl = await qrWithOctopus(url, 400)
-    return { data: { qrDataUrl, url, lanUrl, tableNumber: table.number } }
+    return { data: { qrDataUrl, url, mode, lanUrl, cloudUrl, ipUrl, tableNumber: table.number } }
   })
 
   // Refresh QR token (invalidates old)

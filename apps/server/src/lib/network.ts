@@ -103,3 +103,28 @@ export function stableTableUrl(applianceId: string | null, localRestaurantId: st
 export function lanTableUrl(localRestaurantId: string, qrToken: string): string {
   return `http://${mdnsHost()}:${clientPort()}/${tablePath(localRestaurantId, qrToken)}`
 }
+
+/**
+ * URL LAN basato sull'IP CORRENTE del Mac (es. http://192.168.1.50:3002/...). Per i pochi
+ * telefoni senza supporto mDNS: funziona offline e su qualunque device, ma l'IP deve essere
+ * reso stabile con una DHCP reservation sul router (vedi docs/setup-rete-ristorante.md),
+ * altrimenti il QR muore al cambio IP.
+ */
+export function ipTableUrl(localRestaurantId: string, qrToken: string): string {
+  return `${clientBaseUrl()}/${tablePath(localRestaurantId, qrToken)}`
+}
+
+/** Modalità del QR tavolo. 'lan' = resiliente a internet giù (mDNS tako.local); 'cloud' = resolver pubblico. */
+export type QrMode = 'lan' | 'cloud'
+
+/**
+ * Sceglie l'URL da INCODARE nel QR del tavolo secondo la modalità del ristorante.
+ * Default 'lan' (LAN-first): il menu si apre anche con l'uplink internet giù, purché il
+ * telefono sia sul WiFi del locale. 'cloud' usa il resolver pubblico (richiede internet ma
+ * non richiede mDNS sul telefono). Vedi la decisione LAN-first per la resilienza in sala.
+ */
+export function tableQrUrl(mode: QrMode, applianceId: string | null, localRestaurantId: string, qrToken: string): string {
+  return mode === 'cloud'
+    ? stableTableUrl(applianceId, localRestaurantId, qrToken)
+    : lanTableUrl(localRestaurantId, qrToken)
+}

@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { nanoid } from 'nanoid'
 import { randomUUID } from 'node:crypto'
 import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills, reservations } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
@@ -9,7 +8,7 @@ import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { autoPrintOrder } from '../lib/printer.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill, restaurantTimezone, dayStartInTz } from '../lib/billing.js'
-import { runAssistant } from '../lib/ai-actions.js'
+import { runAssistant, groqComplete } from '../lib/ai-actions.js'
 import { deductStockForOrder } from '../lib/stock-deduct.js'
 
 // Sessione cliente incapsulata nel JWT del cookie tako_table.
@@ -279,7 +278,9 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const [rest] = await db.select({ name: restaurants.name, settings: restaurants.settings })
       .from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
     const rs = (rest?.settings ?? {}) as any
-    return { data: pub, features: { restaurantName: rest?.name ?? '', reservationsEnabled: rs.reservationsEnabled ?? false, reviewUrl: (rs.reviewRequestEnabled && rs.reviewUrl) ? rs.reviewUrl : '' } }
+    // coverCharge = coperto A PERSONA (informativo per il cliente: il conto del tavolo lo aggiunge).
+    const coverOn = (rs.coverChargeEnabled ?? (Number(rs.coverCharge) > 0)) === true
+    return { data: pub, features: { restaurantName: rest?.name ?? '', reservationsEnabled: rs.reservationsEnabled ?? false, reviewUrl: (rs.reviewRequestEnabled && rs.reviewUrl) ? rs.reviewUrl : '', customerOrderingEnabled: rs.customerOrderingEnabled !== false, coverCharge: coverOn ? (Number(rs.coverCharge) || 0) : 0 } }
   })
 
   // Submit order from customer.
@@ -331,6 +332,12 @@ export async function customerRoutes(fastify: FastifyInstance) {
     // SECURITY: verifica che il ristorante esista e sia attivo
     const [restaurant] = await db.select().from(restaurants).where(and(eq(restaurants.id, restaurantId), eq(restaurants.active, true))).limit(1)
     if (!restaurant) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
+
+    // Self-service ordini: l'owner può spegnerlo (rete instabile) → menu in sola lettura.
+    // Default ON: blocca SOLO se esplicitamente false. Il cliente ordina dal cameriere.
+    if ((restaurant.settings as any)?.customerOrderingEnabled === false) {
+      return reply.code(403).send({ error: { code: 'ORDERING_DISABLED', message: 'Gli ordini dal telefono sono momentaneamente disattivati. Chiama il cameriere per ordinare.' } })
+    }
 
     // SECURITY: verifica che il tavolo appartenga al ristorante (previene ordini cross-ristorante)
     if (tableId) {
@@ -553,6 +560,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
       tableId: z.string().uuid().optional(),
       tableNumber: z.string().max(20).optional(),
       sessionId: z.string().uuid().optional(),
+      lang: z.string().max(8).optional(),   // lingua UI del cliente → l'assistente risponde in questa
       history: z.array(z.object({
         role: z.enum(['user', 'assistant']),
         content: z.string().max(2000),
@@ -560,7 +568,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     })
     const parsed = aiChatSchema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })
-    const { restaurantId, message, history } = parsed.data
+    const { restaurantId, message, history, lang: reqLang } = parsed.data
     // Identità tavolo AUTORITATIVA dal JWT (mai dal client): l'assistente AI può
     // creare ordini/chiamare il cameriere, quindi deve agire solo sul proprio tavolo.
     const session = (req as any).tableSession as TableSession
@@ -592,19 +600,82 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const items = (await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))).slice(0, 60)
     const menuContext = items.map(i => `${i.name}: €${i.price}${i.description ? ` — ${i.description}` : ''}${i.allergens?.length ? ` [Allergeni: ${i.allergens.join(', ')}]` : ''}`).join('\n')
     const isTakeaway = session.kind === 'takeaway'
-    const systemPrompt = `Sei Tako, l'assistente del ristorante "${restaurant?.name ?? 'questo ristorante'}".
-Aiuti il cliente e puoi AGIRE con gli strumenti: cerca nel menu, aggiungi piatti al carrello${isTakeaway ? '' : ', chiama il cameriere, controlla lo stato dell\'ordine'}.
-Regole: rispondi in italiano, cordiale e breve (max 3 righe). Se il cliente vuole ordinare, usa add_to_cart (poi conferma lui dal carrello). Non inventare piatti né prezzi: usa solo il menu qui sotto.
+    // Lingua di risposta = lingua UI del cliente (fallback: default del ristorante, poi 'it').
+    const LANG_NAMES: Record<string, string> = { it: 'italiano', en: 'English', es: 'español', de: 'Deutsch', fr: 'français', pt: 'português', nl: 'Nederlands', pl: 'polski', ru: 'русский', tr: 'Türkçe', ar: 'العربية', zh: '中文', ja: '日本語', ko: '한국어' }
+    const lang = String(reqLang ?? (restaurant.settings as any)?.defaultLanguage ?? 'it').toLowerCase().slice(0, 8)
+    const langName = LANG_NAMES[lang] ?? lang
+    const buttonHint = isTakeaway
+      ? 'PULSANTI: dopo aver aggiunto piatti o se il cliente vuole ordinare, chiama show_buttons con ["send_order","view_cart"]. Mostra solo pulsanti pertinenti.'
+      : 'PULSANTI: dopo aver aggiunto piatti o se il cliente vuole ordinare, chiama show_buttons con ["send_order","view_cart"]. Per assistenza offri call_waiter; per prenotare un tavolo offri reserve; per seguire un ordine già inviato offri track_order. Mostra solo pulsanti pertinenti.'
+    const systemPrompt = `LINGUA OBBLIGATORIA: scrivi OGNI risposta al cliente SOLO in ${langName} (codice "${lang}"). MAI in un'altra lingua (né italiano né inglese), a prescindere dalla lingua del menu, dei piatti o della domanda. Questa regola vince su tutto.
+
+Sei Tako, l'assistente del ristorante "${restaurant?.name ?? 'questo ristorante'}".
+Aiuti il cliente e puoi AGIRE con gli strumenti: cerca nel menu, aggiungi piatti al carrello${isTakeaway ? '' : ', chiama il cameriere, controlla lo stato dell\'ordine'}, e mostra pulsanti-azione (show_buttons).
+Cordiale e breve (max 3 righe), sempre in ${langName}.
+${buttonHint}
+Se il cliente vuole ordinare usa add_to_cart (il prezzo lo mette il server) e poi offri i pulsanti. Non inventare piatti né prezzi: usa solo il menu qui sotto.
+IMPORTANTE: usa gli strumenti in modo NATIVO (function calling). Non scrivere MAI nella risposta il nome di uno strumento, JSON, blocchi di codice o tag tipo <function> o show_buttons(...): scrivi solo testo naturale per il cliente. I pulsanti compaiono da soli: NON descriverli né elencarli a parole (niente "[...]", niente "premi il pulsante"). Chiudi con una frase breve e naturale.
 Menu:\n${menuContext}`
-    const allow = isTakeaway ? ['search_menu', 'add_to_cart'] : ['search_menu', 'add_to_cart', 'call_waiter', 'order_status']
+    const allow = isTakeaway
+      ? ['search_menu', 'add_to_cart', 'show_buttons']
+      : ['search_menu', 'add_to_cart', 'call_waiter', 'order_status', 'show_buttons']
+
+    // Ripulisce eventuali "recite" di tool-call che i modelli lasciano nel testo (JSON,
+    // blocchi ```…```, <function=…>, show_buttons(…)) → il cliente vede solo testo naturale.
+    const sanitize = (s: string): string => String(s ?? '')
+      .replace(/```[\w]*[\s\S]*?```/g, ' ')
+      .replace(/<\/?function[^>]*>/gi, ' ')
+      .replace(/<buttons>[\s\S]*?<\/buttons>/gi, ' ')
+      .replace(/\{[\s\S]*?"(?:items|actions)"[\s\S]*?\}/g, ' ')     // blob JSON coi nomi dei campi
+      .replace(/<[a-zA-Z_]\w*>\s*\{[\s\S]*?\}/g, ' ')
+      // nomi-azione interni (hanno l'underscore → non sono parole naturali): rimuovi ovunque,
+      // con eventuali parentesi/bracket/backtick attorno (es. "[send_order]", "view_cart()").
+      .replace(/[[`(]?\b(?:show_buttons|add_to_cart|call_waiter|order_status|search_menu|send_order|view_cart|track_order)\b\s*(?:\([^)]*\))?[\]`)]?/gi, ' ')
+      // "reserve" è anche parola inglese: toglila SOLO se isolata tra bracket/backtick.
+      .replace(/[[`]\s*reserve\s*[\]`]/gi, ' ')
+      // blocchi tra parentesi quadre (il modello a volte "descrive" i pulsanti: "[Mostra pulsanti: …]")
+      .replace(/\[[^\]]*\]/g, ' ')
+      // frammenti di punteggiatura JSON rimasti isolati (es. "]}", "{")
+      .replace(/(^|\s)[[\]{}",]+(?=\s|$)/g, ' ')
+      // etichetta penzolante a fine testo (es. "Pulsanti:", "Buttons:") senza nulla dopo
+      .replace(/\s+[\p{L}]{3,12}\s*:\s*$/u, '')
+      .replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim()
+    // Fallback localizzato quando il messaggio resta vuoto (mai l'italiano "Fatto." in altre lingue).
+    const DONE: Record<string, string> = { it: 'Fatto.', en: 'Done.', es: 'Hecho.', de: 'Erledigt.', fr: 'C\'est fait.', pt: 'Feito.', nl: 'Klaar.', pl: 'Gotowe.', ru: 'Готово.', tr: 'Tamam.', ar: 'تم.', zh: '完成。', ja: '完了しました。', ko: '완료했습니다.' }
 
     try {
-      const turn = await runAssistant({
+      // Modello forte per il cliente: chiama i tool in modo NATIVO (i modelli piccoli
+      // "recitano" i tool nel testo o falliscono la chiamata). Riduce leak e 502.
+      const runOnce = () => runAssistant({
         scope: 'customer',
         ctx: { restaurantId, tableId, tableNumber, role: 'customer' },
         systemPrompt, history, userMessage: message, allow,
+        model: 'openai/gpt-oss-120b',
+        composeReply: true, // risposta composta dal modello → nella lingua del cliente (non il summary IT)
       })
-      return { data: { message: turn.message, actions: turn.actions } }
+      let turn
+      try { turn = await runOnce() } catch { turn = await runOnce() } // un retry su errore transitorio
+      // Safety-net pulsanti: se ha aggiunto al carrello ma il modello non ha proposto pulsanti,
+      // aggiungi "invia ordine" + "vedi carrello" (garantisce il flusso anche coi modelli piccoli).
+      const acts: any[] = Array.isArray(turn.actions) ? turn.actions : []
+      const added = acts.some(a => a?.type === 'add_to_cart' || a?.type === 'cart_add')
+      const hasButtons = acts.some(a => a?.type === 'buttons')
+      if (added && !hasButtons) acts.push({ type: 'buttons', buttons: [{ action: 'send_order' }, { action: 'view_cart' }] })
+      // "Fatto." è il default hardcoded di runAssistant → in altre lingue va localizzato.
+      let outMsg = sanitize(turn.message)
+      if (!outMsg || outMsg === 'Fatto.') outMsg = DONE[lang] || 'OK'
+      // Language-guard DETERMINISTICO per gli script non-latini: se il modello ha risposto
+      // con lo script sbagliato (slip stocastico → inglese/italiano), ritraduco nella lingua
+      // giusta. Copre il caso più fastidioso (cliente cinese/arabo che riceve inglese).
+      const SCRIPT_RE: Record<string, RegExp> = { zh: /[一-鿿]/, ja: /[぀-ヿ一-鿿]/, ko: /[가-힯]/, ru: /[Ѐ-ӿ]/, ar: /[؀-ۿ]/ }
+      const need = SCRIPT_RE[lang]
+      if (need && outMsg && !need.test(outMsg)) {
+        try {
+          const fixed = sanitize(await groqComplete(`Traduci in ${langName} il messaggio, mantenendo senso e tono. Rispondi SOLO con la traduzione, nient'altro.`, outMsg, 220))
+          if (fixed && need.test(fixed)) outMsg = fixed
+        } catch { /* tieni l'originale */ }
+      }
+      return { data: { message: outMsg, actions: acts } }
     } catch (err: any) {
       if (err?.code === 'AI_UNAVAILABLE') return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'AI non configurata' } })
       fastify.log.error(err, 'customer ai-chat error')

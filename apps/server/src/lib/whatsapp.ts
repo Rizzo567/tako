@@ -16,14 +16,14 @@
 
 import { join } from 'node:path'
 import { homedir } from 'node:os'
-import { mkdirSync, existsSync, readFileSync, writeFileSync, rmSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs'
 import { randomInt } from 'node:crypto'
 import { db, restaurants, rooms } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 import { runAssistant, executeAction } from './ai-actions.js'
 import { ownerSystemPrompt } from './owner-prompt.js'
-import { saveImageBuffer } from './image-store.js'
-import { maybeStyleDishImage } from './dish-image-ai.js'
+import { saveImageBuffer, sniffImageMime, UPLOADS_DIR } from './image-store.js'
+import { maybeStyleDishImage, setStyleRef, aiPhotoEnabledFor } from './dish-image-ai.js'
 
 // ─────────────────────────── Percorsi & config su disco ───────────────────────────
 // TAKO_HOME è impostato dalla shell desktop; fallback ~/.tako (stesso schema di bootstrap.ts).
@@ -409,16 +409,34 @@ async function handleIncomingImage(msg: any, jid: string, number: string, captio
     await reply(jid, 'Non sono riuscito a scaricare l\'immagine, riprova.')
     return
   }
+  // Comando "riferimento"/"stile": salva questa foto come ANCORA DI STILE del ristorante
+  // (non la assegna a un piatto). Da lì tutti i piatti verranno uniformati a questa reference.
+  if (/^\s*(riferimento|immagine di riferimento|stile|ref)\s*$/i.test(caption || '')) {
+    if (!sniffImageMime(buf)) { await reply(jid, '⚠️ Il file non sembra un\'immagine valida.'); return }
+    setStyleRef(restaurantId, buf)
+    await reply(jid, '🎨 Impostata come *immagine di riferimento* per lo stile delle foto piatto.\nOra inviami la foto di un piatto (con il nome come didascalia) e la uniformerò a questo stile.')
+    return
+  }
+  // Se lo styling AI è attivo, avvisa che sta lavorando (la generazione richiede qualche secondo).
+  const willStyle = await aiPhotoEnabledFor(restaurantId)
+  if (willStyle) await reply(jid, '🎨 Sto migliorando la foto del piatto, un attimo…')
   // Stile AI coerente (Nano Banana Pro) se attivo per il ristorante; altrimenti originale.
   buf = await maybeStyleDishImage(restaurantId, buf, msg.message?.imageMessage?.mimetype || 'image/jpeg')
   const saved = await saveImageBuffer(restaurantId, buf)
   if ('error' in saved) { await reply(jid, `⚠️ ${saved.error}`); return }
-  await assignImageToDish(jid, number, saved.url, caption)
+  await assignImageToDish(jid, number, saved.url, caption, buf)
+}
+
+// Legge dal disco l'immagine salvata a partire dall'URL pubblico (/uploads/<rid>/<file>).
+function readSavedImage(url: string): Buffer | null {
+  try { return readFileSync(join(UPLOADS_DIR, url.replace(/^\/?uploads\//, ''))) } catch { return null }
 }
 
 // Assegna una foto (già salvata, url) al piatto `dishName`. Se il piatto non è indicato o
-// non è trovato, mette la foto IN ATTESA e chiede il nome del piatto.
-async function assignImageToDish(jid: string, number: string, url: string, dishName: string): Promise<void> {
+// non è trovato, mette la foto IN ATTESA e chiede il nome del piatto. Su successo RIMANDA
+// l'immagine finale con la didascalia di conferma. `imageBuf` = byte già in memoria (path
+// immediato); se assente li rilegge dal disco (path "in attesa").
+async function assignImageToDish(jid: string, number: string, url: string, dishName: string, imageBuf?: Buffer): Promise<void> {
   const restaurantId = await primaryRestaurantId()
   if (!restaurantId) { await reply(jid, 'Nessun ristorante configurato.'); return }
   const name = (dishName || '').trim()
@@ -430,7 +448,9 @@ async function assignImageToDish(jid: string, number: string, url: string, dishN
   const res = await executeAction('set_dish_image', { itemName: name, imageUrl: url }, { restaurantId, role: 'owner' }, 'owner', { allowMutation: true })
   if (res.ok) {
     pushHistory(number, 'assistant', res.summary)
-    await reply(jid, `✅ ${res.summary}`)
+    const img = imageBuf ?? readSavedImage(url)
+    if (img) await replyImage(jid, img, `✅ Assegnata a "${name}"`)
+    else await reply(jid, `✅ ${res.summary}`)
   } else {
     setPendingImage(number, url)
     await reply(jid, `⚠️ ${res.summary}\nScrivi il nome esatto del piatto a cui assegnare la foto (o "annulla").`)
@@ -560,6 +580,20 @@ async function reply(jid: string, text: string): Promise<void> {
   } catch (err) {
     console.error('[whatsapp] invio risposta fallito:', err)
   }
+}
+
+// Invia un'IMMAGINE (Buffer) con didascalia. Fallback a solo testo se l'invio media fallisce.
+async function replyImage(jid: string, image: Buffer, caption: string): Promise<void> {
+  try {
+    if (sock) {
+      const sent = await sock.sendMessage(jid, { image, caption })
+      rememberSent(sent?.key?.id)
+      return
+    }
+  } catch (err) {
+    console.error('[whatsapp] invio immagine fallito:', err)
+  }
+  await reply(jid, caption)
 }
 
 function getPending(number: string): PendingProposal | null {

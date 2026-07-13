@@ -34,6 +34,8 @@ import { menuI18nRoutes } from './routes/menu-i18n.js'
 import { aiOwnerRoutes } from './routes/ai-owner.js'
 import { whatsappRoutes } from './routes/whatsapp.js'
 import { startWhatsApp } from './lib/whatsapp.js'
+import { startConnectivityMonitor, onConnectivityChange } from './lib/connectivity.js'
+import { getNetworkHealth } from './lib/net-health.js'
 import { startMdns } from './lib/mdns.js'
 import { getLanIPv4s } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
@@ -266,6 +268,12 @@ await fastify.ready()
     startMdns()
     // Heartbeat periodica verso il cloud (best-effort, no-op se CLOUD_BASE_URL assente).
     startHeartbeatLoop(fastify)
+    // Monitor connettività internet: stato online/offline → badge dashboard/PWA + fast-fail
+    // delle funzioni internet. Non tocca il core (che gira comunque in locale).
+    startConnectivityMonitor()
+    onConnectivityChange((online) => { try { io?.emit('connectivity', { online }) } catch { /* noop */ } })
+    // Diagnosi rete LAN all'avvio (best-effort): avvisa nei log se la rete è instabile/debole.
+    void getNetworkHealth().then(h => { if (h.status === 'instabile' || h.status === 'debole') console.warn(`[net-health] ${h.status}: ${h.message}`) }).catch(() => { /* noop */ })
   } catch (err) {
     console.error(err)
     process.exit(1)

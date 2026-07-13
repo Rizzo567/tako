@@ -139,11 +139,14 @@ writeFileSync(
 )
 execSync('npm install --omit=dev --no-audit --no-fund --loglevel=error', { cwd: out, stdio: 'inherit' })
 
-// 4) Runtime Node impacchettato.
+// 4) Runtime Node impacchettato. In CI il bundle si costruisce SULLA piattaforma
+// target (macos-latest / windows-latest), quindi execPath è già il node giusto.
+// Su Windows il binario DEVE chiamarsi node.exe: lib.rs lo cerca così.
 console.log('▶ copia runtime node')
-const nodeDest = join(out, 'node')
+const nodeName = process.platform === 'win32' ? 'node.exe' : 'node'
+const nodeDest = join(out, nodeName)
 copyFileSync(execPath, nodeDest)
-chmodSync(nodeDest, 0o755)
+if (process.platform !== 'win32') chmodSync(nodeDest, 0o755)
 
 if (!existsSync(join(out, 'server.mjs'))) throw new Error('server.mjs mancante')
 console.log('✓ bundle pronto:', out)
