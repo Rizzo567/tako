@@ -8,10 +8,20 @@ const dmSansBody = DM_Sans({ subsets: ['latin'], variable: '--font-body', weight
 const dmSerif = DM_Serif_Display({ subsets: ['latin'], variable: '--font-serif', weight: ['400'], style: ['normal', 'italic'] })
 
 export const metadata: Metadata = {
-  title: 'Tako',
+  title: 'Menu · Tako',
   description: 'Ordina dal tavolo',
   manifest: '/manifest.json',
   appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Tako' },
+  icons: {
+    icon: [
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon-32.png',
+  },
 }
 
 // viewport-fit=cover abilita gli env(safe-area-inset-*) usati da header e bottom nav.

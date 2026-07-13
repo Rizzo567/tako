@@ -5,8 +5,8 @@ import { useSessionStore, useCartStore } from '@/lib/store'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import { formatEuro } from '@/lib/utils'
-import { Send, ShoppingBag, Check, Bell, Clock } from 'lucide-react'
-import { useI18n, coerceLang, type Lang } from '@/lib/i18n'
+import { Send, ShoppingBag, Check, Bell, Clock, CalendarDays } from 'lucide-react'
+import { useI18n, coerceLang, type Lang, type UIKey } from '@/lib/i18n'
 import { Confetti } from './ui/Confetti'
 import { SPRING } from '@/lib/motion'
 
@@ -15,7 +15,13 @@ import { SPRING } from '@/lib/motion'
 interface CartAction { type: 'add_to_cart' | 'cart_add'; items: { menuItemId: string; variantId?: string; name: string; unitPrice: number; quantity: number }[] }
 interface WaiterAction { type: 'waiter_called'; reason?: string; label?: string }
 interface OrderPlacedAction { type: 'order_placed'; orderId?: string; total?: number }
-type ChatAction = CartAction | WaiterAction | OrderPlacedAction
+// Azioni renderizzate come "card" (esiti/riepiloghi).
+type CardAction = CartAction | WaiterAction | OrderPlacedAction
+// Nuovo: pulsanti tappabili che il cliente usa per eseguire un'azione. Le etichette
+// NON arrivano dal server: sono localizzate qui via i18n.
+type ButtonAction = 'send_order' | 'view_cart' | 'call_waiter' | 'reserve' | 'track_order'
+interface ButtonsAction { type: 'buttons'; buttons: { action: ButtonAction }[] }
+type ChatAction = CardAction | ButtonsAction
 
 interface Message { role: 'user' | 'assistant'; content: string; actions?: ChatAction[] }
 
@@ -37,7 +43,7 @@ const CHIPS: Record<Lang, string[]> = {
 }
 
 /* ─────────────── action cards ─────────────── */
-function ActionCard({ action, onTrack }: { action: ChatAction; onTrack: () => void }) {
+function ActionCard({ action, onTrack }: { action: CardAction; onTrack: () => void }) {
   const { t } = useI18n()
   const add = useCartStore((s) => s.add)
   const applied = useRef(false)
@@ -100,11 +106,55 @@ function ActionCard({ action, onTrack }: { action: ChatAction; onTrack: () => vo
   )
 }
 
-export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: () => void }) {
+/* ─────────────── action buttons (tappabili dal cliente) ─────────────── */
+function ActionButtons({ buttons, isTakeaway, canReserve, onSendOrder, onViewCart, onCallWaiter, onReserve, onTrack }: {
+  buttons: { action: ButtonAction }[]
+  isTakeaway: boolean
+  canReserve: boolean
+  onSendOrder: () => void
+  onViewCart?: () => void
+  onCallWaiter: () => void
+  onReserve?: () => void
+  onTrack: () => void
+}) {
+  const { t } = useI18n()
+  const pop = { initial: { scale: 0.5, opacity: 0 }, animate: { scale: [0.5, 1.06, 1], opacity: 1 }, transition: SPRING }
+
+  // Mappa azione → icona + etichetta i18n + handler + visibilità (gating lato client).
+  const conf: Record<ButtonAction, { Icon: typeof Send; labelKey: UIKey; onClick?: () => void; show: boolean }> = {
+    send_order:  { Icon: Send,         labelKey: 'btnSendOrder',  onClick: onSendOrder,  show: true },
+    view_cart:   { Icon: ShoppingBag,  labelKey: 'btnViewCart',   onClick: onViewCart,   show: !!onViewCart },
+    call_waiter: { Icon: Bell,         labelKey: 'btnCallWaiter', onClick: onCallWaiter, show: !isTakeaway },
+    reserve:     { Icon: CalendarDays, labelKey: 'btnReserve',    onClick: onReserve,    show: !isTakeaway && canReserve && !!onReserve },
+    track_order: { Icon: Clock,        labelKey: 'btnTrackOrder', onClick: onTrack,      show: !isTakeaway },
+  }
+
+  const seen = new Set<ButtonAction>()
+  const visible = buttons.filter((b) => conf[b.action]?.show && !seen.has(b.action) && seen.add(b.action))
+  if (!visible.length) return null
+
+  return (
+    <motion.div {...pop} className="flex flex-wrap gap-2">
+      {visible.map((b) => {
+        const c = conf[b.action]
+        return (
+          <button key={b.action} onClick={c.onClick}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[14px] font-bold active:scale-95"
+            style={{ background: 'var(--brand-tint)', color: 'var(--brand)', boxShadow: 'inset 0 0 0 1.5px var(--brand)' }}>
+            <c.Icon size={17} strokeWidth={2.2} /> {t(c.labelKey)}
+          </button>
+        )
+      })}
+    </motion.div>
+  )
+}
+
+export function AiChat({ onOrderPlaced, onViewCart, onReserve }: { onOrderPlaced?: () => void; onViewCart?: () => void; onReserve?: () => void }) {
   const { t, lang } = useI18n()
-  const { restaurantId, tableId, tableNumber, sessionId, restaurantName, setOrderId } = useSessionStore()
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: `Ciao! Sono l'assistente di ${restaurantName ?? 'questo locale'}. Posso consigliarti, aggiungere piatti al carrello e chiamare il cameriere. Dimmi pure.` },
+  const { restaurantId, tableId, tableNumber, sessionId, reservationsEnabled, setOrderId } = useSessionStore()
+  const isTakeaway = !tableId
+  const [messages, setMessages] = useState<Message[]>(() => [
+    { role: 'assistant', content: t('chatGreeting') },
   ])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -121,7 +171,7 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
     setTyping(true)
     try {
       const history = next.slice(-10).map((m) => ({ role: m.role, content: m.content }))
-      const { data } = await api.post('/customer/ai-chat', { restaurantId, message: text, tableId, tableNumber, sessionId, history })
+      const { data } = await api.post('/customer/ai-chat', { restaurantId, message: text, tableId, tableNumber, sessionId, history, lang })
       const actions: ChatAction[] = Array.isArray(data.data.actions) ? data.data.actions : []
       // order_placed: aggiorna lo store così il tracking mostra il nuovo ordine.
       const placed = actions.find((a): a is OrderPlacedAction => a.type === 'order_placed')
@@ -131,6 +181,50 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
       setMessages((m) => [...m, { role: 'assistant', content: t('chatError') }])
     } finally {
       setTyping(false)
+    }
+  }
+
+  // send_order: invia l'ordine col carrello corrente riusando ESATTAMENTE la logica di
+  // checkout di CartView (POST /customer/orders, idempotencyKey, gestione ITEM_UNAVAILABLE).
+  async function sendOrder() {
+    const cart = useCartStore.getState()
+    if (!cart.items.length || !restaurantId) { toast.error(t('cartEmpty')); return }
+    try {
+      const idempotencyKey = cart.ensureCheckoutKey()
+      const snapshot = cart.items.slice()
+      const { data } = await api.post('/customer/orders', {
+        restaurantId, tableId, tableNumber, type: 'table',
+        items: snapshot.map((i) => ({ menuItemId: i.menuItemId, variantId: i.variantId, quantity: i.quantity, notes: i.notes })),
+        idempotencyKey,
+      })
+      const orderId: string = data.data.id
+      const total = snapshot.reduce((s, i) => s + i.unitPrice * i.quantity, 0)
+      setOrderId(orderId)
+      cart.clear()
+      toast.success(t('toastOrderSent'))
+      try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission() } catch { /* noop */ }
+      setMessages((m) => [...m, { role: 'assistant', content: '', actions: [{ type: 'order_placed', orderId, total }] }])
+    } catch (e: any) {
+      const err = e?.response?.data?.error
+      if (e?.response?.status === 409 && err?.code === 'ITEM_UNAVAILABLE') {
+        const ids: string[] = Array.isArray(err.items) ? err.items : []
+        for (const id of ids) useCartStore.getState().remove(id)
+        toast.error(t('orderItemsUnavailable'))
+      } else {
+        toast.error(t('orderError'))
+      }
+    }
+  }
+
+  // call_waiter: riusa l'endpoint esistente (WaiterSheet) con reason 'help', poi mostra
+  // la conferma riusando la card waiter_called.
+  async function callWaiter() {
+    try {
+      await api.post('/customer/waiter-call', { restaurantId, tableId, tableNumber, type: 'help' })
+      toast.success(t('toastWaiter'))
+      setMessages((m) => [...m, { role: 'assistant', content: '', actions: [{ type: 'waiter_called' }] }])
+    } catch {
+      toast.error(t('waiterError'))
     }
   }
 
@@ -166,7 +260,14 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
               </motion.div>
             )}
             {m.role === 'assistant' && m.actions?.map((a, ai) => (
-              <div key={ai} className="w-[86%]"><ActionCard action={a} onTrack={() => onOrderPlaced?.()} /></div>
+              <div key={ai} className="w-[86%]">
+                {a.type === 'buttons'
+                  ? <ActionButtons
+                      buttons={a.buttons} isTakeaway={isTakeaway} canReserve={reservationsEnabled}
+                      onSendOrder={sendOrder} onViewCart={onViewCart} onCallWaiter={callWaiter}
+                      onReserve={onReserve} onTrack={() => onOrderPlaced?.()} />
+                  : <ActionCard action={a} onTrack={() => onOrderPlaced?.()} />}
+              </div>
             ))}
           </div>
         ))}
@@ -201,7 +302,7 @@ export function AiChat({ onOrderPlaced }: { onBack: () => void; onOrderPlaced?: 
           className="h-[46px] flex-1 rounded-full px-[18px] text-[15px] text-[var(--ink)] outline-none"
           style={{ background: 'var(--raised)', boxShadow: 'inset 0 0 0 1.5px var(--hairline)' }}
         />
-        <button onClick={() => send()} disabled={!input.trim() || typing} aria-label="Invia"
+        <button onClick={() => send()} disabled={!input.trim() || typing} aria-label={t('send')}
           className="grid h-[46px] w-[46px] flex-none place-items-center rounded-full transition-colors active:scale-90"
           style={{ background: input.trim() ? 'var(--brand)' : 'var(--sunken)', color: input.trim() ? 'var(--on-brand)' : 'var(--ink-3)' }}>
           <Send size={20} strokeWidth={2.2} />

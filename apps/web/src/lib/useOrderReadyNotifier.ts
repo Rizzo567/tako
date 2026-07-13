@@ -25,7 +25,7 @@ export function useOrderReadyNotifier(): void {
         notifiedFor.current = orderId
         toast.success(t('toastOrderReady'))
         if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('Il tuo ordine è pronto', { body: 'Il cameriere sta arrivando.' })
+          new Notification(t('notifReadyTitle'), { body: t('notifReadyBody') })
         }
       }
     }

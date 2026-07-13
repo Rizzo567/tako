@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { api } from '@/lib/api'
 import { useSessionStore, useCartStore } from '@/lib/store'
 import { SPRING, EASE_OUT } from '@/lib/motion'
@@ -12,6 +12,7 @@ import { OrderTracking } from './OrderTracking'
 import { AiChat } from './AiChat'
 import { LanguageSheet } from './LanguageSheet'
 import { WaiterSheet } from './WaiterSheet'
+import { ConnectionBanner } from './ConnectionBanner'
 import { Sheet } from './ui/Sheet'
 
 type View = 'menu' | 'tracking' | 'chat'
@@ -98,8 +99,8 @@ function GlassIconBtn({
 }
 
 /* ───────────────── header (glass, 3 icone 3D centrate) ───────────────── */
-function Header({ count, compact, onCart, onWaiter, onLang }: {
-  count: number; compact: boolean; onCart: () => void; onWaiter: () => void; onLang: () => void
+function Header({ count, compact, onCart, onWaiter, onLang, showCart = true }: {
+  count: number; compact: boolean; onCart: () => void; onWaiter: () => void; onLang: () => void; showCart?: boolean
 }) {
   const { t } = useI18n()
   const ref = useRef<HTMLElement>(null)
@@ -134,10 +135,12 @@ function Header({ count, compact, onCart, onWaiter, onLang }: {
         }}
       >
         <GlassIconBtn img="/tako/nav/m-bell.png" onClick={onWaiter} text={t('hdrWaiter')} label={t('callWaiter')} idle="anim-wiggle" clickKf={KF_RING} imgOrigin="50% 14%" />
-        <span data-cart-anchor>
-          <GlassIconBtn img="/tako/nav/m-bag.png" onClick={onCart} badge={count} text={t('hdrCart')} label={t('hdrCart')} clickKf={KF_HOP} imgOrigin="50% 85%" />
-        </span>
-        <GlassIconBtn img="/tako/nav/m-lang.png" onClick={onLang} text="Language" label={t('language')} clickKf={KF_WIGGLE} imgOrigin="50% 50%" imgScale={1.5} />
+        {showCart && (
+          <span data-cart-anchor>
+            <GlassIconBtn img="/tako/nav/m-bag.png" onClick={onCart} badge={count} text={t('hdrCart')} label={t('hdrCart')} clickKf={KF_HOP} imgOrigin="50% 85%" />
+          </span>
+        )}
+        <GlassIconBtn img="/tako/nav/m-lang.png" onClick={onLang} text={t('language')} label={t('language')} clickKf={KF_WIGGLE} imgOrigin="50% 50%" imgScale={1.5} />
       </div>
     </header>
   )
@@ -213,10 +216,10 @@ function CustomerShell({ token }: { token: string }) {
   const [waiterSheet, setWaiterSheet] = useState(false)
   const [langSheet, setLangSheet] = useState(false)
   const [compact, setCompact] = useState(false)
-  const [sweep, setSweep] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const reduce = useReducedMotion()
+  // Solo un flag: il messaggio è localizzato al render, così il cambio lingua non
+  // ri-scatena il fetch della sessione (t fuori dalle deps dell'effect).
+  const [error, setError] = useState(false)
   // Notifica "ordine pronto" a livello di shell: arriva anche mentre il cliente è su menu/chat.
   useOrderReadyNotifier()
 
@@ -232,11 +235,12 @@ function CustomerShell({ token }: { token: string }) {
         useCartStore.getState().ensureScope(`${restaurant.id}:${table.id}`)
         applyBrand(restaurant.primaryColor)
       })
-      .catch(() => setError('Tavolo non trovato. Riprova a scansionare il QR.'))
+      .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [token, setSession])
 
   const aiEnabled = useSessionStore(s => s.aiEnabled)
+  const orderingEnabled = useSessionStore(s => s.orderingEnabled)
 
   // Header/nav collapse on scroll down (la pagina scrolla il body).
   useEffect(() => { setCompact(false) }, [view])
@@ -257,12 +261,9 @@ function CustomerShell({ token }: { token: string }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [view])
 
-  // "Vedi carrello": pennellata diagonale brand poi apre il carrello (~370ms).
+  // "Vedi carrello": apre direttamente il carrello (niente pennellata arancione a schermo).
   function launchCart() {
-    if (reduce) { setCartOpen(true); return }
-    setSweep(true)
-    setTimeout(() => setCartOpen(true), 370)
-    setTimeout(() => setSweep(false), 780)
+    setCartOpen(true)
   }
 
   if (loading) return (
@@ -272,23 +273,24 @@ function CustomerShell({ token }: { token: string }) {
         <img src={logoUrl || '/tako/tako-chef.png'} alt="" className="h-14 w-14 rounded-2xl object-contain" />
       </div>
       <div className="h-1 w-8 animate-pulse rounded-full" style={{ background: 'var(--brand)' }} />
-      <p className="text-sm font-semibold text-[var(--ink-3)]">Carico il menu...</p>
+      <p className="text-sm font-semibold text-[var(--ink-3)]">{t('loadingMenu')}</p>
     </div>
   )
 
   if (error) return (
     <div className="flex min-h-[100dvh] items-center justify-center p-6 text-center">
       <div>
-        <h1 className="mb-2 font-serif text-2xl text-[var(--ink)]">Qualcosa non va</h1>
-        <p className="font-semibold text-[var(--ink-2)]">{error}</p>
-        <p className="mt-3 text-sm font-medium text-[var(--ink-3)]">Connettiti al Wi-Fi del locale se la pagina non carica.</p>
+        <h1 className="mb-2 font-serif text-2xl text-[var(--ink)]">{t('errorTitle')}</h1>
+        <p className="font-semibold text-[var(--ink-2)]">{t('tableNotFound')}</p>
+        <p className="mt-3 text-sm font-medium text-[var(--ink-3)]">{t('wifiHint')}</p>
       </div>
     </div>
   )
 
   return (
     <div className="min-h-[100dvh]" style={{ background: 'var(--surface)' }}>
-      <Header count={count} compact={compact} onCart={() => setCartOpen(true)} onWaiter={() => setWaiterSheet(true)} onLang={() => setLangSheet(true)} />
+      <ConnectionBanner />
+      <Header count={count} compact={compact} showCart={orderingEnabled} onCart={() => setCartOpen(true)} onWaiter={() => setWaiterSheet(true)} onLang={() => setLangSheet(true)} />
 
       <main style={{ paddingBottom: view === 'chat' ? 0 : 'calc(var(--safe-b) + 96px)' }}>
         <AnimatePresence mode="wait">
@@ -297,26 +299,12 @@ function CustomerShell({ token }: { token: string }) {
             transition={{ duration: 0.34, ease: EASE_OUT }}>
             {view === 'menu' && <MenuView onGoCart={launchCart} compact={compact} />}
             {view === 'tracking' && <OrderTracking onBack={() => setView('menu')} onOrderAgain={() => setView('menu')} />}
-            {view === 'chat' && <AiChat onBack={() => setView('menu')} onOrderPlaced={() => setView('tracking')} />}
+            {view === 'chat' && <AiChat onOrderPlaced={() => setView('tracking')} onViewCart={launchCart} onReserve={() => { window.location.href = `/prenota/${useSessionStore.getState().restaurantId}` }} />}
           </motion.div>
         </AnimatePresence>
       </main>
 
       <BottomNav view={view} setView={setView} aiEnabled={aiEnabled} orderActive={!!orderId} compact={compact} />
-
-      {/* pennellata diagonale brand al lancio del carrello */}
-      <AnimatePresence>
-        {sweep && (
-          <motion.div
-            className="pointer-events-none fixed inset-0 z-[70]"
-            style={{ background: 'var(--brand)' }}
-            initial={{ clipPath: 'polygon(120% 0, 130% 0, 130% 100%, 120% 100%)' }}
-            animate={{ clipPath: 'polygon(-30% 0, 130% 0, 130% 100%, -30% 100%)' }}
-            exit={{ clipPath: 'polygon(-40% 0, -30% 0, -30% 100%, -40% 100%)' }}
-            transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
-          />
-        )}
-      </AnimatePresence>
 
       {/* Cart bottom sheet */}
       <Sheet open={cartOpen} onClose={() => setCartOpen(false)} title={t('yourOrder')} leadIcon={<span className="text-[18px]">🛍️</span>} maxH="90%">

@@ -2,19 +2,22 @@
 import { Check } from 'lucide-react'
 import { Languages } from 'lucide-react'
 import { Sheet } from './ui/Sheet'
-import { useI18n, LANG_NATIVE, type Lang } from '@/lib/i18n'
+import { useI18n, LANG_NATIVE, SUPPORTED, type Lang } from '@/lib/i18n'
 
 const nativeName = (code: string): string =>
   LANG_NATIVE[code.toLowerCase() as Lang] ?? code.toUpperCase()
 
 // Sheet lingua aperto dal pulsante "Language" nell'header. Cambia lingua SENZA reload
 // (aggiorna il context i18n → tutta la UI e il rifetch traduzioni del menu).
+// Mostra TUTTE le lingue supportate: la UI è tradotta in tutte, quindi il cliente può
+// sempre scegliere la propria (i nomi dei piatti restano in IT se il ristorante non li
+// ha tradotti). La lista `languages` del ristorante serve solo alle traduzioni del menu.
 export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { lang, setLang, languages, t } = useI18n()
+  const { lang, setLang, t } = useI18n()
   return (
     <Sheet open={open} onClose={onClose} title={t('language')} sub={t('languageSub')} leadIcon={<Languages size={20} />}>
       <div className="flex flex-col gap-2 px-5 pb-[calc(var(--safe-b)+18px)] pt-1">
-        {languages.map(code => {
+        {SUPPORTED.map(code => {
           const on = code.toLowerCase() === lang.toLowerCase()
           return (
             <button

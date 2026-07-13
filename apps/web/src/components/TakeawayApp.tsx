@@ -9,6 +9,7 @@ import { MenuView } from './MenuView'
 import { CartView } from './CartView'
 import { OrderTracking } from './OrderTracking'
 import { AiChat } from './AiChat'
+import { ConnectionBanner } from './ConnectionBanner'
 import { Sheet } from './ui/Sheet'
 import { I18nProvider, useI18n } from '@/lib/i18n'
 import { useOrderReadyNotifier } from '@/lib/useOrderReadyNotifier'
@@ -33,8 +34,9 @@ function applyBrand(color?: string | null) {
   root.style.setProperty('--on-brand', L > 0.62 ? '#2A1F1A' : '#FFFFFF')
 }
 
-function Header({ count, onCart }: { count: number; onCart: () => void }) {
+function Header({ count, onCart, showCart = true }: { count: number; onCart: () => void; showCart?: boolean }) {
   const { restaurantName, logoUrl } = useSessionStore()
+  const { t } = useI18n()
   return (
     <header className="sticky top-0 z-40 flex items-center gap-3 px-3.5"
       style={{ paddingTop: 'calc(var(--safe-t) + 12px)', paddingBottom: 11, background: 'var(--surface)', borderBottom: '1px solid var(--hairline)' }}>
@@ -42,33 +44,36 @@ function Header({ count, onCart }: { count: number; onCart: () => void }) {
       <img src={logoUrl || '/mascotte/tako-chef.png'} alt="" className="h-[38px] w-[38px] flex-none object-contain" />
       <div className="min-w-0 flex-1">
         <p className="truncate text-[16px] font-bold leading-tight text-[var(--ink)]">{restaurantName}</p>
-        <p className="mt-0.5 flex items-center gap-1 text-[12.5px] font-semibold text-[var(--ink-2)]"><PackageCheck size={13} /> Asporto</p>
+        <p className="mt-0.5 flex items-center gap-1 text-[12.5px] font-semibold text-[var(--ink-2)]"><PackageCheck size={13} /> {t('takeawayLabel')}</p>
       </div>
-      <button onClick={onCart} aria-label="Carrello" data-cart-anchor
-        className="relative grid h-[42px] w-[42px] place-items-center rounded-full text-[var(--ink)] active:scale-90"
-        style={{ background: 'var(--raised)', boxShadow: 'var(--sh-1)' }}>
-        <ShoppingBag size={20} />
-        <AnimatePresence>
-          {count > 0 && (
-            <motion.span key={count}
-              className="absolute -right-1 -top-1 grid h-[19px] min-w-[19px] place-items-center rounded-full px-[5px] text-[11px] font-bold text-[var(--on-brand)]"
-              style={{ background: 'var(--brand)', boxShadow: '0 0 0 2.5px var(--surface)' }}
-              initial={{ scale: 0.4 }} animate={{ scale: [1, 1.5, 1] }} exit={{ scale: 0 }}
-              transition={{ duration: 0.42, ease: [0.34, 1.56, 0.64, 1] }}>
-              {count}
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </button>
+      {showCart && (
+        <button onClick={onCart} aria-label={t('hdrCart')} data-cart-anchor
+          className="relative grid h-[42px] w-[42px] place-items-center rounded-full text-[var(--ink)] active:scale-90"
+          style={{ background: 'var(--raised)', boxShadow: 'var(--sh-1)' }}>
+          <ShoppingBag size={20} />
+          <AnimatePresence>
+            {count > 0 && (
+              <motion.span key={count}
+                className="absolute -right-1 -top-1 grid h-[19px] min-w-[19px] place-items-center rounded-full px-[5px] text-[11px] font-bold text-[var(--on-brand)]"
+                style={{ background: 'var(--brand)', boxShadow: '0 0 0 2.5px var(--surface)' }}
+                initial={{ scale: 0.4 }} animate={{ scale: [1, 1.5, 1] }} exit={{ scale: 0 }}
+                transition={{ duration: 0.42, ease: [0.34, 1.56, 0.64, 1] }}>
+                {count}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
+      )}
     </header>
   )
 }
 
 function BottomNav({ view, setView, aiEnabled, orderActive }: { view: View; setView: (v: View) => void; aiEnabled: boolean; orderActive: boolean }) {
+  const { t } = useI18n()
   const items = [
-    { id: 'menu' as View, Icon: Utensils, label: 'Menù', dot: false },
-    { id: 'tracking' as View, Icon: Clock, label: 'Ordine', dot: orderActive },
-    ...(aiEnabled ? [{ id: 'chat' as View, Icon: Sparkles, label: 'Assistente', dot: false }] : []),
+    { id: 'menu' as View, Icon: Utensils, label: t('navMenu'), dot: false },
+    { id: 'tracking' as View, Icon: Clock, label: t('navOrder'), dot: orderActive },
+    ...(aiEnabled ? [{ id: 'chat' as View, Icon: Sparkles, label: t('navAssistant'), dot: false }] : []),
   ]
   const n = items.length
   const idx = Math.max(0, items.findIndex(i => i.id === view))
@@ -106,7 +111,8 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
   const [view, setView] = useState<View>('menu')
   const [cartOpen, setCartOpen] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // Chiave d'errore (localizzata al render): il cambio lingua non ri-scatena la sessione.
+  const [errorKey, setErrorKey] = useState<'takeawayClosed' | 'takeawayNotFound' | null>(null)
   // Notifica "ordine pronto" a livello di shell (asporto): arriva anche su menu/chat.
   useOrderReadyNotifier()
 
@@ -128,13 +134,12 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
         useCartStore.getState().ensureScope(`${restaurant.id}:takeaway`)
         applyBrand(restaurant.primaryColor)
       })
-      .catch((e) => setError(e?.response?.status === 403
-        ? 'Questo ristorante non accetta ordini da asporto al momento.'
-        : 'Ristorante non trovato. Controlla il link.'))
+      .catch((e) => setErrorKey(e?.response?.status === 403 ? 'takeawayClosed' : 'takeawayNotFound'))
       .finally(() => setLoading(false))
   }, [restaurantId, setSession])
 
   const aiEnabled = useSessionStore(s => s.aiEnabled)
+  const orderingEnabled = useSessionStore(s => s.orderingEnabled)
 
   if (loading) return (
     <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-4" style={{ background: 'var(--surface)' }}>
@@ -142,22 +147,23 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
         <img src={logoUrl || '/mascotte/tako-chef.png'} alt="" className="h-14 w-14 object-contain" />
       </div>
       <div className="h-1 w-8 animate-pulse rounded-full" style={{ background: 'var(--brand)' }} />
-      <p className="text-sm font-semibold text-[var(--ink-3)]">Preparo l&apos;asporto...</p>
+      <p className="text-sm font-semibold text-[var(--ink-3)]">{t('takeawayLoading')}</p>
     </div>
   )
 
-  if (error) return (
+  if (errorKey) return (
     <div className="flex min-h-[100dvh] items-center justify-center p-6 text-center">
       <div>
-        <h1 className="mb-2 font-serif text-2xl text-[var(--ink)]">Asporto non disponibile</h1>
-        <p className="font-semibold text-[var(--ink-2)]">{error}</p>
+        <h1 className="mb-2 font-serif text-2xl text-[var(--ink)]">{t('takeawayErrTitle')}</h1>
+        <p className="font-semibold text-[var(--ink-2)]">{t(errorKey)}</p>
       </div>
     </div>
   )
 
   return (
     <div className="min-h-[100dvh]" style={{ background: 'var(--surface)' }}>
-      <Header count={count} onCart={() => setCartOpen(true)} />
+      <ConnectionBanner />
+      <Header count={count} onCart={() => setCartOpen(true)} showCart={orderingEnabled} />
       <main style={{ paddingBottom: 'calc(var(--safe-b) + 72px)' }}>
         <AnimatePresence mode="wait">
           <motion.div key={view}
@@ -165,7 +171,7 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
             transition={{ duration: 0.34, ease: EASE_OUT }}>
             {view === 'menu' && <MenuView onGoCart={() => setCartOpen(true)} />}
             {view === 'tracking' && <OrderTracking onBack={() => setView('menu')} onOrderAgain={() => setView('menu')} />}
-            {view === 'chat' && <AiChat onBack={() => setView('menu')} onOrderPlaced={() => setView('tracking')} />}
+            {view === 'chat' && <AiChat onOrderPlaced={() => setView('tracking')} onViewCart={() => setCartOpen(true)} />}
           </motion.div>
         </AnimatePresence>
       </main>

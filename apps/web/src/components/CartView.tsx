@@ -12,16 +12,17 @@ import { Dish } from './ui/Dish'
 
 // Stepper riga carrello (min 0 = rimuovi).
 function LineQty({ value, onChange }: { value: number; onChange: (n: number) => void }) {
+  const { t } = useI18n()
   return (
     <div className="inline-flex items-center gap-1 rounded-full p-1" style={{ background: 'var(--sunken)' }}>
-      <button aria-label="Diminuisci" onClick={() => onChange(value - 1)}
+      <button aria-label={t('decrease')} onClick={() => onChange(value - 1)}
         className="grid h-8 w-8 place-items-center rounded-full active:scale-90"
         style={{ background: 'var(--raised)', color: 'var(--ink)', boxShadow: 'var(--sh-1)' }}>
         <Minus size={15} />
       </button>
       <motion.span key={value} className="tnum min-w-[24px] text-center text-[15px] font-bold text-[var(--ink)]"
         initial={{ scale: 0.7 }} animate={{ scale: 1 }} transition={SPRING}>{value}</motion.span>
-      <button aria-label="Aumenta" onClick={() => onChange(value + 1)}
+      <button aria-label={t('increase')} onClick={() => onChange(value + 1)}
         className="grid h-8 w-8 place-items-center rounded-full text-[var(--on-brand)] active:scale-90"
         style={{ background: 'var(--brand)', boxShadow: 'var(--sh-1)' }}>
         <Plus size={15} />
@@ -33,7 +34,10 @@ function LineQty({ value, onChange }: { value: number; onChange: (n: number) => 
 export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrderPlaced: (orderId: string) => void }) {
   const { t } = useI18n()
   const { items, updateQty, remove, clear, total, ensureCheckoutKey } = useCartStore()
-  const { restaurantId, tableId, tableNumber, setOrderId } = useSessionStore()
+  const { restaurantId, tableId, tableNumber, coverCharge, setOrderId } = useSessionStore()
+  // Il coperto è A PERSONA e informativo: lo aggiunge il conto del tavolo, non l'ordine
+  // dal telefono. Solo al tavolo (asporto = tableId null → niente coperto).
+  const showCover = coverCharge > 0 && !!tableId
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
   const animTotal = useCountUp(total())
@@ -118,6 +122,14 @@ export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrde
       </div>
 
       <div className="sticky bottom-0 border-t px-5 py-3" style={{ background: 'var(--raised)', borderColor: 'var(--hairline)' }}>
+        {showCover && (
+          <div className="mb-2 flex items-baseline justify-between gap-3 text-[13px]">
+            <span className="min-w-0 font-semibold text-[var(--ink-2)]">
+              {t('coverCharge')} <span className="font-medium text-[var(--ink-3)]">· {t('coverChargePer')}</span>
+            </span>
+            <span className="tnum flex-none font-semibold text-[var(--ink-2)]">{formatEuro(coverCharge)}</span>
+          </div>
+        )}
         <div className="mb-2.5 flex items-baseline justify-between">
           <span className="font-semibold text-[var(--ink-2)]">{t('total')}</span>
           <span className="serif tnum text-[26px] text-[var(--ink)]">{formatEuro(animTotal)}</span>

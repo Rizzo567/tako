@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { SPRING_SHEET, EASE_OUT } from '@/lib/motion'
+import { useI18n } from '@/lib/i18n'
 
 interface SheetProps {
   open: boolean
@@ -21,6 +22,7 @@ interface SheetProps {
  * Chiude se trascinato oltre 120px o con velocità > 550.
  */
 export function Sheet({ open, onClose, children, title, sub, leadIcon, accent, maxH = '90vh' }: SheetProps) {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const [host, setHost] = useState<HTMLElement | null>(null)
   useEffect(() => { setHost(document.body) }, [])
@@ -80,7 +82,7 @@ export function Sheet({ open, onClose, children, title, sub, leadIcon, accent, m
                   {sub && <p className="mt-0.5 text-[13px] text-[var(--ink-2)]">{sub}</p>}
                 </div>
                 <button
-                  aria-label="Chiudi"
+                  aria-label={t('close')}
                   onClick={onClose}
                   className="grid h-9 w-9 place-items-center rounded-full text-[var(--ink-2)] active:scale-95"
                 >

@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { nanoid } from 'nanoid'
-import type { PublicItem, PublicVariant } from '@tako/types'
 
 // Un carrello persistito non deve sopravvivere oltre la sessione al tavolo: si
 // invalida al cambio tavolo/ristorante (scope) o dopo scadenza.
@@ -89,6 +88,15 @@ interface SessionState {
   restaurantName: string | null
   primaryColor: string
   aiEnabled: boolean
+  // Ordini dal telefono del cliente attivi. Se false il menu resta visibile ma
+  // non si può ordinare (carrello/Aggiungi nascosti). Default true finché il menu non risponde.
+  orderingEnabled: boolean
+  // Prenotazioni tavolo attive per il ristorante. Popolato da MenuView al load del menu;
+  // usato per decidere se mostrare l'azione "Prenota" nell'assistente.
+  reservationsEnabled: boolean
+  // Coperto A PERSONA in € (0 se non attivo). Informativo per il cliente: il conto del
+  // tavolo lo aggiunge. Non si applica all'asporto (mostrato solo se c'è un tavolo).
+  coverCharge: number
   logoUrl?: string
   orderId: string | null
   sessionId: string | null
@@ -100,7 +108,7 @@ export const useSessionStore = create<SessionState>()(
   persist(
     (set) => ({
       restaurantId: null, tableId: null, tableNumber: null,
-      restaurantName: null, primaryColor: '#ED7159', aiEnabled: false, orderId: null,
+      restaurantName: null, primaryColor: '#ED7159', aiEnabled: false, orderingEnabled: true, reservationsEnabled: false, coverCharge: 0, orderId: null,
       sessionId: null,
       // Se cambia il ristorante o il tavolo rispetto a quello corrente, azzera orderId:
       // altrimenti l'ordine di una visita precedente riaffiorerebbe su un tavolo/locale diverso.

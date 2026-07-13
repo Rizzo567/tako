@@ -13,7 +13,7 @@ import { Confetti } from './ui/Confetti'
 interface OrderItem { id?: string; name: string; quantity: number; unitPrice: number; notes?: string }
 interface Order { id?: string; status: string; items?: OrderItem[]; total: number; notes?: string }
 
-export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; onOrderAgain: () => void }) {
+export function OrderTracking({ onOrderAgain }: { onBack: () => void; onOrderAgain: () => void }) {
   const { t, lang } = useI18n()
   const { orderId, tableId, setOrderId } = useSessionStore()
   const [order, setOrder] = useState<Order | null>(null)
@@ -73,8 +73,8 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
     <div className="flex min-h-[62vh] flex-col items-center justify-center gap-3 p-8 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/tako/tako-cloche.png" alt="" className="anim-float w-[150px]" style={{ filter: 'drop-shadow(0 16px 26px rgba(217,83,58,.18))' }} />
-      <h3 className="text-[20px] font-bold text-[var(--ink)]">{error ? 'Errore di caricamento' : t('noActiveOrder')}</h3>
-      <p className="mb-2 text-[14px] text-[var(--ink-2)]">{error ? 'Non riesco a recuperare l’ordine. Riprova.' : t('noActiveOrderSub')}</p>
+      <h3 className="text-[20px] font-bold text-[var(--ink)]">{error ? t('loadError') : t('noActiveOrder')}</h3>
+      <p className="mb-2 text-[14px] text-[var(--ink-2)]">{error ? t('loadErrorSub') : t('noActiveOrderSub')}</p>
       <button onClick={onOrderAgain}
         className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-bold text-[var(--on-brand)] active:scale-95"
         style={{ background: 'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
@@ -94,8 +94,8 @@ export function OrderTracking({ onBack, onOrderAgain }: { onBack: () => void; on
     <div className="p-4">
       <div className="p-6 text-center" style={{ borderRadius: 'var(--r-card)', background: 'color-mix(in srgb, var(--danger) 8%, var(--raised))', border: '1px solid color-mix(in srgb, var(--danger) 30%, transparent)', boxShadow: 'var(--sh-1)' }}>
         <p className="mb-1 text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--danger)' }}>{t('orderWord')}</p>
-        <p className="serif text-[28px]" style={{ color: 'var(--danger)' }}>Annullato</p>
-        <p className="mt-2 text-[14px] font-medium text-[var(--ink-2)]">Ordine annullato — chiedi allo staff per assistenza.</p>
+        <p className="serif text-[28px]" style={{ color: 'var(--danger)' }}>{t('cancelledTitle')}</p>
+        <p className="mt-2 text-[14px] font-medium text-[var(--ink-2)]">{t('cancelledSub')}</p>
         <button onClick={onOrderAgain} className="mt-5 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[15px] font-bold text-[var(--on-brand)]" style={{ background: 'var(--brand)' }}>{t('goToMenu')}</button>
       </div>
     </div>

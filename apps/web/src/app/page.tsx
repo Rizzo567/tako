@@ -2,6 +2,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { EASE_OUT } from '@/lib/motion'
 import { Bubbles } from '@/components/ui/Bubbles'
+import { I18nProvider, useI18n } from '@/lib/i18n'
 
 // QR finto decorativo (21×21, 3 finder pattern + moduli pseudo-casuali deterministici).
 function FauxQR() {
@@ -39,7 +40,17 @@ function FauxQR() {
   )
 }
 
-export default function Splash() {
+export default function Page() {
+  // Nessun ristorante in contesto: il provider sceglie la lingua da localStorage o browser.
+  return (
+    <I18nProvider restaurantId={null}>
+      <Splash />
+    </I18nProvider>
+  )
+}
+
+function Splash() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   // rise-fade staggerato sui blocchi (delay handoff: .15 / .28 / .42 / .54)
   const rise = (delay: number) =>
@@ -90,8 +101,7 @@ export default function Splash() {
 
       <motion.p className="mt-3.5 max-w-[280px] text-[16.5px] leading-relaxed text-[var(--ink-2)]"
         style={{ zIndex: 1 }} {...rise(0.28)}>
-        Scansiona il <b className="text-[var(--ink)]">QR sul tuo tavolo</b> per sfogliare il menù e ordinare.
-        Niente app da scaricare.
+        {t('splashScan')}
       </motion.p>
 
       <motion.div className="mt-8" style={{ zIndex: 1 }} {...rise(0.42)}>
@@ -99,11 +109,11 @@ export default function Splash() {
       </motion.div>
 
       <motion.p className="mt-5 max-w-[280px] text-[12.5px] leading-relaxed text-[var(--ink-3)]" style={{ zIndex: 1 }} {...rise(0.54)}>
-        Connettiti al <b className="text-[var(--ink-2)]">Wi-Fi del locale</b> se la pagina non si carica.
+        {t('wifiHint')}
       </motion.p>
 
       <motion.p className="mt-4 text-[12.5px] text-[var(--ink-3)]" style={{ zIndex: 1 }} {...rise(0.62)}>
-        Tako · sistema operativo del ristorante
+        Tako · {t('splashTagline')}
       </motion.p>
     </div>
   )
