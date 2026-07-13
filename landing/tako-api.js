@@ -99,7 +99,7 @@
       return res.text().then(function (text) {
         var payload = null;
         if (text) {
-          try { payload = JSON.parse(text); } catch (e) { payload = null; }
+          try { payload = JSON.parse(text); } catch { payload = null; }
         }
         if (res.ok) {
           // Il backend incapsula in { data: ... }; espongo data sia grezzo che annidato.

@@ -73,7 +73,7 @@ export async function insightsRoutes(fastify: FastifyInstance) {
   fastify.get('/menu', {
     preHandler: requireAuth,
     config: { rateLimit: { max: 10, timeWindow: 60000, keyGenerator: (req: any) => req.user?.restaurantId ?? req.ip } },
-  }, async (req, reply) => {
+  }, async (req, _reply) => {
     const { days: daysStr } = req.query as { days?: string }
     const days = Math.min(Math.max(parseInt(daysStr ?? '30', 10) || 30, 7), 365)
     const restaurantId = req.user!.restaurantId

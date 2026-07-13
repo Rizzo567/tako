@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
-import { db, orders, orderItems, menuItems, bills, tableSessions } from '@tako/db'
-import { eq, and, gte, lte, desc, sql, inArray, isNotNull } from 'drizzle-orm'
+import { db, orders, orderItems, bills, tableSessions } from '@tako/db'
+import { eq, and, gte, lte, inArray } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz, dayEndInTz } from '../lib/billing.js'
 

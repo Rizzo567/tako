@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { api } from '@/lib/api'
 import { useSessionStore } from '@/lib/store'
 import { useI18n, type UIKey } from '@/lib/i18n'
-import { SPRING, EASE_OUT } from '@/lib/motion'
+import { EASE_OUT } from '@/lib/motion'
 import { Sheet } from './ui/Sheet'
 import { Confetti } from './ui/Confetti'
 

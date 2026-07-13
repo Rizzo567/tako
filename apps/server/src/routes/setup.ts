@@ -8,7 +8,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { db, users, restaurants } from '@tako/db'
-import { eq, and } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import {
   claim,
   heartbeat,

@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemTranslations } from '@tako/db'
-import { eq, and, asc, isNotNull } from 'drizzle-orm'
+import { eq, and, asc } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import OpenAI from 'openai'
@@ -323,7 +323,7 @@ Regole:
           { role: 'user', content: text },
         ],
       })
-    } catch (err: any) {
+    } catch {
       return reply.code(503).send({ error: { code: 'AI_UNAVAILABLE', message: 'Servizio AI non disponibile. Verifica la chiave OpenAI.' } })
     }
 

@@ -40,7 +40,7 @@ if (fresh) {
 
 const shutdown = async () => {
   console.log('\n[pg] stopping...')
-  try { await pg.stop() } catch {}
+  try { await pg.stop() } catch { /* già fermo */ }
   process.exit(0)
 }
 process.on('SIGINT', shutdown)

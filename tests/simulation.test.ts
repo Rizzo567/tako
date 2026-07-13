@@ -137,7 +137,7 @@ describe('Simulazione: 3 ristoranti in servizio contemporaneo', () => {
   })
 
   it('cross-tenant: lo staff di un ristorante non può toccare gli ordini di un altro (404)', async () => {
-    const a = sims[0]!, b = sims[1]!
+    const a = sims[0]!
     const res = await fetch(`${SERVER}/api/orders/${results[1]!.o1.id}/status`, {
       method: 'PATCH', headers: staff(a.env), body: JSON.stringify({ status: 'cancelled' }),
     })

@@ -109,7 +109,7 @@ async function startEphemeralCloudDb(): Promise<ReturnType<typeof postgres>> {
  * helmet (irrilevante ai flussi funzionali): la loro assenza non altera i comportamenti
  * testati. NON chiama listen: i test usano app.inject.
  */
-async function buildCloudApp(opts: CloudTestOptions): Promise<FastifyInstance> {
+async function buildCloudApp(_opts: CloudTestOptions): Promise<FastifyInstance> {
   // Import dinamico DOPO setCloudEnv + CLOUD_DATABASE_URL impostata.
   const { cloudAuthRoutes } = await import('../../src/routes/cloud/auth.ts')
   const { cloudOAuthRoutes } = await import('../../src/routes/cloud/oauth.ts')

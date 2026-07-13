@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, integer, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, integer, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
 
 // Sorgente di verità dell'identità owner nel cloud control-plane.
 // Vedi MASTER_PLAN-cloud-auth §3.1.
