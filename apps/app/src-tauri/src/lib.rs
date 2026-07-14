@@ -10,7 +10,7 @@
 
 use std::process::{Child, Command};
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 use std::time::{Duration, Instant};
 use tauri::{Manager, RunEvent};
 use tauri_plugin_dialog::{DialogExt, MessageDialogButtons};
@@ -23,6 +23,39 @@ const TAKO_PORT: &str = "4317";
 /// Porta dell'app CLIENTE (Next standalone): i telefoni la raggiungono via QR
 /// sulla LAN (http://<IP-Mac>:3002/...). Coerente con CLIENT_PORT lato server.
 const WEB_PORT: &str = "3002";
+
+/// Su Windows impedisce che lo spawn di un processo console (node.exe, taskkill)
+/// faccia lampeggiare una finestra nera davanti all'utente. No-op altrove.
+fn no_console_window(cmd: &mut Command) {
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        // CREATE_NO_WINDOW: nessuna finestra console per il figlio.
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+        cmd.creation_flags(CREATE_NO_WINDOW);
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = cmd; // niente da fare fuori da Windows
+    }
+}
+
+/// Token per-lancio che autorizza la richiesta interna di shutdown ordinato
+/// (`POST /internal/shutdown`). Gira solo su localhost: non è materiale di
+/// sicurezza forte, basta che sia imprevedibile per lancio. Deriva da orologio
+/// ad alta risoluzione + PID, generato una volta sola e condiviso col figlio via
+/// env `TAKO_SHUTDOWN_TOKEN`.
+static SHUTDOWN_TOKEN: OnceLock<String> = OnceLock::new();
+
+fn shutdown_token() -> &'static str {
+    SHUTDOWN_TOKEN.get_or_init(|| {
+        let nanos = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_nanos())
+            .unwrap_or(0);
+        format!("{:x}{:x}", nanos, std::process::id())
+    })
+}
 
 /// Stato di supervisione dei processi figli (API server + web cliente).
 ///
@@ -40,6 +73,11 @@ struct Supervisor {
     pids: Mutex<Vec<Arc<AtomicU32>>>,
     /// Handle dei thread-watchdog, per attenderne l'uscita alla chiusura.
     threads: Mutex<Vec<std::thread::JoinHandle<()>>>,
+    /// (Windows) Stesso Arc del PID-slot del server (proprietario di Postgres):
+    /// il watchdog lo azzera quando il server esce da solo, così la chiusura sa
+    /// attendere lo shutdown ordinato prima del fallback taskkill. 0 = non avviato.
+    #[cfg(windows)]
+    server_pid: Arc<AtomicU32>,
 }
 
 /// Termina l'intero gruppo/albero di processi di `pid` (node + il Postgres che
@@ -58,10 +96,53 @@ fn kill_group(pid: u32) {
     }
     #[cfg(not(unix))]
     {
-        let _ = Command::new("taskkill")
-            .args(["/F", "/T", "/PID", &pid.to_string()])
-            .status();
+        let mut c = Command::new("taskkill");
+        c.args(["/F", "/T", "/PID", &pid.to_string()]);
+        no_console_window(&mut c);
+        let _ = c.status();
     }
+}
+
+/// (Windows) Chiede al server, via HTTP grezzo su localhost, uno shutdown
+/// ORDINATO: il lato node chiude Postgres in modo pulito e rilascia la data dir
+/// prima di uscire, evitando il `taskkill` duro (che lascerebbe il cluster in
+/// stato sporco). Best-effort con timeout corti: se fallisce, il chiamante
+/// ripiega comunque sul taskkill dell'albero.
+#[cfg(windows)]
+fn request_server_shutdown() {
+    use std::io::{Read, Write};
+    use std::net::TcpStream;
+
+    let addr: std::net::SocketAddr = match format!("127.0.0.1:{TAKO_PORT}").parse() {
+        Ok(a) => a,
+        Err(_) => return,
+    };
+    let mut stream = match TcpStream::connect_timeout(&addr, Duration::from_secs(2)) {
+        Ok(s) => s,
+        Err(e) => {
+            log::warn!("shutdown ordinato: connessione fallita ({e}), userò taskkill");
+            return;
+        }
+    };
+    let _ = stream.set_write_timeout(Some(Duration::from_secs(2)));
+    let _ = stream.set_read_timeout(Some(Duration::from_secs(2)));
+    let req = format!(
+        "POST /internal/shutdown HTTP/1.1\r\n\
+         Host: 127.0.0.1:{TAKO_PORT}\r\n\
+         x-tako-shutdown-token: {}\r\n\
+         content-length: 0\r\n\
+         connection: close\r\n\r\n",
+        shutdown_token()
+    );
+    if let Err(e) = stream.write_all(req.as_bytes()) {
+        log::warn!("shutdown ordinato: invio richiesta fallito ({e}), userò taskkill");
+        return;
+    }
+    let _ = stream.flush();
+    // Leggiamo (best-effort) la risposta: conferma che il server l'ha presa.
+    let mut buf = [0u8; 256];
+    let _ = stream.read(&mut buf);
+    log::info!("shutdown ordinato richiesto al server su porta {TAKO_PORT}");
 }
 
 /// Avvia il watchdog di un processo figlio in un thread dedicato che ne possiede
@@ -96,8 +177,12 @@ fn supervise(
             // Attende l'uscita del processo corrente (blocca finché vive).
             let status = child.wait();
 
-            // Uscita durante lo shutdown volontario: nessun riavvio.
+            // Uscita durante lo shutdown volontario: nessun riavvio. Azzera il
+            // PID così la chiusura sa che il figlio è uscito DA SOLO (su Windows
+            // segnala che lo shutdown ordinato di Postgres è andato a buon fine,
+            // evitando il fallback taskkill).
             if shutting_down.load(Ordering::SeqCst) {
+                pid_slot.store(0, Ordering::SeqCst);
                 return;
             }
 
@@ -198,13 +283,20 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
         use std::os::unix::process::CommandExt;
         command.process_group(0);
     }
+    // Su Windows: nessuna finestra console per node.exe.
+    no_console_window(&mut command);
     command
         .env("EMBEDDED_DB", "1")
         .env("PORT", TAKO_PORT)
-        .env("NODE_ENV", "production");
+        .env("NODE_ENV", "production")
+        // Token per-lancio per la richiesta interna di shutdown ordinato.
+        .env("TAKO_SHUTDOWN_TOKEN", shutdown_token());
 
-    // Dati scrivibili (DB, upload, segreto) in app-data utente, fuori dal bundle.
-    if let Ok(data) = app.path().app_data_dir() {
+    // Dati scrivibili (DB, upload, segreto) in app-data LOCALE utente, fuori dal
+    // bundle. Locale (non Roaming su Windows): il cluster Postgres NON deve
+    // finire in una cartella sincronizzata (OneDrive) che ne locka i file. Su
+    // mac/linux il path resta identico ad app_data_dir.
+    if let Ok(data) = app.path().app_local_data_dir() {
         let _ = std::fs::create_dir_all(&data);
         command
             .env("TAKO_HOME", &data)
@@ -249,6 +341,8 @@ fn spawn_web(app: &tauri::AppHandle) -> Option<Child> {
         use std::os::unix::process::CommandExt;
         command.process_group(0);
     }
+    // Su Windows: nessuna finestra console per node.exe.
+    no_console_window(&mut command);
     command
         .env("PORT", WEB_PORT)
         .env("HOSTNAME", "0.0.0.0")
@@ -340,11 +434,19 @@ pub fn run() {
             let shutting_down = Arc::new(AtomicBool::new(false));
             let mut pids: Vec<Arc<AtomicU32>> = Vec::new();
             let mut threads: Vec<std::thread::JoinHandle<()>> = Vec::new();
+            // (Windows) PID-slot del server, condiviso col Supervisor per attendere
+            // lo shutdown ordinato di Postgres alla chiusura.
+            #[cfg(windows)]
+            let mut server_pid: Arc<AtomicU32> = Arc::new(AtomicU32::new(0));
 
             // Ogni figlio parte una volta qui e poi è tenuto in vita dal suo
             // watchdog: se crasha a metà servizio viene riavviato da solo.
             if let Some(child) = spawn_server(app.handle()) {
                 let slot = Arc::new(AtomicU32::new(child.id()));
+                #[cfg(windows)]
+                {
+                    server_pid = slot.clone();
+                }
                 threads.push(supervise(
                     "server Tako",
                     app.handle().clone(),
@@ -372,6 +474,8 @@ pub fn run() {
                 shutting_down,
                 pids: Mutex::new(pids),
                 threads: Mutex::new(threads),
+                #[cfg(windows)]
+                server_pid,
             });
 
             // Controllo aggiornamenti in background (non blocca l'avvio).
@@ -382,25 +486,57 @@ pub fn run() {
         .expect("error while running tauri application");
 
     app.run(|app_handle, event| {
-        // Alla chiusura dell'app, termina con GRAZIA i gruppi dei figli: SIGTERM al
-        // gruppo del server (node + Postgres, spegnimento pulito) e a quello del web.
-        // Su non-unix, taskkill sull'albero.
+        // Alla chiusura dell'app, termina con GRAZIA i gruppi dei figli. Su unix:
+        // SIGTERM al gruppo di ciascun figlio (node + Postgres, spegnimento pulito).
+        // Su Windows: prima si chiede al server uno shutdown ORDINATO via HTTP (così
+        // Postgres rilascia la data dir), gli si dà tempo di uscire, e solo in
+        // fallback si abbatte l'albero con taskkill.
         if let RunEvent::ExitRequested { .. } = event {
             let sup = app_handle.state::<Supervisor>();
             // 1) Segnala lo shutdown volontario PRIMA di killare: quando i watchdog
             //    vedranno i figli uscire NON li riavvieranno (crash vs. chiusura).
             sup.shutting_down.store(true, Ordering::SeqCst);
-            // 2) Uccidi il gruppo di ogni figlio col suo PID corrente.
-            let pids: Vec<u32> = sup
-                .pids
-                .lock()
-                .unwrap()
-                .iter()
-                .map(|p| p.load(Ordering::SeqCst))
-                .collect();
-            for pid in pids {
-                kill_group(pid);
+
+            // 2) Termina i figli.
+            #[cfg(not(windows))]
+            {
+                // unix: SIGTERM al gruppo di ogni figlio col suo PID corrente.
+                let pids: Vec<u32> = sup
+                    .pids
+                    .lock()
+                    .unwrap()
+                    .iter()
+                    .map(|p| p.load(Ordering::SeqCst))
+                    .collect();
+                for pid in pids {
+                    kill_group(pid);
+                }
             }
+            #[cfg(windows)]
+            {
+                // Chiedi al server uno shutdown ordinato (chiude Postgres pulito).
+                request_server_shutdown();
+                // Attendi che il server esca DA SOLO: il suo watchdog azzera il
+                // PID-slot quando lo vede uscire. Poll ogni 200ms fino a max 8s.
+                let deadline = Instant::now() + Duration::from_secs(8);
+                while sup.server_pid.load(Ordering::SeqCst) != 0 && Instant::now() < deadline {
+                    std::thread::sleep(Duration::from_millis(200));
+                }
+                // Fallback (server non uscito in tempo) + web cliente (senza
+                // endpoint di shutdown): abbatti l'albero di ogni figlio ancora
+                // vivo. Un PID a 0 rende kill_group un no-op.
+                let pids: Vec<u32> = sup
+                    .pids
+                    .lock()
+                    .unwrap()
+                    .iter()
+                    .map(|p| p.load(Ordering::SeqCst))
+                    .collect();
+                for pid in pids {
+                    kill_group(pid);
+                }
+            }
+
             // 3) Attendi che i watchdog escano: ognuno fa child.wait() sul proprio
             //    figlio, quindi il join garantisce lo spegnimento pulito (Postgres
             //    rilascia la data dir) prima che l'app termini davvero.

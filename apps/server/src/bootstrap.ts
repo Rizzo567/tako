@@ -5,6 +5,7 @@
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import { maybeStartEmbeddedDb } from '@tako/db/embedded'
 import { startServer } from './index.js'
@@ -20,6 +21,28 @@ const CLOUD_MODE = (process.env['TAKO_MODE'] ?? 'local').toLowerCase() === 'clou
 // del run precedente via pidfile (stesso modello di healStaleLock per Postgres).
 // Il plugin single-instance di Tauri copre il doppio-avvio NORMALE; questo copre il
 // caso post-crash in cui i figli sopravvivono senza un padre vivo.
+// Verifica d'identità anti PID-reuse: uccidi il PID del pidfile SOLO se è davvero il
+// nostro server node. Su un pidfile stantio (crash/force-quit) il vecchio PID potrebbe
+// essere stato riassegnato a un processo ESTRANEO; senza questo check lo uccideremmo per
+// errore. Su win32: tasklist (image = node.exe) + PowerShell (command line contiene
+// server.mjs/bootstrap/tako). Su unix: `ps` (comm+args contiene node + il nostro script).
+function isOurServerProcess(pid: number): boolean {
+  try {
+    if (process.platform === 'win32') {
+      const tl = execFileSync('tasklist', ['/FI', `PID eq ${pid}`, '/FO', 'CSV', '/NH'], { encoding: 'utf8', timeout: 2000, windowsHide: true })
+      if (!/node\.exe/i.test(tl)) return false
+      const cmd = execFileSync(
+        'powershell',
+        ['-NoProfile', '-Command', `Get-CimInstance Win32_Process -Filter "ProcessId=${pid}" | Select -Expand CommandLine`],
+        { encoding: 'utf8', timeout: 4000, windowsHide: true },
+      )
+      return /server\.mjs|bootstrap|tako/i.test(cmd)
+    }
+    const out = execFileSync('ps', ['-p', String(pid), '-o', 'comm=,args='], { encoding: 'utf8', timeout: 2000 })
+    return /node/i.test(out) && /server\.mjs|bootstrap|tako/i.test(out)
+  } catch { return false }
+}
+
 async function reclaimOrphanServer(home: string): Promise<void> {
   const pidFile = join(home, 'server.pid')
   try {
@@ -27,10 +50,15 @@ async function reclaimOrphanServer(home: string): Promise<void> {
       const pid = parseInt((readFileSync(pidFile, 'utf8').split('\n')[0] ?? '').trim(), 10)
       const alive = (p: number) => { try { process.kill(p, 0); return true } catch { return false } }
       if (Number.isInteger(pid) && pid > 1 && pid !== process.pid && alive(pid)) {
-        console.log(`[srv] server orfano precedente (pid ${pid}), lo termino`)
-        try { process.kill(pid, 'SIGTERM') } catch { /* ignore */ }
-        for (let i = 0; i < 8 && alive(pid); i++) await new Promise((r) => setTimeout(r, 300))
-        if (alive(pid)) { try { process.kill(pid, 'SIGKILL') } catch { /* ignore */ } }
+        if (isOurServerProcess(pid)) {
+          console.log(`[srv] server orfano precedente (pid ${pid}), lo termino`)
+          try { process.kill(pid, 'SIGTERM') } catch { /* ignore */ }
+          for (let i = 0; i < 8 && alive(pid); i++) await new Promise((r) => setTimeout(r, 300))
+          if (alive(pid)) { try { process.kill(pid, 'SIGKILL') } catch { /* ignore */ } }
+        } else {
+          // PID riusato da un processo estraneo: NON lo tocco, sovrascrivo solo il pidfile.
+          console.log(`[srv] pid ${pid} nel pidfile non è il server Tako (PID riusato?), non lo termino`)
+        }
       }
     }
     writeFileSync(pidFile, String(process.pid), { mode: 0o600 })

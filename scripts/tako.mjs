@@ -29,22 +29,31 @@ if (existsSync(secretFile)) {
 }
 
 const port = process.env['PORT'] ?? '4317'
-const tsx = join(serverDir, 'node_modules', '.bin', process.platform === 'win32' ? 'tsx.cmd' : 'tsx')
+const isWin = process.platform === 'win32'
+const tsx = join(serverDir, 'node_modules', '.bin', isWin ? 'tsx.cmd' : 'tsx')
 const entry = join(serverDir, 'src', 'bootstrap.ts')
 
 console.log('▶ Tako in avvio — dashboard su http://localhost:%s/staff', port)
 
-const child = spawn(tsx, [entry], {
-  cwd: serverDir,
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    EMBEDDED_DB: '1',
-    PORT: port,
-    JWT_SECRET: secret,
-    NODE_ENV: process.env['NODE_ENV'] ?? 'production',
+// Su Windows tsx è tsx.cmd: con Node ≥22 lo spawn di un .cmd senza shell dà EINVAL.
+// Quindi su win32 passiamo per la shell e quotiamo a mano comando+arg (i path
+// possono contenere spazi). Su mac/linux nessuna shell: comportamento invariato.
+const child = spawn(
+  isWin ? `"${tsx}"` : tsx,
+  isWin ? [`"${entry}"`] : [entry],
+  {
+    cwd: serverDir,
+    stdio: 'inherit',
+    shell: isWin,
+    env: {
+      ...process.env,
+      EMBEDDED_DB: '1',
+      PORT: port,
+      JWT_SECRET: secret,
+      NODE_ENV: process.env['NODE_ENV'] ?? 'production',
+    },
   },
-})
+)
 
 const stop = () => { try { child.kill() } catch {} }
 process.on('SIGINT', () => { stop(); process.exit(0) })

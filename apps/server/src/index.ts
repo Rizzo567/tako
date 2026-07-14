@@ -41,6 +41,7 @@ import { getLanIPv4s } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
 import { isCloudMode } from './cloud/config.js'
 import { startCloudServer } from './cloud/server.js'
+import { stopEmbeddedDb } from '@tako/db/embedded'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
 // dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
@@ -198,6 +199,25 @@ await fastify.register(rateLimit, {
 
 // Health check
 fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString() }))
+
+// Shutdown ordinato: contratto con la shell Tauri (lato Rust) per spegnere pulito
+// l'appliance. L'AUTH è il solo token via header x-tako-shutdown-token (nessuna auth
+// utente). Disabilitata del tutto se TAKO_SHUTDOWN_TOKEN non è settata (→ 404).
+fastify.post('/internal/shutdown', async (request, reply) => {
+  const token = process.env['TAKO_SHUTDOWN_TOKEN']
+  if (!token) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Not found' } })
+  if (request.headers['x-tako-shutdown-token'] !== token) {
+    return reply.code(403).send({ error: { code: 'FORBIDDEN', message: 'Forbidden' } })
+  }
+  // Rispondi subito, poi ferma il DB embedded (se attivo) ed esci in modo ordinato.
+  setImmediate(() => {
+    void (async () => {
+      try { await stopEmbeddedDb() } catch { /* best-effort */ }
+      process.exit(0)
+    })()
+  })
+  return reply.code(200).send({ status: 'shutting-down' })
+})
 
 // Routes
 await fastify.register(authRoutes, { prefix: '/api/auth' })

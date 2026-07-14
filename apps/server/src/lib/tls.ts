@@ -13,13 +13,25 @@
 //  - rigenera solo se manca del tutto, se un SAN desiderato non è coperto (es. è
 //    comparso un nuovo IP LAN), o se si forza con TAKO_TLS_REGEN=1.
 //
-// Generazione via `openssl` (presente su macOS/Linux): nessuna dipendenza npm nuova.
-// In node_modules non ci sono `selfsigned`/`node-forge`, quindi openssl è la via pulita.
+// Generazione: `openssl` (presente su macOS/Linux) è la via preferita. Dove openssl
+// manca (tipicamente Windows), fallback PURE-JS con la dipendenza `selfsigned`
+// (node-forge, nessun binario) → HTTPS funziona comunque e i tablet mantengono il
+// secure context per getUserMedia.
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { existsSync, mkdirSync, readFileSync, writeFileSync, chmodSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
+import { generate as generateSelfSigned } from 'selfsigned'
 import { getLanIPv4s } from './network.js'
+
+// `selfsigned` non pubblica tipi propri: dichiarazione locale minima (sha256, RSA 2048,
+// SAN via extensions.subjectAltName con altNames type 2=DNS, type 7=IP).
+declare module 'selfsigned' {
+  export function generate(
+    attrs?: Array<{ name: string; value: string }>,
+    options?: Record<string, unknown>,
+  ): { private: string; public: string; cert: string }
+}
 
 export interface TlsMaterial {
   key: Buffer
@@ -84,20 +96,6 @@ export function ensureTlsMaterial(): TlsMaterial {
     }
   }
 
-  if (!opensslAvailable()) {
-    // Fallback documentato: senza openssl non possiamo generare il cert. Riusa un cert
-    // esistente se c'è (anche se i SAN non combaciano più), altrimenti fallisce con un
-    // messaggio chiaro invece di avviare un https rotto.
-    if (existsSync(keyPath) && existsSync(certPath)) {
-      return { key: readFileSync(keyPath), cert: readFileSync(certPath) }
-    }
-    throw new Error(
-      "TAKO_HTTPS=1 richiede un certificato TLS ma 'openssl' non è disponibile e non ne esiste uno " +
-        `in ${dir}. Installa openssl, oppure fornisci key.pem/cert.pem in quella cartella, ` +
-        'oppure disattiva HTTPS (togli TAKO_HTTPS).',
-    )
-  }
-
   mkdirSync(dir, { recursive: true })
   try {
     chmodSync(dir, 0o700)
@@ -105,25 +103,51 @@ export function ensureTlsMaterial(): TlsMaterial {
     /* best-effort su filesystem che non supportano i permessi POSIX */
   }
 
-  const sanArg = [
-    ...sans.dns.map((d) => `DNS:${d}`),
-    ...sans.ip.map((i) => `IP:${i}`),
-  ].join(',')
+  if (opensslAvailable()) {
+    // Via preferita: openssl (macOS/Linux). Stessi SAN/CN/O/validità del fallback.
+    const sanArg = [
+      ...sans.dns.map((d) => `DNS:${d}`),
+      ...sans.ip.map((i) => `IP:${i}`),
+    ].join(',')
 
-  execFileSync(
-    'openssl',
-    [
-      'req', '-x509',
-      '-newkey', 'rsa:2048',
-      '-nodes',
-      '-keyout', keyPath,
-      '-out', certPath,
-      '-days', '3650',
-      '-subj', '/CN=tako.local/O=Tako Appliance',
-      '-addext', `subjectAltName=${sanArg}`,
-    ],
-    { stdio: 'ignore' },
-  )
+    execFileSync(
+      'openssl',
+      [
+        'req', '-x509',
+        '-newkey', 'rsa:2048',
+        '-nodes',
+        '-keyout', keyPath,
+        '-out', certPath,
+        '-days', '3650',
+        '-subj', '/CN=tako.local/O=Tako Appliance',
+        '-addext', `subjectAltName=${sanArg}`,
+      ],
+      { stdio: 'ignore' },
+    )
+  } else {
+    // Fallback pure-JS (niente binario openssl → tipicamente Windows): `selfsigned`
+    // genera key+cert self-signed con gli STESSI SAN (DNS = tako.local/localhost,
+    // IP = 127.0.0.1 + IP LAN), CN=tako.local, O=Tako Appliance, RSA 2048, sha256,
+    // validità 3650 giorni. altNames: type 2 = DNS, type 7 = IP.
+    const altNames = [
+      ...sans.dns.map((value) => ({ type: 2, value })),
+      ...sans.ip.map((ip) => ({ type: 7, ip })),
+    ]
+    const pems = generateSelfSigned(
+      [
+        { name: 'commonName', value: 'tako.local' },
+        { name: 'organizationName', value: 'Tako Appliance' },
+      ],
+      {
+        days: 3650,
+        keySize: 2048,
+        algorithm: 'sha256',
+        extensions: [{ name: 'subjectAltName', altNames }],
+      },
+    )
+    writeFileSync(keyPath, pems.private)
+    writeFileSync(certPath, pems.cert)
+  }
 
   try {
     chmodSync(keyPath, 0o600)
