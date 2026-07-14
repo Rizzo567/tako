@@ -18,6 +18,9 @@ const pg = new EmbeddedPostgres({
   password: 'tako',
   port: 5432,
   persistent: true,
+  // UTF8 esplicito: su Windows initdb erediterebbe la codepage (WIN1252) e le
+  // migrazioni/emoji fuori codepage darebbero errore 22P05. Su mac è già default.
+  initdbFlags: ['--encoding=UTF8'],
 })
 
 // Risolve pg_ctl.exe dentro il pacchetto nativo, con due hop di createRequire:

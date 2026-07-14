@@ -15,11 +15,38 @@ import { dirname, join } from 'node:path'
 import { existsSync, readFileSync, unlinkSync, cpSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { homedir } from 'node:os'
+import { createRequire } from 'node:module'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 const MIGRATIONS_DIR = join(currentDir, 'migrations')
 
 let instance: InstanceType<typeof EmbeddedPostgres> | null = null
+
+// Su Windows con token amministratore ("esegui come amministratore", CI) postgres.exe
+// RIFIUTA di partire; pg_ctl invece crea un token ristretto e avvia comunque.
+// Se l'avvio diretto fallisce ripieghiamo su pg_ctl: questi flag ricordano come
+// abbiamo avviato, perché anche lo stop deve passare da pg_ctl.
+let startedViaPgCtl = false
+let pgCtlDataDir = ''
+
+/** Path di pg_ctl.exe dentro il pacchetto binario della piattaforma (solo win32). */
+function resolvePgCtl(): string {
+  // Due hop: i pacchetti espongono solo il main in `exports`, quindi si risolve
+  // il main entry e si risale alla root (dist/index.js → root del pacchetto).
+  const req = createRequire(import.meta.url)
+  const libMain = req.resolve('embedded-postgres')
+  const platMain = createRequire(libMain).resolve('@embedded-postgres/windows-x64')
+  return join(dirname(dirname(platMain)), 'native', 'bin', 'pg_ctl.exe')
+}
+
+/** Spegnimento unificato: pg_ctl se abbiamo avviato via pg_ctl, altrimenti la lib. */
+async function stopInstance(pg: InstanceType<typeof EmbeddedPostgres>): Promise<void> {
+  if (startedViaPgCtl) {
+    execFileSync(resolvePgCtl(), ['-D', pgCtlDataDir, '-m', 'fast', 'stop'], { stdio: 'ignore', timeout: 30000 })
+    return
+  }
+  await pg.stop()
+}
 
 /**
  * Se nella data dir c'è un postmaster.pid di un'istanza precedente, termina il
@@ -122,7 +149,10 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   // quindi la copia è consistente. Recovery = sostituisci pgdata con un backup.
   backupDataDirColdCopy(databaseDir)
 
-  const pg = new EmbeddedPostgres({ databaseDir, user, password, port, persistent: true })
+  // --encoding=UTF8 esplicito: su Windows initdb erediterebbe la codepage del
+  // sistema (es. WIN1252) e qualsiasi carattere fuori codepage (emoji nel menù,
+  // '→' nelle migrazioni) farebbe errore 22P05. Su mac/linux è già il default.
+  const pg = new EmbeddedPostgres({ databaseDir, user, password, port, persistent: true, initdbFlags: ['--encoding=UTF8'] })
   instance = pg
 
   const fresh = !existsSync(join(databaseDir, 'PG_VERSION'))
@@ -130,14 +160,23 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
     console.log('[db] inizializzo Postgres embedded in', databaseDir)
     await pg.initialise()
   }
-  await pg.start()
+  try {
+    await pg.start()
+  } catch (e) {
+    if (process.platform !== 'win32') throw e
+    // Token elevato: riprova via pg_ctl (vedi commento su startedViaPgCtl).
+    console.log('[db] avvio diretto fallito, riprovo via pg_ctl:', (e as Error).message)
+    pgCtlDataDir = databaseDir
+    execFileSync(resolvePgCtl(), ['-D', databaseDir, '-o', `-p ${port}`, '-l', join(databaseDir, 'pg_ctl.log'), '-w', 'start'], { stdio: 'inherit', timeout: 60000 })
+    startedViaPgCtl = true
+  }
   console.log(`[db] Postgres embedded in ascolto su 127.0.0.1:${port}`)
 
   // Handler di shutdown registrati SUBITO dopo start() (prima di createDatabase/migrate):
   // se una fase successiva fallisce e il processo esce, Postgres viene comunque fermato e
   // non resta un'istanza orfana che tiene la data dir + postmaster.pid stantio.
   const stop = async () => {
-    try { await pg.stop() } catch { /* best-effort */ }
+    try { await stopInstance(pg) } catch { /* best-effort */ }
   }
   process.once('SIGINT', async () => { await stop(); process.exit(0) })
   process.once('SIGTERM', async () => { await stop(); process.exit(0) })
@@ -145,7 +184,14 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
 
   if (fresh) {
     try {
-      await pg.createDatabase(database)
+      if (startedViaPgCtl) {
+        // pg.createDatabase esige il processo figlio della lib (qui assente):
+        // crea il db via client SQL sul db di sistema.
+        const admin = postgres(`postgresql://${user}:${password}@127.0.0.1:${port}/postgres`, { max: 1 })
+        try { await admin.unsafe(`CREATE DATABASE "${database}"`) } finally { await admin.end() }
+      } else {
+        await pg.createDatabase(database)
+      }
       console.log(`[db] database "${database}" creato`)
     } catch (e) {
       console.log('[db] createDatabase saltato:', (e as Error).message)
@@ -166,7 +212,7 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   } catch (err) {
     console.error('[db] migrazioni fallite, spengo Postgres embedded:', (err as Error)?.message ?? err)
     try { await migrationClient.end() } catch { /* best-effort */ }
-    try { await pg.stop() } catch { /* best-effort */ }
+    try { await stopInstance(pg) } catch { /* best-effort */ }
     instance = null
     throw err
   } finally {
@@ -177,6 +223,6 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
 /** Ferma il Postgres embedded (se attivo). Per spegnimento esplicito/test. */
 export async function stopEmbeddedDb(): Promise<void> {
   if (!instance) return
-  try { await instance.stop() } catch { /* best-effort */ }
+  try { await stopInstance(instance) } catch { /* best-effort */ }
   instance = null
 }
