@@ -1,0 +1,72 @@
+# Test suite su Windows vero (windows-latest): Postgres embedded + server + vitest.
+# È il verifier della compatibilità Windows del lato Node (il lato Rust/bundle lo
+# verifica già release.yml col job windows). Trigger: push su win-ci o manuale.
+
+name: windows-test
+
+on:
+  push:
+    branches: [win-ci]
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: postgresql://tako:tako@localhost:5432/takodb
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install deps
+        shell: bash
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck server
+        shell: bash
+        run: pnpm --filter server exec tsc -p tsconfig.json --noEmit
+
+      # Un solo step: i processi in background (Postgres, server) devono vivere
+      # nella stessa shell dei test — su Windows muoiono a fine step.
+      - name: Stack vivo + vitest
+        shell: bash
+        env:
+          PORT: '3001'
+        run: |
+          set -e
+          node packages/db/pg-portable.mjs > pg.log 2>&1 &
+          PG_PID=$!
+          ok=""
+          for i in $(seq 1 60); do
+            if node -e "const s=require('net').connect(5432,'127.0.0.1');s.on('connect',()=>process.exit(0));s.on('error',()=>process.exit(1))"; then ok=1; break; fi
+            sleep 2
+          done
+          [ -n "$ok" ] || { echo "Postgres non è partito:"; cat pg.log; exit 1; }
+
+          pnpm db:migrate
+
+          pnpm --filter server exec tsx src/bootstrap.ts > server.log 2>&1 &
+          ok=""
+          for i in $(seq 1 45); do
+            if curl -sf http://localhost:3001/health > /dev/null; then ok=1; break; fi
+            sleep 2
+          done
+          [ -n "$ok" ] || { echo "Server non è partito:"; cat server.log; exit 1; }
+
+          npx vitest run
+
+      - name: Dump logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo "===== pg.log ====="; cat pg.log 2>/dev/null || true
+          echo "===== server.log ====="; cat server.log 2>/dev/null || true
