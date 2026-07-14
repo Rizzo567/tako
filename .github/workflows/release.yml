@@ -1,5 +1,7 @@
 # Release Tako desktop — build firmato per macOS (arm64 + Intel) e Windows (x64),
-# artifact updater firmati (minisign), pubblicazione su Cloudflare per l'auto-update.
+# artifact updater firmati (minisign), pubblicazione come GitHub Release (repo privato).
+# L'auto-update la legge via il Worker gratuito updates.takoitalia.com
+# (infra/updates-worker) — niente R2, niente costi.
 #
 # Trigger: push di un tag vX.Y.Z. La versione DEVE combaciare con quella in
 # apps/app/src-tauri/tauri.conf.json (bump manuale del file + tag).
@@ -7,8 +9,6 @@
 # Secrets richiesti (Settings → Secrets and variables → Actions):
 #   TAURI_SIGNING_PRIVATE_KEY            contenuto di tako-updater.key (firma updater, OBBLIGATORIO)
 #   TAURI_SIGNING_PRIVATE_KEY_PASSWORD   password della key ("" se senza password)
-#   CLOUDFLARE_API_TOKEN                 token con permesso R2 write (per pubblicare gli update)
-#   CLOUDFLARE_ACCOUNT_ID                account id Cloudflare
 # Opzionali (se assenti → build non firmata dall'OS, updater funziona comunque):
 #   macOS  : APPLE_CERTIFICATE, APPLE_CERTIFICATE_PASSWORD, APPLE_SIGNING_IDENTITY,
 #            APPLE_ID, APPLE_PASSWORD, APPLE_TEAM_ID
@@ -110,6 +110,8 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # crea la GitHub Release del tag
     steps:
       - uses: actions/checkout@v4
 
@@ -130,24 +132,23 @@ jobs:
           node scripts/make-latest-json.mjs dist "$VERSION" "https://updates.takoitalia.com"
           cat dist/latest.json
 
-      # Pubblica su R2 SOLO se i secret Cloudflare esistono. Senza (modello USB
-      # hands-on), gli installer restano scaricabili dagli artifact del run.
-      - name: Publish to Cloudflare R2
+      # Pubblica tutto come GitHub Release del tag (repo privato). Il Worker
+      # updates.takoitalia.com serve latest.json + asset alle app installate.
+      - name: Publish GitHub Release
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "⏭  CLOUDFLARE_API_TOKEN assente → salto la pubblica su R2."
-            echo "   Scarica gli installer dagli Artifacts di questo run (modello USB)."
-            exit 0
+          TAG="$GITHUB_REF_NAME"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "▶ release $TAG esiste → aggiorno gli asset"
+            gh release upload "$TAG" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" dist/* \
+              --title "Tako ${TAG#v}" \
+              --notes "Tako ${TAG#v} — build automatica ($GITHUB_SHA)" \
+              --repo "$GITHUB_REPOSITORY"
           fi
-          for f in dist/*; do
-            name="$(basename "$f")"
-            echo "▶ upload $name"
-            npx --yes wrangler@3 r2 object put "tako-updates/$name" --file "$f" --remote
-          done
 
       # Rendi gli installer scaricabili direttamente dal run (per install da chiavetta).
       - uses: actions/upload-artifact@v4

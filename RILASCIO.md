@@ -70,22 +70,25 @@ non identificato" e **non si apre**. Un cliente pagante non riesce nemmeno a lan
 - Poi crea un certificato "Developer ID Application" + un app-specific password.
 - Dammi un colpo: cablo firma+notarizzazione (i secret sono già predisposti nel workflow).
 
-### 2. ☁️ Cloudflare R2 per gli update (host di `latest.json` + installer)
-- Crea un bucket R2 chiamato **`tako-updates`**.
-- Collega un dominio pubblico: `updates.takoitalia.com` → bucket (R2 → Settings →
-  Custom Domains). Deve servire i file in lettura pubblica.
-- Crea un API Token con permesso **R2 write** su quell'account.
-- *(Se preferisci non usare un sottodominio: dimmelo, cambio l'endpoint in `tauri.conf.json`
-  con l'URL pubblico r2.dev del bucket.)*
+### 2. ☁️ Host degli update — ✅ FATTO (2026-07-14, niente R2, costo zero)
+Gli update NON stanno su R2 (voleva la carta): stanno nelle **GitHub Release del repo
+privato**, servite dal Worker Cloudflare gratuito **`tako-updates`**
+(`infra/updates-worker`) su `updates.takoitalia.com`.
+- La CI a ogni tag crea la release e ci carica installer + `latest.json`.
+- Il Worker legge l'ultima release col secret `GITHUB_TOKEN` e la serve alle app
+  (binari = 302 verso URL firmato GitHub; il token non esce mai).
+- ⚠️ Il secret `GITHUB_TOKEN` del Worker è il token della `gh` CLI di Manuel: se fai
+  `gh auth logout` gli update muoiono → sostituiscilo con un fine-grained PAT
+  (solo repo `tako`, permesso Contents read) e `wrangler secret put GITHUB_TOKEN`
+  da `infra/updates-worker`.
 
-### 3. 🔐 GitHub → Settings → Secrets and variables → Actions
-Aggiungi questi secret al repo `Rizzo567/tako`:
-| Secret | Valore |
-|---|---|
-| `TAURI_SIGNING_PRIVATE_KEY` | contenuto INTERO di `tako-updater.key` |
-| `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | vuoto (la key è senza password) |
-| `CLOUDFLARE_API_TOKEN` | il token R2 del punto 2 |
-| `CLOUDFLARE_ACCOUNT_ID` | il tuo account id Cloudflare |
+### 3. 🔐 GitHub → Secrets — ✅ FATTO (2026-07-14)
+Sul repo `Rizzo567/tako`:
+| Secret | Valore | Stato |
+|---|---|---|
+| `TAURI_SIGNING_PRIVATE_KEY` | contenuto INTERO di `tako-updater.key` | ✅ |
+| `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | vuoto (la key è senza password) | ✅ |
+| `CLOUDFLARE_ACCOUNT_ID` | account id Cloudflare | ✅ (non più usato dalla CI, innocuo) |
 
 Opzionali (per firma Mac, dopo il punto 1): `APPLE_CERTIFICATE`,
 `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD`,

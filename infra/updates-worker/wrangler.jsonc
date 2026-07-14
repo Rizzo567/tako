@@ -1,0 +1,12 @@
+// Worker "tako-updates" — proxy update: serve latest.json + installer
+// dall'ultima GitHub Release del repo PRIVATO Rizzo567/tako.
+// Gratis (piano free Workers), niente R2. Deploy: wrangler deploy (da questa cartella).
+// Secret richiesto: wrangler secret put GITHUB_TOKEN (token con lettura release sul repo).
+{
+  "name": "tako-updates",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-14",
+  "routes": [{ "pattern": "updates.takoitalia.com", "custom_domain": true }],
+  "vars": { "GITHUB_REPO": "Rizzo567/tako" },
+  "observability": { "enabled": true }
+}
