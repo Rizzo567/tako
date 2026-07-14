@@ -28,7 +28,11 @@ jobs:
       matrix:
         include:
           - { runner: macos-14, target: aarch64-apple-darwin, os: mac }
-          - { runner: macos-13, target: x86_64-apple-darwin, os: mac }
+          # macos-13 (ultimo runner Intel) è stato RITIRATO da GitHub: il job
+          # restava in coda per sempre. Niente cross-compile da arm: il server
+          # bundle imbarca node/Postgres con l'arch del RUNNER, quindi un build
+          # Intel da macos-14 partirebbe con binari arm64 dentro. Mac Intel
+          # rimandato finché non serve davvero.
           - { runner: windows-latest, target: x86_64-pc-windows-msvc, os: win }
     runs-on: ${{ matrix.runner }}
     steps:
@@ -64,13 +68,11 @@ jobs:
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-          # macOS notarization (usati solo se i secrets esistono):
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # NIENTE env APPLE_*: i secrets non esistono ancora (Apple Developer
+          # non acquistato) e passarle VUOTE faceva fallire il codesign — Tauri
+          # vede la variabile definita e prova a importare un certificato vuoto
+          # ("failed to import keychain certificate"). Quando ci sarà il
+          # certificato: ripristinare qui le 6 env APPLE_* dai secrets.
 
       - name: Collect artifacts
         shell: bash
