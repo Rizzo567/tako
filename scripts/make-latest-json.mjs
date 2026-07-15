@@ -27,6 +27,8 @@ function platformFor(file) {
     return 'darwin-aarch64' // default Apple Silicon
   }
   if (f.endsWith('.nsis.zip') || f.endsWith('.msi.zip')) return 'windows-x86_64'
+  // Tauri v2: l'artefatto updater Windows è il -setup.exe stesso (firmato .sig).
+  if (f.endsWith('-setup.exe')) return 'windows-x86_64'
   if (f.endsWith('.appimage.tar.gz')) return 'linux-x86_64'
   return null
 }
