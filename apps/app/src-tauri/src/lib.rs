@@ -259,6 +259,11 @@ fn supervise(
             if shutting_down.load(Ordering::SeqCst) {
                 kill_group(child.id());
                 let _ = child.wait();
+                // Azzera il PID-slot come su ogni altra uscita: chi chiude aspetta
+                // che diventi 0 per sapere che il figlio è uscito. Lasciarlo pieno
+                // gli farebbe consumare l'intero timeout (8s) per nulla — e ora quel
+                // timeout ritarderebbe anche l'installazione di un aggiornamento.
+                pid_slot.store(0, Ordering::SeqCst);
                 return;
             }
         }
@@ -382,6 +387,73 @@ fn spawn_web(app: &tauri::AppHandle) -> Option<Child> {
     }
 }
 
+/// Termina con GRAZIA i figli (server + web) e attende i watchdog.
+///
+/// Su unix: SIGTERM al gruppo di ciascun figlio (node + Postgres, spegnimento pulito).
+/// Su Windows: prima si chiede al server uno shutdown ORDINATO via HTTP (così il lato
+/// node ferma Postgres e rilascia la data dir), gli si dà tempo di uscire, e solo in
+/// fallback si abbatte l'albero con taskkill. Nota: su Windows il `taskkill /T` da solo
+/// NON basterebbe a fermare Postgres, che è figlio di `pg_ctl` (già uscito) e quindi
+/// fuori dall'albero di node: è lo shutdown ordinato a fermarlo.
+///
+/// Idempotente: alla seconda chiamata i PID-slot sono già a 0 (`kill_group` è un no-op)
+/// e i JoinHandle sono già stati presi (nessun join). Serve perché la chiamiamo sia
+/// alla chiusura volontaria sia PRIMA di installare un aggiornamento.
+fn teardown_children(app: &tauri::AppHandle) {
+    let sup = app.state::<Supervisor>();
+    // 1) Segnala lo shutdown volontario PRIMA di killare: quando i watchdog vedranno
+    //    i figli uscire NON li riavvieranno (crash vs. chiusura).
+    sup.shutting_down.store(true, Ordering::SeqCst);
+
+    // 2) Termina i figli.
+    #[cfg(not(windows))]
+    {
+        // unix: SIGTERM al gruppo di ogni figlio col suo PID corrente.
+        let pids: Vec<u32> = sup
+            .pids
+            .lock()
+            .unwrap()
+            .iter()
+            .map(|p| p.load(Ordering::SeqCst))
+            .collect();
+        for pid in pids {
+            kill_group(pid);
+        }
+    }
+    #[cfg(windows)]
+    {
+        // Chiedi al server uno shutdown ordinato (chiude Postgres pulito).
+        request_server_shutdown();
+        // Attendi che il server esca DA SOLO: il suo watchdog azzera il PID-slot
+        // quando lo vede uscire. Poll ogni 200ms fino a max 8s.
+        let deadline = Instant::now() + Duration::from_secs(8);
+        while sup.server_pid.load(Ordering::SeqCst) != 0 && Instant::now() < deadline {
+            std::thread::sleep(Duration::from_millis(200));
+        }
+        // Fallback (server non uscito in tempo) + web cliente (senza endpoint di
+        // shutdown): abbatti l'albero di ogni figlio ancora vivo. Un PID a 0 rende
+        // kill_group un no-op.
+        let pids: Vec<u32> = sup
+            .pids
+            .lock()
+            .unwrap()
+            .iter()
+            .map(|p| p.load(Ordering::SeqCst))
+            .collect();
+        for pid in pids {
+            kill_group(pid);
+        }
+    }
+
+    // 3) Attendi che i watchdog escano: ognuno fa child.wait() sul proprio figlio,
+    //    quindi il join garantisce lo spegnimento pulito (Postgres rilascia la data
+    //    dir) prima che il chiamante prosegua.
+    let threads = std::mem::take(&mut *sup.threads.lock().unwrap());
+    for t in threads {
+        let _ = t.join();
+    }
+}
+
 /// Controlla all'avvio se c'è un aggiornamento (latest.json su Cloudflare, firma
 /// minisign verificata dal pubkey in tauri.conf). Se sì, chiede all'owner e — su
 /// conferma — scarica, installa e riavvia. Non blocca l'avvio: gira in un task
@@ -412,10 +484,41 @@ fn spawn_update_check(app: &tauri::AppHandle) {
                     ))
                     .blocking_show();
                 if install {
-                    if let Err(e) = update.download_and_install(|_, _| {}, || {}).await {
-                        log::error!("installazione aggiornamento fallita: {e}");
+                    // Download e install sono SEPARATI di proposito (invece di
+                    // download_and_install): tra i due dobbiamo fermare i figli.
+                    // Il download è la parte lenta (rete) e qui l'app è ancora
+                    // pienamente funzionante: il servizio non si ferma per scaricare.
+                    let bytes = match update.download(|_, _| {}, || {}).await {
+                        Ok(b) => b,
+                        Err(e) => {
+                            log::error!("download aggiornamento fallito: {e}");
+                            return;
+                        }
+                    };
+                    // L'installer deve SOVRASCRIVERE i binari dentro resources/
+                    // (node.exe, le DLL di Postgres…). Se i figli sono ancora vivi
+                    // quei file sono LOCKATI e su Windows l'installer NSIS si pianta
+                    // su "Error opening file for writing: …\resources\server\node.exe"
+                    // (Abort/Retry/Ignore) → installazione MISTA: app.exe nuovo,
+                    // resources vecchie. `install()` non passa dal
+                    // RunEvent::ExitRequested (il processo non esce dall'event loop),
+                    // quindi il teardown va fatto qui a mano.
+                    teardown_children(&handle);
+                    if let Err(e) = update.install(bytes) {
+                        // Su Windows si arriva qui solo se l'installer non è nemmeno
+                        // partito (es. scrittura in temp fallita): a spawn avvenuto
+                        // `install()` fa `std::process::exit(0)` e non torna mai.
+                        // I figli sono già fermi, quindi l'app è senza backend:
+                        // riavviamo per tornare a una versione funzionante invece di
+                        // restare a metà. Nota: al riavvio il check ripropone il
+                        // dialog; se l'install continua a fallire l'owner se lo vede
+                        // a ogni avvio finché non sceglie "Più tardi".
+                        log::error!("installazione aggiornamento fallita: {e}, riavvio");
+                        handle.restart();
                         return;
                     }
+                    // Windows: irraggiungibile — `install()` esce dal processo e sarà
+                    // NSIS a rilanciare l'app. macOS: `install()` torna e riavviamo noi.
                     log::info!("aggiornamento installato, riavvio");
                     handle.restart();
                 }
@@ -507,64 +610,10 @@ pub fn run() {
         .expect("error while running tauri application");
 
     app.run(|app_handle, event| {
-        // Alla chiusura dell'app, termina con GRAZIA i gruppi dei figli. Su unix:
-        // SIGTERM al gruppo di ciascun figlio (node + Postgres, spegnimento pulito).
-        // Su Windows: prima si chiede al server uno shutdown ORDINATO via HTTP (così
-        // Postgres rilascia la data dir), gli si dà tempo di uscire, e solo in
-        // fallback si abbatte l'albero con taskkill.
+        // Chiusura volontaria: spegni i figli con grazia (stesso teardown usato
+        // prima di installare un aggiornamento).
         if let RunEvent::ExitRequested { .. } = event {
-            let sup = app_handle.state::<Supervisor>();
-            // 1) Segnala lo shutdown volontario PRIMA di killare: quando i watchdog
-            //    vedranno i figli uscire NON li riavvieranno (crash vs. chiusura).
-            sup.shutting_down.store(true, Ordering::SeqCst);
-
-            // 2) Termina i figli.
-            #[cfg(not(windows))]
-            {
-                // unix: SIGTERM al gruppo di ogni figlio col suo PID corrente.
-                let pids: Vec<u32> = sup
-                    .pids
-                    .lock()
-                    .unwrap()
-                    .iter()
-                    .map(|p| p.load(Ordering::SeqCst))
-                    .collect();
-                for pid in pids {
-                    kill_group(pid);
-                }
-            }
-            #[cfg(windows)]
-            {
-                // Chiedi al server uno shutdown ordinato (chiude Postgres pulito).
-                request_server_shutdown();
-                // Attendi che il server esca DA SOLO: il suo watchdog azzera il
-                // PID-slot quando lo vede uscire. Poll ogni 200ms fino a max 8s.
-                let deadline = Instant::now() + Duration::from_secs(8);
-                while sup.server_pid.load(Ordering::SeqCst) != 0 && Instant::now() < deadline {
-                    std::thread::sleep(Duration::from_millis(200));
-                }
-                // Fallback (server non uscito in tempo) + web cliente (senza
-                // endpoint di shutdown): abbatti l'albero di ogni figlio ancora
-                // vivo. Un PID a 0 rende kill_group un no-op.
-                let pids: Vec<u32> = sup
-                    .pids
-                    .lock()
-                    .unwrap()
-                    .iter()
-                    .map(|p| p.load(Ordering::SeqCst))
-                    .collect();
-                for pid in pids {
-                    kill_group(pid);
-                }
-            }
-
-            // 3) Attendi che i watchdog escano: ognuno fa child.wait() sul proprio
-            //    figlio, quindi il join garantisce lo spegnimento pulito (Postgres
-            //    rilascia la data dir) prima che l'app termini davvero.
-            let threads = std::mem::take(&mut *sup.threads.lock().unwrap());
-            for t in threads {
-                let _ = t.join();
-            }
+            teardown_children(app_handle);
         }
     });
 }
