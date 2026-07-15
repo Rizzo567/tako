@@ -41,15 +41,55 @@ Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
 
 ## A. Installazione e ciclo di vita
 
+> **Aggiornamento:** durante il run il Mac ha pubblicato la release **v0.1.0** con
+> l'asset `Tako_0.1.0_x64-setup.exe`. Sezione A sbloccata. Installato in silent (`/S`).
+
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 1 | Installer NSIS + WebView2 | ⛔ | Nessuna release v0.1.0; no build locale (no Rust) |
-| 2 | Primo avvio bootstrap | ⛔ | idem |
-| 3 | TAKO_HOME struttura | ⛔ | idem |
-| 4 | Chiusura → 0 processi orfani | ⛔ | idem |
+| 1 | Installer NSIS + WebView2 | ✅ | install silent OK → `%LOCALAPPDATA%\Tako\`; WebView2 runtime presente (pv 150.0.4078.65) |
+| 2 | Primo avvio bootstrap | ❌→🔧 | **BUG P0** server embedded non parte (sotto). Fix su branch, serve rebuild dal Mac |
+| 3 | TAKO_HOME struttura | ⚠️ | `%LOCALAPPDATA%\com.tako.dashboard\` creata (solo WebView2/EBWebView; struttura server assente perché il backend crasha) |
+| 4 | Chiusura → 0 processi orfani | ⛔ | dipende da app funzionante (post-rebuild) |
 | 5 | Riavvio dati intatti | ⛔ | idem |
 | 6 | Crash test + healStaleLock | ⛔ | idem |
 | 7 | Single-instance | ⛔ | idem |
+
+### 🔴 BUG P0 — server embedded non parte su Windows (app inutilizzabile)
+
+**Sintomo:** aprendo `app.exe` la finestra WebView2 si apre ma il backend embedded
+(:4317) non parte mai; nessun `node.exe`/`postgres.exe`, UI owner senza API.
+
+**Errore** (stdout dei figli node, node bundled v22.23.1):
+```
+Error: EISDIR: illegal operation on a directory, lstat 'C:'
+    at resolveMainPath (node:internal/modules/run_main)
+```
+Il bootstrap Rust rilancia node in loop; ogni tentativo fallisce identico.
+
+**Root cause (confermata catturando l'argv reale via preload `--require`):** l'app
+passa a `node.exe` un path **verbatim/extended-length**:
+```
+argv[1] = \\?\C:\Users\Manuel\AppData\Local\Tako\resources\server\server.mjs
+```
+`resource_dir()` di Tauri su Windows restituisce path col prefisso `\\?\`. Il resolver
+del main-module di Node v22 non lo gestisce e riduce il path alla radice `C:` →
+`lstat('C:')` → EISDIR. Colpisce **entrambi** i figli: `server/server.mjs` (:4317) e
+`web/apps/web/server.js` (PWA :3002).
+
+**Perché la CI non l'ha preso:** `windows-test.yml` avvia il server via
+`tsx src/bootstrap.ts` (ramo dev `TAKO_SERVER_CMD`), non via lo spawn bundle con
+`resource_dir()`. Quel percorso non era mai stato esercitato — "mai collaudato su
+Windows vero".
+
+**Fix applicato** (`apps/app/src-tauri/src/lib.rs`): helper `deverbatim()` che toglie
+il prefisso `\\?\` prima di spawnare i figli node, in `spawn_server` e `spawn_web`.
+No-op su mac/linux e su path normali → non tocca i 72/72 della CI.
+
+**Verifica del fix (meccanismo, senza rebuild):** lanciando il node bundled sul
+medesimo `server.mjs` con path NON-verbatim (`C:\...\server.mjs`) il server **parte**
+(`Tako server running`). Quindi togliere il prefisso risolve. **Manca la toolchain
+Rust in VM** → non posso produrre l'installer corretto: il **Mac deve ricompilare**
+`collaudo-vm-tako` e ripubblicare per validare A end-to-end (voci 4-7).
 
 ## B. Funzionalità core owner
 
@@ -73,7 +113,7 @@ Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
 
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 16 | updates.takoitalia.com/latest.json | ⬜ | solo lettura |
+| 16 | updates.takoitalia.com/latest.json | ⚠️ | feed raggiungibile HTTP 200, JSON valido v0.1.0. **Ma `platforms` ha solo `darwin-aarch64`, nessun `windows-x86_64`** → updater Windows non troverebbe update (ok per "stessa versione = nessun prompt", ma auto-update Windows non ancora cablato nel feed). Query dal runtime app = BLOCCATO (bug P0) |
 | 17 | Test suite integrazione 72/72 | ✅ | **72/72 passed**, 8 file, 19.84s (vedi log) |
 
 ## E. Frontend / UI
