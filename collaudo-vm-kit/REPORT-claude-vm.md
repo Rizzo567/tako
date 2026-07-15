@@ -59,6 +59,59 @@ Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
 | 6 | Crash test + healStaleLock | ✅ | `taskkill /F /IM app.exe` (uccide solo l'immagine = crash reale) → riavvio: **healStaleLock OK** (`[db] trovato Postgres orfano (pid 9560), lo termino` + backup a copia fredda + cluster ripulito, health 200 in **36s** da stato sporco, **10s** con fix). **Trovato BUG #4 (orfano web su :3002)** → fixato e verificato end-to-end. Niente doppio Postgres: 1 solo postmaster |
 | 7 | Single-instance | ✅ | 1ª istanza su → lancio 2ª: **esce subito, exit code 0**; resta **1 solo `app.exe`** (pid 10808), 2 node invariati (nessun 2º server/web), 1 solo postmaster (pid 9812) su :54317, listener :4317/:3002 invariati. Screenshot `a7-single-instance.png` (finestra unica) |
 
+### 🔴 BUG #5 — RI-COLLAUDO 0.1.2 → 0.1.3: **FAIL**, ma il fix non c'entra
+
+**Esito: la voce 16 NON passa.** L'update 0.1.2 → 0.1.3 si è piantato sullo **stesso identico
+dialog** (`Error opening file for writing: …\resources\server\node.exe`,
+Interrompi/Riprova/Ignora). Screenshot: `bug5-retest-013-fail.png`.
+
+**Perché, ed è la parte importante:** l'aggiornamento è eseguito dall'updater dell'app **in
+esecuzione**, non da quello della versione che si sta installando. Il salto 0.1.2 → 0.1.3 lo
+fa quindi il codice della **0.1.2**, che il fix **non ce l'ha**. Nessun fix nella 0.1.3 può
+sanare retroattivamente questo salto: è strutturale, non un difetto dell'implementazione.
+
+**Il fix È dentro la 0.1.3 — verificato sul binario**, non per fiducia:
+`app.exe` 0.1.3 contiene la stringa `download aggiornamento fallito`, che esiste **solo** nel
+codice fixato (prima c'era un solo messaggio, `installazione aggiornamento fallita`, perché
+`download` e `install` non erano separati). Il fix è spedito e non è mai stato eseguito.
+
+**Timeline campionata ogni 400ms** (`update-timeline.csv`) — è ciò che dimostra il criterio 3,
+che lo stato finale non mostrerebbe:
+```
+17:44:21  app=1 node=2 pg=15 inst=0    ← 0.1.2 in servizio
+17:45:04  (click "Installa e riavvia")
+17:45:21  app=0 node=2 pg=15 inst=1    ← installer PARTE con i figli ANCORA VIVI  ✗
+```
+L'app muore, l'installer parte, e i 2 node + 15 postgres sono ancora in piedi a tenere i lock:
+esattamente il comportamento della 0.1.2, come atteso.
+
+| # | Criterio | Esito |
+|---|----------|-------|
+| 1 | dialog propone 0.1.3 → accetto | ✅ dialog "È disponibile l'aggiornamento 0.1.3", comparso in 2.2s |
+| 2 | nessun dialog NSIS "Error opening file for writing" | ❌ **comparso** (identico al primo collaudo) |
+| 3 | figli morti prima che l'installer scriva | ❌ **node=2, pg=15 vivi** quando `inst=1` |
+| 4 | app si rilancia da sola in 0.1.3 | ⚠️ `app.exe` **0.1.3 confermato** (file + processo in esecuzione), ma solo **dopo recupero manuale** |
+| 5 | dashboard + health + PWA + dati | ✅ health 200 in 17.5s, PWA 200, ACAO `http://tauri.localhost`, dati intatti ("Trattoria Collaudo", stesso qrToken, "Bruschetta"), screenshot `app-dashboard-0.1.3.png` |
+| 6 | chiusura pulita → 0 orfani | ✅ 0 processi, 0 listener |
+
+**Recupero** (stesso della prima volta, mai premuto "Ignora" che darebbe l'installazione
+mista): uccisi gli orfani — node 11084/9692 figli della 0.1.2 morta (pid 6968), postmaster
+5732 con parent già uscito — poi "Riprova" → **install completata**, app rilanciata in 0.1.3,
+`resources/` riscritte dalla 0.1.3 (`server.mjs` 17:24:14, wrapper #4 e CORS #3 presenti).
+
+**Non ho ritentato**: il salto è deterministico e strutturalmente impossibile da passare, un
+2° tentativo avrebbe dato lo stesso esito (regola dei max 2 tentativi non spesa per nulla).
+
+**Impatto reale — meno grave di come suona:** il bug colpisce **solo chi aggiorna DA una
+versione ≤ 0.1.2**, e **una volta sola**. Chi installa la 0.1.3 da zero, o chi da 0.1.3
+aggiornerà alla 0.1.4, ha il codice fixato che gira. Nessun ristoratore è oggi su 0.1.2 →
+in pratica il raggio d'azione è la sola VM di collaudo.
+
+**➡️ Test decisivo che manca: 0.1.3 → 0.1.4.** È l'unico modo di eseguire il fix. Basta una
+**0.1.4 anche solo con la versione bumpata** (nessun cambiamento di codice necessario): se
+l'update fila senza dialog e la timeline mostra `node=0, pg=0` **prima** di `inst=1`, la voce
+16 si chiude e BUG #5 è verificato.
+
 ### 🔴 BUG #5 (P1) — l'update Windows si pianta: i figli vivi lockano i file da sovrascrivere
 
 **Scoperto ri-collaudando l'updater sulla 0.1.2 vera** (0.1.1 pristina → dialog → "Installa
@@ -341,13 +394,13 @@ del bundle, pilotato via HTTP con due cookie jar (owner `tako_session`, cliente 
 |---|------|-------|----------|
 | 13 | QR/URL tavolo, menu carica | ✅ | cliente `GET /api/customer/table/<qrToken>` → 200 + cookie `tako_table`; `GET /api/customer/restaurant/<id>/menu` → menu pubblico contiene "Bruschetta" |
 | 14 | Ordine realtime → owner | ✅ | `POST /api/customer/orders` (2×, idempotencyKey) → 201; owner lo vede subito in `/orders/active`. Layer Socket.IO realtime coperto dai 22 test "realtime" (voce 17, verdi su Windows) |
-| 15 | Da telefono vero | ⛔ | **BLOCCATO-RETE, causa individuata: la VM è dietro NAT.** UTM è in *Shared Network*: VM `192.168.64.2/24`, gateway `192.168.64.1` = il Mac; `tracert` mostra hop2 `192.168.1.1` = router di casa. Il telefono sta su `192.168.1.x` e **non ha rotta** verso `192.168.64.2` (subnet privata dentro il Mac, nessun inbound), e l'mDNS `tako.local` **non attraversa** il NAT. Non è un difetto di Tako. **Tutto il resto è verde e testato senza telefono** (sotto). Sblocco: UTM → Bridged, oppure un port-forward della sola 3002 |
+| 15 | Da telefono vero | ⛔ | **BLOCCATO-RETE: la VM è ancora dietro NAT.** UTM in *Shared Network*: VM `192.168.64.2/24`, gateway `192.168.64.1` = il Mac; hop2 `192.168.1.1` = router di casa. Il telefono su `192.168.1.x` **non ha rotta** verso la VM e l'mDNS `tako.local` **non attraversa** il NAT. Non è un difetto di Tako. **Ricontrollato dopo il passaggio a Bridged annunciato: IP invariato anche dopo `ipconfig /release` + `/renew`** → UTM applica il cambio di rete solo a **VM spenta**, non a caldo. Serve: spegnere la VM, verificare Network=Bridged, riaccendere. **Tutto il resto è verde e testato senza telefono** (sotto) |
 
 ## D. Updater e test suite
 
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 16 | updates.takoitalia.com/latest.json | ⚠️ | Il **feed è a posto** (`0.1.2`, `darwin-aarch64` + `windows-x86_64`, firme ok) e il flusso "check → dialog → download" funziona: 0.1.1 → dialog "È disponibile l'aggiornamento 0.1.2" → **app.exe 0.1.2 in 30s**. Ma l'**installazione si pianta**: NSIS non può sovrascrivere i file lockati dai figli ancora vivi → **BUG #5 (P1)**, sotto. Completata solo uccidendo a mano gli orfani e premendo "Riprova". Ri-testare dopo la 0.1.3 |
+| 16 | updates.takoitalia.com/latest.json | ⚠️ | Feed a posto (`0.1.3`, `darwin-aarch64` + `windows-x86_64`, firmato); check → dialog → download **ok**. Ma l'**installazione si pianta** (BUG #5): NSIS non può sovrascrivere i file lockati dai figli ancora vivi. **Ri-collaudato su 0.1.2 → 0.1.3: FAIL identico** — perché l'update lo esegue l'updater della versione **in esecuzione** (0.1.2, senza fix). Il fix **è** nella 0.1.3 (verificato nel binario). **Chiude solo il test 0.1.3 → 0.1.4** |
 | 17 | Test suite integrazione 72/72 | ✅ | **72/72 passed**, 8 file, 19.84s (vedi log) |
 
 ## E. Frontend / UI
@@ -487,9 +540,14 @@ Stack pg+server lasciati vivi per proseguire B/C.
 
 ## GIUDIZIO FINALE — vendibile su Windows?
 
-> **Aggiornato dopo la 0.1.2 (release vera, installata via updater).** Sezione A completa.
-> **5 bug Windows trovati.** 4 fixati e verificati sul runtime; il 5° (update) è fixato
-> nel codice ma **non compilabile in VM** → serve la 0.1.3.
+> **Aggiornato dopo la 0.1.3 (installata via updater).** Sezione A completa. **5 bug Windows
+> trovati.** 4 fixati e **verificati sul runtime**; il 5° (update) è fixato, **compilato e
+> spedito nella 0.1.3** — ma non ancora *eseguito*: lo esegue solo il salto 0.1.3 → 0.1.4.
+
+**Stato in VM: 0.1.3 installata e funzionante** (health 200 in 17.5s, PWA 200, CORS ok, dati
+intatti, chiusura pulita a 0 orfani). Ci si è arrivati però passando per il dialog NSIS di
+BUG #5 e un recupero manuale: **il salto 0.1.2 → 0.1.3 è rotto per costruzione**, perché lo
+esegue l'updater della 0.1.2. Vedi il ri-collaudo sopra.
 
 **La 0.1.2 installata FUNZIONA: l'app è utilizzabile.** Verificato sulla release ufficiale
 (non sui miei artefatti sostituiti a mano — li ho **rimossi prima** del test, ripristinando
@@ -531,11 +589,10 @@ vita completo**, non solo su server/DB:
 
 **Riserve residue:**
 
-1. **Il rebuild 0.1.3 è obbligatorio**: senza il fix #5 ogni aggiornamento da 0.1.2 in poi
-   si pianta sul dialog NSIS. È il difetto più grave rimasto: si manifesta **al primo
-   contatto** del ristoratore con un aggiornamento, cioè nel momento in cui l'app deve
-   dimostrare di sapersi mantenere da sola. Il fix è scritto e rivisto ma **non compilato**
-   (niente toolchain Rust in VM) → il Mac deve buildare e io ri-testare l'update.
+1. **BUG #5 fixato e spedito, ma il fix non è ancora stato ESEGUITO.** La 0.1.3 lo contiene
+   (verificato nel binario), però l'unico salto che lo esercita è **0.1.3 → 0.1.4**: serve
+   una 0.1.4 (basta il bump di versione) per chiudere la voce 16. Finché non gira davvero,
+   "l'app sa aggiornarsi da sola su Windows" resta **non dimostrato**.
 2. **UI voce 20 — 2 P1 aperti** (non bloccanti la vendita, ma si vedono):
    **Alt+Space** apre il menu di sistema Windows (dettatura inutilizzabile) e **tutte le
    label dicono ⌘K** → su Windows la scorciatoia esiste ma è invisibile. Vanno fixati
@@ -556,15 +613,15 @@ vita completo**, non solo su server/DB:
    apposta **senza toccare `lib.rs`** anche per questo.
 
 ### Azione richiesta al Mac
-1. **Rebuild 0.1.3** con il fix **#5** (`lib.rs`: `teardown_children()` + download/install
-   separati). È l'unico blocco vero rimasto. Il fix è rivisto in avversariale ("COMPILA",
-   verificato sui sorgenti dei crate) ma **non compilato**: se `cargo` dà errore, la riga
-   sospetta è `teardown_children(app_handle)` in `app.run` — `app_handle` è già
-   `&AppHandle`, **non** aggiungere `&`.
-2. Poi io ri-testo l'update **0.1.2 → 0.1.3** dalla VM: è il test che chiude la voce 16.
+1. **Pubblicare una 0.1.4** — basta il **bump di versione**, nessun cambiamento di codice.
+   È l'unico modo di far girare il fix #5: l'update lo esegue sempre l'updater della
+   versione installata, e la 0.1.3 è la prima che ce l'ha. Poi io testo **0.1.3 → 0.1.4**
+   e la voce 16 si chiude (criterio: nessun dialog NSIS + timeline con `node=0, pg=0`
+   prima che parta l'installer).
+2. **Voce 15**: **spegnere la VM** (non basta cambiare l'impostazione a caldo: UTM applica
+   il network mode solo da spenta), verificare Network = **Bridged**, riaccendere. Poi la
+   catena LAN si ri-verifica in un minuto e la scansione del QR la fai tu.
 3. Opzionale: i **2 P1 UI** (Alt+Space, label ⌘K) — serve un helper `isMac` nel frontend.
-4. Se vuoi chiudere la **voce 15**: UTM → Network → **Bridged** e riavvia la VM; poi
-   scansiono/apro il QR dal tuo telefono.
 
 *Ambiente collaudo: la VM è Win11-ARM; l'intero stack è girato sotto **Node x64**
 portatile in emulazione (identico al target ristoratore x64 e alla CI windows-latest).*
