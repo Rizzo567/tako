@@ -14,7 +14,7 @@
 //   node          — runtime Node (l'app non richiede Node sul computer target)
 import { build } from 'esbuild'
 import { execSync } from 'node:child_process'
-import { rmSync, mkdirSync, cpSync, writeFileSync, copyFileSync, chmodSync, existsSync, readFileSync, readdirSync, lstatSync, realpathSync } from 'node:fs'
+import { rmSync, mkdirSync, cpSync, writeFileSync, copyFileSync, chmodSync, existsSync, readFileSync, readdirSync, lstatSync, realpathSync, renameSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execPath } from 'node:process'
@@ -84,6 +84,27 @@ cpSync(webStandalone, webOut, { recursive: true })
 cpSync(join(root, 'apps', 'web', '.next', 'static'), join(webOut, 'apps', 'web', '.next', 'static'), { recursive: true })
 const webPublic = join(root, 'apps', 'web', 'public')
 if (existsSync(webPublic)) cpSync(webPublic, join(webOut, 'apps', 'web', 'public'), { recursive: true })
+
+// Bonifica del web node ORFANO: se la shell Tauri muore per crash, il figlio web
+// sopravvive e tiene :3002 → il nuovo figlio muore in EADDRINUSE e il watchdog si
+// arrende. Il server.js di Next diventa server.next.js e al suo posto mettiamo il
+// nostro wrapper (stessa dir → __dirname invariato per Next), che libera la porta
+// dall'orfano e poi carica il server vero. lib.rs resta invariato: continua a
+// lanciare apps/web/server.js.
+console.log('▶ wrapper bonifica-orfano come entry del web')
+const webEntry = join(webOut, 'apps', 'web', 'server.js')
+if (!existsSync(webEntry)) {
+  throw new Error(`web standalone: server.js mancante (${webEntry})`)
+}
+// Il wrapper è CJS (require) perché oggi lo è anche il server.js generato da Next.
+// Se apps/web diventasse ESM ("type":"module"), Next emetterebbe un server.js ESM e il
+// wrapper esploderebbe a runtime con "require is not defined", rompendo il web NEL
+// BUNDLE (invisibile in dev). Meglio fermare la build qui.
+if (JSON.parse(readFileSync(join(root, 'apps', 'web', 'package.json'), 'utf8')).type === 'module') {
+  throw new Error('apps/web è ESM ("type":"module"): converti scripts/web-server-wrapper.cjs a ESM prima di buildare')
+}
+renameSync(webEntry, join(webOut, 'apps', 'web', 'server.next.js'))
+cpSync(join(root, 'scripts', 'web-server-wrapper.cjs'), webEntry)
 
 // FIX pnpm + Next standalone: il bundler Tauri dereferenzia i symlink, così
 // apps/web/node_modules/next diventa una dir reale ma le SUE dipendenze interne
