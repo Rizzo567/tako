@@ -80,3 +80,20 @@ describe('probe by-key per invii incerti (P1 doppio addebito)', () => {
     expect([401, 404]).toContain(other.status)
   })
 })
+
+describe('stats dashboard: finestra default include gli ordini appena creati (fix timestamptz)', () => {
+  it('un ordine paid di adesso compare nei topItems senza from/to', async () => {
+    const cookie = await getTableCookie(env.qrToken)
+    const order = await placeCustomerOrder(cookie, randomUUID())
+    const sql = postgres(DB_URL)
+    await sql`update orders set status = 'paid' where id = ${order.id}`
+    await sql.end()
+
+    // SENZA from/to: prima del fix la colonna naive + bind UTC di Drizzle
+    // spostavano la finestra di -2h e l'ordine appena creato spariva.
+    const res = await fetch(`${SERVER}/api/stats/dashboard`, { headers: staff() })
+    const d = (await res.json()).data
+    const mine = d.topItems.find((t: any) => t.name === 'Piatto Test')
+    expect(mine, 'topItems deve includere ordini delle ultime 2 ore').toBeTruthy()
+  })
+})
