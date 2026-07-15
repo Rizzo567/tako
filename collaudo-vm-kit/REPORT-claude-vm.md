@@ -157,11 +157,14 @@ del bundle, pilotato via HTTP con due cookie jar (owner `tako_session`, cliente 
 
 ## E. Frontend / UI
 
+Screenshot in `collaudo-vm-kit/screenshots/`. UI resa in **Edge (Chromium 150)** —
+stesso motore di WebView2; la resa in-app vera richiede il rebuild (bug P0).
+
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 18 | App owner rendering WebView2/DPI | ⛔ | dipende app installata |
-| 19 | PWA viewport mobile | ⬜ | via Edge |
-| 20 | Divergenze UI Win vs atteso | ⬜ | |
+| 18 | App owner rendering / DPI | ✅⚠️ | `staff-logged.png`: dashboard owner completa e pulita (KPI Incasso €13/Ticket €13/Coperti 4, nav, grafico, setup 4/5), font leggibili, **nessun testo tagliato**, nessun glitch. `staff-dpi150.png` a scala 1.5 OK. ⚠️ resa in Edge, non in-app WebView2 (serve rebuild) |
+| 19 | PWA viewport mobile | ✅ | `pwa-mobile.png` (390×844): menu cliente "Bruschetta Collaudo 6,50 €", azioni Cameriere/Carrello/Lingua, nav Menù/Ordine, touch target ampi, viewport mobile corretto |
+| 20 | Divergenze UI Win vs atteso | ⚠️ | Nessun glitch/rottura osservato nelle viste testate. Audit completo scorciatoie (Ctrl vs Cmd), animazioni, focus richiede l'app in-app funzionante → dopo rebuild |
 
 ---
 
