@@ -40,6 +40,26 @@ fn no_console_window(cmd: &mut Command) {
     }
 }
 
+/// (Windows) Rimuove il prefisso "verbatim"/extended-length `\\?\` da un path.
+/// `resource_dir()` di Tauri su Windows restituisce path estesi tipo
+/// `\\?\C:\Users\...\resources\server`. Passato come argv a `node.exe`, il
+/// resolver del main-module di Node (v22) NON gestisce quel prefisso e riduce il
+/// path alla sola radice `C:`, facendo fallire l'avvio del server embedded con
+/// `EISDIR: illegal operation on a directory, lstat 'C:'` — quindi niente API su
+/// :4317 e app inutilizzabile. Normalizziamo prima di spawnare i figli Node.
+/// No-op fuori da Windows e per path senza prefisso.
+fn deverbatim(p: std::path::PathBuf) -> std::path::PathBuf {
+    #[cfg(windows)]
+    {
+        if let Some(s) = p.to_str() {
+            if let Some(rest) = s.strip_prefix(r"\\?\") {
+                return std::path::PathBuf::from(rest);
+            }
+        }
+    }
+    p
+}
+
 /// Token per-lancio che autorizza la richiesta interna di shutdown ordinato
 /// (`POST /internal/shutdown`). Gira solo su localhost: non è materiale di
 /// sicurezza forte, basta che sia imprevedibile per lancio. Deriva da orologio
@@ -264,7 +284,9 @@ fn spawn_server(app: &tauri::AppHandle) -> Option<Child> {
         None => {
             // BUNDLE: node impacchettato + server.mjs dalle risorse (F4).
             let res = app.path().resource_dir().ok()?;
-            let server_dir = res.join("resources").join("server");
+            // deverbatim: senza questo, su Windows node riceve `\\?\C:\...\server.mjs`
+            // e fallisce con `EISDIR lstat 'C:'` (vedi commento su `deverbatim`).
+            let server_dir = deverbatim(res.join("resources").join("server"));
             let node_bin = server_dir.join(if cfg!(windows) { "node.exe" } else { "node" });
             let mut c = Command::new(node_bin);
             c.arg(server_dir.join("server.mjs"));
@@ -324,10 +346,9 @@ fn spawn_web(app: &tauri::AppHandle) -> Option<Child> {
         return None;
     }
     let res = app.path().resource_dir().ok()?;
-    let web_root = res.join("resources").join("web");
-    let node_bin = res
-        .join("resources")
-        .join("server")
+    // deverbatim: come per il server, evita `\\?\C:\...` che rompe l'avvio Node.
+    let web_root = deverbatim(res.join("resources").join("web"));
+    let node_bin = deverbatim(res.join("resources").join("server"))
         .join(if cfg!(windows) { "node.exe" } else { "node" });
     let entry = web_root.join("apps").join("web").join("server.js");
     if !entry.exists() {
