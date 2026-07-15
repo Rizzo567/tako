@@ -22,6 +22,21 @@ Legenda: ✅ verificato con evidenza · ⚠️ con riserve · ❌ fallito · ⛔
 Prerequisiti presenti: Node v24.18.0, git 2.55, gh 2.96 (auth `Rizzo567`),
 corepack→pnpm 9.0.0. Repo clonato in `C:\Users\Manuel\tako`.
 
+### ⚠️ Vincolo arch scoperto (rilevante per il prodotto)
+
+La VM è **Win11-ARM** e il Node installato è **arm64 nativo**. `embedded-postgres`
+(Postgres embedded usato da app e test) **non ha binari `windows-arm64`** (non esiste
+il pacchetto `@embedded-postgres/windows-arm64`; esiste solo `windows-x64`).
+Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
+
+- **Impatto prodotto:** Tako NON gira su Windows-on-ARM con runtime arm64. I PC dei
+  ristoratori sono x64 → nel target reale il problema non si presenta. Ma va scritto:
+  **"Windows ARM non supportato"** (se mai un cliente avesse un Surface ARM).
+- **Workaround collaudo:** installato Node **x64** portatile (v24.18.0) in scratchpad;
+  tutto lo stack (pg, migrate, server, vitest) girerà sotto x64 in emulazione,
+  identico al target x64 reale e alla CI `windows-latest`. `pnpm install` rieseguito
+  sotto x64 per materializzare `@embedded-postgres/windows-x64`.
+
 ---
 
 ## A. Installazione e ciclo di vita
@@ -59,7 +74,7 @@ corepack→pnpm 9.0.0. Repo clonato in `C:\Users\Manuel\tako`.
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
 | 16 | updates.takoitalia.com/latest.json | ⬜ | solo lettura |
-| 17 | Test suite integrazione 72/72 | ⬜ | in corso |
+| 17 | Test suite integrazione 72/72 | ✅ | **72/72 passed**, 8 file, 19.84s (vedi log) |
 
 ## E. Frontend / UI
 
@@ -73,7 +88,21 @@ corepack→pnpm 9.0.0. Repo clonato in `C:\Users\Manuel\tako`.
 
 ## Log tentativi
 
-(aggiornato a ogni voce)
+### Voce 17 — Test suite integrazione ✅ (1° tentativo utile, dopo fix arch ambiente)
+Sequenza (identica a `windows-test.yml`), tutto sotto **Node x64**:
+1. `node packages/db/pg-portable.mjs` → Postgres :5432, initdb **UTF8**, db `takodb`.
+   - Ostacolo: con Node arm64 `embedded-postgres` fallisce (no binario windows-arm64);
+     con Node x64 mancava `@embedded-postgres/windows-x64` → risolto con
+     `pnpm install --force` sotto x64 (materializza initdb.exe/postgres.exe).
+2. Verifica encoding: `server_encoding=UTF8 takodb=UTF8` ✅ (fix Windows regge).
+3. `pnpm db:migrate` → 14 migrazioni applicate, exit 0.
+4. `PORT=3001 pnpm --filter server exec tsx src/bootstrap.ts` → `/health` = 200
+   `{"status":"ok"}`, server su 0.0.0.0:3001, mDNS `tako.local → 192.168.64.2`.
+5. `npx vitest run` → **Test Files 8 passed (8), Tests 72 passed (72)**, 19.84s, exit 0.
+
+Evidenza log: `vitest.log`, `pg.log`, `server.log` nella VM (scratchpad/clone).
+Conclusione: il runtime Windows x64 regge la suite completa → **la CI non mente**.
+Stack pg+server lasciati vivi per proseguire B/C.
 
 ## Proposta a Manuel (decisioni aperte)
 
