@@ -47,7 +47,7 @@ Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
 | 1 | Installer NSIS + WebView2 | ✅ | install silent OK → `%LOCALAPPDATA%\Tako\`; WebView2 runtime presente (pv 150.0.4078.65) |
-| 2 | Primo avvio bootstrap | ❌→🔧 | **BUG P0** server embedded non parte (sotto). Fix su branch, serve rebuild dal Mac |
+| 2 | Primo avvio bootstrap | ❌→🔧 | **2 bug** (P0 deverbatim + P1 fallback pg_ctl). Embedded DB reale ora bootato via fix (initdb UTF8, pg_ctl, migrazioni, :4319 ✅). App completa serve rebuild dal Mac (P0 in Rust) |
 | 3 | TAKO_HOME struttura | ⚠️ | `%LOCALAPPDATA%\com.tako.dashboard\` creata (solo WebView2/EBWebView; struttura server assente perché il backend crasha) |
 | 4 | Chiusura → 0 processi orfani | ⛔ | dipende da app funzionante (post-rebuild) |
 | 5 | Riavvio dati intatti | ⛔ | idem |
@@ -90,6 +90,41 @@ medesimo `server.mjs` con path NON-verbatim (`C:\...\server.mjs`) il server **pa
 (`Tako server running`). Quindi togliere il prefisso risolve. **Manca la toolchain
 Rust in VM** → non posso produrre l'installer corretto: il **Mac deve ricompilare**
 `collaudo-vm-tako` e ripubblicare per validare A end-to-end (voci 4-7).
+
+**Nota per il Mac (debito, non bloccante):** `deverbatim()` fa uno strip letterale di
+`\\?\`; NON gestisce il verbatim-UNC `\\?\UNC\...` (lascerebbe `UNC\...`). Non
+raggiungibile con install NSIS in `%LOCALAPPDATA%`/`Program Files` (drive locale),
+ma se un giorno si supportasse l'esecuzione da share di rete servirebbe `dunce::simplified`.
+
+### 🟠 BUG #2 (P1) — fallback pg_ctl dell'embedded DB morto sotto avvio elevato
+
+**Scoperto** lanciando il server embedded reale con la shell **elevata (admin)**:
+Postgres su Windows **rifiuta** l'avvio diretto sotto un token amministrativo
+(`Execution of PostgreSQL by a user with administrative permissions is not permitted`).
+Il codice ha un fallback via `pg_ctl` (che crea un token ristretto e avvia comunque) —
+`packages/db/src/embedded.ts:163-172` — ma il catch faceva:
+```
+console.log('... riprovo via pg_ctl:', (e as Error).message)
+```
+e `embedded-postgres` su Windows rigetta con **`e` = undefined** → `TypeError: Cannot
+read properties of undefined (reading 'message')` → il processo **crasha PRIMA** di
+raggiungere `pg_ctl`. Quindi il fallback pensato proprio per l'avvio elevato era morto.
+(Il bundle `server.mjs` v0.1.0 mostra lo stesso crash a riga 139.)
+
+**Impatto:** se il ristoratore avvia Tako come amministratore (comune sui mini-PC),
+l'embedded DB non parte affatto. Da utente NON elevato l'avvio diretto riesce e il bug
+non si manifesta → invisibile finché non si prova elevato (mai fatto prima).
+
+**Fix applicato** (`packages/db/src/embedded.ts`): accesso null-safe
+`(e as Error)?.message ?? String(e)` (idem sul catch di `createDatabase`), così il
+fallback `pg_ctl` viene eseguito.
+
+**Verifica end-to-end (VM, shell elevata, sorgente via `tsx`):** log →
+`avvio diretto fallito, riprovo via pg_ctl: undefined` → `Postgres embedded in ascolto
+su 127.0.0.1:54317` → `database "takodb" creato` → `migrazioni applicate` →
+`Tako server running` + `/health` 200. ✅ **Fallback funziona, embedded DB su.**
+Cluster con `--encoding=UTF8` forzato (embedded.ts:155) → encoding OK, nessuna
+regressione del fix UTF8.
 
 ## B. Funzionalità core owner
 

@@ -165,7 +165,11 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
   } catch (e) {
     if (process.platform !== 'win32') throw e
     // Token elevato: riprova via pg_ctl (vedi commento su startedViaPgCtl).
-    console.log('[db] avvio diretto fallito, riprovo via pg_ctl:', (e as Error).message)
+    // NB: embedded-postgres su Windows può rigettare con un valore NON-Error
+    // (persino `undefined`); accedere a `.message` senza guardia lanciava un
+    // TypeError QUI, uccidendo il fallback pg_ctl proprio nel caso (avvio da
+    // utente elevato) per cui esiste. Accesso null-safe.
+    console.log('[db] avvio diretto fallito, riprovo via pg_ctl:', (e as Error)?.message ?? String(e))
     pgCtlDataDir = databaseDir
     execFileSync(resolvePgCtl(), ['-D', databaseDir, '-o', `-p ${port}`, '-l', join(databaseDir, 'pg_ctl.log'), '-w', 'start'], { stdio: 'inherit', timeout: 60000 })
     startedViaPgCtl = true
@@ -194,7 +198,7 @@ export async function maybeStartEmbeddedDb(): Promise<void> {
       }
       console.log(`[db] database "${database}" creato`)
     } catch (e) {
-      console.log('[db] createDatabase saltato:', (e as Error).message)
+      console.log('[db] createDatabase saltato:', (e as Error)?.message ?? String(e))
     }
   }
 
