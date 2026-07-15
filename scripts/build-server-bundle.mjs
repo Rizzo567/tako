@@ -14,7 +14,7 @@
 //   node          — runtime Node (l'app non richiede Node sul computer target)
 import { build } from 'esbuild'
 import { execSync } from 'node:child_process'
-import { rmSync, mkdirSync, cpSync, writeFileSync, copyFileSync, chmodSync, existsSync, readFileSync, readdirSync } from 'node:fs'
+import { rmSync, mkdirSync, cpSync, writeFileSync, copyFileSync, chmodSync, existsSync, readFileSync, readdirSync, lstatSync, realpathSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execPath } from 'node:process'
@@ -129,6 +129,34 @@ if (nextEntry) {
   }
 } else {
   console.warn('⚠ next@* non trovato in .pnpm: salto il flatten (verifica la web)')
+}
+
+// FIX Windows/NSIS: lo store .pnpm NON deve finire nel bundle. Le sue dir hanno
+// nomi lunghissimi (next@15.5.15_babel-plugin-react-compiler@…_react@…) che
+// sommati al path del runner sfondano MAX_PATH (260): makensis fallisce con
+// "File: failed opening file". Prima di eliminarlo materializziamo ogni symlink
+// di node_modules/ (root e apps/web) che punta dentro lo store: symlink →
+// copia reale COMPLETA presa dallo store (dereference).
+if (existsSync(pnpmDir)) {
+  console.log('▶ materializzo i symlink pnpm ed elimino lo store .pnpm (fix MAX_PATH/NSIS)')
+  const materialize = (nmDir) => {
+    if (!existsSync(nmDir)) return
+    const entries = readdirSync(nmDir).flatMap((name) => {
+      if (name === '.pnpm' || name === '.bin') return []
+      if (name.startsWith('@')) return readdirSync(join(nmDir, name)).map((s) => `${name}/${s}`)
+      return [name]
+    })
+    for (const dep of entries) {
+      const p = join(nmDir, dep)
+      if (!lstatSync(p).isSymbolicLink()) continue
+      const real = realpathSync(p)
+      rmSync(p, { force: true })
+      cpSync(real, p, { recursive: true, dereference: true, force: true })
+    }
+  }
+  materialize(join(webOut, 'node_modules'))
+  materialize(join(webOut, 'apps', 'web', 'node_modules'))
+  rmSync(pnpmDir, { recursive: true, force: true })
 }
 
 // 3) node_modules runtime: installazione pulita (no symlink pnpm).
