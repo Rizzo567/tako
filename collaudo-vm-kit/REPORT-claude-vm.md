@@ -45,15 +45,43 @@ Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
 > **Aggiornamento:** durante il run il Mac ha pubblicato la release **v0.1.0** con
 > l'asset `Tako_0.1.0_x64-setup.exe`. Sezione A sbloccata. Installato in silent (`/S`).
 
+> **AGGIORNAMENTO 0.1.1** (rilasciata dal Mac con i miei 2 fix): re-collaudo sezione A
+> sull'app vera. VOCE 16 updater ✅. **Trovato un 3° bug Windows (CORS)** che 0.1.1 non
+> aveva ancora → fixato e validato end-to-end (swap `server.mjs` ricompilato in locale).
+
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
 | 1 | Installer NSIS + WebView2 | ✅ | install silent OK → `%LOCALAPPDATA%\Tako\`; WebView2 runtime presente (pv 150.0.4078.65) |
-| 2 | Primo avvio bootstrap | ❌→🔧 | **2 bug** (P0 deverbatim + P1 fallback pg_ctl). Embedded DB reale ora bootato via fix (initdb UTF8, pg_ctl, migrazioni, :4319 ✅). App completa serve rebuild dal Mac (P0 in Rust) |
-| 3 | TAKO_HOME struttura | ⚠️ | `%LOCALAPPDATA%\com.tako.dashboard\` creata (solo WebView2/EBWebView; struttura server assente perché il backend crasha) |
-| 4 | Chiusura → 0 processi orfani | ⛔ | dipende da app funzionante (post-rebuild) |
-| 5 | Riavvio dati intatti | ⛔ | idem |
-| 6 | Crash test + healStaleLock | ⛔ | idem |
-| 7 | Single-instance | ⛔ | idem |
+| 2 | Primo avvio bootstrap | ✅ | con 0.1.1 (fix P0/P1) + fix P2 CORS: `app.exe` + 2×`node.exe` (resources\server) + 9×`postgres.exe`, `:4317/health` 200, `setup/status` 200, **dashboard owner carica in-app** (screenshot `app-dashboard-0.1.1.png`) |
+| 3 | TAKO_HOME struttura | ✅ | `%LOCALAPPDATA%\com.tako.dashboard\`: `pgdata`, `jwt-secret`, `device-secret`, `cloud-identity.enc`, `server.pid`, `uploads`, `.cookies` — struttura sensata |
+| 4 | Chiusura → 0 processi orfani | ⬜ | (in corso, app ora funzionante) |
+| 5 | Riavvio dati intatti | ⬜ | (in corso) |
+| 6 | Crash test + healStaleLock | ⬜ | (in corso) |
+| 7 | Single-instance | ⬜ | (in corso) |
+
+### 🔴 BUG #3 (P2, blocca l'UI) — CORS: origin WebView2 Windows non in allowlist
+
+**Sintomo:** con 0.1.1 (fix P0/P1) l'app parte, backend up (:4317 health 200, node+pg
+vivi), **ma la finestra resta bloccata sullo splash** "Avvio Tako… Preparazione del
+database" e la dashboard non carica mai → app ancora inutilizzabile su Windows.
+
+**Root cause:** lo splash (`apps/app/standalone-dist/index.html`) fa
+`fetch("http://localhost:4317/health")` e al primo `ok` redirige a `/staff`. Su Windows
+la WebView2 serve l'app da origin **`http://tauri.localhost`**; su mac/linux è
+`tauri://localhost`. L'allowlist CORS del server embedded (`apps/server/src/index.ts:111`)
+contiene `localhost` (che copre `tauri://localhost`, hostname=`localhost`) ma **non**
+`tauri.localhost` → la fetch cross-origin dalla WebView è bloccata da CORS → splash in
+loop infinito. Verificato: `/health` con `Origin: http://tauri.localhost` NON ritorna
+`access-control-allow-origin`; con `tauri://localhost` sì.
+
+**Fix applicato** (`apps/server/src/index.ts`): aggiunto `'tauri.localhost'` all'allowlist
+`allowedHosts`. Copre `http://` e `https://tauri.localhost` (porta vuota già ammessa).
+
+**Verifica end-to-end:** ricompilato `server.mjs` in locale (solo esbuild, no Rust),
+sostituito nel bundle installato, riavviata l'app → `/health` con Origin
+`http://tauri.localhost` ora ritorna l'ACAO corretto → **lo splash supera e la dashboard
+owner carica in-app** (login → `app-dashboard-0.1.1.png`: "Buongiorno Manuel!", KPI,
+setup 4/5). Serve rebuild ufficiale dal Mac (0.1.2) con questo fix.
 
 ### 🔴 BUG P0 — server embedded non parte su Windows (app inutilizzabile)
 
@@ -153,7 +181,7 @@ del bundle, pilotato via HTTP con due cookie jar (owner `tako_session`, cliente 
 
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 16 | updates.takoitalia.com/latest.json | ⚠️ | feed raggiungibile HTTP 200, JSON valido v0.1.0. **Ma `platforms` ha solo `darwin-aarch64`, nessun `windows-x86_64`** → updater Windows non troverebbe update (ok per "stessa versione = nessun prompt", ma auto-update Windows non ancora cablato nel feed). Query dal runtime app = BLOCCATO (bug P0) |
+| 16 | updates.takoitalia.com/latest.json | ✅ | feed ora `version 0.1.1` + `platforms: darwin-aarch64, windows-x86_64`. **Update flow testato dal runtime app**: 0.1.0 installata → updater propone 0.1.1 (dialog "Aggiornamento Tako") → accettato → scaricato+installato → **app.exe ora 0.1.1** (~18s). ✅ |
 | 17 | Test suite integrazione 72/72 | ✅ | **72/72 passed**, 8 file, 19.84s (vedi log) |
 
 ## E. Frontend / UI
@@ -163,7 +191,7 @@ stesso motore di WebView2; la resa in-app vera richiede il rebuild (bug P0).
 
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 18 | App owner rendering / DPI | ✅⚠️ | `staff-logged.png`: dashboard owner completa e pulita (KPI Incasso €13/Ticket €13/Coperti 4, nav, grafico, setup 4/5), font leggibili, **nessun testo tagliato**, nessun glitch. `staff-dpi150.png` a scala 1.5 OK. ⚠️ resa in Edge, non in-app WebView2 (serve rebuild) |
+| 18 | App owner rendering / DPI | ✅ | **In-app WebView2 reale** (`app-dashboard-0.1.1.png`): dashboard owner pulita, nav completa, KPI, grafico, setup 4/5, font leggibili, nessun testo tagliato/glitch. Anche `staff-logged.png` (Edge, con dati €13). Screenshot dashboard a login riuscito |
 | 19 | PWA viewport mobile | ✅ | `pwa-mobile.png` (390×844): menu cliente "Bruschetta Collaudo 6,50 €", azioni Cameriere/Carrello/Lingua, nav Menù/Ordine, touch target ampi, viewport mobile corretto |
 | 20 | Divergenze UI Win vs atteso | ⚠️ | Nessun glitch/rottura osservato nelle viste testate. Audit completo scorciatoie (Ctrl vs Cmd), animazioni, focus richiede l'app in-app funzionante → dopo rebuild |
 

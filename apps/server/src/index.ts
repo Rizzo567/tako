@@ -110,6 +110,12 @@ export async function startServer(): Promise<void> {
   const CLIENT_PORT = process.env['CLIENT_PORT'] ?? '3002'
   const allowedHosts = () => new Set<string>([
     'tako.local', 'localhost', '127.0.0.1', '[::1]',
+    // Origin della WebView dell'app desktop Tauri. Su mac/linux è `tauri://localhost`
+    // (hostname 'localhost', già coperto); su **Windows** WebView2 serve l'app da
+    // `http://tauri.localhost` (hostname 'tauri.localhost'). Senza questo la fetch
+    // cross-origin dello splash verso :4317/health veniva bloccata da CORS e la
+    // dashboard non caricava mai (app di fatto inutilizzabile su Windows).
+    'tauri.localhost',
     ...getLanIPv4s(),
   ])
   const allowedPorts = new Set([String(PORT_NUM), String(CLIENT_PORT)])
