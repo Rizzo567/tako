@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, orders, orderItems, orderStatusHistory, menuItems, tables } from '@tako/db'
-import { eq, and, inArray, desc, gte } from 'drizzle-orm'
+import { eq, and, inArray, notInArray, desc, gte } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { recomputeOpenBill, round2, ensureOpenBill } from '../lib/billing.js'
@@ -122,17 +122,30 @@ export async function orderRoutes(fastify: FastifyInstance) {
     }
 
     const idempotencyKey = body.data.idempotencyKey ?? `staff-${restaurantId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    // Ordine + voci in transazione: niente ordine "fantasma" fatturabile senza
+    // voci se il processo o il pool cede tra i due insert (stesso fix del path
+    // cliente in customer.ts).
     let order: typeof orders.$inferSelect | undefined
+    let insertedItems: (typeof orderItems.$inferSelect)[] = []
     try {
-      ;[order] = await db.insert(orders).values({
-        restaurantId, tableId: body.data.tableId, tableNumber, type: body.data.type,
-        status: 'pending', total, notes: body.data.notes,
-        idempotencyKey,
-      }).returning()
+      const created = await db.transaction(async (tx) => {
+        const [o] = await tx.insert(orders).values({
+          restaurantId, tableId: body.data.tableId, tableNumber, type: body.data.type,
+          status: 'pending', total, notes: body.data.notes,
+          idempotencyKey,
+        }).returning()
+        if (!o) throw new Error('Creazione ordine fallita.')
+        const items = await tx.insert(orderItems).values(
+          resolved.map(i => ({ orderId: o.id, menuItemId: i.menuItemId, name: i.name, quantity: i.quantity, unitPrice: i.unitPrice, notes: i.notes, kitchenStation: i.kitchenStation ?? null, status: 'pending' as const }))
+        ).returning()
+        return { order: o, items }
+      })
+      order = created.order
+      insertedItems = created.items
     } catch (err: any) {
       // Race del doppio-tap: due invii con la stessa chiave superano il check iniziale,
       // il vincolo UNIQUE blocca il secondo → ritorna l'ordine già creato (no 500).
-      if (err?.code === '23505' && body.data.idempotencyKey) {
+      if ((err?.code === '23505' || err?.cause?.code === '23505') && body.data.idempotencyKey) {
         const [existingOrder] = await db.select().from(orders).where(and(eq(orders.idempotencyKey, idempotencyKey), eq(orders.restaurantId, restaurantId))).limit(1)
         if (existingOrder) {
           const items = await db.select().from(orderItems).where(eq(orderItems.orderId, existingOrder.id))
@@ -142,10 +155,6 @@ export async function orderRoutes(fastify: FastifyInstance) {
       throw err
     }
     if (!order) return reply.code(500).send({ error: { code: 'DB', message: 'Creazione ordine fallita.' } })
-
-    const insertedItems = await db.insert(orderItems).values(
-      resolved.map(i => ({ orderId: order.id, menuItemId: i.menuItemId, name: i.name, quantity: i.quantity, unitPrice: i.unitPrice, notes: i.notes, kitchenStation: i.kitchenStation ?? null, status: 'pending' as const }))
-    ).returning()
 
     const payload = { ...order, items: insertedItems }
     io.to(`restaurant:${restaurantId}`).emit('order:new', payload)
@@ -249,7 +258,17 @@ export async function orderRoutes(fastify: FastifyInstance) {
     else if (allItems.some(i => i.status === 'preparing' || i.status === 'ready')) derivedStatus = 'preparing'
     else derivedStatus = 'pending'
 
-    await db.update(orders).set({ status: derivedStatus as any, updatedAt: new Date() }).where(eq(orders.id, orderId))
+    // Update CONDIZIONALE: il guard paid/cancelled qui sopra è check-then-act —
+    // se la cassa chiude il conto TRA la lettura e questa riga, la cascade mette
+    // 'paid' e un update secco lo sovrascriverebbe con lo stato derivato
+    // (ordine pagato "resuscitato" → riconciliazione rotta). La WHERE esclude
+    // gli stati terminali: se nel frattempo è diventato paid/cancelled, non tocca
+    // nulla e lo segnaliamo col 409 come il guard iniziale.
+    const [bumped] = await db.update(orders).set({ status: derivedStatus as any, updatedAt: new Date() })
+      .where(and(eq(orders.id, orderId), notInArray(orders.status, ['paid', 'cancelled']))).returning({ id: orders.id })
+    if (!bumped) {
+      return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Ordine pagato o annullato nel frattempo: non modificabile.' } })
+    }
 
     io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, itemId, itemStatus: status, status: derivedStatus })
     // Anche al tavolo del cliente: il tracking riflette lo stato derivato quando

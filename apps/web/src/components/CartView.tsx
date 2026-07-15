@@ -33,7 +33,7 @@ function LineQty({ value, onChange }: { value: number; onChange: (n: number) => 
 
 export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrderPlaced: (orderId: string) => void }) {
   const { t } = useI18n()
-  const { items, updateQty, remove, clear, total, ensureCheckoutKey } = useCartStore()
+  const { items, updateQty, remove, removeSent, total, ensureCheckoutKey, pending, setPending } = useCartStore()
   const { restaurantId, tableId, tableNumber, coverCharge, setOrderId } = useSessionStore()
   // Il coperto è A PERSONA e informativo: lo aggiunge il conto del tavolo, non l'ordine
   // dal telefono. Solo al tavolo (asporto = tableId null → niente coperto).
@@ -42,37 +42,81 @@ export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrde
   const [loading, setLoading] = useState(false)
   const animTotal = useCountUp(total())
 
+  // Successo (dall'invio o dal probe): tracking + rimuovi SOLO le quantità inviate
+  // (gli item aggiunti mentre l'ordine era in volo restano nel carrello).
+  function orderLanded(orderData: any, sent: { items: typeof items }) {
+    setPending(null)
+    setOrderId(orderData.id)
+    removeSent(sent.items)
+    confettiBurst()
+    toast.success(t('toastOrderSent'))
+    // Richiedi il permesso notifiche: il tracking avvisa quando l'ordine è pronto.
+    try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission() } catch { /* noop */ }
+    onOrderPlaced(orderData.id)
+  }
+
   async function placeOrder() {
-    if (!items.length || !restaurantId) return
+    if (!restaurantId) return
     setLoading(true)
     try {
+      // Un invio precedente è finito nel LIMBO (timeout/rete)? Prima di spedire
+      // qualsiasi cosa con una chiave NUOVA, chiedi al server se quella chiave è
+      // atterrata: senza questo probe un carrello ritoccato dopo il timeout
+      // rigenerava la chiave e creava un SECONDO ordine sul conto (doppio addebito).
+      if (pending) {
+        try {
+          const { data } = await api.get(`/customer/orders/by-key/${pending.key}`)
+          orderLanded(data.data, { items: pending.items })
+          return
+        } catch (probeErr: any) {
+          if (probeErr?.response?.status === 404) {
+            // Mai arrivato: si riparte puliti col carrello corrente.
+            setPending(null)
+          } else {
+            // Rete ancora giù: non si spedisce niente finché non sappiamo l'esito.
+            toast.error(t('orderError'))
+            return
+          }
+        }
+      }
+
+      if (!items.length) return
       // Stessa chiave su ogni retry: un reinvio dopo timeout non crea ordini doppi.
       const idempotencyKey = ensureCheckoutKey()
       const snapshot = items.slice()
       const orderNotes = notes
+      // Parcheggia PRIMA della fetch: se il telefono muore a metà, al prossimo
+      // avvio il probe by-key risolve l'esito (pending è persistito).
+      setPending({ key: idempotencyKey, items: snapshot, notes: orderNotes || undefined })
       const { data } = await api.post('/customer/orders', {
         restaurantId, tableId, tableNumber, type: 'table',
         items: snapshot.map(i => ({ menuItemId: i.menuItemId, variantId: i.variantId, quantity: i.quantity, notes: i.notes })),
         notes: orderNotes || undefined,
         idempotencyKey,
       })
-      setOrderId(data.data.id)
-      clear()
-      confettiBurst()
-      toast.success(t('toastOrderSent'))
-      // Richiedi il permesso notifiche: il tracking avvisa quando l'ordine è pronto.
-      try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission() } catch { /* noop */ }
-      onOrderPlaced(data.data.id)
+      orderLanded(data.data, { items: snapshot })
     } catch (e: any) {
+      const err = e?.response?.data?.error
+      if (e?.response?.status) {
+        // Risposta ARRIVATA (4xx/5xx): il server non ha creato l'ordine → niente
+        // limbo, la chiave può essere rigenerata in sicurezza.
+        setPending(null)
+      }
       // 409 ITEM_UNAVAILABLE: alcuni piatti sono stati esauriti tra il caricamento del
       // menu e l'invio. Il server risponde con la lista di menuItemId non più disponibili
-      // → li rimuoviamo dal carrello e mostriamo un messaggio chiaro (non un errore generico).
-      const err = e?.response?.data?.error
+      // → li rimuoviamo dal carrello (TUTTE le varianti) e mostriamo un messaggio chiaro.
       if (e?.response?.status === 409 && err?.code === 'ITEM_UNAVAILABLE') {
         const ids: string[] = Array.isArray(err.items) ? err.items : []
         for (const id of ids) remove(id)
         toast.error(t('orderItemsUnavailable'))
+      } else if (e?.response?.status === 409 && err?.code === 'VARIANT_INVALID') {
+        // Variante sparita (menu modificato dall'owner): togli le righe con variante
+        // così il checkout non resta bloccato in loop, e avvisa come per gli esauriti.
+        for (const i of items.filter(x => x.variantId)) remove(i.menuItemId, i.variantId)
+        toast.error(t('orderItemsUnavailable'))
       } else {
+        // Nessuna risposta (timeout/offline): pending RESTA parcheggiato — il
+        // prossimo tap farà il probe by-key invece di duplicare.
         toast.error(t('orderError'))
       }
     } finally {

@@ -385,28 +385,75 @@ export async function customerRoutes(fastify: FastifyInstance) {
       return { ...orderItem, name: variant ? `${dbItem.name} (${variant.name})` : dbItem.name, unitPrice, kitchenStation: dbItem.kitchenStation }
     })
 
+    // Ordine + voci + (asporto) conto in UN'UNICA TRANSAZIONE: un crash o un
+    // timeout del pool tra gli insert non può più lasciare un ordine "fantasma"
+    // col totale ma senza voci — fatturabile ma mai arrivato in cucina, e
+    // permanente (il retry idempotente ritorna l'esistente senza re-inserire
+    // le voci). Tutto committa o niente.
     let order: typeof orders.$inferSelect | undefined
+    let insertedItems: (typeof orderItems.$inferSelect)[] = []
     try {
-      ;[order] = await db.insert(orders).values({
-        restaurantId,
-        tableId,
-        // tableNumber solo per ordini al tavolo (autoritativo dal JWT/DB); null per asporto.
-        tableNumber: isTakeaway ? null : ((req as any).tableSession?.tableNumber ?? body.data.tableNumber),
-        type,
-        customerName: isTakeaway ? (body.data.customerName ?? null) : null,
-        // ASPORTO: lega l'ordine alla VISITA asporto (sid dal JWT) per il fix IDOR.
-        takeawaySessionId: isTakeaway ? (session.sid ?? null) : null,
-        // conferma automatica se attivata nelle impostazioni del ristorante
-        status: (restaurant?.settings as any)?.autoConfirm ? 'confirmed' : 'pending',
-        total,
-        notes: body.data.notes,
-        idempotencyKey: body.data.idempotencyKey,
-      }).returning()
+      const created = await db.transaction(async (tx) => {
+        const [o] = await tx.insert(orders).values({
+          restaurantId,
+          tableId,
+          // tableNumber solo per ordini al tavolo (autoritativo dal JWT/DB); null per asporto.
+          tableNumber: isTakeaway ? null : ((req as any).tableSession?.tableNumber ?? body.data.tableNumber),
+          type,
+          customerName: isTakeaway ? (body.data.customerName ?? null) : null,
+          // ASPORTO: lega l'ordine alla VISITA asporto (sid dal JWT) per il fix IDOR.
+          takeawaySessionId: isTakeaway ? (session.sid ?? null) : null,
+          // conferma automatica se attivata nelle impostazioni del ristorante
+          status: (restaurant?.settings as any)?.autoConfirm ? 'confirmed' : 'pending',
+          total,
+          notes: body.data.notes,
+          idempotencyKey: body.data.idempotencyKey,
+        }).returning()
+        const items = await tx.insert(orderItems).values(
+          resolvedItems.map(i => ({
+            orderId: o!.id,
+            menuItemId: i.menuItemId,
+            variantId: i.variantId,
+            name: i.name,
+            quantity: i.quantity,
+            unitPrice: i.unitPrice,
+            notes: i.notes,
+            kitchenStation: i.kitchenStation ?? null,
+            status: 'pending' as const,
+          }))
+        ).returning()
+
+        // ── ASPORTO: 1 ordine = 1 CONTO = 1 pagamento al ritiro. ────────────────
+        // L'ordine takeaway (senza tavolo) genera un conto dedicato (tableId null) che
+        // compare in Cassa come ticket asporto (GET /bills/open ritorna anche i no-table).
+        // Il cliente paga AL BANCO col flusso pagamenti esistente (POST /bills/:id/payments):
+        // quella chiusura fa la cascade dell'ordine → 'paid', che così entra in
+        // incasso/statistiche come un tavolo. Niente coperto sull'asporto: total = subtotale.
+        if (isTakeaway && o) {
+          const [takeawayBill] = await tx.insert(bills).values({
+            restaurantId,
+            tableId: null,
+            tableNumber: null,
+            covers: 1,
+            subtotal: total,
+            total,
+            status: 'open',
+          }).returning({ id: bills.id })
+          if (takeawayBill) {
+            await tx.update(orders).set({ billId: takeawayBill.id }).where(eq(orders.id, o.id))
+            o.billId = takeawayBill.id
+          }
+        }
+        return { order: o, items }
+      })
+      order = created.order
+      insertedItems = created.items
     } catch (err: any) {
       // Race del doppio-tap: due invii con lo stesso idempotencyKey arrivano
       // insieme, entrambi superano il check iniziale, ma il vincolo UNIQUE blocca
-      // il secondo. Niente 500: ritorna l'ordine già creato (idempotenza reale).
-      if (err?.code === '23505') {
+      // il secondo (e fa rollback della SUA transazione). Niente 500: ritorna
+      // l'ordine già creato, COMPLETO di voci (idempotenza reale).
+      if (err?.code === '23505' || err?.cause?.code === '23505') {
         const [existingOrder] = await db.select().from(orders).where(and(eq(orders.idempotencyKey, body.data.idempotencyKey), eq(orders.restaurantId, restaurantId))).limit(1)
         if (existingOrder) {
           const items = await db.select().from(orderItems).where(eq(orderItems.orderId, existingOrder.id))
@@ -414,42 +461,6 @@ export async function customerRoutes(fastify: FastifyInstance) {
         }
       }
       throw err
-    }
-
-    const insertedItems = await db.insert(orderItems).values(
-      resolvedItems.map(i => ({
-        orderId: order!.id,
-        menuItemId: i.menuItemId,
-        variantId: i.variantId,
-        name: i.name,
-        quantity: i.quantity,
-        unitPrice: i.unitPrice,
-        notes: i.notes,
-        kitchenStation: i.kitchenStation ?? null,
-        status: 'pending' as const,
-      }))
-    ).returning()
-
-    // ── ASPORTO: 1 ordine = 1 CONTO = 1 pagamento al ritiro. ──────────────────
-    // L'ordine takeaway (senza tavolo) genera un conto dedicato (tableId null) che
-    // compare in Cassa come ticket asporto (GET /bills/open ritorna anche i no-table).
-    // Il cliente paga AL BANCO col flusso pagamenti esistente (POST /bills/:id/payments):
-    // quella chiusura fa la cascade dell'ordine → 'paid', che così entra in
-    // incasso/statistiche come un tavolo. Niente coperto sull'asporto: total = subtotale.
-    if (isTakeaway && order) {
-      const [takeawayBill] = await db.insert(bills).values({
-        restaurantId,
-        tableId: null,
-        tableNumber: null,
-        covers: 1,
-        subtotal: total,
-        total,
-        status: 'open',
-      }).returning({ id: bills.id })
-      if (takeawayBill) {
-        await db.update(orders).set({ billId: takeawayBill.id }).where(eq(orders.id, order.id))
-        order.billId = takeawayBill.id
-      }
     }
 
     // Scarico automatico magazzino da ricetta: se il ristorante auto-conferma gli ordini
@@ -531,6 +542,25 @@ export async function customerRoutes(fastify: FastifyInstance) {
       .limit(1)
     if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ordine non trovato' } })
     const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
+    return { data: { ...order, items } }
+  })
+
+  // Esito di un invio INCERTO (timeout/rete caduta durante POST /orders): la PWA
+  // chiede "la mia idempotencyKey è atterrata?" PRIMA di rispedire con una chiave
+  // nuova. Senza questo probe, un carrello modificato dopo un timeout rigenerava
+  // la chiave e il reinvio creava un SECONDO ordine sul conto (doppio addebito).
+  // Stesso scoping anti-IDOR di GET /orders/:orderId (tavolo o sid asporto).
+  fastify.get('/orders/by-key/:key', { config: { rateLimit: { max: 20, timeWindow: 60000, keyGenerator: (req: any) => req.cookies?.[TABLE_COOKIE] ?? req.ip } }, preHandler: requireTableSession }, async (req: any, reply) => {
+    const { key } = req.params as { key: string }
+    const { restaurantId, tableId, kind, sid } = req.tableSession as TableSession
+    const scopeFilter = kind === 'takeaway' || tableId == null
+      ? and(eq(orders.restaurantId, restaurantId), eq(orders.type, 'takeaway'), eq(orders.takeawaySessionId, sid ?? '00000000-0000-0000-0000-000000000000'))
+      : and(eq(orders.restaurantId, restaurantId), eq(orders.tableId, tableId))
+    const [order] = await db.select().from(orders)
+      .where(and(eq(orders.idempotencyKey, key), scopeFilter))
+      .limit(1)
+    if (!order) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Nessun ordine con questa chiave' } })
+    const items = await db.select().from(orderItems).where(eq(orderItems.orderId, order.id))
     return { data: { ...order, items } }
   })
 

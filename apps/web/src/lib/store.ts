@@ -15,6 +15,17 @@ export interface CartItem {
   notes?: string
 }
 
+// Invio dall'esito INCERTO (timeout/rete caduta durante la POST): la chiave e lo
+// snapshot restano parcheggiati qui finché non sappiamo se l'ordine è atterrato.
+// Il prossimo checkout fa PRIMA il probe by-key: se l'ordine esiste non si
+// rispedisce nulla con una chiave nuova (doppio addebito), se non esiste si
+// riparte puliti. Persistito: sopravvive anche a un reload della PWA.
+export interface PendingSubmission {
+  key: string
+  items: CartItem[]
+  notes?: string
+}
+
 interface CartState {
   items: CartItem[]
   // Scope = `${restaurantId}:${tableId}` della sessione a cui appartiene il carrello.
@@ -23,20 +34,26 @@ interface CartState {
   // Chiave di idempotenza stabile per tentativo di checkout: generata una volta e
   // riusata sui retry finché l'ordine non va a buon fine o il carrello non cambia.
   checkoutKey: string | null
+  pending: PendingSubmission | null
   add: (item: CartItem) => void
   remove: (menuItemId: string, variantId?: string) => void
   updateQty: (menuItemId: string, qty: number, variantId?: string) => void
   clear: () => void
+  // Rimuove SOLO le quantità inviate: gli item aggiunti mentre l'ordine era in
+  // volo restano nel carrello (prima clear() cancellava anche quelli).
+  removeSent: (sent: CartItem[]) => void
   total: () => number
   count: () => number
   ensureScope: (scope: string) => void
   ensureCheckoutKey: () => string
+  setPending: (p: PendingSubmission | null) => void
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      pending: null,
       scope: null,
       touchedAt: 0,
       checkoutKey: null,
@@ -47,8 +64,12 @@ export const useCartStore = create<CartState>()(
           : [...s.items, item]
         return { items, touchedAt: Date.now(), checkoutKey: null }
       }),
+      // variantId omesso = rimuovi TUTTE le righe di quel piatto (anche con
+      // variante): è ciò che serve al 409 ITEM_UNAVAILABLE, che identifica solo
+      // il menuItemId — prima le righe con variante restavano nel carrello e il
+      // checkout si bloccava in loop.
       remove: (menuItemId, variantId) => set((s) => ({
-        items: s.items.filter(i => !(i.menuItemId === menuItemId && i.variantId === variantId)),
+        items: s.items.filter(i => !(i.menuItemId === menuItemId && (variantId === undefined || i.variantId === variantId))),
         touchedAt: Date.now(),
         checkoutKey: null,
       })),
@@ -60,6 +81,15 @@ export const useCartStore = create<CartState>()(
         checkoutKey: null,
       })),
       clear: () => set({ items: [], checkoutKey: null }),
+      removeSent: (sent) => set((s) => ({
+        items: s.items
+          .map(i => {
+            const m = sent.find(x => x.menuItemId === i.menuItemId && x.variantId === i.variantId && (x.notes ?? '') === (i.notes ?? ''))
+            return m ? { ...i, quantity: i.quantity - m.quantity } : i
+          })
+          .filter(i => i.quantity > 0),
+        checkoutKey: null,
+      })),
       total: () => get().items.reduce((s, i) => s + i.unitPrice * i.quantity, 0),
       count: () => get().items.reduce((s, i) => s + i.quantity, 0),
       // Chiamata al resolve della sessione: azzera il carrello se cambia
@@ -67,7 +97,7 @@ export const useCartStore = create<CartState>()(
       ensureScope: (scope) => set((s) => {
         const expired = s.touchedAt > 0 && Date.now() - s.touchedAt > CART_TTL_MS
         if (s.scope !== scope || expired) {
-          return { items: [], scope, touchedAt: 0, checkoutKey: null }
+          return { items: [], scope, touchedAt: 0, checkoutKey: null, pending: null }
         }
         return { scope }
       }),
@@ -76,6 +106,7 @@ export const useCartStore = create<CartState>()(
         if (!k) { k = nanoid(); set({ checkoutKey: k }) }
         return k
       },
+      setPending: (p) => set({ pending: p }),
     }),
     { name: 'tako-cart' }
   )
