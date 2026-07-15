@@ -11,8 +11,9 @@ Legenda: ✅ verificato con evidenza · ⚠️ con riserve · ❌ fallito · ⛔
 
 ## Blocchi ambiente rilevati subito
 
-- **Release `v0.1.0` NON pubblicata** su `Rizzo567/tako` (`gh release list` vuoto).
-  L'installer NSIS non è scaricabile. Dipendenza dal Mac (pubblica lui le release).
+- **Release `v0.1.0`**: all'inizio del run NON era pubblicata (`gh release list` vuoto);
+  il Mac l'ha pubblicata **durante** il collaudo → installer scaricato e installato
+  (sezione A poi sbloccata).
 - **Toolchain Rust/Tauri assente** (`rustc`/`cargo` non presenti, no MSVC).
   Build locale dell'installer non possibile senza installare Rust + VS Build Tools
   (pesante in VM emulata). → decisione per Manuel.
@@ -186,10 +187,55 @@ Evidenza log: `vitest.log`, `pg.log`, `server.log` nella VM (scratchpad/clone).
 Conclusione: il runtime Windows x64 regge la suite completa → **la CI non mente**.
 Stack pg+server lasciati vivi per proseguire B/C.
 
-## Proposta a Manuel (decisioni aperte)
+### Log fix applicati (branch `collaudo-vm-tako`)
 
-1. **Sezione A**: due strade per sbloccarla —
-   (a) il Mac pubblica `v0.1.0` con l'asset `*_x64-setup.exe` → scarico e installo;
-   (b) installo Rust+MSVC in VM e faccio `pnpm tauri build` per generare l'installer
-   localmente (lento, ma sblocca A senza dipendere dalla release).
-   In attesa di decisione procedo con B/C/D (server dev :3001) che non dipendono dall'app impacchettata.
+1. `fix(app,win): deverbatim path spawn node embedded` — **BUG P0**, lib.rs. Verificato
+   a livello meccanismo (path non-verbatim fa bootare server.mjs). Serve rebuild Mac.
+2. `fix(db,win): fallback pg_ctl null-safe su avvio elevato` — **BUG #2 (P1)**,
+   embedded.ts. Verificato end-to-end in VM elevata (embedded DB su via pg_ctl).
+3. Regressione: `npx vitest run` dopo i fix → **72/72 verdi** (nessuna rottura CI).
+
+---
+
+## GIUDIZIO FINALE — vendibile su Windows?
+
+**Allo stato pubblicato (installer v0.1.0): NO.** L'app installata si apre (WebView2)
+ma il **backend embedded non parte** (BUG P0 verbatim path) → app inutilizzabile per
+un ristoratore. È il primo, decisivo esito del "mai collaudato su Windows vero": un
+bug che la CI non poteva vedere perché testa il server via `tsx`, non via lo spawn
+bundle di Tauri.
+
+**Dopo il rebuild con i 2 fix di questo branch: SÌ, CON RISERVE.** Motivo della
+fiducia — tutto il resto del prodotto si è dimostrato **solido su Windows x64 reale**:
+
+- ✅ **72/72** test integrazione sul runtime Windows (encoding cluster UTF8 confermato).
+- ✅ **Flusso completo owner+cliente** end-to-end sul server embedded reale: menu CRUD,
+  tavolo+QR, ordine cliente → owner, **conto con totale corretto (13,00)**, pagamento,
+  inventario carico/scarico, statistiche.
+- ✅ **Persistenza vera** dopo crash (hard-kill): dati e incasso intatti, lock stantio
+  recuperato, Postgres riparte pulito.
+- ✅ **UI** owner e **PWA cliente mobile** renderizzano pulite (screenshot).
+- ✅ Installer NSIS silent + WebView2 runtime presente.
+
+**Riserve / da completare dopo il rebuild (non verificabili senza app funzionante):**
+
+1. **Voci A 4-7**: zero processi orfani alla chiusura, velocità 2° avvio, single-instance,
+   crash test end-to-end **dell'app** (finora provati solo a livello server/DB).
+2. **Voce 16 / updater**: il feed `latest.json` espone **solo `darwin-aarch64`** — manca
+   `windows-x86_64`. Anche con app corretta, l'auto-update su Windows **non è cablato**:
+   o il Worker/feed deve includere la piattaforma Windows, o va documentato "update manuale".
+3. **Firma Authenticode** assente → SmartScreen avvisa (atteso, ma impatta la fiducia del
+   ristoratore al primo avvio). Decisione di Manuel.
+4. **Windows-on-ARM non supportato** (no binario Postgres embedded arm64): irrilevante per
+   PC ristoratori x64, ma da dichiarare.
+5. **Debito fix P0**: `deverbatim()` non gestisce verbatim-UNC (`\\?\UNC\…`); non
+   raggiungibile con install locale, ma se un giorno si girasse da share di rete usare
+   `dunce::simplified`.
+6. **Voce 15** (telefono reale) e **voce 20** (audit divergenze UI Ctrl/Cmd) da fare a valle.
+
+### Azione richiesta al Mac
+Ricompilare `collaudo-vm-tako` (i 2 fix), ripubblicare l'installer Windows, aggiungere
+la piattaforma `windows-x86_64` al feed updater. Poi io ri-collaudo A 4-7 + 16 + 20.
+
+*Ambiente collaudo: la VM è Win11-ARM; l'intero stack è girato sotto **Node x64**
+portatile in emulazione (identico al target ristoratore x64 e alla CI windows-latest).*
