@@ -515,7 +515,6 @@ fn spawn_update_check(app: &tauri::AppHandle) {
                         // a ogni avvio finché non sceglie "Più tardi".
                         log::error!("installazione aggiornamento fallita: {e}, riavvio");
                         handle.restart();
-                        return;
                     }
                     // Windows: irraggiungibile — `install()` esce dal processo e sarà
                     // NSIS a rilanciare l'app. macOS: `install()` torna e riavviamo noi.
