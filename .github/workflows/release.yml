@@ -97,9 +97,13 @@ jobs:
             cp "$B"/dmg/*.dmg dist/ 2>/dev/null || true
           else
             # NSIS: il nome contiene già versione+arch (x64) → univoco per piattaforma.
-            cp "$B"/nsis/*.nsis.zip     dist/ 2>/dev/null || true
-            cp "$B"/nsis/*.nsis.zip.sig dist/ 2>/dev/null || true
-            cp "$B"/nsis/*-setup.exe    dist/ 2>/dev/null || true
+            # Tauri v2 con createUpdaterArtifacts firma il -setup.exe STESSO
+            # (niente .nsis.zip, che era il formato legacy v1): serve il .sig
+            # accanto all'exe o latest.json resta senza piattaforma Windows.
+            cp "$B"/nsis/*.nsis.zip      dist/ 2>/dev/null || true
+            cp "$B"/nsis/*.nsis.zip.sig  dist/ 2>/dev/null || true
+            cp "$B"/nsis/*-setup.exe     dist/ 2>/dev/null || true
+            cp "$B"/nsis/*-setup.exe.sig dist/ 2>/dev/null || true
           fi
           ls -la dist
 
