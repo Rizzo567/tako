@@ -625,3 +625,44 @@ vita completo**, non solo su server/DB:
 
 *Ambiente collaudo: la VM è Win11-ARM; l'intero stack è girato sotto **Node x64**
 portatile in emulazione (identico al target ristoratore x64 e alla CI windows-latest).*
+
+---
+
+## RI-COLLAUDO FINALE — update 0.1.3 → 0.1.4: ✅ PASS, voce 16 CHIUSA
+
+*Eseguito dal Claude del Mac via SSH diretto sulla VM (nuovo setup: OpenSSH Server +
+chiave dedicata, niente più staffetta di prompt). Manuel ha solo cliccato "Installa e
+riavvia" e confermato visivamente l'assenza di dialog NSIS.*
+
+**Il fix #5 ha lavorato al primo salto che lo esegue.** Timeline campionata a 400ms
+(`update-timeline-014.csv`), momento dell'install:
+
+```
+19:09:31.0  app=1 node=2 pg=15   ← 0.1.3 in servizio, click "Installa e riavvia"
+19:09:31.8  app=1 node=2 pg=0    ← shutdown ORDINATO: Postgres giù per primo
+19:09:32.2  app=1 node=0 pg=0    ← figli MORTI, app ancora viva (teardown_children)
+19:09:39.6  app=0 node=0 pg=0    ← app esce SOLO DOPO i figli → installer parte su file liberi
+```
+
+| # | Criterio | Esito |
+|---|----------|-------|
+| 1 | dialog propone 0.1.4 | ✅ |
+| 2 | nessun dialog NSIS "Error opening file for writing" | ✅ nessuno (conferma visiva Manuel) |
+| 3 | figli morti PRIMA dell'installer | ✅ `node=0, pg=0` 7s prima che app esca |
+| 4 | app si rilancia da sola in 0.1.4 | ✅ processo in esecuzione 0.1.4 (~70s totali) |
+| 5 | dashboard/health/PWA | ✅ health 200, PWA :3002 200, wrapper #4 presente (`server.next.js`) |
+| 6 | chiusura pulita | ✅ 0 app, 0 node, 0 postgres, 0 listener |
+
+Note oneste:
+- La colonna `inst` del sampler era cieca: l'installer si chiama `Tako-0.1.4-installer`,
+  non `*setup*`. I criteri decisivi (node/pg) sono genuini; la partenza dell'installer è
+  confermata dal processo osservato vivo (pid 6568) e dalla versione riscritta su disco.
+- Il rilancio automatico ha impiegato ~70s (installer passive + primo avvio): normale,
+  ma da sapere per non giudicarlo "morto" a occhio.
+- Bonus verificato nello stesso giro: kill -F dell'app (crash simulato) → al rilancio la
+  0.1.3 ha bonificato gli orfani (pg 15→7→cluster nuovo), cioè A4 ri-confermata dall'app.
+
+**Verdetto: VENDIBILE CON RISERVE — ora per davvero.** Le riserve sono decisioni, non
+blocchi: 2 P1 UI (Alt+Space apre il menu di sistema, label ⌘K su Windows) + firma
+Authenticode. Resta aperta solo la voce 15 (telefono fisico): Bridged UTM scartato
+(blocca il boot col Mac in Wi-Fi), si farà con proxy dal Mac verso la VM.
