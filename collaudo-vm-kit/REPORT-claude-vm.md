@@ -59,6 +59,79 @@ Con Node arm64 → `Error: Unsupported arch "arm64" for platform "win32"`.
 | 6 | Crash test + healStaleLock | ✅ | `taskkill /F /IM app.exe` (uccide solo l'immagine = crash reale) → riavvio: **healStaleLock OK** (`[db] trovato Postgres orfano (pid 9560), lo termino` + backup a copia fredda + cluster ripulito, health 200 in **36s** da stato sporco, **10s** con fix). **Trovato BUG #4 (orfano web su :3002)** → fixato e verificato end-to-end. Niente doppio Postgres: 1 solo postmaster |
 | 7 | Single-instance | ✅ | 1ª istanza su → lancio 2ª: **esce subito, exit code 0**; resta **1 solo `app.exe`** (pid 10808), 2 node invariati (nessun 2º server/web), 1 solo postmaster (pid 9812) su :54317, listener :4317/:3002 invariati. Screenshot `a7-single-instance.png` (finestra unica) |
 
+### 🔴 BUG #5 (P1) — l'update Windows si pianta: i figli vivi lockano i file da sovrascrivere
+
+**Scoperto ri-collaudando l'updater sulla 0.1.2 vera** (0.1.1 pristina → dialog → "Installa
+e riavvia"). L'installer NSIS si ferma con un dialog **Interrompi/Riprova/Ignora**:
+
+```
+Error opening file for writing:
+C:\Users\Manuel\AppData\Local\Tako\resources\server\node.exe
+```
+e poi, superato quello, di nuovo su
+`...\resources\server\node_modules\@embedded-postgres\windows-x64\native\bin\icudt77.dll`.
+Screenshot: `bug5-updater-node-locked.png`.
+
+**Root cause:** `update.download_and_install()` (`lib.rs`) fa partire l'installer **mentre i
+figli dell'app sono ancora vivi**. `app.exe` muore ma i suoi node + i Postgres restano
+orfani e **tengono lockati i binari dentro `resources/`** che NSIS deve sovrascrivere.
+Il teardown dei figli vive in `RunEvent::ExitRequested`, che **non scatta mai**: su Windows
+`install()` fa `std::process::exit(0)` subito dopo aver lanciato l'installer, saltando
+destructor ed eventi. Evidenza raccolta: `app.exe` (pid 5148) **morto**, i suoi 2 node
+(2588, 2096) **vivi** su `...\Tako\resources\server\node.exe`, e **9 postgres orfani**
+(postmaster 1356, parent già uscito) sui binari di `@embedded-postgres`.
+
+**Impatto: P1, colpisce OGNI update su Windows** (non è un caso limite: il check parte
+all'avvio, quando i figli sono per definizione già vivi e hanno i file aperti). Al
+ristoratore appare un dialog tecnico in inglese con 3 scelte, tutte cattive:
+- **Ignora** → installazione **MISTA**: `app.exe` nuovo + `resources/` vecchie (server, node
+  e Postgres della versione precedente). È lo stato peggiore: silenzioso e incoerente.
+- **Interrompi** → update a metà.
+- **Riprova** → stesso errore, perché nessuno ha fermato gli orfani.
+
+**Verifica della causa:** uccisi a mano i node orfani → "Riprova" **supera** `node.exe` e si
+ferma sulla DLL di Postgres; uccisi anche i 9 postgres → "Riprova" → **l'installazione
+completa** e l'app si rilancia da sola in 0.1.2. Quindi: rimossi i lock, l'installer va.
+
+**Sospetto sulla voce 16 della sessione precedente:** l'update 0.1.0→0.1.1 fu dato per ✅
+avendo verificato che `app.exe` diventava 0.1.1. Con questo bug è **probabile che anche
+quello fosse un update parziale** (exe nuovo, `resources/` vecchie) passato inosservato:
+0.1.0 e 0.1.1 hanno entrambe il bug CORS, quindi il sintomo era indistinguibile. Non
+dimostrabile a posteriori, ma è la spiegazione più semplice.
+
+**Fix applicato** (`apps/app/src-tauri/src/lib.rs`):
+- estratto il teardown in `fn teardown_children(&AppHandle)`, ora usato sia da
+  `RunEvent::ExitRequested` sia dall'updater (niente duplicazione);
+- l'updater ora usa `update.download(...)` e `update.install(bytes)` **separati** invece di
+  `download_and_install()`, con `teardown_children()` **in mezzo**: il download (lento, rete)
+  avviene con l'app pienamente funzionante — il servizio non si ferma per scaricare — e i
+  figli si spengono solo nell'istante prima di installare, liberando i lock.
+- Nota: su Windows è lo shutdown ORDINATO a fermare Postgres (il `taskkill /T` sull'albero
+  di node non lo raggiungerebbe: Postgres è figlio di `pg_ctl`, già uscito).
+
+**Verifica avversariale del fix** (agente col mandato di confutarlo, senza toolchain Rust in
+VM il rischio n.1 era "non compila"): **verdetto COMPILA**, verificato sui sorgenti reali di
+`tauri 2.11.3` / `tauri-plugin-updater 2.10.1`, incluso il punto più a rischio
+(`app.run(|app_handle, ...|)` passa già `&AppHandle`, quindi `teardown_children(app_handle)`
+è corretto e `&app_handle` avrebbe rotto la build). Ha inoltre **dimostrato** che il doppio
+teardown (`restart()` → `ExitRequested`) è idempotente e innocuo, e che non c'è deadlock
+(`supervise()` non prende mai i Mutex del Supervisor → nessuna inversione d'ordine; nessun
+lock è tenuto attraverso un `.join()`). Corretti i 2 problemi reali emersi:
+1. **(P3, preesistente)** nel ramo "chiusura durante il respawn" `supervise()` non azzerava
+   il `pid_slot` → chi chiude consumava gli **8s** interi di timeout per nulla; col fix quel
+   timeout avrebbe ritardato anche l'installazione. Aggiunto `pid_slot.store(0)`.
+2. **(P1, documentato)** su Windows `install()` non ritorna mai (`exit(0)`): `handle.restart()`
+   dopo è codice morto — è NSIS a rilanciare l'app (**confermato dal vivo**: a install
+   completata la 0.1.2 si è riavviata da sola). Il commento ora dice il vero.
+
+**Regressione nota e accettata:** ora il teardown precede l'install, quindi se `install()`
+fallisce (su Windows solo se l'installer non parte proprio) i figli sono già giù → si riavvia
+per tornare a una versione funzionante, e al riavvio il dialog si ripresenta. È un *nag*
+gated dal click dell'owner (può scegliere "Più tardi"), non un loop automatico.
+
+**⚠️ NON verificabile in VM** (manca la toolchain Rust): il fix è scritto e rivisto ma **non
+compilato**. Serve la 0.1.3 dal Mac e un nuovo test dell'update per chiuderlo.
+
 ### 🟠 BUG #4 (P2) — dopo un crash il web node ORFANO tiene :3002 per sempre
 
 **Sintomo:** dopo un crash dell'app (non una chiusura pulita), il figlio node del **web
@@ -268,13 +341,13 @@ del bundle, pilotato via HTTP con due cookie jar (owner `tako_session`, cliente 
 |---|------|-------|----------|
 | 13 | QR/URL tavolo, menu carica | ✅ | cliente `GET /api/customer/table/<qrToken>` → 200 + cookie `tako_table`; `GET /api/customer/restaurant/<id>/menu` → menu pubblico contiene "Bruschetta" |
 | 14 | Ordine realtime → owner | ✅ | `POST /api/customer/orders` (2×, idempotencyKey) → 201; owner lo vede subito in `/orders/active`. Layer Socket.IO realtime coperto dai 22 test "realtime" (voce 17, verdi su Windows) |
-| 15 | Da telefono vero | ⚠️/⛔ | **Catena LAN verificata sull'app installata**: server bind `0.0.0.0:4317` e web `0.0.0.0:3002`; da IP LAN `http://192.168.64.2:4317/health` → **200**, `http://192.168.64.2:3002/` → **200** (40386 byte), **mDNS `http://tako.local:3002/` → 200**; firewall Windows con regole `node.exe` **Allow** inbound. Manca solo il telefono fisico (Manuel assente) → **BLOCCATO-HARDWARE**, ma tutto ciò che sta sotto il telefono è verde |
+| 15 | Da telefono vero | ⛔ | **BLOCCATO-RETE, causa individuata: la VM è dietro NAT.** UTM è in *Shared Network*: VM `192.168.64.2/24`, gateway `192.168.64.1` = il Mac; `tracert` mostra hop2 `192.168.1.1` = router di casa. Il telefono sta su `192.168.1.x` e **non ha rotta** verso `192.168.64.2` (subnet privata dentro il Mac, nessun inbound), e l'mDNS `tako.local` **non attraversa** il NAT. Non è un difetto di Tako. **Tutto il resto è verde e testato senza telefono** (sotto). Sblocco: UTM → Bridged, oppure un port-forward della sola 3002 |
 
 ## D. Updater e test suite
 
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 16 | updates.takoitalia.com/latest.json | ✅ | feed ora `version 0.1.1` + `platforms: darwin-aarch64, windows-x86_64`. **Update flow testato dal runtime app**: 0.1.0 installata → updater propone 0.1.1 (dialog "Aggiornamento Tako") → accettato → scaricato+installato → **app.exe ora 0.1.1** (~18s). ✅ |
+| 16 | updates.takoitalia.com/latest.json | ⚠️ | Il **feed è a posto** (`0.1.2`, `darwin-aarch64` + `windows-x86_64`, firme ok) e il flusso "check → dialog → download" funziona: 0.1.1 → dialog "È disponibile l'aggiornamento 0.1.2" → **app.exe 0.1.2 in 30s**. Ma l'**installazione si pianta**: NSIS non può sovrascrivere i file lockati dai figli ancora vivi → **BUG #5 (P1)**, sotto. Completata solo uccidendo a mano gli orfani e premendo "Riprova". Ri-testare dopo la 0.1.3 |
 | 17 | Test suite integrazione 72/72 | ✅ | **72/72 passed**, 8 file, 19.84s (vedi log) |
 
 ## E. Frontend / UI
@@ -287,6 +360,54 @@ stesso motore di WebView2; la resa in-app vera richiede il rebuild (bug P0).
 | 18 | App owner rendering / DPI | ✅ | **In-app WebView2 reale** (`app-dashboard-0.1.1.png`): dashboard owner pulita, nav completa, KPI, grafico, setup 4/5, font leggibili, nessun testo tagliato/glitch. Anche `staff-logged.png` (Edge, con dati €13). Screenshot dashboard a login riuscito |
 | 19 | PWA viewport mobile | ✅ | `pwa-mobile.png` (390×844): menu cliente "Bruschetta Collaudo 6,50 €", azioni Cameriere/Carrello/Lingua, nav Menù/Ordine, touch target ampi, viewport mobile corretto |
 | 20 | Divergenze UI Win vs atteso | ⚠️ | **Audit completo fatto** (codice + in-app): **8 divergenze reali**, 2 P1. La peggiore — **Alt+Space apre il menu di sistema Windows** — verificata dal vivo nell'app (screenshot `e20-altspace-menu-sistema.png`). **Nessun handler `metaKey`-only**: l'unico hotkey globale è già cross-platform. Dettaglio sotto |
+
+### Voce 15 — telefono: cosa è verificato e cosa manca davvero
+
+Il telefono fisico è bloccato dalla rete (sopra), ma **la parte di Tako che il telefono
+eserciterebbe è stata verificata lo stesso**, simulando il telefono dalla sola porta 3002.
+
+**1. Cosa c'è dentro il QR** — `GET /api/tables/<id>/qr` sul runtime vero:
+```
+url:      http://tako.local:3002/r/<restaurantId>/t/<qrToken>     ← è questo che finisce nel QR
+mode:     lan
+ipUrl:    http://192.168.64.2:3002/r/...
+cloudUrl: http://192.168.64.2:3002/r/...
+```
+Il QR **non contiene `localhost`** (sarebbe stato rotto per definizione) e **non contiene
+l'IP**: usa il nome mDNS `tako.local`, che sopravvive ai cambi di IP del router. Scelta
+corretta e LAN-first (`apps/server/src/lib/network.ts`).
+*Nota:* `cloudUrl` == `ipUrl` perché l'appliance non è accoppiata al cloud → `stableTableUrl()`
+fa il fallback documentato all'IP. Coerente col codice, ma il nome del campo inganna:
+un client che si fidasse di `cloudUrl` come URL stabile stamperebbe un IP. Da chiarire.
+
+**2. Il telefono parla SOLO con la 3002** (rischio che il test da Edge-nella-VM
+maschererebbe): i rewrite di Next sono **server-side** (`/api/*`, `/uploads/*`, `/socket.io/*`
+→ `127.0.0.1:4317`), quindi il telefono non deve raggiungere la 4317. Verificato che i
+**bundle client non contengono** `127.0.0.1:4317` né `localhost:4317` (13 chunk scaricati e
+grepati): se `NEXT_PUBLIC_API_URL` fosse finito nel codice client, dal telefono `127.0.0.1`
+sarebbe **il telefono stesso** → PWA rotta, e da Edge nella VM non se ne sarebbe accorto
+nessuno. **Non accade.**
+
+**3. Flusso cliente simulato da origin NON-localhost** (`192.168.64.2:3002`, mai la 4317):
+| passo | esito |
+|---|---|
+| apre il link del QR (pagina tavolo) | **200** |
+| `/api/customer/table/<qrToken>` via rewrite | **200** — "Trattoria Collaudo", tavolo 1, 4 coperti |
+| `/api/customer/restaurant/<id>/menu` | **200** — contiene "Bruschetta" |
+| `/socket.io/` (realtime) | **200** |
+
+**Resta da provare col telefono vero, e solo quello:** che iOS/Android risolva `tako.local`
+via mDNS/Bonjour sulla LAN del locale, il rendering touch reale e la scansione del QR con la
+fotocamera. Tutto il resto della catena è verde.
+
+**Per sbloccarlo servono 2 minuti sul Mac** (scelta di Manuel):
+- **Consigliato — UTM → Network → Bridged**: la VM prende un IP `192.168.1.x`, stessa L2 del
+  telefono → il QR con `tako.local` funziona davvero end-to-end, che è esattamente lo
+  scenario del ristorante.
+- **Alternativa — port-forward della sola porta 3002** (UTM Shared lo supporta): il telefono
+  apre `http://<IP-del-Mac>:3002/r/<restaurantId>/t/<qrToken>`. Basta una porta grazie ai
+  rewrite server-side (punto 2). Limite: il QR punta a `tako.local`, che via NAT non
+  risolverebbe → si prova la PWA, non la scansione del QR.
 
 ### Voce 20 — audit divergenze UI Windows (dettaglio)
 
@@ -354,7 +475,10 @@ Stack pg+server lasciati vivi per proseguire B/C.
    Verificato end-to-end sul bundle installato (crash → riavvio → 0 orfani) + verifica
    avversariale (4 difetti trovati e corretti) + test anti-falso-positivo su un
    processo estraneo. **`lib.rs` non toccato.**
-5. Regressione: `npx vitest run` dopo i fix → **72/72 verdi** (nessuna rottura CI).
+5. `fix(app,win): ferma i figli prima di installare un aggiornamento` — **BUG #5 (P1)**,
+   `lib.rs`. Scritto + verifica avversariale (verdetto COMPILA sui sorgenti dei crate;
+   2 problemi corretti). **NON compilato** (no toolchain Rust in VM) → serve la 0.1.3.
+6. Regressione: `npx vitest run` dopo i fix → **72/72 verdi** (nessuna rottura CI).
    *Nota di metodo:* una run intermedia ha dato 7 suite fallite — era la suite lanciata
    contro il server `:3001` appena riavviato (2s di vita, non ancora caldo), non una
    regressione: riavviato lo stack e rilanciata → 72/72, exit 0.
@@ -363,17 +487,28 @@ Stack pg+server lasciati vivi per proseguire B/C.
 
 ## GIUDIZIO FINALE — vendibile su Windows?
 
-> **Aggiornato a fine collaudo: sezione A ora è COMPLETA (voci 1-7 tutte ✅).** Non è
-> più la parte non provata: è la parte con più evidenza. 4 bug Windows trovati, tutti
-> fixati e verificati sul runtime vero.
+> **Aggiornato dopo la 0.1.2 (release vera, installata via updater).** Sezione A completa.
+> **5 bug Windows trovati.** 4 fixati e verificati sul runtime; il 5° (update) è fixato
+> nel codice ma **non compilabile in VM** → serve la 0.1.3.
 
-**Allo stato pubblicato (installer v0.1.1): NO.** Restano fuori dalla release 2 fix
-necessari (**#3 CORS**, senza cui l'app resta bloccata sullo splash → inutilizzabile;
-**#4 orfano web**). Entrambi validati in VM sostituendo gli artefatti nel bundle
-installato, ma **serve il rebuild 0.1.2 dal Mac**.
+**La 0.1.2 installata FUNZIONA: l'app è utilizzabile.** Verificato sulla release ufficiale
+(non sui miei artefatti sostituiti a mano — li ho **rimossi prima** del test, ripristinando
+una 0.1.1 pristina, così un update che non consegnasse i fix sarebbe stato smascherato):
+- **fix #3 CORS confermato**: `/health` con `Origin: http://tauri.localhost` → ACAO corretto,
+  **lo splash passa e la dashboard owner carica in-app** (`app-dashboard-0.1.2.png`);
+- **fix #4 confermato sulla build ufficiale**: crash → riavvio → **orfano web bonificato in
+  4.1s**, 0 orfani, PWA 200; chiusura pulita → **0 processi, 0 listener**;
+- health `:4317` in **6-8s**, sessione e dati intatti dopo l'update.
 
-**Con la 0.1.2 che includa i 4 fix di questo branch: SÌ, CON RISERVE.** La fiducia ora
-poggia anche sul **ciclo di vita completo**, non solo su server/DB:
+**Ma la 0.1.2 NON è ancora vendibile, per un motivo nuovo: BUG #5 (P1).** L'**update stesso**
+è rotto su Windows: NSIS non riesce a sovrascrivere i file lockati dai figli ancora vivi e
+mostra al ristoratore un Interrompi/Riprova/Ignora tecnico; "Ignora" produce
+un'installazione **mista** (exe nuovo + resources vecchie). Colpisce **ogni** update, non un
+caso limite. Chi installa la 0.1.2 **da zero** (installer scaricato a mano) sta bene; chi
+**aggiorna** da 0.1.1 no.
+
+**Con la 0.1.3 che includa il fix #5: SÌ, CON RISERVE.** La fiducia poggia sul **ciclo di
+vita completo**, non solo su server/DB:
 
 - ✅ **Ciclo di vita A 1-7 completo sull'app installata**: bootstrap, TAKO_HOME,
   chiusura pulita a **0 orfani**, riavvio **4-8s** con dati intatti, **crash test**
@@ -396,9 +531,11 @@ poggia anche sul **ciclo di vita completo**, non solo su server/DB:
 
 **Riserve residue:**
 
-1. **Il rebuild 0.1.2 è obbligatorio**: la 0.1.1 pubblicata è **inutilizzabile** senza il
-   fix CORS (splash infinito). I 4 fix sono sul branch; 2 dei 4 (P0, P1) sono già in
-   0.1.1, gli altri 2 (#3 CORS, #4 orfano web) no.
+1. **Il rebuild 0.1.3 è obbligatorio**: senza il fix #5 ogni aggiornamento da 0.1.2 in poi
+   si pianta sul dialog NSIS. È il difetto più grave rimasto: si manifesta **al primo
+   contatto** del ristoratore con un aggiornamento, cioè nel momento in cui l'app deve
+   dimostrare di sapersi mantenere da sola. Il fix è scritto e rivisto ma **non compilato**
+   (niente toolchain Rust in VM) → il Mac deve buildare e io ri-testare l'update.
 2. **UI voce 20 — 2 P1 aperti** (non bloccanti la vendita, ma si vedono):
    **Alt+Space** apre il menu di sistema Windows (dettatura inutilizzabile) e **tutte le
    label dicono ⌘K** → su Windows la scorciatoia esiste ma è invisibile. Vanno fixati
@@ -409,8 +546,9 @@ poggia anche sul **ciclo di vita completo**, non solo su server/DB:
 5. **Debito fix P0**: `deverbatim()` non gestisce verbatim-UNC (`\\?\UNC\…`); non
    raggiungibile con install locale, ma se un giorno si girasse da share di rete usare
    `dunce::simplified`.
-6. **Voce 15**: manca solo il telefono fisico (BLOCCATO-HARDWARE); tutta la catena LAN
-   sotto di esso è verde.
+6. **Voce 15**: bloccata dal **NAT di UTM** (la VM non è sulla LAN del telefono), non da
+   Tako. QR, rewrite server-side e flusso cliente verificati simulando il telefono dalla
+   sola porta 3002. Per il test vero: UTM → Bridged (2 min sul Mac).
 7. **Da misurare sull'HW target** (non sensato in VM emulata): il `backdrop-filter:
    blur(30px)` sulla nav fissa è il candidato n.1 a jank su un mini-PC con GPU integrata.
 8. **Non verificabile in VM**: la toolchain Rust non c'è → i fix in `lib.rs` (P0) restano
@@ -418,11 +556,15 @@ poggia anche sul **ciclo di vita completo**, non solo su server/DB:
    apposta **senza toccare `lib.rs`** anche per questo.
 
 ### Azione richiesta al Mac
-Ricompilare `collaudo-vm-tako` con i **4 fix** (P0 deverbatim, P1 pg_ctl, #3 CORS,
-#4 wrapper bonifica-orfano web) e ripubblicare l'installer Windows come **0.1.2**.
-Il feed updater espone già `windows-x86_64` (voce 16 ✅, update 0.1.0→0.1.1 provato dal
-runtime). Poi ri-collaudo A6/A7 sull'installer ufficiale (finora provati sul bundle
-con gli artefatti sostituiti a mano) + le voci UI se decidete di fixare i 2 P1.
+1. **Rebuild 0.1.3** con il fix **#5** (`lib.rs`: `teardown_children()` + download/install
+   separati). È l'unico blocco vero rimasto. Il fix è rivisto in avversariale ("COMPILA",
+   verificato sui sorgenti dei crate) ma **non compilato**: se `cargo` dà errore, la riga
+   sospetta è `teardown_children(app_handle)` in `app.run` — `app_handle` è già
+   `&AppHandle`, **non** aggiungere `&`.
+2. Poi io ri-testo l'update **0.1.2 → 0.1.3** dalla VM: è il test che chiude la voce 16.
+3. Opzionale: i **2 P1 UI** (Alt+Space, label ⌘K) — serve un helper `isMac` nel frontend.
+4. Se vuoi chiudere la **voce 15**: UTM → Network → **Bridged** e riavvia la VM; poi
+   scansiono/apro il QR dal tuo telefono.
 
 *Ambiente collaudo: la VM è Win11-ARM; l'intero stack è girato sotto **Node x64**
 portatile in emulazione (identico al target ristoratore x64 e alla CI windows-latest).*
