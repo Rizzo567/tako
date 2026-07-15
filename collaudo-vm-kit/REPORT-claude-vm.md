@@ -128,21 +128,25 @@ regressione del fix UTF8.
 
 ## B. Funzionalità core owner
 
+Testato contro il **server embedded reale su :4319** (config bundle: `EMBEDDED_DB=1`,
+Postgres embedded UTF8 su :54317, migrazioni applicate) — lo stesso codice `server.mjs`
+del bundle, pilotato via HTTP con due cookie jar (owner `tako_session`, cliente `tako_table`).
+
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 8 | Setup locale/sala/tavoli | ⬜ | via server dev :3001 |
-| 9 | Menu CRUD | ⬜ | |
-| 10 | Ordine al tavolo + conto | ⬜ | |
-| 11 | Inventario | ⬜ | |
-| 12 | Persistenza dopo riavvio | ⬜ | |
+| 8 | Setup locale/sala/tavoli | ✅ | login owner, ristorante, `POST /api/tables/rooms` + `/api/tables/` → tavolo con `qrToken` (2 tavoli) |
+| 9 | Menu CRUD | ✅ | menu day-1 presente; `POST` sezione "Antipasti" + piatto "Bruschetta" prezzo 6.5 (201) |
+| 10 | Ordine al tavolo + conto | ✅ | ordine 2× → owner lo vede (`/orders/active` n=1) → stato `confirmed` → conto **TOTALE=13.00** (2×6.5 esatto) → pagamento chiude (billsCount 1, revenue 13) |
+| 11 | Inventario | ✅ | crea Farina 10kg → carico +5 → scarico −3 → **qty=12**; `/inventory/stats` OK (totalValue, itemCount, lowCount, outCount, perItem) |
+| 12 | Persistenza dopo riavvio | ✅ | dopo **hard-kill** (crash) + restart: menu, inventario (12), tavoli, storico ordini, incasso conto (`revenue:13`) tutti persistiti (7/7) |
 
 ## C. PWA cliente
 
 | # | Voce | Stato | Evidenza |
 |---|------|-------|----------|
-| 13 | QR/URL tavolo, menu carica | ⬜ | |
-| 14 | Ordine realtime da Edge | ⬜ | |
-| 15 | Da telefono vero | ⬜ | dipende rete UTM |
+| 13 | QR/URL tavolo, menu carica | ✅ | cliente `GET /api/customer/table/<qrToken>` → 200 + cookie `tako_table`; `GET /api/customer/restaurant/<id>/menu` → menu pubblico contiene "Bruschetta" |
+| 14 | Ordine realtime → owner | ✅ | `POST /api/customer/orders` (2×, idempotencyKey) → 201; owner lo vede subito in `/orders/active`. Layer Socket.IO realtime coperto dai 22 test "realtime" (voce 17, verdi su Windows) |
+| 15 | Da telefono vero | ⛔ | BLOCCATO-RETE: server bind su `0.0.0.0:4319` (LAN-raggiungibile se UTM in bridge); telefono fisico di Manuel non pilotabile in autonomia. mDNS `tako.local → 192.168.64.2` |
 
 ## D. Updater e test suite
 
