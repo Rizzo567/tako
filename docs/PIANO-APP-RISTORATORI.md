@@ -945,3 +945,113 @@ shell si ridisegna dalla cache col badge "Appliance non raggiungibile" — nessu
   rieseguire `pnpm --filter @tako/dashboard build:owner` e committare l'output.
 - `owner-src/**` **è** dentro il perimetro di ESLint e del tsconfig della dashboard (a differenza di
   `public/**`, che è ignorato): il codice dell'app owner è soggetto ai gate, quello della staff no.
+
+---
+
+### Diario esecuzione 2026-08-09 — F1 (accesso remoto)
+
+**F1.1, F1.2, F1.3, F1.4 — tutti DONE.** Nessuna Exit di fallimento è scattata; nessuno dei
+quattro task ha consumato più di una iterazione sul proprio goal. Commit sul branch
+`feat/owner-app`: `088d759` (F1.1), `9479b36` (F1.2), `e33565d` (F1.3), `4d2b5da` (F1.4).
+
+#### Misure
+
+| Grandezza | Prima di F1 | Dopo F1 |
+|---|---|---|
+| `vitest` root (stack vivo) | 9 file, **76 verdi** | 11 file, **113 verdi** |
+| `vitest` cloud (`test:cloud`) | 7 file, **71 verdi** | 7 file, **76 verdi** |
+| `pnpm lint` | 0 errori, 169 warning | 0 errori, 169 warning |
+| `tsc -p … --noEmit` (server, dashboard, web, db) | pulito | pulito |
+| `owner/app.js` minificato | 189,4 KB | **191,7 KB** (budget 250 KB) |
+| Probe LAN → ripiego sul tunnel | — | **1254 ms** su LAN appesa (budget 1200) |
+| Kill di `cloudflared` → `state: 'down'` | — | **2 s** (budget 60 s) |
+
+Verifier di F1.4: `node scripts/test-owner-endpoint.mjs` — 17 controlli su 6 scenari, tutti
+verdi. Verifica e2e del gate sull'**hostname pubblico reale** (quick tunnel): senza token
+404 su `/api/tables`, `/health`, `/owner/`, `/staff/`; con token valido 200 sull'API e 404
+su `/staff`, `/api/setup/*`, `/api/auth/pin-roster`.
+
+#### Cosa è stato trovato strada facendo (e che il piano non prevedeva)
+
+1. **Socket.io sta SOTTO Fastify: l'hook `onRequest` non lo vede.** Engine.io sostituisce i
+   listener `request` del server HTTP e gestisce anche `upgrade`, quindi `/socket.io/*` non
+   passa da nessun hook Fastify: il gate di F1.3, da solo, avrebbe lasciato **un WebSocket
+   anonimo esposto su internet** (handshake senza auth, room pubbliche `join:menu`,
+   connessioni tenute aperte a piacere). Chiuso con l'opzione `allowRequest` di Socket.io,
+   che copre sia il polling sia l'upgrade, riusando la stessa verifica di sessione.
+   **Deviazione dichiarata**: lì il rifiuto è un **403 di engine.io**, non il 404 opaco —
+   è sotto il router e non c'è modo di rispondere 404 senza mettersi a sostituire i listener
+   del server HTTP. Non espone nulla (nessun dato, nessun form, nessuna enumerazione), ma è
+   l'unico punto della superficie remota che non risponde 404.
+2. **Il preflight CORS non porta mai l'`Authorization`** (lo dice la specifica): il gate lo
+   bloccava e il browser scartava **ogni** chiamata al remoto → il dual-endpoint non
+   funzionava affatto. Gli `OPTIONS` ora passano prima della deny-list: `@fastify/cors`
+   risponde 204 a qualunque OPTIONS, che la rotta esista o no (nessun oracolo), senza corpo
+   e senza effetti; la richiesta vera che segue resta gated.
+3. **L'hostname del tunnel mancava nella allowlist CORS.** L'app owner vive su due origini e
+   deve parlare con entrambe. Aggiunto in `allowedHosts()`, solo l'hostname del nostro tunnel.
+4. **Bug pre-esistente riemerso: rate-limit → 500 invece di 429.** `errorResponseBuilder`
+   restituiva un oggetto senza `statusCode`; `@fastify/rate-limit` fa `throw` di quel valore
+   e il nostro error handler globale, non trovando `statusCode`, lo classificava 5xx.
+   Invisibile in dev (loopback esente) e **reale in produzione**. Ora restituisce un `Error`
+   con `statusCode`/`code`; misurato: 100×200 poi 10×429.
+5. **L'esenzione loopback del rate-limit copriva anche il tunnel.** Dietro `cloudflared`
+   ogni richiesta arriva da `127.0.0.1`: in dev il tunnel sarebbe stato l'unico canale
+   *senza* rate limit. Ora l'`allowList` non esenta mai le richieste sull'Host pubblico.
+6. **`/health` non è più pubblico sul remoto** (nessuna eccezione al "404 su tutto"), quindi
+   la sonda dell'endpoint remoto viaggia con il Bearer. Conseguenza voluta: senza sessione
+   l'endpoint remoto risulta non disponibile — correttamente, perché senza sessione non ci
+   si potrebbe fare nulla comunque.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **F1.1** — verificato con un **quick tunnel** (`TAKO_TUNNEL_QUICK=1`) invece che con un
+  `TAKO_TUNNEL_TOKEN` di prova: un token finto non sale mai, quindi non avrebbe potuto
+  mostrare la transizione `up → down → up` che è il vero Stop del task. Il quick tunnel dà
+  anche l'hostname pubblico reale usato per il collaudo e2e del gate. Il ramo con token
+  nominato è nel codice ma **non collaudato** (richiede il token di Manuel).
+- **F1.1** — lo stato `up` si legge dai **log del processo figlio** (`Registered tunnel
+  connection`). Il match è volutamente largo (più alternative) perché il formato dei log di
+  `cloudflared` è cambiato fra le versioni: legarsi a una stringa esatta significherebbe
+  restare bloccati su `down` dopo un aggiornamento del binario.
+- **F1.2** — il test di **persistenza** dell'heartbeat non sta in `tests/tunnel-endpoints.test.ts`
+  come indicato, ma in `apps/server/tests/cloud/pairing.test.ts` (+5 casi): il server locale
+  su `:3001` gira in `TAKO_MODE=local` e **non monta `/api/pair/*`**, mentre la suite cloud
+  ha già Postgres effimero e migrazioni cloud. `tests/tunnel-endpoints.test.ts` esiste e
+  copre il resto (validatore condiviso, due endpoint, payload di `/info`, nessun leak del
+  token) — 12 casi.
+- **F1.3** — riconoscimento **asimmetrico** invece che con una sola regola: *severità* =
+  Host pubblico **oppure** header CF (fail-closed: chi falsifica `CF-Ray` dalla LAN si
+  auto-impone il regime più severo, non guadagna nulla); *fiducia* = **solo** Host ==
+  `remoteHost` (l'allowlist esatta prevista dall'Exit), unica condizione che autorizza il
+  rate-limit a usare `CF-Connecting-IP`. Il piano prevedeva l'allowlist come ripiego: è
+  stata adottata subito, ma limitata al punto in cui la fiducia conta davvero.
+- **F1.4** — aggiunto uno scenario non previsto (**LAN appesa**): una connessione rifiutata
+  fallisce in 14 ms e non esercita mai il timeout, quindi senza questo caso il budget di
+  1200 ms non sarebbe stato verificato da nulla.
+
+#### Conseguenze da tenere presenti in F2
+
+- **`/owner/` non è raggiungibile dal remoto via navigazione**: una navigazione del browser
+  non può portare un header `Authorization`, quindi il gate risponde 404. L'app si installa
+  **in LAN** e da fuori il guscio arriva dal service worker; solo le chiamate API vanno in
+  rete, col Bearer. Coerente con D3, ma va detto nell'onboarding.
+- **Stessa cosa per `/uploads/*`**: un `<img src="/uploads/…">` non porta il Bearer → le foto
+  dei piatti non si vedono dal remoto. Da risolvere in F2 (URL firmati, oppure un cookie di
+  sessione `Secure`+`SameSite` sull'origine del tunnel — il gate legge già il cookie
+  `tako_session`, quindi la strada è aperta senza toccare questo file).
+- **Realtime dal remoto**: il socket deve passare il token in **query** (`?token=`), unico
+  canale disponibile all'upgrade WebSocket di un browser; `join:restaurant` continua a
+  volere il suo token come sempre.
+- Il gate esegue **una query sessione per richiesta remota**. È lo stesso costo di
+  `requireAuth` e riguarda solo il traffico dal tunnel (un telefono), ma resta un vettore di
+  carico da internet: mitigato dal filtro di forma sul token (niente query per la spazzatura)
+  e dal rate-limit per-IP reale, non risolto del tutto.
+
+#### Cosa resta a Manuel
+
+- **Tunnel nominato**: token Cloudflare + DNS wildcard `*.box.takoitalia.com`, poi
+  `TAKO_TUNNEL_TOKEN` e `TAKO_TUNNEL_HOSTNAME` sull'appliance (oggi collaudato solo il quick
+  tunnel). Il binario `cloudflared` va imbarcato in `apps/app/src-tauri/resources/` per la
+  build desktop: la cascata di risoluzione lo cerca già lì.
+- Collaudo su **device fisico** dal 4G, fuori dal locale.
