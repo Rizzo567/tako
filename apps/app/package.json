@@ -42,6 +42,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "export:web": "expo export --platform web",
+    "test:url": "node --experimental-strip-types scripts/test-url.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "tauri": "tauri",
     "desktop": "TAKO_SERVER_CMD=\"node_modules/.bin/tsx src/bootstrap.ts\" TAKO_SERVER_CWD=\"../server\" tauri dev",
     "bundle:server": "node ../../scripts/build-server-bundle.mjs",
