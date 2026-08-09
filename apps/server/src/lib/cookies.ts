@@ -27,6 +27,10 @@ export function authCookieOptions(maxAgeSeconds: number, path = '/'): CookieSeri
 // a ogni uso, quindi finché usi Tako non ti disconnette. Il cookie WKWebView di
 // Tauri è persistente → sopravvive ai riavvii dell'app.
 export const STAFF_SESSION_MAX_AGE = 60 * 60 * 24 * 90 // 90 giorni
+// Sessione del TELEFONO arruolato (app owner): 30 giorni, non 90. Stesso refresh
+// rolling, finestra più corta perché un telefono si perde più facilmente di un Mac
+// in cucina (piano app ristoratori §3 D3). Non viaggia mai in un cookie: solo Bearer.
+export const MOBILE_SESSION_MAX_AGE = 60 * 60 * 24 * 30 // 30 giorni
 // Ogni quanto (al massimo) rinnovare la scadenza di una sessione staff attiva:
 // evita una UPDATE a ogni richiesta, rinnova al più una volta al giorno.
 export const SESSION_REFRESH_AFTER_MS = 60 * 60 * 24 * 1000 // 1 giorno

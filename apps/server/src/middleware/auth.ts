@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import { db, sessions, users } from '@tako/db'
 import { eq, and, gt } from 'drizzle-orm'
-import { SESSION_COOKIE, STAFF_SESSION_MAX_AGE, SESSION_REFRESH_AFTER_MS, authCookieOptions } from '../lib/cookies.js'
+import { SESSION_COOKIE, STAFF_SESSION_MAX_AGE, MOBILE_SESSION_MAX_AGE, SESSION_REFRESH_AFTER_MS, authCookieOptions } from '../lib/cookies.js'
 
 // Le sessioni PIN (tablet condiviso) usano un token nanoid(32); quelle staff
 // long-lived un nanoid(64). Il refresh rolling si applica SOLO alle staff, così
@@ -27,13 +27,21 @@ export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
   // Refresh ROLLING della sessione staff: finché usi l'app, la scadenza si sposta
   // avanti (login persistente). Rinnova al più una volta al giorno per non scrivere
   // a ogni richiesta. Best-effort: un errore qui non deve bloccare la richiesta.
+  // Le sessioni MOBILE (telefono arruolato, app owner) hanno lo stesso token lungo ma
+  // una finestra più corta: 30 giorni invece di 90. Il kind sta sulla riga sessions
+  // (migrazione 0017) e vale 'staff' per tutto ciò che esisteva prima.
+  const isMobile = session.session.kind === 'mobile'
   if (token.length >= STAFF_TOKEN_LEN) {
     const remainingMs = session.session.expiresAt.getTime() - Date.now()
-    const maxMs = STAFF_SESSION_MAX_AGE * 1000
+    const maxMs = (isMobile ? MOBILE_SESSION_MAX_AGE : STAFF_SESSION_MAX_AGE) * 1000
     if (remainingMs < maxMs - SESSION_REFRESH_AFTER_MS) {
       try {
-        await db.update(sessions).set({ expiresAt: new Date(Date.now() + maxMs) }).where(eq(sessions.token, token))
-        reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
+        await db.update(sessions)
+          .set({ expiresAt: new Date(Date.now() + maxMs), ...(isMobile ? { lastSeenAt: new Date() } : {}) })
+          .where(eq(sessions.token, token))
+        // Il telefono autentica SOLO con Bearer (mai cookie: fra LAN http e tunnel
+        // https un cookie non sopravvive a SameSite/Secure) → nessun Set-Cookie qui.
+        if (!isMobile) reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
       } catch { /* non-fatale: la sessione resta valida fino alla scadenza corrente */ }
     }
   }

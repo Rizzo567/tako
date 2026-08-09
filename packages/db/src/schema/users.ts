@@ -31,5 +31,28 @@ export const sessions = pgTable('sessions', {
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   token: text('token').notNull().unique(),
   expiresAt: timestamp('expires_at').notNull(),
+  // 'staff' = dashboard (90 giorni, rolling); 'mobile' = telefono arruolato via QR
+  // (30 giorni, rolling — un telefono si perde più facilmente). Vedi migrazione 0017.
+  kind: text('kind', { enum: ['staff', 'mobile'] }).default('staff').notNull(),
+  // Metadati mostrati in "Dispositivi": servono a riconoscere QUALE telefono revocare.
+  deviceName: text('device_name'),
+  devicePlatform: text('device_platform'),
+  lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (t) => ({
+  userKindIdx: index('sessions_user_kind_idx').on(t.userId, t.kind),
+}))
+
+// Codici di arruolamento del telefono (F2.1). Stessa disciplina del device-code
+// cloud (routes/cloud/pair.ts): alta entropia, HMAC a riposo (mai il codice in
+// chiaro), TTL breve, single-use atomico.
+export const deviceEnrollCodes = pgTable('device_enroll_codes', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  restaurantId: uuid('restaurant_id').notNull().references(() => restaurants.id, { onDelete: 'cascade' }),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  codeHash: text('code_hash').notNull().unique(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  consumedAt: timestamp('consumed_at', { withTimezone: true }),
+  sessionId: uuid('session_id'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })

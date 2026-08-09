@@ -2,10 +2,13 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
-import { db, users, sessions, restaurants, menus } from '@tako/db'
-import { eq, and, sql, isNotNull } from 'drizzle-orm'
-import { requireAuth } from '../middleware/auth.js'
-import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE } from '../lib/cookies.js'
+import { createHmac, randomBytes } from 'node:crypto'
+import { db, users, sessions, restaurants, menus, deviceEnrollCodes } from '@tako/db'
+import { eq, and, sql, isNotNull, isNull, gt, desc, inArray } from 'drizzle-orm'
+import { requireAuth, requireRole } from '../middleware/auth.js'
+import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE, MOBILE_SESSION_MAX_AGE } from '../lib/cookies.js'
+import { lanBaseUrl } from '../lib/network.js'
+import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { emailVerificationEnabled, cloudRegisterOwner, cloudLoginProbe, cloudResendVerification } from '../lib/cloud-verify.js'
 
 const loginSchema = z.object({
@@ -64,6 +67,56 @@ function recordFailedLogin(key: string) {
   } else {
     record.count++
   }
+}
+
+// ─────────────── Arruolamento del telefono (app owner — piano F2.1) ───────────────
+//
+// FLUSSO. L'owner, dalla dashboard `/staff` (quindi già autenticato e IN LAN), apre
+// «Dispositivi → Collega telefono» e vede un QR. Il telefono lo scansiona sulla stessa
+// rete e ottiene un Bearer da 30 giorni. Il possesso della dashboard autenticata in LAN
+// È la prova dell'intenzione: stesso ragionamento del device-code cloud di
+// routes/cloud/pair.ts, dove il code è auto-approvato alla generazione.
+//
+// La disciplina del codice è copiata da lì, punto per punto:
+//   - alta entropia (32 byte random, base64url);
+//   - HMAC A RIPOSO: nel DB non c'è mai il codice in chiaro, solo l'HMAC;
+//   - TTL breve (5 minuti: il QR è sullo schermo, non serve di più);
+//   - SINGLE-USE ATOMICO: il consumo è una UPDATE ... WHERE consumed_at IS NULL, quindi
+//     due telefoni che scansionano lo stesso QR non ottengono mai due sessioni;
+//   - lockout PER-CODICE, indipendente dall'IP (un attaccante che ruota IP viene fermato).
+const ENROLL_CODE_TTL_MS = 5 * 60 * 1000
+const ENROLL_MAX_ATTEMPTS = 5
+const ENROLL_LOCKOUT_MS = ENROLL_CODE_TTL_MS
+const ENROLL_MAX_TRACKED = 2000
+
+// HMAC del codice con il segreto del server. Il cloud usa TOKEN_PEPPER (env del deploy);
+// l'appliance ha già JWT_SECRET, persistito in ~/.tako/jwt-secret da bootstrap.ts e
+// obbligatorio all'avvio (index.ts). Prefisso di dominio: lo stesso segreto firma anche
+// i JWT del tavolo, e due usi diversi non devono mai produrre lo stesso digest.
+function hashEnrollCode(code: string): string {
+  const secret = process.env['JWT_SECRET'] ?? ''
+  return createHmac('sha256', secret).update(`device-enroll:${code}`).digest('hex')
+}
+
+// Lockout per-codice in-memory: l'appliance è un processo singolo (niente Redis come
+// nel control-plane cloud), quindi una Map basta e ha lo stesso comportamento osservabile.
+const enrollAttempts = new Map<string, { count: number; firstAttempt: number }>()
+
+function enrollLockedOut(codeHash: string): boolean {
+  const rec = enrollAttempts.get(codeHash)
+  if (!rec) return false
+  if (Date.now() - rec.firstAttempt > ENROLL_LOCKOUT_MS) { enrollAttempts.delete(codeHash); return false }
+  return rec.count >= ENROLL_MAX_ATTEMPTS
+}
+
+function recordEnrollFailure(codeHash: string): void {
+  const now = Date.now()
+  if (enrollAttempts.size > ENROLL_MAX_TRACKED) {
+    for (const [k, v] of enrollAttempts) if (now - v.firstAttempt > ENROLL_LOCKOUT_MS) enrollAttempts.delete(k)
+  }
+  const rec = enrollAttempts.get(codeHash)
+  if (!rec || now - rec.firstAttempt > ENROLL_LOCKOUT_MS) enrollAttempts.set(codeHash, { count: 1, firstAttempt: now })
+  else rec.count++
 }
 
 export async function authRoutes(fastify: FastifyInstance) {
@@ -334,6 +387,158 @@ export async function authRoutes(fastify: FastifyInstance) {
     const members = await db.select({ id: users.id, name: users.name, role: users.role }).from(users)
       .where(and(eq(users.restaurantId, restaurantId), eq(users.active, true), isNotNull(users.pin)))
     return { data: { restaurantId, restaurant: rest, members } }
+  })
+
+  // ─── POST /device/enroll-code — l'owner genera il QR per collegare un telefono ───
+  // requireRole('owner'): non è un'azione da cameriere. Il codice in CHIARO esce da qui
+  // una volta sola (dentro il QR mostrato sullo schermo dell'owner); a riposo c'è l'HMAC.
+  fastify.post('/device/enroll-code', { preHandler: requireRole('owner') }, async (req, reply) => {
+    const code = randomBytes(32).toString('base64url')
+    const codeHash = hashEnrollCode(code)
+    const expiresAt = new Date(Date.now() + ENROLL_CODE_TTL_MS)
+
+    await db.insert(deviceEnrollCodes).values({
+      restaurantId: req.user!.restaurantId,
+      userId: req.user!.id,
+      codeHash,
+      expiresAt,
+    })
+
+    // Pulizia opportunistica: i codici scaduti non servono più a nulla e la tabella
+    // non deve crescere per sempre (un QR generato e mai usato è la norma, non l'eccezione).
+    try {
+      await db.delete(deviceEnrollCodes).where(sql`${deviceEnrollCodes.expiresAt} < now() - interval '1 day'`)
+    } catch { /* best-effort */ }
+
+    // Il QR porta il telefono direttamente sull'app owner in LAN, col codice nel FRAGMENT:
+    // il fragment non viene mai inviato al server né finisce nei log di accesso, e l'app lo
+    // consuma subito ripulendo la barra degli indirizzi.
+    const enrollUrl = `${lanBaseUrl()}/owner/#enroll=${code}`
+    let qrDataUrl: string | null = null
+    try {
+      qrDataUrl = await qrWithOctopus(enrollUrl, 360)
+    } catch (err) {
+      // Il QR è una comodità: se il rendering fallisce restano URL e codice, che
+      // l'owner può digitare a mano (ripiego previsto dall'Exit del piano F2.1).
+      req.log.warn({ err }, 'device enroll: QR non generato')
+    }
+
+    return reply.send({
+      data: { code, enrollUrl, qrDataUrl, expiresInSeconds: Math.floor(ENROLL_CODE_TTL_MS / 1000) },
+    })
+  })
+
+  // ─── POST /device/enroll — il telefono riscatta il codice (ANONIMO) ───────────────
+  // Non richiede sessione: il telefono non ne ha ancora una. La prova è il codice valido,
+  // non scaduto e non consumato. Rate-limit di route (il globale è per-IP e generoso) +
+  // lockout per-codice: 5 tentativi falliti bruciano quel codice, non l'appliance.
+  fastify.post('/device/enroll', { config: { rateLimit: { max: 10, timeWindow: 60000 } } }, async (req, reply) => {
+    const schema = z.object({
+      code: z.string().min(16).max(200),
+      deviceName: z.string().max(60).optional(),
+      platform: z.string().max(40).optional(),
+    })
+    const body = schema.safeParse(req.body)
+    if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Dati non validi' } })
+
+    const codeHash = hashEnrollCode(body.data.code)
+    if (enrollLockedOut(codeHash)) {
+      return reply.code(429).send({ error: { code: 'TOO_MANY_ATTEMPTS', message: 'Troppi tentativi su questo codice. Genera un nuovo QR.' } })
+    }
+
+    // Consumo ATOMICO: vince una sola richiesta. Un secondo telefono (o lo stesso QR
+    // scansionato due volte) trova consumed_at valorizzato e riceve 400.
+    const [consumed] = await db
+      .update(deviceEnrollCodes)
+      .set({ consumedAt: new Date() })
+      .where(and(
+        eq(deviceEnrollCodes.codeHash, codeHash),
+        isNull(deviceEnrollCodes.consumedAt),
+        gt(deviceEnrollCodes.expiresAt, new Date()),
+      ))
+      .returning()
+
+    if (!consumed) {
+      recordEnrollFailure(codeHash)
+      return reply.code(400).send({ error: { code: 'INVALID_CODE', message: 'Codice non valido, scaduto o già usato.' } })
+    }
+
+    // L'utente deve esistere ed essere ancora attivo: un owner disattivato fra la
+    // generazione del QR e la scansione non deve poter arruolare un telefono.
+    const [user] = await db.select().from(users)
+      .where(and(eq(users.id, consumed.userId), eq(users.active, true))).limit(1)
+    if (!user || user.restaurantId !== consumed.restaurantId) {
+      return reply.code(403).send({ error: { code: 'FORBIDDEN', message: 'Utente non più disponibile.' } })
+    }
+
+    const token = nanoid(64)
+    const expiresAt = new Date(Date.now() + MOBILE_SESSION_MAX_AGE * 1000)
+    const [session] = await db.insert(sessions).values({
+      userId: user.id,
+      token,
+      expiresAt,
+      kind: 'mobile',
+      deviceName: body.data.deviceName ?? 'Telefono',
+      devicePlatform: body.data.platform ?? null,
+      lastSeenAt: new Date(),
+    }).returning()
+
+    await db.update(deviceEnrollCodes).set({ sessionId: session!.id }).where(eq(deviceEnrollCodes.id, consumed.id))
+
+    const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, consumed.restaurantId)).limit(1)
+
+    // NESSUN cookie: l'app owner autentica sempre col Bearer, che sopravvive al passaggio
+    // fra l'origine LAN (http) e quella del tunnel (https). Vedi piano §3 D3.
+    return reply.code(201).send({
+      data: {
+        token,
+        expiresAt: expiresAt.toISOString(),
+        deviceId: session!.id,
+        user: { id: user.id, name: user.name, email: user.email, role: user.role },
+        restaurant: restaurant ? { id: restaurant.id, name: restaurant.name, slug: restaurant.slug } : null,
+      },
+    })
+  })
+
+  // ─── GET /devices — i telefoni arruolati del ristorante ───────────────────────────
+  // Owner-only e scoped al ristorante (anti cross-tenant come ogni altra route). Non
+  // espone MAI il token: solo ciò che serve a riconoscere quale telefono revocare.
+  fastify.get('/devices', { preHandler: requireRole('owner') }, async (req) => {
+    const staff = await db.select({ id: users.id, name: users.name })
+      .from(users).where(eq(users.restaurantId, req.user!.restaurantId))
+    const staffIds = staff.map(s => s.id)
+    if (!staffIds.length) return { data: [] }
+    const rows = await db.select({
+      id: sessions.id,
+      userId: sessions.userId,
+      deviceName: sessions.deviceName,
+      devicePlatform: sessions.devicePlatform,
+      createdAt: sessions.createdAt,
+      lastSeenAt: sessions.lastSeenAt,
+      expiresAt: sessions.expiresAt,
+    }).from(sessions)
+      .where(and(inArray(sessions.userId, staffIds), eq(sessions.kind, 'mobile'), gt(sessions.expiresAt, new Date())))
+      .orderBy(desc(sessions.createdAt))
+    const nameOf = new Map(staff.map(s => [s.id, s.name]))
+    return { data: rows.map(r => ({ ...r, userName: nameOf.get(r.userId) ?? null })) }
+  })
+
+  // ─── DELETE /devices/:id — revoca immediata di un telefono ────────────────────────
+  // La revoca è efficace ovunque e subito: requireAuth interroga `sessions` a ogni
+  // richiesta, e il socket si rivalida entro 60 s (socket/handlers.ts).
+  fastify.delete('/devices/:id', { preHandler: requireRole('owner') }, async (req, reply) => {
+    const { id } = req.params as { id: string }
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+      return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Dispositivo non trovato' } })
+    }
+    const staff = await db.select({ id: users.id }).from(users).where(eq(users.restaurantId, req.user!.restaurantId))
+    const staffIds = staff.map(s => s.id)
+    if (!staffIds.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Dispositivo non trovato' } })
+    const [deleted] = await db.delete(sessions)
+      .where(and(eq(sessions.id, id), eq(sessions.kind, 'mobile'), inArray(sessions.userId, staffIds)))
+      .returning({ id: sessions.id })
+    if (!deleted) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Dispositivo non trovato' } })
+    return { data: { success: true } }
   })
 
   // Logout

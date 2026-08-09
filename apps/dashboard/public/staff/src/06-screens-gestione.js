@@ -1664,12 +1664,106 @@ function ScreenCollega({ mobile }) {
   );
 }
 
+/* ═══════════════════ APP OWNER — collega il telefono del ristoratore ═══════════════════ */
+/* Il QR contiene un codice monouso con TTL 5 minuti (POST /auth/device/enroll-code).
+   Si scansiona col telefono SULLA STESSA RETE: il possesso di questa dashboard
+   autenticata in LAN è la prova dell'intenzione (piano app ristoratori §3 D3).
+   Il codice in chiaro non viene mai salvato: nel DB c'è solo il suo HMAC. */
+function ScreenAppOwner({ mobile }) {
+  const [code, setCode] = useState(null);      // { code, enrollUrl, qrDataUrl, expiresInSeconds }
+  const [left, setLeft] = useState(0);         // secondi rimasti prima che il QR scada
+  const [busy, setBusy] = useState(false);
+  const [devices, setDevices] = useState([]);
+
+  const loadDevices = React.useCallback(() => {
+    TakoAPI.get("/auth/devices").then((d) => setDevices(d || [])).catch(() => setDevices([]));
+  }, []);
+  useEffect(loadDevices, [loadDevices]);
+
+  // Countdown: quando arriva a zero il QR mostrato è morto, e dirlo è meglio che
+  // lasciare il ristoratore a inquadrare un codice che il server rifiuterà.
+  useEffect(() => {
+    if (!code) return;
+    setLeft(code.expiresInSeconds || 0);
+    const t = setInterval(() => setLeft((s) => (s > 0 ? s - 1 : 0)), 1000);
+    return () => clearInterval(t);
+  }, [code]);
+
+  // Il telefono appena collegato compare nell'elenco: aggiorniamo mentre il QR è vivo.
+  useEffect(() => {
+    if (!code || left <= 0) return;
+    const t = setInterval(loadDevices, 4000);
+    return () => clearInterval(t);
+  }, [code, left, loadDevices]);
+
+  const genera = async () => {
+    setBusy(true);
+    try { setCode(await TakoAPI.post("/auth/device/enroll-code")); }
+    catch (e) { toast(e.message || "Impossibile generare il codice", { type: "error" }); }
+    finally { setBusy(false); }
+  };
+
+  const revoca = async (id) => {
+    try { await TakoAPI.del(`/auth/devices/${id}`); toast("Dispositivo scollegato", { type: "ok" }); loadDevices(); }
+    catch (e) { toast(e.message || "Revoca non riuscita", { type: "error" }); }
+  };
+
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  const scaduto = code && left <= 0;
+
+  return (
+    <ScreenScroll mobile={mobile}>
+      <PageHead mobile={mobile} tako="serve" title="App del ristoratore" sub="Collega il tuo telefono a Tako" />
+      <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.5 }}>
+            Genera un QR e inquadralo col telefono <b>sulla stessa rete WiFi</b>. Il telefono resta
+            collegato 30 giorni e puoi scollegarlo da qui in qualsiasi momento.
+          </div>
+          {!code && <Btn onClick={genera} icon="qr" disabled={busy}>{busy ? "Genero…" : "Collega telefono"}</Btn>}
+          {code && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+              {code.qrDataUrl && (
+                <img src={code.qrDataUrl} alt="QR per collegare il telefono" width={220} height={220}
+                  style={{ borderRadius: 14, border: "1px solid var(--hairline)", opacity: scaduto ? 0.25 : 1, transition: "opacity .2s var(--out)" }} />
+              )}
+              <Badge tone={scaduto ? "danger" : "ok"} dot>{scaduto ? "QR scaduto" : `Valido ancora ${mmss(left)}`}</Badge>
+              <div style={{ width: "100%" }}><CopyRow label="oppure apri" value={code.enrollUrl} /></div>
+              <Btn kind="ghost" size="sm" onClick={genera} icon="refresh" disabled={busy}>Genera un nuovo QR</Btn>
+            </div>
+          )}
+        </div>
+      </Card>
+
+      <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580, marginTop: 16 }}>
+        <h3 style={{ fontSize: 16, marginBottom: 12 }}>Telefoni collegati</h3>
+        {!devices.length && <div style={{ fontSize: 13.5, color: "var(--ink-2)" }}>Nessun telefono collegato.</div>}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {devices.map((d) => (
+            <div key={d.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+              padding: "10px 12px", borderRadius: 12, background: "var(--sunken)" }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>{d.deviceName || "Telefono"}</div>
+                <div style={{ fontSize: 12, color: "var(--ink-3)" }}>
+                  {d.userName || ""}{d.devicePlatform ? ` · ${d.devicePlatform}` : ""}
+                  {d.lastSeenAt ? ` · visto ${new Date(d.lastSeenAt).toLocaleDateString()}` : ""}
+                </div>
+              </div>
+              <Btn size="sm" kind="danger" onClick={() => revoca(d.id)}>Scollega</Btn>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </ScreenScroll>
+  );
+}
+
 /* ═══════════════════ DISPOSITIVI (QR + Collega, unificate) ═══════════════════ */
-/* Raccoglie in un'unica voce di sidebar due schermate affini (owner-only). */
+/* Raccoglie in un'unica voce di sidebar tre schermate affini (owner-only). */
 function ScreenDispositivi({ mobile }) {
   const [tab, setTab] = React.useState("qr");
   const QR = window.ScreenQR, Collega = window.ScreenCollega;
-  const tabs = [["qr", "QR Codes"], ["collega", "Collega dispositivi"]];
+  const tabs = [["qr", "QR Codes"], ["collega", "Collega dispositivi"], ["app", "App ristoratore"]];
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <div style={{ display: "flex", gap: 8, padding: mobile ? "12px 16px 4px" : "16px 24px 4px", flex: "none" }}>
@@ -1682,10 +1776,12 @@ function ScreenDispositivi({ mobile }) {
         ))}
       </div>
       <div style={{ flex: 1, minHeight: 0 }}>
-        {tab === "qr" ? (QR ? <QR mobile={mobile} /> : null) : (Collega ? <Collega mobile={mobile} /> : null)}
+        {tab === "qr" ? (QR ? <QR mobile={mobile} /> : null)
+          : tab === "app" ? <ScreenAppOwner mobile={mobile} />
+          : (Collega ? <Collega mobile={mobile} /> : null)}
       </div>
     </div>
   );
 }
 
-Object.assign(window, { ScreenMenu, ScreenStatistiche, ScreenInsights, ScreenInventario, ScreenStaff, ScreenImpostazioni, ScreenCollega, ScreenDispositivi });
+Object.assign(window, { ScreenMenu, ScreenStatistiche, ScreenInsights, ScreenInventario, ScreenStaff, ScreenImpostazioni, ScreenCollega, ScreenAppOwner, ScreenDispositivi });
