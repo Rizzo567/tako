@@ -2164,3 +2164,189 @@ nessun avvio successivo riesce a rimuovere.
 - **Decidere su `cloudflared`** (imbarco nel bundle vs download al primo avvio): finché non è
   deciso, l'accesso da remoto funziona solo sulle macchine dove il binario c'è già.
 - **F6.2**: il collaudo di una serata vera resta l'ultimo gate, ed è **P0**.
+
+---
+
+### Diario esecuzione 2026-08-09 — F8.1 (il guscio smette di sembrare un browser)
+
+**F8.1 — DONE in 4 giri sui 6 disponibili.** Nessuna Exit di fallimento. Commit `af64f11`.
+
+Questa fase non nasce dal piano: nasce da Manuel che apre la build di F7.3 sul Simulatore e
+la boccia in quattro frasi. Ogni frase qui sotto è diventata una causa e una misura — e
+tre delle quattro avevano la **stessa** radice.
+
+| Frase di Manuel | Causa vera | Dove si è chiusa |
+|---|---|---|
+| «si può muovere tutta l'interfaccia a destra e sinistra» | la scrollView della WebView aveva di che scorrere e rimbalzava | `bounces={false}` + body fisso |
+| «non arriva al limite della dynamic island» | `SafeAreaView` con 62 pt di crema sopra la WebView | via la SafeAreaView, inset alla PWA |
+| «gli elementi oltre l'isola non diventano sfocati» | l'header stava in colonna SOPRA il pannello: sotto non passava niente | header galleggiante + vetro a due strati |
+| «sembra una pagina web» | pizzico, doppio-tap, evidenziazione, callout, gesture di ritorno | `user-scalable=no` e compagnia |
+
+#### La radice comune, che nessuno degli screenshot precedenti aveva mostrato
+
+Il primo screenshot di questo task **non** somigliava a `ios-14` di F7.3: niente header, una
+barra di scorrimento orizzontale in basso, il contenuto spostato. Un `terminate` + `launch`
+ha rimesso tutto a posto. Da lì la diagnosi: **non era un difetto di disegno, era una posa**.
+Il trascinamento sposta la scrollView della WKWebView, non la pagina — quindi né un reload
+né la chiusura dell'app lo annullano, perché la vista sopravvive. Manuel ha toccato
+l'interfaccia, l'ha spostata, e da quel momento in poi la sua app era storta.
+
+E ciò che dava alla scrollView una corsa da percorrere era **la banda**: `SafeAreaView`
+metteva 62 pt di padding, la WebView riceveva un `contentInset`, e un inset è esattamente
+una corsa. I difetti 1 e 2 erano **lo stesso difetto** guardato da due lati.
+
+#### Cosa è cambiato, e perché così
+
+**Guscio (`apps/app/app/index.tsx`)**
+
+- **Niente `SafeAreaView`**: la WebView occupa tutto lo schermo. Gli inset non spariscono,
+  cambiano padrone — li applica la PWA, l'unica che sa quali elementi devono stare sotto
+  l'isola (lo scrim) e quali no.
+- **Gli inset li passa il nativo alla pagina** (`useSafeAreaInsets` → `--safe-top`
+  `--safe-bottom` come stile inline su `:root`). La PWA ha già `env(safe-area-inset-*)` e in
+  Safari standalone usa quelle; dentro una WebView Android, con l'edge-to-edge di SDK 56,
+  `env()` torna 0 in più di un caso e l'header nascerebbe sotto la barra di stato.
+- `bounces={false}` — e **basta quello**: `alwaysBounceHorizontal/Vertical` NON esistono in
+  `react-native-webview` (non sono in `IOSWebViewProps`; `tsc` lo dice subito). `bounces` è
+  `UIScrollView.bounces` e vale per entrambi gli assi.
+- `contentInsetAdjustmentBehavior="never"`, `automaticallyAdjustContentInsets={false}`,
+  `automaticallyAdjustsScrollIndicatorInsets={false}`, `directionalLockEnabled`, indicatori
+  di scorrimento spenti. Android: `overScrollMode="never"`, `setBuiltInZoomControls={false}`,
+  `setDisplayZoomControls={false}`, `nestedScrollEnabled={false}`.
+- **`allowsBackForwardNavigationGestures={false}`** — scelta motivata, non pulizia. Quella
+  gesture fa scivolare l'istantanea della pagina precedente: è l'animazione di Safari, e
+  sulle navigazioni `pushState` della PWA (le sotto-schermate di «Altro») scivola una copia
+  identica di ciò che si sta guardando. Il ritorno ce l'hanno già la freccia nell'header e
+  il tasto fisico di Android.
+- **`allowsLinkPreview={false}`**: l'anteprima al tocco prolungato è un menù da browser.
+- **`scrollEnabled` resta `true`**, deliberatamente: quando compare la tastiera, WebKit usa
+  proprio quella scrollView per portare in vista il campo a fuoco. Non c'è bisogno di
+  spegnerla — basta non darle niente da scorrere.
+
+**PWA (`owner-src`)**
+
+- `body { position: fixed; inset: 0 }` — non solo `overflow: hidden`: Safari iOS scorre
+  comunque un body `overflow:hidden` quando compare la tastiera. È la difesa che vale anche
+  **installata da Safari**, dove `bounces` non esiste.
+- `.ow-scroll` è l'unico pannello che scorre, con `overscroll-behavior: contain`.
+- `touch-action: manipulation` su `html` (toglie il doppio-tap per ingrandire).
+  **NON `pan-y`**: `touch-action` si interseca lungo la catena degli antenati, e un `pan-y`
+  in cima più il `pan-x` della striscia delle sale danno insieme «niente» — la striscia
+  smetterebbe di scorrere. È il motivo per cui il goal chiedeva `pan-y` sui contenitori e
+  qui c'è `manipulation`: con `pan-y` la Sala si rompe.
+- **Header galleggiante** (`position: absolute`) sopra il pannello, con `pointer-events`
+  restituiti ai figli. Il pannello parte da y=0 e ha `padding-top: safe-top + 54px`: il
+  riquadro tocca il bordo, il contenuto no.
+- **Sfocatura progressiva a due strati** con maschere sfalsate (blur 12px mascherato 0-55%,
+  blur 24px mascherato 0-38%), coda 20 px sotto l'header. Un solo strato darebbe un taglio
+  netto dove finisce la maschera: lo stesso difetto, 40 px più in basso. La velatura è
+  **traslucida** (60% → 0): con un fondo pieno il contenuto non si sfoca, si nasconde — e si
+  vede che è un'altra cosa.
+- `maximum-scale=1, user-scalable=no` nel viewport, `-webkit-tap-highlight-color:
+  transparent`, `user-select: none` + `-webkit-touch-callout: none` sul telaio. I **dati**
+  restano selezionabili (`.num`, `.mono`, `.ow-kv b`, `.ow-muted`, `input`, `textarea`):
+  importi, indirizzi e note sono cose che un ristoratore copia davvero.
+- `theme-color` da `#ED7159` a `#F2EBE2`: l'arancio dietro la barra di stato era una delle
+  cose che facevano «sito».
+
+#### Il difetto trovato dal verifier, non dal piano: la tastiera
+
+Con il body fisso, all'apertura della tastiera **WebKit sposta la finestra visibile** per
+scoprire il campo a fuoco — e non la rimette a posto. Screenshot al terzo giro: header
+sparito, chip sopra l'orologio. Era **lo stesso difetto per cui l'app è stata bocciata**, che
+rientrava dalla porta della tastiera, e nessun controllo statico l'avrebbe visto.
+
+Rimedio in due mosse, entrambe nella PWA (valgono quindi anche in Safari standalone):
+`--kb` misura l'altezza dei tasti dalla `visualViewport` e la shell si accorcia sopra di
+essi; `window.scrollTo(0, 0)` annulla lo spostamento, in tre passate (0, 90, 340 ms) perché
+WebKit decide a metà dell'animazione. A tastiera aperta la barra delle sezioni sparisce
+(`data-kb="1"`): sotto una tastiera è una fila di bottoni che nessuno può premere.
+
+#### Il pull-to-refresh è caduto, e non è una perdita
+
+`pullToRefreshEnabled` mette `bounces` a `true` da solo: è incompatibile con il difetto n. 1.
+Sono caduti con lui il `ScrollView` + `RefreshControl` di F7.4 (il ripiego Android) e
+`nestedScrollEnabled`. Al loro posto **«Ricarica l'app»** in Altro, accanto a «Ricontrolla la
+rete». I dati arrivano comunque da soli — socket più ricarica a ogni cambio sezione — e il
+bottone resta per il caso raro in cui si vuole ripartire puliti.
+
+#### Come si è misurato: gesti VERI sul Simulatore
+
+`simctl` non sa toccare lo schermo, e senza un dito non si può provare che l'interfaccia
+**non** si muove. È stato scritto un piccolo strumento in Swift che posta eventi CoreGraphics
+sulla finestra del Simulatore (trascinamento con mantenimento, click, doppio-tap, e il
+pizzico come Option + trascinamento). Mappa: punto del dispositivo `(dx, dy)` → schermo
+`(319,5 + dx, 78 + dy)` con la finestra a `(303, 40)`.
+
+Il mantenimento è la parte che conta: uno screenshot **a dito ancora giù** è l'unico modo di
+vedere un rimbalzo, che al rilascio torna indietro da solo.
+
+| Gesto (build nuova) | Differenza media rispetto al riposo |
+|---|---|
+| Trascinamento 130 pt a **sinistra**, tenuto 3 s | **0,00** su 1206×2622 |
+| Trascinamento 130 pt a **destra**, tenuto 3 s | **0,00** |
+| Trascinamento 220 pt in **basso**, tenuto 3 s | **0,00** |
+| **Doppio tap** al centro | **0,00** |
+| **Pizzico** (Option + trascinamento 110 pt), tenuto 3 s | **0,01** |
+
+Il pizzico a 0,01 sarebbe una prova nulla se il gesto non arrivasse: **controllo** eseguito
+in Safari del Simulatore sulla stessa macchina, stesso comando → **9,78** di differenza
+media, la pagina si ingrandisce. Il gesto arriva; è l'app che non lo raccoglie.
+
+E lo scorrimento interno continua a funzionare: stesso strumento, trascinamento verticale
+sulla schermata Altro → differenza media **18,26**, il pannello scorre.
+
+#### Il verifier nuovo: `scripts/test-owner-feel.mjs`
+
+**33 controlli in Chrome headless** (documento non scorrevole a 390 e 430 px, un solo
+contenitore orizzontale, geometria delle safe area, `meta viewport`, selezione, tap
+highlight, `theme-color`) più il **modo `--shot`**, che legge i **pixel degli screenshot del
+Simulatore**.
+
+Due cose che valgono più dei numeri:
+
+1. **La sfocatura si misura, non si guarda.** «Nitidezza» = salto medio di luminanza fra
+   pixel vicini. Prima versione: si nascondeva l'header e si confrontava — e misurava anche
+   la sparizione del titolo, cioè diceva verde per il motivo sbagliato. Ora si spegne **solo**
+   il `backdrop-filter` e resta tutto il resto: 2,32 contro 3,83, cioè il 40% di incisione in
+   meno dovuto alla sola sfocatura. Sui pixel del Simulatore: fascia sotto l'isola **2,63**
+   contro **7,95** del contenuto a fuoco più inciso della stessa schermata.
+2. **La banda si riconosce dalla cucitura, non dal colore.** La prima versione del controllo
+   cercava il crema dell'app con tolleranza 26: la banda bocciata era `#FBF8F4`, che dista 18
+   — sarebbe **passata sulla build da bocciare**. Ora la tolleranza è 14 e c'è un cercatore di
+   cuciture (salto di luminanza sui due margini esterni, dove non passano né l'orologio né il
+   titolo). **Provato contro il difetto**: sulla build di F7.3 trova il salto a **y=62pt
+   esatti** — l'altezza della `SafeAreaView` — e boccia 5 controlli su 6.
+
+#### Gate finali
+
+| Gate | Valore |
+|---|---|
+| `vitest` root (stack :5432 + :3001) | **207/207** |
+| `vitest` cloud | **76/76** |
+| `test-owner-shell` | 13 verdi · **TTI 1655 ms** (budget 2000) |
+| `test-owner-wave2` · `wave3` · `endpoint` · `push` | 34 · 71 · 27 · 19, tutti verdi |
+| `test-owner-feel` (nuovo) | **33 verdi** in Chrome + **7 verdi** sui pixel del Simulatore |
+| Bundle owner in brotli | **89,5 KB** (budget 100) |
+| `tsc` `apps/app` · `apps/dashboard` | puliti |
+| `eslint` | **0 errori** (2 warning preesistenti) |
+| Build iOS Release incrementale | **BUILD SUCCEEDED** |
+
+#### Deviazioni e cose da sapere
+
+- **`touch-action: pan-y` sui contenitori scroll non è stato messo**, e non per pigrizia:
+  intersecandosi con il `pan-x` della striscia delle sale la spegnerebbe. Vedi sopra.
+- **`apple-mobile-web-app-status-bar-style` resta `default`.** `black-translucent` darebbe il
+  bordo-a-bordo anche alla PWA installata da Safari, ma su crema il testo bianco della barra
+  di stato è illeggibile. Nel guscio nativo il problema non si pone: lo risolve
+  `<StatusBar style="dark" />`. La PWA da Safari resta quindi un gradino sotto il nativo su
+  questo punto solo.
+- **Lo sfondo dietro l'header è `#F5EBDC`, non `#F2EBE2`**: è il `saturate(160%)` dello scrim
+  applicato al crema. Scarto di 3-6 su 255, invisibile a occhio ma misurabile — la tolleranza
+  del verifier lo sa.
+- **Il colore di avvio del guscio è ora `T.bg`** e non `T.surface`: è ciò che si intravede fra
+  la comparsa della WebView e il primo paint della pagina.
+- **`app.json` non è stato toccato**: lo splash resta `#FBF8F4`. Allinearlo a `#F2EBE2`
+  significherebbe rigenerare il progetto nativo, e non è una cosa da fare la sera del
+  collaudo.
+
