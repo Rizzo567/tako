@@ -8,9 +8,12 @@
 // Sul telefono in 4G è inaccettabile. Qui si compila a build-time: zero Babel a runtime.
 //
 // Output apps/dashboard/public/owner/:
-//   index.html — copiato da owner-src (nessun <script type="text/babel">)
-//   app.js     — bundle React minificato (soglia: BUDGET_KB)
-//   app.css    — token + shell, @import risolti da esbuild
+//   index.html           — copiato da owner-src (nessun <script type="text/babel">)
+//   app.js               — bundle React minificato (soglia: BUDGET_KB)
+//   app.css              — token + shell, @import risolti da esbuild
+//   sw.js                — service worker, scope /owner/
+//   manifest.webmanifest — start_url e scope /owner/
+//   icons/               — copia locale delle icone (devono stare DENTRO lo scope)
 import { build } from 'esbuild'
 import { rmSync, mkdirSync, cpSync, existsSync, statSync } from 'node:fs'
 import { join, dirname } from 'node:path'
@@ -19,6 +22,7 @@ import { fileURLToPath } from 'node:url'
 const root = dirname(dirname(fileURLToPath(import.meta.url)))
 const src = join(root, 'apps', 'dashboard', 'owner-src')
 const out = join(root, 'apps', 'dashboard', 'public', 'owner')
+const icons = join(root, 'apps', 'dashboard', 'public', 'icons')
 
 // Budget del bundle JS. È la differenza fra un'app usabile in 4G attraverso un tunnel
 // e una che non lo è: se sfora, la build FALLISCE invece di degradare in silenzio.
@@ -60,8 +64,13 @@ await build({
 })
 
 // 3) File statici copiati verbatim.
-console.log('▶ copia index.html')
-cpSync(join(src, 'index.html'), join(out, 'index.html'))
+console.log('▶ copia index.html + sw.js + manifest + icone')
+for (const f of ['index.html', 'sw.js', 'manifest.webmanifest']) {
+  cpSync(join(src, f), join(out, f))
+}
+// Le icone vanno DENTRO /owner/: un manifest con scope /owner/ non deve dipendere da
+// risorse fuori scope, e Fastify serve solo le sottocartelle registrate (staff/, owner/).
+cpSync(icons, join(out, 'icons'), { recursive: true })
 
 // 4) Verifica: il gate sta nella build, non in un controllo manuale a valle.
 const jsBytes = statSync(join(out, 'app.js')).size
@@ -78,7 +87,7 @@ if (jsKb > BUDGET_KB) {
   )
 }
 
-for (const f of ['index.html', 'app.js', 'app.css']) {
+for (const f of ['index.html', 'app.js', 'app.css', 'sw.js', 'manifest.webmanifest', 'icons']) {
   if (!existsSync(join(out, f))) throw new Error(`output mancante: ${f}`)
 }
 

@@ -5,7 +5,14 @@
 <!-- viewport-fit=cover + safe-area nei token: notch e home indicator gestiti in CSS -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ED7159">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tako">
 <title>Tako Owner</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="app.css">
 <style>
 /* Primo paint prima che il CSS/JS arrivino: mai schermo bianco. */
@@ -38,6 +45,18 @@
     if ((e && e.filename) || /SyntaxError|is not defined|Unexpected/i.test(m)) panel(m)
   })
   setTimeout(function () { if (document.getElementById('boot')) panel('Il bundle non si &egrave; caricato.') }, 10000)
+
+  // Service worker: scope /owner/ (lo sw.js è servito da /owner/sw.js, quindi lo
+  // scope massimo consentito è già /owner/). In http:// puro non-localhost il
+  // browser NON espone navigator.serviceWorker: è atteso, non è un errore — la PWA
+  // diventa installabile quando l'appliance è raggiunta via HTTPS (tunnel).
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function (err) {
+        console.warn('[owner] service worker non registrato:', err && err.message)
+      })
+    })
+  }
 })()
 </script>
 <script src="app.js" defer></script>
