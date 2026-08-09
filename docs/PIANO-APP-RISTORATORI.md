@@ -1187,3 +1187,128 @@ che mostra foto di piatti è la Wave 2 (F4.2/F4.3), che lo userà.
 - Chi tocca `owner-src/` deve rieseguire `node scripts/build-owner-app.mjs` e committare
   l'output: `apps/dashboard/public/owner/` è artefatto di build versionato (ora include
   anche `.br`/`.gz` e i due font).
+
+---
+
+### Diario esecuzione 2026-08-09 — F7.2 (guscio nativo owner)
+
+**F7.2 — DONE al primo giro** (1 iterazione delle 4 disponibili; nessuna Exit di fallimento).
+Commit: `c03be8f`.
+
+`apps/app` è un progetto DOPPIO — shell Tauri desktop *e* app Expo — e la prima cosa
+verificata è stata quale metà usa cosa: Tauri prende il frontend da
+`src-tauri/tauri.conf.json → frontendDist: ../standalone-dist` (un `index.html` scritto a
+mano che fa polling su `:4317/health` e poi carica `/staff`), **non** dalla cartella
+`app/` di expo-router. Le due metà sono disgiunte: nulla in `src-tauri/**` nomina
+`app.json` o `app/index.tsx`. Il desktop resta quindi sulla dashboard staff, il mobile va
+su `/owner/` — che è la divisione voluta, non una svista.
+
+#### Verifier
+
+| Gate | Esito |
+|---|---|
+| `tsc -p apps/app/tsconfig.json --noEmit` | **0 errori** (prima e dopo) |
+| `npx expo export -p ios -p android` | **completa**: iOS 1063 moduli / 2,5 MB hbc, Android 1536 moduli / 3,7 MB hbc |
+| `npx expo config --type public` | risolve senza warning; `com.takoitalia.tako` su entrambe le piattaforme |
+| Tauri non regredisce | `cargo check` in `src-tauri` **exit 0**; `git status` → zero file toccati sotto `src-tauri/` e `standalone-dist/` |
+| `node --experimental-strip-types apps/app/scripts/test-url.mjs` | **16 controlli verdi** (nuovo) |
+
+#### Come si lancia in sviluppo
+
+```bash
+pnpm tako                       # appliance su :4317 (serve /owner/)
+pnpm --filter @tako/app start   # Metro; poi 'i' per iOS, 'a' per Android
+```
+
+L'host che il guscio deve usare **dipende da dove gira**, ed è il motivo per cui la
+schermata di collegamento ha un campo manuale:
+
+| Dove | Host | Perché |
+|---|---|---|
+| Telefono fisico sulla WiFi del locale | `tako.local:4317` (automatico) | mDNS annunciato dall'appliance |
+| Simulatore iOS | `localhost:4317` | condivide la rete del Mac, ma non risolve `tako.local` |
+| Emulatore Android | `10.0.2.2:4317` | `10.0.2.2` è l'alias dell'host dal NAT dell'emulatore |
+
+Le due voci per emulatore/simulatore compaiono come scorciatoie **solo in `__DEV__`**: a un
+ristoratore `10.0.2.2` non direbbe nulla e sarebbe solo un modo per rompersi l'app da soli.
+Si può anche forzare tutto con `EXPO_PUBLIC_SERVER_URL` o `expo.extra.serverUrl`, che
+saltano il probe: è una decisione di chi costruisce la build, non si discute a runtime.
+
+#### Cosa è stato trovato strada facendo
+
+1. **Il probe remoto non può usare la stessa regola della PWA.** In `owner-src` il probe
+   remoto porta il Bearer; il guscio nativo un token non ce l'ha — vive in `localStorage`,
+   *dentro* la WebView. Sull'hostname pubblico il gate di F1.3 risponde quindi 404 anche a
+   `/health`. Trattarlo come "non raggiungibile" avrebbe reso il tunnel invisibile al
+   guscio per sempre. `probeRemote()` accetta perciò tutto ciò che sta **sotto il 500**: un
+   404 lì dentro significa "il tunnel è su e mi chiede le credenziali", che è esattamente
+   l'informazione che serve per mandarci la WebView, la quale il token ce l'ha.
+2. **`new URL` di React Native non si può usare su input incompleti.** Su `10.0.2.2:4317`
+   interpreta `10.0.2.2` come *schema*. Tutta la normalizzazione è fatta a mano in
+   `src/url.ts` — ed è la ragione per cui quel file esiste separato da `endpoint.ts`: non
+   ha un solo import, quindi Node lo carica in `--experimental-strip-types` e lo si collauda
+   senza simulatore. È l'unico pezzo del guscio verificabile prima di F7.3/F7.4, e un
+   errore qui manderebbe la WebView sull'origine sbagliata con diagnosi rimandata a dopo
+   una build nativa completa.
+3. **Gli endpoint del tunnel il guscio li impara dalla PWA, non dal server.** Un hook su
+   `localStorage.setItem` iniettato nella pagina rilancia al nativo
+   `tako.owner.endpoints`, che `learnEndpoints()` scrive già. Zero chiamate duplicate a
+   `/api/system/info` — che peraltro il guscio non potrebbe fare, non avendo il token.
+4. **Il deep link `tako://…#enroll=…` non può passare dalla `source` della WebView.**
+   Cambiare *solo* il fragment di un URL già caricato è una navigazione interna al
+   documento: la pagina non si rimonta e `takeEnrollCodeFromUrl()`, che gira in un effect
+   al mount, non scatterebbe mai. Il codice si scrive nel fragment e si forza il `reload()`.
+5. **`reload()` su una WebView morta non fa nulla.** `onRenderProcessGone` (Android) e
+   `onContentProcessDidTerminate` (iOS) segnalano un processo di rendering defunto: la
+   vista va **ricreata**, e si fa cambiando la `key`. La sessione sopravvive perché il
+   token sta in `localStorage`, non nella vista.
+6. **`pullToRefreshEnabled` di react-native-webview è iOS-only** (sta in `IOSWebViewProps`).
+   Su Android il tirare-per-aggiornare lo dà un `RefreshControl` su uno `ScrollView` che
+   avvolge la WebView, la quale gli gira l'overscroll grazie a `nestedScrollEnabled`.
+   **Da collaudare in F7.4**: è l'unico pezzo di questo task che non ha un verifier
+   automatico.
+7. **`expo-status-bar` in SDK 56 non accetta più `backgroundColor`** (edge-to-edge
+   obbligatorio su Android): il colore dietro la status bar lo dà la `SafeAreaView`.
+8. **Lo stack vivo su `:4317` durante il task era `/Applications/Tako.app` (v0.1.6), non
+   il dev server**: risponde 200 su `/staff/index.html` e **404 su `/owner/`**, perché quel
+   bundle è anteriore a F0.3. Non è una regressione — ma chi collauda il guscio su device
+   deve ricordarsi di avere davanti l'appliance *di sviluppo*, non l'app installata.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **Splash nativo NON configurato.** In SDK 56 lo splash di sistema si dichiara solo col
+  plugin `expo-splash-screen`, che qui non è installato e la cui aggiunta avrebbe richiesto
+  un `pnpm install` — cioè toccare `pnpm-lock.yaml` mentre un altro agente lavorava in
+  parallelo sul repo. Al suo posto c'è `src/BootScreen.tsx`: logo Tako su fondo di marca
+  durante il probe (≤1,2 s), che è ciò che l'utente vede davvero subito dopo lo splash di
+  sistema. **Prerequisito esplicito di F7.3/F7.4**: `expo install expo-splash-screen` e
+  `expo.plugins` con `image: ./assets/splash-icon.png`, `backgroundColor: #FBF8F4` —
+  altrimenti `prebuild` genera lo splash bianco di default.
+- **Icone**: non è stato generato nulla di nuovo. `assets/icon.png` e le tre adaptive icon
+  Android erano **già** il logo Tako reale (polpo col telefono) su fondo `#FBF8F4`. La sola
+  cosa che mancava era il fondo di marca dichiarato in `app.json` (`backgroundColor`,
+  `primaryColor`).
+- **Aggiunte non richieste, ma dovute prima delle build native**: `ios.infoPlist` con
+  `NSAppTransportSecurity.NSAllowsLocalNetworking` (senza, iOS blocca l'`http://` in LAN),
+  `NSLocalNetworkUsageDescription` + `NSBonjourServices: ["_http._tcp"]` (senza, iOS 14+
+  non risolve `tako.local` e non chiede nemmeno il permesso). Dichiararle ora costa una
+  riga; scoprirle in F7.3 costa un giro di build.
+
+#### Rischi aperti per F7.3 / F7.4
+
+- **Android e il traffico in chiaro.** `usesCleartextTraffic` **non esiste** nello schema di
+  `app.json` in SDK 56: per la build *release* serve `expo-build-properties`
+  (`android.usesCleartextTraffic: true`) oppure un `networkSecurityConfig` con eccezione per
+  la LAN. Senza, l'APK release **non** parlerà con `http://tako.local:4317` — e sarà una
+  connessione rifiutata muta, non un errore leggibile. Da verificare subito dopo il primo
+  `assembleRelease`, non dopo.
+- **Splash nativo** (vedi sopra): plugin da installare prima di `expo prebuild`.
+- **Pull-to-refresh Android**: la ricetta `ScrollView` + `nestedScrollEnabled` è quella
+  standard ma non è verificabile senza emulatore. Se lo scroll interno della PWA dovesse
+  risultare impastato, la mossa è togliere il wrapper e lasciare il refresh alla PWA.
+- **`/owner/` dal remoto resta 404 in navigazione** (conseguenza nota di F1.3): il guscio
+  mostrerà la schermata di collegamento con il messaggio giusto, ma un telefono *fuori* dal
+  locale non caricherà la shell finché il service worker non l'ha in cache. È il vincolo
+  già annotato in F1, non un difetto del guscio.
+- **Firma**: `com.takoitalia.tako` va registrato nel team Apple Developer (iOS) e il
+  keystore Android generato e persistito — azioni di Manuel, come da piano.
