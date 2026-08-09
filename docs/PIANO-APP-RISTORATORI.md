@@ -1312,3 +1312,144 @@ saltano il probe: è una decisione di chi costruisce la build, non si discute a 
   già annotato in F1, non un difetto del guscio.
 - **Firma**: `com.takoitalia.tako` va registrato nel team Apple Developer (iOS) e il
   keystore Android generato e persistito — azioni di Manuel, come da piano.
+
+---
+
+### Diario esecuzione 2026-08-09 — F3 (notifiche push)
+
+**F3.1, F3.2 — DONE. F3.3 — DONE per la parte automatizzabile**, con il collaudo su
+device fisici che resta a Manuel (checklist in `scripts/test-push-e2e.md`). Nessuna Exit
+di fallimento è scattata; nessuno dei tre task ha consumato più di una iterazione sul
+proprio goal. Commit sul branch `feat/owner-app`: `ea39307` (F3.1), `ff18d20` (F3.2),
+`a4bfdd7` (F3.3).
+
+#### Misure
+
+| Grandezza | Prima di F3 | Dopo F3 |
+|---|---|---|
+| `vitest` root (stack vivo) | 15 file, **132 verdi** | 18 file, **149 verdi** |
+| `vitest` cloud (`test:cloud`) | 7 file, **76 verdi** | 7 file, **76 verdi** (invariato) |
+| `pnpm lint` sui file toccati | 0 errori | **0 errori** |
+| `tsc -p … --noEmit` (server, dashboard, web, db) | pulito | pulito |
+| `owner/app.js` grezzo | 264,3 KB | **271,7 KB** (budget 400) |
+| `owner/app.js` in brotli | 71,8 KB | **73,8 KB** (budget 100) |
+| TTI su Fast 3G | 1573 ms | **1586 ms** (budget 2000), 79 KB sul filo |
+| `POST /api/customer/orders`, mediana su 8 | — | **5,5 ms** con push attiva · **5,0 ms** senza |
+
+Test nuovi: `tests/push-subscriptions.test.ts` (6), `tests/push-dispatch.test.ts` (5),
+`tests/push-triggers.test.ts` (6). Verifier nuovo: `node scripts/test-owner-push.mjs` —
+20 controlli sugli handler del service worker, tutti verdi. `scripts/test-owner-shell.mjs`
+resta verde (13 controlli). Build dell'app owner riproducibile: due build consecutive
+lasciano `git status` pulito su `public/owner/`.
+
+#### `web-push` non ha rotto niente: l'Exit di F3.1 non è servita
+
+L'Exit prevedeva di riscrivere VAPID a mano con `node:crypto` se la dipendenza avesse
+rotto il bundle esbuild. Non è successo, e per una ragione strutturale:
+`scripts/build-server-bundle.mjs` tiene **esterni tutti i pacchetti npm**
+(`external: [...Object.keys(runtimeDeps)]`) e bundla solo il nostro codice — quindi una
+dipendenza npm in più è una riga in più in `package.json`, non un rischio per il bundle.
+`web-push@3.6.7` porta 5 pacchetti, tutti JavaScript puro (niente binari nativi).
+
+#### Cosa è stato trovato strada facendo (e che il piano non prevedeva)
+
+1. **Le chiavi VAPID vanno persistite o le push muoiono in silenzio.** La chiave pubblica
+   è incisa dentro OGNI subscription già registrata dai telefoni: rigenerarla a un riavvio
+   dell'appliance non produce nessun errore da nessuna parte — semplicemente le notifiche
+   smettono di arrivare. Per questo `~/.tako/vapid.json` non è una comodità ma un
+   invariante, ed è testato (`la chiave VAPID è stabile fra due letture`).
+2. **La revoca del device doveva essere un vincolo, non del codice.** `push_subscriptions.
+   session_id → sessions.id ON DELETE CASCADE`: revocare un telefono ne spegne le notifiche
+   perché la riga sparisce. Farlo in applicazione avrebbe significato un telefono revocato
+   che continua a squillare con gli ordini — la peggior forma di revoca, quella che sembra
+   fatta e non lo è.
+3. **`req.user` non porta l'id di sessione**, e legare la subscription all'UTENTE avrebbe
+   voluto dire che revocare un telefono zittisce anche gli altri dello stesso proprietario.
+   `routes/push.ts` risolve la sessione dal token (una query, come `requireAuth`) invece di
+   allargare l'interfaccia condivisa di `middleware/auth.ts` — che è anche il file su cui
+   la concorrenza fra agenti era più probabile.
+4. **Come si osserva una push senza un push service.** Il server gira in un altro processo:
+   non si può spiare `pushDispatch` con un mock, come indicava il piano. La subscription di
+   prova punta a `https://push.invalid/…` (TLD che per RFC 2606 non risolve mai), quindi
+   ogni invio fallisce e `fail_count` sale di **esattamente uno per push tentata**. Contare
+   i fallimenti a database è **più forte** di contare le chiamate a un mock: dimostra che il
+   codice di produzione è arrivato davvero fino alla rete, e che ci è arrivato dopo la
+   risposta HTTP.
+5. **`pushDispatch` prende una dipendenza iniettabile (`PushDeps`) per rete e connettività.**
+   È l'unico modo di verificare la gestione degli errori — un 410, un 500, il fast-fail —
+   senza bussare a un push service vero. Tutto il resto (query, filtri, cancellazioni) resta
+   codice di produzione: `tests/push-dispatch.test.ts` gira in-process contro lo stesso
+   Postgres del server.
+6. **Un 5xx non deve cancellare niente.** Solo 404/410 (endpoint morto) cancellano subito;
+   un errore transitorio incrementa `fail_count` e la riga resta. Dieci fallimenti
+   **consecutivi** la potano, perché alcuni push service non dicono mai "morto": rispondono
+   500 all'infinito. Il contatore si azzera a ogni successo — "consecutivi" deve voler dire
+   consecutivi, ed è testato.
+7. **L'alert scorte parte solo quando la soglia viene sfondata davvero.** Uno scarico che
+   lascia la giacenza sopra il minimo non genera nulla: il rumore è il modo più veloce di
+   far disattivare le notifiche a un ristoratore. Verificato con due movimenti consecutivi
+   sullo stesso articolo.
+8. **Chrome revoca il permesso alle PWA che ricevono una push e non mostrano nulla.** Alcuni
+   push service consegnano push senza payload (succede dopo un riavvio del telefono):
+   l'handler ha un ripiego obbligatorio, non facoltativo.
+9. **Il tap sulla notifica NON deve ricaricare l'app.** `notificationclick` manda la rotta
+   con `postMessage` e mette a fuoco la finestra già aperta. Un `openWindow` su un'app già
+   viva butterebbe via lo stato — il conto a metà, la lista già scorsa — esattamente mentre
+   il ristoratore sta rispondendo a una chiamata. Una finestra `/staff/` aperta non viene
+   dirottata: scope diverso, utente diverso.
+10. **`syncPush()` all'avvio chiude un buco che nessun errore segnalerebbe.** Un telefono
+    ri-arruolato ha perso la sua riga per CASCADE, ma il browser ha ancora la sua
+    subscription: senza ri-registrarla resterebbe muto per sempre, con il permesso concesso
+    e l'interfaccia che dice "Attive". La ri-registrazione è un UPSERT: costa una riga.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **La migrazione è la `0018`, non la `0017`** (§3 D5 e D6 dicevano `0017`): la 0017 è stata
+  consumata da F2 (device + `waiter_calls`). Il piano è ora disallineato su quel numero.
+- **`waiter:called` si aggancia dopo la persistenza di F2.5**, non all'emit nudo indicato in
+  §5 F3.2: è lo stesso punto, ma dopo l'insert in `waiter_calls`.
+- **La disiscrizione passa l'endpoint in QUERY** (`DELETE /api/push/subscribe?endpoint=…`) e
+  non nel corpo: una DELETE con `Content-Type: application/json` e corpo vuoto riceve 400 da
+  Fastify prima di entrare nella route (trappola già incontrata tre volte in F2).
+- **Aggiunta una route non prevista, `GET /api/push/key`**: il browser ha bisogno della
+  chiave pubblica VAPID per `pushManager.subscribe()`, e incidere la chiave nel bundle
+  l'avrebbe legata alla build invece che all'appliance.
+- **Il momento in cui si chiede il permesso è il primo evento live** (`order:new` o
+  `waiter:called`) ricevuto con l'app aperta, più la card sempre presente in *Altro*. Il
+  piano diceva "dopo il primo uso reale": questa è la sua lettura più stretta — il momento
+  in cui la domanda «vuoi che te lo dica anche a app chiusa?» si risponde da sé.
+- **`scripts/test-owner-push.mjs` non era previsto.** Il piano dava F3.3 come interamente
+  manuale; la logica degli handler è però codice normale, e collaudarla su un telefono è il
+  modo più lento e meno affidabile di scoprire un refuso in un campo. Il device resta
+  necessario per permesso, consegna reale e app chiusa: quelli non si simulano.
+
+#### Rischi residui
+
+- **Le push iOS restano il rischio R3 del piano** e non sono ancora state viste arrivare su
+  un telefono vero: F3.3 è "DONE per la parte automatizzabile", non collaudata. Il criterio
+  per aprire **F5.4** (wrapper Expo con APNs) è scritto in `scripts/test-push-e2e.md`: due
+  settimane di misura, più del 10% di notifiche attese e non arrivate su iPhone.
+- **`lib/ai-actions.ts` non è stato agganciato.** La chiamata cameriere fatta dall'assistente
+  del cliente (`ai-actions.ts:347`) e l'alert scorte generato dall'assistente owner
+  (`ai-actions.ts:1437`) emettono il socket ma **non** mandano push — e la prima non
+  persiste nemmeno in `waiter_calls` (già così da F2.5). Sono due righe da aggiungere, ma il
+  piano elencava quattro punti e sono quelli fatti: allargare il perimetro senza dirlo
+  sarebbe stato peggio che lasciarlo scritto qui.
+- **Nessun controllo di quota per ristorante.** Un'appliance con dieci telefoni arruolati
+  manda dieci POST per ogni ordine. È il numero giusto per un ristorante e un problema
+  teorico per un ristorante con cento dispositivi: quando esisterà, il posto è
+  `pushDispatch` (coda in-memory drenata da un `setInterval`, come il briefing WhatsApp).
+- **Le notifiche non si differenziano per ruolo.** Chi ha un telefono arruolato riceve
+  tutto: ordini, chiamate, scorte. Il filtro per interesse (il cassiere non vuole gli alert
+  di magazzino) è materiale di Wave 2, insieme alle preferenze per-dispositivo.
+
+#### Note per i task successivi
+
+- `apps/dashboard/owner-src/lib/push.ts` è il punto unico lato client: `pushState()`
+  distingue i cinque stati (`unsupported`, `needs-install`, `default`, `granted`, `denied`)
+  e ogni schermata nuova deve raccontarli, mai un codice.
+- Le fabbriche del testo delle notifiche (`orderNewNotification`, `waiterCalledNotification`,
+  `inventoryAlertNotification`) stanno in `apps/server/src/lib/push.ts`, non nelle route: una
+  route sa di ordini e scorte, non di come si scrive una notifica.
+- Chi aggiunge un trigger nuovo usa `pushAfterResponse()`, mai `pushDispatch()` diretto in
+  una route: è il `setImmediate` che tiene la push fuori dal percorso critico.
