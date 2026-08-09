@@ -38,6 +38,7 @@ import { startConnectivityMonitor, onConnectivityChange } from './lib/connectivi
 import { getNetworkHealth } from './lib/net-health.js'
 import { startMdns } from './lib/mdns.js'
 import { startTunnel } from './lib/tunnel.js'
+import { remoteGate, rateLimitKey, isTrustedTunnelHost, socketAllowRequest } from './middleware/remoteGate.js'
 import { getLanIPv4s } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
 import { isCloudMode } from './cloud/config.js'
@@ -215,11 +216,34 @@ await fastify.register(rateLimit, {
   global: true,
   max: 100,          // max 100 req per finestra
   timeWindow: 60000, // 1 minuto
-  allowList: rlAllowList,
-  errorResponseBuilder: () => ({
-    error: { code: 'RATE_LIMIT', message: 'Troppe richieste. Riprova tra un minuto.' },
-  }),
+  // Dietro il tunnel TUTTE le richieste arrivano da cloudflared sul loopback: senza una
+  // chiave per-client un solo telefono esaurirebbe il budget di tutti (e in dev il
+  // loopback sarebbe perfino esentato). rateLimitKey usa CF-Connecting-IP SOLO sulle
+  // richieste su Host fidato; per la LAN resta req.ip, identico a prima.
+  keyGenerator: (req) => rateLimitKey(req),
+  // L'esenzione del loopback resta valida solo per la LAN in dev. Il traffico che arriva
+  // sull'Host pubblico NON è mai esentato, anche se cloudflared lo consegna da 127.0.0.1:
+  // altrimenti il tunnel sarebbe l'unico canale senza rate limit.
+  allowList: (req) => !isTrustedTunnelHost(req) && rlAllowList.includes(req.ip),
+  // @fastify/rate-limit fa `throw errorResponseBuilder(...)`: il valore restituito deve
+  // essere un ERRORE con statusCode, altrimenti il nostro error handler globale non trova
+  // `statusCode`, lo classifica come 5xx e risponde 500 invece di 429. Bug pre-esistente
+  // mai visibile in dev (il loopback era esente) e riemerso col tunnel, dove il limite si
+  // raggiunge davvero. `code`/`message` producono l'envelope { error: { code, message } }.
+  errorResponseBuilder: (_req, ctx) => {
+    const err = new Error('Troppe richieste. Riprova tra un minuto.') as Error & { statusCode: number; code: string }
+    err.statusCode = ctx.statusCode ?? 429
+    err.code = 'RATE_LIMIT'
+    return err
+  },
 })
+
+// GATE REMOTO (P0). Registrato DOPO il rate-limit (che così protegge anche il gate stesso
+// dal flood) e PRIMA di ogni route: sull'hostname pubblico tutto ciò che non porta una
+// sessione viva riceve 404, e /staff, /api/setup, /internal, /api/auth/pin-roster e
+// /api/whatsapp/bootstrap-code restano LAN-only anche con una sessione valida.
+// Sul traffico LAN è un no-op: il comportamento del server non cambia di una virgola.
+fastify.addHook('onRequest', remoteGate)
 
 // Health check
 fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString() }))
@@ -276,6 +300,11 @@ await fastify.ready()
       credentials: true,
     },
     pingTimeout: 60000,
+    // Estensione del gate remoto al canale realtime. Socket.io si attacca al server HTTP
+    // SOTTO Fastify: le sue richieste non passano dagli hook onRequest, quindi senza
+    // questo l'hostname pubblico esporrebbe comunque un WebSocket anonimo. In LAN è un
+    // no-op. Vedi middleware/remoteGate.ts.
+    allowRequest: socketAllowRequest,
   })
   setupSocketHandlers(io, fastify)
   // Dettatura vocale (Cmd+K): namespace dedicato + warmup del motore locale
