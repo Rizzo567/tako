@@ -10,6 +10,7 @@ import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/c
 import { round2, ensureOpenBill, restaurantTimezone, dayStartInTz } from '../lib/billing.js'
 import { runAssistant, groqComplete } from '../lib/ai-actions.js'
 import { deductStockForOrder } from '../lib/stock-deduct.js'
+import { pushAfterResponse, orderNewNotification, waiterCalledNotification } from '../lib/push.js'
 
 // Sessione cliente incapsulata nel JWT del cookie tako_table.
 //  • kind 'table'    → legata a un tavolo scansionato (tableId reale).
@@ -520,6 +521,11 @@ export async function customerRoutes(fastify: FastifyInstance) {
       }
     }
 
+    // Push al telefono del ristoratore (F3.2). Va per ULTIMA e via setImmediate:
+    // questo è IL percorso critico dell'app cliente — un cliente che aspetta la
+    // conferma dell'ordine non deve pagare un millisecondo per una notifica.
+    if (order) pushAfterResponse(restaurantId, orderNewNotification(order))
+
     return reply.code(201).send({ data: payload })
   })
 
@@ -599,6 +605,13 @@ export async function customerRoutes(fastify: FastifyInstance) {
     }
 
     io.to(`restaurant:${restaurantId}`).emit('waiter:called', { tableId, tableNumber, type })
+
+    // Push (F3.2). È l'evento in cui la notifica conta di più: il cliente ha alzato
+    // la mano ADESSO, e il ristoratore può benissimo avere il telefono in tasca e
+    // l'app chiusa. Urgenza `high` e TTL 5 minuti (lib/push.ts): una chiamata di
+    // venti minuti fa non va recapitata affatto.
+    pushAfterResponse(restaurantId, waiterCalledNotification({ tableNumber, type }))
+
     return { data: { success: true } }
   })
 
