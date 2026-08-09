@@ -37,6 +37,7 @@ import { startWhatsApp } from './lib/whatsapp.js'
 import { startConnectivityMonitor, onConnectivityChange } from './lib/connectivity.js'
 import { getNetworkHealth } from './lib/net-health.js'
 import { startMdns } from './lib/mdns.js'
+import { startTunnel } from './lib/tunnel.js'
 import { getLanIPv4s } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
 import { isCloudMode } from './cloud/config.js'
@@ -309,6 +310,14 @@ await fastify.ready()
     if (useHttps) console.log(`[tls] HTTPS attivo (cert self-signed) → apri https://tako.local:${PORT}`)
     // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
     startMdns()
+    // Cloudflare Tunnel (opt-in, best-effort): pubblica l'appliance su un hostname HTTPS
+    // per l'app owner fuori dal locale. In try/catch e con .catch() — se cloudflared manca
+    // o esplode NON deve tirare giù il server (stesso trattamento del canale WhatsApp).
+    try {
+      startTunnel().catch(err => console.error('[tunnel] avvio automatico fallito:', err))
+    } catch (err) {
+      console.error('[tunnel] bootstrap saltato:', err)
+    }
     // Heartbeat periodica verso il cloud (best-effort, no-op se CLOUD_BASE_URL assente).
     startHeartbeatLoop(fastify)
     // Monitor connettività internet: stato online/offline → badge dashboard/PWA + fast-fail

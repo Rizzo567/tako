@@ -5,6 +5,7 @@ import QRCode from 'qrcode'
 import { getLanIPv4s, primaryLanIPv4, clientBaseUrl } from '../lib/network.js'
 import { getConnectivity } from '../lib/connectivity.js'
 import { getNetworkHealth } from '../lib/net-health.js'
+import { getTunnelStatus } from '../lib/tunnel.js'
 
 export const systemRoutes: FastifyPluginAsync = async (fastify) => {
   // Stato connettività INTERNET (il core non ne dipende): per il badge offline di dashboard/PWA.
@@ -35,6 +36,9 @@ export const systemRoutes: FastifyPluginAsync = async (fastify) => {
           mdns: `http://tako.local:${port}`,
         },
         qrDataUrl,
+        // Stato del Cloudflare Tunnel (accesso remoto dell'app owner). Mai il token:
+        // solo state + hostname pubblico. 'disabled' = appliance LAN-only.
+        tunnel: getTunnelStatus(),
       },
     }
   })
