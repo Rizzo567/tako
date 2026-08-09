@@ -47,9 +47,52 @@ const FAKE_SESSION = {
   restaurant: { id: 'r', name: 'Trattoria di Prova', slug: 'prova' },
 }
 
+// Dati finti serviti al posto dell'API. Il probe deve misurare il GUSCIO, non lo stato
+// del database della macchina che lo esegue: senza stub servirebbe un ristorante
+// seminato, e il risultato dipenderebbe da quanti tavoli ha oggi.
+// I contenuti sono deliberatamente LUNGHI (nomi di piatti chilometrici, numeri di
+// tavolo strani): l'overflow orizzontale, se c'è, salta fuori qui e non in sala.
+const LONG = 'Tagliatelle al ragù di cinghiale con scaglie di pecorino stagionato'
+const STUBS = {
+  '/api/system/info': { data: { version: '0.1.6', lanUrl: SERVER, remoteUrl: null } },
+  '/api/tables/rooms': { data: [
+    { id: 'r1', name: 'Sala interna con veranda affacciata sul giardino', position: 0, tables: [{ id: 't1' }] },
+    { id: 'r2', name: 'Dehors', position: 1, tables: [{ id: 't9' }] },
+  ] },
+  '/api/tables': { data: [
+    { id: 't1', number: '1', seats: 4, roomId: 'r1', status: 'occupied', posX: 20, posY: 20 },
+    { id: 't2', number: '2', seats: 2, roomId: 'r1', status: 'free', posX: 70, posY: 30 },
+    { id: 't9', number: 'Dehors-12', seats: 8, roomId: 'r2', status: 'waiting', posX: null, posY: null },
+  ] },
+  '/api/tables/waiter-calls': { data: [
+    { id: 'c1', tableId: 't1', tableNumber: 'Dehors-12', type: 'bill', createdAt: new Date().toISOString() },
+  ] },
+  '/api/orders/active': {
+    data: [{
+      id: 'o1', restaurantId: 'r', tableId: 't1', tableNumber: 'Dehors-12', type: 'table',
+      status: 'preparing', total: 128.5, createdAt: new Date().toISOString(),
+      items: [{ id: 'i1', name: LONG, quantity: 2, unitPrice: 18 }],
+    }],
+    meta: { nextBefore: null },
+  },
+  '/api/bills/open': { data: [
+    { id: 'b1', tableId: 't1', tableNumber: 'Dehors-12', covers: 8, subtotal: 128.5, discount: 0, tip: 0, total: 128.5, status: 'open', createdAt: new Date().toISOString() },
+  ] },
+  '/api/bills/summary/today': { data: { revenue: 1234.56, tips: 78.9, billsCount: 27, avgTicket: 45.72 } },
+  '/api/stats/dashboard': { data: { revenue: 1, todayRevenue: 1, avgTicket: 1, totalCovers: 120, billsCount: 27, pendingOrdersCount: 3, dailyRevenue: [], topItems: [{ name: LONG, qty: 12, revenue: 216 }], sessions: {} } },
+}
+
+function stubFor(pathname) {
+  if (STUBS[pathname]) return STUBS[pathname]
+  if (pathname.startsWith('/api/orders/table/')) return { data: [] }
+  if (pathname.startsWith('/api/bills/')) return { data: { id: 'b1', tableNumber: 'Dehors-12', covers: 8, subtotal: 128.5, discount: 0, tip: 0, total: 128.5, status: 'open', createdAt: new Date().toISOString(), payments: [] } }
+  if (pathname.startsWith('/api/')) return { data: [] }
+  return null
+}
+
 const browser = await puppeteer.launch({ executablePath: chrome, headless: 'new', args: ['--no-sandbox'] })
 
-async function newPage(width) {
+async function newPage(width, { stub = false } = {}) {
   const page = await browser.newPage()
   await page.setViewport({ width, height: 860, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
   await page.evaluateOnNewDocument((session, origin) => {
@@ -57,6 +100,18 @@ async function newPage(width) {
     // Endpoint già noti: nessun probe verso host inesistenti a rallentare l'avvio.
     localStorage.setItem('tako.owner.endpoints', JSON.stringify({ lan: origin, remote: null }))
   }, FAKE_SESSION, SERVER)
+
+  if (stub) {
+    await page.setRequestInterception(true)
+    page.on('request', (req) => {
+      const url = new URL(req.url())
+      const body = url.pathname.startsWith('/api/') ? stubFor(url.pathname) : null
+      if (body) return req.respond({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
+      // Il socket non deve nemmeno provarci: qui si misura il layout, non il realtime.
+      if (url.pathname.startsWith('/socket.io')) return req.abort()
+      return req.continue()
+    })
+  }
   return page
 }
 
@@ -100,8 +155,8 @@ console.log('\n▶ TTI su Fast 3G (budget 2 s)')
 // ─── 2. Nessuno scroll orizzontale ────────────────────────────────────────────
 console.log('\n▶ Zero scroll orizzontale (misurato in JS, non a occhio)')
 for (const width of [390, 430]) {
-  const page = await newPage(width)
-  await page.goto(`${SERVER}/owner/`, { waitUntil: 'networkidle2' })
+  const page = await newPage(width, { stub: true })
+  await page.goto(`${SERVER}/owner/`, { waitUntil: 'domcontentloaded' })
   await page.waitForFunction(() => document.querySelectorAll('.ow-bb-tab').length === 5, { timeout: 20000 })
 
   for (const section of ['sala', 'ordini', 'cassa', 'oggi', 'altro']) {
@@ -110,13 +165,17 @@ for (const width of [390, 430]) {
       const order = ['sala', 'ordini', 'cassa', 'oggi', 'altro']
       tabs[order.indexOf(s)].click()
     }, section)
-    await new Promise((r) => setTimeout(r, 260))
+    await new Promise((r) => setTimeout(r, 400))
 
     const m = await page.evaluate(() => {
       // innerWidth è la larghezza LOGICA reale del viewport emulato: è questa che
       // conta, non la dimensione dello screenshot.
+      // Elementi che sfondano il viewport. Si escludono quelli dentro una striscia
+      // che scorre di suo (la barra delle sale): lì sfondare è il comportamento
+      // voluto, e il body non scorre comunque.
+      const inScroller = (el) => !!el.closest('.ow-seg-scroll')
       const over = [...document.querySelectorAll('*')]
-        .filter((el) => el.getBoundingClientRect().right > window.innerWidth + 1)
+        .filter((el) => !inScroller(el) && el.getBoundingClientRect().right > window.innerWidth + 1)
         .slice(0, 3)
         .map((el) => `${el.tagName.toLowerCase()}.${el.className || '(nessuna classe)'}`)
       return {
@@ -127,9 +186,13 @@ for (const width of [390, 430]) {
       }
     })
 
+    // Il body non deve scorrere in orizzontale E nessun elemento deve sfondare il
+    // viewport: senza la seconda condizione un testo lungo verrebbe semplicemente
+    // TAGLIATO da overflow-x: hidden, e il test direbbe "tutto ok" mentre sullo
+    // schermo manca mezza parola.
     check(
       `${width}px · ${section}: scrollWidth ${m.bodyScroll} <= innerWidth ${m.inner}`,
-      m.bodyScroll <= m.inner && m.docScroll <= m.inner,
+      m.bodyScroll <= m.inner && m.docScroll <= m.inner && m.over.length === 0,
       m.over.length ? `sfora: ${m.over.join(', ')}` : '',
     )
   }
