@@ -4,6 +4,8 @@ import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemT
 import { eq, and, asc } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
+import { saveImageBuffer } from '../lib/image-store.js'
+import { maybeStyleDishImage } from '../lib/dish-image-ai.js'
 import OpenAI from 'openai'
 
 const getAI = () => {
@@ -194,6 +196,72 @@ export async function menuRoutes(fastify: FastifyInstance) {
     io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
     io.to(`menu:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
     return { data: item }
+  })
+
+  // Foto del piatto SCATTATA COL TELEFONO (F4.3). Carica e assegna in un colpo solo.
+  //
+  // Perché una rotta nuova e non `POST /api/uploads/image` + `PATCH /items/:id`:
+  // l'upload e l'assegnazione sono la stessa azione per chi la compie ("questa foto
+  // è di questo piatto"), e spezzarla in due lascia un rifiuto possibile in mezzo —
+  // la foto stilizzata a pagamento salvata su disco e mai assegnata a niente.
+  //
+  // La pipeline è ESATTAMENTE quella che finora era raggiungibile solo da WhatsApp
+  // (lib/whatsapp.ts → azione hidden `set_dish_image`): stesso `maybeStyleDishImage`
+  // (che fa da sé il fast-fail su `isOnline()` e sul flag `aiPhotoEnabled`), stesso
+  // `saveImageBuffer` (magic bytes + re-encode sharp + quota per ristorante). Qui non
+  // si duplica nessuna regola: si apre un secondo ingresso alla stessa.
+  fastify.post('/items/:itemId/photo', { preHandler: requireAuth }, async (req, reply) => {
+    const { itemId } = req.params as { itemId: string }
+    // Ownership PRIMA di leggere il corpo: senza, un itemId altrui costerebbe
+    // comunque 10 MB di upload e una generazione Gemini a carico del ristorante.
+    if (!(await ownsItem(itemId, req.user!.restaurantId))) {
+      return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    }
+
+    const data = await req.file()
+    if (!data) return reply.code(400).send({ error: { code: 'NO_FILE', message: 'Nessun file caricato' } })
+    // toBuffer rispetta il limite multipart (10 MB) impostato in index.ts. Il client
+    // ridimensiona già a 1600 px di lato lungo: qui il limite è la rete di sicurezza,
+    // non il percorso normale.
+    const original = await data.toBuffer()
+
+    // Best-effort: se lo stile AI è spento, l'appliance è offline o Gemini fallisce,
+    // torna lo STESSO buffer — e allora `styled` è false. Il confronto è per
+    // riferimento, quindi non mente: nessun altro modo di sapere se ha davvero girato.
+    const buf = await maybeStyleDishImage(req.user!.restaurantId, original, data.mimetype || 'image/jpeg')
+    const styled = buf !== original
+
+    const res = await saveImageBuffer(req.user!.restaurantId, buf)
+    if ('error' in res) {
+      const status = res.code === 'STORAGE_FULL' ? 507 : 400
+      return reply.code(status).send({ error: { code: res.code, message: res.error } })
+    }
+
+    const [item] = await db.update(menuItems)
+      .set({ imageUrl: res.url, updatedAt: new Date() })
+      .where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId)))
+      .returning()
+    if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+
+    // Stessa coppia di emit di PATCH /items/:itemId: la dashboard riceve la riga
+    // completa, la room pubblica del menu solo i campi che il cliente può vedere.
+    io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
+    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', {
+      itemId,
+      item: {
+        id: item.id,
+        sectionId: item.sectionId,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        imageUrl: item.imageUrl,
+        allergens: item.allergens,
+        tags: item.tags,
+        available: item.available,
+      },
+    })
+
+    return { data: { id: item.id, imageUrl: item.imageUrl, styled } }
   })
 
   // Delete item

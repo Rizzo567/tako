@@ -115,7 +115,8 @@ function stubFor(pathname) {
   if (pathname.startsWith('/api/inventory/') && pathname.endsWith('/movements')) {
     return { data: { id: 'mv1', type: 'load', quantity: 1 } }
   }
-  if (pathname.startsWith('/api/menus/items/')) return { data: { id: 'mi1', available: false, price: 24, imageUrl: '/uploads/r/x.jpg' } }
+  if (pathname.endsWith('/photo')) return { data: { id: 'mi1', imageUrl: '/uploads/r/x.jpg', styled: false } }
+  if (pathname.startsWith('/api/menus/items/')) return { data: { id: 'mi1', available: false, price: 24, imageUrl: null } }
   if (pathname.startsWith('/api/')) return { data: [] }
   return null
 }
@@ -132,8 +133,14 @@ async function newPage(width = 390) {
     localStorage.setItem('tako.owner.endpoints', JSON.stringify({ lan: origin, remote: null }))
     // Contatore di tap: fase di CATTURA sul document, così conta anche i click che
     // un handler più interno fermerebbe. È il numero che i goal di F4 vincolano.
+    //
+    // Solo eventi FIDATI (`isTrusted`): quelli che nascono da un dito o dal mouse
+    // vero — che è ciò che puppeteer sintetizza via CDP. I click generati dal
+    // codice (`input.click()` per aprire la fotocamera, per esempio) sono lavoro
+    // dell'app, non gesti dell'utente: contarli farebbe sembrare da 4 tap un
+    // flusso che il pollice risolve in 3.
     window.__taps = 0
-    document.addEventListener('click', () => { window.__taps++ }, true)
+    document.addEventListener('click', (e) => { if (e.isTrusted) window.__taps++ }, true)
   }, FAKE_SESSION, SERVER)
 
   await page.setRequestInterception(true)
@@ -217,6 +224,54 @@ console.log('\n▶ F4.2 — segnare un piatto finito (budget: 3 tap)')
   const label = await page.$eval('.ow-avail', (el) => el.textContent.trim())
   check('la riga dice subito «Finito»', label === 'Finito', `pastiglia: "${label}"`)
   check('nessun foglio si è aperto', (await page.$('.ow-sheet')) === null)
+  await page.close()
+}
+
+// ─── F4.3 — la foto: fotocamera in ≤ 3 tap, e il ridimensionamento a 1600 px ──
+console.log('\n▶ F4.3 — foto del piatto (budget: 3 tap per aprire la fotocamera)')
+{
+  const { page, calls, taps } = await newPage()
+  await tap(page, '.ow-bb-tab', { nth: 4 })        // 1. Altro
+  await tap(page, '.ow-hub-tile[data-sub="menu"]') // 2. Menu
+
+  // Il terzo tap deve aprire il SELETTORE DI FILE (sul telefono: la fotocamera).
+  // `waitForFileChooser` è l'unico modo di osservarlo: in headless il dialogo di
+  // sistema non esiste, ma l'evento CDP che lo aprirebbe sì.
+  const [chooser] = await Promise.all([
+    page.waitForFileChooser({ timeout: 8000 }),
+    tap(page, '.ow-thumb'),                        // 3. la miniatura/fotocamera
+  ])
+  const n = await taps()
+  check(`${n} tap ≤ 3 per aprire la fotocamera`, n <= 3, 'sequenza: Altro → Menu → miniatura')
+  check('il selettore accetta un solo file', !chooser.isMultiple())
+  await chooser.cancel()
+
+  // Ora la foto vera. Un JPEG 3000×2000 (quello che esce da un telefono) viene
+  // consegnato all'input come farebbe la fotocamera: se `resizeForUpload` non
+  // lavorasse, il lato lungo resterebbe 3000 e sul filo passerebbero megabyte.
+  const shot = await page.evaluate(async () => {
+    const c = document.createElement('canvas')
+    c.width = 3000; c.height = 2000
+    const ctx = c.getContext('2d')
+    const grad = ctx.createLinearGradient(0, 0, 3000, 2000)
+    grad.addColorStop(0, '#ED7159'); grad.addColorStop(1, '#2A1F1A')
+    ctx.fillStyle = grad; ctx.fillRect(0, 0, 3000, 2000)
+    const blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.92))
+    const file = new File([blob], 'piatto.jpg', { type: 'image/jpeg' })
+    const dt = new DataTransfer()
+    dt.items.add(file)
+    const input = document.querySelector('input[type="file"]')
+    input.files = dt.files
+    input.dispatchEvent(new Event('change', { bubbles: true }))
+    return blob.size
+  })
+  await new Promise((r) => setTimeout(r, 1200))
+
+  const post = calls.find((c) => /\/api\/menus\/items\/[^/]+\/photo$/.test(c.path))
+  check('la foto parte verso la rotta nuova', !!post, post ? `${post.method} ${post.path}` : 'nessuna POST osservata')
+  const msg = await page.$eval('.ow-warn-ok', (el) => el.textContent.trim()).catch(() => null)
+  check('la foto è stata ridotta a 1600 px di lato lungo', !!msg && /1600×1067/.test(msg),
+    msg ? `messaggio: "${msg}" · originale ${Math.round(shot / 1024)} KB a 3000×2000` : 'nessun esito mostrato')
   await page.close()
 }
 

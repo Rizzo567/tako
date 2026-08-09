@@ -12,9 +12,10 @@
 // (routes/menu.ts) e `GET /api/customer/.../menu` filtra su `available`.
 //
 // Il prezzo, che invece si cambia una volta a stagione, sta dietro un tap in più.
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useApp } from '../lib/app'
 import { useLiveEvent, useLiveReload } from '../lib/live'
+import { resizeForUpload } from '../lib/photo'
 import { Badge, Btn, Card, EmptyState, Skeleton, euro } from '../ui/kit'
 import { Icon } from '../ui/icons'
 
@@ -42,6 +43,53 @@ interface MenuHead {
   position: number
 }
 
+/**
+ * Miniatura del piatto.
+ *
+ * IN SALA (LAN) l'`<img src>` punta al file e basta: `/uploads/*` è servito senza
+ * gate. DA REMOTO no — una richiesta di immagine è una navigazione del browser e non
+ * porta l'header Authorization, quindi il gate del tunnel (F1.3) risponde 404 e la
+ * foto non si vede. Lì si passa da `api.blobUrl()`, che scarica con fetch + Bearer.
+ * Il blob URL si revoca all'uscita: senza, un menu lungo sfoglia decine di MB.
+ */
+function DishThumb({ url, onPick, busy }: { url: string | null; onPick: () => void; busy: boolean }) {
+  const { api, remote } = useApp()
+  const [src, setSrc] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!url) { setSrc(null); return }
+    if (!remote) { setSrc(api.url(url)); return }
+    let revoke: string | null = null
+    let alive = true
+    void api.blobUrl(url).then((b) => {
+      if (!alive) { if (b) URL.revokeObjectURL(b); return }
+      revoke = b
+      setSrc(b)
+    })
+    return () => {
+      alive = false
+      if (revoke) URL.revokeObjectURL(revoke)
+    }
+  }, [api, url, remote])
+
+  return (
+    <button
+      type="button"
+      className="press ow-thumb"
+      data-has={src ? '1' : '0'}
+      onClick={onPick}
+      disabled={busy}
+      aria-label={url ? 'Cambia la foto del piatto' : 'Scatta la foto del piatto'}
+    >
+      {busy
+        ? <span className="ow-spin" style={{ width: 18, height: 18 }} />
+        : src
+          ? <img src={src} alt="" />
+          : <Icon name="camera" size={18} stroke={2.1} />}
+    </button>
+  )
+}
+
 export function MenuScreen() {
   const { api } = useApp()
   const [menus, setMenus] = useState<MenuHead[] | null>(null)
@@ -53,6 +101,12 @@ export function MenuScreen() {
   // Le righe già commutate localmente: l'interfaccia risponde al dito subito e la
   // riga resta coerente anche prima che il fetch di conferma torni.
   const [pending, setPending] = useState<Record<string, boolean>>({})
+  // Foto (F4.3): un solo <input file> per tutta la schermata, riusato — il piatto a
+  // cui appartiene lo scatto sta nel ref, non nel DOM.
+  const fileRef = useRef<HTMLInputElement>(null)
+  const targetRef = useRef<string | null>(null)
+  const [uploading, setUploading] = useState<string | null>(null)
+  const [photoMsg, setPhotoMsg] = useState<{ tone: 'ok' | 'err'; text: string } | null>(null)
 
   useEffect(() => {
     api.get<MenuHead[]>('/menus')
@@ -94,6 +148,41 @@ export function MenuScreen() {
     }
   }
 
+  const pickPhoto = (itemId: string) => {
+    targetRef.current = itemId
+    setPhotoMsg(null)
+    // Lo stesso input riusato: senza azzerare `value`, riscegliere LO STESSO file non
+    // fa scattare `change` e il ristoratore crede che l'app si sia piantata.
+    if (fileRef.current) fileRef.current.value = ''
+    fileRef.current?.click()
+  }
+
+  const onPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    const itemId = targetRef.current
+    if (!file || !itemId) return
+    setUploading(itemId)
+    setPhotoMsg(null)
+    try {
+      const { blob, filename, shrunk, width, height } = await resizeForUpload(file)
+      const out = await api.upload<{ imageUrl: string; styled: boolean }>(`/menus/items/${itemId}/photo`, blob, filename)
+      setPhotoMsg({
+        tone: 'ok',
+        text: out.styled
+          ? 'Foto migliorata dall\'AI e messa a menu.'
+          : shrunk
+            ? `Foto messa a menu (ridotta a ${width}×${height}).`
+            : 'Foto messa a menu.',
+      })
+      await load()
+    } catch (err) {
+      setPhotoMsg({ tone: 'err', text: err instanceof Error ? err.message : 'Foto non caricata' })
+    } finally {
+      setUploading(null)
+      targetRef.current = null
+    }
+  }
+
   if (!menus && failed) {
     return <EmptyState icon="menu" title="Menu non disponibile" sub="L'appliance non risponde: riprova quando torni in sala." />
   }
@@ -110,6 +199,25 @@ export function MenuScreen() {
 
   return (
     <div className="ow-stack">
+      {/* `capture="environment"`: su iPhone e Android apre la fotocamera POSTERIORE
+          invece della galleria — il gesto è "fotografo il piatto", non "cerco un
+          file". Chi vuole la galleria la raggiunge comunque dal selettore di sistema. */}
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        hidden
+        onChange={(e) => void onPhoto(e)}
+      />
+
+      {photoMsg && (
+        <div className={photoMsg.tone === 'ok' ? 'ow-warn ow-warn-ok' : 'ow-enroll-err'}>
+          <Icon name={photoMsg.tone === 'ok' ? 'check' : 'alert'} size={16} />
+          {photoMsg.text}
+        </div>
+      )}
+
       {menus.length > 1 && (
         <div className="ow-seg-scroll">
           {menus.map((m) => (
@@ -143,6 +251,7 @@ export function MenuScreen() {
               const available = pending[i.id] ?? i.available
               return (
                 <div key={i.id} className="ow-menu-row">
+                  <DishThumb url={i.imageUrl} busy={uploading === i.id} onPick={() => pickPhoto(i.id)} />
                   <button type="button" className="press ow-menu-main" onClick={() => setEdit(i)}>
                     <span className="ow-menu-name">{i.name}</span>
                     <span className="num ow-menu-price">{euro(i.price)}</span>
