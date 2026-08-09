@@ -56,3 +56,24 @@ export const deviceEnrollCodes = pgTable('device_enroll_codes', {
   sessionId: uuid('session_id'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
+
+// Subscription Web Push del telefono arruolato (F3.1, migrazione 0018).
+// Il legame con `sessions` è ON DELETE CASCADE: revocare il dispositivo spegne le
+// sue notifiche senza che nessun codice se ne debba ricordare.
+export const pushSubscriptions = pgTable('push_subscriptions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  restaurantId: uuid('restaurant_id').notNull().references(() => restaurants.id, { onDelete: 'cascade' }),
+  sessionId: uuid('session_id').notNull().references(() => sessions.id, { onDelete: 'cascade' }),
+  endpoint: text('endpoint').notNull().unique(),
+  p256dh: text('p256dh').notNull(),
+  auth: text('auth').notNull(),
+  userAgent: text('user_agent'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  lastSuccessAt: timestamp('last_success_at', { withTimezone: true }),
+  // Errori CONSECUTIVI (azzerato a ogni successo): 404/410 cancellano subito, il
+  // contatore pota le subscription che falliscono per sempre senza dire mai 410.
+  failCount: integer('fail_count').default(0).notNull(),
+}, (t) => ({
+  restaurantIdx: index('push_subscriptions_restaurant_idx').on(t.restaurantId),
+  sessionIdx: index('push_subscriptions_session_idx').on(t.sessionId),
+}))

@@ -33,6 +33,7 @@ import { shiftRoutes } from './routes/shifts.js'
 import { menuI18nRoutes } from './routes/menu-i18n.js'
 import { aiOwnerRoutes } from './routes/ai-owner.js'
 import { whatsappRoutes } from './routes/whatsapp.js'
+import { pushRoutes } from './routes/push.js'
 import { startWhatsApp } from './lib/whatsapp.js'
 import { startConnectivityMonitor, onConnectivityChange } from './lib/connectivity.js'
 import { getNetworkHealth } from './lib/net-health.js'
@@ -297,6 +298,7 @@ await fastify.register(shiftRoutes, { prefix: '/api/shifts' })
 await fastify.register(menuI18nRoutes, { prefix: '/api/customer' })
 await fastify.register(aiOwnerRoutes, { prefix: '/api/ai/owner' })
 await fastify.register(whatsappRoutes, { prefix: '/api/whatsapp' })
+await fastify.register(pushRoutes, { prefix: '/api/push' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
