@@ -49,6 +49,14 @@ export interface Api {
   blobUrl(path: string): Promise<string | null>
   /** Invia un file in multipart (foto piatto). Ritorna il `data` della risposta. */
   upload<T>(path: string, file: Blob, filename: string, field?: string): Promise<T>
+  /**
+   * POST che restituisce la `Response` GREZZA, senza spacchettare la busta: serve
+   * all'unica rotta che non risponde in JSON ma in `text/event-stream` (il copilot).
+   * Il corpo si legge a chunk da chi chiama; qui si mette solo il Bearer, che un
+   * `EventSource` non saprebbe mandare — ed è il motivo per cui l'SSE del copilot
+   * passa da `fetch` e non da `EventSource`.
+   */
+  stream(path: string, body: unknown, signal?: AbortSignal): Promise<Response>
 }
 
 export function createApi(deps: ApiDeps): Api {
@@ -120,6 +128,24 @@ export function createApi(deps: ApiDeps): Api {
       } catch {
         return null
       }
+    },
+
+    // SSE del copilot. Non usa `envelope()` perché la risposta NON è JSON: è uno
+    // stream che va letto mentre arriva. Un 401 chiude comunque la sessione come
+    // ogni altra chiamata; per il resto la Response torna così com'è e il chiamante
+    // decide se leggerla a chunk o ripiegare sul non-streaming.
+    stream: async (path: string, body: unknown, signal?: AbortSignal) => {
+      const headers = new Headers({ 'Content-Type': 'application/json', Accept: 'text/event-stream' })
+      const token = deps.token()
+      if (token) headers.set('Authorization', `Bearer ${token}`)
+      const res = await fetch(`${deps.base()}/api${path}`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+        ...(signal ? { signal } : {}),
+      })
+      if (res.status === 401) deps.onUnauthorized?.()
+      return res
     },
 
     // Multipart. Il Content-Type NON si imposta a mano: il browser deve poterci

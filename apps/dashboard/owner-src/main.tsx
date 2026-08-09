@@ -15,6 +15,7 @@ import { OrdiniScreen } from './screens/ordini'
 import { CassaScreen } from './screens/cassa'
 import { OggiScreen } from './screens/oggi'
 import { AltroScreen } from './screens/altro'
+import { CopilotScreen } from './screens/copilot'
 import { MagazzinoScreen } from './screens/magazzino'
 import { MenuScreen } from './screens/menu'
 import { AndamentoScreen } from './screens/andamento'
@@ -130,6 +131,7 @@ function Shell() {
     <div className="ow-app">
       <Header title={title} net={net} onNetClick={recheck} onBack={sub ? closeSub : undefined} />
       <div className="ow-scroll" ref={scrollRef}>
+        {sub === 'copilot' && <CopilotScreen />}
         {sub === 'magazzino' && <MagazzinoScreen />}
         {sub === 'menu' && <MenuScreen />}
         {sub === 'andamento' && <AndamentoScreen />}
