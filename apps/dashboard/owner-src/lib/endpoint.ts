@@ -5,9 +5,16 @@
 //
 //   (1) http://tako.local:4317     LAN, ~5 ms, funziona anche con internet giù
 //        │ timeout 1200 ms / errore di rete
-//   (2) https://<host>.box…        tunnel Cloudflare, HTTPS valido, da qualunque rete
-//        │ entrambi falliti
-//   (3) offline                    ultima snapshot in cache, sola lettura
+//   (2) l'ORIGINE che serve la pagina  (http://192.168.1.50:4317 e simili)
+//        │ non raggiungibile
+//   (3) https://<host>.box…        tunnel Cloudflare, HTTPS valido, da qualunque rete
+//        │ tutti falliti
+//   (4) offline                    ultima snapshot in cache, sola lettura
+//
+// Il passo (2) esiste perché `tako.local` non è l'unico modo di arrivare all'appliance:
+// su una rete dove il mDNS non passa (WiFi ospiti, isolation, Android che non risolve
+// `.local`) il ristoratore apre l'app per IP, e senza questo passo il badge direbbe
+// «Non raggiungibile» mentre la pagina che lo mostra è appena arrivata da lì.
 //
 // Tre regole che qui valgono più di ogni ottimizzazione:
 //
@@ -144,6 +151,47 @@ export async function probe(base: string, timeoutMs: number, token?: string | nu
   }
 }
 
+// ─────────────────────────── Origine servente ───────────────────────────
+
+/**
+ * L'indirizzo da cui la pagina è stata caricata. È un endpoint a tutti gli effetti:
+ * se l'app è a schermo, quell'indirizzo ha funzionato almeno una volta. Fuori dal
+ * browser (o in un contesto sandboxed, dove `origin` è la stringa "null") vale null.
+ */
+function currentOrigin(): string | null {
+  try {
+    const o = window.location.origin
+    return o && o !== 'null' ? o : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * L'origine è un indirizzo di RETE LOCALE?
+ *
+ * Serve a non dichiarare «In sala» un'app aperta dal tunnel: il badge verde non è
+ * decorazione, è ciò che abilita le azioni che si fanno solo stando nel locale. Sono
+ * LAN: `localhost`, un IP privato, un nome che finisce in `.local` e un hostname a
+ * etichetta singola (`mac-di-manuel`) — quelli li risolve solo la rete di casa.
+ * Qualunque nome pubblico (`x.box.takoitalia.com`) non lo è.
+ */
+export function isLanOrigin(url: string): boolean {
+  let host: string
+  try { host = new URL(url).hostname } catch { return false }
+  if (host === 'localhost' || host === '::1' || host === '[::1]') return true
+  if (host.endsWith('.local')) return true
+  if (!host.includes('.')) return true
+  const m = /^(\d{1,3})\.(\d{1,3})\.\d{1,3}\.\d{1,3}$/.exec(host)
+  if (!m) return false
+  const a = Number(m[1])
+  const b = Number(m[2])
+  return a === 10 || a === 127
+    || (a === 192 && b === 168)
+    || (a === 172 && b >= 16 && b <= 31)
+    || (a === 169 && b === 254)
+}
+
 // ─────────────────────────── Selezione ───────────────────────────
 
 export interface ResolveOptions {
@@ -152,6 +200,8 @@ export interface ResolveOptions {
   token?: string | null
   /** Forza il salto del probe LAN (default: rete cellulare). */
   skipLan?: boolean
+  /** Origine da cui la pagina è servita (default: `window.location.origin`). */
+  origin?: string | null
 }
 
 /**
@@ -162,15 +212,40 @@ export async function resolveEndpoint(opts: ResolveOptions = {}): Promise<Endpoi
   const endpoints = opts.endpoints ?? loadEndpoints()
   const token = opts.token ?? null
   const skipLan = opts.skipLan ?? shouldSkipLanProbe()
+  const origin = normalizeBase(opts.origin ?? currentOrigin())
+
+  // L'origine è un candidato IN PIÙ solo quando non è già uno dei due endpoint noti.
+  // Se è l'host del tunnel resta «da remoto»: ci pensa il ramo remoto qui sotto.
+  const originKind: 'lan' | 'remote' | null =
+    !origin || origin === endpoints.lan
+      ? null
+      : origin === endpoints.remote || !isLanOrigin(origin)
+        ? 'remote'
+        : 'lan'
 
   if (endpoints.lan && !skipLan) {
     if (await probe(endpoints.lan, lanProbeTimeoutMs(), token)) {
       return select('lan', endpoints.lan)
     }
   }
+  // Appliance raggiunta per IP o con un hostname scritto a mano: stessa velocità e
+  // stessa rete di `tako.local`, quindi stesso badge e stesso budget di attesa. Su
+  // rete cellulare si salta come il probe LAN: lì un IP privato non risponde mai.
+  if (origin && originKind === 'lan' && !skipLan) {
+    if (await probe(origin, lanProbeTimeoutMs(), token)) {
+      return select('lan', origin)
+    }
+  }
   if (endpoints.remote) {
     if (await probe(endpoints.remote, REMOTE_PROBE_TIMEOUT_MS, token)) {
       return select('remote', endpoints.remote)
+    }
+  }
+  // App aperta dal tunnel prima ancora di aver imparato gli endpoint: l'origine è
+  // l'unico indirizzo che si conosce, e va usata SENZA spacciarla per «in sala».
+  if (origin && originKind === 'remote' && origin !== endpoints.remote) {
+    if (await probe(origin, REMOTE_PROBE_TIMEOUT_MS, token)) {
+      return select('remote', origin)
     }
   }
   return { kind: 'offline', baseUrl: '', since: Date.now() }

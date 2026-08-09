@@ -68,12 +68,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }), [setSession])
 
   useEffect(() => {
-    const stored = loadEndpoints()
-    // Finché gli endpoint non sono noti si usa l'origine da cui l'app è stata
-    // caricata: per definizione è un endpoint che funziona.
-    const endpoints = { lan: stored.lan ?? window.location.origin, remote: stored.remote }
+    // L'origine da cui l'app è stata caricata NON si passa più come se fosse la LAN:
+    // `resolveEndpoint` la sonda da sé e la classifica (rete locale o tunnel). Così
+    // l'appliance raggiunta per IP risulta «in sala» e il tunnel resta «da remoto».
     const manager = createEndpointManager({
-      endpoints,
+      endpoints: loadEndpoints(),
       token: tokenRef.current,
       onChange: (s) => { baseRef.current = s.baseUrl; setEndpoint(s) },
     })
