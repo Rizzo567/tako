@@ -1523,7 +1523,7 @@ la gesture dal bordo su iOS chiudono la sotto-schermata invece di uscire dall'ap
 4. **`res.text()` si mangia il BOM.** Il primo test sul BOM UTF-8 falliva pur essendo il BOM
    presente: la specifica fetch impone al decoder di rimuoverlo. Si verifica sui **byte**
    (`EF BB BF` da `arrayBuffer()`), non sul testo decodificato. Nel sorgente il BOM è scritto
-   `'﻿'` e non come carattere invisibile: un editor che "ripulisce" il file lo
+   `'\uFEFF'` e non come carattere invisibile: un editor che "ripulisce" il file lo
    toglierebbe senza che nessun test se ne accorga a occhio — ed è anche l'unica forma che
    `no-irregular-whitespace` accetta.
 5. **Il tetto dei 365 giorni: rifiuto, non troncamento.** `insights.ts` tronca in silenzio
