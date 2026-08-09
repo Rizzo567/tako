@@ -25,7 +25,7 @@
 //     `loadDeviceSecret()` senza toccare il resto.
 import { join } from 'node:path'
 import { homedir } from 'node:os'
-import { primaryLanIPv4, clientPort, mdnsHost } from './network.js'
+import { primaryLanIPv4, clientPort, mdnsHost, remoteHost } from './network.js'
 import {
   existsSync,
   mkdirSync,
@@ -326,8 +326,15 @@ export async function heartbeat(): Promise<HeartbeatResult> {
     clientPort: number
     lanHost: string
     lanIp?: string
+    remoteHost?: string
   } = { credentialsVersion: s.credentialsVersion, clientPort: clientPort(), lanHost: mdnsHost() }
   if (lanIp) hbBody.lanIp = lanIp
+  // Hostname pubblico del tunnel: STESSO trattamento dei campi LAN — fuori dal payload
+  // firmato (integrità dal TLS verso il control-plane), ri-validato lato cloud. Lo
+  // inviamo solo se il tunnel è configurato e l'hostname è ben formato: un'appliance
+  // LAN-only non tocca il valore remoto memorizzato.
+  const remote = remoteHost()
+  if (remote) hbBody.remoteHost = remote
 
   let res: Response
   try {

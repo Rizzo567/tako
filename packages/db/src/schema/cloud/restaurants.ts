@@ -30,6 +30,11 @@ export const cloudAppliances = pgTable('cloud_appliances', {
   lanIp: text('lan_ip'),
   clientPort: integer('client_port'),
   lanHost: text('lan_host'),
+  // Hostname PUBBLICO dell'appliance via Cloudflare Tunnel (secondo endpoint del
+  // dual-endpoint LAN-first dell'app owner). Pubblicato dalla stessa heartbeat e
+  // validato in scrittura (isValidRemoteHost): FQDN pubblico, mai *.local, mai IP
+  // nudi. NULL = appliance senza tunnel → app owner LAN-only.
+  remoteHost: text('remote_host'),
   pairedAt: timestamp('paired_at', { withTimezone: true }).defaultNow().notNull(),
   lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
   revokedAt: timestamp('revoked_at', { withTimezone: true }),

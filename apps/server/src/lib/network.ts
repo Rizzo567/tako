@@ -1,6 +1,7 @@
 // Indirizzi LAN del device host: servono per dire ai tablet/telefoni a quale
 // URL collegarsi (schermata "collega dispositivi" dell'onboarding).
 import { networkInterfaces } from 'os'
+import { tunnelHostname } from './tunnel.js'
 
 /** IPv4 non-loopback delle interfacce attive (es. WiFi del ristorante). */
 export function getLanIPv4s(): string[] {
@@ -112,6 +113,64 @@ export function lanTableUrl(localRestaurantId: string, qrToken: string): string 
  */
 export function ipTableUrl(localRestaurantId: string, qrToken: string): string {
   return `${clientBaseUrl()}/${tablePath(localRestaurantId, qrToken)}`
+}
+
+/**
+ * Hostname PUBBLICO dell'appliance (endpoint remoto via Cloudflare Tunnel) ben formato.
+ * Doppio uso, esattamente come `isPrivateLanIPv4`:
+ *  - appliance: validare l'hostname prima di pubblicarlo al cloud via heartbeat;
+ *  - cloud (heartbeat): non scrivere MAI in `cloud_appliances.remote_host` un valore
+ *    malformato — quel campo diventa un URL che l'app owner apre.
+ *
+ * Difensivo per costruzione: FQDN minuscolo, ≥2 label, TLD alfabetico, label senza
+ * trattini in testa/coda. Rifiuta esplicitamente:
+ *  - i nomi mDNS `*.local` (sono l'endpoint LAN, non quello remoto: confonderli
+ *    manderebbe l'app owner sul percorso sbagliato);
+ *  - gli IP nudi (un IP non è un hostname con certificato TLS valido);
+ *  - schema, porta, path, credenziali, spazi (qui si accetta SOLO l'host).
+ */
+export function isValidRemoteHost(host: string): boolean {
+  const h = String(host ?? '').trim().toLowerCase()
+  if (h.length < 4 || h.length > 253) return false
+  if (/[^a-z0-9.-]/.test(h)) return false           // niente schema/porta/path/spazi
+  if (h.endsWith('.local')) return false            // è l'endpoint LAN, non il remoto
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(h)) return false // niente IP nudi
+  const labels = h.split('.')
+  if (labels.length < 2) return false               // niente hostname a label singola
+  if (!/^[a-z]{2,63}$/.test(labels[labels.length - 1]!)) return false // TLD alfabetico
+  return labels.every((l) => /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/.test(l))
+}
+
+/**
+ * Hostname pubblico CORRENTE di questa appliance, se il tunnel è configurato. Precedenza
+ * all'hostname dichiarato (`TAKO_TUNNEL_HOSTNAME`, tunnel nominato), poi a quello scoperto
+ * dall'output di un quick tunnel. null = appliance LAN-only (degrado pulito, non rottura).
+ * Il valore è ri-validato qui: un hostname malformato equivale ad assente.
+ */
+export function remoteHost(): string | null {
+  const h = tunnelHostname()
+  if (!h) return null
+  const norm = h.trim().toLowerCase()
+  return isValidRemoteHost(norm) ? norm : null
+}
+
+/**
+ * Base URL REMOTA dell'appliance (`https://<hostname>`), secondo endpoint del dual-endpoint
+ * LAN-first. Sempre https: il tunnel termina TLS con un certificato valido — è quello che
+ * sblocca service worker, Web Push e getUserMedia fuori dalla LAN. null se non configurato.
+ */
+export function remoteBaseUrl(): string | null {
+  const h = remoteHost()
+  return h ? `https://${h}` : null
+}
+
+/**
+ * Base URL LAN dell'appliance stessa (porta server, non porta PWA cliente): è il PRIMO
+ * endpoint provato dall'app owner. Usa il nome mDNS, stabile ai cambi di IP.
+ */
+export function lanBaseUrl(): string {
+  const port = Number(process.env['PORT'] ?? 3001)
+  return `http://${mdnsHost()}:${port}`
 }
 
 /** Modalità del QR tavolo. 'lan' = resiliente a internet giù (mDNS tako.local); 'cloud' = resolver pubblico. */

@@ -231,3 +231,85 @@ describe('/pair/heartbeat — proof-of-possession ed25519 (SEC-003/007)', () => 
     expect(res.json().data.action).toBe('revoke')
   })
 })
+
+// F1.2 — remote_host: l'heartbeat pubblica anche l'hostname PUBBLICO del tunnel (secondo
+// endpoint del dual-endpoint LAN-first dell'app owner). Stessa disciplina dei campi LAN:
+// fuori dal payload firmato, validato in scrittura, e un valore invalido NON deve MAI
+// cancellare o dirottare l'ultimo hostname valido pubblicato.
+describe('/pair/heartbeat — remoteHost (dual-endpoint LAN-first)', () => {
+  async function pairedAppliance(email: string) {
+    const a = await makeOwnerWithRestaurant(email)
+    const code = (await genCode(a.sessionCookie, a.restaurantId)).json().data.code as string
+    const kp = newKeypair()
+    const claim = await ctx.app.inject({ url: '/api/pair/claim', ...body({ code, devicePubKey: kp.publicKeyPem }) })
+    const data = claim.json().data
+    return { ...a, kp, applianceId: data.applianceId as string, credentialsVersion: data.credentialsVersion as number }
+  }
+
+  // Heartbeat firmata con campi di rete arbitrari nel body (i campi net NON sono firmati).
+  function heartbeatWithNet(applianceId: string, kp: { privateKeyPem: string }, net: Record<string, unknown>) {
+    const ts = Date.now()
+    const cv = 0
+    const payload = JSON.stringify({ applianceId, ts, credentialsVersion: cv })
+    return ctx.app.inject({
+      url: '/api/pair/heartbeat',
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-tako-appliance-token': applianceId,
+        'x-tako-signature': signEd25519(kp.privateKeyPem, payload),
+        'x-tako-timestamp': String(ts),
+      },
+      payload: JSON.stringify({ credentialsVersion: cv, ...net }),
+    })
+  }
+
+  const remoteHostOf = async (applianceId: string) =>
+    (await ctx.sql`select remote_host from cloud_appliances where id = ${applianceId}`)[0]!.remote_host as string | null
+
+  it('hostname valido → persistito (normalizzato a minuscolo)', async () => {
+    const p = await pairedAppliance('hb-remote-ok@test.local')
+    expect(await remoteHostOf(p.applianceId)).toBeNull()
+    const res = await heartbeatWithNet(p.applianceId, p.kp, { remoteHost: 'Osteria-Mario.box.takoitalia.com' })
+    expect(res.statusCode).toBe(200)
+    expect(await remoteHostOf(p.applianceId)).toBe('osteria-mario.box.takoitalia.com')
+  })
+
+  it('hostname malformato → IGNORATO, il valore precedente resta intatto', async () => {
+    const p = await pairedAppliance('hb-remote-bad@test.local')
+    await heartbeatWithNet(p.applianceId, p.kp, { remoteHost: 'buono.box.takoitalia.com' })
+    expect(await remoteHostOf(p.applianceId)).toBe('buono.box.takoitalia.com')
+
+    // Spazzatura, endpoint LAN spacciato per remoto, IP nudo, URL completo: nessuno scrive.
+    for (const bad of ['not a host', 'tako.local', '192.168.1.50', 'https://evil.com/x', '-bad.com']) {
+      const res = await heartbeatWithNet(p.applianceId, p.kp, { remoteHost: bad })
+      expect([200, 400]).toContain(res.statusCode)
+      expect(await remoteHostOf(p.applianceId), bad).toBe('buono.box.takoitalia.com')
+    }
+  })
+
+  it('campo assente → nessuna sovrascrittura (appliance vecchia o LAN-only)', async () => {
+    const p = await pairedAppliance('hb-remote-absent@test.local')
+    await heartbeatWithNet(p.applianceId, p.kp, { remoteHost: 'stabile.box.takoitalia.com' })
+    const res = await heartbeatWithNet(p.applianceId, p.kp, {})
+    expect(res.statusCode).toBe(200)
+    expect(await remoteHostOf(p.applianceId)).toBe('stabile.box.takoitalia.com')
+  })
+
+  it('un nuovo hostname valido sostituisce il precedente (tunnel ri-creato)', async () => {
+    const p = await pairedAppliance('hb-remote-rotate@test.local')
+    await heartbeatWithNet(p.applianceId, p.kp, { remoteHost: 'vecchio.trycloudflare.com' })
+    await heartbeatWithNet(p.applianceId, p.kp, { remoteHost: 'nuovo.trycloudflare.com' })
+    expect(await remoteHostOf(p.applianceId)).toBe('nuovo.trycloudflare.com')
+  })
+
+  it('remoteHost non altera i campi LAN pubblicati dalla stessa heartbeat', async () => {
+    const p = await pairedAppliance('hb-remote-lan@test.local')
+    await heartbeatWithNet(p.applianceId, p.kp, { lanIp: '192.168.1.50', lanHost: 'tako.local', clientPort: 3002, remoteHost: 'x.box.takoitalia.com' })
+    const row = (await ctx.sql`select lan_ip, lan_host, client_port, remote_host from cloud_appliances where id = ${p.applianceId}`)[0]!
+    expect(row.lan_ip).toBe('192.168.1.50')
+    expect(row.lan_host).toBe('tako.local')
+    expect(row.client_port).toBe(3002)
+    expect(row.remote_host).toBe('x.box.takoitalia.com')
+  })
+})

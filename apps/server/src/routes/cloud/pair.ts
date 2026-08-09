@@ -31,7 +31,7 @@ import {
 } from '../../cloud/db.js'
 import { hashToken, generateSessionToken } from '../../cloud/security.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
-import { isPrivateLanIPv4 } from '../../lib/network.js'
+import { isPrivateLanIPv4, isValidRemoteHost } from '../../lib/network.js'
 import { audit } from '../../cloud/audit.js'
 import { incrWithTtl, getCount, del as redisDel, checkMonotonicTs } from '../../cloud/redis.js'
 
@@ -66,6 +66,10 @@ const heartbeatSchema = z.object({
   lanIp: z.string().min(7).max(15).optional(),
   clientPort: z.number().int().min(1).max(65535).optional(),
   lanHost: z.string().min(3).max(64).optional(),
+  // Hostname pubblico del Cloudflare Tunnel (endpoint remoto dell'app owner). Stessa
+  // disciplina degli altri campi net: fuori dal payload firmato, ri-validato sotto con
+  // isValidRemoteHost, e MAI sovrascrive un valore valido con uno invalido.
+  remoteHost: z.string().min(4).max(253).optional(),
 })
 
 const APPLIANCE_TOKEN_HEADER = 'x-tako-appliance-token'
@@ -433,6 +437,13 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
     const lanIp = parsed.data.lanIp && isPrivateLanIPv4(parsed.data.lanIp) ? parsed.data.lanIp : null
     const lanHost = parsed.data.lanHost && lanHostRe.test(parsed.data.lanHost) ? parsed.data.lanHost.toLowerCase() : null
     const clientPort = parsed.data.clientPort ?? null
+    // remoteHost segue la STESSA regola: solo un FQDN pubblico ben formato viene scritto.
+    // Un valore malformato (o un `*.local`, o un IP) è semplicemente IGNORATO: l'ultimo
+    // hostname valido noto resta intatto, così un'appliance che invia spazzatura (bug o
+    // manomissione del body) non può cancellare o dirottare l'endpoint remoto pubblicato.
+    const remoteHost = parsed.data.remoteHost && isValidRemoteHost(parsed.data.remoteHost)
+      ? parsed.data.remoteHost.trim().toLowerCase()
+      : null
 
     const cloudVersion = appliance.ownerVersion
     await cloudDb
@@ -443,6 +454,7 @@ export async function cloudPairRoutes(fastify: FastifyInstance) {
         ...(lanIp ? { lanIp } : {}),
         ...(lanHost ? { lanHost } : {}),
         ...(clientPort ? { clientPort } : {}),
+        ...(remoteHost ? { remoteHost } : {}),
       })
       .where(eq(cloudAppliances.id, applianceId))
 

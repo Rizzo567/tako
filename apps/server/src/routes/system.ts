@@ -2,7 +2,7 @@
 // telefoni si agganciano (IP LAN + tako.local) e un QR pronto da mostrare/stampare.
 import type { FastifyPluginAsync } from 'fastify'
 import QRCode from 'qrcode'
-import { getLanIPv4s, primaryLanIPv4, clientBaseUrl } from '../lib/network.js'
+import { getLanIPv4s, primaryLanIPv4, clientBaseUrl, lanBaseUrl, remoteBaseUrl } from '../lib/network.js'
 import { getConnectivity } from '../lib/connectivity.js'
 import { getNetworkHealth } from '../lib/net-health.js'
 import { getTunnelStatus } from '../lib/tunnel.js'
@@ -29,11 +29,18 @@ export const systemRoutes: FastifyPluginAsync = async (fastify) => {
         lanIPs: ips,
         lanIP,
         clientBaseUrl: clientBase,
+        // Dual-endpoint LAN-first dell'app owner: `lanUrl` è il primo tentativo (mDNS,
+        // ~5ms, funziona senza internet), `remoteUrl` il ripiego via tunnel (HTTPS
+        // valido). remoteUrl è null quando il tunnel non è configurato → app LAN-only.
+        lanUrl: lanBaseUrl(),
+        remoteUrl: remoteBaseUrl(),
         urls: {
           primary,
           dashboard,
           client: clientBase,
           mdns: `http://tako.local:${port}`,
+          lan: lanBaseUrl(),
+          remote: remoteBaseUrl(),
         },
         qrDataUrl,
         // Stato del Cloudflare Tunnel (accesso remoto dell'app owner). Mai il token:
