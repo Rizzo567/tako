@@ -1990,3 +1990,153 @@ eventi socket già emessi (`reservation:changed`, `shift:updated`): l'unica modi
   tap `isTrusted` e un interruttore per far rispondere 409 a una rotta.
 - Chi tocca `owner-src/` deve rieseguire `node scripts/build-owner-app.mjs` e **committare
   l'output** in `apps/dashboard/public/owner/`: il bundle dell'appliance copia quella cartella.
+
+---
+
+### Diario esecuzione 2026-08-09 — F6.1 (l'app owner dentro il bundle dell'appliance)
+
+**F6.1 — DONE.** `/Applications/Tako.app` — l'unica installata, aggiornata **in place** —
+serve `/owner/` dal proprio bundle. Prima di questo task rispondeva `404`. Due giri di build
+su tre disponibili: il primo si è fermato prima dell'installazione per un difetto vero dello
+script di deploy (sotto), il secondo è andato fino in fondo.
+
+#### Pre-task — il badge diceva «Non raggiungibile» a un'app che stava funzionando
+
+Difetto trovato in F7.4 e chiuso qui (commit `b07e85a`). Il probe sondava **solo**
+`endpoints.lan`, cioè `tako.local` imparato da `/api/system/info`. Dove il mDNS non passa —
+WiFi ospiti, client isolation, Android che non risolve `.local` — il ristoratore apre l'app
+all'**IP** dell'appliance: `tako.local` non risponde, il tunnel non c'è, e il badge dichiarava
+irraggiungibile la macchina che gli aveva appena servito la pagina.
+
+Ora la cascata è a quattro passi: `tako.local` → **l'origine che serve la pagina** → tunnel →
+offline. L'origine non viene data per buona, viene **classificata**: IP privato, `.local`,
+`localhost` o hostname a etichetta singola valgono «in sala»; qualunque nome pubblico — o
+un'origine che coincide col `remoteHost` — resta «da remoto». Il verde non è decorazione:
+abilita le azioni che si fanno stando nel locale, e un'app aperta dal tunnel non deve averle.
+
+È caduto anche il ripiego di `lib/app.tsx` che passava `window.location.origin` **come se
+fosse la LAN**: stessa confusione, un livello più su, e già oggi diceva «In sala» a un'app
+aperta dall'hostname pubblico al primo avvio.
+
+`scripts/test-owner-endpoint.mjs` era **stale dal 2026-08-09 mattina**: cercava
+`.ow-badge[data-endpoint]`, un elemento sparito con la shell di F2.2, quindi sarebbe fallito
+comunque. Riscritto sul badge vero (`.ow-net[data-net]`, che vive **dentro** la sessione →
+ogni pagina parte con sessione finta e API stubbata, altrimenti il primo 401 riporta alla
+schermata di collegamento e il badge sparisce a metà scenario) e allargato da 5 a 8 scenari.
+Sul codice pre-fix i controlli nuovi falliscono **5 su 5** — il verifier è stato provato
+contro il difetto, non solo contro la correzione.
+
+| Scenario | Esito |
+|---|---|
+| 1. LAN su → nessuna richiesta al tunnel | ✓ (lan in 2 ms) |
+| 2. LAN giù → tunnel entro 2 s | ✓ (3 ms) |
+| 2 bis. LAN **appesa** → ripiego per timeout | ✓ (1247 ms, budget 1200) |
+| 3. LAN che ritorna in foreground | ✓ (2 ms) |
+| 4. Cellulare → nessun probe LAN **né sull'origine** | ✓ |
+| 5. Tutto giù → offline esplicito | ✓ («Non raggiungibile») |
+| 6. **Appliance per IP** → «In sala» | ✓ (nuovo) |
+| 6 bis. **L'origine È il remoteHost** → «Da remoto» | ✓ (nuovo) |
+| 7. **Aperta dal tunnel, endpoint non imparati** → «Da remoto» | ✓ (nuovo) |
+
+Lo scenario 7 serve la pagina da un'origine `https` finta proxando gli asset dall'appliance
+vera: è l'unico modo, senza un tunnel acceso, di provare che un hostname pubblico non venga
+scambiato per la sala.
+
+#### La build: due difetti dello script di deploy, entrambi silenziosi
+
+`scripts/build-server-bundle.mjs` copiava già `owner/` (fatto in F0, riga 60: **rigenera** con
+`build-owner-app.mjs` e poi copia, così il bundle non può spedire un artefatto stale) e il
+glob `resources/server/**/*` del `tauri.conf.json` è ricorsivo: da quel lato non serviva
+niente. I due difetti stavano nel **deploy**, e nessuno dei due si vedeva senza arrivare in
+fondo:
+
+1. **`pnpm desktop:build` esce 1 anche a build riuscita.** `createUpdaterArtifacts: true`
+   fa firmare anche `Tako.app.tar.gz`, e senza `TAURI_SIGNING_PRIVATE_KEY` fallisce — **dopo**
+   aver già prodotto il `.app`. Con `set -e`, `deploy-desktop.sh` moriva lì: build buona,
+   installazione mai eseguita. Ora l'uscita non-zero è tollerata con un avviso e il controllo
+   che conta resta l'esistenza del bundle (già presente due righe sotto). L'artefatto updater
+   lo firma la CI, che la chiave ce l'ha.
+2. **L'app installata cambiava identità di firma a ogni deploy.** Senza identità,
+   `tauri build` lascia solo la firma del **linker**: `Identifier=app-ab96ddfb1d27a542`,
+   `Info.plist=not bound`, `Sealed Resources=none`. L'installata era invece
+   `com.tako.dashboard` con risorse sigillate (l'ha firmata `install-usb-mac.sh`). macOS
+   àncora TCC — **il microfono della dettatura** — e le voci di portachiavi
+   all'identificatore: un aggiornamento in place avrebbe rimesso il ristoratore davanti a
+   tutti i permessi da riconcedere. Aggiunto `codesign --force --deep --sign -` dopo il
+   rsync, stessa incantazione di `install-usb-mac.sh`. Verificato dopo il deploy:
+   `Identifier=com.tako.dashboard`, `Sealed Resources version=2`, 15581 file.
+
+Aggiunta anche la rimozione di `Tako.app.tar.gz(.sig)` alla pulizia: è un artefatto updater
+**non firmato**, e lasciarlo in giro è il modo migliore per pubblicarlo per sbaglio un giorno.
+
+#### Verifier di F6.1
+
+| Controllo | Esito |
+|---|---|
+| `curl http://localhost:4317/owner/index.html` | **200** (era **404** con la v0.1.6) |
+| `curl …/owner/app.js`, `…/owner/manifest.webmanifest` | 200, 200 |
+| `curl …/staff/index.html` | 200 (invariata) |
+| `curl …/api/system/info` | risponde **con `lanUrl`/`remoteUrl`** — campi nati in F1, prova che gira il server nuovo |
+| `curl http://192.168.168.2:4317/owner/index.html` (per IP, il caso del pre-task) | 200 |
+| sha256 di `app.js`: repo · bundle installato · servito | **identici** (`b1436416…`) |
+| `mdfind "kMDItemFSName == 'Tako.app'"` | **1 riga** — `/Applications/Tako.app` |
+| `scripts/test-owner-endpoint.mjs http://localhost:4317` | **8 scenari verdi dall'app installata** |
+| `tsc` dashboard, `eslint owner-src` | puliti (1 warning preesistente su `<img>`) |
+
+Tempi: bundle server ~2 min (il grosso è `pnpm --filter @tako/web build` + `npm install` dei
+runtime), cargo release ~17 s incrementale, rsync + firma ~20 s.
+
+#### «Una sola app»: c'erano due Tako.app
+
+`mdfind` ne restituiva **due**: `/Applications/Tako.app` e la `.app` del **Simulatore iOS**
+lasciata da F7.3 in `apps/app/ios/build/Build/Products/Release-iphonesimulator/` (77 MB).
+Su Tahoe la griglia app legge da Spotlight, quindi era un secondo Tako a tutti gli effetti.
+Messo `.metadata_never_index` in `apps/app/ios/build/` — e **il marcatore da solo non basta**:
+Spotlight non dimentica ciò che ha già indicizzato, la riga è sparita solo dopo aver rimosso
+il bundle (`lsregister -u` + `rm -rf`). È un artefatto rigenerabile: gli intermedi restano,
+`xcodebuild` lo rifà rilinkando. `apps/app/src-tauri/target/` il marcatore ce l'aveva già.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **`cloudflared` NON è imbarcato** e non lo si è imbarcato adesso. La cascata di
+  `lib/tunnel.ts` (env → risorsa del bundle → `~/.local/bin` → PATH) lo trova già sul Mac di
+  Manuel (38 MB in `~/.local/bin`). Per questa build va bene così; l'**imbarco resta aperto**
+  ed è la scelta descritta dal rischio R5: o dentro il bundle (+38 MB per piattaforma) o
+  scaricato al primo avvio in `~/.tako/bin/`. Su un'appliance di un cliente vero, oggi, il
+  tunnel non partirebbe: `cloudflared` semplicemente non c'è.
+- **Versione NON bumpata**: `tauri.conf.json` resta a `0.1.6`. Questa è
+  un'installazione locale di collaudo, non un rilascio.
+- **Nessuna notarizzazione**: firma ad-hoc, come tutte le installazioni hands-on del modello
+  USB (`RILASCIO.md`). Il `.app` di questa build non è distribuibile per download.
+- **`.github/workflows/release.yml` non toccato**: era fra i tool di F6.1, ma il pezzo che
+  riguarda l'app owner (copiare `owner/` nel bundle) sta in `build-server-bundle.mjs`, che la
+  CI esegue già dentro `desktop:build`. Non c'era niente da cambiare nel workflow.
+- **La seconda metà del Goal — «l'auto-update aggiorna anche l'app del telefono» — è vera per
+  costruzione ma NON è stata provata qui**: richiede un update firmato (chiave updater) e un
+  salto di versione. Ciò che si può dire con certezza è che `/owner/` viaggia dentro
+  `resources/server/`, quindi un aggiornamento dell'appliance sostituisce anche il bundle
+  della PWA; il service worker è network-first sulla navigazione, quindi il telefono prende
+  l'`index.html` nuovo al primo caricamento e gli asset al giro successivo.
+
+#### Rischi residui e note
+
+- **Il costo del mDNS morto è ~1,2 s a ogni avvio.** Dopo un avvio riuscito per IP,
+  `learnEndpoints` riscrive `endpoints.lan = tako.local` (glielo dice l'appliance), quindi al
+  lancio dopo si riprova `tako.local`, si aspetta il timeout e **poi** si passa dall'origine.
+  Funziona, ma è un secondo di attesa ogni volta. Sistemarlo significa ricordare quale
+  indirizzo ha funzionato e provarlo per primo: non è stato fatto qui per non toccare la
+  semantica LAN-first a ridosso della build.
+- **`apps/app/ios/build/` pesa 4,4 GB** ed è gitignored. Se serve spazio è la prima cosa da
+  buttare: si rigenera.
+- Chi tocca `deploy-desktop.sh` ricordi che quello script è l'**unico** punto in cui l'app
+  installata viene firmata: senza la riga `codesign`, l'aggiornamento successivo torna a
+  cambiare identità all'app.
+
+#### Cosa resta a Manuel
+
+- **Tagliare la release vera** (tag + CI con `TAURI_SIGNING_PRIVATE_KEY`) quando vuole che
+  l'appliance dei clienti riceva `/owner/` via auto-update: qui si è fatta solo
+  un'installazione locale, la versione è ancora `0.1.6`.
+- **Decidere su `cloudflared`** (imbarco nel bundle vs download al primo avvio): finché non è
+  deciso, l'accesso da remoto funziona solo sulle macchine dove il binario c'è già.
+- **F6.2**: il collaudo di una serata vera resta l'ultimo gate, ed è **P0**.
