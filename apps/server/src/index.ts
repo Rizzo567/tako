@@ -189,6 +189,23 @@ if (existsSync(STAFF_DIR)) {
   console.warn(`STAFF_DIR non trovato (${STAFF_DIR}); dashboard statica non servita.`)
 }
 
+// App owner (PWA mobile del ristoratore), SPA statica separata dalla staff: stessa
+// cascata di candidati (env → risorsa accanto al server nel bundle desktop → sorgente
+// dashboard in dev). Registrazione INDIPENDENTE da quella staff: se /owner non è stato
+// ancora buildato, /staff resta servita esattamente come prima.
+const ownerCandidates = [
+  process.env['OWNER_DIR'],
+  resolve(currentDir, 'owner'),
+  resolve(currentDir, '../../dashboard/public/owner'),
+].filter((p): p is string => !!p).map((p) => resolve(p))
+const OWNER_DIR = ownerCandidates.find((p) => existsSync(p)) ?? ownerCandidates[ownerCandidates.length - 1]!
+if (existsSync(OWNER_DIR)) {
+  await fastify.register(fastifyStatic, { root: OWNER_DIR, prefix: '/owner/', decorateReply: false })
+  console.log(`App owner servita da ${OWNER_DIR} su /owner/`)
+} else {
+  console.warn(`OWNER_DIR non trovato (${OWNER_DIR}); app owner non servita (build: pnpm --filter @tako/dashboard build:owner).`)
+}
+
 // Rate limiting globale. In dev il loopback (test, dashboard locale, /health) è
 // esentato: il limite per-IP serve contro abusi esterni, non contro la macchina
 // stessa. In produzione resta attivo per tutti.

@@ -11,6 +11,7 @@
 //   node_modules/ — dipendenze runtime npm (installazione pulita, no symlink pnpm)
 //   migrations/   — migrazioni Drizzle (lette a runtime)
 //   staff/        — dashboard statica servita su /staff
+//   owner/        — PWA owner (mobile) servita su /owner
 //   node          — runtime Node (l'app non richiede Node sul computer target)
 import { build } from 'esbuild'
 import { execSync } from 'node:child_process'
@@ -57,6 +58,15 @@ await build({
 console.log('▶ copia migrations + staff + worker ASR')
 cpSync(join(root, 'packages', 'db', 'src', 'migrations'), join(out, 'migrations'), { recursive: true })
 cpSync(join(root, 'apps', 'dashboard', 'public', 'staff'), join(out, 'staff'), { recursive: true })
+// App owner (PWA mobile), servita su /owner/. Copia GUARDATA: se non è ancora stata
+// buildata il bundle resta valido e /staff continua a funzionare come prima.
+const ownerSrcDir = join(root, 'apps', 'dashboard', 'public', 'owner')
+if (existsSync(ownerSrcDir)) {
+  console.log('▶ copia app owner (/owner)')
+  cpSync(ownerSrcDir, join(out, 'owner'), { recursive: true })
+} else {
+  console.warn('⚠ apps/dashboard/public/owner assente: app owner non impacchettata')
+}
 // Worker Python della dettatura (mlx-whisper): asr-local.ts lo cerca accanto
 // al bundle (resources/server/asr/asr_worker.py). Il venv sta in ~/.tako.
 cpSync(join(root, 'apps', 'server', 'asr'), join(out, 'asr'), { recursive: true })
