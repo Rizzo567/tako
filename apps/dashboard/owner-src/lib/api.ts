@@ -43,8 +43,12 @@ export interface Api {
   del<T>(path: string, init?: RequestInit): Promise<T>
   /** URL assoluto di una risorsa (per <img>, download, ecc.). */
   url(path: string): string
+  /** Scarica una risorsa protetta e ne restituisce il Blob (null se non disponibile). */
+  blob(path: string): Promise<Blob | null>
   /** Scarica una risorsa protetta e ne restituisce un blob URL (vedi immagini sotto). */
   blobUrl(path: string): Promise<string | null>
+  /** Invia un file in multipart (foto piatto). Ritorna il `data` della risposta. */
+  upload<T>(path: string, file: Blob, filename: string, field?: string): Promise<T>
 }
 
 export function createApi(deps: ApiDeps): Api {
@@ -91,6 +95,20 @@ export function createApi(deps: ApiDeps): Api {
     // F1). Rimedio: scaricare il file con fetch + Bearer e passare all'<img> un blob:
     // URL. Nessun cookie da inventare, nessuna URL firmata da far scadere, e in LAN
     // il costo è lo stesso di prima.
+    blob: async (path: string) => {
+      try {
+        const headers = new Headers()
+        const token = deps.token()
+        if (token) headers.set('Authorization', `Bearer ${token}`)
+        const res = await fetch(`${deps.base()}${path.startsWith('/') ? path : `/${path}`}`, { headers })
+        if (res.status === 401) deps.onUnauthorized?.()
+        if (!res.ok) return null
+        return await res.blob()
+      } catch {
+        return null
+      }
+    },
+
     blobUrl: async (path: string) => {
       try {
         const headers = new Headers()
@@ -102,6 +120,25 @@ export function createApi(deps: ApiDeps): Api {
       } catch {
         return null
       }
+    },
+
+    // Multipart. Il Content-Type NON si imposta a mano: il browser deve poterci
+    // mettere il `boundary`, e un header scritto da noi lo cancellerebbe — il
+    // server riceverebbe un multipart senza confine e risponderebbe 400.
+    upload: async <T,>(path: string, file: Blob, filename: string, field = 'file'): Promise<T> => {
+      const headers = new Headers()
+      const token = deps.token()
+      if (token) headers.set('Authorization', `Bearer ${token}`)
+      const form = new FormData()
+      form.append(field, file, filename)
+      const res = await fetch(`${deps.base()}/api${path}`, { method: 'POST', headers, body: form })
+      let json: { data?: unknown; error?: { code?: string; message?: string } } | null = null
+      try { json = await res.json() } catch { /* corpo non-JSON */ }
+      if (!res.ok) {
+        if (res.status === 401) deps.onUnauthorized?.()
+        throw new ApiError(json?.error?.message ?? res.statusText, res.status, json?.error?.code ?? 'HTTP_ERROR')
+      }
+      return (json?.data ?? null) as T
     },
   }
 }

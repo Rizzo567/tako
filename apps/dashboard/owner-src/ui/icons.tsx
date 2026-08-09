@@ -34,6 +34,16 @@ export const IC: Record<string, string> = {
   settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 4.6l.1.1',
   search: 'M11 11m-8 0a8 8 0 1 0 16 0a8 8 0 1 0-16 0M21 21l-4.3-4.3',
   sparkles: 'M12 3l1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6ZM19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18z',
+  // ── Wave 2 (F4): magazzino, menu, foto, export ──
+  back: 'M19 12H5M12 19l-7-7 7-7',
+  box: 'M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8',
+  menu: 'M4 5h16M4 12h16M4 19h10',
+  camera: 'M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8',
+  share: 'M12 16V3M8 7l4-4 4 4M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6',
+  download: 'M12 3v13M8 12l4 4 4-4M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5',
+  truck: 'M3 6h11v11H3zM14 9h4l3 3v5h-7zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4M18 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4',
+  minus: 'M5 12h14',
+  trash: 'M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14',
 }
 
 export function Icon({ name, size = 20, stroke = 2, style }: {

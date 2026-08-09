@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useApp } from '../lib/app'
 import { Badge, Btn, Card, SectionTitle } from '../ui/kit'
 import { Icon } from '../ui/icons'
+import { SUBS, type SubId } from '../ui/shell'
 import { NotificheCard } from './notifiche'
 
 interface SystemInfo {
@@ -14,7 +15,7 @@ interface SystemInfo {
   tunnel?: { state?: string } | null
 }
 
-export function AltroScreen() {
+export function AltroScreen({ onOpen }: { onOpen: (id: SubId) => void }) {
   const { session, net, base, api, logout, recheck } = useApp()
   const [info, setInfo] = useState<SystemInfo | null>(null)
 
@@ -29,6 +30,19 @@ export function AltroScreen() {
 
   return (
     <div className="ow-stack">
+      {/* L'hub di Wave 2 sta IN CIMA e senza scroll: è il primo dei tap contati dai
+          goal di F4 (magazzino in 4, disponibilità in 3), e non può stare sotto le
+          impostazioni della rete. */}
+      <div className="ow-hub">
+        {SUBS.map((s) => (
+          <button key={s.id} type="button" className="press ow-hub-tile" data-sub={s.id} onClick={() => onOpen(s.id)}>
+            <span className="ow-hub-ico"><Icon name={s.icon} size={20} stroke={2.2} /></span>
+            <span className="ow-hub-label">{s.label}</span>
+            <span className="ow-hub-hint">{s.hint}</span>
+          </button>
+        ))}
+      </div>
+
       <Card pad={16}>
         <SectionTitle right={<Badge tone={net === 'lan' ? 'ok' : net === 'remote' ? 'wait' : net === 'offline' ? 'danger' : 'muted'} dot>
           {net === 'lan' ? 'In sala' : net === 'remote' ? 'Da remoto' : net === 'offline' ? 'Offline' : 'Verifico'}
@@ -67,9 +81,8 @@ export function AltroScreen() {
       <Card pad={16}>
         <SectionTitle>Cosa arriva</SectionTitle>
         <ul className="ow-list-plain">
-          <li><Icon name="coins" size={16} /> Magazzino e prezzi dal telefono</li>
-          <li><Icon name="qr" size={16} /> Foto dei piatti scattate col telefono</li>
           <li><Icon name="sparkles" size={16} /> L&apos;assistente del ristoratore</li>
+          <li><Icon name="clock" size={16} /> Prenotazioni e turni dal telefono</li>
         </ul>
       </Card>
     </div>

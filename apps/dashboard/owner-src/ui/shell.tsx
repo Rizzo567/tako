@@ -26,6 +26,25 @@ export const SECTIONS: SectionDef[] = [
   { id: 'altro', label: 'Altro', icon: 'apps' },
 ]
 
+// Wave 2 (F4): magazzino, menu e andamento NON sono una sesta, settima e ottava
+// linguetta. Una barra inferiore a otto voci non si tocca col pollice e diluisce le
+// cinque cose che contano durante il servizio. Vivono come SOTTO-SCHERMATE di
+// "Altro", che diventa così l'hub del fuori-servizio: un tap per entrarci, uno per
+// scegliere. Il conto dei tap dei goal di F4 parte da qui e li rispetta:
+// Altro → Magazzino → riga → tipo di movimento = 4; Altro → Menu → «Finito» = 3.
+export type SubId = 'magazzino' | 'menu' | 'andamento'
+
+export interface SubDef {
+  id: SubId
+  label: string
+  icon: string
+  hint: string
+}
+
+export const SUBS: SubDef[] = [
+  { id: 'magazzino', label: 'Magazzino', icon: 'box', hint: 'Giacenze, alert e riordino' },
+]
+
 export type NetKind = 'lan' | 'remote' | 'offline' | 'checking'
 
 // I tre stati di D4, mai ambigui: verde in sala, giallo da remoto, rosso irraggiungibile.
@@ -45,15 +64,22 @@ export function NetBadge({ kind, onClick }: { kind: NetKind; onClick?: () => voi
   )
 }
 
-export function Header({ title, net, onNetClick, right }: {
+export function Header({ title, net, onNetClick, right, onBack }: {
   title: string
   net: NetKind
   onNetClick?: () => void
   right?: ReactNode
+  /** Presente solo nelle sotto-schermate di Wave 2: torna all'hub "Altro". */
+  onBack?: () => void
 }) {
   return (
     <header className="ow-header">
       <div className="ow-header-row">
+        {onBack && (
+          <button type="button" className="press ow-icon-btn ow-back" onClick={onBack} aria-label="Indietro">
+            <Icon name="back" size={19} stroke={2.4} />
+          </button>
+        )}
         <h1>{title}</h1>
         <div className="ow-header-right">
           {right}
