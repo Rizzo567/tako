@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, orders, orderItems, orderStatusHistory, menuItems, tables } from '@tako/db'
-import { eq, and, inArray, notInArray, desc, gte } from 'drizzle-orm'
+import { eq, and, inArray, notInArray, desc, gte, lt } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { recomputeOpenBill, round2, ensureOpenBill } from '../lib/billing.js'
@@ -26,20 +26,43 @@ const ALLOWED_TRANSITIONS: Record<string, OrderStatus[]> = {
   cancelled: [],
 }
 
+// Paginazione a CURSORE per /active e /history (piano F2.3). È ADDITIVA: senza
+// parametri le due route rispondono esattamente come prima (tutti i risultati, più
+// recenti prima), quindi la dashboard staff non cambia di una riga. Il cursore è
+// `createdAt` — le liste sono già ordinate per quello — e non un offset: con ordini
+// che arrivano mentre si scorre, un OFFSET salterebbe o duplicherebbe righe.
+const MAX_PAGE = 200
+
+function pageParams(query: unknown): { limit: number | null; before: Date | null } {
+  const q = (query ?? {}) as { limit?: string; before?: string }
+  const rawLimit = q.limit !== undefined ? Number(q.limit) : NaN
+  const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? Math.min(Math.floor(rawLimit), MAX_PAGE) : null
+  const beforeDate = q.before ? new Date(q.before) : null
+  const before = beforeDate && !isNaN(beforeDate.getTime()) ? beforeDate : null
+  return { limit, before }
+}
+
 export async function orderRoutes(fastify: FastifyInstance) {
   // Get active orders for restaurant
   fastify.get('/active', { preHandler: requireAuth }, async (req) => {
-    const activeOrders = await db
-      .select()
-      .from(orders)
-      .where(and(
-        eq(orders.restaurantId, req.user!.restaurantId),
-        inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready']),
-      ))
-      .orderBy(desc(orders.createdAt))
+    const { limit, before } = pageParams(req.query)
+    const where = and(
+      eq(orders.restaurantId, req.user!.restaurantId),
+      inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready']),
+      ...(before ? [lt(orders.createdAt, before)] : []),
+    )
+    const base = db.select().from(orders).where(where).orderBy(desc(orders.createdAt))
+    const activeOrders = limit ? await base.limit(limit) : await base
 
     const items = await db.select().from(orderItems).where(inArray(orderItems.orderId, activeOrders.map(o => o.id)))
-    return { data: activeOrders.map(o => ({ ...o, items: items.filter(i => i.orderId === o.id) })) }
+    // `nextBefore` è il cursore per la pagina successiva: null quando non c'è altro.
+    const nextBefore = limit && activeOrders.length === limit
+      ? activeOrders[activeOrders.length - 1]!.createdAt.toISOString()
+      : null
+    return {
+      data: activeOrders.map(o => ({ ...o, items: items.filter(i => i.orderId === o.id) })),
+      ...(limit ? { meta: { nextBefore } } : {}),
+    }
   })
 
   // Get orders by table
@@ -59,14 +82,18 @@ export async function orderRoutes(fastify: FastifyInstance) {
   fastify.get('/history', { preHandler: requireAuth }, async (req) => {
     const startOfDay = new Date()
     startOfDay.setHours(0, 0, 0, 0)
+    const { limit, before } = pageParams(req.query)
 
-    const hist = await db
-      .select()
-      .from(orders)
-      .where(and(eq(orders.restaurantId, req.user!.restaurantId), gte(orders.createdAt, startOfDay)))
-      .orderBy(desc(orders.createdAt))
+    const where = and(
+      eq(orders.restaurantId, req.user!.restaurantId),
+      gte(orders.createdAt, startOfDay),
+      ...(before ? [lt(orders.createdAt, before)] : []),
+    )
+    const base = db.select().from(orders).where(where).orderBy(desc(orders.createdAt))
+    const hist = limit ? await base.limit(limit) : await base
 
-    return { data: hist }
+    const nextBefore = limit && hist.length === limit ? hist[hist.length - 1]!.createdAt.toISOString() : null
+    return { data: hist, ...(limit ? { meta: { nextBefore } } : {}) }
   })
 
   // Create order (staff — comanda). Prezzi sempre dal DB, mai dal client.

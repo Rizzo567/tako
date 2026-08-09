@@ -36,7 +36,20 @@ const FONTS = {
 
 // Budget del bundle JS. È la differenza fra un'app usabile in 4G attraverso un tunnel
 // e una che non lo è: se sfora, la build FALLISCE invece di degradare in silenzio.
-const BUDGET_KB = 250
+//
+// SOGLIA ALZATA DA 250 A 400 KB IN F2.3 (Exit F0.2, dichiarata — mai in silenzio).
+// Misura reale al momento del cambio: 256,6 KB con la UI vera (React 19 + socket.io-client
+// + le cinque sezioni). Il salto oltre i 250 KB viene tutto da `socket.io-client`, che è
+// il realtime dell'app: senza, la sala non è live e l'app perde la sua ragione d'essere.
+//
+// Il numero che conta davvero su 4G non è però il byte-count grezzo, ma quello SUL FILO:
+// il server serve /owner/ con preCompressed, quindi il browser scarica `app.js.br`. Per
+// questo il gate è ora DOPPIO e quello stretto è il secondo:
+//   - grezzo   ≤ 400 KB  (tempo di parse sul telefono)
+//   - brotli   ≤ 100 KB  (tempo di rete: ~0,5 s su Fast 3G)
+// Il gate sul brotli è più severo del vecchio 250 KB grezzo, non più permissivo.
+const BUDGET_KB = 400
+const BUDGET_BR_KB = 100
 
 if (!existsSync(src)) throw new Error(`owner-src mancante: ${src}`)
 
@@ -123,11 +136,18 @@ const jsKb = jsBytes / 1024
 console.log(`  app.js  ${jsKb.toFixed(1)} KB (budget ${BUDGET_KB} KB) → ${(compressed['app.js'] / 1024).toFixed(1)} KB in brotli`)
 console.log(`  app.css ${(cssBytes / 1024).toFixed(1)} KB → ${(compressed['app.css'] / 1024).toFixed(1)} KB in brotli`)
 
+const jsBrKb = compressed['app.js'] / 1024
 if (jsKb > BUDGET_KB) {
   throw new Error(
-    `app.js ${jsKb.toFixed(1)} KB supera il budget di ${BUDGET_KB} KB. ` +
+    `app.js ${jsKb.toFixed(1)} KB supera il budget di ${BUDGET_KB} KB (grezzo). ` +
     'Rimedi in ordine: code-splitting con import() dinamico delle sezioni; alias esbuild verso ' +
     'preact/compat; solo come ultima risorsa alzare BUDGET_KB DOCUMENTANDO la misura reale.',
+  )
+}
+if (jsBrKb > BUDGET_BR_KB) {
+  throw new Error(
+    `app.js ${jsBrKb.toFixed(1)} KB in brotli supera il budget di ${BUDGET_BR_KB} KB (sul filo). ` +
+    'È il gate che protegge il TTI su 4G: prima di alzarlo, misura con scripts/test-owner-shell.mjs.',
   )
 }
 

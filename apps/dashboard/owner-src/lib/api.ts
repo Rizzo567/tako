@@ -29,8 +29,15 @@ export interface ApiDeps {
   onUnauthorized?: () => void
 }
 
+export interface Envelope<T> {
+  data: T
+  meta?: { nextBefore?: string | null }
+}
+
 export interface Api {
   get<T>(path: string, init?: RequestInit): Promise<T>
+  /** Come get, ma restituisce la busta intera: serve dove c'è `meta` (paginazione). */
+  page<T>(path: string): Promise<Envelope<T>>
   post<T>(path: string, body?: unknown, init?: RequestInit): Promise<T>
   patch<T>(path: string, body?: unknown, init?: RequestInit): Promise<T>
   del<T>(path: string, init?: RequestInit): Promise<T>
@@ -41,7 +48,7 @@ export interface Api {
 }
 
 export function createApi(deps: ApiDeps): Api {
-  async function req<T>(method: string, path: string, body?: unknown, init: RequestInit = {}): Promise<T> {
+  async function envelope<T>(method: string, path: string, body?: unknown, init: RequestInit = {}): Promise<Envelope<T>> {
     const headers = new Headers(init.headers)
     const token = deps.token()
     if (token) headers.set('Authorization', `Bearer ${token}`)
@@ -54,7 +61,7 @@ export function createApi(deps: ApiDeps): Api {
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     })
 
-    let json: { data?: unknown; error?: { code?: string; message?: string } } | null = null
+    let json: { data?: unknown; meta?: { nextBefore?: string | null }; error?: { code?: string; message?: string } } | null = null
     try { json = await res.json() } catch { /* 204 o corpo non-JSON */ }
 
     if (!res.ok) {
@@ -63,11 +70,16 @@ export function createApi(deps: ApiDeps): Api {
       if (res.status === 401) deps.onUnauthorized?.()
       throw new ApiError(json?.error?.message ?? res.statusText, res.status, json?.error?.code ?? 'HTTP_ERROR')
     }
-    return (json?.data ?? null) as T
+    return { data: (json?.data ?? null) as T, ...(json?.meta ? { meta: json.meta } : {}) }
+  }
+
+  async function req<T>(method: string, path: string, body?: unknown, init: RequestInit = {}): Promise<T> {
+    return (await envelope<T>(method, path, body, init)).data
   }
 
   return {
     get: (path, init) => req('GET', path, undefined, init),
+    page: (path) => envelope('GET', path),
     post: (path, body, init) => req('POST', path, body, init),
     patch: (path, body, init) => req('PATCH', path, body, init),
     del: (path, init) => req('DELETE', path, undefined, init),

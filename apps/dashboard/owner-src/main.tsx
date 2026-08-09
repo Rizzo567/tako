@@ -8,6 +8,7 @@
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { AppProvider, useApp } from './lib/app'
+import { LiveProvider } from './lib/live'
 import { EnrollScreen } from './screens/enroll'
 import { SalaScreen } from './screens/sala'
 import { OrdiniScreen } from './screens/ordini'
@@ -82,7 +83,11 @@ function Shell() {
 
 function Root() {
   const { session } = useApp()
-  return session ? <Shell /> : <EnrollScreen />
+  // Il socket vive SOLO dentro la sessione: senza token non c'è nessuna room in cui
+  // entrare, e una connessione anonima è esattamente ciò che il gate di F1.3 rifiuta.
+  return session
+    ? <LiveProvider><Shell /></LiveProvider>
+    : <EnrollScreen />
 }
 
 const mount = document.getElementById('root')
