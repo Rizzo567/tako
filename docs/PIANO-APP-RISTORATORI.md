@@ -2118,6 +2118,30 @@ il bundle (`lsregister -u` + `rm -rf`). È un artefatto rigenerabile: gli interm
   della PWA; il service worker è network-first sulla navigazione, quindi il telefono prende
   l'`index.html` nuovo al primo caricamento e gli asset al giro successivo.
 
+#### Trovato riavviando l'app: la bonifica del web orfano non funziona su macOS
+
+Non è un difetto di F6.1, ma si vede solo facendo esattamente ciò che F6.1 fa — spegnere e
+riaccendere l'appliance installata. `:3002` (la PWA cliente, quella del QR sui tavoli) era
+tenuta da un **next-server orfano** delle 14:40, `ppid 1`, e il nuovo figlio web non riusciva
+a bindare. La PWA rispondeva 200 e «sembrava» funzionare: la serviva un processo che nessuno
+più supervisionava e che sarebbe sopravvissuto anche alla chiusura pulita dell'app.
+
+La causa è nel controllo d'identità di `scripts/web-server-wrapper.cjs`: per non uccidere
+processi altrui, prima di terminare il proprietario della porta verifica che la sua command
+line contenga il path esatto del wrapper. Su macOS però **Next riscrive `process.title`**, e
+`ps -ww -p <pid> -o args=` restituisce `next-server (v15.5.15)` — il path non c'è più. La
+verifica fallisce sempre, il wrapper dice «non lo tocco» e la bonifica non parte mai. Su
+Windows la command line non viene riscritta ed è per questo che il collaudo del 15/07 era
+verde: **il fix è stato provato solo dove il difetto non c'è**.
+
+Rimediato a mano per questo giro (orfano ucciso, app riavviata: `:3002` ora è del figlio
+`87876` dell'app, `ppid` = shell Tauri, tutta la catena supervisionata). Il rimedio nel codice
+NON è stato fatto — è fuori dal perimetro di F6.1 e va scelto con criterio: l'identità va
+stabilita su qualcosa che Next non può riscrivere (l'eseguibile del processo — `ps -o comm=`
+punta al `node` DENTRO `Tako.app` — oppure `lsof -p <pid>` sul file `server.next.js` aperto),
+mai sul titolo. Finché resta così, ogni crash della shell lascia un orfano su `:3002` che
+nessun avvio successivo riesce a rimuovere.
+
 #### Rischi residui e note
 
 - **Il costo del mDNS morto è ~1,2 s a ogni avvio.** Dopo un avvio riuscito per IP,
