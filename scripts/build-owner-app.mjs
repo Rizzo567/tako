@@ -15,14 +15,24 @@
 //   manifest.webmanifest — start_url e scope /owner/
 //   icons/               — copia locale delle icone (devono stare DENTRO lo scope)
 import { build } from 'esbuild'
-import { rmSync, mkdirSync, cpSync, existsSync, statSync } from 'node:fs'
+import { rmSync, mkdirSync, cpSync, existsSync, statSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { gzipSync, brotliCompressSync, constants as zlibConstants } from 'node:zlib'
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)))
 const src = join(root, 'apps', 'dashboard', 'owner-src')
 const out = join(root, 'apps', 'dashboard', 'public', 'owner')
 const icons = join(root, 'apps', 'dashboard', 'public', 'icons')
+const staffFonts = join(root, 'apps', 'dashboard', 'public', 'staff', 'fonts')
+
+// I due woff2 (variabili, subset latin) che portano l'identità tipografica di Tako.
+// Sono gli STESSI file della dashboard staff, rinominati in modo leggibile: se un
+// giorno la staff cambia font, questa mappa è l'unico punto da aggiornare.
+const FONTS = {
+  'dm-sans.woff2': '330da2a2-35b5-4ed3-b4a5-cc50326c5a41.woff2',
+  'nunito.woff2': '6c6c6d55-52ec-4e1a-8a7a-d99f3b2e3f36.woff2',
+}
 
 // Budget del bundle JS. È la differenza fra un'app usabile in 4G attraverso un tunnel
 // e una che non lo è: se sfora, la build FALLISCE invece di degradare in silenzio.
@@ -59,6 +69,10 @@ await build({
   entryPoints: [join(src, 'app.css')],
   bundle: true,
   minify: true,
+  // I woff2 restano riferimenti relativi: la build li copia già in /owner/fonts/ e
+  // NON devono finire inline nel CSS (in base64 costerebbero un terzo in più e
+  // bloccherebbero il primo paint, che è esattamente ciò che font-display evita).
+  external: ['*.woff2'],
   outfile: join(out, 'app.css'),
   logLevel: 'warning',
 })
@@ -72,12 +86,42 @@ for (const f of ['index.html', 'sw.js', 'manifest.webmanifest']) {
 // risorse fuori scope, e Fastify serve solo le sottocartelle registrate (staff/, owner/).
 cpSync(icons, join(out, 'icons'), { recursive: true })
 
+// 3b) Font: solo i due subset latin usati dai token (vedi owner-src/fonts.css).
+console.log('▶ copia font (subset latin)')
+mkdirSync(join(out, 'fonts'), { recursive: true })
+for (const [dest, source] of Object.entries(FONTS)) {
+  const from = join(staffFonts, source)
+  if (!existsSync(from)) throw new Error(`font mancante: ${from} (mappa FONTS in questo script)`)
+  cpSync(from, join(out, 'fonts', dest))
+}
+
+// 3c) Pre-compressione. Il server registra /owner/ con `preCompressed: true`, quindi
+// serve `app.js.br` a chi accetta brotli senza comprimere nulla a runtime. È LA misura
+// che rende l'app usabile in 4G attraverso un tunnel: un bundle React da ~200 KB
+// diventa ~60 KB sul filo. Niente dipendenze nuove: brotli e gzip sono in node:zlib.
+console.log('▶ pre-compressione (br + gz)')
+const compressible = ['app.js', 'app.css', 'index.html', 'manifest.webmanifest', 'sw.js']
+const compressed = {}
+for (const f of compressible) {
+  const buf = readFileSync(join(out, f))
+  const br = brotliCompressSync(buf, {
+    params: {
+      [zlibConstants.BROTLI_PARAM_QUALITY]: 11,
+      [zlibConstants.BROTLI_PARAM_SIZE_HINT]: buf.length,
+    },
+  })
+  const gz = gzipSync(buf, { level: 9 })
+  writeFileSync(join(out, `${f}.br`), br)
+  writeFileSync(join(out, `${f}.gz`), gz)
+  compressed[f] = br.length
+}
+
 // 4) Verifica: il gate sta nella build, non in un controllo manuale a valle.
 const jsBytes = statSync(join(out, 'app.js')).size
 const cssBytes = statSync(join(out, 'app.css')).size
 const jsKb = jsBytes / 1024
-console.log(`  app.js  ${jsKb.toFixed(1)} KB (budget ${BUDGET_KB} KB)`)
-console.log(`  app.css ${(cssBytes / 1024).toFixed(1)} KB`)
+console.log(`  app.js  ${jsKb.toFixed(1)} KB (budget ${BUDGET_KB} KB) → ${(compressed['app.js'] / 1024).toFixed(1)} KB in brotli`)
+console.log(`  app.css ${(cssBytes / 1024).toFixed(1)} KB → ${(compressed['app.css'] / 1024).toFixed(1)} KB in brotli`)
 
 if (jsKb > BUDGET_KB) {
   throw new Error(
@@ -87,7 +131,7 @@ if (jsKb > BUDGET_KB) {
   )
 }
 
-for (const f of ['index.html', 'app.js', 'app.css', 'sw.js', 'manifest.webmanifest', 'icons']) {
+for (const f of ['index.html', 'app.js', 'app.css', 'app.js.br', 'app.css.br', 'sw.js', 'manifest.webmanifest', 'icons', 'fonts/dm-sans.woff2', 'fonts/nunito.woff2']) {
   if (!existsSync(join(out, f))) throw new Error(`output mancante: ${f}`)
 }
 

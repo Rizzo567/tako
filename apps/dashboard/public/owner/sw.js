@@ -3,7 +3,7 @@
 // API, socket e qualunque richiesta non-GET NON passano MAI dalla cache. I dati del
 // ristorante (ordini, conti, tavoli) sono live: servirne una copia stantia sarebbe
 // peggio di non servirli affatto. La cache copre SOLO il guscio statico.
-const CACHE = 'tako-owner-v1'
+const CACHE = 'tako-owner-v2'
 const SHELL = [
   '/owner/',
   '/owner/index.html',
@@ -12,6 +12,9 @@ const SHELL = [
   '/owner/manifest.webmanifest',
   '/owner/icons/icon-192.png',
   '/owner/icons/icon-512.png',
+  // I due woff2 dell'identità Tako: scaricati una volta, poi mai più (nemmeno da remoto).
+  '/owner/fonts/dm-sans.woff2',
+  '/owner/fonts/nunito.woff2',
 ]
 
 self.addEventListener('install', (e) => {

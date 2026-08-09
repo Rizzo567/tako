@@ -31,9 +31,11 @@
   /* motion */
   --spring: cubic-bezier(.34, 1.56, .64, 1);
   --out: cubic-bezier(.22, 1, .36, 1);
-  /* fonts — nessun @font-face: l'app owner usa i font di sistema, non scarica woff2 su 4G */
-  --f-display: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* fonts — stessi della staff (vedi fonts.css: solo subset latin, font-display swap).
+     Il monospace resta quello di sistema: JetBrains Mono costerebbe altri 31 KB per
+     poche etichette tecniche. */
+  --f-display: 'Nunito', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ui: 'DM Sans', system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   /* safe-area iOS (PWA a schermo intero) */
   --safe-top: env(safe-area-inset-top, 0px);

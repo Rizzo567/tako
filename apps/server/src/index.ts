@@ -207,7 +207,10 @@ const ownerCandidates = [
 ].filter((p): p is string => !!p).map((p) => resolve(p))
 const OWNER_DIR = ownerCandidates.find((p) => existsSync(p)) ?? ownerCandidates[ownerCandidates.length - 1]!
 if (existsSync(OWNER_DIR)) {
-  await fastify.register(fastifyStatic, { root: OWNER_DIR, prefix: '/owner/', decorateReply: false })
+  // preCompressed: la build genera app.js.br / .gz accanto agli originali. Su 4G
+  // attraverso un tunnel è la differenza fra ~200 KB e ~60 KB sul filo, senza
+  // comprimere nulla a runtime né aggiungere dipendenze.
+  await fastify.register(fastifyStatic, { root: OWNER_DIR, prefix: '/owner/', decorateReply: false, preCompressed: true })
   console.log(`App owner servita da ${OWNER_DIR} su /owner/`)
 } else {
   console.warn(`OWNER_DIR non trovato (${OWNER_DIR}); app owner non servita (build: pnpm --filter @tako/dashboard build:owner).`)
