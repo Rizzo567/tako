@@ -171,6 +171,19 @@ describe('gate remoto end-to-end — richiesta marcata come proveniente dal tunn
     }
   })
 
+  it('il preflight CORS passa (non porta mai l Authorization) ma non apre nulla', async () => {
+    // Senza questo il dual-endpoint sarebbe irraggiungibile dall'app servita in LAN: il
+    // preflight verrebbe bloccato e il browser scarterebbe ogni chiamata al remoto.
+    const pre = await raw('/api/tables', {
+      method: 'OPTIONS',
+      headers: { ...CF, Origin: 'http://tako.local:3001', 'Access-Control-Request-Method': 'GET' },
+    })
+    expect(pre.status).toBeLessThan(400)
+    expect(pre.body).toBe('') // nessun corpo, nessun dato: solo header
+    // E la richiesta VERA che segue il preflight resta soggetta al gate.
+    expect((await raw('/api/tables', { headers: CF })).status).toBe(404)
+  })
+
   it('token invalido, scaduto o malformato → 404 (mai 401: nessun oracolo)', async () => {
     for (const t of ['non-esiste-questo-token-affatto-x', 'x', '"; drop table sessions; --', `${env.staffToken}x`]) {
       const res = await raw('/api/tables', { headers: { ...CF, Authorization: `Bearer ${t}` } })

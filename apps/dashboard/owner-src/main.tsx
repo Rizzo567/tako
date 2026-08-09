@@ -8,42 +8,61 @@
 //   - design token identici alla staff (owner-src/tokens.css)
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import {
+  createEndpointManager,
+  learnEndpoints,
+  loadEndpoints,
+  type EndpointKind,
+  type EndpointState,
+} from './lib/endpoint'
 
-type Health = 'checking' | 'online' | 'offline'
+type Shown = EndpointKind | 'checking'
 
-const LABEL: Record<Health, string> = {
+// I tre stati di rete di D4: mai ambigui, sempre visibili in cima allo schermo.
+const LABEL: Record<Shown, string> = {
   checking: 'Verifico…',
-  online: 'Appliance raggiungibile',
+  lan: 'In sala',
+  remote: 'Da remoto',
   offline: 'Appliance non raggiungibile',
 }
 
-/** Sonda /health: esiste già nel server e non richiede autenticazione. */
-function useApplianceHealth(): Health {
-  const [state, setState] = useState<Health>('checking')
+// Mappa sugli stati grafici già esistenti del badge (verde/rosso): il giallo del
+// "da remoto" arriva con la UI vera in F2.
+const BADGE_STATE: Record<Shown, string | undefined> = {
+  checking: undefined,
+  lan: 'online',
+  remote: 'online',
+  offline: 'offline',
+}
+
+/**
+ * Selezione dell'endpoint LAN-first. Gli URL dei due endpoint si imparano dall'appliance
+ * (`/api/system/info`) e restano in localStorage; finché non sono noti si usa l'origine da
+ * cui l'app è stata caricata, che è per definizione un endpoint funzionante.
+ */
+function useEndpoint(): EndpointState & { shown: Shown } {
+  const [state, setState] = useState<EndpointState | null>(null)
 
   useEffect(() => {
-    let alive = true
-    const probe = async () => {
-      try {
-        const res = await fetch('/health', { cache: 'no-store' })
-        if (alive) setState(res.ok ? 'online' : 'offline')
-      } catch {
-        if (alive) setState('offline')
-      }
-    }
-    void probe()
-    const timer = window.setInterval(() => void probe(), 15000)
-    return () => {
-      alive = false
-      window.clearInterval(timer)
-    }
+    const stored = loadEndpoints()
+    const endpoints = { lan: stored.lan ?? window.location.origin, remote: stored.remote }
+    const manager = createEndpointManager({ endpoints, onChange: setState })
+
+    void manager.refresh().then(async (s) => {
+      setState(s)
+      // Raggiungibili → aggiorna la mappa degli endpoint (il tunnel può essere stato
+      // acceso, spento o ricreato dall'ultima volta).
+      if (s.kind !== 'offline') await learnEndpoints(s.baseUrl)
+    })
+
+    return () => manager.stop()
   }, [])
 
-  return state
+  return { ...(state ?? { kind: 'offline', baseUrl: '', since: 0 }), shown: state ? state.kind : 'checking' }
 }
 
 function App() {
-  const health = useApplianceHealth()
+  const { shown } = useEndpoint()
 
   return (
     <div className="ow-app">
@@ -56,9 +75,9 @@ function App() {
       </header>
 
       <div>
-        <span className="ow-badge" data-state={health === 'checking' ? undefined : health}>
+        <span className="ow-badge" data-state={BADGE_STATE[shown]} data-endpoint={shown}>
           <span className="dot" />
-          {LABEL[health]}
+          {LABEL[shown]}
         </span>
       </div>
 

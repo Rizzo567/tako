@@ -39,7 +39,7 @@ import { getNetworkHealth } from './lib/net-health.js'
 import { startMdns } from './lib/mdns.js'
 import { startTunnel } from './lib/tunnel.js'
 import { remoteGate, rateLimitKey, isTrustedTunnelHost, socketAllowRequest } from './middleware/remoteGate.js'
-import { getLanIPv4s } from './lib/network.js'
+import { getLanIPv4s, remoteHost } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
 import { isCloudMode } from './cloud/config.js'
 import { startCloudServer } from './cloud/server.js'
@@ -119,6 +119,11 @@ export async function startServer(): Promise<void> {
     // dashboard non caricava mai (app di fatto inutilizzabile su Windows).
     'tauri.localhost',
     ...getLanIPv4s(),
+    // Hostname pubblico del tunnel: l'app owner vive su due origini (LAN e remota) e
+    // parla con entrambe. Senza questo, ogni richiesta cross-origin fra i due endpoint
+    // verrebbe bloccata dal browser e il dual-endpoint LAN-first non funzionerebbe.
+    // È una allowlist: entra SOLO l'hostname del nostro tunnel, se configurato.
+    ...(remoteHost() ? [remoteHost()!] : []),
   ])
   const allowedPorts = new Set([String(PORT_NUM), String(CLIENT_PORT)])
   function isAllowedOrigin(origin?: string): boolean {

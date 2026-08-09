@@ -191,6 +191,14 @@ function notFound(req: FastifyRequest, reply: FastifyReply) {
 export async function remoteGate(req: FastifyRequest, reply: FastifyReply): Promise<void> {
   if (!isRemoteRequest(req)) return // LAN: comportamento invariato, zero costo
 
+  // PREFLIGHT CORS: un OPTIONS di preflight non porta MAI l'Authorization (lo dice la
+  // specifica), quindi bloccarlo qui renderebbe irraggiungibile l'intero endpoint remoto
+  // dall'app servita sull'origine LAN — cioè il dual-endpoint non funzionerebbe affatto.
+  // Lasciarlo passare non apre nulla: @fastify/cors risponde 204 a QUALUNQUE OPTIONS, che
+  // la rotta esista o no (nessun oracolo), senza corpo e senza effetti collaterali. La
+  // richiesta vera che segue il preflight resta soggetta al gate.
+  if (req.method === 'OPTIONS') return
+
   const path = normalizedPath(req.url)
 
   // 1) Superfici mai esposte: 404 SEMPRE, prima ancora di guardare la sessione. Una sessione
