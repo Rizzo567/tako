@@ -1453,3 +1453,152 @@ dipendenza npm in più è una riga in più in `package.json`, non un rischio per
   route sa di ordini e scorte, non di come si scrive una notifica.
 - Chi aggiunge un trigger nuovo usa `pushAfterResponse()`, mai `pushDispatch()` diretto in
   una route: è il `setImmediate` che tiene la push fuori dal percorso critico.
+
+---
+
+### Diario esecuzione 2026-08-09 — F4 (Wave 2: magazzino, menu, statistiche)
+
+**F4.1, F4.2, F4.3, F4.4 — tutti DONE.** Nessuna Exit di fallimento è scattata; nessuno dei
+quattro task ha consumato più di una iterazione sul proprio goal (F4.3 ne ha consumata una in
+più solo sul *verifier*, non sul codice: vedi punto 6). Commit sul branch `feat/owner-app`:
+`8bbdf44` (F4.1), `f0801ea` (F4.2), `b26a65d` (F4.3), `afd6a21` (F4.4).
+
+#### Misure
+
+| Grandezza | Prima di F4 | Dopo F4 |
+|---|---|---|
+| `vitest` root (stack vivo) | 18 file, **149 verdi** | 22 file, **179 verdi** |
+| `vitest` cloud (`test:cloud`) | 7 file, 76 verdi | 7 file, **76 verdi** (invariato) |
+| `pnpm lint` | 0 errori | **0 errori**, 169 warning |
+| `tsc -p … --noEmit` (server, dashboard, web, db) | pulito | pulito |
+| `owner/app.js` grezzo | 271,7 KB | **291,9 KB** (budget 400) |
+| `owner/app.js` in brotli | 73,8 KB | **78,9 KB** (budget 100, gate) |
+| TTI su Fast 3G | 1586 ms | **1604 ms** (budget 2000), 85 KB sul filo |
+| Movimento di magazzino | — | **4 tap** (budget 4) |
+| «Finito il branzino» | — | **3 tap** (budget 3) |
+| Aprire la fotocamera su un piatto | — | **3 tap** |
+| Foto 3000×2000 → sul filo | — | **1600×1067**, ridotta nel browser |
+
+Test nuovi: `tests/inventory-mobile.test.ts` (7), `tests/menu-availability.test.ts` (5),
+`tests/menu-photo.test.ts` (8), `tests/stats-export.test.ts` (10). Verifier nuovo:
+`node scripts/test-owner-wave2.mjs` — **32 controlli**, tutti verdi. `test-owner-shell.mjs`
+(13) e `test-owner-push.mjs` (20) restano verdi. Build dell'app owner riproducibile.
+
+#### La decisione che ha disegnato tutta la Wave 2: dove mettere tre schermate
+
+Magazzino, Menu e Andamento **non** sono la sesta, settima e ottava linguetta. Una barra
+inferiore a otto voci non si tocca col pollice e, soprattutto, diluisce le cinque cose che
+contano *durante* il servizio. «Altro» diventa l'**hub del fuori-servizio**: tre tessere in
+cima alla schermata, un tap per entrarci e uno per scegliere.
+
+Questa scelta è ciò che rende raggiungibili i budget di tap del piano, e li rende **stretti**:
+con l'hub, «carico» è `Altro → Magazzino → riga → Carico` = 4 su 4, e «finito» è
+`Altro → Menu → pastiglia` = 3 su 3. Non c'è margine per un passaggio intermedio in più — ed
+è esattamente per questo che la quantità non si digita (stepper già a 1, o alla quantità
+suggerita dal riordino) e che i tre tasti del foglio **sono** il movimento invece di
+prepararlo. Un «Conferma» finale sarebbe costato il quinto tap.
+
+Le sotto-schermate spingono una voce nella cronologia: il tasto indietro fisico di Android e
+la gesture dal bordo su iOS chiudono la sotto-schermata invece di uscire dall'app.
+
+#### Cosa è stato trovato strada facendo (e che il piano non prevedeva)
+
+1. **Il contatore di tap contava anche i click dell'app.** Il primo probe dava 4 tap per
+   aprire la fotocamera invece di 3: il quarto era il `input.click()` con cui la schermata
+   apre il selettore di file. Un click generato dal codice non è un gesto dell'utente. Il
+   contatore ora somma solo gli eventi `isTrusted` — quelli che puppeteer sintetizza via CDP,
+   come farebbe un dito. Senza questa correzione il probe avrebbe **bocciato un flusso
+   corretto**, che è il modo peggiore in cui un verifier può sbagliare.
+2. **`/stats/dashboard` e `/bills/summary/today` non concordano su cosa sia l'incasso.** Il
+   primo somma `bills.total` (mance **incluse**), il secondo toglie la mancia perché è
+   pass-through allo staff. È preesistente e non introdotto qui. Lo Stop di F4.4 impone che il
+   CSV coincida con `/stats/dashboard`, quindi l'export eredita quella definizione — ma
+   riporta **tre** colonne (Incasso, Mance, Incasso netto mance) e la schermata scrive «mance
+   incluse» sotto la cifra. **Resta aperto**: due schermate con lo stesso numero diverso vanno
+   riconciliate, e il posto giusto non è questo task.
+3. **La coincidenza CSV ↔ dashboard non si ottiene scrivendo due volte lo stesso calcolo.**
+   `periodTotals()` è ora l'unica funzione che calcola il periodo e `/dashboard` è stata
+   riscritta sopra di essa. Due implementazioni "uguali" divergono al primo arrotondamento
+   cambiato, e nessuno se ne accorge finché non se ne accorge il commercialista.
+4. **`res.text()` si mangia il BOM.** Il primo test sul BOM UTF-8 falliva pur essendo il BOM
+   presente: la specifica fetch impone al decoder di rimuoverlo. Si verifica sui **byte**
+   (`EF BB BF` da `arrayBuffer()`), non sul testo decodificato. Nel sorgente il BOM è scritto
+   `'﻿'` e non come carattere invisibile: un editor che "ripulisce" il file lo
+   toglierebbe senza che nessun test se ne accorga a occhio — ed è anche l'unica forma che
+   `no-irregular-whitespace` accetta.
+5. **Il tetto dei 365 giorni: rifiuto, non troncamento.** `insights.ts` tronca in silenzio
+   (riga 78). L'export no: risponde 400 `RANGE_TOO_LONG`. Un CSV troncato senza dirlo è un CSV
+   sbagliato, e chi lo apre non ha modo di accorgersene. **Deviazione dichiarata** rispetto
+   alla lettera dell'Exit di F4.4, che diceva «imporre un tetto come già fa insights.ts».
+6. **«Gemini non è stato chiamato» non si prova da fuori.** Dall'esterno un originale salvato
+   e un originale-perché-l'AI-ha-fallito sono identici. `tests/menu-photo.test.ts` importa
+   `lib/dish-image-ai.ts` **in processo** (come `push-dispatch.test.ts`), sostituisce
+   `globalThis.fetch` e **conta le chiamate** a `generativelanguage.googleapis.com`: zero, sia
+   col flag spento sia con l'appliance offline. La chiave finta va impostata, altrimenti il
+   fast-fail scatterebbe *prima* del flag e il test dimostrerebbe la cosa sbagliata.
+7. **La foto si carica e si assegna in una rotta sola.** Spezzare in `POST /uploads/image` +
+   `PATCH /items/:id` lascia un rifiuto possibile in mezzo: la foto stilizzata (che costa una
+   generazione Gemini) salvata su disco e mai assegnata a niente. L'ownership si verifica
+   **prima** di leggere il corpo, altrimenti un `itemId` altrui costerebbe comunque 10 MB di
+   upload e una generazione.
+8. **`fastifyStatic` per `/uploads/*` non è gated in LAN**, quindi la miniatura usa un `<img
+   src>` diretto quando si è in sala e passa da `api.blobUrl()` **solo da remoto**. Fare
+   sempre il giro del blob costerebbe una fetch autenticata per ogni piatto di un menu da
+   sessanta voci, in cambio di niente.
+9. **Il CSV non si scarica con un `<a href>`.** Dal tunnel un href nudo non porta
+   l'`Authorization` e prende 404 dal gate di F1.3 — lo stesso problema delle immagini,
+   risolto allo stesso modo: `api.blob()` con Bearer, poi Web Share API con il `File`.
+   `canShare({files})` va chiesto **prima** di `share()`: Safari espone `share` anche dove i
+   file non li accetta, e la chiamata fallirebbe dopo aver già consumato il gesto utente.
+10. **Nessuna migrazione.** Wave 2 non ha aggiunto una sola colonna: `inventory_items`,
+    `inventory_movements`, `menu_items.image_url` e `bills` bastavano già tutti. Le uniche due
+    righe di server nuove sono `POST /api/menus/items/:itemId/photo` e `GET /api/stats/export`.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **F4.1** — il piano prevedeva come ripiego «tagliare a due movimenti rapidi (carico,
+  spreco)». Non è servito: con lo stepper pre-caricato i **tre** tipi stanno nei 4 tap.
+- **F4.1** — la quantità proposta non è 1 quando l'articolo è in lista di riordino: è la
+  **quantità suggerita** da `GET /api/inventory/reorder` (par − giacenza). È il numero che il
+  ristoratore sta per ordinare davvero; partire da 1 lo avrebbe costretto a battere sul `+`.
+- **F4.2** — la disponibilità si manda **esplicita** (`available: false`), mai come toggle da
+  risolvere lato server: con due telefoni in sala due toggle in sequenza si annullerebbero.
+- **F4.2** — aggiunto un filtro «Finiti · N» non previsto: rimettere a menu a fine servizio è
+  l'altra metà dell'operazione, e senza filtro va cercata a mano in un menu da sessanta voci.
+- **F4.3** — il ridimensionamento client (Exit del piano) è stato adottato **subito**, non
+  come ripiego: è la scelta giusta a prescindere dal limite di 10 MB, perché il server
+  ri-encoda comunque a 2000 px e su 4G quei megabyte sono solo attesa.
+- **F4.4** — la schermata non disegna grafici oltre alle sette barre della settimana. Su
+  390 px un istogramma di 30 giorni è una striscia illeggibile: il periodo lungo si legge nei
+  numeri.
+- **F4.4** — `/insights/menu` è trattata come un di più: se il rate-limit (10/min per
+  ristorante) la rifiuta, la schermata resta utile senza i quadranti invece di andare in
+  errore.
+
+#### Rischi residui
+
+- **Il menu non ha ricerca.** Con sessanta voci la pastiglia giusta si trova scorrendo. Il
+  filtro «Finiti» copre il rientro, non la prima marcatura. Una casella di ricerca costa un
+  tap di messa a fuoco e non rientrerebbe nei 3 tap misurati: va aggiunta **accanto** al
+  percorso corto, non dentro.
+- **`GET /api/menus/:menuId` carica tutte le traduzioni del ristorante** (multilingua) anche
+  quando all'app servono nome, prezzo e disponibilità. Su un menu grande è payload sprecato
+  sul telefono. Non toccato: è la rotta della dashboard e cambiarla è un'altra decisione.
+- **L'export non ha paginazione né streaming**: 365 giorni di conti stanno in memoria prima di
+  diventare stringa. Per un ristorante è nell'ordine delle migliaia di righe, per una catena
+  no. Il rate-limit per-ristorante limita il danno, non lo elimina.
+- **La foto AI non è stata provata contro Gemini vero** in questa sessione (nessuna chiave
+  configurata): è provata la pipeline e provato che *non* viene chiamata quando non deve. Il
+  ramo che chiama davvero il modello è lo stesso di WhatsApp, in produzione da tempo.
+
+#### Note per i task successivi
+
+- `SUBS` in `ui/shell.tsx` è l'elenco delle sotto-schermate dell'hub: aggiungerne una è una
+  riga lì, un `import` e un ramo in `main.tsx`. Le voci di Wave 3 (prenotazioni, staff,
+  copilot) hanno già il loro posto.
+- `scripts/test-owner-wave2.mjs` è il posto dove si contano i tap di **qualunque** flusso
+  nuovo: `newPage()` dà sessione finta, API stubbata, registro delle chiamate mutanti e
+  contatore `isTrusted`.
+- Il gate del bundle in brotli è a **78,9 KB su 100**: restano ~21 KB per Wave 3. La prima
+  leva, se si stringe, resta quella scritta in F2 — `import()` dinamico delle sotto-schermate
+  di Wave 2, che non servono al primo paint (le cinque sezioni del servizio sì).
