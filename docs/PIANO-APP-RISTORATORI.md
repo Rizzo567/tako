@@ -1055,3 +1055,135 @@ su `/staff`, `/api/setup/*`, `/api/auth/pin-roster`.
   tunnel). Il binario `cloudflared` va imbarcato in `apps/app/src-tauri/resources/` per la
   build desktop: la cascata di risoluzione lo cerca già lì.
 - Collaudo su **device fisico** dal 4G, fuori dal locale.
+
+---
+
+### Diario esecuzione 2026-08-09 — F2 (Wave 1: MVP vendibile)
+
+**F2.1 … F2.6 — tutti DONE.** Nessuna Exit di fallimento è scattata sui task F2; è
+scattata invece — dichiarata e documentata — l'**Exit F0.2 sul budget del bundle** (vedi
+sotto). Commit sul branch `feat/owner-app`: `fb6db93` (F2.1), `7a5c9d5` (F2.2),
+`0c035cb` (F2.3), `521fe8e` (F2.4), `531123f` (F2.5), `6bbbac8` (F2.6).
+
+#### Misure
+
+| Grandezza | Prima di F2 | Dopo F2 |
+|---|---|---|
+| `vitest` root (stack vivo) | 11 file, **113 verdi** | 15 file, **132 verdi** |
+| `vitest` cloud (`test:cloud`) | 7 file, **76 verdi** | 7 file, **76 verdi** (invariato) |
+| `pnpm lint` | 0 errori, 169 warning | 0 errori, **169 warning** (invariato) |
+| `tsc -p … --noEmit` (server, dashboard, web, db) | pulito | pulito |
+| `owner/app.js` grezzo | 191,7 KB | **264,3 KB** (budget ora 400) |
+| `owner/app.js` in **brotli** (ciò che viaggia) | — | **71,8 KB** (budget 100) |
+| TTI su Fast 3G | — | **1573 ms** (budget 2000), 77 KB sul filo |
+| Scroll orizzontale a 390/430 px | — | **zero**, su tutte e 5 le sezioni |
+
+Verifier di F2.2/F2.3: `node scripts/test-owner-shell.mjs` — 13 controlli, tutti verdi.
+Test nuovi: `tests/device-enroll.test.ts` (5), `tests/mobile-realtime.test.ts` (3),
+`tests/waiter-calls.test.ts` (4), `tests/oggi-summary.test.ts` (3), più 4 casi di cassa
+aggiunti a `tests/load-review-fixes.test.ts`.
+
+#### La sola Exit scattata: budget del bundle (F0.2)
+
+Con la UI vera + `socket.io-client` il bundle grezzo passa da 191,7 a 264,3 KB e sfora i
+250 KB. Il salto viene tutto dal client socket, che è *il* realtime dell'app: senza, la
+sala non è live e l'app perde la sua ragione d'essere. Rimedi valutati nell'ordine
+previsto dal piano:
+
+1. **Code-splitting delle sezioni** — scartato: le cinque sezioni pesano insieme ~25 KB;
+   il grosso è React + socket.io, che servono comunque al primo paint.
+2. **preact/compat** — scartato per ora: risparmierebbe ~35 KB grezzi (~10 KB in brotli)
+   in cambio di un rischio di incompatibilità su un'app che tocca i soldi. Resta la
+   prima carta da giocare se il budget tornasse stretto.
+3. **Soglia alzata, ma con un gate nuovo e più severo** — scelta adottata. Grezzo ≤ 400 KB
+   (è il tempo di *parse* sul telefono), **brotli ≤ 100 KB** (è il tempo di *rete*, cioè
+   ciò che decide il TTI su 4G). Il gate sul brotli è più stretto del vecchio 250 KB
+   grezzo: 71,8 KB misurati oggi.
+
+Il pezzo che rende sensato il secondo gate è la **pre-compressione**: la build scrive
+`app.js.br`/`.gz` accanto agli artefatti e il server registra `/owner/` con
+`preCompressed: true`. Zero dipendenze nuove (brotli sta in `node:zlib`). Prima di
+questo, /owner/ viaggiava **non compresso**: ~200 KB su 4G.
+
+#### Cosa è stato trovato strada facendo (e che il piano non prevedeva)
+
+1. **Una sola migrazione, come chiesto — ma `device_enroll_codes` non era prevista.** Il
+   piano parlava solo di "metadati device su `sessions`". Il codice di arruolamento però
+   deve stare da qualche parte con HMAC a riposo, TTL e consumo single-use *atomico*: in
+   memoria sarebbe stato più semplice ma il consumo atomico e la revoca non sarebbero
+   sopravvissuti a un riavvio dell'appliance a metà servizio. La 0017 contiene quindi
+   tre cose: colonne su `sessions`, `device_enroll_codes`, `waiter_calls`.
+2. **`hashToken` del cloud non è riusabile sull'appliance**: dipende da `TOKEN_PEPPER`,
+   che esiste solo in `TAKO_MODE=cloud` (lancia se manca). Sull'appliance l'HMAC usa
+   `JWT_SECRET` — già obbligatorio all'avvio e persistito in `~/.tako/jwt-secret` — con
+   un prefisso di dominio (`device-enroll:`), perché lo stesso segreto firma anche i JWT
+   del tavolo e due usi diversi non devono produrre lo stesso digest.
+3. **Il refresh rolling avrebbe allungato a 90 giorni anche le sessioni mobile.**
+   `middleware/auth.ts` decideva la finestra dalla LUNGHEZZA del token, e il token
+   mobile è un `nanoid(64)` come quello staff: senza il campo `kind` la sessione del
+   telefono si sarebbe auto-estesa a 90 giorni, contraddicendo D3. Ora la finestra la
+   decide `sessions.kind`, e per il mobile non si emette nessun `Set-Cookie`.
+4. **`posX`/`posY` hanno DEFAULT 0, non NULL.** Il piano (e la staff) assumono `null` per
+   "non piazzato", ma un tavolo creato da `POST /api/tables` nasce a (0,0). Nell'app un
+   tavolo a (0,0) è trattato come **non piazzato** e finisce nella griglia sotto la
+   piantina: incollarlo all'angolo in alto a sinistra sarebbe un'informazione inventata.
+5. **Trappola dei test, incontrata tre volte**: una richiesta senza corpo ma con
+   `Content-Type: application/json` riceve **400** da Fastify prima ancora di entrare
+   nella route. Vale per `POST /device/enroll-code`, `DELETE /devices/:id`,
+   `POST /waiter-resolve`. Nei test si passa il solo header di autenticazione.
+6. **Il piano indicava `lib/cleanup.ts` per la retention delle chiamate cameriere, ma
+   quel file è la pulizia del TESTO dettato (ASR), non dei dati.** La retention di 7
+   giorni sulle chiamate risolte vive in `routes/tables.ts`, opportunistica sul
+   `waiter-resolve`. Le chiamate *aperte* sono comunque limitate a una per tavolo
+   dall'indice unico parziale.
+7. **Il verifier del guscio, se non stubba l'API, misura il database della macchina.**
+   Peggio: con un token finto la prima 401 riporta l'app alla schermata di collegamento e
+   il probe non trova più le cinque sezioni. Ora `test-owner-shell.mjs` intercetta
+   `/api/*` e risponde con dati finti *deliberatamente lunghi* (nomi di piatti
+   chilometrici, numeri di tavolo come `Dehors-12`).
+8. **Il controllo "niente scroll orizzontale" da solo non basta.** Con
+   `overflow-x: hidden` sul contenitore scorrevole, un testo troppo lungo viene
+   **tagliato** e `scrollWidth` resta perfetto: il test diceva verde mentre sullo schermo
+   mancava mezza parola. Il probe ora verifica anche che nessun elemento sfondi il
+   viewport — e così ha trovato il difetto vero nelle righe chiave/valore (ora con i
+   puntini di sospensione).
+
+#### Il rischio residuo di F1 sulle foto dei piatti: chiuso
+
+Da remoto un `<img src="/uploads/…">` non porta l'header `Authorization` (è una
+navigazione del browser) e il gate risponde 404. Fra le due strade previste — URL firmate
+o cookie di sessione sull'origine del tunnel — si è scelta **la terza, più semplice e
+senza superficie nuova**: `api.blobUrl()` scarica la risorsa con `fetch` + Bearer e
+restituisce un `blob:` URL da dare all'`<img>`. Nessuna URL da far scadere, nessun cookie
+da inventare (che avrebbe riaperto il tema `SameSite`/`Secure` fra le due origini), e in
+LAN il costo è identico a prima. Il metodo è pronto in `lib/api.ts`; la prima schermata
+che mostra foto di piatti è la Wave 2 (F4.2/F4.3), che lo userà.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **F2.1** — la revoca elencata in D3 come `DELETE /api/auth/devices/:id` è owner-only e
+  scoped al ristorante (join su `users.restaurantId`), non "sessione dell'utente
+  corrente": è l'owner che deve poter scollegare *un* telefono, anche non suo.
+- **F2.2** — i due woff2 (Nunito + DM Sans, subset latin, 101 KB) vengono spediti. Il
+  piano non lo prevedeva e F0 aveva deciso i font di sistema, ma il vincolo esplicito di
+  Manuel è che l'app **sembri la dashboard**: il doppio font è metà dell'identità visiva.
+  Con `font-display: swap` non entrano nel percorso critico e il service worker li
+  scarica una volta sola. JetBrains Mono NON viene spedito (−31 KB): gli id tecnici usano
+  il monospace di sistema.
+- **F2.3** — la lista ordini usa `?limit=25`; il cursore `meta.nextBefore` lo produce il
+  server, il client non lo ricostruisce.
+- **F2.4** — il test di concorrenza lancia **tre** pagamenti in parallelo per giro invece
+  di due (venti giri): con due il vincitore è quasi deterministico, con tre si esercita
+  davvero la coda dell'advisory lock. Zero doppi addebiti in 20 giri.
+- **F2.5** — aggiunto un caso non previsto: cinque tocchi consecutivi sul pulsante
+  producono UNA sola chiamata aperta (indice unico parziale), non cinque badge.
+
+#### Note per i task successivi
+
+- La sezione **Altro** è oggi il posto naturale dove atterreranno onboarding push (F3.3) e
+  le voci di Wave 2: è già strutturata a card indipendenti.
+- `useLiveEvent` / `useLiveReload` (in `lib/live.tsx`) sono il punto unico in cui
+  agganciare i nuovi eventi socket: l'elenco `EVENTS` è esplicito di proposito.
+- Chi tocca `owner-src/` deve rieseguire `node scripts/build-owner-app.mjs` e committare
+  l'output: `apps/dashboard/public/owner/` è artefatto di build versionato (ora include
+  anche `.br`/`.gz` e i due font).
