@@ -97,3 +97,120 @@ describe('stats dashboard: finestra default include gli ordini appena creati (fi
     expect(mine, 'topItems deve includere ordini delle ultime 2 ore').toBeTruthy()
   })
 })
+
+// ─────────────────────────────────────────────────────────────────────────────
+// F2.4 — Cassa dal telefono (P0: tocca i soldi).
+//
+// L'app owner incassa con le STESSE route della dashboard. Il rischio non è la UI,
+// è la concorrenza: due dita, due dispositivi, la stessa rete lenta. Qui si verifica
+// che l'esito sia identico a quello di un incasso fatto dalla cassa fissa.
+describe('cassa mobile: incasso concorrente (P0 doppio addebito)', () => {
+  // Apre un conto con un ordine reale sopra, così il totale non è zero.
+  async function openBillWithOrder() {
+    const cookie = await getTableCookie(env.qrToken)
+    await placeCustomerOrder(cookie, randomUUID())
+    // L'ordine cliente apre già il conto del tavolo (ensureOpenBill). Lo si rilegge.
+    const res = await fetch(`${SERVER}/api/bills/open`, { headers: staff() })
+    const bills = (await res.json()).data as { id: string; tableId: string | null; total: number }[]
+    const bill = bills.find((b) => b.tableId === env.tableId)
+    expect(bill, 'il conto del tavolo deve esistere').toBeTruthy()
+    return bill!
+  }
+
+  it('due POST /payments simultanei: uno chiude, l\'altro 409 BILL_NOT_OPEN', async () => {
+    const bill = await openBillWithOrder()
+
+    // Il totale viene dal SERVER, mai calcolato dal client: è la regola di F2.4.
+    const detail = await (await fetch(`${SERVER}/api/bills/${bill.id}`, { headers: staff() })).json()
+    const amount = detail.data.total as number
+    expect(amount).toBeGreaterThan(0)
+
+    const pay = () => fetch(`${SERVER}/api/bills/${bill.id}/payments`, {
+      method: 'POST',
+      headers: staff(),
+      body: JSON.stringify({ amount, method: 'cash' }),
+    })
+    const [a, b] = await Promise.all([pay(), pay()])
+    const codes = [a.status, b.status].sort()
+    expect(codes).toEqual([201, 409])
+
+    const loser = a.status === 409 ? a : b
+    expect((await loser.json()).error.code).toBe('BILL_NOT_OPEN')
+
+    // Un solo pagamento registrato: nessun doppio addebito.
+    const after = await (await fetch(`${SERVER}/api/bills/${bill.id}`, { headers: staff() })).json()
+    expect(after.data.status).toBe('closed')
+    expect(after.data.payments.length).toBe(1)
+  })
+
+  it('20 esecuzioni consecutive: mai due pagamenti sullo stesso conto', async () => {
+    for (let i = 0; i < 20; i++) {
+      const bill = await openBillWithOrder()
+      const detail = await (await fetch(`${SERVER}/api/bills/${bill.id}`, { headers: staff() })).json()
+      const amount = detail.data.total as number
+
+      const pay = () => fetch(`${SERVER}/api/bills/${bill.id}/payments`, {
+        method: 'POST',
+        headers: staff(),
+        body: JSON.stringify({ amount, method: i % 2 ? 'card' : 'cash' }),
+      })
+      const results = await Promise.all([pay(), pay(), pay()])
+      const ok = results.filter((r) => r.status === 201)
+      expect(ok.length, `giro ${i + 1}: esattamente un pagamento accettato`).toBe(1)
+
+      const after = await (await fetch(`${SERVER}/api/bills/${bill.id}`, { headers: staff() })).json()
+      expect(after.data.payments.length, `giro ${i + 1}: un solo pagamento sul conto`).toBe(1)
+      expect(after.data.status).toBe('closed')
+
+      // Il tavolo torna libero per il giro successivo (la chiusura lo mette in 'cleaning').
+      await fetch(`${SERVER}/api/tables/${env.tableId}/status`, {
+        method: 'PATCH', headers: staff(), body: JSON.stringify({ status: 'free' }),
+      })
+    }
+  }, 120_000)
+
+  it('liberare un tavolo con conto aperto → 409 TABLE_HAS_OPEN_BILL', async () => {
+    const bill = await openBillWithOrder()
+
+    const res = await fetch(`${SERVER}/api/tables/${env.tableId}/status`, {
+      method: 'PATCH', headers: staff(), body: JSON.stringify({ status: 'free' }),
+    })
+    expect(res.status).toBe(409)
+    expect((await res.json()).error.code).toBe('TABLE_HAS_OPEN_BILL')
+
+    // Incassato il conto, il tavolo si libera senza discussioni.
+    const detail = await (await fetch(`${SERVER}/api/bills/${bill.id}`, { headers: staff() })).json()
+    await fetch(`${SERVER}/api/bills/${bill.id}/payments`, {
+      method: 'POST', headers: staff(), body: JSON.stringify({ amount: detail.data.total, method: 'cash' }),
+    })
+    const free = await fetch(`${SERVER}/api/tables/${env.tableId}/status`, {
+      method: 'PATCH', headers: staff(), body: JSON.stringify({ status: 'free' }),
+    })
+    expect(free.status).toBe(200)
+  })
+
+  it('lo sconto è applicato dal SERVER e il totale ricalcolato sotto lock', async () => {
+    const bill = await openBillWithOrder()
+    const before = await (await fetch(`${SERVER}/api/bills/${bill.id}`, { headers: staff() })).json()
+
+    const patched = await fetch(`${SERVER}/api/bills/${bill.id}`, {
+      method: 'PATCH', headers: staff(), body: JSON.stringify({ discount: 3, tip: 2 }),
+    })
+    expect(patched.status).toBe(200)
+    const after = (await patched.json()).data
+
+    // Il client non calcola nulla: si limita a mostrare questi numeri.
+    expect(after.discount).toBe(3)
+    expect(after.tip).toBe(2)
+    expect(after.total).toBeCloseTo(after.subtotal - 3 + 2, 2)
+    expect(after.total).not.toBe(before.data.total)
+
+    // Pulizia: chiudi il conto e libera il tavolo.
+    await fetch(`${SERVER}/api/bills/${bill.id}/payments`, {
+      method: 'POST', headers: staff(), body: JSON.stringify({ amount: after.total, method: 'cash' }),
+    })
+    await fetch(`${SERVER}/api/tables/${env.tableId}/status`, {
+      method: 'PATCH', headers: staff(), body: JSON.stringify({ status: 'free' }),
+    })
+  })
+})
