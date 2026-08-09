@@ -31,8 +31,7 @@ import {
   type HostSuggestion,
 } from './endpoint'
 import { T } from './theme'
-
-const LOGO = require('../assets/icon.png')
+import LOGO from '../assets/icon.png'
 
 export interface ConnectScreenProps {
   /** Messaggio dell'ultimo tentativo fallito, se c'è stato. */
@@ -70,7 +69,9 @@ export function ConnectScreen({ error, initialHost, onAutoRetry, onManualHost }:
     else setLocalError(`Nessuna risposta da ${base}. Controlla che Tako sia acceso e che il telefono sia sulla stessa rete.`)
   }
 
-  const useSuggestion = (s: HostSuggestion) => {
+  // NB: il nome non può iniziare per `use` — le regole degli Hook prenderebbero una
+  // funzione qualunque chiamata dentro un callback per un hook fuori posto.
+  const applySuggestion = (s: HostSuggestion) => {
     setHost(s.value)
     setLocalError(null)
     void test(s.value)
@@ -152,7 +153,7 @@ export function ConnectScreen({ error, initialHost, onAutoRetry, onManualHost }:
             <Pressable
               key={s.value}
               accessibilityRole="button"
-              onPress={() => useSuggestion(s)}
+              onPress={() => applySuggestion(s)}
               disabled={testing}
               style={({ pressed }) => [styles.chip, pressed && styles.pressed]}
             >

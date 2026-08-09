@@ -115,7 +115,9 @@ export default function Index() {
     void resolve()
   }, [resolve])
 
-  const useManualHost = useCallback(async (baseUrl: string) => {
+  // NB: il nome non può iniziare per `use` — le regole degli Hook lo scambierebbero
+  // per un hook chiamato dentro un callback (il render lo passa a `onManualHost`).
+  const applyManualHost = useCallback(async (baseUrl: string) => {
     const next = await saveConfig({ manual: baseUrl })
     setCfg(next)
     setPhase({ name: 'web', base: baseUrl })
@@ -189,7 +191,7 @@ export default function Index() {
         error={phase.error}
         initialHost={cfg.manual}
         onAutoRetry={() => void resolve()}
-        onManualHost={(url) => void useManualHost(url)}
+        onManualHost={(url) => void applyManualHost(url)}
       />
     )
   }
@@ -202,7 +204,14 @@ export default function Index() {
       // Confina la WebView all'origine dell'appliance: nessuna navigazione
       // off-host può ereditare la sessione del ristoratore (MITM/redirect su LAN
       // in chiaro). I link esterni si aprono nel browser di sistema, fuori di qui.
-      originWhitelist={[`${origin}/*`]}
+      //
+      // ATTENZIONE al formato: react-native-webview confronta questi pattern con
+      // l'ORIGINE nuda della richiesta (`schema://host:porta`, senza path). Un
+      // pattern con lo slash finale — `http://tako.local:4317/*` — non combacia
+      // MAI, e la conseguenza non è un errore: la libreria considera la pagina
+      // "esterna" e la apre in Safari. In F7.3 l'app si è aperta nel browser di
+      // sistema, con la PWA giusta e la barra degli indirizzi visibile.
+      originWhitelist={[origin]}
       onShouldStartLoadWithRequest={(req) => {
         const url = req.url
         if (url.startsWith(origin) || url === 'about:blank' || url.startsWith('blob:') || url.startsWith('data:')) {

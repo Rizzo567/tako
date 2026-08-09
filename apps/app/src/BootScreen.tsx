@@ -7,9 +7,8 @@
 // prima pittura della WebView, resterebbe un rettangolo vuoto.
 
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native'
+import LOGO from '../assets/icon.png'
 import { T } from './theme'
-
-const LOGO = require('../assets/icon.png')
 
 export function BootScreen({ label = 'Cerco Tako sulla rete…' }: { label?: string }) {
   return (

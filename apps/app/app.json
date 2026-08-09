@@ -15,7 +15,9 @@
       "infoPlist": {
         "UIStatusBarStyle": "UIStatusBarStyleDarkContent",
         "NSLocalNetworkUsageDescription": "Tako parla con il computer del locale sulla rete WiFi del ristorante.",
-        "NSBonjourServices": ["_http._tcp"],
+        "NSBonjourServices": [
+          "_http._tcp"
+        ],
         "NSAppTransportSecurity": {
           "NSAllowsLocalNetworking": true
         }
@@ -39,7 +41,26 @@
       "expo-router",
       "expo-secure-store",
       "expo-font",
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#FBF8F4"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true,
+            "buildArchs": ["arm64-v8a", "armeabi-v7a"]
+          }
+        }
+      ],
+      "./plugins/with-android-release-signing"
     ]
   }
 }
