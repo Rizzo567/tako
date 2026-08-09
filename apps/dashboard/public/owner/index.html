@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<!-- viewport-fit=cover + safe-area nei token: notch e home indicator gestiti in CSS -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ED7159">
+<title>Tako Owner</title>
+<link rel="stylesheet" href="app.css">
+<style>
+/* Primo paint prima che il CSS/JS arrivino: mai schermo bianco. */
+#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:system-ui,-apple-system,sans-serif;color:#2A1F1A;background:#F2EBE2;text-align:center;padding:24px}
+#boot .sp{width:34px;height:34px;border:3px solid #ED715933;border-top-color:#ED7159;border-radius:50%;animation:ow-spin .9s linear infinite}
+#boot b{font-size:16px;font-weight:800}#boot small{color:#6B5A50;font-size:13px;max-width:300px}
+#boot button{margin-top:6px;padding:10px 18px;border:none;border-radius:11px;background:#ED7159;color:#fff;font-weight:700;font-size:14px}
+@keyframes ow-spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<!-- #boot vive DENTRO #root: React lo rimuove al mount (createRoot().render svuota
+     il container). Se il bundle non carica, il watchdog qui sotto mostra una diagnosi. -->
+<div id="root"><div id="boot"><div class="sp"></div><b>Avvio Tako…</b><small>Se resta così, l&rsquo;appliance potrebbe non essere raggiungibile.</small></div></div>
+<script>
+(function () {
+  var shown = false
+  function panel(msg) {
+    if (shown) return; shown = true
+    var boot = document.getElementById('boot')
+    if (!boot) return
+    boot.innerHTML =
+      '<b>Tako Owner non si &egrave; avviata</b>' +
+      '<small>' + (msg || '') + '</small>' +
+      '<small>Verifica che l&rsquo;appliance sia accesa e raggiungibile.</small>' +
+      '<button onclick="location.reload()">Ricarica</button>'
+  }
+  window.addEventListener('error', function (e) {
+    var m = (e && e.message) || 'Errore di caricamento'
+    if ((e && e.filename) || /SyntaxError|is not defined|Unexpected/i.test(m)) panel(m)
+  })
+  setTimeout(function () { if (document.getElementById('boot')) panel('Il bundle non si &egrave; caricato.') }, 10000)
+})()
+</script>
+<script src="app.js" defer></script>
+</body>
+</html>
