@@ -20,12 +20,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   BackHandler,
   Platform,
-  RefreshControl,
   Linking as RNLinking,
-  ScrollView,
   StyleSheet,
+  View,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { WebView, type WebViewMessageEvent } from 'react-native-webview'
 import { BootScreen } from '../src/BootScreen'
 import { ConnectScreen } from '../src/ConnectScreen'
@@ -56,6 +55,26 @@ type Phase =
  * l'indirizzo del tunnel senza duplicare la chiamata a `/api/system/info` — che
  * peraltro non potrebbe fare, non avendo il token.
  */
+/**
+ * Le safe area le misura il NATIVO e le passa alla pagina come `--safe-top` /
+ * `--safe-bottom` (F8.1). La PWA le ha già in `env(safe-area-inset-*)`, ma dentro
+ * una WebView quei valori valgono solo se la vista arriva davvero fino ai bordi —
+ * su Android, con l'edge-to-edge di SDK 56, `env()` torna 0 in più di un caso. Lo
+ * stile inline su `:root` vince sui token e non tocca il caso Safari standalone,
+ * dove questa iniezione semplicemente non gira e restano le `env()`.
+ */
+function insetsJs(top: number, bottom: number) {
+  return `(function () {
+  try {
+    var d = document.documentElement;
+    d.style.setProperty('--safe-top', '${Math.round(top)}px');
+    d.style.setProperty('--safe-bottom', '${Math.round(bottom)}px');
+    d.setAttribute('data-tako-shell', '1');
+  } catch (e) {}
+  true;
+})();`
+}
+
 const LEARN_ENDPOINTS_JS = `(function () {
   try {
     var KEY = 'tako.owner.endpoints';
@@ -76,9 +95,9 @@ const LEARN_ENDPOINTS_JS = `(function () {
 export default function Index() {
   const [phase, setPhase] = useState<Phase>({ name: 'boot' })
   const [cfg, setCfg] = useState<StoredConfig>({ manual: null, remote: null })
-  const [refreshing, setRefreshing] = useState(false)
   /** Rimonta la WebView: unico rimedio quando il processo di rendering muore. */
   const [webKey, setWebKey] = useState(0)
+  const insets = useSafeAreaInsets()
 
   const webRef = useRef<WebView>(null)
   const canGoBack = useRef(false)
@@ -144,9 +163,16 @@ export default function Index() {
     webRef.current?.injectJavaScript(`(function(){ location.hash = ${hash}; location.reload(); })(); true;`)
   }, [enrollCode, phase.name])
 
+  // Le safe area cambiano con la rotazione e all'apertura della tastiera: la pagina
+  // va riallineata subito, non al prossimo caricamento.
+  const insetsScript = insetsJs(insets.top, insets.bottom)
+  useEffect(() => {
+    if (phase.name !== 'web') return
+    webRef.current?.injectJavaScript(insetsScript)
+  }, [insetsScript, phase.name])
+
   const fail = useCallback((message: string) => {
     canGoBack.current = false
-    setRefreshing(false)
     setPhase({ name: 'connect', error: message })
   }, [])
 
@@ -174,11 +200,6 @@ export default function Index() {
     } catch {
       /* la pagina può postare messaggi suoi: quelli non nostri si ignorano */
     }
-  }, [])
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    webRef.current?.reload()
   }, [])
 
   // ─────────────── Render ───────────────
@@ -227,9 +248,10 @@ export default function Index() {
       // senza domStorage l'app si scollegherebbe a ogni avvio.
       javaScriptEnabled
       domStorageEnabled
-      // Endpoint imparati dalla PWA → AsyncStorage del guscio.
-      injectedJavaScript={LEARN_ENDPOINTS_JS}
-      injectedJavaScriptBeforeContentLoaded={LEARN_ENDPOINTS_JS}
+      // Endpoint imparati dalla PWA → AsyncStorage del guscio. Le safe area viaggiano
+      // insieme: devono valere già al primo paint, o l'header nasce sotto l'isola.
+      injectedJavaScript={`${insetsScript}${LEARN_ENDPOINTS_JS}`}
+      injectedJavaScriptBeforeContentLoaded={`${insetsScript}${LEARN_ENDPOINTS_JS}`}
       onMessage={onMessage}
       // Errori di rete sul documento principale: si torna alla schermata nativa.
       // Il codice -999 di WebKit è la richiesta ANNULLATA (una navigazione ne ha
@@ -249,7 +271,6 @@ export default function Index() {
             : `Tako ha risposto ${nativeEvent.statusCode} su ${origin}.`,
         )
       }}
-      onLoadEnd={() => setRefreshing(false)}
       // Processo di rendering morto (Android `onRenderProcessGone`, iOS
       // `onContentProcessDidTerminate`): una `reload()` su una WebView morta non
       // fa nulla — la vista va RICREATA. Cambiare la key la rimonta da zero, e il
@@ -257,12 +278,49 @@ export default function Index() {
       // sopravvive alla vista).
       onRenderProcessGone={() => setWebKey((k) => k + 1)}
       onContentProcessDidTerminate={() => setWebKey((k) => k + 1)}
-      pullToRefreshEnabled
-      nestedScrollEnabled
+      // ───────── F8.1 — questa non è una pagina web, è un'app ─────────
+      //
+      // Tutto ciò che segue serve a togliere alla WebView i gesti che tradiscono
+      // il browser. Manuel ha bocciato la build di F7.3 con quattro parole:
+      // «si può muovere tutta l'interfaccia».
+      //
+      // Il pannello che scorre è UNO SOLO ed è dentro la pagina (`.ow-scroll`);
+      // il documento è grande esattamente quanto il viewport (body fissato in
+      // `owner-src/app.css`). Quindi la scrollView della WebView non ha nulla da
+      // scorrere — e senza `bounces` non può nemmeno fingere di averlo. Lo
+      // scorrimento NON è disabilitato del tutto: quando si apre la tastiera,
+      // WebKit usa proprio quella scrollView per portare in vista il campo a
+      // fuoco, e toglierla lascerebbe l'input sotto i tasti.
+      //
+      // NB: react-native-webview NON espone `alwaysBounceHorizontal/Vertical`
+      // (non sono in `IOSWebViewProps`): `bounces={false}` è la sola leva, e
+      // spegne il rimbalzo su ENTRAMBI gli assi perché è `UIScrollView.bounces`.
+      bounces={false}
+      directionalLockEnabled
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      // La pagina si dispone da sé sulle safe area (`viewport-fit=cover` + env()):
+      // nessuno deve aggiungere insidie sopra, o il contenuto nasce spostato e la
+      // WebView diventa scorrevole per la sola altezza dell'inset.
+      contentInsetAdjustmentBehavior="never"
+      automaticallyAdjustContentInsets={false}
+      automaticallyAdjustsScrollIndicatorInsets={false}
+      // Android: niente effetto "stiro" ai bordi e niente controlli di zoom.
+      overScrollMode="never"
+      setBuiltInZoomControls={false}
+      setDisplayZoomControls={false}
+      // La gesture di ritorno dal bordo fa scivolare l'istantanea della pagina
+      // precedente: è l'animazione di Safari, e sulle navigazioni pushState della
+      // PWA (le sotto-schermate di "Altro") scivola una copia identica di ciò che
+      // si sta guardando. Il ritorno ce l'hanno già la freccia nell'header e il
+      // tasto fisico di Android.
+      allowsBackForwardNavigationGestures={false}
+      // Anteprima al tocco prolungato: menù contestuale da browser su ogni link.
+      allowsLinkPreview={false}
+      nestedScrollEnabled={false}
       sharedCookiesEnabled
       thirdPartyCookiesEnabled={false}
       allowsInlineMediaPlayback
-      allowsBackForwardNavigationGestures
       setSupportMultipleWindows={false}
       scalesPageToFit={false}
       webviewDebuggingEnabled={__DEV__}
@@ -271,36 +329,16 @@ export default function Index() {
     />
   )
 
-  return (
-    <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
-      {/* Su iOS il pull-to-refresh è nativo della WebView (`pullToRefreshEnabled`,
-          prop iOS-only). Su Android non esiste: lo dà il RefreshControl del
-          ScrollView, che riceve l'overscroll grazie a `nestedScrollEnabled`. */}
-      {Platform.OS === 'android' ? (
-        <ScrollView
-          style={styles.web}
-          contentContainerStyle={styles.fill}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={[T.brand]}
-              tintColor={T.brand}
-              progressBackgroundColor={T.surface}
-            />
-          }
-        >
-          {webview}
-        </ScrollView>
-      ) : (
-        webview
-      )}
-    </SafeAreaView>
-  )
+  // Nessuna SafeAreaView: la WebView arriva ai bordi dello schermo, isola compresa.
+  // Gli inset non spariscono, cambiano padrone — li applica la PWA in CSS, che è
+  // l'unica a sapere quali elementi devono stare sotto l'isola (lo scrim sfocato)
+  // e quali no. Un padding nativo qui è esattamente la banda che Manuel ha visto.
+  return <View style={styles.root}>{webview}</View>
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: T.surface },
-  web: { flex: 1, backgroundColor: T.surface },
-  fill: { flexGrow: 1 },
+  // Lo sfondo è quello della pagina, non della schermata di collegamento: è ciò
+  // che si intravede nel frame fra l'avvio della WebView e il primo paint.
+  root: { flex: 1, backgroundColor: T.bg },
+  web: { flex: 1, backgroundColor: T.bg },
 })

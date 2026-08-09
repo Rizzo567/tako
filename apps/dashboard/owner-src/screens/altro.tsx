@@ -55,7 +55,15 @@ export function AltroScreen({ onOpen }: { onOpen: (id: SubId) => void }) {
         {info?.version && (
           <div className="ow-kv"><span>Versione appliance</span><b className="mono">{info.version}</b></div>
         )}
-        <Btn kind="soft" size="sm" icon="refresh" onClick={recheck} style={{ marginTop: 12 }}>Ricontrolla la rete</Btn>
+        {/* Ricaricare l'app era il tirare-per-aggiornare del guscio nativo. È stato
+            tolto in F8.1: quel gesto pretende che la pagina possa rimbalzare, e una
+            pagina che rimbalza è una pagina che si può trascinare via tutta. I dati
+            arrivano comunque da soli (socket + ricariche a ogni cambio sezione);
+            questo bottone resta per il caso raro in cui si vuole ripartire puliti. */}
+        <div className="ow-row-btns">
+          <Btn kind="soft" size="sm" icon="refresh" onClick={recheck}>Ricontrolla la rete</Btn>
+          <Btn kind="ghost" size="sm" icon="refresh" onClick={() => window.location.reload()}>Ricarica l&rsquo;app</Btn>
+        </div>
       </Card>
 
       {/* Le notifiche stanno QUI e non in una schermata dedicata: è la sezione che il

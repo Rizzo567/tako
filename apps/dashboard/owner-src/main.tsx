@@ -162,6 +162,52 @@ function Root() {
     : <EnrollScreen />
 }
 
+/**
+ * Altezza della tastiera → `--kb`, e la shell si accorcia sopra i tasti.
+ *
+ * Serve perché il body è FISSO (vedi app.css): è la scelta che impedisce di
+ * trascinare tutta l'interfaccia, e il suo prezzo è che il browser non può più
+ * scorrere la pagina per scoprire il campo a fuoco. Il prezzo lo si paga qui.
+ *
+ * `visualViewport` misura ciò che si VEDE davvero; `innerHeight` resta l'altezza
+ * di prima. La differenza è la tastiera — meno l'eventuale scorrimento della
+ * visualViewport, che va sottratto o a tastiera aperta il valore balla mentre si
+ * scorre. Sotto i 120 px si considera zero: barre di sistema e arrotondamenti non
+ * sono una tastiera.
+ */
+function trackKeyboard() {
+  const vv = window.visualViewport
+  if (!vv) return
+  // Seconda metà del lavoro, e la meno ovvia: quando apre la tastiera WebKit SPOSTA
+  // la finestra visibile per scoprire il campo a fuoco. Con un layout fisso quello
+  // spostamento non torna più indietro da solo — header sotto la barra di stato,
+  // contenuto sopra l'orologio: è lo stesso difetto per cui l'app è stata bocciata,
+  // che rientra dalla porta della tastiera. Lo si annulla: l'ingombro dei tasti l'ha
+  // già tolto `--kb` accorciando la shell, quindi non c'è più niente da scoprire.
+  const settle = () => {
+    if (vv.offsetTop !== 0 || window.scrollY !== 0) window.scrollTo(0, 0)
+  }
+  const apply = () => {
+    const kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop))
+    const open = kb > 120
+    document.documentElement.style.setProperty('--kb', open ? `${kb}px` : '0px')
+    // A tastiera aperta la barra delle sezioni non si può toccare e l'home
+    // indicator non c'è: entrambi devono sparire dal conto, o restano come due
+    // fasce vuote fra il campo e i tasti. La regola sta in app.css.
+    document.documentElement.setAttribute('data-kb', open ? '1' : '0')
+    settle()
+  }
+  // Tre passate: la tastiera entra in animazione (~250 ms) e WebKit decide di
+  // spostare la finestra a metà strada, dopo la prima misura.
+  const applyLater = () => { apply(); setTimeout(apply, 90); setTimeout(apply, 340) }
+  vv.addEventListener('resize', applyLater)
+  vv.addEventListener('scroll', settle)
+  window.addEventListener('focusin', applyLater)
+  window.addEventListener('focusout', applyLater)
+  apply()
+}
+trackKeyboard()
+
 const mount = document.getElementById('root')
 if (mount) {
   createRoot(mount).render(

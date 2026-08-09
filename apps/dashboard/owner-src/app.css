@@ -8,21 +8,61 @@
 
 * { box-sizing: border-box; }
 
-html, body {
-  margin: 0;
+/* ─────────── Il documento non scorre. Mai. ───────────
+   Questa è la regola che separa un'app da una pagina web, e la prima cosa che si
+   nota quando manca: se il documento può scorrere anche di un solo pixel, iOS ti
+   lascia trascinare TUTTA l'interfaccia — isola, header, barra — e te la lascia
+   dove l'hai mollata. Il guscio nativo spegne il rimbalzo della WebView
+   (`bounces={false}` in apps/app/app/index.tsx), ma la PWA gira anche installata
+   da Safari, dove quella leva non esiste: lì l'unica difesa è non dare al
+   documento nulla da scorrere.
+
+   `position: fixed` sul body — non solo `overflow: hidden` — perché Safari iOS
+   scorre comunque un body `overflow:hidden` quando compare la tastiera. */
+html {
   height: 100%;
-  /* Nessuno scroll orizzontale, mai: la pagina scorre solo in verticale. */
-  overflow-x: hidden;
+  overflow: hidden;
+  /* Niente lampo grigio sotto il dito su ogni tocco: è la firma del browser. */
+  -webkit-tap-highlight-color: transparent;
+  /* `manipulation` toglie il doppio-tap per ingrandire lasciando vivo lo scorrimento
+     dei pannelli interni. NON si usa `pan-y`: la striscia delle sale (.ow-seg-scroll)
+     scorre in orizzontale, e touch-action si INTERSECA lungo la catena degli
+     antenati — un `pan-y` qui sopra e un `pan-x` là dentro danno insieme "niente". */
+  touch-action: manipulation;
+  overscroll-behavior: none;
 }
 
 body {
+  position: fixed;
+  inset: 0;
+  /* La tastiera non deve coprire il campo a fuoco: `--kb` è l'altezza dei tasti,
+     misurata dalla visualViewport in main.tsx. A tastiera chiusa vale 0. */
+  bottom: var(--kb, 0px);
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
   font-family: var(--f-ui);
   font-weight: 500;
   color: var(--ink);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overscroll-behavior-y: none;
+  /* Niente lente d'ingrandimento e niente menù "Copia/Cerca" sul telaio dell'app.
+     Il testo che si vuole davvero copiare — importi, note, indirizzi — lo riabilita
+     la regola `.ow-sel` qui sotto: la selezione si concede, non si subisce. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* I DATI restano selezionabili: un importo, un totale, il codice di collegamento o
+   una nota del cliente sono cose che un ristoratore copia davvero. Il telaio
+   (linguette, titoli, etichette dei bottoni) no: lì la selezione è solo un modo per
+   ritrovarsi mezza interfaccia evidenziata in azzurro. */
+.ow-sel, .num, .mono, .ow-kv b, .ow-muted, input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 
 h1, h2, h3 {
@@ -70,15 +110,70 @@ button {
 .ow-app {
   position: fixed;
   inset: 0;
+  bottom: var(--kb, 0px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
+/* ─────────── Header: galleggia, non occupa ───────────
+   L'header è FUORI dal flusso e sta sopra al pannello che scorre. Non è un vezzo:
+   è la condizione perché il contenuto passi SOTTO di lui e si sfochi, che è il
+   modo in cui su iOS si capisce che una lista continua oltre il bordo dello
+   schermo. Con l'header in colonna, sopra il pannello, sotto non passa niente e
+   la lista finisce di netto contro l'isola. */
 .ow-header {
-  flex: none;
-  padding: calc(var(--safe-top) + 10px) 14px 8px;
-  background: linear-gradient(180deg, var(--bg) 62%, transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: calc(var(--safe-top) + 8px) 14px 10px;
+  /* Il riquadro dell'header non deve rubare i tocchi al pannello che gli scorre
+     sotto: li riprendono i suoi figli. */
+  pointer-events: none;
+}
+.ow-header > * { pointer-events: auto; }
+
+/* Sfocatura PROGRESSIVA: due strati sovrapposti con maschere sfalsate. In cima si
+   sommano (18 + 9 px), a metà resta solo il più leggero, in fondo non resta nulla.
+   Un solo strato darebbe un taglio netto dove finisce la maschera — cioè
+   esattamente il difetto che si sta correggendo, spostato di 40 px più in basso.
+   La coda scende 20 px sotto l'header perché la sfumatura deve FINIRE nel vuoto,
+   non sul bordo di un elemento. */
+.ow-header::before,
+.ow-header::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 -20px 0;
+  pointer-events: none;
+}
+.ow-header::before {
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+}
+.ow-header::after {
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  /* Velatura TRASLUCIDA, non coprente: sotto l'isola il contenuto deve continuare
+     a vedersi, sfocato. Con un fondo pieno non si sfoca niente — si nasconde, ed è
+     un'altra cosa (e si vede che è un'altra cosa). */
+  background: linear-gradient(180deg, rgba(242, 235, 226, .60) 0%, rgba(242, 235, 226, .34) 55%, rgba(242, 235, 226, 0) 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 38%, transparent 82%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 38%, transparent 82%);
+}
+/* Il titolo e il badge stanno SOPRA i due strati di vetro. */
+.ow-header-row { position: relative; z-index: 2; }
+
+@media (prefers-reduced-transparency: reduce) {
+  .ow-header::before { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .ow-header::after {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: linear-gradient(180deg, var(--bg) 70%, rgba(242, 235, 226, 0));
+  }
 }
 
 .ow-header-row {
@@ -130,14 +225,21 @@ button {
   100% { box-shadow: 0 0 0 0 rgba(79, 169, 128, 0); }
 }
 
-/* Area scorrevole. Il padding in basso tiene i contenuti sopra la barra flottante. */
+/* Area scorrevole: l'UNICA cosa che scorre in tutta l'app.
+   Parte da SOTTO l'isola solo per via del padding — il riquadro invece arriva fino
+   in cima allo schermo, ed è per questo che il contenuto passa sotto il vetro
+   dell'header invece di fermarsi contro di lui.
+   Il padding in basso tiene i contenuti sopra la barra flottante. */
 .ow-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 14px calc(var(--safe-bottom) + 104px);
+  /* Lo scorrimento si ferma qui: non si propaga al documento (che è fisso) e non
+     produce il rimbalzo a vuoto della pagina intera. */
+  overscroll-behavior: contain;
+  padding: calc(var(--safe-top) + 54px) 14px calc(var(--safe-bottom) + 104px);
 }
 .ow-scroll::-webkit-scrollbar { width: 9px; }
 .ow-scroll::-webkit-scrollbar-thumb {
@@ -148,6 +250,12 @@ button {
 }
 
 .ow-stack { display: flex; flex-direction: column; gap: 14px; }
+
+/* Tastiera aperta: la shell si è già accorciata sopra i tasti (`--kb`), qui si
+   toglie ciò che a quel punto è solo ingombro. La barra delle sezioni sotto una
+   tastiera è una fila di bottoni che nessuno può premere. */
+:root[data-kb="1"] .ow-bb { display: none; }
+:root[data-kb="1"] .ow-scroll { padding-bottom: 16px; }
 
 /* ─────────── Barra inferiore "vetro" (stessa della staff) ─────────── */
 
@@ -360,6 +468,7 @@ button {
 .ow-sheet-wrap {
   position: fixed;
   inset: 0;
+  bottom: var(--kb, 0px);
   z-index: 60;
   background: rgba(42, 31, 26, .38);
   display: flex;
@@ -384,17 +493,28 @@ button {
 .ow-sheet-grip { width: 40px; height: 4px; border-radius: 99px; background: var(--hairline); margin: 4px auto 10px; }
 .ow-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .ow-sheet-head h2 { font-size: 18px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ow-sheet-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 12px; }
+.ow-sheet-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 12px; }
 .ow-sheet-foot { flex: none; padding-top: 12px; display: flex; gap: 10px; }
 
 /* ─────────── Collegamento del telefono ─────────── */
 
+/* Il body è fisso: questa schermata vive fuori dalla shell, quindi lo scorrimento
+   se lo dà da sola. Senza, su un telefono piccolo con la tastiera aperta il campo
+   del codice finisce sotto i tasti e non c'è modo di raggiungerlo. */
 .ow-enroll {
-  min-height: 100%;
+  position: fixed;
+  inset: 0;
+  bottom: var(--kb, 0px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* `safe center` invece di `center`: quando il contenuto supera l'altezza, il
+     centraggio classico spinge il primo elemento FUORI dal bordo alto e lo rende
+     irraggiungibile allo scorrimento. */
+  justify-content: safe center;
   text-align: center;
   gap: 14px;
   padding: calc(var(--safe-top) + 32px) 22px calc(var(--safe-bottom) + 32px);
@@ -443,6 +563,10 @@ button {
   gap: 8px;
   overflow-x: auto;
   scrollbar-width: none;
+  /* L'unico elemento a cui è concesso il pan orizzontale, e nemmeno lui può
+     trascinarsi dietro qualcos'altro quando arriva in fondo. */
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
   padding-bottom: 2px;
   /* La striscia scorre da sola: è l'unico elemento dell'app a cui è concesso, e
      non deve mai trascinarsi dietro la pagina (nessuno scroll orizzontale globale). */
@@ -1061,6 +1185,9 @@ button {
   background: var(--raised);
   box-shadow: var(--sh-2);
 }
+/* Sparita la barra delle sezioni, gli 86 px che servivano a scavalcarla non
+   servono più: il composer si appoggia ai tasti, che è dove lo cerca il pollice. */
+:root[data-kb="1"] .ow-cop-composer { bottom: 8px; }
 .ow-cop-input {
   flex: 1;
   min-width: 0;
