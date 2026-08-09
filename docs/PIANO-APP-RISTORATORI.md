@@ -1853,3 +1853,140 @@ Screenshot: `and-01` (collegamento), `and-02` (host scritto), `and-03` (PWA), `a
 - **Push native (F7.5)**: APNs e progetto Firebase, come già scritto nel piano.
 - **Ruby moderno sul Mac** (rbenv o mise): sblocca i moduli Expo precompilati e accorcia le
   build iOS.
+
+---
+
+### Diario esecuzione 2026-08-09 — F5 (Wave 3: assistente, prenotazioni, staff)
+
+**F5.1, F5.2, F5.3 — tutti DONE.** Nessuna Exit di fallimento è scattata; nessuno dei tre task
+ha consumato più di una iterazione sul proprio goal. **F5.4 non è stata eseguita**: è superata
+dalla §9 (il guscio nativo di F7 esiste già e la decisione «wrapper sì o no» non è più aperta
+nei termini in cui F5.4 la poneva). Commit sul branch `feat/owner-app`: `6fe37f3` (F5.1),
+`1fe069b` (F5.2), `a8eece3` (F5.3).
+
+#### Misure
+
+| Grandezza | Dopo F4 | Dopo F5.1 | Dopo F5.2 | Dopo F5.3 |
+|---|---|---|---|---|
+| `vitest` root (stack vivo) | 22 file, 179 | 23 file, **193** | 23 file, **200** | 23 file, **207** |
+| `vitest` cloud (`test:cloud`) | 7 file, 76 | 7, 76 | 7, 76 | 7 file, **76** (invariato) |
+| `pnpm lint` | 0 err, 169 warn | 0 / 169 | 0 / 169 | **0 errori, 169 warning** |
+| `tsc -p … --noEmit` (server, dashboard, web, db) | pulito | pulito | pulito | **pulito** |
+| `owner/app.js` grezzo | 291,8 KB | 298,4 KB | 308,4 KB | **314,0 KB** (budget 400) |
+| `owner/app.js` in brotli | 78,8 KB | 80,6 KB | 82,3 KB | **83,4 KB** (budget 100, gate) |
+| TTI su Fast 3G | 1604 ms | — | 1631 ms | **1638 ms** (budget 2000), 90 KB sul filo |
+| `scripts/test-owner-wave3.mjs` | — | 22 controlli | 50 | **72 controlli** |
+| Segnare «arrivati» una prenotazione | — | — | **4 tap** | 4 tap |
+| Assegnare un tavolo | — | — | **5 tap** | 5 tap |
+| Timbrare l'entrata di un membro | — | — | — | **3 tap** |
+
+Test nuovi: `tests/copilot-owner.test.ts` (14, F5.1), `tests/reservations.test.ts` +7 (18 in
+tutto), `tests/shifts.test.ts` +7 (15 in tutto). `test-owner-shell.mjs` (13) e
+`test-owner-wave2.mjs` (32) restano verdi a ogni giro.
+
+**Nessuna riga di server è stata scritta in tutta la Wave 3.** Le tre schermate girano su
+rotte già in produzione (`ai-owner.ts`, `reservations.ts`, `shifts.ts`, `staff.ts`) e su due
+eventi socket già emessi (`reservation:changed`, `shift:updated`): l'unica modifica lato client
+è stato aggiungerli all'elenco esplicito di `lib/live.tsx`.
+
+#### Le tre decisioni che hanno disegnato la Wave 3
+
+1. **La mutation dell'assistente vive solo dentro l'`onClick` della conferma** (F5.1). Non è un
+   controllo *aggiuntivo*: è l'unico posto del codice da cui `POST /ai/owner/execute` può
+   partire. Un flag «già confermato» controllato altrove sarebbe una promessa; questa è una
+   proprietà strutturale, e il probe la verifica al contrario — registra ogni chiamata non-GET
+   e pretende che il registro sia **vuoto** dopo una risposta piena di proposte.
+2. **L'ora è il numero grande** (F5.2). Chi apre le prenotazioni cerca «chi arriva adesso», non
+   un nome: la lista è ordinata per ora, l'ora sta a sinistra in `.num`, e i due gesti della
+   sera («Arrivati», «Non presentati») sono i primi due bottoni del foglio, larghi 175×52 px.
+   Tutto il resto — conferma, tavolo, annulla, elimina — sta sotto, dove costa un tap in più
+   perché si fa dieci volte meno spesso.
+3. **Timbrare è un tap dalla lista, non un gesto dentro un foglio** (F5.3). La riga dello staff
+   ha **due** bersagli: il nome apre il dettaglio, il tasto a destra timbra. Sono due gesti
+   diversi e non devono contendersi lo stesso pixel — è ciò che tiene `Altro → Staff → Entrata`
+   dentro i 3 tap.
+
+#### Cosa è stato trovato strada facendo
+
+1. **L'heartbeat dell'SSE non è JSON.** Il server manda `: ping` ogni 15 s (commento SSE): un
+   parser che desse in pasto ogni riga a `JSON.parse` morirebbe **a metà di una risposta lunga**,
+   cioè proprio quando serve. Il probe inietta il ping in mezzo ai token per non lasciare la
+   cosa al caso.
+2. **`EventSource` non sa mandare `Authorization`.** L'SSE del copilot passa da `fetch` con la
+   Response letta a chunk (`api.stream()`), non da `EventSource`: dal tunnel il Bearer è
+   l'unica autenticazione che c'è, e un `EventSource` non ha modo di metterlo.
+3. **Il ripiego non-streaming è diventato comportamento normale, non emergenza.** Se lo stream
+   non parte, muore a metà o risponde `error`, il client rifà la domanda a `POST
+   /ai/owner/chat`. È l'Exit del piano adottata come default: attraverso il tunnel un SSE che
+   cade è un evento ordinario, non un guasto.
+4. **Il 409 dell'anti-overbooking è un testo, non un codice.** `routes/reservations.ts`
+   risponde «Il tavolo è già prenotato in quella fascia oraria.»: la schermata lo stampa
+   **parola per parola**. Tradurlo in «Operazione non riuscita» butterebbe via l'unica
+   informazione utile. Il test lo tratta come contratto e verifica la stringa esatta.
+5. **La creazione manda quattro campi, non sei.** `durationMin` (90′) e `status`
+   («da confermare») restano decisioni del server: se un giorno cambiassero, cambierebbero
+   ovunque insieme. Il probe verifica che l'app **non** li mandi.
+6. **`new Date('2026-08-09T20:00:00')` è ora locale del telefono** — che è quella del
+   ristorante — mentre `?date=` viaggia come chiave giorno. Le due letture combaciano perché il
+   server risolve la chiave nel fuso del ristorante (`dayStartInTz`), non in UTC.
+7. **Disattivare un account non è «togliere una spunta»: cancella tutte le sessioni** di quel
+   membro (`staff.ts:63`). Il tablet in sala si scollega all'istante. L'avviso sta **sopra** il
+   bottone, visibile prima del tap, e il test lo prova davvero: il vecchio token passa da 200 a
+   401 — e **non torna a funzionare** nemmeno riattivando l'account.
+8. **Il `data-act` sui bottoni non è decorazione.** Selezionare per posizione (`.ow-btn` n°2) si
+   rompe al primo bottone condizionale che compare o sparisce — e un probe che tocca il bottone
+   sbagliato **dichiara verde una cosa mai provata**. `Btn` ora accetta `act`.
+9. **Un `<button>` dentro un `<button>` non esiste.** La riga dello staff è un `div` con due
+   bottoni figli, non una riga-bottone con un bottone dentro: è il motivo per cui non riusa il
+   pattern di `.ow-inv-row`.
+10. **Il probe di Wave 3 era già pronto per F5.2 e F5.3 prima che esistessero.** Gli stub di
+    `/api/reservations`, `/api/staff` e `/api/shifts/active` erano stati scritti in F5.1: le due
+    schermate successive hanno solo aggiunto i controlli, non l'impianto.
+
+#### Deviazioni rispetto alla lettera del piano
+
+- **F5.4 non eseguita** — superata dalla §9, come già annotato nel piano stesso (riga «Questo
+  supera F5.4»). Il guscio nativo esiste da F7.2–F7.4; la decisione che restava (push native)
+  è F7.5, non F5.4.
+- **F5.2** — il piano elencava anche `PATCH /:id` fra i tool. La schermata **non** la usa: nome,
+  telefono, ora e persone non si correggono dal telefono. Cambiarli è un'operazione da
+  dashboard, e ognuno di quei campi in un foglio mobile costa una tastiera aperta durante il
+  servizio. `PATCH /:id/status` e `PATCH /:id/table` coprono tutto ciò che si fa in piedi.
+- **F5.2** — aggiunto un contatore «N attese · N coperti» non previsto: è il numero che si
+  guarda prima del servizio, e senza di quello la lista va contata a occhio.
+- **F5.3** — la disattivazione è a **un tap** dopo l'avviso, non a due con conferma. L'avviso
+  esplicito prima del gesto + la riattivazione immediata a un tap valgono più di un «Confermi?»
+  che si impara a saltare. È una scelta, non una dimenticanza.
+- **F5.3** — il piano prevedeva `GET /api/shifts` fra i tool solo implicitamente: la schermata
+  usa **solo** `/shifts/active`. Lo storico dei turni è una vista da dashboard; su 390 px
+  sarebbe una lista lunga senza una domanda a cui rispondere.
+- **Rimossa la card «Cosa arriva»** da `Altro`: annunciava l'assistente e «prenotazioni e turni
+  dal telefono», che ora ci sono tutti e tre.
+
+#### Rischi residui
+
+- **Le prenotazioni si vedono solo a due giorni.** «Oggi» e «Domani» coprono il gesto del
+  servizio; chi cerca sabato prossimo deve passare dalla dashboard. Aggiungere un calendario
+  costerebbe un tap prima di ogni cosa, e la sera non si guarda mai.
+- **La griglia dei tavoli non sa quali siano liberi in quella fascia.** Mostra tutti i tavoli e
+  lascia che sia il server a rifiutare con 409. Su un locale da quaranta tavoli è un tap
+  sprecato ogni tanto; saperlo prima richiederebbe una rotta di disponibilità che non esiste.
+- **`GET /staff` non dice se un membro ha un turno aperto**: lo si ricava incrociando
+  `/shifts/active`. Con una squadra grande sono due liste da tenere allineate a mano nel client.
+- **Il copilot non ha memoria fra un'apertura e l'altra** (la chat vive in `localStorage`, le
+  proposte no): una card salvata ieri eseguirebbe una decisione presa su dati che non ci sono
+  più. È voluto, ma significa che una proposta lasciata a metà va rifatta.
+- **Il gate del bundle in brotli è a 83,4 KB su 100.** Restano ~16 KB. La prima leva, se si
+  stringe, resta l'`import()` dinamico delle sotto-schermate dell'hub, che non servono al primo
+  paint — oggi le sei sotto-schermate viaggiano nello stesso `app.js` delle cinque sezioni del
+  servizio.
+
+#### Note per i task successivi
+
+- L'hub «Altro» ha ora **sei** tessere e sta ancora sopra la piega a 390 px (verificato). La
+  settima va misurata prima di aggiungerla: il probe conta le tessere sotto la piega.
+- `scripts/test-owner-wave3.mjs` è il verifier di riferimento per qualunque schermata nuova:
+  `newPage()` dà sessione finta, API stubbata, registro delle chiamate mutanti, contatore dei
+  tap `isTrusted` e un interruttore per far rispondere 409 a una rotta.
+- Chi tocca `owner-src/` deve rieseguire `node scripts/build-owner-app.mjs` e **committare
+  l'output** in `apps/dashboard/public/owner/`: il bundle dell'appliance copia quella cartella.
