@@ -15,11 +15,23 @@ import { OrdiniScreen } from './screens/ordini'
 import { CassaScreen } from './screens/cassa'
 import { OggiScreen } from './screens/oggi'
 import { AltroScreen } from './screens/altro'
+import { PushPrompt } from './screens/notifiche'
 import { BottomBar, Header, SECTIONS, type SectionId } from './ui/shell'
 
 const LS_SECTION = 'tako.owner.section'
 
+/** Sezione contenuta in una URL/fragment di deep-link ('/owner/#ordini'). */
+function sectionFromUrl(url: string): SectionId | null {
+  const hash = url.includes('#') ? url.slice(url.indexOf('#') + 1) : ''
+  return SECTIONS.some((s) => s.id === hash) ? (hash as SectionId) : null
+}
+
 function initialSection(): SectionId {
+  // Il deep-link della notifica VINCE sull'ultima sezione visitata: se il telefono si
+  // è aperto perché il ristoratore ha toccato "Nuovo ordine", deve trovarsi negli
+  // ordini — non dove era rimasto tre ore prima.
+  const fromHash = sectionFromUrl(window.location.hash)
+  if (fromHash) return fromHash
   try {
     const v = localStorage.getItem(LS_SECTION)
     if (SECTIONS.some((s) => s.id === v)) return v as SectionId
@@ -62,6 +74,23 @@ function Shell() {
     reset()
   }
 
+  // Deep-link da una notifica toccata mentre l'app era GIÀ APERTA. Il service worker
+  // manda la rotta invece di ricaricare la pagina: un reload butterebbe via lo stato
+  // (il conto a metà, la lista già scorsa) proprio nel momento peggiore.
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return
+    const onMessage = (e: MessageEvent) => {
+      const data = e.data as { type?: string; url?: string } | null
+      if (data?.type !== 'tako:navigate' || !data.url) return
+      const id = sectionFromUrl(data.url)
+      if (id) go(id)
+    }
+    navigator.serviceWorker.addEventListener('message', onMessage)
+    return () => navigator.serviceWorker.removeEventListener('message', onMessage)
+    // `go` è stabile quanto basta: dipende solo da setter e ref.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const title = section === 'altro'
     ? (session?.restaurant?.name ?? 'Tako')
     : SECTIONS.find((s) => s.id === section)!.label
@@ -77,6 +106,9 @@ function Shell() {
         {section === 'altro' && <AltroScreen />}
       </div>
       <BottomBar active={section} onGo={go} compact={compact} />
+      {/* Vive nella shell e non in una schermata: deve poter comparire qualunque
+          sezione sia aperta, perché l'evento che lo fa scattare arriva da solo. */}
+      <PushPrompt />
     </div>
   )
 }

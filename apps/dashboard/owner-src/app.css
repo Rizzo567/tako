@@ -300,6 +300,16 @@ button {
 .ow-list-plain { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
 .ow-list-plain li { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--ink-2); }
 
+/* Guida numerata (installazione della PWA su iOS): passi corti, numeri in evidenza. */
+.ow-guide { margin: 12px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; }
+.ow-guide li { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.ow-guide li::marker { font-weight: 800; color: var(--brand); }
+
+/* Riga di pulsanti che va a capo: sul telefono stretto due bottoni non ci stanno mai. */
+.ow-row-btns { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
+.ow-sheet-foot .ow-row-btns { margin-top: 0; width: 100%; }
+.ow-sheet-foot .ow-row-btns .ow-btn { flex: 1 1 auto; justify-content: center; }
+
 /* Stat tile: etichetta piccola, numero grande, delta colorato. */
 .ow-stat-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .ow-stat-label { font-size: 13px; font-weight: 600; color: var(--ink-2); }

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useApp } from '../lib/app'
 import { Badge, Btn, Card, SectionTitle } from '../ui/kit'
 import { Icon } from '../ui/icons'
+import { NotificheCard } from './notifiche'
 
 interface SystemInfo {
   version?: string
@@ -43,6 +44,11 @@ export function AltroScreen() {
         <Btn kind="soft" size="sm" icon="refresh" onClick={recheck} style={{ marginTop: 12 }}>Ricontrolla la rete</Btn>
       </Card>
 
+      {/* Le notifiche stanno QUI e non in una schermata dedicata: è la sezione che il
+          ristoratore apre quando cerca un interruttore, ed è dove il piano (F2, note
+          per i task successivi) le aveva già previste. */}
+      <NotificheCard />
+
       <Card pad={16}>
         <SectionTitle>Questo dispositivo</SectionTitle>
         <div className="ow-kv"><span>Ristorante</span><b>{session?.restaurant?.name ?? '—'}</b></div>
@@ -61,8 +67,8 @@ export function AltroScreen() {
       <Card pad={16}>
         <SectionTitle>Cosa arriva</SectionTitle>
         <ul className="ow-list-plain">
-          <li><Icon name="bell" size={16} /> Notifiche push per ordini e chiamate</li>
           <li><Icon name="coins" size={16} /> Magazzino e prezzi dal telefono</li>
+          <li><Icon name="qr" size={16} /> Foto dei piatti scattate col telefono</li>
           <li><Icon name="sparkles" size={16} /> L&apos;assistente del ristoratore</li>
         </ul>
       </Card>
