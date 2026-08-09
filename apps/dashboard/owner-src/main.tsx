@@ -17,6 +17,7 @@ import { OggiScreen } from './screens/oggi'
 import { AltroScreen } from './screens/altro'
 import { MagazzinoScreen } from './screens/magazzino'
 import { MenuScreen } from './screens/menu'
+import { AndamentoScreen } from './screens/andamento'
 import { PushPrompt } from './screens/notifiche'
 import { BottomBar, Header, SECTIONS, SUBS, type SectionId, type SubId } from './ui/shell'
 
@@ -131,6 +132,7 @@ function Shell() {
       <div className="ow-scroll" ref={scrollRef}>
         {sub === 'magazzino' && <MagazzinoScreen />}
         {sub === 'menu' && <MenuScreen />}
+        {sub === 'andamento' && <AndamentoScreen />}
         {!sub && section === 'sala' && <SalaScreen />}
         {!sub && section === 'ordini' && <OrdiniScreen />}
         {!sub && section === 'cassa' && <CassaScreen />}

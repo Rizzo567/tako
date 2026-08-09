@@ -147,6 +147,15 @@ async function newPage(width = 390) {
   page.on('request', (req) => {
     const url = new URL(req.url())
     if (url.pathname.startsWith('/socket.io')) return req.abort()
+    // L'export non è JSON: si risponde CSV vero, così il client esercita il ramo
+    // blob/Web Share invece di inciampare su un corpo che non sa leggere.
+    if (url.pathname === '/api/stats/export') {
+      return req.respond({
+        status: 200,
+        contentType: 'text/csv; charset=utf-8',
+        body: 'Tako — export incassi\r\nTotale;1;2;10,00\r\n',
+      })
+    }
     if (url.pathname.startsWith('/api/')) {
       if (req.method() !== 'GET') {
         let body = null
@@ -275,6 +284,43 @@ console.log('\n▶ F4.3 — foto del piatto (budget: 3 tap per aprire la fotocam
   await page.close()
 }
 
+// ─── F4.4 — Andamento: quadranti, periodo, export condivisibile ───────────────
+console.log('\n▶ F4.4 — andamento ed export')
+{
+  const { page, taps } = await newPage()
+  await tap(page, '.ow-bb-tab', { nth: 4 })
+  await tap(page, '.ow-hub-tile[data-sub="andamento"]')
+  check(`${await taps()} tap per arrivare all'andamento`, (await taps()) <= 2)
+
+  // Il periodo va nella query, non ricalcolato dal client su dati di 7 giorni.
+  const req7 = await page.evaluate(() => performance.getEntriesByType('resource').map((r) => new URL(r.name).pathname + new URL(r.name).search).filter((p) => p.startsWith('/api/stats/dashboard')))
+  check('la dashboard è chiesta CON un intervallo', req7.some((p) => /from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}/.test(p)), req7.join(' · '))
+
+  const quadranti = await page.$$eval('.ow-quad .ow-badge-pill', (els) => els.map((e) => e.textContent.trim()))
+  check('i quadranti del menu engineering sono in italiano, non in gergo',
+    quadranti.length >= 2 && !quadranti.some((q) => /star|plowhorse|puzzle|dog/i.test(q)), quadranti.join(' · '))
+
+  const bars = await page.$$eval('.ow-bar', (els) => els.length)
+  check('le barre sono i giorni tornati dal server', bars > 0, `${bars} barre`)
+
+  // Cambio periodo: la richiesta deve ripartire con un intervallo di 30 giorni.
+  await tap(page, '.ow-seg-scroll .ow-chip', { nth: 1 })
+  await new Promise((r) => setTimeout(r, 400))
+  const req30 = await page.evaluate(() => performance.getEntriesByType('resource').map((r) => new URL(r.name).search).filter((s) => s.includes('days=30')))
+  check('«30 giorni» ricarica davvero su 30 giorni', req30.length > 0)
+
+  // Export: il click deve scaricare il CSV con il Bearer (non un <a href> nudo, che
+  // dal tunnel prenderebbe 404 non portando l'header).
+  let exportReq = null
+  page.on('request', (r) => { if (r.url().includes('/api/stats/export')) exportReq = r })
+  await tap(page, '.ow-card:last-child .ow-btn')
+  await new Promise((r) => setTimeout(r, 600))
+  check('l\'export parte verso /api/stats/export con il periodo', !!exportReq && /from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}/.test(exportReq.url()),
+    exportReq ? new URL(exportReq.url()).search : 'nessuna richiesta')
+  check('e porta l\'header Authorization', !!exportReq?.headers()?.authorization?.startsWith('Bearer '))
+  await page.close()
+}
+
 // ─── Layout delle sotto-schermate a 390 e 430 px ──────────────────────────────
 console.log('\n▶ Zero scroll orizzontale sulle schermate di Wave 2')
 for (const width of [390, 430]) {
@@ -290,7 +336,7 @@ for (const width of [390, 430]) {
       m.over.length ? `sfora: ${m.over.join(', ')}` : '')
   }
 
-  for (const sub of ['magazzino', 'menu']) {
+  for (const sub of ['magazzino', 'menu', 'andamento']) {
     await tap(page, `.ow-hub-tile[data-sub="${sub}"]`)
     const m = await overflow(page)
     check(`${width}px · ${sub}: ${m.body} <= ${m.inner}`, m.body <= m.inner && m.doc <= m.inner && m.over.length === 0,

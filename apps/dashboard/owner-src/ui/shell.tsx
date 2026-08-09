@@ -44,6 +44,7 @@ export interface SubDef {
 export const SUBS: SubDef[] = [
   { id: 'magazzino', label: 'Magazzino', icon: 'box', hint: 'Giacenze, alert e riordino' },
   { id: 'menu', label: 'Menu', icon: 'menu', hint: 'Disponibilità, prezzi e foto' },
+  { id: 'andamento', label: 'Andamento', icon: 'stats', hint: '7 e 30 giorni, export' },
 ]
 
 export type NetKind = 'lan' | 'remote' | 'offline' | 'checking'
