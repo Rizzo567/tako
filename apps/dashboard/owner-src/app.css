@@ -1084,3 +1084,62 @@ button {
   box-shadow: 0 6px 16px -6px var(--brand);
 }
 .ow-cop-send:disabled { background: var(--muted-bg); color: var(--ink-3); box-shadow: none; }
+
+/* ─────────── Wave 3 (F5.2) — Prenotazioni ───────────
+   La riga si legge nell'ordine in cui la sera si svolge: ORA, chi, com'è messa. */
+
+.ow-resv-count { flex: none; align-self: center; font-size: 12.5px; font-weight: 700; color: var(--ink-3); padding-left: 2px; }
+
+.ow-resv-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  text-align: left;
+  border-top: 1px solid var(--hairline);
+}
+.ow-resv-row:first-child { border-top: none; }
+/* Chi non è venuto e chi ha annullato resta in lista ma smette di chiedere
+   attenzione: sbiadito, non nascosto — serve ancora per il conto della sera. */
+.ow-resv-row[data-status="no_show"], .ow-resv-row[data-status="cancelled"] { opacity: .55; }
+
+.ow-resv-time { flex: none; width: 48px; font-size: 17px; color: var(--ink); }
+.ow-resv-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ow-resv-name {
+  font-weight: 700; font-size: 14.5px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ow-resv-sub { font-size: 12.5px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ow-resv-acts { display: flex; gap: 9px; margin: 14px 0 4px; }
+.ow-resv-act { flex: 1; min-width: 0; }
+
+/* Griglia dei tavoli: bersagli quadrati da 64 px, non una tendina. */
+.ow-resv-tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+.ow-resv-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  height: 60px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--ink);
+}
+.ow-resv-table .num { font-size: 16px; }
+.ow-resv-table small { font-size: 11px; color: var(--ink-3); }
+.ow-resv-table[data-on="1"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.ow-resv-table[data-on="1"] small { color: rgba(255, 255, 255, .8); }
+.ow-resv-table:disabled { opacity: .5; }
+
+.ow-resv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; align-items: end; }
+.ow-resv-grid .ow-step { margin: 0; }

@@ -35,7 +35,7 @@ export function Card({ children, pad = 16, style, onClick, className = '' }: {
   )
 }
 
-export function Btn({ children, onClick, kind = 'brand', size = 'md', icon, full, disabled, style }: {
+export function Btn({ children, onClick, kind = 'brand', size = 'md', icon, full, disabled, style, act }: {
   children?: ReactNode
   onClick?: () => void
   kind?: 'brand' | 'soft' | 'ghost' | 'dark' | 'danger' | 'ok'
@@ -44,6 +44,13 @@ export function Btn({ children, onClick, kind = 'brand', size = 'md', icon, full
   full?: boolean
   disabled?: boolean
   style?: CSSProperties
+  /**
+   * Nome dell'azione, esposto come `data-act`. Serve ai verifier headless per
+   * toccare IL bottone giusto: selezionarlo per posizione (`.ow-btn:nth(2)`) si
+   * rompe al primo bottone condizionale che compare o sparisce, e un probe che
+   * tocca il bottone sbagliato dichiara verde una cosa mai provata.
+   */
+  act?: string
 }) {
   return (
     <button
@@ -51,6 +58,7 @@ export function Btn({ children, onClick, kind = 'brand', size = 'md', icon, full
       className={`press ow-btn ow-btn-${kind} ow-btn-${size}`}
       onClick={onClick}
       disabled={disabled}
+      data-act={act}
       style={{ ...(full ? { width: '100%' } : null), ...style }}
     >
       {icon && <Icon name={icon} size={size === 'sm' ? 16 : 18} stroke={2.2} />}

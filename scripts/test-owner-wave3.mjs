@@ -126,10 +126,15 @@ const browser = await puppeteer.launch({ executablePath: chrome, headless: 'new'
  * Pagina con sessione finta, API stubbata e registro delle chiamate mutanti.
  * `stream` decide cosa risponde `/ai/owner/chat/stream`: un corpo SSE, oppure uno
  * status di errore per esercitare il ripiego non-streaming.
+ *
+ * `conflict` fa rispondere 409 all'assegnazione del tavolo, con lo STESSO corpo del
+ * server (`routes/reservations.ts`): serve a provare che il messaggio arriva a
+ * schermo parola per parola invece di diventare un «errore» che non spiega niente.
  */
-async function newPage({ width = 390, stream = STREAM_WITH_PENDING, streamStatus = 200 } = {}) {
+async function newPage({ width = 390, stream = STREAM_WITH_PENDING, streamStatus = 200, conflict = false } = {}) {
   const page = await browser.newPage()
   const calls = []
+  const reads = []
   await page.setViewport({ width, height: 860, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
   await page.evaluateOnNewDocument((session, origin) => {
     localStorage.setItem('tako.owner.session', JSON.stringify(session))
@@ -157,6 +162,15 @@ async function newPage({ width = 390, stream = STREAM_WITH_PENDING, streamStatus
         let body = null
         try { body = JSON.parse(req.postData() ?? 'null') } catch { body = req.postData() ?? null }
         calls.push({ method: req.method(), path: url.pathname + url.search, body })
+      } else {
+        reads.push(url.pathname + url.search)
+      }
+      if (conflict && /^\/api\/reservations\/[^/]+\/table$/.test(url.pathname)) {
+        return req.respond({
+          status: 409,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: { code: 'RESERVATION_OVERLAP', message: 'Il tavolo è già prenotato in quella fascia oraria.' } }),
+        })
       }
       const stub = stubFor(url.pathname)
       if (stub) return req.respond({ status: 200, contentType: 'application/json', body: JSON.stringify(stub) })
@@ -167,7 +181,7 @@ async function newPage({ width = 390, stream = STREAM_WITH_PENDING, streamStatus
   await page.goto(`${SERVER}/owner/`, { waitUntil: 'domcontentloaded' })
   await page.waitForFunction(() => document.querySelectorAll('.ow-bb-tab').length === 5, { timeout: 20000 })
   await page.evaluate(() => { window.__taps = 0 })
-  return { page, calls, taps: () => page.evaluate(() => window.__taps) }
+  return { page, calls, reads, taps: () => page.evaluate(() => window.__taps) }
 }
 
 /** Un tap vero: `page.click` sposta il mouse e preme, non chiama l'handler a mano. */
@@ -265,6 +279,145 @@ console.log('\n▶ F5.1 — SSE non disponibile: ripiego sul non-streaming (Exit
   await page.close()
 }
 
+// ─── F5.2 — Prenotazioni: i due gesti della sera, e il 409 detto com'è ────────
+console.log('\n▶ F5.2 — prenotazioni: la lista della sera')
+{
+  const { page, calls, reads, taps } = await newPage()
+  await openSub(page, 'prenotazioni')
+  check(`${await taps()} tap per arrivare alle prenotazioni`, (await taps()) <= 2, 'Altro → Prenotazioni')
+
+  const rows = await page.$$eval('.ow-resv-row', (els) => els.map((el) => ({
+    time: el.querySelector('.ow-resv-time')?.textContent.trim(),
+    name: el.querySelector('.ow-resv-name')?.textContent.trim(),
+    sub: el.querySelector('.ow-resv-sub')?.textContent.trim(),
+    status: el.dataset.status,
+  })))
+  check('le due prenotazioni sono in lista, in ordine di ora', rows.length === 2 && rows[0].time === '20:00' && rows[1].time === '21:30',
+    rows.map((r) => `${r.time} ${r.name}`).join(' · '))
+  check('la riga porta nome, persone e tavolo senza una seconda chiamata',
+    rows[0].name === 'Famiglia Bianchi' && rows[0].sub.includes('4 persone') && rows[0].sub.includes('tavolo T1'), rows[0].sub)
+  check('chi non ha tavolo lo dice', rows[1].sub.includes('senza tavolo'), rows[1].sub)
+
+  // Il conto in cima è quello che serve al ristoratore prima del servizio: quante
+  // prenotazioni aspetta e quanti coperti sono (annullati e no-show esclusi).
+  const conta = await page.$eval('.ow-resv-count', (el) => el.textContent.trim())
+  check('il conteggio della sera è in cima', conta === '2 attese · 6 coperti', conta)
+
+  // «Domani» è la stessa schermata con un'altra chiave giorno.
+  const tomorrow = new Date(Date.now() + 86400_000).toISOString().slice(0, 10)
+  await tap(page, '.ow-seg-scroll .ow-chip', { nth: 1 })
+  await wait(300)
+  check('«Domani» richiede il giorno dopo alla stessa rotta', reads.some((p) => p === `/api/reservations?date=${tomorrow}`),
+    reads.filter((p) => p.startsWith('/api/reservations')).join(' · '))
+  check('nessuna scrittura per cambiare giorno', mutations(calls).length === 0)
+  await page.close()
+}
+
+console.log('\n▶ F5.2 — «Arrivati» e «Non presentati» col pollice')
+{
+  const { page, calls, taps } = await newPage()
+  await openSub(page, 'prenotazioni')
+  await tap(page, '.ow-resv-row')
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+
+  // I due tasti stanno in cima al foglio e sono alti come si tocca in piedi.
+  const box = await page.$eval('[data-act="seated"]', (el) => { const r = el.getBoundingClientRect(); return { h: Math.round(r.height), w: Math.round(r.width) } })
+  check('«Arrivati» è un bersaglio da pollice', box.h >= 44 && box.w >= 120, `${box.w}×${box.h} px`)
+
+  await tap(page, '[data-act="seated"]')
+  await wait(300)
+  const seated = calls.filter((c) => /\/status$/.test(c.path))
+  check('un tap = una PATCH sullo stato, e nient\'altro', mutations(calls).length === 1 && seated.length === 1,
+    mutations(calls).map((c) => `${c.method} ${c.path}`).join(' · '))
+  check('il corpo dice seated e basta', seated[0]?.body?.status === 'seated' && Object.keys(seated[0]?.body ?? {}).length === 1,
+    JSON.stringify(seated[0]?.body))
+  check(`${await taps()} tap per segnare arrivata una prenotazione`, (await taps()) <= 4, 'Altro → Prenotazioni → riga → Arrivati')
+  check('il foglio si chiude da solo dopo il gesto', (await page.$('.ow-sheet')) === null)
+  await page.close()
+}
+{
+  const { page, calls } = await newPage()
+  await openSub(page, 'prenotazioni')
+  await tap(page, '.ow-resv-row', { nth: 1 })
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+  await tap(page, '[data-act="no_show"]')
+  await wait(300)
+  const ns = calls.filter((c) => /\/status$/.test(c.path))
+  check('«Non presentati» manda no_show sulla riga toccata', ns.length === 1 && ns[0].body.status === 'no_show' && ns[0].path.includes('/rs2/'),
+    ns.map((c) => `${c.path} ${JSON.stringify(c.body)}`).join(' · '))
+  await page.close()
+}
+
+console.log('\n▶ F5.2 — il tavolo si sceglie da una griglia, non si digita')
+{
+  const { page, calls, taps } = await newPage()
+  await openSub(page, 'prenotazioni')
+  await tap(page, '.ow-resv-row', { nth: 1 })
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+  await tap(page, '[data-act="assign"]')
+
+  const tiles = await page.$$eval('.ow-resv-table', (els) => els.map((el) => {
+    const r = el.getBoundingClientRect()
+    return { label: el.querySelector('.num')?.textContent.trim(), h: Math.round(r.height), w: Math.round(r.width) }
+  }))
+  check('la griglia mostra i tavoli del locale', tiles.length === 2 && tiles[0].label === 'T1', tiles.map((t) => t.label).join(' · '))
+  check('ogni tavolo è un bersaglio quadrato, non una voce di tendina', tiles.every((t) => t.h >= 44 && t.w >= 44),
+    tiles.map((t) => `${t.w}×${t.h}`).join(' · '))
+
+  await tap(page, '.ow-resv-table', { nth: 1 })
+  await wait(300)
+  const assign = calls.filter((c) => /\/table$/.test(c.path))
+  check('toccare un tavolo lo assegna in una PATCH sola', assign.length === 1 && assign[0].body.tableId === 'tb2',
+    assign.map((c) => `${c.path} ${JSON.stringify(c.body)}`).join(' · '))
+  check(`${await taps()} tap per assegnare un tavolo`, (await taps()) <= 5, 'Altro → Prenotazioni → riga → Assegna → tavolo')
+  await page.close()
+}
+
+console.log('\n▶ F5.2 — il 409 del tavolo occupato si legge com\'è')
+{
+  const { page } = await newPage({ conflict: true })
+  await openSub(page, 'prenotazioni')
+  await tap(page, '.ow-resv-row', { nth: 1 })
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+  await tap(page, '[data-act="assign"]')
+  await tap(page, '.ow-resv-table', { nth: 0 })
+  await wait(400)
+
+  const warn = await page.$eval('.ow-sheet .ow-warn', (el) => el.textContent.trim()).catch(() => null)
+  check('il messaggio del server è mostrato parola per parola', warn === 'Il tavolo è già prenotato in quella fascia oraria.', warn ?? 'nessun avviso')
+  check('il foglio resta aperto: il gesto non è andato a buon fine', (await page.$('.ow-sheet')) !== null)
+  await page.close()
+}
+
+console.log('\n▶ F5.2 — nuova prenotazione: solo i campi che il server pretende')
+{
+  const { page, calls } = await newPage()
+  await openSub(page, 'prenotazioni')
+  await tap(page, '[data-act="new"]')
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+
+  const before = await page.$eval('[data-act="save"]', (el) => el.disabled)
+  check('«Salva» è spento finché mancano nome e telefono', before === true)
+  await tap(page, '[data-act="save"]')
+  await wait(200)
+  check('e infatti non parte nulla', mutations(calls).length === 0, mutations(calls).map((c) => c.path).join(' · '))
+
+  await page.type('#rs-name', 'Famiglia Verdi')
+  await page.type('#rs-phone', '+39 340 9998877')
+  await tap(page, '.ow-step-btn', { nth: 1 })   // 2 → 3 persone
+  await tap(page, '[data-act="save"]')
+  await wait(400)
+
+  const post = calls.find((c) => c.method === 'POST' && c.path.startsWith('/api/reservations'))
+  check('il POST parte col nome, il telefono, le persone e l\'ora', !!post && post.body.customerName === 'Famiglia Verdi'
+    && post.body.customerPhone === '+39 340 9998877' && post.body.partySize === 3 && typeof post.body.startsAt === 'string',
+  post ? JSON.stringify(post.body) : 'nessun POST')
+  // Durata e stato NON si mandano: sono decisioni del server (90′, «da confermare»).
+  check('durata e stato restano al server', !!post && post.body.durationMin === undefined && post.body.status === undefined)
+  check('l\'ora è un istante ISO, non una stringa "20:00"', !!post && !isNaN(Date.parse(post.body.startsAt ?? '')), post?.body?.startsAt)
+  await page.close()
+}
+
 // ─── Layout: hub allargato e schermate di Wave 3 a 390 e 430 px ───────────────
 console.log('\n▶ Zero scroll orizzontale sulle schermate di Wave 3')
 for (const width of [390, 430]) {
@@ -283,12 +436,22 @@ for (const width of [390, 430]) {
     check(`${width}px · tutte le tessere dell'hub sono sopra la piega`, below === 0, `${below} fuori schermo`)
   }
 
-  for (const sub of ['copilot']) {
+  for (const sub of ['copilot', 'prenotazioni']) {
     await tap(page, `.ow-hub-tile[data-sub="${sub}"]`)
     await wait(200)
     const m = await overflow(page)
     check(`${width}px · ${sub}: ${m.body} <= ${m.inner}`, m.body <= m.inner && m.doc <= m.inner && m.over.length === 0,
       m.over.length ? `sfora: ${m.over.join(', ')}` : '')
+    // Il foglio è dove stanno i nomi lunghi e la griglia dei tavoli: è lì che una
+    // schermata stretta sfora, non nella lista.
+    if (sub === 'prenotazioni') {
+      await tap(page, '.ow-resv-row')
+      await tap(page, '[data-act="assign"]')
+      const s = await overflow(page)
+      check(`${width}px · foglio prenotazione aperto: ${s.body} <= ${s.inner}`, s.body <= s.inner && s.doc <= s.inner && s.over.length === 0,
+        s.over.length ? `sfora: ${s.over.join(', ')}` : '')
+      await tap(page, '.ow-sheet-head .ow-icon-btn')
+    }
     await tap(page, '.ow-back')
   }
   await page.close()

@@ -65,6 +65,11 @@ const EVENTS = [
   // al tavolo (room pubblica `menu:{id}`), emesso da routes/menu.ts.
   'menu:item_availability',
   'menu:updated',
+  // Wave 3 (F5.2/F5.3): la sera cambia anche da altre mani — la dashboard, il
+  // cliente che prenota, un altro telefono che timbra. Sono gli stessi eventi che
+  // routes/reservations.ts e routes/shifts.ts emettono già nella room del ristorante.
+  'reservation:changed',
+  'shift:updated',
   'connectivity',
 ]
 
