@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { randomUUID } from 'node:crypto'
-import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills, reservations } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills, reservations, waiterCalls } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
@@ -577,6 +577,27 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const { restaurantId, tableId, type } = body.data
     // tableNumber autoritativo dal JWT/tavolo, non dal client.
     const tableNumber = (req as any).tableSession?.tableNumber ?? body.data.tableNumber
+
+    // PERSISTENZA (F2.5). Prima qui c'era solo l'emit: chi apriva l'app DOPO la
+    // chiamata non la vedeva mai — e il telefono del ristoratore è per definizione
+    // un dispositivo che si collega in ritardo. L'indice unico parziale su
+    // (table_id) WHERE resolved_at IS NULL fa sì che il cliente che tocca il
+    // pulsante cinque volte produca UNA riga: la seconda aggiorna la prima
+    // (il tipo più recente vince, l'ora della prima chiamata resta).
+    // Best-effort: se la scrittura fallisce, la chiamata deve comunque squillare
+    // in sala — l'evento realtime resta la funzione principale.
+    try {
+      await db.insert(waiterCalls)
+        .values({ restaurantId, tableId, tableNumber, type })
+        .onConflictDoUpdate({
+          target: waiterCalls.tableId,
+          targetWhere: isNull(waiterCalls.resolvedAt),
+          set: { type },
+        })
+    } catch (err) {
+      req.log.warn({ err }, 'waiter-call: persistenza fallita, evento comunque emesso')
+    }
+
     io.to(`restaurant:${restaurantId}`).emit('waiter:called', { tableId, tableNumber, type })
     return { data: { success: true } }
   })

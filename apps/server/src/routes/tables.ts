@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, tables, rooms, bills, orders, restaurants } from '@tako/db'
-import { eq, and, inArray } from 'drizzle-orm'
+import { db, tables, rooms, bills, orders, restaurants, waiterCalls } from '@tako/db'
+import { eq, and, inArray, isNull, desc, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { stableTableUrl, lanTableUrl, ipTableUrl, tableQrUrl, type QrMode } from '../lib/network.js'
@@ -149,14 +149,55 @@ export async function tableRoutes(fastify: FastifyInstance) {
     return { data: table }
   })
 
+  // Chiamate cameriere ANCORA APERTE (F2.5). Prima della migrazione 0017 le chiamate
+  // erano solo un emit socket: un dispositivo acceso dopo la chiamata non la vedeva
+  // mai. Questa route è ciò che permette all'app del ristoratore, aperta cinque minuti
+  // dopo, di sapere che il tavolo 4 sta ancora aspettando.
+  // Scoped al ristorante dell'utente: nessuna chiamata di altri tenant, mai.
+  fastify.get('/waiter-calls', { preHandler: requireAuth }, async (req) => {
+    const q = req.query as { open?: string }
+    const onlyOpen = q.open !== '0'
+    const rows = await db.select()
+      .from(waiterCalls)
+      .where(and(
+        eq(waiterCalls.restaurantId, req.user!.restaurantId),
+        ...(onlyOpen ? [isNull(waiterCalls.resolvedAt)] : []),
+      ))
+      .orderBy(desc(waiterCalls.createdAt))
+      .limit(100)
+    return { data: rows }
+  })
+
   // Risolvi una chiamata cameriere: lo staff la segna come gestita e l'evento
   // waiter:resolved sincronizza TUTTI i device staff (il badge sparisce ovunque).
-  // Le chiamate non sono persistite: è una pura sincronizzazione real-time.
+  // Da F2.5 la risoluzione è anche PERSISTITA: chi apre l'app dopo non deve rivedere
+  // una chiamata già gestita. Idempotente — risolvere due volte non è un errore.
   fastify.post('/:tableId/waiter-resolve', { preHandler: requireAuth }, async (req, reply) => {
     const { tableId } = req.params as { tableId: string }
     // SECURITY: il tavolo deve appartenere al ristorante dello staff.
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
+
+    await db.update(waiterCalls)
+      .set({ resolvedAt: new Date(), resolvedBy: req.user!.id })
+      .where(and(
+        eq(waiterCalls.restaurantId, req.user!.restaurantId),
+        eq(waiterCalls.tableId, tableId),
+        isNull(waiterCalls.resolvedAt),
+      ))
+
+    // Retention 7 giorni sulle chiamate GIÀ risolte (Exit del piano F2.5, applicata
+    // subito perché costa una riga): le aperte sono al massimo una per tavolo grazie
+    // all'indice unico parziale, ma le risolte crescerebbero per sempre. Il piano
+    // indicava lib/cleanup.ts, che però è la pulizia del TESTO dettato, non dei dati:
+    // la pulizia vive qui, opportunistica e best-effort.
+    try {
+      await db.delete(waiterCalls).where(and(
+        eq(waiterCalls.restaurantId, req.user!.restaurantId),
+        sql`${waiterCalls.resolvedAt} < now() - interval '7 days'`,
+      ))
+    } catch { /* best-effort: la risoluzione è già avvenuta */ }
+
     io.to(`restaurant:${req.user!.restaurantId}`).emit('waiter:resolved', { tableId })
     return { data: { success: true } }
   })
