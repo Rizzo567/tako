@@ -35,7 +35,7 @@ export const SECTIONS: SectionDef[] = [
 // Wave 3 (F5) allarga l'hub invece di allargare la barra: il Copilot apre l'elenco
 // perché è l'unica voce che sa fare un po' di tutto ciò che sta sotto — e chiedere
 // a voce resta il percorso più corto quando non si sa dove guardare.
-export type SubId = 'copilot' | 'prenotazioni' | 'magazzino' | 'menu' | 'andamento'
+export type SubId = 'copilot' | 'prenotazioni' | 'staff' | 'magazzino' | 'menu' | 'andamento'
 
 export interface SubDef {
   id: SubId
@@ -47,6 +47,7 @@ export interface SubDef {
 export const SUBS: SubDef[] = [
   { id: 'copilot', label: 'Assistente', icon: 'sparkles', hint: 'Chiedi e conferma tu' },
   { id: 'prenotazioni', label: 'Prenotazioni', icon: 'clock', hint: 'Oggi e domani, tavoli' },
+  { id: 'staff', label: 'Staff e turni', icon: 'user', hint: 'Chi c\'è adesso, entrate e uscite' },
   { id: 'magazzino', label: 'Magazzino', icon: 'box', hint: 'Giacenze, alert e riordino' },
   { id: 'menu', label: 'Menu', icon: 'menu', hint: 'Disponibilità, prezzi e foto' },
   { id: 'andamento', label: 'Andamento', icon: 'stats', hint: '7 e 30 giorni, export' },

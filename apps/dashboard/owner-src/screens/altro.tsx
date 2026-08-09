@@ -77,14 +77,6 @@ export function AltroScreen({ onOpen }: { onOpen: (id: SubId) => void }) {
         </p>
         <Btn kind="danger" size="sm" icon="logout" onClick={logout} style={{ marginTop: 12 }}>Scollega questo telefono</Btn>
       </Card>
-
-      <Card pad={16}>
-        <SectionTitle>Cosa arriva</SectionTitle>
-        <ul className="ow-list-plain">
-          <li><Icon name="sparkles" size={16} /> L&apos;assistente del ristoratore</li>
-          <li><Icon name="clock" size={16} /> Prenotazioni e turni dal telefono</li>
-        </ul>
-      </Card>
     </div>
   )
 }

@@ -418,6 +418,101 @@ console.log('\n▶ F5.2 — nuova prenotazione: solo i campi che il server prete
   await page.close()
 }
 
+// ─── F5.3 — Staff e turni: chi c'è adesso, e l'interruttore che scollega ──────
+console.log('\n▶ F5.3 — staff: chi è in turno sta in cima')
+{
+  const { page, taps } = await newPage()
+  await openSub(page, 'staff')
+  check(`${await taps()} tap per arrivare a staff e turni`, (await taps()) <= 2, 'Altro → Staff e turni')
+
+  const rows = await page.$$eval('.ow-staff-row', (els) => els.map((el) => ({
+    name: el.querySelector('.ow-staff-name')?.textContent.trim(),
+    sub: el.querySelector('.ow-staff-sub')?.textContent.trim(),
+    inTurno: el.dataset.on === '1',
+    attivo: el.dataset.active === '1',
+    clock: el.querySelector('.ow-staff-clock')?.dataset.act ?? null,
+  })))
+  check('chi è in turno è il primo della lista, chi è spento l\'ultimo',
+    rows.map((r) => r.name).join(' · ') === 'Giulia Cameriera · Owner di prova · Marco Sospeso',
+    rows.map((r) => r.name).join(' · '))
+  check('la riga dice il ruolo e da quanto è in turno', rows[0].inTurno && /sala · in turno da \d/.test(rows[0].sub), rows[0].sub)
+  check('chi non è in turno ha «Entrata», chi lo è ha «Uscita»',
+    rows[0].clock === 'clock-out' && rows[1].clock === 'clock-in', `${rows[0].clock} · ${rows[1].clock}`)
+  check('un account disattivato non si può timbrare', rows[2].attivo === false && rows[2].clock === null, rows[2].sub)
+
+  const conta = await page.$eval('.ow-section-title .ow-badge-pill', (el) => el.textContent.trim())
+  check('il conteggio di chi è in turno è in cima', conta === '1 in turno', conta)
+
+  const box = await page.$eval('.ow-staff-clock', (el) => { const r = el.getBoundingClientRect(); return { h: Math.round(r.height), w: Math.round(r.width) } })
+  check('il tasto della timbratura è un bersaglio da 44 px', box.h >= 44, `${box.w}×${box.h} px`)
+  await page.close()
+}
+
+console.log('\n▶ F5.3 — timbrare è un tap dalla lista')
+{
+  const { page, calls, taps } = await newPage()
+  await openSub(page, 'staff')
+  await tap(page, '.ow-staff-clock[data-act="clock-in"]')
+  await wait(400)
+
+  const ci = calls.filter((c) => c.path.includes('/shifts/clock-in'))
+  check('un tap = un clock-in sul membro toccato', mutations(calls).length === 1 && ci.length === 1 && ci[0].body.userId === 'u',
+    mutations(calls).map((c) => `${c.method} ${c.path} ${JSON.stringify(c.body)}`).join(' · '))
+  check(`${await taps()} tap per timbrare l'entrata`, (await taps()) <= 3, 'Altro → Staff → Entrata')
+
+  await tap(page, '.ow-staff-clock[data-act="clock-out"]')
+  await wait(400)
+  const co = calls.filter((c) => c.path.includes('/shifts/clock-out'))
+  check('e «Uscita» chiude il turno di quel membro', co.length === 1 && co[0].body.userId === 'u2', JSON.stringify(co[0]?.body))
+  await page.close()
+}
+
+console.log('\n▶ F5.3 — disattivare un account si dice prima, non dopo')
+{
+  const { page, calls } = await newPage()
+  await openSub(page, 'staff')
+  await tap(page, '.ow-staff-main')            // Giulia, in turno
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+
+  const avviso = await page.$eval('.ow-staff-acct .ow-warn', (el) => el.textContent.replace(/\s+/g, ' ').trim()).catch(() => null)
+  check('l\'avviso è visibile PRIMA del tap', !!avviso && /scolleghi/i.test(avviso) && /subito/i.test(avviso), avviso ?? 'nessun avviso')
+  check('e dice che i dispositivi smettono di funzionare', !!avviso && /dispositiv/i.test(avviso) && /rientrare/i.test(avviso))
+  // Aprire il foglio non deve aver scritto niente.
+  check('aprire il foglio non tocca nulla', mutations(calls).length === 0)
+
+  await tap(page, '[data-act="deactivate"]')
+  await wait(400)
+  const patch = calls.filter((c) => c.method === 'PATCH' && c.path.startsWith('/api/staff/'))
+  check('il tap manda active:false sul membro giusto', patch.length === 1 && patch[0].path === '/api/staff/u2' && patch[0].body.active === false,
+    patch.map((c) => `${c.path} ${JSON.stringify(c.body)}`).join(' · '))
+  await page.close()
+}
+
+console.log('\n▶ F5.3 — l\'account spento si riaccende, il proprio non si tocca')
+{
+  const { page, calls } = await newPage()
+  await openSub(page, 'staff')
+  await tap(page, '.ow-staff-main', { nth: 2 })   // Marco Sospeso, account spento
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+  check('per chi è spento non c\'è nessun avviso da leggere', (await page.$('.ow-staff-acct .ow-warn')) === null)
+  await tap(page, '[data-act="activate"]')
+  await wait(400)
+  const patch = calls.filter((c) => c.method === 'PATCH' && c.path.startsWith('/api/staff/'))
+  check('«Riattiva» manda active:true', patch.length === 1 && patch[0].path === '/api/staff/u3' && patch[0].body.active === true,
+    patch.map((c) => `${c.path} ${JSON.stringify(c.body)}`).join(' · '))
+  await page.close()
+}
+{
+  const { page } = await newPage()
+  await openSub(page, 'staff')
+  await tap(page, '.ow-staff-main', { nth: 1 })   // sé stessi (FAKE_SESSION.user.id = 'u')
+  await page.waitForSelector('.ow-sheet', { timeout: 8000 })
+  const testo = await page.$eval('.ow-staff-acct', (el) => el.textContent.replace(/\s+/g, ' ').trim())
+  check('il proprio account non ha né interruttore né avviso',
+    (await page.$('[data-act="deactivate"]')) === null && (await page.$('[data-act="activate"]')) === null && /Questo sei tu/.test(testo), testo)
+  await page.close()
+}
+
 // ─── Layout: hub allargato e schermate di Wave 3 a 390 e 430 px ───────────────
 console.log('\n▶ Zero scroll orizzontale sulle schermate di Wave 3')
 for (const width of [390, 430]) {
@@ -436,7 +531,7 @@ for (const width of [390, 430]) {
     check(`${width}px · tutte le tessere dell'hub sono sopra la piega`, below === 0, `${below} fuori schermo`)
   }
 
-  for (const sub of ['copilot', 'prenotazioni']) {
+  for (const sub of ['copilot', 'prenotazioni', 'staff']) {
     await tap(page, `.ow-hub-tile[data-sub="${sub}"]`)
     await wait(200)
     const m = await overflow(page)
@@ -449,6 +544,15 @@ for (const width of [390, 430]) {
       await tap(page, '[data-act="assign"]')
       const s = await overflow(page)
       check(`${width}px · foglio prenotazione aperto: ${s.body} <= ${s.inner}`, s.body <= s.inner && s.doc <= s.inner && s.over.length === 0,
+        s.over.length ? `sfora: ${s.over.join(', ')}` : '')
+      await tap(page, '.ow-sheet-head .ow-icon-btn')
+    }
+    // Il foglio del membro porta l'avviso lungo della disattivazione: è il testo che
+    // per primo sfonderebbe una schermata stretta.
+    if (sub === 'staff') {
+      await tap(page, '.ow-staff-main')
+      const s = await overflow(page)
+      check(`${width}px · foglio membro aperto: ${s.body} <= ${s.inner}`, s.body <= s.inner && s.doc <= s.inner && s.over.length === 0,
         s.over.length ? `sfora: ${s.over.join(', ')}` : '')
       await tap(page, '.ow-sheet-head .ow-icon-btn')
     }

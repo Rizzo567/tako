@@ -17,6 +17,7 @@ import { OggiScreen } from './screens/oggi'
 import { AltroScreen } from './screens/altro'
 import { CopilotScreen } from './screens/copilot'
 import { PrenotazioniScreen } from './screens/prenotazioni'
+import { StaffScreen } from './screens/staff'
 import { MagazzinoScreen } from './screens/magazzino'
 import { MenuScreen } from './screens/menu'
 import { AndamentoScreen } from './screens/andamento'
@@ -134,6 +135,7 @@ function Shell() {
       <div className="ow-scroll" ref={scrollRef}>
         {sub === 'copilot' && <CopilotScreen />}
         {sub === 'prenotazioni' && <PrenotazioniScreen />}
+        {sub === 'staff' && <StaffScreen />}
         {sub === 'magazzino' && <MagazzinoScreen />}
         {sub === 'menu' && <MenuScreen />}
         {sub === 'andamento' && <AndamentoScreen />}
