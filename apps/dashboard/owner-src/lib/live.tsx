@@ -60,6 +60,11 @@ const EVENTS = [
   'waiter:called',
   'waiter:resolved',
   'inventory:alert',
+  // Wave 2 (F4.2): la disponibilità cambiata da un altro telefono, dalla dashboard o
+  // dall'assistente deve vedersi anche qui. È lo STESSO evento che riceve il cliente
+  // al tavolo (room pubblica `menu:{id}`), emesso da routes/menu.ts.
+  'menu:item_availability',
+  'menu:updated',
   'connectivity',
 ]
 

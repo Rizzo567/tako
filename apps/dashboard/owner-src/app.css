@@ -802,3 +802,63 @@ button {
 /* I tre tasti del movimento: stessa larghezza, nessuno più importante degli altri. */
 .ow-move-foot { gap: 8px; }
 .ow-move-foot .ow-btn { flex: 1; min-width: 0; padding-left: 4px; padding-right: 4px; }
+
+/* ─────────── Wave 2 (F4.2) — menu: disponibilità e prezzo ─────────── */
+
+.ow-menu-sec {
+  padding: 11px 16px 7px;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.ow-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px 14px 9px 16px;
+  border-top: 1px solid var(--hairline);
+}
+.ow-menu-row:first-of-type { border-top: none; }
+
+.ow-menu-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+}
+.ow-menu-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ow-menu-price { font-size: 13px; color: var(--ink-2); }
+
+/* La pastiglia della disponibilità: è il terzo tap del goal di F4.2, quindi è
+   grande (44 px di bersaglio) e dice lo stato ATTUALE, non l'azione — «A menu»
+   verde significa che il cliente lo vede; toccandola diventa «Finito». */
+.ow-avail {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: var(--r-pill);
+  font-size: 12.5px;
+  font-weight: 800;
+  background: var(--danger-bg);
+  color: var(--danger);
+  transition: background .18s var(--out), color .18s var(--out);
+}
+.ow-avail[data-on="1"] { background: var(--ok-bg); color: var(--ok-deep); }

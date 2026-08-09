@@ -77,15 +77,18 @@ const STUBS = {
     },
   },
   '/api/menus': { data: [{ id: 'm1', name: 'Menu alla carta', type: 'main', active: true, position: 0 }] },
+  // Stessa forma di GET /api/menus/:menuId (routes/menu.ts): il menu con dentro le
+  // sezioni, e ogni sezione con dentro le sue voci.
   '/api/menus/m1': {
     data: {
-      menu: { id: 'm1', name: 'Menu alla carta' },
-      sections: [{ id: 's1', name: 'Secondi di mare', position: 0 }],
-      items: [
-        { id: 'mi1', sectionId: 's1', name: LONG_ITEM, price: 24, available: true, imageUrl: null, position: 0 },
-        { id: 'mi2', sectionId: 's1', name: 'Fritto misto', price: 18, available: false, imageUrl: null, position: 1 },
-      ],
-      variants: [],
+      id: 'm1', name: 'Menu alla carta', type: 'main', active: true, position: 0,
+      sections: [{
+        id: 's1', name: 'Secondi di mare', position: 0, active: true,
+        items: [
+          { id: 'mi1', sectionId: 's1', name: LONG_ITEM, price: 24, available: true, imageUrl: null, position: 0, variants: [], translations: [] },
+          { id: 'mi2', sectionId: 's1', name: 'Fritto misto dell\'Adriatico', price: 18, available: false, imageUrl: null, position: 1, variants: [], translations: [] },
+        ],
+      }],
     },
   },
   '/api/stats/dashboard': {
@@ -196,6 +199,27 @@ console.log('\n▶ F4.1 — movimento di magazzino (budget: 4 tap)')
   await page.close()
 }
 
+// ─── F4.2 — «finito il branzino» in ≤ 3 tap ───────────────────────────────────
+console.log('\n▶ F4.2 — segnare un piatto finito (budget: 3 tap)')
+{
+  const { page, calls, taps } = await newPage()
+  await tap(page, '.ow-bb-tab', { nth: 4 })      // 1. Altro
+  await tap(page, '.ow-hub-tile[data-sub="menu"]') // 2. Menu
+  await tap(page, '.ow-avail[data-on="1"]')        // 3. la pastiglia della voce a menu
+  await new Promise((r) => setTimeout(r, 300))
+
+  const n = await taps()
+  const patch = calls.find((c) => /\/api\/menus\/items\/[^/]+\/availability$/.test(c.path))
+  check(`${n} tap ≤ 3`, n <= 3, 'sequenza: Altro → Menu → «A menu»')
+  check('il terzo tap SCRIVE la disponibilità', !!patch,
+    patch ? `${patch.method} ${patch.path} ${JSON.stringify(patch.body)}` : 'nessuna PATCH osservata')
+  check('manda available:false (non un toggle cieco lato server)', patch?.body?.available === false)
+  const label = await page.$eval('.ow-avail', (el) => el.textContent.trim())
+  check('la riga dice subito «Finito»', label === 'Finito', `pastiglia: "${label}"`)
+  check('nessun foglio si è aperto', (await page.$('.ow-sheet')) === null)
+  await page.close()
+}
+
 // ─── Layout delle sotto-schermate a 390 e 430 px ──────────────────────────────
 console.log('\n▶ Zero scroll orizzontale sulle schermate di Wave 2')
 for (const width of [390, 430]) {
@@ -211,7 +235,7 @@ for (const width of [390, 430]) {
       m.over.length ? `sfora: ${m.over.join(', ')}` : '')
   }
 
-  for (const sub of ['magazzino']) {
+  for (const sub of ['magazzino', 'menu']) {
     await tap(page, `.ow-hub-tile[data-sub="${sub}"]`)
     const m = await overflow(page)
     check(`${width}px · ${sub}: ${m.body} <= ${m.inner}`, m.body <= m.inner && m.doc <= m.inner && m.over.length === 0,
