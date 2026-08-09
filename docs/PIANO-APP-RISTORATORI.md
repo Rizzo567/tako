@@ -1602,3 +1602,254 @@ la gesture dal bordo su iOS chiudono la sotto-schermata invece di uscire dall'ap
 - Il gate del bundle in brotli è a **78,9 KB su 100**: restano ~21 KB per Wave 3. La prima
   leva, se si stringe, resta quella scritta in F2 — `import()` dinamico delle sotto-schermate
   di Wave 2, che non servono al primo paint (le cinque sezioni del servizio sì).
+
+---
+
+### Diario esecuzione 2026-08-09 — F7.3 (build iOS per il Simulatore)
+
+**F7.3 — DONE.** Tre giri di build delle cinque disponibili, tutti e tre chiusi da un difetto
+vero trovato dal verifier (nessuno era un capriccio della toolchain). Nessuna Exit di
+fallimento è scattata. La `.app` Release gira nel Simulatore, trova l'appliance da sola su
+`tako.local:4317` e mostra la shell owner a cinque sezioni.
+
+#### Prima delle build: i 4 errori eslint di F7.2
+
+`npx eslint apps/app` era rosso da F7.2 e il gate di questo task era portarlo a zero.
+
+| Errore | Causa | Rimedio |
+|---|---|---|
+| `useManualHost cannot be called inside a callback` | il nome inizia per `use`, quindi le regole degli Hook lo scambiano per un hook | rinominata `applyManualHost` |
+| `useSuggestion` idem in `ConnectScreen` | idem | rinominata `applySuggestion` |
+| due `require()` per `assets/icon.png` | né `expo/types` né i tipi di React Native dichiarano il wildcard `*.png`, quindi l'`import` non compilava | nuovo `src/assets.d.ts` con `declare module '*.png'`, poi `import LOGO from …` |
+
+Esito: **0 errori eslint** su `apps/app`, `tsc --noEmit` pulito. Il rinomino non è cosmetico:
+`react-hooks` non distingue una funzione qualunque da un hook, guarda solo il prefisso — e una
+funzione chiamata dentro `onPress` con quel nome è un errore che si ripresenta a ogni PR.
+
+#### La toolchain iOS su questo Mac: niente brew, niente CocoaPods, Ruby 2.6
+
+`brew` **non esiste** su questa macchina e `pod` nemmeno; il Ruby di sistema è il 2.6.10.
+CocoaPods 1.16+ tira dipendenze che pretendono Ruby ≥ 3.1, quindi `gem install --user-install
+cocoapods` fallisce a catena. La via che ha funzionato è **appuntare a mano le ultime versioni
+compatibili con Ruby 2.6**, in quest'ordine:
+
+```
+gem install --user-install ffi -v 1.16.3        # 1.17.x pretende Ruby ≥ 3.0
+gem install --user-install zeitwerk -v 2.6.18   # 2.7.x pretende Ruby ≥ 3.2
+gem install --user-install i18n -v 1.14.7       # 1.14.8 pretende Ruby ≥ 3.1
+gem install --user-install activesupport -v 6.1.7.10
+gem install --user-install --conservative cocoapods   # → 1.17.0
+```
+
+`pod` finisce in `~/.gem/ruby/2.6.0/bin`, che **non è nel PATH**: va esportato a ogni comando.
+
+**Conseguenza da sapere prima del prossimo giro**: `filter_map` è un metodo di Ruby ≥ 2.7, e
+gli script `spm.config.json` di Expo lo usano. Su Ruby 2.6 `pod install` stampa una decina di
+`[Expo-precompiled] Failed to read spm.config.json … undefined method 'filter_map'` e chiude
+con *«Precompiled modules enabled but no xcframeworks found. All modules will build from
+source»*. Non è fatale — il core di React Native resta prebuilt (`React-Core-prebuilt`,
+`ReactNativeDependencies-artifacts`) e la prima build completa è durata **2 min 23 s** — ma i
+moduli Expo si compilano da sorgente inutilmente. **Installare un Ruby moderno (rbenv/mise) è
+il primo miglioramento di questa toolchain**, non una pulizia estetica.
+
+`expo prebuild` è stato lanciato sempre con **`--no-install`**: senza quel flag il CLI esegue
+il package manager e avrebbe toccato `pnpm-lock.yaml` mentre un altro agente lavorava sul repo.
+I pod si installano dopo, a mano, con `pod install` dentro `ios/`.
+
+#### Due difetti veri, trovati solo dalla build (nessuno visibile a `tsc` o a eslint)
+
+1. **`Cannot find module 'babel-preset-expo'`** — la build Release muore nella fase *Bundle
+   React Native code and images*. `babel-preset-expo` è una dipendenza di `expo`, non nostra:
+   con pnpm non è linkata in `apps/app/node_modules`, e Babel risolve i preset **dalla cartella
+   del file di configurazione**. Con `expo start` non si vede mai, perché il dev server passa
+   dalla propria copia; salta fuori solo in `export:embed`, cioè dentro Xcode e dentro Gradle.
+   `babel.config.js` ora risolve il preset **per percorso**, partendo da dove sta `expo`. Chi
+   aggiungerà un plugin Babel deve fare lo stesso, o la build nativa cadrà allo stesso punto.
+
+2. **La WebView si apriva in Safari.** Il primo avvio nel Simulatore ha mostrato la PWA owner
+   giusta… con la barra degli indirizzi di Safari sotto. Causa: `originWhitelist={[
+   `${origin}/*`]}` scritto in F7.2. `react-native-webview` confronta quei pattern con
+   l'**origine nuda** della richiesta (`http://tako.local:4317`, senza path): con lo slash
+   finale il pattern non combacia mai, la libreria considera la pagina esterna e la passa al
+   browser di sistema. **Non produce nessun errore**: produce un'app che sembra funzionare e
+   che invece ha appena consegnato la sessione del ristoratore a Safari. Ora è
+   `originWhitelist={[origin]}`. È il difetto più grave trovato in questo task, ed è anche il
+   motivo per cui una build su simulatore vale più di dieci riletture del file.
+
+#### Il deep link: `tako://open?…` non esiste, `tako://?…` sì
+
+`xcrun simctl openurl booted "tako://open?enroll=CODE"` apre l'app e mostra la schermata
+**«Unmatched Route»** di expo-router: il router legge `open` come rotta, e quella rotta non c'è.
+La forma corretta è **senza path**: `tako://?enroll=CODE` → rotta `index` → `enrollFromDeepLink`
+trova `?enroll=` e l'arruolamento parte. Due note operative che costano un'ora se non si sanno:
+
+- se l'app **non** è in primo piano, SpringBoard interpone *«Vuoi aprire l'elemento in "Tako"?»*.
+  `simctl` non sa toccare lo schermo; il bottone si preme via System Events sull'albero di
+  accessibilità del Simulatore (`click (button whose description is "Apri")`). Con l'app **già
+  in primo piano** la conferma non compare affatto — ed è la strada da usare negli script.
+- il QR generato dall'appliance non è un `tako://`: è
+  `http://tako.local:4317/owner/#enroll=CODE`. Il deep link nativo esiste per il futuro, e oggi
+  è verificato.
+
+#### Verifier
+
+| Grandezza | Valore |
+|---|---|
+| `npx eslint apps/app` | **0 errori** (erano 4) |
+| `tsc -p apps/app --noEmit` | pulito |
+| `xcodebuild … -destination 'generic/platform=iOS Simulator' -configuration Release` | **exit 0** |
+| Prima build completa (compilazione pod inclusa) | **2 min 23 s** |
+| Build incrementali (solo bundle JS + link) | **11–13 s** |
+| `Tako.app` (simulatore, Release) | **77 MB**, `main.jsbundle` 2,5 MB |
+| Simulatore | iPhone 17, iOS 26.5 — `simctl install` + `launch` ok |
+| Splash nativo | `SplashScreen.storyboardc` dentro il bundle, fondo `#FBF8F4` |
+| ATS | `NSAppTransportSecurity.NSAllowsLocalNetworking` presente nell'`Info.plist` generato |
+| Schermata finale | shell owner a 5 sezioni (Sala · Ordini · Cassa · Oggi · Altro), badge **In sala** |
+
+**Verifica di contenuto lato server, non a occhio**: l'arruolamento dal Simulatore lascia in
+`sessions` una riga `device_name='iPhone'`, `device_platform='iOS'`, `kind='mobile'`
+(15:29:30Z). È la prova che la PWA ha girato *dentro* la WebView, ha chiamato
+`POST /api/auth/device/enroll` e ha ottenuto la sessione: uno screenshot non lo dimostra, una
+riga a database sì. L'`entire contents` dell'albero di accessibilità del Simulatore, provato
+come alternativa, **non espone il contenuto della WKWebView** e torna vuoto.
+
+Screenshot: `ios-02` (PWA nella WebView), `ios-13` (Unmatched Route, il difetto del deep link),
+`ios-14` (shell a cinque sezioni).
+
+#### L'appliance di prova (e perché non è quella di Manuel)
+
+`/Applications/Tako.app` (v0.1.6) tiene la 4317 ma **non serve `/owner/`**: 404. L'appliance
+di prova è stata avviata dal repo su una porta e un DB **isolati**, per non disturbare né i
+dati di Manuel né l'altro agente che lavorava sul suo Postgres:
+
+```
+EMBEDDED_DB=1 PGPORT=54318 PGDATA_DIR=~/.tako-f73/pgdata TAKO_HOME=~/.tako-f73 \
+PORT=4317 NODE_ENV=production tsx src/bootstrap.ts
+```
+
+con `packages/db/seed-bootstrap.mjs` per l'owner demo (`nino@tako.local` / `demo12345`).
+`~/.tako-f73` (65 MB) resta sul disco: è l'appliance di collaudo delle app native, rigenerabile
+ma comoda. `Tako.app` è stata fermata prima e **riavviata a fine lavoro**, verificata a 200.
+
+#### Deviazioni
+
+- **`ios/` non si committa** (già in `.gitignore` da F7.2, confermato). Nessuna patch a mano nei
+  file generati: tutto passa da `app.json` e dai plugin.
+- **`package.json` cambiato da `prebuild`**: `expo start --ios/--android` → `expo run:ios/
+  run:android`. È il CLI che lo fa da solo su un progetto con cartelle native, ed è lo script
+  giusto per questo flusso: si tiene.
+- **`ios.backgroundColor` è ignorato**: `prebuild` avvisa che servirebbe `expo-system-ui`, non
+  installato (installarlo avrebbe toccato il lockfile). Irrilevante per lo splash, che prende
+  il colore dal plugin `expo-splash-screen`, ma la riga in `app.json` oggi non fa nulla.
+
+---
+
+### Diario esecuzione 2026-08-09 — F7.4 (APK Android firmato)
+
+**F7.4 — DONE.** Due giri di `assembleRelease` dei cinque disponibili. APK **firmato con
+keystore di produzione**, **53,1 MB** (budget 80), installato e collaudato sull'emulatore
+`tako`: schermata di collegamento → host `10.0.2.2:4317` → shell owner a cinque sezioni.
+
+#### Ambiente
+
+`~/.zshrc` non viene letto da una shell non interattiva: `JAVA_HOME` (Temurin 17.0.20),
+`ANDROID_HOME` e il PATH di `platform-tools`/`emulator` vanno esportati **in ogni comando**.
+L'AVD `tako` esiste da F7.1 ed è `arm64-v8a` su `android-36/google_apis` — dato che conta per
+la scelta delle ABI (sotto). Boot headless: `sys.boot_completed=1` in ~5 s.
+
+#### Firma: keystore fuori dal repo, configurazione dentro
+
+Keystore generato una volta sola:
+
+```
+~/.tako/android-keystore/tako-owner.keystore   PKCS12, RSA 4096, 30 anni, alias `tako`
+~/.tako/android-keystore/credentials.txt       chmod 600, password casuale di 32 caratteri
+```
+
+Certificato `CN=Tako, OU=Tako Owner App, O=Tako Italia, L=Milano, C=IT`, SHA-256
+`e7:3c:3f:3a:4a:f5:bc:3e:…:88`. **Questo file è la cosa più fragile del progetto Android**:
+perderlo significa non poter più aggiornare l'app sui telefoni già installati né pubblicarla
+come aggiornamento sul Play Store. Va nel backup di Manuel, non solo su questo Mac.
+
+Il cablaggio della firma **non** è stato scritto a mano in `android/`, perché quella cartella è
+generata e ignorata da git: sarebbe sparita al primo `prebuild --clean`. È un config plugin,
+`apps/app/plugins/with-android-release-signing.js`, che al momento del prebuild legge
+`credentials.txt`, travasa i quattro valori in `android/gradle.properties` (generato, ignorato)
+e riscrive `app/build.gradle` con un `signingConfigs.release` usato dal buildType `release`.
+**Se il file delle credenziali non c'è il plugin non fa nulla** e la release resta firmata con
+la chiave di debug, cioè il comportamento di default di React Native: su una macchina nuova la
+build passa lo stesso, semplicemente produce un APK non distribuibile — meglio di un errore di
+Gradle su una password mancante. Il segreto non entra mai nel repo: nel repo c'è solo il codice
+che sa *dove cercarlo*.
+
+#### Il traffico in chiaro: il rischio di F7.2 era reale, ed è chiuso
+
+`expo-build-properties` con `android.usesCleartextTraffic: true` finisce nel manifest generato
+(`<application … android:usesCleartextTraffic="true">`) — verificato sia staticamente sia **in
+funzione**: la WebView dell'APK *release* carica `http://10.0.2.2:4317/owner/`. Senza, sarebbe
+stata una connessione rifiutata muta, come annotato in F7.2.
+
+#### 97,8 MB → 53,1 MB: le ABI
+
+Il primo APK, con le quattro ABI di default (`armeabi-v7a, arm64-v8a, x86, x86_64`), pesava
+**97,8 MB**: fuori dal budget di 80. `android.buildArchs: ["arm64-v8a", "armeabi-v7a"]` lo porta
+a **53,1 MB** senza perdere nulla di reale — i telefoni Android x86 non esistono e l'emulatore
+su Apple Silicon è arm64. **La conseguenza da mettere per iscritto**: questo APK **non gira su
+un emulatore x86_64** (Mac Intel, CI cloud Android x86). Chi ne avrà bisogno rimette `x86_64`
+in `app.json` per quella build, o passa agli split per ABI.
+
+#### Verifier
+
+| Grandezza | Valore |
+|---|---|
+| `./gradlew assembleRelease` a freddo (`--no-daemon`, 4 ABI) | **8 min 14 s**, 655 task |
+| `./gradlew assembleRelease` incrementale (2 ABI, nuovo bundle JS) | **25 s**, 82 task |
+| APK | **53,1 MB** (era 97,8) — budget 80 ✅ |
+| `apksigner verify --print-certs` | **Verifies**, schema v2, 1 firmatario = certificato Tako |
+| Emulatore | AVD `tako` (arm64-v8a, android-36), boot headless, `adb install` **Success** |
+| `uiautomator dump` sulla schermata di collegamento | i 9 testi nativi attesi, con i bounds |
+| Percorso collaudato | ConnectScreen → `10.0.2.2:4317` → PWA → deep link `tako://?enroll=` → shell |
+| Sessione a database | `device_name='Telefono Android'`, `device_platform='Android'`, `kind='mobile'` |
+| Pull-to-refresh (rischio aperto di F7.2) | **funziona**: `RefreshControl` compare, la WebView ricarica, la sessione sopravvive |
+| Navigazione | tap su *Ordini* → schermata Ordini, tab attiva aggiornata |
+
+Screenshot: `and-01` (collegamento), `and-02` (host scritto), `and-03` (PWA), `and-04` (shell),
+`and-05` (pull-to-refresh in corso), `and-08` (tab Ordini).
+
+#### Due cose trovate strada facendo
+
+1. **`uiautomator dump` non vede dentro la WebView.** Sulle schermate native (la schermata di
+   collegamento) restituisce testo e bounds, ed è stato il verifier testuale di quella parte.
+   Sul contenuto della WebView torna vuoto: Android costruisce l'albero di accessibilità del
+   WebView solo con un servizio di accessibilità attivo. Per la shell il verifier oggettivo è
+   quindi la riga in `sessions` (che dimostra la chiamata HTTP fatta dalla PWA), non il dump.
+
+2. **Il badge di rete dice «Non raggiungibile» mentre l'app funziona.** Nell'emulatore la PWA è
+   servita da `10.0.2.2:4317` e funziona, ma il badge è rosso. Non è un difetto del guscio:
+   `owner-src/lib/endpoint.ts` sonda `endpoints.lan`, cioè l'indirizzo che l'appliance dichiara
+   in `/api/system/info` (`http://tako.local:4317`), e l'emulatore non risolve l'mDNS. Sul
+   telefono vero non succede — ma **succederebbe a chiunque raggiunga l'appliance per IP invece
+   che per `tako.local`** (rete che blocca il multicast, telefono su una VLAN ospiti): l'app
+   funzionerebbe mostrando un pallino rosso. Il rimedio, quando lo si vorrà, è sondare **anche
+   l'origine da cui la pagina è stata servita** prima di dichiararsi offline. Non è materia di
+   F7.4: è una riga per Wave 2, annotata qui perché è stata vista.
+
+#### Deviazioni
+
+- **`android/` non si committa** (già in `.gitignore` da F7.2). Nessuna modifica a mano ai file
+  generati: la firma passa dal config plugin, le ABI e il cleartext da `app.json`.
+- **Niente split per ABI**: un solo APK universale a due architetture è più semplice da mandare
+  via WhatsApp a un ristoratore, che è il canale di distribuzione previsto finché non c'è il
+  Play Store.
+
+#### Cosa resta a Manuel (nessuna delle due è automatizzabile da qui)
+
+- **iOS su device / TestFlight**: `com.takoitalia.tako` va registrato nel team Apple Developer,
+  poi `DEVELOPMENT_TEAM` + provisioning in `app.json` (`ios.appleTeamId`) e
+  `xcodebuild -destination 'generic/platform=iOS' archive` + export. Il Simulatore non firma:
+  quanto verificato qui **non** dice niente sulla firma.
+- **Play Store**: 25 $ una tantum. Nel frattempo `~/Desktop/TakoOwner-release.apk` è
+  installabile direttamente (il telefono chiederà di consentire le origini sconosciute).
+- **Push native (F7.5)**: APNs e progetto Firebase, come già scritto nel piano.
+- **Ruby moderno sul Mac** (rbenv o mise): sblocca i moduli Expo precompilati e accorcia le
+  build iOS.
