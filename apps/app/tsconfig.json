@@ -1,7 +1,0 @@
-{
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true
-  },
-  "exclude": ["src-tauri", "node_modules", "dist", ".expo"]
-}

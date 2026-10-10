@@ -7,23 +7,6 @@ function save(k, v) { try { localStorage.setItem("tako-dash-" + k, v); } catch (
 
 const HEX2BRAND = Object.fromEntries(Object.entries(BRAND_PALETTES).map(([k, p]) => [p.brand.toLowerCase(), k]));
 
-/* ── Trascinamento finestra (solo app desktop Tauri) ──────────────────────────
-   La finestra usa titleBarStyle "Overlay": senza una zona `data-tauri-drag-region`
-   la finestra NON si sposta afferrandola in alto. Questa striscia fissa in cima
-   (30px, trasparente) fa da titlebar. Il drag nativo parte solo se il mousedown
-   colpisce QUESTA striscia, quindi i controlli sotto restano cliccabili; l'area
-   utile (padding 26px in alto sul desktop) è comunque vuota. Doppio-click =
-   zoom/maximize, gestito nativamente da Tauri. Non renderizzata nel browser. */
-function WindowDragStrip() {
-  const isTauri = typeof window !== "undefined" && (window.__TAURI_INTERNALS__ || window.__TAURI__);
-  if (!isTauri) return null;
-  return (
-    <div data-tauri-drag-region aria-hidden="true"
-      style={{ position: "fixed", top: 0, left: 0, right: 0, height: 30, zIndex: 9998,
-        background: "transparent", WebkitUserSelect: "none", userSelect: "none", cursor: "default" }} />
-  );
-}
-
 /* ── slug url-safe dal nome ristorante (per /auth/register) ── */
 function slugifyName(s) {
   const base = (s || "").toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g, "")
@@ -372,7 +355,6 @@ function App({ session }) {
 
   return (
     <TakoCtx.Provider value={brand}>
-      <WindowDragStrip />
       {(!online || !realtimeOnline) && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, display: "flex", justifyContent: "center", pointerEvents: "none", paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}>
           <div role="status" aria-live="polite" style={{ pointerEvents: "auto", display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 15px", borderRadius: 99, background: "var(--danger)", color: "#fff", fontSize: 13, fontWeight: 700, boxShadow: "0 8px 24px rgba(0,0,0,.20)" }}>

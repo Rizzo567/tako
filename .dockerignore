@@ -19,10 +19,7 @@
 **/dist
 **/.next
 **/.turbo
-**/.expo
 *.tsbuildinfo
-apps/app/src-tauri/target
-apps/app/src-tauri/gen
 
 # Dati locali appliance / store ~/.tako / Postgres portatile (mai nel cloud)
 packages/db/.pgdata
@@ -38,7 +35,3 @@ materiali
 **/*.log
 .DS_Store
 Thumbs.db
-
-# Altre app non necessarie al control-plane cloud (immagine = solo apps/server + packages).
-apps/app
-"Tako Dashboard App"

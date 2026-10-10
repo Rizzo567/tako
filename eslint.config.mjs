@@ -24,10 +24,8 @@ export default [
       '**/.next/**',
       '**/dist/**',
       '**/build/**',
-      '**/.expo/**',
       '**/coverage/**',
       '**/next-env.d.ts',
-      'apps/app/src-tauri/**',
       'apps/dashboard/public/**', // staff JS a globali (Babel-in-browser) — non a modulo
       'apps/web/public/**',
       '**/*.config.js',
@@ -63,7 +61,7 @@ export default [
 
   // Regole degli Hook: solo frontend React.
   {
-    files: ['apps/web/**/*.{ts,tsx}', 'apps/dashboard/**/*.{ts,tsx}', 'apps/app/**/*.{ts,tsx}'],
+    files: ['apps/web/**/*.{ts,tsx}', 'apps/dashboard/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks },
     rules: { ...reactHooks.configs.recommended.rules },
   },
