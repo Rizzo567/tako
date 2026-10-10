@@ -328,7 +328,7 @@ function MobileHeader({ route, openDrawer, live, role, badges, nome, dark, go })
       {/* logo (reagisce all'arrivo) */}
       <div style={{ position: "relative", flex: "none", display: "grid", placeItems: "center" }}>
         {active && <span className="nb-glow" style={{ position: "absolute", width: 46, height: 46, borderRadius: "50%", background: "radial-gradient(circle, var(--brand) 0%, transparent 70%)", pointerEvents: "none" }} />}
-        <Tako logo pose={intro.pose} size={52} float={false} className={busy ? "nb-tako" : undefined} style={{ flex: "none", position: "relative" }} />
+        <Tako logo pose="logoMark" size={44} float={false} className={busy ? "nb-tako" : undefined} style={{ flex: "none", position: "relative" }} />
       </div>
 
       {/* contenuto header — sfuma ed esce verso l'alto */}

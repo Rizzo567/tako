@@ -139,7 +139,7 @@ export const useSessionStore = create<SessionState>()(
   persist(
     (set) => ({
       restaurantId: null, tableId: null, tableNumber: null,
-      restaurantName: null, primaryColor: '#ED7159', aiEnabled: false, orderingEnabled: true, reservationsEnabled: false, coverCharge: 0, orderId: null,
+      restaurantName: null, primaryColor: '#1d1d1f', aiEnabled: false, orderingEnabled: true, reservationsEnabled: false, coverCharge: 0, orderId: null,
       sessionId: null,
       // Se cambia il ristorante o il tavolo rispetto a quello corrente, azzera orderId:
       // altrimenti l'ordine di una visita precedente riaffiorerebbe su un tavolo/locale diverso.

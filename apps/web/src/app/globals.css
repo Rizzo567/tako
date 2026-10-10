@@ -6,7 +6,7 @@
 @layer base {
   :root {
     /* ── Brand (overridden at runtime by CustomerApp via --brand) ── */
-    --brand: #ED7159;
+    --brand: #1d1d1f;
     --brand-hover: color-mix(in srgb, var(--brand) 88%, black);
     --brand-pressed: color-mix(in srgb, var(--brand) 78%, black);
     --brand-tint: color-mix(in srgb, var(--brand) 10%, white);

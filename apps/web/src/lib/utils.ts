@@ -1,3 +1,4 @@
+import { menuAccent } from './menu-palette'
 export function formatEuro(n: number) {
   // Evita "NaN €" se un valore arriva undefined/NaN dall'API.
   const v = Number.isFinite(n) ? n : 0
@@ -5,8 +6,8 @@ export function formatEuro(n: number) {
 }
 
 /** Applica il colore brand del ristorante e sceglie il testo leggibile sopra (--on-brand). */
-export function applyBrand(color?: string | null) {
-  if (!color) return
+export function applyBrand(raw?: string | null) {
+  const color = menuAccent(raw)
   const root = document.documentElement
   root.style.setProperty('--brand', color)
   const hex = color.trim().replace('#', '')

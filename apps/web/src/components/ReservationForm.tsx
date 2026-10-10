@@ -52,7 +52,7 @@ export function ReservationForm({ restaurantId }: { restaurantId: string }) {
     } finally { setBusy(false) }
   }
 
-  const field = 'w-full rounded-xl border border-[var(--hairline,#e5e5e5)] bg-[var(--sunken,#f6f3ec)] px-3.5 py-3 text-[15px] text-[var(--ink,#2a1f1a)] outline-none focus:border-[var(--brand,#ED7159)]'
+  const field = 'w-full rounded-xl border border-[var(--hairline,#e5e5e5)] bg-[var(--sunken,#f6f3ec)] px-3.5 py-3 text-[15px] text-[var(--ink,#2a1f1a)] outline-none focus:border-[var(--brand,#1d1d1f)]'
 
   if (loading) return <div className="grid min-h-dvh place-items-center text-[var(--ink-3,#999)]">{t('loading')}</div>
 

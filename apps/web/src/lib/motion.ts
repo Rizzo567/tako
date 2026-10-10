@@ -20,7 +20,7 @@ function prefersReducedMotion() {
  */
 export function confettiBurst(x?: number, y?: number, n = 26) {
   if (typeof document === 'undefined' || prefersReducedMotion() || !document.body.animate) return
-  const cols = ['#ED7159', '#F4B860', '#4FA882', '#D9533A', '#FCE7DF', '#E0A23C']
+  const cols = ['#1d1d1f', '#6e6e73', '#4FA882', '#c7c7cc', '#e5e5ea', '#2F7D58']
   const cx = x ?? window.innerWidth / 2
   const cy = y ?? window.innerHeight * 0.62
   for (let i = 0; i < n; i++) {
