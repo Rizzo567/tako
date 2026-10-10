@@ -1072,7 +1072,7 @@ function ScreenStaff({ mobile }) {
   const [editMember, setEditMember] = useState(null);
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="hello" title="Staff" sub={`${STAFF.length} membri`} actions={<Btn kind="brand" icon="plus" onClick={() => { setEditMember(null); setFormOpen(true); }}>Aggiungi membro</Btn>} />
+      <PageHead mobile={mobile} tako="hello" title="Team" sub={STAFF.length === 1 ? "1 collaboratore" : `${STAFF.length} collaboratori`} actions={<Btn kind="brand" icon="plus" onClick={() => { setEditMember(null); setFormOpen(true); }}>Aggiungi membro</Btn>} />
       <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill,minmax(300px,1fr))", gap: 14 }}>
         {STAFF.map(m => {
           const [tone, label] = ROLE_BADGE[m.ruolo];

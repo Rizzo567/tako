@@ -11,9 +11,12 @@ const definitions = shell.slice(shell.indexOf('const NAV ='), shell.indexOf('/* 
 const api = runInNewContext(definitions + '\n({NAV, ROLE_ACCESS, MOBILE_PRIMARY, navAllowed, canNavigate, safeRoute, navParent, findItem, navBadge})', { Object });
 
 test('owner navigation is grouped by task without duplicate legacy screens', () => {
-  assert.deepEqual(Array.from(api.NAV, g => g.group), ['Tako', 'Servizio', 'Gestione']);
-  assert.deepEqual(Array.from(api.NAV.flatMap(g => g.items), i => i.label), ['Panoramica','Sala','Ordini','Cucina','Cassa','Prenotazioni','Menu','Magazzino','Team','Report']);
-  for (const [route, parent] of Object.entries({tavoli:'sala',turni:'staff',dispositivi:'impostazioni',qr:'impostazioni',insights:'statistiche'})) assert.equal(api.navParent(route),parent);
+  assert.deepEqual(Array.from(api.NAV, g => g.group), ['Servizio', 'Gestione']);
+  assert.deepEqual(Array.from(api.NAV.flatMap(g => g.items), i => i.label), ['Panoramica','Sala','Ordini','Cucina','Cassa','Prenotazioni','Menu','Magazzino','Report']);
+  for (const [route, parent] of Object.entries({tavoli:'sala',staff:'impostazioni',turni:'impostazioni',dispositivi:'impostazioni',qr:'impostazioni',insights:'statistiche'})) assert.equal(api.navParent(route),parent);
+  // Team e Impostazioni non sono voci della sidebar, ma le route legacy restano valide.
+  for (const id of ['staff','turni','impostazioni']) assert.equal(api.canNavigate('owner',id),true);
+  assert.equal(api.findItem('staff').label,'Team');
 });
 test('every role-visible route is authorized; direct shortcuts use the same guard', () => {
   for (const role of Object.keys(api.ROLE_ACCESS)) {
@@ -29,7 +32,11 @@ test('every role-visible route is authorized; direct shortcuts use the same guar
 });
 test('waiter mobile has direct calls and order creation; staff shifts remain reachable', () => {
   assert.deepEqual(Array.from(api.MOBILE_PRIMARY.cameriere),['sala','ordini','chiamate','comanda']);
-  for(const role of ['cameriere','chef','cassiere']) assert.ok(api.navAllowed(role).some(g => g.items.some(i => i.id === 'turni' && i.label === 'Team')));
+  for(const role of ['cameriere','chef','cassiere']) {
+    assert.ok(api.navAllowed(role).some(g => g.group === 'Gestione' && g.items.some(i => i.id === 'turni' && i.label === 'Turni')));
+    assert.equal(api.safeRoute(role,'turni'),'turni');
+  }
+  assert.ok(!api.navAllowed('owner').some(g => g.items.some(i => ['staff','turni','impostazioni'].includes(i.id))));
   assert.equal(api.findItem('comanda').label,'Nuovo ordine');
   assert.equal(api.navBadge(api.findItem('chiamate'),{ordini:8,chiamate:2}),2);
 });
@@ -59,7 +66,9 @@ test('sidebar and mobile navigation render with role-specific labels and no unau
     const props={route:'sala',go:()=>{},role,badges:{ordini:2,chiamate:1}};
     const html=renderToStaticMarkup(React.createElement(context.window.Sidebar,props));
     assert.ok(html.includes('Panoramica'));
-    assert.equal(html.includes('Impostazioni'),role==='owner');
+    // Impostazioni si apre dal menu utente (chiuso al primo render), non è una voce della sidebar.
+    assert.equal(html.includes('Impostazioni'),false);
+    assert.equal(html.includes('>Team<'),false);
     const mobile=renderToStaticMarkup(React.createElement(context.window.BottomBar,props));
     if(role==='cameriere') { assert.ok(mobile.includes('Chiamate'));assert.ok(mobile.includes('Nuovo ordine')); }
     if(role==='chef') assert.ok(mobile.includes('Cucina'));

@@ -338,9 +338,8 @@ function App({ session }) {
 
   const sections = {
     sala: [{ id: "sala", label: "Sala live" }, { id: "tavoli", label: "Configurazione" }],
-    staff: [{ id: "staff", label: "Collaboratori" }, { id: "turni", label: "Turni" }],
     statistiche: [{ id: "statistiche", label: "Statistiche" }, { id: "insights", label: "Menu engineering" }],
-    impostazioni: [{ id: "impostazioni", label: "Locale" }, { id: "dispositivi", label: "Dispositivi" }, { id: "qr", label: "QR tavoli" }, { id: "collega", label: "Collegamenti" }],
+    impostazioni: [{ id: "impostazioni", label: "Locale" }, { id: "staff", label: "Team" }, { id: "turni", label: "Turni" }, { id: "dispositivi", label: "Dispositivi" }, { id: "qr", label: "QR tavoli" }, { id: "collega", label: "Collegamenti" }],
   };
   const tabs = (sections[navParent(route)] || []).filter(it => canNavigate(role, it.id));
   const newOrder = ["sala", "ordini", "chiamate"].includes(route) && canNavigate(role, "comanda");

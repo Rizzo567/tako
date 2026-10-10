@@ -1,10 +1,8 @@
 /* ───────────────── Tako Dashboard — shell responsive + navigazione ───────────────── */
 
 const NAV = [
-  { group: "Tako", items: [
-    { id: "dashboard", label: "Panoramica", icon: "home" },
-  ]},
   { group: "Servizio", items: [
+    { id: "dashboard", label: "Panoramica", icon: "home" },
     { id: "sala", label: "Sala", icon: "map" },
     { id: "ordini", label: "Ordini", icon: "orders", badge: true },
     { id: "kds", label: "Cucina", icon: "kitchen" },
@@ -14,18 +12,20 @@ const NAV = [
   { group: "Gestione", items: [
     { id: "menu", label: "Menu", icon: "menu" },
     { id: "inventario", label: "Magazzino", icon: "inventory" },
-    { id: "staff", label: "Team", icon: "staff" },
     { id: "statistiche", label: "Report", icon: "stats" },
   ]},
 ];
 
-/* Legacy route IDs stay stable for saved routes, screen links and copilot tools. */
-const NAV_PARENT = { tavoli: "sala", turni: "staff", dispositivi: "impostazioni", qr: "impostazioni", collega: "impostazioni", insights: "statistiche" };
+/* Legacy route IDs stay stable for saved routes, screen links and copilot tools.
+   Team (staff = collaboratori, turni) vive dentro Impostazioni; Impostazioni si apre dal
+   menu utente in fondo alla sidebar (desktop) e dall'icona accanto all'utente (drawer mobile). */
+const NAV_PARENT = { tavoli: "sala", staff: "impostazioni", turni: "impostazioni", dispositivi: "impostazioni", qr: "impostazioni", collega: "impostazioni", insights: "statistiche" };
 const EXTRA_NAV = {
   cowork: { id: "cowork", label: "Assistente", icon: "sparkles" },
   comanda: { id: "comanda", label: "Nuovo ordine", icon: "comanda" },
   chiamate: { id: "chiamate", label: "Chiamate", icon: "bell", badge: true },
   impostazioni: { id: "impostazioni", label: "Impostazioni", icon: "settings" },
+  staff: { id: "staff", label: "Team", icon: "staff" },
   tavoli: { id: "tavoli", label: "Configurazione sala", icon: "table" },
   turni: { id: "turni", label: "Turni", icon: "clock" },
   dispositivi: { id: "dispositivi", label: "Dispositivi", icon: "qr" },
@@ -56,7 +56,13 @@ function safeRoute(role, id) { return canNavigate(role, id) ? id : (ROLE_HOME[ro
 function navParent(id) { return NAV_PARENT[id] || id; }
 function navBadge(it, badges) { return (badges || {})[it.id] || 0; }
 function navAllowed(role) {
-  return NAV.map(g => ({ ...g, items: g.items.map(it => it.id === "staff" && !canNavigate(role, "staff") && canNavigate(role, "turni") ? { ...it, id: "turni" } : it).filter(it => canNavigate(role, it.id)) })).filter(g => g.items.length);
+  const groups = NAV.map(g => ({ ...g, items: g.items.filter(it => canNavigate(role, it.id)) }));
+  // Chi vede i propri turni ma non Impostazioni (cameriere, chef, cassiere) li trova in Gestione.
+  if (canNavigate(role, "turni") && !canNavigate(role, "impostazioni")) {
+    const gestione = groups.find(g => g.group === "Gestione");
+    gestione.items = [...gestione.items, EXTRA_NAV.turni];
+  }
+  return groups.filter(g => g.items.length);
 }
 function findItem(id) {
   for (const g of NAV) for (const it of g.items) if (it.id === id) return it;
@@ -131,7 +137,6 @@ function Sidebar({ route, go, role, badges, live }) {
             </div>
             {isLast && <>
               {canNavigate(role, "cowork") && NavBtn(EXTRA_NAV.cowork)}
-              {canNavigate(role, "impostazioni") && NavBtn(EXTRA_NAV.impostazioni)}
               <SidebarUser role={role} go={go} />
             </>}
           </div>
@@ -275,7 +280,8 @@ function routeIntro(route, role = "owner") {
     inventario: { pose: "dishAlt", title: "Inventario" },
     statistiche: { pose: "pay", title: "Statistiche" },
     insights: { pose: "dishAlt", title: "Analisi Menu" },
-    staff: { pose: "hello", title: "Staff" },
+    staff: { pose: "hello", title: "Team" },
+    turni: { pose: "hello", title: "Turni" },
     impostazioni: { pose: "bowtie", title: "Impostazioni" },
   };
   return m[route] || { pose: "neutral", title: findItem(route).label };
@@ -420,7 +426,7 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
 /* drawer "Altro": pannello arrotondato, esclude le voci della bottom-bar */
 function MobileDrawer({ open, onClose, route, go, role, badges }) {
   const primary = MOBILE_PRIMARY[role] || [];
-  const groups = [...navAllowed(role), { group: "Altro", items: [EXTRA_NAV.cowork, EXTRA_NAV.impostazioni].filter(it => canNavigate(role, it.id)) }].map(g => ({ ...g, items: g.items.filter(it => !primary.includes(it.id)) })).filter(g => g.items.length);
+  const groups = [...navAllowed(role), { group: "Altro", items: [EXTRA_NAV.cowork].filter(it => canNavigate(role, it.id)) }].map(g => ({ ...g, items: g.items.filter(it => !primary.includes(it.id)) })).filter(g => g.items.length);
   const r = ROLES[role];
   return (
     <Overlay open={open} onClose={onClose} anchor="right">
