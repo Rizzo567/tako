@@ -2,7 +2,9 @@
 
 Data: 2026-10-10. Branch `codex/tako-webapp`. Riferimento: [RIFERIMENTO-VIDEO.md](RIFERIMENTO-VIDEO.md).
 
-Dove si sceglie: **Impostazioni › Locale › Aspetto › «Tema dell'interfaccia»** (Tako classico / Sobrio). Vale per utente e dispositivo: `localStorage` con chiave `tako-dash-ui:<id utente>` (il server non ha preferenze per utente). Default: classico. Il tema si applica con `data-ui="sobrio"` sul contenitore `.screen`.
+> Aggiornamento 10/10: il tema Sobrio è ora l'unico tema e la scelta è stata rimossa, vedi [RITOCCHI-10-10.md](RITOCCHI-10-10.md).
+
+Dove si sceglieva: **Impostazioni › Locale › Aspetto › «Tema dell'interfaccia»** (Tako classico / Sobrio). Vale per utente e dispositivo: `localStorage` con chiave `tako-dash-ui:<id utente>` (il server non ha preferenze per utente). Default: classico. Il tema si applica con `data-ui="sobrio"` sul contenitore `.screen`.
 
 Strumenti (tutti headless, nessuna finestra):
 - `scripts/qa-screenshots.mjs` + `scripts/qa-screenshot-diff.mjs` (esistenti) — classico prima/dopo.
