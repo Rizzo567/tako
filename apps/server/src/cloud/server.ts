@@ -14,6 +14,7 @@ import { Redis } from 'ioredis'
 import { cloudAuthRoutes } from '../routes/cloud/auth.js'
 import { cloudOAuthRoutes } from '../routes/cloud/oauth.js'
 import { cloudContactRoutes } from '../routes/cloud/contact.js'
+import { cloudResolveRoutes } from '../routes/cloud/resolve.js'
 import { allowedOrigins, cookieMode } from './config.js'
 import { validateEmailConfig } from './email.js'
 import { setRedis } from './redis.js'
@@ -151,6 +152,8 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
   // provider sono configurati (client id/secret in env), altrimenti è un no-op.
   await fastify.register(cloudOAuthRoutes, { prefix: '/api/auth' })
   await fastify.register(cloudContactRoutes, { prefix: '/api' })
+  // Vecchi QR dei tavoli (appliance) → stesso percorso sulla webapp pubblica.
+  await fastify.register(cloudResolveRoutes)
 
   return fastify
 }

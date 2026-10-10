@@ -15,6 +15,16 @@ export function siteBaseUrl(): string {
   return v.replace(/\/+$/, '')
 }
 
+/** Base URL pubblica della webapp (menu cliente). Facoltativa: se manca, i vecchi QR
+ *  dell'appliance mostrano «Menu in aggiornamento» invece di reindirizzare. */
+export function webPublicUrl(): string | null {
+  const v = (process.env['WEB_PUBLIC_URL'] ?? '').trim()
+  if (!v) return null
+  const u = new URL(v)
+  if (u.protocol !== 'https:' && u.hostname !== 'localhost') throw new Error('WEB_PUBLIC_URL deve essere https')
+  return u.origin + u.pathname.replace(/\/+$/, '')
+}
+
 /** Allowlist ESATTA di origin per CORS (lista separata da virgola). Mai wildcard. */
 export function allowedOrigins(): string[] {
   const raw = process.env['ALLOWED_ORIGINS'] ?? ''

@@ -26,6 +26,10 @@ services:
         value: samesite
       - key: SITE_BASE_URL
         value: https://takoitalia.com
+      # Base pubblica della webapp: i vecchi QR /t/<appliance>/r/.../t/... vi vengono reindirizzati.
+      # Da impostare quando la webapp sarà online; finché manca mostrano «Menu in aggiornamento».
+      - key: WEB_PUBLIC_URL
+        sync: false
       - key: OAUTH_BASE_URL
         value: https://api.takoitalia.com
       - key: ALLOWED_ORIGINS
