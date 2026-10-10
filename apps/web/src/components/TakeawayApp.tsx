@@ -13,6 +13,7 @@ import { ConnectionBanner } from './ConnectionBanner'
 import { Sheet } from './ui/Sheet'
 import { I18nProvider, useI18n } from '@/lib/i18n'
 import { useOrderReadyNotifier } from '@/lib/useOrderReadyNotifier'
+import { applyBrand } from '@/lib/utils'
 
 // ─────────────────── PWA ASPORTO / ORDINE-AHEAD (senza tavolo) ───────────────────
 // Flusso separato dal tavolo: apre una sessione 'takeaway' (cookie tako_table scoped
@@ -21,18 +22,6 @@ import { useOrderReadyNotifier } from '@/lib/useOrderReadyNotifier'
 // non dal client). NON tocca MenuView.
 
 type View = 'menu' | 'tracking' | 'chat'
-
-function applyBrand(color?: string | null) {
-  if (!color) return
-  const root = document.documentElement
-  root.style.setProperty('--brand', color)
-  const hex = color.trim().replace('#', '')
-  if (hex.length !== 6) return
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))
-  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
-  root.style.setProperty('--on-brand', L > 0.62 ? '#2A1F1A' : '#FFFFFF')
-}
 
 function Header({ count, onCart, showCart = true }: { count: number; onCart: () => void; showCart?: boolean }) {
   const { restaurantName, logoUrl } = useSessionStore()

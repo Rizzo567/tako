@@ -7,8 +7,6 @@ export const SPRING: Transition = { type: 'spring', stiffness: 480, damping: 24 
 export const SPRING_SOFT: Transition = { type: 'spring', stiffness: 380, damping: 30 }
 export const SPRING_SHEET: Transition = { type: 'spring', stiffness: 380, damping: 34 }
 export const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1]
-export const PRESS = { scale: 0.94 }
-export const PRESS_SM = { scale: 0.97 }
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined'

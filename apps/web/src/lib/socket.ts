@@ -49,10 +49,3 @@ export function joinOrder(orderId: string) {
   if (!socket.connected) socket.connect()
   else emitJoin()
 }
-
-export function leaveTableSocket() {
-  joinedTableId = null
-  joinedMenuRestaurantId = null
-  joinedOrderId = null
-  socket.disconnect()
-}

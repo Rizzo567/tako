@@ -6,6 +6,7 @@ import { useSessionStore, useCartStore } from '@/lib/store'
 import { SPRING, EASE_OUT } from '@/lib/motion'
 import { I18nProvider, useI18n } from '@/lib/i18n'
 import { useOrderReadyNotifier } from '@/lib/useOrderReadyNotifier'
+import { applyBrand } from '@/lib/utils'
 import { MenuView } from './MenuView'
 import { CartView } from './CartView'
 import { OrderTracking } from './OrderTracking'
@@ -33,18 +34,6 @@ const KF_WIGGLE = [
 
 // Sets --brand and picks a readable text color (--on-brand) via WCAG relative luminance,
 // so CTAs stay legible whatever brand color a restaurant chooses (incl. light yellows).
-function applyBrand(color?: string | null) {
-  if (!color) return
-  const root = document.documentElement
-  root.style.setProperty('--brand', color)
-  const hex = color.trim().replace('#', '')
-  if (hex.length !== 6) return
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))
-  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
-  root.style.setProperty('--on-brand', L > 0.62 ? '#2A1F1A' : '#FFFFFF')
-}
-
 /* ───────────────── glass icon button (header) ───────────────── */
 function GlassIconBtn({
   img, onClick, badge, text, label, idle, clickKf, imgOrigin, imgScale,
