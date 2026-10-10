@@ -7,6 +7,7 @@ import { createWriteStream, mkdirSync, readdirSync, statSync } from 'fs'
 import { join } from 'path'
 import { nanoid } from 'nanoid'
 import sharp from 'sharp'
+import { remoteStorageEnabled, remoteImageUsage, uploadRemoteImage } from './remote-image-store.js'
 
 export const UPLOADS_DIR = process.env['UPLOADS_DIR'] ?? './uploads'
 mkdirSync(UPLOADS_DIR, { recursive: true })
@@ -20,6 +21,7 @@ const MIME_TO_EXT: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 
 
 const tenantUsedBytes = new Map<string, number>()
 const tenantInFlightBytes = new Map<string, number>()
+const remoteTenantWrites = new Map<string, Promise<void>>()
 
 function seedTenantUsage(tenantDir: string): number {
   try {
@@ -67,6 +69,24 @@ export async function saveImageBuffer(restaurantId: string, buf: Buffer): Promis
     return { code: 'INVALID_FILE_CONTENT', error: 'Il contenuto del file non è un\'immagine valida.' }
   }
 
+  const filename = `${nanoid(16)}.${MIME_TO_EXT[realMime]!}`
+  if (remoteStorageEnabled()) {
+    // Serialize quota check + write per restaurant in this single-replica runtime.
+    const previous = remoteTenantWrites.get(restaurantId) ?? Promise.resolve()
+    const write = previous.catch(() => {}).then(async () => {
+      if (await remoteImageUsage(restaurantId) + out.length > MAX_UPLOADS_BYTES) {
+        return { code: 'STORAGE_FULL', error: 'Spazio immagini esaurito.' }
+      }
+      await uploadRemoteImage(restaurantId, filename, out, realMime)
+      return { url: `/uploads/${restaurantId}/${filename}` }
+    }).catch(() => ({ code: 'WRITE_FAILED', error: 'Salvataggio immagine non riuscito.' }))
+    const tail = write.then(() => {})
+    remoteTenantWrites.set(restaurantId, tail)
+    try { return await write } finally {
+      // Only the latest pending writer may remove this restaurant's queue.
+      if (remoteTenantWrites.get(restaurantId) === tail) remoteTenantWrites.delete(restaurantId)
+    }
+  }
   const tenantDir = join(UPLOADS_DIR, restaurantId)
   mkdirSync(tenantDir, { recursive: true })
   if (!tenantUsedBytes.has(restaurantId)) tenantUsedBytes.set(restaurantId, seedTenantUsage(tenantDir))
@@ -77,7 +97,6 @@ export async function saveImageBuffer(restaurantId: string, buf: Buffer): Promis
   }
   tenantInFlightBytes.set(restaurantId, inFlight + out.length)
 
-  const filename = `${nanoid(16)}.${MIME_TO_EXT[realMime]!}`
   const filepath = join(tenantDir, filename)
   try {
     await new Promise<void>((resolve, reject) => {

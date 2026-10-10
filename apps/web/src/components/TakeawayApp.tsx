@@ -109,6 +109,7 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
   const { setSession, orderId, logoUrl } = useSessionStore()
   const count = useCartStore(s => s.items.reduce((n, i) => n + i.quantity, 0))
   const [view, setView] = useState<View>('menu')
+  useEffect(() => { if (view === 'menu') document.documentElement.style.setProperty('--header-h', '0px') }, [view])
   const [cartOpen, setCartOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   // Chiave d'errore (localizzata al render): il cambio lingua non ri-scatena la sessione.
@@ -163,13 +164,13 @@ function TakeawayShell({ restaurantId }: { restaurantId: string }) {
   return (
     <div className="min-h-[100dvh]" style={{ background: 'var(--surface)' }}>
       <ConnectionBanner />
-      <Header count={count} onCart={() => setCartOpen(true)} showCart={orderingEnabled} />
+      {view !== 'menu' && <Header count={count} onCart={() => setCartOpen(true)} showCart={orderingEnabled} />}
       <main style={{ paddingBottom: 'calc(var(--safe-b) + 72px)' }}>
         <AnimatePresence mode="wait">
           <motion.div key={view}
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.34, ease: EASE_OUT }}>
-            {view === 'menu' && <MenuView onGoCart={() => setCartOpen(true)} />}
+            {view === 'menu' && <MenuView onGoCart={() => setCartOpen(true)} serviceActions={orderingEnabled ? <button type="button" onClick={() => setCartOpen(true)} aria-label={t('hdrCart')} data-cart-anchor className="min-h-11 rounded-xl border px-3 text-sm font-semibold">{t('hdrCart')}{count > 0 ? ` (${count})` : ''}</button> : undefined} />}
             {view === 'tracking' && <OrderTracking onBack={() => setView('menu')} onOrderAgain={() => setView('menu')} />}
             {view === 'chat' && <AiChat onOrderPlaced={() => setView('tracking')} onViewCart={() => setCartOpen(true)} />}
           </motion.div>

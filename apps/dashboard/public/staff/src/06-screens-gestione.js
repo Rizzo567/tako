@@ -987,6 +987,12 @@ const ROLE_BADGE = { owner: ["brand", "Titolare"], cameriere: ["info", "Camerier
 const STAFF_ROLE_OPTS = [["cameriere", "Cameriere"], ["chef", "Chef"], ["cassiere", "Cassiere"]];
 /* Modale form membro staff — creazione e modifica (campi reali di /staff). */
 function StaffFormModal({ open, onClose, member }) {
+  const [webMode, setWebMode] = useState(null);
+  useEffect(() => {
+    let active = true;
+    window.TakoActions.systemInfo().then(info => { if (active) setWebMode(info.mode === "web"); }).catch(() => {});
+    return () => { active = false; };
+  }, []);
   const isEdit = !!member;
   const isOwner = isEdit && member.ruolo === "owner";
   const [nome, setNome] = useState("");
@@ -1007,20 +1013,23 @@ function StaffFormModal({ open, onClose, member }) {
     if (nome.trim().length < 2) { toast("Inserisci il nome (min 2 caratteri)", { type: "error" }); return; }
     if (!isEdit && !/.+@.+\..+/.test(email.trim())) { toast("Inserisci un'email valida", { type: "error" }); return; }
     if (pin && !/^\d{4}$/.test(pin)) { toast("Il PIN deve avere 4 cifre", { type: "error" }); return; }
-    if (!isEdit && password && password.length < 6) { toast("La password deve avere almeno 6 caratteri", { type: "error" }); return; }
+    if (webMode === null) { toast("Verifica della connessione in corso. Riprova tra poco.", { type: "error" }); return; }
+    if (webMode && !isEdit && !password) { toast("Imposta una password per l'accesso web", { type: "error" }); return; }
+    if (password && password.length < (webMode ? 10 : 6)) { toast(`La password deve avere almeno ${webMode ? 10 : 6} caratteri`, { type: "error" }); return; }
     setSaving(true);
     try {
       const roleDb = ROLE_UI2DB[ruolo] || "dipendente";
       if (isEdit) {
         const fields = { name: nome.trim(), active, phone: tel.trim() };
         if (!isOwner) fields.role = roleDb;  // il ruolo owner non è modificabile dal backend
-        if (pin) fields.pin = pin;
+        if (pin && !webMode) fields.pin = pin;
+        if (password) fields.password = password;
         await window.TakoActions.staffUpdate(member._id, fields);
         toast("Membro aggiornato", { type: "success" });
       } else {
         const fields = { name: nome.trim(), email: email.trim(), role: roleDb };
         if (tel.trim()) fields.phone = tel.trim();
-        if (pin) fields.pin = pin;
+        if (pin && !webMode) fields.pin = pin;
         if (password) fields.password = password;
         await window.TakoActions.staffCreate(fields);
         toast("Membro aggiunto", { type: "success" });
@@ -1051,8 +1060,8 @@ function StaffFormModal({ open, onClose, member }) {
           </Field>
           {isOwner && <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: -8, marginBottom: 12 }}>Il ruolo del titolare non è modificabile.</div>}
           <Field label="Telefono (opzionale)"><input style={inputStyle} value={tel} onChange={e => setTel(e.target.value)} placeholder="+39…" /></Field>
-          <Field label="PIN (opzionale, 4 cifre)"><input style={inputStyle} value={pin} inputMode="numeric" maxLength={4} onChange={e => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="Per l'accesso rapido" /></Field>
-          {!isEdit && <Field label="Password (opzionale)"><input style={inputStyle} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Almeno 6 caratteri" /></Field>}
+          {webMode === false && <Field label="PIN (opzionale, 4 cifre)"><input style={inputStyle} value={pin} inputMode="numeric" maxLength={4} onChange={e => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="Per l'accesso rapido" /></Field>}
+          <Field label={isEdit ? "Nuova password (lascia vuoto per mantenerla)" : webMode ? "Password per l'accesso web" : "Password (opzionale)"}><input style={inputStyle} type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} placeholder={webMode ? "Almeno 10 caratteri" : "Almeno 6 caratteri"} /></Field>
           {isEdit && <Row label="Attivo" sub="Un membro disattivo non può accedere"><Toggle on={active} set={setActive} /></Row>}
         </div>
         <div style={{ padding: 16, borderTop: "1px solid var(--hairline)", display: "flex", gap: 10 }}>
@@ -1307,6 +1316,14 @@ function NetHealthCard() {
 }
 function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAULTS, setSettings = () => {} }) {
   const [sec, setSec] = useState("aspetto");
+  const [webMode, setWebMode] = useState(false);
+  useEffect(() => {
+    let active = true;
+    window.TakoActions.systemInfo().then(info => {
+      if (active) setWebMode(info.mode === "web");
+    }).catch(() => {});
+    return () => { active = false; };
+  }, []);
   const set = (k, v) => setSettings(s => ({ ...s, [k]: v }));
   const setKpi = (k, v) => setSettings(s => ({ ...s, kpi: { ...s.kpi, [k]: v } }));
   // Logo del ristorante: caricato come le foto piatto (TakoActions.uploadImage) e
@@ -1334,7 +1351,9 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
     }
   };
   // Sezioni visibili: quelle owner-only (4° elemento truthy) solo per il titolare.
-  const visibleSections = SET_SECTIONS.filter(([, , , ownerOnly]) => !ownerOnly || window.__takoRole === "owner");
+  const visibleSections = SET_SECTIONS.filter(([key, , , ownerOnly]) =>
+    (!ownerOnly || window.__takoRole === "owner") &&
+    (!webMode || !["stampante", "whatsapp"].includes(key)));
   return (
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="bowtie" title="Impostazioni" sub="Personalizza la dashboard del tuo ristorante"
@@ -1435,6 +1454,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <h3 style={{ fontSize: 16, marginBottom: 4 }}>Rete & Connessione</h3>
               <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 12 }}>Come i clienti raggiungono il menu dai QR e cosa fare se la rete è debole.</p>
               <Row label="Ordini dal telefono dei clienti" sub="Disattiva se la rete non regge: il menu resta visibile ma i clienti ordinano dal cameriere."><Toggle on={settings.ordiniClienti !== false} set={v => set("ordiniClienti", v)} /></Row>
+              {webMode ? <p style={{ fontSize: 13, color: "var(--ink-2)", marginTop: 14 }}>I QR aprono il menu online. Clienti e staff devono essere connessi a internet; gli ordini sono inviati solo dopo conferma del server.</p> : <>
               <Field label="Modalità QR tavoli">
                 <select style={inputStyle} value={settings.qrMode || "lan"} onChange={e => set("qrMode", e.target.value)}>
                   <option value="lan">LAN (consigliato, funziona senza internet)</option>
@@ -1446,8 +1466,9 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
                   ? "I QR puntano al resolver pubblico: i clienti accedono anche da rete dati, ma serve internet attivo sul Mac."
                   : "I QR puntano a tako.local sulla rete del locale: funziona anche se internet è giù. Consigliato per la maggior parte dei ristoranti."}
               </p>
+              </>}
             </Card>
-            <NetHealthCard />
+            {!webMode && <NetHealthCard />}
           </>)}
 
           {sec === "cucina" && (
@@ -1455,7 +1476,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <h3 style={{ fontSize: 16, marginBottom: 6 }}>Ordini & Cucina</h3>
               <Row label="Suoni nuovo ordine" sub="Bip all'arrivo di un ordine"><Toggle on={settings.suoniOrdini} set={v => set("suoniOrdini", v)} /></Row>
               <Row label="Auto-conferma ordini" sub="Conferma in automatico i nuovi ordini"><Toggle on={settings.autoConferma} set={v => set("autoConferma", v)} /></Row>
-              <Row label="Stampa automatica comanda" sub="Invia alla stampante alla chiusura"><Toggle on={settings.stampaAuto} set={v => set("stampaAuto", v)} /></Row>
+              {!webMode && <Row label="Stampa automatica comanda" sub="Invia alla stampante alla chiusura"><Toggle on={settings.stampaAuto} set={v => set("stampaAuto", v)} /></Row>}
               <Row label="Vista KDS compatta" sub="Cucina più densa di default"><Toggle on={settings.kdsCompatta} set={v => set("kdsCompatta", v)} /></Row>
               <Row label="Soglia ritardo · giallo" sub="Minuti prima dell'avviso giallo in cucina"><div style={{ display: "flex", alignItems: "center", gap: 7 }}><input type="number" style={numStyle} value={settings.kdsWarn} onChange={e => set("kdsWarn", parseInt(e.target.value) || 0)} /><span style={{ fontSize: 13, color: "var(--ink-3)" }}>min</span></div></Row>
               <Row label="Soglia ritardo · rosso" sub="Minuti prima dell'avviso rosso in cucina"><div style={{ display: "flex", alignItems: "center", gap: 7 }}><input type="number" style={numStyle} value={settings.kdsLate} onChange={e => set("kdsLate", parseInt(e.target.value) || 0)} /><span style={{ fontSize: 13, color: "var(--ink-3)" }}>min</span></div></Row>

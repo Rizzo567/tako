@@ -1,5 +1,6 @@
+import { publishedMenu } from '../lib/published-menu.js'
 import type { FastifyInstance } from 'fastify'
-import { db, restaurants, menuItemTranslations, menuItems } from '@tako/db'
+import { db, restaurants, menuItemTranslations, menuItems, menus, menuSections } from '@tako/db'
 import { eq, and } from 'drizzle-orm'
 
 /**
@@ -25,6 +26,8 @@ export async function menuI18nRoutes(fastify: FastifyInstance) {
     const [r] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
     if (!r) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Ristorante non trovato' } })
 
+    const workspace = await publishedMenu(restaurantId)
+    if (workspace) return {data:{languages:workspace.languages,defaultLanguage:workspace.defaultLanguage}}
     const s = (r.settings as any) ?? {}
     // Normalizzo a minuscolo: le chiavi lingua devono combaciare con quelle scritte
     // dallo staff (menu.ts normalizza anch'esso a minuscolo).
@@ -40,6 +43,9 @@ export async function menuI18nRoutes(fastify: FastifyInstance) {
     const { restaurantId, lang } = req.query as { restaurantId?: string; lang?: string }
     if (!restaurantId || !lang) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'restaurantId and lang required' } })
     const langNorm = String(lang).toLowerCase()
+    const workspace = await publishedMenu(restaurantId)
+    if (workspace) return {data:workspace.menus.flatMap(menu => menu.sections.flatMap(section => section.items.flatMap(item => {const translation=item.translations[langNorm];return translation ? [{itemId:item.id,name:translation.name,description:translation.description??null}] : []}))) }
+
 
     // Solo traduzioni di piatti DISPONIBILI: come il menu pubblico (customer.ts filtra
     // available=true), non esporre nomi/descrizioni tradotti di piatti esauriti/bozza.
@@ -47,10 +53,13 @@ export async function menuI18nRoutes(fastify: FastifyInstance) {
       .select({ itemId: menuItemTranslations.itemId, name: menuItemTranslations.name, description: menuItemTranslations.description })
       .from(menuItemTranslations)
       .innerJoin(menuItems, eq(menuItems.id, menuItemTranslations.itemId))
+      .innerJoin(menuSections, eq(menuSections.id,menuItems.sectionId))
+      .innerJoin(menus,eq(menus.id,menuSections.menuId))
       .where(and(
         eq(menuItemTranslations.restaurantId, restaurantId),
         eq(menuItemTranslations.lang, langNorm),
         eq(menuItems.available, true),
+        eq(menuSections.active,true),eq(menus.active,true),eq(menus.restaurantId,restaurantId),
       ))
 
     return { data: rows }

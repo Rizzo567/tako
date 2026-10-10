@@ -212,6 +212,7 @@ function CustomerShell({ token }: { token: string }) {
   const { setSession, orderId, logoUrl } = useSessionStore()
   const count = useCartStore(s => s.items.reduce((n, i) => n + i.quantity, 0))
   const [view, setView] = useState<View>('menu')
+  useEffect(() => { if (view === 'menu') document.documentElement.style.setProperty('--header-h', '0px') }, [view])
   const [cartOpen, setCartOpen] = useState(false)
   const [waiterSheet, setWaiterSheet] = useState(false)
   const [langSheet, setLangSheet] = useState(false)
@@ -290,14 +291,17 @@ function CustomerShell({ token }: { token: string }) {
   return (
     <div className="min-h-[100dvh]" style={{ background: 'var(--surface)' }}>
       <ConnectionBanner />
-      <Header count={count} compact={compact} showCart={orderingEnabled} onCart={() => setCartOpen(true)} onWaiter={() => setWaiterSheet(true)} onLang={() => setLangSheet(true)} />
+      {view !== 'menu' && <Header count={count} compact={compact} showCart={orderingEnabled} onCart={() => setCartOpen(true)} onWaiter={() => setWaiterSheet(true)} onLang={() => setLangSheet(true)} />}
 
       <main style={{ paddingBottom: view === 'chat' ? 0 : 'calc(var(--safe-b) + 96px)' }}>
         <AnimatePresence mode="wait">
           <motion.div key={view}
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.34, ease: EASE_OUT }}>
-            {view === 'menu' && <MenuView onGoCart={launchCart} compact={compact} />}
+            {view === 'menu' && <MenuView onGoCart={launchCart} compact={compact} serviceActions={<>
+              <button type="button" onClick={() => setWaiterSheet(true)} aria-label={t('callWaiter')} className="min-h-11 rounded-xl border px-3 text-sm font-semibold">{t('hdrWaiter')}</button>
+              {orderingEnabled && <button type="button" onClick={() => setCartOpen(true)} aria-label={t('hdrCart')} data-cart-anchor className="min-h-11 rounded-xl border px-3 text-sm font-semibold">{t('hdrCart')}{count > 0 ? ` (${count})` : ''}</button>}
+            </>} />}
             {view === 'tracking' && <OrderTracking onBack={() => setView('menu')} onOrderAgain={() => setView('menu')} />}
             {view === 'chat' && <AiChat onOrderPlaced={() => setView('tracking')} onViewCart={launchCart} onReserve={() => { window.location.href = `/prenota/${useSessionStore.getState().restaurantId}` }} />}
           </motion.div>

@@ -1,3 +1,4 @@
+import { isWebMode, webUnavailable } from '../lib/web-runtime.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
@@ -12,7 +13,7 @@ import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { emailVerificationEnabled, cloudRegisterOwner, cloudLoginProbe, cloudResendVerification } from '../lib/cloud-verify.js'
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().trim().email().transform(value => value.toLowerCase()),
   password: z.string().min(6),
 })
 
@@ -20,7 +21,7 @@ const registerSchema = z.object({
   restaurantName: z.string().min(2),
   restaurantSlug: z.string().min(2).regex(/^[a-z0-9-]+$/),
   name: z.string().min(2),
-  email: z.string().email(),
+  email: z.string().trim().email().transform(value => value.toLowerCase()),
   password: z.string().min(8),
   // Opt-in newsletter: inoltrato al cloud, iscrizione Resend Audience alla verifica.
   newsletter: z.boolean().optional(),
@@ -164,7 +165,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       if (existing.length) return reply.code(409).send({ error: { code: 'CONFLICT', message: 'Slug già in uso. Scegli un altro.' } })
 
       // Check email unique
-      const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1)
+      const existingUser = await db.select().from(users).where(sql`lower(${users.email}) = ${email}`).limit(1)
       if (existingUser.length) return reply.code(409).send({ error: { code: 'EMAIL_TAKEN', message: 'Email già registrata.' } })
 
       const passwordHash = await bcrypt.hash(password, 12)
@@ -250,7 +251,11 @@ export async function authRoutes(fastify: FastifyInstance) {
       return reply.code(429).send({ error: { code: 'BRUTE_FORCE', message: 'Troppi tentativi. Riprova tra 15 minuti.' } })
     }
 
-    const [user] = await db.select().from(users).where(eq(users.email, body.data.email.toLowerCase())).limit(1)
+    // Legacy imports can retain mixed casing. Reject ambiguous legacy identities
+    // rather than picking one tenant arbitrarily if duplicates differ only by case.
+    const candidates = await db.select().from(users)
+      .where(and(sql`lower(${users.email}) = ${body.data.email}`, eq(users.active, true))).limit(2)
+    const user = candidates.length === 1 ? candidates[0] : undefined
     // Un utente è autenticabile se ha una password locale classica (staff/owner storico)
     // OPPURE, per l'owner sincronizzato dal cloud, una credenziale owner LOCALE dedicata
     // (local_owner_secret_hash) impostata al pairing per l'accesso OFFLINE (SEC-001).
@@ -314,6 +319,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
   // PIN login (for shared tablets)
   fastify.post('/pin-login', async (req, reply) => {
+    if (isWebMode()) return webUnavailable(reply)
     const pinLoginSchema = z.object({
       restaurantId: z.string().uuid(),
       // Identità dell'utente OBBLIGATORIA: la UI del tablet condiviso seleziona il
@@ -368,6 +374,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   // id+nome+ruolo dei membri attivi con PIN impostato — nessuna email/hash/pin.
   // Il brute-force resta gestito da /pin-login (per-IP + per-utente).
   fastify.get('/pin-roster', async (req, reply) => {
+    if (isWebMode()) return webUnavailable(reply)
     // Solo appliance mono-ristorante (login-tablet in LAN). In multi-tenant l'endpoint
     // pubblico permetterebbe di enumerare nomi+userId+ruolo dello staff conoscendo un
     // restaurantId → disabilitato (usare un flusso autenticato).

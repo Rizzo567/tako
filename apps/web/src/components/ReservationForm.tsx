@@ -19,6 +19,8 @@ export function ReservationForm({ restaurantId }: { restaurantId: string }) {
 
   const [customerName, setCustomerName] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
+  const [customerEmail,setCustomerEmail]=useState('')
+  const [reminderConsent,setReminderConsent]=useState(false)
   const [partySize, setPartySize] = useState(2)
   const [date, setDate] = useState('')
   const [time, setTime] = useState('20:00')
@@ -41,6 +43,7 @@ export function ReservationForm({ restaurantId }: { restaurantId: string }) {
     try {
       await api.post(`/customer/restaurant/${restaurantId}/reservation`, {
         customerName: customerName.trim(), customerPhone: customerPhone.trim(),
+        customerEmail:customerEmail.trim()||undefined,reminderConsent,
         partySize: Number(partySize), date, time, notes: notes.trim() || undefined,
       })
       setDone(true)
@@ -90,6 +93,8 @@ export function ReservationForm({ restaurantId }: { restaurantId: string }) {
           <span className="text-[13px] font-semibold text-[var(--ink-2,#666)]">{t('resvPhone')}</span>
           <input className={field} type="tel" value={customerPhone} onChange={e => setCustomerPhone(e.target.value)} placeholder={t('resvPhonePh')} />
         </label>
+        <label className="flex flex-col gap-1.5"><span>Email (opzionale)</span><input className={field} type="email" value={customerEmail} onChange={e=>setCustomerEmail(e.target.value)}/></label>
+        <label className="flex gap-2"><input type="checkbox" checked={reminderConsent} onChange={e=>setReminderConsent(e.target.checked)}/>Acconsento a ricevere il promemoria di questa prenotazione via email.</label>
         <div className="flex gap-3">
           <label className="flex flex-1 flex-col gap-1.5">
             <span className="text-[13px] font-semibold text-[var(--ink-2,#666)]">{t('resvParty')}</span>

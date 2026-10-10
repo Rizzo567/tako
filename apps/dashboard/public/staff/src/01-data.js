@@ -23,6 +23,7 @@ const TABLE_STATUS = {
 };
 const STATIONS = ["Cucina", "Griglia", "Pizzeria", "Bar"];
 const ROLES = {
+  menu_editor: { label: "Editor menu", name: "—", initials: "—" },
   owner:    { label: "Titolare",  name: "—", initials: "—" },
   cameriere:{ label: "Cameriere", name: "—", initials: "—" },
   chef:     { label: "Chef",      name: "—", initials: "—" },
@@ -78,7 +79,7 @@ const ITEM_UI2DB = { attesa:"pending", prep:"preparing", pronto:"ready", servito
 const TBL_DB2UI = { free:"libero", occupied:"occupato", waiting:"attesa", cleaning:"pulizia", reserved:"prenotato" };
 const TBL_UI2DB = { libero:"free", occupato:"occupied", attesa:"waiting", pulizia:"cleaning", prenotato:"reserved", pronto:"occupied" };
 const TYPE_DB2UI = { table:"tavolo", takeaway:"asporto" };
-const ROLE_DB2UI = { owner:"owner", dipendente:"cameriere", chef:"chef", cassiere:"cassiere" };
+const ROLE_DB2UI = { menu_editor:"menu_editor", owner:"owner", dipendente:"cameriere", chef:"chef", cassiere:"cassiere" };
 const ROLE_UI2DB = { owner:"owner", cameriere:"dipendente", chef:"chef", cassiere:"cassiere" };
 const CALL_TYPE_LABEL = { help:"Aiuto", bill:"Chiede il conto", water:"Acqua e pane" };
 const QUAD_DB2UI = { star:"star", plowhorse:"plow", puzzle:"puzzle", dog:"dog" };
@@ -175,7 +176,13 @@ async function loadMenu() {
 }
 
 /* ═══════════ caricamento completo (post-login) ═══════════ */
-async function loadAll() {
+async function loadAll(context) {
+  if((context?.role || window.__takoRole)==='menu_editor'){
+    RESTAURANT={name:'Menu',city:'',vat:'',brand:'#ED7159'};
+    window.__settings_raw={id:context?.restaurantId||window.__takoRestaurantId,name:'Menu'};
+    ORDERS=[];ROOMS=[];BILLS=[];MENU=[];INVENTORY=[];STAFF=[];ENGINEERING=[];
+    syncGlobals();return;
+  }
   const today = new Date(); const from = new Date(today); from.setDate(from.getDate() - 6);
   const iso = (d) => d.toISOString().slice(0, 10);
   const [rest, active, rooms, bills, cassa, stats, menu, inv, staff, insights] = await Promise.all([

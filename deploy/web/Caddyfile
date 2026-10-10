@@ -1,0 +1,10 @@
+{$WEB_HOST} {
+  encode zstd gzip
+  @server path / /staff /staff/* /owner /owner/* /api/* /uploads/* /socket.io /socket.io/* /health
+  handle @server {
+    reverse_proxy server:3001
+  }
+  handle {
+    reverse_proxy customer:3002
+  }
+}

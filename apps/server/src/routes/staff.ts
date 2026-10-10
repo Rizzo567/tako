@@ -1,8 +1,9 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
+import { isWebMode } from '../lib/web-runtime.js'
 import bcrypt from 'bcryptjs'
 import { db, users, sessions } from '@tako/db'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, sql } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 
 export async function staffRoutes(fastify: FastifyInstance) {
@@ -17,7 +18,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
   fastify.post('/', { preHandler: requireRole('owner') }, async (req, reply) => {
     const schema = z.object({
       name: z.string().min(2),
-      email: z.string().email(),
+      email: z.string().trim().email().transform(value => value.toLowerCase()),
       role: z.enum(['dipendente', 'chef', 'cassiere']),
       pin: z.string().length(4).optional(),
       password: z.string().min(6).optional(),
@@ -25,6 +26,15 @@ export async function staffRoutes(fastify: FastifyInstance) {
     })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
+
+    if (isWebMode() && (!body.data.password || body.data.password.length < 10)) {
+      return reply.code(400).send({ error: { code: 'WEB_PASSWORD_REQUIRED', message: 'Per il servizio web serve una password di almeno 10 caratteri.' } })
+    }
+
+    // Match legacy mixed-case emails as well as new normalized addresses.
+    const existing = await db.select({ id: users.id }).from(users)
+      .where(sql`lower(${users.email}) = ${body.data.email}`).limit(1)
+    if (existing.length) return reply.code(409).send({ error: { code: 'EMAIL_TAKEN', message: 'Email già registrata.' } })
 
     const passwordHash = body.data.password ? await bcrypt.hash(body.data.password, 12) : undefined
     const pinHash = body.data.pin ? await bcrypt.hash(body.data.pin, 10) : undefined
@@ -47,6 +57,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
       name: z.string().optional(),
       role: z.enum(['dipendente', 'chef', 'cassiere']).optional(),
       pin: z.string().length(4).optional(),
+      password: z.string().min(6).optional(),
       active: z.boolean().optional(),
       phone: z.string().optional(),
     })
@@ -54,13 +65,19 @@ export async function staffRoutes(fastify: FastifyInstance) {
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     // Hash del PIN come nel POST: mai scrivere il PIN grezzo in users.pin.
-    const { pin, ...rest } = body.data
-    const updates = { ...rest, ...(pin ? { pin: await bcrypt.hash(pin, 10) } : {}) }
+    if (isWebMode() && body.data.password && body.data.password.length < 10) {
+      return reply.code(400).send({ error: { code: 'WEB_PASSWORD_REQUIRED', message: 'La password web deve avere almeno 10 caratteri.' } })
+    }
+    const { pin, password, ...rest } = body.data
+    const updates = { ...rest,
+      ...(pin ? { pin: await bcrypt.hash(pin, 10) } : {}),
+      ...(password ? { passwordHash: await bcrypt.hash(password, 12), ...(isWebMode() ? { localOwnerSecretHash: null } : {}) } : {}),
+    }
     const [user] = await db.update(users).set(updates).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning()
     if (!user) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })
     // Disattivazione = revoca immediata: cancella tutte le sessioni dell'utente
     // così non può più autenticarsi (né via HTTP né via socket).
-    if (body.data.active === false) await db.delete(sessions).where(eq(sessions.userId, userId))
+    if (body.data.active === false || body.data.password) await db.delete(sessions).where(eq(sessions.userId, userId))
     // Non esporre passwordHash/pin: ritorna solo i campi pubblici.
     return { data: { id: user.id, name: user.name, email: user.email, role: user.role, active: user.active, phone: user.phone } }
   })

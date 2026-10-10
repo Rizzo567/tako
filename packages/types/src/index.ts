@@ -101,6 +101,8 @@ export interface PublicMenu {
 
 export interface PublicSection {
   id: string
+  parentSectionId?: string | null
+  description?: string
   name: string
   items: PublicItem[]
 }
@@ -113,6 +115,10 @@ export interface PublicItem {
   imageUrl?: string
   allergens: string[]
   tags: string[]
+  additives?: string[]
+  displayMode?: 'normal' | 'centered' | 'link'
+  externalLink?: string
+  priceDisplay?: string
   available: boolean
   variants?: PublicVariant[]
 }

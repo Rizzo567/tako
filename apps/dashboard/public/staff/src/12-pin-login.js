@@ -257,17 +257,23 @@ function PinLogin({ onDone, onBack }) {
    il PIN il default sul tablet, cambiare lo stato iniziale a "pin". */
 function LoginGate({ onDone }) {
   const [mode, setMode] = useState("password"); // "password" | "pin"
+  const [runtime, setRuntime] = useState(null);
+  useEffect(() => {
+    let active = true;
+    window.TakoActions.systemInfo().then(info => { if (active) setRuntime(info); }).catch(() => {});
+    return () => { active = false; };
+  }, []);
   if (mode === "pin") return <PinLogin onDone={onDone} onBack={() => setMode("password")} />;
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
-      <Login onDone={onDone} />
-      <button type="button" onClick={() => setMode("pin")}
+      <Login onDone={onDone} webMode={runtime?.mode === "web"} registrationAllowed={!!runtime && runtime.registrationEnabled !== false} />
+      {runtime && runtime.mode !== "web" && <button type="button" onClick={() => setMode("pin")}
         style={{ position: "fixed", left: "50%", bottom: 26, transform: "translateX(-50%)",
           display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 20px", borderRadius: 999,
           border: "1px solid rgba(0,0,0,.08)", background: "#fff", color: "#2A1F1A", fontWeight: 800, fontSize: 14,
           boxShadow: "0 6px 22px rgba(0,0,0,.10)", cursor: "pointer", zIndex: 40 }}>
         <Icon name="user" size={17} /> Accesso rapido con PIN
-      </button>
+      </button>}
     </div>
   );
 }

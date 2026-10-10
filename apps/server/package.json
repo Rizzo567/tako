@@ -30,6 +30,7 @@
     "multicast-dns": "^7.2.5",
     "nanoid": "^5.0.9",
     "openai": "^4.83.0",
+    "pdfkit": "0.17.2",
     "postgres": "^3.4.9",
     "qrcode": "^1.5.4",
     "selfsigned": "^5.5.0",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.10.0",
+    "@types/pdfkit": "0.17.3",
     "@types/qrcode": "^1.5.5",
     "@types/web-push": "^3.6.4",
     "tsx": "^4.21.0",

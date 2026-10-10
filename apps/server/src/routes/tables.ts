@@ -6,6 +6,7 @@ import { eq, and, inArray, isNull, desc, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { stableTableUrl, lanTableUrl, ipTableUrl, tableQrUrl, type QrMode } from '../lib/network.js'
+import { isWebMode } from '../lib/web-runtime.js'
 import { getApplianceId } from '../lib/cloud-client.js'
 import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { BILLABLE_STATUSES } from '../lib/billing.js'
@@ -214,10 +215,10 @@ export async function tableRoutes(fastify: FastifyInstance) {
     // Restituisco SEMPRE tutte le varianti così la dashboard può mostrare/scaricare le alternative
     // (lanUrl mDNS, cloudUrl resolver, ipUrl per telefoni senza mDNS). Rendering qrWithOctopus (EC=H).
     const [rest] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
-    const mode: QrMode = (rest?.settings as any)?.qrMode === 'cloud' ? 'cloud' : 'lan'
-    const url = tableQrUrl(mode, getApplianceId(), req.user!.restaurantId, table.qrToken)
+    const mode: QrMode = isWebMode() || (rest?.settings as any)?.qrMode === 'cloud' ? 'cloud' : 'lan'
+    const url = tableQrUrl(mode, isWebMode() ? null : getApplianceId(), req.user!.restaurantId, table.qrToken)
     const lanUrl = lanTableUrl(req.user!.restaurantId, table.qrToken)
-    const cloudUrl = stableTableUrl(getApplianceId(), req.user!.restaurantId, table.qrToken)
+    const cloudUrl = stableTableUrl(isWebMode() ? null : getApplianceId(), req.user!.restaurantId, table.qrToken)
     const ipUrl = ipTableUrl(req.user!.restaurantId, table.qrToken)
     const qrDataUrl = await qrWithOctopus(url, 400)
     return { data: { qrDataUrl, url, mode, lanUrl, cloudUrl, ipUrl, tableNumber: table.number } }

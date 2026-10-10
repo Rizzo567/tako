@@ -1,0 +1,60 @@
+# Single operational replica: Socket.io, limiter and image quota are process-local.
+# Managed PostgreSQL is external. Only Caddy publishes ports.
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      WEB_HOST: ${WEB_HOST:?Set WEB_HOST}
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [edge]
+    depends_on: [server, customer]
+  server:
+    build:
+      context: ../..
+      dockerfile: deploy/web/Dockerfile
+      target: server
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      TAKO_MODE: web
+      PORT: 3001
+      WEB_ORIGIN: https://${WEB_HOST:?Set WEB_HOST}
+      DATABASE_URL: ${DATABASE_URL:?Set managed DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
+      TRUST_PROXY: 172.30.87.0/24
+      COOKIE_SECURE: "1"
+      TAKO_MULTI_TENANT: "1"
+      TAKO_DISABLE_REGISTRATION: "1"
+      UPLOADS_DIR: /data/uploads
+      STAFF_DIR: /app/apps/dashboard/public/staff
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes: ["uploads:/data/uploads"]
+    networks: [edge]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  customer:
+    build:
+      context: ../..
+      dockerfile: deploy/web/Dockerfile
+      target: customer
+    restart: unless-stopped
+    networks: [edge]
+networks:
+  edge:
+    ipam:
+      config:
+        - subnet: 172.30.87.0/24
+volumes:
+  uploads:
+  caddy_data:
+  caddy_config:

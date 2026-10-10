@@ -9,9 +9,13 @@ import { execFileSync } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import { maybeStartEmbeddedDb } from '@tako/db/embedded'
 import { startServer } from './index.js'
+import { isWebMode, validateWebRuntime } from './lib/web-runtime.js'
+
+validateWebRuntime()
 
 // Modo CLOUD (control-plane): NON avvia il Postgres embedded locale e non auto-provvisiona
 // JWT_SECRET (il cloud usa SESSION_SECRET + CLOUD_DATABASE_URL gestite via env del deploy).
+const HOSTED_MODE = isWebMode()
 const CLOUD_MODE = (process.env['TAKO_MODE'] ?? 'local').toLowerCase() === 'cloud'
 
 // Bonifica del server NODE orfano: se la shell Tauri è morta per crash/force-quit,
@@ -72,7 +76,7 @@ async function reclaimOrphanServer(home: string): Promise<void> {
 // Segreto JWT auto-provvisionato e persistente: l'app desktop non deve chiederlo.
 // Stabile tra i riavvii (le sessioni sopravvivono). TAKO_HOME è impostato dalla
 // shell Tauri (app-data utente); fallback ~/.tako.
-if (!CLOUD_MODE && !process.env['JWT_SECRET']) {
+if (!CLOUD_MODE && !HOSTED_MODE && !process.env['JWT_SECRET']) {
   const home = process.env['TAKO_HOME'] ?? join(homedir(), '.tako')
   mkdirSync(home, { recursive: true })
   const f = join(home, 'jwt-secret')
@@ -88,7 +92,7 @@ if (!CLOUD_MODE && !process.env['JWT_SECRET']) {
 // Chiave Groq (import-da-testo AI) persistente: nell'app desktop l'env non è
 // caricato da .env, quindi come per JWT la leggiamo da un file in TAKO_HOME.
 // Precedenza all'env (dev con --env-file o launchd); fallback al file. Solo appliance.
-if (!CLOUD_MODE && !process.env['GROQ_API_KEY']) {
+if (!CLOUD_MODE && !HOSTED_MODE && !process.env['GROQ_API_KEY']) {
   const home = process.env['TAKO_HOME'] ?? join(homedir(), '.tako')
   mkdirSync(home, { recursive: true })
   const gf = join(home, 'groq-key')
@@ -100,7 +104,7 @@ if (!CLOUD_MODE && !process.env['GROQ_API_KEY']) {
 
 // Termina l'eventuale server orfano PRIMA di avviare DB e HTTP (libera :4317).
 // Solo appliance: sul cloud (Render) non c'è shell Tauri né pidfile.
-if (!CLOUD_MODE) await reclaimOrphanServer(process.env['TAKO_HOME'] ?? join(homedir(), '.tako'))
+if (!CLOUD_MODE && !HOSTED_MODE) await reclaimOrphanServer(process.env['TAKO_HOME'] ?? join(homedir(), '.tako'))
 
-if (!CLOUD_MODE) await maybeStartEmbeddedDb()
+if (!CLOUD_MODE && !HOSTED_MODE) await maybeStartEmbeddedDb()
 await startServer()

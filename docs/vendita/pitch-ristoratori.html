@@ -1,0 +1,611 @@
+<title>Tako — manuale da campo</title>
+<style>
+  /* ── Neutri: sistema Tako (premium-soft, ink espresso) ─────────────────── */
+  :root {
+    --carta:      #F5F2EE;
+    --superficie: #FFFFFF;
+    --superficie-2:#EDE8E2;
+    --ink:        #2A1F1A;
+    --ink-2:      #6B5B52;
+    --ink-3:      #9A897E;
+    --bordo:      #E2DBD3;
+    --ombra:      0 1px 2px rgba(42,31,26,.05), 0 8px 22px -14px rgba(42,31,26,.35);
+
+    --display: ui-serif, "New York", Iowan Old Style, Georgia, serif;
+    --testo:   -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --mono:    ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+
+    --acc: #CF5A3C;
+  }
+
+  /* ── Un accento per parte: la pagina si impara a colori, non a numeri ──── */
+  .p0  { --acc: #CF5A3C; }  /* coral — il marchio */
+  .p1  { --acc: #B5791A; }  /* ambra */
+  .p2  { --acc: #5F7B33; }  /* oliva */
+  .p3  { --acc: #227D72; }  /* verde acqua */
+  .p4  { --acc: #3D6CA8; }  /* blu — la demo */
+  .p5  { --acc: #8C4A79; }  /* prugna */
+  .p6  { --acc: #3F7A52; }  /* verde — i soldi */
+  .p7  { --acc: #A8362B; }  /* mattone — i divieti */
+  .p8  { --acc: #4E5AA8; }  /* indaco */
+  .p9  { --acc: #7A5A34; }  /* bruno */
+  .p10 { --acc: #B4552B; }  /* ruggine */
+  .p11 { --acc: #CF5A3C; }  /* coral — chiude come apre */
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --carta:      #15100E;
+      --superficie: #1F1916;
+      --superficie-2:#2A221E;
+      --ink:        #F2EBE5;
+      --ink-2:      #B7A79C;
+      --ink-3:      #8A786D;
+      --bordo:      #362C26;
+      --ombra:      0 1px 2px rgba(0,0,0,.4), 0 8px 22px -14px rgba(0,0,0,.8);
+      --acc: #F0805F;
+    }
+    :root:not([data-theme="light"]) .p0  { --acc: #F0805F; }
+    :root:not([data-theme="light"]) .p1  { --acc: #E5B25A; }
+    :root:not([data-theme="light"]) .p2  { --acc: #A8C46E; }
+    :root:not([data-theme="light"]) .p3  { --acc: #5FC4B6; }
+    :root:not([data-theme="light"]) .p4  { --acc: #7FA9E0; }
+    :root:not([data-theme="light"]) .p5  { --acc: #D290BE; }
+    :root:not([data-theme="light"]) .p6  { --acc: #7FC79E; }
+    :root:not([data-theme="light"]) .p7  { --acc: #F08979; }
+    :root:not([data-theme="light"]) .p8  { --acc: #97A0EA; }
+    :root:not([data-theme="light"]) .p9  { --acc: #CBA97A; }
+    :root:not([data-theme="light"]) .p10 { --acc: #F0996B; }
+    :root:not([data-theme="light"]) .p11 { --acc: #F0805F; }
+  }
+  :root[data-theme="dark"] {
+    --carta:      #15100E;
+    --superficie: #1F1916;
+    --superficie-2:#2A221E;
+    --ink:        #F2EBE5;
+    --ink-2:      #B7A79C;
+    --ink-3:      #8A786D;
+    --bordo:      #362C26;
+    --ombra:      0 1px 2px rgba(0,0,0,.4), 0 8px 22px -14px rgba(0,0,0,.8);
+    --acc: #F0805F;
+  }
+  :root[data-theme="dark"] .p0  { --acc: #F0805F; }
+  :root[data-theme="dark"] .p1  { --acc: #E5B25A; }
+  :root[data-theme="dark"] .p2  { --acc: #A8C46E; }
+  :root[data-theme="dark"] .p3  { --acc: #5FC4B6; }
+  :root[data-theme="dark"] .p4  { --acc: #7FA9E0; }
+  :root[data-theme="dark"] .p5  { --acc: #D290BE; }
+  :root[data-theme="dark"] .p6  { --acc: #7FC79E; }
+  :root[data-theme="dark"] .p7  { --acc: #F08979; }
+  :root[data-theme="dark"] .p8  { --acc: #97A0EA; }
+  :root[data-theme="dark"] .p9  { --acc: #CBA97A; }
+  :root[data-theme="dark"] .p10 { --acc: #F0996B; }
+  :root[data-theme="dark"] .p11 { --acc: #F0805F; }
+
+  /* Fondi derivati dall'accento della sezione: una sola regola, dodici colori. */
+  section, .p0, .p1, .p2, .p3, .p4, .p5, .p6, .p7, .p8, .p9, .p10, .p11 {
+    --acc-soft:  color-mix(in oklab, var(--acc) 13%, var(--superficie));
+    --acc-soft2: color-mix(in oklab, var(--acc) 22%, var(--superficie));
+    --acc-bordo: color-mix(in oklab, var(--acc) 38%, var(--bordo));
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--carta); color: var(--ink);
+    font-family: var(--testo); font-size: 16px; line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 0 1rem 5rem; }
+
+  /* ── Testata ───────────────────────────────────────────────────────────── */
+  .testata { padding: 2.2rem 0 1.2rem; }
+  .marchio {
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--acc); margin-bottom: .5rem;
+  }
+  .testata h1 {
+    font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 7vw, 2.7rem);
+    line-height: 1.1; margin: 0 0 .5rem; text-wrap: balance; letter-spacing: -.01em;
+  }
+  .testata h1 em { font-style: normal; color: var(--acc); }
+  .testata p { margin: 0; color: var(--ink-2); font-size: .95rem; max-width: 34rem; }
+  .righello { display: flex; height: 5px; border-radius: 3px; overflow: hidden; margin-top: 1.1rem; }
+  .righello i { flex: 1; }
+
+  /* ── Navigazione a chip, colorata come le sezioni ──────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 10; background: var(--carta);
+    border-bottom: 1px solid var(--bordo); margin: 0 -1rem; padding: .55rem 1rem;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav ol { display: flex; gap: .4rem; list-style: none; margin: 0; padding: 0; }
+  nav a {
+    display: block; white-space: nowrap; text-decoration: none;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .03em;
+    color: var(--acc); background: var(--acc-soft);
+    border: 1px solid var(--acc-bordo); border-radius: 999px; padding: .3rem .7rem;
+  }
+  nav a:hover, nav a:focus-visible { background: var(--acc-soft2); }
+
+  /* ── Sezioni ───────────────────────────────────────────────────────────── */
+  section { padding-top: 2.4rem; scroll-margin-top: 3.2rem; }
+  .cappello { display: flex; align-items: center; gap: .55rem; margin-bottom: .45rem; }
+  .cappello .badge {
+    font-family: var(--mono); font-size: .78rem; font-weight: 700; color: #fff;
+    background: var(--acc); border-radius: 7px; padding: .12rem .48rem; line-height: 1.5;
+  }
+  .cappello .eyebrow {
+    font-family: var(--mono); font-size: .69rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--acc);
+  }
+  h2 {
+    font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 4.8vw, 1.8rem);
+    margin: 0 0 .3rem; line-height: 1.18; text-wrap: balance;
+  }
+  .sottotitolo { color: var(--ink-2); font-size: .92rem; margin: 0 0 1.1rem; }
+  h3 {
+    font-size: .76rem; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    color: var(--acc); margin: 1.7rem 0 .55rem; font-weight: 700;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  h3::after { content: ""; flex: 1; height: 1px; background: var(--acc-bordo); }
+
+  /* ── Blocchi semantici ─────────────────────────────────────────────────── */
+  .dire {
+    background: var(--acc-soft); border-left: 4px solid var(--acc);
+    border-radius: 0 12px 12px 0; padding: .85rem 1rem; margin: .7rem 0;
+    font-family: var(--display); font-size: 1.07rem; font-style: italic; line-height: 1.45;
+  }
+  .dire b { font-style: normal; font-weight: 600; }
+  .nota {
+    display: grid; grid-template-columns: auto 1fr; gap: .7rem;
+    padding: .75rem .9rem; border-radius: 12px; margin: .7rem 0; font-size: .93rem;
+    background: var(--n-soft); border: 1px solid var(--n-bordo);
+  }
+  .nota .tag {
+    font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 800; color: #fff; background: var(--n); border-radius: 6px;
+    padding: .16rem .4rem; align-self: start; white-space: nowrap;
+  }
+  .fai    { --n: #2F6B4F; }
+  .occhio { --n: #9A6A12; }
+  .mai    { --n: #A8362B; }
+  .nota { --n-soft: color-mix(in oklab, var(--n) 12%, var(--superficie));
+          --n-bordo: color-mix(in oklab, var(--n) 30%, var(--bordo)); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .fai    { --n: #4E9E76; }
+    :root:not([data-theme="light"]) .occhio { --n: #C79633; }
+    :root:not([data-theme="light"]) .mai    { --n: #D9604E; }
+  }
+  :root[data-theme="dark"] .fai    { --n: #4E9E76; }
+  :root[data-theme="dark"] .occhio { --n: #C79633; }
+  :root[data-theme="dark"] .mai    { --n: #D9604E; }
+
+  /* ── Tabelle ───────────────────────────────────────────────────────────── */
+  .scroll { overflow-x: auto; margin: .8rem 0; border: 1px solid var(--acc-bordo); border-radius: 14px; background: var(--superficie); box-shadow: var(--ombra); }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { text-align: left; padding: .62rem .85rem; border-bottom: 1px solid var(--bordo); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  th {
+    font-family: var(--mono); font-size: .66rem; letter-spacing: .09em; text-transform: uppercase;
+    color: #fff; background: var(--acc); font-weight: 700; border-bottom: 0;
+  }
+  tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--acc) 5%, var(--superficie)); }
+  td.stato { white-space: nowrap; font-family: var(--mono); font-size: .8rem; }
+
+  /* ── Schede ────────────────────────────────────────────────────────────── */
+  .schede { display: grid; gap: .6rem; margin: .8rem 0; }
+  @media (min-width: 34rem) { .schede.due { grid-template-columns: 1fr 1fr; } }
+  .scheda {
+    background: var(--superficie); border: 1px solid var(--bordo);
+    border-top: 3px solid var(--acc); border-radius: 12px; padding: .8rem .9rem; box-shadow: var(--ombra);
+  }
+  .scheda h4 { margin: 0 0 .25rem; font-size: .95rem; font-weight: 650; color: var(--acc); }
+  .scheda p { margin: 0; font-size: .88rem; color: var(--ink-2); }
+  .scheda em { color: var(--ink); font-family: var(--display); font-size: 1.02em; }
+
+  /* ── Scaletta numerata ─────────────────────────────────────────────────── */
+  /* Due colonne: il numero a sinistra, TUTTO il testo nella seconda colonna.
+     (Prima strong e span erano due celle diverse: lo span finiva nella colonna
+     da 2rem del numero e andava a capo a ogni parola.) */
+  .scaletta { list-style: none; margin: .8rem 0; padding: 0; display: grid; gap: .5rem; counter-reset: passo; }
+  .scaletta li {
+    display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: .75rem; align-items: start;
+    background: var(--superficie); border: 1px solid var(--bordo);
+    border-radius: 12px; padding: .7rem .85rem; box-shadow: var(--ombra);
+  }
+  .scaletta li::before {
+    counter-increment: passo; content: counter(passo);
+    font-family: var(--mono); font-size: .8rem; font-weight: 700; color: #fff;
+    background: var(--acc); border-radius: 8px; text-align: center; padding: .28rem 0;
+  }
+  .scaletta li > * { grid-column: 2; }
+  .scaletta li.chiave { border-color: var(--acc); background: var(--acc-soft); }
+  .scaletta strong { display: block; font-size: .94rem; }
+  .scaletta span { display: block; font-size: .87rem; color: var(--ink-2); margin-top: .12rem; }
+  .scaletta span:empty { display: none; }
+
+  /* ── Checklist con memoria ─────────────────────────────────────────────── */
+  .check { list-style: none; margin: .8rem 0; padding: 0; display: grid; gap: .35rem; }
+  .check li {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .6rem; align-items: start;
+    background: var(--superficie); border: 1px solid var(--bordo);
+    border-left: 3px solid var(--acc); border-radius: 10px; padding: .55rem .7rem; font-size: .92rem;
+  }
+  .check input { margin: .2rem 0 0; accent-color: var(--acc); width: 1.05rem; height: 1.05rem; }
+  .check input:checked + span { color: var(--ink-3); text-decoration: line-through; }
+
+  /* ── Frasi a memoria ───────────────────────────────────────────────────── */
+  .frasi { display: grid; gap: .5rem; margin: .8rem 0; }
+  .frasi div {
+    font-family: var(--display); font-style: italic; font-size: 1.05rem;
+    background: var(--acc-soft); border-left: 4px solid var(--acc);
+    border-radius: 0 12px 12px 0; padding: .65rem .9rem;
+  }
+
+  ul.lista { margin: .6rem 0; padding-left: 0; list-style: none; }
+  ul.lista li { margin-bottom: .4rem; font-size: .93rem; padding-left: 1.15rem; position: relative; }
+  ul.lista li::before {
+    content: ""; position: absolute; left: 0; top: .62em;
+    width: .42rem; height: .42rem; border-radius: 2px; background: var(--acc);
+  }
+  code { font-family: var(--mono); font-size: .85em; background: var(--acc-soft); color: var(--acc); padding: .1em .35em; border-radius: 5px; }
+  pre {
+    font-family: var(--mono); font-size: .78rem; color: var(--ink);
+    background: var(--superficie); border: 1px solid var(--acc-bordo); border-left: 4px solid var(--acc);
+    border-radius: 0 12px 12px 0; padding: .8rem .9rem; overflow-x: auto; line-height: 1.55;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  a { color: var(--acc); }
+  :focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; border-radius: 4px; }
+  footer { margin-top: 3rem; padding-top: 1.2rem; border-top: 2px solid var(--acc); color: var(--ink-3); font-size: .82rem; font-family: var(--mono); }
+</style>
+
+<div class="wrap p0">
+
+<header class="testata">
+  <div class="marchio">Tako · manuale da campo</div>
+  <h1>Vendere Tako a <em>un ristoratore</em></h1>
+  <p>Quello che dici, nell'ordine in cui lo dici. Pensato per essere letto in piedi, sul
+     telefono, davanti a un locale. Aggiornato al 9 agosto 2026, su Tako 0.1.6.</p>
+  <div class="righello">
+    <i class="p0"  style="background:var(--acc)"></i><i class="p1"  style="background:var(--acc)"></i>
+    <i class="p2"  style="background:var(--acc)"></i><i class="p3"  style="background:var(--acc)"></i>
+    <i class="p4"  style="background:var(--acc)"></i><i class="p5"  style="background:var(--acc)"></i>
+    <i class="p6"  style="background:var(--acc)"></i><i class="p7"  style="background:var(--acc)"></i>
+    <i class="p8"  style="background:var(--acc)"></i><i class="p9"  style="background:var(--acc)"></i>
+    <i class="p10" style="background:var(--acc)"></i><i class="p11" style="background:var(--acc)"></i>
+  </div>
+</header>
+
+<nav aria-label="Sezioni">
+  <ol>
+    <li class="p0"><a href="#p0">0 · Pronto?</a></li>
+    <li class="p1"><a href="#p1">1 · Pitch 30″</a></li>
+    <li class="p2"><a href="#p2">2 · Quando serve</a></li>
+    <li class="p3"><a href="#p3">3 · Benefici</a></li>
+    <li class="p4"><a href="#p4">4 · Demo</a></li>
+    <li class="p5"><a href="#p5">5 · Obiezioni</a></li>
+    <li class="p6"><a href="#p6">6 · Prezzo</a></li>
+    <li class="p7"><a href="#p7">7 · Mai promettere</a></li>
+    <li class="p8"><a href="#p8">8 · La visita</a></li>
+    <li class="p9"><a href="#p9">9 · Fatture</a></li>
+    <li class="p10"><a href="#p10">10 · Errori</a></li>
+    <li class="p11"><a href="#p11">11 · A memoria</a></li>
+  </ol>
+</nav>
+
+<!-- ── 0 ─────────────────────────────────────────────────────────────────── -->
+<section id="p0" class="p0">
+  <div class="cappello"><span class="badge">0</span><span class="eyebrow">Preparazione</span></div>
+  <h2>Sei pronto?</h2>
+  <p class="sottotitolo">Stato reale della preparazione, verificato sul Mac.</p>
+
+  <div class="scroll"><table>
+    <thead><tr><th>Cosa</th><th>Stato</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Mac demo alla 0.1.6</strong> (era 0.1.0)</td><td class="stato">✅ fatto</td></tr>
+      <tr><td><strong>Menu demo</strong> — 44 piatti, 10 sezioni, 29 varianti, food cost, 5 lingue</td><td class="stato">✅ fatto</td></tr>
+      <tr><td><strong>Storico</strong> — 21 giorni, 177 conti, €5.719, 2 tavoli vivi</td><td class="stato">✅ fatto</td></tr>
+      <tr><td><strong>Giro completo collaudato</strong> — QR→menu→ordine→cucina→conto in 282 ms</td><td class="stato">✅ fatto</td></tr>
+      <tr><td><strong>Foto dei piatti</strong></td><td class="stato">⛔ manca</td></tr>
+      <tr><td><strong>Batteria, alimentatore, hotspot sul telefono</strong></td><td class="stato">→ tu</td></tr>
+      <tr><td><strong>Prezzo deciso</strong></td><td class="stato">→ tu</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Domani, prima di uscire</h3>
+  <div class="nota occhio"><span class="tag">Occhio</span><div>Lo storico è relativo al giorno in cui lo lanci: se non lo rifai, <strong>«quanto ho incassato oggi?» risponde zero davanti al cliente</strong>. E i QR contengono l'IP corrente: cambi rete o accendi l'hotspot → rigenerali.</div></div>
+<pre><code>cd ~/Projects/Tako
+DATABASE_URL='postgresql://tako:tako@127.0.0.1:54317/takodb' \
+  node packages/db/seed-demo-storico.mjs 21
+DATABASE_URL='postgresql://tako:tako@127.0.0.1:54317/takodb' \
+  node scripts/qr-demo.mjs 6</code></pre>
+  <div class="nota fai"><span class="tag">Accesso</span><div>Dashboard: <code>demo@tako.local</code> / <code>demo12345</code> — PIN <code>1234</code>. Account creato apposta: non dipendi dal ricordarti la tua password.</div></div>
+  <div class="nota mai"><span class="tag">Trappola</span><div><strong>Il QR <code>tako.local</code> costa 5 secondi</strong> su questa rete (l'IP diretto 6 ms): il DNS di sistema sta su un'altra sottorete e ogni lookup paga il timeout. Usa il foglio QR generato da <code>qr-demo.mjs</code>, non quello della dashboard.</div></div>
+
+  <h3>In borsa</h3>
+  <ul class="check" id="borsa">
+    <li><input type="checkbox" id="b1"><span>Mac + alimentatore</span></li>
+    <li><input type="checkbox" id="b2"><span>Cavo Ethernet USB-C → RJ45</span></li>
+    <li><input type="checkbox" id="b3"><span>Telefono personale (fa il cliente)</span></li>
+    <li><input type="checkbox" id="b4"><span>Secondo telefono o tablet (fa il cameriere)</span></li>
+    <li><input type="checkbox" id="b5"><span>Foglio QR stampato (<code>~/Desktop/Tako-QR-demo.html</code>)</span></li>
+    <li><input type="checkbox" id="b6"><span>Blocco per appunti — scrivere a mano fa credibilità, il telefono no</span></li>
+  </ul>
+</section>
+
+<!-- ── 1 ─────────────────────────────────────────────────────────────────── -->
+<section id="p1" class="p1">
+  <div class="cappello"><span class="badge">1</span><span class="eyebrow">L'apertura</span></div>
+  <h2>Il pitch da 30 secondi</h2>
+  <p class="sottotitolo">A memoria. Mai letto.</p>
+
+  <div class="dire">Tako è il sistema che fa girare la sala e la cucina. Il cliente inquadra il QR del tavolo,
+  ordina dal suo telefono senza scaricare niente, e l'ordine arriva dritto in cucina. Lo staff lavora da
+  tablet: tavoli, conti, prenotazioni, magazzino. La differenza vera con gli altri: <b>gira su un Mac dentro
+  il tuo locale</b>, non nel cloud. Se salta internet tu continui a lavorare, e i dati dei tuoi clienti
+  restano a casa tua. E ci parli normale: «quanto ho incassato oggi», «togli la carbonara» — e lui lo fa.</div>
+
+  <div class="schede due">
+    <div class="scheda"><h4>Le tre cose che devono restargli in testa</h4><p>Ordini diretti in cucina · Funziona senza internet · I dati sono tuoi</p></div>
+    <div class="scheda"><h4>Come non aprire</h4><p>Niente «sistema operativo per la ristorazione», niente «AI-powered», niente «piattaforma». Dì cosa fa, con le parole del suo mestiere.</p></div>
+  </div>
+</section>
+
+<!-- ── 2 ─────────────────────────────────────────────────────────────────── -->
+<section id="p2" class="p2">
+  <div class="cappello"><span class="badge">2</span><span class="eyebrow">Qualificazione</span></div>
+  <h2>Quando Tako serve — e quando no</h2>
+  <p class="sottotitolo">Qualifica in 60 secondi. Un no rapido vale più di un sì tiepido.</p>
+
+  <h3>Serve molto — vai a fondo</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Situazione</th><th>Perché morde</th></tr></thead>
+    <tbody>
+      <tr><td>Ordini a mano su blocchetto</td><td>Elimina errori di trascrizione e i viaggi del cameriere. Visibile dal primo turno.</td></tr>
+      <tr><td>Molti turisti o clienti stranieri</td><td>Menu in 14 lingue + assistente che risponde nella lingua del cliente.</td></tr>
+      <tr><td>Internet che fa i capricci</td><td>È il differenziatore n.1. Un POS cloud lì è inutilizzabile.</td></tr>
+      <tr><td>Rush concentrati (venerdì, aperitivo, brunch)</td><td>KDS con timer: più coperti con lo stesso staff.</td></tr>
+      <tr><td>Non sa quale piatto rende</td><td>Menu engineering, food cost, incassi live. Un numero al posto di una sensazione.</td></tr>
+      <tr><td>Magazzino a occhio</td><td>Lista di riordino già divisa per fornitore, con costo stimato.</td></tr>
+      <tr><td>Titolare spesso fuori</td><td>Copilota su WhatsApp: controlla e comanda da dove sta.</td></tr>
+      <tr><td>Paga già 80–120 €/mese di software</td><td>Confronto diretto sul costo, con in più l'offline.</td></tr>
+      <tr><td>Poco personale di sala</td><td>L'ordinazione da telefono libera una persona nel rush.</td></tr>
+      <tr><td>Asporto rilevante</td><td>Stesso sistema, cliente che segue l'ordine dal telefono.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Serve poco — saluta bene e vai</h3>
+  <ul class="lista">
+    <li>Ha appena firmato un POS pluriennale → <strong>segnati la data di scadenza</strong> e torna.</li>
+    <li>Gli serve lo scontrino fiscale integrato, e non vuole tenere il registratore attuale.</li>
+    <li>Vuole il pagamento dal telefono del cliente.</li>
+    <li>Nessuno nel locale userebbe un tablet → costo di assistenza altissimo, margine negativo.</li>
+    <li>Non può tenere un Mac acceso e collegato.</li>
+    <li>Catena con IT centralizzato → chiedi chi decide e vai da quello.</li>
+  </ul>
+</section>
+
+<!-- ── 3 ─────────────────────────────────────────────────────────────────── -->
+<section id="p3" class="p3">
+  <div class="cappello"><span class="badge">3</span><span class="eyebrow">Argomenti</span></div>
+  <h2>Le dieci leve</h2>
+  <p class="sottotitolo">Usa solo quelle che c'entrano col locale davanti a te. Recitarle tutte suona come un catalogo.</p>
+
+  <div class="schede">
+    <div class="scheda"><h4>1 · Tempo dello staff</h4><p><em>«Il cameriere smette di fare il postino.»</em> Meno viaggi sala↔cucina, più tavoli serviti con lo stesso organico.</p></div>
+    <div class="scheda"><h4>2 · Errori e contestazioni</h4><p><em>«Il piatto sbagliato lo paghi due volte: gli ingredienti e il cliente incazzato.»</em> Nessuna trascrizione intermedia.</p></div>
+    <div class="scheda"><h4>3 · Scontrino medio</h4><p><em>«Un cliente che legge il menu nella sua lingua ordina di più e chiede di meno.»</em> 14 lingue, foto uniformi, assistente che consiglia.</p></div>
+    <div class="scheda"><h4>4 · Margine e food cost</h4><p><em>«Ti dico quali piatti ti fanno guadagnare. Senza Excel.»</em> Menu engineering a quadranti, food cost per piatto.</p></div>
+    <div class="scheda"><h4>5 · Magazzino</h4><p><em>«Domenica sera ti dice cosa ordinare, diviso per fornitore, con quanto ti costa.»</em> Soglie, consumi, giorni-alla-rottura.</p></div>
+    <div class="scheda"><h4>6 · Continuità</h4><p><em>«Sabato sera cade la linea. Col cloud chiudi. Con Tako non te ne accorgi.»</em> Tutto il cuore gira sul Mac del locale.</p></div>
+    <div class="scheda"><h4>7 · Dati e privacy</h4><p><em>«I dati dei tuoi clienti stanno nel tuo locale. Non li vede nessuno, io compreso.»</em> GDPR più semplice, zero lock-in.</p></div>
+    <div class="scheda"><h4>8 · Controllo a distanza</h4><p><em>«Sei a casa e vuoi sapere com'è andata? Scrivi su WhatsApp.»</em> Oltre 40 azioni, con conferma per ogni modifica.</p></div>
+    <div class="scheda"><h4>9 · Formazione</h4><p><em>«Chi sa usare WhatsApp sa usare Tako.»</em> PIN a 4 cifre, tre schermate per ruolo, cheatsheet stampato.</p></div>
+    <div class="scheda"><h4>10 · Clienti che tornano</h4><p><em>«Gli chiedi la recensione mentre è ancora seduto e contento.»</em> CTA a fine esperienza, punti fedeltà.</p></div>
+  </div>
+</section>
+
+<!-- ── 4 ─────────────────────────────────────────────────────────────────── -->
+<section id="p4" class="p4">
+  <div class="cappello"><span class="badge">4</span><span class="eyebrow">Sul campo</span></div>
+  <h2>La demo di 8 minuti</h2>
+  <p class="sottotitolo">L'ordine conta. Non far vedere le impostazioni: fai vedere il giro dei soldi.</p>
+
+  <ol class="scaletta">
+    <li><strong>Metti il QR sul tavolo e digli «lo inquadri tu»</strong><span>Deve essere lui, col suo telefono. Il menu che si apre senza scaricare niente è il momento in cui vendi.</span></li>
+    <li><strong>Fagli cambiare lingua</strong><span>Meglio una che non conosce. Poi torna in italiano.</span></li>
+    <li><strong>Fagli ordinare due piatti</strong><span>Carrello, invio ordine.</span></li>
+    <li><strong>Giri il Mac: l'ordine è già in cucina</strong><span>KDS, timer che parte. Fai «pronto».</span></li>
+    <li><strong>Cassa</strong><span>Apri il conto, mostra il totale, applica uno sconto, chiudi.</span></li>
+    <li class="chiave"><strong>Il colpo: stacca la linea e rifai un ordine</strong><span>Funziona tutto uguale. È la scena che si ricorda.</span></li>
+    <li><strong>Copilota</strong><span>«Quanto ho incassato oggi» e «metti fuori menu la carbonara». Mostragli la card di conferma prima che tocchi qualcosa.</span></li>
+    <li class="chiave"><strong>Chiudi e stai zitto</strong><span>Lascialo parlare per primo. Chi parla per primo dopo la demo, perde.</span></li>
+  </ol>
+
+  <div class="nota occhio"><span class="tag">Se s'inceppa</span><div>Non ti scusare tre volte e non spiegare il bug. Una frase: <em>«Questo lo sistemo, non è nella parte che ti installo.»</em> Vai avanti. Poi segnatelo davvero.</div></div>
+  <div class="nota mai"><span class="tag">Varianti</span><div>Mostra le varianti (Maxi, mezzo litro) <strong>dal telefono del cliente</strong>. Dal tablet staff la comanda addebita ancora il prezzo base: è un bug noto, non farlo vedere.</div></div>
+</section>
+
+<!-- ── 5 ─────────────────────────────────────────────────────────────────── -->
+<section id="p5" class="p5">
+  <div class="cappello"><span class="badge">5</span><span class="eyebrow">Difesa</span></div>
+  <h2>Obiezioni</h2>
+  <p class="sottotitolo">Ogni risposta si pronuncia in meno di 15 secondi.</p>
+
+  <div class="scroll"><table>
+    <thead><tr><th>Ti dice</th><th>Rispondi</th></tr></thead>
+    <tbody>
+      <tr><td><strong>«Quanto costa?»</strong></td><td>Mai il numero secco. <em>«Prima dimmi quanto spendi oggi tra POS, gestionale e sito, così vediamo se ha senso.»</em></td></tr>
+      <tr><td><strong>«I camerieri non ce la fanno»</strong></td><td><em>«Tre schermate e un PIN. Ti lascio una pagina stampata per ruolo e sto qui io per il primo servizio. Se dopo un servizio non lo usano, non lo installiamo.»</em></td></tr>
+      <tr><td><strong>«E se salta internet?»</strong></td><td>Non spiegarlo: <strong>stacca la linea davanti a lui</strong>.</td></tr>
+      <tr><td><strong>«Il QR ai miei clienti non piace»</strong></td><td><em>«Il QR è in più, non al posto. Il cameriere prende la comanda dal tablet come fa oggi col blocchetto, e finisce nello stesso posto.»</em></td></tr>
+      <tr><td><strong>«Ho già un POS»</strong></td><td><em>«Non te lo tolgo. Il registratore fiscale resta il tuo. Tako fa la parte dove perdi tempo.»</em></td></tr>
+      <tr><td><strong>«E se si rompe il Mac?»</strong></td><td><em>«C'è il backup del database, si reinstalla e si ripristina. Ma è un rischio vero: il Mac dev'essere solo per questo, sempre acceso e attaccato alla corrente.»</em></td></tr>
+      <tr><td><strong>«Devo comprare un Mac?»</strong></td><td><em>«Se ce l'hai usiamo quello. Se no è una spesa una tantum, non un canone.»</em> Non promettere che lo fornisci tu.</td></tr>
+      <tr><td><strong>«Fa lo scontrino fiscale?»</strong></td><td><em>«No, e non te lo racconto diverso. Resta il tuo registratore. Tako stampa la comanda in cucina e la nota di cortesia.»</em></td></tr>
+      <tr><td><strong>«Si paga dal telefono?»</strong></td><td><em>«Non ancora. Il pagamento lo registri in cassa come fai oggi.»</em></td></tr>
+      <tr><td><strong>«Chi mi assiste sabato alle 21?»</strong></td><td>Solo quello che farai davvero: <em>«Il mio numero diretto su WhatsApp negli orari di servizio. Non ho un call center e non te lo invento.»</em></td></tr>
+      <tr><td><strong>«Fammi pensare»</strong></td><td><em>«Ti lascio installato il menu del tuo locale su un QR di prova, senza impegno. Se tra una settimana non l'hai usato, ci siamo risparmiati tempo.»</em></td></tr>
+      <tr><td><strong>«Ce l'ha il mio vicino?»</strong></td><td>Mai mentire. <em>«Sei tra i primi. È il motivo per cui il prezzo è questo e per cui vengo io di persona.»</em></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ── 6 ─────────────────────────────────────────────────────────────────── -->
+<section id="p6" class="p6">
+  <div class="cappello"><span class="badge">6</span><span class="eyebrow">Soldi</span></div>
+  <h2>Il prezzo</h2>
+  <p class="sottotitolo">Da confermare stasera. Poi non si cambia per tutta la giornata.</p>
+
+  <div class="nota occhio"><span class="tag">Aperto</span><div>Nessuna decisione di prezzo è registrata. Devi uscire con <strong>un numero in bocca</strong>: se esiti, capisce che stai improvvisando e non firma.</div></div>
+
+  <div class="scroll"><table>
+    <thead><tr><th>Voce</th><th>Listino</th><th>Primi locali</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Attivazione</strong> — installazione, menu, QR, formazione, primo servizio con te</td><td class="stato">490 €</td><td class="stato">190 €</td></tr>
+      <tr><td><strong>Canone</strong> — aggiornamenti, assistenza, funzioni AI</td><td class="stato">89 €/mese</td><td class="stato">59 €/mese</td></tr>
+      <tr><td>Mac</td><td colspan="2">non incluso — se ce l'ha, si usa il suo</td></tr>
+    </tbody>
+  </table></div>
+
+  <ol class="scaletta">
+    <li><strong>Prima il suo costo</strong><span>«Quanto paghi di POS? E il sito del menu? E il gestionale?» Fai la somma su carta davanti a lui.</span></li>
+    <li><strong>Poi il tuo</strong><span>«Tako sta qui sotto, e in più funziona quando cade la linea.»</span></li>
+    <li><strong>Poi il costo a coperto</strong><span>«59 € al mese su 40 coperti al giorno sono 5 centesimi a coperto. Il tovagliolo costa di più.»</span></li>
+    <li><strong>Poi la garanzia</strong><span>«Se dopo il primo mese il tuo staff non lo usa, smetti e non paghi il secondo.» Offrila solo se la rispetti.</span></li>
+  </ol>
+
+  <div class="nota mai"><span class="tag">Mai</span><div>Non scontare al primo «è caro». Chiedi <em>«caro rispetto a cosa?»</em> e ascolta: nove volte su dieci sotto c'è un dubbio diverso dal prezzo.</div></div>
+</section>
+
+<!-- ── 7 ─────────────────────────────────────────────────────────────────── -->
+<section id="p7" class="p7">
+  <div class="cappello"><span class="badge">7</span><span class="eyebrow">Confini</span></div>
+  <h2>Cosa non devi promettere</h2>
+  <p class="sottotitolo">Prometti una di queste e tra un mese hai un cliente arrabbiato nella stessa via.</p>
+
+  <h3>Non esiste</h3>
+  <ul class="lista">
+    <li><strong>Scontrino fiscale, registratore telematico, corrispettivi, SDI.</strong> Lo scontrino che stampa è di cortesia.</li>
+    <li><strong>Pagamenti online o dal telefono del cliente.</strong> Si registrano in cassa.</li>
+    <li><strong>Integrazioni Glovo, Deliveroo, TheFork, Just Eat.</strong></li>
+    <li><strong>Import del menu da foto o PDF.</strong> Il testo va incollato: portati il menu già in formato testo.</li>
+    <li><strong>App da scaricare per il cliente.</strong> È una pagina web. È un vantaggio, ma non chiamarla app.</li>
+    <li><strong>Account cliente con storico personale.</strong></li>
+    <li><strong>Report via email, export CSV, confronto settimana-su-settimana.</strong></li>
+    <li><strong>Marketing via WhatsApp/SMS ai clienti finali.</strong></li>
+  </ul>
+
+  <h3>Esiste, ma con un se</h3>
+  <ul class="lista">
+    <li><strong>Il Mac dev'essere acceso.</strong> Tako <em>è</em> quel Mac: se va in stop, il servizio si ferma.</li>
+    <li><strong>Le funzioni AI vogliono internet.</strong> Assistente, copilota, traduzioni, foto, import magazzino. Il resto no.</li>
+    <li><strong>WhatsApp copilota:</strong> spento di default, da configurare, non ancora collaudato sul campo.</li>
+    <li><strong>Scarico automatico del magazzino:</strong> spento di default, è una stima ottima — non contabilità certificata.</li>
+    <li><strong>App non firmata/notarizzata:</strong> al primo avvio può servire uno sblocco. Lo fai tu in installazione.</li>
+    <li><strong><code>tako.local</code> può non funzionare</strong> su Android vecchi o reti mal configurate → fallback su IP, che richiede un IP stabile.</li>
+  </ul>
+
+  <div class="nota mai"><span class="tag">Interno</span><div>Non lo dici al ristoratore, ma condiziona cosa accendi: la comanda staff <strong>non addebita le varianti</strong>; l'asporto al banco può restare <strong>senza conto</strong>; <code>/api/setup/*</code> è <strong>senza autenticazione</strong> (non installare su Wi-Fi aperto agli ospiti); lo split conto su rete instabile può <strong>addebitare due volte</strong>.</div></div>
+</section>
+
+<!-- ── 8 ─────────────────────────────────────────────────────────────────── -->
+<section id="p8" class="p8">
+  <div class="cappello"><span class="badge">8</span><span class="eyebrow">Protocollo</span></div>
+  <h2>La visita</h2>
+
+  <div class="schede due">
+    <div class="scheda"><h4>Quando</h4><p><strong>15:00–17:30</strong>, tra pranzo e cena. Mai durante il servizio: se arrivi alle 12:30 o alle 20:00 bruci il locale.</p></div>
+    <div class="scheda"><h4>Chi</h4><p>Il titolare. Se non c'è: «A che ora lo trovo? Torno io.» Non lasciare un volantino a un cameriere sperando che richiami.</p></div>
+  </div>
+
+  <h3>I primi 20 secondi — in piedi, senza tirare fuori niente</h3>
+  <div class="dire">Buongiorno, sono Manuel, sono qui in zona. Non le vendo niente adesso: ho fatto un sistema
+  per la sala e la cucina, gira qui dentro senza internet, e vorrei farglielo vedere in cinque minuti
+  quando ha un momento. È lei che gestisce?</div>
+
+  <h3>Poi tre domande, e ascolti</h3>
+  <ol class="scaletta">
+    <li><strong>«Come prendete gli ordini adesso?»</strong></li>
+    <li><strong>«Cosa vi fa perdere più tempo la sera che siete pieni?»</strong></li>
+    <li><strong>«Che internet avete qui? Regge?»</strong><span>Se risponde «ordini a mano, e la linea fa schifo», hai già vinto: parla solo di quello.</span></li>
+  </ol>
+
+  <h3>Chiudi chiedendo un passo, mai «che ne pensa»</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Livello</th><th>Cosa chiedi</th></tr></thead>
+    <tbody>
+      <tr><td class="stato">forte</td><td><em>«Le va che vengo giovedì pomeriggio e gliela installo per una settimana di prova?»</em></td></tr>
+      <tr><td class="stato">medio</td><td><em>«Le carico il suo menu e le porto il QR del suo locale la prossima settimana. Zero impegno.»</em></td></tr>
+      <tr><td class="stato">minimo</td><td><em>«Le mando il video su WhatsApp. Qual è il suo numero?»</em> — e mandaglielo entro sera.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="nota fai"><span class="tag">Dopo</span><div>60 secondi sul blocco: nome locale, nome persona, coperti, come prendono gli ordini oggi, cosa paga oggi, obiezione principale, <strong>prossimo passo con data</strong>.</div></div>
+</section>
+
+<!-- ── 9 ─────────────────────────────────────────────────────────────────── -->
+<section id="p9" class="p9">
+  <div class="cappello"><span class="badge">9</span><span class="eyebrow">Burocrazia</span></div>
+  <h2>Fatture, contratti, privacy</h2>
+
+  <div class="nota mai"><span class="tag">Soldi</span><div>Senza P.IVA aperta, <strong>domani non incassi</strong>. Niente caparre, niente bonifici, niente contanti. Raccogli impegni e piloti.</div></div>
+  <div class="dire">Partiamo con una settimana di prova, poi le faccio fattura regolare dal primo mese vero.</div>
+  <p class="sottotitolo">È vero ed è anche una chiusura migliore che chiedere soldi subito.</p>
+
+  <ul class="lista">
+    <li><code>contratto-licenza-BOZZA.md</code>, <code>dpa-BOZZA.md</code>, <code>disclaimer-fiscale.md</code> — <strong>bozze non riviste da un legale</strong>: traccia, non da far firmare.</li>
+    <li><code>runbook-installazione.md</code> (45–75 min) e <code>checklist-install-day.md</code> — da leggere <strong>prima</strong> di fissare la prima installazione.</li>
+  </ul>
+</section>
+
+<!-- ── 10 ────────────────────────────────────────────────────────────────── -->
+<section id="p10" class="p10">
+  <div class="cappello"><span class="badge">10</span><span class="eyebrow">Autocontrollo</span></div>
+  <h2>Gli otto errori</h2>
+  <ol class="scaletta">
+    <li><strong>Parlare di funzioni invece che del suo problema</strong><span>Non compra il KDS, compra «non sbaglio più gli ordini».</span></li>
+    <li><strong>Fare la demo delle impostazioni</strong><span>Fai la demo del giro dei soldi.</span></li>
+    <li><strong>Dire «intelligenza artificiale» più di una volta</strong><span>Metà dei ristoratori la sente come fumo.</span></li>
+    <li><strong>Promettere il fiscale o i pagamenti</strong><span>Lo perdi dopo, peggio, e parlando male di te.</span></li>
+    <li><strong>Scontare al primo dubbio</strong></li>
+    <li><strong>Uscire senza un prossimo passo con una data</strong></li>
+    <li><strong>Citare clienti che non hai</strong><span>La tua leva è: «sei tra i primi, quindi ti seguo io di persona».</span></li>
+    <li><strong>Restare più di 25 minuti</strong><span>Se non arrivano domande vere, saluta bene e torna un'altra volta.</span></li>
+  </ol>
+</section>
+
+<!-- ── 11 ────────────────────────────────────────────────────────────────── -->
+<section id="p11" class="p11">
+  <div class="cappello"><span class="badge">11</span><span class="eyebrow">Ripasso</span></div>
+  <h2>A memoria</h2>
+  <div class="frasi">
+    <div>Il cameriere smette di fare il postino.</div>
+    <div>Se salta internet, tu continui a lavorare.</div>
+    <div>I dati dei tuoi clienti restano nel tuo locale.</div>
+    <div>Non ti tolgo il registratore fiscale. Ti tolgo i foglietti.</div>
+    <div>Cinque centesimi a coperto. Il tovagliolo costa di più.</div>
+    <div>Se dopo un servizio il tuo staff non lo usa, non lo installiamo.</div>
+    <div>Non ti vendo niente adesso. Voglio solo fartelo vedere cinque minuti.</div>
+  </div>
+</section>
+
+<footer class="p0">
+  Tako 0.1.6 · documento completo: docs/vendita/pitch-ristoratori.md
+</footer>
+
+</div>
+
+<script>
+  // Le spunte della borsa sopravvivono alla chiusura della pagina: la lista si
+  // riempie stasera e si consulta domani mattina sul telefono.
+  for (const box of document.querySelectorAll('#borsa input')) {
+    const chiave = 'tako-borsa-' + box.id;
+    if (localStorage.getItem(chiave) === '1') box.checked = true;
+    box.addEventListener('change', () => {
+      localStorage.setItem(chiave, box.checked ? '1' : '0');
+    });
+  }
+</script>

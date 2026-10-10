@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, integer, index } from 'drizzle-orm/pg-core'
+import { pgTable, text, uuid, timestamp, integer, index, boolean } from 'drizzle-orm/pg-core'
 import { restaurants } from './restaurants.js'
 import { tables } from './tables.js'
 
@@ -8,6 +8,9 @@ export const reservations = pgTable('reservations', {
   tableId: uuid('table_id').references(() => tables.id, { onDelete: 'set null' }),
   customerName: text('customer_name').notNull(),
   customerPhone: text('customer_phone').notNull(),
+  customerEmail: text('customer_email'),
+  reminderConsent: boolean('reminder_consent').default(false).notNull(),
+  reminderRevision: integer('reminder_revision').default(0).notNull(),
   partySize: integer('party_size').notNull(),
   startsAt: timestamp('starts_at', { withTimezone: true }).notNull(),
   durationMin: integer('duration_min').default(90).notNull(),

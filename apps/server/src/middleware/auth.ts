@@ -1,3 +1,4 @@
+import {resolveWebLocation,menuEditorAllowed} from '../lib/web-location-scope.js'
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import { db, sessions, users } from '@tako/db'
 import { eq, and, gt } from 'drizzle-orm'
@@ -46,7 +47,10 @@ export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
     }
   }
 
-  req.user = { id: session.user.id, restaurantId: session.user.restaurantId!, name: session.user.name, email: session.user.email, role: session.user.role }
+  const scope = await resolveWebLocation(token,session.user)
+  if (!scope) return reply.code(401).send({error:{code:'LOCATION_ACCESS_REVOKED',message:'Accesso al locale revocato.'}})
+  if(scope.role==='menu_editor'&&!menuEditorAllowed(req.url,req.method)) return reply.code(403).send({error:{code:'FORBIDDEN',message:'Permesso riservato alla gestione menu.'}})
+  req.user = { id: session.user.id, restaurantId: scope.restaurantId, name: session.user.name, email: session.user.email, role: scope.role }
 }
 
 export function requireRole(...roles: string[]) {

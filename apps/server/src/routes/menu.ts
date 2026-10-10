@@ -1,3 +1,5 @@
+import {readWorkspace} from '../lib/menu-workspace-store.js'
+import {isWebMode} from '../lib/web-runtime.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemTranslations } from '@tako/db'
@@ -33,6 +35,13 @@ async function ownsItem(itemId: string, restaurantId: string) {
 }
 
 export async function menuRoutes(fastify: FastifyInstance) {
+  fastify.addHook('preHandler',async(req,reply)=>{
+    if (!isWebMode() || ['GET','HEAD','OPTIONS'].includes(req.method) || req.url.split('?')[0]?.endsWith('/availability')) return
+    await requireAuth(req,reply)
+    if(reply.sent)return
+    if(req.user!.role!=='owner') return reply.code(403).send({error:{code:'FORBIDDEN',message:'Modifica riservata al titolare.'}})
+    if(await readWorkspace(req.user!.restaurantId)) return reply.code(409).send({error:{code:'WORKSPACE_MANAGED',message:'Modifica e pubblica questo menu dal nuovo editor.'}})
+  })
   // Get all menus for restaurant
   fastify.get('/', { preHandler: requireAuth }, async (req) => {
     const all = await db.select().from(menus).where(eq(menus.restaurantId, req.user!.restaurantId)).orderBy(asc(menus.position))

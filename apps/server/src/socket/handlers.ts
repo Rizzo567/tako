@@ -1,3 +1,5 @@
+import {resolveWebLocation} from '../lib/web-location-scope.js'
+import { socketCookie } from './cookies.js'
 import type { Server, Socket } from 'socket.io'
 import type { FastifyInstance } from 'fastify'
 import { db, sessions, users, tables, bills, orders } from '@tako/db'
@@ -11,7 +13,7 @@ const MAX_ROOMS_PER_SOCKET = 20
 
 async function verifyStaffToken(token: string): Promise<{ restaurantId: string } | null> {
   const [session] = await db
-    .select({ restaurantId: users.restaurantId })
+    .select({ id: users.id, restaurantId: users.restaurantId, role: users.role })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
     // active=true: una sessione residua di un utente disattivato/licenziato viene
@@ -19,19 +21,13 @@ async function verifyStaffToken(token: string): Promise<{ restaurantId: string }
     .where(and(eq(sessions.token, token), gt(sessions.expiresAt, new Date()), eq(users.active, true)))
     .limit(1)
   if (!session?.restaurantId) return null
-  return { restaurantId: session.restaurantId }
+  const scope=await resolveWebLocation(token,session)
+  return scope && scope.role!=='menu_editor' ? {restaurantId:scope.restaurantId} : null
 }
 
 // Estrae un cookie dall'header handshake del socket (cookie-auth staff).
 function cookieFromHandshake(socket: Socket, name: string): string | null {
-  const raw = socket.handshake.headers.cookie
-  if (!raw) return null
-  for (const part of raw.split(';')) {
-    const i = part.indexOf('=')
-    if (i === -1) continue
-    if (part.slice(0, i).trim() === name) return decodeURIComponent(part.slice(i + 1).trim())
-  }
-  return null
+  return socketCookie(socket.handshake.headers.cookie, name)
 }
 
 export function setupSocketHandlers(io: Server, fastify: FastifyInstance) {

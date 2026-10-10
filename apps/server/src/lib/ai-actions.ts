@@ -1,3 +1,5 @@
+import {readWorkspace} from './menu-workspace-store.js'
+import { isWebMode } from './web-runtime.js'
 // ─────────────────────────────── Tako — MOTORE AZIONI AI ───────────────────────────────
 // Un unico registro di "tool" che l'AI (Groq function-calling) può invocare, condiviso
 // da due personalità con permessi diversi:
@@ -1517,6 +1519,7 @@ const ACTIONS: ActionDef[] = [
     },
     label: (a) => `Aggiungi ${a?.name ?? '?'} come ${a?.role ?? '?'}`,
     execute: async (ctx, args) => {
+      if (isWebMode()) return { ok: false, summary: 'Nel servizio web aggiungi il collaboratore da Team, con email reale e password personale.' }
       const name = (args?.name ?? '').toString().trim()
       // "cameriere"/"sala" sono il modo naturale di dirlo: il DB usa 'dipendente'
       // (stessa mappa ROLE_UI2DB della dashboard). Normalizziamo qui.
@@ -2029,6 +2032,9 @@ export async function executeAction(
   }
   if (def.kind === 'mutation' && !opts?.allowMutation) {
     return { ok: false, summary: 'Questa azione modifica dati e richiede conferma esplicita.' }
+  }
+  if (isWebMode() && ['create_menu_item','create_menu_section','update_menu_item','delete_menu_item','delete_menu_section','rename_menu_section','generate_dish_description','translate_menu_item','set_food_cost','add_dish_variant'].includes(name) && await readWorkspace(ctx.restaurantId)) {
+    return {ok:false,summary:'Questo menu usa bozze e versioni: applica la modifica dal nuovo editor e pubblicala.'}
   }
   return def.execute(ctx, args ?? {})
 }

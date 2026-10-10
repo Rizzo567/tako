@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Plus, Minus, Filter, Info, X } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -10,13 +10,17 @@ import { useSessionStore, useCartStore } from '@/lib/store'
 import { formatEuro } from '@/lib/utils'
 import { SPRING, SPRING_SOFT, flyToCart, useCountUp } from '@/lib/motion'
 import { useI18n, trTag, trAllergen } from '@/lib/i18n'
-import { Dish, dishGradient } from './ui/Dish'
+import { dishGradient } from './ui/Dish'
 import { Sheet } from './ui/Sheet'
+import { WorkspaceMenuRenderer, type MenuDesign } from './WorkspaceMenuRenderer'
 
 type ItemTranslation = { itemId: string; name: string; description?: string | null }
 
 // 12 allergeni del prototipo: emoji per i badge + label per il filtro.
 const ALLERGENS: { id: string; emoji: string; label: string }[] = [
+  { id: 'crostacei', emoji: '🦐', label: 'Crostacei' },
+  { id: 'solfiti', emoji: '⚠️', label: 'Solfiti' },
+  { id: 'frutta-a-guscio', emoji: '🌰', label: 'Frutta a guscio' },
   { id: 'glutine', emoji: '🌾', label: 'Glutine' },
   { id: 'latte', emoji: '🥛', label: 'Latte' },
   { id: 'uova', emoji: '🥚', label: 'Uova' },
@@ -93,7 +97,7 @@ function Qty({ value, onChange, min = 1 }: { value: number; onChange: (n: number
 }
 
 /* ───────────────── item detail sheet ───────────────── */
-function ItemSheet({ item, open, onClose, canOrder = true }: { item: PublicItem | null; open: boolean; onClose: () => void; canOrder?: boolean }) {
+function ItemSheet({ item, open, onClose, canOrder = true, design }: { item: PublicItem | null; open: boolean; onClose: () => void; canOrder?: boolean; design?: MenuDesign }) {
   const { t } = useI18n()
   const reduce = useReducedMotion()
   const add = useCartStore(s => s.add)
@@ -111,6 +115,9 @@ function ItemSheet({ item, open, onClose, canOrder = true }: { item: PublicItem 
   }, [open, item])
 
   if (!item) return null
+  const mode=(item as PublicItem & {displayMode?:string}).displayMode==='centered'?'centered':(item as PublicItem & {displayMode?:string}).displayMode==='link'?'link':'standard';
+  const menuFont=(font?:string)=>font==='serif'?'var(--font-serif)':font==='mono'?'monospace':font&&['poppins','staatliches','amaranth','italiana'].includes(font)?`var(--font-${font})`:undefined;
+  const part=(key:string):CSSProperties=>{const value=design?.[mode]?.[key];return value?{fontSize:value.fontSize,color:value.color,fontWeight:value.bold?700:400,fontStyle:value.italic?'italic':'normal',textAlign:value.align,fontFamily:menuFont(value.font),textDecoration:value.underline?'underline':'none'}:{};};
   const variant: PublicVariant | undefined = item.variants?.find(v => v.id === variantId)
   const unit = item.price + (variant?.priceModifier ?? 0)
 
@@ -131,14 +138,14 @@ function ItemSheet({ item, open, onClose, canOrder = true }: { item: PublicItem 
 
   return (
     <Sheet open={open} onClose={onClose} maxH="92vh">
-      <div className="pb-[18px]">
+      <div className="pb-[18px]" style={{fontFamily:menuFont(design?.font),color:design?.text}}>
         {/* hero (shared-element: cresce dalla tile lista via layoutId) */}
-        <div className="px-5">
+        {design?.showImages!==false&&item.imageUrl&&<div className="px-5">
           <motion.div
             ref={heroRef}
             layoutId={reduce ? undefined : `dish-${item.id}`}
             className="relative grid h-[188px] w-full place-items-center overflow-hidden"
-            style={{ borderRadius: 20, background: item.imageUrl ? 'var(--sunken)' : dishGradient(item.name) }}
+            style={{ width:design?.imageWidth?Math.min(design.imageWidth,600):undefined,height:design?.imageHeight||188,maxWidth:'100%',borderRadius: design?.imageRadius??(design?.imageShape==='circle'?'50%':design?.imageShape==='square'?0:20), background: item.imageUrl ? 'var(--sunken)' : dishGradient(item.name) }}
           >
             {item.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -154,15 +161,17 @@ function ItemSheet({ item, open, onClose, canOrder = true }: { item: PublicItem 
               </div>
             )}
           </motion.div>
-        </div>
+        </div>}
 
         <div className="px-5 pt-[18px]">
-          <h3 className="text-[23px] font-bold text-[var(--ink)]">{item.name}</h3>
-          {item.description && (
-            <p className="mt-1.5 text-[14.5px] leading-relaxed text-[var(--ink-2)]">{item.description}</p>
+          <h3 className="text-[23px] font-bold text-[var(--ink)]" style={part('name')}>{item.name}</h3>
+          {design?.showDescriptions!==false&&item.description && (
+            <p className="mt-1.5 text-[14.5px] leading-relaxed text-[var(--ink-2)]" style={part('description')}>{item.description}</p>
           )}
 
-          {item.allergens.length > 0 && (
+          {design?.showPrices!==false&&<p className="mt-3 font-bold" style={part('price')}>{(item as PublicItem & {priceDisplay?:string}).priceDisplay||formatEuro(item.price)}</p>}
+          {design?.showImages===false&&item.tags?.length>0&&<div className="mt-2 flex flex-wrap gap-2">{item.tags.map(tag=><Tag key={tag}>{tag}</Tag>)}</div>}
+          {design?.showAllergens!==false&&item.allergens.length > 0 && (
             <div className="mt-4">
               <p className="mb-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--ink-3)]">{t('allergens')}</p>
               <div className="flex flex-wrap gap-[7px]">
@@ -217,7 +226,7 @@ function ItemSheet({ item, open, onClose, canOrder = true }: { item: PublicItem 
           <Qty value={qty} onChange={q => setQty(Math.max(1, q))} min={1} />
           <button onClick={handleAdd}
             className="flex h-[54px] flex-1 items-center justify-between rounded-2xl px-5 text-[16px] font-bold text-[var(--on-brand)] active:scale-[0.98]"
-            style={{ background: 'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
+            style={{ background: design?.primary||'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
             <span>{t('add')}</span>
             <span className="tnum">{formatEuro(unit * qty)}</span>
           </button>
@@ -253,7 +262,7 @@ function FilterSheet({
         {list.map(a => {
           const on = excluded.has(a.id)
           return (
-            <button key={a.id} onClick={() => toggle(a.id)}
+            <button key={a.id} onClick={() => toggle(a.id)} aria-pressed={on}
               className="flex items-center gap-2.5 rounded-[14px] px-3.5 py-3 text-left transition-all active:scale-[0.98]"
               style={{
                 background: on ? 'var(--ink)' : 'var(--surface)',
@@ -285,9 +294,10 @@ function FilterSheet({
 }
 
 /* ───────────────── menu view ───────────────── */
-export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?: boolean }) {
-  const { t, lang, defaultLang } = useI18n()
+export function MenuView({ onGoCart, compact, serviceActions }: { onGoCart: () => void; compact?: boolean; serviceActions?: ReactNode }) {
+  const { t, lang, defaultLang, languages, setLang } = useI18n()
   const restaurantId = useSessionStore(s => s.restaurantId)
+  const sessionLogo = useSessionStore(s => s.logoUrl)
   const items = useCartStore(s => s.items)
   const count = useMemo(() => items.reduce((n, i) => n + i.quantity, 0), [items])
   const total = useMemo(() => items.reduce((n, i) => n + i.unitPrice * i.quantity, 0), [items])
@@ -296,28 +306,33 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
   const orderingEnabled = useSessionStore(s => s.orderingEnabled)
   const setSession = useSessionStore(s => s.setSession)
 
+  const [menuChoices,setMenuChoices]=useState<{id:string;name:string}[]>([]);
+  const [menuId,setMenuId]=useState('');
+  const [food,setFood]=useState<any>({});
+  const [design,setDesign]=useState<MenuDesign|null>(null);
+  const rendererDesign = useMemo(() => ({ ...(design || {}), ...(!design?.logoUrl && sessionLogo ? { logoUrl: sessionLogo } : {}) }), [design, sessionLogo])
   const [menu, setMenu] = useState<PublicMenu | null>(null)
   const [menuError, setMenuError] = useState(false)
   const [features, setFeatures] = useState<{ restaurantName?: string; reservationsEnabled?: boolean; reviewUrl?: string; customerOrderingEnabled?: boolean; coverCharge?: number } | null>(null)
   const [trMap, setTrMap] = useState<Record<string, ItemTranslation>>({})
-  const [active, setActive] = useState<string | null>(null)
   const [excluded, setExcluded] = useState<Set<string>>(new Set())
   const [filterOpen, setFilterOpen] = useState(false)
   const [selected, setSelected] = useState<PublicItem | null>(null)
   const [itemOpen, setItemOpen] = useState(false)
-  const [ind, setInd] = useState({ x: 16, w: 78 })
 
-  const secRefs = useRef<Record<string, HTMLElement | null>>({})
-  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({})
-  const lockUntil = useRef(0)
+  const [menuLoading, setMenuLoading] = useState(false)
+  const loadSequence = useRef(0)
 
   const loadMenu = useCallback(() => {
     if (!restaurantId) return
+    const sequence = ++loadSequence.current
     setMenuError(false)
-    api.get(`/customer/restaurant/${restaurantId}/menu`).then(r => {
+    setMenuLoading(true)
+    api.get(`/customer/restaurant/${restaurantId}/menu?menuId=${encodeURIComponent(menuId)}&lang=${encodeURIComponent(lang)}`).then(r => {
+      if (sequence !== loadSequence.current) return
       const m: PublicMenu = r.data.data
       setMenu(m)
-      setActive(m.sections[0]?.id ?? null)
+      setFood({labels:r.data.foodTranslations?.[lang],catalogs:r.data.foodCatalogs});setMenuChoices(r.data.menus?.length ? r.data.menus : [{id:m.id,name:m.name}]);setDesign(r.data.design||null)
       setFeatures(r.data.features || null)
       // Propaga i flag al session store: usati anche fuori da MenuView (es. icona carrello
       // nell'header, coperto nel carrello). Default sicuri se non specificati.
@@ -326,14 +341,14 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
         reservationsEnabled: r.data.features?.reservationsEnabled === true,
         coverCharge: Number(r.data.features?.coverCharge) || 0,
       })
-    }).catch(() => { setMenuError(true) }) // la schermata d'errore (con Riprova) è il feedback primario
-  }, [restaurantId, setSession])
+    }).catch(() => { if (sequence === loadSequence.current) setMenuError(true) }).finally(() => { if (sequence === loadSequence.current) setMenuLoading(false) })
+  }, [restaurantId, setSession, menuId, lang])
 
-  useEffect(() => { loadMenu() }, [loadMenu])
+  useEffect(() => { loadMenu(); return () => { loadSequence.current++ } }, [loadMenu])
 
   // Traduzioni piatti: quando la lingua ≠ default, rifetch/merge per itemId (solo display).
   useEffect(() => {
-    if (!restaurantId || !lang || lang === defaultLang) { setTrMap({}); return }
+    if (design || !restaurantId || !lang || lang === defaultLang) { setTrMap({}); return }
     let alive = true
     api.get(`/customer/menu-translations?restaurantId=${restaurantId}&lang=${encodeURIComponent(lang)}`).then(r => {
       if (!alive) return
@@ -343,7 +358,7 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
       setTrMap(map)
     }).catch(() => { if (alive) setTrMap({}) })
     return () => { alive = false }
-  }, [restaurantId, lang, defaultLang])
+  }, [restaurantId, lang, defaultLang, design])
 
   // Applica le traduzioni (name/description) per itemId; l'id resta invariato → il
   // carrello/ordine usa sempre il nome canonico italiano dei dati originali.
@@ -376,12 +391,11 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
         })),
       } : m)
     const onAvail = ({ itemId, available }: { itemId: string; available: boolean }) => patchItem(itemId, { available })
-    const onUpdated = () => api.get(`/customer/restaurant/${restaurantId}/menu`)
-      .then(r => setMenu(r.data.data)).catch(() => {})
+    const onUpdated = loadMenu
     socket.on('menu:item_availability', onAvail)
     socket.on('menu:updated', onUpdated)
     return () => { socket.off('menu:item_availability', onAvail); socket.off('menu:updated', onUpdated) }
-  }, [restaurantId])
+  }, [restaurantId,loadMenu])
 
   const sections = useMemo(() => {
     if (!localizedMenu) return []
@@ -401,50 +415,11 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
     [menu],
   )
 
-  const headerOffset = () =>
-    parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64
-
-  // scroll-spy su window (il body scrolla)
-  useEffect(() => {
-    const onScroll = () => {
-      if (Date.now() < lockUntil.current) return
-      const probe = window.scrollY + headerOffset() + 64
-      let cur = sections[0]?.id
-      for (const s of sections) {
-        const el = secRefs.current[s.id]
-        if (el && el.offsetTop <= probe) cur = s.id
-      }
-      if (cur && cur !== active) setActive(cur)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [sections, active])
-
-  // muovi l'indicatore a pillola sotto la tab attiva + tienila in vista
-  useEffect(() => {
-    if (!active) return
-    const tab = tabRefs.current[active]
-    if (tab) {
-      setInd({ x: tab.offsetLeft, w: tab.offsetWidth })
-      tab.parentElement?.scrollTo({ left: tab.offsetLeft - 60, behavior: 'smooth' })
-    }
-  }, [active, sections])
-
-  function goTo(id: string) {
-    const el = secRefs.current[id]
-    if (!el) return
-    lockUntil.current = Date.now() + 650
-    setActive(id)
-    window.scrollTo({ top: el.offsetTop - headerOffset() - 56, behavior: 'smooth' })
-  }
-
   function openItem(it: PublicItem) {
     if (!it.available) return
     setSelected(it)
     setItemOpen(true)
   }
-
-  const reduce = useReducedMotion()
 
   // Errore di caricamento menu (nessun dato) → schermata d'errore con "Riprova",
   // invece di uno skeleton che resta all'infinito.
@@ -464,34 +439,10 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
 
   return (
     <div className="relative">
-      {/* sticky tabs + filtro */}
-      <div className="sticky z-20 pt-1" style={{ top: 'var(--header-h)', background: 'linear-gradient(var(--surface) 72%, transparent)' }}>
-        <div className="scrollbar-hide relative flex items-center gap-2 overflow-x-auto px-4 pb-2.5 pt-1.5">
-          <motion.div aria-hidden className="absolute left-0 top-1.5 z-0 rounded-full"
-            style={{ height: 35, background: 'var(--ink)' }}
-            animate={{ x: ind.x, width: ind.w }} transition={SPRING} />
-          {sections.map(s => {
-            const on = active === s.id
-            return (
-              <button key={s.id} ref={el => { tabRefs.current[s.id] = el }} onClick={() => goTo(s.id)}
-                className="relative z-[1] flex-none whitespace-nowrap rounded-full px-[15px] py-2 text-[14px] font-bold transition-colors active:scale-[0.97]"
-                style={{ color: on ? 'var(--surface)' : 'var(--ink-3)' }}>
-                {s.name}
-              </button>
-            )
-          })}
-          <button onClick={() => setFilterOpen(true)} aria-label={t('filterTitle')}
-            className="relative z-[1] flex flex-none items-center gap-1.5 rounded-full px-3.5 py-2 text-[14px] font-bold active:scale-[0.97]"
-            style={{
-              background: excluded.size ? 'var(--brand)' : 'var(--raised)',
-              color: excluded.size ? 'var(--on-brand)' : 'var(--ink-2)',
-              boxShadow: 'var(--sh-1)',
-            }}>
-            <Filter size={16} />{excluded.size || ''}
-          </button>
-        </div>
-      </div>
-
+      {menuError && menu && <div role="alert" className="mx-4 my-3 flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm">
+        <span>{t('menuError')}</span>
+        <button onClick={loadMenu} className="min-h-10 rounded-lg px-3 font-bold underline">{t('retry')}</button>
+      </div>}
       {excluded.size > 0 && (
         <div className="mx-4 mb-1 flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-[12.5px] font-semibold"
           style={{ background: 'var(--brand-wash)', color: 'var(--brand-deep)' }}>
@@ -507,62 +458,21 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
       )}
 
       {/* sezioni */}
-      <div className="px-4 pb-2 pt-1">
-        {sections.map((s, si) => (
-          <section key={s.id} ref={el => { secRefs.current[s.id] = el }} style={{ paddingTop: si === 0 ? 6 : 22 }}>
-            <h2 className="serif mb-3 pl-0.5 text-[27px] text-[var(--ink)]">{s.name}</h2>
-            <div className="flex flex-col gap-3">
-              {s.items.map((it, i) => (
-                <motion.button
-                  key={it.id} onClick={() => openItem(it)} disabled={!it.available}
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ ...SPRING_SOFT, delay: Math.min(0.4, si * 0.05 + i * 0.06) }}
-                  whileTap={it.available ? { scale: 0.97 } : undefined}
-                  className="flex gap-3.5 rounded-[var(--r-card)] p-3 text-left"
-                  style={{
-                    background: 'var(--raised)', boxShadow: 'var(--sh-1)',
-                    opacity: it.available ? 1 : 0.58, cursor: it.available ? 'pointer' : 'default',
-                  }}>
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-[16px] font-bold text-[var(--ink)]">{it.name}</span>
-                      {it.tags?.slice(0, 1).map(t => <Tag key={t}>{t}</Tag>)}
-                    </div>
-                    {it.description && (
-                      <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-[var(--ink-2)]">{it.description}</p>
-                    )}
-                    <div className="mt-auto flex items-center gap-2.5 pt-2">
-                      <span className="tnum text-[15px] font-bold text-[var(--ink)]">{formatEuro(it.price)}</span>
-                      <div className="flex gap-px">{it.allergens.slice(0, 5).map(a => <AllergenDot key={a} id={a} />)}</div>
-                    </div>
-                  </div>
-                  <div className="relative flex-none">
-                    <motion.div layoutId={reduce || !it.available ? undefined : `dish-${it.id}`}>
-                      <Dish name={it.name} imageUrl={it.imageUrl} size={86} radius={14} />
-                    </motion.div>
-                    {!it.available ? (
-                      <span className="absolute inset-0 grid place-items-center rounded-[14px] text-[11.5px] font-bold tracking-wide text-white"
-                        style={{ background: 'rgba(42,31,26,.66)' }}>{t('soldOut')}</span>
-                    ) : orderingEnabled ? (
-                      <span className="absolute -bottom-1.5 -right-1.5 grid h-[30px] w-[30px] place-items-center rounded-full text-[var(--on-brand)]"
-                        style={{ background: 'var(--brand)', boxShadow: 'var(--sh-2)' }}>
-                        <Plus size={17} strokeWidth={2.6} />
-                      </span>
-                    ) : null}
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </section>
-        ))}
-        {!menu && !menuError && (
-          <div className="space-y-3 pt-2">
-            {[0, 1, 2, 3].map(i => <div key={i} className="skeleton h-[110px]" />)}
-          </div>
-        )}
-        {menu && sections.length === 0 && (
+      <div className="pb-2">
+        {localizedMenu && <WorkspaceMenuRenderer
+          menu={{ ...localizedMenu, sections }}
+          design={rendererDesign}
+          onOpen={openItem}
+          foodLabels={food.labels}
+          foodCatalogs={food.catalogs}
+          menus={menuChoices}
+          onSelectMenu={setMenuId}
+          languages={languages}
+          language={lang}
+          onSelectLanguage={setLang}
+          restaurantName={features?.restaurantName}
+          loading={menuLoading}
+          emptyState={
           <div className="flex min-h-[46vh] flex-col items-center justify-center gap-3 px-8 py-10 text-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/tako/tako-pasta.png" alt="" className="anim-float w-[130px]" style={{ filter: 'drop-shadow(0 16px 26px rgba(217,83,58,.18))' }} />
@@ -576,6 +486,23 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
                 {t('reset')}
               </button>
             )}
+          </div>
+          }
+          toolbar={<>
+            {serviceActions}
+            <button onClick={() => setFilterOpen(true)}
+              aria-label={`${t('filterTitle')}${excluded.size ? ` (${excluded.size})` : ''}`}
+              aria-haspopup="dialog" aria-expanded={filterOpen}
+              className="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl px-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{ background: excluded.size ? design?.primary || 'var(--brand)' : 'rgba(255,255,255,.14)', color: 'inherit', border: '1px solid currentColor' }}>
+              <Filter size={18} aria-hidden="true" />
+              {excluded.size > 0 && <span>{excluded.size}</span>}
+            </button>
+          </>}
+        />}
+        {!menu && !menuError && (
+          <div className="space-y-3 pt-2">
+            {[0, 1, 2, 3].map(i => <div key={i} className="skeleton h-[110px]" />)}
           </div>
         )}
         <div style={{ height: count > 0 ? 96 : 24 }} />
@@ -618,7 +545,7 @@ export function MenuView({ onGoCart, compact }: { onGoCart: () => void; compact?
         </div>
       )}
 
-      <ItemSheet item={selected} open={itemOpen} onClose={() => setItemOpen(false)} canOrder={orderingEnabled} />
+      <ItemSheet item={selected} open={itemOpen} onClose={() => setItemOpen(false)} canOrder={orderingEnabled} design={design||undefined} />
       <FilterSheet open={filterOpen} onClose={() => setFilterOpen(false)}
         available={availableAllergens} excluded={excluded} setExcluded={setExcluded} />
     </div>

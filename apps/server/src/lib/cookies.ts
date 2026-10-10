@@ -1,5 +1,6 @@
 // Cookie di autenticazione condivisi (HttpOnly). Centralizza nomi e opzioni così
 // staff (sessione) e cliente (JWT tavolo) restano coerenti.
+import { isWebMode, webOrigin } from './web-runtime.js'
 import type { CookieSerializeOptions } from '@fastify/cookie'
 
 export const SESSION_COOKIE = 'tako_session' // token di sessione staff (opaco)
@@ -16,7 +17,7 @@ export function authCookieOptions(maxAgeSeconds: number, path = '/'): CookieSeri
   return {
     httpOnly: true,
     sameSite: 'lax',
-    secure: cookieSecure,
+    secure: isWebMode() ? new URL(webOrigin()).protocol === 'https:' : cookieSecure,
     path,
     maxAge: maxAgeSeconds,
   }

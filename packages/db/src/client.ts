@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
+import { readFileSync } from 'node:fs'
 import * as schema from './schema/index.js'
 
 // Client Drizzle LAZY: la connessione (e quindi la lettura di DATABASE_URL) avviene
@@ -12,7 +13,11 @@ let _db: Drizzle | null = null
 function real(): Drizzle {
   if (!_db) {
     const connectionString = process.env['DATABASE_URL'] ?? 'postgresql://tako:tako@localhost:5432/takodb'
-    _db = drizzle(postgres(connectionString), { schema })
+    const caPath = process.env['DATABASE_CA_CERT_PATH']
+    const connection = caPath
+      ? postgres(connectionString, { ssl: { ca: readFileSync(caPath, 'utf8'), rejectUnauthorized: true } })
+      : postgres(connectionString)
+    _db = drizzle(connection, { schema })
   }
   return _db
 }

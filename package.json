@@ -10,11 +10,13 @@
     "db:migrate": "turbo run db:migrate --filter=@tako/db",
     "db:studio": "turbo run db:studio --filter=@tako/db",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "webapp": "node scripts/start-webapp.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "esbuild": "^0.28.1",
+    "pdfjs-dist": "6.4.299",
     "postgres": "^3.4.9",
     "puppeteer-core": "^25.1.0",
     "socket.io-client": "^4.8.1",

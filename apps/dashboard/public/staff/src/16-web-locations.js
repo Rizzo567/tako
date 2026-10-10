@@ -1,0 +1,19 @@
+function TakoLocationsBar({mobile=false}) {
+ const [locations,setLocations]=React.useState([]),[current,setCurrent]=React.useState(''),[open,setOpen]=React.useState(false),[members,setMembers]=React.useState([]),[busy,setBusy]=React.useState(false),[error,setError]=React.useState('');
+ const [name,setName]=React.useState(''),[slug,setSlug]=React.useState(''),[email,setEmail]=React.useState('');
+ const refresh=async()=>{const result=await fetch('/api/web-locations/',{credentials:'include'});if(!result.ok)throw new Error('Locali non disponibili');const response=await result.json();setLocations(response.data||response);setCurrent(response.currentId||'');};
+ React.useEffect(()=>{refresh().catch(()=>{});},[]);
+ const own=locations.find(location=>location.id===current)?.role==='owner';
+ const action=async(run)=>{setBusy(true);setError('');try{await run();}catch(exception){setError(exception.message||'Operazione non riuscita.');}finally{setBusy(false);}};
+ if(!locations.length)return null;
+ return <section aria-label="Locali" style={{flex:'none',padding:'10px 18px',borderBottom:'1px solid var(--hairline)',background:'var(--surface)',...(mobile?{position:'absolute',top:76,left:14,right:14,zIndex:21,border:'1px solid var(--hairline)',borderRadius:14,maxHeight:'calc(100vh - 190px)',overflowY:'auto'}:{})}}>
+ <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}><label>Locale <select aria-label="Locale attivo" disabled={busy} value={current} onChange={event=>{const restaurantId=event.target.value;if(window.__takoMenuLeaveGuard&&!window.__takoMenuLeaveGuard())return;action(async()=>{await TakoAPI.post('/web-locations/switch',{restaurantId});window.location.reload();});}}>{locations.map(location=><option key={location.id} value={location.id}>{location.name}</option>)}</select></label>{own&&<button type="button" disabled={busy} onClick={()=>action(async()=>{setOpen(!open);if(!open){const response=await TakoAPI.get('/web-locations/members');setMembers(response.data||response);}})}>{mobile?"Locali e accessi":"Gestisci locali e accessi"}</button>}</div>
+ {error&&<p role="alert">{error}</p>}
+ {open&&own&&<div style={{paddingTop:14,display:'grid',gap:14}}>
+ <form onSubmit={event=>{event.preventDefault();action(async()=>{await TakoAPI.post('/web-locations',{name,slug});setName('');setSlug('');await refresh();});}}><strong>Aggiungi un locale</strong><div style={{display:'flex',gap:8,flexWrap:'wrap'}}><input aria-label="Nome del locale" placeholder="Nome" required maxLength={150} value={name} onChange={event=>setName(event.target.value)}/><input aria-label="Indirizzo del locale" placeholder="nome-locale" required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={100} value={slug} onChange={event=>setSlug(event.target.value)}/><button disabled={busy}>Crea locale</button></div></form>
+ <form onSubmit={event=>{event.preventDefault();action(async()=>{await TakoAPI.post('/web-locations/members',{email,role:'menu_editor'});setEmail('');const response=await TakoAPI.get('/web-locations/members');setMembers(response.data||response);});}}><strong>Accesso editor menu</strong><p>Concedi a un account Tako esistente il permesso di gestire il menu di questo locale.</p><input aria-label="Email editor" type="email" placeholder="Email dell’account" required value={email} onChange={event=>setEmail(event.target.value)}/><button disabled={busy}>Concedi accesso</button></form>
+ {members.map(member=><div key={member.id} style={{display:'flex',gap:12,alignItems:'center'}}><span>{member.name} · {member.email} · {member.role==='menu_editor'?'Editor menu':'Titolare'}</span>{member.role==='menu_editor'&&<button disabled={busy} type="button" onClick={()=>action(async()=>{await TakoAPI.del('/web-locations/members/'+member.id);setMembers(rows=>rows.filter(row=>row.id!==member.id));})}>Revoca</button>}</div>)}
+ </div>}
+ </section>;
+}
+window.TakoLocationsBar=TakoLocationsBar;

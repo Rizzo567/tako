@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { DM_Sans, DM_Serif_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
-const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-display', weight: ['400', '500', '600', '700'] })
-const dmSansBody = DM_Sans({ subsets: ['latin'], variable: '--font-body', weight: ['400', '500', '600'] })
-const dmSerif = DM_Serif_Display({ subsets: ['latin'], variable: '--font-serif', weight: ['400'], style: ['normal', 'italic'] })
+const dmSans = localFont({src:'../fonts/DMSans.ttf',variable:'--font-display',weight:'400 700',display:'swap'})
+const dmSansBody = localFont({src:'../fonts/DMSans.ttf',variable:'--font-body',weight:'400 600',display:'swap'})
+const dmSerif = localFont({src:[{path:'../fonts/DMSerifDisplay-Regular.ttf',weight:'400',style:'normal'},{path:'../fonts/DMSerifDisplay-Italic.ttf',weight:'400',style:'italic'}],variable:'--font-serif',display:'swap'})
 
 export const metadata: Metadata = {
   title: 'Menu · Tako',

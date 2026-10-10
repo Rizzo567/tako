@@ -1,0 +1,9 @@
+import { describe,it,expect } from 'vitest'
+import { baselineLanguageConfiguration,normalizeBaselineTranslations } from '../apps/server/src/lib/menu-workspace-languages.js'
+describe('Baseline preserves configured and actual translation languages',()=>{
+ it('retains configured default and appends translated legacy languages',()=>{expect(baselineLanguageConfiguration({languages:['fr','en'],defaultLanguage:'fr'},['de','en','es'])).toEqual({languages:['fr','en','de','es'],defaultLanguage:'fr'})})
+ it('keeps valid explicit default even when absent from configured list',()=>{expect(baselineLanguageConfiguration({languages:['en'],defaultLanguage:'fr'},[])).toEqual({languages:['en','fr'],defaultLanguage:'fr'})})
+ it('normalizes casing and legacy locale keys consistently',()=>{expect(baselineLanguageConfiguration({languages:[' EN ','en_US'],defaultLanguage:'EN'},['EN_us','fr'])).toEqual({languages:['en','en-us','fr'],defaultLanguage:'en'});expect(normalizeBaselineTranslations({'EN_us':{name:'Name'}})).toEqual({'en-us':{name:'Name'}})})
+ it('uses Italian source fallback without dropping existing translations',()=>{expect(baselineLanguageConfiguration(undefined,['en','fr'])).toEqual({languages:['it','en','fr'],defaultLanguage:'it'});expect(baselineLanguageConfiguration({languages:['invalid tag','fr'],defaultLanguage:'not valid'},[]).defaultLanguage).toBe('fr')})
+ it('fails without silently deleting data when more than 30 valid languages exist',()=>{const langs=Array.from({length:31},(_,n)=>'a'+String.fromCharCode(97+n%26)+String.fromCharCode(97+Math.floor(n/26)));expect(()=>baselineLanguageConfiguration({languages:langs,defaultLanguage:langs[0]},[])).toThrow('30 lingue');expect(langs).toHaveLength(31)})
+})

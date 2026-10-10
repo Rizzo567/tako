@@ -1,0 +1,50 @@
+# Independent operational webapp; do not replace the root control-plane Blueprint.
+# yaml-language-server: $schema=https://render.com/schema/render.yaml.json
+services:
+  - type: web
+    name: tako-webapp
+    runtime: docker
+    region: frankfurt
+    plan: 1c-2g
+    numInstances: 1
+    dockerfilePath: ./deploy/render/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: "off"
+    maxShutdownDelaySeconds: 30
+    domains:
+      - app.takoitalia.com
+    renderSubdomainPolicy: disabled
+    envVars:
+      - key: TAKO_MODE
+        value: web
+      - key: TAKO_MULTI_TENANT
+        value: "1"
+      - key: TAKO_DISABLE_REGISTRATION
+        value: "1"
+      - key: NODE_ENV
+        value: production
+      - key: EMBEDDED_DB
+        value: "0"
+      - key: TAKO_HTTPS
+        value: "0"
+      - key: WEB_ORIGIN
+        value: https://app.takoitalia.com
+      - key: ALLOWED_ORIGINS
+        value: https://app.takoitalia.com
+      - key: TRUST_PROXY
+        value: 127.0.0.1,::1
+      - key: UPLOADS_DIR
+        value: /tmp/tako-upload-cache
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: UPLOADS_DRIVER
+        value: supabase
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: tako-menu-images

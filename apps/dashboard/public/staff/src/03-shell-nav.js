@@ -1,53 +1,66 @@
 /* ───────────────── Tako Dashboard — shell responsive + navigazione ───────────────── */
 
 const NAV = [
-  { group: "Operatività", items: [
-    { id: "cowork", label: "Cowork", icon: "sparkles" },
-    { id: "dashboard", label: "Dashboard", icon: "home" },
+  { group: "Tako", items: [
+    { id: "dashboard", label: "Panoramica", icon: "home" },
+  ]},
+  { group: "Servizio", items: [
+    { id: "sala", label: "Sala", icon: "map" },
     { id: "ordini", label: "Ordini", icon: "orders", badge: true },
     { id: "kds", label: "Cucina", icon: "kitchen" },
     { id: "cassa", label: "Cassa", icon: "cassa" },
-    { id: "comanda", label: "Comanda", icon: "comanda" },
-  ]},
-  { group: "Sala", items: [
-    { id: "sala", label: "Sala Live", icon: "map" },
-    { id: "tavoli", label: "Gestione Tavoli", icon: "table" },
     { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
-    { id: "dispositivi", label: "Dispositivi", icon: "qr" },
   ]},
   { group: "Gestione", items: [
     { id: "menu", label: "Menu", icon: "menu" },
-    { id: "inventario", label: "Inventario", icon: "inventory" },
-    { id: "statistiche", label: "Statistiche", icon: "stats" },
-    { id: "staff", label: "Staff", icon: "staff" },
-    { id: "turni", label: "Turni", icon: "clock" },
+    { id: "inventario", label: "Magazzino", icon: "inventory" },
+    { id: "staff", label: "Team", icon: "staff" },
+    { id: "statistiche", label: "Report", icon: "stats" },
   ]},
 ];
 
-/* accesso per ruolo (owner = tutto) */
+/* Legacy route IDs stay stable for saved routes, screen links and copilot tools. */
+const NAV_PARENT = { tavoli: "sala", turni: "staff", dispositivi: "impostazioni", qr: "impostazioni", collega: "impostazioni", insights: "statistiche" };
+const EXTRA_NAV = {
+  cowork: { id: "cowork", label: "Assistente", icon: "sparkles" },
+  comanda: { id: "comanda", label: "Nuovo ordine", icon: "comanda" },
+  chiamate: { id: "chiamate", label: "Chiamate", icon: "bell", badge: true },
+  impostazioni: { id: "impostazioni", label: "Impostazioni", icon: "settings" },
+  tavoli: { id: "tavoli", label: "Configurazione sala", icon: "table" },
+  turni: { id: "turni", label: "Turni", icon: "clock" },
+  dispositivi: { id: "dispositivi", label: "Dispositivi", icon: "qr" },
+  qr: { id: "qr", label: "QR dei tavoli", icon: "qr" },
+  collega: { id: "collega", label: "Collegamenti", icon: "settings" },
+  insights: { id: "insights", label: "Menu engineering", icon: "stats" },
+};
 const ROLE_ACCESS = {
+  menu_editor: ["menu"],
   owner: null,
-  cameriere: ["dashboard", "ordini", "sala", "tavoli", "prenotazioni", "comanda", "cassa", "menu", "turni"],
+  cameriere: ["dashboard", "ordini", "sala", "tavoli", "prenotazioni", "comanda", "chiamate", "cassa", "menu", "turni"],
   chef: ["dashboard", "kds", "ordini", "menu", "inventario", "turni"],
   cassiere: ["dashboard", "cassa", "ordini", "sala", "prenotazioni", "turni"],
 };
-/* schermata d'ingresso per ruolo */
-const ROLE_HOME = { owner: "dashboard", cameriere: "sala", chef: "kds", cassiere: "cassa" };
-/* item primari bottom-bar mobile per ruolo */
+const ROLE_HOME = { menu_editor:"menu", owner: "dashboard", cameriere: "sala", chef: "kds", cassiere: "cassa" };
 const MOBILE_PRIMARY = {
-  owner: ["dashboard", "ordini", "sala", "cassa"],
-  cameriere: ["sala", "ordini", "comanda", "cassa"],
+  menu_editor: ["menu"],
+  owner: ["dashboard", "sala", "ordini", "cassa"],
+  cameriere: ["sala", "ordini", "chiamate", "comanda"],
   chef: ["kds", "ordini", "menu", "inventario"],
   cassiere: ["cassa", "ordini", "sala", "dashboard"],
 };
-
+function canNavigate(role, id) {
+  const known = NAV.some(g => g.items.some(it => it.id === id)) || Object.hasOwn(EXTRA_NAV, id);
+  return known && Object.hasOwn(ROLE_ACCESS, role) && (ROLE_ACCESS[role] === null || ROLE_ACCESS[role].includes(id));
+}
+function safeRoute(role, id) { return canNavigate(role, id) ? id : (ROLE_HOME[role] || "dashboard"); }
+function navParent(id) { return NAV_PARENT[id] || id; }
+function navBadge(it, badges) { return (badges || {})[it.id] || 0; }
 function navAllowed(role) {
-  const allow = ROLE_ACCESS[role];
-  return NAV.map(g => ({ ...g, items: g.items.filter(it => !allow || allow.includes(it.id)) })).filter(g => g.items.length);
+  return NAV.map(g => ({ ...g, items: g.items.map(it => it.id === "staff" && !canNavigate(role, "staff") && canNavigate(role, "turni") ? { ...it, id: "turni" } : it).filter(it => canNavigate(role, it.id)) })).filter(g => g.items.length);
 }
 function findItem(id) {
   for (const g of NAV) for (const it of g.items) if (it.id === id) return it;
-  return { id, label: id, icon: "home" };
+  return EXTRA_NAV[id] || { id, label: id, icon: "home" };
 }
 
 /* ───────────────── desktop sidebar (3 riquadri) ───────────────── */
@@ -76,7 +89,7 @@ function Sidebar({ route, go, role, badges, live }) {
     return () => window.removeEventListener("tako-nav-slidein", slideIn);
   }, []);
   const NavBtn = (it) => {
-    const on = route === it.id;
+    const on = navParent(route) === navParent(it.id);
     return (
       <button key={it.id} className={"press nav-item" + (on ? " on" : "")} onClick={() => go(it.id)}
         style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "7px 11px", borderRadius: 11, marginBottom: 1,
@@ -84,8 +97,8 @@ function Sidebar({ route, go, role, badges, live }) {
           boxShadow: on ? "0 6px 16px -6px var(--brand)" : "none", transition: "background .15s" }}>
         <span className="nav-ico"><Icon name={it.icon} size={18} /></span>
         <span style={{ flex: 1, textAlign: "left" }}>{it.label}</span>
-        {it.badge && badges.ordini > 0 && (
-          <span style={{ minWidth: 19, height: 19, padding: "0 6px", borderRadius: 99, background: on ? "rgba(255,255,255,.25)" : "var(--brand)", color: "var(--on-brand)", fontSize: 11, fontWeight: 800, display: "grid", placeItems: "center" }}>{badges.ordini}</span>
+        {it.badge && navBadge(it, badges) > 0 && (
+          <span style={{ minWidth: 19, height: 19, padding: "0 6px", borderRadius: 99, background: on ? "rgba(255,255,255,.25)" : "var(--brand)", color: "var(--on-brand)", fontSize: 11, fontWeight: 800, display: "grid", placeItems: "center" }}>{navBadge(it, badges)}</span>
         )}
       </button>
     );
@@ -116,8 +129,13 @@ function Sidebar({ route, go, role, badges, live }) {
             </button>
             <div style={{ overflow: "hidden", transition: "max-height .34s var(--out), opacity .26s ease", maxHeight: isOpen ? g.items.length * 40 + 4 : 0, opacity: isOpen ? 1 : 0 }}>
               {g.items.map(NavBtn)}
+
             </div>
-            {isLast && <SidebarUser role={role} go={go} />}
+            {isLast && <>
+              {canNavigate(role, "cowork") && NavBtn(EXTRA_NAV.cowork)}
+              {canNavigate(role, "impostazioni") && NavBtn(EXTRA_NAV.impostazioni)}
+              <SidebarUser role={role} go={go} />
+            </>}
           </div>
         );
       })}
@@ -138,7 +156,7 @@ function SidebarUser({ role, go }) {
     return () => document.removeEventListener("mousedown", h);
   }, [open]);
   const items = [
-    { label: "Impostazioni", icon: "settings", onClick: () => { go("impostazioni"); setOpen(false); } },
+    ...(canNavigate(role, "impostazioni") ? [{ label: "Impostazioni", icon: "settings", onClick: () => { go("impostazioni"); setOpen(false); } }] : []),
     { label: "Notifiche", icon: "bell", onClick: () => { setNotifOpen(true); setOpen(false); } },
   ];
   return (
@@ -152,7 +170,7 @@ function SidebarUser({ role, go }) {
             </button>
           ))}
           <div style={{ height: 1, background: "var(--nav-line)", margin: "5px 8px" }} />
-          <button className="press" onClick={async () => { try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "10px 11px", borderRadius: 10, color: "#F0907F", fontSize: 14, fontWeight: 700, background: "transparent" }}>
+          <button className="press" onClick={async () => { if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return; try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "10px 11px", borderRadius: 10, color: "#F0907F", fontSize: 14, fontWeight: 700, background: "transparent" }}>
             <Icon name="logout" size={18} />Esci dall'account
           </button>
         </div>
@@ -375,21 +393,21 @@ function HomeIndicator({ dark }) {
 
 /* floating glass tab bar */
 function BottomBar({ route, go, role, badges, openDrawer, dark }) {
-  const prim = MOBILE_PRIMARY[role].map(findItem);
+  const prim = (MOBILE_PRIMARY[role] || []).filter(id => canNavigate(role, id)).map(findItem);
   const compact = useScrollDown();
   const idle = dark ? "#9B9CA4" : "var(--ink-3)";
   const glass = dark
     ? { background: "linear-gradient(160deg, rgba(62,54,48,.4), rgba(26,21,18,.26))", border: "1px solid rgba(255,255,255,.16)", boxShadow: "0 16px 42px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.06)" }
     : { background: "linear-gradient(160deg, rgba(255,255,255,.5), rgba(255,255,255,.24))", border: "1px solid rgba(255,255,255,.7)", boxShadow: "0 16px 42px rgba(42,31,26,.22), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.35)" };
   const Tab = ({ it, isMore }) => {
-    const on = !isMore && route === it.id;
+    const on = !isMore && navParent(route) === navParent(it.id);
     return (
       <button className="press bb-tab" onClick={isMore ? openDrawer : () => go(it.id)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 0 : 4, padding: compact ? "8px 0" : "9px 0 8px", color: on ? "var(--brand)" : idle, position: "relative" }}>
         <span className="nav-ico" style={{ position: "relative" }}>
           <Icon name={isMore ? "apps" : it.icon} size={compact ? 25 : 22} stroke={on ? 2.5 : 2} />
-          {!isMore && it.badge && badges.ordini > 0 && <span style={{ position: "absolute", top: -5, right: -8, minWidth: 15, height: 15, padding: "0 4px", borderRadius: 99, background: "var(--brand)", color: "var(--on-brand)", fontSize: 9.5, fontWeight: 800, display: "grid", placeItems: "center", border: dark ? "1.5px solid #1A1310" : "1.5px solid rgba(255,255,255,.95)" }}>{badges.ordini}</span>}
+          {!isMore && it.badge && navBadge(it, badges) > 0 && <span style={{ position: "absolute", top: -5, right: -8, minWidth: 15, height: 15, padding: "0 4px", borderRadius: 99, background: "var(--brand)", color: "var(--on-brand)", fontSize: 9.5, fontWeight: 800, display: "grid", placeItems: "center", border: dark ? "1.5px solid #1A1310" : "1.5px solid rgba(255,255,255,.95)" }}>{navBadge(it, badges)}</span>}
         </span>
-        <span style={{ fontSize: 10, fontWeight: on ? 700 : 600, maxHeight: compact ? 0 : 14, opacity: compact ? 0 : 1, overflow: "hidden", transition: "max-height .25s var(--out), opacity .18s" }}>{isMore ? "Altro" : it.label.split(" ")[0]}</span>
+        <span style={{ fontSize: 10, fontWeight: on ? 700 : 600, maxHeight: compact ? 0 : 14, opacity: compact ? 0 : 1, overflow: "hidden", transition: "max-height .25s var(--out), opacity .18s" }}>{isMore ? "Altro" : it.label}</span>
       </button>
     );
   };
@@ -403,8 +421,8 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
 
 /* drawer "Altro": pannello arrotondato, esclude le voci della bottom-bar */
 function MobileDrawer({ open, onClose, route, go, role, badges }) {
-  const primary = MOBILE_PRIMARY[role];
-  const groups = navAllowed(role).map(g => ({ ...g, items: g.items.filter(it => !primary.includes(it.id)) })).filter(g => g.items.length);
+  const primary = MOBILE_PRIMARY[role] || [];
+  const groups = [...navAllowed(role), { group: "Altro", items: [EXTRA_NAV.cowork, EXTRA_NAV.impostazioni].filter(it => canNavigate(role, it.id)) }].map(g => ({ ...g, items: g.items.filter(it => !primary.includes(it.id)) })).filter(g => g.items.length);
   const r = ROLES[role];
   return (
     <Overlay open={open} onClose={onClose} anchor="right">
@@ -418,11 +436,11 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
           <div key={g.group} style={{ marginBottom: 12 }}>
             <div className="mono" style={{ fontSize: 10.5, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--nav-ink-2)", padding: "6px 8px" }}>{g.group}</div>
             {g.items.map(it => {
-              const on = route === it.id;
+              const on = navParent(route) === navParent(it.id);
               return (
                 <button key={it.id} className={"press nav-item" + (on ? " on" : "")} onClick={() => { go(it.id); onClose(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px", borderRadius: 12, color: on ? "var(--on-brand)" : "var(--nav-ink)", background: on ? "var(--brand)" : "transparent", fontWeight: on ? 700 : 600, fontSize: 15 }}>
                   <span className="nav-ico"><Icon name={it.icon} size={20} /></span><span style={{ flex: 1, textAlign: "left" }}>{it.label}</span>
-                  {it.badge && badges.ordini > 0 && <span style={{ minWidth: 20, height: 20, padding: "0 6px", borderRadius: 99, background: on ? "rgba(255,255,255,.25)" : "var(--brand)", color: "var(--on-brand)", fontSize: 11.5, fontWeight: 800, display: "grid", placeItems: "center" }}>{badges.ordini}</span>}
+                  {it.badge && navBadge(it, badges) > 0 && <span style={{ minWidth: 20, height: 20, padding: "0 6px", borderRadius: 99, background: on ? "rgba(255,255,255,.25)" : "var(--brand)", color: "var(--on-brand)", fontSize: 11.5, fontWeight: 800, display: "grid", placeItems: "center" }}>{navBadge(it, badges)}</span>}
                 </button>
               );
             })}
@@ -431,12 +449,12 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
         <div style={{ marginTop: 8, padding: 12, borderTop: "1px solid var(--nav-line)", display: "flex", alignItems: "center", gap: 11 }}>
           <Avatar initials={r.initials} size={36} />
           <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{r.name}</div><div style={{ fontSize: 12, color: "var(--nav-ink-2)" }}>{r.label}</div></div>
-          <IconBtn name="settings" tone="ghost" size={36} style={{ color: "var(--nav-ink-2)" }} onClick={() => { go("impostazioni"); onClose(); }} />
-          <IconBtn name="logout" tone="ghost" size={36} style={{ color: "#F0907F" }} onClick={async () => { try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} />
+          {canNavigate(role, "impostazioni") && <IconBtn name="settings" tone="ghost" size={36} style={{ color: "var(--nav-ink-2)" }} onClick={() => { go("impostazioni"); onClose(); }} />}
+          <IconBtn name="logout" tone="ghost" size={36} style={{ color: "#F0907F" }} onClick={async () => { if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return; try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} />
         </div>
       </div>
     </Overlay>
   );
 }
 
-Object.assign(window, { NAV, ROLE_ACCESS, ROLE_HOME, MOBILE_PRIMARY, navAllowed, findItem, Sidebar, MobileHeader, BottomBar, MobileDrawer, IOSStatusBar, HomeIndicator });
+Object.assign(window, { NAV, ROLE_ACCESS, ROLE_HOME, MOBILE_PRIMARY, navAllowed, findItem, canNavigate, safeRoute, navParent, navBadge, Sidebar, MobileHeader, BottomBar, MobileDrawer, IOSStatusBar, HomeIndicator });

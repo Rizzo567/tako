@@ -1,0 +1,16 @@
+import { describe,it,expect } from 'vitest'
+import { randomUUID } from 'node:crypto'
+import { workspaceSchema,scheduleSchema } from '../apps/server/src/lib/menu-workspace-contract.js'
+import { publicWorkspace,scheduledVisible,workspaceDiff } from '../apps/server/src/lib/menu-workspace-schedule.js'
+const schedule=(windows:unknown[])=>scheduleSchema.parse({enabled:true,timezone:'Europe/Rome',windows})
+const sample=()=>workspaceSchema.parse({menus:[{id:randomUUID(),name:'Menu',sections:[{id:randomUUID(),name:'Piatti',items:[{id:randomUUID(),name:'Ravioli',price:12}]}]}]})
+describe('Menu publication contract',()=>{
+ it('rejects duplicate IDs and foreign hierarchy',()=>{const w=sample();w.menus[0]!.sections[0]!.items[0]!.id=w.menus[0]!.id;expect(workspaceSchema.safeParse(w).success).toBe(false);const v=sample();v.menus[0]!.sections[0]!.parentSectionId=randomUUID();expect(workspaceSchema.safeParse(v).success).toBe(false)})
+ it('validates timezone and enabled language',()=>{expect(scheduleSchema.safeParse({timezone:'Never/Land'}).success).toBe(false);const w=sample();w.defaultLanguage='fr';expect(workspaceSchema.safeParse(w).success).toBe(false)})
+ it('handles overnight windows across weekdays',()=>{const s=schedule([{weekdays:[5],start:'22:00',end:'02:00'}]);expect(scheduledVisible(s,new Date('2026-10-09T21:00:00Z'))).toBe(true);expect(scheduledVisible(s,new Date('2026-10-10T00:01:00Z'))).toBe(false);expect(scheduledVisible(s,new Date('2026-10-09T23:59:00Z'))).toBe(true)})
+ it('uses local wall clock in 23h and 25h DST days',()=>{const s=schedule([{weekdays:[0],start:'03:00',end:'04:00'}]);expect(scheduledVisible(s,new Date('2026-03-29T01:30:00Z'))).toBe(true);expect(scheduledVisible(s,new Date('2026-03-29T02:00:00Z'))).toBe(false);expect(scheduledVisible(s,new Date('2026-10-25T02:30:00Z'))).toBe(true)})
+ it('filters parent and child visibility without mutating draft',()=>{const w=sample();const p=w.menus[0]!.sections[0]!;p.active=false;w.menus[0]!.sections.push({...p,id:randomUUID(),parentSectionId:p.id,active:true});expect(publicWorkspace(w).menus[0]!.sections).toHaveLength(0);expect(w.menus[0]!.sections).toHaveLength(2)})
+ it('diff identifies retained IDs rather than replacement',()=>{const a=sample(),b=structuredClone(a);b.menus[0]!.sections[0]!.items[0]!.price=13;const d=workspaceDiff(a,b);expect(d.added).toEqual([]);expect(d.removed).toEqual([]);expect(d.changed).toEqual([a.menus[0]!.sections[0]!.items[0]!.id])})
+})
+it('human diff reports field before/after and preserved item label',()=>{const a=sample(),b=structuredClone(a);b.menus[0]!.sections[0]!.items[0]!.price=17;const detail=workspaceDiff(a,b).details[0]!;expect(detail.label).toBe('Ravioli');expect(detail.type).toBe('item');expect(detail.fields).toContainEqual({field:'price',label:'Prezzo',before:12,after:17})})
+it('PDF personal presets are additive defaults and validate their configs',()=>{const w=sample();expect(w.pdfPresets).toEqual([]);const valid=workspaceSchema.parse({...w,pdfPresets:[{id:randomUUID(),name:'Due colonne',config:{columns:2}}]});expect(valid.pdfPresets[0]!.config.columns).toBe(2);expect(workspaceSchema.safeParse({...w,pdfPresets:[{id:randomUUID(),name:'Bad',config:{columns:9}}]}).success).toBe(false)})

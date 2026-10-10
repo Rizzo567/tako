@@ -33,3 +33,14 @@ apps/app/.expo/
 apps/app/dist/
 apps/app/src-tauri/target/
 apps/app/src-tauri/gen/
+
+# artefatti di rilascio locali
+release/
+*.apk
+
+# Materiali privati (credenziali, chiavi, revisioni)
+materiali/
+
+# Hosted Tako credentials entered locally, never committed.
+.env.web
+.env.web.local

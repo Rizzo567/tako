@@ -34,12 +34,11 @@ packages/db/.pgdata
 .claude.bak
 .superpowers
 strategia-vendita
+materiali
 **/*.log
 .DS_Store
 Thumbs.db
 
 # Altre app non necessarie al control-plane cloud (immagine = solo apps/server + packages).
-apps/web
-apps/dashboard
 apps/app
 "Tako Dashboard App"

@@ -4,7 +4,9 @@ import { db, reservations, tables } from '@tako/db'
 import { eq, and, gte, lt, ne, asc, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
+import { enqueueReservationReminder } from '../lib/web-mail.js'
 import { io } from '../index.js'
+import { checkReservationCapacity, lockReservationCapacity, nextCalendarDay, reservationLocalInstant } from '../lib/reservation-capacity.js'
 
 const STATUSES = ['requested', 'confirmed', 'seated', 'no_show', 'cancelled'] as const
 
@@ -77,7 +79,8 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const dateStr = q.data.date ?? dayKeyInTz(new Date(), tz)
     const dayStart = dayStartInTz(dateStr, tz)
     if (isNaN(dayStart.getTime())) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Data non valida' } })
-    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
+    let dayEnd: Date
+    try { dayEnd = dayStartInTz(nextCalendarDay(dateStr), tz) } catch { return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Data non valida' } }) }
 
     const rows = await db.select().from(reservations)
       .where(and(
@@ -98,8 +101,11 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       customerName: z.string().min(1),
       customerPhone: z.string().min(1),
+      customerEmail: z.string().email().nullable().optional(),
+      reminderConsent: z.boolean().optional(),
       partySize: z.number().int().min(1),
-      startsAt: z.string().datetime({ offset: true }).or(z.string().min(1)),
+      startsAt: z.string().datetime({ offset: true }).optional(),
+      localDate: z.string().optional(), localTime: z.string().optional(),
       durationMin: z.number().int().min(15).max(600).optional(),
       tableId: z.string().uuid().nullable().optional(),
       notes: z.string().optional(),
@@ -108,7 +114,13 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    const startsAt = new Date(body.data.startsAt)
+    let startsAt: Date
+    try {
+      if (body.data.localDate || body.data.localTime) {
+        if (!body.data.localDate || !body.data.localTime || body.data.startsAt) throw new Error('Ambiguous date fields')
+        startsAt = reservationLocalInstant(body.data.localDate, body.data.localTime, await restaurantTimezone(req.user!.restaurantId))
+      } else { if (!body.data.startsAt) throw new Error('Date required'); startsAt = new Date(body.data.startsAt) }
+    } catch { return reply.code(400).send({ error: { code: 'INVALID_LOCAL_TIME', message: 'Data o ora locale non valida o ambigua.' } }) }
     if (isNaN(startsAt.getTime())) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'startsAt non valido' } })
     const durationMin = body.data.durationMin ?? 90
     const restaurantId = req.user!.restaurantId
@@ -117,6 +129,9 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       tableId: body.data.tableId ?? null,
       customerName: body.data.customerName,
       customerPhone: body.data.customerPhone,
+      customerEmail: body.data.customerEmail ?? null,
+      reminderConsent: body.data.reminderConsent ?? false,
+      reminderRevision: 1,
       partySize: body.data.partySize,
       startsAt,
       durationMin,
@@ -126,7 +141,16 @@ export async function reservationRoutes(fastify: FastifyInstance) {
 
     // Senza tavolo: nessun overbooking possibile, insert diretto.
     if (!body.data.tableId) {
-      const [row] = await db.insert(reservations).values(values).returning()
+      const result = await db.transaction(async (tx) => {
+        await lockReservationCapacity(tx, restaurantId)
+        const error = await checkReservationCapacity(tx, values)
+        if (error) return { error }
+        const [row] = await tx.insert(reservations).values(values).returning()
+        if (row) await enqueueReservationReminder(tx, row)
+      return { row }
+      })
+      if ('error' in result) return reply.code(409).send({ error: result.error })
+      const row = result.row
       io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: row!.id })
       return reply.code(201).send({ data: row })
     }
@@ -136,11 +160,16 @@ export async function reservationRoutes(fastify: FastifyInstance) {
 
     // Check-overlap + insert atomici sotto advisory lock del tavolo.
     const res = await db.transaction(async (tx) => {
+      await lockReservationCapacity(tx, restaurantId)
+      const capacityError = await checkReservationCapacity(tx, values)
+      if (capacityError) return { capacityError }
       await lockTable(tx, restaurantId, body.data.tableId!)
       if (await findOverlap(tx, restaurantId, body.data.tableId!, startsAt, durationMin)) return { clash: true as const }
       const [row] = await tx.insert(reservations).values(values).returning()
+      await enqueueReservationReminder(tx, row!)
       return { row: row! }
     })
+    if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
     if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
     io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: res.row.id })
     return reply.code(201).send({ data: res.row })
@@ -152,8 +181,11 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       customerName: z.string().min(1).optional(),
       customerPhone: z.string().min(1).optional(),
+      customerEmail: z.string().email().nullable().optional(),
+      reminderConsent: z.boolean().optional(),
       partySize: z.number().int().min(1).optional(),
-      startsAt: z.string().min(1).optional(),
+      startsAt: z.string().datetime({ offset: true }).optional(),
+      localDate: z.string().optional(), localTime: z.string().optional(),
       durationMin: z.number().int().min(15).max(600).optional(),
       tableId: z.string().uuid().nullable().optional(),
       notes: z.string().nullable().optional(),
@@ -166,15 +198,23 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).limit(1)
     if (!existing) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Prenotazione non trovata' } })
 
-    const updates: Record<string, unknown> = { updatedAt: new Date() }
+    const updates: Record<string, unknown> = { updatedAt: new Date(), reminderRevision: sql`${reservations.reminderRevision}+1` }
+    if (parsed.data.customerEmail !== undefined) updates.customerEmail = parsed.data.customerEmail
+    if (parsed.data.reminderConsent !== undefined) updates.reminderConsent = parsed.data.reminderConsent
     if (parsed.data.customerName !== undefined) updates['customerName'] = parsed.data.customerName
     if (parsed.data.customerPhone !== undefined) updates['customerPhone'] = parsed.data.customerPhone
     if (parsed.data.partySize !== undefined) updates['partySize'] = parsed.data.partySize
     if (parsed.data.notes !== undefined) updates['notes'] = parsed.data.notes
 
     let startsAt = new Date(existing.startsAt)
-    if (parsed.data.startsAt !== undefined) {
-      const d = new Date(parsed.data.startsAt)
+    if (parsed.data.startsAt !== undefined || parsed.data.localDate || parsed.data.localTime) {
+      let d: Date
+      try {
+        if (parsed.data.localDate || parsed.data.localTime) {
+          if (!parsed.data.localDate || !parsed.data.localTime || parsed.data.startsAt) throw new Error('Ambiguous date fields')
+          d = reservationLocalInstant(parsed.data.localDate, parsed.data.localTime, await restaurantTimezone(restaurantId))
+        } else d = new Date(parsed.data.startsAt!)
+      } catch { return reply.code(400).send({ error: { code: 'INVALID_LOCAL_TIME', message: 'Data o ora locale non valida o ambigua.' } }) }
       if (isNaN(d.getTime())) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'startsAt non valido' } })
       startsAt = d
       updates['startsAt'] = d
@@ -193,19 +233,32 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     // Se resta/diventa su un tavolo: check-overlap + update atomici sotto lock.
     if (tableId) {
       const res = await db.transaction(async (tx) => {
+        await lockReservationCapacity(tx, restaurantId)
+        const capacityError = await checkReservationCapacity(tx, { ...existing, startsAt, durationMin, tableId, partySize: parsed.data.partySize ?? existing.partySize, excludeId: id })
+        if (capacityError) return { capacityError }
         await lockTable(tx, restaurantId, tableId!)
         if (await findOverlap(tx, restaurantId, tableId!, startsAt, durationMin, id)) return { clash: true as const }
         const [row] = await tx.update(reservations).set(updates)
           .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
-        return { row: row! }
+        await enqueueReservationReminder(tx, row!)
+      return { row: row! }
       })
-      if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
+      if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
+    if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
       io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
       return { data: res.row }
     }
 
-    const [row] = await db.update(reservations).set(updates)
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+    const result = await db.transaction(async tx => {
+      await lockReservationCapacity(tx, restaurantId)
+      const capacityError = await checkReservationCapacity(tx, { ...existing, startsAt, durationMin, tableId, partySize: parsed.data.partySize ?? existing.partySize, excludeId: id })
+      if (capacityError) return { capacityError }
+      const [row] = await tx.update(reservations).set(updates).where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+      if (row) await enqueueReservationReminder(tx, row)
+      return { row }
+    })
+    if ('capacityError' in result) return reply.code(409).send({ error: result.capacityError })
+    const row = result.row
     io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
     return { data: row }
   })
@@ -226,19 +279,32 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     // l'anti-overbooking (nel frattempo lo slot potrebbe essere stato riassegnato).
     if (status !== 'cancelled' && existing.status === 'cancelled' && existing.tableId) {
       const res = await db.transaction(async (tx) => {
+        await lockReservationCapacity(tx, restaurantId)
+        const capacityError = await checkReservationCapacity(tx, { ...existing, status, excludeId: id })
+        if (capacityError) return { capacityError }
         await lockTable(tx, restaurantId, existing.tableId!)
         if (await findOverlap(tx, restaurantId, existing.tableId!, new Date(existing.startsAt), existing.durationMin, id)) return { clash: true as const }
-        const [row] = await tx.update(reservations).set({ status, updatedAt: new Date() })
+        const [row] = await tx.update(reservations).set({ status, updatedAt: new Date(), reminderRevision: sql`${reservations.reminderRevision}+1` })
           .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
-        return { row: row! }
+        await enqueueReservationReminder(tx, row!)
+      return { row: row! }
       })
-      if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
+      if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
+    if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
       io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
       return { data: res.row }
     }
 
-    const [row] = await db.update(reservations).set({ status, updatedAt: new Date() })
-      .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+    const result = await db.transaction(async tx => {
+      await lockReservationCapacity(tx, restaurantId)
+      const capacityError = await checkReservationCapacity(tx, { ...existing, status, excludeId: id })
+      if (capacityError) return { capacityError }
+      const [row] = await tx.update(reservations).set({ status, updatedAt: new Date(), reminderRevision: sql`${reservations.reminderRevision}+1` }).where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+      if (row) await enqueueReservationReminder(tx, row)
+      return { row }
+    })
+    if ('capacityError' in result) return reply.code(409).send({ error: result.capacityError })
+    const row = result.row
     io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
     return { data: row }
   })
@@ -265,12 +331,17 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
     const res = await db.transaction(async (tx) => {
+      await lockReservationCapacity(tx, restaurantId)
+      const capacityError = await checkReservationCapacity(tx, { ...existing, tableId: parsed.data.tableId, excludeId: id })
+      if (capacityError) return { capacityError }
       await lockTable(tx, restaurantId, parsed.data.tableId!)
       if (await findOverlap(tx, restaurantId, parsed.data.tableId!, new Date(existing.startsAt), existing.durationMin, id)) return { clash: true as const }
       const [row] = await tx.update(reservations).set({ tableId: parsed.data.tableId, updatedAt: new Date() })
         .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
+      await enqueueReservationReminder(tx, row!)
       return { row: row! }
     })
+    if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
     if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
     io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
     return { data: res.row }

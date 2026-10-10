@@ -121,7 +121,7 @@ function SetupSlot({ go, setupDone, allDone, role = "owner" }) {
             <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: s.done ? "var(--ink-3)" : "var(--ink)" }}>
               <span style={{ width: 20, height: 20, borderRadius: 99, display: "grid", placeItems: "center", background: s.done ? "var(--ok)" : "var(--ink)", color: "#fff" }}><Icon name="check" size={12} stroke={3} /></span>
               <span style={{ textDecoration: s.done ? "line-through" : "none", fontWeight: s.done ? 500 : 600 }}>{s.k}</span>
-              {!s.done && <span style={{ marginLeft: "auto" }}><Btn size="sm" kind="brand" style={{ height: 26, padding: "0 13px", fontSize: 12.5 }} onClick={() => go(s.route || "impostazioni")}>Vai</Btn></span>}
+              {!s.done && <span style={{ marginLeft: "auto" }}><Btn size="sm" kind="brand" style={{ height: 26, padding: "0 13px", fontSize: 12.5 }} onClick={() => { if(s.route === "menu" && role === "owner") window.__takoOpenMenuSetup = true; go(s.route || "impostazioni"); }}>Vai</Btn></span>}
             </div>
           ))}
         </div>
@@ -195,6 +195,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
                 <button key={id} className="press" onClick={() => go(id)} style={{ display: "flex", alignItems: "center", gap: 9, padding: "12px", borderRadius: 12, background: "var(--sunken)", fontWeight: 700, fontSize: 13.5, color: "var(--ink)" }}><Icon name={ic} size={18} />{l}</button>
               ))}
             </div>
+            {role === "owner" && <button className="press" onClick={() => { window.__takoOpenMenuSetup = true; go("menu"); }} style={{ display:"flex",alignItems:"center",gap:9,width:"100%",marginTop:9,padding:12,borderRadius:12,background:"var(--sunken)",fontWeight:700,fontSize:13.5,color:"var(--ink)" }}><Icon name="menu" size={18}/>Configura menu cliente</button>}
           </Card>
         </div>
       </div>

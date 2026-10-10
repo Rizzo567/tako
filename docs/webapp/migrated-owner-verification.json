@@ -1,0 +1,41 @@
+{
+  "migratedOwnerLogin": true,
+  "checks": [
+    {
+      "route": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "route": "/api/tables",
+      "status": 200
+    },
+    {
+      "route": "/api/menus",
+      "status": 200
+    },
+    {
+      "route": "/api/orders/active",
+      "status": 200
+    },
+    {
+      "route": "/api/bills/open",
+      "status": 200
+    },
+    {
+      "route": "/api/staff",
+      "status": 200
+    },
+    {
+      "route": "/api/inventory",
+      "status": 200
+    },
+    {
+      "route": "/api/reservations",
+      "status": 200
+    },
+    {
+      "route": "/api/tables/rooms",
+      "status": 200
+    }
+  ]
+}

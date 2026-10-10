@@ -234,6 +234,42 @@
     }
   }
 
+  // Hosted web uses the browser's speech service only after an explicit gesture.
+  // It never opens the appliance ASR socket or captures PCM for a server.
+  class TakoBrowserDictationRecorder {
+    constructor(opts) { this.opts = opts || {}; this.recording = false; this.socket = null; this.recognition = null; this.text = ""; this.ended = false; this.error = null; this._pending = null; }
+    getLevel() { return 0; } // SpeechRecognition provides no measured audio level.
+    _ensureSocket() { return null; }
+    async start() {
+      if (this.recording) return;
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) throw new Error("Questo browser non supporta la dettatura. Scrivi nel campo di testo.");
+      const recognition = new Recognition(); this.recognition = recognition;
+      this.text = ""; this.ended = false; this.error = null;
+      recognition.lang = "it-IT"; recognition.continuous = false; recognition.interimResults = false;
+      await new Promise((resolve, reject) => {
+        let started = false; this._startReject = reject;
+        recognition.onstart = () => { started = true; this._startReject = null; this.recording = true; this._maxTimer = setTimeout(() => this.opts.onSpeechEnd && this.opts.onSpeechEnd(), MAX_RECORD_MS); resolve(); };
+        recognition.onresult = event => { for (let i = event.resultIndex; i < event.results.length; i++) if (event.results[i].isFinal) this.text += (this.text ? " " : "") + event.results[i][0].transcript; };
+        recognition.onerror = event => { this.error = new Error(event.error === "not-allowed" ? "Permesso microfono negato. Abilitalo nelle impostazioni del browser oppure scrivi nel campo." : event.error === "no-speech" ? "Nessuna voce rilevata. Scrivi nel campo oppure riprova." : "Dettatura del browser non disponibile: " + event.error); if (!started) { this.recording = false; this._startReject = null; reject(this.error); } };
+        recognition.onend = () => { this.ended = true; clearTimeout(this._maxTimer); if (this._pending) { const pending = this._pending; this._pending = null; this.error ? pending.reject(this.error) : pending.resolve(this._result()); } else if (this.recording) this.opts.onSpeechEnd && this.opts.onSpeechEnd(); else if (!started) reject(this.error || new Error("Dettatura non avviata.")); };
+        try { recognition.start(); } catch (error) { reject(error); }
+      });
+    }
+    _result() { return { text: this.text.trim(), raw: this.text.trim(), asrEngine: "browser", previewOnly: true }; }
+    async stop() {
+      this.recording = false; clearTimeout(this._maxTimer);
+      if (this.ended) { if (this.error) throw this.error; return this._result(); }
+      return new Promise((resolve, reject) => { const timeout = setTimeout(() => { this.cancel(); reject(new Error("Timeout dettatura del browser.")); }, 8000); this._pending = { resolve: result => { clearTimeout(timeout); resolve(result); }, reject: error => { clearTimeout(timeout); reject(error); } }; try { this.recognition.stop(); } catch (error) { this._pending.reject(error); this._pending = null; } });
+    }
+    cancel() { this.recording = false; clearTimeout(this._maxTimer); if (this._startReject) { this._startReject(new Error("Dettatura annullata.")); this._startReject = null; } if (this.recognition) { this.recognition.onstart = null; this.recognition.onend = null; this.recognition.onresult = null; this.recognition.onerror = null; try { this.recognition.abort(); } catch (_) {} } if (this._pending) { this._pending.reject(new Error("Dettatura annullata.")); this._pending = null; } this.text = ""; }
+  }
+  let dictationRuntimePromise;
+  function dictationRuntime() {
+    if (!dictationRuntimePromise) dictationRuntimePromise = fetch("/api/system/info", { credentials: "include" }).then(response => { if (!response.ok) throw new Error("Runtime non disponibile"); return response.json(); }).then(result => { if (result.data && result.data.mode === "web") return "web"; if (result.data && typeof result.data.port === "number") return "local"; throw new Error("Runtime non riconosciuto"); });
+    return dictationRuntimePromise;
+  }
+
   function downsampleToPcm16(f32, fromRate, toRate) {
     let mono = f32;
     if (fromRate !== toRate) {
@@ -405,11 +441,14 @@
   function DictationButton({ onText, onStateChange, size }) {
     const { useState, useRef, useEffect } = React;
     const [state, setState] = useState("idle"); // idle | rec | busy
+    const [available, setAvailable] = useState(false);
+    const [availabilityMessage, setAvailabilityMessage] = useState("Verifica dettatura…");
+    const mountedRef = useRef(true);
     const recRef = useRef(null);
     const stateRef = useRef("idle");
     const px = size || 44;
 
-    const set = (s) => { stateRef.current = s; setState(s); onStateChange && onStateChange(s); };
+    const set = (s) => { stateRef.current = s; if (mountedRef.current) { setState(s); onStateChange && onStateChange(s); } };
 
     // Stop + trascrizione: unico flusso per stop manuale (click/Cmd+K) e
     // auto-stop su silenzio (endpointing).
@@ -419,7 +458,7 @@
       set("busy");
       try {
         const r = await rec.stop();
-        if (r && r.text) onText && onText(r.text, r);
+        if (mountedRef.current && r && r.text) onText && onText(r.text, r);
         else window.toast && window.toast("Non ti ho sentito: parla più vicino al microfono e riprova.", "error");
       } catch (e) {
         reportClientError(rec, "stop", e);
@@ -457,7 +496,13 @@
     // niente falso "sessione scaduta" per chi detta una frase breve subito.
     // Deps [] OBBLIGATORIE (vedi bug useEffter-cleanup a ogni render).
     useEffect(() => {
-      const rec = new TakoDictationRecorder({
+      mountedRef.current = true;
+      let rec = null;
+      dictationRuntime().then(mode => {
+      if (!mountedRef.current) return;
+      if (mode === "web" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) { setAvailabilityMessage("Dettatura non supportata da questo browser: scrivi nel campo di testo."); return; }
+      const Recorder = mode === "web" ? TakoBrowserDictationRecorder : TakoDictationRecorder;
+      rec = new Recorder({
         onSpeechEnd: () => stopAndTranscribe(),
         onNoSpeech: () => {
           if (recRef.current && stateRef.current === "rec") {
@@ -469,11 +514,14 @@
       recRef.current = rec;
       window.__takoDictRec = rec;                 // condiviso con la waveform del copilot
       try { rec._ensureSocket(); } catch (_) {}   // pre-connessione (auth in anticipo)
+      setAvailable(true); setAvailabilityMessage(mode === "web" ? "Detta con il browser · rivedi il testo prima di inviare" : "Detta (Cmd+K)");
       window.takoDictationToggle = toggle;
+      }).catch(() => { if (mountedRef.current) setAvailabilityMessage("Dettatura non disponibile: scrivi nel campo di testo."); });
       return () => {
+        mountedRef.current = false;
         if (window.takoDictationToggle === toggle) delete window.takoDictationToggle;
-        if (rec.recording) rec.cancel();
-        try { rec.socket && rec.socket.close(); } catch (_) {}
+        if (rec) rec.cancel();
+        try { rec && rec.socket && rec.socket.close(); } catch (_) {}
         if (window.__takoDictRec === rec) delete window.__takoDictRec;
       };
     }, []);
@@ -488,15 +536,16 @@
     const bg = state === "rec" ? "#E5484D" : "var(--surface2,#F4EFE8)";
     const fg = state === "rec" ? "#fff" : "#2A1F1A";
     const title = state === "rec" ? "Ferma e trascrivi · Esc per annullare"
-      : state === "busy" ? "Trascrizione in corso…" : "Detta (Cmd+K)";
+      : state === "busy" ? "Trascrizione in corso…" : availabilityMessage;
     return React.createElement("button", {
       onClick: toggle,
+      disabled: !available,
       title: title,
       "aria-label": "Dettatura vocale",
       "aria-busy": state === "busy",
       style: {
         width: px, height: px, minWidth: px, borderRadius: "50%", border: "1px solid var(--hairline,#E5DDD3)",
-        background: bg, color: fg, cursor: state === "busy" ? "wait" : "pointer",
+        background: bg, color: fg, cursor: !available ? "not-allowed" : state === "busy" ? "wait" : "pointer", opacity: available ? 1 : 0.45,
         display: "inline-flex", alignItems: "center", justifyContent: "center",
         animation: state === "rec" ? "takoDictPulse 1.2s ease-in-out infinite" : "none",
         transition: "background .15s",
@@ -528,6 +577,7 @@
     document.head.appendChild(st);
   }
 
+  window.TakoBrowserDictationRecorder = TakoBrowserDictationRecorder;
   window.TakoDictationRecorder = TakoDictationRecorder;
   window.DictationButton = DictationButton;
   window.TakoDictationWave = TakoDictationWave;

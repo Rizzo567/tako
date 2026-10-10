@@ -1,6 +1,7 @@
 // Indirizzi LAN del device host: servono per dire ai tablet/telefoni a quale
 // URL collegarsi (schermata "collega dispositivi" dell'onboarding).
 import { networkInterfaces } from 'os'
+import { isWebMode, webOrigin } from './web-runtime.js'
 import { tunnelHostname } from './tunnel.js'
 
 /** IPv4 non-loopback delle interfacce attive (es. WiFi del ristorante). */
@@ -61,6 +62,7 @@ export function mdnsHost(): string {
  * l'appliance non è ancora accoppiata al cloud. Override esplicito via CLIENT_BASE_URL.
  */
 export function clientBaseUrl(): string {
+  if (isWebMode()) return webOrigin()
   const override = process.env['CLIENT_BASE_URL']?.trim()
   if (override) return override.replace(/\/+$/, '')
   const ip = primaryLanIPv4() ?? 'localhost'
@@ -92,6 +94,7 @@ function tablePath(localRestaurantId: string, qrToken: string): string {
  */
 export function stableTableUrl(applianceId: string | null, localRestaurantId: string, qrToken: string): string {
   const path = tablePath(localRestaurantId, qrToken)
+  if (isWebMode()) return `${webOrigin()}/${path}`
   if (applianceId) return `${publicBaseUrl()}/t/${applianceId}/${path}`
   return `${clientBaseUrl()}/${path}`
 }
@@ -102,6 +105,7 @@ export function stableTableUrl(applianceId: string | null, localRestaurantId: st
  * per garantire l'accesso offline-first quando il control-plane è giù ma il cliente è in WiFi.
  */
 export function lanTableUrl(localRestaurantId: string, qrToken: string): string {
+  if (isWebMode()) return `${webOrigin()}/${tablePath(localRestaurantId, qrToken)}`
   return `http://${mdnsHost()}:${clientPort()}/${tablePath(localRestaurantId, qrToken)}`
 }
 
@@ -160,6 +164,7 @@ export function remoteHost(): string | null {
  * sblocca service worker, Web Push e getUserMedia fuori dalla LAN. null se non configurato.
  */
 export function remoteBaseUrl(): string | null {
+  if (isWebMode()) return webOrigin()
   const h = remoteHost()
   return h ? `https://${h}` : null
 }
@@ -169,6 +174,7 @@ export function remoteBaseUrl(): string | null {
  * endpoint provato dall'app owner. Usa il nome mDNS, stabile ai cambi di IP.
  */
 export function lanBaseUrl(): string {
+  if (isWebMode()) return webOrigin()
   const port = Number(process.env['PORT'] ?? 3001)
   return `http://${mdnsHost()}:${port}`
 }

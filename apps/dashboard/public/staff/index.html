@@ -11,6 +11,7 @@
 #boot button{margin-top:8px;padding:10px 18px;border:none;border-radius:11px;background:#ED7159;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
 @keyframes spin{to{transform:rotate(360deg)}}</style>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="src/menu-workspace.css">
 </head>
 <body>
 <!-- Primo paint visibile: mai schermo bianco. #boot vive DENTRO #stage così
@@ -28,7 +29,7 @@
     boot.innerHTML =
       '<b>Tako non si è avviato</b>' +
       '<small>' + (msg || '') + '</small>' +
-      '<small>Avvia con <code>pnpm tako</code> e apri <b>http://localhost:4317</b> (o <b>http://tako.local:4317</b> dai dispositivi).</small>' +
+      '<small>Controlla la connessione e ricarica la pagina. Se il problema continua, contatta l’assistenza Tako.</small>' +
       '<button onclick="location.reload()">Ricarica</button>'
   }
   // Errori di caricamento/compilazione (es. SyntaxError Babel, script mancante):
@@ -58,6 +59,12 @@
 <script type="text/babel" src="src/10-shifts.js"></script>
 <script type="text/babel" src="src/11-copilot.js"></script>
 <script type="text/babel" src="src/12-pin-login.js"></script>
+<script type="text/babel" src="src/14-menu-print.js"></script>
+<script type="text/babel" src="src/15-menu-gallery-history.js"></script>
+<script type="text/babel" src="src/17-menu-import-translate.js"></script>
+<script type="text/babel" src="src/13-menu-workspace.js"></script>
+<script type="text/babel" src="src/16-web-locations.js"></script>
+<script type="text/babel" src="src/18-menu-metrics.js"></script>
 <script type="text/babel" src="src/07-app-root.js"></script>
 </body>
 </html>

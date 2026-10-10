@@ -438,7 +438,7 @@ Styling AI di una foto piatto (best-effort: se fallisce si tiene l'originale).
   restaurantId (non copiabile) e verificato ad ogni generazione. Codice letto da
   `settings.aiPhotoProCode` (dashboard → Impostazioni → Funzionalità → "Codice Pro").
   Generazione (solo Manuel): `scripts/tako-pro-code.mjs <restaurantId>`, chiave privata da
-  `TAKO_PRO_PRIVATE_KEY` o `~/Documents/brain/tako-pro-private-key.txt`.
+  `TAKO_PRO_PRIVATE_KEY` o `~/Documents/Certificati/altro/tako-pro-private-key.txt`.
 - **Immagine di riferimento per-locale**: `<UPLOADS_DIR>/<restaurantId>/_style_ref.jpg`
   (`:80-82`). Impostata via WhatsApp (foto con caption `riferimento`/`stile`/`ref` →
   `setStyleRef`). Usata solo se Pro attivo (flash è un semplice editor, ignora/copia la

@@ -16,6 +16,7 @@
 // il pollice.
 
 import * as Linking from 'expo-linking'
+import { router } from 'expo-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   BackHandler,
@@ -38,6 +39,8 @@ import {
   saveConfig,
   type StoredConfig,
 } from '../src/endpoint'
+import { setNativeBoot, webImportDisabled } from '../src/native/bootstrap'
+import { enrollNative, isSession, loadNativeSession, saveNativeSession, type Session } from '../src/native/session'
 import { T } from '../src/theme'
 
 /** Percorso della PWA owner sull'appliance (registrato in `apps/server/src/index.ts`). */
@@ -92,6 +95,27 @@ const LEARN_ENDPOINTS_JS = `(function () {
   true;
 })();`
 
+// Ponte di sessione (F8.2): la sessione che la PWA tiene in localStorage viene
+// rilanciata al guscio — sia quella già presente, sia quella scritta da un enroll
+// fatto DENTRO la WebView. Il nativo la importa e prende il comando: è così che
+// un telefono già arruolato via QR passa alle tab RN senza rifare nulla.
+const SESSION_BRIDGE_JS = `(function () {
+  try {
+    var KEY = 'tako.owner.session';
+    var send = function (raw) {
+      if (!raw) return;
+      try { window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'session', value: JSON.parse(raw) })); } catch (e) {}
+    };
+    send(localStorage.getItem(KEY));
+    if (!window.__takoSessionHook) {
+      window.__takoSessionHook = true;
+      var orig = localStorage.setItem.bind(localStorage);
+      localStorage.setItem = function (k, v) { orig(k, v); if (k === KEY) send(v); };
+    }
+  } catch (e) {}
+  true;
+})();`
+
 export default function Index() {
   const [phase, setPhase] = useState<Phase>({ name: 'boot' })
   const [cfg, setCfg] = useState<StoredConfig>({ manual: null, remote: null })
@@ -105,6 +129,20 @@ export default function Index() {
   const deepLink = Linking.useURL()
   const enrollCode = enrollFromDeepLink(deepLink)
 
+  // ─────────────── Takeover nativo (F8.2) ───────────────
+  //
+  // Dal port nativo la WebView è il ripiego, non la destinazione: se il telefono
+  // ha una sessione nativa (o la importa da quella della WebView, vedi il ponte
+  // in onMessage) si va alle tab RN. La WebView resta per chi non è ancora
+  // arruolato e per le schermate non ancora portate.
+  const goNative = useCallback(async (base: string, session?: Session): Promise<boolean> => {
+    const s = session ?? (await loadNativeSession())
+    if (!s) return false
+    setNativeBoot({ session: s, base })
+    router.replace('/(tabs)/oggi')
+    return true
+  }, [])
+
   // ─────────────── Risoluzione dell'endpoint ───────────────
 
   const resolve = useCallback(async () => {
@@ -113,14 +151,17 @@ export default function Index() {
     // una decisione di chi costruisce la build: si rispetta senza sondare nulla.
     const override = configuredOverride()
     if (override) {
+      if (await goNative(override)) return
       setPhase({ name: 'web', base: override })
       return
     }
     const loaded = await loadConfig()
     setCfg(loaded)
     const found = await resolveEndpoint(loaded)
-    if (found) setPhase({ name: 'web', base: found.baseUrl })
-    else {
+    if (found) {
+      if (await goNative(found.baseUrl)) return
+      setPhase({ name: 'web', base: found.baseUrl })
+    } else {
       setPhase({
         name: 'connect',
         error: loaded.manual
@@ -128,7 +169,7 @@ export default function Index() {
           : null,
       })
     }
-  }, [])
+  }, [goNative])
 
   useEffect(() => {
     void resolve()
@@ -152,16 +193,23 @@ export default function Index() {
   // ricaricare la pagina a ogni cambio di stato (e con essa la sessione in corso).
   const source = useMemo(() => ({ uri: startUrl }), [startUrl])
 
-  // Il codice di arruolamento NON entra nella `source`: cambiare solo il fragment
-  // di un URL già caricato è una navigazione interna al documento, la pagina non
-  // si rimonta e `takeEnrollCodeFromUrl()` — che gira in un effect al mount — non
-  // scatterebbe mai. Si scrive il fragment e si RICARICA, che è l'unico modo per
-  // far ripartire la PWA con il codice in mano.
+  // Codice di arruolamento dal deep link: dal port nativo lo riscatta il GUSCIO
+  // (POST /device/enroll) e si va dritti alle tab RN. La vecchia via — scrivere
+  // il fragment nella WebView e ricaricare — resta come ripiego se il riscatto
+  // nativo fallisce (codice consumato/scaduto): la PWA sa mostrare quell'errore.
   useEffect(() => {
     if (!enrollCode || phase.name !== 'web') return
-    const hash = JSON.stringify(`#enroll=${encodeURIComponent(enrollCode)}`)
-    webRef.current?.injectJavaScript(`(function(){ location.hash = ${hash}; location.reload(); })(); true;`)
-  }, [enrollCode, phase.name])
+    const base = phase.base
+    void (async () => {
+      try {
+        const s = await enrollNative(base, enrollCode)
+        await goNative(base, s)
+      } catch {
+        const hash = JSON.stringify(`#enroll=${encodeURIComponent(enrollCode)}`)
+        webRef.current?.injectJavaScript(`(function(){ location.hash = ${hash}; location.reload(); })(); true;`)
+      }
+    })()
+  }, [enrollCode, phase, goNative])
 
   // Le safe area cambiano con la rotazione e all'apertura della tastiera: la pagina
   // va riallineata subito, non al prossimo caricamento.
@@ -194,13 +242,23 @@ export default function Index() {
   const onMessage = useCallback((e: WebViewMessageEvent) => {
     try {
       const msg = JSON.parse(e.nativeEvent.data) as { type?: string; value?: unknown }
-      if (msg?.type !== 'endpoints') return
-      const learned = parseLearnedEndpoints(msg.value)
-      if (learned?.remote) void saveConfig({ remote: learned.remote }).then(setCfg)
+      if (msg?.type === 'endpoints') {
+        const learned = parseLearnedEndpoints(msg.value)
+        if (learned?.remote) void saveConfig({ remote: learned.remote }).then(setCfg)
+        return
+      }
+      // Ponte di sessione: la WebView ha (o ha appena ottenuto) una sessione →
+      // il nativo la importa e prende il comando. Disattivato dopo un logout
+      // nativo, o il ristoratore rimbalzerebbe dentro l'app appena lasciata.
+      if (msg?.type === 'session' && phase.name === 'web' && !webImportDisabled() && isSession(msg.value)) {
+        const s = msg.value
+        const base = phase.base
+        void saveNativeSession(s).then(() => goNative(base, s))
+      }
     } catch {
       /* la pagina può postare messaggi suoi: quelli non nostri si ignorano */
     }
-  }, [])
+  }, [phase, goNative])
 
   // ─────────────── Render ───────────────
 
@@ -250,8 +308,8 @@ export default function Index() {
       domStorageEnabled
       // Endpoint imparati dalla PWA → AsyncStorage del guscio. Le safe area viaggiano
       // insieme: devono valere già al primo paint, o l'header nasce sotto l'isola.
-      injectedJavaScript={`${insetsScript}${LEARN_ENDPOINTS_JS}`}
-      injectedJavaScriptBeforeContentLoaded={`${insetsScript}${LEARN_ENDPOINTS_JS}`}
+      injectedJavaScript={`${insetsScript}${LEARN_ENDPOINTS_JS}${SESSION_BRIDGE_JS}`}
+      injectedJavaScriptBeforeContentLoaded={`${insetsScript}${LEARN_ENDPOINTS_JS}${SESSION_BRIDGE_JS}`}
       onMessage={onMessage}
       // Errori di rete sul documento principale: si torna alla schermata nativa.
       // Il codice -999 di WebKit è la richiesta ANNULLATA (una navigazione ne ha

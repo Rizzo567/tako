@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Genera un CODICE PRO (Ed25519) per sbloccare Nano Banana Pro su un ristorante.
 // SOLO Manuel: firma il restaurantId con la chiave PRIVATA segreta (fuori dal repo:
-// ~/Documents/brain/tako-pro-private-key.txt). Il codice va incollato dal ristoratore in
+// ~/Documents/Certificati/altro/tako-pro-private-key.txt). Il codice va incollato dal ristoratore in
 // Impostazioni → Funzionalità → "Codice Pro". Vale SOLO per quel restaurantId.
 //
 // Uso:  node scripts/tako-pro-code.mjs <restaurantId>
@@ -13,7 +13,7 @@ import { join } from 'node:path'
 const rid = process.argv[2]
 if (!rid) { console.error('Uso: node scripts/tako-pro-code.mjs <restaurantId>'); process.exit(1) }
 
-const keyPath = process.env.TAKO_PRO_PRIVATE_KEY ?? join(homedir(), 'Documents', 'brain', 'tako-pro-private-key.txt')
+const keyPath = process.env.TAKO_PRO_PRIVATE_KEY ?? join(homedir(), 'Documents', 'Certificati', 'altro', 'tako-pro-private-key.txt')
 let privB64
 try { privB64 = readFileSync(keyPath, 'utf8').trim() }
 catch { console.error('Chiave privata non trovata:', keyPath); process.exit(1) }

@@ -16,6 +16,9 @@ import { warmupAsr } from './lib/asr.js'
 import { authRoutes } from './routes/auth.js'
 import { setupRoutes, startHeartbeatLoop } from './routes/setup.js'
 import { restaurantRoutes } from './routes/restaurants.js'
+import { webLocationRoutes } from './routes/web-locations.js'
+import { menuWorkspaceRoutes } from './routes/menu-workspace.js'
+import { webAccountRoutes } from './routes/web-accounts.js'
 import { menuRoutes } from './routes/menu.js'
 import { tableRoutes } from './routes/tables.js'
 import { orderRoutes } from './routes/orders.js'
@@ -44,6 +47,9 @@ import { getLanIPv4s, remoteHost } from './lib/network.js'
 import { httpsEnabled, ensureTlsMaterial } from './lib/tls.js'
 import { isCloudMode } from './cloud/config.js'
 import { startCloudServer } from './cloud/server.js'
+import { remoteStorageEnabled } from './lib/remote-image-store.js'
+import { remoteImageRoutes } from './routes/remote-images.js'
+import { isWebMode, validateWebRuntime, webOrigin, webRequestAllowed, registerAppliancePlugin, webUnavailable, webServerHost, webSocketOrigin } from './lib/web-runtime.js'
 import { stopEmbeddedDb } from '@tako/db/embedded'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
@@ -61,6 +67,9 @@ export async function startServer(): Promise<void> {
     return
   }
 
+  validateWebRuntime()
+  const hosted = isWebMode()
+  const publicOrigin = hosted ? webOrigin() : null
   const PORT = Number(process.env['PORT'] ?? 3001)
   const JWT_SECRET = process.env['JWT_SECRET']
   if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
@@ -74,8 +83,11 @@ export async function startServer(): Promise<void> {
   // "secure context" e sblocca getUserMedia (dettatura vocale). Cert self-signed locale
   // generato/persistito in ~/.tako/tls (vedi lib/tls.ts). Default OFF → dev e i test di
   // integrazione continuano su http://localhost:3001 invariati. Porta e resto identici.
-  let useHttps = httpsEnabled()
-  const fastifyOptions: FastifyServerOptions = { logger: { level: 'error' } }
+  let useHttps = !hosted && httpsEnabled()
+  const fastifyOptions: FastifyServerOptions = {
+    logger: { level: 'error' },
+    ...(hosted && process.env['TRUST_PROXY'] ? { trustProxy: process.env['TRUST_PROXY'].split(',').map(value => value.trim()).filter(Boolean) } : {}),
+  }
   if (useHttps) {
     // `https` è passato a node https.createServer (key/cert Buffer). Lo attacchiamo via
     // cast: il tipo restituito resta l'istanza http di default → tutte le .register/.get
@@ -138,6 +150,7 @@ export async function startServer(): Promise<void> {
   // Override opzionale per reverse-proxy/dominio fisso: CORS_ORIGINS=https://a.com,https://b.com
   const corsAllowlist = (process.env['CORS_ORIGINS'] ?? '').split(',').map(s => s.trim()).filter(Boolean)
   const resolveCorsOrigin = (origin?: string): boolean => {
+    if (hosted) return !origin || origin === publicOrigin
     if (corsAllowlist.length && origin && corsAllowlist.includes(origin)) return true
     return isAllowedOrigin(origin)
   }
@@ -151,11 +164,12 @@ await fastify.register(helmet, {
     useDefaults: false,
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      scriptSrc: hosted ? ["'self'"] : ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'blob:'],
       fontSrc: ["'self'", 'data:'],
-      connectSrc: ["'self'", 'ws:', 'wss:', 'http:', 'https:'],
+      connectSrc: hosted ? ["'self'", webSocketOrigin()] : ["'self'", 'ws:', 'wss:', 'http:', 'https:'],
+      frameSrc: ["'self'"],
       frameAncestors: ["'none'"],
       baseUri: ["'self'"],
     },
@@ -174,7 +188,8 @@ await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
 
 const UPLOADS_DIR = resolve(process.env['UPLOADS_DIR'] ?? './uploads')
 mkdirSync(UPLOADS_DIR, { recursive: true })
-await fastify.register(fastifyStatic, { root: UPLOADS_DIR, prefix: '/uploads/', decorateReply: false })
+if (remoteStorageEnabled()) await fastify.register(remoteImageRoutes)
+else await fastify.register(fastifyStatic, { root: UPLOADS_DIR, prefix: '/uploads/', decorateReply: false })
 
 // Dashboard staff statica servita DALLO STESSO server. Same-origin: /api, /socket.io
 // e /uploads sono sullo stesso host → niente reverse-proxy/rewrite Next. Nel bundle
@@ -229,7 +244,7 @@ await fastify.register(rateLimit, {
   // chiave per-client un solo telefono esaurirebbe il budget di tutti (e in dev il
   // loopback sarebbe perfino esentato). rateLimitKey usa CF-Connecting-IP SOLO sulle
   // richieste su Host fidato; per la LAN resta req.ip, identico a prima.
-  keyGenerator: (req) => rateLimitKey(req),
+  keyGenerator: (req) => hosted ? req.ip : rateLimitKey(req),
   // L'esenzione del loopback resta valida solo per la LAN in dev. Il traffico che arriva
   // sull'Host pubblico NON è mai esentato, anche se cloudflared lo consegna da 127.0.0.1:
   // altrimenti il tunnel sarebbe l'unico canale senza rate limit.
@@ -252,7 +267,20 @@ await fastify.register(rateLimit, {
 // sessione viva riceve 404, e /staff, /api/setup, /internal, /api/auth/pin-roster e
 // /api/whatsapp/bootstrap-code restano LAN-only anche con una sessione valida.
 // Sul traffico LAN è un no-op: il comportamento del server non cambia di una virgola.
-fastify.addHook('onRequest', remoteGate)
+if (hosted) {
+  fastify.addHook('onRequest', async (request, reply) => {
+    // No process shutdown, appliance pairing, local ASR, LAN printing or global
+    // Baileys credentials exposed on the hosted service.
+    const path = request.url.split('?')[0]!
+    const unavailable = ['/internal', '/api/setup', '/api/print', '/api/whatsapp', '/api/auth/pin-roster', '/api/auth/pin-login']
+    if (unavailable.some(prefix => path === prefix || path.startsWith(prefix + '/'))) {
+      return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Funzione non disponibile nel servizio web.' } })
+    }
+    if (!webRequestAllowed(request.method, request.headers.origin, publicOrigin!)) {
+      return reply.code(403).send({ error: { code: 'ORIGIN_REJECTED', message: 'Origine della richiesta non autorizzata.' } })
+    }
+  })
+} else fastify.addHook('onRequest', remoteGate)
 
 // Health check
 fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString() }))
@@ -261,6 +289,7 @@ fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString()
 // l'appliance. L'AUTH è il solo token via header x-tako-shutdown-token (nessuna auth
 // utente). Disabilitata del tutto se TAKO_SHUTDOWN_TOKEN non è settata (→ 404).
 fastify.post('/internal/shutdown', async (request, reply) => {
+  if (hosted) return webUnavailable(reply)
   const token = process.env['TAKO_SHUTDOWN_TOKEN']
   if (!token) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Not found' } })
   if (request.headers['x-tako-shutdown-token'] !== token) {
@@ -279,9 +308,14 @@ fastify.post('/internal/shutdown', async (request, reply) => {
 // Routes
 await fastify.register(authRoutes, { prefix: '/api/auth' })
 // Pairing appliance↔cloud (claim + credenziale owner offline). Solo modo local.
-await fastify.register(setupRoutes, { prefix: '/api/setup' })
+if (!hosted) await fastify.register(setupRoutes, { prefix: '/api/setup' })
 await fastify.register(restaurantRoutes, { prefix: '/api/restaurants' })
 await fastify.register(menuRoutes, { prefix: '/api/menus' })
+if (hosted) {
+  await fastify.register(menuWorkspaceRoutes, { prefix: '/api/menu-workspace' })
+  await fastify.register(webAccountRoutes, { prefix: '/api/web-accounts' })
+  await fastify.register(webLocationRoutes, { prefix: '/api/web-locations' })
+}
 await fastify.register(tableRoutes, { prefix: '/api/tables' })
 await fastify.register(orderRoutes, { prefix: '/api/orders' })
 await fastify.register(billRoutes, { prefix: '/api/bills' })
@@ -291,13 +325,13 @@ await fastify.register(customerRoutes, { prefix: '/api/customer' })
 await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
 await fastify.register(staffRoutes, { prefix: '/api/staff' })
 await fastify.register(insightsRoutes, { prefix: '/api/insights' })
-await fastify.register(printRoutes, { prefix: '/api/print' })
+await registerAppliancePlugin(fastify, printRoutes, '/api/print')
 await fastify.register(systemRoutes, { prefix: '/api/system' })
 await fastify.register(reservationRoutes, { prefix: '/api/reservations' })
 await fastify.register(shiftRoutes, { prefix: '/api/shifts' })
 await fastify.register(menuI18nRoutes, { prefix: '/api/customer' })
 await fastify.register(aiOwnerRoutes, { prefix: '/api/ai/owner' })
-await fastify.register(whatsappRoutes, { prefix: '/api/whatsapp' })
+await registerAppliancePlugin(fastify, whatsappRoutes, '/api/whatsapp')
 await fastify.register(pushRoutes, { prefix: '/api/push' })
 
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
@@ -314,17 +348,21 @@ await fastify.ready()
     // SOTTO Fastify: le sue richieste non passano dagli hook onRequest, quindi senza
     // questo l'hostname pubblico esporrebbe comunque un WebSocket anonimo. In LAN è un
     // no-op. Vedi middleware/remoteGate.ts.
-    allowRequest: socketAllowRequest,
+    allowRequest: hosted
+      ? (request, cb) => cb(null, request.headers.origin === publicOrigin)
+      : socketAllowRequest,
   })
   setupSocketHandlers(io, fastify)
   // Dettatura vocale (Cmd+K): namespace dedicato + warmup del motore locale
   // in background (il primo uso non paga il cold start del modello).
-  setupDictationNamespace(io)
-  warmupAsr()
+  if (!hosted) {
+    setupDictationNamespace(io)
+    warmupAsr()
+  }
 
   // Canale WhatsApp (opt-in): parte solo se già abilitato in config o via TAKO_WHATSAPP=1.
   // In try/catch — se Baileys esplode NON deve tirare giù il server (è un extra, non il core).
-  try {
+  if (!hosted) try {
     const { readFileSync } = await import('node:fs')
     const { join } = await import('node:path')
     const { homedir } = await import('node:os')
@@ -335,7 +373,7 @@ await fastify.ready()
         waEnabled = JSON.parse(readFileSync(cfgPath, 'utf8'))?.enabled === true
       } catch { /* config assente → resta OFF */ }
     }
-    if (waEnabled) {
+    if (waEnabled && !hosted) {
       startWhatsApp().catch(err => console.error('[whatsapp] avvio automatico fallito:', err))
     }
   } catch (err) {
@@ -343,28 +381,29 @@ await fastify.ready()
   }
 
   try {
-    await fastify.listen({ port: PORT, host: '0.0.0.0' })
+    const serverHost = hosted ? webServerHost() : '0.0.0.0'
+    await fastify.listen({ port: PORT, host: serverHost })
     const scheme = useHttps ? 'https' : 'http'
-    console.log(`Tako server running on ${scheme}://0.0.0.0:${PORT}`)
+    console.log(`Tako server running on ${scheme}://${serverHost}:${PORT}`)
     if (useHttps) console.log(`[tls] HTTPS attivo (cert self-signed) → apri https://tako.local:${PORT}`)
     // Annuncia tako.local sulla LAN (best-effort): i dispositivi si collegano senza IP.
-    startMdns()
+    if (!hosted) startMdns()
     // Cloudflare Tunnel (opt-in, best-effort): pubblica l'appliance su un hostname HTTPS
     // per l'app owner fuori dal locale. In try/catch e con .catch() — se cloudflared manca
     // o esplode NON deve tirare giù il server (stesso trattamento del canale WhatsApp).
     try {
-      startTunnel().catch(err => console.error('[tunnel] avvio automatico fallito:', err))
+      if (!hosted) startTunnel().catch(err => console.error('[tunnel] avvio automatico fallito:', err))
     } catch (err) {
       console.error('[tunnel] bootstrap saltato:', err)
     }
     // Heartbeat periodica verso il cloud (best-effort, no-op se CLOUD_BASE_URL assente).
-    startHeartbeatLoop(fastify)
+    if (!hosted) startHeartbeatLoop(fastify)
     // Monitor connettività internet: stato online/offline → badge dashboard/PWA + fast-fail
     // delle funzioni internet. Non tocca il core (che gira comunque in locale).
     startConnectivityMonitor()
     onConnectivityChange((online) => { try { io?.emit('connectivity', { online }) } catch { /* noop */ } })
     // Diagnosi rete LAN all'avvio (best-effort): avvisa nei log se la rete è instabile/debole.
-    void getNetworkHealth().then(h => { if (h.status === 'instabile' || h.status === 'debole') console.warn(`[net-health] ${h.status}: ${h.message}`) }).catch(() => { /* noop */ })
+    if (!hosted) void getNetworkHealth().then(h => { if (h.status === 'instabile' || h.status === 'debole') console.warn(`[net-health] ${h.status}: ${h.message}`) }).catch(() => { /* noop */ })
   } catch (err) {
     console.error(err)
     process.exit(1)

@@ -1,3 +1,7 @@
+import {foodCatalogs} from '../lib/menu-workspace-catalogs.js'
+import {recordMenuEvent} from './menu-workspace.js'
+import { publishedMenu, publicMenuProjection } from '../lib/published-menu.js'
+import { checkReservationCapacity, lockReservationCapacity, reservationLocalInstant } from '../lib/reservation-capacity.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { randomUUID } from 'node:crypto'
@@ -209,6 +213,8 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const schema = z.object({
       customerName: z.string().min(1).max(120),
       customerPhone: z.string().min(3).max(40),
+      customerEmail: z.string().email().max(254).optional(),
+      reminderConsent: z.boolean().default(false),
       partySize: z.number().int().min(1).max(60),
       date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
       time: z.string().regex(/^\d{1,2}:\d{2}$/),
@@ -221,26 +227,54 @@ export async function customerRoutes(fastify: FastifyInstance) {
     if (!restaurant || !restaurant.active || ((restaurant.settings as any)?.reservationsEnabled ?? false) !== true) {
       return reply.code(404).send({ error: { code: 'NOT_AVAILABLE', message: 'Le prenotazioni online non sono attive per questo ristorante.' } })
     }
-    const { customerName, customerPhone, partySize, date, time, notes } = parsed.data
+    const { customerName, customerPhone, customerEmail, reminderConsent, partySize, date, time, notes } = parsed.data
     const tz = await restaurantTimezone(restaurantId)
-    const m = time.match(/^(\d{1,2}):(\d{2})$/)!
-    // La regex accetta ore>23 / minuti>59 ("29:99"): validali PRIMA di comporre startsAt,
-    // altrimenti l'orario traboccherebbe in un giorno successivo o assurdo.
-    if (parseInt(m[1]!, 10) > 23 || parseInt(m[2]!, 10) > 59) return reply.code(400).send({ error: { code: 'BAD_TIME', message: 'Orario non valido.' } })
-    const dayStart = dayStartInTz(date, tz)
-    if (isNaN(dayStart.getTime())) return reply.code(400).send({ error: { code: 'BAD_DATE', message: 'Data non valida.' } })
-    const startsAt = new Date(dayStart.getTime() + (parseInt(m[1]!, 10) * 60 + parseInt(m[2]!, 10)) * 60_000)
+    let startsAt: Date
+    try { startsAt = reservationLocalInstant(date, time.padStart(5, '0'), tz) }
+    catch { return reply.code(400).send({ error: { code: 'BAD_TIME', message: 'Data o ora non valida nel fuso del ristorante.' } }) }
     if (startsAt.getTime() < Date.now() - 60_000) return reply.code(400).send({ error: { code: 'PAST', message: 'La data e ora sono nel passato.' } })
-    const [row] = await db.insert(reservations).values({
-      restaurantId, tableId: null, customerName: customerName.trim().slice(0, 120), customerPhone: customerPhone.trim().slice(0, 40),
-      partySize, startsAt, durationMin: 90, status: 'requested', notes: notes ? notes.slice(0, 500) : null,
-    }).returning()
+    const outcome = await db.transaction(async tx => {
+      await lockReservationCapacity(tx, restaurantId)
+      const error = await checkReservationCapacity(tx, {restaurantId, startsAt, partySize, durationMin: 90})
+      if (error) return {error}
+      const [row] = await tx.insert(reservations).values({
+        restaurantId, tableId: null, customerName: customerName.trim(), customerPhone: customerPhone.trim(),
+        customerEmail: customerEmail??null,reminderConsent,
+        partySize, startsAt, durationMin: 90, status: 'requested', notes: notes ?? null,
+      }).returning()
+      return {row}
+    })
+    if (outcome.error) return reply.code(409).send({error: outcome.error})
+    const row = outcome.row!
     io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: row!.id })
     return { data: { id: row!.id, status: 'requested' } }
   })
 
   fastify.get('/restaurant/:restaurantId/menu', async (req, reply) => {
     const { restaurantId } = req.params as { restaurantId: string }
+
+    const published = await publishedMenu(restaurantId)
+    if (published) {
+      const query = req.query as {menuId?: string; lang?: string}
+      const selected = query.menuId ? published.menus.find(menu => menu.id === query.menuId) : published.menus[0]
+      const [rest] = await db.select().from(restaurants).where(and(eq(restaurants.id, restaurantId),eq(restaurants.active,true))).limit(1)
+      if (!selected || !rest) return reply.code(404).send({error:{code:'NOT_FOUND',message:'Nessun menu attivo'}})
+      const rs = rest.settings as any ?? {}
+      const lang = published.languages.includes(query.lang ?? '') ? query.lang : published.defaultLanguage
+      let visitId: string|undefined
+      try {
+        const token=req.cookies?.tako_menu_visit
+        const payload=token?fastify.jwt.verify(token) as {kind?:string;restaurantId?:string;sid?:string}:null
+        if(payload?.kind==='menu_visit'&&payload.restaurantId===restaurantId)visitId=payload.sid
+      }catch{/* Issue a fresh anonymous visit after expiry. */}
+      if(!visitId){visitId=randomUUID();reply.setCookie('tako_menu_visit',fastify.jwt.sign({kind:'menu_visit',restaurantId,sid:visitId},{expiresIn:'2h'}),authCookieOptions(7200))}
+      try{
+        await recordMenuEvent(restaurantId,selected.id,'scan','',visitId,String(rs.timezone??'Europe/Rome'))
+        await recordMenuEvent(restaurantId,selected.id,'language',lang!,visitId,String(rs.timezone??'Europe/Rome'))
+      }catch{/* Analytics cannot interrupt menu service. */}
+      return {data: publicMenuProjection(selected,lang), menus: published.menus.map(menu => ({id:menu.id,name:menu.translations[lang!]?.name || menu.name})), design:published.design, foodTranslations:published.foodTranslations,foodCatalogs, languages:published.languages, defaultLanguage:published.defaultLanguage,
+        features:{restaurantName:rest.name,reservationsEnabled:rs.reservationsEnabled??false,reviewUrl:rs.reviewRequestEnabled?rs.reviewUrl??'':'',customerOrderingEnabled:rs.customerOrderingEnabled!==false,coverCharge:rs.coverChargeEnabled?Number(rs.coverCharge)||0:0}}
+    }
 
     const allMenus = await db.select().from(menus).where(and(eq(menus.restaurantId, restaurantId), eq(menus.active, true))).orderBy(asc(menus.position))
     if (!allMenus.length) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Nessun menu attivo' } })
@@ -347,7 +381,10 @@ export async function customerRoutes(fastify: FastifyInstance) {
     }
 
     // SECURITY: prezzi sempre dal DB, mai dal client — previene price tampering
-    const dbItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))
+    const liveWorkspace = await publishedMenu(restaurantId)
+    const liveItems = liveWorkspace?.menus.flatMap(menu => menu.sections.flatMap(section => section.items.filter(item=>item.displayMode!=='link')))
+    const operationalItems = await db.select().from(menuItems).where(and(eq(menuItems.restaurantId, restaurantId), eq(menuItems.available, true)))
+    const dbItems = liveItems ? liveItems.map(item=>({...item,kitchenStation:operationalItems.find(row=>row.id===item.id)?.kitchenStation??null})) : operationalItems
 
     // SECURITY: max 15 voci per ordine
     if (body.data.items.length > 15) return reply.code(400).send({ error: { code: 'TOO_MANY_ITEMS', message: 'Massimo 15 voci per ordine' } })
@@ -365,7 +402,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     // Varianti dal DB (es. "Litro +€13"): il priceModifier va aggiunto al prezzo,
     // altrimenti l'ordine è sotto-fatturato. Carico solo le varianti dei piatti ordinati.
     const orderedItemIds = body.data.items.map(i => i.menuItemId)
-    const dbVariants = orderedItemIds.length
+    const dbVariants = liveItems ? liveItems.flatMap(item => item.variants.filter(variant => variant.available).map(variant => ({...variant,itemId:item.id}))) : orderedItemIds.length
       ? await db.select().from(itemVariants).where(inArray(itemVariants.itemId, orderedItemIds))
       : []
 

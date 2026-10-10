@@ -25,7 +25,8 @@ const resApi = {
 };
 
 /* ═══════════ helper date locali ═══════════ */
-const resToday = () => new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD (ora locale)
+const resTimezone = () => SETTINGS_DEFAULTS.fuso || "Europe/Rome";
+const resToday = () => new Date().toLocaleDateString("en-CA",{timeZone:resTimezone()}); // YYYY-MM-DD (ora locale)
 function resAddDays(dateStr, n) {
   const d = new Date(`${dateStr}T00:00:00`);
   d.setDate(d.getDate() + n);
@@ -36,13 +37,13 @@ function resPrettyDate(dateStr) {
   const s = d.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
-const resHHMM = (iso) => { try { return new Date(iso).toTimeString().slice(0, 5); } catch (_) { return ""; } };
+const resHHMM = (iso) => { try { return new Intl.DateTimeFormat("it-IT",{timeZone:resTimezone(),hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(iso)); } catch (_) { return ""; } };
 /* ISO (timestamptz) → valore per <input type="datetime-local"> in ora locale */
 function resIsoToLocalInput(iso) {
   const d = new Date(iso);
   if (isNaN(d.getTime())) return "";
-  const pad = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:resTimezone(),year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(d).map(part=>[part.type,part.value]));
+  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
 }
 /* tutti i tavoli del locale come opzioni { _id, n, room } (da window.ROOMS) */
 function resAllTables() {
@@ -61,6 +62,8 @@ function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) 
   const isEdit = !!reservation;
   const [nome, setNome] = useState("");
   const [tel, setTel] = useState("");
+  const [email,setEmail]=useState("");
+  const [consent,setConsent]=useState(false);
   const [coperti, setCoperti] = useState(2);
   const [quando, setQuando] = useState("");
   const [durata, setDurata] = useState(90);
@@ -74,13 +77,14 @@ function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) 
     if (reservation) {
       setNome(reservation.customerName || "");
       setTel(reservation.customerPhone || "");
+      setEmail(reservation.customerEmail||"");setConsent(!!reservation.reminderConsent);
       setCoperti(reservation.partySize || 2);
       setQuando(resIsoToLocalInput(reservation.startsAt));
       setDurata(reservation.durationMin || 90);
       setTableId(reservation.tableId || "");
       setNote(reservation.notes || "");
     } else {
-      setNome(""); setTel(""); setCoperti(2);
+      setNome(""); setTel(""); setEmail("");setConsent(false);setCoperti(2);
       // default: giorno visualizzato alle 20:00
       setQuando(`${defaultDate || resToday()}T20:00`);
       setDurata(90); setTableId(""); setNote("");
@@ -99,8 +103,9 @@ function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) 
       const payload = {
         customerName: nome.trim(),
         customerPhone: tel.trim(),
+        customerEmail: email.trim()||null,reminderConsent:consent,
         partySize: Number(coperti) || 1,
-        startsAt: startsAt.toISOString(),
+        localDate: quando.slice(0,10),localTime:quando.slice(11,16),
         durationMin: Number(durata) || 90,
         tableId: tableId || null,
         notes: note.trim() || null,
@@ -130,11 +135,13 @@ function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) 
         <div className="scroll" style={{ padding: 20, overflowY: "auto" }}>
           <ResField label="Nome cliente"><input style={RES_INPUT} value={nome} autoFocus onChange={(e) => setNome(e.target.value)} placeholder="Es. Marco Rossi" /></ResField>
           <ResField label="Telefono"><input style={RES_INPUT} value={tel} onChange={(e) => setTel(e.target.value)} placeholder="+39…" /></ResField>
+          <ResField label="Email (opzionale)"><input type="email" style={RES_INPUT} value={email} onChange={e=>setEmail(e.target.value)}/></ResField>
+          <label style={{display:"flex",gap:8,marginBottom:14}}><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/> Il cliente acconsente al promemoria via email</label>
           <div style={{ display: "flex", gap: 12 }}>
             <ResField label="Coperti"><input style={RES_INPUT} type="number" min="1" value={coperti} onChange={(e) => setCoperti(e.target.value)} /></ResField>
             <ResField label="Durata (min)"><input style={RES_INPUT} type="number" min="15" step="15" value={durata} onChange={(e) => setDurata(e.target.value)} /></ResField>
           </div>
-          <ResField label="Data e ora"><input style={RES_INPUT} type="datetime-local" value={quando} onChange={(e) => setQuando(e.target.value)} /></ResField>
+          <ResField label={`Data e ora · ${resTimezone()}`}><input style={RES_INPUT} type="datetime-local" value={quando} onChange={(e) => setQuando(e.target.value)} /></ResField>
           <ResField label="Tavolo (opzionale)">
             <select style={RES_INPUT} value={tableId} onChange={(e) => setTableId(e.target.value)}>
               <option value="">Nessun tavolo assegnato</option>
