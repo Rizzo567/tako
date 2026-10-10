@@ -43,7 +43,7 @@ test('both JSX sources compile with all grouped screens preserved', async () => 
 });
 
 test('sidebar and mobile navigation render with role-specific labels and no unauthorized settings', async () => {
-  const require = createRequire(new URL('../../apps/dashboard/package.json', import.meta.url));
+  const require = createRequire(new URL('../../apps/web/package.json', import.meta.url));
   const React = require('react');
   const { renderToStaticMarkup } = require('react-dom/server');
   const component = ({ children }) => React.createElement('span', null, children);
@@ -67,4 +67,4 @@ test('sidebar and mobile navigation render with role-specific labels and no unau
   }
 });
 
-test('SPA navigation retains draft when leave guard rejects and still applies role restrictions',()=>{const app=readFileSync(path+'07-app-root.js','utf8');const body=app.match(/const go = \(id\) => \{([\s\S]*?)\n  \};/)[1];const routes=[];const ctx={role:'owner',route:'menu',window:{__takoMenuLeaveGuard:()=>false},safeRoute:api.safeRoute,setRoute:id=>routes.push(id),setDrawer(){}};const go=runInNewContext(`(id)=>{${body}}`,ctx);go('sala');assert.deepEqual(routes,[]);ctx.window.__takoMenuLeaveGuard=()=>true;go('sala');assert.deepEqual(routes,['sala']);ctx.role='menu_editor';go('cassa');assert.equal(routes.at(-1),'menu');});
+test('SPA navigation retains draft when leave guard rejects and still applies role restrictions',()=>{const app=readFileSync(path+'07-app-root.js','utf8');const body=app.match(/const go = \(id\) => \{([\s\S]*?)\n {2}\};/)[1];const routes=[];const ctx={role:'owner',route:'menu',window:{__takoMenuLeaveGuard:()=>false},safeRoute:api.safeRoute,setRoute:id=>routes.push(id),setDrawer(){}};const go=runInNewContext(`(id)=>{${body}}`,ctx);go('sala');assert.deepEqual(routes,[]);ctx.window.__takoMenuLeaveGuard=()=>true;go('sala');assert.deepEqual(routes,['sala']);ctx.role='menu_editor';go('cassa');assert.equal(routes.at(-1),'menu');});

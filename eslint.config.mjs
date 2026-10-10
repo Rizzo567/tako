@@ -1,14 +1,14 @@
 // ESLint flat config (ESLint 9) — sostituisce il vecchio `next lint` (deprecato) che
 // nel repo non aveva config e si bloccava sul setup interattivo.
 //
-// Scope: SOLO il codice sorgente TypeScript/TSX (server, web, dashboard, app, packages).
+// Scope: SOLO il codice sorgente TypeScript/TSX (server, web, packages) e i test.
 // Escluso lo staff `apps/dashboard/public/staff` (JS "script a globali" con Babel-in-browser:
 // React/ReactDOM/hook globali → produrrebbe solo rumore no-undef, non è codice a modulo).
 //
 // Regole tarate per essere UTILI senza sommergere: correttezza in `error`, stile in `warn`.
 // `no-undef` è OFF ovunque: i riferimenti non definiti li intercettano già TypeScript e la
 // build (evita falsi positivi su window/document/process/console e sui tipi globali).
-// `react-hooks` è applicato SOLO al frontend React (web/dashboard/app), non al server
+// `react-hooks` è applicato SOLO al frontend React (apps/web), non al server
 // (dove `useX` di librerie — es. Baileys `useMultiFileAuthState` — non sono hook React).
 
 import js from '@eslint/js'
@@ -27,6 +27,7 @@ export default [
       '**/coverage/**',
       '**/next-env.d.ts',
       'apps/dashboard/public/**', // staff JS a globali (Babel-in-browser) — non a modulo
+      'release/**', // build generate (staff precompilata, cache locale)
       'apps/web/public/**',
       '**/*.config.js',
       '**/*.config.mjs',
@@ -61,14 +62,14 @@ export default [
 
   // Regole degli Hook: solo frontend React.
   {
-    files: ['apps/web/**/*.{ts,tsx}', 'apps/dashboard/**/*.{ts,tsx}'],
+    files: ['apps/web/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks },
     rules: { ...reactHooks.configs.recommended.rules },
   },
 
-  // Next.js: solo web + dashboard.
+  // Next.js: solo apps/web.
   {
-    files: ['apps/web/**/*.{ts,tsx}', 'apps/dashboard/**/*.{ts,tsx}'],
+    files: ['apps/web/**/*.{ts,tsx}'],
     plugins: { '@next/next': nextPlugin },
     rules: {
       ...nextPlugin.configs.recommended.rules,
