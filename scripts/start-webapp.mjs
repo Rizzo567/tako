@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Isolated local webapp, without launching or changing the installed desktop app. */
+/** Local webapp runtime (pnpm webapp): staff, API and customer renderer on loopback ports. */
 import {parseEnv} from 'node:util';
 import {readFile,writeFile,mkdir,cp,readdir} from 'node:fs/promises';
 import {existsSync} from 'node:fs';

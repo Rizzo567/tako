@@ -2,17 +2,18 @@
 
 ## Cos'è
 
-Tako = sistema operativo ristorante. App web locale gira su mini PC nel ristorante. Staff usa dashboard su tablet. Clienti scansionano QR tavolo, ordinano da telefono, niente app da scaricare.
+Tako = sistema operativo ristorante, come **webapp unica** (dal 2026-10-10 non esistono più app nativa né appliance locale). Staff usa la dashboard nel browser; clienti scansionano il QR del tavolo e ordinano dal telefono, niente app da scaricare.
 
-Stack: Next.js + Fastify + Socket.io + PostgreSQL. Tutto locale, funziona senza internet.
+Stack: Next.js + Fastify + Socket.io + PostgreSQL gestito (Supabase) + Supabase Storage. Serve internet.
 
 ## Chi usa
 
-- **Ristoratore/owner**: dashboard gestione completa
+- **Ristoratore/owner**: dashboard gestione completa (menu, Aspetto, PDF/QR, staff, report)
+- **Agenzia / menu_editor**: accesso per locale, solo editor menu
 - **Cameriere**: vista sala, ordini, chiamate tavolo
 - **Cuoco**: KDS cucina real-time
 - **Cassiere**: cassa, conti, pagamenti
-- **Cliente**: menu PWA da QR, ordina, traccia, paga
+- **Cliente**: menu web da QR (consultazione, tavolo, asporto, prenotazione)
 
 ## Obiettivo finale
 
@@ -22,34 +23,33 @@ Tako non sostituisce l'ospitalità — la potenzia.
 
 ## Stack
 
-- `apps/server` — Fastify + Socket.io + Drizzle ORM
-- `apps/dashboard` — Next.js 15 staff app (porta 3000)
-- `apps/web` — Next.js 15 customer PWA (porta 3002)
-- `packages/db` — schema PostgreSQL con Drizzle
+- `apps/server` — Fastify + Socket.io + Drizzle ORM. `TAKO_MODE=web` = webapp (entry `src/bootstrap.ts`); `TAKO_MODE=cloud` = control-plane del sito takoitalia.com (entry `src/cloud/entry.ts`, deploy separato). Nessun altro modo è accettato.
+- `apps/dashboard/public/staff` — SPA staff (script a globali), precompilata da `scripts/build-staff-web.mjs`
+- `apps/web` — Next.js 15: menu cliente `/r/...`, tavolo, asporto, prenotazione, anteprima editor
+- `packages/db` — schema PostgreSQL con Drizzle (migrazioni web e cloud)
 - `packages/types` — tipi condivisi Socket.io + API
+- `landing/` — sito pubblico; `deploy/render` — gateway e Dockerfile della webapp su Render
 
 ## Comandi avvio
 
 ```bash
-# Dalla root, avvia tutto
-pnpm dev
+# Webapp locale: staff http://localhost:5137/staff/ (API 5131, Next 5132 su loopback)
+pnpm webapp          # legge .env.web (mai committare né stampare)
 
-# Solo server
-cd apps/server && node_modules/.bin/tsx src/index.ts
-
-# Solo dashboard
-cd apps/dashboard && pnpm dev
-
-# Solo customer PWA
-cd apps/web && pnpm dev
+# Test
+pnpm test            # Vitest; la suite webapp usa Postgres isolato (embedded-postgres solo nei test)
+node --test tests/web/*.test.mjs deploy/render/gateway.test.mjs
+pnpm --filter @tako/server test:cloud   # control-plane cloud
+pnpm --filter @tako/server exec tsc --noEmit && pnpm --filter @tako/web exec tsc --noEmit
 ```
 
 ## Note architettura
 
 - Real-time via Socket.io rooms: `restaurant:{id}` per staff, `table:{id}` per cliente
 - Prezzi ordini sempre dal DB (mai dal client)
-- Dashboard blocca porta 3000 da rete WiFi via firewall Windows
-- PostgreSQL ascolta solo localhost
+- Confine web in `apps/server/src/lib/web-runtime.ts`: origine pubblica unica, scritture solo dalla stessa origine, endpoint dell'ex appliance (`/internal`, `/api/setup`, `/api/print`, `/api/whatsapp`, PIN) → 404 `NOT_AVAILABLE_WEB`
+- Mai scrivere sul Supabase remoto dai test (niente migrazioni/seed): usare DB isolati o il tenant QA
+- Stato e verifiche della webapp: `docs/webapp/` (FEATURE-MATRIX, controls-parity/VERIFICATION, cleanup/REPORT)
 
 ---
 
@@ -66,7 +66,7 @@ Quando sei un agente che lavora su Tako in modo autonomo, segui questo protocoll
 1. Leggi `TAKO.md` (§5 "Da fare") — prendi il **primo task non completato** in ordine di priorità (P0 prima)
 2. Leggi il codice rilevante prima di modificare
 3. Implementa il task
-4. Verifica: `pnpm tsc --noEmit` dalla root — zero errori TypeScript prima di procedere
+4. Verifica: `tsc --noEmit` di server e web (vedi «Comandi avvio») — zero errori TypeScript prima di procedere
 5. Committa con messaggio descrittivo
 6. Aggiorna `TAKO.md` (§5): sposta il task da `- [ ]` a `- [x]` con data
 7. Aggiungi entry a `.claude/comms/AGENT-LOG.md`
@@ -96,7 +96,7 @@ verifier, ledger-writer — più `prompt-architect` come utility), allineato agl
   overlap sullo stesso file → l'orchestratore **serializza**.
 - **Modalità [MASTER]** (modifiche grosse/UI/architettura): Design → ⏸ gate (attendi OK di
   Manuel) → Foundation → Build → QA. Merge su main: **solo Manuel**.
-- **Ownership Tako (monorepo):** frontend → `apps/web/src`, `apps/dashboard/src`; backend →
+- **Ownership Tako (monorepo):** frontend → `apps/web/src`, `apps/dashboard/public/staff`; backend →
   `apps/server/src/routes`, `apps/server/src/ai`, `apps/server/src/lib`; database →
   `packages/db`; integrations → `apps/server/src` (socket, provider esterni). Aggiorna §8 del
   contratto madre se cambiano.

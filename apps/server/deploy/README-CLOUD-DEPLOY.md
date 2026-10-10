@@ -2,21 +2,21 @@
 
 Guida operativa per mettere online il **control-plane identità** (`TAKO_MODE=cloud`):
 il backend Fastify che gestisce gli account owner del sito (email/password, Google,
-GitHub, verifica email, reset password, registry ristoranti, pairing appliance).
+GitHub, verifica email, reset password, registry ristoranti, form contatti).
 
-È un deploy **separato** dall'appliance locale: non condivide DB né segreti con
-l'installazione nel ristorante. Riferimenti: `MASTER_PLAN-cloud-auth.md` §8 e §11.
+È un deploy **separato** dalla webapp (`TAKO_MODE=web`, `deploy/render`): non condivide
+DB né segreti con lei. Il pairing appliance↔cloud è stato rimosso il 2026-10-10. Riferimenti: `MASTER_PLAN-cloud-auth.md` §8 e §11.
 
 ## Artefatti in questa cartella
 - `Dockerfile.cloud` — immagine di produzione del server in modo cloud (entrypoint
-  `src/cloud/entry.ts`, niente Postgres embedded, gira con `tsx`).
+  `src/cloud/entry.ts`, gira con `tsx`).
 - `fly.toml` — config Fly.io (region EU, porta interna 3001, healthcheck `/health`, HTTPS forzato).
 - Questo README.
 
 > **Build/run del server (assunzione confermata leggendo il codice):** i package
 > workspace `@tako/db` e `@tako/types` esportano **TypeScript sorgente** (nessun build
-> TS→JS), quindi il server gira con **`tsx` a runtime** anche in produzione — come già
-> fa `apps/server/Dockerfile` (appliance). Lo script `start:cloud` = `tsx src/cloud/entry.ts`.
+> TS→JS), quindi il server gira con **`tsx` a runtime** anche in produzione.
+> Lo script `start:cloud` = `tsx src/cloud/entry.ts`.
 
 ---
 
@@ -47,8 +47,8 @@ DATABASE_URL='postgresql://user:pass@ep-xxx.eu-central-1.aws.neon.tech/takocloud
   pnpm --filter @tako/db db:migrate:cloud
 ```
 
-> ⚠️ Verifica di puntare al **DB cloud** e mai al Postgres locale: lo schema cloud
-> (`cloud_owners`, `cloud_sessions`, …) non deve finire nel DB dell'appliance e viceversa.
+> ⚠️ Verifica di puntare al **DB cloud** e mai al DB della webapp: lo schema cloud
+> (`cloud_owners`, `cloud_sessions`, …) non deve finire nel DB della webapp e viceversa.
 
 ---
 
@@ -135,8 +135,8 @@ fly secrets set -a tako-cloud \
 | Env | Obbligatoria | Cosa fa |
 |---|---|---|
 | `TAKO_MODE` | sì | `cloud` attiva il control-plane (anche forzata dall'entrypoint + `fly.toml`). |
-| `CLOUD_DATABASE_URL` | sì | Connessione al Postgres **Neon EU**. Deve essere ≠ dal DB locale appliance. |
-| `SESSION_SECRET` | sì (≥32 char) | Firma i cookie di sessione cloud (anti-tamper). **Distinto** da `JWT_SECRET` locale. |
+| `CLOUD_DATABASE_URL` | sì | Connessione al Postgres **Neon EU**. Deve essere ≠ dal DB della webapp. |
+| `SESSION_SECRET` | sì (≥32 char) | Firma i cookie di sessione cloud (anti-tamper). **Distinto** da `JWT_SECRET` della webapp. |
 | `TOKEN_PEPPER` | sì (≥16 char) | Pepper HMAC dei token a riposo (verifica email, reset, sessioni). |
 | `SITE_BASE_URL` | sì | Base URL del **sito** (front-end). Costruisce i link email e l'allowlist redirect. Mai da Host header. |
 | `OAUTH_BASE_URL` | per OAuth | Base URL pubblica del **control-plane** su cui rientrano i callback OAuth (es. `https://api.tako.app`). |
@@ -151,7 +151,7 @@ fly secrets set -a tako-cloud \
 | `TRUST_PROXY` | no (def. `1`) | Hop di proxy fidati (Fly = 1). Da `1` deriva `req.ip` dall'X-Forwarded-For. |
 
 > `JWT_SECRET`, `DATABASE_URL`, `PORT` locali, `UPLOADS_DIR`, `OPENAI_API_KEY`, `CLOUD_BASE_URL`
-> **non** servono in cloud (sono dell'appliance). In cloud non vanno impostati.
+> **non** servono in cloud (sono della webapp). In cloud non vanno impostati.
 
 ### 5.2 Deploy
 ```bash

@@ -1,4 +1,4 @@
-// Regressioni per i fix della review-carico 2026-07-15 (docs/review-carico-2026-07-15.md):
+// Regressioni per i fix della review-carico 2026-07-15 (docs/archivio/review-carico-2026-07-15.md):
 //  P1 #2 — il bump portata non deve toccare un ordine paid/cancelled (409)
 //  P1 #3 — probe GET /customer/orders/by-key/:key per gli invii dall'esito incerto
 //  P1 #1 (transazione) è coperto indirettamente: il flusso ordine resta identico.

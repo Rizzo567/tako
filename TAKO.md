@@ -1,18 +1,23 @@
 # TAKO — File unico di progetto
 
 > **Unica fonte di verità** per cos'è Tako, cosa è stato fatto e cosa resta da fare.
-> Root del progetto: 3 soli documenti — `TAKO.md` (questo), `manu.md` (azioni di Manuel),
-> `CLAUDE.md` (regole repo/agenti). I vecchi `PLAN-*.md` sono consolidati qui in §6.
-> Ultimo aggiornamento: **2026-07-10** (lint completo verificato sul codice).
+> Root del progetto: `TAKO.md` (questo) e `CLAUDE.md` (regole repo/agenti). Lo stato attuale
+> della webapp è in `docs/webapp/` (matrice funzioni, verifiche, note di implementazione).
+>
+> **Aggiornamento 2026-10-10 — resta SOLO la webapp.** App nativa (Expo/Tauri), app owner,
+> modalità appliance locale (Postgres embedded, `tako.local`, pairing, tunnel, stampa LAN,
+> installer USB) sono state rimosse: vedi `docs/webapp/cleanup/REPORT.md`. Le sezioni §3–§7
+> qui sotto sono lo storico di luglio e citano ancora l'appliance dove pertinente; lo storico
+> esteso (vecchia mappa, revisioni, `manu.md`) è in `docs/archivio/`.
 
 ---
 
 ## 1. Cos'è
 
-Tako = **sistema operativo del ristorante**. Gira **in locale** su un mini PC/Mac nel locale. Lo
-staff usa la dashboard su tablet; i clienti scansionano il QR del tavolo e ordinano dal telefono
-senza installare nulla. Il core POS funziona **senza internet**; solo AI e identità cloud
-richiedono rete.
+Tako = **sistema operativo del ristorante**, come **webapp** unica per titolari, staff e
+clienti. Lo staff usa la dashboard nel browser (tablet, telefono, PC); i clienti scansionano il
+QR del tavolo e ordinano dal telefono senza installare nulla. Dati su PostgreSQL gestito
+(Supabase) e immagini su Supabase Storage: serve internet.
 
 **Obiettivo:** sistema indispensabile — il ristoratore non torna a carta e penna. Ordini diretti
 in cucina, cliente ordina da solo, zero errori, statistiche utili. Tako non sostituisce
@@ -26,30 +31,33 @@ cassiere (cassa/conti), cliente (PWA da QR).
 ## 2. Architettura
 
 ```
-  apps/server     Fastify + Socket.io + Drizzle/Postgres   :3001   ← cuore, multi-tenant
-  apps/web        Customer PWA (Next.js 15)                 :3002   ← cliente da QR
-  apps/dashboard  Dashboard staff (SPA in /public/staff)    :3000   ← staff su tablet
-  apps/app        App nativa Expo + Tauri (thin client)             ← carica /staff
-  packages/db     Schema Postgres (Drizzle)
+  apps/server     Fastify + Socket.io + Drizzle (TAKO_MODE=web)   API :5131  ← cuore, multi-tenant
+                  + control-plane del sito (TAKO_MODE=cloud, deploy separato)
+  apps/web        Next.js 15: menu cliente, tavolo, asporto, prenota, anteprima  :5132
+  apps/dashboard  Sorgente della SPA staff (public/staff), precompilata in release/local-web/staff
+  packages/db     Schema Postgres (Drizzle) + migrazioni web e cloud
   packages/types  Tipi condivisi Socket.io + API
+  landing/        Sito takoitalia.com (Cloudflare Pages)
+  deploy/render   Gateway + Dockerfile della webapp su Render (non ancora attivato)
 ```
 
 - Realtime via Socket.io rooms: `restaurant:{id}` (staff), `table:{id}` (cliente).
 - **Prezzi ordini sempre ricalcolati dal DB, mai dal client.**
-- Multi-tenant: ogni entità scoped per `restaurantId`.
-- AI (cliente + copilot owner) su **Groq**; dettatura vocale whisper.cpp locale ⇄ Groq.
+- Multi-tenant: ogni entità scoped per `restaurantId`; accessi agenzia per locale.
+- AI (cliente + copilot owner + traduzioni/import) su **Groq**; dettatura dal browser
+  (SpeechRecognition), nessun audio al server.
 
 ### Avvio locale
 ```bash
-pnpm dev                                  # dalla root, avvia tutto
-pnpm tako                                 # avvio unico (un processo, Postgres embedded)
-cd apps/server && node_modules/.bin/tsx src/bootstrap.ts   # solo server (index.ts esporta soltanto startServer)
+pnpm webapp      # staff http://localhost:5137/staff/ — API 5131 e Next 5132 su loopback, DB da .env.web
+pnpm test        # Vitest (suite webapp con Postgres isolato in-process; i vecchi test "stack :3001" falliscono a freddo)
+node --test tests/web/*.test.mjs deploy/render/gateway.test.mjs   # test Node frontend/gateway
 ```
-Porte: server 3001, dashboard 3000 (anche da server su `/staff`), PWA 3002.
-Test integrazione: stack vivo (`EMBEDDED_DB=1 PGPORT=5432 PORT=3001`) + `npx vitest run` — a freddo falliscono tutti, non è una regressione.
-App desktop: build+deploy in place con `sh scripts/deploy-desktop.sh` (mai eliminare/rimettere `/Applications/Tako.app`).
+Dettagli: `docs/webapp/local-start.md`, `docs/webapp/render.md`.
 
 ---
+
+## 3. ✅ Fatto---
 
 ## 3. ✅ Fatto (verificato sul codice, lint 2026-07-10)
 
@@ -144,7 +152,7 @@ vivono solo su questo Mac / in `~/.tako/models`).
 - [ ] Pagination ordini (`/active` e `/history` senza limit/offset, `orders.ts:30,58`).
 - [ ] Icone 3D clay (33 asset, prompt pronti) — piano §6-D.
 
-### Packaging / deploy
+### Packaging / deploy (voci appliance/desktop OBSOLETE dal 2026-10-10: resta il deploy Render della webapp)
 - [ ] **F-web**: PWA cliente ancora su processo Next `:3002` separato (Fastify serve solo `/staff`, `index.ts:157`).
 - [ ] Firma + notarizzazione macOS + target Windows/Linux in CI (nessun workflow esiste).
 - [ ] QR tavolo stabili via cloud: codati ma NON live — piano §6-B.
@@ -181,7 +189,7 @@ migrazioni su Supabase prod + `RESEND_AUDIENCE_ID` su Render + `CLOUD_BASE_URL` 
 
 ## 6. 📋 Piani pronti (ex PLAN-*.md, consolidati 2026-07-10)
 
-### 6-A. RLS multi-tenant a runtime (leverage 2/5)
+### 6-A. RLS multi-tenant a runtime (leverage 2/5) — storico: riguardava il Postgres dell'appliance
 **Goal:** ogni query autenticata dentro `withRestaurantContext(restaurantId, fn)` → RLS Postgres
 come seconda barriera. In prod ruolo NON-superuser `tako_app`; in dev/embedded resta superuser
 `tako` (RLS bypassata, invariato).
@@ -202,7 +210,7 @@ come seconda barriera. In prod ruolo NON-superuser `tako_app`; in dev/embedded r
 - Prod (Manuel): password reale `ALTER ROLE tako_app` + `DATABASE_URL` col ruolo `tako_app`.
   Riguarda il Postgres dell'appliance, NON Supabase.
 
-### 6-B. QR tavolo stabili via cloud → LIVE (leverage 1/5)
+### 6-B. QR tavolo stabili via cloud → LIVE (OBSOLETO: appliance e resolver rimossi il 2026-10-10)
 **Goal:** QR stampato = `https://api.takoitalia.com/t/<applianceId>/…` → resolver cloud
 reindirizza all'IP LAN corrente (heartbeat). QR valido per sempre.
 - Feature GIÀ CODATA (commit `018d94b` su `feat/cloud-auth-20260625`): resolver
@@ -284,10 +292,9 @@ rompere il multi-brand.
 
 - **Niente pagamenti digitali** (né RT/corrispettivi/SDI) — fuori scope.
 - **Prezzi sempre dal DB**, mai dal client.
-- **Core POS 100% locale**; solo AI + identità cloud richiedono rete.
+- **Solo webapp** (dal 2026-10-10): niente app nativa né appliance locale.
 - **AI su Groq** (cliente + copilot owner).
-- **Dashboard = prototipo verbatim** wirato al backend, servito da `/staff`.
-- **App nativa = thin client** che carica `/staff`.
+- **Dashboard = prototipo verbatim** wirato al backend, precompilato e servito da `/staff`.
 - **Multi-tenant**: ogni entità scoped per `restaurantId`.
 - **Identità cloud proprietaria**: Render + Supabase + Cloudflare + Resend + Upstash.
 - **Merge su main: solo Manuel.**
@@ -299,8 +306,6 @@ rompere il multi-brand.
 
 - `CLAUDE.md` — istruzioni progetto + routine autonoma.
 - `.claude/CLAUDE.md` + `.claude/agents/*` + `.claude/comms/` — team di agenti (funzionali).
-- `apps/app/CLAUDE.md`, `apps/app/AGENTS.md` — istruzioni app nativa.
-- `scripts/deploy-desktop.sh` — build+deploy app desktop in place.
-- `scripts/build-server-bundle.mjs` — bundle server autosufficiente per Tauri.
-- Dati demo: Test Pizza (`#ED7159`) · Trattoria da Nino (`#5963ee`) · URL cliente
-  `http://localhost:3002/r/{restaurantId}/t/{qr_token}`.
+- `docs/webapp/` — matrice funzioni, verifiche, note di implementazione, report pulizia.
+- `scripts/start-webapp.mjs` (`pnpm webapp`) e `scripts/web-render-entry.mjs` (gateway Render).
+- Tenant QA della webapp: credenziali in `~/.config/tako-webapp/qa-login.json` (mai nel repo).
