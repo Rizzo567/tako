@@ -44,11 +44,6 @@ export function setRedis(client: Redis | null): void {
   _client = client
 }
 
-/** Solo per i test: resetta il singleton per non contaminare i file di test successivi. */
-export function __resetRedisForTests(): void {
-  _client = undefined
-}
-
 // ─── Helper: contatore con scadenza (lockout/quota) ──────────────────────────────
 // INCR + EXPIRE ATOMICI via Lua: se INCR ed EXPIRE fossero due round-trip separati, un crash
 // (o errore Redis) tra i due lascerebbe la chiave SENZA TTL → contatore permanente = lockout
@@ -88,37 +83,4 @@ export async function del(key: string): Promise<void> {
   const redis = getRedis()
   if (!redis) return
   try { await redis.del(key) } catch { /* best-effort */ }
-}
-
-/**
- * Anti-replay basato su nonce/timestamp monotono per chiave (es. richieste firmate per-client).
- * Memorizza l'ultimo `ts` accettato con un TTL; rifiuta un `ts` <= all'ultimo visto.
- * Ritorna:
- *   - 'ok'        → ts accettato e registrato;
- *   - 'replay'    → ts già visto o non monotono → rifiuta;
- *   - 'no-redis'  → Redis non disponibile → il chiamante applica la sola finestra temporale.
- * Implementato con uno script Lua per atomicità (read-compare-set).
- */
-const MONOTONIC_LUA = `
-local last = redis.call('GET', KEYS[1])
-if last and tonumber(ARGV[1]) <= tonumber(last) then
-  return 0
-end
-redis.call('SET', KEYS[1], ARGV[1], 'EX', tonumber(ARGV[2]))
-return 1
-`
-export async function checkMonotonicTs(
-  key: string,
-  ts: number,
-  ttlSeconds: number,
-): Promise<'ok' | 'replay' | 'no-redis'> {
-  const redis = getRedis()
-  if (!redis) return 'no-redis'
-  try {
-    const res = (await redis.eval(MONOTONIC_LUA, 1, key, String(ts), String(ttlSeconds))) as number
-    return res === 1 ? 'ok' : 'replay'
-  } catch {
-    // Errore Redis a runtime: degrada alla sola finestra temporale (non bloccare il client).
-    return 'no-redis'
-  }
 }

@@ -27,7 +27,7 @@ import {
   PASSWORD_RESET_TTL_MS,
 } from '../../cloud/security.js'
 import { issueCloudSession } from '../../cloud/session.js'
-import { sendEmail, verifyEmailTemplate, resetPasswordTemplate } from '../../cloud/email.js'
+import { sendEmail, verifyEmailTemplate, resetPasswordTemplate, escapeHtml as esc } from '../../cloud/email.js'
 import { buildVerifyUrl, buildResetUrl, cookieMode } from '../../cloud/config.js'
 import { CLOUD_SESSION_COOKIE, CLOUD_CSRF_COOKIE } from '../../cloud/cookies.js'
 import { requireCloudAuth, requireCsrf } from '../../middleware/cloudAuth.js'
@@ -67,13 +67,6 @@ async function sendVerificationEmail(ownerId: string, ownerName: string | null, 
   })
   const tpl = verifyEmailTemplate({ name: ownerName, verifyUrl: buildVerifyUrl(token) })
   await sendEmail({ to, subject: tpl.subject, html: tpl.html })
-}
-
-// Escape HTML (stessa logica di contact.ts, replicata: là è locale non esportata).
-// Impedisce injection nell'email admin quando interpoliamo dati controllati dall'utente.
-function esc(s: string): string {
-  return s.replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
 }
 
 // Notifica al titolare di Tako (Manuel) ogni nuova registrazione dal sito = lead.

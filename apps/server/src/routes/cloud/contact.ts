@@ -5,7 +5,7 @@
 // (classe SENSITIVE_AUTH in server.ts) perché spedisce email.
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { sendEmail } from '../../cloud/email.js'
+import { sendEmail, escapeHtml as esc } from '../../cloud/email.js'
 import { audit } from '../../cloud/audit.js'
 
 const contactSchema = z.object({
@@ -16,11 +16,6 @@ const contactSchema = z.object({
   message: z.string().trim().min(1).max(4000),
   intent: z.enum(['info', 'demo']).optional().default('info'),
 })
-
-function esc(s: string): string {
-  return s.replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string))
-}
 
 export async function cloudContactRoutes(fastify: FastifyInstance) {
   fastify.post('/contact', async (req, reply) => {

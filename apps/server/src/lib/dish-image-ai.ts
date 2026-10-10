@@ -70,9 +70,6 @@ const STYLE_PROMPT_REF = [
 function styleRefPath(restaurantId: string): string {
   return join(UPLOADS_DIR, restaurantId, '_style_ref.jpg')
 }
-export function hasStyleRef(restaurantId: string): boolean {
-  try { return existsSync(styleRefPath(restaurantId)) } catch { return false }
-}
 function loadStyleRef(restaurantId: string): Buffer | null {
   try { const p = styleRefPath(restaurantId); return existsSync(p) ? readFileSync(p) : null } catch { return null }
 }
