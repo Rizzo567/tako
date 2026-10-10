@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/** QA visiva del tema dell'interfaccia staff (Tako classico / Sobrio), headless e in sola lettura.
- *  Uso: node scripts/qa-tema-sobrio.mjs <outDir> [--ui classico|sobrio] [--only nome,nome]
+/** QA visiva del tema Sobrio (unico tema dello staff), headless e in sola lettura.
+ *  Uso: node scripts/qa-tema-sobrio.mjs <outDir> [--only nome,nome]
  *  Schermate: home, impostazioni, menu, sala, riquadro-conto, riquadro-comanda, cassa-modale (desktop 1440 + mobile 390 emulato).
  *  La modale «Nuovo conto» viene solo aperta: nessun invio. Tempo congelato e animazioni a 0
  *  come scripts/qa-screenshots.mjs, quindi due esecuzioni sono confrontabili pixel per pixel. */
@@ -14,7 +14,6 @@ const puppeteer = require('puppeteer-core');
 const args = process.argv.slice(2);
 const out = resolve(args[0]); await mkdir(out, { recursive: true });
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
-const ui = opt('--ui', 'sobrio');
 const only = opt('--only', '') ? opt('--only', '').split(',') : null;
 const qa = JSON.parse(await readFile(process.env.HOME + '/.config/tako-webapp/qa-login.json', 'utf8'));
 const origin = 'http://localhost:5137';
@@ -36,7 +35,7 @@ async function page(vp, route) {
   const p = await ctx.newPage();
   await p.emulate({ viewport: viewports[vp], userAgent: vp === 'mobile' ? UA_MOBILE : (await browser.userAgent()) });
   await p.evaluateOnNewDocument(freeze);
-  await p.evaluateOnNewDocument((route, key, ui) => { try { localStorage.setItem('tako-dash-route', route); localStorage.setItem(key, ui); } catch {} }, route, 'tako-dash-ui:' + userId, ui);
+  await p.evaluateOnNewDocument((route) => { try { localStorage.setItem('tako-dash-route', route); } catch {} }, route);
   await ctx.setCookie(...cookies);
   // sola lettura: qualunque scrittura verso l'API viene bloccata
   await p.setRequestInterception(true);

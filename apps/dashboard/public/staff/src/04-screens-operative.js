@@ -32,7 +32,7 @@ function Confetti({ onDone, duration = 1500 }) {
   const ref = useRef(null);
   useEffect(() => {
     const host = ref.current; if (!host) return;
-    const colors = ["#ED7159", "#F2B705", "#3CB371", "#4F86C6", "#E86A92", "#8E7DBE", "#FF8C42"];
+    const colors = ["#0a0a0a", "#525252", "#a3a3a3", "#d4d4d4", "#15803d", "#e5e5e5"];
     const pieces = [];
     const N = 90;
     for (let i = 0; i < N; i++) {
@@ -130,7 +130,6 @@ function SetupSlot({ go, setupDone, allDone, role = "owner" }) {
 
 /* ═══════════════════ DASHBOARD HOME ═══════════════════ */
 function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, role = "owner" }) {
-  const ui = useContext(UiCtx);
   const active = orders.filter(o => !["servito", "pagato", "annullato"].includes(o.stato)).length;
   // Saluto derivato dall'ora + nome dell'utente loggato per il suo ruolo (non fisso su owner).
   const _hour = new Date().getHours();
@@ -186,15 +185,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {incomplete && <SetupSlot go={go} setupDone={setupDone} allDone={allDone} role={role} />}
-          {ui === "sobrio" ? <SobrioShortcuts go={go} role={role} /> : <Card pad={18}>
-            <h3 style={{ fontSize: 16, marginBottom: 12 }}>Scorciatoie</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }}>
-              {[["Nuovo conto", "cassa", "cassa"], ["Comanda", "comanda", "comanda"], ["Sala live", "sala", "map"], ["Cucina", "kds", "kitchen"]].map(([l, id, ic]) => (
-                <button key={id} className="press" onClick={() => go(id)} style={{ display: "flex", alignItems: "center", gap: 9, padding: "12px", borderRadius: 12, background: "var(--sunken)", fontWeight: 700, fontSize: 13.5, color: "var(--ink)" }}><Icon name={ic} size={18} />{l}</button>
-              ))}
-            </div>
-            {role === "owner" && <button className="press" onClick={() => { window.__takoOpenMenuSetup = true; go("menu"); }} style={{ display:"flex",alignItems:"center",gap:9,width:"100%",marginTop:9,padding:12,borderRadius:12,background:"var(--sunken)",fontWeight:700,fontSize:13.5,color:"var(--ink)" }}><Icon name="menu" size={18}/>Configura menu cliente</button>}
-          </Card>}
+          <SobrioShortcuts go={go} role={role} />
         </div>
       </div>
     </ScreenScroll>
@@ -296,7 +287,7 @@ function KdsTimer({ min, warn = 10, late = 15 }) {
   const elapsed = min * 60 + (Math.floor(Date.now() / 1000) % 60);
   const m = Math.floor(elapsed / 60), s = elapsed % 60;
   const isLate = m >= late, isWarn = m >= warn;
-  const col = isLate ? "var(--danger)" : isWarn ? "#9A6912" : "var(--ok-deep)";
+  const col = isLate ? "var(--danger)" : isWarn ? "var(--wait)" : "var(--ok-deep)";
   const bg = isLate ? "var(--danger-bg)" : isWarn ? "var(--wait-bg)" : "var(--ok-bg)";
   return <span className="mono" style={{ fontSize: 14, fontWeight: 700, color: col, background: bg, padding: "3px 8px", borderRadius: 8 }}>{m}:{String(s).padStart(2, "0")}</span>;
 }
@@ -339,7 +330,7 @@ function ScreenKDS({ mobile, orders, onAdvanceItem, onBump, settings = SETTINGS_
                       <span className="num" style={{ color: "var(--brand)", fontSize: 16, minWidth: 26 }}>{it.qty}×</span>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: compact ? 14 : 15.5, fontWeight: 700, color: "var(--ink)", textDecoration: it.stato === "pronto" ? "line-through" : "none" }}>{it.nome}</div>
-                        {!compact && it.note && <div style={{ fontSize: 12.5, color: "#9A6912", fontStyle: "italic" }}>“{it.note}”</div>}
+                        {!compact && it.note && <div style={{ fontSize: 12.5, color: "var(--wait)", fontStyle: "italic" }}>“{it.note}”</div>}
                         {!compact && <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>{it.station}</div>}
                       </div>
                       <span style={{ width: 22, height: 22, borderRadius: 99, border: `2px solid ${it.stato === "pronto" ? "var(--ok)" : "var(--hairline)"}`, background: it.stato === "pronto" ? "var(--ok)" : "transparent", display: "grid", placeItems: "center", flex: "none", marginTop: 2 }}>{it.stato === "pronto" && <Icon name="check" size={12} stroke={3} style={{ color: "#fff" }} />}</span>

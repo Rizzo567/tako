@@ -194,12 +194,12 @@
     };
     return (
       <div style={{ border: "1px solid var(--hairline,#e6ded6)", background: "var(--surface,#fff)", borderRadius: 12, padding: 12, marginTop: 8 }}>
-        <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--brand,#ED7159)", textTransform: "uppercase", letterSpacing: .4, marginBottom: 6 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--brand)", textTransform: "uppercase", letterSpacing: .4, marginBottom: 6 }}>
           Conferma richiesta
         </div>
         <div style={{ fontSize: 14.5, fontWeight: 600, color: "var(--ink,#2A1F1A)" }}>{item.label}</div>
         {state === "done" || state === "error" || state === "cancelled"
-          ? <div style={{ marginTop: 8, fontSize: 13, display: "flex", alignItems: "center", gap: 6, color: state === "error" ? "var(--danger,#d9533a)" : state === "cancelled" ? "var(--ink-3,#9a8f86)" : "var(--ink-2,#6a5f56)" }}>
+          ? <div style={{ marginTop: 8, fontSize: 13, display: "flex", alignItems: "center", gap: 6, color: state === "error" ? "var(--danger)" : state === "cancelled" ? "var(--ink-3,#9a8f86)" : "var(--ink-2,#6a5f56)" }}>
               {state === "cancelled" && <Icon name="x" size={14} />}{state === "cancelled" ? "Annullato" : msg}
             </div>
           : (
@@ -209,7 +209,7 @@
                 Annulla
               </button>
               <button onClick={confirm} disabled={state === "running"}
-                style={{ flex: 1, padding: "9px 14px", borderRadius: 11, border: "none", background: "var(--brand,#ED7159)", color: "var(--on-brand,#fff)", fontWeight: 800, fontSize: 13.5, cursor: "pointer", opacity: state === "running" ? .6 : 1 }}>
+                style={{ flex: 1, padding: "9px 14px", borderRadius: 11, border: "none", background: "var(--brand)", color: "var(--on-brand,#fff)", fontWeight: 800, fontSize: 13.5, cursor: "pointer", opacity: state === "running" ? .6 : 1 }}>
                 {state === "running" ? "Eseguo…" : "Conferma ed esegui"}
               </button>
             </div>
@@ -275,7 +275,7 @@
               <button key={it.label} onClick={it.onClick} className="press nav-item"
                 style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 9,
                   border: "none", background: "transparent", cursor: "pointer", fontFamily: "inherit",
-                  color: it.danger ? "#F0907F" : "var(--nav-ink,#E6E6EA)", fontSize: 13.5, fontWeight: 600 }}>
+                  color: it.danger ? "#fca5a5" : "var(--nav-ink,#E6E6EA)", fontSize: 13.5, fontWeight: 600 }}>
                 <Icon name={it.icon} size={16} />{it.label}
               </button>
             ))}
@@ -306,8 +306,8 @@
       <div onClick={() => !editing && !confirming && onSelect(s.id)}
         style={{ position: "relative", display: "flex", alignItems: "center", gap: 6, padding: "8px 8px 8px 11px",
           borderRadius: 11, cursor: "pointer", userSelect: "none",
-          background: active ? "var(--brand,#ED7159)" : "transparent",
-          boxShadow: active ? "0 6px 16px -6px var(--brand,#ED7159)" : "none",
+          background: active ? "var(--brand)" : "transparent",
+          boxShadow: active ? "0 6px 16px -6px var(--brand)" : "none",
           transition: "background .14s" }}
         onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "var(--nav-2,#313338)"; }}
         onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}>
@@ -330,9 +330,9 @@
           {!editing && (
             confirming ? (
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 3 }}>
-                <span style={{ fontSize: 11.5, color: active ? "rgba(255,255,255,.92)" : "#F0907F", fontWeight: 700 }}>Eliminare?</span>
+                <span style={{ fontSize: 11.5, color: active ? "rgba(255,255,255,.92)" : "#fca5a5", fontWeight: 700 }}>Eliminare?</span>
                 <button onClick={(e) => { e.stopPropagation(); onDelete(s.id); }}
-                  style={{ border: "none", background: "transparent", color: active ? "#fff" : "#F0907F", fontSize: 11.5, fontWeight: 800, cursor: "pointer", padding: 0 }}>Sì</button>
+                  style={{ border: "none", background: "transparent", color: active ? "#fff" : "#fca5a5", fontSize: 11.5, fontWeight: 800, cursor: "pointer", padding: 0 }}>Sì</button>
                 <button onClick={(e) => { e.stopPropagation(); setConfirming(false); }}
                   style={{ border: "none", background: "transparent", color: "var(--nav-ink-2,#9B9CA4)", fontSize: 11.5, fontWeight: 700, cursor: "pointer", padding: 0 }}>No</button>
               </div>
@@ -375,14 +375,14 @@
             style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 40, borderRadius: 11,
               border: "1px solid var(--nav-line,rgba(255,255,255,.12))", background: "var(--nav-2,#313338)",
               color: "var(--nav-ink,#E6E6EA)", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit" }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "var(--brand,#ED7159)"; e.currentTarget.style.color = "var(--on-brand,#fff)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "var(--brand)"; e.currentTarget.style.color = "var(--on-brand,#fff)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = "var(--nav-2,#313338)"; e.currentTarget.style.color = "var(--nav-ink,#E6E6EA)"; }}>
             <Icon name="plus" size={17} /> Nuova chat
           </button>
           {sessions.length > 1 && (confirmAll ? (
             <div style={{ display: "flex", alignItems: "center", gap: 6, flex: "none" }}>
               <button onClick={() => { onDeleteAll(); setConfirmAll(false); }} title="Elimina tutte le chat"
-                style={{ border: "none", background: "transparent", color: "#F0907F", fontSize: 12, fontWeight: 800, cursor: "pointer", padding: "0 2px" }}>Tutte?</button>
+                style={{ border: "none", background: "transparent", color: "#fca5a5", fontSize: 12, fontWeight: 800, cursor: "pointer", padding: "0 2px" }}>Tutte?</button>
               <button onClick={() => setConfirmAll(false)}
                 style={{ border: "none", background: "transparent", color: "var(--nav-ink-2,#9B9CA4)", fontSize: 12, fontWeight: 700, cursor: "pointer", padding: "0 2px" }}>No</button>
             </div>
@@ -390,7 +390,7 @@
             <button onClick={() => setConfirmAll(true)} aria-label="Elimina tutte le chat" title="Elimina tutte le chat" className="press"
               style={{ flex: "none", width: 40, height: 40, borderRadius: 11, border: "1px solid var(--nav-line,rgba(255,255,255,.12))",
                 background: "var(--nav-2,#313338)", color: "var(--nav-ink-2,#9B9CA4)", display: "grid", placeItems: "center", cursor: "pointer" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#F0907F"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#fca5a5"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "var(--nav-ink-2,#9B9CA4)"; }}>
               <Icon name="trash" size={17} />
             </button>
@@ -585,7 +585,7 @@
         border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none" }}>
         {/* Intestazione: pallino rosso live pulsante + titoletto dinamico per target */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-          <span style={{ width: 8, height: 8, borderRadius: 99, background: "#F0524A", animation: "takoLivePulse 1.4s ease-in-out infinite", flex: "none" }} />
+          <span style={{ width: 8, height: 8, borderRadius: 99, background: "#ef4444", animation: "takoLivePulse 1.4s ease-in-out infinite", flex: "none" }} />
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: .5, textTransform: "uppercase", color: "var(--nav-ink-2,#9B9CA4)" }}>
             Streaming · {targetLabel}
           </div>
@@ -903,7 +903,7 @@
             <button onClick={() => send()} disabled={!canSend} aria-label="Invia"
               style={{ width: 36, height: 36, borderRadius: 12, border: "none", display: "grid", placeItems: "center",
                 cursor: canSend ? "pointer" : "default", color: "#fff", transition: "background .15s, opacity .15s",
-                background: canSend ? "var(--brand,#D97757)" : "var(--brand,#D97757)", opacity: canSend ? 1 : .32 }}>
+                background: canSend ? "var(--brand)" : "var(--brand)", opacity: canSend ? 1 : .32 }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5" /><path d="M5 12l7-7 7 7" /></svg>
             </button>
           </div>
@@ -923,13 +923,13 @@
               <div key={i} style={{ marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
                   <div style={{ maxWidth: "86%", padding: "11px 14px", borderRadius: 12,
-                    background: m.role === "user" ? "var(--brand,#ED7159)" : "var(--surface,#fff)",
+                    background: m.role === "user" ? "var(--brand)" : "var(--surface,#fff)",
                     color: m.role === "user" ? "var(--on-brand,#fff)" : "var(--ink,#2A1F1A)",
                     border: m.role === "user" ? "none" : "1px solid var(--hairline,#eee)",
                     fontSize: 14.5, lineHeight: 1.45, fontWeight: 500, whiteSpace: "pre-wrap" }}>
                     {m.image && <img src={m.image} alt="allegato" style={{ display: "block", maxWidth: 180, borderRadius: 10, marginBottom: m.content ? 8 : 0 }} />}
                     {m.content || (m.streaming ? "…" : "")}
-                    {m.streaming && m.content ? <span style={{ display: "inline-block", width: 6, height: 14, marginLeft: 3, borderRadius: 2, background: "var(--brand,#ED7159)", verticalAlign: "-2px", opacity: .55 }} /> : null}
+                    {m.streaming && m.content ? <span style={{ display: "inline-block", width: 6, height: 14, marginLeft: 3, borderRadius: 2, background: "var(--brand)", verticalAlign: "-2px", opacity: .55 }} /> : null}
                   </div>
                 </div>
                 {m.role === "assistant" && m.pending && m.pending.map((p, pi) => (
@@ -951,7 +951,7 @@
             {owner && (
               <span style={{ position: "relative", display: "inline-block", fontWeight: 600, paddingBottom: 6 }}>
                 {owner}
-                <svg style={{ position: "absolute", width: "140%", height: 18, bottom: -2, left: "-20%", color: "var(--brand,#D97757)" }}
+                <svg style={{ position: "absolute", width: "140%", height: 18, bottom: -2, left: "-20%", color: "var(--brand)" }}
                   viewBox="0 0 140 24" fill="none" preserveAspectRatio="none" aria-hidden="true">
                   <path d="M6 16 Q 70 24, 134 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
                 </svg>
@@ -995,7 +995,7 @@
               whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{displayTitle(active)}</div>
             <button onClick={handleNew} aria-label="Nuova chat"
               style={{ flex: "none", width: 36, height: 36, borderRadius: 11, border: "1px solid var(--hairline,#e6ded6)",
-                background: "var(--surface,#fff)", color: "var(--brand,#ED7159)", display: "grid", placeItems: "center", cursor: "pointer" }}>
+                background: "var(--surface,#fff)", color: "var(--brand)", display: "grid", placeItems: "center", cursor: "pointer" }}>
               <Icon name="plus" size={18} />
             </button>
           </div>

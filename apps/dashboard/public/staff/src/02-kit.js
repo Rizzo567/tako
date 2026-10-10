@@ -1,8 +1,6 @@
 /* ───────────────── Tako Dashboard — kit primitivi ───────────────── */
 const { useState, useEffect, useRef, useMemo, useCallback, createContext, useContext } = React;
 
-/* Tema dell'interfaccia: "classico" | "sobrio" (fornito da App, vedi 19-sobrio.js) */
-const UiCtx = React.createContext("classico");
 
 /* icone Lucide-style, stroke 2, viewBox 24 */
 const IC = {
@@ -45,6 +43,10 @@ const IC = {
   table:'M3 9h18M3 9 5 4h14l2 5M4 9v11M20 9v11M9 9v4M15 9v4',
   move:'M12 2v20M2 12h20M9 5l3-3 3 3M9 19l3 3 3-3M5 9l-3 3 3 3M19 9l3 3-3 3',
   apps:'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
+  image:'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M21 15l-5-5L5 21',
+  upload:'M12 15V3M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4',
+  globe:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20',
+  palette:'M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.4 3.4A1.5 1.5 0 0 1 12 22zM7.5 11.5h.01M10.5 7.5h.01M15.5 8.5h.01'
 };
 function Icon({ name, size = 20, stroke = 2, fill = "none", style }) {
   return (
@@ -59,57 +61,42 @@ function Card({ children, pad = 18, style, className = "", ...rest }) {
   return <div className={className} style={{ background: "var(--raised)", borderRadius: "var(--r-lg)", boxShadow: "var(--sh-1)", border: "1px solid var(--hairline)", padding: pad, ...style }} {...rest}>{children}</div>;
 }
 
-/* button */
-/* Nel tema Sobrio (UiCtx) i pulsanti leggono i token --btn-* / --r-btn di src/sobrio.css;
-   nel classico gli stili sono quelli originali, letterali, per non cambiare un pixel. */
+/* button: token --btn-* / --r-btn (styles.css, tema Sobrio unico) */
 function Btn({ children, onClick, kind = "brand", size = "md", icon, full, disabled, style, ...rest }) {
-  const sob = useContext(UiCtx) === "sobrio";
-  const sizes = { sm: { h: 36, px: 13, fs: 13.5 }, md: { h: 44, px: 18, fs: 15 }, lg: { h: 52, px: 24, fs: 16.5 } }[size];
-  const kinds = sob ? {
+  const sizes = { sm: { px: 13, fs: 13.5 }, md: { px: 18, fs: 15 }, lg: { px: 24, fs: 16.5 } }[size];
+  const kinds = {
     brand: { background: disabled ? "var(--btn-disabled-bg)" : "var(--btn-brand-bg, var(--brand))", color: disabled ? "var(--btn-disabled-fg)" : "var(--on-brand)", boxShadow: "none" },
     dark: { background: "var(--btn-brand-bg, var(--ink))", color: "var(--surface)" },
     soft: { background: "var(--btn-soft-bg)", color: "var(--ink)", boxShadow: "var(--btn-soft-ring)" },
     ghost: { background: "transparent", color: "var(--ink)", boxShadow: "var(--btn-ghost-ring)" },
     danger: { background: "var(--danger-bg)", color: "var(--danger)" },
     ok: { background: "var(--ok)", color: "#fff" },
-  }[kind] : {
-    brand: { background: disabled ? "var(--ink-3)" : "var(--brand)", color: "var(--on-brand)", boxShadow: disabled ? "none" : "0 6px 16px -6px var(--brand)" },
-    dark: { background: "var(--ink)", color: "var(--surface)" },
-    soft: { background: "var(--sunken)", color: "var(--ink)" },
-    ghost: { background: "transparent", color: "var(--ink)", boxShadow: "inset 0 0 0 1.5px var(--hairline)" },
-    danger: { background: "var(--danger-bg)", color: "var(--danger)" },
-    ok: { background: "var(--ok)", color: "#fff" },
   }[kind];
-  const dims = sob
-    ? { height: `var(--btn-h-${size})`, borderRadius: "var(--r-btn)", fontSize: `var(--btn-fs-${size})`, fontWeight: "var(--btn-weight)", opacity: 1 }
-    : { height: sizes.h, borderRadius: "var(--r-md)", fontSize: sizes.fs, fontWeight: 700, opacity: disabled ? .6 : 1 };
   return (
-    <button className="press" onClick={onClick} disabled={disabled} {...(sob ? { "data-kind": kind } : null)} {...rest}
+    <button className="press" onClick={onClick} disabled={disabled} data-kind={kind} {...rest}
       style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, width: full ? "100%" : "auto",
-        height: dims.height, padding: `0 ${sizes.px}px`, borderRadius: dims.borderRadius, fontSize: dims.fontSize, fontWeight: dims.fontWeight,
-        fontFamily: "var(--f-ui)", opacity: dims.opacity, transition: "filter .15s", ...kinds, ...style }}>
+        height: `var(--btn-h-${size})`, padding: `0 ${sizes.px}px`, borderRadius: "var(--r-btn)", fontSize: `var(--btn-fs-${size})`, fontWeight: "var(--btn-weight)",
+        fontFamily: "var(--f-ui)", opacity: 1, transition: "filter .15s", ...kinds, ...style }}>
       {icon && <Icon name={icon} size={sizes.fs + 4} />}{children}
     </button>
   );
 }
 function IconBtn({ name, onClick, size = 40, iconSize = 20, tone = "soft", style, label, ...rest }) {
-  const sob = useContext(UiCtx) === "sobrio";
-  const tones = { soft: sob ? { background: "var(--iconbtn-soft-bg)", color: "var(--iconbtn-soft-fg)" } : { background: "var(--sunken)", color: "var(--ink)" }, ghost: { background: "transparent", color: "var(--ink-2)" }, brand: { background: "var(--brand)", color: "var(--on-brand)" }, raised: { background: "var(--raised)", color: "var(--ink)", boxShadow: "var(--sh-1)" } }[tone];
-  return <button aria-label={label || name} className="press" onClick={onClick} {...rest} style={{ width: size, height: size, borderRadius: sob ? "var(--r-btn)" : "var(--r-md)", display: "grid", placeItems: "center", ...tones, ...style }}><Icon name={name} size={iconSize} /></button>;
+  const tones = { soft: { background: "var(--iconbtn-soft-bg)", color: "var(--iconbtn-soft-fg)" }, ghost: { background: "transparent", color: "var(--ink-2)" }, brand: { background: "var(--brand)", color: "var(--on-brand)" }, raised: { background: "var(--raised)", color: "var(--ink)", boxShadow: "var(--sh-1)" } }[tone];
+  return <button aria-label={label || name} className="press" onClick={onClick} {...rest} style={{ width: size, height: size, borderRadius: "var(--r-btn)", display: "grid", placeItems: "center", ...tones, ...style }}><Icon name={name} size={iconSize} /></button>;
 }
 
 /* badge / status */
 const TONE = {
-  ok: ["var(--ok-bg)", "var(--ok-deep)"], okDeep: ["var(--ok)", "#fff"], wait: ["var(--wait-bg)", "#9A6912"],
-  info: ["var(--info-bg)", "#3A6587"], brand: ["var(--brand-tint)", "var(--brand-deep)"], danger: ["var(--danger-bg)", "var(--danger)"],
+  ok: ["var(--ok-bg)", "var(--ok-deep)"], okDeep: ["var(--ok)", "#fff"], wait: ["var(--wait-bg)", "var(--wait)"],
+  info: ["var(--info-bg)", "var(--info)"], brand: ["var(--brand-tint)", "var(--brand-deep)"], danger: ["var(--danger-bg)", "var(--danger)"],
   muted: ["var(--muted-bg)", "var(--ink-2)"],
 };
 function Badge({ children, tone = "muted", dot, solid, style }) {
-  const sob = useContext(UiCtx) === "sobrio";
   const [bg, fg] = TONE[tone] || TONE.muted;
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: "var(--r-pill)",
-      fontSize: 12.5, fontWeight: sob ? 500 : 700, background: solid ? fg : bg, color: solid ? "#fff" : fg, whiteSpace: "nowrap", ...style }}>
+      fontSize: 12.5, fontWeight: 500, background: solid ? fg : bg, color: solid ? "#fff" : fg, whiteSpace: "nowrap", ...style }}>
       {dot && <span style={{ width: 7, height: 7, borderRadius: 99, background: solid ? "#fff" : fg }} />}{children}
     </span>
   );
@@ -187,10 +174,9 @@ function Avatar({ initials, color = "var(--brand)", size = 38 }) {
 
 /* modal (center) + drawer (right/bottom) */
 function Overlay({ open, onClose, children, anchor = "center" }) {
-  const ui = useContext(UiCtx);
   const { mounted, active } = useMountTransition(open, 320);
-  // Sobrio: il riquadro nasce dal pulsante che l'ha aperto (primitiva in 19-sobrio.js)
-  if (ui === "sobrio" && window.MorphOverlay) return <window.MorphOverlay open={open} onClose={onClose} anchor={anchor}>{children}</window.MorphOverlay>;
+  // il riquadro nasce dal pulsante che l'ha aperto (primitiva in 19-sobrio.js)
+  if (window.MorphOverlay) return <window.MorphOverlay open={open} onClose={onClose} anchor={anchor}>{children}</window.MorphOverlay>;
   if (!mounted) return null;
   const pos = {
     center: { alignItems: "center", justifyContent: "center" },
@@ -363,21 +349,21 @@ const TAKO_POSE = {
   pay: "pollice_in_su",  // scontrino + pagamento + monete — cassa / incasso / stats
   bowtie: "mangia",      // papillon elegante — impostazioni
 };
-const TakoCtx = React.createContext("arancione");
-function Tako({ pose = "neutral", size = 120, float = true, flip = false, style, alt = "Tako" }) {
-  const brand = useContext(TakoCtx);
-  let file = TAKO_POSE[pose] || pose;
-  if (pose === "logoMark") file = brand === "arancione" ? "logo-chef" : "neutro";
+function Tako({ pose = "neutral", size = 120, float = true, flip = false, style, alt = "Tako", logo: asLogo = false }) {
+  // Unico elemento arancione della dashboard: il logo in alto a sinistra. Ogni altra
+  // mascotte è resa in scala di grigi.
+  const logo = pose === "logoMark" || asLogo;
+  const file = pose === "logoMark" ? "logo-chef" : (TAKO_POSE[pose] || pose);
   return (
-    <img src={`assets/takos/${brand}/${file}.png`} alt={alt} draggable={false}
+    <img src={`assets/takos/arancione/${file}.png`} alt={alt} draggable={false} data-tako-logo={logo ? "" : undefined}
       className={float ? "tako-float" : undefined}
       style={{ width: size, height: size, objectFit: "contain", flex: "none", userSelect: "none",
-        filter: "drop-shadow(0 12px 18px rgba(42,31,26,.16))", transform: flip ? "scaleX(-1)" : "none", ...style }} />
+        filter: logo ? "none" : "grayscale(1) drop-shadow(0 12px 18px rgba(0,0,0,.12))", transform: flip ? "scaleX(-1)" : "none", ...style }} />
   );
 }
 
 Object.assign(window, {
   Icon, Card, Btn, IconBtn, Badge, Kpi, Progress, BarChart, Empty, Search, Avatar,
-  Overlay, UiCtx, useMountTransition, toast, Toaster, Confirm, PageHead, TONE, Tako, TakoCtx, TAKO_POSE,
+  Overlay, useMountTransition, toast, Toaster, Confirm, PageHead, TONE, Tako, TAKO_POSE,
   pushLiveNotif, useLiveNotif, setScrollDown, useScrollDown,
 });

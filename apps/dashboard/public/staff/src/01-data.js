@@ -29,13 +29,6 @@ const ROLES = {
   chef:     { label: "Chef",      name: "—", initials: "—" },
   cassiere: { label: "Cassiere",  name: "—", initials: "—" },
 };
-const BRAND_PALETTES = {
-  arancione: { label: "Arancione", brand: "#ED7159", deep: "#D9533A", tint: "#FCE7DF", wash: "#FBF1ED", on: "#FFFFFF" },
-  blu:       { label: "Blu",       brand: "#3E7BD0", deep: "#2C5FA8", tint: "#E4ECF9", wash: "#EFF4FB", on: "#FFFFFF" },
-  giallo:    { label: "Giallo",    brand: "#F0B429", deep: "#CE9410", tint: "#FBF0D2", wash: "#FBF7EA", on: "#2A1F1A" },
-  verde:     { label: "Verde",     brand: "#4FA980", deep: "#2F7D58", tint: "#E1F1E9", wash: "#EEF6F1", on: "#FFFFFF" },
-  rosa:      { label: "Rosa",      brand: "#E86FA6", deep: "#C9497F", tint: "#FBE4EF", wash: "#FBF0F6", on: "#FFFFFF" },
-};
 const CUR = { sym: "€" };
 const CURRENCIES = { EUR: "€", USD: "$", GBP: "£", CHF: "CHF " };
 const SETUP = [
@@ -269,7 +262,7 @@ function syncGlobals() {
   Object.assign(window, {
     RESTAURANT, KPI, WEEK, ORDERS, ROOMS, WAITER_CALLS, BILLS, CASSA_OGGI,
     MENU, ENGINEERING, INVENTORY, STAFF, PEAK_HOURS, TOP_DISHES, QR_ANALYTICS,
-    ORDER_STATUS, TABLE_STATUS, BRAND_PALETTES, CUR, CURRENCIES, STATIONS, ROLES, SETUP, SETTINGS_DEFAULTS,
+    ORDER_STATUS, TABLE_STATUS, CUR, CURRENCIES, STATIONS, ROLES, SETUP, SETTINGS_DEFAULTS,
     _ORDERS: ORDERS, _ROOMS: ROOMS, _BILLS: BILLS, _WAITER: WAITER_CALLS,
   });
 }

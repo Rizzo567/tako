@@ -5,7 +5,6 @@
 function load(k, d) { try { const v = localStorage.getItem("tako-dash-" + k); return v ?? d; } catch (_) { return d; } }
 function save(k, v) { try { localStorage.setItem("tako-dash-" + k, v); } catch (_) {} }
 
-const HEX2BRAND = Object.fromEntries(Object.entries(BRAND_PALETTES).map(([k, p]) => [p.brand.toLowerCase(), k]));
 
 /* ── slug url-safe dal nome ristorante (per /auth/register) ── */
 function slugifyName(s) {
@@ -62,11 +61,9 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
     catch (_) { setInfo("Email inviata di nuovo: controlla la posta (anche lo spam)."); }
     finally { setBusy(false); }
   };
-  const p = BRAND_PALETTES.arancione;
   const inp = { width: "100%", margin: "6px 0 14px", padding: "11px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" };
   const lab = { fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" };
-  const wrapStyle = { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
-    "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on };
+  const wrapStyle = { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 };
   const cardStyle = { width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" };
 
   // Schermata "conferma la tua email" (gate verifica attivo): niente sessione finché
@@ -76,9 +73,9 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
       <div style={wrapStyle}>
         <div style={{ ...cardStyle, textAlign: "center" }}>
           <div style={{ fontSize: 44, marginBottom: 10 }} aria-hidden="true">📬</div>
-          <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 21, color: "var(--ink,#2A1F1A)", marginBottom: 8 }}>Conferma la tua email</div>
+          <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 21, color: "var(--ink)", marginBottom: 8 }}>Conferma la tua email</div>
           <div style={{ fontSize: 14, color: "var(--ink2,#555)", lineHeight: 1.5, marginBottom: 4 }}>
-            Ti abbiamo inviato un link di verifica a<br /><b style={{ color: "var(--ink,#2A1F1A)" }}>{verifyEmail}</b>
+            Ti abbiamo inviato un link di verifica a<br /><b style={{ color: "var(--ink)" }}>{verifyEmail}</b>
           </div>
           <div style={{ fontSize: 12.5, color: "var(--ink3,#888)", marginBottom: 18 }}>Controlla anche la cartella spam.</div>
           {info && <div style={{ fontSize: 13, color: "var(--brand)", fontWeight: 700, margin: "0 0 12px" }}>{info}</div>}
@@ -96,14 +93,13 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
   }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
-      "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 }}>
       <form onSubmit={submit} style={{ width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginBottom: 22 }}>
           <img src="/staff/assets/takos/arancione/logo.png" alt="Tako"
             onError={(e) => { if (e.currentTarget.src.indexOf('piatto') < 0) e.currentTarget.src = '/staff/assets/takos/arancione/piatto.png'; }}
             style={{ width: 84, height: 84, objectFit: "contain" }} />
-          <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 24, color: "var(--ink,#2A1F1A)" }}>Tako</div>
+          <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 24, color: "var(--ink)" }}>Tako</div>
           <div style={{ fontSize: 13.5, color: "var(--ink3,#888)" }}>{isForgot ? "Recupera l’accesso" : isReset ? "Scegli una nuova password" : isReg ? "Crea il tuo ristorante" : "Accedi alla dashboard"}</div>
         </div>
         {isReg && (
@@ -125,7 +121,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
           </label>
         )}
         {info && <p role="status">{info}</p>}
-        {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 13, margin: "8px 0" }}>{err}</div>}
+        {err && <div style={{ color: "var(--danger)", fontSize: 13, margin: "8px 0" }}>{err}</div>}
         <button type="submit" disabled={busy}
           style={{ width: "100%", marginTop: 14, padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer", opacity: busy ? .6 : 1 }}>
           {busy ? "Attendi…" : isForgot ? "Invia istruzioni" : isReset ? "Aggiorna password" : isReg ? "Crea ristorante" : "Entra"}
@@ -146,7 +142,6 @@ function App({ session }) {
   const role0 = ROLE_DB2UI[session.user.role] || "nonAutorizzato";
   ROLES[role0] = { ...ROLES[role0], name: session.user.name, initials: (session.user.name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() };
   const [route, setRoute] = useState(() => safeRoute(role0, load("route", ROLE_HOME[role0] || "dashboard")));
-  const [brand, setBrand] = useState(() => HEX2BRAND[(RESTAURANT.brand || "").toLowerCase()] || load("brand", "arancione"));
   const [settings, setSettings] = useState(() => {
     let ls = {}; try { ls = JSON.parse(localStorage.getItem("tako-dash-settings") || "{}"); } catch (_) { ls = {}; }
     // Backend vince: SETTINGS_DEFAULTS è già stato popolato dal backend in loadAll().
@@ -164,12 +159,8 @@ function App({ session }) {
   window.__takoRole = role;
   window.__takoRestaurantId = session.user.restaurantId || session.restaurant?.id || window.__settings_raw?.id;
   const [drawer, setDrawer] = useState(false);
-  // Tema dell'interfaccia per utente ("classico" | "sobrio"), salvato in localStorage
-  // (il server non ha preferenze per utente). Default: Tako classico.
-  const [ui, setUiState] = useState(() => loadUi(session.user.id));
-  const setUi = (v) => { setUiState(v); saveUi(session.user.id, v); };
-  const sobrio = ui === "sobrio";
-  useEffect(() => { if (sobrio) sbInstallTriggerTracker(); }, [sobrio]);
+  // Tema unico «Sobrio»: il riquadro nasce dal pulsante che lo apre (19-sobrio.js).
+  useEffect(() => { sbInstallTriggerTracker(); }, []);
   const [frame, setFrame] = useState(() => (typeof window !== "undefined" && window.innerWidth < 900 ? "mobile" : "desktop"));
   const mobile = frame === "mobile";
   const mobileRef = useRef(mobile); mobileRef.current = mobile;
@@ -213,8 +204,7 @@ function App({ session }) {
 
   useEffect(() => save("route", route), [route]);
   const prevRouteRef = useRef(route);
-  useEffect(() => { const prev = prevRouteRef.current; prevRouteRef.current = route; if (sobrio && prev !== route) sbPageRouteChanged(prev, route); }, [route, sobrio]);
-  useEffect(() => save("brand", brand), [brand]);
+  useEffect(() => { const prev = prevRouteRef.current; prevRouteRef.current = route; if (prev !== route) sbPageRouteChanged(prev, route); }, [route]);
   useEffect(() => { try { localStorage.setItem("tako-dash-settings", JSON.stringify(settings)); } catch (_) {} }, [settings]);
   useEffect(() => { const onR = () => setFrame(window.innerWidth < 900 ? "mobile" : "desktop"); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, []);
   useEffect(() => { if (!canNavigate(role, route)) setRoute(safeRoute(role, route)); }, [role, route]);
@@ -285,7 +275,6 @@ function App({ session }) {
   };
   // Il pagamento lo esegue il PaymentModal (metodo+mancia). Qui solo refresh.
   const onCloseBill = async (id) => { setBills((bs) => bs.filter((x) => x.id !== id)); refreshBills(); refreshRooms(); };
-  const onSetBrand = async (b) => { setBrand(b); try { await TakoAPI.patch("/restaurants/me", { primaryColor: BRAND_PALETTES[b].brand }); } catch (_) {} };
   const onSaveSettings = async (nextOrFn) => {
     // I toggle chiamano set(k,v) → setSettings(s => ({...s,[k]:v})): qui arriva una
     // FUNZIONE updater, non un oggetto. Risolvila contro lo stato corrente, altrimenti
@@ -342,7 +331,7 @@ function App({ session }) {
     case "statistiche": Screen = role === "owner" && window.ScreenReportsWorkspace ? <window.ScreenReportsWorkspace mobile={mobile}/> : <ScreenStatistiche key={"stats" + dataVersion} mobile={mobile} />; break;
     case "insights": Screen = <ScreenInsights key={"insights" + dataVersion} mobile={mobile} />; break;
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
-    case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} brand={brand} setBrand={onSetBrand} settings={settings} setSettings={onSaveSettings} ui={ui} setUi={setUi} />; break;
+    case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} settings={settings} setSettings={onSaveSettings} />; break;
     case "collega": Screen = <ScreenCollega mobile={mobile} />; break;
     default: Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />;
   }
@@ -358,17 +347,12 @@ function App({ session }) {
   if (tabs.length > 1 || newOrder) Screen = <WorkspaceNavigation mobile={mobile} tabs={tabs} route={route} go={go} newOrder={newOrder}>{Screen}</WorkspaceNavigation>;
   if (!Object.hasOwn(ROLE_ACCESS, role)) return <div style={{ padding: 32 }}>Il tuo ruolo non è autorizzato ad accedere alla dashboard. Contatta il responsabile del locale.</div>;
 
-  const p = BRAND_PALETTES[brand] || BRAND_PALETTES.arancione;
-  // Sobrio: i colori vengono da src/sobrio.css ([data-ui="sobrio"]), non dalla palette inline.
-  const brandVars = sobrio ? {} : { "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on };
-  const uiAttr = sobrio ? "sobrio" : undefined;
-  // Sobrio: la schermata sta in un livello che può nascere dal pulsante della Panoramica.
-  const ghost = sobrio && route !== "dashboard" ? <ScreenDashboard mobile={mobile} go={() => {}} orders={orders} settings={settings} role={role} /> : null;
-  const Content = sobrio ? <PageMorphLayer route={route} ghost={ghost} mobile={mobile} onBack={() => sbPageBack(go)}>{Screen}</PageMorphLayer> : Screen;
+  // La schermata sta in un livello che può nascere dal pulsante della Panoramica.
+  const ghost = route !== "dashboard" ? <ScreenDashboard mobile={mobile} go={() => {}} orders={orders} settings={settings} role={role} /> : null;
+  const Content = <PageMorphLayer route={route} ghost={ghost} mobile={mobile} onBack={() => sbPageBack(go)}>{Screen}</PageMorphLayer>;
 
   return (
-    <UiCtx.Provider value={ui}>
-    <TakoCtx.Provider value={brand}>
+    <>
       {(!online || !realtimeOnline) && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, display: "flex", justifyContent: "center", pointerEvents: "none", paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}>
           <div role="status" aria-live="polite" style={{ pointerEvents: "auto", display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 15px", borderRadius: 99, background: "var(--danger)", color: "#fff", fontSize: 13, fontWeight: 700, boxShadow: "0 8px 24px rgba(0,0,0,.20)" }}>
@@ -378,11 +362,11 @@ function App({ session }) {
         </div>
       )}
       {mobile ? (
-        <div className="screen app-live mobile" data-ui={uiAttr} style={{ ...brandVars, width: "100vw", height: "100vh" }}>
+        <div className="screen app-live mobile" style={{ width: "100vw", height: "100vh" }}>
           <div style={{ width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--surface)" }}>
             <div style={{ flex: 1, minHeight: 0, position: "relative", display: "flex", flexDirection: "column" }}>
               {Content}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, background: sobrio ? "rgba(255,255,255,.72)" : "rgba(251,248,244,.55)", backdropFilter: "blur(16px) saturate(180%)", WebkitBackdropFilter: "blur(16px) saturate(180%)" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, background: "rgba(255,255,255,.72)", backdropFilter: "blur(16px) saturate(180%)", WebkitBackdropFilter: "blur(16px) saturate(180%)" }}>
                 <MobileHeader route={route} openDrawer={() => setDrawer(true)} live role={role} badges={badges} nome={settings.nome || RESTAURANT.name} go={go} />
               </div>
             </div>
@@ -392,7 +376,7 @@ function App({ session }) {
           <Toaster mobile />
         </div>
       ) : (
-        <div className="screen app-live" data-ui={uiAttr} style={{ ...brandVars, width: "100vw", height: "100vh" }}>
+        <div className="screen app-live" style={{ width: "100vw", height: "100vh" }}>
           <div style={{ width: "100%", height: "100%", display: "flex", background: "var(--bg)" }}>
             <Sidebar route={route} go={go} role={role} badges={badges} live />
             <main style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "var(--bg)" }}>
@@ -402,8 +386,7 @@ function App({ session }) {
           <Toaster mobile={false} />
         </div>
       )}
-    </TakoCtx.Provider>
-    </UiCtx.Provider>
+    </>
   );
 }
 
@@ -459,7 +442,7 @@ function Root() {
     })();
   }, []);
   const onLogin = async (d) => { await loadAll(d.user); setState({ phase: "app", session: { user: d.user, restaurant: d.restaurant } }); };
-  if (state.phase === "loading") return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF8F4", color: "#aaa" }}>Caricamento…</div>;
+  if (state.phase === "loading") return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", color: "var(--ink-3)" }}>Caricamento…</div>;
   if (state.phase === "login") return <LoginGate onDone={onLogin} />;
   return <App session={state.session} />;
 }
@@ -467,16 +450,16 @@ function Root() {
 /* ── schermata di crash (italiana) mostrata dall'ErrorBoundary ── */
 function CrashScreen({ onReload, onHome }) {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF8F4", padding: 24 }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 }}>
       <div style={{ width: 400, maxWidth: "100%", background: "#fff", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid #eee", textAlign: "center" }}>
         <img src="assets/takos/arancione/pollice_in_su.png" alt="Tako" style={{ width: 84, height: 84, objectFit: "contain", margin: "0 auto 10px" }} />
-        <div style={{ fontWeight: 900, fontSize: 21, color: "#2A1F1A", marginBottom: 8 }}>Qualcosa è andato storto</div>
-        <div style={{ fontSize: 14, color: "#8a8079", lineHeight: 1.5, marginBottom: 22 }}>
+        <div style={{ fontWeight: 900, fontSize: 21, color: "var(--ink)", marginBottom: 8 }}>Qualcosa è andato storto</div>
+        <div style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.5, marginBottom: 22 }}>
           Si è verificato un errore imprevisto nella dashboard. Puoi ricaricare la pagina oppure tornare alla Dashboard.
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          <button onClick={onHome} style={{ flex: 1, padding: "12px", borderRadius: 12, border: "1.5px solid #ddd", background: "#fff", color: "#2A1F1A", fontWeight: 700, fontSize: 14.5, cursor: "pointer" }}>Torna alla Dashboard</button>
-          <button onClick={onReload} style={{ flex: 1, padding: "12px", borderRadius: 12, border: "none", background: "#ED7159", color: "#fff", fontWeight: 800, fontSize: 14.5, cursor: "pointer" }}>Ricarica</button>
+          <button onClick={onHome} style={{ flex: 1, padding: "12px", border: "1px solid var(--hairline)", background: "#fff", color: "var(--ink)", fontWeight: 500, borderRadius: 999, fontSize: 14.5, cursor: "pointer" }}>Torna alla Dashboard</button>
+          <button onClick={onReload} style={{ flex: 1, padding: "12px", border: "none", background: "var(--ink)", color: "#fff", fontWeight: 500, borderRadius: 999, fontSize: 14.5, cursor: "pointer" }}>Ricarica</button>
         </div>
       </div>
     </div>

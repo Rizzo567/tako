@@ -1,7 +1,6 @@
-/* ───────────────── Tema «Sobrio» ─────────────────
-   Attivo solo con data-ui="sobrio" sul contenitore .screen (vedi 07-app-root).
-   Misure e colori: docs/webapp/tema-sobrio/RIFERIMENTO-VIDEO.md.
-   Il tema «Tako classico» non legge nulla di questo file. */
+/* ───────────────── Tema «Sobrio» (unico tema della dashboard) ─────────────────
+   I token di base stanno in styles.css (:root). Qui: carattere, stati interattivi e
+   primitive di movimento. Misure e colori: docs/webapp/tema-sobrio/RIFERIMENTO-VIDEO.md. */
 
 /* Inter (OFL, fonts/inter/OFL.txt). La famiglia «Tako Sobrio» rimappa i pesi:
    gli stili inline del gestionale usano 700–900 pensando a DM Sans/Nunito; il
@@ -10,65 +9,13 @@
 @font-face { font-family: "Tako Sobrio"; font-style: normal; font-weight: 450 649; font-display: swap; src: url("../fonts/inter/inter-latin-500.woff2") format("woff2"); }
 @font-face { font-family: "Tako Sobrio"; font-style: normal; font-weight: 650 1000; font-display: swap; src: url("../fonts/inter/inter-latin-600.woff2") format("woff2"); }
 
-.screen[data-ui="sobrio"] {
-  /* il «brand» è il nero del video; l'arancione resta solo nel logo (immagine) */
-  --brand: #0a0a0a; --brand-deep: #0a0a0a; --brand-tint: #f5f5f5; --brand-wash: #fafafa; --on-brand: #ffffff;
-  --bg: #ffffff; --surface: #ffffff; --raised: #ffffff; --sunken: #f5f5f5; --hairline: #e5e5e5;
-  --side: #fafafa; --side-2: #f0f0f0; --side-line: #e5e5e5; --side-ink: #0a0a0a; --side-ink-2: #737373; --side-sel: #0a0a0a; --side-on: #ffffff;
-  --ink: #0a0a0a; --ink-2: #525252; --ink-3: #737373;
-  /* stati: testo colorato pieno, fondi appena tinti (come la spunta verde) */
-  --ok: #15803d; --ok-bg: #f0fdf4; --ok-deep: #15803d;
-  --wait: #b45309; --wait-bg: #fffbeb;
-  --info: #404040; --info-bg: #f5f5f5;
-  --danger: #b91c1c; --danger-bg: #fef2f2;
-  --muted: #737373; --muted-bg: #f5f5f5;
-  --st-free: #16a34a; --st-busy: #0a0a0a; --st-wait: #d97706; --st-ready: #2563eb; --st-clean: #a3a3a3; --st-resv: #7c3aed;
-  /* raggi: card 24 (riquadri), pannelli 16, campi 12, pulsanti e chip a pillola */
-  --r-xs: 6px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-pill: 999px;
-  --r-btn: 999px;
-  --sh-1: 0 1px 2px rgba(0,0,0,.04);
-  --sh-2: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px -6px rgba(0,0,0,.08);
-  --sh-3: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -6px rgba(0,0,0,.12);
-  --sh-pop: 0 0 0 1px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -6px rgba(0,0,0,.12);
-  --f-display: "Tako Sobrio", system-ui, sans-serif;
-  --f-ui: "Tako Sobrio", system-ui, sans-serif;
-  /* pulsanti (Btn/IconBtn/Badge leggono questi con fallback ai valori classici) */
-  --btn-h-sm: 36px; --btn-h-md: 40px; --btn-h-lg: 48px;
-  --btn-fs-sm: 13px; --btn-fs-md: 14px; --btn-fs-lg: 15px;
-  --btn-weight: 500; --btn-shadow: none;
-  --btn-soft-bg: #ffffff; --btn-soft-ring: inset 0 0 0 1px #e5e5e5;
-  --btn-ghost-ring: inset 0 0 0 1px #e5e5e5;
-  --btn-disabled-bg: #e5e5e5; --btn-disabled-fg: #737373; --btn-disabled-opacity: 1;
-  --iconbtn-soft-bg: transparent; --iconbtn-soft-fg: #525252;
-  --badge-weight: 500;
-  --card-border: 1px solid #e5e5e5;
-  --scrim: rgba(10,10,10,.04); --scrim-blur: none;
-  font-family: var(--f-ui);
-  color: var(--ink);
-  font-feature-settings: "cv11", "ss01";
-  accent-color: #0a0a0a;
-  background: #ffffff;
-}
-.screen[data-ui="sobrio"] h1, .screen[data-ui="sobrio"] h2, .screen[data-ui="sobrio"] h3, .screen[data-ui="sobrio"] h4 { letter-spacing: -.011em; }
-.screen[data-ui="sobrio"] .num { letter-spacing: -.01em; }
-.screen[data-ui="sobrio"] ::selection { background: #e5e5e5; }
 
-/* pressione: nel video nessuna scala; feedback = hover più chiaro */
-.screen[data-ui="sobrio"] .press:active { transform: none; }
-.screen[data-ui="sobrio"] .press { transition: background-color .14s ease, color .14s ease, box-shadow .14s ease; }
-.screen[data-ui="sobrio"] button[data-kind="brand"]:not(:disabled):hover,
-.screen[data-ui="sobrio"] button[data-kind="dark"]:not(:disabled):hover { --btn-brand-bg: #262626; }
-.screen[data-ui="sobrio"] button[data-kind="soft"]:not(:disabled):hover,
-.screen[data-ui="sobrio"] button[data-kind="ghost"]:not(:disabled):hover { --btn-soft-bg: #fafafa; }
-.screen[data-ui="sobrio"] .seg { border-radius: 999px; background: #f5f5f5; }
-.screen[data-ui="sobrio"] .seg button { border-radius: 999px; font-weight: 500; }
-.screen[data-ui="sobrio"] .seg button.on { box-shadow: 0 0 0 1px #e5e5e5, 0 1px 2px rgba(0,0,0,.04); }
-.screen[data-ui="sobrio"] .nav-item:hover { background: #f0f0f0; }
-.screen[data-ui="sobrio"] .nav-item.on:hover { background: #262626; }
-.screen[data-ui="sobrio"] .nav-item:hover .nav-ico { animation: none; }
-.screen[data-ui="sobrio"] .scroll::-webkit-scrollbar-thumb { background: #d4d4d4; }
-.screen[data-ui="sobrio"] input:focus-visible, .screen[data-ui="sobrio"] select:focus-visible, .screen[data-ui="sobrio"] textarea:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 1px; }
-.screen[data-ui="sobrio"] button:focus-visible, .screen[data-ui="sobrio"] [role="button"]:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 2px; }
+.screen button[data-kind="brand"]:not(:disabled):hover,
+.screen button[data-kind="dark"]:not(:disabled):hover { --btn-brand-bg: #262626; }
+.screen button[data-kind="soft"]:not(:disabled):hover,
+.screen button[data-kind="ghost"]:not(:disabled):hover { --btn-soft-bg: #fafafa; }
+.screen input:focus-visible, .screen select:focus-visible, .screen textarea:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 1px; }
+.screen button:focus-visible, .screen [role="button"]:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 2px; }
 
 /* ── primitive di movimento (19-sobrio.js) ── */
 .sb-morph-shell { position: fixed; left: 0; top: 0; pointer-events: none; will-change: transform, width, height; overflow: hidden; }

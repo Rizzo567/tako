@@ -1309,7 +1309,7 @@ function NetHealthCard() {
     </Card>
   );
 }
-function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAULTS, setSettings = () => {}, ui = "classico", setUi = () => {} }) {
+function ScreenImpostazioni({ mobile, settings = SETTINGS_DEFAULTS, setSettings = () => {} }) {
   const [sec, setSec] = useState("aspetto");
   const [webMode, setWebMode] = useState(false);
   useEffect(() => {
@@ -1375,44 +1375,12 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
         <div style={{ flex: 1, minWidth: 0, width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
           {sec === "aspetto" && (<>
             <Card pad={20}>
-              <h3 style={{ fontSize: 16, marginBottom: 4 }}>Tema dell'interfaccia</h3>
-              <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 16 }}>Vale solo per il tuo account, su questo dispositivo.</p>
-              <div role="radiogroup" aria-label="Tema dell'interfaccia" style={{ display: "grid", gridTemplateColumns: mobile ? "1fr 1fr" : "repeat(2, minmax(0, 220px))", gap: 12 }}>
-                {Object.entries(UI_THEMES).map(([k, label]) => { const on = ui === k; const sob = k === "sobrio"; return (
-                  <button key={k} role="radio" aria-checked={on} className="press" onClick={() => setUi(k)}
-                    style={{ display: "flex", flexDirection: "column", gap: 10, padding: 10, borderRadius: 12, textAlign: "left", background: "var(--raised)", boxShadow: on ? "0 0 0 2px var(--ink)" : "inset 0 0 0 1px var(--hairline)" }}>
-                    <span aria-hidden="true" style={{ height: 64, borderRadius: 8, background: sob ? "#ffffff" : "#F2EBE2", boxShadow: "inset 0 0 0 1px " + (sob ? "#e5e5e5" : "#E7DDD1"), display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-                      <span style={{ height: 22, padding: "0 12px", display: "grid", placeItems: "center", borderRadius: sob ? 999 : 7, background: sob ? "#0a0a0a" : "#ED7159", color: "#fff", fontSize: 11, fontWeight: sob ? 500 : 700, fontFamily: sob ? '"Tako Sobrio", system-ui' : "var(--f-ui)" }}>Apri</span>
-                      <span style={{ height: 22, padding: "0 12px", display: "grid", placeItems: "center", borderRadius: sob ? 999 : 7, background: sob ? "#fff" : "#F4EEE7", boxShadow: sob ? "inset 0 0 0 1px #e5e5e5" : "none", color: sob ? "#0a0a0a" : "#2A1F1A", fontSize: 11, fontWeight: sob ? 500 : 700, fontFamily: sob ? '"Tako Sobrio", system-ui' : "var(--f-ui)" }}>Annulla</span>
-                    </span>
-                    <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700 }}>
-                      <span style={{ width: 16, height: 16, borderRadius: 99, boxShadow: on ? "inset 0 0 0 5px var(--ink)" : "inset 0 0 0 1.5px var(--ink-3)" }} />{label}
-                    </span>
-                    <span style={{ fontSize: 12, color: "var(--ink-3)", marginTop: -6 }}>{sob ? "Bianco e grigi, pulsanti a pillola, riquadri che nascono dal pulsante" : "Colori caldi e colore brand del locale"}</span>
-                  </button>
-                ); })}
-              </div>
-              {ui === "sobrio" && <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginTop: 12 }}>Nel tema Sobrio il colore principale è il nero; il colore brand del locale resta per il tema classico e per il menu dei clienti.</p>}
-            </Card>
-            {ui !== "sobrio" && <Card pad={20}>
-              <h3 style={{ fontSize: 16, marginBottom: 4 }}>Colore brand</h3>
-              <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 16 }}>Cambia il colore principale di tutta l'interfaccia in tempo reale.</p>
-              <div style={{ display: "flex", gap: mobile ? 12 : 18, flexWrap: "wrap" }}>
-                {Object.entries(BRAND_PALETTES).map(([k, p]) => { const on = brand === k; return (
-                  <button key={k} className="press" onClick={() => setBrand(k)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                    <span style={{ width: 54, height: 54, borderRadius: 12, background: p.brand, display: "grid", placeItems: "center", boxShadow: on ? `0 0 0 3px var(--raised), 0 0 0 5px ${p.brand}` : "var(--sh-1)", transition: "box-shadow .2s" }}>{on && <Icon name="check" size={26} stroke={2.6} style={{ color: p.on }} />}</span>
-                    <span style={{ fontSize: 12.5, fontWeight: on ? 700 : 600, color: on ? "var(--ink)" : "var(--ink-2)" }}>{p.label}</span>
-                  </button>
-                ); })}
-              </div>
-            </Card>}
-            <Card pad={20}>
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>Logo</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <span style={{ width: 64, height: 64, borderRadius: 12, background: "var(--brand-tint)", display: "grid", placeItems: "center", flex: "none", overflow: "hidden" }}>
+                <span style={{ width: 64, height: 64, borderRadius: 16, background: "var(--sunken)", boxShadow: "inset 0 0 0 1px var(--hairline)", display: "grid", placeItems: "center", flex: "none", overflow: "hidden" }}>
                   {logoUrl
                     ? <img src={logoUrl} alt="Logo ristorante" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                    : <img src="assets/tako-chef.png" alt="" style={{ height: 48 }} />}
+                    : <Icon name="image" size={24} style={{ color: "var(--ink-3)" }} />}
                 </span>
                 <label style={{ flex: 1, height: 64, borderRadius: 12, border: "1.5px dashed var(--hairline)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 13, fontWeight: 600, cursor: logoUploading ? "wait" : "pointer", textAlign: "center", padding: "0 12px" }}>
                   <input type="file" accept="image/png,image/webp,image/jpeg,image/svg+xml" onChange={onPickLogo} disabled={logoUploading} style={{ display: "none" }} />
@@ -1655,7 +1623,7 @@ function CloudPairing({ mobile }) {
           <input value={code} onChange={(e) => setCode(e.target.value)} type="text" required minLength={8} placeholder="incolla qui il codice" style={inp} />
           <label style={lab}>Password owner per l'accesso offline</label>
           <input value={pw} onChange={(e) => setPw(e.target.value)} type="password" required minLength={8} placeholder="almeno 8 caratteri" style={inp} />
-          {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 13, margin: "4px 0 8px" }}>{err}</div>}
+          {err && <div style={{ color: "var(--danger)", fontSize: 13, margin: "4px 0 8px" }}>{err}</div>}
           <Btn kind="brand" disabled={busy} onClick={submit}>{busy ? "Collego…" : "Collega account"}</Btn>
         </form>
       )}
@@ -1681,7 +1649,7 @@ function ScreenCollega({ mobile }) {
       <PageHead mobile={mobile} tako="serve" title="Collega dispositivi" sub="Apri Tako sui tablet e telefoni dello staff" />
       <CloudPairing mobile={mobile} />
       <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580 }}>
-        {err && <div style={{ color: "var(--danger,#d9533a)", fontSize: 14 }}>Info non disponibili. Server raggiungibile?</div>}
+        {err && <div style={{ color: "var(--danger)", fontSize: 14 }}>Info non disponibili. Server raggiungibile?</div>}
         {!err && !info && <div style={{ color: "var(--ink-2)", fontSize: 14 }}>Carico…</div>}
         {info && (
           <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 22, alignItems: mobile ? "stretch" : "center" }}>

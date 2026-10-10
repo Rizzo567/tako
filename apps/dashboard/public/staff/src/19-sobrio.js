@@ -1,5 +1,5 @@
 /* ───────────────── Tema «Sobrio» — movimento e riquadri rapidi ─────────────────
-   Tutto qui è usato solo con il tema Sobrio (UiCtx === "sobrio"). Misure del video in
+   Il tema Sobrio è l'unico tema della dashboard. Misure del video in
    docs/webapp/tema-sobrio/RIFERIMENTO-VIDEO.md:
    - molla a smorzamento critico ω=13,8 (apertura, successo e chiusura: 13,3–14,3, RMS<0,01)
    - colore del contenitore: inseguimento esponenziale τ≈48 ms
@@ -679,13 +679,7 @@ function SobrioShortcuts({ go, role }) {
   </Card>;
 }
 
-/* Tema per utente: localStorage (nessun endpoint di preferenze utente nel server). */
-const UI_THEMES = { classico: "Tako classico", sobrio: "Sobrio" };
-function uiKey(userId) { return "tako-dash-ui:" + (userId || "anon"); }
-function loadUi(userId) { try { const v = localStorage.getItem(uiKey(userId)); return v === "sobrio" ? "sobrio" : "classico"; } catch (_) { return "classico"; } }
-function saveUi(userId, v) { try { localStorage.setItem(uiKey(userId), v); } catch (_) {} }
-
 Object.assign(window, {
   SB, sbSpring, MorphOverlay, PageMorphLayer, sbPageMorphGo, sbPageBack, sbPageRouteChanged, sbInstallTriggerTracker,
-  SwapText, Spinner, CopyPill, SizeMorph, QuickNewBill, QuickComanda, SobrioShortcuts, UI_THEMES, loadUi, saveUi,
+  SwapText, Spinner, CopyPill, SizeMorph, QuickNewBill, QuickComanda, SobrioShortcuts,
 });

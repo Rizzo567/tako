@@ -184,7 +184,7 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
         <Card pad={0} style={{ marginBottom: 16, overflow: "hidden", border: "1.5px solid var(--wait)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", background: "var(--wait-bg)" }}>
             <Icon name="bell" size={17} style={{ color: "var(--wait)" }} />
-            <span style={{ fontWeight: 800, fontSize: 14, color: "#9A6912" }}>{calls.length} chiamate cameriere</span>
+            <span style={{ fontWeight: 800, fontSize: 14, color: "var(--wait)" }}>{calls.length} chiamate cameriere</span>
           </div>
           <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 1, background: "var(--hairline)" }}>
             {calls.map((c, i) => (
@@ -865,7 +865,6 @@ function QrAltRow({ label, hint, value }) {
   );
 }
 function QrCard({ t, onDownload, onDelete }) {
-  const ui = useContext(UiCtx);
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [url, setUrl] = useState("");
   const [mode, setMode] = useState("lan");
@@ -904,10 +903,6 @@ function QrCard({ t, onDownload, onDelete }) {
     }
   };
 
-  const copyLink = async () => {
-    try { await navigator.clipboard.writeText(url); toast("Link copiato", { type: "success" }); }
-    catch (_) { toast(url || "Link non disponibile"); }
-  };
   const openLink = () => { try { window.open(url, "_blank"); } catch (_) { toast("Impossibile aprire il link", { type: "error" }); } };
 
   return (
@@ -939,7 +934,7 @@ function QrCard({ t, onDownload, onDelete }) {
         <Btn size="sm" kind="soft" icon="download" onClick={() => onDownload(t, qrDataUrl)} style={{ flex: "1 1 90px", minWidth: 0 }}>Scarica</Btn>
       </div>
       <div style={{ display: "flex", gap: 8, width: "100%", justifyContent: "center" }}>
-        {ui === "sobrio" ? <CopyPill text={url} label="Copia link" /> : <IconBtn name="qr" tone="soft" onClick={copyLink} title="Copia link" />}
+        <CopyPill text={url} label="Copia link" />
         <IconBtn name="phone" tone="soft" onClick={openLink} title="Apri anteprima cliente" />
         <IconBtn name="trash" tone="soft" style={{ color: "var(--danger)" }} onClick={() => onDelete(t)} title="Elimina tavolo + QR" />
       </div>
