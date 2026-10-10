@@ -25,9 +25,6 @@ landing/RESTAURANT-ECONOMICS.md
 # TypeScript build cache
 *.tsbuildinfo
 
-# Postgres portatile dev (dati locali, non versionare)
-packages/db/.pgdata/
-
 # artefatti di rilascio locali
 release/
 *.apk

@@ -6,7 +6,7 @@ import { join, resolve } from 'node:path'
 import { createServer } from 'node:net'
 import postgres from 'postgres'
 
-// Avoid importing index.ts (which boots an appliance). Only its event transport
+// Avoid importing index.ts (which starts the whole server). Only its event transport
 // is replaced, with the actual Socket.io server created below. Auth/SQL/routes
 // remain the production implementations.
 const transport = vi.hoisted(() => ({ server: null as any }))

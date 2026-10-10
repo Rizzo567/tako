@@ -21,8 +21,7 @@
 **/.turbo
 *.tsbuildinfo
 
-# Dati locali appliance / store ~/.tako / Postgres portatile (mai nel cloud)
-packages/db/.pgdata
+# Dati locali (upload di sviluppo, ~/.tako): mai nell'immagine
 **/uploads
 .tako
 

@@ -43,7 +43,7 @@ const registerSchema = z.object({
   email: emailField,
   password: passwordField,
   name: z.string().trim().min(1).max(120).optional(),
-  // Opt-in newsletter (checkbox alla registrazione, sito o appliance). L'iscrizione
+  // Opt-in newsletter (checkbox alla registrazione sul sito). L'iscrizione
   // alla Resend Audience parte solo alla verifica email (double opt-in di fatto).
   newsletter: z.boolean().optional(),
 })

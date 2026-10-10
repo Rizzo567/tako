@@ -2,7 +2,7 @@ import type { Config } from 'drizzle-kit'
 
 // Config Drizzle DEDICATA al control-plane cloud. Punta SOLO allo schema cloud
 // e a una cartella di migrazioni separata, così le tabelle `cloud_*` non finiscono
-// mai nel DB locale (appliance) e viceversa. Vedi MASTER_PLAN-cloud-auth §2.1/§3.1.
+// mai nel DB della webapp e viceversa. Vedi MASTER_PLAN-cloud-auth §2.1/§3.1.
 export default {
   schema: './src/schema/cloud/*.ts',
   out: './src/migrations-cloud',
