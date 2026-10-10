@@ -1309,7 +1309,7 @@ function NetHealthCard() {
     </Card>
   );
 }
-function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAULTS, setSettings = () => {} }) {
+function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAULTS, setSettings = () => {}, ui = "classico", setUi = () => {} }) {
   const [sec, setSec] = useState("aspetto");
   const [webMode, setWebMode] = useState(false);
   useEffect(() => {
@@ -1375,6 +1375,26 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
         <div style={{ flex: 1, minWidth: 0, width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
           {sec === "aspetto" && (<>
             <Card pad={20}>
+              <h3 style={{ fontSize: 16, marginBottom: 4 }}>Tema dell'interfaccia</h3>
+              <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 16 }}>Vale solo per il tuo account, su questo dispositivo.</p>
+              <div role="radiogroup" aria-label="Tema dell'interfaccia" style={{ display: "grid", gridTemplateColumns: mobile ? "1fr 1fr" : "repeat(2, minmax(0, 220px))", gap: 12 }}>
+                {Object.entries(UI_THEMES).map(([k, label]) => { const on = ui === k; const sob = k === "sobrio"; return (
+                  <button key={k} role="radio" aria-checked={on} className="press" onClick={() => setUi(k)}
+                    style={{ display: "flex", flexDirection: "column", gap: 10, padding: 10, borderRadius: 12, textAlign: "left", background: "var(--raised)", boxShadow: on ? "0 0 0 2px var(--ink)" : "inset 0 0 0 1px var(--hairline)" }}>
+                    <span aria-hidden="true" style={{ height: 64, borderRadius: 8, background: sob ? "#ffffff" : "#F2EBE2", boxShadow: "inset 0 0 0 1px " + (sob ? "#e5e5e5" : "#E7DDD1"), display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                      <span style={{ height: 22, padding: "0 12px", display: "grid", placeItems: "center", borderRadius: sob ? 999 : 7, background: sob ? "#0a0a0a" : "#ED7159", color: "#fff", fontSize: 11, fontWeight: sob ? 500 : 700, fontFamily: sob ? '"Tako Sobrio", system-ui' : "var(--f-ui)" }}>Apri</span>
+                      <span style={{ height: 22, padding: "0 12px", display: "grid", placeItems: "center", borderRadius: sob ? 999 : 7, background: sob ? "#fff" : "#F4EEE7", boxShadow: sob ? "inset 0 0 0 1px #e5e5e5" : "none", color: sob ? "#0a0a0a" : "#2A1F1A", fontSize: 11, fontWeight: sob ? 500 : 700, fontFamily: sob ? '"Tako Sobrio", system-ui' : "var(--f-ui)" }}>Annulla</span>
+                    </span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 700 }}>
+                      <span style={{ width: 16, height: 16, borderRadius: 99, boxShadow: on ? "inset 0 0 0 5px var(--ink)" : "inset 0 0 0 1.5px var(--ink-3)" }} />{label}
+                    </span>
+                    <span style={{ fontSize: 12, color: "var(--ink-3)", marginTop: -6 }}>{sob ? "Bianco e grigi, pulsanti a pillola, riquadri che nascono dal pulsante" : "Colori caldi e colore brand del locale"}</span>
+                  </button>
+                ); })}
+              </div>
+              {ui === "sobrio" && <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginTop: 12 }}>Nel tema Sobrio il colore principale è il nero; il colore brand del locale resta per il tema classico e per il menu dei clienti.</p>}
+            </Card>
+            {ui !== "sobrio" && <Card pad={20}>
               <h3 style={{ fontSize: 16, marginBottom: 4 }}>Colore brand</h3>
               <p style={{ fontSize: 12.5, color: "var(--ink-2)", marginBottom: 16 }}>Cambia il colore principale di tutta l'interfaccia in tempo reale.</p>
               <div style={{ display: "flex", gap: mobile ? 12 : 18, flexWrap: "wrap" }}>
@@ -1385,7 +1405,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
                   </button>
                 ); })}
               </div>
-            </Card>
+            </Card>}
             <Card pad={20}>
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>Logo</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

@@ -130,6 +130,7 @@ function SetupSlot({ go, setupDone, allDone, role = "owner" }) {
 
 /* ═══════════════════ DASHBOARD HOME ═══════════════════ */
 function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, role = "owner" }) {
+  const ui = useContext(UiCtx);
   const active = orders.filter(o => !["servito", "pagato", "annullato"].includes(o.stato)).length;
   // Saluto derivato dall'ora + nome dell'utente loggato per il suo ruolo (non fisso su owner).
   const _hour = new Date().getHours();
@@ -185,7 +186,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {incomplete && <SetupSlot go={go} setupDone={setupDone} allDone={allDone} role={role} />}
-          <Card pad={18}>
+          {ui === "sobrio" ? <SobrioShortcuts go={go} role={role} /> : <Card pad={18}>
             <h3 style={{ fontSize: 16, marginBottom: 12 }}>Scorciatoie</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }}>
               {[["Nuovo conto", "cassa", "cassa"], ["Comanda", "comanda", "comanda"], ["Sala live", "sala", "map"], ["Cucina", "kds", "kitchen"]].map(([l, id, ic]) => (
@@ -193,7 +194,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
               ))}
             </div>
             {role === "owner" && <button className="press" onClick={() => { window.__takoOpenMenuSetup = true; go("menu"); }} style={{ display:"flex",alignItems:"center",gap:9,width:"100%",marginTop:9,padding:12,borderRadius:12,background:"var(--sunken)",fontWeight:700,fontSize:13.5,color:"var(--ink)" }}><Icon name="menu" size={18}/>Configura menu cliente</button>}
-          </Card>
+          </Card>}
         </div>
       </div>
     </ScreenScroll>

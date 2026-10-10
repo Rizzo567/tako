@@ -865,6 +865,7 @@ function QrAltRow({ label, hint, value }) {
   );
 }
 function QrCard({ t, onDownload, onDelete }) {
+  const ui = useContext(UiCtx);
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [url, setUrl] = useState("");
   const [mode, setMode] = useState("lan");
@@ -938,7 +939,7 @@ function QrCard({ t, onDownload, onDelete }) {
         <Btn size="sm" kind="soft" icon="download" onClick={() => onDownload(t, qrDataUrl)} style={{ flex: "1 1 90px", minWidth: 0 }}>Scarica</Btn>
       </div>
       <div style={{ display: "flex", gap: 8, width: "100%", justifyContent: "center" }}>
-        <IconBtn name="qr" tone="soft" onClick={copyLink} title="Copia link" />
+        {ui === "sobrio" ? <CopyPill text={url} label="Copia link" /> : <IconBtn name="qr" tone="soft" onClick={copyLink} title="Copia link" />}
         <IconBtn name="phone" tone="soft" onClick={openLink} title="Apri anteprima cliente" />
         <IconBtn name="trash" tone="soft" style={{ color: "var(--danger)" }} onClick={() => onDelete(t)} title="Elimina tavolo + QR" />
       </div>

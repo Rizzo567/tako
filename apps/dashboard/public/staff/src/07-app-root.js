@@ -164,6 +164,12 @@ function App({ session }) {
   window.__takoRole = role;
   window.__takoRestaurantId = session.user.restaurantId || session.restaurant?.id || window.__settings_raw?.id;
   const [drawer, setDrawer] = useState(false);
+  // Tema dell'interfaccia per utente ("classico" | "sobrio"), salvato in localStorage
+  // (il server non ha preferenze per utente). Default: Tako classico.
+  const [ui, setUiState] = useState(() => loadUi(session.user.id));
+  const setUi = (v) => { setUiState(v); saveUi(session.user.id, v); };
+  const sobrio = ui === "sobrio";
+  useEffect(() => { if (sobrio) sbInstallTriggerTracker(); }, [sobrio]);
   const [frame, setFrame] = useState(() => (typeof window !== "undefined" && window.innerWidth < 900 ? "mobile" : "desktop"));
   const mobile = frame === "mobile";
   const mobileRef = useRef(mobile); mobileRef.current = mobile;
@@ -206,6 +212,8 @@ function App({ session }) {
   }, [route]);
 
   useEffect(() => save("route", route), [route]);
+  const prevRouteRef = useRef(route);
+  useEffect(() => { const prev = prevRouteRef.current; prevRouteRef.current = route; if (sobrio && prev !== route) sbPageRouteChanged(prev, route); }, [route, sobrio]);
   useEffect(() => save("brand", brand), [brand]);
   useEffect(() => { try { localStorage.setItem("tako-dash-settings", JSON.stringify(settings)); } catch (_) {} }, [settings]);
   useEffect(() => { const onR = () => setFrame(window.innerWidth < 900 ? "mobile" : "desktop"); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, []);
@@ -334,7 +342,7 @@ function App({ session }) {
     case "statistiche": Screen = role === "owner" && window.ScreenReportsWorkspace ? <window.ScreenReportsWorkspace mobile={mobile}/> : <ScreenStatistiche key={"stats" + dataVersion} mobile={mobile} />; break;
     case "insights": Screen = <ScreenInsights key={"insights" + dataVersion} mobile={mobile} />; break;
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
-    case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} brand={brand} setBrand={onSetBrand} settings={settings} setSettings={onSaveSettings} />; break;
+    case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} brand={brand} setBrand={onSetBrand} settings={settings} setSettings={onSaveSettings} ui={ui} setUi={setUi} />; break;
     case "collega": Screen = <ScreenCollega mobile={mobile} />; break;
     default: Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />;
   }
@@ -351,9 +359,15 @@ function App({ session }) {
   if (!Object.hasOwn(ROLE_ACCESS, role)) return <div style={{ padding: 32 }}>Il tuo ruolo non è autorizzato ad accedere alla dashboard. Contatta il responsabile del locale.</div>;
 
   const p = BRAND_PALETTES[brand] || BRAND_PALETTES.arancione;
-  const brandVars = { "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on };
+  // Sobrio: i colori vengono da src/sobrio.css ([data-ui="sobrio"]), non dalla palette inline.
+  const brandVars = sobrio ? {} : { "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on };
+  const uiAttr = sobrio ? "sobrio" : undefined;
+  // Sobrio: la schermata sta in un livello che può nascere dal pulsante della Panoramica.
+  const ghost = sobrio && route !== "dashboard" ? <ScreenDashboard mobile={mobile} go={() => {}} orders={orders} settings={settings} role={role} /> : null;
+  const Content = sobrio ? <PageMorphLayer route={route} ghost={ghost} mobile={mobile} onBack={() => sbPageBack(go)}>{Screen}</PageMorphLayer> : Screen;
 
   return (
+    <UiCtx.Provider value={ui}>
     <TakoCtx.Provider value={brand}>
       {(!online || !realtimeOnline) && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, display: "flex", justifyContent: "center", pointerEvents: "none", paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}>
@@ -364,11 +378,11 @@ function App({ session }) {
         </div>
       )}
       {mobile ? (
-        <div className="screen app-live mobile" style={{ ...brandVars, width: "100vw", height: "100vh" }}>
+        <div className="screen app-live mobile" data-ui={uiAttr} style={{ ...brandVars, width: "100vw", height: "100vh" }}>
           <div style={{ width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--surface)" }}>
             <div style={{ flex: 1, minHeight: 0, position: "relative", display: "flex", flexDirection: "column" }}>
-              {Screen}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, background: "rgba(251,248,244,.55)", backdropFilter: "blur(16px) saturate(180%)", WebkitBackdropFilter: "blur(16px) saturate(180%)" }}>
+              {Content}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, background: sobrio ? "rgba(255,255,255,.72)" : "rgba(251,248,244,.55)", backdropFilter: "blur(16px) saturate(180%)", WebkitBackdropFilter: "blur(16px) saturate(180%)" }}>
                 <MobileHeader route={route} openDrawer={() => setDrawer(true)} live role={role} badges={badges} nome={settings.nome || RESTAURANT.name} go={go} />
               </div>
             </div>
@@ -378,17 +392,18 @@ function App({ session }) {
           <Toaster mobile />
         </div>
       ) : (
-        <div className="screen app-live" style={{ ...brandVars, width: "100vw", height: "100vh" }}>
+        <div className="screen app-live" data-ui={uiAttr} style={{ ...brandVars, width: "100vw", height: "100vh" }}>
           <div style={{ width: "100%", height: "100%", display: "flex", background: "var(--bg)" }}>
             <Sidebar route={route} go={go} role={role} badges={badges} live />
             <main style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "var(--bg)" }}>
-              {Screen}
+              {Content}
             </main>
           </div>
           <Toaster mobile={false} />
         </div>
       )}
     </TakoCtx.Provider>
+    </UiCtx.Provider>
   );
 }
 
