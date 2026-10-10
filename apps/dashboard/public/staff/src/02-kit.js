@@ -1,6 +1,9 @@
 /* ───────────────── Tako Dashboard — kit primitivi ───────────────── */
 const { useState, useEffect, useRef, useMemo, useCallback, createContext, useContext } = React;
 
+/* Tema dell'interfaccia: "classico" | "sobrio" (fornito da App, vedi 19-sobrio.js) */
+const UiCtx = React.createContext("classico");
+
 /* icone Lucide-style, stroke 2, viewBox 24 */
 const IC = {
   copy:'M10 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zM4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
@@ -57,9 +60,19 @@ function Card({ children, pad = 18, style, className = "", ...rest }) {
 }
 
 /* button */
-function Btn({ children, onClick, kind = "brand", size = "md", icon, full, disabled, style }) {
+/* Nel tema Sobrio (UiCtx) i pulsanti leggono i token --btn-* / --r-btn di src/sobrio.css;
+   nel classico gli stili sono quelli originali, letterali, per non cambiare un pixel. */
+function Btn({ children, onClick, kind = "brand", size = "md", icon, full, disabled, style, ...rest }) {
+  const sob = useContext(UiCtx) === "sobrio";
   const sizes = { sm: { h: 36, px: 13, fs: 13.5 }, md: { h: 44, px: 18, fs: 15 }, lg: { h: 52, px: 24, fs: 16.5 } }[size];
-  const kinds = {
+  const kinds = sob ? {
+    brand: { background: disabled ? "var(--btn-disabled-bg)" : "var(--btn-brand-bg, var(--brand))", color: disabled ? "var(--btn-disabled-fg)" : "var(--on-brand)", boxShadow: "none" },
+    dark: { background: "var(--btn-brand-bg, var(--ink))", color: "var(--surface)" },
+    soft: { background: "var(--btn-soft-bg)", color: "var(--ink)", boxShadow: "var(--btn-soft-ring)" },
+    ghost: { background: "transparent", color: "var(--ink)", boxShadow: "var(--btn-ghost-ring)" },
+    danger: { background: "var(--danger-bg)", color: "var(--danger)" },
+    ok: { background: "var(--ok)", color: "#fff" },
+  }[kind] : {
     brand: { background: disabled ? "var(--ink-3)" : "var(--brand)", color: "var(--on-brand)", boxShadow: disabled ? "none" : "0 6px 16px -6px var(--brand)" },
     dark: { background: "var(--ink)", color: "var(--surface)" },
     soft: { background: "var(--sunken)", color: "var(--ink)" },
@@ -67,18 +80,22 @@ function Btn({ children, onClick, kind = "brand", size = "md", icon, full, disab
     danger: { background: "var(--danger-bg)", color: "var(--danger)" },
     ok: { background: "var(--ok)", color: "#fff" },
   }[kind];
+  const dims = sob
+    ? { height: `var(--btn-h-${size})`, borderRadius: "var(--r-btn)", fontSize: `var(--btn-fs-${size})`, fontWeight: "var(--btn-weight)", opacity: 1 }
+    : { height: sizes.h, borderRadius: "var(--r-md)", fontSize: sizes.fs, fontWeight: 700, opacity: disabled ? .6 : 1 };
   return (
-    <button className="press" onClick={onClick} disabled={disabled}
+    <button className="press" onClick={onClick} disabled={disabled} {...(sob ? { "data-kind": kind } : null)} {...rest}
       style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, width: full ? "100%" : "auto",
-        height: sizes.h, padding: `0 ${sizes.px}px`, borderRadius: "var(--r-md)", fontSize: sizes.fs, fontWeight: 700,
-        fontFamily: "var(--f-ui)", opacity: disabled ? .6 : 1, transition: "filter .15s", ...kinds, ...style }}>
+        height: dims.height, padding: `0 ${sizes.px}px`, borderRadius: dims.borderRadius, fontSize: dims.fontSize, fontWeight: dims.fontWeight,
+        fontFamily: "var(--f-ui)", opacity: dims.opacity, transition: "filter .15s", ...kinds, ...style }}>
       {icon && <Icon name={icon} size={sizes.fs + 4} />}{children}
     </button>
   );
 }
-function IconBtn({ name, onClick, size = 40, iconSize = 20, tone = "soft", style, label }) {
-  const tones = { soft: { background: "var(--sunken)", color: "var(--ink)" }, ghost: { background: "transparent", color: "var(--ink-2)" }, brand: { background: "var(--brand)", color: "var(--on-brand)" }, raised: { background: "var(--raised)", color: "var(--ink)", boxShadow: "var(--sh-1)" } }[tone];
-  return <button aria-label={label || name} className="press" onClick={onClick} style={{ width: size, height: size, borderRadius: "var(--r-md)", display: "grid", placeItems: "center", ...tones, ...style }}><Icon name={name} size={iconSize} /></button>;
+function IconBtn({ name, onClick, size = 40, iconSize = 20, tone = "soft", style, label, ...rest }) {
+  const sob = useContext(UiCtx) === "sobrio";
+  const tones = { soft: sob ? { background: "var(--iconbtn-soft-bg)", color: "var(--iconbtn-soft-fg)" } : { background: "var(--sunken)", color: "var(--ink)" }, ghost: { background: "transparent", color: "var(--ink-2)" }, brand: { background: "var(--brand)", color: "var(--on-brand)" }, raised: { background: "var(--raised)", color: "var(--ink)", boxShadow: "var(--sh-1)" } }[tone];
+  return <button aria-label={label || name} className="press" onClick={onClick} {...rest} style={{ width: size, height: size, borderRadius: sob ? "var(--r-btn)" : "var(--r-md)", display: "grid", placeItems: "center", ...tones, ...style }}><Icon name={name} size={iconSize} /></button>;
 }
 
 /* badge / status */
@@ -88,10 +105,11 @@ const TONE = {
   muted: ["var(--muted-bg)", "var(--ink-2)"],
 };
 function Badge({ children, tone = "muted", dot, solid, style }) {
+  const sob = useContext(UiCtx) === "sobrio";
   const [bg, fg] = TONE[tone] || TONE.muted;
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: "var(--r-pill)",
-      fontSize: 12.5, fontWeight: 700, background: solid ? fg : bg, color: solid ? "#fff" : fg, whiteSpace: "nowrap", ...style }}>
+      fontSize: 12.5, fontWeight: sob ? 500 : 700, background: solid ? fg : bg, color: solid ? "#fff" : fg, whiteSpace: "nowrap", ...style }}>
       {dot && <span style={{ width: 7, height: 7, borderRadius: 99, background: solid ? "#fff" : fg }} />}{children}
     </span>
   );
@@ -169,7 +187,10 @@ function Avatar({ initials, color = "var(--brand)", size = 38 }) {
 
 /* modal (center) + drawer (right/bottom) */
 function Overlay({ open, onClose, children, anchor = "center" }) {
+  const ui = useContext(UiCtx);
   const { mounted, active } = useMountTransition(open, 320);
+  // Sobrio: il riquadro nasce dal pulsante che l'ha aperto (primitiva in 19-sobrio.js)
+  if (ui === "sobrio" && window.MorphOverlay) return <window.MorphOverlay open={open} onClose={onClose} anchor={anchor}>{children}</window.MorphOverlay>;
   if (!mounted) return null;
   const pos = {
     center: { alignItems: "center", justifyContent: "center" },
@@ -357,6 +378,6 @@ function Tako({ pose = "neutral", size = 120, float = true, flip = false, style,
 
 Object.assign(window, {
   Icon, Card, Btn, IconBtn, Badge, Kpi, Progress, BarChart, Empty, Search, Avatar,
-  Overlay, useMountTransition, toast, Toaster, Confirm, PageHead, TONE, Tako, TakoCtx, TAKO_POSE,
+  Overlay, UiCtx, useMountTransition, toast, Toaster, Confirm, PageHead, TONE, Tako, TakoCtx, TAKO_POSE,
   pushLiveNotif, useLiveNotif, setScrollDown, useScrollDown,
 });

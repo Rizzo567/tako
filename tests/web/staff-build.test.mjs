@@ -10,7 +10,7 @@ test('hosted build compiles all source scripts in order, copies original design,
  const dir=await mkdtemp(join(tmpdir(),'tako-staff-build-'));t.after(()=>rm(dir,{recursive:true,force:true}));
  const source=resolve('apps/dashboard/public/staff');const before=await readFile(join(source,'index.html'),'utf8');
  const result=await buildStaffWeb(join(dir,'out'));
- assert.equal(result.sources.length,18);assert.equal(result.sources.at(-1),'src/07-app-root.js');
+ assert.equal(result.sources.length,19);assert.equal(result.sources.at(-1),'src/07-app-root.js');
  const html=await readFile(join(result.out,'index.html'),'utf8');
  assert.ok(html.includes('src="app.js"'));assert.ok(html.includes('src="boot.js"'));
  assert.equal(/text\/babel|lib\/babel|onclick=|<script\b(?![^>]*\bsrc=)/i.test(html),false);
