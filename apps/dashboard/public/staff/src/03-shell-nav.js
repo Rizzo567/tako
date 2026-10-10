@@ -93,8 +93,8 @@ function Sidebar({ route, go, role, badges, live }) {
     return (
       <button key={it.id} className={"press nav-item" + (on ? " on" : "")} onClick={() => go(it.id)}
         style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "7px 11px", borderRadius: 11, marginBottom: 1,
-          color: on ? "var(--on-brand)" : "var(--nav-ink)", background: on ? "var(--brand)" : "transparent", fontWeight: on ? 700 : 600, fontSize: 14,
-          boxShadow: on ? "0 6px 16px -6px var(--brand)" : "none", transition: "background .15s" }}>
+          color: on ? "var(--side-on)" : "var(--side-ink)", background: on ? "var(--side-sel)" : "transparent", fontWeight: on ? 700 : 600, fontSize: 14,
+          boxShadow: "none", transition: "background .15s" }}>
         <span className="nav-ico"><Icon name={it.icon} size={18} /></span>
         <span style={{ flex: 1, textAlign: "left" }}>{it.label}</span>
         {it.badge && navBadge(it, badges) > 0 && (
@@ -103,7 +103,7 @@ function Sidebar({ route, go, role, badges, live }) {
       </button>
     );
   };
-  const boxStyle = { background: "var(--nav)", color: "var(--nav-ink)", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none" };
+  const boxStyle = { background: "var(--side)", color: "var(--side-ink)", borderRadius: 12, boxShadow: "none", border: "1px solid var(--side-line)", flex: "none" };
 
   return (
     <aside ref={asideRef} className="scroll" style={{ width: 238, flex: "none", margin: "5px 12px 12px 5px", height: "calc(100% - 17px)", display: "flex", flexDirection: "column", gap: 10, overflowY: "auto" }}>
@@ -115,17 +115,17 @@ function Sidebar({ route, go, role, badges, live }) {
           <div key={g.group} style={{ ...boxStyle, padding: isFirst ? "30px 10px 9px" : "8px 10px 9px" }}>
             {isFirst && (
               <div style={{ padding: "7px 7px 9px", display: "flex", alignItems: "center", gap: 9 }}>
-                <Tako pose="logoMark" size={38} float={false} style={{ filter: "drop-shadow(0 6px 12px rgba(0,0,0,.3))" }} />
+                <Tako pose="logoMark" size={38} float={false} style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,.12))" }} />
                 <div>
-                  <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 19, color: "#fff", lineHeight: 1 }}>Tako</div>
-                  <div style={{ fontSize: 10.5, color: "var(--nav-ink-2)", marginTop: 2 }}>Dashboard</div>
+                  <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 19, color: "var(--side-ink)", lineHeight: 1 }}>Tako</div>
+                  <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
                 </div>
               </div>
             )}
             <button className="press" onClick={() => toggle(g.group)}
               style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "5px 9px 7px", background: "transparent" }}>
-              <span style={{ fontFamily: "var(--f-display)", fontWeight: 800, fontSize: 13.5, color: "var(--nav-ink)", letterSpacing: ".005em" }}>{g.group}</span>
-              <Icon name="chevD" size={15} style={{ marginLeft: "auto", color: "var(--nav-ink-2)", transform: isOpen ? "none" : "rotate(-90deg)", transition: "transform .2s" }} />
+              <span style={{ fontFamily: "var(--f-display)", fontWeight: 800, fontSize: 13.5, color: "var(--side-ink)", letterSpacing: ".005em" }}>{g.group}</span>
+              <Icon name="chevD" size={15} style={{ marginLeft: "auto", color: "var(--side-ink-2)", transform: isOpen ? "none" : "rotate(-90deg)", transition: "transform .2s" }} />
             </button>
             <div style={{ overflow: "hidden", transition: "max-height .34s var(--out), opacity .26s ease", maxHeight: isOpen ? g.items.length * 40 + 4 : 0, opacity: isOpen ? 1 : 0 }}>
               {g.items.map(NavBtn)}
@@ -160,28 +160,28 @@ function SidebarUser({ role, go }) {
     { label: "Notifiche", icon: "bell", onClick: () => { setNotifOpen(true); setOpen(false); } },
   ];
   return (
-    <div ref={ref} style={{ position: "relative", paddingTop: 10, marginTop: 8, borderTop: "1px solid var(--nav-line)" }}>
+    <div ref={ref} style={{ position: "relative", paddingTop: 10, marginTop: 8, borderTop: "1px solid var(--side-line)" }}>
       <NotificationsSheet open={notifOpen} onClose={() => setNotifOpen(false)} />
       {open && (
-        <div className="pop-in" style={{ position: "absolute", left: 0, right: 0, bottom: "calc(100% - 2px)", transformOrigin: "bottom", background: "var(--nav-2)", border: "1px solid var(--nav-line)", borderRadius: 14, boxShadow: "var(--sh-3)", padding: 6, marginBottom: 6 }}>
+        <div className="pop-in" style={{ position: "absolute", left: 0, right: 0, bottom: "calc(100% - 2px)", transformOrigin: "bottom", background: "var(--side-2)", border: "1px solid var(--side-line)", borderRadius: 12, boxShadow: "var(--sh-3)", padding: 6, marginBottom: 6 }}>
           {items.map(it => (
-            <button key={it.label} className="press nav-item" onClick={it.onClick} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "10px 11px", borderRadius: 10, color: "var(--nav-ink)", fontSize: 14, fontWeight: 600, background: "transparent" }}>
+            <button key={it.label} className="press nav-item" onClick={it.onClick} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "10px 11px", borderRadius: 10, color: "var(--side-ink)", fontSize: 14, fontWeight: 600, background: "transparent" }}>
               <span className="nav-ico"><Icon name={it.icon} size={18} /></span>{it.label}
             </button>
           ))}
-          <div style={{ height: 1, background: "var(--nav-line)", margin: "5px 8px" }} />
-          <button className="press" onClick={async () => { if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return; try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "10px 11px", borderRadius: 10, color: "#F0907F", fontSize: 14, fontWeight: 700, background: "transparent" }}>
+          <div style={{ height: 1, background: "var(--side-line)", margin: "5px 8px" }} />
+          <button className="press" onClick={async () => { if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return; try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "10px 11px", borderRadius: 10, color: "var(--danger)", fontSize: 14, fontWeight: 700, background: "transparent" }}>
             <Icon name="logout" size={18} />Esci dall'account
           </button>
         </div>
       )}
-      <button className="press" onClick={() => setOpen(o => !o)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, background: open ? "var(--nav-2)" : "transparent", borderRadius: 11, padding: 5 }}>
+      <button className="press" onClick={() => setOpen(o => !o)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, background: open ? "var(--side-2)" : "transparent", borderRadius: 11, padding: 5 }}>
         <Avatar initials={r.initials} size={34} color="var(--brand)" />
         <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{r.name}</div>
-          <div style={{ fontSize: 11.5, color: "var(--nav-ink-2)" }}>{r.label}</div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: "var(--side-ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{r.name}</div>
+          <div style={{ fontSize: 11.5, color: "var(--side-ink-2)" }}>{r.label}</div>
         </div>
-        <Icon name="chevU" size={16} style={{ color: "var(--nav-ink-2)", transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+        <Icon name="chevU" size={16} style={{ color: "var(--side-ink-2)", transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
       </button>
     </div>
   );
@@ -237,7 +237,7 @@ function NotificationsSheet({ open, onClose }) {
           ) : list.map((n, i) => {
             const [bg, fg] = TONE[n.tone] || TONE.muted;
             return (
-              <div key={i} className="press" style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 10px", borderRadius: 14, background: n.unread ? "var(--brand-wash)" : "transparent" }}>
+              <div key={i} className="press" style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 10px", borderRadius: 12, background: n.unread ? "var(--brand-wash)" : "transparent" }}>
                 <span style={{ width: 40, height: 40, borderRadius: 12, flex: "none", display: "grid", placeItems: "center", background: bg, color: fg }}><Icon name={n.icon} size={19} /></span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14.5, fontWeight: 700, lineHeight: 1.25 }}>{n.title}</div>
@@ -347,7 +347,7 @@ function MobileHeader({ route, openDrawer, live, role, badges, nome, dark, go })
       {busy && (
         <div onClick={() => { setAnim(null); setNotifOpen(true); }}
           className={ph === "hold" ? "nb-float" : undefined}
-          style={{ position: "absolute", left: 74, top: 9, height: 46, width: cap.w, maxWidth: "calc(100% - 88px)", display: "flex", alignItems: "center", gap: 10, padding: "0 10px", borderRadius: 15, background: "var(--nav)", color: "var(--nav-ink)", boxShadow: "0 14px 30px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.08)", overflow: "hidden", whiteSpace: "nowrap", opacity: cap.o, transform: `translateX(${cap.x}px) scale(${cap.s}) rotate(${cap.rot}deg)`, transformOrigin: "right center", transition: capTrans, zIndex: 30, cursor: "pointer" }}>
+          style={{ position: "absolute", left: 74, top: 9, height: 46, width: cap.w, maxWidth: "calc(100% - 88px)", display: "flex", alignItems: "center", gap: 10, padding: "0 10px", borderRadius: 12, background: "var(--nav)", color: "var(--nav-ink)", boxShadow: "0 14px 30px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.08)", overflow: "hidden", whiteSpace: "nowrap", opacity: cap.o, transform: `translateX(${cap.x}px) scale(${cap.s}) rotate(${cap.rot}deg)`, transformOrigin: "right center", transition: capTrans, zIndex: 30, cursor: "pointer" }}>
           {/* sheen sweep */}
           {active && <span className="nb-sheen" style={{ position: "absolute", top: 0, bottom: 0, width: 40, background: "linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent)", pointerEvents: "none" }} />}
           {/* icona */}
@@ -373,7 +373,7 @@ function IOSStatusBar({ dark }) {
   return (
     <div style={{ position: "relative", flex: "none", height: 48, display: "flex", alignItems: "flex-end", justifyContent: "space-between", padding: "0 28px 7px", zIndex: 25 }}>
       <span style={{ fontSize: 15, fontWeight: 700, color: fg, fontFamily: "var(--f-ui)", letterSpacing: ".02em" }}>9:41</span>
-      <div style={{ position: "absolute", top: 9, left: "50%", transform: "translateX(-50%)", width: 116, height: 33, borderRadius: 18, background: "#000", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 11 }}>
+      <div style={{ position: "absolute", top: 9, left: "50%", transform: "translateX(-50%)", width: 116, height: 33, borderRadius: 12, background: "#000", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 11 }}>
         <span style={{ width: 9, height: 9, borderRadius: 99, background: "#0E1A2B", boxShadow: "inset 0 0 0 1px rgba(90,130,180,.5)" }} />
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 6, color: fg }}>
@@ -402,7 +402,7 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
   const Tab = ({ it, isMore }) => {
     const on = !isMore && navParent(route) === navParent(it.id);
     return (
-      <button className="press bb-tab" onClick={isMore ? openDrawer : () => go(it.id)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 0 : 4, padding: compact ? "8px 0" : "9px 0 8px", color: on ? "var(--brand)" : idle, position: "relative" }}>
+      <button className="press bb-tab" onClick={isMore ? openDrawer : () => go(it.id)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 0 : 4, padding: compact ? "8px 0" : "9px 0 8px", color: on ? "var(--side-sel)" : idle, position: "relative" }}>
         <span className="nav-ico" style={{ position: "relative" }}>
           <Icon name={isMore ? "apps" : it.icon} size={compact ? 25 : 22} stroke={on ? 2.5 : 2} />
           {!isMore && it.badge && navBadge(it, badges) > 0 && <span style={{ position: "absolute", top: -5, right: -8, minWidth: 15, height: 15, padding: "0 4px", borderRadius: 99, background: "var(--brand)", color: "var(--on-brand)", fontSize: 9.5, fontWeight: 800, display: "grid", placeItems: "center", border: dark ? "1.5px solid #1A1310" : "1.5px solid rgba(255,255,255,.95)" }}>{navBadge(it, badges)}</span>}
@@ -412,7 +412,7 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
     );
   };
   return (
-    <nav style={{ position: "absolute", left: 14, right: 14, bottom: 26, display: "flex", alignItems: "stretch", borderRadius: 26, padding: "2px 6px", zIndex: 40, backdropFilter: "blur(30px) saturate(200%)", WebkitBackdropFilter: "blur(30px) saturate(200%)", transition: "padding .25s var(--out)", ...glass }}>
+    <nav style={{ position: "absolute", left: 14, right: 14, bottom: 26, display: "flex", alignItems: "stretch", borderRadius: 12, padding: "2px 6px", zIndex: 40, backdropFilter: "blur(30px) saturate(200%)", WebkitBackdropFilter: "blur(30px) saturate(200%)", transition: "padding .25s var(--out)", ...glass }}>
       {prim.map(it => <Tab key={it.id} it={it} />)}
       <Tab isMore it={{}} />
     </nav>
@@ -426,19 +426,19 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
   const r = ROLES[role];
   return (
     <Overlay open={open} onClose={onClose} anchor="right">
-      <div className="scroll" style={{ width: 296, maxWidth: "86vw", height: "auto", maxHeight: "calc(100% - 24px)", alignSelf: "flex-end", margin: "12px 12px 12px 0", borderRadius: 26, background: "var(--nav)", color: "var(--nav-ink)", overflowY: "auto", padding: "16px 12px", boxShadow: "var(--sh-3)" }}>
+      <div className="scroll" style={{ width: 296, maxWidth: "86vw", height: "auto", maxHeight: "calc(100% - 24px)", alignSelf: "flex-end", margin: "12px 12px 12px 0", borderRadius: 12, background: "var(--side)", color: "var(--side-ink)", overflowY: "auto", padding: "16px 12px", boxShadow: "var(--sh-3)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "2px 6px 14px" }}>
-          <span style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 20, color: "#fff" }}>Altro</span>
-          <span style={{ fontSize: 12.5, color: "var(--nav-ink-2)" }}>tutte le funzioni</span>
-          <IconBtn name="x" tone="ghost" size={34} style={{ marginLeft: "auto", color: "var(--nav-ink-2)" }} onClick={onClose} />
+          <span style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 20, color: "var(--side-ink)" }}>Altro</span>
+          <span style={{ fontSize: 12.5, color: "var(--side-ink-2)" }}>tutte le funzioni</span>
+          <IconBtn name="x" tone="ghost" size={34} style={{ marginLeft: "auto", color: "var(--side-ink-2)" }} onClick={onClose} />
         </div>
         {groups.map(g => (
           <div key={g.group} style={{ marginBottom: 12 }}>
-            <div className="mono" style={{ fontSize: 10.5, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--nav-ink-2)", padding: "6px 8px" }}>{g.group}</div>
+            <div className="mono" style={{ fontSize: 10.5, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--side-ink-2)", padding: "6px 8px" }}>{g.group}</div>
             {g.items.map(it => {
               const on = navParent(route) === navParent(it.id);
               return (
-                <button key={it.id} className={"press nav-item" + (on ? " on" : "")} onClick={() => { go(it.id); onClose(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px", borderRadius: 12, color: on ? "var(--on-brand)" : "var(--nav-ink)", background: on ? "var(--brand)" : "transparent", fontWeight: on ? 700 : 600, fontSize: 15 }}>
+                <button key={it.id} className={"press nav-item" + (on ? " on" : "")} onClick={() => { go(it.id); onClose(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px", borderRadius: 12, color: on ? "var(--side-on)" : "var(--side-ink)", background: on ? "var(--side-sel)" : "transparent", fontWeight: on ? 700 : 600, fontSize: 15 }}>
                   <span className="nav-ico"><Icon name={it.icon} size={20} /></span><span style={{ flex: 1, textAlign: "left" }}>{it.label}</span>
                   {it.badge && navBadge(it, badges) > 0 && <span style={{ minWidth: 20, height: 20, padding: "0 6px", borderRadius: 99, background: on ? "rgba(255,255,255,.25)" : "var(--brand)", color: "var(--on-brand)", fontSize: 11.5, fontWeight: 800, display: "grid", placeItems: "center" }}>{navBadge(it, badges)}</span>}
                 </button>
@@ -446,11 +446,11 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
             })}
           </div>
         ))}
-        <div style={{ marginTop: 8, padding: 12, borderTop: "1px solid var(--nav-line)", display: "flex", alignItems: "center", gap: 11 }}>
+        <div style={{ marginTop: 8, padding: 12, borderTop: "1px solid var(--side-line)", display: "flex", alignItems: "center", gap: 11 }}>
           <Avatar initials={r.initials} size={36} />
-          <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{r.name}</div><div style={{ fontSize: 12, color: "var(--nav-ink-2)" }}>{r.label}</div></div>
-          {canNavigate(role, "impostazioni") && <IconBtn name="settings" tone="ghost" size={36} style={{ color: "var(--nav-ink-2)" }} onClick={() => { go("impostazioni"); onClose(); }} />}
-          <IconBtn name="logout" tone="ghost" size={36} style={{ color: "#F0907F" }} onClick={async () => { if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return; try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} />
+          <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 700, color: "var(--side-ink)" }}>{r.name}</div><div style={{ fontSize: 12, color: "var(--side-ink-2)" }}>{r.label}</div></div>
+          {canNavigate(role, "impostazioni") && <IconBtn name="settings" tone="ghost" size={36} style={{ color: "var(--side-ink-2)" }} onClick={() => { go("impostazioni"); onClose(); }} />}
+          <IconBtn name="logout" tone="ghost" size={36} style={{ color: "var(--danger)" }} onClick={async () => { if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return; try { await window.TakoActions.logout(); } catch (_) {} ; try { localStorage.removeItem('tako-dash-route'); } catch(_){}; window.location.reload(); }} />
         </div>
       </div>
     </Overlay>

@@ -67,7 +67,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
   const lab = { fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" };
   const wrapStyle = { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
     "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on };
-  const cardStyle = { width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 20, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" };
+  const cardStyle = { width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" };
 
   // Schermata "conferma la tua email" (gate verifica attivo): niente sessione finché
   // il link nell'email non è stato cliccato; si entra dal pulsante Accedi.
@@ -98,7 +98,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg, #FBF8F4)", padding: 24,
       "--brand": p.brand, "--brand-deep": p.deep, "--brand-tint": p.tint, "--brand-wash": p.wash, "--on-brand": p.on }}>
-      <form onSubmit={submit} style={{ width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 20, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" }}>
+      <form onSubmit={submit} style={{ width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginBottom: 22 }}>
           <img src="/staff/assets/takos/arancione/logo.png" alt="Tako"
             onError={(e) => { if (e.currentTarget.src.indexOf('piatto') < 0) e.currentTarget.src = '/staff/assets/takos/arancione/piatto.png'; }}
@@ -400,7 +400,7 @@ function WorkspaceNavigation({ mobile, tabs, route, go, newOrder, children }) {
     <div style={{ flex: "none", padding: mobile ? "112px 14px 0" : "26px 30px 0" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <nav aria-label="Sezioni della pagina" style={{ display: "flex", flex: 1, gap: 6, flexWrap: "wrap" }}>
-          {tabs.map(it => <Btn key={it.id} size="sm" kind={route === it.id ? "brand" : "soft"} onClick={() => go(it.id)}>{it.label}</Btn>)}
+          {tabs.map(it => <Btn key={it.id} size="sm" kind={route === it.id ? "dark" : "soft"} onClick={() => go(it.id)}>{it.label}</Btn>)}
         </nav>
         {newOrder && <Btn icon="plus" onClick={() => go("comanda")}>Nuovo ordine</Btn>}
       </div>
@@ -455,7 +455,7 @@ function Root() {
 function CrashScreen({ onReload, onHome }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF8F4", padding: 24 }}>
-      <div style={{ width: 400, maxWidth: "100%", background: "#fff", borderRadius: 20, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid #eee", textAlign: "center" }}>
+      <div style={{ width: 400, maxWidth: "100%", background: "#fff", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid #eee", textAlign: "center" }}>
         <img src="assets/takos/arancione/pollice_in_su.png" alt="Tako" style={{ width: 84, height: 84, objectFit: "contain", margin: "0 auto 10px" }} />
         <div style={{ fontWeight: 900, fontSize: 21, color: "#2A1F1A", marginBottom: 8 }}>Qualcosa è andato storto</div>
         <div style={{ fontSize: 14, color: "#8a8079", lineHeight: 1.5, marginBottom: 22 }}>

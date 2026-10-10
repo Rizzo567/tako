@@ -145,7 +145,7 @@ function Empty({ icon = "sparkles", title, sub, action, tako }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, padding: "48px 24px", textAlign: "center" }}>
       {tako
         ? <Tako pose={tako} size={130} />
-        : <span style={{ width: 56, height: 56, borderRadius: 18, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name={icon} size={26} /></span>}
+        : <span style={{ width: 56, height: 56, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name={icon} size={26} /></span>}
       <div style={{ fontFamily: "var(--f-display)", fontWeight: 800, fontSize: 18 }}>{title}</div>
       {sub && <div style={{ fontSize: 14, color: "var(--ink-2)", maxWidth: 320 }}>{sub}</div>}
       {action}
@@ -261,7 +261,7 @@ function Toaster({ mobile }) {
           const ic = t.icon || (t.type === "success" ? "check" : t.type === "error" ? "alert" : "bell");
           return (
             <div key={t.id} className="ds-toast-in" onClick={() => dismiss(t.id)}
-              style={{ position: "relative", display: "flex", alignItems: "center", gap: 13, width: 340, padding: "14px 16px 14px 14px", borderRadius: 16, background: "var(--nav)", color: "#fff", boxShadow: "0 18px 44px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.07)", overflow: "hidden", pointerEvents: "auto", cursor: "pointer" }}>
+              style={{ position: "relative", display: "flex", alignItems: "center", gap: 13, width: 340, padding: "14px 16px 14px 14px", borderRadius: 12, background: "var(--nav)", color: "#fff", boxShadow: "0 18px 44px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.07)", overflow: "hidden", pointerEvents: "auto", cursor: "pointer" }}>
               <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: c }} />
               <span className="ds-toast-icon" style={{ flex: "none", width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center", background: c, color: "#fff", boxShadow: `0 6px 16px -5px ${c}` }}><Icon name={ic} size={21} stroke={2.4} /></span>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -283,7 +283,7 @@ function Toaster({ mobile }) {
         const c = t.type === "success" ? "var(--ok)" : t.type === "error" ? "var(--danger)" : t.type === "warn" ? "var(--wait)" : "var(--brand)";
         const ic = t.icon || (t.type === "success" ? "check" : t.type === "error" ? "alert" : "bell");
         return (
-          <div key={t.id} className="new-row" style={{ display: "inline-flex", alignItems: "center", gap: 11, maxWidth: 420, padding: "11px 16px 11px 12px", borderRadius: 14, background: "var(--ink)", color: "var(--surface)", boxShadow: "var(--sh-3)" }}>
+          <div key={t.id} className="new-row" style={{ display: "inline-flex", alignItems: "center", gap: 11, maxWidth: 420, padding: "11px 16px 11px 12px", borderRadius: 12, background: "var(--ink)", color: "var(--surface)", boxShadow: "var(--sh-3)" }}>
             <span style={{ width: 26, height: 26, borderRadius: 8, display: "grid", placeItems: "center", background: c, color: "#fff", flex: "none" }}><Icon name={ic} size={15} stroke={2.6} /></span>
             <div style={{ minWidth: 0 }}>
               <div style={{ fontSize: 14, fontWeight: 700 }}>{t.msg}</div>
@@ -301,7 +301,7 @@ function Confirm({ open, onClose, onConfirm, title, body, danger, confirmLabel =
   return (
     <Overlay open={open} onClose={onClose} anchor="center">
       <div style={{ width: 380, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
-        <div style={{ width: 48, height: 48, borderRadius: 14, display: "grid", placeItems: "center", background: danger ? "var(--danger-bg)" : "var(--brand-tint)", color: danger ? "var(--danger)" : "var(--brand)", marginBottom: 14 }}><Icon name={danger ? "alert" : "bell"} size={24} /></div>
+        <div style={{ width: 48, height: 48, borderRadius: 12, display: "grid", placeItems: "center", background: danger ? "var(--danger-bg)" : "var(--brand-tint)", color: danger ? "var(--danger)" : "var(--brand)", marginBottom: 14 }}><Icon name={danger ? "alert" : "bell"} size={24} /></div>
         <h3 style={{ fontSize: 19 }}>{title}</h3>
         <p style={{ fontSize: 14.5, color: "var(--ink-2)", lineHeight: 1.5, margin: "8px 0 20px" }}>{body}</p>
         <div style={{ display: "flex", gap: 10 }}>

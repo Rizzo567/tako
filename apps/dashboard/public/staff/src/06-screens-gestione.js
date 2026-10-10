@@ -79,7 +79,7 @@ function ScreenMenu({ mobile }) {
                     {!mobile && <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.desc} · <span style={{ color: hasMargin && margine > 60 ? "var(--ok-deep)" : "var(--wait)" }}>margine {hasMargin ? margine + "%" : "—"}</span> · {p.station}</div>}
                   </div>
                   <span className="num" style={{ fontSize: 16, flex: "none" }}>{euro(p.prezzo)}</span>
-                  <button className="press" onClick={() => toggle(s.sezione, p.nome)} title="Disponibilità" style={{ width: 46, height: 26, borderRadius: 99, flex: "none", background: p.disp ? "var(--ok)" : "var(--ink-3)", position: "relative", transition: "background .2s" }}>
+                  <button className="press" onClick={() => toggle(s.sezione, p.nome)} title="Disponibilità" style={{ width: 46, height: 26, borderRadius: 10, flex: "none", background: p.disp ? "var(--ok)" : "var(--ink-3)", position: "relative", transition: "background .2s" }}>
                     <span style={{ position: "absolute", top: 3, left: p.disp ? 23 : 3, width: 20, height: 20, borderRadius: 99, background: "#fff", transition: "left .2s var(--spring)" }} />
                   </button>
                   <IconBtn name="edit" tone="ghost" onClick={() => setEdit(p)} />
@@ -121,7 +121,7 @@ function ScreenMenu({ mobile }) {
         {edit && <DishEditor dish={edit} mobile={mobile} onClose={() => setEdit(null)} />}
       </Overlay>
       <Overlay open={secOpen} onClose={() => { if (!secLoading) setSecOpen(false); }} anchor="center">
-        <div style={{ width: mobile ? 320 : 400, maxWidth: "100%", background: "var(--surface)", borderRadius: 24, overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
+        <div style={{ width: mobile ? 320 : 400, maxWidth: "100%", background: "var(--surface)", borderRadius: 12, overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
             <h3 style={{ flex: 1, fontSize: 18 }}>Nuova sezione</h3>
             <IconBtn name="x" tone="soft" onClick={() => { if (!secLoading) setSecOpen(false); }} />
@@ -149,7 +149,7 @@ function ScreenMenu({ mobile }) {
         </div>
       </Overlay>
       <Overlay open={importOpen} onClose={() => { if (!loading) setImportOpen(false); }} anchor="center">
-        <div style={{ width: mobile ? 354 : 560, maxWidth: "100%", maxHeight: "calc(100% - 48px)", background: "var(--surface)", borderRadius: 24, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
+        <div style={{ width: mobile ? 354 : 560, maxWidth: "100%", maxHeight: "calc(100% - 48px)", background: "var(--surface)", borderRadius: 12, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
             <h3 style={{ flex: 1, fontSize: 18 }}>{preview ? "Anteprima importazione" : "Importa menu da testo"}</h3>
             <IconBtn name="x" tone="soft" onClick={() => { if (!loading) setImportOpen(false); }} />
@@ -301,12 +301,12 @@ function DishEditor({ dish, mobile, onClose }) {
     finally { setSaving(false); }
   };
   return (
-    <div style={{ width: mobile ? 354 : 420, maxWidth: "100%", height: mobile ? "auto" : "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 24 : 0, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: mobile ? "var(--sh-pop)" : "none" }}>
+    <div style={{ width: mobile ? 354 : 420, maxWidth: "100%", height: mobile ? "auto" : "100%", maxHeight: mobile ? "calc(100% - 48px)" : "100%", background: "var(--surface)", borderRadius: mobile ? 12 : 0, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: mobile ? "var(--sh-pop)" : "none" }}>
       <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
         <h3 style={{ flex: 1, fontSize: 18 }}>Modifica piatto</h3><IconBtn name="x" tone="soft" onClick={onClose} />
       </div>
       <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: 20 }}>
-        <label style={{ position: "relative", display: "block", height: 120, borderRadius: 14, border: "1.5px dashed var(--hairline)", overflow: "hidden", cursor: uploading ? "wait" : "pointer", color: "var(--ink-3)", marginBottom: 16, background: imageUrl ? "var(--surface)" : "var(--sunken)" }}>
+        <label style={{ position: "relative", display: "block", height: 120, borderRadius: 12, border: "1.5px dashed var(--hairline)", overflow: "hidden", cursor: uploading ? "wait" : "pointer", color: "var(--ink-3)", marginBottom: 16, background: imageUrl ? "var(--surface)" : "var(--sunken)" }}>
           <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onPickImage} disabled={uploading} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "inherit" }} />
           {imageUrl ? (
             <img src={imageUrl} alt="Immagine piatto" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
@@ -498,7 +498,7 @@ function ScreenInsights({ mobile }) {
       )}
 
       <Card pad={mobile ? 14 : 22} style={{ marginBottom: 16 }}>
-        <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, aspectRatio: mobile ? "1/1.1" : "16/8", background: "var(--hairline)", borderRadius: 14, overflow: "hidden" }}>
+        <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, aspectRatio: mobile ? "1/1.1" : "16/8", background: "var(--hairline)", borderRadius: 12, overflow: "hidden" }}>
           {["puzzle", "star", "dog", "plow"].map(q => {
             const Q = QUAD[q];
             const dishes = ENGINEERING.filter(d => d.cls === q);
@@ -601,7 +601,7 @@ function InvFormModal({ open, onClose, item }) {
   const half = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 };
   return (
     <Overlay open={open} onClose={() => onClose(false)} anchor="center">
-      <div style={{ width: 420, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 24, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
+      <div style={{ width: 420, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 12, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="inventory" size={20} /></div>
           <h3 style={{ fontSize: 18, flex: 1 }}>{isEdit ? "Modifica articolo" : "Nuovo articolo"}</h3>
@@ -655,7 +655,7 @@ function InvItemDrawer({ item, stat, mobile, onClose, onChanged, onEdit, onDelet
     finally { setBusy(false); }
   };
   return (
-    <div style={{ width: mobile ? 354 : 392, maxWidth: "100%", height: "calc(100% - 24px)", maxHeight: "calc(100% - 24px)", margin: 12, borderRadius: 20, background: "var(--surface)", boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ width: mobile ? 354 : 392, maxWidth: "100%", height: "calc(100% - 24px)", maxHeight: "calc(100% - 24px)", margin: 12, borderRadius: 12, background: "var(--surface)", boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <h3 style={{ fontSize: 19, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.name}</h3>
@@ -679,7 +679,7 @@ function InvItemDrawer({ item, stat, mobile, onClose, onChanged, onEdit, onDelet
         </div>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}><NumStepper value={amt} set={setAmt} /></div>
         <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
-          {[1, 5, 10, 25].map(x => <button key={x} className="press num" onClick={() => setAmt(x)} style={{ padding: "6px 13px", borderRadius: 999, border: "1px solid var(--hairline)", background: "var(--sunken)", fontWeight: 700, fontSize: 13, color: "var(--ink-2)", cursor: "pointer" }}>{x}</button>)}
+          {[1, 5, 10, 25].map(x => <button key={x} className="press num" onClick={() => setAmt(x)} style={{ padding: "6px 13px", borderRadius: 10, border: "1px solid var(--hairline)", background: "var(--sunken)", fontWeight: 700, fontSize: 13, color: "var(--ink-2)", cursor: "pointer" }}>{x}</button>)}
         </div>
         <input value={note} onChange={e => setNote(e.target.value)} placeholder="Nota (opzionale)" style={{ ...inputStyle, marginBottom: 10 }} />
         <Btn kind="brand" full icon="check" disabled={busy} onClick={apply}>{busy ? "Registro…" : `Registra ${MOVE_META[mtype].label.toLowerCase()}`}</Btn>
@@ -833,7 +833,7 @@ function ScreenInventario({ mobile }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
         {[["magazzino", "Magazzino"], ["riordino", "Da riordinare"]].map(([id, label]) => (
           <button key={id} className="press" onClick={() => setTab(id)}
-            style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "8px 15px", borderRadius: 999, border: "1px solid var(--hairline)", fontWeight: 700, fontSize: 13.5, cursor: "pointer",
+            style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "8px 15px", borderRadius: 10, border: "1px solid var(--hairline)", fontWeight: 700, fontSize: 13.5, cursor: "pointer",
               background: tab === id ? "var(--brand)" : "transparent", color: tab === id ? "var(--on-brand)" : "var(--ink-2)" }}>
             {label}
             {id === "riordino" && reorderCount > 0 && <span className="num" style={{ padding: "1px 7px", borderRadius: 999, fontSize: 11.5, fontWeight: 800, background: tab === id ? "rgba(255,255,255,.25)" : "var(--danger)", color: "#fff" }}>{reorderCount}</span>}
@@ -920,7 +920,7 @@ function ScreenInventario({ mobile }) {
         confirmLabel="Elimina" onConfirm={async () => { const it = delItem; if (!it) return; try { await window.TakoActions.inventoryDelete(it.id); toast("Articolo archiviato", { type: "success" }); if (openId === it.id) setOpenId(null); reload(); } catch (e) { toast(e.message, { type: "error" }); } }} />
 
       <Overlay open={impOpen} onClose={() => { if (!impLoading) setImpOpen(false); }} anchor="center">
-        <div style={{ width: mobile ? 354 : 560, maxWidth: "100%", maxHeight: "calc(100% - 48px)", background: "var(--surface)", borderRadius: 24, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
+        <div style={{ width: mobile ? 354 : 560, maxWidth: "100%", maxHeight: "calc(100% - 48px)", background: "var(--surface)", borderRadius: 12, display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
             <h3 style={{ flex: 1, fontSize: 18 }}>{impPreview ? "Anteprima importazione" : "Importa ingredienti da testo"}</h3>
             <IconBtn name="x" tone="soft" onClick={() => { if (!impLoading) setImpOpen(false); }} />
@@ -1037,7 +1037,7 @@ function StaffFormModal({ open, onClose, member }) {
   };
   return (
     <Overlay open={open} onClose={onClose} anchor="center">
-      <div style={{ width: 400, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 24, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
+      <div style={{ width: 400, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 12, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="staff" size={20} /></div>
           <h3 style={{ fontSize: 18, flex: 1 }}>{isEdit ? "Modifica membro" : "Nuovo membro"}</h3>
@@ -1117,7 +1117,7 @@ function ScreenStaff({ mobile }) {
 
 /* ═══════════════════ IMPOSTAZIONI ═══════════════════ */
 function Toggle({ on, set }) {
-  return <button className="press" onClick={() => set(!on)} style={{ width: 48, height: 28, borderRadius: 99, flex: "none", background: on ? "var(--ok)" : "var(--ink-3)", position: "relative" }}><span style={{ position: "absolute", top: 3, left: on ? 23 : 3, width: 22, height: 22, borderRadius: 99, background: "#fff", transition: "left .2s var(--spring)" }} /></button>;
+  return <button className="press" onClick={() => set(!on)} style={{ width: 48, height: 28, borderRadius: 10, flex: "none", background: on ? "var(--ok)" : "var(--ink-3)", position: "relative" }}><span style={{ position: "absolute", top: 3, left: on ? 23 : 3, width: 22, height: 22, borderRadius: 99, background: "#fff", transition: "left .2s var(--spring)" }} /></button>;
 }
 function Row({ label, sub, children }) {
   return <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "13px 0", borderBottom: "1px solid var(--hairline)" }}><div style={{ flex: 1 }}><div style={{ fontWeight: 600, fontSize: 14.5 }}>{label}</div>{sub && <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2 }}>{sub}</div>}</div>{children}</div>;
@@ -1218,7 +1218,7 @@ function WhatsAppPanel({ mobile }) {
           <h3 style={{ fontSize: 16, marginBottom: 6 }}>Collega il telefono</h3>
           {status && status.qrDataUrl ? (
             <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 20, alignItems: mobile ? "stretch" : "center" }}>
-              <img src={status.qrDataUrl} alt="QR WhatsApp" width={210} height={210} style={{ alignSelf: "center", borderRadius: 14, border: "1px solid var(--hairline)", background: "#fff", padding: 8 }} />
+              <img src={status.qrDataUrl} alt="QR WhatsApp" width={210} height={210} style={{ alignSelf: "center", borderRadius: 12, border: "1px solid var(--hairline)", background: "#fff", padding: 8 }} />
               <ol style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7, paddingLeft: 18, margin: 0 }}>
                 <li>Apri <b>WhatsApp</b> sul telefono del ristorante</li>
                 <li>Vai su <b>Impostazioni → Dispositivi collegati</b></li>
@@ -1362,7 +1362,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
       <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: mobile ? 14 : 24, alignItems: "flex-start" }}>
         {mobile ? (
           <div className="scroll" style={{ display: "flex", gap: 8, overflowX: "auto", width: "100%", paddingBottom: 2 }}>
-            {visibleSections.map(([k, l]) => <button key={k} className="press" onClick={() => setSec(k)} style={{ flex: "none", padding: "9px 15px", borderRadius: 99, fontSize: 13.5, fontWeight: 700, background: sec === k ? "var(--brand)" : "var(--sunken)", color: sec === k ? "var(--on-brand)" : "var(--ink-2)" }}>{l}</button>)}
+            {visibleSections.map(([k, l]) => <button key={k} className="press" onClick={() => setSec(k)} style={{ flex: "none", padding: "9px 15px", borderRadius: 10, fontSize: 13.5, fontWeight: 700, background: sec === k ? "var(--brand)" : "var(--sunken)", color: sec === k ? "var(--on-brand)" : "var(--ink-2)" }}>{l}</button>)}
           </div>
         ) : (
           <div style={{ flex: "none", width: 224, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -1380,7 +1380,7 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
               <div style={{ display: "flex", gap: mobile ? 12 : 18, flexWrap: "wrap" }}>
                 {Object.entries(BRAND_PALETTES).map(([k, p]) => { const on = brand === k; return (
                   <button key={k} className="press" onClick={() => setBrand(k)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                    <span style={{ width: 54, height: 54, borderRadius: 16, background: p.brand, display: "grid", placeItems: "center", boxShadow: on ? `0 0 0 3px var(--raised), 0 0 0 5px ${p.brand}` : "var(--sh-1)", transition: "box-shadow .2s" }}>{on && <Icon name="check" size={26} stroke={2.6} style={{ color: p.on }} />}</span>
+                    <span style={{ width: 54, height: 54, borderRadius: 12, background: p.brand, display: "grid", placeItems: "center", boxShadow: on ? `0 0 0 3px var(--raised), 0 0 0 5px ${p.brand}` : "var(--sh-1)", transition: "box-shadow .2s" }}>{on && <Icon name="check" size={26} stroke={2.6} style={{ color: p.on }} />}</span>
                     <span style={{ fontSize: 12.5, fontWeight: on ? 700 : 600, color: on ? "var(--ink)" : "var(--ink-2)" }}>{p.label}</span>
                   </button>
                 ); })}
@@ -1389,12 +1389,12 @@ function ScreenImpostazioni({ mobile, brand, setBrand, settings = SETTINGS_DEFAU
             <Card pad={20}>
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>Logo</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <span style={{ width: 64, height: 64, borderRadius: 16, background: "var(--brand-tint)", display: "grid", placeItems: "center", flex: "none", overflow: "hidden" }}>
+                <span style={{ width: 64, height: 64, borderRadius: 12, background: "var(--brand-tint)", display: "grid", placeItems: "center", flex: "none", overflow: "hidden" }}>
                   {logoUrl
                     ? <img src={logoUrl} alt="Logo ristorante" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                     : <img src="assets/tako-chef.png" alt="" style={{ height: 48 }} />}
                 </span>
-                <label style={{ flex: 1, height: 64, borderRadius: 14, border: "1.5px dashed var(--hairline)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 13, fontWeight: 600, cursor: logoUploading ? "wait" : "pointer", textAlign: "center", padding: "0 12px" }}>
+                <label style={{ flex: 1, height: 64, borderRadius: 12, border: "1.5px dashed var(--hairline)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 13, fontWeight: 600, cursor: logoUploading ? "wait" : "pointer", textAlign: "center", padding: "0 12px" }}>
                   <input type="file" accept="image/png,image/webp,image/jpeg,image/svg+xml" onChange={onPickLogo} disabled={logoUploading} style={{ display: "none" }} />
                   {logoUploading ? "Carico…" : (logoUrl ? "Cambia logo (PNG trasparente)" : "Carica un PNG trasparente")}
                 </label>
@@ -1564,7 +1564,7 @@ function CopyRow({ label, value }) {
     } catch (_) {}
   };
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "var(--sunken)", border: "1px solid var(--hairline)", borderRadius: 14 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "var(--sunken)", border: "1px solid var(--hairline)", borderRadius: 12 }}>
       <Tako pose="logoMark" size={34} float={false} style={{ flex: "none" }} />
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-3)", textTransform: "uppercase", letterSpacing: ".05em" }}>{label}</span>
@@ -1666,7 +1666,7 @@ function ScreenCollega({ mobile }) {
         {!err && !info && <div style={{ color: "var(--ink-2)", fontSize: 14 }}>Carico…</div>}
         {info && (
           <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 22, alignItems: mobile ? "stretch" : "center" }}>
-            {info.qrDataUrl && <img src={info.qrDataUrl} alt="QR collega" width={200} height={200} style={{ alignSelf: "center", borderRadius: 14, border: "1px solid var(--hairline,#eee)" }} />}
+            {info.qrDataUrl && <img src={info.qrDataUrl} alt="QR collega" width={200} height={200} style={{ alignSelf: "center", borderRadius: 12, border: "1px solid var(--hairline,#eee)" }} />}
             <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 14, minWidth: 0 }}>
               <div>Sullo stesso WiFi, apri nel browser del dispositivo:</div>
               {info.urls && info.urls.mdns && <CopyRow label="Indirizzo" value={info.urls.mdns} />}
@@ -1741,7 +1741,7 @@ function ScreenAppOwner({ mobile }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
               {code.qrDataUrl && (
                 <img src={code.qrDataUrl} alt="QR per collegare il telefono" width={220} height={220}
-                  style={{ borderRadius: 14, border: "1px solid var(--hairline)", opacity: scaduto ? 0.25 : 1, transition: "opacity .2s var(--out)" }} />
+                  style={{ borderRadius: 12, border: "1px solid var(--hairline)", opacity: scaduto ? 0.25 : 1, transition: "opacity .2s var(--out)" }} />
               )}
               <Badge tone={scaduto ? "danger" : "ok"} dot>{scaduto ? "QR scaduto" : `Valido ancora ${mmss(left)}`}</Badge>
               <div style={{ width: "100%" }}><CopyRow label="oppure apri" value={code.enrollUrl} /></div>
@@ -1785,7 +1785,7 @@ function ScreenDispositivi({ mobile }) {
       <div style={{ display: "flex", gap: 8, padding: mobile ? "12px 16px 4px" : "16px 24px 4px", flex: "none" }}>
         {tabs.map(([id, label]) => (
           <button key={id} onClick={() => setTab(id)}
-            style={{ padding: "8px 15px", borderRadius: 999, border: "1px solid var(--hairline)", fontWeight: 700, fontSize: 13.5, cursor: "pointer",
+            style={{ padding: "8px 15px", borderRadius: 10, border: "1px solid var(--hairline)", fontWeight: 700, fontSize: 13.5, cursor: "pointer",
               background: tab === id ? "var(--brand)" : "transparent", color: tab === id ? "var(--on-brand)" : "var(--ink-2)" }}>
             {label}
           </button>

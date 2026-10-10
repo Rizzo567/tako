@@ -126,7 +126,7 @@ function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) 
 
   return (
     <Overlay open={open} onClose={onClose} anchor="center">
-      <div style={{ width: 420, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 24, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
+      <div style={{ width: 420, maxWidth: "calc(100vw - 40px)", background: "var(--surface)", borderRadius: 12, boxShadow: "var(--sh-pop)", display: "flex", flexDirection: "column", maxHeight: "calc(100% - 48px)", overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="clock" size={20} /></div>
           <h3 style={{ fontSize: 18, flex: 1 }}>{isEdit ? "Modifica prenotazione" : "Nuova prenotazione"}</h3>

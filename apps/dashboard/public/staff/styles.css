@@ -425,6 +425,8 @@
     --bg: #F2EBE2; --surface: #FBF8F4; --raised: #FFFFFF; --sunken: #F4EEE7; --hairline: #E7DDD1;
     /* sidebar dark */
     --nav: #25262A; --nav-2: #313338; --nav-line: rgba(255,255,255,.09); --nav-ink: #E6E6EA; --nav-ink-2: #9B9CA4;
+    /* sidebar chiara: grigio chiaro, selezione scura */
+    --side: #EDEBE8; --side-2: #E2DFDB; --side-line: rgba(42,38,36,.09); --side-ink: #2A2624; --side-ink-2: #77716C; --side-sel: #2A2624; --side-on: #FFFFFF;
     /* testo */
     --ink: #2A1F1A; --ink-2: #6B5A50; --ink-3: #9A8B82;
     /* stati semantici */
@@ -436,7 +438,7 @@
     /* stati tavoli */
     --st-free: #4FA980; --st-busy: #ED7159; --st-wait: #E0A23C; --st-ready: #5B8DB8; --st-clean: #94A7B5; --st-resv: #A98FCB;
     /* radii */
-    --r-xs: 8px; --r-sm: 10px; --r-md: 14px; --r-lg: 18px; --r-xl: 24px; --r-pill: 999px;
+    --r-xs: 6px; --r-sm: 8px; --r-md: 10px; --r-lg: 12px; --r-xl: 12px; --r-pill: 10px;
     /* shadow */
     --sh-1: 0 1px 2px rgba(42,31,26,.05), 0 1px 3px rgba(42,31,26,.04);
     --sh-2: 0 2px 6px rgba(42,31,26,.06), 0 8px 22px rgba(42,31,26,.07);

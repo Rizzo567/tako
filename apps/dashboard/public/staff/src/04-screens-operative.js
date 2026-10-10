@@ -73,7 +73,7 @@ function CoworkCard({ go, entering }) {
         </div>
       </div>
       <button className="press" onClick={() => go("cowork")}
-        style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 13, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 14.5, boxShadow: "0 8px 20px -8px var(--brand)" }}>
+        style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 14.5, boxShadow: "0 8px 20px -8px var(--brand)" }}>
         <Icon name="sparkles" size={18} />Apri Cowork
         <span style={{ marginLeft: 4, fontSize: 12, fontWeight: 700, opacity: .8, padding: "2px 7px", borderRadius: 7, background: "rgba(255,255,255,.22)" }}>⌘K</span>
       </button>

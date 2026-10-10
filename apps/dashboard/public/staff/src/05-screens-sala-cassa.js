@@ -205,7 +205,7 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
 
       <Card pad={mobile ? 14 : 22}>
         <div ref={mapRef}
-          style={{ position: "relative", width: "100%", aspectRatio: mobile ? "1 / 1.15" : "16 / 8", background: "radial-gradient(var(--hairline) 1px, transparent 1px) 0 0/22px 22px, var(--sunken)", borderRadius: 14, border: "1px dashed var(--hairline)" }}>
+          style={{ position: "relative", width: "100%", aspectRatio: mobile ? "1 / 1.15" : "16 / 8", background: "radial-gradient(var(--hairline) 1px, transparent 1px) 0 0/22px 22px, var(--sunken)", borderRadius: 12, border: "1px dashed var(--hairline)" }}>
           {placedTables.length === 0 && (
             <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center", color: "var(--ink-3)", fontSize: 13, fontWeight: 600, pointerEvents: "none", padding: 20 }}>
               Trascina qui i tavoli dal riquadro "Da posizionare" qui sotto
@@ -256,7 +256,7 @@ function ScreenSala({ mobile, rooms, calls, onSetTableState }) {
               return (
                 <button key={t.n} onPointerDown={(e) => onTrayDown(e, t)} onPointerMove={onTrayMove} onPointerUp={onTrayUp}
                   title={`Tavolo ${t.n} · ${t.posti} posti`}
-                  style={{ position: "relative", width: 76, height: 76, borderRadius: 14, border: "1px dashed var(--hairline)", background: "var(--sunken)", display: "grid", placeItems: "center", cursor: "grab", touchAction: "none", userSelect: "none", padding: 0 }}>
+                  style={{ position: "relative", width: 76, height: 76, borderRadius: 12, border: "1px dashed var(--hairline)", background: "var(--sunken)", display: "grid", placeItems: "center", cursor: "grab", touchAction: "none", userSelect: "none", padding: 0 }}>
                   <img src={`assets/tables/${tableAsset(t)}.png`} alt="" draggable={false} style={{ width: "80%", height: "80%", objectFit: "contain", pointerEvents: "none", filter: "drop-shadow(0 2px 3px rgba(30,20,16,.2))" }} />
                   <span className="num" style={{ position: "absolute", fontSize: 15, color: "var(--ink)", pointerEvents: "none", textShadow: "0 1px 2px rgba(255,255,255,.9)" }}>{t.n}</span>
                   <span style={{ position: "absolute", top: 3, right: 3, width: 11, height: 11, borderRadius: 99, background: st.color, border: "2px solid var(--raised)" }} />
@@ -287,9 +287,9 @@ function TableDrawer({ table, mobile, onClose, onSetState, placed, onUnplace }) 
   const st = TABLE_STATUS[table.stato];
   const orders = ORDERS.filter(o => o.tavolo === table.n);
   return (
-    <div style={{ width: mobile ? 354 : 360, maxWidth: "100%", height: mobile ? "auto" : "calc(100% - 24px)", maxHeight: "calc(100% - 24px)", margin: mobile ? 0 : 12, borderRadius: 20, display: "flex", flexDirection: "column", overflow: "hidden", ...GLASS }}>
+    <div style={{ width: mobile ? 354 : 360, maxWidth: "100%", height: mobile ? "auto" : "calc(100% - 24px)", maxHeight: "calc(100% - 24px)", margin: mobile ? 0 : 12, borderRadius: 12, display: "flex", flexDirection: "column", overflow: "hidden", ...GLASS }}>
       <div style={{ padding: "18px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
-        <span className="num" style={{ width: 50, height: 50, borderRadius: 14, background: "var(--ink)", color: "#fff", display: "grid", placeItems: "center", fontSize: 24 }}>{table.n}</span>
+        <span className="num" style={{ width: 50, height: 50, borderRadius: 12, background: "var(--ink)", color: "#fff", display: "grid", placeItems: "center", fontSize: 24 }}>{table.n}</span>
         <div style={{ flex: 1 }}><h3 style={{ fontSize: 19 }}>Tavolo {table.n}</h3><div style={{ display: "flex", gap: 8, marginTop: 4 }}><Badge tone="muted" dot style={{ background: st.color + "22", color: st.color }}>{st.label}</Badge><Badge tone="muted">{table.posti} posti</Badge></div></div>
         <IconBtn name="x" tone="soft" onClick={onClose} />
       </div>
@@ -339,7 +339,7 @@ function NewBillModal({ open, onClose }) {
     <Overlay open={open} onClose={onClose} anchor="center">
       <div style={{ width: 360, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 13, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="cassa" size={22} /></div>
+          <div style={{ width: 44, height: 44, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="cassa" size={22} /></div>
           <h3 style={{ fontSize: 19, flex: 1 }}>Nuovo conto</h3>
           <IconBtn name="x" tone="soft" onClick={onClose} />
         </div>
@@ -503,7 +503,7 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
         {!mobile && <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 6 }}><IconBtn name="x" tone="soft" onClick={onClose} /></div>}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 9, marginBottom: mobile ? 12 : 18 }}>
           {[["contanti", "Contanti", "banknote"], ["carta", "Carta", "card"], ["digitale", "Digitale", "smartphone"]].map(([k, l, ic]) => (
-            <button key={k} className="press" onClick={() => setMethod(k)} style={{ padding: mobile ? "10px 6px" : "14px 8px", borderRadius: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: mobile ? 5 : 7, fontWeight: 700, fontSize: mobile ? 12.5 : 13.5, background: method === k ? "var(--brand)" : "var(--sunken)", color: method === k ? "#fff" : "var(--ink)", boxShadow: method === k ? "var(--sh-1)" : "none" }}><Icon name={ic} size={mobile ? 19 : 22} />{l}</button>
+            <button key={k} className="press" onClick={() => setMethod(k)} style={{ padding: mobile ? "10px 6px" : "14px 8px", borderRadius: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: mobile ? 5 : 7, fontWeight: 700, fontSize: mobile ? 12.5 : 13.5, background: method === k ? "var(--brand)" : "var(--sunken)", color: method === k ? "#fff" : "var(--ink)", boxShadow: method === k ? "var(--sh-1)" : "none" }}><Icon name={ic} size={mobile ? 19 : 22} />{l}</button>
           ))}
         </div>
 
@@ -519,7 +519,7 @@ function PaymentModal({ bill, mobile, onClose, onDone, settings = SETTINGS_DEFAU
             </div>
           </div>
         ) : (
-          <div style={{ flex: 1, display: "grid", placeItems: "center", textAlign: "center", color: "var(--ink-2)", border: "1.5px dashed var(--hairline)", borderRadius: 14, padding: 24 }}>
+          <div style={{ flex: 1, display: "grid", placeItems: "center", textAlign: "center", color: "var(--ink-2)", border: "1.5px dashed var(--hairline)", borderRadius: 12, padding: 24 }}>
             <div><Icon name={method === "carta" ? "card" : "smartphone"} size={44} style={{ color: "var(--brand)", margin: "0 auto 12px" }} /><div style={{ fontWeight: 700, color: "var(--ink)", fontSize: 16 }}>{method === "carta" ? "Pagamento con carta" : "Pagamento digitale"}</div><div style={{ fontSize: 13.5, marginTop: 6 }}>Registra l'incasso di {euro(total)} — conferma manuale</div></div>
           </div>
         )}
@@ -599,7 +599,7 @@ function ScreenComanda({ mobile }) {
         <div style={{ display: "grid", gridTemplateColumns: mobile ? "repeat(3,1fr)" : "repeat(auto-fill,minmax(110px,1fr))", gap: 12 }}>
           {selectableTables.map(t => {
             const st = TABLE_STATUS[t.stato];
-            return <button key={t.n} className="press" onClick={() => setTavolo(t.n)} style={{ aspectRatio: "1", borderRadius: 16, background: "var(--raised)", border: `2px solid ${st.color}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, boxShadow: "var(--sh-1)" }}><span className="num" style={{ fontSize: 26 }}>{t.n}</span><span style={{ fontSize: 11, color: "var(--ink-3)", fontWeight: 600 }}>{t.posti} posti</span></button>;
+            return <button key={t.n} className="press" onClick={() => setTavolo(t.n)} style={{ aspectRatio: "1", borderRadius: 12, background: "var(--raised)", border: `2px solid ${st.color}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, boxShadow: "var(--sh-1)" }}><span className="num" style={{ fontSize: 26 }}>{t.n}</span><span style={{ fontSize: 11, color: "var(--ink-3)", fontWeight: 600 }}>{t.posti} posti</span></button>;
           })}
         </div>
         )}
@@ -708,7 +708,7 @@ function TableFormModal({ open, onClose, table, rooms }) {
     <Overlay open={open} onClose={onClose} anchor="center">
       <div style={{ width: 380, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 13, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="grid" size={22} /></div>
+          <div style={{ width: 44, height: 44, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="grid" size={22} /></div>
           <h3 style={{ fontSize: 19, flex: 1 }}>{table ? "Modifica tavolo" : "Nuovo tavolo"}</h3>
           <IconBtn name="x" tone="soft" onClick={onClose} />
         </div>
@@ -774,7 +774,7 @@ function RoomFormModal({ open, onClose }) {
     <Overlay open={open} onClose={onClose} anchor="center">
       <div style={{ width: 360, maxWidth: "calc(100vw - 40px)", background: "var(--raised)", borderRadius: "var(--r-xl)", boxShadow: "var(--sh-pop)", padding: 24, margin: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 13, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="grid" size={22} /></div>
+          <div style={{ width: 44, height: 44, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name="grid" size={22} /></div>
           <h3 style={{ fontSize: 19, flex: 1 }}>Nuova sala</h3>
           <IconBtn name="x" tone="soft" onClick={onClose} />
         </div>

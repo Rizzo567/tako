@@ -193,7 +193,7 @@
       }
     };
     return (
-      <div style={{ border: "1px solid var(--hairline,#e6ded6)", background: "var(--surface,#fff)", borderRadius: 14, padding: 12, marginTop: 8 }}>
+      <div style={{ border: "1px solid var(--hairline,#e6ded6)", background: "var(--surface,#fff)", borderRadius: 12, padding: 12, marginTop: 8 }}>
         <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--brand,#ED7159)", textTransform: "uppercase", letterSpacing: .4, marginBottom: 6 }}>
           Conferma richiesta
         </div>
@@ -582,7 +582,7 @@
 
     return (
       <div ref={cardRef} style={{ padding: 14, background: "var(--nav,#25262A)", color: "var(--nav-ink,#E6E6EA)",
-        border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 16, boxShadow: "var(--sh-2)", flex: "none" }}>
+        border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none" }}>
         {/* Intestazione: pallino rosso live pulsante + titoletto dinamico per target */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
           <span style={{ width: 8, height: 8, borderRadius: 99, background: "#F0524A", animation: "takoLivePulse 1.4s ease-in-out infinite", flex: "none" }} />
@@ -867,14 +867,14 @@
       <div style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
         {/* Waveform durante la dettatura (pennellata Wispr) — larga ~1/3, centrata, senza testo */}
         {DictWave && (dictState === "rec" || dictState === "busy") && (
-          <div style={{ width: "34%", maxWidth: 240, margin: "0 auto 10px", height: 84, borderRadius: 20, overflow: "hidden", position: "relative",
+          <div style={{ width: "34%", maxWidth: 240, margin: "0 auto 10px", height: 84, borderRadius: 12, overflow: "hidden", position: "relative",
             background: "linear-gradient(180deg,#F4F0E7 0%,#EFEADF 55%,#EAE4D7 100%)",
             border: "1px solid #0000000f", boxShadow: "0 8px 24px rgba(30,20,12,.16), inset 0 1.5px 0 rgba(255,255,255,.7)" }}>
             <DictWave />
           </div>
         )}
 
-        <div style={{ borderRadius: 24, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E5E5)",
+        <div style={{ borderRadius: 12, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E5E5)",
           boxShadow: "0 1px 2px rgba(0,0,0,.06), 0 12px 32px rgba(30,20,10,.07)", padding: "14px 16px 10px" }}>
           {attachedImage && (
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 10, padding: "5px 8px 5px 5px", borderRadius: 12, background: "var(--sunken,#F4F0E7)", border: "1px solid var(--hairline,#E5E5E5)" }}>
@@ -922,7 +922,7 @@
             {messages.map((m, i) => (
               <div key={i} style={{ marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                  <div style={{ maxWidth: "86%", padding: "11px 14px", borderRadius: 16,
+                  <div style={{ maxWidth: "86%", padding: "11px 14px", borderRadius: 12,
                     background: m.role === "user" ? "var(--brand,#ED7159)" : "var(--surface,#fff)",
                     color: m.role === "user" ? "var(--on-brand,#fff)" : "var(--ink,#2A1F1A)",
                     border: m.role === "user" ? "none" : "1px solid var(--hairline,#eee)",
@@ -967,7 +967,7 @@
             <button key={s} onClick={() => send(s)}
               style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", fontSize: 13.5,
                 color: "var(--ink-2,#6a5f56)", background: "transparent", border: "1px solid var(--hairline,#e6ded6)",
-                borderRadius: 999, cursor: "pointer", transition: "background .15s, color .15s" }}
+                borderRadius: 10, cursor: "pointer", transition: "background .15s, color .15s" }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "var(--sunken,#F0EEE6)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}>
               {s}
@@ -1046,7 +1046,7 @@
               layout resta); fase "collapsed" = collasso layout ISTANTANEO (max-height
               fuori dalla transition) così la card Streaming risale via FLIP spring. */}
           <div style={{ padding: 14, background: "var(--nav,#25262A)", color: "var(--nav-ink,#E6E6EA)",
-            border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 16, boxShadow: "var(--sh-2)", flex: "none",
+            border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none",
             transform: streamExpanding ? "translateY(-22px) scale(.97)" : "none", opacity: streamExpanding ? 0 : 1,
             maxHeight: streamExpanding === "collapsed" ? 0 : 4000, overflow: streamExpanding ? "hidden" : "visible",
             transition: streamExpanding === "collapsed"
