@@ -367,7 +367,6 @@ function App({ session }) {
         <div className="screen app-live mobile" style={{ ...brandVars, width: "100vw", height: "100vh" }}>
           <div style={{ width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--surface)" }}>
             <div style={{ flex: 1, minHeight: 0, position: "relative", display: "flex", flexDirection: "column" }}>
-              {["owner","menu_editor"].includes(role) && window.TakoLocationsBar && <window.TakoLocationsBar role={role} mobile={mobile}/> }
               {Screen}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, background: "rgba(251,248,244,.55)", backdropFilter: "blur(16px) saturate(180%)", WebkitBackdropFilter: "blur(16px) saturate(180%)" }}>
                 <MobileHeader route={route} openDrawer={() => setDrawer(true)} live role={role} badges={badges} nome={settings.nome || RESTAURANT.name} go={go} />
@@ -383,7 +382,6 @@ function App({ session }) {
           <div style={{ width: "100%", height: "100%", display: "flex", background: "var(--bg)" }}>
             <Sidebar route={route} go={go} role={role} badges={badges} live />
             <main style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "var(--bg)" }}>
-              {["owner","menu_editor"].includes(role) && window.TakoLocationsBar && <window.TakoLocationsBar role={role} mobile={mobile}/> }
               {Screen}
             </main>
           </div>

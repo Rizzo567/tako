@@ -66,7 +66,6 @@ function CoworkCard({ go, entering }) {
       transform: shown ? "scale(1)" : "scale(.86)", opacity: shown ? 1 : 0,
       transition: "transform .42s cubic-bezier(.34,1.56,.5,1), opacity .32s ease" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-        <Tako pose="hello" size={46} float={false} />
         <div>
           <h3 style={{ fontSize: 16 }}>Tako Cowork</h3>
           <p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>Chiedi incassi, stato tavoli — o detta un comando</p>
@@ -112,7 +111,6 @@ function SetupSlot({ go, setupDone, allDone, role = "owner" }) {
         transformOrigin: "center", transform: leaving ? "scale(.72)" : "scale(1)", opacity: leaving ? 0 : 1,
         transition: leaving ? "transform .5s cubic-bezier(.5,-0.4,.7,.4), opacity .42s ease .12s" : "none" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-          <Tako pose="serve" size={46} float={false} />
           <div><h3 style={{ fontSize: 16 }}>{allDone ? "Setup completato" : "Completa il setup"}</h3><p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{allDone ? "Tutto pronto!" : `${setupDone}/${SETUP.length} passi · ci siamo quasi`}</p></div>
         </div>
         <Progress value={(setupDone / SETUP.length) * 100} />
@@ -162,7 +160,6 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
     <ScreenScroll mobile={mobile}>
       {!mobile && (
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18, padding: "0" }}>
-          <Tako pose="hello" size={78} />
           <div>
             <h1 style={{ fontSize: 26, fontWeight: 900 }}>{_greet}{_first ? ", " + _first : ""}!</h1>
             <p style={{ fontSize: 14, color: "var(--ink-2)", marginTop: 4 }}>{settings.nome} · {new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })}</p>

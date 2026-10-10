@@ -107,21 +107,19 @@ function Sidebar({ route, go, role, badges, live }) {
 
   return (
     <aside ref={asideRef} className="scroll" style={{ width: 238, flex: "none", margin: "5px 12px 12px 5px", height: "calc(100% - 17px)", display: "flex", flexDirection: "column", gap: 10, overflowY: "auto" }}>
+      <div style={{ padding: "16px 8px 4px", display: "flex", alignItems: "center", gap: 9 }}>
+        <Tako pose="logoMark" size={36} float={false} />
+        <div>
+          <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 19, color: "var(--side-ink)", lineHeight: 1 }}>Tako</div>
+          <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
+        </div>
+      </div>
+      {window.TakoLocationSwitcher && <window.TakoLocationSwitcher role={role} />}
       {groups.map((g, gi) => {
-        const isFirst = gi === 0;
         const isLast = gi === groups.length - 1;
         const isOpen = !collapsed[g.group];
         return (
-          <div key={g.group} style={{ ...boxStyle, padding: isFirst ? "30px 10px 9px" : "8px 10px 9px" }}>
-            {isFirst && (
-              <div style={{ padding: "7px 7px 9px", display: "flex", alignItems: "center", gap: 9 }}>
-                <Tako pose="logoMark" size={38} float={false} style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,.12))" }} />
-                <div>
-                  <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 19, color: "var(--side-ink)", lineHeight: 1 }}>Tako</div>
-                  <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
-                </div>
-              </div>
-            )}
+          <div key={g.group} style={{ ...boxStyle, padding: "8px 10px 9px" }}>
             <button className="press" onClick={() => toggle(g.group)}
               style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "5px 9px 7px", background: "transparent" }}>
               <span style={{ fontFamily: "var(--f-display)", fontWeight: 800, fontSize: 13.5, color: "var(--side-ink)", letterSpacing: ".005em" }}>{g.group}</span>
@@ -432,6 +430,7 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
           <span style={{ fontSize: 12.5, color: "var(--side-ink-2)" }}>tutte le funzioni</span>
           <IconBtn name="x" tone="ghost" size={34} style={{ marginLeft: "auto", color: "var(--side-ink-2)" }} onClick={onClose} />
         </div>
+        {window.TakoLocationSwitcher && <div style={{ padding: "0 4px 14px" }}><window.TakoLocationSwitcher role={role} /></div>}
         {groups.map(g => (
           <div key={g.group} style={{ marginBottom: 12 }}>
             <div className="mono" style={{ fontSize: 10.5, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--side-ink-2)", padding: "6px 8px" }}>{g.group}</div>

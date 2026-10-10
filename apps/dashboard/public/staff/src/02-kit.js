@@ -143,9 +143,7 @@ function BarChart({ data, color = "var(--brand)", h = 120, fmt = (v) => v, label
 function Empty({ icon = "sparkles", title, sub, action, tako }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, padding: "48px 24px", textAlign: "center" }}>
-      {tako
-        ? <Tako pose={tako} size={130} />
-        : <span style={{ width: 56, height: 56, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name={icon} size={26} /></span>}
+      {<span style={{ width: 56, height: 56, borderRadius: 12, display: "grid", placeItems: "center", background: "var(--brand-tint)", color: "var(--brand)" }}><Icon name={icon} size={26} /></span>}
       <div style={{ fontFamily: "var(--f-display)", fontWeight: 800, fontSize: 18 }}>{title}</div>
       {sub && <div style={{ fontSize: 14, color: "var(--ink-2)", maxWidth: 320 }}>{sub}</div>}
       {action}
@@ -321,7 +319,6 @@ function PageHead({ title, sub, actions, icon, tako, mobile }) {
   return (
     <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap", marginBottom: 18 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
-        {tako && <Tako pose={tako} size={62} />}
         <div>
           <h1 style={{ fontSize: 26, fontWeight: 900 }}>{title}</h1>
           {sub && <p style={{ fontSize: 14, color: "var(--ink-2)", marginTop: 4 }}>{sub}</p>}

@@ -1565,7 +1565,6 @@ function CopyRow({ label, value }) {
   };
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "var(--sunken)", border: "1px solid var(--hairline)", borderRadius: 12 }}>
-      <Tako pose="logoMark" size={34} float={false} style={{ flex: "none" }} />
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-3)", textTransform: "uppercase", letterSpacing: ".05em" }}>{label}</span>
         <code style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--f-mono, ui-monospace, monospace)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>

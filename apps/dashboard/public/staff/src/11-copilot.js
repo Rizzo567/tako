@@ -946,8 +946,6 @@
       <div style={{ flex: 1, minHeight: 0, overflowY: "auto", display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center", padding: mobile ? "24px 16px" : "24px", gap: 8, pointerEvents: leaving ? "none" : "auto" }}>
         <div style={{ textAlign: "center", marginBottom: 26, transition: "opacity .24s ease, transform .34s cubic-bezier(.4,0,1,1)", opacity: leaving ? 0 : 1, transform: leaving ? "translateY(-22px) scale(.96)" : "none" }}>
-          <img src="assets/takos/arancione/logo.png" alt="Tako" draggable={false}
-            style={{ width: 80, height: 80, objectFit: "contain", margin: "0 auto 16px", filter: "drop-shadow(0 10px 20px rgba(42,31,26,.18))" }} />
           <h1 style={{ fontSize: mobile ? 27 : 34, fontWeight: 400, color: "var(--ink,#2A1F1A)", letterSpacing: "-.5px", lineHeight: 1.1 }}>
             {greet}{owner ? ", " : ""}
             {owner && (
