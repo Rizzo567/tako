@@ -3,7 +3,7 @@
 // Strategia (vedi handoff): l'ambiente non ha un Postgres esterno né Redis, ma
 // `@tako/db/embedded` (embedded-postgres) funziona. Quindi avviamo un Postgres
 // EFFIMERO per-file di test, applichiamo SOLO la migrazione cloud, e montiamo le
-// route cloud reali (cloudAuthRoutes/cloudOAuthRoutes/cloudPairRoutes) su un'istanza
+// route cloud reali (cloudAuthRoutes/cloudOAuthRoutes) su un'istanza
 // Fastify usata con `inject` (nessun socket TCP, nessun listen).
 //
 // IMPORTANTE: le env cloud (TAKO_MODE, CLOUD_DATABASE_URL, TOKEN_PEPPER, SESSION_SECRET,
@@ -113,7 +113,6 @@ async function buildCloudApp(_opts: CloudTestOptions): Promise<FastifyInstance> 
   // Import dinamico DOPO setCloudEnv + CLOUD_DATABASE_URL impostata.
   const { cloudAuthRoutes } = await import('../../src/routes/cloud/auth.ts')
   const { cloudOAuthRoutes } = await import('../../src/routes/cloud/oauth.ts')
-  const { cloudPairRoutes } = await import('../../src/routes/cloud/pair.ts')
   const { allowedOrigins } = await import('../../src/cloud/config.ts')
 
   const app = Fastify({ logger: false })
@@ -139,7 +138,6 @@ async function buildCloudApp(_opts: CloudTestOptions): Promise<FastifyInstance> 
     _oauthScope = scope
     await cloudOAuthRoutes(scope)
   }, { prefix: '/api/auth' })
-  await app.register(cloudPairRoutes, { prefix: '/api/pair' })
   await app.ready()
   return app
 }

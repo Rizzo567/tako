@@ -9,12 +9,10 @@ import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, 
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
-import { autoPrintOrder } from '../lib/printer.js'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill, restaurantTimezone, dayStartInTz } from '../lib/billing.js'
 import { runAssistant, groqComplete } from '../lib/ai-actions.js'
 import { deductStockForOrder } from '../lib/stock-deduct.js'
-import { pushAfterResponse, orderNewNotification, waiterCalledNotification } from '../lib/push.js'
 
 // Sessione cliente incapsulata nel JWT del cookie tako_table.
 //  • kind 'table'    → legata a un tavolo scansionato (tableId reale).
@@ -512,15 +510,6 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
     const payload = { ...order, items: insertedItems }
 
-    // Auto-print comanda (fire-and-forget — non blocca risposta al cliente).
-    // tableNumber AUTORITATIVO dal JWT/DB (come l'insert), non dal client: evita
-    // spoof del ticket di cucina con un tavolo altrui.
-    autoPrintOrder({
-      restaurantId,
-      tableNumber: (req as any).tableSession?.tableNumber ?? body.data.tableNumber,
-      items: insertedItems.map(i => ({ name: i.name, quantity: i.quantity, notes: i.notes ?? undefined })),
-    }).catch(() => {}) // errore stampante non deve rompere l'ordine
-
     // Emit to restaurant room (staff devices)
     io.to(`restaurant:${restaurantId}`).emit('order:new', payload)
 
@@ -557,11 +546,6 @@ export async function customerRoutes(fastify: FastifyInstance) {
           .where(eq(tableSessions.id, session.id))
       }
     }
-
-    // Push al telefono del ristoratore (F3.2). Va per ULTIMA e via setImmediate:
-    // questo è IL percorso critico dell'app cliente — un cliente che aspetta la
-    // conferma dell'ordine non deve pagare un millisecondo per una notifica.
-    if (order) pushAfterResponse(restaurantId, orderNewNotification(order))
 
     return reply.code(201).send({ data: payload })
   })
@@ -643,11 +627,6 @@ export async function customerRoutes(fastify: FastifyInstance) {
 
     io.to(`restaurant:${restaurantId}`).emit('waiter:called', { tableId, tableNumber, type })
 
-    // Push (F3.2). È l'evento in cui la notifica conta di più: il cliente ha alzato
-    // la mano ADESSO, e il ristoratore può benissimo avere il telefono in tasca e
-    // l'app chiusa. Urgenza `high` e TTL 5 minuti (lib/push.ts): una chiamata di
-    // venti minuti fa non va recapitata affatto.
-    pushAfterResponse(restaurantId, waiterCalledNotification({ tableNumber, type }))
 
     return { data: { success: true } }
   })

@@ -1,7 +1,6 @@
 // FASE 5c — Isolamento multi-tenant cloud (§10 / SEC-011).
 // L'owner viene SEMPRE dalla sessione, mai dall'input. Verifichiamo che owner A non
-// possa leggere/usare risorse di owner B: /me ritorna solo sé stesso; /pair/code su un
-// restaurantId di B → 403; il device code di B non è generabile/riscattabile da A.
+// possa leggere/usare risorse di owner B: /me ritorna solo sé stesso.
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { setupCloud, cookieFromSetCookie, type CloudTestCtx } from './helpers'
 
@@ -42,40 +41,6 @@ describe('cross-tenant (SEC-011)', () => {
     expect(meB.json().data.owner.email).toBe('tenant-b@test.local')
     // A e B non si vedono a vicenda
     expect(meB.json().data.owner.id).not.toBe(a.ownerId)
-  })
-
-  it('owner A NON può generare un device code per il ristorante di B → 403', async () => {
-    const a = await makeOwner('xt-a@test.local')
-    const b = await makeOwner('xt-b@test.local')
-    const res = await ctx.app.inject({
-      url: '/api/pair/code', method: 'POST',
-      headers: { 'content-type': 'application/json', cookie: `tako_cloud_session=${a.sessionCookie}` },
-      payload: JSON.stringify({ restaurantId: b.restaurantId }),
-    })
-    expect(res.statusCode).toBe(403)
-    expect(res.json().error.code).toBe('FORBIDDEN')
-    // nessun pairing code creato per il ristorante di B da parte di A
-    const codes = await ctx.sql`select count(*)::int as n from cloud_pairing_codes where restaurant_id = ${b.restaurantId}`
-    expect(codes[0]!.n as number).toBe(0)
-  })
-
-  it('/approve di A su un code di B → fallisce (ownership del code)', async () => {
-    const a = await makeOwner('apr-a@test.local')
-    const b = await makeOwner('apr-b@test.local')
-    // B genera legittimamente un code per sé
-    const codeB = (await ctx.app.inject({
-      url: '/api/pair/code', method: 'POST',
-      headers: { 'content-type': 'application/json', cookie: `tako_cloud_session=${b.sessionCookie}` },
-      payload: JSON.stringify({ restaurantId: b.restaurantId }),
-    })).json().data.code as string
-    // A prova ad approvare il code di B
-    const res = await ctx.app.inject({
-      url: '/api/pair/approve', method: 'POST',
-      headers: { 'content-type': 'application/json', cookie: `tako_cloud_session=${a.sessionCookie}` },
-      payload: JSON.stringify({ code: codeB }),
-    })
-    expect(res.statusCode).toBe(400)
-    expect(res.json().error.code).toBe('INVALID_CODE')
   })
 
   it('senza sessione /me → 401', async () => {

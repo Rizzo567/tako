@@ -8,14 +8,13 @@ import { db, restaurants } from '@tako/db'
 import { eq } from 'drizzle-orm'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { homedir } from 'node:os'
 import { createPublicKey, verify as edVerify } from 'node:crypto'
 import { UPLOADS_DIR } from './image-store.js'
 import { isOnline } from './connectivity.js'
 
 // ─────────────────── Sblocco PRO (Nano Banana Pro) — a prova di crack ───────────────────
 // Il modello Pro (più costoso, qualità max) si sblocca SOLO con un CODICE firmato da Manuel
-// con la sua chiave PRIVATA (offline, mai nell'appliance). Qui c'è solo la chiave PUBBLICA:
+// con la sua chiave PRIVATA (offline, mai sul server). Qui c'è solo la chiave PUBBLICA:
 // verifica la firma ma non può crearne → il ristoratore, anche con accesso completo al Mac
 // (DB, config, bundle), NON può forgiare un codice valido. Il codice è legato al restaurantId
 // (non copiabile tra ristoranti) e la firma si verifica AD OGNI generazione (un flag nel DB
@@ -37,19 +36,10 @@ export function verifyProCode(restaurantId: string, code: string | undefined | n
 const MODEL_PRO = 'gemini-3-pro-image'      // Nano Banana Pro (solo con codice valido)
 const MODEL_BASE = 'gemini-2.5-flash-image' // base (flash), col solo toggle attivo
 
-// La chiave Gemini: da env GEMINI_API_KEY, oppure (comodo sull'app pacchettizzata dove
-// non si settano env) da un file `gemini-key.txt` in TAKO_HOME. Così basta incollare la
-// chiave in quel file — nessuna configurazione di sistema.
+// La chiave Gemini arriva solo dall'ambiente del server (GEMINI_API_KEY).
 function geminiKey(): string | null {
   const env = process.env['GEMINI_API_KEY']
-  if (env && env.trim()) return env.trim()
-  // Nessuna cache: così se incolli la chiave nel file mentre il server è già su, viene
-  // raccolta senza riavvio (la lettura è economica e la generazione è comunque rara).
-  try {
-    const home = process.env['TAKO_HOME'] ?? join(homedir(), '.tako')
-    const k = readFileSync(join(home, 'gemini-key.txt'), 'utf8').trim()
-    return k || null
-  } catch { return null }
+  return env && env.trim() ? env.trim() : null
 }
 
 // Stile FISSO applicato a ogni piatto → coerenza visiva su tutto il menù.

@@ -1,13 +1,13 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Tako CONTROL-PLANE cloud (TAKO_MODE=cloud) — immagine di produzione.
 #
-# Distinto da apps/server/Dockerfile (appliance LOCALE): qui NON gira il Postgres
-# embedded, non si auto-provvisiona JWT_SECRET, i segreti arrivano da Fly secrets.
+# Distinto da deploy/render/Dockerfile (webapp): i segreti arrivano dall'ambiente
+# del provider, mai da file.
 #
 # NB build: @tako/db e @tako/types ESPORTANO TypeScript sorgente (vedi packages/db
 # package.json "exports": "./src/*.ts"), NON c'è un build TS→JS dei package workspace.
-# Di conseguenza il server gira con `tsx` a runtime anche in produzione (coerente con
-# apps/server/Dockerfile esistente). L'entrypoint cloud è src/cloud/entry.ts.
+# Di conseguenza il server gira con `tsx` a runtime anche in produzione.
+# L'entrypoint cloud è src/cloud/entry.ts.
 #
 # Build DAL ROOT del monorepo (il context deve vedere pnpm-workspace.yaml + packages):
 #   docker build -f apps/server/deploy/Dockerfile.cloud -t tako-cloud .
@@ -72,6 +72,6 @@ EXPOSE 3001
 HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||3001)+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
-# Entrypoint cloud dedicato: NON importa @tako/db/embedded (niente embedded-postgres).
+# Entrypoint cloud dedicato (src/cloud/entry.ts).
 # Env iniettate da Fly secrets / orchestratore (mai --env-file in prod).
 CMD ["pnpm", "exec", "tsx", "src/cloud/entry.ts"]

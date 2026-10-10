@@ -2,8 +2,6 @@
   "name": "tako",
   "private": true,
   "scripts": {
-    "dev": "turbo run dev",
-    "tako": "node scripts/tako.mjs",
     "build": "turbo run build",
     "lint": "eslint .",
     "db:generate": "turbo run db:generate --filter=@tako/db",

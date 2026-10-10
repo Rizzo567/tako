@@ -1,6 +1,6 @@
 // FASE 5c — CSRF (modo crosssite) + CORS allowlist (§10 / SEC-004 / SEC-018).
 // In COOKIE_MODE=crosssite il login emette anche il cookie double-submit tako_cloud_csrf;
-// i POST a sessione (es. /logout, /pair/code) richiedono l'header X-Tako-CSRF == cookie.
+// i POST a sessione (es. /logout) richiedono l'header X-Tako-CSRF == cookie.
 // CORS: solo gli origin in ALLOWED_ORIGINS ricevono Access-Control-Allow-Origin; un
 // *.pages.dev arbitrario è bloccato (nessun header CORS riflesso).
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
@@ -67,16 +67,6 @@ describe('CSRF double-submit (crosssite)', () => {
     expect(res.json().data.success).toBe(true)
   })
 
-  it('POST /pair/code senza X-Tako-CSRF → 403 (CSRF prima della logica)', async () => {
-    const s = await loggedIn('csrf-pair@test.local')
-    const res = await ctx.app.inject({
-      url: '/api/pair/code', method: 'POST',
-      headers: { 'content-type': 'application/json', cookie: `tako_cloud_session=${s.session}; tako_cloud_csrf=${s.csrf}` },
-      payload: JSON.stringify({ restaurantId: '00000000-0000-0000-0000-000000000000' }),
-    })
-    expect(res.statusCode).toBe(403)
-    expect(res.json().error.code).toBe('CSRF')
-  })
 })
 
 describe('CORS allowlist esatta (SEC-004/018)', () => {

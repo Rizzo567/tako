@@ -1,36 +1,28 @@
 // Cookie di autenticazione condivisi (HttpOnly). Centralizza nomi e opzioni così
 // staff (sessione) e cliente (JWT tavolo) restano coerenti.
-import { isWebMode, webOrigin } from './web-runtime.js'
+import { webOrigin } from './web-runtime.js'
 import type { CookieSerializeOptions } from '@fastify/cookie'
 
 export const SESSION_COOKIE = 'tako_session' // token di sessione staff (opaco)
 export const TABLE_COOKIE = 'tako_table'     // JWT legato al tavolo del cliente
 
-// Secure SOLO dietro TLS reale. Tako è un'appliance locale che gira in http sulla
-// LAN: lì i browser RIFIUTANO i cookie Secure (eccetto su localhost), quindi la
-// sessione non verrebbe salvata sui tablet/telefoni. Default false; imposta
-// COOKIE_SECURE=1 solo se servi Tako dietro HTTPS.
-const cookieSecure = process.env['COOKIE_SECURE'] === '1'
-
-/** Opzioni base: HttpOnly, SameSite=Lax, Secure solo dietro TLS. `path`/`maxAge` per-uso. */
+/** Opzioni base: HttpOnly, SameSite=Lax, Secure quando l'origine pubblica è HTTPS
+ * (solo lo sviluppo su localhost usa HTTP). `path`/`maxAge` per-uso. */
 export function authCookieOptions(maxAgeSeconds: number, path = '/'): CookieSerializeOptions {
   return {
     httpOnly: true,
     sameSite: 'lax',
-    secure: isWebMode() ? new URL(webOrigin()).protocol === 'https:' : cookieSecure,
+    secure: new URL(webOrigin()).protocol === 'https:',
     path,
     maxAge: maxAgeSeconds,
   }
 }
 
-// Sessione staff LONG-LIVED con refresh rolling (vedi middleware/auth.ts): su un
-// appliance desktop personale il login deve "restare". La scadenza viene rinnovata
-// a ogni uso, quindi finché usi Tako non ti disconnette. Il cookie WKWebView di
-// Tauri è persistente → sopravvive ai riavvii dell'app.
+// Sessione staff LONG-LIVED con refresh rolling (vedi middleware/auth.ts): la
+// scadenza viene rinnovata a ogni uso, quindi finché usi Tako non ti disconnette.
 export const STAFF_SESSION_MAX_AGE = 60 * 60 * 24 * 90 // 90 giorni
-// Sessione del TELEFONO arruolato (app owner): 30 giorni, non 90. Stesso refresh
-// rolling, finestra più corta perché un telefono si perde più facilmente di un Mac
-// in cucina (piano app ristoratori §3 D3). Non viaggia mai in un cookie: solo Bearer.
+// Sessioni 'mobile' (telefoni collegati, elencati in «Dispositivi»): 30 giorni con
+// lo stesso refresh rolling. Non viaggiano mai in un cookie: solo Bearer.
 export const MOBILE_SESSION_MAX_AGE = 60 * 60 * 24 * 30 // 30 giorni
 // Ogni quanto (al massimo) rinnovare la scadenza di una sessione staff attiva:
 // evita una UPDATE a ogni richiesta, rinnova al più una volta al giorno.

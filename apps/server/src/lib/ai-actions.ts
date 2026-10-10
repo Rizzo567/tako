@@ -1,5 +1,4 @@
 import {readWorkspace} from './menu-workspace-store.js'
-import { isWebMode } from './web-runtime.js'
 // ─────────────────────────────── Tako — MOTORE AZIONI AI ───────────────────────────────
 // Un unico registro di "tool" che l'AI (Groq function-calling) può invocare, condiviso
 // da due personalità con permessi diversi:
@@ -26,7 +25,6 @@ import { isWebMode } from './web-runtime.js'
 import { db, restaurants, menus, menuSections, menuItems, menuItemTranslations, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions, loyaltyAccounts, recipes } from '@tako/db'
 import { eq, and, asc, desc, gte, lt, lte, ne, inArray, isNull, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
-import bcrypt from 'bcryptjs'
 import { io } from '../index.js'
 import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz, coverUnit, billTotalsFromOrders, recomputeOpenBill, BILLABLE_STATUSES } from './billing.js'
 
@@ -1518,32 +1516,8 @@ const ACTIONS: ActionDef[] = [
       required: ['name', 'role'],
     },
     label: (a) => `Aggiungi ${a?.name ?? '?'} come ${a?.role ?? '?'}`,
-    execute: async (ctx, args) => {
-      if (isWebMode()) return { ok: false, summary: 'Nel servizio web aggiungi il collaboratore da Team, con email reale e password personale.' }
-      const name = (args?.name ?? '').toString().trim()
-      // "cameriere"/"sala" sono il modo naturale di dirlo: il DB usa 'dipendente'
-      // (stessa mappa ROLE_UI2DB della dashboard). Normalizziamo qui.
-      const ROLE_SYNONYMS: Record<string, string> = { cameriere: 'dipendente', sala: 'dipendente', cuoco: 'chef' }
-      const rawRole = (args?.role ?? '').toString().toLowerCase().trim()
-      const normalized = ROLE_SYNONYMS[rawRole] ?? rawRole
-      const role = ['dipendente', 'chef', 'cassiere'].includes(normalized) ? normalized : null
-      if (!name || name.length < 2 || !role) return { ok: false, summary: 'Servono nome (min 2 caratteri) e ruolo valido.' }
-      if (args?.pin && !/^\d{4}$/.test(String(args.pin))) return { ok: false, summary: 'Il PIN deve essere di 4 cifre.' }
-      // anti-duplicato: senza questo ogni riproposta creava un membro fantasma omonimo
-      const existingStaff = await db.select({ name: users.name }).from(users)
-        .where(and(eq(users.restaurantId, ctx.restaurantId), eq(users.active, true)))
-      if (existingStaff.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-        return { ok: false, summary: `Esiste già un membro "${name}". Per un omonimo aggiungi un dettaglio al nome.` }
-      }
-      // email tecnica auto-generata (la tabella la richiede unica; il login del
-      // dipendente avviene via PIN sul tablet)
-      const email = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '.').replace(/^\.|\.$/g, '')}+${nanoid(6).toLowerCase()}@tako.local`
-      const pinHash = args?.pin ? await bcrypt.hash(String(args.pin), 10) : undefined
-      const [user] = await db.insert(users).values({
-        restaurantId: ctx.restaurantId, name: name.slice(0, 120), email, role,
-        pin: pinHash, phone: args?.phone ? String(args.phone).slice(0, 40) : undefined,
-      }).returning()
-      return { ok: true, data: { id: user!.id, name: user!.name, role: user!.role }, summary: `${user!.name} aggiunto come ${role}${args?.pin ? ' (PIN impostato per il tablet)' : ''}.` }
+    execute: async () => {
+      return { ok: false, summary: 'Nel servizio web aggiungi il collaboratore da Team, con email reale e password personale.' }
     },
   },
   {
@@ -2033,7 +2007,7 @@ export async function executeAction(
   if (def.kind === 'mutation' && !opts?.allowMutation) {
     return { ok: false, summary: 'Questa azione modifica dati e richiede conferma esplicita.' }
   }
-  if (isWebMode() && ['create_menu_item','create_menu_section','update_menu_item','delete_menu_item','delete_menu_section','rename_menu_section','generate_dish_description','translate_menu_item','set_food_cost','add_dish_variant'].includes(name) && await readWorkspace(ctx.restaurantId)) {
+  if (['create_menu_item','create_menu_section','update_menu_item','delete_menu_item','delete_menu_section','rename_menu_section','generate_dish_description','translate_menu_item','set_food_cost','add_dish_variant'].includes(name) && await readWorkspace(ctx.restaurantId)) {
     return {ok:false,summary:'Questo menu usa bozze e versioni: applica la modifica dal nuovo editor e pubblicala.'}
   }
   return def.execute(ctx, args ?? {})

@@ -1,5 +1,4 @@
 import {readWorkspace} from '../lib/menu-workspace-store.js'
-import {isWebMode} from '../lib/web-runtime.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemTranslations } from '@tako/db'
@@ -36,7 +35,7 @@ async function ownsItem(itemId: string, restaurantId: string) {
 
 export async function menuRoutes(fastify: FastifyInstance) {
   fastify.addHook('preHandler',async(req,reply)=>{
-    if (!isWebMode() || ['GET','HEAD','OPTIONS'].includes(req.method) || req.url.split('?')[0]?.endsWith('/availability')) return
+    if (['GET','HEAD','OPTIONS'].includes(req.method) || req.url.split('?')[0]?.endsWith('/availability')) return
     await requireAuth(req,reply)
     if(reply.sent)return
     if(req.user!.role!=='owner') return reply.code(403).send({error:{code:'FORBIDDEN',message:'Modifica riservata al titolare.'}})
@@ -234,7 +233,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     // non il percorso normale.
     const original = await data.toBuffer()
 
-    // Best-effort: se lo stile AI è spento, l'appliance è offline o Gemini fallisce,
+    // Best-effort: se lo stile AI è spento, il server è offline o Gemini fallisce,
     // torna lo STESSO buffer — e allora `styled` è false. Il confronto è per
     // riferimento, quindi non mente: nessun altro modo di sapere se ha davvero girato.
     const buf = await maybeStyleDishImage(req.user!.restaurantId, original, data.mimetype || 'image/jpeg')

@@ -21,11 +21,6 @@ export type AuditEvent =
   | 'oauth_link_refused'
   | 'oauth_state_invalid'
   | 'oauth_email_unverified'
-  // Pairing appliance↔cloud (Fase 2b)
-  | 'pair_code_generated'
-  | 'pair_claimed'
-  | 'pair_claim_refused'
-  | 'pair_heartbeat'
   // Form contatti del sito
   | 'contact'
 

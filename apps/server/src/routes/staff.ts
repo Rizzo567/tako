@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { isWebMode } from '../lib/web-runtime.js'
 import bcrypt from 'bcryptjs'
 import { db, users, sessions } from '@tako/db'
 import { eq, and, sql } from 'drizzle-orm'
@@ -27,7 +26,7 @@ export async function staffRoutes(fastify: FastifyInstance) {
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
-    if (isWebMode() && (!body.data.password || body.data.password.length < 10)) {
+    if (!body.data.password || body.data.password.length < 10) {
       return reply.code(400).send({ error: { code: 'WEB_PASSWORD_REQUIRED', message: 'Per il servizio web serve una password di almeno 10 caratteri.' } })
     }
 
@@ -65,13 +64,13 @@ export async function staffRoutes(fastify: FastifyInstance) {
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
 
     // Hash del PIN come nel POST: mai scrivere il PIN grezzo in users.pin.
-    if (isWebMode() && body.data.password && body.data.password.length < 10) {
+    if (body.data.password && body.data.password.length < 10) {
       return reply.code(400).send({ error: { code: 'WEB_PASSWORD_REQUIRED', message: 'La password web deve avere almeno 10 caratteri.' } })
     }
     const { pin, password, ...rest } = body.data
     const updates = { ...rest,
       ...(pin ? { pin: await bcrypt.hash(pin, 10) } : {}),
-      ...(password ? { passwordHash: await bcrypt.hash(password, 12), ...(isWebMode() ? { localOwnerSecretHash: null } : {}) } : {}),
+      ...(password ? { passwordHash: await bcrypt.hash(password, 12), localOwnerSecretHash: null } : {}),
     }
     const [user] = await db.update(users).set(updates).where(and(eq(users.id, userId), eq(users.restaurantId, req.user!.restaurantId))).returning()
     if (!user) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'User not found' } })

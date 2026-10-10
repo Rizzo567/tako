@@ -4,9 +4,8 @@ import { readFileSync } from 'node:fs'
 import * as schema from './schema/index.js'
 
 // Client Drizzle LAZY: la connessione (e quindi la lettura di DATABASE_URL) avviene
-// alla PRIMA query, non all'import. Così il server può importare le route (che
-// importano questo modulo) prima di aver avviato il Postgres embedded: DATABASE_URL
-// viene impostato da maybeStartEmbeddedDb() e letto solo quando serve davvero.
+// alla PRIMA query, non all'import. Così i test possono impostare DATABASE_URL (DB
+// isolati) dopo aver importato le route.
 type Drizzle = ReturnType<typeof drizzle<typeof schema>>
 
 let _db: Drizzle | null = null

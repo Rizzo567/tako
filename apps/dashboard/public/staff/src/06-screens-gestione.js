@@ -999,20 +999,18 @@ function StaffFormModal({ open, onClose, member }) {
   const [email, setEmail] = useState("");
   const [ruolo, setRuolo] = useState("cameriere");
   const [tel, setTel] = useState("");
-  const [pin, setPin] = useState("");
   const [password, setPassword] = useState("");
   const [active, setActive] = useState(true);
   const [saving, setSaving] = useState(false);
   useEffect(() => {
     if (!open) return;
-    if (member) { setNome(member.nome || ""); setEmail(member.email || ""); setRuolo(member.ruolo === "owner" ? "cameriere" : (member.ruolo || "cameriere")); setTel(member.tel || ""); setPin(""); setPassword(""); setActive(!!member.attivo); }
-    else { setNome(""); setEmail(""); setRuolo("cameriere"); setTel(""); setPin(""); setPassword(""); setActive(true); }
+    if (member) { setNome(member.nome || ""); setEmail(member.email || ""); setRuolo(member.ruolo === "owner" ? "cameriere" : (member.ruolo || "cameriere")); setTel(member.tel || ""); setPassword(""); setActive(!!member.attivo); }
+    else { setNome(""); setEmail(""); setRuolo("cameriere"); setTel(""); setPassword(""); setActive(true); }
   }, [open, member]);
   const save = async () => {
     if (saving) return;
     if (nome.trim().length < 2) { toast("Inserisci il nome (min 2 caratteri)", { type: "error" }); return; }
     if (!isEdit && !/.+@.+\..+/.test(email.trim())) { toast("Inserisci un'email valida", { type: "error" }); return; }
-    if (pin && !/^\d{4}$/.test(pin)) { toast("Il PIN deve avere 4 cifre", { type: "error" }); return; }
     if (webMode === null) { toast("Verifica della connessione in corso. Riprova tra poco.", { type: "error" }); return; }
     if (webMode && !isEdit && !password) { toast("Imposta una password per l'accesso web", { type: "error" }); return; }
     if (password && password.length < (webMode ? 10 : 6)) { toast(`La password deve avere almeno ${webMode ? 10 : 6} caratteri`, { type: "error" }); return; }
@@ -1022,14 +1020,12 @@ function StaffFormModal({ open, onClose, member }) {
       if (isEdit) {
         const fields = { name: nome.trim(), active, phone: tel.trim() };
         if (!isOwner) fields.role = roleDb;  // il ruolo owner non è modificabile dal backend
-        if (pin && !webMode) fields.pin = pin;
         if (password) fields.password = password;
         await window.TakoActions.staffUpdate(member._id, fields);
         toast("Membro aggiornato", { type: "success" });
       } else {
         const fields = { name: nome.trim(), email: email.trim(), role: roleDb };
         if (tel.trim()) fields.phone = tel.trim();
-        if (pin && !webMode) fields.pin = pin;
         if (password) fields.password = password;
         await window.TakoActions.staffCreate(fields);
         toast("Membro aggiunto", { type: "success" });
@@ -1060,7 +1056,6 @@ function StaffFormModal({ open, onClose, member }) {
           </Field>
           {isOwner && <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: -8, marginBottom: 12 }}>Il ruolo del titolare non è modificabile.</div>}
           <Field label="Telefono (opzionale)"><input style={inputStyle} value={tel} onChange={e => setTel(e.target.value)} placeholder="+39…" /></Field>
-          {webMode === false && <Field label="PIN (opzionale, 4 cifre)"><input style={inputStyle} value={pin} inputMode="numeric" maxLength={4} onChange={e => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="Per l'accesso rapido" /></Field>}
           <Field label={isEdit ? "Nuova password (lascia vuoto per mantenerla)" : webMode ? "Password per l'accesso web" : "Password (opzionale)"}><input style={inputStyle} type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} placeholder={webMode ? "Almeno 10 caratteri" : "Almeno 6 caratteri"} /></Field>
           {isEdit && <Row label="Attivo" sub="Un membro disattivo non può accedere"><Toggle on={active} set={setActive} /></Row>}
         </div>

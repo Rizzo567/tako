@@ -1,6 +1,6 @@
-// Avvio del CONTROL-PLANE cloud (TAKO_MODE=cloud). SEPARATO da index.ts (modo local),
-// che resta invariato. Monta CORS allowlist esatta, rate-limit con store Redis condiviso,
-// e le route cloud (/api/auth + /api/pair).
+// Avvio del CONTROL-PLANE cloud (TAKO_MODE=cloud). Separato dalla webapp (TAKO_MODE=web).
+// Monta CORS allowlist esatta, rate-limit con store Redis condiviso e le route cloud
+// del sito (/api/auth, /api/contact).
 //
 // FASE 5e: `buildCloudApp()` (costruisce e registra tutto, NIENTE listen) è estratto da
 // `startCloudServer()` (build + listen) per testabilità: un test può montare l'app reale
@@ -13,14 +13,12 @@ import helmet from '@fastify/helmet'
 import { Redis } from 'ioredis'
 import { cloudAuthRoutes } from '../routes/cloud/auth.js'
 import { cloudOAuthRoutes } from '../routes/cloud/oauth.js'
-import { cloudPairRoutes } from '../routes/cloud/pair.js'
-import { cloudResolveRoutes } from '../routes/cloud/resolve.js'
 import { cloudContactRoutes } from '../routes/cloud/contact.js'
 import { allowedOrigins, cookieMode } from './config.js'
 import { validateEmailConfig } from './email.js'
 import { setRedis } from './redis.js'
 
-// bodyLimit del control-plane (NEW-02): i payload JSON auth/pairing sono piccoli.
+// bodyLimit del control-plane (NEW-02): i payload JSON auth sono piccoli.
 const CLOUD_BODY_LIMIT = 32 * 1024 // 32 KiB
 
 // trustProxy: il cloud sta DIETRO un reverse proxy (Vercel/Fly/Nginx). req.ip va derivato
@@ -48,7 +46,7 @@ function buildCloudFastify(trustProxy: boolean | number | string): FastifyInstan
  */
 export async function buildCloudApp(): Promise<FastifyInstance> {
   // SESSION_SECRET firma i cookie (firma anti-tamper di @fastify/cookie). DISTINTO da
-  // JWT_SECRET locale: il control-plane non condivide segreti con l'appliance.
+  // Il control-plane non condivide segreti (JWT_SECRET) con la webapp.
   const SESSION_SECRET = process.env['SESSION_SECRET']
   if (!SESSION_SECRET) throw new Error('SESSION_SECRET è obbligatoria in TAKO_MODE=cloud')
   if (process.env['NODE_ENV'] === 'production' && SESSION_SECRET.length < 32) {
@@ -127,11 +125,8 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
   // mostra l'icona Tako.
   fastify.get('/favicon.ico', async (_req, reply) => reply.redirect('https://takoitalia.com/favicon.ico', 301))
 
-  // Rate-limit per-endpoint. Due classi (NEW-01 FASE 5e):
-  //  - SENSITIVE_AUTH: endpoint auth che spediscono email / verificano credenziali → 10/min.
-  //  - SENSITIVE_PAIR: endpoint pairing non autenticati o ad alta frequenza. claim/heartbeat
-  //    sono i più esposti (no sessione owner) → 30/min per-IP; code/approve passano comunque
-  //    dal rate-limit globale per-IP via questa classe (30/min) oltre alla sessione+CSRF.
+  // Rate-limit per-endpoint (NEW-01 FASE 5e): endpoint auth che spediscono email o
+  // verificano credenziali → 10/min.
   const SENSITIVE_AUTH = new Set([
     'POST:/api/auth/login',
     'POST:/api/auth/register',
@@ -142,21 +137,11 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
     'GET:/api/auth/verify-email',
     'POST:/api/contact',
   ])
-  const SENSITIVE_PAIR = new Set([
-    'POST:/api/pair/claim',
-    'POST:/api/pair/heartbeat',
-    'POST:/api/pair/code',
-    'POST:/api/pair/approve',
-  ])
   fastify.addHook('onRoute', (routeOptions) => {
     const methods = Array.isArray(routeOptions.method) ? routeOptions.method : [routeOptions.method]
     const keys = methods.map((m) => `${m}:${routeOptions.url}`)
     if (keys.some((k) => SENSITIVE_AUTH.has(k))) {
       routeOptions.config = { ...(routeOptions.config ?? {}), rateLimit: { max: 10, timeWindow: '1 minute' } }
-    } else if (keys.some((k) => SENSITIVE_PAIR.has(k))) {
-      // claim/heartbeat non hanno sessione: il per-IP è la prima linea di difesa (oltre al
-      // per-code lockout e al PoP ed25519). 30/min/IP è ampio per un'appliance legittima.
-      routeOptions.config = { ...(routeOptions.config ?? {}), rateLimit: { max: 30, timeWindow: '1 minute' } }
     }
   })
 
@@ -165,10 +150,7 @@ export async function buildCloudApp(): Promise<FastifyInstance> {
   // /api/auth/google, callback → /api/auth/google/callback). Si registra solo se i
   // provider sono configurati (client id/secret in env), altrimenti è un no-op.
   await fastify.register(cloudOAuthRoutes, { prefix: '/api/auth' })
-  await fastify.register(cloudPairRoutes, { prefix: '/api/pair' })
   await fastify.register(cloudContactRoutes, { prefix: '/api' })
-  // Resolver pubblico del QR stabile: GET /t/:applianceId/* (nessun prefix /api).
-  await fastify.register(cloudResolveRoutes)
 
   return fastify
 }

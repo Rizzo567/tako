@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyPluginAsync, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 /** Hosted operational runtime; distinct from the cloud identity/control plane. */
 import { remoteStorageConfig } from './remote-image-store.js'
 
@@ -41,13 +41,22 @@ export function webRequestAllowed(method: string, origin: string | undefined, ex
   return ['GET', 'HEAD', 'OPTIONS'].includes(method)
 }
 
-/** Never mount appliance-only plugins in the hosted server: encoded URLs cannot bypass this. */
-export async function registerAppliancePlugin(server: FastifyInstance, plugin: FastifyPluginAsync, prefix: string): Promise<void> {
-  if (!isWebMode()) await server.register(plugin, { prefix })
-}
+/** Former local-appliance endpoints (shutdown, pairing, LAN printing, global WhatsApp
+ * credentials, PIN login). They always answer with the same explicit 404. */
+export const WEB_UNAVAILABLE_PREFIXES = ['/internal', '/api/setup', '/api/print', '/api/whatsapp', '/api/auth/pin-roster', '/api/auth/pin-login']
 
-export function webUnavailable(reply: FastifyReply) {
-  return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Funzione non disponibile nel servizio web.' } })
+/** onRequest boundary of the web service: unavailable appliance paths, then the
+ * strict browser-origin check for cookie-authenticated writes. */
+export function webBoundary(publicOrigin: string) {
+  return async (request: FastifyRequest, reply: FastifyReply) => {
+    const path = request.url.split('?')[0]!
+    if (WEB_UNAVAILABLE_PREFIXES.some(prefix => path === prefix || path.startsWith(prefix + '/'))) {
+      return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Funzione non disponibile nel servizio web.' } })
+    }
+    if (!webRequestAllowed(request.method, request.headers.origin, publicOrigin)) {
+      return reply.code(403).send({ error: { code: 'ORIGIN_REJECTED', message: 'Origine della richiesta non autorizzata.' } })
+    }
+  }
 }
 
 /** The browser origin may use HTTP only for development confined to this machine. */

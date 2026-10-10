@@ -1,241 +1,15 @@
 /* ═══════════════════════ Tako — DETTATURA VOCALE (push-to-talk) ═══════════════
-   MVP batch: premi (Cmd+K o click sul mic) → parli → ripremi → il segmento va
-   al server via socket.io '/dictation' → ASR dual-mode (mlx locale ⇄ Groq
-   cloud) → cleanup LLM (Ollama ⇄ Groq) → testo pulito nel campo del copilot.
-
-   Pipeline client volutamente minimale (lo streaming è fase 2):
-     mic (getUserMedia, mono, NS/AGC nativi)
-       → AudioWorklet 'tako-capture' (frame Float32 @ sample-rate nativo)
-         [fallback ScriptProcessor se il worklet non carica]
-       → accumulo in RAM → allo stop: downsample 16 kHz + PCM16 → 'finalize'
+   La webapp usa il riconoscimento vocale del browser (SpeechRecognition), avviato
+   solo da un gesto esplicito: nessun audio viene inviato al server Tako.
 
    Espone:
-     window.TakoDictationRecorder  — classe riusabile (start/stop/cancel)
-     window.DictationButton        — bottone React autonomo (stati: idle/rec/busy)
-     window.takoDictationToggle()  — registrata dal bottone montato (per Cmd+K)
+     window.TakoBrowserDictationRecorder — recorder del browser (start/stop/cancel)
+     window.DictationButton              — bottone React autonomo (stati: idle/rec/busy)
+     window.takoDictationToggle()        — registrata dal bottone montato (per Cmd+K)
    ─────────────────────────────────────────────────────────────────────────── */
 (function () {
-  const WORKLET_URL = "/staff/vendor/dictation-worklet.js";
-  const TARGET_SR = 16000;
   const MAX_RECORD_MS = 90_000;    // tetto di sicurezza
-  const RESULT_TIMEOUT_MS = 120_000;
-  // Endpointing stile Wispr Flow (hands-free): quando l'utente ha parlato e poi
-  // resta in silenzio per SILENCE_STOP_MS, la dettatura si chiude da sola.
-  const SILENCE_STOP_MS = 1500;
-  const NO_SPEECH_TIMEOUT_MS = 8000; // mai parlato → annulla (mic muto/sbagliato)
-  const SPEECH_RMS_MIN = 0.007;      // soglia assoluta minima di "voce"
-
-  /* ── Recorder: cattura → PCM16 16k → socket → risultato ─────────────────── */
-  class TakoDictationRecorder {
-    constructor(opts) {
-      opts = opts || {};
-      this.socket = null;
-      this.stream = null;
-      this.ctx = null;
-      this.node = null;
-      this.source = null;
-      this.chunks = [];            // Float32Array @ ctx.sampleRate
-      this.recording = false;
-      this.status = null;          // {local, cloud, engine} dal server
-      this._autoStop = null;
-      // Endpointing: rileva voce→silenzio e chiama onSpeechEnd (il chiamante
-      // esegue lo stesso flusso dello stop manuale). Energia RMS con noise
-      // floor adattivo: robusto a rumori di fondo costanti (frigo, sala).
-      this.onSpeechEnd = opts.onSpeechEnd || null;
-      this.onNoSpeech = opts.onNoSpeech || null;
-      this._spokeAt = 0;           // ultimo frame con voce
-      this._startedAt = 0;
-      this._floor = 0.003;         // noise floor adattivo
-      this._endTimer = null;
-      this._level = 0;             // livello audio smussato 0..1 (per la waveform)
-    }
-
-    // Livello audio corrente 0..1 per la visualizzazione (waveform reattiva).
-    getLevel() { return this._level; }
-
-    // Un frame Float32 dal thread audio: accumula + endpointing + livello.
-    _ingest(frame) {
-      if (!this.recording) return;
-      this.chunks.push(frame);
-      let sum = 0;
-      for (let i = 0; i < frame.length; i++) sum += frame[i] * frame[i];
-      const rms = Math.sqrt(sum / frame.length);
-      // Livello per la UI: gain + smoothing asimmetrico (attacco veloce, rilascio
-      // lento) → barre vivaci che scattano sulla voce e scendono morbide.
-      const target = Math.min(1, rms * 9);
-      this._level = target > this._level ? this._level * 0.4 + target * 0.6 : this._level * 0.82 + target * 0.18;
-      // floor: scende subito sui frame quieti, sale lentissimo (evita di
-      // "imparare" la voce come rumore)
-      this._floor = rms < this._floor ? rms : this._floor * 1.002;
-      const speaking = rms > Math.max(this._floor * 3.5, SPEECH_RMS_MIN);
-      const now = Date.now();
-      if (speaking) this._spokeAt = now;
-      else if (this._spokeAt && now - this._spokeAt > SILENCE_STOP_MS) {
-        // voce c'è stata, poi silenzio prolungato → fine frase
-        this._spokeAt = 0;
-        this.onSpeechEnd && this.onSpeechEnd();
-      } else if (!this._spokeAt && now - this._startedAt > NO_SPEECH_TIMEOUT_MS) {
-        this._startedAt = now + 86400000; // non ri-triggerare
-        this.onNoSpeech && this.onNoSpeech();
-      }
-    }
-
-    _clog(where, message) {
-      try { this.socket && this.socket.emit("clientlog", { where, message: String(message) }); } catch (_) {}
-    }
-
-    _ensureSocket() {
-      if (this.socket) return this.socket;
-      this.socket = window.io("/dictation", { withCredentials: true, transports: ["websocket", "polling"] });
-      this.socket.on("ready", (s) => { this.status = s; this._clog("socket", "ready engine=" + (s && s.engine)); });
-      this.socket.on("disconnect", (r) => { this.status = null; this._clog("socket", "disconnect " + r); });
-      this.socket.on("connect", () => { this._clog("socket", "connect id=" + this.socket.id); });
-      this.socket.on("connect_error", (e) => { this._clog("socket", "connect_error " + (e && e.message)); });
-      return this.socket;
-    }
-
-    // Il server attacca il listener 'finalize' solo DOPO l'auth (evento 'ready'):
-    // emettere prima = evento perso. Attendiamo 'ready' (max 8s) prima di inviare.
-    _waitReady(socket) {
-      this._clog("waitReady", "enter status=" + (this.status ? "set" : "null") + " connected=" + socket.connected);
-      if (this.status) return Promise.resolve();
-      return new Promise((resolve, reject) => {
-        const t = setTimeout(() => { cleanup(); this._clog("waitReady", "TIMEOUT"); reject(new Error("Connessione al motore vocale non pronta.")); }, 8000);
-        const onReady = () => { cleanup(); resolve(); };
-        const onErr = (e) => { cleanup(); reject(new Error((e && e.message) || "Errore dettatura")); };
-        const cleanup = () => { clearTimeout(t); socket.off("ready", onReady); socket.off("asr:error", onErr); };
-        socket.on("ready", onReady);
-        socket.on("asr:error", onErr);
-      });
-    }
-
-    async start() {
-      if (this.recording) return;
-      this._ensureSocket();
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-      });
-      const AC = window.AudioContext || window.webkitAudioContext;
-      try { this.ctx = new AC({ sampleRate: 48000 }); } catch (_) { this.ctx = new AC(); }
-      if (this.ctx.state === "suspended") { try { await this.ctx.resume(); } catch (_) {} }
-      this.source = this.ctx.createMediaStreamSource(this.stream);
-      this.chunks = [];
-
-      let usedWorklet = false;
-      try {
-        await this.ctx.audioWorklet.addModule(WORKLET_URL);
-        this.node = new AudioWorkletNode(this.ctx, "tako-capture");
-        this.node.port.onmessage = (e) => this._ingest(e.data);
-        this.source.connect(this.node);
-        usedWorklet = true;
-      } catch (_) { usedWorklet = false; }
-      if (!usedWorklet) {
-        // Fallback: ScriptProcessor (deprecato ma ovunque disponibile)
-        this.node = this.ctx.createScriptProcessor(2048, 1, 1);
-        this.node.onaudioprocess = (e) => this._ingest(new Float32Array(e.inputBuffer.getChannelData(0)));
-        this.source.connect(this.node);
-      }
-      // CRITICO per WebKit/WKWebView: un nodo senza percorso verso destination
-      // non viene "pullato" dal grafo → process()/onaudioprocess mai chiamati →
-      // zero audio ("Dettatura fallita: nessun audio"). Colleghiamo via gain a 0:
-      // il grafo renderizza, ma non si sente nulla (niente feedback dal mic).
-      this._mute = this.ctx.createGain();
-      this._mute.gain.value = 0;
-      this.node.connect(this._mute);
-      this._mute.connect(this.ctx.destination);
-
-      this.recording = true;
-      this._spokeAt = 0;
-      this._startedAt = Date.now();
-      this._floor = 0.003;
-      this._level = 0;
-      this._autoStop = setTimeout(() => { this.onSpeechEnd && this.onSpeechEnd(); }, MAX_RECORD_MS);
-
-      // Watchdog frames: se dopo 2.5s non è arrivato NESSUN frame audio, il
-      // grafo WebKit non sta renderizzando (context sospeso / worklet muto).
-      // Diagnostica via clientlog + tentativo di recupero (resume + fallback
-      // ScriptProcessor se era in uso il worklet).
-      const self = this;
-      this._watchdog = setTimeout(function () {
-        if (!self.recording || self.chunks.length > 0) return;
-        const st = self.ctx ? self.ctx.state : "no-ctx";
-        try {
-          self.socket && self.socket.emit("clientlog", {
-            where: "watchdog", name: "NoFrames",
-            message: "0 frame dopo 2.5s — ctx.state=" + st + " worklet=" + usedWorklet + " sr=" + (self.ctx && self.ctx.sampleRate),
-          });
-        } catch (_) {}
-        if (self.ctx && self.ctx.state === "suspended") { try { self.ctx.resume(); } catch (_) {} }
-        // ultimo tentativo: rimpiazza il worklet con ScriptProcessor
-        if (usedWorklet && self.ctx && self.source) {
-          try {
-            self.node.disconnect();
-            self.node = self.ctx.createScriptProcessor(2048, 1, 1);
-            self.node.onaudioprocess = function (e) { self._ingest(new Float32Array(e.inputBuffer.getChannelData(0))); };
-            self.source.connect(self.node);
-            self.node.connect(self._mute);
-          } catch (_) {}
-        }
-      }, 2500);
-    }
-
-    _teardownAudio() {
-      clearTimeout(this._autoStop);
-      clearTimeout(this._watchdog);
-      try { this.source && this.source.disconnect(); } catch (_) {}
-      try { this.node && this.node.disconnect(); } catch (_) {}
-      try { this._mute && this._mute.disconnect(); } catch (_) {}
-      try { this.stream && this.stream.getTracks().forEach((t) => t.stop()); } catch (_) {}
-      try { this.ctx && this.ctx.close(); } catch (_) {}
-      this.source = this.node = this._mute = this.stream = this.ctx = null;
-    }
-
-    cancel() {
-      this.recording = false;
-      this._teardownAudio();
-      this.chunks = [];
-    }
-
-    /** Ferma la registrazione e trascrive. Risolve {text, raw, asrEngine, ...}. */
-    async stop() {
-      if (!this.recording) throw new Error("Nessuna registrazione in corso.");
-      this.recording = false;
-      const srcRate = this.ctx ? this.ctx.sampleRate : 48000;
-      this._teardownAudio();
-
-      const total = this.chunks.reduce((n, c) => n + c.length, 0);
-      const all = new Float32Array(total);
-      let off = 0;
-      for (const c of this.chunks) { all.set(c, off); off += c.length; }
-      this.chunks = [];
-      if (total === 0) throw new Error("Nessun audio registrato.");
-
-      const pcm = downsampleToPcm16(all, srcRate, TARGET_SR);
-      this._clog("stop", "frames=" + total + " pcmBytes=" + pcm.byteLength + " srcRate=" + srcRate);
-      const socket = this._ensureSocket();
-      await this._waitReady(socket);
-      this._clog("stop", "emit finalize");
-      return new Promise((resolve, reject) => {
-        const timer = setTimeout(() => {
-          cleanupHandlers();
-          reject(new Error("Timeout trascrizione."));
-        }, RESULT_TIMEOUT_MS);
-        const onResult = (r) => { cleanupHandlers(); resolve(r); };
-        const onError = (e) => { cleanupHandlers(); reject(new Error((e && e.message) || "Errore trascrizione")); };
-        const cleanupHandlers = () => {
-          clearTimeout(timer);
-          socket.off("result", onResult);
-          socket.off("asr:error", onError);
-        };
-        socket.on("result", onResult);
-        socket.on("asr:error", onError);
-        socket.emit("finalize", { pcm: pcm.buffer, sampleRate: TARGET_SR });
-      });
-    }
-  }
-
-  // Hosted web uses the browser's speech service only after an explicit gesture.
-  // It never opens the appliance ASR socket or captures PCM for a server.
+  // Il servizio vocale del browser parte solo dopo un gesto esplicito.
   class TakoBrowserDictationRecorder {
     constructor(opts) { this.opts = opts || {}; this.recording = false; this.socket = null; this.recognition = null; this.text = ""; this.ended = false; this.error = null; this._pending = null; }
     getLevel() { return 0; } // SpeechRecognition provides no measured audio level.
@@ -268,25 +42,6 @@
   function dictationRuntime() {
     if (!dictationRuntimePromise) dictationRuntimePromise = fetch("/api/system/info", { credentials: "include" }).then(response => { if (!response.ok) throw new Error("Runtime non disponibile"); return response.json(); }).then(result => { if (result.data && result.data.mode === "web") return "web"; if (result.data && typeof result.data.port === "number") return "local"; throw new Error("Runtime non riconosciuto"); });
     return dictationRuntimePromise;
-  }
-
-  function downsampleToPcm16(f32, fromRate, toRate) {
-    let mono = f32;
-    if (fromRate !== toRate) {
-      const nOut = Math.round(f32.length * toRate / fromRate);
-      mono = new Float32Array(nOut);
-      const ratio = (f32.length - 1) / Math.max(1, nOut - 1);
-      for (let i = 0; i < nOut; i++) {
-        const x = i * ratio, i0 = Math.floor(x), i1 = Math.min(f32.length - 1, i0 + 1), t = x - i0;
-        mono[i] = f32[i0] * (1 - t) + f32[i1] * t;
-      }
-    }
-    const out = new Int16Array(mono.length);
-    for (let i = 0; i < mono.length; i++) {
-      const s = Math.max(-1, Math.min(1, mono[i]));
-      out[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-    }
-    return out;
   }
 
   /* ── Bottone mic autonomo (React) ────────────────────────────────────────── */
@@ -501,8 +256,7 @@
       dictationRuntime().then(mode => {
       if (!mountedRef.current) return;
       if (mode === "web" && !(window.SpeechRecognition || window.webkitSpeechRecognition)) { setAvailabilityMessage("Dettatura non supportata da questo browser: scrivi nel campo di testo."); return; }
-      const Recorder = mode === "web" ? TakoBrowserDictationRecorder : TakoDictationRecorder;
-      rec = new Recorder({
+      rec = new TakoBrowserDictationRecorder({
         onSpeechEnd: () => stopAndTranscribe(),
         onNoSpeech: () => {
           if (recRef.current && stateRef.current === "rec") {
@@ -578,7 +332,6 @@
   }
 
   window.TakoBrowserDictationRecorder = TakoBrowserDictationRecorder;
-  window.TakoDictationRecorder = TakoDictationRecorder;
   window.DictationButton = DictationButton;
   window.TakoDictationWave = TakoDictationWave;
 })();

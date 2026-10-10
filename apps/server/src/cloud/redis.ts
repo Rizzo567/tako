@@ -91,7 +91,7 @@ export async function del(key: string): Promise<void> {
 }
 
 /**
- * Anti-replay basato su nonce/timestamp monotono per chiave (es. heartbeat per-appliance).
+ * Anti-replay basato su nonce/timestamp monotono per chiave (es. richieste firmate per-client).
  * Memorizza l'ultimo `ts` accettato con un TTL; rifiuta un `ts` <= all'ultimo visto.
  * Ritorna:
  *   - 'ok'        → ts accettato e registrato;
@@ -118,7 +118,7 @@ export async function checkMonotonicTs(
     const res = (await redis.eval(MONOTONIC_LUA, 1, key, String(ts), String(ttlSeconds))) as number
     return res === 1 ? 'ok' : 'replay'
   } catch {
-    // Errore Redis a runtime: degrada alla sola finestra temporale (non bloccare l'appliance).
+    // Errore Redis a runtime: degrada alla sola finestra temporale (non bloccare il client).
     return 'no-redis'
   }
 }

@@ -7,7 +7,6 @@ import { io } from '../index.js'
 import { recomputeOpenBill, round2, ensureOpenBill } from '../lib/billing.js'
 import { deductStockForOrder } from '../lib/stock-deduct.js'
 import type { OrderStatus } from '@tako/types'
-import { pushAfterResponse, orderNewNotification } from '../lib/push.js'
 
 // Transizioni di stato ordine consentite. Impedisce di "resuscitare" ordini
 // pagati/annullati o di mandarli indietro in modo incoerente.
@@ -192,11 +191,6 @@ export async function orderRoutes(fastify: FastifyInstance) {
       io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
       await ensureOpenBill(restaurantId, body.data.tableId)
     }
-
-    // Push al telefono del ristoratore (F3.2). `pushAfterResponse` rimanda a
-    // setImmediate: quando parte, questa risposta è già sul socket. Il socket
-    // qui sopra resta la via principale — la push serve a chi NON ha l'app aperta.
-    pushAfterResponse(restaurantId, orderNewNotification(order))
 
     return reply.code(201).send({ data: payload })
   })

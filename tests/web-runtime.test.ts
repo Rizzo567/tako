@@ -1,9 +1,8 @@
 import { createRequire } from 'node:module'
 const Fastify = createRequire(new URL('../apps/server/package.json', import.meta.url))('fastify')
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { isWebMode, validateWebRuntime, webOrigin, webRequestAllowed, registerAppliancePlugin, webUnavailable, webServerHost, webSocketOrigin } from '../apps/server/src/lib/web-runtime'
+import { isWebMode, validateWebRuntime, webOrigin, webRequestAllowed, webBoundary, webServerHost, webSocketOrigin } from '../apps/server/src/lib/web-runtime'
 import { authCookieOptions } from '../apps/server/src/lib/cookies'
-import { clientBaseUrl, lanBaseUrl, stableTableUrl, tableQrUrl, remoteBaseUrl } from '../apps/server/src/lib/network'
 
 const valid = {
   TAKO_MODE: 'web', WEB_ORIGIN: 'https://tako.example.com',
@@ -48,64 +47,35 @@ describe('hosted operational mode', () => {
     vi.stubEnv('WEB_ORIGIN', valid.WEB_ORIGIN)
     expect(authCookieOptions(3600)).toMatchObject({ secure: true, httpOnly: true, sameSite: 'lax' })
   })
-  it('generates direct HTTPS links without LAN IP, mDNS or appliance resolver', () => {
-    vi.stubEnv('TAKO_MODE', 'web')
-    vi.stubEnv('WEB_ORIGIN', valid.WEB_ORIGIN)
-    vi.stubEnv('CLIENT_BASE_URL', 'http://192.168.1.5:3002')
-    expect(clientBaseUrl()).toBe(valid.WEB_ORIGIN)
-    expect(lanBaseUrl()).toBe(valid.WEB_ORIGIN)
-    expect(remoteBaseUrl()).toBe(valid.WEB_ORIGIN)
-    const expected = valid.WEB_ORIGIN + '/r/restaurant/t/token'
-    expect(stableTableUrl('appliance', 'restaurant', 'token')).toBe(expected)
-    expect(tableQrUrl('lan', 'appliance', 'restaurant', 'token')).toBe(expected)
-    expect(tableQrUrl('cloud', null, 'restaurant', 'token')).toBe(expected)
-  })
 })
 
 
-describe('real Fastify appliance policy (no database/network)', () => {
-  it('does not install local printer/WhatsApp plugins, including encoded routes', async () => {
-    vi.stubEnv('TAKO_MODE', 'web')
+describe('real Fastify web boundary (no database/network)', () => {
+  const origin = 'https://tako.example.com'
+  async function boundaryServer() {
     const server = Fastify()
-    const called = vi.fn()
-    const localPlugin = async (f: typeof server) => {
-      called()
-      f.post('/enable', async () => ({ reached: true }))
-    }
-    await registerAppliancePlugin(server, localPlugin, '/api/whatsapp')
-    await registerAppliancePlugin(server, localPlugin, '/api/print')
-    for (const url of ['/api/whatsapp/enable', '/api/%77hatsapp/enable', '/api/print/enable', '/api/%70rint/enable']) {
-      const response = await server.inject({ method: 'POST', url })
-      expect(response.statusCode).toBe(404)
-    }
-    expect(called).not.toHaveBeenCalled()
-    await server.close()
-  })
-  it('rejects PIN/shutdown inside matched handler regardless of URL spelling', async () => {
-    vi.stubEnv('TAKO_MODE', 'web')
-    const server = Fastify()
-    const dangerousAction = vi.fn()
-    server.post('/api/auth/pin-login', async (_req, reply) => {
-      if (isWebMode()) return webUnavailable(reply)
-      dangerousAction()
-    })
-    server.post('/internal/shutdown', async (_req, reply) => {
-      if (isWebMode()) return webUnavailable(reply)
-      dangerousAction()
-    })
-    for (const url of ['/api/auth/pin-login', '/api/auth/%70in-login', '/internal/shutdown', '/%69nternal/shutdown']) {
-      const response = await server.inject({ method: 'POST', url })
+    server.addHook('onRequest', webBoundary(origin))
+    // The appliance handlers no longer exist: only the boundary answers for them.
+    server.post('/api/orders', async () => ({ ok: true }))
+    return { server }
+  }
+  it('answers former appliance endpoints with NOT_AVAILABLE_WEB, including encoded spellings', async () => {
+    const { server } = await boundaryServer()
+    for (const url of ['/api/whatsapp/enable', '/api/print/enable', '/api/auth/pin-login', '/internal/shutdown', '/api/setup/pair']) {
+      const response = await server.inject({ method: 'POST', url, headers: { origin } })
       expect(response.statusCode).toBe(404)
       expect(response.json().error.code).toBe('NOT_AVAILABLE_WEB')
     }
-    expect(dangerousAction).not.toHaveBeenCalled()
+    for (const url of ['/api/%77hatsapp/enable', '/api/%70rint/enable', '/api/auth/%70in-login', '/%69nternal/shutdown']) {
+      expect((await server.inject({ method: 'POST', url, headers: { origin } })).statusCode).toBe(404)
+    }
     await server.close()
   })
-  it('keeps appliance plugins mounted in local mode', async () => {
-    vi.stubEnv('TAKO_MODE', 'local')
-    const server = Fastify()
-    await registerAppliancePlugin(server, async f => { f.post('/enable', async () => ({ reached: true })) }, '/api/print')
-    expect((await server.inject({ method: 'POST', url: '/api/print/enable' })).statusCode).toBe(200)
+  it('rejects writes from foreign or missing origins and accepts the public origin', async () => {
+    const { server } = await boundaryServer()
+    expect((await server.inject({ method: 'POST', url: '/api/orders', headers: { origin: 'https://evil.example.com' } })).json().error.code).toBe('ORIGIN_REJECTED')
+    expect((await server.inject({ method: 'POST', url: '/api/orders' })).statusCode).toBe(403)
+    expect((await server.inject({ method: 'POST', url: '/api/orders', headers: { origin } })).statusCode).toBe(200)
     await server.close()
   })
 })

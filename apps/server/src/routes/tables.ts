@@ -1,13 +1,11 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
-import { db, tables, rooms, bills, orders, restaurants, waiterCalls } from '@tako/db'
+import { db, tables, rooms, bills, orders, waiterCalls } from '@tako/db'
 import { eq, and, inArray, isNull, desc, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { stableTableUrl, lanTableUrl, ipTableUrl, tableQrUrl, type QrMode } from '../lib/network.js'
-import { isWebMode } from '../lib/web-runtime.js'
-import { getApplianceId } from '../lib/cloud-client.js'
+import { webOrigin } from '../lib/web-runtime.js'
 import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { BILLABLE_STATUSES } from '../lib/billing.js'
 
@@ -209,17 +207,11 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const [table] = await db.select().from(tables).where(and(eq(tables.id, tableId), eq(tables.restaurantId, req.user!.restaurantId))).limit(1)
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
-    // Modalità QR del ristorante (default 'lan' = LAN-first, resiliente a internet giù):
-    //  - 'lan'   → QR = tako.local:3002 (mDNS): il menu si apre anche senza uplink internet.
-    //  - 'cloud' → QR = resolver pubblico /t/<applianceId>/... (richiede internet, no mDNS).
-    // Restituisco SEMPRE tutte le varianti così la dashboard può mostrare/scaricare le alternative
-    // (lanUrl mDNS, cloudUrl resolver, ipUrl per telefoni senza mDNS). Rendering qrWithOctopus (EC=H).
-    const [rest] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
-    const mode: QrMode = isWebMode() || (rest?.settings as any)?.qrMode === 'cloud' ? 'cloud' : 'lan'
-    const url = tableQrUrl(mode, isWebMode() ? null : getApplianceId(), req.user!.restaurantId, table.qrToken)
-    const lanUrl = lanTableUrl(req.user!.restaurantId, table.qrToken)
-    const cloudUrl = stableTableUrl(isWebMode() ? null : getApplianceId(), req.user!.restaurantId, table.qrToken)
-    const ipUrl = ipTableUrl(req.user!.restaurantId, table.qrToken)
+    // Un solo URL pubblico per tavolo. La dashboard riceve ancora le varianti storiche
+    // (lanUrl/cloudUrl/ipUrl) e la modalità, tutte coincidenti con l'origine della webapp.
+    const url = `${webOrigin()}/r/${req.user!.restaurantId}/t/${table.qrToken}`
+    const mode = 'cloud'
+    const lanUrl = url, cloudUrl = url, ipUrl = url
     const qrDataUrl = await qrWithOctopus(url, 400)
     return { data: { qrDataUrl, url, mode, lanUrl, cloudUrl, ipUrl, tableNumber: table.number } }
   })

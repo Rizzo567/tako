@@ -2,13 +2,11 @@ import {db,menuItems} from '@tako/db'
 import {and,eq} from 'drizzle-orm'
 import { readWorkspace } from './menu-workspace-store.js'
 import { publicWorkspace } from './menu-workspace-schedule.js'
-import { isWebMode } from './web-runtime.js'
 import type { Workspace } from './menu-workspace-contract.js'
 import type { PublicMenu } from '@tako/types'
 
 /** Never initialize an editor or expose drafts from a public request. */
 export async function publishedMenu(restaurantId: string): Promise<Workspace | null> {
-  if (!isWebMode()) return null
   const row = await readWorkspace(restaurantId)
   if(!row?.published)return null
   const workspace=publicWorkspace(row.published)

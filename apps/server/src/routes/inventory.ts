@@ -5,7 +5,6 @@ import { eq, and, lte, sql, desc, inArray, gte } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
 import OpenAI from 'openai'
-import { pushAfterResponse, inventoryAlertNotification } from '../lib/push.js'
 
 function getAI() {
   if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
@@ -172,9 +171,6 @@ export async function inventoryRoutes(fastify: FastifyInstance) {
 
     if (item && item.quantity <= item.minQuantity) {
       io.to(`restaurant:${req.user!.restaurantId}`).emit('inventory:alert', { itemId, name: item.name, quantity: item.quantity })
-      // Push (F3.2). Urgenza `normal` e TTL un'ora: è un promemoria da leggere
-      // quando capita, non qualcosa per cui far vibrare un telefono a schermo spento.
-      pushAfterResponse(req.user!.restaurantId, inventoryAlertNotification({ name: item.name, quantity: item.quantity, unit: item.unit }))
     }
 
     return reply.code(201).send({ data: movement })

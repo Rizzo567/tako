@@ -2,7 +2,7 @@
 // ISOLAMENTO (MASTER_PLAN-cloud-auth §3 / contratto database-cloud-identity):
 //  - usa lo schema cloud (`@tako/db/schema/cloud`), MAI lo schema locale;
 //  - usa `CLOUD_DATABASE_URL` (env DISTINTA da DATABASE_URL): non deve MAI puntare
-//    al Postgres locale dell'appliance. Se manca, il modo cloud non parte.
+//    al DB della webapp. Se manca, il modo cloud non parte.
 // Il client è lazy come quello locale: la connessione si apre alla prima query.
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
@@ -17,7 +17,7 @@ function real(): CloudDrizzle {
     const connectionString = process.env['CLOUD_DATABASE_URL']
     if (!connectionString) {
       // Fail-fast: in modo cloud questa env è obbligatoria. Senza, rischieremmo di
-      // scrivere identità cloud sul DB locale dell'appliance (mai accettabile).
+      // scrivere identità cloud sul DB della webapp (mai accettabile).
       throw new Error('CLOUD_DATABASE_URL è obbligatoria in TAKO_MODE=cloud')
     }
     _cloudDb = drizzle(postgres(connectionString), { schema: cloudSchema })
@@ -43,7 +43,5 @@ export {
   cloudPasswordResetTokens,
   cloudSessions,
   cloudRestaurants,
-  cloudAppliances,
-  cloudPairingCodes,
   cloudAuditLog,
 } from '@tako/db/schema/cloud'
