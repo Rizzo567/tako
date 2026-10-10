@@ -10,8 +10,8 @@ const SB = {
   omega: 13.8,          // rad/s → k = ω² ≈ 190, c = 2ω ≈ 27,6 (massa 1)
   colorTau: 48,         // ms, verso il fondo del riquadro (apertura)
   colorTauClose: 38,    // ms, verso il colore del pulsante (chiusura: 55 % a 16 ms, 91 % a 100 ms)
-  contentDelay: 95, contentDur: 105,   // ms, ingresso contenuto in apertura
-  exitDur: 60,          // ms, uscita contenuto (chiusura / cambio stato)
+  contentDelay: 82, contentTau: 28, contentDur: 140,  // ms dall’avvio: 1−e^(−(t−82)/28) → 5 % a +84, 50 % a +101, 90 % a +146; misurati in headless +1 fotogramma (video 100/116/166)
+  exitTau: 15, exitDur: 70,   // ms, uscita contenuto: e^(−t/15) → 50 % a 10 ms, 5 % a 45 ms (video <50 % a 16, <5 % a ~55)
   labelOut: 30, labelInDelay: 80, labelInDur: 40,  // etichetta del pulsante dentro il contenitore
   reducedDur: 120,      // ms, dissolvenza con prefers-reduced-motion
 };
@@ -147,13 +147,13 @@ function MorphOverlay({ open, onClose, children, anchor = "center" }) {
     const top = y - wr.y, left = x - wr.x, right = (wr.x + wr.w) - (x + w), bottom = (wr.y + wr.h) - (y + h);
     wrap.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round ${rad}px)`;
     if (opening) {
-      const k = sbClamp((t - SB.contentDelay) / SB.contentDur);
-      s.contentOp = Math.max(s.contentOp, 1 - Math.pow(1 - k, 2));
+      const k = t < SB.contentDelay ? 0 : 1 - Math.exp(-(t - SB.contentDelay) / SB.contentTau);
+      s.contentOp = Math.max(s.contentOp, k > 0.995 ? 1 : k);
       wrap.style.filter = "";
     } else {
-      const k = sbClamp(t / SB.exitDur);
-      s.contentOp = s.exitFrom * (1 - k);
-      wrap.style.filter = `blur(${4 * k}px)`;
+      const k = 1 - Math.exp(-t / SB.exitTau);
+      s.contentOp = s.exitFrom * (k > 0.995 ? 0 : 1 - k);
+      wrap.style.filter = `blur(${(4 * k).toFixed(2)}px)`;
     }
     wrap.style.opacity = s.contentOp;
     if (labelRef.current) labelRef.current.style.opacity = opening ? Math.max(0, 1 - t / SB.labelOut) * (1 - sbClamp(p * 4)) : sbClamp((t - SB.labelInDelay) / SB.labelInDur);
@@ -225,7 +225,7 @@ function MorphOverlay({ open, onClose, children, anchor = "center" }) {
       if (!wrap || !open) return;
       if (wrap.contains(document.activeElement)) return;
       const f = sbFocusables(wrap);
-      const pref = f.find(el => el.matches("input, select, textarea")) || f[0];
+      const pref = f.find(el => el.matches("input, select, textarea, [role=radio]")) || f[0];
       if (pref) try { pref.focus({ preventScroll: true }); } catch (_) {}
     }, 60);
     const onKey = (e) => {
@@ -330,8 +330,8 @@ function PageMorphLayer({ route, ghost, children, onBack, mobile }) {
     if (fwd) {
       const top = y - lr.y, left = x - lr.x, right = lr.x + lr.w - x - w, bottom = lr.y + lr.h - y - h;
       layer.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round ${rad}px)`;
-      const k = sbClamp((t - SB.contentDelay) / SB.contentDur);
-      P.contentOp = Math.max(P.contentOp, 1 - Math.pow(1 - k, 2));
+      const k = t < SB.contentDelay ? 0 : 1 - Math.exp(-(t - SB.contentDelay) / SB.contentTau);
+      P.contentOp = Math.max(P.contentOp, k > 0.995 ? 1 : k);
       layer.style.opacity = P.contentOp;
     } else { layer.style.clipPath = ""; layer.style.opacity = 1; }
     if (labelRef.current) labelRef.current.style.opacity = fwd ? Math.max(0, 1 - t / SB.labelOut) : sbClamp((t - SB.labelInDelay) / SB.labelInDur);
@@ -408,7 +408,7 @@ function SizeMorph({ k, children, style, className }) {
   const anim = useRef({ s: { p: 1, v: 0 }, raf: 0, from: null, to: null, last: 0 });
   const lastSize = useRef(null);   // misura al commit precedente (durante un'animazione: quella corrente)
   React.useLayoutEffect(() => {
-    if (prev.current.k === k) { prev.current = { k, node: children }; return; }
+    if (prev.current.k === k) return;
     const o = outer.current, i = inner.current; if (!o || !i) return;
     const from = lastSize.current || { w: o.offsetWidth, h: o.offsetHeight };
     const old = prev.current; prev.current = { k, node: children };
@@ -430,7 +430,8 @@ function SizeMorph({ k, children, style, className }) {
     };
     cancelAnimationFrame(A.raf); A.raf = requestAnimationFrame(step);
   }, [k]);
-  React.useLayoutEffect(() => { const o = outer.current; if (o) lastSize.current = { w: o.offsetWidth, h: o.offsetHeight }; });
+  // dopo ogni commit: ultimo contenuto e misura, usati al prossimo cambio di stato
+  React.useLayoutEffect(() => { prev.current = { k, node: children }; const o = outer.current; if (o && !anim.current.raf) lastSize.current = { w: o.offsetWidth, h: o.offsetHeight }; });
   useEffect(() => { if (!leaving) return; const t = setTimeout(() => setLeaving(null), 90); return () => clearTimeout(t); }, [leaving]);
   useEffect(() => () => cancelAnimationFrame(anim.current.raf), []);
   return <div ref={outer} className={className} style={{ position: "relative", ...style }}>

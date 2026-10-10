@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** QA visiva del tema dell'interfaccia staff (Tako classico / Sobrio), headless e in sola lettura.
  *  Uso: node scripts/qa-tema-sobrio.mjs <outDir> [--ui classico|sobrio] [--only nome,nome]
- *  Schermate: home, impostazioni, menu, sala, cassa-modale (desktop 1440 + mobile 390 emulato).
+ *  Schermate: home, impostazioni, menu, sala, riquadro-conto, riquadro-comanda, cassa-modale (desktop 1440 + mobile 390 emulato).
  *  La modale «Nuovo conto» viene solo aperta: nessun invio. Tempo congelato e animazioni a 0
  *  come scripts/qa-screenshots.mjs, quindi due esecuzioni sono confrontabili pixel per pixel. */
 import { createRequire } from 'node:module';
@@ -61,6 +61,8 @@ const shots = {
   impostazioni: async vp => { const r = await page(vp, 'impostazioni'); await settle(r.p, 3000); return r; },
   menu: async vp => { const r = await page(vp, 'menu'); await settle(r.p, 3500); return r; },
   sala: async vp => { const r = await page(vp, 'sala'); await settle(r.p, 3500); return r; },
+  'riquadro-conto': async vp => { const r = await page(vp, 'dashboard'); await settle(r.p, 2500); await clickText(r.p, 'button', 'Nuovo conto'); await new Promise(x => setTimeout(x, 900)); await r.p.evaluate(() => document.querySelector('[data-sb-quick] [role=radio]')?.click()); await settle(r.p, 800); return r; },
+  'riquadro-comanda': async vp => { const r = await page(vp, 'dashboard'); await settle(r.p, 2500); await clickText(r.p, 'button', 'Comanda'); await new Promise(x => setTimeout(x, 900)); await r.p.evaluate(() => { document.querySelector('[data-sb-quick] [role=radio]')?.click(); }); await new Promise(x => setTimeout(x, 200)); await r.p.evaluate(() => document.querySelector('[data-sb-quick] [aria-label^="Aggiungi "]')?.click()); await settle(r.p, 800); return r; },
   'cassa-modale': async vp => { const r = await page(vp, 'cassa'); await settle(r.p, 3000); await clickText(r.p, 'button', 'Nuovo conto'); await settle(r.p, 1500); return r; },
 };
 for (const vp of ['desktop', 'mobile']) for (const [name, fn] of Object.entries(shots)) {

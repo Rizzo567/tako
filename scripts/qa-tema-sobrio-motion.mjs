@@ -93,12 +93,12 @@ async function btn(p, text, scope = 'button') {
   const el = h.asElement(); if (!el) throw new Error('pulsante non trovato: ' + text); return el;
 }
 async function clickEl(p, el) { const b = await el.boundingBox(); await p.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await sleep(120); await p.mouse.down(); await sleep(85); await p.mouse.up(); }
-async function probe(p) { return p.evaluate(() => ({ probe: window.__probe.splice(0), marks: window.__marks.splice(0) })); }
+async function probe(p) { return p.evaluate(() => ({ origin: performance.timeOrigin, probe: window.__probe.splice(0), marks: window.__marks.splice(0) })); }
 async function saveFrames(P, name) {
   if (!P.frames) return;
   const dir = `${out}/frames-${name}`; await mkdir(dir, { recursive: true });
   const t0 = P.frames[0]?.ts || 0;
-  await writeFile(`${dir}/index.json`, JSON.stringify(P.frames.map((f, i) => ({ i, t: Math.round((f.ts - t0) * 1000) }))));
+  await writeFile(`${dir}/index.json`, JSON.stringify(P.frames.map((f, i) => ({ i, t: Math.round((f.ts - t0) * 1000), wall: f.ts * 1000 }))));
   await Promise.all(P.frames.map((f, i) => writeFile(`${dir}/f${String(i).padStart(3, '0')}.png`, Buffer.from(f.data, 'base64'))));
   P.frames.length = 0;
 }
