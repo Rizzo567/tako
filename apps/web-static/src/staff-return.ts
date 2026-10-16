@@ -1,6 +1,8 @@
 import {STAFF_RETURN_KEY,STAFF_RETURN_RESTORE_KEY} from './staff-return-hint'
-// «Torna all'editor»: compare solo se il server conferma una sessione staff agenzia valida
-// (GET /api/agency/me, cookie HttpOnly stessa origine). Montato fuori dal renderer del menu.
+// «Torna all'editor»: compare solo se il server conferma una sessione staff valida (cookie HttpOnly stessa origine).
+// Indizio della card agenzia: GET /api/agency/me. Indizio «share» (Condividi → Apri menu del ristoratore):
+// GET /api/auth/me deve avere lo stesso locale dell'indizio (e della pagina), altrimenti basta l'agenzia.
+// Montato fuori dal renderer del menu.
 // Movimento: token «fast» (180 ms) ed easing «out» di apps/web/src/lib/menu-motion.tokens.json, copiati qui:
 // importare il JSON creerebbe un chunk condiviso e cambierebbe tutti i file del menu pubblico.
 const FAST_MS=180,EASE_OUT='cubic-bezier(.22,1,.36,1)'
@@ -8,13 +10,27 @@ const ID='tako-staff-return'
 const css=`#${ID}{position:fixed;z-index:18;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(var(--tako-staff-return-offset,0px) + 12px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 11px;border-radius:999px;border:1px solid rgba(42,31,26,.14);background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 20px rgba(42,31,26,.14);color:#2a1f1a;font:600 14px/1 var(--font-display,system-ui,sans-serif);text-decoration:none;-webkit-tap-highlight-color:transparent}
 #${ID}:active{background:rgba(245,241,238,.96)}#${ID}:focus-visible{outline:2px solid #2a1f1a;outline-offset:2px}#${ID} svg{flex:none}
 body.tako-staff-return-space{padding-bottom:calc(var(--tako-staff-return-offset,0px) + 64px)}`
-async function confirmed(signal:AbortSignal):Promise<boolean|null>{
+async function getJson(path:string,signal:AbortSignal):Promise<any|false|null>{
+ const r=await fetch(path,{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'},signal})
+ if(r.status===401||r.status===403)return false
+ if(!r.ok)return null
+ return await r.json().catch(()=>null)
+}
+async function agencyConfirmed(signal:AbortSignal):Promise<boolean|null>{
+ const body=await getJson('/api/agency/me',signal)
+ return body===false?false:body===null?null:body?.data?.agency===true
+}
+function readHint():{kind?:unknown,restaurantId?:unknown}|null{try{return JSON.parse(sessionStorage.getItem(STAFF_RETURN_KEY)||'null')}catch{return null}}
+async function confirmed(signal:AbortSignal,pageRestaurantId:string|null):Promise<boolean|null>{
  try{
-  const r=await fetch('/api/agency/me',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'},signal})
-  if(r.status===401||r.status===403)return false
-  if(!r.ok)return null
-  const body=await r.json().catch(()=>null)
-  return body?.data?.agency===true
+  const hint=readHint()
+  if(hint?.kind!=='share')return await agencyConfirmed(signal)
+  const rid=typeof hint.restaurantId==='string'?hint.restaurantId:''
+  if(!rid||(pageRestaurantId&&pageRestaurantId!==rid))return false
+  const me=await getJson('/api/auth/me',signal)
+  if(me===false)return false
+  if(me&&me.data?.restaurantId===rid)return true
+  return await agencyConfirmed(signal)
  }catch{return null}
 }
 // Se il menu ha la striscia dei menu fissata in basso, il pulsante sale sopra di essa.
@@ -26,9 +42,9 @@ function bottomOffset():number{
  }
  return Math.round(offset)
 }
-export async function mountStaffReturn(){
+export async function mountStaffReturn(pageRestaurantId:string|null=null){
  if(document.getElementById(ID))return
- const ok=await confirmed(AbortSignal.timeout(8000))
+ const ok=await confirmed(AbortSignal.timeout(8000),pageRestaurantId)
  if(ok===false){try{sessionStorage.removeItem(STAFF_RETURN_KEY)}catch{};return}
  if(!ok)return
  const style=document.createElement('style');style.textContent=css;document.head.appendChild(style)
