@@ -1,5 +1,6 @@
 /** F2 — API dashboard dei preset settimanali (prefisso /api/menu-workspace/day-presets) e tick del job
  * (prefisso /api/day-presets-cron). Logica in lib/menu-day-presets.ts. */
+import { Buffer } from 'node:buffer' // il runtime Deno dell'edge non ha Buffer globale (16/10: tick 500 «Buffer is not defined»)
 import type { FastifyInstance, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { timingSafeEqual } from 'node:crypto'
@@ -72,11 +73,22 @@ export function cronSecretValid(received: unknown, secret = process.env.TAKO_PRE
 }
 /** Tick del job: lo chiama ogni 5 minuti il Worker deploy/cloudflare/preset-cron.mjs. Idempotente. */
 export async function menuDayPresetCronRoutes(fastify: FastifyInstance) {
- fastify.post('/tick', { config: { rateLimit: { max: 30, timeWindow: 60000 } } }, async (req, reply) => {
+ fastify.post('/tick', { config: { rateLimit: { max: 30, timeWindow: 60000 } }, errorHandler: (e, req, reply) => {
+  // Diagnosi senza log: solo con il segreto cron valido il corpo riporta l'errore (anche da hook e plugin della rotta).
   if (!cronSecretValid(req.headers['x-tako-cron-secret'])) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Not found' } })
-  const autopublish = await runDayPresetAutopublish()
-  // Le traduzioni non bloccano mai la pubblicazione: un errore qui non cambia l'esito del giro.
-  const translations = await processTranslationQueue({ maxCalls: 4 }).catch(e => ({ error: e instanceof Error ? e.message : String(e) }))
-  return { data: { autopublish, translations } }
+  const err = e as { name?: unknown; message?: unknown; stack?: unknown; statusCode?: unknown }
+  return reply.code(500).send({ error: { code: 'TICK_FAILED', status: err?.statusCode ?? null, name: String(err?.name ?? 'Error'), message: String(err?.message ?? e).slice(0, 300), stack: String(err?.stack ?? '').split('\n').slice(0, 6).join('\n').slice(0, 1200) } })
+ } }, async (req, reply) => {
+  if (!cronSecretValid(req.headers['x-tako-cron-secret'])) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Not found' } })
+  // Dietro segreto valido: in caso di errore il corpo riporta nome, messaggio e prime righe dello stack (nessun dato).
+  try {
+   const autopublish = await runDayPresetAutopublish()
+   // Le traduzioni non bloccano mai la pubblicazione: un errore qui non cambia l'esito del giro.
+   const translations = await processTranslationQueue({ maxCalls: 4 }).catch(e => ({ error: e instanceof Error ? e.message : String(e) }))
+   return { data: { autopublish, translations } }
+  } catch (e) {
+   const err = e as { name?: unknown; message?: unknown; stack?: unknown }
+   return reply.code(500).send({ error: { code: 'TICK_FAILED', name: String(err?.name ?? 'Error'), message: String(err?.message ?? e).slice(0, 300), stack: String(err?.stack ?? '').split('\n').slice(0, 6).join('\n').slice(0, 1200) } })
+  }
  })
 }

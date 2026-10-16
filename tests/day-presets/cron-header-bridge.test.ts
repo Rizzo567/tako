@@ -9,3 +9,9 @@ describe('edge bridge forwards the preset cron secret',()=>{
   expect(list).toContain("'x-tako-cron-secret'");expect(list).not.toMatch(/x-forwarded|x-real-ip/)
  })
 })
+describe('edge runtime globals',()=>{
+ it('the tick route imports Buffer from node:buffer (no Buffer global on the Deno edge)',()=>{
+  const route=readFileSync(new URL('../../apps/server/src/routes/menu-day-presets.ts',import.meta.url),'utf8')
+  expect(route).toMatch(/import \{ Buffer \} from 'node:buffer'/)
+ })
+})
