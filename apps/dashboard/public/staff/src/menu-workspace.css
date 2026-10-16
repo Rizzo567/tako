@@ -861,3 +861,8 @@ button.mw-catalog-photo.is-loading img{opacity:.45}
 @media(max-width:899px){.mw-dp-btn{width:128px}.mw-dp-chip{min-width:52px;padding:4px 10px}.mw-dp-create{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.mw-dp-spin{animation:none;border-top-color:#ffffff55;border-right-color:#fff}}
 .mw-dp-empty{margin:0 0 12px;padding:28px 20px;border:1px dashed var(--hairline);border-radius:18px;text-align:center;color:var(--ink-3);font-size:13px}.mw-dp-empty strong{display:block;margin-bottom:4px;color:var(--ink);font-size:15px}
+
+/* === 16/10: menu PROVA (campagna lead) — stato privato sobrio, nessun errore rosso. === */
+.mw-trial-status{color:var(--ink-2)}
+.mw-trial-note{margin:4px auto 0;max-width:440px;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--sunken);color:var(--ink-2);font-size:13px;line-height:1.45;text-align:center}
+.mw-trial-note~.mw-share-qr:empty{display:none}
