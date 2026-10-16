@@ -149,3 +149,37 @@ Stessa suite: invariata. `menu-sales` 15/15, dopo aver corretto la mia prima ver
 Locale temporaneo creato e poi cancellato; il QA e il numero di Manuel non sono stati toccati.
 11 frasi: data in testa, «per tutto il weekend», «no scusa fino a sabato», tutte le promo, «togli piccante da tutti i piatti», «mi metti la carbonara a 13?», «tredici e mezzo», nome esatto, «lascia stare la margherita, nascondi il tiramisù», doppio «torna come prima».
 Groq: zero chiamate su v102. Su v101 «tredici e mezzo» era passata una volta dall'IA ed è stata corretta in v102.
+
+# Quarto giro (round 4, 100 casi nuovi su v102), edge v103
+
+Il verificatore ha accettato i 4 casi contestati e ha corretto il banco del round 3.
+
+| Batteria | Prima (v102) | Dopo (v103) |
+|---|---|---|
+| Round 1, 283 | 263 · 0 GRAVI · 2 MEDI (OK scritto) · 18 BASSI | invariata |
+| Round 2, 160 | 151 · 0 · 0 · 9 | 152 · 0 · 0 · 8 |
+| Round 3, 141 (banco corretto) | 0 GRAVI | 135 · 0 · 0 · 6 |
+| Round 4, 100 | 79 OK · 19 GRAVI · 0 MEDI · 2 BASSI | **99 OK · 0 GRAVI · 0 MEDI · 1 BASSO** |
+
+## Fix
+1. **Filtro di categoria sempre applicato**: «togli piccante / tutte le etichette / tutte le promo / ultime porzioni da|dalle|dai <gruppo>». Il gruppo si risolve con `categoryItems`: categoria, oppure menu («bevande»), al singolare o al plurale. Senza «tutte/tutti» passano da qui solo i gruppi che sono una categoria con più piatti («togli ultime porzioni dai dolci»). Un singolo piatto, o una frase con «e …», resta al percorso di sempre.
+2. **Ogni clausola promo ha la sua data**: «X in promo a 10 fino a domenica e Y in promo a 9 fino a sabato» diventa una richiesta multipla deterministica, con la stessa validazione. Funziona anche con «stasera …», «tutta la settimana …», «questo weekend …» in testa.
+3. **Gruppi** (`groupCommand`):
+   - «tutte le pizze sono finite», «finiti tutti i …», «nascondi tutti i dolci», «mostra/rimetti tutti i …», «rimetti disponibili tutte le pizze», «tutti i contorni sono finiti»;
+   - «… tranne X», anche su promo ed etichette («togli la promo a tutti tranne la carbonara»).
+   Sempre con la regola delle 3 modifiche e l'OK.
+4. **Domande cortesi**: «puoi dirmi se / potresti dirmi se / mi dici se / mi sapresti dire se / mi confermi che / dimmi se» seguite da uno stato o un prezzo sono letture. «ho messo X in evidenza» punta al piatto X. «potresti dirmi cosa è finito?» elenca i piatti finiti.
+5. «lascia stare la lasagna, è tornata» dopo un esaurito annulla l'esaurito.
+- **BASSO** — Il messaggio «niente da annullare» ora suggerisce «ripristina il menu di prima» per i menu interi.
+
+## Test aggiornati
+`twilio-menu-sales`: «tiramisù in promo a 7 e carbonara in promo a 8» ora è deterministico, quindi risposta immediata senza IA. La validazione è la stessa (prezzo promo non valido → «Non ho cambiato nulla»).
+
+## Deploy
+v102 (`fa0c8414…`) → **v103** (`268f2a90…`). Il bundle è v102 più 5 sezioni: `twilio-menu-nlu`, `menu-sales`, `twilio-menu-sales`, `twilio-menu-create`, `routes/twilio-menu`. Il diff per sezione non tocca nient'altro; check-active fatto prima.
+Rollback: `cp ~/.config/tako-webapp/rollback-edge-20261016/candidate-index-v102-owner-bot-r3.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`
+
+## Live (12/12, v103)
+Locale temporaneo creato e poi cancellato; il QA e il numero di Manuel non sono stati toccati.
+10 frasi: piccante tolto solo alle pizze; due promo con due date; «stasera …» in testa; bibite finite tranne l'acqua; bibite rimesse disponibili; promo tolte solo ai primi; «puoi dirmi se la lasagna è finita?»; «potresti dirmi cosa è finito?»; esaurito poi «lascia stare la lasagna, è tornata».
+Groq: zero chiamate.

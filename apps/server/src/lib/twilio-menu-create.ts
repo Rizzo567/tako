@@ -7,6 +7,7 @@ import type {SectionRef,MenuRef,MenuAction} from './twilio-menu-ai.js'
 import {findDishes} from './twilio-menu-nlu.js'
 import {g9WordNumber} from './twilio-menu-ai.js'
 import {resolveUntil} from './menu-sales.js'
+import {categoryItems} from './twilio-menu-sales.js'
 
 export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null}
 export type CreateParse={name:string|null,price:number|null,sectionId:string|null,unknownSection:boolean}
@@ -156,3 +157,22 @@ export function categoryWordItems(target:string,refs:MenuRef[]):MenuRef[]|null{
  const w=waNewFold(target).replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(x=>x&&!['il','la','lo','l','i','gli','le','un','una','uno'].includes(x));if(w.length!==1)return null
  const word=w[0]!,variants=(s:string)=>{const p=waNewFold(s).replace(/[^a-z0-9]+/g,' ').trim();return[p,p.replace(/i$/,'o'),p.replace(/e$/,'a'),p.replace(/i$/,'e')]}
  const items=refs.filter(r=>r.section&&variants(r.section).includes(word));return items.length>1?items:null}
+
+/** Round 4: comandi su un gruppo («tutte le pizze sono finite», «nascondi tutti i dolci», «rimetti disponibili tutte le
+ * pizze», «tutte le bibite sono finite tranne l'acqua»). Il gruppo è una categoria o un menu esistente (singolare o
+ * plurale); la regola delle 3 modifiche e l'OK restano nel bot. null = non è un comando di gruppo. */
+export function groupCommand(text:string,refs:MenuRef[]):MenuAction[]|null{
+ const t=waNewFold(text).replace(/[^a-z0-9]+/g,' ').trim()
+ let body=t,except:string|null=null;const tr=t.match(/^(.*?) tranne (.+)$/);if(tr){body=tr[1]!;except=tr[2]!}
+ const G='(?:tutt[eio] )(?:(?:i|le|gli|il|la) )?(.+?)'
+ let m:RegExpMatchArray|null,kind:'available'|'hidden'|null=null,value=false,group=''
+ if((m=body.match(new RegExp(`^${G} (?:sono |e )?(?:finit|esaurit)[oaie]$`)))){kind='available';value=false;group=m[1]!}
+ else if((m=body.match(new RegExp(`^(?:sono )?(?:finit|esaurit)[oaie] ${G}$`)))){kind='available';value=false;group=m[1]!}
+ else if((m=body.match(new RegExp(`^(?:(?:rimetti|rendi|metti|segna) )?(?:di nuovo )?disponibil[ei] ${G}$`)))||(m=body.match(new RegExp(`^${G} (?:sono )?(?:di nuovo |tornat[ei] )?disponibil[ei]$`)))||(m=body.match(new RegExp(`^${G} sono tornat[ei]$`)))){kind='available';value=true;group=m[1]!}
+ else if((m=body.match(new RegExp(`^nascondi ${G}$`)))){kind='hidden';value=true;group=m[1]!}
+ else if((m=body.match(new RegExp(`^(?:mostra|rimetti(?: nel menu)?) ${G}$`)))){kind='hidden';value=false;group=m[1]!}
+ if(!kind)return null
+ const items=categoryItems(group,refs);if(!items.length)return null
+ const skip=new Set(except?findDishes(except.replace(/^(?:l|il|la|lo|i|gli|le) /,''),refs).map(r=>r.id):[])
+ return items.filter(r=>!skip.has(r.id)).map(r=>({kind:kind!,id:r.id,value}) as MenuAction)
+}

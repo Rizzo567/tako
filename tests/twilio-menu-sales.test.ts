@@ -141,8 +141,9 @@ describe('flusso WhatsApp: promo (F3)', () => {
     expect(state.writes).toBe(2); expect(item(AMAT).promo).toEqual({ price: 8, until: null }); expect(item(MAR1).scarcity).toEqual({ lastPortions: false, onlyToday: '2026-10-16' })
     // promo non valida dal modello: nessuna proposta, nessuna scrittura
     groqReply = { intent: 'change', actions: [{ action: 'set_promo', item_id: TIRA, price: 7 }, { action: 'set_promo', item_id: CARB, price: 8 }] }
-    await say(a, 'tiramisù in promo a 7 e carbonara in promo a 8')
-    expect(sent.at(-1)!.Body).toContain('*Tiramisù*'); expect(sent.at(-1)!.Body).toContain('*Non ho cambiato nulla.*'); expect(state.writes).toBe(2)
+    // Round 4: due promo nella stessa frase ora sono deterministiche (risposta immediata, senza IA): stessa validazione.
+    const invalid = await say(a, 'tiramisù in promo a 7 e carbonara in promo a 8')
+    expect(invalid).toContain('*Tiramisù*'); expect(invalid).toContain('*Non ho cambiato nulla.*'); expect(state.writes).toBe(2)
     await a.close()
   })
 })

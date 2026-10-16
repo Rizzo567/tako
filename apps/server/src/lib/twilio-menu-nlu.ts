@@ -60,8 +60,11 @@ export function parseIntent(raw:string):Intent|null{
  // Round 2: domande senza «?» («c'è ancora la tagliata», «sai se la carbonara è finita», «la lasagna è finita vero»).
  const q=plainText(raw).replace(/[,.!]/g,' ').replace(/\s+/g,' ').trim(),spoken=q.match(/^(?:c e ancora|ce ancora|ci sono ancora|abbiamo ancora|avete ancora) (.+)$/)
  if(spoken)return{kind:'ask',target:spoken[1]!.replace(/ vero$/,'')}
- const lead=q.match(/^(?:sai se|mi sai dire se|mi dici se|e vero che|ma) (.+)$/),tail=/ vero$/.test(q)
- if(lead&&q.startsWith('ma ')===false||tail){const inner=parseIntentCore(lead?lead[1]!.replace(/ vero$/,''):q.replace(/ vero$/,''));if(inner&&'target' in inner)return{kind:'ask',target:inner.target}}
+ const lead=q.match(/^(?:sai se|mi sai dire se|mi sapresti dire se|mi dici se|dimmi se|puoi dirmi se|potresti dirmi se|mi puoi dire se|mi confermi che|confermami che|mi confermi se|e vero che|ma) (.+)$/),tail=/ vero$/.test(q)
+ // Round 4: «potresti dirmi cosa è finito?», «mi dici se ho messo la tagliata in evidenza?» → letture.
+ const told=q.match(/^(?:puoi|potresti|mi sai|mi sapresti|mi puoi) dirmi (cosa|che cosa|quali piatti|quanto) (.+)$/);if(told)return parseIntentCore(`${told[1]} ${told[2]}`)
+ if(lead&&q.startsWith('ma ')===false||tail){const inner=parseIntentCore((lead?lead[1]!:q).replace(/ vero$/,'').replace(/^(?:ho|abbiamo|hai) (?:messo|segnato|tolto|nascosto|cambiato) /,''));if(inner&&'target' in inner)return{kind:'ask',target:inner.target.replace(/^(?:ho|abbiamo) (?:messo|segnato) /,'')}
+  if(inner&&inner.kind==='read')return inner}
  const found=parseIntentCore(raw);if(found&&'target' in found&&found.kind!=='ask'&&/\?\s*$/.test(raw.trim()))return{kind:'ask',target:found.target};return found
 }
 const nluActionTarget=/\b(promo|offerta|offerte|sconto|scontat\w*|aggiung\w*|inserisc\w*|nuov[oa]|nel menu|al menu|categoria|descrizione|foto)\b/

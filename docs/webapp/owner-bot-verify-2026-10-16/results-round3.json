@@ -1,6 +1,6 @@
 {
  "cases": 141,
- "runs": 252,
+ "runs": 249,
  "unknownSql": [],
  "results": [
   {
@@ -2533,64 +2533,15 @@
     "togli tutte le promo tranne la carbonara"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €"
    ],
    "expected": [
     "promo|Tagliata di manzo|null"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte-09",
-   "cat": "tutte",
-   "mode": "empty",
-   "turns": [
-    "togli tutte le promo tranne la carbonara"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
+   "actual": [
     "promo|Tagliata di manzo|null"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte-09",
-   "cat": "tutte",
-   "mode": "wrong",
-   "turns": [
-    "togli tutte le promo tranne la carbonara"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "promo|Tagliata di manzo|null"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte-09",
-   "cat": "tutte",
-   "mode": "wrongCreate",
-   "turns": [
-    "togli tutte le promo tranne la carbonara"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "promo|Tagliata di manzo|null"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -4384,7 +4335,7 @@
    "replies": [
     "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4403,7 +4354,7 @@
    "replies": [
     "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4422,7 +4373,7 @@
    "replies": [
     "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4441,7 +4392,7 @@
    "replies": [
     "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4460,7 +4411,7 @@
    "replies": [
     "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
     "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -4489,7 +4440,7 @@
    "replies": [
     "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -4513,7 +4464,7 @@
    "replies": [
     "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -4537,7 +4488,7 @@
    "replies": [
     "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -4637,7 +4588,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 5 piatti: 5 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [
@@ -4665,12 +4616,7 @@
     "hidden|Insalata mista|true"
    ],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non indica come tornare indietro (attesa /ripristin/i)"
-    }
-   ],
+   "fails": [],
    "note": "atteso ripristino del menu di prima (o domanda chiara). Banco corretto al giro 4: risposta chiara accettata, BASSO se non indica «ripristina il menu di prima»"
   },
   {
@@ -4685,7 +4631,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 4 piatti: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [
@@ -4727,7 +4673,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 4 piatti: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [
@@ -4769,7 +4715,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 4 piatti: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [
@@ -4811,7 +4757,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4830,7 +4776,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4849,7 +4795,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -4868,7 +4814,7 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato.",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [],
    "actual": [],
@@ -5049,7 +4995,7 @@
    ],
    "replies": [
     "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13"
@@ -5075,7 +5021,7 @@
     "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*",
     "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
     "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *disponibile*",
-    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+    "Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
    ],
    "expected": [
     "available|Spaghetti alla carbonara|false"

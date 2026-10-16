@@ -91,7 +91,7 @@ export function resolveUntil(phrase: string, today: string): string | null {
   if (!t) return null
   // Round 3: «fine mese» = ultimo giorno del mese del giorno di servizio.
   if (/^fine (?:del )?mese$/.test(t)) { const d = new Date(today.slice(0, 7) + '-01T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1); d.setUTCDate(0); return d.toISOString().slice(0, 10) }
-  if (/^(?:tutto )?(?:il )?weekend$/.test(t)) return addDays(today, (7 - weekdayOf(today)) % 7)
+  if (/^(?:tutto |questo )?(?:il )?weekend$/.test(t)) return addDays(today, (7 - weekdayOf(today)) % 7)
   if (/^(oggi|stasera|stanotte|fine giornata|questa sera)$/.test(t)) return today
   if (/^domani( sera)?$/.test(t)) return addDays(today, 1)
   if (/^dopodomani$/.test(t)) return addDays(today, 2)

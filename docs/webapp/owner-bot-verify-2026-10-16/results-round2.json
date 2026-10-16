@@ -1,6 +1,6 @@
 {
  "cases": 160,
- "runs": 391,
+ "runs": 388,
  "unknownSql": [],
  "results": [
   {
@@ -416,61 +416,11 @@
     "🎤 dimmi se il caffè è disponibile"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Caffè*: *1,20 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /caff/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-09",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 dimmi se il caffè è disponibile"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-09",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 dimmi se il caffè è disponibile"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-09",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 dimmi se il caffè è disponibile"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

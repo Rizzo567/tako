@@ -1,6 +1,6 @@
 {
  "cases": 100,
- "runs": 172,
+ "runs": 154,
  "unknownSql": [],
  "results": [
   {
@@ -128,22 +128,18 @@
     "stasera la carbonara in promo a 10"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), finché non la togli"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *venerdì 16/10*"
    ],
    "expected": [
     "promo|Spaghetti alla carbonara|10",
     "until|Spaghetti alla carbonara|2026-10-16"
    ],
    "actual": [
-    "promo|Spaghetti alla carbonara|10"
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-16"
    ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: until|Spaghetti alla carbonara|2026-10-16"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "date4-05",
@@ -614,7 +610,7 @@
     "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*\n*Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *domenica 18/10*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*\n*Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *sabato 17/10*"
    ],
    "expected": [
     "promo|Spaghetti alla carbonara|10",
@@ -626,78 +622,9 @@
     "promo|Spaghetti alla carbonara|10",
     "until|Spaghetti alla carbonara|2026-10-18",
     "promo|Lasagna al forno|9",
-    "until|Lasagna al forno|2026-10-18"
-   ],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "scrittura sbagliata: until|Lasagna al forno|2026-10-18"
-    },
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: until|Lasagna al forno|2026-10-17"
-    }
-   ]
-  },
-  {
-   "id": "date4-20",
-   "cat": "date4",
-   "mode": "empty",
-   "turns": [
-    "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "promo|Spaghetti alla carbonara|10",
-    "until|Spaghetti alla carbonara|2026-10-18",
-    "promo|Lasagna al forno|9",
     "until|Lasagna al forno|2026-10-17"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "date4-20",
-   "cat": "date4",
-   "mode": "wrong",
-   "turns": [
-    "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "promo|Spaghetti alla carbonara|10",
-    "until|Spaghetti alla carbonara|2026-10-18",
-    "promo|Lasagna al forno|9",
-    "until|Lasagna al forno|2026-10-17"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "date4-20",
-   "cat": "date4",
-   "mode": "wrongCreate",
-   "turns": [
-    "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "promo|Spaghetti alla carbonara|10",
-    "until|Spaghetti alla carbonara|2026-10-18",
-    "promo|Lasagna al forno|9",
-    "until|Lasagna al forno|2026-10-17"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -858,24 +785,18 @@
     "tutta la settimana la lasagna in promo a 9"
    ],
    "replies": [
-    "*Non trovo «tutta la settimana la lasagna».* Scrivi il nome come appare nel menu."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *domenica 18/10*"
    ],
    "expected": [
     "promo|Lasagna al forno|9",
     "until|Lasagna al forno|2026-10-18"
    ],
-   "actual": [],
+   "actual": [
+    "promo|Lasagna al forno|9",
+    "until|Lasagna al forno|2026-10-18"
+   ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «tutta la settimana la lasagna»» cita la frase come nome di piatto"
-    },
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: promo|Lasagna al forno|9, until|Lasagna al forno|2026-10-18"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "date4-27",
@@ -1094,8 +1015,8 @@
     "ok"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
-    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Margherita*: *finito*\n2. *Pizza 4 formaggi*: *finito*\n3. *Diavola*: *finito*\n4. *Capricciosa*: *finito*\n5. *Margherita con bufala*: *finito*\n6. *Pizza del lunedì*: *finito*\n7. *Pizza mezzo metro*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: *finito*\n*Pizza 4 formaggi*: *finito*\n*Diavola*: *finito*\n*Capricciosa*: *finito*\n*Margherita con bufala*: *finito*\n*Pizza del lunedì*: *finito*\n*Pizza mezzo metro*: *finito*"
    ],
    "expected": [
     "available|Margherita|false",
@@ -1106,28 +1027,7 @@
     "available|Pizza del lunedì|false",
     "available|Pizza mezzo metro|false"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: available|Margherita|false, available|Pizza 4 formaggi|false, available|Diavola|false, available|Capricciosa|false, available|Margherita con bufala|false, available|Pizza del lunedì|false, available|Pizza mezzo metro|false"
-    }
-   ]
-  },
-  {
-   "id": "tutte4-02",
-   "cat": "tutte4",
-   "mode": "empty",
-   "turns": [
-    "tutte le pizze sono finite",
-    "ok"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
-    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
-   ],
-   "expected": [
+   "actual": [
     "available|Margherita|false",
     "available|Pizza 4 formaggi|false",
     "available|Diavola|false",
@@ -1136,58 +1036,7 @@
     "available|Pizza del lunedì|false",
     "available|Pizza mezzo metro|false"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-02",
-   "cat": "tutte4",
-   "mode": "wrong",
-   "turns": [
-    "tutte le pizze sono finite",
-    "ok"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
-    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
-   ],
-   "expected": [
-    "available|Margherita|false",
-    "available|Pizza 4 formaggi|false",
-    "available|Diavola|false",
-    "available|Capricciosa|false",
-    "available|Margherita con bufala|false",
-    "available|Pizza del lunedì|false",
-    "available|Pizza mezzo metro|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-02",
-   "cat": "tutte4",
-   "mode": "wrongCreate",
-   "turns": [
-    "tutte le pizze sono finite",
-    "ok"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
-    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
-   ],
-   "expected": [
-    "available|Margherita|false",
-    "available|Pizza 4 formaggi|false",
-    "available|Diavola|false",
-    "available|Capricciosa|false",
-    "available|Margherita con bufala|false",
-    "available|Pizza del lunedì|false",
-    "available|Pizza mezzo metro|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1199,7 +1048,7 @@
     "ok"
    ],
    "replies": [
-    "*Non trovo «tutti i dolci».* Scrivi il nome come appare nel menu.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n*Panna cotta*: *nascosto* dal menu\n*Dolce del giorno*: *nascosto* dal menu",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "expected": [
@@ -1207,14 +1056,13 @@
     "hidden|Panna cotta|true",
     "hidden|Dolce del giorno|true"
    ],
-   "actual": [],
+   "actual": [
+    "hidden|Tiramisù|true",
+    "hidden|Panna cotta|true",
+    "hidden|Dolce del giorno|true"
+   ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: hidden|Tiramisù|true, hidden|Panna cotta|true, hidden|Dolce del giorno|true"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "tutte4-04",
@@ -1224,73 +1072,17 @@
     "togli tutte le etichette dalle pizze"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: tolgo l’etichetta *Vegetariano*\n*Diavola*: tolgo l’etichetta *Piccante*"
    ],
    "expected": [
     "tag|Diavola|piccante|false",
     "tag|Margherita|vegetariano|false"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: tag|Diavola|piccante|false, tag|Margherita|vegetariano|false"
-    }
-   ]
-  },
-  {
-   "id": "tutte4-04",
-   "cat": "tutte4",
-   "mode": "empty",
-   "turns": [
-    "togli tutte le etichette dalle pizze"
+   "actual": [
+    "tag|Margherita|vegetariano|false",
+    "tag|Diavola|piccante|false"
    ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "tag|Diavola|piccante|false",
-    "tag|Margherita|vegetariano|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-04",
-   "cat": "tutte4",
-   "mode": "wrong",
-   "turns": [
-    "togli tutte le etichette dalle pizze"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "tag|Diavola|piccante|false",
-    "tag|Margherita|vegetariano|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-04",
-   "cat": "tutte4",
-   "mode": "wrongCreate",
-   "turns": [
-    "togli tutte le etichette dalle pizze"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "tag|Diavola|piccante|false",
-    "tag|Margherita|vegetariano|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1322,22 +1114,16 @@
     "togli piccante da tutte le pizze"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: tolgo l’etichetta *Piccante*\n*Diavola*: tolgo l’etichetta *Piccante*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: tolgo l’etichetta *Piccante*"
    ],
    "expected": [
     "tag|Diavola|piccante|false"
    ],
    "actual": [
-    "tag|Spaghetti aglio olio e peperoncino|piccante|false",
     "tag|Diavola|piccante|false"
    ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "scrittura sbagliata: tag|Spaghetti aglio olio e peperoncino|piccante|false"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "tutte4-07",
@@ -1362,20 +1148,18 @@
     "tutti i contorni sono finiti"
    ],
    "replies": [
-    "*Non trovo «tutti i contorni».* Scrivi il nome come appare nel menu."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Patate al forno*: *finito*\n*Insalata mista*: *finito*"
    ],
    "expected": [
     "available|Patate al forno|false",
     "available|Insalata mista|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|Patate al forno|false",
+    "available|Insalata mista|false"
+   ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: available|Patate al forno|false, available|Insalata mista|false"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "tutte4-09",
@@ -1385,23 +1169,16 @@
     "togli la promo a tutti tranne la carbonara"
    ],
    "replies": [
-    "*Non trovo «tutti tranne la carbonara».* Scrivi il nome come appare nel menu."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €"
    ],
    "expected": [
     "promo|Tagliata di manzo|null"
    ],
-   "actual": [],
+   "actual": [
+    "promo|Tagliata di manzo|null"
+   ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «tutti tranne la carbonara»» cita la frase come nome di piatto"
-    },
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: promo|Tagliata di manzo|null"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "tutte4-10",
@@ -1411,69 +1188,15 @@
     "togli tutte le promo dalle bevande"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: tolgo la *promo*, torna a 3,00 €"
    ],
    "expected": [
     "promo|Coca Cola 33cl|null"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: promo|Coca Cola 33cl|null"
-    }
-   ]
-  },
-  {
-   "id": "tutte4-10",
-   "cat": "tutte4",
-   "mode": "empty",
-   "turns": [
-    "togli tutte le promo dalle bevande"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
+   "actual": [
     "promo|Coca Cola 33cl|null"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-10",
-   "cat": "tutte4",
-   "mode": "wrong",
-   "turns": [
-    "togli tutte le promo dalle bevande"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "promo|Coca Cola 33cl|null"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-10",
-   "cat": "tutte4",
-   "mode": "wrongCreate",
-   "turns": [
-    "togli tutte le promo dalle bevande"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "promo|Coca Cola 33cl|null"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1484,20 +1207,18 @@
     "rimetti disponibili tutte le pizze"
    ],
    "replies": [
-    "*Non trovo «tutte le pizze».* Scrivi il nome come appare nel menu."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: di nuovo *disponibile*\n*Diavola*: di nuovo *disponibile*"
    ],
    "expected": [
     "available|Diavola|true",
     "available|Margherita|true"
    ],
-   "actual": [],
+   "actual": [
+    "available|Margherita|true",
+    "available|Diavola|true"
+   ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: available|Diavola|true, available|Margherita|true"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "tutte4-12",
@@ -1550,19 +1271,16 @@
     "togli ultime porzioni dai dolci"
    ],
    "replies": [
-    "Il menu è *già aggiornato* così. Non serve cambiare nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: tolgo *Ultime porzioni*"
    ],
    "expected": [
     "last|Tiramisù|false"
    ],
-   "actual": [],
+   "actual": [
+    "last|Tiramisù|false"
+   ],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: last|Tiramisù|false"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "tutte4-15",
@@ -1572,73 +1290,17 @@
     "tutte le bibite sono finite tranne l'acqua"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *finito*\n*Birra media*: *finito*"
    ],
    "expected": [
     "available|Coca Cola 33cl|false",
     "available|Birra media|false"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "richiesta persa: available|Coca Cola 33cl|false, available|Birra media|false"
-    }
-   ]
-  },
-  {
-   "id": "tutte4-15",
-   "cat": "tutte4",
-   "mode": "empty",
-   "turns": [
-    "tutte le bibite sono finite tranne l'acqua"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
+   "actual": [
     "available|Coca Cola 33cl|false",
     "available|Birra media|false"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-15",
-   "cat": "tutte4",
-   "mode": "wrong",
-   "turns": [
-    "tutte le bibite sono finite tranne l'acqua"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "available|Coca Cola 33cl|false",
-    "available|Birra media|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "tutte4-15",
-   "cat": "tutte4",
-   "mode": "wrongCreate",
-   "turns": [
-    "tutte le bibite sono finite tranne l'acqua"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Coca Cola 33cl|false",
-    "available|Birra media|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1709,17 +1371,12 @@
     "puoi dirmi se la lasagna è finita?"
    ],
    "replies": [
-    "*Non trovo «puoi dirmi se la lasagna».* Scrivi il nome come appare nel menu."
+    "*Lasagna al forno*: *11,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «puoi dirmi se la lasagna»» cita la frase come nome di piatto"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "domcort-03",
@@ -1789,17 +1446,12 @@
     "potresti dirmi cosa è finito?"
    ],
    "replies": [
-    "*Non trovo «potresti dirmi cosa».* Scrivi il nome come appare nel menu."
+    "Tutti i piatti sono *disponibili*."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /finit|disponibil/i)"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "domcort-05",
@@ -2114,17 +1766,12 @@
     "mi dici se ho messo la tagliata in evidenza?"
    ],
    "replies": [
-    "*Non trovo «ho messo la tagliata».* Scrivi il nome come appare nel menu."
+    "*Tagliata di manzo*: *18,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «ho messo la tagliata»» cita la frase come nome di piatto"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "domcort-11",
@@ -2134,17 +1781,12 @@
     "puoi dirmi se la carbonara costa 13?"
    ],
    "replies": [
-    "*Non trovo «puoi dirmi se la carbonara».* Scrivi il nome come appare nel menu."
+    "*Spaghetti alla carbonara*: *12,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «puoi dirmi se la carbonara»» cita la frase come nome di piatto"
-    }
-   ],
+   "fails": [],
    "note": "NON deve mettere 13"
   },
   {
@@ -2155,17 +1797,12 @@
     "mi confermi che la lasagna è finita?"
    ],
    "replies": [
-    "*Non trovo «mi confermi che la lasagna».* Scrivi il nome come appare nel menu."
+    "*Lasagna al forno*: *11,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «mi confermi che la lasagna»» cita la frase come nome di piatto"
-    }
-   ],
+   "fails": [],
    "note": "NON deve segnarla finita"
   },
   {
@@ -2176,17 +1813,12 @@
     "mi sapresti dire se il tiramisù è finito?"
    ],
    "replies": [
-    "*Non trovo «mi sapresti dire se il tiramisu».* Scrivi il nome come appare nel menu."
+    "*Tiramisù*: *5,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "turno 1: «Non trovo «mi sapresti dire se il tiramisu»» cita la frase come nome di piatto"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "domcort-14",
@@ -2542,91 +2174,12 @@
    ],
    "replies": [
     "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *disponibile*"
    ],
    "expected": [],
-   "actual": [
-    "available|Lasagna al forno|false"
-   ],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "scrittura sbagliata: available|Lasagna al forno|false"
-    }
-   ]
-  },
-  {
-   "id": "lascia4-10",
-   "cat": "lascia4",
-   "mode": "empty",
-   "turns": [
-    "la lasagna è finita",
-    "lascia stare la lasagna, è tornata"
-   ],
-   "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [
-    "available|Lasagna al forno|false"
-   ],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (empty) → scritto: available|Lasagna al forno|false"
-    }
-   ]
-  },
-  {
-   "id": "lascia4-10",
-   "cat": "lascia4",
-   "mode": "wrong",
-   "turns": [
-    "la lasagna è finita",
-    "lascia stare la lasagna, è tornata"
-   ],
-   "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [
-    "available|Lasagna al forno|false"
-   ],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (wrong) → scritto: available|Lasagna al forno|false"
-    }
-   ]
-  },
-  {
-   "id": "lascia4-10",
-   "cat": "lascia4",
-   "mode": "wrongCreate",
-   "turns": [
-    "la lasagna è finita",
-    "lascia stare la lasagna, è tornata"
-   ],
-   "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [
-    "available|Lasagna al forno|false"
-   ],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (wrongCreate) → scritto: available|Lasagna al forno|false"
-    }
-   ]
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
   },
   {
    "id": "mezzo-01",

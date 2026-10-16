@@ -1,118 +1,108 @@
 {
- "at": "2026-10-16T17:39:17.607Z",
- "edge": "v102",
+ "at": "2026-10-16T17:53:22.444Z",
+ "edge": "v103",
  "turns": [
   {
-   "in": "solo per stasera la lasagna in promo a 9",
-   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *venerdì 16/10*",
+   "in": "togli piccante da tutte le pizze",
+   "out": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*",
    "revision": 3
   },
   {
-   "in": "la carbonara in promo a 10 per tutto il weekend",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*",
+   "in": "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10* *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *sabato 17/10*",
    "revision": 5
   },
   {
-   "in": "no scusa fino a sabato",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *sabato 17/10*",
+   "in": "stasera la panna cotta in promo a 4",
+   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: in *promo* a *4,00 €* (prezzo pieno 5,00 €), fino a *venerdì 16/10*",
    "revision": 7
   },
   {
-   "in": "togli tutte le promo",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €",
+   "in": "tutte le bibite sono finite tranne l'acqua",
+   "out": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: *finito* *Birra*: *finito*",
    "revision": 9
   },
   {
-   "in": "togli piccante da tutti i piatti",
-   "out": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*",
+   "in": "rimetti disponibili tutte le bibite",
+   "out": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: di nuovo *disponibile* *Birra*: di nuovo *disponibile*",
    "revision": 11
   },
   {
-   "in": "mi metti la carbonara a 13?",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+   "in": "togli tutte le promo dai primi",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €",
    "revision": 13
   },
   {
-   "in": "la carbonara costa tredici e mezzo",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 13,00 € a *13,50 €*",
+   "in": "puoi dirmi se la lasagna è finita?",
+   "out": "*Lasagna al forno*: *11,00 €* · disponibile",
+   "revision": 13
+  },
+  {
+   "in": "potresti dirmi cosa è finito?",
+   "out": "Tutti i piatti sono *disponibili*.",
+   "revision": 13
+  },
+  {
+   "in": "la lasagna è finita",
+   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: *finito*",
    "revision": 15
   },
   {
-   "in": "nascondi la margherita",
-   "out": "*Confermato.* Ho aggiornato il menu. *Margherita*: *nascosto* dal menu",
+   "in": "lascia stare la lasagna, è tornata",
+   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: di nuovo *disponibile*",
    "revision": 17
-  },
-  {
-   "in": "lascia stare la margherita, nascondi il tiramisù",
-   "out": "*Confermato.* Ho aggiornato il menu. *Margherita*: di nuovo *visibile* nel menu *Tiramisù*: *nascosto* dal menu",
-   "revision": 19
-  },
-  {
-   "in": "torna come prima",
-   "out": "*Confermato.* Ho aggiornato il menu. *Tiramisù*: di nuovo *visibile* nel menu",
-   "revision": 21
-  },
-  {
-   "in": "torna come prima",
-   "out": "Non c&apos;è un&apos;ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare.",
-   "revision": 21
   }
  ],
  "checks": [
   {
-   "name": "A: data in testa → promo fino a oggi",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *venerdì 16/10*"
-  },
-  {
-   "name": "A: «per tutto il weekend»",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
-  },
-  {
-   "name": "A: correzione della sola scadenza",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *sabato 17/10*"
-  },
-  {
-   "name": "B: tutte le promo",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €"
-  },
-  {
-   "name": "B: etichetta tolta ovunque",
+   "name": "1: filtro di categoria (gli spaghetti piccanti restano)",
    "ok": true,
    "detail": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*"
   },
   {
-   "name": "C: richiesta cortese = comando",
+   "name": "2: due promo, due date",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10* *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *sabato 17/10*"
   },
   {
-   "name": "E: «e mezzo»",
+   "name": "2: «stasera» in testa",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 13,00 € a *13,50 €*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: in *promo* a *4,00 €* (prezzo pieno 5,00 €), fino a *venerdì 16/10*"
   },
   {
-   "name": "M: nome esatto vince",
+   "name": "3: gruppo con «tranne»",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Margherita*: *nascosto* dal menu"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: *finito* *Birra*: *finito*"
   },
   {
-   "name": "D: «lascia stare X» annulla X e applica il comando",
+   "name": "3: rimetti disponibili il gruppo",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Margherita*: di nuovo *visibile* nel menu *Tiramisù*: *nascosto* dal menu"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: di nuovo *disponibile* *Birra*: di nuovo *disponibile*"
   },
   {
-   "name": "F: annulla l'ultima (tiramisù di nuovo visibile)",
+   "name": "3: promo tolte solo nel gruppo",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Tiramisù*: di nuovo *visibile* nel menu"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €"
   },
   {
-   "name": "F: secondo annullamento → niente da annullare",
+   "name": "4: domanda cortese = lettura",
    "ok": true,
-   "detail": "Non c&apos;è un&apos;ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
+   "detail": "*Lasagna al forno*: *11,00 €* · disponibile"
+  },
+  {
+   "name": "4: elenco dei finiti",
+   "ok": true,
+   "detail": "Tutti i piatti sono *disponibili*."
+  },
+  {
+   "name": "esaurito",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: *finito*"
+  },
+  {
+   "name": "5: «lascia stare X, è tornata» la rimette disponibile",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: di nuovo *disponibile*"
   },
   {
    "name": "pulizia completa (locale, menu, collegamento)",
