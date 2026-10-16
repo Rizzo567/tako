@@ -1,0 +1,222 @@
+{
+ "at": "2026-10-16T09:37:49.538Z",
+ "mode": "live",
+ "pass": 28,
+ "total": 28,
+ "results": [
+  {
+   "name": "[desktop] admin: Apri menu apre la pagina pubblica giusta",
+   "ok": true,
+   "target": "L'Osterietta",
+   "expected": "/l-osterietta-1",
+   "landed": "/l-osterietta-1"
+  },
+  {
+   "name": "[desktop] admin: pulsante «Torna all'editor» visibile",
+   "ok": true,
+   "pill": {
+    "text": "Torna all’editor",
+    "href": "/staff/",
+    "x": 12,
+    "y": 848,
+    "w": 149.203125,
+    "h": 40,
+    "b": 888,
+    "r": 161.203125,
+    "vw": 1280,
+    "vh": 900,
+    "visible": true
+   },
+   "agencyMe": [
+    200
+   ]
+  },
+  {
+   "name": "[desktop] admin: il pulsante non copre header, lingue, striscia menu",
+   "ok": true,
+   "covered": []
+  },
+  {
+   "name": "[desktop] admin: anche scorrendo non copre header/striscia",
+   "ok": true,
+   "coveredMid": [],
+   "midY": 2836
+  },
+  {
+   "name": "[desktop] admin: in fondo alla pagina il pulsante non copre il piè di pagina",
+   "ok": true,
+   "hidden": [],
+   "footer": 1
+  },
+  {
+   "name": "[desktop] admin: nessun errore in console sulla pagina del menu",
+   "ok": true,
+   "errors": []
+  },
+  {
+   "name": "[desktop] admin: «Torna all'editor» riporta alla dashboard nel punto di partenza",
+   "ok": true,
+   "scrollBefore": 0,
+   "back": {
+    "path": "/staff/",
+    "scroll": 0,
+    "search": "L'Os",
+    "focused": "Apri menu L'Osterietta"
+   },
+   "search": "L'Os"
+  },
+  {
+   "scenario": "admin",
+   "viewport": "desktop",
+   "expected": "/l-osterietta-1"
+  },
+  {
+   "name": "[desktop] anonimo: nessun pulsante e nessuna richiesta staff",
+   "ok": true,
+   "agencyMe": [],
+   "chunks": []
+  },
+  {
+   "name": "[desktop] anonimo: nessun errore in console",
+   "ok": true,
+   "errors": []
+  },
+  {
+   "name": "[desktop] anonimo con parametri: nessun pulsante e nessuna richiesta staff",
+   "ok": true,
+   "agencyMe": [],
+   "chunks": []
+  },
+  {
+   "name": "[desktop] anonimo con parametri: nessun errore in console",
+   "ok": true,
+   "errors": []
+  },
+  {
+   "name": "[desktop] anonimo con indizio falsificato: server rifiuta, nessun pulsante",
+   "ok": true,
+   "agencyMe": [
+    401
+   ]
+  },
+  {
+   "name": "[desktop] ristoratore: nessun pulsante",
+   "ok": true,
+   "agencyMe": []
+  },
+  {
+   "name": "[desktop] ristoratore con indizio: nessun pulsante",
+   "ok": true,
+   "agencyMe": [
+    200
+   ]
+  },
+  {
+   "name": "[mobile] admin: Apri menu apre la pagina pubblica giusta",
+   "ok": true,
+   "target": "L'Osterietta",
+   "expected": "/l-osterietta-1",
+   "landed": "/l-osterietta-1"
+  },
+  {
+   "name": "[mobile] admin: pulsante «Torna all'editor» visibile",
+   "ok": true,
+   "pill": {
+    "text": "Torna all’editor",
+    "href": "/staff/",
+    "x": 12,
+    "y": 848,
+    "w": 149.203125,
+    "h": 40,
+    "b": 888,
+    "r": 161.203125,
+    "vw": 500,
+    "vh": 900,
+    "visible": true
+   },
+   "agencyMe": [
+    200
+   ]
+  },
+  {
+   "name": "[mobile] admin: il pulsante non copre header, lingue, striscia menu",
+   "ok": true,
+   "covered": []
+  },
+  {
+   "name": "[mobile] admin: anche scorrendo non copre header/striscia",
+   "ok": true,
+   "coveredMid": [],
+   "midY": 2846
+  },
+  {
+   "name": "[mobile] admin: in fondo alla pagina il pulsante non copre il piè di pagina",
+   "ok": true,
+   "hidden": [],
+   "footer": 1
+  },
+  {
+   "name": "[mobile] admin: nessun errore in console sulla pagina del menu",
+   "ok": true,
+   "errors": []
+  },
+  {
+   "name": "[mobile] admin: «Torna all'editor» riporta alla dashboard nel punto di partenza",
+   "ok": true,
+   "scrollBefore": 595,
+   "back": {
+    "path": "/staff/",
+    "scroll": 595,
+    "search": "",
+    "focused": "Apri menu L'Osterietta"
+   },
+   "search": ""
+  },
+  {
+   "scenario": "admin",
+   "viewport": "mobile",
+   "expected": "/l-osterietta-1"
+  },
+  {
+   "name": "[mobile] anonimo: nessun pulsante e nessuna richiesta staff",
+   "ok": true,
+   "agencyMe": [],
+   "chunks": []
+  },
+  {
+   "name": "[mobile] anonimo: nessun errore in console",
+   "ok": true,
+   "errors": []
+  },
+  {
+   "name": "[mobile] anonimo con parametri: nessun pulsante e nessuna richiesta staff",
+   "ok": true,
+   "agencyMe": [],
+   "chunks": []
+  },
+  {
+   "name": "[mobile] anonimo con parametri: nessun errore in console",
+   "ok": true,
+   "errors": []
+  },
+  {
+   "name": "[mobile] anonimo con indizio falsificato: server rifiuta, nessun pulsante",
+   "ok": true,
+   "agencyMe": [
+    401
+   ]
+  },
+  {
+   "name": "[mobile] ristoratore: nessun pulsante",
+   "ok": true,
+   "agencyMe": []
+  },
+  {
+   "name": "[mobile] ristoratore con indizio: nessun pulsante",
+   "ok": true,
+   "agencyMe": [
+    200
+   ]
+  }
+ ]
+}
