@@ -179,6 +179,7 @@ await fastify.register((await import('./routes/brand-from-site.js')).brandFromSi
 await fastify.register((await import('./routes/web-accounts.js')).webAccountRoutes, { prefix: '/api/web-accounts' })
 await fastify.register((await import('./routes/web-locations.js')).webLocationRoutes, { prefix: '/api/web-locations' })
 await fastify.register((await import('./routes/agency.js')).agencyRoutes, { prefix: '/api/agency' })
+await fastify.register((await import('./routes/agency-leads.js')).agencyLeadRoutes, { prefix: '/api/agency/leads' })
 await fastify.register((await import('./routes/onboarding.js')).onboardingRoutes, { prefix: '/api' })
 await fastify.register((await import('./routes/tables.js')).tableRoutes, { prefix: '/api/tables' })
 await fastify.register((await import('./routes/orders.js')).orderRoutes, { prefix: '/api/orders' })

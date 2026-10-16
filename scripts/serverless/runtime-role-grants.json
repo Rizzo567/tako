@@ -1,37 +1,187 @@
 {
- "restaurants":["SELECT","INSERT","UPDATE"],
- "users":["SELECT","INSERT","UPDATE"],
- "sessions":["SELECT","INSERT","UPDATE","DELETE"],
- "menus":["SELECT","INSERT","UPDATE","DELETE"],
- "menu_sections":["SELECT","INSERT","UPDATE","DELETE"],
- "menu_items":["SELECT","INSERT","UPDATE","DELETE"],
- "item_variants":["SELECT","INSERT","UPDATE","DELETE"],
- "menu_item_translations":["SELECT","INSERT","UPDATE","DELETE"],
- "rooms":["SELECT"],
- "tables":["SELECT","UPDATE"],
- "waiter_calls":["SELECT","INSERT","UPDATE","DELETE"],
- "orders":["SELECT","INSERT","UPDATE"],
- "order_items":["SELECT","INSERT","UPDATE"],
- "order_status_history":["SELECT","INSERT"],
- "bills":["SELECT","INSERT","UPDATE"],
- "bill_payments":["SELECT"],
- "reservations":["SELECT","INSERT","UPDATE","DELETE"],
- "loyalty_accounts":["SELECT","INSERT","UPDATE"],
- "recipes":["SELECT"],
- "inventory_items":["SELECT","UPDATE"],
- "table_sessions":["SELECT","INSERT"],
- "menu_workspaces":["SELECT","INSERT","UPDATE"],
- "menu_workspace_versions":["SELECT","INSERT"],
- "menu_workspace_events":["SELECT","INSERT"],
- "menu_workspace_assets":["SELECT","INSERT","UPDATE","DELETE"],
- "menu_workspace_presets":["SELECT","INSERT","DELETE"],
- "web_location_memberships":["SELECT","INSERT","UPDATE","DELETE"],
- "web_session_locations":["SELECT","INSERT","UPDATE","DELETE"],
- "web_password_resets":["SELECT","INSERT","UPDATE","DELETE"],
- "web_mail_outbox":["SELECT","INSERT","UPDATE"],
- "edge_rate_counters":["SELECT","INSERT","UPDATE"],
- "edge_login_buckets":["SELECT","INSERT","UPDATE"],
- "edge_login_reservations":["SELECT","INSERT","DELETE"],
- "edge_image_quota_accounts":["SELECT","UPDATE(tenant_id)"],
- "edge_image_quota_objects":["SELECT","INSERT","UPDATE","DELETE"]
+ "restaurants": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "users": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "sessions": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "menus": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "menu_sections": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "menu_items": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "item_variants": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "menu_item_translations": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "rooms": [
+  "SELECT"
+ ],
+ "tables": [
+  "SELECT",
+  "UPDATE"
+ ],
+ "waiter_calls": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "orders": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "order_items": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "order_status_history": [
+  "SELECT",
+  "INSERT"
+ ],
+ "bills": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "bill_payments": [
+  "SELECT"
+ ],
+ "reservations": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "loyalty_accounts": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "recipes": [
+  "SELECT"
+ ],
+ "inventory_items": [
+  "SELECT",
+  "UPDATE"
+ ],
+ "table_sessions": [
+  "SELECT",
+  "INSERT"
+ ],
+ "menu_workspaces": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "menu_workspace_versions": [
+  "SELECT",
+  "INSERT"
+ ],
+ "menu_workspace_events": [
+  "SELECT",
+  "INSERT"
+ ],
+ "menu_workspace_assets": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "menu_workspace_presets": [
+  "SELECT",
+  "INSERT",
+  "DELETE"
+ ],
+ "web_location_memberships": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "web_session_locations": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "web_password_resets": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "web_mail_outbox": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "edge_rate_counters": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "edge_login_buckets": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "edge_login_reservations": [
+  "SELECT",
+  "INSERT",
+  "DELETE"
+ ],
+ "edge_image_quota_accounts": [
+  "SELECT",
+  "UPDATE(tenant_id)"
+ ],
+ "edge_image_quota_objects": [
+  "SELECT",
+  "INSERT",
+  "UPDATE",
+  "DELETE"
+ ],
+ "tako_agency_leads": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ],
+ "tako_agency_lead_activities": [
+  "SELECT",
+  "INSERT",
+  "UPDATE"
+ ]
 }

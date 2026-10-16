@@ -5,7 +5,7 @@ import {requireAuth} from '../middleware/auth.js'
 import {isAgencyUser} from '../lib/agency-access.js'
 import {summarizeAgencyRestaurant} from '../lib/agency-overview.js'
 import {readAgencyMe} from '../lib/read-queries.js'
-export const agencyOverviewQuery=sql`SELECT r.id,r.name,r.slug,r.logo_url,w.revision,w.published_revision,w.draft,GREATEST(r.updated_at,w.updated_at) AS updated_at,
+export const agencyOverviewQuery=sql`SELECT r.id,r.name,r.slug,r.logo_url,r.settings,w.revision,w.published_revision,w.draft,GREATEST(r.updated_at,w.updated_at) AS updated_at,
  (SELECT count(*)::int FROM menus m WHERE m.restaurant_id=r.id) AS menu_count,
  (SELECT count(*)::int FROM menu_items i WHERE i.restaurant_id=r.id) AS dish_count
  FROM restaurants r LEFT JOIN menu_workspaces w ON w.restaurant_id=r.id WHERE r.active=true ORDER BY lower(r.name),r.id`

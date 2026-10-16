@@ -29,6 +29,7 @@ export function StaticApp(){
   case 'privacy':screen=<PrivacyPage/>;break
   case 'table':screen=<CustomerApp restaurantId={route.restaurantId!} token={route.token!}/>;break
   case 'digital-menu':screen=<DigitalMenu restaurantId={route.restaurantId!}/>;break
+  case 'trial-menu':screen=<OnboardingPreview token={route.token!} trial/>;break
   case 'onboarding-preview':screen=<OnboardingPreview token={route.token!}/>;break
   case 'onboarding-claim':screen=<OnboardingClaim token={route.token!}/>;break
   case 'menu-preview':screen=<MenuPreview menuId={route.menuId!}/>;break

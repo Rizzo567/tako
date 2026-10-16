@@ -20,6 +20,7 @@ const NAV = [
 const NAV_PARENT = { staff: "impostazioni" };
 const EXTRA_NAV = {
   agency: { id: "agency", label: "Locali", icon: "home" },
+  agency_leads: {id:"agency_leads",label:"Lead",icon:"staff"},
   agency_tasks: {id:"agency_tasks",label:"Da fare",icon:"orders"},
   account: {id:"account",label:"Account",icon:"settings"},
   cowork: { id: "cowork", label: "Assistente", icon: "sparkles" },
@@ -45,11 +46,11 @@ const MOBILE_PRIMARY = {
 };
 function mobilePrimary(role) {
   return role === "owner" && typeof window !== "undefined" && window.__takomenuAgency === true
-    ? ["agency", "account"] : (MOBILE_PRIMARY[role] || []);
+    ? ["agency", "agency_leads", "account"] : (MOBILE_PRIMARY[role] || []);
 }
 function canNavigate(role, id) {
   if(id === "account") return ["owner","menu_editor"].includes(role);
-  if (id === "agency" || id === "agency_tasks") return typeof window !== "undefined" && window.__takomenuAgency === true;
+  if (id === "agency" || id === "agency_tasks" || id === "agency_leads") return typeof window !== "undefined" && window.__takomenuAgency === true;
   const known = NAV.some(g => g.items.some(it => it.id === id)) || Object.hasOwn(EXTRA_NAV, id);
   return known && Object.hasOwn(ROLE_ACCESS, role) && (ROLE_ACCESS[role] === null || ROLE_ACCESS[role].includes(id));
 }
@@ -58,7 +59,7 @@ function navParent(id) { return NAV_PARENT[id] || id; }
 function navBadge(it, badges) { return (badges || {})[it.id] || 0; }
 function navAllowed(role) {
   const groups = NAV.map(g => ({ ...g, items: g.items.filter(it => canNavigate(role, it.id)) }));
-  if (typeof window !== "undefined" && window.__takomenuAgency === true) groups.unshift({ group: "Serie B Agency", items: [EXTRA_NAV.agency] });
+  if (typeof window !== "undefined" && window.__takomenuAgency === true) groups.unshift({ group: "Serie B Agency", items: [EXTRA_NAV.agency, EXTRA_NAV.agency_leads] });
   return groups.filter(g => g.items.length);
 }
 function findItem(id) {

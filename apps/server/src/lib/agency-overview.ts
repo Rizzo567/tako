@@ -15,7 +15,7 @@ export function summarizeAgencyRestaurant(row:any){
   return {language,complete,total:entities.length,legendsComplete,legendsTotal:food.length,stale,ready:!!draft&&entities.length>0&&complete===entities.length&&legendsComplete===food.length&&stale===0}
  })
  const revision=row.revision==null?null:Number(row.revision),publishedRevision=row.published_revision==null?null:Number(row.published_revision)
- return {id:String(row.id),name:String(row.name||''),slug:String(row.slug||''),logoUrl:draft?.design?.logoUrl||row.logo_url||null,
+ return {isTrial:row.settings?.takomenuTrial===true,trialLeadId:row.settings?.takomenuTrial===true?row.settings?.trialLeadId||null:null,id:String(row.id),name:String(row.name||''),slug:String(row.slug||''),logoUrl:draft?.design?.logoUrl||row.logo_url||null,
   menuCount:draft?menus.length:Number(row.menu_count||0),dishCount:draft?new Set(menus.flatMap(m=>rows(m.sections).flatMap(s=>rows(s.items).map(i=>i.id))).filter(Boolean)).size:Number(row.dish_count||0),
   revision,publishedRevision,status:!draft?'unconfigured':publishedRevision===null?'unpublished':publishedRevision===revision?'published':'draft',
   translations,completeLanguages:translations.filter(t=>t.ready).length,requiredLanguages:AGENCY_LANGUAGES.length,updatedAt:row.updated_at instanceof Date?row.updated_at.toISOString():row.updated_at||null}

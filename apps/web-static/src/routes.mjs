@@ -7,7 +7,7 @@ export function parseStaticRoute(pathname) {
  if(path==='/')return {kind:'home'};
  if(path==='/privacy')return {kind:'privacy'};
  const alias=path.slice(1);if(Object.hasOwn(publicMenuAliases,alias))return {kind:'digital-menu',restaurantId:publicMenuAliases[alias]};
- let privateRoute=path.match(/^\/(onboarding-preview|onboarding-claim)\/([^/]+)$/);if(privateRoute){const token=segment(privateRoute[2]);return token?{kind:privateRoute[1],token}:{kind:'not-found'};}
+ let privateRoute=path.match(/^\/(onboarding-preview|onboarding-claim|trial-menu)\/([^/]+)$/);if(privateRoute){const token=segment(privateRoute[2]);return token?{kind:privateRoute[1],token}:{kind:'not-found'};}
  let m=path.match(/^\/r\/([^/]+)\/t\/([^/]+)$/);if(m){const restaurantId=segment(m[1]),token=segment(m[2]);return restaurantId&&token?{kind:'table',restaurantId,token}:{kind:'not-found'};}
  m=path.match(/^\/r\/([^/]+)\/menu$/);if(m){const restaurantId=segment(m[1]);return restaurantId?{kind:'digital-menu',restaurantId}:{kind:'not-found'};}
  m=path.match(/^\/(prenota|menu-preview)\/([^/]+)$/);if(m){const id=segment(m[2]);if(!id)return {kind:'not-found'};return m[1]==='menu-preview'?{kind:'menu-preview',menuId:id}:{kind:'reservation',restaurantId:id};}

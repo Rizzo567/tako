@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import{parseStaticRoute}from'../../apps/web-static/src/routes.mjs';
+test('trial menu accepts an opaque token as a dedicated read-only route',()=>{const token='a'.repeat(64);assert.deepEqual(parseStaticRoute('/trial-menu/'+token),{kind:'trial-menu',token});assert.equal(parseStaticRoute('/trial-menu/../bad').kind,'not-found');assert.equal(parseStaticRoute('/trial-menu/%2fsecret').kind,'not-found')});

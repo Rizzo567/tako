@@ -139,7 +139,7 @@ function App({ session }) {
   window.__takomenuAgency = session.user.agency === true;window.__takoUser=session.user;
   const role0 = ROLE_DB2UI[session.user.role] || "nonAutorizzato";
   ROLES[role0] = { ...ROLES[role0], name: session.user.name, initials: (session.user.name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() };
-  const [route, setRoute] = useState(() => safeRoute(role0, session.user.agency&&["dashboard",null].includes(load("route",null))?"agency":load("route",session.user.agency?"agency":window.innerWidth<900&&role0==="owner"?"menu":ROLE_HOME[role0]||"dashboard")));
+  const [route, setRoute] = useState(() => safeRoute(role0, session.user.agency&&new URLSearchParams(location.search).get("view")==="leads"?"agency_leads":session.user.agency&&["dashboard",null].includes(load("route",null))?"agency":load("route",session.user.agency?"agency":window.innerWidth<900&&role0==="owner"?"menu":ROLE_HOME[role0]||"dashboard")));
   const [settings, setSettings] = useState(() => {
     let ls = {}; try { ls = JSON.parse(localStorage.getItem("tako-dash-settings") || "{}"); } catch (_) { ls = {}; }
     // Backend vince: SETTINGS_DEFAULTS è già stato popolato dal backend in loadAll().
@@ -314,6 +314,7 @@ function App({ session }) {
 
   let Screen;
   switch (route) {
+    case "agency_leads": Screen = session.user.agency===true && window.ScreenAgencyLeads ? <window.ScreenAgencyLeads mobile={mobile}/> : null; break;
     case "agency_tasks": Screen = session.user.agency===true ? <window.ScreenAgencyDashboard mobile={mobile} tasksOnly/> : null; break;
     case "account": Screen = <ScreenMobileAccount mobile={mobile} session={session} go={go}/>; break;
     case "agency": Screen = session.user.agency === true && window.ScreenAgencyDashboard ? <window.ScreenAgencyDashboard mobile={mobile} /> : <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />; break;
