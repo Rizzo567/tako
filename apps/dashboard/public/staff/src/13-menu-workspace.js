@@ -558,15 +558,23 @@ function MenuWorkspaceItemActions({document,item,menuId,checked,setChecked,busy,
 
 /* WhatsApp del titolare (15/10/2026): un solo telefono per locale. Salvare crea un pre-collegamento senza codici né messaggi;
    quando quel numero scrive al bot per la prima volta il collegamento diventa attivo. Permessi verificati dal server (agenzia o titolare). */
-function MenuWhatsAppSetup(){const [state,setState]=useState(null),[phone,setPhone]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[move,setMove]=useState('');
+function MenuWhatsAppSetup(){const [state,setState]=useState(null),[phone,setPhone]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[move,setMove]=useState(''),[linkedAt,setLinkedAt]=useState(null);
  const show=r=>{setState(r);setPhone(r?.phone||'');};
+ const statusRef=useRef(null);
  useEffect(()=>{let alive=true;TakoAPI.get('/menu-workspace/whatsapp/owner').then(r=>{if(alive)show(r)}).catch(e=>{if(alive)setError(e.message)});return()=>{alive=false}},[]);
+ /* In attesa del primo messaggio: rilegge lo stato ogni 3 s solo con la scheda visibile; si ferma appena collegato o alla chiusura del pannello. */
+ const waiting=state?.status==='pending'&&!!state?.phone,waitingPhone=waiting?state.phone:'';
+ useEffect(()=>{if(!waitingPhone)return;let alive=true,inFlight=false;
+  const poll=()=>{if(!alive||inFlight||window.document.hidden)return;inFlight=true;TakoAPI.get('/menu-workspace/whatsapp/owner').then(r=>{if(!alive||!r||r.phone!==waitingPhone)return;if(r.status==='linked'){setLinkedAt(new Date());setState(r);}}).catch(()=>{}).finally(()=>{inFlight=false});};
+  const timer=setInterval(poll,3000),visible=()=>{if(!window.document.hidden)poll()};window.document.addEventListener('visibilitychange',visible);
+  return()=>{alive=false;clearInterval(timer);window.document.removeEventListener('visibilitychange',visible)}},[waitingPhone]);
+ useEffect(()=>{const el=statusRef.current;if(!linkedAt||!el||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const t=window.TakoMenuMotion;el.animate([{opacity:.4,transform:'scale(.97)'},{opacity:1,transform:'none'}],{duration:t?.durationMs?.standard||280,easing:`cubic-bezier(${(t?.easing?.out||[.22,1,.36,1]).join(',')})`});},[linkedAt]);
  const save=async(confirmMove)=>{if(busy)return;setBusy(true);setError('');setMove('');try{show(await TakoAPI.post('/menu-workspace/whatsapp/owner',confirmMove?{phone,move:true}:{phone}));toast('Numero salvato',{type:'success'})}catch(e){if(e.code==='PHONE_IN_USE_MOVABLE')setMove(e.message);else setError(e.message||'Numero non salvato')}finally{setBusy(false)}};
  const disconnect=async()=>{if(busy||!window.confirm('Scollegare il WhatsApp del titolare? Il bot non risponderà più a questo numero.'))return;setBusy(true);setError('');setMove('');try{show(await TakoAPI.del('/menu-workspace/whatsapp/owner'));toast('WhatsApp scollegato',{type:'success'})}catch(e){setError(e.message||'Scollegamento non riuscito')}finally{setBusy(false)}};
  const linked=state?.status==='linked';
  return <Card><section aria-label="WhatsApp del titolare" className="mw-owner-whatsapp"><h3>WhatsApp del titolare</h3><p>Il titolare aggiorna il menu scrivendo su WhatsApp al numero {state?.sender||'di Tako'}. Inserisci il suo cellulare: quando scrive per la prima volta, il bot lo riconosce e gli manda il benvenuto. Ogni modifica richiede una conferma prima di essere pubblicata.</p>
   <form onSubmit={e=>{e.preventDefault();save(false)}}><label className="mw-field"><span>WhatsApp del titolare</span><input type="tel" inputMode="tel" autoComplete="off" placeholder="333 123 4567" maxLength={24} value={phone} disabled={busy||!state} onChange={e=>{setPhone(e.target.value);setMove('')}}/></label>
-   {state?.phone&&<p role="status" className="mw-owner-whatsapp-status"><Badge tone={linked?'ok':'muted'} dot>{linked?'Collegato':'In attesa del primo messaggio'}</Badge><span>{state.phone}</span></p>}
+   {state?.phone&&<p role="status" aria-live="polite" className="mw-owner-whatsapp-status"><span ref={statusRef} className={'mw-owner-whatsapp-pill'+(linked?' is-linked':'')}><Badge tone={linked?'ok':'muted'} dot>{linked?'Collegato':'In attesa del primo messaggio'}</Badge></span><span>{state.phone}</span>{linked&&linkedAt&&<span className="mw-owner-whatsapp-time">dalle {linkedAt.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}</span>}</p>}
    {move&&<div role="alert" className="mw-owner-whatsapp-move"><p>{move}</p><div className="mw-actions"><Btn type="button" disabled={busy} onClick={()=>save(true)}>Sposta su questo locale</Btn><Btn type="button" kind="ghost" disabled={busy} onClick={()=>setMove('')}>Annulla</Btn></div></div>}
    {error&&<p role="alert">{error}</p>}
    <div className="mw-actions"><Btn disabled={busy||!state||!phone.trim()||phone.trim()===state?.phone}>Salva</Btn>{state?.phone&&<Btn type="button" kind="soft" disabled={busy} onClick={disconnect}>Scollega</Btn>}</div></form></section></Card>}
