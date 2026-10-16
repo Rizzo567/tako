@@ -54,11 +54,11 @@ function fixture(withDinner=false){return workspaceSchema.parse({menus:[
  {id:DRINKS,name:'Drinks',type:'drinks',sections:[{id:sec(5),name:'Bevande',items:[item(9,'Acqua',2),item(10,'Vino della casa',5)]}]}],design:{}})}
 
 // ---- Groq e Twilio finti (fetch globale) ----
-const net={model:null as null|((source:string)=>any),planner:0,chats:0,transcript:'',whisper:0,sent:[] as string[]}
+const net={model:null as null|((source:string)=>any),planner:0,plannerText:'',chats:0,transcript:'',whisper:0,sent:[] as string[]}
 const row=(section:string,name:string,price:number|null,evidence:string)=>({section,name,price,description:'',evidence})
 const realFetch=globalThis.fetch
 vi.stubGlobal('fetch',async(url:any,init:any)=>{const u=String(url)
- if(u.includes('/chat/completions')){const user=JSON.parse(init.body).messages[1].content;let source:string;try{source=JSON.parse(user).source}catch{net.planner++;return new Response(JSON.stringify({choices:[{message:{content:JSON.stringify({intent:'clarify',item_ids:[]})}}],usage:{prompt_tokens:1,completion_tokens:1}}),{status:200,headers:{'Content-Type':'application/json'}})}net.chats++;const content=net.model?net.model(source):{rows:[],issues:[]};return new Response(JSON.stringify({choices:[{message:{content:JSON.stringify(content)}}],usage:{total_tokens:900}}),{status:200,headers:{'Content-Type':'application/json'}})}
+ if(u.includes('/chat/completions')){const user=JSON.parse(init.body).messages[1].content;let source:string;try{source=JSON.parse(user).source}catch{net.planner++;net.plannerText=user;return new Response(JSON.stringify({choices:[{message:{content:JSON.stringify({intent:'clarify',item_ids:[]})}}],usage:{prompt_tokens:1,completion_tokens:1}}),{status:200,headers:{'Content-Type':'application/json'}})}net.chats++;const content=net.model?net.model(source):{rows:[],issues:[]};return new Response(JSON.stringify({choices:[{message:{content:JSON.stringify(content)}}],usage:{total_tokens:900}}),{status:200,headers:{'Content-Type':'application/json'}})}
  if(u.includes('/audio/transcriptions')){net.whisper++;return new Response(JSON.stringify({text:net.transcript,duration:6}),{status:200,headers:{'Content-Type':'application/json'}})}
  if(u.endsWith('/Messages.json')){net.sent.push(new URLSearchParams(String(init.body)).get('Body')!);return new Response('{}',{status:201,headers:{'Content-Type':'application/json'}})}
  if(u.includes('/Media/'))return new Response(new Uint8Array([79,103,103,83]),{status:200,headers:{'Content-Type':'audio/ogg'}})
@@ -182,6 +182,10 @@ describe('F1 regressione: le modifiche singole si comportano come prima',()=>{
   for(const t of ['carbonara 12, lasagna 12, branzino 19, tiramisù 6','carbonara finita','branzino 18','porta la carbonara a 12 e la lasagna a 13','aggiungi tra i primi: pasta al ragù, 12 euro','quanto costa la tagliata?'])expect(fullMenuSignal(t,refs),t).toBeNull()
   for(const t of [twelve,'Menu di oggi. Primi: carbonara 10, amatriciana 9. Secondi: tagliata 16. Dolci: tiramisù 5.','allora menu di lunedì antipasti bruschetta cinque tagliere dodici e cinquanta primi lasagna undici'])expect(fullMenuSignal(t,refs),t).toBe('full')
   expect(fullMenuSignal('gnocchi 10, risotto 12, polpette 13, sorbetto 4',refs)).toBe('doubt')})
+ it('nel dubbio, MODIFICHE rimanda il messaggio originale al pianificatore delle modifiche, senza riepilogo del menu intero',async()=>{const a=await app()
+  expect(await say(a,'gnocchi 10, risotto 12, polpette 13, sorbetto 4')).toBe(fullMenuCopy.doubt)
+  expect(await say(a,'modifiche')).toBe(copy.notUnderstood);expect(net.planner).toBe(1);expect(net.plannerText).toContain('MESSAGGIO\ngnocchi 10, risotto 12, polpette 13, sorbetto 4');expect(net.chats).toBe(0)
+  expect(await say(a,'branzino')).not.toBe(fullMenuCopy.doubtAgain);expect([...S.proposals.values()].some(p=>p.command.kind==='fullmenu')).toBe(false);await a.close()})
  it('nel dubbio fa una sola domanda: MENU porta al menu intero, MODIFICHE al flusso di prima',async()=>{const a=await app();net.model=ideal([['Menu','gnocchi',10],['Menu','risotto',12],['Menu','polpette',13],['Menu','sorbetto',4]])
   expect(await say(a,'gnocchi 10, risotto 12, polpette 13, sorbetto 4')).toBe(fullMenuCopy.doubt);expect(net.chats).toBe(0)
   const summary=await say(a,'menu');expect(summary).toContain('- Gnocchi: 10,00 €');expect(summary).toContain('menu *Pranzo*');await a.close()})
