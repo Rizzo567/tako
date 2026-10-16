@@ -79,7 +79,8 @@ function lenientFields(raw:unknown){
 /** Unknown keys stay a hard rejection (a model asked to act, not to extract): only absent/malformed known values are tolerated. */
 const unknownKeys=(raw:Record<string,unknown>,allowed:string[])=>Object.entries(withoutEmpty(raw) as Record<string,unknown>).some(([k])=>!allowed.includes(k))
 function lenientMessage(raw:unknown){if(!raw||typeof raw!=='object'||Array.isArray(raw))return raw;const corr=(raw as any).corrections;if(unknownKeys(raw as Record<string,unknown>,[...Object.keys(fields),'corrections']))return raw; // live 16/10: «corrections» with an invented key (e.g. price) dropped the whole message; unknown keys there are ignored
-const corrections=(raw as any).corrections,base=lenientFields(raw) as Record<string,unknown>;if(corrections&&typeof corrections==='object'){const c=lenientFields(corrections) as Record<string,unknown>;if(Object.keys(c).length)base.corrections=c}return base}
+const corrections=(raw as any).corrections,base=lenientFields(raw) as Record<string,unknown>;if(corrections&&typeof corrections==='object'&&!Array.isArray(corrections)){ // live 16/10 14:18: «corrections» as an array dropped the message
+const c=lenientFields(corrections) as Record<string,unknown>;if(Object.keys(c).length)base.corrections=c}return base}
 function groundedFields(value:Record<string,any>,source:string){
  const clean:Record<string,any>={}
  for(const [key,item] of Object.entries(value)){

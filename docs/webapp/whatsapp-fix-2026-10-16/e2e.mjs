@@ -42,7 +42,11 @@ v2Expected.m12={name:'Verifica Avversaria Sedici',dishes:['Cena/Panini/Burger cl
 // E2E_SET=names: dishes that look like a person or a locale must never become the locale name or the owner.
 const namesPhrases=[advPhrases[0],'Aggiungi nel menu Cena, categoria Pizze, Pizza Mario a 9 euro.','Nel menu Pranzo, categoria Primi, aggiungi Trattoria della nonna a 12 euro.','Porta la Pasta al pomodoro a 11 euro.','Mario Collaudo','Il locale si chiama Verifica Avversaria Sedici Bis.','Mostrami il riepilogo dei menu e dei piatti.']
 v2Expected.names={name:'Verifica Avversaria Sedici Bis',dishes:['Cena/Panini/Burger classico/12','Cena/Pizze/Pizza Mario/9','Pranzo/Primi/Pasta al pomodoro/11','Pranzo/Primi/Trattoria della nonna/12'],nameAfterStep:['Verifica Avversaria Sedici','Verifica Avversaria Sedici','Verifica Avversaria Sedici','Verifica Avversaria Sedici','Verifica Avversaria Sedici','Verifica Avversaria Sedici Bis','Verifica Avversaria Sedici Bis'],ownerAfterStep:[null,null,null,null,'Mario Collaudo','Mario Collaudo','Mario Collaudo']}
-const set=['b2','adv','v2a','v2b','m12','names'].includes(process.env.E2E_SET)?process.env.E2E_SET:'morning',phrases={b2:b2Phrases,adv:advPhrases,v2a:v2aPhrases,v2b:v2bPhrases,m12:m12Phrases,names:namesPhrases}[set]??morningPhrases
+// E2E_SET=reg: one draft, budget ≤40k Groq tokens (≈9 AI messages): the 8 morning phrases, m12 with the name set,
+// a dish that looks like a person, then a plain owner answer (no AI).
+const regPhrases=[...morningPhrases,'Metti il Risotto ai funghi a 15 euro.','Aggiungi nel menu Cena, categoria Pizze, Pizza Mario a 9 euro.','Mario Collaudo']
+v2Expected.reg={name:'Collaudo Mattina Sedici',dishes:['Cena/Panini/Burger classico/13','Cena/Pizze/Pizza Mario/9','Pranzo/Dolci/Tiramisu/6','Pranzo/Primi/Gnocchi al pesto/11','Pranzo/Primi/Pasta al pomodoro/10','Pranzo/Primi/Risotto ai funghi/15'],nameAfterStep:Array(11).fill('Collaudo Mattina Sedici'),ownerAfterStep:[...Array(10).fill(null),'Mario Collaudo']}
+const set=['b2','adv','v2a','v2b','m12','names','reg'].includes(process.env.E2E_SET)?process.env.E2E_SET:'morning',phrases={b2:b2Phrases,adv:advPhrases,v2a:v2aPhrases,v2b:v2bPhrases,m12:m12Phrases,names:namesPhrases,reg:regPhrases}[set]??morningPhrases
 async function snapshot(){return db.begin('read only',async tx=>{
  const rows=await tx`SELECT r.id,r.name,w.revision,w.published_revision,w.draft,w.published FROM restaurants r LEFT JOIN menu_workspaces w ON w.restaurant_id=r.id ORDER BY r.id`
  const restaurants=Object.fromEntries(rows.map(r=>[r.id,{name:r.name,revision:r.revision,publishedRevision:r.published_revision,draftHash:hash(r.draft),publishedHash:hash(r.published)}]))
@@ -56,7 +60,8 @@ async function settle(sid,maxMs=170000){const start=Date.now();for(;;){const row
 const dishes=w=>(w?.menus||[]).flatMap(m=>(m.sections||[]).flatMap(s=>(s.items||[]).map(i=>({menu:m.name,section:s.name,name:i.name,price:i.price,id:i.id}))))
 const started=new Date(),report={set,startedAt:started.toISOString(),steps:[]}
 try{
- const agency=await db`SELECT actor_id FROM tako_onboarding_agency_links WHERE phone=${AGENCY_PHONE}`;if(!agency.length)throw Error('agency phone not paired');const actor=agency[0].actor_id
+ const agency=await db`SELECT actor_id FROM tako_onboarding_agency_links WHERE phone=${AGENCY_PHONE}`,envActor=process.env.E2E_ACTOR&&(await db`SELECT id FROM users WHERE id=${process.env.E2E_ACTOR} AND active=true`).length?process.env.E2E_ACTOR:null
+ if(!agency.length&&!envActor)throw Error('agency phone not paired');const actor=agency[0]?.actor_id??envActor
  const existing=await db`SELECT actor_id FROM tako_onboarding_agency_links WHERE phone=${QA}`;if(existing.length&&existing[0].actor_id!==actor)throw Error('QA phone linked to another actor')
  if(await session(actor))throw Error('an open QA draft already exists on the QA phone: stop')
  report.before=await snapshot()
@@ -67,10 +72,11 @@ try{
   const sentAt=new Date(Date.now()-2000),hook=await webhook(text),done=await settle(hook.sid),s=await session(actor);await sleep(4000)
   const items=dishes(s?.data?.workspace);if(index===0)burgerId=items.find(i=>i.name==='Burger classico')?.id??null
   report.steps.push({n:index+1,name:s?.data?.name??null,owner:s?.data?.ownerName??null,text,webhook:{status:hook.status,ack:hook.twiml},job:done,replies:await twilioSince(sentAt),revision:s?.revision,items,unresolved:s?.data?.unresolved,design:s?.data?.workspace?.design&&{background:s.data.workspace.design.background,primary:s.data.workspace.design.primary,text:s.data.workspace.design.text,font:s.data.workspace.design.font}})
+  if(process.env.E2E_STOP_ON_QUOTA&&done.diagnostic?.cause==='quota'){console.log(JSON.stringify({stopped:'quota',at:index+1}));break}
   console.log(JSON.stringify({n:index+1,job:done.status,items:items.map(i=>`${i.menu}/${i.section}/${i.name}/${i.price}`),unresolved:s?.data?.unresolved?.length}))
  }
  const final=report.steps.at(-1),items=final.items,burger=items.filter(i=>i.name==='Burger classico')
- if(set==='v2a'||set==='v2b'||set==='m12'||set==='names'){const e=v2Expected[set],s=await session(actor)
+ if(set==='v2a'||set==='v2b'||set==='m12'||set==='names'||set==='reg'){const e=v2Expected[set],s=await session(actor)
   report.expected=e;report.actual={dishes:items.map(i=>`${i.menu}/${i.section}/${i.name}/${i.price}`).sort(),name:s?.data?.name,ownerName:s?.data?.ownerName??null,everyStepAnswered:report.steps.every(x=>x.replies.length>0),pastaAfterStep:report.steps.map(x=>x.items.find(i=>i.name==='Pasta al pomodoro')?.price??null),recapReturned:final.replies.some(r=>/\*Pranzo\*\n/.test(r.body)),failedJobs:report.steps.filter(x=>x.job.status!=='done').map(x=>x.n)}
   report.actual.nameAfterStep=report.steps.map(x=>x.name);report.actual.ownerAfterStep=report.steps.map(x=>x.owner)
   report.pass=(!e.nameAfterStep||JSON.stringify(report.actual.nameAfterStep)===JSON.stringify(e.nameAfterStep)&&JSON.stringify(report.actual.ownerAfterStep)===JSON.stringify(e.ownerAfterStep))&&JSON.stringify(report.actual.dishes)===JSON.stringify(e.dishes)&&report.actual.name===e.name&&report.actual.ownerName!=='Cena'&&report.actual.everyStepAnswered&&report.actual.recapReturned&&(!e.pastaAfterStep||JSON.stringify(report.actual.pastaAfterStep)===JSON.stringify(e.pastaAfterStep))

@@ -12,6 +12,7 @@ import { workspaceSchema, type Workspace } from './menu-workspace-contract.js'
 import { mutateWorkspace, readWorkspace, WorkspaceConflict } from './menu-workspace-store.js'
 import { enqueueNewTextTranslations, readTranslationCache, fillTranslationsFromCache, seedTranslationCache, sectionEntities, allLanguages, workspaceTexts, SYSTEM_ACTOR } from './menu-text-translations.js'
 import { hasSuppliedMenuPdf } from './supplied-menu-pdf.js'
+import { stampOnlyToday } from './menu-sales.js'
 
 type Conn = Pick<DB,'execute'>
 export type Weekday = 1|2|3|4|5|6|7
@@ -195,22 +196,22 @@ export async function deleteDayPreset(restaurantId: string, presetId: string, co
 /** Per F1 (bot, «menu di lunedì: …»): salva il contenuto nel preset del giorno o con quel nome, creandolo se manca.
  * Non pubblica: per mettere online serve publishDayPreset dopo l'OK del titolare. */
 export async function saveDayPreset(restaurantId: string, input: { menuId: string; sections: PresetSections; presetId?: string; weekday?: Weekday; name?: string; actor?: string | null }, connection: DB = db) {
- return connection.transaction(async tx => {
-  const existing = input.presetId ? await readDayPreset(restaurantId, { presetId: input.presetId }, tx) : input.weekday ? await readDayPreset(restaurantId, { menuId: input.menuId, weekday: input.weekday }, tx) : input.name ? await readDayPreset(restaurantId, { menuId: input.menuId, name: input.name }, tx) : null
-  if (input.presetId && !existing) throw new DayPresetError('NOT_FOUND', 'Preset non trovato')
-  if (existing && existing.menuId !== input.menuId) throw new DayPresetError('INVALID', 'Il preset appartiene a un altro menu')
-  const preset = existing ? await updateDayPreset(restaurantId, existing.id, { sections: input.sections }, tx) : await createDayPreset(restaurantId, { menuId: input.menuId, name: input.name ?? (input.weekday ? WEEKDAY_NAMES[input.weekday] : 'Preset'), weekday: input.weekday ?? null, source: { kind: 'empty' }, actor: input.actor }, tx).then(p => updateDayPreset(restaurantId, p.id, { sections: input.sections }, tx))
-  const settings = await readDayPresetSettings(restaurantId, input.menuId, tx)
-  if (!settings.enabled) await upsertSettings(tx, restaurantId, input.menuId, { enabled: true })
-  return preset
- })
+ return connection.transaction(async tx => saveDayPresetWith(tx, restaurantId, input))
+}
+/** Come saveDayPreset ma dentro una transazione già aperta dal chiamante (bot F1). */
+export async function saveDayPresetWith(tx: Conn, restaurantId: string, input: { menuId: string; sections: PresetSections; presetId?: string; weekday?: Weekday; name?: string; actor?: string | null }) {
+ const existing = input.presetId ? await readDayPreset(restaurantId, { presetId: input.presetId }, tx) : input.weekday ? await readDayPreset(restaurantId, { menuId: input.menuId, weekday: input.weekday }, tx) : input.name ? await readDayPreset(restaurantId, { menuId: input.menuId, name: input.name }, tx) : null
+ if (input.presetId && !existing) throw new DayPresetError('NOT_FOUND', 'Preset non trovato')
+ if (existing && existing.menuId !== input.menuId) throw new DayPresetError('INVALID', 'Il preset appartiene a un altro menu')
+ const preset = existing ? await updateDayPreset(restaurantId, existing.id, { sections: input.sections }, tx) : await createDayPreset(restaurantId, { menuId: input.menuId, name: input.name ?? (input.weekday ? WEEKDAY_NAMES[input.weekday] : 'Preset'), weekday: input.weekday ?? null, source: { kind: 'empty' }, actor: input.actor }, tx).then(p => updateDayPreset(restaurantId, p.id, { sections: input.sections }, tx))
+ const settings = await readDayPresetSettings(restaurantId, input.menuId, tx)
+ if (!settings.enabled) await upsertSettings(tx, restaurantId, input.menuId, { enabled: true })
+ return preset
 }
 
-/** Punto di aggancio per F3+4 (stessa firma di `stampOnlyToday` in lib/menu-sales.ts sul ramo codex/feat-promo-scarsita):
- * quando un preset va online, «Solo oggi» salvato nel preset deve valere per il giorno di servizio corrente.
- * Al merge: `return stampOnlyToday(workspace, menuId, today)` (import da './menu-sales.js'). Oggi è un passaggio neutro. */
-export function presetOnlineStamp(workspace: Workspace, _menuId: string, _today: string): Workspace {
- return workspace
+/** F3+4: quando un preset va online, «Solo oggi» salvato nel preset vale per il giorno di servizio corrente. */
+export function presetOnlineStamp(workspace: Workspace, menuId: string, today: string): Workspace {
+ return stampOnlyToday(workspace, menuId, today)
 }
 
 export type PublishResult = { revision: number; presetId: string; menuId: string; discardedDraftVersionId: string | null; notices: string[] }

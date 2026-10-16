@@ -41,7 +41,7 @@ try{
   // 1. Pulsante spento → pannello «Attiva i preset per Pranzo» (M06: lista scende, poi il contenuto).
   check('barra variante A: [Menu] [Preset] … [cerca] [+]',await page.evaluate(()=>{const t=document.querySelector('.mw-studio-toolbar');const r=s=>t.querySelector(s).getBoundingClientRect();return r('.mw-menu-picker').right<=r('.mw-dp-btn').left&&r('.mw-dp-btn').right<r('.mw-studio-toolbuttons').left-20;}));
   check('Preset spento finché non si attiva',(await page.$eval('.mw-dp-btn',b=>b.className)).includes('is-off'));
-  const t0=Date.now();await tap('.mw-dp-btn');
+  await tap('.mw-dp-btn');
   if(mode==='reduced'){await sleep(40);const s=await st();check('reduced motion: lista già a fine corsa dopo 40ms',s.y>50,s);}
   await settle();let s=await st();
   check('apertura: aria-expanded=true e lista scesa sotto il vassoio',s.expanded==='true'&&s.y>50,s);
@@ -177,7 +177,7 @@ try{
  check('nessun errore JavaScript',errors.length===0,errors.slice(0,5));
  await sleep(400);
 }finally{
- try{await recorder?.stop();}catch{}
+ try{await recorder?.stop();}catch{/* registrazione già chiusa */}
  await browser.close();await h.close();
  fs.writeFileSync(path.join(OUT,name+'-checks.json'),JSON.stringify({name,checks,passed:checks.filter(c=>c.ok).length,total:checks.length},null,1));
  console.log(`${checks.filter(c=>c.ok).length}/${checks.length} PASS`);

@@ -3,9 +3,11 @@ import {randomUUID} from 'node:crypto'
 import {inspectStaticImage,STATIC_IMAGE_LIMITS} from './static-image-policy.js'
 import {copy,line,capabilities,allowedTags,dailySectionName,fill} from './twilio-menu-copy.js'
 import {menuSystemPrompt,dishSystemPrompt} from './twilio-menu-prompt.js'
+import {isSalesAction,salesActionKey,salesActionChanged,applySalesAction,describeSalesAction,salesFromLlm,salesLlmActions,type SalesAction} from './twilio-menu-sales.js'
+import {businessDate} from './menu-sales.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string}
-export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}
+export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction
 export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[]}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'clarify',ids:string[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
 export const groqBase=()=>process.env.GROQ_API_BASE||'https://api.groq.com/openai/v1'
 export const twilioBase=()=>process.env.TWILIO_API_BASE||'https://api.twilio.com'
@@ -46,6 +48,7 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
   else if(a.action==='set_hidden'&&typeof a.hidden==='boolean')actions.push({kind:'hidden',id:a.item_id,value:a.hidden})
   else if(a.action==='set_featured'&&typeof a.featured==='boolean')actions.push({kind:'featured',id:a.item_id,value:a.featured})
   else if((a.action==='add_tag'||a.action==='remove_tag')&&typeof a.tag==='string'&&a.tag in allowedTags)actions.push({kind:'tag',id:a.item_id,tag:a.tag,value:a.action==='add_tag'})
+  else if(salesLlmActions.includes(a.action)){const sale=salesFromLlm(a,message);if(!sale)return clarify(valid);actions.push(sale)}
   else if(a.action==='set_description'){const text=cleanText(a.text,4000);if(!text)return clarify(valid);if(!verbatim(text,message))return{type:'verbatim'};actions.push({kind:'description',id:a.item_id,text})}
   else return clarify(valid)}
  // Full, unambiguous names explicitly present in a request must never disappear from its plan.
@@ -62,6 +65,7 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
  if(a.kind==='create'){const section=sections.find(s=>s.id===a.sectionId);return fill(line.create,{piatto:safe(a.name),categoria:section?safe(section.name):'?',prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})}
  if(a.kind==='special')return fill(line.special,{piatto:safe(a.name),prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})
  const ref=refs.find(r=>r.id===a.id)!,piatto=itemLabel(ref,refs)
+ if(isSalesAction(a))return describeSalesAction(a,piatto,ref.price)
  if(a.kind==='price')return fill(line.price,{piatto,prima:euro(ref.price),dopo:euro(a.price)})
  if(a.kind==='available')return fill(a.value?line.available:line.unavailable,{piatto})
  if(a.kind==='hidden')return fill(a.value?line.hide:line.show,{piatto})
@@ -71,14 +75,14 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
  if(a.kind==='tag')return fill(a.value?line.tagAdd:line.tagRemove,{piatto,etichetta:allowedTags[a.tag]!});return piatto
 }
 /** Canonical field identity lets corrections replace a value without dropping the rest of a pending batch. */
-export const actionKey=(a:MenuAction)=>a.kind==='create'?`create:${a.sectionId}:${plain(a.name)}`:a.kind==='special'?`special:${plain(a.name)}`:`${a.id}:${a.kind}:${a.kind==='tag'?a.tag:''}`
+export const actionKey=(a:MenuAction)=>isSalesAction(a)?salesActionKey(a):a.kind==='create'?`create:${a.sectionId}:${plain(a.name)}`:a.kind==='special'?`special:${plain(a.name)}`:`${a.id}:${a.kind}:${a.kind==='tag'?a.tag:''}`
 export function mergeMenuActions(previous:MenuAction[],delta:MenuAction[],remove:number[]=[]){
  const replacementKeys=new Set(delta.map(actionKey)),retained=previous.filter((a,i)=>!remove.includes(i+1)||replacementKeys.has(actionKey(a))),byKey=new Map(retained.map(a=>[actionKey(a),a]));for(const a of delta)byKey.set(actionKey(a),a);return [...byKey.values()]
 }
 /** Count actual field changes, not repeated instructions or values already in the published menu. */
 export function effectiveMenuActions(actions:MenuAction[],workspace:any):MenuAction[]{
  const items=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i]))));
- return mergeMenuActions([],actions).filter(a=>{if(a.kind==='create'||a.kind==='special'||a.kind==='image')return true;const item=items.get(a.id);if(!item)throw new Error('Item missing');if(a.kind==='price')return item.price!==a.price;if(a.kind==='description')return (item.description??'')!==a.text;if(a.kind==='tag')return (item.tags??[]).includes(a.tag)!==a.value;return (a.kind==='available'?item.available!==false:!!item[a.kind])!==a.value})
+ return mergeMenuActions([],actions).filter(a=>{if(a.kind==='create'||a.kind==='special'||a.kind==='image')return true;const item=items.get(a.id);if(!item)throw new Error('Item missing');if(isSalesAction(a))return salesActionChanged(a,item);if(a.kind==='price')return item.price!==a.price;if(a.kind==='description')return (item.description??'')!==a.text;if(a.kind==='tag')return (item.tags??[]).includes(a.tag)!==a.value;return (a.kind==='available'?item.available!==false:!!item[a.kind])!==a.value})
 }
 export const appliedMenuText=(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[])=>'*Confermato.* Ho aggiornato il menu.\n\n'+actions.map(a=>describeAction(a,refs,sections)).join('\n')
 /** Explicit requests to keep the published price cancel only that pending price row. */
@@ -152,6 +156,7 @@ export function applyActions(w:any,actions:MenuAction[],opts:{uploads?:Map<strin
   const item=items.get(a.id);if(!item)throw new Error('Item missing');if(!names.includes(item.name))names.push(item.name)
   if(a.kind==='price')item.price=a.price;else if(a.kind==='available')item.available=a.value;else if(a.kind==='hidden')item.hidden=a.value;else if(a.kind==='featured')item.featured=a.value
   else if(a.kind==='description')item.description=a.text;else if(a.kind==='image'){const url=opts.uploads?.get(a.id);if(!url)throw new Error('Upload missing');item.imageUrl=url}
+  else if(isSalesAction(a))applySalesAction(item,a,businessDate(opts.timezone,opts.now))
   else if(a.kind==='tag'){const tags:string[]=item.tags??[];item.tags=a.value?(tags.includes(a.tag)?tags:[...tags,a.tag]):tags.filter(t=>t!==a.tag)}
  }
  return names

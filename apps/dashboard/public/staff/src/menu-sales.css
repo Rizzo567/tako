@@ -1,0 +1,13 @@
+/* F3+F4 promo e scarsità (13-menu-sales.js): sobrio, nessun arancione, nessuna animazione decorativa.
+   Unico movimento: la nota entra in opacità con il token micro (140ms, ease-out). */
+.mw-sales{margin:2px 0 6px}
+.mw-sales .mw-fields{margin:10px 0 4px}
+.mw-sales .mw-field small{font-weight:400;color:var(--ink-2)}
+.mw-sales input[aria-invalid=true]{border-color:#ad6858}
+.mw-sales-note{margin:0 0 4px;min-height:18px;font-size:12px;line-height:18px;color:var(--ink-2);opacity:.85;transition:opacity 140ms cubic-bezier(.22,1,.36,1)}
+.mw-sales-note.is-visible{color:#ad6858;opacity:1}
+.mw-sales .mw-check{min-height:44px;margin:0}
+.mw-sales-hint{margin-left:8px;font-size:11.5px;color:var(--ink-2)}
+.mw-sales-marks{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.mw-sales-mark{display:inline-block;font-size:11px;line-height:16px;padding:1px 7px;border:1px solid var(--hairline,#e4ded3);border-radius:999px;color:var(--ink-2);background:var(--surface,#fff);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.mw-sales-note{transition:none}}

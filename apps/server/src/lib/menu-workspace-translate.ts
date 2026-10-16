@@ -14,7 +14,8 @@ export function translationFingerprint(entity:{name:string;description?:string|n
  * si mostra l'italiano. La chiave non va mai stampata. */
 export const TRANSLATION_GROQ_KEY_ENV='TAKO_CANDIDATE_GROQ_TRANSLATION_API_KEY'
 export function translationGroqKey(env:NodeJS.ProcessEnv=process.env,readLocal:(path:string)=>string=path=>readFileSync(path,'utf8')):string|null{
- const configured=env[TRANSLATION_GROQ_KEY_ENV]?.trim();if(configured)return configured
+ // Sull'edge il segreto TAKO_CANDIDATE_GROQ_TRANSLATION_API_KEY arriva come GROQ_TRANSLATION_API_KEY (candidate-entry.mjs).
+ const configured=(env[TRANSLATION_GROQ_KEY_ENV]||env['GROQ_TRANSLATION_API_KEY'])?.trim();if(configured)return configured
  if(env['TAKO_EXECUTION_RUNTIME']==='edge')return null
  try{return readLocal(join(homedir(),'.config/tako-webapp/groq-key-traduzioni.txt')).trim()||null}catch{return null}
 }

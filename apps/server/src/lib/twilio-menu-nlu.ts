@@ -1,6 +1,7 @@
 // Comprensione deterministica lato server: riconosce le frasi comuni e preseleziona i piatti senza chiamare l'IA.
 import type {MenuRef,SectionRef} from './twilio-menu-ai.js'
 import {capabilities,helpWords} from './twilio-menu-copy.js'
+import {parseMenuCommand} from './twilio-menu-command.js'
 export const plainText=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/€/g,' euro ').replace(/[^a-z0-9,.]+/g,' ').replace(/\s+/g,' ').trim()
 const stop=new Set('il lo la i gli le l un uno una di da del dello della dei degli delle al allo alla ai agli alle dal dallo dalla dai dagli dalle nel nello nella nei negli nelle con col coi sul sulla e ed o a in per tra fra che mi ci si ti oggi niente piu non c e sono costa costano euro eur prezzo metti mettila mettilo mettili mettile porta portala portalo cambia imposta finito finita finiti finite esaurito esaurita esauriti esaurite tornato tornata tornati tornate disponibile disponibili nascondi togli rimetti mostra menu evidenza piatto piatti scrivi quanto cosa ancora adesso ora stasera domani grazie ciao per favore perfavore anche pure'.split(' '))
 export const stem=(w:string)=>w.length>4?w.replace(/[aeiou]+$/,''):w
@@ -96,4 +97,24 @@ export function compoundIntents(raw:string,refs:MenuRef[]):{intent:ChangeIntent,
  const walk=(rest:string,previous:ChangeIntent|undefined,depth:number):{intent:ChangeIntent,ref:MenuRef}[]|null=>{if(depth>5)return null;const whole=depth>0?one(rest,previous):null;if(whole)return[whole]
   for(const m of rest.matchAll(/ e /g)){const left=one(rest.slice(0,m.index),previous);if(!left)continue;const right=walk(rest.slice(m.index!+3),left.intent,depth+1);if(right)return[left,...right]}return null}
  return / e /.test(t)?walk(t,undefined,0):null
+}
+// Separatori di frase composta («e», virgola, «;», a capo). Quelli che fanno parte del nome di un piatto del menu
+// («Pasta e fagioli», «Piatto live E») non rendono composta la frase: «prezzo Pasta e fagioli a 9» è un comando semplice.
+const compoundSeparator=/(?<!\d),(?!\d)|[;\n]|\s+e\s+/i
+// Lowercase only: accents are kept, «è» (verb) must never become the separator «e».
+const lowerPlain=(s:string)=>s.normalize('NFC').toLowerCase()
+export function maskDishNames(raw:string,refs:MenuRef[]){
+ let t=lowerPlain(raw)
+ const names=[...new Set(refs.map(r=>lowerPlain(r.name).replace(/\s+/g,' ').trim()).filter(n=>n&&compoundSeparator.test(n)))].sort((a,b)=>b.length-a.length)
+ for(const n of names)t=t.replace(new RegExp(`(?<![\\p{L}\\d])${n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/ /g,'\\s+')}(?![\\p{L}\\d])`,'giu'),' piatto ')
+ return t
+}
+const completePart=(part:string)=>!!parseMenuCommand(part)||!!parseIntent(part)||/^\s*\S.*?\s(?:a|=)\s*(?:€\s*)?\d+(?:[.,]\d{1,2})?\s*(?:€|euro)?\s*$/i.test(part)
+/** Frase da trattare come composta: c'è un separatore che non appartiene a un nome di piatto e, se l'intero messaggio è
+ * già un comando semplice, ogni pezzo è a sua volta un comando completo («prezzo Burger a 12 e Tiramisu a 6»). */
+export function isCompoundMessage(raw:string,refs:MenuRef[]){
+ const masked=maskDishNames(raw,refs);if(!compoundSeparator.test(masked))return false
+ if(!parseMenuCommand(raw))return true
+ const parts=masked.split(new RegExp(compoundSeparator.source,'gi')).map(x=>x.trim()).filter(Boolean)
+ return parts.length>1&&parts.every(completePart)
 }
