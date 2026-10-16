@@ -1,0 +1,904 @@
+{
+  "set": "adv",
+  "startedAt": "2026-10-16T08:11:56.098Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Verifica Avversaria Sedici. Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6378
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Risotto ai funghi a quattordici euro. Nel menu Cena cambia il Burger classico da dodici a tredici euro. Non cambiare la Pasta al pomodoro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6409
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 3 piatti.\n\nFatto: aggiunto *Risotto ai funghi* (Pranzo · Primi) a 14 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Mario Collaudo",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3229
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 3 piatti.\n\nFatto: titolare *Mario Collaudo*.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Nel menu Cena, categoria Panini, cambia il Burger classico da 13 a 14 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6315
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 3 piatti.\n\nFatto: *Burger classico* (Cena) 12 € → 14 €.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 5,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Gnocchi al pesto a undici euro. Sfondo nero, pulsanti arancioni, testo bianco e font Poppins. Mantieni Burger classico a 14 euro e Pasta al pomodoro a 10 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6438
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 4 piatti.\n\nFatto: stile aggiornato (sfondo, pulsanti, testo, font); aggiunto *Gnocchi al pesto* (Pranzo · Primi) a 11 €.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 6,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 6,
+      "text": "Nel menu Pranzo, categoria Panini, aggiungi Burger classico a 14 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6372
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 5 piatti.\n\nFatto: aggiunto *Burger classico* (Pranzo · Panini) a 14 €.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 7,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 7,
+      "text": "Porta il Burger classico a 15 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3165
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 5 piatti.\n\nQuale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 8,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [
+        "Quale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?"
+      ],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 8,
+      "text": "Cena",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3190
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 5 piatti.\n\nFatto: *Burger classico* (Cena) 14 € → 15 €.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 9,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 9,
+      "text": "Tieni Burger classico a 15 euro e Pasta al pomodoro a 10 euro. Nel menu Pranzo, categoria Dolci, aggiungi Tiramisu a 6 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6453
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 6 piatti.\n\nFatto: aggiunto *Tiramisu* (Pranzo · Dolci) a 6 €.\n\nIn quale *menu* va Tieni Burger classico?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 10,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "79443580-ceaa-4f01-8abe-cb0f506a97d0"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Tieni Burger classico?",
+        "In quale *menu* va Pasta al pomodoro?"
+      ],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 10,
+      "text": "Non cambiare niente, tranne la Pasta al pomodoro che va a 11 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6249
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 6 piatti.\n\nIn quale *menu* va Tieni Burger classico?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 11,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "79443580-ceaa-4f01-8abe-cb0f506a97d0"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Tieni Burger classico?"
+      ],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 11,
+      "text": "Alza la Pasta al pomodoro a 12 euro nel Pranzo.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3177
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 7 piatti.\n\nFatto: aggiunto *Alza la Pasta al pomodoro* (Pranzo · Menu) a 12 €.\n\nIn quale *menu* va Tieni Burger classico?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 12,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "79443580-ceaa-4f01-8abe-cb0f506a97d0"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Menu",
+          "name": "Alza la Pasta al pomodoro",
+          "price": 12,
+          "id": "0916abff-b2fb-4550-838b-c55976e5fb66"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Tieni Burger classico?"
+      ],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 12,
+      "text": "Metti il Risotto ai funghi a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3353
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 7 piatti.\n\nIn quale *menu* va Tieni Burger classico?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 13,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "79443580-ceaa-4f01-8abe-cb0f506a97d0"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Menu",
+          "name": "Alza la Pasta al pomodoro",
+          "price": 12,
+          "id": "0916abff-b2fb-4550-838b-c55976e5fb66"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Tieni Burger classico?",
+        "In quale *menu* va Risotto ai funghi?"
+      ],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    },
+    {
+      "n": 13,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3169
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 7 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 10 €, Risotto ai funghi 14 €, Gnocchi al pesto 11 €\nPanini: Burger classico 14 €\nDolci: Tiramisu 6 €\nMenu: Alza la Pasta al pomodoro 12 €\n*Cena*\nPanini: Burger classico 15 €\nStile: sfondo #000000, pulsanti #ff8a28, testo #ffffff, font Poppins.\n\nRaccolti: nome titolare.\n\nIn quale *menu* va Tieni Burger classico?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 13,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "cde689c1-9623-4310-afe1-7ed9d02337c7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "25d6f222-87fe-4a8f-baa7-585bddad74d7"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "4d620593-c799-4f36-9102-86a384e9c5e6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "3b8bce4e-5bde-4d4b-8f76-31a2916a50a2"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "79443580-ceaa-4f01-8abe-cb0f506a97d0"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Menu",
+          "name": "Alza la Pasta al pomodoro",
+          "price": 12,
+          "id": "0916abff-b2fb-4550-838b-c55976e5fb66"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "81c0af76-5ffa-4917-ba00-f30429a8bd54"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Tieni Burger classico?",
+        "In quale *menu* va Risotto ai funghi?"
+      ],
+      "design": {
+        "background": "#000000",
+        "primary": "#ff8a28",
+        "text": "#ffffff",
+        "font": "poppins"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 25,
+      "publishedRevision": 25,
+      "draftHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9",
+      "publishedHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "pass": null,
+  "errors": [],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3262
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 25,
+      "publishedRevision": 25,
+      "draftHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9",
+      "publishedHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [
+    "26050ecd-2e55-4057-a4c5-bff2b449cd47"
+  ],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": true,
+  "finishedAt": "2026-10-16T08:19:46.807Z"
+}

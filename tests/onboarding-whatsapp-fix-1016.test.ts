@@ -246,7 +246,7 @@ describe('round 3 — never a wrong value, never silence',()=>{
   for(let i=1;i<=16;i++){const text=`Nel menu Pranzo, categoria Primi, aggiungi Piatto ${i} a ${i+3} euro.`;script.set(text,{message:{menuText:text},menu:{rows:[row('Pranzo','Primi',`Piatto ${i}`,i+3,`Piatto ${i} a ${i+3} euro`)],issues:[]}});const reply=await say(text);expect(reply,`message ${i}`).toContain(`aggiunto *Piatto ${i}*`)}
   expect(dishes(current.data.workspace)).toHaveLength(18);expect(current.data.sources.length).toBeLessThanOrEqual(12);expect(m.db.jobs.filter(j=>j.status==='failed')).toHaveLength(0)})
  it('N8 (live): «Cena» answers «In quale menu va Sorbetto?» and never becomes the name or the owner',async()=>{current=draft(12,{ownerName:'Mario Collaudo'});const text='Aggiungi Sorbetto a 4 euro, categoria Dolci.'
-  script.set(text,{message:{menuText:text},menu:{rows:[row(null,'Dolci','Sorbetto',4,'Sorbetto a 4 euro')],issues:[]}});const r1=await say(text);expect(r1).toContain('In quale *menu* va Sorbetto?')
+  script.set(text,{message:{menuText:text},menu:{rows:[row(null,'Dolci','Sorbetto',4,'Sorbetto a 4 euro')],issues:[]}});const r1=await say(text);expect(r1).toContain('In quale *menu* va Sorbetto: *Pranzo* o *Cena*?')
   script.set('Cena',{message:{name:'Cena',ownerName:'Cena'}});const r2=await say('Cena')
   expect(current.data.name).toBe('Collaudo Mattina Sedici');expect(current.data.ownerName).toBe('Mario Collaudo');expect(dishes(current.data.workspace)).toContain('Cena/Dolci/Sorbetto/4');expect(r2).toContain('aggiunto *Sorbetto* (Cena · Dolci) a 4 €');expect(current.data.unresolved).toEqual([])})
  it('N8 (live): a bare «Cena» while the owner name is asked is not taken as the owner',async()=>{current=draft(12);const reply=await say('Cena');expect(current.data.ownerName).toBeUndefined();expect(reply).toContain('Come si chiama il *titolare*?')})
@@ -260,4 +260,24 @@ describe('round 3 — never a wrong value, never silence',()=>{
   const t3='Porta il Burger classico a 13 euro.';script.set(t3,{message:{menuText:t3},menu:{rows:[row(null,'Menu','Burger classico',13,'Burger classico a 13 euro')],issues:[]}});await say(t3);expect(current.data.unresolved).toEqual([])})
  it('keep with a different price is said, never «erano già così», never overwritten',async()=>{current=draft(12);const text='Mantieni il Burger classico a 13 euro.';script.set(text,{message:{menuText:text},menu:{rows:[row(null,'Menu','Burger classico',13,'Burger classico a 13 euro')],issues:[]}})
   const reply=await say(text);expect(burgers(current.data.workspace)[0].price).toBe(12);expect(reply).toContain('è a 12 €, non a 13 €');expect(reply).not.toContain('erano già così')})
+})
+
+// ---- After the live E2E on v77 (v2a/v2b): copy that must not ask pointless questions or hide a change.
+describe('live v77 copy',()=>{
+ it('«non aggiungere il Tiramisu» with the model silent: no question',async()=>{current=draft(12);const text='Nel menu Pranzo, categoria Dolci, non aggiungere il Tiramisu a 6 euro.';script.set(text,{message:{menuText:text},menu:{rows:[],issues:[]}})
+  const reply=await say(text);expect(reply).not.toContain('Non ho capito');expect(current.data.unresolved).toEqual([]);expect(dishes(current.data.workspace)).toHaveLength(2)})
+ it('«elimina» a dish not in the draft is said once and is not an open doubt',async()=>{current=draft(12);const text='Nel menu Cena, categoria Dolci, elimina la Panna cotta a 5 euro.';script.set(text,{message:{menuText:text},menu:{rows:[row('Cena','Dolci','Panna cotta',5,'Panna cotta a 5 euro')],issues:[]}})
+  const reply=await say(text);expect(reply).toContain('Non trovo *Panna cotta* nella bozza: non ho cambiato nulla.');expect(reply).not.toContain('Puoi inviare il dato corretto');expect(current.data.unresolved).toEqual([])})
+ it('«In quale menu va X: *Pranzo* o *Cena*?» is one plain question',async()=>{current=draft(12);const text='Aggiungi Sorbetto a 4 euro, categoria Dolci.';script.set(text,{message:{menuText:text},menu:{rows:[row(null,'Dolci','Sorbetto',4,'Sorbetto a 4 euro')],issues:[]}})
+  const reply=await say(text);expect(reply).toContain('In quale *menu* va Sorbetto: *Pranzo* o *Cena*?');expect(reply).not.toContain('Puoi inviare il dato corretto')})
+ it('«Rinomina…» does not leave a model doubt about the new name',async()=>{current=draft(12);const text='Rinomina Burger classico in Burger della casa.';script.set(text,{message:{menuText:text},menu:{rows:[],issues:['Manca il prezzo di *Burger della casa*.']}})
+  const reply=await say(text);expect(reply).toContain('Da qui non posso *rinominare*');expect(current.data.unresolved).toEqual([])})
+ it('a change made before the locale has a name is still confirmed',async()=>{current=session({workspace:twoMenus(12)});const text='Nel menu Cena, categoria Dolci, aggiungi Sorbetto a 4 euro.';script.set(text,{message:{menuText:text},menu:{rows:[row('Cena','Dolci','Sorbetto',4,'Sorbetto a 4 euro')],issues:[]}})
+  const reply=await say(text);expect(reply).toContain('Fatto: aggiunto *Sorbetto* (Cena · Dolci) a 4 €.');expect(reply).toContain('Come si chiama il *locale*?')})
+})
+describe('live v77: an existing locale name is never replaced by a dish',()=>{
+ it('«Metti il Risotto ai funghi a 15 euro» with the extractor returning name «Risotto ai funghi» keeps the name',async()=>{current=fullDraft();const text='Metti il Risotto ai funghi a 15 euro.'
+  script.set(text,{message:{name:'Risotto ai funghi',menuText:text},menu:{rows:[row(null,'Menu','Risotto ai funghi',15,'Risotto ai funghi a 15 euro')],issues:[]}})
+  await say(text);expect(current.data.name).toBe('Collaudo Mattina Sedici');expect(current.data.slug).toBe('collaudo-mattina-sedici');expect(dishes(current.data.workspace)).toContain('Pranzo/Primi/Risotto ai funghi/15')})
+ it('an explicit rename of the locale still works',async()=>{current=draft(12);const text='Il locale si chiama Trattoria Nuova.';script.set(text,{message:{name:'Trattoria Nuova'}});await say(text);expect(current.data.name).toBe('Trattoria Nuova')})
 })

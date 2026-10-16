@@ -55,7 +55,7 @@ export function mergeOnboardingRows(workspace:Workspace,rows:OnboardingMenuRow[]
   }
   if(row.intent==='remove'||row.intent==='move'||row.intent==='rename'){
    let found=fuzzy(row.name);if(row.menu){const inMenu=found.filter(f=>key(f.menu.name)===key(row.menu!));if(inMenu.length)found=inMenu}
-   if(!found.length){issues.push(`Non trovo *${clean(row.name)}* nella bozza: non ho cambiato nulla.`);continue}
+   if(!found.length){notes.push(`Non trovo *${clean(row.name)}* nella bozza: non ho cambiato nulla.`);continue} // said, not an open doubt
    if(row.intent!=='remove'){notes.push(`Da qui non posso ${row.intent==='move'?'*spostare* un piatto in un altro menu':'*rinominare* un piatto'}: *${clean(found[0]!.item.name)}* resta com’è. Si fa dalla dashboard dopo l’attivazione.`);resolvedNames.push(row.name);continue}
    if(found.length>1){issues.push(`Quale *${clean(found[0]!.item.name)}* vuoi eliminare: ${[...new Set(found.map(f=>'*'+clean(f.menu.name)+'*'))].join(' o ')}?`);continue}
    const f=found[0]!;f.section.items=f.section.items.filter(item=>item.id!==f.item.id);resolvedNames.push(row.name);changes.push(`eliminato *${clean(f.item.name)}* (${clean(f.menu.name)})`);continue
@@ -85,7 +85,7 @@ export function mergeOnboardingRows(workspace:Workspace,rows:OnboardingMenuRow[]
    ask(row,all);continue
   }
   let menu=row.menu?workspace.menus.find(m=>key(m.name)===key(row.menu!)):workspace.menus.length===1?workspace.menus[0]:undefined
-  if(!menu&&!row.menu&&workspace.menus.length>1){issues.push(`In quale *menu* va ${clean(row.name)}? ${workspace.menus.map(m=>'*'+clean(m.name)+'*').join(' o ')}`);choices.push({name:row.name,price:row.price,options:workspace.menus.map(m=>({menu:m.name,itemId:''})),add:{section:row.section,description:row.description}});continue}
+  if(!menu&&!row.menu&&workspace.menus.length>1){issues.push(`In quale *menu* va ${clean(row.name)}: ${workspace.menus.map(m=>'*'+clean(m.name)+'*').join(' o ')}?`);choices.push({name:row.name,price:row.price,options:workspace.menus.map(m=>({menu:m.name,itemId:''})),add:{section:row.section,description:row.description}});continue}
   if(!menu){menu=workspaceSchema.parse({menus:[{id:randomUUID(),name:onboardingDisplayCase(row.menu||'Menu'),active:true}]}).menus[0]!;workspace.menus.push(menu)}
   const matches=menu.sections.flatMap(section=>section.items.filter(item=>key(item.name)===key(row.name)).map(item=>({section,item})))
   const specified=key(row.section)==='menu'?[]:matches.filter(match=>key(match.section.name)===key(row.section))

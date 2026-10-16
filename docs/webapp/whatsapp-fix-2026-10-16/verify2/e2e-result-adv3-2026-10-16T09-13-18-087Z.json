@@ -1,0 +1,256 @@
+{
+  "set": "adv3",
+  "startedAt": "2026-10-16T09:13:18.087Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Verifica Avversaria Quattro. Nel menu Pranzo, categoria Panini, Burger classico a 12 euro. Nel menu Cena, categoria Panini, Burger classico a 12 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3262
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 1 piatti.\n\nFatto: aggiunto *Burger classico* (Pranzo · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "60c6a6db-61ad-44f2-927e-457ecf7c915c"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Porta il Burger classico a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "parse"
+        },
+        "waitedMs": 3170
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Non sono riuscito a leggere l’ultimo messaggio. *Rimandalo*, la bozza è salva."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "60c6a6db-61ad-44f2-927e-457ecf7c915c"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Aggiungi Sorbetto a 4 euro, categoria Dolci.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3171
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 1 piatti.\n\nIn quale *menu* va Sorbetto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "60c6a6db-61ad-44f2-927e-457ecf7c915c"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Sorbetto?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Cena",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3196
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Cena* · 1 piatti.\n\nIn quale *menu* va Sorbetto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "60c6a6db-61ad-44f2-927e-457ecf7c915c"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Sorbetto?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3171
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Cena* · 1 piatti.\n\n*Pranzo*\nPanini: Burger classico 12 €\n\nNessun contatto del titolare ancora raccolto.\n\nIn quale *menu* va Sorbetto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "60c6a6db-61ad-44f2-927e-457ecf7c915c"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Sorbetto?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "pass": null,
+  "errors": [
+    {
+      "kind": "onboarding_parse",
+      "detail": "message schema corrections:unrecognized_keys",
+      "alerted": false,
+      "created_at": "2026-10-16T09:14:04.366Z"
+    }
+  ],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3239
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T09:16:18.734Z"
+}

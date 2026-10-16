@@ -59,6 +59,9 @@ const notAnAnswer=/^(?:cambia|aggiungi|metti|togli|rimuovi|modifica|crea|imposta
 export function onboardingStepAnswer(d:OnboardingData,text:string):Partial<Record<StepField,string>>|null{
  const field=expectedOnboardingField(d),raw=text.trim().replace(/\s+/g,' ')
  if(!field||!raw||raw.length>120||/[\n\r]|https?:\/\//i.test(text)||onboardingHasPrice(raw)||startsOnboarding(raw)||onboardingLifecycleCommand(raw))return null
+ // «Il locale si chiama X» while the owner is asked is about another field: not an answer to this step.
+ const named=raw.match(/^(?:(?:il |l[a’'] ?)?(locale|ristorante|titolare|proprietari[oa]|numero|telefono|cellulare|whatsapp|email|e-mail|mail|link|indirizzo))\b/i)?.[1]?.toLowerCase()
+ if(named){const about:StepField=/locale|ristorante/.test(named)?'name':/titolare|propriet/.test(named)?'ownerName':/numero|telefono|cellulare|whatsapp/.test(named)?'ownerPhone':/mail/.test(named)?'ownerEmail':'slug';if(about!==field)return null}
  const value=raw.replace(/^(?:(?:il |l[a’'] ?)?(?:locale|ristorante|titolare|proprietari[oa]|nome|numero|telefono|cellulare|whatsapp|email|e-mail|mail|link|indirizzo)(?: del (?:locale|titolare|menu))?(?: si chiama| è| e'|:)?|si chiama|è|e')\s*/i,'').replace(/[.!]+$/,'').trim()
  if(!value)return null
  if(field==='ownerPhone'){const phone=normalizeOwnerPhone(value);return phone?{ownerPhone:phone}:null}
@@ -157,7 +160,8 @@ export function nextOnboardingStep(d:OnboardingData):string{
 }
 export async function summary(s:OnboardingSession,mode:'progress'|'recap'='progress',showChanges=false){
  const count=s.data.workspace.menus.reduce((n,m)=>n+m.sections.reduce((p,c)=>p+c.items.length,0),0),preview=count&&!pendingOnboardingSources(s.data)?await onboardingToken(s,'preview'):null
- if(!s.data.name)return `${nextOnboardingStep(s.data)}\n\nLa bozza si elimina dopo *10 minuti senza attività*.`
+ // Without a locale name yet, changes are still confirmed (live 16/10: Sorbetto added with no confirmation).
+ if(!s.data.name){const done=showChanges&&Array.isArray(s.data.lastChanges)&&s.data.lastChanges.length?['Fatto: '+(s.data.lastChanges as string[]).slice(0,8).join('; ')+'.']:[],said=showChanges&&Array.isArray(s.data.lastNotes)?(s.data.lastNotes as string[]).slice(0,4):[];return [...done,...said,nextOnboardingStep(s.data),'La bozza si elimina dopo *10 minuti senza attività*.'].join('\n\n')}
  const saved=[s.data.ownerName?'nome titolare':null,s.data.ownerPhone?'WhatsApp':null,s.data.ownerEmail?'email':null,s.data.workspace.design.logoUrl?'logo':null,s.data.workspace.design.coverUrl?'copertina':null].filter(Boolean)
  const changes=showChanges&&Array.isArray(s.data.lastChanges)?(s.data.lastChanges as string[]).slice(0,8):[],recap=mode==='recap'?onboardingRecap(s.data):''
  return [`*${safeName(s.data.name)}*${count?' · '+count+' piatti':''}.`,...(changes.length?['Fatto: '+changes.join('; ')+'.']:showChanges&&s.data.lastNoChange?['Nessuna modifica ai piatti: erano già così.']:[]),...(showChanges&&Array.isArray(s.data.lastNotes)&&s.data.lastNotes.length?[(s.data.lastNotes as string[]).slice(0,4).join('\n')]:[]),...(recap?[recap]:[]),...(mode==='recap'?[saved.length?'Raccolti: '+saved.join(', ')+'.':'Nessun contatto del titolare ancora raccolto.']:[]),...(typeof s.data.recentAssetNotice==='string'?[s.data.recentAssetNotice]:[]),nextOnboardingStep(s.data),...(preview?['*Anteprima privata*:\n'+preview]:[]),...(mode==='recap'?['La bozza si elimina dopo *10 minuti senza attività*.']:[])].join('\n\n')
@@ -223,6 +227,10 @@ async function prepare(s:OnboardingSession,text:string,form:Record<string,string
  const explicitCorrection=!!planned.corrections||/\b(cambia|correggi|modifica|aggiorna|porta)\b[\s\S]*\b(prezzo|euro|euri)\b/i.test(text)
  if(explicitCorrection)d.lastExplicitCorrection=text.slice(0,2000)
  if(menuWord)for(const k of ['name','ownerName','slug','styleRestaurant'] as const)delete fields[k]
+ // An already-filled locale/owner field is changed only by an explicit correction or a sentence that talks about it
+ // (live 16/10 on v77: «Metti il Risotto ai funghi a 15 euro» renamed the locale «Risotto ai funghi»).
+ const fieldContext:Record<string,RegExp>={name:/\b(?:locale|ristorante|bar|pizzeria|trattoria|osteria|si chiama|nome)\b/i,ownerName:/\b(?:titolare|proprietari[oa]|gestore|si chiama)\b/i,ownerEmail:/@/,slug:/\b(?:link|indirizzo)\b/i}
+ for(const k of ['name','ownerName','ownerEmail','slug'] as const)if(fields[k]&&d[k]&&!(step&&k in step)&&!(planned.corrections&&k in planned.corrections&&fieldContext[k]!.test(text))&&!fieldContext[k]!.test(text))delete fields[k]
  for(const k of ['name','ownerName','ownerEmail'] as const)if(fields[k])d[k]=fields[k]!
  if(fields.ownerName)changes.push(`titolare *${safeName(String(fields.ownerName))}*`);if(fields.ownerEmail)changes.push('email del titolare salvata')
  if(fields.ownerPhone){const phone=normalizeOwnerPhone(fields.ownerPhone);if(phone){d.ownerPhone=phone;changes.push('WhatsApp del titolare salvato')}else {delete d.ownerPhone;d.warnings.push('Verifica il *numero WhatsApp del titolare*.')}}
@@ -231,10 +239,13 @@ async function prepare(s:OnboardingSession,text:string,form:Record<string,string
  if(fields.designInstructions?.length){const design=applyOnboardingDesign(d.workspace.design,fields.designInstructions);d.workspace.design=design.design;const priorIssues=d.designIssuesByField&&typeof d.designIssuesByField==='object'?{...d.designIssuesByField as Record<string,string[]>}:Object.fromEntries((Array.isArray(d.designIssues)?d.designIssues as string[]:[]).map(issue=>[/angolo/i.test(issue)?'gradientAngle':/font/i.test(issue)?'font':'other',[issue]]));for(const instruction of fields.designInstructions)delete priorIssues[instruction.field];if(d.workspace.design.backgroundGradient&&!design.issuesByField.gradient)delete priorIssues.gradient;Object.assign(priorIssues,design.issuesByField);d.designIssuesByField=priorIssues;d.designIssues=Object.values(priorIssues).flat();d.explicitDesignFields=[...new Set([...(Array.isArray(d.explicitDesignFields)?d.explicitDesignFields:[]),...design.applied])];if(design.applied.length)changes.push('stile aggiornato ('+[...new Set(design.applied.map(f=>designLabels[f]||f))].join(', ')+')')}
  if(fields.menuStructure?.length)for(const structure of fields.menuStructure){let target=d.workspace.menus.find(m=>onboardingCommand(m.name)===onboardingCommand(structure.menu));if(!target){target=workspaceSchema.parse({menus:[{id:randomUUID(),name:onboardingDisplayCase(structure.menu),active:true}]}).menus[0]!;d.workspace.menus.push(target)}if(structure.section&&!target.sections.some(section=>onboardingCommand(section.name)===onboardingCommand(structure.section!))){target.sections.push(workspaceSchema.parse({menus:[{id:randomUUID(),name:'tmp',sections:[{id:randomUUID(),name:onboardingDisplayCase(structure.section)}]}]}).menus[0]!.sections[0]!)}}
  // «Elimina il Burger classico», «Sposta…», «Rinomina…» without a price: applied (remove) or explained, never ignored.
+ let nonPriceOnly=false
  if(!onboardingHasPrice(text)&&!(Number(form.NumMedia)>0)){const existingNames=d.workspace.menus.flatMap(m=>m.sections.flatMap(section=>section.items.map(item=>item.name))),req=onboardingNonPriceRequests(text,existingNames)
   const asked=[...req.remove.map(name=>({name,intent:'remove' as const})),...req.move.map(name=>({name,intent:'move' as const})),...req.rename.map(name=>({name,intent:'rename' as const}))]
+  nonPriceOnly=asked.length>0
   if(asked.length){const done=mergeOnboardingRows(d.workspace,asked.map(a=>({name:a.name,price:0,section:'Menu',description:'',evidence:a.name,intent:a.intent})),false);changes.push(...done.changes);notes.push(...done.notes,...done.issues)}}
- if(fields.menuText||onboardingHasPrice(text)){const url='message:'+(form.MessageSid||randomUUID());if(!sources.some(source=>source.url===url))sources.push({url,kind:'text',text:fields.menuText||text,warnings:[],...(explicitCorrection?{correction:true}:{})} as OnboardingSource)}
+ // A pure «elimina/sposta/rinomina» message is not menu material (live: «Manca il prezzo di Burger della casa»).
+ if(!nonPriceOnly&&(fields.menuText||onboardingHasPrice(text))){const url='message:'+(form.MessageSid||randomUUID());if(!sources.some(source=>source.url===url))sources.push({url,kind:'text',text:fields.menuText||text,warnings:[],...(explicitCorrection?{correction:true}:{})} as OnboardingSource)}
  const urls=[...new Set(text.match(/https:\/\/[^\s<>]+/gi)||[])].slice(0,3)
  for(const raw of urls){const url=raw.replace(/[),.;]+$/,'');if(!sources.some(x=>x.url===url)&&!acquisitions.some(x=>x.url===url))acquisitions.push({kind:'url',url,followMenu:true})}
  }
@@ -297,7 +308,8 @@ async function prepare(s:OnboardingSession,text:string,form:Record<string,string
  // A chat message talks about dishes already in the draft («non cambiare la Pasta»): model doubts about those are noise.
  const existing=d.workspace.menus.flatMap(m=>m.sections.flatMap(section=>section.items.map(item=>item.name)))
  let own=[...((source as any).issues||[]),...(message?extracted.issues.filter(issue=>!existing.some(name=>mentions(issue,name))&&!guard.rows.some(r=>mentions(issue,r.name))):extracted.issues),...guard.issues,...merged.issues]
- if(message&&own.some(issue=>!genericSourceIssue.test(issue)))own=own.filter(issue=>!genericSourceIssue.test(issue))
+ // Chat messages: coverage is checked clause by clause by the guardrail, the generic «no dishes read» doubt is noise.
+ if(message)own=own.filter(issue=>!genericSourceIssue.test(issue))
  ;(source as any).issues=[...new Set(own)]
  // A newer message about a dish closes the older doubts about it; generic doubts of older chat messages are superseded.
  settle([...merged.resolvedNames,...extracted.rows.map(row=>row.name)],source)

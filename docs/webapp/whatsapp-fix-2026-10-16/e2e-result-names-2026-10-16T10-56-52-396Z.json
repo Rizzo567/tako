@@ -1,0 +1,547 @@
+{
+  "set": "names",
+  "startedAt": "2026-10-16T10:56:52.396Z",
+  "steps": [
+    {
+      "n": 1,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Crea locale Verifica Avversaria Sedici. Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 72322
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Aggiungi nel menu Cena, categoria Pizze, Pizza Mario a 9 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "quota"
+        },
+        "waitedMs": 97695
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: non ho letto l’ultimo messaggio. *Rimandalo* tra qualche minuto, la bozza è salva."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Trattoria della nonna a 12 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "quota"
+        },
+        "waitedMs": 97596
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: non ho letto l’ultimo messaggio. *Rimandalo* tra qualche minuto, la bozza è salva."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Porta la Pasta al pomodoro a 11 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "quota"
+        },
+        "waitedMs": 107344
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: non ho letto l’ultimo messaggio. *Rimandalo* tra qualche minuto, la bozza è salva."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "name": "Verifica Avversaria Sedici",
+      "owner": "Mario Collaudo",
+      "text": "Mario Collaudo",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3271
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\nFatto: titolare *Mario Collaudo*.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 6,
+      "name": "Verifica Avversaria Sedici Bis",
+      "owner": "Mario Collaudo",
+      "text": "Il locale si chiama Verifica Avversaria Sedici Bis.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 50084
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici Bis* · 2 piatti.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 7,
+      "name": "Verifica Avversaria Sedici Bis",
+      "owner": "Mario Collaudo",
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3249
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici Bis* · 2 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 10 €\n*Cena*\nPanini: Burger classico 12 €\n\nRaccolti: nome titolare.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "1d3fa0b3-361f-4589-a9bf-85ed61effe0a"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "63c20fe6-2578-4835-932d-4ddd183cce38"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "name": "Verifica Avversaria Sedici Bis",
+    "dishes": [
+      "Cena/Panini/Burger classico/12",
+      "Cena/Pizze/Pizza Mario/9",
+      "Pranzo/Primi/Pasta al pomodoro/11",
+      "Pranzo/Primi/Trattoria della nonna/12"
+    ],
+    "nameAfterStep": [
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici Bis",
+      "Verifica Avversaria Sedici Bis"
+    ],
+    "ownerAfterStep": [
+      null,
+      null,
+      null,
+      null,
+      "Mario Collaudo",
+      "Mario Collaudo",
+      "Mario Collaudo"
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Cena/Panini/Burger classico/12",
+      "Pranzo/Primi/Pasta al pomodoro/10"
+    ],
+    "name": "Verifica Avversaria Sedici Bis",
+    "ownerName": "Mario Collaudo",
+    "everyStepAnswered": true,
+    "pastaAfterStep": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "recapReturned": true,
+    "failedJobs": [
+      2,
+      3,
+      4
+    ],
+    "nameAfterStep": [
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici Bis",
+      "Verifica Avversaria Sedici Bis"
+    ],
+    "ownerAfterStep": [
+      null,
+      null,
+      null,
+      null,
+      "Mario Collaudo",
+      "Mario Collaudo",
+      "Mario Collaudo"
+    ]
+  },
+  "pass": false,
+  "errors": [
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:56:56.040Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:58:59.423Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 2/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:59:47.507Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:00:34.954Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:01:28.390Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 2/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:02:15.922Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:03:03.480Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:03:58.158Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 2/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:04:54.092Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:05:41.230Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 48s",
+      "alerted": false,
+      "created_at": "2026-10-16T11:07:30.529Z"
+    }
+  ],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3258
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [
+    "26050ecd-2e55-4057-a4c5-bff2b449cd47"
+  ],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T11:09:26.569Z"
+}
