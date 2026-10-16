@@ -68,3 +68,43 @@ Il QA ha collegato il numero di Manuel e non è stato toccato. Ho creato un loca
 - «la carbonara non è finita» → nessuna scrittura.
 
 Groq: una sola frase (la negazione) è passata dall'IA, qualche migliaio di token al massimo, sotto il budget di 15k.
+
+# Secondo giro (round 2, 160 casi nuovi del verificatore su v99), edge v100
+
+| Batteria | Prima (v99) | Dopo (v100) |
+|---|---|---|
+| Round 1, 283 casi | 263 OK · 0 GRAVI · 2 MEDI · 18 BASSI | invariata: 263 · 0 · 2 · 18 |
+| Round 2, 160 casi | 127 OK · 12 GRAVI · 7 MEDI · 14 BASSI | **151 OK · 0 GRAVI · 0 MEDI · 9 BASSI** |
+
+I 2 MEDI del round 1 sono la regola dell'OK scritto, la decisione aperta descritta sopra.
+
+Nel verificatore del round 2 ho aggiunto soltanto `novantacinque:95` al suo lettore di numeri: era la ragione del falso «prezzo 95 mai detto», visto che ora il server legge i numeri in lettere fino a 999.
+
+## Fix
+- **A** — `followUp`: dopo «scusa/no/anzi» o «anche» il resto deve essere solo un nome di piatto, eventualmente con un prezzo. Una parola d'azione (finita, evidenza, nascondi, costa, promo…) indica un comando nuovo, che segue il flusso normale. «scusa, anche la lasagna» applica la stessa modifica senza annullare la prima.
+- **B** — Una parola che è il nome di una categoria con più piatti («la pizza», «il dolce») porta a una domanda con i piatti della categoria (`categoryWordItems`). Lo stesso vale nel validatore G9: quella parola da sola non vale come piatto nominato.
+- **C** — `parseSalesText` / `salesTurn`:
+  - «offerta» dentro il nome di un piatto esistente non è una promo;
+  - «… in promo a 10 solo oggi» diventa una promo fino a oggi;
+  - «togli tutte le promo» toglie tutte quelle attive; oltre 3 modifiche scatta il riepilogo con OK.
+- **D** — «no scusa 9» dopo una promo corregge la promo.
+- **E** — «anche la cotoletta a 12» dopo una promo produce una domanda («Vuoi mettere … in promo a 12 €?») e non cambia mai il prezzo pieno.
+- **F** — «no aspetta, lascia stare», «annulla l'ultima», «torna come prima» annullano l'ultima modifica usando la memoria `last:`. L'undo ora copre anche promo ed etichette, e lo conferma una riga. «annulla» da solo resta com'era: «già pubblicate restano».
+- **MEDI**:
+  - G6: conferma oltre 500 € o da 8 volte il prezzo attuale in su (lo zero in più); 3× bloccava prezzi veri.
+  - Numeri in lettere fino a 999, nel validatore, nell'aggiunta e davanti a «euro» nel percorso deterministico.
+  - La domanda «Quale piatto intendi» con una sola opzione è sostituita da una richiesta chiara («Non ho capito cosa cambiare per X…»). Ho aggiornato il test di `clarifyText`.
+  - «metti nel menu il nuovo burger», con il piatto che esiste ed è nascosto, lo rende visibile invece di aggiungerne un altro.
+- **BASSI** (fatto in parte) — Le domande senza «?» («c'è ancora…», «sai se…», «… vero») diventano letture. Restano 9 BASSI di formulazione (domande a voce più libere, «il menù costa 16»).
+
+## Deploy
+v99 (`0dc80692…`) → **v100** (`2a913bea…`). Il bundle è v99 più 5 sezioni: `twilio-menu-nlu`, `twilio-menu-sales`, `twilio-menu-ai`, `twilio-menu-create`, `routes/twilio-menu`. Il diff per sezione non tocca nient'altro; check-active fatto prima.
+Rollback: `cp ~/.config/tako-webapp/rollback-edge-20261016/candidate-index-v99-owner-bot.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`
+
+## Regressioni
+Stessa suite del giro 1: invariata. Fanno eccezione `twilio-menu-ai`, dove ho aggiornato la frase del chiarimento con una sola opzione, e `twilio-menu-ai-flow`, che resta 20/20. `twilio-owner-link` resta 8/15 come su v98.
+
+## Live (`live/verify-owner-bot-live.mjs`, 14/14)
+Ho usato un locale temporaneo «ZZ Test bot titolare» con Primi, Dolci, Pizze e Secondi (dentro anche un «Nuovo burger» nascosto e il caffè), poi l'ho cancellato. Il QA e il numero di Manuel non sono stati toccati.
+12 frasi: A, «anche», B, C (solo oggi), D, E, C (tutte), F, piatto nascosto, G6 (10×).
+Groq: una sola frase, «scusa, la lasagna è finita», è passata dall'IA; risultato corretto, sotto il budget di 10k.

@@ -30,13 +30,18 @@ const LAST = '(?:le )?ultim[ei] porzion[ei]'
 const TODAY = 'solo (?:per )?oggi'
 const OFF = '(?:togli|toglila|toglilo|rimuovi|leva|elimina|cancella|annulla|ferma|termina|chiudi|stop|basta|niente)'
 const SET = '(?:metti|mettiamo|segna|aggiungi|fai|facciamo|imposta)'
-export type SalesIntent = { kind: 'promo', target: string, price: number, untilText: string | null } | { kind: 'promoOff', target: string | null } | { kind: 'scarcity', target: string | null, label: SalesLabelKey, value: boolean }
+export type SalesIntent = { kind: 'promo', target: string, price: number, untilText: string | null } | { kind: 'promoOff', target: string | null, all?: boolean } | { kind: 'scarcity', target: string | null, label: SalesLabelKey, value: boolean }
 const clean = (s: string | undefined) => (s ?? '').replace(/^(?:il|lo|la|i|gli|le|l|un|una|uno)\s+/, '').trim()
 /** Riconosce solo frasi di un piatto; null se non è una richiesta promo/scarsità (o se è composta). */
 export function parseSalesText(raw: string): SalesIntent | null {
   const t = plainText(raw).replace(/(?<!\d)[,.]|[,.](?!\d)/g, ' ').replace(/\s+/g, ' ').trim()
   if (!/(promo|offerta|porzion|solo (per )?oggi)/.test(t) || /\?$/.test(raw.trim()) || /^(cosa|che|quali|quanto|quando|come)\b/.test(t)) return null
   let m: RegExpMatchArray | null
+  // «togli tutte le promo»: tutte quelle attive (la regola delle 3 modifiche resta nel bot).
+  if (new RegExp(`^${OFF} (?:tutte|tutti) (?:le |i )?(?:${PROMO}|promozioni|offerte)$`).test(t)) return { kind: 'promoOff', target: null, all: true }
+  // «carbonara in promo a 10 solo oggi»: la promo vale fino a oggi.
+  const todayOnly = new RegExp(` ${TODAY}$`).test(t) && /\b(promo|promozione|offerta)\b/.test(t)
+  if (todayOnly) { const base = parseSalesText(raw.replace(/\s*,?\s*solo\s+(?:per\s+)?oggi\s*[.!]*\s*$/i, '')); if (base?.kind === 'promo' && !base.untilText) return { ...base, untilText: 'oggi' } }
   const promo = (target: string, value: string, cents: string | undefined, until: string | undefined): SalesIntent | null => { const price = amount(value, cents); return price === null || !clean(target) ? null : { kind: 'promo', target: clean(target), price, untilText: until?.trim() || null } }
   if ((m = t.match(new RegExp(`^(?:${SET} )?(.+?) in ${PROMO}(?: a| per| da)? ${NUM}(?: euro| eur)?${UNTIL}$`)))) return promo(m[1]!, m[2]!, m[3], m[4])
   if ((m = t.match(new RegExp(`^${SET} in ${PROMO} (.+?) (?:a |per |da )?${NUM}(?: euro| eur)?${UNTIL}$`)))) return promo(m[1]!, m[2]!, m[3], m[4])
@@ -58,6 +63,9 @@ const shown = (target: string) => target.slice(0, 60)
 export function salesTurn(text: string, workspace: Doc, refs: MenuRef[], today: string): SalesTurn | null {
   const intent = parseSalesText(text)
   if (!intent) return null
+  // «Offerta pranzo a 11»: «offerta» fa parte del nome di un piatto esistente, non è una promo.
+  const said = ' ' + plainText(text) + ' '
+  if (refs.some(r => /\b(promo|promozione|offerta|offerte)\b/.test(plainText(r.name)) && said.includes(' ' + plainText(r.name) + ' '))) return null
   let template: SalesTemplate
   if (intent.kind === 'promo') {
     const until = intent.untilText ? resolveUntil(intent.untilText, today) : null
@@ -77,6 +85,7 @@ export function salesTurn(text: string, workspace: Doc, refs: MenuRef[], today: 
     options = refs.filter(r => { const i = items.get(r.id); return label === 'promo' ? !!i?.promo : label === 'lastPortions' ? !!i?.scarcity?.lastPortions : i?.scarcity?.onlyToday === today })
     if (!options.length) return { reply: salesCopy.noneWithLabel[label] }
   }
+  if (intent.kind === 'promoOff' && intent.all) return { actions: options.map(r => ({ ...template, id: r.id }) as SalesAction) }
   if (options.length > 1) return { choose: { template, options: options.slice(0, 8) } }
   return { actions: [{ ...template, id: options[0]!.id } as SalesAction] }
 }

@@ -5,6 +5,7 @@
  * il messaggio successivo, testo o vocale, completa la bozza anche se riscritto per intero. */
 import type {SectionRef,MenuRef,MenuAction} from './twilio-menu-ai.js'
 import {findDishes} from './twilio-menu-nlu.js'
+import {g9WordNumber} from './twilio-menu-ai.js'
 
 export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null}
 export type CreateParse={name:string|null,price:number|null,sectionId:string|null,unknownSection:boolean}
@@ -21,7 +22,7 @@ export const createCompound=(raw:string)=>{const t=waNewFold(raw).replace(/(\d)[
 
 type Tok={o:string,p:string}
 const waNewTokens=(raw:string):Tok[]=>raw.replace(/€/g,' euro ').replace(/(\d)[,.](\d)/g,'$1\u0000$2').split(/[^\p{L}\p{N}\u0000']+/u).flatMap(w=>w.split("'")).filter(Boolean).map(w=>w.replace('\u0000','.')).map(o=>({o,p:waNewFold(o)}))
-const waNewValue=(p:string)=>/^\d+(?:\.\d{1,2})?$/.test(p)?Number(p):p in waNewNumbers?waNewNumbers[p]!:null
+const waNewValue=(p:string)=>/^\d+(?:\.\d{1,2})?$/.test(p)?Number(p):p in waNewNumbers?waNewNumbers[p]!:(/^[a-z]{5,}$/.test(p)?g9WordNumber(p):null)
 
 /** Estrae categoria, prezzo e nome. `verbRequired=false` per la risposta a una domanda del bot. */
 export function parseCreate(raw:string,sections:SectionRef[],verbRequired=true):CreateParse|null{
@@ -80,15 +81,17 @@ export function createQuestion(d:CreateDraft,sections:SectionRef[],unknownSectio
 }
 export const draftComplete=(d:CreateDraft):d is CreateDraft&{name:string,price:number,sectionId:string}=>!!d.name&&d.price!==null&&!!d.sectionId
 
-export type CreateStep={kind:'none'}|{kind:'ask',draft:CreateDraft,text:string}|{kind:'exists',name:string,section:string}|{kind:'create',action:{kind:'create',sectionId:string,name:string,price:number,description:null}}
+export type CreateStep={kind:'none'}|{kind:'unhide',id:string}|{kind:'ask',draft:CreateDraft,text:string}|{kind:'exists',name:string,section:string}|{kind:'create',action:{kind:'create',sectionId:string,name:string,price:number,description:null}}
 /** Decide se il messaggio è un'aggiunta (verbo iniziale) o la risposta a una domanda di aggiunta in attesa.
  * Con una bozza in attesa, un messaggio riconosciuto come altro comando (finito, nascondi…) non è una risposta;
  * un «cambio prezzo» sì (è il caso «… che costa 12 euro» del vocale). */
-export function createStep(text:string,draft:CreateDraft|null,sections:SectionRef[],refs:{name:string,sectionId?:string|null}[],otherIntent:(t:string)=>{kind:string}|null):CreateStep{
+export function createStep(text:string,draft:CreateDraft|null,sections:SectionRef[],refs:{id?:string,name:string,sectionId?:string|null,hidden?:boolean}[],otherIntent:(t:string)=>{kind:string}|null):CreateStep{
  const verbFirst=startsWithCreate(text)
  if(verbFirst&&createCompound(text))return{kind:'none'}
  if(!verbFirst){if(!draft||waNewNotCreate.test(waNewFold(text).replace(/[^a-z0-9]+/g,' ')))return{kind:'none'};const other=otherIntent(text);if(other&&other.kind!=='price')return{kind:'none'}}
  const parsed=parseCreate(text,sections,verbFirst)!
+ // «metti nel menu il nuovo burger»: se il piatto esiste ed è nascosto, va mostrato (non aggiunto un doppione).
+ if(parsed.name){const same=refs.filter(r=>waNewFold(r.name).trim()===waNewFold(parsed.name!).trim());if(same.length===1&&same[0]!.id){if(same[0]!.hidden)return{kind:'unhide',id:same[0]!.id};if(!draft&&!parsed.sectionId)return{kind:'exists',name:same[0]!.name,section:sections.find(s=>s.id===same[0]!.sectionId)?.name??''}}}
  const bare=!parsed.sectionId?sections.find(s=>waNewFold(s.name).replace(/[^a-z0-9]+/g,' ').trim()===waNewFold(text).replace(/[^a-z0-9]+/g,' ').trim()):undefined
  const d=mergeDraft(draft??{kind:'create_draft',name:null,price:null,sectionId:null},bare?{name:null,price:null,sectionId:bare.id,unknownSection:false}:parsed)
  if(!draftComplete(d))return{kind:'ask',draft:d,text:createQuestion(d,sections,parsed.unknownSection&&!d.sectionId)}
@@ -98,22 +101,45 @@ export function createStep(text:string,draft:CreateDraft|null,sections:SectionRe
  return{kind:'create',action:{kind:'create',sectionId:d.sectionId,name:d.name,price:d.price,description:null}}
 }
 
-/** Memoria dell'ultima modifica applicata (proposta `last`, 10 minuti): «anche la lasagna», «no scusa 14»,
- * «scusa no era la lasagna» (annulla la precedente e applica quella giusta, in una sola pubblicazione). */
+/** Memoria dell'ultima modifica applicata (`last:<telefono>`, 10 minuti). Dopo «scusa/no/anzi» o «anche» il resto deve
+ * essere SOLO un nome di piatto (eventualmente con un prezzo): se contiene un verbo o una parola d'azione è un comando
+ * nuovo e segue il flusso normale (round 2, 16/10).
+ * - «anche la lasagna» / «scusa, anche la lasagna»: stessa modifica su un altro piatto, senza annullare la prima;
+ * - «anche la cotoletta a 12» dopo una promo: promo a 12 (mai il prezzo pieno); dopo un prezzo: prezzo;
+ * - «no scusa 14»: corregge il valore della modifica appena fatta (prezzo o promo);
+ * - «scusa no era la lasagna»: annulla la modifica precedente e la applica al piatto giusto, in una sola pubblicazione;
+ * - «no aspetta, lascia stare», «annulla l'ultima»: annulla l'ultima modifica. */
 export type LastApplied={kind:'last',actions:MenuAction[],undo:MenuAction[]}
-export function undoFor(actions:MenuAction[],refs:MenuRef[]):MenuAction[]|null{const out:MenuAction[]=[]
- for(const a of actions){const r='id' in a?refs.find(x=>x.id===a.id):undefined;if(!r)return null
-  if(a.kind==='price')out.push({kind:'price',id:r.id,price:r.price});else if(a.kind==='available')out.push({kind:'available',id:r.id,value:r.available!==false});else if(a.kind==='hidden')out.push({kind:'hidden',id:r.id,value:!!r.hidden});else if(a.kind==='featured')out.push({kind:'featured',id:r.id,value:!!(r as any).featured});else return null}
+type WaItem={price:number,available?:boolean,hidden?:boolean,featured?:boolean,promo?:{price:number,until?:string|null}|null,scarcity?:{lastPortions?:boolean,onlyToday?:string|null}|null}
+export function undoFor(actions:MenuAction[],itemOf:(id:string)=>WaItem|undefined):MenuAction[]|null{const out:MenuAction[]=[]
+ for(const a of actions){const r='id' in a?itemOf(a.id):undefined;if(!r||!('id' in a))return null
+  if(a.kind==='price')out.push({kind:'price',id:a.id,price:r.price});else if(a.kind==='available')out.push({kind:'available',id:a.id,value:r.available!==false});else if(a.kind==='hidden')out.push({kind:'hidden',id:a.id,value:!!r.hidden});else if(a.kind==='featured')out.push({kind:'featured',id:a.id,value:!!r.featured})
+  else if(a.kind==='promo')out.push({kind:'promo',id:a.id,price:r.promo?.price??null,until:r.promo?.until??null} as MenuAction)
+  else if(a.kind==='scarcity'){const label=(a as any).label;out.push({kind:'scarcity',id:a.id,label,value:label==='lastPortions'?!!r.scarcity?.lastPortions:!!r.scarcity?.onlyToday} as MenuAction)}else return null}
  return out}
-export function followUp(text:string,last:LastApplied,refs:MenuRef[]):MenuAction[]|null{
- if(last.actions.length!==1)return null;const prev=last.actions[0]!;if(!('id' in prev))return null
+const waNewAction=/\b(finit\w*|esaurit\w*|evidenza|nascond\w*|togli\w*|leva|mostra|rimetti|costa|costano|prezzo|metti\w*|porta\w*|promo\w*|offert\w*|disponibil\w*|tornat\w*|aggiung\w*|scriv\w*|ultime|porzion\w*|oggi|piccant\w*|vegan\w*|vegetarian\w*|cambia|chiama\w*|sposta\w*|foto|descrizione)\b/
+export function followUp(text:string,last:LastApplied,refs:MenuRef[]):MenuAction[]|{reply:string}|null{
  const t=waNewFold(text).replace(/(\d)[,.](\d)/g,'$1.$2').replace(/[^a-z0-9.]+/g,' ').trim()
- const also=t.match(/^(?:e )?anche (?:per )?(.+)$/)
- if(also&&!/\d/.test(also[1]!)){const hits=findDishes(also[1]!,refs).filter(r=>r.id!==prev.id);return hits.length===1?[{...prev,id:hits[0]!.id} as MenuAction]:null}
- if(!/^(?:no|scusa|scusami|anzi|ops|pardon|errore|sbagliato|mi sono sbagliat\w*|volevo dire)\b/.test(t))return null
- const rest=t.replace(/^(?:(?:no|scusa|scusami|anzi|ops|pardon|errore|sbagliato|mi sono sbagliat\w*|volevo dire|era|e|intendevo|il|la|lo|i|gli|le|non)\s+)+/,'')
- const n=rest.match(/^(\d+(?:\.\d{1,2})?)(?:\s*euro)?$/)
- if(n){if(prev.kind!=='price')return null;return[{kind:'price',id:prev.id,price:Number(n[1])}]}
- if(!rest||/\d/.test(rest))return null
- const hits=findDishes(rest,refs).filter(r=>r.id!==prev.id);if(hits.length!==1)return null
- return[...last.undo,{...prev,id:hits[0]!.id} as MenuAction]}
+ if(/^(?:no |scusa |aspetta |anzi )*(?:aspetta )?(?:lascia stare|lascia perdere|annulla l ultima(?: modifica)?|annulla (?:quello|questo|quella|questa)|torna come prima|rimetti come prima|annulla la modifica(?: di prima)?)$/.test(t))return last.undo.length?last.undo:null
+ if(last.actions.length!==1)return null;const prev=last.actions[0]!;if(!('id' in prev))return null
+ const lead=t.match(/^((?:(?:no|scusa|scusami|anzi|ops|pardon|aspetta|ancora|errore|sbagliato|volevo dire|intendevo|e|anche|pure|era|non)\s+)+)(.*)$/)
+ if(!lead)return null
+ const words=lead[1]!.trim().split(/\s+/),also=words.includes('anche')||words.includes('pure'),correction=words.some(w=>['no','scusa','scusami','anzi','ops','pardon','errore','sbagliato','volevo','intendevo','era'].includes(w))
+ const rest=lead[2]!.replace(/^(?:(?:il|la|lo|l|i|gli|le|per|quello|quella|dire)\s+)+/,'').trim()
+ if(waNewAction.test(rest))return null
+ const n=rest.match(/^(?:(.*?)\s+)?(?:a\s+)?(\d+(?:\.\d{1,2})?)(?:\s*euro)?$/),name=(n?n[1]??'':rest).trim(),value=n?Number(n[2]):null
+ const priced=(id:string)=>prev.kind==='price'&&value!==null?{kind:'price',id,price:value} as MenuAction:prev.kind==='promo'&&value!==null?{...prev,id,price:value} as MenuAction:value===null?{...prev,id} as MenuAction:null
+ if(!name){if(!correction||value===null)return null;return prev.kind==='price'||prev.kind==='promo'?[priced(prev.id)!]:null}
+ const hits=findDishes(name,refs).filter(r=>r.id!==prev.id);if(hits.length!==1)return null
+ const next=priced(hits[0]!.id);if(!next)return null
+ // «anche la cotoletta a 12» dopo una promo: mai il prezzo pieno; si chiede conferma della promo.
+ if(also&&prev.kind==='promo'&&value!==null){const nm=hits[0]!.name;return{reply:`Vuoi mettere *${nm}* in *promo* a *${value.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2})} €*? Scrivimi «${nm.toLowerCase()} in promo a ${value}». Non ho cambiato nulla.`}}
+ if(also)return[next]
+ if(correction)return[...last.undo,next]
+ return null}
+
+/** «la pizza», «il dolce»: il bersaglio è solo il nome (singolare o plurale) di una categoria con più piatti → i suoi piatti. */
+export function categoryWordItems(target:string,refs:MenuRef[]):MenuRef[]|null{
+ const w=waNewFold(target).replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(x=>x&&!['il','la','lo','l','i','gli','le','un','una','uno'].includes(x));if(w.length!==1)return null
+ const word=w[0]!,variants=(s:string)=>{const p=waNewFold(s).replace(/[^a-z0-9]+/g,' ').trim();return[p,p.replace(/i$/,'o'),p.replace(/e$/,'a'),p.replace(/i$/,'e')]}
+ const items=refs.filter(r=>r.section&&variants(r.section).includes(word));return items.length>1?items:null}

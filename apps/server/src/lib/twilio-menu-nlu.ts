@@ -53,14 +53,24 @@ export function capabilityFromText(raw:string):string[]|null{
 // Frasi comuni con un solo piatto: niente IA. Le frasi composte («… e …») restano all'IA.
 export function parseIntent(raw:string):Intent|null{
  // G4: una domanda non è mai un'azione («il tiramisù è finito?», «la carbonara costa 13?»): diventa una lettura.
+ // Round 2: domande senza «?» («c'è ancora la tagliata», «sai se la carbonara è finita», «la lasagna è finita vero»).
+ const q=plainText(raw).replace(/[,.!]/g,' ').replace(/\s+/g,' ').trim(),spoken=q.match(/^(?:c e ancora|ce ancora|ci sono ancora|abbiamo ancora|avete ancora) (.+)$/)
+ if(spoken)return{kind:'ask',target:spoken[1]!.replace(/ vero$/,'')}
+ const lead=q.match(/^(?:sai se|mi sai dire se|mi dici se|e vero che|ma) (.+)$/),tail=/ vero$/.test(q)
+ if(lead&&q.startsWith('ma ')===false||tail){const inner=parseIntentCore(lead?lead[1]!.replace(/ vero$/,''):q.replace(/ vero$/,''));if(inner&&'target' in inner)return{kind:'ask',target:inner.target}}
  const found=parseIntentCore(raw);if(found&&'target' in found&&found.kind!=='ask'&&/\?\s*$/.test(raw.trim()))return{kind:'ask',target:found.target};return found
 }
-const nluActionTarget=/\b(promo|offerta|offerte|sconto|scontat\w*|aggiung\w*|inserisc\w*|nuov[oa]|menu|categoria|descrizione|foto)\b/
+const nluActionTarget=/\b(promo|offerta|offerte|sconto|scontat\w*|aggiung\w*|inserisc\w*|nuov[oa]|nel menu|al menu|categoria|descrizione|foto)\b/
+const nluUnits:Record<string,number>={uno:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9},nluTeens:Record<string,number>={dieci:10,undici:11,dodici:12,tredici:13,quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19},nluTens:[string,number][]=[['venti',20],['vent',20],['trenta',30],['trent',30],['quaranta',40],['quarant',40],['cinquanta',50],['cinquant',50],['sessanta',60],['sessant',60],['settanta',70],['settant',70],['ottanta',80],['ottant',80],['novanta',90],['novant',90]]
+function nluBelow100(w:string):number|null{if(!w)return 0;if(w in nluUnits)return nluUnits[w]!;if(w in nluTeens)return nluTeens[w]!;for(const [p,v] of nluTens)if(w.startsWith(p)){const r=w.slice(p.length);if(!r)return v;if(r in nluUnits)return v+nluUnits[r]!}return null}
+function nluWordNumber(w:string):number|null{const m=w.match(/^(due|tre|quattro|cinque|sei|sette|otto|nove)?cento?(.*)$/);if(m&&w.includes('cent')){const r=nluBelow100(m[2]!);return r===null?null:(m[1]?nluUnits[m[1]]!:1)*100+r}const v=w?nluBelow100(w):null;return v===0?null:v}
 function parseIntentCore(raw:string):Intent|null{
  const original=raw.trim(),t=plainText(raw).replace(/(?<!\d)[,.]|[,.](?!\d)/g,' ').replace(/\s+/g,' ').trim()
  if(/^(cosa|che cosa|quali piatti|quali|che piatti) (e|sono|ci sono|risultano) (gia )?(finit|esaurit)\w*/.test(t)||/^(cosa|che cosa) (manca|non c e)/.test(t))return{kind:'read',read:'unavailable'}
  if(/^(cosa|che cosa|quali piatti|quali) (e|sono) nascost\w*/.test(t))return{kind:'read',read:'hidden'}
  const description=original.match(/^(?:nella|nel|nello|nei|negli|nelle|per (?:la|il|lo|i|gli|le)|alla|al|allo)\s+(.+?)\s+scrivi\s*:\s*(.+)$/i);if(description)return{kind:'description',target:description[1]!,text:description[2]!.trim()}
+ // Round 2: «costa novantacinque euro» → «costa 95 euro» (numeri in lettere fino a 999, solo davanti a «euro»).
+ const tSpoken=t.replace(/\b([a-z]{3,}) euro\b/g,(all,w)=>{const n=nluWordNumber(w);return n===null?all:n+' euro'});if(tSpoken!==t)return parseIntentCore(tSpoken)
  // G5: negazioni («non è finita», «non cambiare…», «non ci sarà») non sono comandi; restano «non c'è più», «non abbiamo più».
  if(/\bnon\b/.test(t)&&!/\bnon (c e|ce|abbiamo) piu\b/.test(t))return null
  let m:RegExpMatchArray|null

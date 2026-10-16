@@ -1,148 +1,128 @@
 {
- "at": "2026-10-16T17:04:53.511Z",
- "edge": "v99",
+ "at": "2026-10-16T17:19:54.587Z",
+ "edge": "v100",
  "turns": [
   {
-   "in": "aggiungi tra i primi il piatto pasta al ragù che costa 12 euro",
-   "out": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Pasta al ragù* in *Primi*: *12,00 €*",
+   "in": "la carbonara costa 13",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
    "revision": 3
   },
   {
-   "in": "aggiungiamo un piatto",
-   "out": "In quale categoria metto il piatto? Categorie: Primi, Dolci.",
-   "revision": 3
-  },
-  {
-   "in": "pasta al pesto 11 euro nei primi",
-   "out": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Pasta al pesto* in *Primi*: *11,00 €*",
+   "in": "scusa, la lasagna è finita",
+   "out": "",
    "revision": 5
   },
   {
-   "in": "metti in offerta la lasagna a 9 euro",
-   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), finché non la togli",
+   "in": "anche la panna cotta",
+   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: *finito*",
    "revision": 7
   },
   {
-   "in": "il tiramisù è finito?",
-   "out": "*Tiramisù*: *5,00 €* · disponibile",
+   "in": "la pizza costa 10",
+   "out": "Quale piatto intendi? 1. *Margherita* 2. *Pizza diavola* Rispondi con il *numero* o il *nome*.",
    "revision": 7
   },
   {
-   "in": "la carbonara costa 13?",
-   "out": "*Spaghetti alla carbonara*: *12,00 €* · disponibile",
-   "revision": 7
-  },
-  {
-   "in": "la carbonara costa 1300",
-   "out": "*ZZ Test bot titolare*: ecco le modifiche. 1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *1300,00 €* Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto. *ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
-   "revision": 7
-  },
-  {
-   "in": "cabonara finita",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: *finito*",
+   "in": "carbonara in promo a 10 solo oggi",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*",
    "revision": 9
   },
   {
-   "in": "scusa no era la lasagna",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: di nuovo *disponibile* *Lasagna al forno*: *finito*",
+   "in": "no scusa 9",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *9,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*",
    "revision": 11
+  },
+  {
+   "in": "anche la lasagna a 8",
+   "out": "Vuoi mettere *Lasagna al forno* in *promo* a *8,00 €*? Scrivimi «lasagna al forno in promo a 8». Non ho cambiato nulla.",
+   "revision": 11
+  },
+  {
+   "in": "togli tutte le promo",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 13,00 €",
+   "revision": 13
   },
   {
    "in": "metti la panna cotta a 6",
    "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 5,00 € a *6,00 €*",
-   "revision": 13
-  },
-  {
-   "in": "no scusa 7",
-   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 6,00 € a *7,00 €*",
    "revision": 15
   },
   {
-   "in": "anche il tiramisù",
-   "out": "*Confermato.* Ho aggiornato il menu. *Tiramisù*: prezzo da 5,00 € a *7,00 €*",
+   "in": "no aspetta, lascia stare",
+   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 6,00 € a *5,00 €*",
    "revision": 17
   },
   {
-   "in": "aggingi tra i dolci cannolo siciliano 4 euro",
-   "out": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Cannolo siciliano* in *Dolci*: *4,00 €*",
+   "in": "metti nel menu il nuovo burger",
+   "out": "*Confermato.* Ho aggiornato il menu. *Nuovo burger*: di nuovo *visibile* nel menu",
    "revision": 19
   },
   {
-   "in": "la carbonara non è finita",
-   "out": "",
+   "in": "il caffè costa 12",
+   "out": "*ZZ Test bot titolare*: ecco le modifiche. 1. *Caffè*: prezzo da 1,20 € a *12,00 €* Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto. *ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
    "revision": 19
   }
  ],
  "checks": [
   {
-   "name": "vocale reale: aggiunta, mai «Non trovo»",
+   "name": "prezzo semplice",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Pasta al ragù* in *Primi*: *12,00 €*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
   },
   {
-   "name": "«aggiungiamo un piatto» → una domanda",
+   "name": "A: «scusa» + comando nuovo non annulla la precedente",
    "ok": true,
-   "detail": "In quale categoria metto il piatto? Categorie: Primi, Dolci."
+   "detail": ""
   },
   {
-   "name": "risposta alla domanda collegata (G2)",
+   "name": "«anche» = stessa modifica (finita)",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Pasta al pesto* in *Primi*: *11,00 €*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: *finito*"
   },
   {
-   "name": "«metti in offerta … a 9» non è un cambio prezzo (G1)",
+   "name": "B: «la pizza» con più pizze → domanda, nessuna scrittura",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), finché non la togli"
+   "detail": "Quale piatto intendi? 1. *Margherita* 2. *Pizza diavola* Rispondi con il *numero* o il *nome*."
   },
   {
-   "name": "domanda, mai azione (G4)",
+   "name": "C: promo con «solo oggi»",
    "ok": true,
-   "detail": "*Tiramisù*: *5,00 €* · disponibile"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*"
   },
   {
-   "name": "domanda sul prezzo, mai azione (G4)",
+   "name": "D: correzione della promo",
    "ok": true,
-   "detail": "*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *9,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*"
   },
   {
-   "name": "prezzo implausibile → conferma, non online (G6)",
+   "name": "E: dopo una promo mai il prezzo pieno → domanda",
    "ok": true,
-   "detail": "*ZZ Test bot titolare*: ecco le modifiche. 1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *1300,00 €* Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto. *ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
+   "detail": "Vuoi mettere *Lasagna al forno* in *promo* a *8,00 €*? Scrivimi «lasagna al forno in promo a 8». Non ho cambiato nulla."
   },
   {
-   "name": "refuso + «X finita» senza «è» (G8)",
+   "name": "C: tutte le promo tolte",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: *finito*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 13,00 €"
   },
   {
-   "name": "correzione: carbonara torna, lasagna finita (G3)",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: di nuovo *disponibile* *Lasagna al forno*: *finito*"
-  },
-  {
-   "name": "cambio prezzo semplice",
+   "name": "prezzo semplice",
    "ok": true,
    "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 5,00 € a *6,00 €*"
   },
   {
-   "name": "correzione del prezzo (G2)",
+   "name": "F: annulla l'ultima modifica",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 6,00 € a *7,00 €*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 6,00 € a *5,00 €*"
   },
   {
-   "name": "«anche il tiramisù» = stessa modifica",
+   "name": "piatto nascosto → mostrato, non duplicato",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Tiramisù*: prezzo da 5,00 € a *7,00 €*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Nuovo burger*: di nuovo *visibile* nel menu"
   },
   {
-   "name": "refuso nel verbo (G8)",
+   "name": "G6: 10× → conferma, non online",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Cannolo siciliano* in *Dolci*: *4,00 €*"
-  },
-  {
-   "name": "negazione: nessuna scrittura (G5)",
-   "ok": true,
-   "detail": ""
+   "detail": "*ZZ Test bot titolare*: ecco le modifiche. 1. *Caffè*: prezzo da 1,20 € a *12,00 €* Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto. *ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
   },
   {
    "name": "pulizia completa (locale, menu, collegamento)",
