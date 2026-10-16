@@ -281,3 +281,8 @@ describe('live v77: an existing locale name is never replaced by a dish',()=>{
   await say(text);expect(current.data.name).toBe('Collaudo Mattina Sedici');expect(current.data.slug).toBe('collaudo-mattina-sedici');expect(dishes(current.data.workspace)).toContain('Pranzo/Primi/Risotto ai funghi/15')})
  it('an explicit rename of the locale still works',async()=>{current=draft(12);const text='Il locale si chiama Trattoria Nuova.';script.set(text,{message:{name:'Trattoria Nuova'}});await say(text);expect(current.data.name).toBe('Trattoria Nuova')})
 })
+describe('live 16/10 14:18: «corrections» returned as an array',()=>{
+ it('the message is still read (the invalid «corrections» is ignored)',async()=>{const reply=(content:unknown)=>(async()=>new Response(JSON.stringify({choices:[{message:{content:JSON.stringify(content)}}]}),{status:200})) as any
+  const text='Nel menu Cena, categoria Panini, il prezzo corretto del Burger classico è 13 euro. Aggiorna il piatto esistente. Non pubblicare.'
+  expect(await extractOnboardingMessage(text,'k',reply({menuText:text,corrections:[{name:'Burger classico',price:13}]}))).toEqual({menuText:text})})
+})

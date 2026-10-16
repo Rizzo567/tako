@@ -9,7 +9,7 @@ import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
 import {priceChoiceText,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
 import {copy,helpWords,fill} from '../lib/twilio-menu-copy.js'
-import {parseIntent,findDishes,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,type Intent} from '../lib/twilio-menu-nlu.js'
+import {parseIntent,findDishes,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,isCompoundMessage,type Intent} from '../lib/twilio-menu-nlu.js'
 import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
 import {reportFailure,inBackground,type FailureKind} from '../lib/twilio-menu-alerts.js'
 import {normalizeOwnerPhone,whatsappAddress} from '../lib/whatsapp-phone.js'
@@ -47,7 +47,8 @@ export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revisio
  const batch=proposal&&(proposal.command as any)?.kind==='batch'?storedActions(proposal.command,refs,sections):null;
  if(batch&&Number(proposal!.revision)!==row.revision){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return copy.menuChanged}
  if(batch&&!planned)return{llm:true};
- if(!planned&&!pending&&!choice&&(/(?<!\d),(?!\d)|[;\n]|\s+e\s+/i.test(text)))return{llm:true};
+ // «prezzo Pasta e fagioli a 9»: la «e» del nome del piatto non rende composta la frase (era mandata all'IA, senza risposta in 45 s).
+ if(!planned&&!pending&&!choice&&isCompoundMessage(text,refs))return{llm:true};
  let actions:MenuAction[];if(planned){if(planned.revision!==row.revision||planned.proposalRevision!==undefined&&planned.proposalRevision!==JSON.stringify(proposal?.command??null))return copy.menuChanged;const plan=planned.plan;if(plan.type!=='change')return planText(plan,refs,sections);if(!storedActions({kind:'batch',actions:plan.actions},refs,sections))return copy.notUnderstood;actions=batch?mergeMenuActions(batch,plan.actions,plan.remove):plan.actions}
  else{let picked:MenuAction[]|null=null;if(choice){const target=resolveChoice(text,choice.options.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r));if(target)picked=[{...choice.action,id:target.id} as MenuAction]}
   const command=parseMenuCommand(text)
