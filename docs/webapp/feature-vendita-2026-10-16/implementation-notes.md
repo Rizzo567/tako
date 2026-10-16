@@ -116,3 +116,18 @@ Ramo `codex/feat-promo-scarsita` (base `7cd55ab`). Nessun deploy, nessuna migraz
 ### Limiti
 - Il drawer è verificato in una fixture con il componente vero (`13-menu-sales.js` com'è) e lo stesso `updateItem`; non dentro la dashboard intera (servirebbe login sul DB). L'aggancio nel drawer vero è di una riga e il file compila nel bundle staff.
 - Nessuna prova sul numero WhatsApp reale (vietato oggi).
+
+
+## F2 — Preset settimanali (pausa 16/10 14:50)
+1. Fatto e committato: migrazione additiva `scripts/serverless/menu-day-presets.sql` (+ rollback, MAI applicata), servizio `lib/menu-day-presets.ts`, API `routes/menu-day-presets.ts`, job 06:00 idempotente (cron del Worker `deploy/cloudflare/preset-cron.mjs`, non deployato: pg_cron scartato perché il job deve passare da mutateWorkspace(publish) in TS), cache traduzioni `lib/menu-text-translations.ts` con `enqueueNewTextTranslations(restaurantId, texts)`, chiave Groq dedicata `TAKO_CANDIDATE_GROQ_TRANSLATION_API_KEY` (da impostare al deploy; anche la traduzione della dashboard e dell'onboarding ora la usano). Test `tests/day-presets`: 15/15 verdi su Postgres locale usa-e-getta.
+2. Bozza pendente alle 06:00: persa ma salvata in `menu_workspace_versions` («Bozza non pubblicata, sostituita…») + avviso. Esauriti di ieri tornano disponibili col preset del giorno (solo automatico).
+3. Aggancio F3+4: `presetOnlineStamp()` in menu-day-presets.ts, neutro; al merge farlo chiamare `stampOnlyToday(workspace, menuId, today)`.
+4. UI (WIP): `13-menu-day-presets.js` + agganci in `13-menu-workspace.js` + CSS. Registrazioni desktop e mobile con puntatore 35/35 PASS (`verifica-f2/record-f2.mjs`, harness con finto backend).
+Manca, nell'ordine: (a) reduced motion — il tocco sul chip in reduced non sceglie il preset (scelta ignorata, da diagnosticare); (b) script tastiera: si blocca all'attivazione da tastiera (Tab+Invio sull'opzione); (c) copiare i 4 video mp4 + checks in `verifica-f2/video/`; (d) FEATURE-MOTION integrazione aggiornato; (e) sezione F2 in contracts.md (funzioni per F1); (f) `pnpm test`/typecheck/lint completi e confronto con la baseline (35 errori lint preesistenti, 20 file di test d'integrazione già rossi senza stack dev); (g) note di consegna (migrazione + deploy da autorizzare).
+
+### F2 — ripresa 16/10 sera
+- Reduced motion: il tap selezionava; il test attendeva meno della latenza del finto backend (diagnosi). Tastiera: aperto da tastiera il pannello di attivazione ora porta il focus sulla prima scelta (prima Tab finiva sulla ricerca). Dopo «Crea preset» il vassoio si chiude. Video: `verifica-f2/video/f2-desktop-reduced.mp4` (34/34), `f2-desktop-keyboard.mp4` (14/14); puntatore desktop/mobile 35/35 (registrati prima, non rigenerati).
+- Merge `codex/release-1016` (4a4de8e, contiene 2f871c0): conflitti in index.html (tenuti entrambi gli script), 13-menu-workspace.js (presa la loro versione del blocco + i 3 agganci F2), implementation-notes (tutte le sezioni).
+- `presetOnlineStamp` → `stampOnlyToday`; stub F1 collegati; `candidate-entry.mjs` passa `GROQ_TRANSLATION_API_KEY` e `TAKO_PRESET_CRON_SECRET` all'edge.
+- Test mirati: 9 file, 601/601 (preset 15, F1, F3+4, invariante onboarding). tsc server e web verdi; build staff ok; lint dei file F2 senza errori.
+- Non fatto: comandi chat dei preset (presetChatCommand), avvisi al titolare via WhatsApp. Lista deploy: `deploy-f2.md`.

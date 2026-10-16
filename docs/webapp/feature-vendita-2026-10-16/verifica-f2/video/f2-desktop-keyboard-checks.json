@@ -1,0 +1,154 @@
+{
+ "name": "f2-desktop-keyboard",
+ "checks": [
+  {
+   "label": "Tab porta al pulsante Preset (focus visibile)",
+   "ok": true,
+   "detail": "mw-dp-btn is-off|Preset"
+  },
+  {
+   "label": "Invio apre il pannello di attivazione",
+   "ok": true
+  },
+  {
+   "label": "pannello aperto da tastiera: focus sulla prima scelta",
+   "ok": true,
+   "detail": "mw-dp-option|Copia il menu attuale in tutti"
+  },
+  {
+   "label": "Esc chiude e riporta il focus al pulsante",
+   "ok": true,
+   "detail": {
+    "expanded": "false",
+    "label": "Preset",
+    "y": 0,
+    "dishes": [
+     "Primi",
+     "Secondi",
+     "Dolci"
+    ],
+    "counts": [
+     2,
+     2,
+     1
+    ],
+    "current": "Menu attuale",
+    "focus": "mw-dp-btn|Preset"
+   }
+  },
+  {
+   "label": "Freccia giù apre con il focus sul chip corrente (Menu attuale)",
+   "ok": true,
+   "detail": {
+    "expanded": "true",
+    "label": "Preset",
+    "y": 145,
+    "dishes": [
+     "Primi",
+     "Secondi",
+     "Dolci"
+    ],
+    "counts": [
+     2,
+     2,
+     1
+    ],
+    "current": "Menu attuale",
+    "focus": "mw-dp-chip mw-dp-chip--action|Menu attuale"
+   }
+  },
+  {
+   "label": "frecce e Home spostano il focus tra i chip (roving tabindex)",
+   "ok": true,
+   "detail": "mw-dp-chip|MerMercoledì"
+  },
+  {
+   "label": "Invio sceglie Mercoledì: aria-current e etichetta",
+   "ok": true,
+   "detail": {
+    "expanded": "false",
+    "label": "Mercoledì",
+    "y": 0,
+    "dishes": [
+     "Primi",
+     "Secondi",
+     "Dolci"
+    ],
+    "counts": [
+     2,
+     2,
+     1
+    ],
+    "current": "MerMercoledì",
+    "focus": "|MenuModifiche non pubblicateAl"
+   }
+  },
+  {
+   "label": "riaperto: aria-current sul giorno scelto",
+   "ok": true
+  },
+  {
+   "label": "errore al salvataggio: messaggio role=alert, dialogo aperto, dati conservati",
+   "ok": true
+  },
+  {
+   "label": "riprova: salvato e poi «Menu attuale»",
+   "ok": true,
+   "detail": {
+    "s": {
+     "expanded": "false",
+     "label": "Preset",
+     "y": 0,
+     "dishes": [
+      "Primi",
+      "Secondi",
+      "Dolci"
+     ],
+     "counts": [
+      2,
+      2,
+      1
+     ],
+     "current": "Menu attuale",
+     "focus": "|MenuPubblicatoAltre azioniPubb"
+    }
+   }
+  },
+  {
+   "label": "Tab fuori dal vassoio lo chiude",
+   "ok": true,
+   "detail": {
+    "expanded": "false",
+    "label": "Preset",
+    "y": 0,
+    "dishes": [
+     "Primi",
+     "Secondi",
+     "Dolci"
+    ],
+    "counts": [
+     2,
+     2,
+     1
+    ],
+    "current": "Menu attuale",
+    "focus": "press mw-drag-handle|"
+   }
+  },
+  {
+   "label": "aree tocco ≥44px (chip, interruttore, pulsanti)",
+   "ok": true
+  },
+  {
+   "label": "nessuno scroll orizzontale",
+   "ok": true
+  },
+  {
+   "label": "nessun errore JavaScript",
+   "ok": true,
+   "detail": []
+  }
+ ],
+ "passed": 14,
+ "total": 14
+}

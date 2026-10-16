@@ -132,3 +132,23 @@ export function salesActionProblem(actions, workspace): string | null   // promo
 ### 6. Esaurito operativo: `apps/server/src/lib/menu-sales-store.ts`
 
 `clearLastPortionsOnSoldOut(restaurantId, itemId)` è chiamata da `PATCH /api/menus/items/:id/availability` con `available=false`: toglie «Ultime porzioni» in bozza e pubblicato **senza cambiare revisione** (un editor aperto non va in conflitto). Best effort: l'esaurito resta valido anche se la pulizia fallisce.
+
+## F2 — Preset settimanali (ramo `codex/feat-preset-settimanali`)
+
+Tabelle nuove (migrazione `scripts/serverless/menu-day-presets.sql`). Funzioni in `apps/server/src/lib/menu-day-presets.ts` (giorni ISO: 1 lunedì … 7 domenica; giornata che cambia alle 06:00 nel fuso del locale, ripiego Europe/Rome):
+
+```ts
+listDayPresets(restaurantId, {menuId?, now?})                → {timezone, serviceDay:{date,weekday}, settings[], presets[] (senza contenuto)}
+readDayPreset(restaurantId, {presetId} | {menuId, weekday} | {menuId, name})   → DayPreset con sections | null
+saveDayPreset(restaurantId, {menuId, sections, weekday? | name? | presetId?, actor?})   // crea o sostituisce, accende i preset; NON pubblica
+saveDayPresetWith(tx, restaurantId, …)                        // uguale, dentro una transazione aperta (usata da menuPresetTarget)
+publishDayPreset(restaurantId, {presetId, mode:'manual'|'auto', expectedRevision?, actor?})   // via mutateWorkspace(publish): tabelle, PDF, live
+setDayPresetAutoPublish(restaurantId, menuId, enabled)        // acceso a metà giornata: primo automatico al prossimo cambio delle 06:00
+setDayPresetsEnabled(restaurantId, menuId, enabled)           // menu unico ⇄ settimanale, i preset restano
+activateDayPresets / createDayPreset / updateDayPreset / renameDayPreset / deleteDayPreset
+runDayPresetAutopublish({now})                                // job idempotente (tick ogni 5 min)
+```
+
+- **F1:** `menu-preset-target.ts` è implementato (enabled + save su `saveDayPresetWith`, giorni F1 0–6 convertiti in ISO); `menu-translation-queue.ts` chiama `enqueueNewTextTranslations` di `lib/menu-text-translations.ts` (stessa firma `(restaurantId, texts)`, solo accodamento, mai bloccante). `presetChatCommand` resta lo stub (null).
+- **F3+4:** `presetOnlineStamp` chiama `stampOnlyToday(workspace, menuId, giornoDiServizio)` a ogni pubblicazione di preset (manuale e automatica). I preset salvano il piatto per intero, promo ed etichette incluse.
+- Traduzioni: solo con la chiave dedicata (`GROQ_TRANSLATION_API_KEY` sull'edge, file `~/.config/tako-webapp/groq-key-traduzioni.txt` in locale); senza chiave nessuna chiamata, resta l'italiano.
