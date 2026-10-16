@@ -85,8 +85,13 @@ const validDate = (y: number, m: number, d: number) => { const iso = `${y}-${Str
 /** Ultimo giorno incluso della promo, o null se l'espressione non è chiara. Le date passate passano all'anno/mese successivo. */
 export function resolveUntil(phrase: string, today: string): string | null {
   const t = phrase.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9/.\- ]+/g, ' ').replace(/\s+/g, ' ').trim()
-    .replace(/^(?:fino|finoa|sino)\s+(?:a|al|alla|all|ad)?\s*|^(?:entro|per)\s+(?:il|la|l)?\s*/, '').replace(/^(?:il|la|l)\s+/, '').trim()
+    .replace(/^solo\s+(?:per\s+)?/, '')
+    .replace(/^(?:fino|finoa|sino)\s+(?:a|al|alla|all|ad)?\s*|^(?:entro|per)\s+(?:il|la|l)?\s*/, '').replace(/^(?:il|la|l)\s+/, '').replace(/^tutto il weekend$/, 'weekend').trim()
+    .replace(/^(lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|oggi) sera$/, '$1')
   if (!t) return null
+  // Round 3: «fine mese» = ultimo giorno del mese del giorno di servizio.
+  if (/^fine (?:del )?mese$/.test(t)) { const d = new Date(today.slice(0, 7) + '-01T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1); d.setUTCDate(0); return d.toISOString().slice(0, 10) }
+  if (/^(?:tutto )?(?:il )?weekend$/.test(t)) return addDays(today, (7 - weekdayOf(today)) % 7)
   if (/^(oggi|stasera|stanotte|fine giornata|questa sera)$/.test(t)) return today
   if (/^domani( sera)?$/.test(t)) return addDays(today, 1)
   if (/^dopodomani$/.test(t)) return addDays(today, 2)

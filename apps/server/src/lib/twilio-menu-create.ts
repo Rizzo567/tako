@@ -6,6 +6,7 @@
 import type {SectionRef,MenuRef,MenuAction} from './twilio-menu-ai.js'
 import {findDishes} from './twilio-menu-nlu.js'
 import {g9WordNumber} from './twilio-menu-ai.js'
+import {resolveUntil} from './menu-sales.js'
 
 export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null}
 export type CreateParse={name:string|null,price:number|null,sectionId:string|null,unknownSection:boolean}
@@ -110,22 +111,34 @@ export function createStep(text:string,draft:CreateDraft|null,sections:SectionRe
  * - «scusa no era la lasagna»: annulla la modifica precedente e la applica al piatto giusto, in una sola pubblicazione;
  * - «no aspetta, lascia stare», «annulla l'ultima»: annulla l'ultima modifica. */
 export type LastApplied={kind:'last',actions:MenuAction[],undo:MenuAction[]}
-type WaItem={price:number,available?:boolean,hidden?:boolean,featured?:boolean,promo?:{price:number,until?:string|null}|null,scarcity?:{lastPortions?:boolean,onlyToday?:string|null}|null}
+type WaItem={price:number,tags?:string[],available?:boolean,hidden?:boolean,featured?:boolean,promo?:{price:number,until?:string|null}|null,scarcity?:{lastPortions?:boolean,onlyToday?:string|null}|null}
 export function undoFor(actions:MenuAction[],itemOf:(id:string)=>WaItem|undefined):MenuAction[]|null{const out:MenuAction[]=[]
  for(const a of actions){const r='id' in a?itemOf(a.id):undefined;if(!r||!('id' in a))return null
   if(a.kind==='price')out.push({kind:'price',id:a.id,price:r.price});else if(a.kind==='available')out.push({kind:'available',id:a.id,value:r.available!==false});else if(a.kind==='hidden')out.push({kind:'hidden',id:a.id,value:!!r.hidden});else if(a.kind==='featured')out.push({kind:'featured',id:a.id,value:!!r.featured})
   else if(a.kind==='promo')out.push({kind:'promo',id:a.id,price:r.promo?.price??null,until:r.promo?.until??null} as MenuAction)
+  else if(a.kind==='tag')out.push({kind:'tag',id:a.id,tag:a.tag,value:(r.tags??[]).includes(a.tag)})
   else if(a.kind==='scarcity'){const label=(a as any).label;out.push({kind:'scarcity',id:a.id,label,value:label==='lastPortions'?!!r.scarcity?.lastPortions:!!r.scarcity?.onlyToday} as MenuAction)}else return null}
  return out}
 const waNewAction=/\b(finit\w*|esaurit\w*|evidenza|nascond\w*|togli\w*|leva|mostra|rimetti|costa|costano|prezzo|metti\w*|porta\w*|promo\w*|offert\w*|disponibil\w*|tornat\w*|aggiung\w*|scriv\w*|ultime|porzion\w*|oggi|piccant\w*|vegan\w*|vegetarian\w*|cambia|chiama\w*|sposta\w*|foto|descrizione)\b/
-export function followUp(text:string,last:LastApplied,refs:MenuRef[]):MenuAction[]|{reply:string}|null{
+const waNewRevert=/^(?:(?:no|scusa|aspetta|anzi|ok)\s+)*(?:aspetta\s+)?(?:lascia stare|lascia perdere|annulla l ultima(?: modifica)?|annulla (?:quello|questo|quella|questa)|torna come prima|torna com era|rimetti come prima|annulla la modifica(?: di prima)?)(?:\s+(?:il prezzo (?:del|della|dello|dei|delle|di)\s+|l etichetta (?:del|della|di)\s+)?(.+))?$/
+/** undefined = non è un annullamento; '' = annullamento senza piatto; altrimenti il piatto nominato. */
+export function revertTarget(text:string):string|undefined{const t=waNewFold(text).replace(/[^a-z0-9]+/g,' ').trim(),m=t.match(waNewRevert);if(!m)return undefined;if(m[1]&&waNewAction.test(m[1]))return undefined;return (m[1]??'').replace(/^(?:il|la|lo|l|i|gli|le)\s+/,'').trim()}
+export function followUp(text:string,last:LastApplied,refs:MenuRef[],ageMs=0,today?:string):MenuAction[]|{reply:string}|null{
  const t=waNewFold(text).replace(/(\d)[,.](\d)/g,'$1.$2').replace(/[^a-z0-9.]+/g,' ').trim()
- if(/^(?:no |scusa |aspetta |anzi )*(?:aspetta )?(?:lascia stare|lascia perdere|annulla l ultima(?: modifica)?|annulla (?:quello|questo|quella|questa)|torna come prima|rimetti come prima|annulla la modifica(?: di prima)?)$/.test(t))return last.undo.length?last.undo:null
+ const revert=revertTarget(text)
+ if(revert!==undefined){
+  if(!revert){if(ageMs>600000||!last.undo.length)return{reply:'Non c\'è un\'ultima modifica recente da annullare. Dimmi cosa vuoi cambiare.'};return last.undo}
+  const ids=new Set(findDishes(revert,refs).map(r=>r.id)),undo=last.undo.filter(a=>'id' in a&&ids.has(a.id))
+  if(!undo.length)return{reply:`Non ho una modifica recente su *${revert}* da annullare. Dimmi cosa vuoi, per esempio «${revert} è di nuovo disponibile».`}
+  return undo}
+ if(ageMs>600000)return null
  if(last.actions.length!==1)return null;const prev=last.actions[0]!;if(!('id' in prev))return null
  const lead=t.match(/^((?:(?:no|scusa|scusami|anzi|ops|pardon|aspetta|ancora|errore|sbagliato|volevo dire|intendevo|e|anche|pure|era|non)\s+)+)(.*)$/)
  if(!lead)return null
  const words=lead[1]!.trim().split(/\s+/),also=words.includes('anche')||words.includes('pure'),correction=words.some(w=>['no','scusa','scusami','anzi','ops','pardon','errore','sbagliato','volevo','intendevo','era'].includes(w))
  const rest=lead[2]!.replace(/^(?:(?:il|la|lo|l|i|gli|le|per|quello|quella|dire)\s+)+/,'').trim()
+ // «no scusa fino a sabato» dopo una promo: cambia solo la scadenza.
+ if(prev.kind==='promo'&&today&&/^(?:fino|sino|entro|solo|per)\b/.test(rest)){const until=resolveUntil(rest,today);return until?[{...prev,until} as MenuAction]:{reply:'Non ho capito *fino a quando* vale la promo. Scrivi per esempio «fino a domenica» o «fino al 20/10». Non ho cambiato nulla.'}}
  if(waNewAction.test(rest))return null
  const n=rest.match(/^(?:(.*?)\s+)?(?:a\s+)?(\d+(?:\.\d{1,2})?)(?:\s*euro)?$/),name=(n?n[1]??'':rest).trim(),value=n?Number(n[2]):null
  const priced=(id:string)=>prev.kind==='price'&&value!==null?{kind:'price',id,price:value} as MenuAction:prev.kind==='promo'&&value!==null?{...prev,id,price:value} as MenuAction:value===null?{...prev,id} as MenuAction:null

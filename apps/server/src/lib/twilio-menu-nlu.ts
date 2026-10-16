@@ -17,6 +17,10 @@ export function matchDishes(query:string,refs:MenuRef[],same:(a:string,b:string)
  // Nome generico di una parola («Margherita»): anche i piatti che lo contengono per intero («Mezzo metro Margherita») restano in gioco.
  const wider=exact.length===1&&nameWords(exact[0]!.name).length<=1?hits.filter(r=>r!==exact[0]&&nameWords(exact[0]!.name).every(n=>nameWords(r.name).some(m=>sameWord(n,m)))):[];return[...exact,...wider]
 }
+/** Round 3: tra più candidati vince l'unico il cui nome è tutto nel testo («la pizza margherita» → Margherita, non
+ * «Margherita con bufala»). null se non c'è un vincitore unico. */
+export function exactPick(query:string,options:MenuRef[]):MenuRef|null{const q=words(query),inside=options.filter(r=>nameWords(r.name).every(n=>q.some(w=>sameWord(w,n))));return inside.length===1?inside[0]!:null
+}
 // Chiave fonetica dell'italiano scritto o dettato: gli/li/j → i, ch/c dura/q/k → k, gh → g, h muta, z/x → s, y → i, doppie scempie, desinenza vocalica tolta.
 export const soundKey=(w:string)=>{const k=w.replace(/gli/g,'li').replace(/li(?=[aeou])/g,'i').replace(/j/g,'i').replace(/ch/g,'k').replace(/gh/g,'g').replace(/c(?=[aouk]|$)/g,'k').replace(/q/g,'k').replace(/h/g,'').replace(/[zx]/g,'s').replace(/y/g,'i').replace(/w/g,'v').replace(/(.)\1+/g,'$1');return k.length>3?k.replace(/[aeiou]+$/,''):k}
 // Distanza di edit con lo scambio di due lettere vicine contato come un solo errore («merigna» → «meringa»).
@@ -70,7 +74,11 @@ function parseIntentCore(raw:string):Intent|null{
  if(/^(cosa|che cosa|quali piatti|quali) (e|sono) nascost\w*/.test(t))return{kind:'read',read:'hidden'}
  const description=original.match(/^(?:nella|nel|nello|nei|negli|nelle|per (?:la|il|lo|i|gli|le)|alla|al|allo)\s+(.+?)\s+scrivi\s*:\s*(.+)$/i);if(description)return{kind:'description',target:description[1]!,text:description[2]!.trim()}
  // Round 2: «costa novantacinque euro» → «costa 95 euro» (numeri in lettere fino a 999, solo davanti a «euro»).
- const tSpoken=t.replace(/\b([a-z]{3,}) euro\b/g,(all,w)=>{const n=nluWordNumber(w);return n===null?all:n+' euro'});if(tSpoken!==t)return parseIntentCore(tSpoken)
+ // Round 3 (E): decimali a voce «dieci virgola cinque», «tredici e mezzo».
+ const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(w)
+ const tDec=t.replace(/\b(\w+) virgola (\w+)\b/g,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null?all:`${x}.${String(y).padStart(b.length>=2&&/^\d/.test(b)?b.length:1,'0')}`}).replace(/\b(\w+)(?: euro)? e mezz[oa]\b/g,(all,a)=>{const x=nv(a);return x===null?all:`${x}.5`})
+ if(tDec!==t)return parseIntentCore(tDec)
+ const tSpoken=t.replace(/\b([a-z]{3,})( euro)?$/,(all,w,e)=>{const n=/costa|costano|a/.test(t)?nluWordNumber(w):null;return n===null?all:n+(e??'')}).replace(/\b([a-z]{3,}) euro\b/g,(all,w)=>{const n=nluWordNumber(w);return n===null?all:n+' euro'});if(tSpoken!==t)return parseIntentCore(tSpoken)
  // G5: negazioni («non è finita», «non cambiare…», «non ci sarà») non sono comandi; restano «non c'è più», «non abbiamo più».
  if(/\bnon\b/.test(t)&&!/\bnon (c e|ce|abbiamo) piu\b/.test(t))return null
  let m:RegExpMatchArray|null
@@ -97,6 +105,26 @@ export function resolveChoice(raw:string,options:MenuRef[]):MenuRef|null{
 }
 export const wantsCreateText=(m:string)=>/\b(aggiung\w*|inserisc\w*|inserire|nuov[oa]|crea\w*)\b/.test(plainText(m))
 export const wantsSpecialText=(m:string)=>/\b(del giorno|di oggi)\b/.test(plainText(m))
+// Round 3 (C, D): richieste cortesi o domande con verbo d'azione sono comandi («mi metti la carbonara a 13?», «possiamo
+// mettere…», «puoi segnare finita…», «… ? mettila a 13»); «lascia stare X, <comando>» tiene solo il comando.
+// Restituisce il testo riscritto come comando, oppure null se il messaggio va lasciato com'è.
+/** Round 3 (E): «dieci virgola cinque» → 10.5, «tredici e mezzo» → 13.5 (prima del controllo «frase composta»). */
+export function spokenDecimals(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w));return raw.replace(/\b([\p{L}\d]+)\s+virgola\s+([\p{L}\d]+)\b/giu,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null?all:`${x},${y}`}).replace(/\b([\p{L}\d]+)(\s+euro)?\s+e\s+mezz[oa]\b/giu,(all,a,e)=>{const x=nv(a);return x===null?all:`${x},5${e??''}`})}
+export function politeCommand(raw:string):string|null{
+ let t=raw.trim(),changed=false
+ const two=t.match(/^(.+?)\?\s*(mettil[aoie]|portal[aoie]|fall[aoie]) a (\d+(?:[.,]\d{1,2})?)(?:\s*(?:euro|€))?[.!]?$/i)
+ if(two){const asked=parseIntentCore(two[1]!);if(asked&&'target' in asked)return `prezzo ${asked.target} a ${two[3]}`}
+ const lead=/^(?:ciao |allora |senti )?(?:per (?:piacere|favore) )?(?:mi |ci |me l[ao] |ce l[ao] |me li |me le )?(?:(?:puoi|potresti|possiamo|potete|riesci a|riusciresti a|ce la fai a|vorrei|volevo|dovresti|devi)\s+)?(?:mi |me l[ao] |ce l[ao] )?/i
+ const verbs:[RegExp,string][]=[[/^metter[ei]\b|^metti\b/i,'metti'],[/^nasconder[ei]\b|^nascondi\b/i,'nascondi'],[/^toglier[ei]\b|^togli\b/i,'togli'],[/^segnar[ei]\b|^segn[ai]\b/i,'segna'],[/^aggiunger[ei]\b|^aggiungi\b/i,'aggiungi'],[/^rimetter[ei]\b|^rimetti\b/i,'rimetti'],[/^cambiar[ei]\b|^cambi\b/i,'cambia'],[/^portar[ei]\b|^porti\b/i,'porta']]
+ const body=t.replace(/\s*\?+\s*$/,'').replace(/\s*,?\s*per (?:favore|piacere|cortesia)\s*$/i,'')
+ const m=body.match(lead),after=body.slice(m?m[0].length:0),hasLead=!!m&&m[0].trim().length>0
+ const v=verbs.find(([r])=>r.test(after))
+ if(v&&(hasLead||/\?\s*$/.test(t))){t=after.replace(v[0],v[1]);changed=true}
+ // «segna finita la carbonara» / «segna la carbonara finita» → «finita la carbonara» / «la carbonara finita»
+ if(/^segna\s/i.test(t)){const rest=t.replace(/^segna\s+/i,'');if(/\b(finit|esaurit|disponibil|tornat)\w*\b/i.test(rest)){t=rest;changed=true}}
+ if(/^rimetti\s+disponibil[ei]\s+/i.test(t)){t='disponibile '+t.replace(/^rimetti\s+disponibil[ei]\s+/i,'');changed=true}
+ return changed?t:null
+}
 export const looksLikeQuestion=(m:string)=>/\?\s*$/.test(m)||/^(puoi|potresti|sai|posso|riesci|come|cosa|che|quali|quanto|quando|si puo|e possibile)\b/.test(plainText(m))
 export const capabilityIds=capabilities.map(c=>c.id)
 export const sectionsFor=(sections:SectionRef[])=>sections.slice(0,60)

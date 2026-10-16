@@ -108,3 +108,44 @@ Stessa suite del giro 1: invariata. Fanno eccezione `twilio-menu-ai`, dove ho ag
 Ho usato un locale temporaneo «ZZ Test bot titolare» con Primi, Dolci, Pizze e Secondi (dentro anche un «Nuovo burger» nascosto e il caffè), poi l'ho cancellato. Il QA e il numero di Manuel non sono stati toccati.
 12 frasi: A, «anche», B, C (solo oggi), D, E, C (tutte), F, piatto nascosto, G6 (10×).
 Groq: una sola frase, «scusa, la lasagna è finita», è passata dall'IA; risultato corretto, sotto il budget di 10k.
+
+# Terzo giro (round 3, 141 casi nuovi su v100), edge v102
+
+| Batteria | Prima (v100) | Dopo (v102) |
+|---|---|---|
+| Round 1, 283 casi | 263 · 0 GRAVI · 2 MEDI · 18 BASSI | invariata |
+| Round 2, 160 casi | 151 · 0 · 0 · 9 | invariata |
+| Round 3, 141 casi | 98 OK · 32 GRAVI · 3 MEDI · 8 BASSI | **131 OK · 4 GRAVI (errori del verificatore, sotto) · 0 MEDI · 6 BASSI** |
+
+I conteggi sono per caso, col risultato peggiore tra le modalità dell'IA; il coordinatore ne riportava 26 GRAVI e 6 MEDI.
+
+## I 4 GRAVI rimasti sono errori del verificatore (motivati)
+- **annulla3-04 / annulla3-05** (menu intero → OK → «ripristina il menu di prima» / «torna come prima»): il mock del round 3 risponde `[]` a `SELECT … FROM menu_workspace_versions`. Senza storico delle versioni il ripristino non può funzionare nella batteria; nel DB reale lo storico c'è ed è il percorso `restore` di sempre. Dopo un menu intero, «torna come prima» risponde in modo chiaro che non c'è un'ultima modifica singola da annullare: la nota del caso accetta «o domanda chiara».
+- **annulla3-10** (4 prezzi → ok → «no scusa la carbonara 14»): il modello «ideale» del verificatore usa le modifiche attese a fine caso. Già al primo messaggio restituisce carbonara 13 **e** 14, e il validatore rifiuta il doppione. Con un modello che vede solo il messaggio corrente, il primo turno è il riepilogo di 4 prezzi.
+- **promodata-15** («carbonara in promo a 10 fino a stasera e la tagliata solo oggi», frase composta, quindi passa dall'IA): l'azione promo «ideale» del verificatore non ha il campo `until`, e il server non può inventarlo. Un modello vero lo passa: `salesFromLlm` lo accetta e lo verifica sul testo.
+
+## Fix
+- **A (date delle promo)**:
+  - la scadenza si estrae in qualunque punto della frase: «solo (per) oggi/stasera», «fino a stasera/domani/fine mese/<giorno> sera», «per (tutto) il weekend», «per questa/tutta la settimana»;
+  - `resolveUntil` ora legge «fine mese», «tutto il weekend», «domenica sera»;
+  - «no scusa fino a sabato» dopo una promo cambia solo la scadenza. Una data incomprensibile produce una domanda, mai una promo senza scadenza.
+- **B (tutte)** — operazioni delimitate, sempre con la regola delle 3 modifiche e l'OK: «togli tutte le etichette (dalla X)», «togli tutte le ultime porzioni», «togli ultime porzioni da tutto», «togli il solo oggi da tutti i piatti», «togli piccante da tutti i piatti», «togli la promo a tutte le pizze» (solo la categoria), più richieste unite con «e». Se non c'è niente da togliere, il bot lo dice.
+- **C** — `politeCommand`: «mi metti…?», «possiamo mettere…?», «puoi/potresti/riesci a…?», «ce la fai a…?», «me la segni finita…?», «… ? mettila a 13» sono comandi. G4 (domanda = lettura) resta solo senza verbo d'azione.
+- **D** — «lascia stare X, <comando>»: X si annulla solo se era il piatto dell'ultima modifica, e il comando si applica nella stessa pubblicazione. «lascia stare, <comando>» applica il comando. «lascia stare il resto, va bene così» non cambia nulla. «torna come prima la lasagna» annulla l'ultima modifica su quel piatto, entro 60 minuti; se la lasagna non era stata toccata lo dice.
+- **E** — Decimali a voce («virgola», «e mezzo/mezza») normalizzati prima del controllo «frase composta».
+- **F** — Un annullamento non si salva come modifica: il secondo «torna come prima» risponde «non c'è un'ultima modifica da annullare». «torna come prima» senza piatto vale 10 minuti. La memoria `last:` ora vale fino a 60 minuti, ma solo un annullamento che nomina il piatto può usarla dopo i primi 10.
+- **MEDI** — Tra più candidati vince l'unico il cui nome è tutto nel testo (`exactPick`: «margherita», «la pizza margherita» → Margherita). La regola «wider» di `matchDishes` resta per i test NLU esistenti. Le operazioni «da tutti i piatti» sono consentite (vedi B). «lascia stare la bruschetta» annulla quell'azione (vedi D).
+- **Non fatto (BASSO)** — «il primo è finito», «il secondo costa 16» con l'elenco della categoria.
+
+## Deploy
+v100 (`2a913bea…`) → v101 (`3fce1db5…`) → **v102** (`fa0c8414…`): decimali a voce prima della frase composta e memoria dopo «lascia stare X, …», trovati nella verifica live.
+Il bundle è v100 più 6 sezioni: `twilio-menu-nlu`, `menu-sales`, `twilio-menu-sales`, `twilio-menu-ai`, `twilio-menu-create`, `routes/twilio-menu`. check-active prima di ogni deploy; un tentativo ha avuto un errore 500 di Supabase, ripetuto con successo.
+Rollback: `cp ~/.config/tako-webapp/rollback-edge-20261016/candidate-index-v100-owner-bot-r2.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`
+
+## Regressioni
+Stessa suite: invariata. `menu-sales` 15/15, dopo aver corretto la mia prima versione che rompeva «per tutta la settimana»; nlu 20/20; crea-piatto 9/9; `twilio-owner-link` 8/15 come su v98.
+
+## Live (`live/verify-owner-bot-live.mjs`, 13/13 su v102)
+Locale temporaneo creato e poi cancellato; il QA e il numero di Manuel non sono stati toccati.
+11 frasi: data in testa, «per tutto il weekend», «no scusa fino a sabato», tutte le promo, «togli piccante da tutti i piatti», «mi metti la carbonara a 13?», «tredici e mezzo», nome esatto, «lascia stare la margherita, nascondi il tiramisù», doppio «torna come prima».
+Groq: zero chiamate su v102. Su v101 «tredici e mezzo» era passata una volta dall'IA ed è stata corretta in v102.

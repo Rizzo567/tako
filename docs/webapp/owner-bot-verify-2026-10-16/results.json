@@ -1,6 +1,6 @@
 {
  "cases": 283,
- "runs": 637,
+ "runs": 631,
  "unknownSql": [],
  "results": [
   {
@@ -3850,58 +3850,7 @@
    "actual": [
     "available|Tiramisù|false"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "esaurito-09",
-   "cat": "esaurito",
-   "mode": "empty",
-   "turns": [
-    "segna esaurito il tiramisù"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Tiramisù|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "esaurito-09",
-   "cat": "esaurito",
-   "mode": "wrong",
-   "turns": [
-    "segna esaurito il tiramisù"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "available|Tiramisù|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "esaurito-09",
-   "cat": "esaurito",
-   "mode": "wrongCreate",
-   "turns": [
-    "segna esaurito il tiramisù"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Tiramisù|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -4338,58 +4287,7 @@
    "actual": [
     "available|Tagliata di manzo|true"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "disponibile-03",
-   "cat": "disponibile",
-   "mode": "empty",
-   "turns": [
-    "rimetti disponibile la tagliata"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Tagliata di manzo|true"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "disponibile-03",
-   "cat": "disponibile",
-   "mode": "wrong",
-   "turns": [
-    "rimetti disponibile la tagliata"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "available|Tagliata di manzo|true"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "disponibile-03",
-   "cat": "disponibile",
-   "mode": "wrongCreate",
-   "turns": [
-    "rimetti disponibile la tagliata"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Tagliata di manzo|true"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

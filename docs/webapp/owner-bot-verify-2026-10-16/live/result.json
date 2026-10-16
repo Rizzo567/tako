@@ -1,128 +1,118 @@
 {
- "at": "2026-10-16T17:19:54.587Z",
- "edge": "v100",
+ "at": "2026-10-16T17:39:17.607Z",
+ "edge": "v102",
  "turns": [
   {
-   "in": "la carbonara costa 13",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+   "in": "solo per stasera la lasagna in promo a 9",
+   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *venerdì 16/10*",
    "revision": 3
   },
   {
-   "in": "scusa, la lasagna è finita",
-   "out": "",
+   "in": "la carbonara in promo a 10 per tutto il weekend",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*",
    "revision": 5
   },
   {
-   "in": "anche la panna cotta",
-   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: *finito*",
+   "in": "no scusa fino a sabato",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *sabato 17/10*",
    "revision": 7
-  },
-  {
-   "in": "la pizza costa 10",
-   "out": "Quale piatto intendi? 1. *Margherita* 2. *Pizza diavola* Rispondi con il *numero* o il *nome*.",
-   "revision": 7
-  },
-  {
-   "in": "carbonara in promo a 10 solo oggi",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*",
-   "revision": 9
-  },
-  {
-   "in": "no scusa 9",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *9,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*",
-   "revision": 11
-  },
-  {
-   "in": "anche la lasagna a 8",
-   "out": "Vuoi mettere *Lasagna al forno* in *promo* a *8,00 €*? Scrivimi «lasagna al forno in promo a 8». Non ho cambiato nulla.",
-   "revision": 11
   },
   {
    "in": "togli tutte le promo",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 13,00 €",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €",
+   "revision": 9
+  },
+  {
+   "in": "togli piccante da tutti i piatti",
+   "out": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*",
+   "revision": 11
+  },
+  {
+   "in": "mi metti la carbonara a 13?",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
    "revision": 13
   },
   {
-   "in": "metti la panna cotta a 6",
-   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 5,00 € a *6,00 €*",
+   "in": "la carbonara costa tredici e mezzo",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 13,00 € a *13,50 €*",
    "revision": 15
   },
   {
-   "in": "no aspetta, lascia stare",
-   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 6,00 € a *5,00 €*",
+   "in": "nascondi la margherita",
+   "out": "*Confermato.* Ho aggiornato il menu. *Margherita*: *nascosto* dal menu",
    "revision": 17
   },
   {
-   "in": "metti nel menu il nuovo burger",
-   "out": "*Confermato.* Ho aggiornato il menu. *Nuovo burger*: di nuovo *visibile* nel menu",
+   "in": "lascia stare la margherita, nascondi il tiramisù",
+   "out": "*Confermato.* Ho aggiornato il menu. *Margherita*: di nuovo *visibile* nel menu *Tiramisù*: *nascosto* dal menu",
    "revision": 19
   },
   {
-   "in": "il caffè costa 12",
-   "out": "*ZZ Test bot titolare*: ecco le modifiche. 1. *Caffè*: prezzo da 1,20 € a *12,00 €* Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto. *ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
-   "revision": 19
+   "in": "torna come prima",
+   "out": "*Confermato.* Ho aggiornato il menu. *Tiramisù*: di nuovo *visibile* nel menu",
+   "revision": 21
+  },
+  {
+   "in": "torna come prima",
+   "out": "Non c&apos;è un&apos;ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare.",
+   "revision": 21
   }
  ],
  "checks": [
   {
-   "name": "prezzo semplice",
+   "name": "A: data in testa → promo fino a oggi",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *venerdì 16/10*"
+  },
+  {
+   "name": "A: «per tutto il weekend»",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
+  },
+  {
+   "name": "A: correzione della sola scadenza",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *sabato 17/10*"
+  },
+  {
+   "name": "B: tutte le promo",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €"
+  },
+  {
+   "name": "B: etichetta tolta ovunque",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*"
+  },
+  {
+   "name": "C: richiesta cortese = comando",
    "ok": true,
    "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
   },
   {
-   "name": "A: «scusa» + comando nuovo non annulla la precedente",
+   "name": "E: «e mezzo»",
    "ok": true,
-   "detail": ""
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 13,00 € a *13,50 €*"
   },
   {
-   "name": "«anche» = stessa modifica (finita)",
+   "name": "M: nome esatto vince",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: *finito*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Margherita*: *nascosto* dal menu"
   },
   {
-   "name": "B: «la pizza» con più pizze → domanda, nessuna scrittura",
+   "name": "D: «lascia stare X» annulla X e applica il comando",
    "ok": true,
-   "detail": "Quale piatto intendi? 1. *Margherita* 2. *Pizza diavola* Rispondi con il *numero* o il *nome*."
+   "detail": "*Confermato.* Ho aggiornato il menu. *Margherita*: di nuovo *visibile* nel menu *Tiramisù*: *nascosto* dal menu"
   },
   {
-   "name": "C: promo con «solo oggi»",
+   "name": "F: annulla l'ultima (tiramisù di nuovo visibile)",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*"
+   "detail": "*Confermato.* Ho aggiornato il menu. *Tiramisù*: di nuovo *visibile* nel menu"
   },
   {
-   "name": "D: correzione della promo",
+   "name": "F: secondo annullamento → niente da annullare",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *9,00 €* (prezzo pieno 13,00 €), fino a *venerdì 16/10*"
-  },
-  {
-   "name": "E: dopo una promo mai il prezzo pieno → domanda",
-   "ok": true,
-   "detail": "Vuoi mettere *Lasagna al forno* in *promo* a *8,00 €*? Scrivimi «lasagna al forno in promo a 8». Non ho cambiato nulla."
-  },
-  {
-   "name": "C: tutte le promo tolte",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 13,00 €"
-  },
-  {
-   "name": "prezzo semplice",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 5,00 € a *6,00 €*"
-  },
-  {
-   "name": "F: annulla l'ultima modifica",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: prezzo da 6,00 € a *5,00 €*"
-  },
-  {
-   "name": "piatto nascosto → mostrato, non duplicato",
-   "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Nuovo burger*: di nuovo *visibile* nel menu"
-  },
-  {
-   "name": "G6: 10× → conferma, non online",
-   "ok": true,
-   "detail": "*ZZ Test bot titolare*: ecco le modifiche. 1. *Caffè*: prezzo da 1,20 € a *12,00 €* Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto. *ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
+   "detail": "Non c&apos;è un&apos;ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare."
   },
   {
    "name": "pulizia completa (locale, menu, collegamento)",

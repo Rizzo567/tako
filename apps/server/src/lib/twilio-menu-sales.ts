@@ -5,13 +5,13 @@
 // Le frasi composte («… e …») restano al modello con le azioni set_promo/remove_promo/set_last_portions/set_only_today.
 import type { MenuRef } from './twilio-menu-ai.js'
 import { plainText, findDishes } from './twilio-menu-nlu.js'
-import { salesCopy, salesLine, fill, copy } from './twilio-menu-copy.js'
+import { salesCopy, salesLine, fill, copy, allowedTags } from './twilio-menu-copy.js'
 import { businessDate, resolveUntil, untilLabel, validPromoPrice } from './menu-sales.js'
 
 export type SalesLabelKey = 'lastPortions' | 'onlyToday'
 export type SalesAction = { kind: 'promo', id: string, price: number | null, until: string | null } | { kind: 'scarcity', id: string, label: SalesLabelKey, value: boolean }
 export type SalesTemplate = { kind: 'promo', price: number | null, until: string | null } | { kind: 'scarcity', label: SalesLabelKey, value: boolean }
-type Item = { id: string, name: string, price: number, available?: boolean, priceDisplay?: string | null, promo?: { price: number, until?: string | null } | null, scarcity?: { lastPortions?: boolean, onlyToday?: string | null } | null }
+type Item = { id: string, name: string, price: number, tags?: string[], available?: boolean, priceDisplay?: string | null, promo?: { price: number, until?: string | null } | null, scarcity?: { lastPortions?: boolean, onlyToday?: string | null } | null }
 type Doc = { menus: { sections: { items: Item[] }[] }[] }
 
 const euro = (n: number) => n.toFixed(2).replace('.', ',') + ' €'
@@ -30,18 +30,25 @@ const LAST = '(?:le )?ultim[ei] porzion[ei]'
 const TODAY = 'solo (?:per )?oggi'
 const OFF = '(?:togli|toglila|toglilo|rimuovi|leva|elimina|cancella|annulla|ferma|termina|chiudi|stop|basta|niente)'
 const SET = '(?:metti|mettiamo|segna|aggiungi|fai|facciamo|imposta)'
-export type SalesIntent = { kind: 'promo', target: string, price: number, untilText: string | null } | { kind: 'promoOff', target: string | null, all?: boolean } | { kind: 'scarcity', target: string | null, label: SalesLabelKey, value: boolean }
+export type SalesIntent = { kind: 'promo', target: string, price: number, untilText: string | null } | { kind: 'promoOff', target: string | null, all?: boolean } | { kind: 'scarcity', target: string | null, label: SalesLabelKey, value: boolean, all?: boolean } | { kind: 'tagsOff', tag: string | null, target: string | null } | { kind: 'multi', parts: SalesIntent[] }
 const clean = (s: string | undefined) => (s ?? '').replace(/^(?:il|lo|la|i|gli|le|l|un|una|uno)\s+/, '').trim()
 /** Riconosce solo frasi di un piatto; null se non è una richiesta promo/scarsità (o se è composta). */
 export function parseSalesText(raw: string): SalesIntent | null {
   const t = plainText(raw).replace(/(?<!\d)[,.]|[,.](?!\d)/g, ' ').replace(/\s+/g, ' ').trim()
+  // Round 3 (B): operazioni delimitate su «tutte/tutti»: etichette, ultime porzioni, solo oggi, promo, più richieste insieme.
+  const bulk = bulkOff(t)
+  if (bulk) return bulk
   if (!/(promo|offerta|porzion|solo (per )?oggi)/.test(t) || /\?$/.test(raw.trim()) || /^(cosa|che|quali|quanto|quando|come)\b/.test(t)) return null
   let m: RegExpMatchArray | null
   // «togli tutte le promo»: tutte quelle attive (la regola delle 3 modifiche resta nel bot).
   if (new RegExp(`^${OFF} (?:tutte|tutti) (?:le |i )?(?:${PROMO}|promozioni|offerte)$`).test(t)) return { kind: 'promoOff', target: null, all: true }
   // «carbonara in promo a 10 solo oggi»: la promo vale fino a oggi.
-  const todayOnly = new RegExp(` ${TODAY}$`).test(t) && /\b(promo|promozione|offerta)\b/.test(t)
-  if (todayOnly) { const base = parseSalesText(raw.replace(/\s*,?\s*solo\s+(?:per\s+)?oggi\s*[.!]*\s*$/i, '')); if (base?.kind === 'promo' && !base.untilText) return { ...base, untilText: 'oggi' } }
+  // Round 3: la scadenza può stare in qualunque punto («solo per oggi la lasagna in promo a 9», «… solo per stasera a 10»,
+  // «per tutto il weekend», «fino a fine mese», «fino a domenica sera»). Si estrae e si passa a resolveUntil.
+  if (/\b(promo|promozione|offerta)\b/.test(t)) {
+    const d = t.match(/(?:^|\s)(solo (?:per )?(?:oggi|stasera)|fino a (?:stasera|oggi|domani(?: sera)?|fine (?:del )?mese|fine settimana|(?:lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)(?: sera)?)|per (?:tutto il |il )?weekend|per (?:questa|tutta la) settimana)(?=\s|$)/)
+    if (d) { const base = parseSalesText(t.replace(d[0], ' ').replace(/\s+/g, ' ').trim()); if (base?.kind === 'promo' && !base.untilText) return { ...base, untilText: d[1]! } }
+  }
   const promo = (target: string, value: string, cents: string | undefined, until: string | undefined): SalesIntent | null => { const price = amount(value, cents); return price === null || !clean(target) ? null : { kind: 'promo', target: clean(target), price, untilText: until?.trim() || null } }
   if ((m = t.match(new RegExp(`^(?:${SET} )?(.+?) in ${PROMO}(?: a| per| da)? ${NUM}(?: euro| eur)?${UNTIL}$`)))) return promo(m[1]!, m[2]!, m[3], m[4])
   if ((m = t.match(new RegExp(`^${SET} in ${PROMO} (.+?) (?:a |per |da )?${NUM}(?: euro| eur)?${UNTIL}$`)))) return promo(m[1]!, m[2]!, m[3], m[4])
@@ -63,6 +70,7 @@ const shown = (target: string) => target.slice(0, 60)
 export function salesTurn(text: string, workspace: Doc, refs: MenuRef[], today: string): SalesTurn | null {
   const intent = parseSalesText(text)
   if (!intent) return null
+  if (intent.kind === 'multi' || intent.kind === 'tagsOff' || ((intent.kind === 'promoOff' || intent.kind === 'scarcity') && intent.all)) return bulkTurn(intent, workspace, refs, today)
   // «Offerta pranzo a 11»: «offerta» fa parte del nome di un piatto esistente, non è una promo.
   const said = ' ' + plainText(text) + ' '
   if (refs.some(r => /\b(promo|promozione|offerta|offerte)\b/.test(plainText(r.name)) && said.includes(' ' + plainText(r.name) + ' '))) return null
@@ -136,4 +144,40 @@ export function salesFromLlm(a: { action?: unknown, item_id?: unknown, price?: u
   }
   if ((a.action === 'set_last_portions' || a.action === 'set_only_today') && typeof a.value === 'boolean') return { kind: 'scarcity', id, label: a.action === 'set_last_portions' ? 'lastPortions' : 'onlyToday', value: a.value }
   return null
+}
+
+const BULK_OFF = new RegExp(`^${OFF} `)
+function bulkOff(t: string): SalesIntent | null {
+  if (!BULK_OFF.test(t) || !/\b(tutt[eio]|tutto)\b/.test(t)) return null
+  const parts = t.replace(BULK_OFF, '').split(/ e (?=tutt[eio]\b|le |la |il |gli )/)
+  if (parts.length > 1) { const all = parts.map(p => bulkOff(t.match(BULK_OFF)![0] + p)); return all.every(Boolean) ? { kind: 'multi', parts: all as SalesIntent[] } : null }
+  const rest = t.replace(BULK_OFF, '').replace(/^(?:tutt[ei] )?(?:le |la |il |l |gli |i )?/, '')
+  const scope = rest.match(/ (?:da|dai|dalle|a|ai|alle|su|sui|sulle) (?:tutt[oeia]|tutti i piatti|tutte le (.+)|tutti i (.+)|tutto il menu)$/)
+  const what = scope ? rest.slice(0, scope.index) : rest, everywhere = /^tutt[ei] /.test(t.replace(BULK_OFF, '')) || !!scope
+  if (!everywhere) return null
+  const label = /^(?:le )?ultim[ei] porzion[ei]$/.test(what) ? 'lastPortions' : /^solo (?:per )?oggi$/.test(what) ? 'onlyToday' : null
+  if (label) return { kind: 'scarcity', target: scope?.[1] ?? scope?.[2] ?? null, label, value: false, all: true }
+  if (/^(?:promo|promozioni|offerte|promozione)$/.test(what)) return { kind: 'promoOff', target: scope?.[1] ?? scope?.[2] ?? null, all: true }
+  const dalla = what.match(/^etichette(?: (?:dalla|dal|dallo|dall|da) (.+))?$/)
+  if (dalla) return { kind: 'tagsOff', tag: null, target: dalla[1] ?? null }
+  if (what in allowedTags || what.replace(/[ie]$/, 'o') in allowedTags) return { kind: 'tagsOff', tag: what in allowedTags ? what : what.replace(/[ie]$/, 'o'), target: null }
+  return null
+}
+/** «tutte le pizze»: i piatti della categoria (singolare o plurale) nominata. */
+function categoryItems(word: string, refs: MenuRef[]): MenuRef[] { const v = (s: string) => { const p = plainText(s); return [p, p.replace(/i$/, 'o'), p.replace(/e$/, 'a'), p.replace(/i$/, 'e')] }; return refs.filter(r => r.section && v(r.section).includes(plainText(word))) }
+
+function bulkTurn(intent: SalesIntent, workspace: Doc, refs: MenuRef[], today: string): SalesTurn {
+  const items = itemsOf(workspace), out: SalesAction[] = []
+  const collect = (x: SalesIntent): boolean => {
+    if (x.kind === 'multi') return x.parts.every(collect)
+    const pool = x.kind === 'tagsOff' ? (x.target ? findDishes(x.target, refs) : refs) : x.target ? categoryItems(x.target, refs) : refs
+    if (x.target && !pool.length) return false
+    for (const r of pool) { const i = items.get(r.id); if (!i) continue
+      if (x.kind === 'promoOff' && i.promo) out.push({ kind: 'promo', id: r.id, price: null, until: null })
+      if (x.kind === 'scarcity' && (x.label === 'lastPortions' ? i.scarcity?.lastPortions : i.scarcity?.onlyToday === today)) out.push({ kind: 'scarcity', id: r.id, label: x.label, value: false })
+      if (x.kind === 'tagsOff') for (const tag of i.tags ?? []) if (tag in allowedTags && (!x.tag || x.tag === tag)) out.push({ kind: 'tag', id: r.id, tag, value: false } as unknown as SalesAction) }
+    return true }
+  if (!collect(intent)) return { reply: fill(copy.notFoundNamed, { nome: (intent as { target?: string }).target ?? '' }) }
+  if (!out.length) return { reply: 'Non ci sono etichette, promo o ultime porzioni da togliere: il menu è *già aggiornato* così.' }
+  return { actions: out }
 }
