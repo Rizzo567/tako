@@ -6,4 +6,4 @@ Inclusi dashboard, backend, frontend, asset pubblici, test e SQL. Esclusi materi
 
 Verifiche: install frozen-lockfile offline in copia pulita, typecheck web/server e build pubblica passati; 501 test onboarding + 11 categorie nella copia pulita, 24 test WhatsApp nel checkout principale. Non eseguita l'intera suite né QA fisica mobile. Nessun invito Ale: account GitHub da comunicare.
 
-Prossimo passo: verificare push remoto, dare prompt, poi condividere con account esatto. Ricerca ristoranti in parallelo, consegna separata con fonti. Coordinamento futuro nel protocollo sessioni.
+Push iniziale riuscito sul branch codex/takomenu-handoff-2026-10-16. Prompt fornito anche nei Download. Prossimo passo: condividere con account GitHub Ale quando Manuel lo comunica. Ricerca conclusa con 50 candidati fuori Lombardia e fonti, consegnata separatamente nei Download; non pubblicata qui come lista commerciale. Coordinamento futuro nel protocollo sessioni.

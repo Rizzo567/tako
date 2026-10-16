@@ -14,9 +14,9 @@ Consegna del sistema completo ad Ale tramite GitHub. Account GitHub Ale ancora d
 
 | Attività | Responsabile | Stato | Prossimo passo |
 | --- | --- | --- | --- |
-| Consegna completa sorgenti e prompt | Manuel / Codex | Preparata e verificata localmente | Push branch e verifica commit remoto |
+| Consegna completa sorgenti e prompt | Manuel / Codex | Push completato; verifiche locali passate | Condividere con account GitHub Ale |
 | Accesso GitHub Ale | Manuel | In attesa identificazione account | Invitare account corretto dopo comunicazione |
-| Ricerca 50 ristoranti fuori Lombardia | Codex, sottoagenti autorizzati | In corso su fonti pubbliche | Consegnare CSV con fonti ed evidenza frequenza |
+| Ricerca 50 ristoranti fuori Lombardia | Codex, sottoagenti autorizzati | 50 candidati raccolti in 13 regioni | Verificare menu recenti prima delle demo |
 | Collaudo WhatsApp dopo correzioni | Da assegnare | Test locali disponibili; QA reale non completa | Riprodurre casi su bozza privata autorizzata |
 
 ## Stato verificato della consegna
