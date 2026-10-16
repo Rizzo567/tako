@@ -3,9 +3,9 @@
 export const copy={
  welcome:`Benvenuto nel *Takomenu di {locale}*.
 
-Mandami un messaggio o un vocale per aggiornare il menu, anche con più richieste insieme.
+Mandami un messaggio o un vocale per aggiornare il menu. Puoi mandarmi anche il *menu di oggi*, anche a voce, o «menu di lunedì: …».
 
-Fino a *3 modifiche* le pubblico subito. Per più modifiche ti mostro il riepilogo e aspetto il tuo *OK*.
+Fino a *3 modifiche* le pubblico subito. Per più modifiche o un menu intero ti mostro il riepilogo e aspetto il tuo *OK*.
 
 Scrivi *cosa sai fare* per vedere le funzioni.`,
  welcomeExamples:{price:'«la caprese costa 11»',finished:'«è finita la carbonara»',create:'«aggiungi tra i primi: pasta al ragù, 12 euro»'},
@@ -14,6 +14,8 @@ Scrivi *cosa sai fare* per vedere le funzioni.`,
 Scrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.
 
 Esempio: «carbonara finita, diavola a 10 euro».
+
+Puoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Ti mostro il riepilogo e lo pubblico dopo il tuo *OK*.
 
 *Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard.`,
  proposal:`*{locale}*: ecco le modifiche.
@@ -115,16 +117,57 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'special',can:true,text:'aggiungere un piatto del giorno',example:'«oggi piatto del giorno: risotto, 16 euro». Si nasconde a fine giornata.'},
  {id:'photo',can:true,text:'aggiungere una foto',example:'Manda la foto con il nome del piatto.'},
  {id:'questions',can:true,text:'dirti prezzi e disponibilità',example:'«quanto costa la tagliata?» o «cosa è finito?»'},
+ {id:'fullmenu',can:true,text:'cambiare tutto il menu del giorno',example:'«menu di oggi: primi carbonara 10, amatriciana 9; secondi tagliata 16», anche a voce. Ti mostro il riepilogo e aspetto il tuo *OK*. I piatti di prima si nascondono, non si eliminano.'},
  {id:'voice',can:true,text:'ricevere più richieste in un vocale',example:'Fino a *3 modifiche* pubblico subito. Per più modifiche aspetto il tuo *OK*.'},
  {id:'allergens',can:false,text:'Gli *allergeni* non si cambiano da questa chat.',alternative:'Usa la scheda del piatto nella *dashboard*.'},
  {id:'delete',can:false,text:'Da questa chat non posso *eliminare* un piatto.',alternative:'Puoi nasconderlo: «nascondi il polpo».'},
  {id:'rename',can:false,text:'Il *nome del piatto* si cambia dalla dashboard.',alternative:'Qui posso cambiare la descrizione: «nella caprese scrivi: …».'},
- {id:'bulk',can:false,text:'Non applico modifiche generiche a *tutto il menu*.',alternative:'Indica i piatti e i cambiamenti, anche nello stesso vocale.'},
+ {id:'bulk',can:false,text:'Non applico modifiche generiche a *tutto il menu*.',alternative:'Indica i piatti e i cambiamenti, anche nello stesso vocale. Oppure mandami il *menu completo* del giorno: lo sostituisco dopo il tuo *OK*.'},
  {id:'graphics',can:false,text:'La *grafica* si cambia dalla dashboard.',alternative:'Lì puoi modificare colori, font e impaginazione.'},
  {id:'categories',can:false,text:'Le *categorie* si creano e si spostano dalla dashboard.',alternative:'Qui posso aggiungere un piatto in una categoria già presente.'},
  {id:'translations',can:false,text:'Le *traduzioni* si gestiscono dalla dashboard.',alternative:'Apri la sezione dedicata alle lingue.'},
  {id:'other',can:false,text:'Questa funzione *non è disponibile* nella chat.',alternative:'Scrivi *cosa sai fare* per vedere le funzioni.'},
 ]
+// Menu intero da messaggio o vocale (Feature 1). Il server compila i segnaposto con dati verificati.
+export const fullMenuCopy={
+ doubt:'È il *menu completo* da mettere al posto di quello attuale, o sono *modifiche* ai piatti che ci sono già?\n\nRispondi *MENU* oppure *MODIFICHE*. Non ho ancora cambiato nulla.',
+ doubtAgain:'Rispondi *MENU* (sostituisco il menu dopo il riepilogo) oppure *MODIFICHE* (le applico ai piatti che ci sono). *ANNULLA* per lasciar perdere.',
+ where:'Dove lo metto?\n{domanda}\n\nNon ho ancora cambiato nulla.',
+ whereMenu:'Nel menu {opzioni}?',
+ whereMode:'Al posto del *menu attuale* o nel *preset di un giorno* (per esempio «pranzo di lunedì»)?',
+ whereReplaceOnly:'Lo metto *al posto del menu attuale*.',
+ whereConfirmReplace:'Vuoi metterlo al posto del menu attuale ({menu})? Rispondi *al posto* oppure *ANNULLA*.',
+ presetOff:'I *menu dei singoli giorni* (preset) non sono ancora attivi per questo locale.',
+ destReplace:'menu *{menu}*, al posto di quello attuale',
+ destPreset:'preset *{preset}* del menu *{menu}*',
+ head:'*{locale}*, {destinazione}.\n{origine}',
+ fromVoice:'Ecco il menu che ho capito dal *vocale*: controlla nomi e prezzi.',
+ fromText:'Ecco il menu che ho letto.',
+ noSection:'Senza categoria',
+ missing:'*Senza prezzo*, non li metto online: {piatti}. Scrivimi il prezzo, per esempio «{esempio} 12».',
+ twoPrices:' (ho letto più prezzi)',
+ check:'*Da controllare*:',
+ changes:'Rispetto a oggi: {nuovi} nuovi, {aggiornati} con prezzo cambiato, {nascosti} nascosti (non eliminati){elenco}.',
+ hiddenList:': {piatti}',
+ others:'Gli altri menu non cambiano: {menu}.',
+ presetNote:'Lo salvo nel preset *{preset}*: il menu online non cambia.',
+ confirm:'Confermi? Rispondi OK, oppure correggi (es. "{esempio}").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.',
+ fixPrice:'*{piatto}*: {prima} → *{dopo}*',
+ fixRemoved:'*{piatto}*: tolto',
+ fixAdded:'*{piatto}*: *{prezzo}*',
+ fixDone:'Fatto: {modifiche}.',
+ fixFailed:'Non ho capito: «{testo}». Scrivi per esempio «la carbonara è 11», «togli la tagliata» o «aggiungi panna cotta 5 tra i dolci».',
+ pending:'C’è un *menu in attesa* della tua conferma. Rispondi *OK* per pubblicarlo, mandami una correzione, oppure *ANNULLA*.',
+ empty:'Non sono riuscito a leggere *piatti e prezzi* nel menu. *Non ho cambiato nulla.* Rimandalo scritto, una riga per piatto: «carbonara 10».',
+ noRows:'Il menu non ha più piatti con prezzo. *Non ho cambiato nulla.* Mandami i prezzi o scrivi *ANNULLA*.',
+ failed:'Non sono riuscito a leggere il menu. *Non ho cambiato nulla.* Riprova tra poco o mandalo scritto.',
+ applied:'*Fatto.* Il menu *{menu}* è online con {piatti} piatti: {nuovi} nuovi, {aggiornati} con prezzo cambiato, {nascosti} nascosti (non eliminati).{senzaPrezzo}\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».',
+ appliedMissing:'\nNon ho messo online: {piatti} (senza prezzo).',
+ savedPreset:'*Fatto.* Ho salvato il menu nel {preset}. Il menu online *non cambia*.',
+ restored:'*Ripristinato.* Il menu *{menu}* è tornato com’era prima del menu intero. Gli altri menu non cambiano.',
+ restoreNone:'Non trovo un menu di prima da ripristinare. Da qui ripristino solo un menu intero mandato in chat; per le altre versioni usa la dashboard.',
+ restoreDone:'Ho *già ripristinato* il menu di prima. Per altre versioni usa la dashboard.',
+}
 export const allowedTags:Record<string,string>={vegetariano:'Vegetariano',vegano:'Vegano',piccante:'Piccante',surgelato:'Surgelato',biologico:'Biologico',locale:'Locale'}
 export const alertCopy={
  alert:'*Problema WhatsApp Takomenu*: {cosa}.\nLocale: *{locale}*\nOra: {ora}',
