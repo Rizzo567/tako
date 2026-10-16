@@ -79,13 +79,18 @@ const QUAD_DB2UI = { star:"star", plowhorse:"plow", puzzle:"puzzle", dog:"dog" }
 
 /* ═══════════ helper API (same-origin /api, cookie sessione) ═══════════ */
 const TakoAPI = {
+  _pending:new Map(), _generation:0,
   async req(method, path, body) {
-    const opt = { method, credentials: "include", headers: {} };
+    const read=method==='GET';if(!read){this._generation++;this._pending.clear();}
+    const key=this._generation+':'+path;if(read&&this._pending.has(key))return this._pending.get(key);
+    const task=(async()=>{const opt = { method, credentials: "include", headers: {} };
     if (body !== undefined) { opt.headers["Content-Type"] = "application/json"; opt.body = JSON.stringify(body); }
-    const r = await fetch("/api" + path, opt);
+    let r;
+    for(let attempt=0;attempt<3;attempt++){r=await fetch("/api"+path,opt);if(!read||![429,502,503,504].includes(r.status)||attempt===2)break;await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));}
     let j = null; try { j = await r.json(); } catch (_) {}
     if (!r.ok) { const e = new Error(j?.error?.message || r.statusText); e.code = j?.error?.code; e.status = r.status; throw e; }
-    return j ? j.data : null;
+    return j ? j.data : null;})();if(read)this._pending.set(key,task);
+    try{return await task}finally{if(this._pending.get(key)===task)this._pending.delete(key)}
   },
   get(p) { return this.req("GET", p); },
   post(p, b) { return this.req("POST", p, b); },
@@ -169,26 +174,28 @@ async function loadMenu() {
 }
 
 /* ═══════════ caricamento completo (post-login) ═══════════ */
-async function loadAll(context) {
+async function loadAll(context,initialRestaurant) {
   if((context?.role || window.__takoRole)==='menu_editor'){
     RESTAURANT={name:'Menu',city:'',vat:'',brand:'#ED7159'};
     window.__settings_raw={id:context?.restaurantId||window.__takoRestaurantId,name:'Menu'};
     ORDERS=[];ROOMS=[];BILLS=[];MENU=[];INVENTORY=[];STAFF=[];ENGINEERING=[];
     syncGlobals();return;
   }
+  let requestedRoute=window.__takoRoute;try{requestedRoute=requestedRoute||localStorage.getItem('tako-dash-route')?.replace(/^"|"$/g,'')}catch{}
+  const mobileMenuOnly=window.__TAKO_STATIC_TRANSPORT==="polling" && (context?.role==="owner"||context?.agency===true||window.__takoRole==="owner") && (window.innerWidth<900||['menu','agency','agency-tasks','account','impostazioni','galleria','qr','traduzioni'].includes(requestedRoute)||(context?.agency===true&&(!requestedRoute||requestedRoute==='dashboard')));
   const today = new Date(); const from = new Date(today); from.setDate(from.getDate() - 6);
   const iso = (d) => d.toISOString().slice(0, 10);
   const [rest, active, rooms, bills, cassa, stats, menu, inv, staff, insights] = await Promise.all([
-    TakoAPI.get("/restaurants/me").catch(() => null),
-    TakoAPI.get("/orders/active").catch(() => []),
-    TakoAPI.get("/tables/rooms").catch(() => []),
-    TakoAPI.get("/bills/open").catch(() => []),
-    TakoAPI.get("/bills/summary/today").catch(() => null),
-    TakoAPI.get(`/stats/dashboard?from=${iso(from)}&to=${iso(today)}`).catch(() => null),
-    loadMenu().catch(() => []),
-    TakoAPI.get("/inventory").catch(() => []),
-    TakoAPI.get("/staff").catch(() => []),
-    TakoAPI.get("/insights/menu?days=30").catch(() => null),
+    initialRestaurant ? Promise.resolve(initialRestaurant) : TakoAPI.get("/restaurants/me").catch(() => null),
+    mobileMenuOnly ? Promise.resolve([]) : TakoAPI.get("/orders/active").catch(() => []),
+    window.__TAKO_STATIC_TRANSPORT === "polling" ? Promise.resolve([]) : TakoAPI.get("/tables/rooms").catch(() => []),
+    Promise.resolve([]),
+    Promise.resolve(null),
+    mobileMenuOnly ? Promise.resolve(null) : TakoAPI.get(`/stats/dashboard?from=${iso(from)}&to=${iso(today)}`).catch(() => null),
+    mobileMenuOnly ? Promise.resolve([]) : loadMenu().catch(() => []),
+    Promise.resolve([]),
+    mobileMenuOnly ? Promise.resolve([]) : TakoAPI.get("/staff").catch(() => []),
+    Promise.resolve(null),
   ]);
 
   if (rest) {
@@ -198,7 +205,7 @@ async function loadAll(context) {
       nome: rest.name || "", indirizzo: rest.address || "", telefono: rest.phone || "",
       valuta: rest.settings?.currency || "EUR", iva: rest.settings?.vatRate ?? 10, fuso: rest.settings?.timezone || "Europe/Rome",
       lingue: rest.settings?.languages || ["IT"], linguaDefault: rest.settings?.defaultLanguage || "IT",
-      servizioTavolo: rest.settings?.tableServiceEnabled ?? true, asporto: rest.settings?.takeawayEnabled ?? true,
+      servizioTavolo: rest.settings?.tableServiceEnabled ?? true, asporto: false,
       pagaTavolo: rest.settings?.payAtTableEnabled ?? true, ai: rest.settings?.aiEnabled ?? false,
       printerIp: rest.settings?.printerIp || "", printerPort: rest.settings?.printerPort || "9100",
       // preferenze operative persistite (read-back)
@@ -282,7 +289,7 @@ function connectSocket(restaurantId, onEvent) {
     _firstConnect = false;
   });
   const fwd = (ev) => _socket.on(ev, (p) => onEvent(ev, p));
-  ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","inventory:alert","reservation:changed","connectivity"].forEach(fwd);
+  ["order:new","order:updated","table:updated","waiter:called","waiter:resolved","menu:updated","menu:item_availability","reservation:changed","connectivity"].forEach(fwd);
   return _socket;
 }
 

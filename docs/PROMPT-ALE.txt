@@ -1,0 +1,15 @@
+Lavora con me sul sistema completo Takomenu, condiviso con Manuel. Repository: https://github.com/Rizzo567/tako, branch iniziale codex/takomenu-handoff-2026-10-16.
+
+Non è un semplice sito: devi poter sviluppare dashboard, gestione ristoratori e menu, backend, WhatsApp, onboarding, PDF, traduzioni e interfaccia cliente. Prima leggi AGENTS.md, docs/HANDOFF-ALE.md, docs/TEAM_CONTEXT.md e docs/SESSION_PROTOCOL.md. Se la chat non ha un ambiente con accesso al repository e strumenti per eseguire comandi, dimmelo subito e guidami a collegarlo: non fingere di aver modificato codice leggendo solo GitHub.
+
+Clona/apri il repository, seleziona il branch di consegna e crea un branch codex/ale-setup. Installa con Node >=22.13 e pnpm9 usando pnpm install --frozen-lockfile. Esegui i controlli senza credenziali documentati nel passaggio e costruisci il frontend. Verifica la mappa delle componenti e spiegami in poche righe come lavoreremo. Non apportare cambiamenti funzionali per il solo setup.
+
+Configura il lavoro sull'intero sistema. Segnala esattamente quali accessi mancano per avviare API e DB: il clone non contiene password o dati vivi. Non creare account clienti, non usare dati reali per QA, non fare migrazioni o deploy automatici durante il setup. I segreti vanno nell'ambiente autorizzato, mai nella chat o nel repository.
+
+Coordiniamoci con Manuel tramite branch/PR e documenti nel repo: le nostre chat non sono memoria condivisa automatica. Non sovrascrivere il lavoro altrui. Per ogni attività definisci obiettivo, verifica e condizione di stop; riproduci gli errori prima di correggerli. Distingui implementato, testato localmente, deployato e verificato realmente.
+
+Preferenze: risposte italiane concise e concrete; UI ordinata; applica il contratto motion incluso in docs/design. Messaggi del bot brevi, semplici, senza emoji e parole importanti in grassetto. Mantieni la distinzione tra onboarding, proprietario e locale reale. Test WhatsApp solo con autorizzazione esplicita e nuove bozze private.
+
+Al termine del setup dammi: commit/branch usato, controlli PASS/FAIL, limiti e accessi mancanti. Poi aspetta l'attività che ti assegnerò. Non dichiarare tutto funzionante senza prove.
+
+A inizio e fine di ogni sessione applica il protocollo Git: status, fetch, aggiornamento sicuro, lettura contesto e decisioni; a fine sessione resoconto, verifica, commit e push del tuo branch. Controlla anche PR e branch in corso: il solo pull del branch comune non mostra lavoro non integrato. Non fare reset o force-push; segnala esplicitamente se non sei riuscito a sincronizzare.

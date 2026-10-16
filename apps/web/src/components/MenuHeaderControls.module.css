@@ -1,0 +1,111 @@
+.controls{display:flex;align-items:flex-start;gap:8px;flex-shrink:0;position:relative;z-index:30}
+.anchor{position:relative;height:40px;flex-shrink:0}
+.surface{position:absolute;right:0;top:0;overflow:hidden;border:1px solid color-mix(in srgb,var(--menu-accent) 32%,transparent);border-radius:24px;background:var(--menu-surface);color:var(--menu-ink);box-shadow:0 2px 8px #0000000a;isolation:isolate}
+.surface[data-open=true]{box-shadow:0 12px 32px #00000016}
+.trigger{height:46px;width:100%;display:flex;align-items:center;justify-content:safe center;gap:7px;padding:0 12px;font-weight:650;font-size:14px;white-space:nowrap;background:transparent;border:0;color:inherit;cursor:pointer}
+.flag{font-family:'Apple Color Emoji','Segoe UI Emoji',sans-serif;font-size:22px;line-height:1}
+.list{padding:4px 8px 8px;overflow:auto;max-height:min(420px,60dvh);overscroll-behavior:contain;scrollbar-width:thin}
+.option{position:relative;width:100%;height:44px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:16px;border:0;background:transparent;color:inherit;font-size:14px;text-align:left;cursor:pointer}
+.option[aria-checked=true]{background:color-mix(in srgb,var(--menu-accent) 14%,var(--menu-surface));font-weight:650}
+.option:hover{background:color-mix(in srgb,var(--menu-accent) 10%,var(--menu-surface))}
+.code{margin-left:auto;font-size:11px;letter-spacing:.04em;opacity:.6}
+.searchRow{height:38px;display:flex;align-items:center;padding-left:12px}
+.input{min-width:0;flex:1;width:100%;background:transparent;color:inherit;border:0;outline:0;font-size:15px}
+.input::placeholder{color:inherit;opacity:.55}
+.iconButton{width:38px;height:38px;display:grid;place-items:center;background:transparent;border:0;color:inherit;flex-shrink:0;cursor:pointer}
+.trigger:focus-visible,.option:focus-visible,.iconButton:focus-visible{outline:2px solid var(--menu-accent);outline-offset:-4px}
+.input:focus-visible{box-shadow:0 2px 0 var(--menu-accent)}
+.trigger:disabled{opacity:.5;cursor:default}
+@media(prefers-reduced-motion:reduce){.surface{scroll-behavior:auto}}
+.menuStrip{display:flex;justify-content:safe center;gap:20px;overflow-x:auto;max-width:100%;padding:0 20px 4px;scrollbar-width:none;scroll-padding:20px;mask-image:linear-gradient(to right,transparent,#000 20px,#000 calc(100% - 20px),transparent);-webkit-mask-image:linear-gradient(to right,transparent,#000 20px,#000 calc(100% - 20px),transparent)}
+.menuStrip::-webkit-scrollbar{display:none}
+@media(min-width:800px){.menuStrip{justify-content:safe center}}
+
+.categoryGrid{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:-10px;margin-bottom:54px;align-items:center}
+.categoryButton{position:relative;min-width:0;max-width:100%;width:auto;border:2px solid;border-radius:999px;padding:10px 16px;font-size:16px;font-weight:650;white-space:normal;overflow-wrap:anywhere;line-height:1.4;display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px}
+
+
+.controls [data-menu-language-surface]{border-radius:20px}.trigger{height:38px;padding:0 8px;gap:5px;font-size:12px}.flag{font-size:18px}.option{padding:0 5px;gap:6px;font-size:12px}.list{padding:4px 5px 8px}
+
+.socials{display:flex;align-items:center;justify-content:center;gap:20px;margin:24px 0;flex-wrap:wrap}.socialLink{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;gap:8px;text-decoration:none;border:0;background:transparent}.socialLink:focus-visible,.review:focus-visible{outline:2px solid currentColor;outline-offset:4px}.review{display:flex;align-items:center;justify-content:center;gap:12px;margin:20px auto 28px;padding:16px 18px;border-radius:20px;background:linear-gradient(125deg,#fff3cb,#ffe0ae);color:#593915;box-shadow:0 4px 16px #00000012;text-decoration:none;font-size:14px;font-weight:650}.reviewStars{color:#ce8b13;letter-spacing:1px;font-size:12px}
+
+/* Header remains above the scrolling menu; its lower edge softly occludes content. */
+.stickyHeader{isolation:isolate;display:flex;flex-direction:column}
+.stickyHeader>*{position:relative;z-index:1}
+.stickyHeader>div:not(.headerBackdrop){z-index:3}
+.stickyHeader>.headerBackdrop{position:absolute;z-index:0;inset:-20px -20px -8px;pointer-events:none;background-size:cover;background-position:center top;mask-image:linear-gradient(to bottom,#000 calc(100% - 14px),transparent);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 14px),transparent);transition-property:opacity;transition-timing-function:linear}
+.menuUnderline{position:absolute;bottom:0;left:0;right:0;height:3px;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.stickyHeader>.headerBackdrop{transition:none}}
+
+.heroToolbar{position:relative;display:flex;justify-content:center;align-items:flex-start;min-height:52px}
+.centeredLogo{display:flex;justify-content:center;align-items:flex-start}
+.heroToolbar .controls{position:absolute;right:0;top:0;justify-content:flex-end}
+.heroToolbar .trigger{padding:0 4px}
+.heroToolbar .option{padding:0 3px;gap:4px}
+.heroToolbar .list{padding:4px 3px 8px}
+
+.flagIcon{display:block;width:40px;height:28px;border-radius:9px;overflow:hidden;flex-shrink:0}
+.flagSurface{border:0;background:transparent;box-shadow:none;border-radius:16px}
+.flagSurface[data-open=true]{background:rgba(255,255,255,.14);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 12px 32px #0005}
+.flagSurface .trigger{padding:0;gap:0;justify-content:center}
+.flagList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 6px}
+.flagList .option{padding:0;justify-content:center;border-radius:10px}
+.flagList .option[aria-checked=true]{background:rgba(255,255,255,.2)}
+
+@font-face{font-family:'Tako Menu Rounded';src:url('../fonts/Nunito.woff2') format('woff2'),url('../fonts/Nunito.ttf') format('truetype');font-style:normal;font-weight:200 1000;font-display:swap}
+.sectionHeading{position:relative;display:table;width:max-content;max-width:100%;padding:4px 16px;border-radius:999px;text-transform:uppercase;font-style:italic;line-height:1.4;margin-top:28px}
+.sectionHeading:after{content:'';position:absolute;inset-inline-start:calc(100% + 12px);top:50%;width:max(0px,calc(100vw - 80px - 100%));max-width:200px;border-top:2px dashed var(--menu-accent,currentColor);opacity:.4}
+.dishRow{display:flex;width:100%;align-items:flex-start;gap:14px;text-align:start;background:transparent;border:0;color:inherit;min-height:64px}
+.dishPhoto{width:80px;height:64px;object-fit:cover;border-radius:14px;flex-shrink:0}
+.foodSection{padding:16px 0;border-bottom:1px solid color-mix(in srgb,currentColor 18%,transparent);font-size:14px;line-height:1.6}
+.foodSection summary{cursor:pointer;font-weight:750;min-height:24px}.foodSection p{padding-top:12px;opacity:.8}.foodLegends{font-size:14px;line-height:1.6}
+.socialLink{min-width:48px;min-height:48px}.socials{gap:24px;margin:32px 0 20px}
+
+.compactCategoryGrid{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:360px;margin:0 auto 24px;align-items:center}.compactCategoryGrid .categoryButton{width:auto;max-width:100%;min-height:44px;line-height:1.3}
+
+/* Shared hero composition: large central mark, tabs beneath the image. */
+.heroToolbar{height:172px;min-height:172px;display:flex;align-items:center;justify-content:center;padding:0 0 16px}.centeredLogo{align-items:center}.heroToolbar .controls{top:-12px;right:-10px}.stickyHeader>.headerBackdrop{inset:-20px -20px auto;height:192px;mask-image:linear-gradient(to bottom,#000 76%,transparent);-webkit-mask-image:linear-gradient(to bottom,#000 76%,transparent)}.menuStrip{padding-top:12px}
+.flagList{display:flex;flex-direction:column;gap:0;max-height:220px!important;padding:0 6px!important;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.6) transparent;mask-image:linear-gradient(to bottom,#000 calc(100% - 16px),transparent);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 16px),transparent)}.flagList .option{height:44px;min-height:44px;flex-shrink:0}.flagList::-webkit-scrollbar{width:3px}.flagList::-webkit-scrollbar-thumb{background:rgba(255,255,255,.6);border-radius:99px}.flagSurface[data-open=true]:after{content:'⌄';position:absolute;bottom:0;left:0;right:0;height:15px;text-align:center;color:#fff;font-size:16px;line-height:15px;pointer-events:none;background:linear-gradient(transparent,#0003)}
+
+/* Opaque continuation beneath the hero keeps scrolling dishes away from tabs.
+   The apron fades the content before it reaches the navigation baseline. */
+.stickyHeader::before{content:'';position:absolute;inset:-20px -20px 0;z-index:-1;background:var(--menu-header-fill);pointer-events:none}
+.stickyHeader::after{content:'';position:absolute;left:-20px;right:-20px;top:100%;height:36px;z-index:0;background:var(--menu-header-fill);mask-image:linear-gradient(to bottom,#000,transparent);-webkit-mask-image:linear-gradient(to bottom,#000,transparent);pointer-events:none}
+
+/* Reserve the fade apron in normal flow so categories start fully visible. */
+.stickyHeader{margin-bottom:30px!important}
+.heroToolbar{height:160px;min-height:160px;padding-bottom:4px}
+.stickyHeader::after{height:24px}
+.socialLink svg{border-radius:50%;overflow:hidden}
+.review{max-width:360px;justify-content:flex-start;gap:14px;padding:18px 20px;border-radius:24px;background:#fff;color:#202124;border:1px solid #ffffff90;box-shadow:0 8px 28px #00000018;font-size:16px;font-weight:800}
+.reviewLogo{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border-radius:50%;background:#f5f6f8}
+.reviewCopy{display:flex;flex-direction:column;gap:5px;line-height:1.35}
+.reviewStars{color:#fbbc04;font-size:15px;letter-spacing:3px}
+.reviewArrow{margin-left:auto;color:#5f6368;font-size:24px}
+
+/* Compact review action, with the Google mark directly on its surface. */
+.review{max-width:360px;min-height:54px;padding:12px 16px;gap:12px;border-radius:18px;font-size:15px;font-weight:650;box-shadow:0 3px 14px #00000010}
+.reviewLogo{width:28px;height:28px;background:transparent;border-radius:0}
+.reviewLogo svg{width:28px;height:28px}
+.reviewCopy{display:block;line-height:1.3}
+.reviewArrow{flex:none;margin-left:auto;animation:review-arrow 2.4s cubic-bezier(.22,1,.36,1) infinite}
+@keyframes review-arrow{0%,70%,100%{transform:translate3d(0,0,0)}35%{transform:translate3d(2px,-2px,0)}}
+@media(prefers-reduced-motion:reduce){.reviewArrow{animation:none}}
+
+/* Keep every flag on the same vertical axis as the collapsed flag. */
+.heroToolbar .flagList{padding-left:0!important;padding-right:0!important}
+.heroToolbar .flagList .option{padding:0;justify-content:center}
+
+.restaurantFooter{display:flex;justify-content:center;padding:4px 0 12px;margin:0 auto}.restaurantFooter img{display:block;width:144px;height:144px;object-fit:contain}
+
+.review{border-radius:30px}.socialLink svg{width:54px;height:54px}.productFooter{padding:28px 0 calc(12px + env(safe-area-inset-bottom,0px));text-align:center;color:inherit}.productFooter p{font-size:14px;line-height:1.8;opacity:.65}.productFooter>a{display:inline-flex;margin:18px 0 30px}.productFooter img{width:140px;max-height:80px;object-fit:contain}.productFooter nav{display:flex;flex-direction:column;gap:16px;font-size:13px;opacity:.65}.productFooter nav a{color:inherit;text-decoration:none}.backTop{position:fixed;right:20px;bottom:max(20px,env(safe-area-inset-bottom));z-index:30;width:46px;height:46px;border:0;border-radius:50%;display:grid;place-items:center;box-shadow:0 4px 16px #0002;transition:opacity .28s ease;cursor:pointer}.backTop:focus-visible{outline:2px solid currentColor;outline-offset:4px}@media(prefers-reduced-motion:reduce){.backTop{transition:none}}
+
+.productFooter>a{align-items:center;gap:8px;text-decoration:none;color:inherit}.productFooter img{width:42px;height:42px}.productFooter strong{font-size:24px}
+
+.productFooter nav a{display:flex;justify-content:center;align-items:center;gap:10px}
+
+/* Finestre basse (zoom 200–300%, telefono in orizzontale): l'header scorre via, i piatti restano leggibili. */
+@media(max-height:500px){.stickyHeader{position:relative!important;top:auto!important}}
+
+/* Canonical Takomenu lettering inherits contrast on every restaurant theme. */
+.productWordmark{display:block;width:210px;max-width:76vw;height:42px;background:currentColor;mask:url(/takomenu-public/branding/takomenu-wordmark-v2.svg) center/contain no-repeat;-webkit-mask:url(/takomenu-public/branding/takomenu-wordmark-v2.svg) center/contain no-repeat}

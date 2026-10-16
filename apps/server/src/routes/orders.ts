@@ -4,9 +4,11 @@ import { db, orders, orderItems, orderStatusHistory, menuItems, tables } from '@
 import { eq, and, inArray, notInArray, desc, gte, lt } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
+import { deliverPersistedEvent } from '../lib/event-delivery.js'
 import { recomputeOpenBill, round2, ensureOpenBill } from '../lib/billing.js'
 import { deductStockForOrder } from '../lib/stock-deduct.js'
 import type { OrderStatus } from '@tako/types'
+import { pageParams, readActiveOrders } from '../lib/read-queries.js'
 
 // Transizioni di stato ordine consentite. Impedisce di "resuscitare" ordini
 // pagati/annullati o di mandarli indietro in modo incoerente.
@@ -26,43 +28,14 @@ const ALLOWED_TRANSITIONS: Record<string, OrderStatus[]> = {
   cancelled: [],
 }
 
-// Paginazione a CURSORE per /active e /history (piano F2.3). È ADDITIVA: senza
-// parametri le due route rispondono esattamente come prima (tutti i risultati, più
-// recenti prima), quindi la dashboard staff non cambia di una riga. Il cursore è
-// `createdAt` — le liste sono già ordinate per quello — e non un offset: con ordini
-// che arrivano mentre si scorre, un OFFSET salterebbe o duplicherebbe righe.
-const MAX_PAGE = 200
-
-function pageParams(query: unknown): { limit: number | null; before: Date | null } {
-  const q = (query ?? {}) as { limit?: string; before?: string }
-  const rawLimit = q.limit !== undefined ? Number(q.limit) : NaN
-  const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? Math.min(Math.floor(rawLimit), MAX_PAGE) : null
-  const beforeDate = q.before ? new Date(q.before) : null
-  const before = beforeDate && !isNaN(beforeDate.getTime()) ? beforeDate : null
-  return { limit, before }
-}
+// pageParams e la lettura di /active vivono in lib/read-queries.ts: la stessa
+// funzione serve anche la read-edge (stessa risposta sui due percorsi).
 
 export async function orderRoutes(fastify: FastifyInstance) {
   // Get active orders for restaurant
-  fastify.get('/active', { preHandler: requireAuth }, async (req) => {
-    const { limit, before } = pageParams(req.query)
-    const where = and(
-      eq(orders.restaurantId, req.user!.restaurantId),
-      inArray(orders.status, ['pending', 'confirmed', 'preparing', 'ready']),
-      ...(before ? [lt(orders.createdAt, before)] : []),
-    )
-    const base = db.select().from(orders).where(where).orderBy(desc(orders.createdAt))
-    const activeOrders = limit ? await base.limit(limit) : await base
-
-    const items = await db.select().from(orderItems).where(inArray(orderItems.orderId, activeOrders.map(o => o.id)))
-    // `nextBefore` è il cursore per la pagina successiva: null quando non c'è altro.
-    const nextBefore = limit && activeOrders.length === limit
-      ? activeOrders[activeOrders.length - 1]!.createdAt.toISOString()
-      : null
-    return {
-      data: activeOrders.map(o => ({ ...o, items: items.filter(i => i.orderId === o.id) })),
-      ...(limit ? { meta: { nextBefore } } : {}),
-    }
+  fastify.get('/active', { preHandler: requireAuth }, async (req, reply) => {
+    const r = await readActiveOrders(req.user!.restaurantId, req.query)
+    return reply.code(r.status).send(r.body)
   })
 
   // Get orders by table
@@ -102,7 +75,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
       tableId: z.string().uuid().optional(),
       // La SPA cassa invia tableNumber come Number → coerce a stringa (evita 400).
       tableNumber: z.coerce.string().optional(),
-      type: z.enum(['table', 'takeaway']).default('table'),
+      type: z.enum(['table']).default('table'),
       items: z.array(z.object({
         menuItemId: z.string().uuid(),
         quantity: z.number().int().positive().max(20),
@@ -184,11 +157,11 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (!order) return reply.code(500).send({ error: { code: 'DB', message: 'Creazione ordine fallita.' } })
 
     const payload = { ...order, items: insertedItems }
-    io.to(`restaurant:${restaurantId}`).emit('order:new', payload)
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'order:new', payload, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
 
     if (body.data.tableId) {
       await db.update(tables).set({ status: 'occupied', openedAt: new Date() }).where(eq(tables.id, body.data.tableId))
-      io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId: body.data.tableId, status: 'occupied' })
+      deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'table:updated', { tableId: body.data.tableId, status: 'occupied' }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
       await ensureOpenBill(restaurantId, body.data.tableId)
     }
 
@@ -244,14 +217,14 @@ export async function orderRoutes(fastify: FastifyInstance) {
     }
 
     // Broadcast to all connected clients in this restaurant
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'order:updated', { orderId, status }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
 
     // Notify customer if at table
     if (current.tableId) {
-      io.to(`table:${current.tableId}`).emit('order:updated', { orderId, status })
+      deliverPersistedEvent(io, `table:${current.tableId}`, 'order:updated', { orderId, status }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     }
     // Cliente ASPORTO (senza tavolo): riceve il tracking dalla room del proprio ordine.
-    io.to(`order:${orderId}`).emit('order:updated', { orderId, status })
+    deliverPersistedEvent(io, `order:${orderId}`, 'order:updated', { orderId, status }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
 
     return { data: updated }
   })
@@ -297,14 +270,14 @@ export async function orderRoutes(fastify: FastifyInstance) {
       return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Ordine pagato o annullato nel frattempo: non modificabile.' } })
     }
 
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, itemId, itemStatus: status, status: derivedStatus })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'order:updated', { orderId, itemId, itemStatus: status, status: derivedStatus }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     // Anche al tavolo del cliente: il tracking riflette lo stato derivato quando
     // la cucina avanza le singole portate (non solo sul cambio stato globale).
     if (order.tableId) {
-      io.to(`table:${order.tableId}`).emit('order:updated', { orderId, status: derivedStatus })
+      deliverPersistedEvent(io, `table:${order.tableId}`, 'order:updated', { orderId, status: derivedStatus }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     }
     // Cliente ASPORTO: stesso aggiornamento sulla room del proprio ordine.
-    io.to(`order:${orderId}`).emit('order:updated', { orderId, status: derivedStatus })
+    deliverPersistedEvent(io, `order:${orderId}`, 'order:updated', { orderId, status: derivedStatus }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: { item, orderStatus: derivedStatus } }
   })
 
@@ -326,11 +299,11 @@ export async function orderRoutes(fastify: FastifyInstance) {
     if (!updated) return reply.code(409).send({ error: { code: 'INVALID_TRANSITION', message: 'Lo stato dell\'ordine è cambiato, riprova.' } })
     // Il conto deve scendere: ricalcola il bill aperto del tavolo escludendo l'annullato.
     if (updated.tableId) await recomputeOpenBill(req.user!.restaurantId, updated.tableId)
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('order:updated', { orderId, status: 'cancelled' })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'order:updated', { orderId, status: 'cancelled' }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     // Avvisa anche il cliente al tavolo: il tracking riflette l'annullamento.
-    if (updated.tableId) io.to(`table:${updated.tableId}`).emit('order:updated', { orderId, status: 'cancelled' })
+    if (updated.tableId) deliverPersistedEvent(io, `table:${updated.tableId}`, 'order:updated', { orderId, status: 'cancelled' }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     // Cliente ASPORTO: annullamento visibile sulla room del proprio ordine.
-    io.to(`order:${orderId}`).emit('order:updated', { orderId, status: 'cancelled' })
+    deliverPersistedEvent(io, `order:${orderId}`, 'order:updated', { orderId, status: 'cancelled' }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: updated }
   })
 }

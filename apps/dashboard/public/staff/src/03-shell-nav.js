@@ -1,67 +1,64 @@
 /* ───────────────── Tako Dashboard — shell responsive + navigazione ───────────────── */
 
 const NAV = [
+  { group: "Gestione", items: [
+    { id: "menu", label: "Menu", icon: "menu" },
+    { id: "statistiche", label: "Report", icon: "stats" },
+  ]},
   { group: "Servizio", items: [
     { id: "dashboard", label: "Panoramica", icon: "home" },
     { id: "sala", label: "Sala", icon: "map" },
     { id: "ordini", label: "Ordini", icon: "orders", badge: true },
     { id: "kds", label: "Cucina", icon: "kitchen" },
-    { id: "cassa", label: "Cassa", icon: "cassa" },
     { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
-  ]},
-  { group: "Gestione", items: [
-    { id: "menu", label: "Menu", icon: "menu" },
-    { id: "inventario", label: "Magazzino", icon: "inventory" },
-    { id: "statistiche", label: "Report", icon: "stats" },
   ]},
 ];
 
 /* Legacy route IDs stay stable for saved routes, screen links and copilot tools.
    Team (staff = collaboratori, turni) vive dentro Impostazioni; Impostazioni si apre dal
    menu utente in fondo alla sidebar (desktop) e dall'icona accanto all'utente (drawer mobile). */
-const NAV_PARENT = { tavoli: "sala", staff: "impostazioni", turni: "impostazioni", dispositivi: "impostazioni", qr: "impostazioni", collega: "impostazioni", insights: "statistiche" };
+const NAV_PARENT = { staff: "impostazioni" };
 const EXTRA_NAV = {
+  agency: { id: "agency", label: "Locali", icon: "home" },
+  agency_tasks: {id:"agency_tasks",label:"Da fare",icon:"orders"},
+  account: {id:"account",label:"Account",icon:"settings"},
   cowork: { id: "cowork", label: "Assistente", icon: "sparkles" },
   comanda: { id: "comanda", label: "Nuovo ordine", icon: "comanda" },
   chiamate: { id: "chiamate", label: "Chiamate", icon: "bell", badge: true },
   impostazioni: { id: "impostazioni", label: "Impostazioni", icon: "settings" },
   staff: { id: "staff", label: "Team", icon: "staff" },
-  tavoli: { id: "tavoli", label: "Configurazione sala", icon: "table" },
-  turni: { id: "turni", label: "Turni", icon: "clock" },
-  dispositivi: { id: "dispositivi", label: "Dispositivi", icon: "qr" },
-  qr: { id: "qr", label: "QR dei tavoli", icon: "qr" },
-  collega: { id: "collega", label: "Collegamenti", icon: "settings" },
-  insights: { id: "insights", label: "Menu engineering", icon: "stats" },
 };
 const ROLE_ACCESS = {
   menu_editor: ["menu"],
   owner: null,
-  cameriere: ["dashboard", "ordini", "sala", "tavoli", "prenotazioni", "comanda", "chiamate", "cassa", "menu", "turni"],
-  chef: ["dashboard", "kds", "ordini", "menu", "inventario", "turni"],
-  cassiere: ["dashboard", "cassa", "ordini", "sala", "prenotazioni", "turni"],
+  cameriere: ["dashboard", "ordini", "sala", "prenotazioni", "comanda", "chiamate", "menu"],
+  chef: ["dashboard", "kds", "ordini", "menu"],
+  cassiere: ["dashboard", "ordini", "sala", "prenotazioni"],
 };
-const ROLE_HOME = { menu_editor:"menu", owner: "dashboard", cameriere: "sala", chef: "kds", cassiere: "cassa" };
+const ROLE_HOME = { menu_editor:"menu", owner: "dashboard", cameriere: "sala", chef: "kds", cassiere: "ordini" };
 const MOBILE_PRIMARY = {
   menu_editor: ["menu"],
-  owner: ["dashboard", "sala", "ordini", "cassa"],
+  owner: ["menu", "cowork", "account"],
   cameriere: ["sala", "ordini", "chiamate", "comanda"],
-  chef: ["kds", "ordini", "menu", "inventario"],
-  cassiere: ["cassa", "ordini", "sala", "dashboard"],
+  chef: ["kds", "ordini", "menu"],
+  cassiere: ["ordini", "sala", "dashboard"],
 };
+function mobilePrimary(role) {
+  return role === "owner" && typeof window !== "undefined" && window.__takomenuAgency === true
+    ? ["agency", "account"] : (MOBILE_PRIMARY[role] || []);
+}
 function canNavigate(role, id) {
+  if(id === "account") return ["owner","menu_editor"].includes(role);
+  if (id === "agency" || id === "agency_tasks") return typeof window !== "undefined" && window.__takomenuAgency === true;
   const known = NAV.some(g => g.items.some(it => it.id === id)) || Object.hasOwn(EXTRA_NAV, id);
   return known && Object.hasOwn(ROLE_ACCESS, role) && (ROLE_ACCESS[role] === null || ROLE_ACCESS[role].includes(id));
 }
-function safeRoute(role, id) { return canNavigate(role, id) ? id : (ROLE_HOME[role] || "dashboard"); }
+function safeRoute(role, id) { if(typeof id==="string"&&id.startsWith('"')){try{id=JSON.parse(id)}catch{}} if(typeof window!=="undefined"&&window.innerWidth<900&&role==="owner"&&id==="dashboard")return window.__takomenuAgency?"agency":"menu"; return canNavigate(role, id) ? id : (typeof window!=="undefined"&&window.innerWidth<900&&role==="owner"?(window.__takomenuAgency?"agency":"menu"):ROLE_HOME[role] || "dashboard"); }
 function navParent(id) { return NAV_PARENT[id] || id; }
 function navBadge(it, badges) { return (badges || {})[it.id] || 0; }
 function navAllowed(role) {
   const groups = NAV.map(g => ({ ...g, items: g.items.filter(it => canNavigate(role, it.id)) }));
-  // Chi vede i propri turni ma non Impostazioni (cameriere, chef, cassiere) li trova in Gestione.
-  if (canNavigate(role, "turni") && !canNavigate(role, "impostazioni")) {
-    const gestione = groups.find(g => g.group === "Gestione");
-    gestione.items = [...gestione.items, EXTRA_NAV.turni];
-  }
+  if (typeof window !== "undefined" && window.__takomenuAgency === true) groups.unshift({ group: "Serie B Agency", items: [EXTRA_NAV.agency] });
   return groups.filter(g => g.items.length);
 }
 function findItem(id) {
@@ -114,9 +111,9 @@ function Sidebar({ route, go, role, badges, live }) {
   return (
     <aside ref={asideRef} className="scroll" style={{ width: 238, flex: "none", margin: "5px 12px 12px 5px", height: "calc(100% - 17px)", display: "flex", flexDirection: "column", gap: 10, overflowY: "auto" }}>
       <div style={{ padding: "16px 8px 4px", display: "flex", alignItems: "center", gap: 9 }}>
-        <Tako pose="logoMark" size={36} float={false} />
+
         <div>
-          <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 19, color: "var(--side-ink)", lineHeight: 1 }}>Tako</div>
+          <span role="img" aria-label="Takomenu" style={{ display: "block", width: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
           <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
         </div>
       </div>
@@ -266,7 +263,10 @@ function routeIntro(route, role = "owner") {
   const _r = ROLES[role] || ROLES.owner;
   const _first = (_r.name && _r.name !== "—") ? _r.name.split(" ")[0] : "";
   const m = {
-    cowork: { pose: "hello", title: "Tako" },
+    cowork: { pose: "hello", title: "Assistente" },
+    agency:{pose:"neutral",title:"Locali"},
+    agency_tasks:{pose:"neutral",title:"Da fare"},
+    account:{pose:"neutral",title:"Account"},
     dashboard: { pose: "hello", title: `${_greet}${_first ? ", " + _first : ""}!` },
     ordini: { pose: "phone", title: "Ordini live" },
     kds: { pose: "chef", title: "Cucina" },
@@ -286,8 +286,9 @@ function routeIntro(route, role = "owner") {
   };
   return m[route] || { pose: "neutral", title: findItem(route).label };
 }
-function MobileHeader({ route, openDrawer, live, role, badges, nome, dark, go }) {
+function MobileHeader({ syncDelayed=false, route, openDrawer, live, role, badges, nome, dark, go }) {
   const intro = routeIntro(route, role);
+  const [toolsOpen,setToolsOpen]=useState(false);
   const fg = dark ? "#fff" : "var(--ink)";
   const [notifOpen, setNotifOpen] = useState(false);
   const [anim, setAnim] = useState(null); // { n, phase }
@@ -324,27 +325,19 @@ function MobileHeader({ route, openDrawer, live, role, badges, nome, dark, go })
   const showText = ph === "reveal" || ph === "hold";
 
   return (
-    <header style={{ position: "relative", flex: "none", display: "flex", alignItems: "center", gap: 11, padding: "6px 14px 10px", background: "transparent", minHeight: 64 }}>
-      {/* logo (reagisce all'arrivo) */}
-      <div style={{ position: "relative", flex: "none", display: "grid", placeItems: "center" }}>
-        {active && <span className="nb-glow" style={{ position: "absolute", width: 46, height: 46, borderRadius: "50%", background: "radial-gradient(circle, var(--brand) 0%, transparent 70%)", pointerEvents: "none" }} />}
-        <Tako logo pose="logoMark" size={44} float={false} className={busy ? "nb-tako" : undefined} style={{ flex: "none", position: "relative" }} />
-      </div>
-
+    <header style={{ position: "relative", flex: "none", display: "flex", alignItems: "center", gap: 5, padding: "6px 14px 10px", background: "transparent", minHeight: 64 }}>
       {/* contenuto header — sfuma ed esce verso l'alto */}
-      <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 11, transform: headerHidden ? "translateY(-30px) scale(.92)" : "translateY(0) scale(1)", filter: headerHidden ? "blur(4px)" : "blur(0)", opacity: headerHidden ? 0 : 1, transition: "transform .4s var(--out), opacity .3s ease, filter .3s ease", transformOrigin: "left center", pointerEvents: headerHidden ? "none" : "auto" }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: "var(--f-display)", fontWeight: 900, fontSize: 21, lineHeight: 1.05, color: fg, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{intro.title}</div>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 11, transform: headerHidden ? "translateY(-30px) scale(.92)" : "none", filter: headerHidden ? "blur(4px)" : "none", opacity: headerHidden ? 0 : 1, transition: "transform .4s var(--out), opacity .3s ease, filter .3s ease", transformOrigin: "left center", pointerEvents: headerHidden ? "none" : "auto" }}>
+        <div className={"mobile-header-brand"+(toolsOpen?" is-tools-open":"")} style={{ flex: 1, minWidth: 0 }}>
+          <span role="img" aria-label="Takomenu" style={{ display: "block", width: "min(148px, 100%)", height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+
         </div>
         {route === "cassa" && (
           <button className="press" onClick={() => { if (window.__openNewBill) window.__openNewBill(); else window.takoGo && window.takoGo('cassa'); }} style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 6, height: 40, padding: "0 14px", borderRadius: 12, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 700, fontSize: 13.5, fontFamily: "var(--f-ui)", boxShadow: "0 6px 16px -6px var(--brand)" }}>
             <Icon name="plus" size={17} />Nuovo conto
           </button>
         )}
-        <span style={{ position: "relative", flex: "none" }}>
-          <IconBtn name="bell" tone="soft" size={40} onClick={() => setNotifOpen(true)} style={dark ? { background: "rgba(255,255,255,.1)", color: "#fff" } : undefined} />
-          <span style={{ position: "absolute", top: 0, right: 0, width: 10, height: 10, borderRadius: 99, background: "var(--brand)", border: `2px solid ${dark ? "#1A1310" : "var(--surface)"}` }} />
-        </span>
+        {window.__takomenuAgency&&['agency','agency_tasks'].includes(route)?<MobileAgencyTools onModeChange={setToolsOpen}/>:null}
       </div>
 
       {/* capsula notifica volante */}
@@ -397,14 +390,15 @@ function HomeIndicator({ dark }) {
 
 /* floating glass tab bar */
 function BottomBar({ route, go, role, badges, openDrawer, dark }) {
-  const prim = (MOBILE_PRIMARY[role] || []).filter(id => canNavigate(role, id)).map(findItem);
-  const compact = useScrollDown();
+  const prim = mobilePrimary(role).filter(id => canNavigate(role, id)).map(findItem);
+  const compact = false;
   const idle = dark ? "#9B9CA4" : "var(--ink-3)";
   const glass = dark
     ? { background: "linear-gradient(160deg, rgba(62,54,48,.4), rgba(26,21,18,.26))", border: "1px solid rgba(255,255,255,.16)", boxShadow: "0 16px 42px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.06)" }
     : { background: "linear-gradient(160deg, rgba(255,255,255,.5), rgba(255,255,255,.24))", border: "1px solid rgba(255,255,255,.7)", boxShadow: "0 16px 42px rgba(42,31,26,.22), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.35)" };
   const Tab = ({ it, isMore }) => {
-    const on = !isMore && navParent(route) === navParent(it.id);
+    const selectedRoute = route==="menu"&&window.__takomenuAgency?"agency":route==="impostazioni"?"account":navParent(route);
+    const on = !isMore && selectedRoute === navParent(it.id);
     return (
       <button className="press bb-tab" onClick={isMore ? openDrawer : () => go(it.id)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 0 : 4, padding: compact ? "8px 0" : "9px 0 8px", color: on ? "var(--side-sel)" : idle, position: "relative" }}>
         <span className="nav-ico" style={{ position: "relative" }}>
@@ -416,16 +410,16 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
     );
   };
   return (
-    <nav style={{ position: "absolute", left: 14, right: 14, bottom: 26, display: "flex", alignItems: "stretch", borderRadius: 12, padding: "2px 6px", zIndex: 40, backdropFilter: "blur(30px) saturate(200%)", WebkitBackdropFilter: "blur(30px) saturate(200%)", transition: "padding .25s var(--out)", ...glass }}>
+    <nav aria-label="Navigazione principale" className="mobile-bottom-nav" style={{ position: "relative", flex:"none", margin:"0 10px", marginBottom:"max(8px, env(safe-area-inset-bottom, 0px))", display: "flex", alignItems: "stretch", borderRadius: 12, padding: "2px 6px", zIndex: 40, backdropFilter: "blur(30px) saturate(200%)", WebkitBackdropFilter: "blur(30px) saturate(200%)", transition: "padding .25s var(--out)", ...glass }}>
       {prim.map(it => <Tab key={it.id} it={it} />)}
-      <Tab isMore it={{}} />
+      {!["owner","menu_editor"].includes(role)&&<Tab isMore it={{}} />}
     </nav>
   );
 }
 
 /* drawer "Altro": pannello arrotondato, esclude le voci della bottom-bar */
 function MobileDrawer({ open, onClose, route, go, role, badges }) {
-  const primary = MOBILE_PRIMARY[role] || [];
+  const primary = mobilePrimary(role);
   const groups = [...navAllowed(role), { group: "Altro", items: [EXTRA_NAV.cowork].filter(it => canNavigate(role, it.id)) }].map(g => ({ ...g, items: g.items.filter(it => !primary.includes(it.id)) })).filter(g => g.items.length);
   const r = ROLES[role];
   return (
@@ -463,3 +457,12 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
 }
 
 Object.assign(window, { NAV, ROLE_ACCESS, ROLE_HOME, MOBILE_PRIMARY, navAllowed, findItem, canNavigate, safeRoute, navParent, navBadge, Sidebar, MobileHeader, BottomBar, MobileDrawer, IOSStatusBar, HomeIndicator });
+
+function MobileAgencyTools({onModeChange}){
+ const [mode,setMode]=useState(''),[query,setQuery]=useState(window.__agencyFilters?.search||''),[filter,setFilter]=useState(window.__agencyFilters?.filter||'all');const field=useRef(null),surface=useRef(null),lastMode=useRef('');
+ useEffect(()=>{const sync=e=>{setQuery(e.detail.search||'');setFilter(e.detail.filter||'all')};window.addEventListener('tako:agency-filter',sync);return()=>window.removeEventListener('tako:agency-filter',sync)},[]);
+ const update=(search,status)=>{window.__agencyFilters={search,filter:status};window.dispatchEvent(new CustomEvent('tako:agency-filter',{detail:window.__agencyFilters}))};
+ useEffect(()=>{if(mode)lastMode.current=mode;onModeChange?.(!!mode);const restore=mode==='status'?setTimeout(()=>{onModeChange?.(false);surface.current?.classList.add('brand-restored')},1000):null;surface.current?.classList.remove('brand-restored');if(mode!=='search'&&document.activeElement===field.current)field.current.blur();const close=e=>{if(e.key==='Escape')setMode('');if(e.type==='pointerdown'&&!surface.current?.contains(e.target))setMode('')};window.addEventListener('keydown',close);window.addEventListener('pointerdown',close);return()=>{clearTimeout(restore);window.removeEventListener('keydown',close);window.removeEventListener('pointerdown',close);onModeChange?.(false)}},[mode]);
+ const statuses=[['all','Tutti'],['published','Pubblicati'],['draft','Da pubblicare'],['translations','Traduzioni'],['unconfigured','Da configurare']];
+ return <div ref={surface} className={'mobile-tool-surface '+(mode?'is-open':'')} data-mode={mode} data-collapse-from={lastMode.current}><div className="mobile-tool-row"><button type="button" aria-label="Cerca locale" aria-expanded={mode==='search'} aria-pressed={mode==='search'||!!query} onClick={()=>setMode(mode==='search'?'':'search')}><Icon name="search" size={20}/></button><div className="mobile-search-field" data-visible={mode==='search'}><input data-visible={mode==='search'} tabIndex={mode==='search'?0:-1} aria-hidden={mode!=='search'} ref={field} aria-label="Nome del ristorante" placeholder="" value={query} onChange={e=>{setQuery(e.target.value);update(e.target.value,filter)}}/>{!query&&<span className="mobile-search-cue" aria-hidden>Cerca<span>.</span><span>.</span><span>.</span></span>}</div><button type="button" aria-label="Filtra per stato" aria-expanded={mode==='status'} aria-pressed={filter!=='all'||mode==='status'} onClick={()=>setMode(mode==='status'?'':'status')}><Icon name="filter" size={19}/></button><button data-visible={!!mode} tabIndex={mode?0:-1} aria-hidden={!mode} type="button" aria-label="Chiudi ricerca e filtri" onClick={()=>setMode('')}><Icon name="x" size={18}/></button></div><div className="mobile-tool-options" role="group" aria-label="Stato dei locali" aria-hidden={mode!=='status'} inert={mode!=='status'?'':undefined}>{statuses.map(([value,label])=><button key={value} type="button" aria-pressed={filter===value} onClick={()=>{setFilter(value);update(query,value);setMode('')}}>{label}</button>)}</div></div>
+}

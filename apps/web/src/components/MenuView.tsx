@@ -8,6 +8,7 @@ import { api } from '@/lib/api'
 import { joinMenu, socket } from '@/lib/socket'
 import { useSessionStore, useCartStore } from '@/lib/store'
 import { formatEuro } from '@/lib/utils'
+import { menuItemPriceLabel } from '@/lib/menu-price'
 import { SPRING, SPRING_SOFT, flyToCart, useCountUp } from '@/lib/motion'
 import { useI18n, trTag, trAllergen } from '@/lib/i18n'
 import { dishGradient } from './ui/Dish'
@@ -169,7 +170,7 @@ function ItemSheet({ item, open, onClose, canOrder = true, design }: { item: Pub
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-[var(--ink-2)]" style={part('description')}>{item.description}</p>
           )}
 
-          {design?.showPrices!==false&&<p className="mt-3 font-bold" style={part('price')}>{(item as PublicItem & {priceDisplay?:string}).priceDisplay||formatEuro(item.price)}</p>}
+          {design?.showPrices!==false&&menuItemPriceLabel(item,formatEuro)&&<p className="mt-3 font-bold" style={part('price')}>{menuItemPriceLabel(item,formatEuro)}</p>}
           {design?.showImages===false&&item.tags?.length>0&&<div className="mt-2 flex flex-wrap gap-2">{item.tags.map(tag=><Tag key={tag}>{tag}</Tag>)}</div>}
           {design?.showAllergens!==false&&item.allergens.length > 0 && (
             <div className="mt-4">

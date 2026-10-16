@@ -43,15 +43,22 @@ export function webRequestAllowed(method: string, origin: string | undefined, ex
 
 /** Former local-appliance endpoints (shutdown, pairing, LAN printing, global WhatsApp
  * credentials, PIN login). They always answer with the same explicit 404. */
-export const WEB_UNAVAILABLE_PREFIXES = ['/internal', '/api/setup', '/api/print', '/api/whatsapp', '/api/auth/pin-roster', '/api/auth/pin-login']
+export const WEB_UNAVAILABLE_PREFIXES = ['/internal', '/api/setup', '/api/print', '/api/whatsapp', '/api/auth/device', '/api/auth/pin-roster', '/api/auth/pin-login', '/api/bills', '/api/inventory', '/api/shifts', '/api/devices', '/api/insights', '/api/ai/owner/chat/stream', '/api/customer/takeaway']
 
 /** onRequest boundary of the web service: unavailable appliance paths, then the
  * strict browser-origin check for cookie-authenticated writes. */
 export function webBoundary(publicOrigin: string) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
-    const path = request.url.split('?')[0]!
+    // Twilio authenticates this exact server-to-server POST with its signature, never cookies.
+    if(request.method==='POST'&&request.url==='/api/whatsapp/twilio')return
+    let path: string
+    try { path = decodeURIComponent(request.url.split('?')[0]!) } catch { return reply.code(400).send({ error: { code: 'INVALID_PATH', message: 'Percorso non valido.' } }) }
     if (WEB_UNAVAILABLE_PREFIXES.some(prefix => path === prefix || path.startsWith(prefix + '/'))) {
       return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Funzione non disponibile nel servizio web.' } })
+    }
+    const tableConfiguration = /^\/api\/tables\/[^/]+\/qr(?:\/|$)/.test(path) || (/^\/api\/tables(?:\/|$)/.test(path) && !['GET', 'HEAD', 'OPTIONS'].includes(request.method) && !/^\/api\/tables\/[^/]+\/(status|waiter-resolve)$/.test(path))
+    if (tableConfiguration) {
+      return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Configurazione tavoli non disponibile.' } })
     }
     if (!webRequestAllowed(request.method, request.headers.origin, publicOrigin)) {
       return reply.code(403).send({ error: { code: 'ORIGIN_REJECTED', message: 'Origine della richiesta non autorizzata.' } })

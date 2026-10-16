@@ -1,3 +1,4 @@
+import { imageErrorStatus } from '../lib/image-error-status.js'
 import {readWorkspace} from '../lib/menu-workspace-store.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
@@ -5,12 +6,11 @@ import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemT
 import { eq, and, asc } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-import { saveImageBuffer } from '../lib/image-store.js'
-import { maybeStyleDishImage } from '../lib/dish-image-ai.js'
-import OpenAI from 'openai'
+import { deliverPersistedEvent } from '../lib/event-delivery.js'
 
-const getAI = () => {
+const getAI = async () => {
   if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  const {default:OpenAI}=await import('openai');
   return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
@@ -179,7 +179,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
     // Broadcast menu change: dashboard staff (room privata) riceve la riga COMPLETA;
     // la room pubblica menu:{id} (anonima, joinabile da chiunque) riceve solo i campi
     // pubblici — MAI costPrice (food cost/margine) né altri campi interni.
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'menu:updated', { itemId, item }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     const publicItem = {
       id: item.id,
       sectionId: item.sectionId,
@@ -191,7 +191,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
       tags: item.tags,
       available: item.available,
     }
-    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item: publicItem })
+    deliverPersistedEvent(io, `menu:${req.user!.restaurantId}`, 'menu:updated', { itemId, item: publicItem }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: item }
   })
 
@@ -201,8 +201,8 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const { available } = req.body as { available: boolean }
     const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
-    io.to(`menu:${req.user!.restaurantId}`).emit('menu:item_availability', { itemId, available })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'menu:item_availability', { itemId, available }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
+    deliverPersistedEvent(io, `menu:${req.user!.restaurantId}`, 'menu:item_availability', { itemId, available }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: item }
   })
 
@@ -236,12 +236,14 @@ export async function menuRoutes(fastify: FastifyInstance) {
     // Best-effort: se lo stile AI è spento, il server è offline o Gemini fallisce,
     // torna lo STESSO buffer — e allora `styled` è false. Il confronto è per
     // riferimento, quindi non mente: nessun altro modo di sapere se ha davvero girato.
+    const {maybeStyleDishImage}=await import('../lib/dish-image-ai.js')
     const buf = await maybeStyleDishImage(req.user!.restaurantId, original, data.mimetype || 'image/jpeg')
     const styled = buf !== original
 
+    const { saveImageBuffer } = await import('../lib/image-store.js')
     const res = await saveImageBuffer(req.user!.restaurantId, buf)
     if ('error' in res) {
-      const status = res.code === 'STORAGE_FULL' ? 507 : 400
+      const status = imageErrorStatus(res.code)
       return reply.code(status).send({ error: { code: res.code, message: res.error } })
     }
 
@@ -253,8 +255,8 @@ export async function menuRoutes(fastify: FastifyInstance) {
 
     // Stessa coppia di emit di PATCH /items/:itemId: la dashboard riceve la riga
     // completa, la room pubblica del menu solo i campi che il cliente può vedere.
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('menu:updated', { itemId, item })
-    io.to(`menu:${req.user!.restaurantId}`).emit('menu:updated', {
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'menu:updated', { itemId, item }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
+    deliverPersistedEvent(io, `menu:${req.user!.restaurantId}`, 'menu:updated', {
       itemId,
       item: {
         id: item.id,
@@ -267,7 +269,7 @@ export async function menuRoutes(fastify: FastifyInstance) {
         tags: item.tags,
         available: item.available,
       },
-    })
+    }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
 
     return { data: { id: item.id, imageUrl: item.imageUrl, styled } }
   })
@@ -363,9 +365,9 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const [menu] = await db.select().from(menus).where(and(eq(menus.id, menuId), eq(menus.restaurantId, req.user!.restaurantId))).limit(1)
     if (!menu) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Menu not found' } })
 
-    let completion: Awaited<ReturnType<ReturnType<typeof getAI>['chat']['completions']['create']>>
+    let completion: Awaited<ReturnType<Awaited<ReturnType<typeof getAI>>['chat']['completions']['create']>>
     try {
-      const openai = getAI()
+      const openai = await getAI()
       completion = await openai.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         response_format: { type: 'json_object' },

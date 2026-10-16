@@ -1,4 +1,5 @@
 'use client'
+import { TakoLoading } from './TakoLoading'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Clock, Plus } from 'lucide-react'
@@ -64,7 +65,7 @@ export function OrderTracking({ onOrderAgain }: { onBack: () => void; onOrderAga
 
   if (loading) return (
     <div className="flex min-h-[60vh] items-center justify-center">
-      <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-transparent" style={{ borderColor: 'var(--brand)', borderTopColor: 'transparent' }} />
+      <TakoLoading label="Aggiornamento ordine…" variant="screen"/>
     </div>
   )
 

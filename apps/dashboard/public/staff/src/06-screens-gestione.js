@@ -35,7 +35,6 @@ function ScreenMenu({ mobile }) {
     <ScreenScroll mobile={mobile}>
       <PageHead mobile={mobile} tako="dish" title="Menu" sub={`${menu.length} sezioni · ${menu.reduce((a, s) => a + s.piatti.length, 0)} piatti`}
         actions={<div style={{ display: "flex", gap: 8 }}>
-          <Btn kind="soft" icon="insights" onClick={() => window.takoGo && window.takoGo("insights")}>Analisi menu</Btn>
           <Btn kind="soft" icon="sparkles" onClick={() => setImportOpen(true)}>Importa da testo</Btn>
           <Btn kind="soft" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuova sezione</Btn>
           <Btn kind="brand" icon="plus" onClick={async () => {
@@ -307,12 +306,12 @@ function DishEditor({ dish, mobile, onClose }) {
       </div>
       <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: 20 }}>
         <label style={{ position: "relative", display: "block", height: 120, borderRadius: 12, border: "1.5px dashed var(--hairline)", overflow: "hidden", cursor: uploading ? "wait" : "pointer", color: "var(--ink-3)", marginBottom: 16, background: imageUrl ? "var(--surface)" : "var(--sunken)" }}>
-          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onPickImage} disabled={uploading} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "inherit" }} />
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={onPickImage} disabled={uploading} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "inherit" }} />
           {imageUrl ? (
             <img src={imageUrl} alt="Immagine piatto" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
           ) : (
             <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
-              <div style={{ textAlign: "center" }}><Icon name="download" size={24} style={{ margin: "0 auto 6px" }} /><span style={{ fontSize: 13, fontWeight: 600 }}>{uploading ? "Carico…" : "Carica immagine"}</span></div>
+              <div style={{ textAlign: "center" }}><Icon name="download" size={24} style={{ margin: "0 auto 6px" }} /><span style={{ fontSize: 13, fontWeight: 600 }}>{uploading ? <TakoLoading label="Caricamento immagine…" variant="compact"/> : "Carica immagine"}</span></div>
             </div>
           )}
           {imageUrl && !uploading && (
@@ -695,7 +694,7 @@ function InvItemDrawer({ item, stat, mobile, onClose, onChanged, onEdit, onDelet
         {item.supplier && <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 14 }}>Fornitore · <b style={{ color: "var(--ink-2)" }}>{item.supplier}</b></div>}
 
         <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink-2)", marginBottom: 8 }}>Storico movimenti</div>
-        {moves === null ? <div style={{ fontSize: 13, color: "var(--ink-3)", padding: "8px 0" }}>Carico…</div>
+        {moves === null ? <div style={{ fontSize: 13, color: "var(--ink-3)", padding: "8px 0" }}><TakoLoading label="Caricamento dati…" variant="compact"/></div>
           : moves.length === 0 ? <div style={{ fontSize: 13, color: "var(--ink-3)", padding: "8px 0" }}>Nessun movimento registrato.</div>
           : <Card pad={0} style={{ overflow: "hidden" }}>
               {moves.map((mv, i) => { const m = MOVE_META[mv.type] || MOVE_META.adjustment; const [bg, fg] = TONE[m.tone] || TONE.muted;
@@ -1383,8 +1382,8 @@ function ScreenImpostazioni({ mobile, settings = SETTINGS_DEFAULTS, setSettings 
                     : <Icon name="image" size={24} style={{ color: "var(--ink-3)" }} />}
                 </span>
                 <label style={{ flex: 1, height: 64, borderRadius: 12, border: "1.5px dashed var(--hairline)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 13, fontWeight: 600, cursor: logoUploading ? "wait" : "pointer", textAlign: "center", padding: "0 12px" }}>
-                  <input type="file" accept="image/png,image/webp,image/jpeg,image/svg+xml" onChange={onPickLogo} disabled={logoUploading} style={{ display: "none" }} />
-                  {logoUploading ? "Carico…" : (logoUrl ? "Cambia logo (PNG trasparente)" : "Carica un PNG trasparente")}
+                  <input type="file" accept="image/png,image/webp,image/jpeg" onChange={onPickLogo} disabled={logoUploading} style={{ display: "none" }} />
+                  {logoUploading ? <TakoLoading label="Caricamento logo…" variant="compact"/> : (logoUrl ? "Cambia logo (PNG trasparente)" : "Carica un PNG trasparente")}
                 </label>
               </div>
             </Card>
@@ -1400,11 +1399,8 @@ function ScreenImpostazioni({ mobile, settings = SETTINGS_DEFAULTS, setSettings 
             <Card pad={20}>
               <h3 style={{ fontSize: 16, marginBottom: 6 }}>Modalità di servizio</h3>
               <Row label="Servizio al tavolo" sub="Ordini dai QR ai tavoli"><Toggle on={settings.servizioTavolo} set={v => set("servizioTavolo", v)} /></Row>
-              <Row label="Asporto" sub="Ordini da ritirare"><Toggle on={settings.asporto} set={v => set("asporto", v)} /></Row>
-              <Row label="Paga al tavolo" sub="Pagamento dal telefono del cliente"><Toggle on={settings.pagaTavolo} set={v => set("pagaTavolo", v)} /></Row>
               <Row label="Assistente AI" sub="Suggerimenti e risposte ai clienti"><Toggle on={settings.ai} set={v => set("ai", v)} /></Row>
               <Row label="Coperto" sub="Aggiunto automaticamente al conto"><div style={{ display: "flex", alignItems: "center", gap: 10 }}>{settings.copertoOn && <input type="number" step="0.5" style={numStyle} value={settings.coperto} onChange={e => set("coperto", parseFloat(e.target.value) || 0)} />}<Toggle on={settings.copertoOn} set={v => set("copertoOn", v)} /></div></Row>
-              <Row label="Mance suggerite" sub="Mostra 5/10/15% in cassa"><Toggle on={settings.manceSuggerite} set={v => set("manceSuggerite", v)} /></Row>
             </Card>
           )}
 
@@ -1418,7 +1414,6 @@ function ScreenImpostazioni({ mobile, settings = SETTINGS_DEFAULTS, setSettings 
               {settings.recensioni && (
                 <Field label="Link recensione (es. Google)"><input style={inputStyle} value={settings.recensioniUrl} placeholder="https://g.page/r/..." onChange={e => set("recensioniUrl", e.target.value)} /></Field>
               )}
-              <Row label="Scarico automatico magazzino" sub="Cala lo stock in base alla ricetta quando vendi"><Toggle on={settings.scaricoAuto} set={v => set("scaricoAuto", v)} /></Row>
             </Card>
             <Card pad={20}>
               <h3 style={{ fontSize: 16, marginBottom: 6 }}>Assistente & AI</h3>
@@ -1428,7 +1423,6 @@ function ScreenImpostazioni({ mobile, settings = SETTINGS_DEFAULTS, setSettings 
               {settings.fotoAi && (
                 <Field label="Codice Pro (opzionale)"><input style={inputStyle} value={settings.fotoAiCodice} placeholder="Sblocca la qualità Pro — richiedilo al fornitore" onChange={e => set("fotoAiCodice", e.target.value)} /></Field>
               )}
-              <Row label="Menu engineering" sub="Analisi profitto/popolarità dei piatti — consigliata attiva"><Toggle on={settings.menuEngineering} set={v => set("menuEngineering", v)} /></Row>
             </Card>
           </>)}
 
@@ -1650,7 +1644,7 @@ function ScreenCollega({ mobile }) {
       <CloudPairing mobile={mobile} />
       <Card pad={mobile ? 18 : 26} style={{ maxWidth: 580 }}>
         {err && <div style={{ color: "var(--danger)", fontSize: 14 }}>Info non disponibili. Server raggiungibile?</div>}
-        {!err && !info && <div style={{ color: "var(--ink-2)", fontSize: 14 }}>Carico…</div>}
+        {!err && !info && <div style={{ color: "var(--ink-2)", fontSize: 14 }}><TakoLoading label="Caricamento dati…" variant="compact"/></div>}
         {info && (
           <div style={{ display: "flex", flexDirection: mobile ? "column" : "row", gap: 22, alignItems: mobile ? "stretch" : "center" }}>
             {info.qrDataUrl && <img src={info.qrDataUrl} alt="QR collega" width={200} height={200} style={{ alignSelf: "center", borderRadius: 12, border: "1px solid var(--hairline,#eee)" }} />}

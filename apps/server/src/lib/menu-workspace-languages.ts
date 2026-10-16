@@ -15,3 +15,9 @@ export function baselineLanguageConfiguration(settings:{languages?:unknown;defau
 export function normalizeBaselineTranslations<T>(translations:Record<string,T>):Record<string,T>{
  const result:Record<string,T>={};for(const [key,value]of Object.entries(translations)){const normalized=supportedMenuLanguage(key);result[normalized??key]=value}return result
 }
+
+/** Product-wide enabled languages. Historical translation maps are kept untouched. */
+export const COMMON_MENU_LANGUAGES=['it','en','fr','de','es','pt','nl','pl','ru','ar','zh','ja'] as const
+export function commonMenuLanguages<T extends {languages:string[]}>(workspace:T):T{
+ return {...workspace,languages:[...COMMON_MENU_LANGUAGES]}
+}

@@ -1,3 +1,4 @@
+import { registerEdgeUploadAdmission } from './lib/edge-upload-admission.js'
 import Fastify, { type FastifyServerOptions } from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
@@ -5,56 +6,27 @@ import cookie from '@fastify/cookie'
 import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 import helmet from '@fastify/helmet'
-import fastifyStatic from '@fastify/static'
-import { resolve, dirname } from 'path'
-import { mkdirSync, existsSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { Server as SocketServer } from 'socket.io'
-import { setupSocketHandlers } from './socket/handlers.js'
-import { authRoutes } from './routes/auth.js'
-import { restaurantRoutes } from './routes/restaurants.js'
-import { webLocationRoutes } from './routes/web-locations.js'
-import { menuWorkspaceRoutes } from './routes/menu-workspace.js'
-import { webAccountRoutes } from './routes/web-accounts.js'
-import { menuRoutes } from './routes/menu.js'
-import { tableRoutes } from './routes/tables.js'
-import { orderRoutes } from './routes/orders.js'
-import { billRoutes } from './routes/bills.js'
-import { inventoryRoutes } from './routes/inventory.js'
-import { statsRoutes } from './routes/stats.js'
-import { customerRoutes } from './routes/customer.js'
-import { uploadRoutes } from './routes/uploads.js'
-import { staffRoutes } from './routes/staff.js'
-import { insightsRoutes } from './routes/insights.js'
-import { systemRoutes } from './routes/system.js'
-import { reservationRoutes } from './routes/reservations.js'
-import { shiftRoutes } from './routes/shifts.js'
-import { menuI18nRoutes } from './routes/menu-i18n.js'
-import { aiOwnerRoutes } from './routes/ai-owner.js'
-import { startConnectivityMonitor, onConnectivityChange } from './lib/connectivity.js'
-import { isCloudMode } from './cloud/config.js'
-import { startCloudServer } from './cloud/server.js'
-import { remoteStorageEnabled } from './lib/remote-image-store.js'
-import { remoteImageRoutes } from './routes/remote-images.js'
+import { optionalDurableStore } from './lib/durable-rate-store.js'
+import type { Server as SocketServer } from 'socket.io'
 import { isWebMode, validateWebRuntime, webOrigin, webBoundary, webServerHost, webSocketOrigin } from './lib/web-runtime.js'
 
 // Socket.io condiviso con le route (import { io } from '../index.js'). Assegnato
 // dentro startServer(); live binding ESM → le route lo vedono valorizzato a runtime.
 export let io: SocketServer
 
-// Avvio del server (chiamata da bootstrap.ts e cloud/entry.ts).
-export async function startServer(): Promise<void> {
-  // TAKO_MODE=cloud: control-plane identità del sito (route cloud, CORS allowlist,
-  // rate-limit Redis). Ogni altro avvio è la webapp ospitata (TAKO_MODE=web).
-  if (isCloudMode()) {
-    await startCloudServer()
-    return
-  }
+export type AppBuildOptions = { runtime?: 'node' | 'edge-spike' | 'edge-candidate' }
+export const EDGE_SPIKE_CAPABILITIES = Object.freeze({ experimental: true, productionReady: false, supported: ['GET /health'], unsupported: ['authentication', 'restaurant/location/menu APIs', 'operational writes', 'realtime', 'uploads/QR/PDF', 'static files'] })
 
+/** Build without a listener or realtime side effects. edge-spike is deliberately
+ * health-only until the full provider parity gate passes; it cannot run in production. */
+export async function createApp(options: AppBuildOptions = {}) {
+  const edge = options.runtime === 'edge-spike' || options.runtime === 'edge-candidate'
+  const candidate = options.runtime === 'edge-candidate'
+  if (candidate && process.env['TAKO_EXECUTION_RUNTIME'] !== 'edge') throw new Error('Edge candidate requires TAKO_EXECUTION_RUNTIME=edge')
+  if (edge && process.env['NODE_ENV'] === 'production') throw new Error('Experimental edge-spike cannot run in production')
   if (!isWebMode()) throw new Error('TAKO_MODE=web is required: the local appliance runtime has been removed')
-  validateWebRuntime()
+  if (!edge) validateWebRuntime()
   const publicOrigin = webOrigin()
-  const PORT = Number(process.env['PORT'] ?? 3001)
   const JWT_SECRET = process.env['JWT_SECRET']
   if (!JWT_SECRET) throw new Error('JWT_SECRET env variable is required')
   // Lo stesso segreto firma sessioni staff, JWT tavolo e cookie firmati: un valore
@@ -68,6 +40,11 @@ export async function startServer(): Promise<void> {
     ...(process.env['TRUST_PROXY'] ? { trustProxy: process.env['TRUST_PROXY'].split(',').map(value => value.trim()).filter(Boolean) } : {}),
   }
   const fastify = Fastify(fastifyOptions)
+  if (!edge && process.env['TAKO_DURABLE_IMAGE_QUOTA'] === '1') {
+    const { initializeNodeImageQuota } = await import('./lib/node-image-quota-initializer.js')
+    const images = await initializeNodeImageQuota()
+    if (images) fastify.addHook('onClose', async () => { await images.close() })
+  }
 
   // Error handler globale: logga l'errore completo server-side e sanifica i 5xx
   // (gli errori Postgres/Drizzle non incapsulati trapelerebbero nomi colonne,
@@ -77,6 +54,9 @@ export async function startServer(): Promise<void> {
     const e = error as { statusCode?: number; code?: string; message?: string }
     const status = e.statusCode ?? 500
     request.log.error({ err: error }, 'unhandled route error')
+    if (status === 503 && e.code === 'RATE_STORE_UNAVAILABLE') {
+      return reply.code(503).send({ error: { code: e.code, message: 'Servizio temporaneamente non disponibile' } })
+    }
     if (status < 500) {
       return reply.code(status).send({ error: { code: e.code ?? 'BAD_REQUEST', message: e.message } })
     }
@@ -112,6 +92,22 @@ await fastify.register(jwt, { secret: JWT_SECRET })
 await fastify.register(cookie, { secret: JWT_SECRET })
 await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
 
+// Edge serves the same immutable Storage images without loading codecs or local files.
+if (edge) {
+  const { remoteStorageEnabled } = await import('./lib/remote-image-store.js')
+  if (remoteStorageEnabled()) {
+    const { remoteImageRoutes } = await import('./routes/remote-images.js')
+    await fastify.register(remoteImageRoutes)
+  }
+}
+
+if (!edge) {
+  const { resolve, dirname } = await import('node:path')
+  const { mkdirSync, existsSync } = await import('node:fs')
+  const { fileURLToPath } = await import('node:url')
+  const { default: fastifyStatic } = await import('@fastify/static')
+  const { remoteStorageEnabled } = await import('./lib/remote-image-store.js')
+  const { remoteImageRoutes } = await import('./routes/remote-images.js')
 const UPLOADS_DIR = resolve(process.env['UPLOADS_DIR'] ?? './uploads')
 mkdirSync(UPLOADS_DIR, { recursive: true })
 if (remoteStorageEnabled()) await fastify.register(remoteImageRoutes)
@@ -135,11 +131,16 @@ if (existsSync(STAFF_DIR)) {
   console.warn(`STAFF_DIR non trovato (${STAFF_DIR}); dashboard statica non servita.`)
 }
 
+}
+
 // Rate limiting globale. In dev il loopback (test, dashboard locale, /health) è
 // esentato: il limite per-IP serve contro abusi esterni, non contro la macchina
 // stessa. In produzione resta attivo per tutti.
-const rlAllowList = process.env['NODE_ENV'] === 'production' ? [] : ['127.0.0.1', '::1']
+const durableRateStore = optionalDurableStore()
+const rlAllowList = durableRateStore || process.env['NODE_ENV'] === 'production' ? [] : ['127.0.0.1', '::1']
 await fastify.register(rateLimit, {
+  ...(durableRateStore ? { store: durableRateStore } : {}),
+  skipOnError: false,
   global: true,
   max: 100,          // max 100 req per finestra
   timeWindow: 60000, // 1 minuto
@@ -161,33 +162,55 @@ await fastify.register(rateLimit, {
 // Confine del servizio web: le funzioni della vecchia appliance locale rispondono con
 // un 404 esplicito e le scritture da origini estranee sono rifiutate (lib/web-runtime.ts).
 fastify.addHook('onRequest', webBoundary(publicOrigin))
+if(candidate)registerEdgeUploadAdmission(fastify)
 
 // Health check
 fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString() }))
 
+if (!edge || candidate) {
+// Operational candidate is still forbidden in production until hosted gates pass.
 // Routes
-await fastify.register(authRoutes, { prefix: '/api/auth' })
-await fastify.register(restaurantRoutes, { prefix: '/api/restaurants' })
-await fastify.register(menuRoutes, { prefix: '/api/menus' })
-await fastify.register(menuWorkspaceRoutes, { prefix: '/api/menu-workspace' })
+await fastify.register((await import('./routes/twilio-menu.js')).twilioMenuRoutes, { prefix: '/api' })
+await fastify.register((await import('./routes/auth.js')).authRoutes, { prefix: '/api/auth' })
+await fastify.register((await import('./routes/restaurants.js')).restaurantRoutes, { prefix: '/api/restaurants' })
+await fastify.register((await import('./routes/menu.js')).menuRoutes, { prefix: '/api/menus' })
+await fastify.register((await import('./routes/menu-workspace.js')).menuWorkspaceRoutes, { prefix: '/api/menu-workspace' })
 await fastify.register((await import('./routes/brand-from-site.js')).brandFromSiteRoutes, { prefix: '/api/menu-workspace' })
-await fastify.register(webAccountRoutes, { prefix: '/api/web-accounts' })
-await fastify.register(webLocationRoutes, { prefix: '/api/web-locations' })
-await fastify.register(tableRoutes, { prefix: '/api/tables' })
-await fastify.register(orderRoutes, { prefix: '/api/orders' })
-await fastify.register(billRoutes, { prefix: '/api/bills' })
-await fastify.register(inventoryRoutes, { prefix: '/api/inventory' })
-await fastify.register(statsRoutes, { prefix: '/api/stats' })
-await fastify.register(customerRoutes, { prefix: '/api/customer' })
-await fastify.register(uploadRoutes, { prefix: '/api/uploads' })
-await fastify.register(staffRoutes, { prefix: '/api/staff' })
-await fastify.register(insightsRoutes, { prefix: '/api/insights' })
-await fastify.register(systemRoutes, { prefix: '/api/system' })
-await fastify.register(reservationRoutes, { prefix: '/api/reservations' })
-await fastify.register(shiftRoutes, { prefix: '/api/shifts' })
-await fastify.register(menuI18nRoutes, { prefix: '/api/customer' })
-await fastify.register(aiOwnerRoutes, { prefix: '/api/ai/owner' })
+await fastify.register((await import('./routes/web-accounts.js')).webAccountRoutes, { prefix: '/api/web-accounts' })
+await fastify.register((await import('./routes/web-locations.js')).webLocationRoutes, { prefix: '/api/web-locations' })
+await fastify.register((await import('./routes/agency.js')).agencyRoutes, { prefix: '/api/agency' })
+await fastify.register((await import('./routes/onboarding.js')).onboardingRoutes, { prefix: '/api' })
+await fastify.register((await import('./routes/tables.js')).tableRoutes, { prefix: '/api/tables' })
+await fastify.register((await import('./routes/orders.js')).orderRoutes, { prefix: '/api/orders' })
+await fastify.register((await import('./routes/bills.js')).billRoutes, { prefix: '/api/bills' })
+await fastify.register((await import('./routes/inventory.js')).inventoryRoutes, { prefix: '/api/inventory' })
+await fastify.register((await import('./routes/stats.js')).statsRoutes, { prefix: '/api/stats' })
+await fastify.register((await import('./routes/customer.js')).customerRoutes, { prefix: '/api/customer' })
+await fastify.register((await import('./routes/uploads.js')).uploadRoutes, { prefix: '/api/uploads' })
+await fastify.register((await import('./routes/staff.js')).staffRoutes, { prefix: '/api/staff' })
+await fastify.register((await import('./routes/insights.js')).insightsRoutes, { prefix: '/api/insights' })
+await fastify.register((await import('./routes/system.js')).systemRoutes, { prefix: '/api/system' })
+await fastify.register((await import('./routes/reservations.js')).reservationRoutes, { prefix: '/api/reservations' })
+await fastify.register((await import('./routes/shifts.js')).shiftRoutes, { prefix: '/api/shifts' })
+await fastify.register((await import('./routes/menu-i18n.js')).menuI18nRoutes, { prefix: '/api/customer' })
+await fastify.register((await import('./routes/ai-owner.js')).aiOwnerRoutes, { prefix: '/api/ai/owner' })
 
+}
+await fastify.ready()
+return fastify
+}
+
+/** Node listener preserves the existing hosted/local web runtime. */
+export async function startServer(): Promise<void> {
+  const { isCloudMode } = await import('./cloud/config.js')
+  if (isCloudMode()) { const { startCloudServer } = await import('./cloud/server.js'); await startCloudServer(); return }
+  const fastify = await createApp()
+  const publicOrigin = webOrigin()
+  const PORT = Number(process.env['PORT'] ?? 3001)
+  const resolveCorsOrigin = (origin?: string): boolean => !origin || origin === publicOrigin
+  const { Server: SocketServer } = await import('socket.io')
+  const { setupSocketHandlers } = await import('./socket/handlers.js')
+  const { startConnectivityMonitor, onConnectivityChange } = await import('./lib/connectivity.js')
 // Attach Socket.io to Fastify's underlying HTTP server AFTER ready()
 await fastify.ready()
 

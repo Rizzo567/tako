@@ -66,7 +66,7 @@ function MwDropZone({title,label,value,busy,disabled,onFile,onRemove,variant}) {
   <input ref={input} type="file" accept={MW_IMAGE_TYPES.join(',')} tabIndex={-1} aria-hidden="true" style={{display:'none'}} onChange={e=>{const file=e.target.files?.[0];e.target.value='';take(file);}}/>
   {value?<><div className="mw-drop-media"><img src={value} alt={label}/></div><div className="mw-drop-bar"><span>{label}</span><button type="button" className="press mw-chip" disabled={disabled||busy} onClick={pick}>Sostituisci</button><button type="button" className="press mw-chip" disabled={disabled||busy} onClick={onRemove}>Rimuovi</button></div></>
   :<button type="button" className="mw-drop-empty" disabled={disabled||busy} onClick={pick} aria-label={`${title}: scegli un file`}><span className="mw-drop-icon"><Icon name="upload" size={18}/></span><b>{title}</b><small>oppure fai clic per sceglierlo · PNG, JPG o WebP</small></button>}
-  {busy&&<div className="mw-drop-busy" role="status"><Spinner/>Caricamento…</div>}
+  {busy&&<div className="mw-drop-busy"><TakoLoading label="Caricamento immagine…" variant="compact"/></div>}
  </div>;
 }
 function MwSwatch({label,value,onChange}) {
@@ -79,13 +79,13 @@ function MwContrast({text,background}) {
 
 function MenuWorkspaceSetup({adapter,document,onApply,onClose,onPending}) {
  const [step,setStep]=useState(0),[design,setDesign]=useState(()=>({...document.design})),[source,setSource]=useState(''),[target,setTarget]=useState(''),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[assets,setAssets]=useState([]),[assetsError,setAssetsError]=useState(false);
- const [uploading,setUploading]=useState(null),[proposal,setProposal]=useState(null),[siteUrl,setSiteUrl]=useState(''),[siteBusy,setSiteBusy]=useState(false),[siteError,setSiteError]=useState(''),[uploadError,setUploadError]=useState('');
+ const [imageEdit,setImageEdit]=useState(null),[imagePreparing,setImagePreparing]=useState(false),[uploading,setUploading]=useState(null),[proposal,setProposal]=useState(null),[siteUrl,setSiteUrl]=useState(''),[siteBusy,setSiteBusy]=useState(false),[siteError,setSiteError]=useState(''),[uploadError,setUploadError]=useState('');
  const frame=useRef(null),initial=useRef(JSON.stringify(document)),requestId=useRef(0),extractId=useRef(0);
- const changed=JSON.stringify(design)!==JSON.stringify(document.design)||!!source.trim();
+ const changed=JSON.stringify(design)!==JSON.stringify(document.design)||!!source.trim()||!!imageEdit;
  const stale=initial.current!==JSON.stringify(document);
  const candidate=MW_SETUP_DOCUMENT(document,result?.workspace,design);
  const previewMenuId=target||candidate.menus.find(m=>!document.menus.some(original=>original.id===m.id)||m.sections.some(s=>s.items.some(i=>!document.menus.flatMap(x=>x.sections.flatMap(y=>y.items)).some(original=>original.id===i.id))))?.id||candidate.menus[0]?.id;
- const pending=busy||!!uploading||siteBusy;
+ const pending=busy||!!uploading||siteBusy||imagePreparing;
  useEffect(()=>{onPending(changed,pending);return()=>onPending(false,false);},[changed,pending]);
  const loadAssets=()=>adapter.listAssets().then(r=>{setAssets(Array.isArray(r)?r:r.data||[]);setAssetsError(false);}).catch(()=>setAssetsError(true));
  useEffect(()=>{let alive=true;adapter.listAssets().then(r=>{if(alive){setAssets(Array.isArray(r)?r:r.data||[]);setAssetsError(false);}}).catch(()=>{if(alive)setAssetsError(true);});return()=>{alive=false;requestId.current++;extractId.current++;};},[adapter]);
@@ -93,16 +93,7 @@ function MenuWorkspaceSetup({adapter,document,onApply,onClose,onPending}) {
  const change=(key,value)=>{setDesign(d=>({...d,[key]:value,...(key==='primary'?{categoryActiveBackground:value}:{})}));};
  const colors={primary:design.primary||'#242628',background:design.background||'#ffffff',text:design.text||'#242628'};
  const propose=async(src,from)=>{const id=++extractId.current;try{const palette=await mwExtractFromImage(src);if(extractId.current===id)setProposal({...palette,from});}catch(_){/* immagine non leggibile: nessuna proposta */}};
- const upload=async(key,file)=>{
-  setUploadError('');
-  if(!MW_IMAGE_TYPES.includes(file.type)){setUploadError('Formato non supportato: usa PNG, JPG o WebP.');return;}
-  if(file.size>10*1024*1024){setUploadError('Immagine troppo grande: massimo 10 MB.');return;}
-  if(key==='logoUrl'){const local=URL.createObjectURL(file);propose(local,'logo').finally(()=>setTimeout(()=>URL.revokeObjectURL(local),1000));}
-  setUploading(key);
-  try{const response=await adapter.uploadAsset(file);const asset=response.data||response;if(asset.url)change(key,asset.url);loadAssets();}
-  catch(e){setUploadError(e.message||'Caricamento non riuscito');}
-  finally{setUploading(null);}
- };
+ const upload=async(key,file)=>{setImageEdit({key,file});setUploadError('');};
  const fromSite=async()=>{
   const url=siteUrl.trim();if(!url||siteBusy)return;setSiteBusy(true);setSiteError('');
   try{const response=await fetch('/api/menu-workspace/brand-from-site',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})});const body=await response.json().catch(()=>null);if(!response.ok)throw new Error(body?.error?.message||'Sito non raggiungibile');
@@ -128,10 +119,11 @@ function MenuWorkspaceSetup({adapter,document,onApply,onClose,onPending}) {
    <div className="mw-brand">
     <div className="mw-brand-media">
      <MwDropZone title="Trascina qui il logo" label="Logo" variant="logo" value={design.logoUrl} busy={uploading==='logoUrl'} disabled={stale||(!!uploading&&uploading!=='logoUrl')} onFile={file=>upload('logoUrl',file)} onRemove={()=>change('logoUrl',null)}/>
-     <MwDropZone title="Trascina qui lo sfondo" label="Sfondo" variant="background" value={design.backgroundImageUrl} busy={uploading==='backgroundImageUrl'} disabled={stale||(!!uploading&&uploading!=='backgroundImageUrl')} onFile={file=>upload('backgroundImageUrl',file)} onRemove={()=>change('backgroundImageUrl',null)}/>
-     {uploadError&&<SbError msg={uploadError}/>}
+     <MwDropZone title="Trascina qui l’hero" label="Hero" variant="background" value={design.coverUrl} busy={uploading==='coverUrl'} disabled={stale||(!!uploading&&uploading!=='coverUrl')} onFile={file=>upload('coverUrl',file)} onRemove={()=>change('coverUrl',null)}/>
+     <window.MenuWorkspaceBackground design={design} onChange={next=>setDesign(next)}/>
+     {imageEdit&&<section><window.MenuWorkspaceImageUpload key={imageEdit.key+imageEdit.file.name} initialFile={imageEdit.file} purpose={imageEdit.key==='logoUrl'?'logo':'background'} assets={assets} adapter={adapter} onPending={(changed,pending)=>setImagePreparing(pending)} onUploaded={async asset=>{change(imageEdit.key,asset.url);if(imageEdit.key==='logoUrl')propose(asset.url,'logo');loadAssets();setImageEdit(null);}}/><Btn disabled={imagePreparing} kind="soft" onClick={()=>setImageEdit(null)}>Chiudi editor immagine</Btn></section>}{uploadError&&<SbError msg={uploadError}/> }
      <p className="mw-hint">Le immagini caricate finiscono nella libreria del locale.</p>
-     {assets.length>0&&<details className="mw-library"><summary>Scegli dalla libreria <span>{assets.length}</span></summary><div className="mw-library-grid">{assets.map(a=><div className="mw-library-item" key={a.id}><img src={a.url} alt={a.name||'Immagine'}/><div><button type="button" className="press mw-chip" aria-label={`Usa ${a.name||'immagine'} come logo`} onClick={()=>{change('logoUrl',a.url);propose(a.url,'logo');}}>Logo</button><button type="button" className="press mw-chip" aria-label={`Usa ${a.name||'immagine'} come sfondo`} onClick={()=>change('backgroundImageUrl',a.url)}>Sfondo</button></div></div>)}</div></details>}
+     {assets.length>0&&<details className="mw-library"><summary>Scegli dalla libreria <span>{assets.length}</span></summary><div className="mw-library-grid">{assets.map(a=><div className="mw-library-item" key={a.id}><img src={a.url} alt={a.name||'Immagine'}/><div><button type="button" className="press mw-chip" aria-label={`Usa ${a.name||'immagine'} come logo`} onClick={()=>{change('logoUrl',a.url);propose(a.url,'logo');}}>Logo</button><button type="button" className="press mw-chip" aria-label={`Usa ${a.name||'immagine'} come hero`} onClick={()=>change('coverUrl',a.url)}>Hero</button></div></div>)}</div></details>}
      {assetsError&&<p className="mw-hint">Libreria immagini non disponibile al momento: puoi comunque caricare un file.</p>}
     </div>
     <div className="mw-brand-colors">
@@ -143,7 +135,7 @@ function MenuWorkspaceSetup({adapter,document,onApply,onClose,onPending}) {
      <div className="mw-panel">
       <h4>Ricava i colori</h4>
       <p className="mw-hint">Dal logo caricato, in automatico, oppure dal sito del locale.</p>
-      <form className="mw-site" onSubmit={e=>{e.preventDefault();fromSite();}}><input type="text" inputMode="url" autoComplete="url" placeholder="www.ilmioristorante.it" value={siteUrl} onChange={e=>{setSiteUrl(e.target.value);setSiteError('');}} aria-label="Indirizzo del sito" disabled={stale}/><Btn kind="soft" size="sm" type="submit" disabled={!siteUrl.trim()||siteBusy||stale}><SwapText k={siteBusy?'b':'i'}>{siteBusy?<><Spinner size={13}/>Analisi…</>:'Analizza sito'}</SwapText></Btn></form>
+      <form className="mw-site" onSubmit={e=>{e.preventDefault();fromSite();}}><input type="text" inputMode="url" autoComplete="url" placeholder="www.ilmioristorante.it" value={siteUrl} onChange={e=>{setSiteUrl(e.target.value);setSiteError('');}} aria-label="Indirizzo del sito" disabled={stale}/><Btn kind="soft" size="sm" type="submit" disabled={!siteUrl.trim()||siteBusy||stale}><SwapText k={siteBusy?'b':'i'}>{siteBusy?<TakoLoading label="Analisi del menu…" variant="compact"/>:'Analizza sito'}</SwapText></Btn></form>
       {siteError&&<SbError msg={siteError}/>}
       {proposal&&<div className="mw-proposal sb-enter" key={proposal.from+proposal.primary+proposal.background}>
        <div className="mw-proposal-head">{proposal.logo&&<img src={proposal.logo} alt="Logo trovato sul sito"/>}<span>{proposal.from==='site'?`Dal sito ${proposal.host}`:'Dal logo'}</span></div>
@@ -162,7 +154,7 @@ function MenuWorkspaceSetup({adapter,document,onApply,onClose,onPending}) {
    <p className="mw-hint" role="status">I piatti si aggiungono: se la destinazione esiste, il suo contenuto resta. Controlla i doppioni prima di applicare.</p>
    <label className="mw-field"><span>Testo del menu</span><textarea disabled={busy} rows={11} value={source} placeholder={MW_SETUP_EXAMPLE} aria-describedby="mw-setup-format" onChange={e=>{setSource(e.target.value);setResult(null);}}/></label>
    <div className="mw-help" id="mw-setup-format"><Icon name="info" size={16}/><div><b>Come scriverlo</b><ul><li><code># ANTIPASTI</code> apre una categoria</li><li><code>Bruschetta — 6,00 €</code> nome e prezzo</li><li>La riga sotto è la descrizione</li></ul><span>I casi ambigui vengono segnalati. Lascia vuoto per cambiare solo l’aspetto.</span></div></div>
-   <footer className="mw-setup-foot"><Btn kind="soft" disabled={busy} onClick={()=>setStep(0)}>Indietro</Btn><Btn disabled={busy||stale} onClick={analyze}><SwapText k={busy?'b':'i'}>{busy?<><Spinner size={13}/>Analisi…</>:'Genera anteprima'}</SwapText></Btn></footer>
+   <footer className="mw-setup-foot"><Btn kind="soft" disabled={busy} onClick={()=>setStep(0)}>Indietro</Btn><Btn disabled={busy||stale} onClick={analyze}><SwapText k={busy?'b':'i'}>{busy?<TakoLoading label="Analisi del menu…" variant="compact"/>:'Genera anteprima'}</SwapText></Btn></footer>
   </div>}
   {step===2&&<div className="mw-setup-body sb-enter" key="s2">
    {result&&<div className="mw-result"><p role="status"><Icon name="check" size={14}/>{result.importedCount} {result.importedCount===1?'piatto importato':'piatti importati'} da verificare</p>{result.warnings?.length>0&&<ul className="mw-warnings">{result.warnings.map((w,i)=><li key={i}><Icon name="alert" size={13}/>{typeof w==='string'?w:JSON.stringify(w)}</li>)}</ul>}</div>}

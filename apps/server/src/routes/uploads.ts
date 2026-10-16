@@ -1,7 +1,6 @@
+import { imageErrorStatus } from '../lib/image-error-status.js'
 import type { FastifyInstance } from 'fastify'
 import { requireAuth } from '../middleware/auth.js'
-import { saveImageBuffer } from '../lib/image-store.js'
-import { maybeStyleDishImage } from '../lib/dish-image-ai.js'
 
 // Upload immagine piatto. La pipeline (magic bytes + re-encode sharp + quota per
 // ristorante) vive in lib/image-store così che ANCHE WhatsApp e il copilot la riusino.
@@ -12,10 +11,12 @@ export async function uploadRoutes(fastify: FastifyInstance) {
     // toBuffer rispetta il limite multipart (10MB) impostato in index.ts.
     let buf = await data.toBuffer()
     // Stile AI coerente (Nano Banana Pro) se attivo; best-effort → altrimenti originale.
+    const {maybeStyleDishImage}=await import('../lib/dish-image-ai.js')
     buf = await maybeStyleDishImage(req.user!.restaurantId, buf, data.mimetype || 'image/jpeg')
+    const {saveImageBuffer}=await import('../lib/image-store.js')
     const res = await saveImageBuffer(req.user!.restaurantId, buf)
     if ('error' in res) {
-      const status = res.code === 'STORAGE_FULL' ? 507 : 400
+      const status = imageErrorStatus(res.code)
       return reply.code(status).send({ error: { code: res.code, message: res.error } })
     }
     return { data: { url: res.url } }

@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 // Sprite pixel-art del polpo Tako + badge centrale per i QR.
 //
 // Lo sprite è disegnato in codice (griglia 16×16) e renderizzato con sharp: nessun
@@ -5,7 +6,6 @@
 // badge è il polpo su un quadrato chiaro arrotondato che fa da "quiet zone" al centro
 // del QR. Si usa con errorCorrectionLevel 'H' (≈30% ridondanza) così coprire il ~24%
 // centrale non rompe la scansione.
-import sharp from 'sharp'
 
 // Griglia pixel-art del polpo. Pochi pixel = blocchi grandi, look chunky.
 // B = corpo polpo, W = bianco occhio, K = pupilla, '.' = trasparente.
@@ -61,6 +61,7 @@ export function octopusBadge(size = 96): Promise<Buffer> {
 }
 
 async function buildBadge(size: number): Promise<Buffer> {
+  const {default:sharp}=await import('sharp')
   const inner = Math.round(size * 0.78) // il polpo non tocca i bordi del pad
   // Resize NEAREST per mantenere i pixel netti (no anti-aliasing → vero pixel-art).
   const octo = await sharp(octopusRaw(), { raw: { width: GRID_W, height: GRID_H, channels: 4 } })
@@ -82,6 +83,7 @@ async function buildBadge(size: number): Promise<Buffer> {
  * EC level 'H' è obbligatorio per tollerare il logo centrale.
  */
 export async function qrWithOctopus(url: string, width = 400): Promise<string> {
+  const {default:sharp}=await import('sharp')
   const QRCode = (await import('qrcode')).default
   const qrBuf = await QRCode.toBuffer(url, {
     errorCorrectionLevel: 'H',

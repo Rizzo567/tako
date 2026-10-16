@@ -1,0 +1,25 @@
+import {createPollingTransport,fingerprint} from './polling-core.mjs';
+const originalFetch=window.fetch.bind(window),live=new Set();let menuUrl=null,reservationUrl='/api/reservations';
+const rows=body=>{if(!Array.isArray(body?.data))throw Error('Invalid list snapshot');return body.data;};
+// Observe only existing, successful GETs to follow the menu/date selected by UI.
+window.fetch=async function(input,options){const response=await originalFetch(input,options);try{const url=new URL(typeof input==='string'?input:input.url,location.origin);const method=options?.method||input?.method||'GET';if(method.toUpperCase()==='GET'&&response.ok&&url.origin===location.origin){let changed=false;if(/^\/api\/menus\/[^/]+$/.test(url.pathname)&&menuUrl!==url.pathname+url.search){menuUrl=url.pathname+url.search;changed=true;}if(url.pathname==='/api/reservations'&&reservationUrl!==url.pathname+url.search){reservationUrl=url.pathname+url.search;changed=true;}if(changed)for(const instance of live)instance.update();}}catch{/* non-URL resources retain native fetch semantics */}return response;};
+window.__TAKO_STATIC_TRANSPORT='polling';
+window.io=function(){let auth=window.__takoUser||null,restaurantId=auth?.restaurantId||null,preflight=null,pendingReload=false,reloading=false;const events=new Map();const fire=(ev,payload)=>{for(const listener of events.get(ev)||[])listener(payload);};
+ const reload=()=>{if(!pendingReload||reloading||window.__takoMenuLeaveGuard||!window.takoReload)return;pendingReload=false;reloading=true;Promise.resolve(window.takoReload()).catch(()=>{}).finally(()=>{reloading=false;});};
+ const transport=createPollingTransport({fetcher:(url,options)=>url==='/api/auth/me'&&preflight?Promise.resolve({ok:true,status:200,json:async()=>preflight}):originalFetch(url,options),interval:30000,timeout:15000,onBeforeCycle:async({signal})=>{preflight=null;if(!restaurantId)return true;const response=await originalFetch('/api/auth/me',{credentials:'include',signal});if(!response.ok)return false;const body=await response.json();if(body.data?.restaurantId!==restaurantId)return false;auth=body.data;preflight=body;return true;},onAfterCycle:reload});
+ const on=transport.on.bind(transport),off=transport.off.bind(transport),disconnect=transport.disconnect.bind(transport);
+ transport.on=(event,cb)=>{if(!events.has(event))events.set(event,new Set());events.get(event).add(cb);return on(event,cb);};
+ transport.off=(event,cb)=>{if(cb)events.get(event)?.delete(cb);else events.delete(event);return off(event,cb);};
+ const task=(key,url,onChange)=>({key,url,project:rows,onChange});
+ function update(){if(!restaurantId){transport.setTasks([{key:'health',url:'/api/auth/me',afterGate:true,project:body=>{if(!body.data?.restaurantId)throw Error('Invalid staff identity');auth=body.data;return {restaurantId:auth.restaurantId};}}]);return;}
+  const tasks=[task('orders','/api/orders/active',(next,previous)=>{const ids=new Set(previous.map(o=>o.id));for(const order of next)if(!ids.has(order.id))fire('order:new',order);if(next.some(o=>{const before=previous.find(p=>p.id===o.id);return before&&fingerprint(before)!==fingerprint(o);})||previous.some(o=>!next.some(n=>n.id===o.id)))fire('order:updated',{});}),task('rooms','/api/tables/rooms',()=>fire('table:updated',{})),task('calls','/api/tables/waiter-calls',(next,previous)=>{for(const call of next){const old=previous.find(p=>p.tableId===call.tableId);if(!old||fingerprint(old)!==fingerprint(call))fire('waiter:called',call);}for(const call of previous)if(!next.some(n=>n.tableId===call.tableId))fire('waiter:resolved',{tableId:call.tableId});}),task('menus','/api/menus',()=>fire('menu:updated',{})),task('reservations',reservationUrl,()=>fire('reservation:changed',{}))];
+  const route=window.__takoRoute||'dashboard';
+  const needed=new Set(route==='dashboard'?['orders']:route==='sala'?['rooms','calls']:route==='chiamate'?['calls']:['ordini','kds','comanda'].includes(route)?['orders']:route==='prenotazioni'?['reservations']:route==='menu'&&!window.TakoMenuWorkspaceContract?['menus']:[]);
+  const visibleTasks=tasks.filter(t=>needed.has(t.key));
+  if(!visibleTasks.length)visibleTasks.push({key:'identity',url:'/api/auth/me',afterGate:true,project:body=>({restaurantId:body.data?.restaurantId})});
+  if(menuUrl&&route==='menu'&&!window.TakoMenuWorkspaceContract)visibleTasks.push({key:'menu-full',url:menuUrl,project:body=>{if(!body.data?.id)throw Error('Invalid menu snapshot');return body.data;},onChange:()=>fire('menu:updated',{})});transport.setTasks(visibleTasks);
+ }
+ transport.emit=(event,id)=>{if(event==='join:restaurant'&&typeof id==='string'&&auth?.restaurantId===id){restaurantId=id;pendingReload=!["owner","menu_editor"].includes(auth?.role)&&auth?.agency!==true;update();}return transport;};
+ transport.disconnect=()=>{window.removeEventListener("tako:route",update);live.delete(instance);events.clear();return disconnect();};
+ const instance={update};window.addEventListener("tako:route",update);live.add(instance);update();transport.connect();return transport;
+};

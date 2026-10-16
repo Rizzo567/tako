@@ -1,3 +1,5 @@
+function TakoLoading({label='Caricamento…',variant='inline'}) {return <span role="status" aria-live="polite" className={'tako-loading tako-loading--'+variant}><picture className="tako-loading__figure"><source media="(prefers-reduced-motion: reduce)" srcSet="assets/loading/tako-loading-static.svg?v=20261012-trace-slow"/><img className="tako-loading__mascot" src="assets/loading/tako-loading.svg?v=20261012-trace-slow" alt="" aria-hidden="true"/></picture><span className="tako-loading__text">{label}</span></span>;}
+window.TakoLoading=TakoLoading;
 /* ───────────────── Tako Dashboard — kit primitivi ───────────────── */
 const { useState, useEffect, useRef, useMemo, useCallback, createContext, useContext } = React;
 
@@ -14,7 +16,7 @@ const IC = {
   insights:'M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4',
   inventory:'M3 8 12 3l9 5v8l-9 5-9-5zM3 8l9 5 9-5M12 13v9',
   staff:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.8',
-  settings:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 6 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H.1a2 2 0 0 1 0-4h.1A1.6 1.6 0 0 0 1.4 6M4.6 4.6l.1.1A1.6 1.6 0 0 0 7 4.6h0M9 1.4V1a2 2 0 0 1 4 0v.1',
+  settings:'M12.000 4.000L12.784 4.039L13.951 2.192L14.903 2.431L15.827 2.761L16.714 3.181L16.445 5.348L17.075 5.816L17.657 6.343L18.184 6.925L20.315 6.444L20.819 7.286L21.239 8.173L21.569 9.097L19.846 10.439L19.961 11.216L20.000 12.000L19.961 12.784L21.808 13.951L21.569 14.903L21.239 15.827L20.819 16.714L18.652 16.445L18.184 17.075L17.657 17.657L17.075 18.184L17.556 20.315L16.714 20.819L15.827 21.239L14.903 21.569L13.561 19.846L12.784 19.961L12.000 20.000L11.216 19.961L10.049 21.808L9.097 21.569L8.173 21.239L7.286 20.819L7.555 18.652L6.925 18.184L6.343 17.657L5.816 17.075L3.685 17.556L3.181 16.714L2.761 15.827L2.431 14.903L4.154 13.561L4.039 12.784L4.000 12.000L4.039 11.216L2.192 10.049L2.431 9.097L2.761 8.173L3.181 7.286L5.348 7.555L5.816 6.925L6.343 6.343L6.925 5.816L6.444 3.685L7.286 3.181L8.173 2.761L9.097 2.431L10.439 4.154L11.216 4.039ZM15.5 12a3.5 3.5 0 1 0-7 0 3.5 3.5 0 0 0 7 0',
   sala:'M3 3h18v18H3zM3 9h18M9 9v12',
   qr:'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z',
   comanda:'M9 3h6a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2V4a1 1 0 0 1 1-1zM9 5h6M9 12l2 2 4-4',
@@ -78,7 +80,7 @@ function Btn({ children, onClick, kind = "brand", size = "md", icon, full, disab
       style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, width: full ? "100%" : "auto",
         height: `var(--btn-h-${size})`, padding: `0 ${sizes.px}px`, borderRadius: "var(--r-btn)", fontSize: `var(--btn-fs-${size})`, fontWeight: "var(--btn-weight)",
         fontFamily: "var(--f-ui)", opacity: 1, transition: "filter .15s", ...kinds, ...style }}>
-      {icon && <Icon name={icon} size={sizes.fs + 4} />}{children}
+      {icon && <Icon name={icon} size={sizes.fs + 4} />}{typeof children==='string'&&/^(Attendi|Caricamento|Carico|Traduzione|Generazione|Salvataggio|Invio|Elaborazione|Importazione|Preparazione|Aggiornamento|Creazione|Accesso)/.test(children)?<TakoLoading label={children} variant="compact"/>:children}
     </button>
   );
 }

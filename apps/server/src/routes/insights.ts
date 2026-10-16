@@ -3,10 +3,10 @@ import { z } from 'zod'
 import { db, orders, orderItems, menuItems } from '@tako/db'
 import { eq, and, gte, inArray, sql } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
-import OpenAI from 'openai'
 
-const getOpenAI = () => {
+const getOpenAI = async () => {
   if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  const {default:OpenAI}=await import('openai');
   return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
@@ -241,7 +241,7 @@ ${JSON.stringify(dataForAI, null, 2)}
 Produci i suggerimenti.`
 
     try {
-      const openai = getOpenAI()
+      const openai = await getOpenAI()
       const completion = await openai.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         messages: [

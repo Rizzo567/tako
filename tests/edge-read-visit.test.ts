@@ -1,0 +1,6 @@
+import {it,expect} from 'vitest'
+import {createHmac} from 'node:crypto'
+import {visitToken} from '../apps/server/src/lib/edge-read-handler.js'
+const secret='synthetic-test-secret-with-at-least-thirty-two-characters'
+it('reuses a correctly signed same-tenant visit; expires, tampering and other tenants get fresh visits',()=>{const original=visitToken(secret,'tenant',undefined,1000);expect(original.token).toBeTruthy();expect(visitToken(secret,'tenant',original.token,1001)).toEqual({sid:original.sid});expect(visitToken(secret,'other',original.token,1001).sid).not.toBe(original.sid);expect(visitToken(secret,'tenant',original.token,8201).sid).not.toBe(original.sid);expect(visitToken(secret,'tenant',original.token!.slice(0,-10)+'tampered',1001).sid).not.toBe(original.sid)})
+it('produces standard HS256 tokens compatible with the existing anonymous visit cookie',()=>{const {sid,token}=visitToken(secret,'tenant',undefined,1000);const [header,payload,signature]=token!.split('.');expect(JSON.parse(Buffer.from(header!,'base64url').toString()).alg).toBe('HS256');expect(JSON.parse(Buffer.from(payload!,'base64url').toString())).toMatchObject({kind:'menu_visit',restaurantId:'tenant',sid,iat:1000,exp:8200});expect(signature).toBe(createHmac('sha256',secret).update(header+'.'+payload).digest('base64url'))})

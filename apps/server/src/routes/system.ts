@@ -2,7 +2,6 @@
 // e un QR della dashboard per la schermata «Collegamenti».
 import type { FastifyPluginAsync } from 'fastify'
 import { webOrigin } from '../lib/web-runtime.js'
-import QRCode from 'qrcode'
 import { getConnectivity } from '../lib/connectivity.js'
 
 export const systemRoutes: FastifyPluginAsync = async (fastify) => {
@@ -13,6 +12,7 @@ export const systemRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/net-health', async () => ({ data: { status: 'online', message: 'Servizio web: la connessione del dispositivo è verificata dal browser.' } }))
 
   fastify.get('/info', async () => {
+    const {default:QRCode}=await import('qrcode');
     const origin = webOrigin()
     const dashboard = `${origin}/staff/index.html`
     return { data: { mode: 'web', onlineOnly: true, registrationEnabled: process.env['TAKO_DISABLE_REGISTRATION'] !== '1', clientBaseUrl: origin,

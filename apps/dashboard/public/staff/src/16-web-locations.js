@@ -1,23 +1,24 @@
 /* ───────────────── Locale attivo: selettore in sidebar + gestione locali e accessi ───────────────── */
-function useWebLocations() {
- const [locations,setLocations]=React.useState([]),[current,setCurrent]=React.useState('');
+function useWebLocations(eager=true) {
+ const [locations,setLocations]=React.useState([]),[current,setCurrent]=React.useState(window.__takoRestaurantId||'');
  const refresh=async()=>{const result=await fetch('/api/web-locations/',{credentials:'include'});if(!result.ok)throw new Error('Locali non disponibili');const response=await result.json();setLocations(response.data||response);setCurrent(response.currentId||'');};
- React.useEffect(()=>{refresh().catch(()=>{});},[]);
+ React.useEffect(()=>{if(eager)refresh().catch(()=>{});},[eager]);
  return {locations,current,refresh};
 }
 function locationInitials(name){return String(name||'').split(/\s+/).filter(Boolean).slice(0,2).map(word=>word[0].toUpperCase()).join('')||'·';}
 
 function TakoLocationSwitcher({role}) {
- const {locations,current,refresh}=useWebLocations();
+ const {locations,current,refresh}=useWebLocations(false);
  const [open,setOpen]=React.useState(false),[manage,setManage]=React.useState(false),[busy,setBusy]=React.useState(false),[error,setError]=React.useState('');
  const ref=React.useRef(null);
  React.useEffect(()=>{if(!open)return;const close=event=>{if(ref.current&&!ref.current.contains(event.target))setOpen(false);};document.addEventListener('mousedown',close);return()=>document.removeEventListener('mousedown',close);},[open]);
  const active=locations.find(location=>location.id===current);
  const name=active?.name||RESTAURANT.name||'';
  if(!name)return null;
- const own=active?.role==='owner';
- const canOpen=locations.length>1||own;
- const switchTo=async(restaurantId)=>{if(restaurantId===current){setOpen(false);return;}if(window.__takoMenuLeaveGuard&&!window.__takoMenuLeaveGuard())return;setBusy(true);setError('');try{await TakoAPI.post('/web-locations/switch',{restaurantId});window.location.reload();}catch(exception){setError(exception.message||'Cambio locale non riuscito.');setBusy(false);}};
+ React.useEffect(()=>{if(open&&!locations.length)refresh().catch(e=>setError(e.message))},[open]);
+ const own=active?.role==='owner'||role==='owner';
+ const canOpen=locations.length>1||own||!locations.length;
+ const switchTo=async(restaurantId)=>{if(restaurantId===current){setOpen(false);return;}if(window.__takoMenuLeaveGuard&&!window.__takoMenuLeaveGuard())return;setBusy(true);setError('');try{await TakoAPI.post('/web-locations/switch',{restaurantId});if(window.takoSwitchSession)await window.takoSwitchSession();else window.location.reload();}catch(exception){setError(exception.message||'Cambio locale non riuscito.');setBusy(false);}};
  const row={width:'100%',display:'flex',alignItems:'center',gap:10,padding:'9px 10px',borderRadius:8,fontSize:14,fontWeight:600,color:'var(--side-ink)',background:'transparent',textAlign:'left'};
  return <div ref={ref} style={{position:'relative'}}>
   <button type="button" className="press" aria-label="Locale attivo" aria-haspopup={canOpen?'listbox':undefined} aria-expanded={canOpen?open:undefined} disabled={busy||!canOpen} onClick={()=>setOpen(value=>!value)}
@@ -28,6 +29,7 @@ function TakoLocationSwitcher({role}) {
   </button>
   {error&&<p role="alert" style={{fontSize:12,color:'var(--danger)',margin:'6px 4px 0'}}>{error}</p>}
   {open&&<div role="listbox" aria-label="Locali" className="pop-in" style={{position:'absolute',top:'calc(100% + 6px)',left:0,right:0,zIndex:30,background:'var(--raised)',border:'1px solid var(--hairline)',borderRadius:10,boxShadow:'var(--sh-3)',padding:6}}>
+   {!locations.length&&<div style={{display:"flex",justifyContent:"center",padding:12}}><TakoLoading variant="compact"/></div>}
    {locations.map(location=><button key={location.id} type="button" role="option" aria-selected={location.id===current} className="press nav-item" disabled={busy} onClick={()=>switchTo(location.id)} style={row}>
     <span aria-hidden="true" style={{flex:'none',width:22,height:22,borderRadius:'50%',display:'grid',placeItems:'center',background:'var(--sunken)',color:'var(--ink-2)',fontSize:10,fontWeight:800}}>{locationInitials(location.name)}</span>
     <span style={{flex:1,minWidth:0,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{location.name}</span>

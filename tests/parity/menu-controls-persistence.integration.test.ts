@@ -181,4 +181,27 @@ describe('extended menu controls HTTP persistence', () => {
     expect(projected.sections[1]).toMatchObject({parentSectionId:root.id,name:'Translated child',description:'Translated section description'})
   })
 
+  it('publication review is scoped and hide/unhide preserves availability and identity',async()=>{
+    const start=(await request('GET','/api/menu-workspace/',cookieA)).json()
+    const w=structuredClone(start.data),item=w.menus[0].sections[0].items[0]
+    item.hidden=true
+    expect((await request('PUT','/api/menu-workspace/',cookieA,{expectedRevision:start.revision,workspace:w})).statusCode).toBe(200)
+    const saved=(await request('GET','/api/menu-workspace/',cookieA)).json()
+    const review=await request('GET','/api/menu-workspace/publish/diff',cookieA)
+    expect(review.statusCode).toBe(200);expect(review.json().data.revision).toBe(saved.revision)
+    expect(review.json().data.details.some((d:any)=>d.id===a.itemId&&d.fields.some((f:any)=>f.field==='hidden'&&f.after===true))).toBe(true)
+    const foreignReview=(await request('GET','/api/menu-workspace/publish/diff',cookieB)).json()
+    expect(JSON.stringify(foreignReview)).not.toContain(a.itemId)
+    expect((await request('POST','/api/menu-workspace/publish',cookieA,{expectedRevision:saved.revision})).statusCode).toBe(200)
+    expect((await sql`select available from menu_items where id=${a.itemId}`)[0].available).toBe(false)
+    const hidden=(await request('GET','/api/menu-workspace/',cookieA)).json()
+    expect(hidden.data.menus[0].sections[0].items[0].available).toBe(true)
+    hidden.data.menus[0].sections[0].items[0].hidden=false
+    expect((await request('PUT','/api/menu-workspace/',cookieA,{expectedRevision:hidden.revision,workspace:hidden.data})).statusCode).toBe(200)
+    const unhidden=(await request('GET','/api/menu-workspace/',cookieA)).json()
+    expect((await request('POST','/api/menu-workspace/publish',cookieA,{expectedRevision:unhidden.revision})).statusCode).toBe(200)
+    expect((await sql`select available from menu_items where id=${a.itemId}`)[0].available).toBe(true)
+    expect((await request('GET','/api/menu-workspace/',cookieA)).json().data.menus[0].sections[0].items[0].id).toBe(a.itemId)
+  })
+
 })

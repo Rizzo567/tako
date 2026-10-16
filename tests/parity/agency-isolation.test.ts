@@ -173,7 +173,7 @@ describe('hosted Tako: real credentials and tenant isolation', () => {
     expect((await request('POST','/api/web-locations/switch',cookieA,{restaurantId:b.id})).statusCode).toBe(404)
     expect((await request('POST','/api/web-locations/switch',cookieA,{restaurantId:secondId})).statusCode).toBe(200)
     const workspace=(await request('GET','/api/menu-workspace/',cookieA)).json()
-    expect(workspace.data.menus[0].name).toBe('Menu')
+    expect(workspace.data.menus[0].name).toBe('Cena')
     expect((await request('GET','/api/menu/',cookieA)).json().data.every((menu:any)=>menu.restaurantId===secondId)).toBe(true)
     expect((await request('POST','/api/web-locations/switch',cookieA,{restaurantId:a.id})).statusCode).toBe(200)
     expect((await request('GET','/api/menu-workspace/',cookieA)).json().data.menus[0].name).toBe('Agency edit')

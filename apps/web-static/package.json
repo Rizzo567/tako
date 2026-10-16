@@ -1,0 +1,9 @@
+{
+  "name": "@tako/web-static",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "vite build", "dev": "vite --host 127.0.0.1 --port 5147" },
+  "dependencies": { "@tako/types": "workspace:*", "react": "^19.0.0", "react-dom": "^19.0.0", "react-hot-toast": "^2.4.1" },
+  "devDependencies": { "vite": "8.3.4", "tailwindcss": "^3.4.17", "autoprefixer": "^10.4.20", "postcss": "^8.5.1", "@types/react": "^19.0.0", "@types/react-dom": "^19.0.0", "typescript": "^5.7.2" }
+}

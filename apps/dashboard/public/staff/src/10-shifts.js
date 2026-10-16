@@ -146,7 +146,7 @@ function ScreenTurni({ mobile }) {
     } finally { setLoading(false); }
   };
   useEffect(() => { reload(); }, [weekStart]);
-  useEffect(() => { window.TakoAPI.get("/auth/me").then(setMe).catch(() => {}); }, []);
+  useEffect(() => { if(window.__takoUser)setMe(window.__takoUser);else window.TakoAPI.get("/auth/me").then(setMe).catch(() => {}); }, []);
 
   const openByUser = {};
   for (const s of active) openByUser[s.userId] = s;
@@ -231,7 +231,7 @@ function ScreenTurni({ mobile }) {
         <IconBtn name="chevR" tone="soft" onClick={() => setWeekStart(shAddDays(weekStart, 7))} />
       </div>
       {loading ? (
-        <Card pad={20}><p style={{ fontSize: 13.5, color: "var(--ink-3)" }}>Caricamento turni…</p></Card>
+        <Card pad={20}><TakoLoading label="Caricamento turni…" variant="page"/></Card>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(7,1fr)", gap: mobile ? 10 : 8 }}>
           {days.map((day, i) => {

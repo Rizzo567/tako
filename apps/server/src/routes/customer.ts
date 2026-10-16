@@ -1,6 +1,7 @@
+import {COMMON_MENU_LANGUAGES} from '../lib/menu-workspace-languages.js'
 import {foodCatalogs} from '../lib/menu-workspace-catalogs.js'
-import {recordMenuEvent} from './menu-workspace.js'
-import { publishedMenu, publicMenuProjection } from '../lib/published-menu.js'
+import {recordMenuEvent,recordMenuEvents} from '../lib/menu-workspace-events.js'
+import { publishedMenu,readPublishedCatalog, publicMenuProjection } from '../lib/published-menu.js'
 import { checkReservationCapacity, lockReservationCapacity, reservationLocalInstant } from '../lib/reservation-capacity.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
@@ -8,6 +9,7 @@ import { randomUUID } from 'node:crypto'
 import { db, restaurants, menus, menuSections, menuItems, itemVariants, tables, orders, orderItems, tableSessions, bills, reservations, waiterCalls } from '@tako/db'
 import { eq, and, asc, inArray, isNull, desc, gte } from 'drizzle-orm'
 import { io } from '../index.js'
+import { deliverPersistedEvent, usesPollingDelivery } from '../lib/event-delivery.js'
 import type { PublicRestaurant, PublicMenu } from '@tako/types'
 import { TABLE_COOKIE, authCookieOptions, TABLE_SESSION_MAX_AGE } from '../lib/cookies.js'
 import { round2, ensureOpenBill, restaurantTimezone, dayStartInTz } from '../lib/billing.js'
@@ -63,14 +65,8 @@ export async function customerRoutes(fastify: FastifyInstance) {
     // Asporto (kind 'takeaway'): nessun tavolo. Validiamo solo che il ristorante sia
     // attivo e l'asporto abilitato; niente qrToken/visita da verificare.
     if (payload.kind === 'takeaway' || payload.tableId == null) {
-      const [r] = await db.select({ id: restaurants.id, settings: restaurants.settings, active: restaurants.active })
-        .from(restaurants).where(eq(restaurants.id, payload.restaurantId)).limit(1)
-      if (!r || !r.active || ((r.settings as any)?.takeawayEnabled ?? false) !== true) {
-        return reply.code(403).send({ error: { code: 'TAKEAWAY_DISABLED', message: 'Ordini da asporto non disponibili.' } })
-      }
-      // Preserva `sid` dal JWT: è il perno del filtro anti-IDOR su GET /orders/:id.
-      req.tableSession = { ...payload, tableId: null, kind: 'takeaway', tableNumber: null }
-      return
+      return reply.code(404).send({ error: { code: 'TAKEAWAY_DISABLED', message: 'Asporto non disponibile.' } })
+
     }
 
     // Numero tavolo AUTORITATIVO dal DB (mai dal client): evita che un cliente
@@ -124,7 +120,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
       logoUrl: restaurant.logoUrl ?? undefined,
       primaryColor: restaurant.primaryColor ?? '#1d1d1f',
       defaultLanguage: settings.defaultLanguage ?? 'it',
-      languages: settings.languages ?? ['it'],
+      languages: [...COMMON_MENU_LANGUAGES],
       aiEnabled: settings.aiEnabled ?? false,
     }
 
@@ -186,7 +182,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
       logoUrl: restaurant.logoUrl ?? undefined,
       primaryColor: restaurant.primaryColor ?? '#1d1d1f',
       defaultLanguage: settings.defaultLanguage ?? 'it',
-      languages: settings.languages ?? ['it'],
+      languages: [...COMMON_MENU_LANGUAGES],
       aiEnabled: settings.aiEnabled ?? false,
     }
 
@@ -244,21 +240,21 @@ export async function customerRoutes(fastify: FastifyInstance) {
     })
     if (outcome.error) return reply.code(409).send({error: outcome.error})
     const row = outcome.row!
-    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: row!.id })
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id: row!.id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: { id: row!.id, status: 'requested' } }
   })
 
   fastify.get('/restaurant/:restaurantId/menu', async (req, reply) => {
     const { restaurantId } = req.params as { restaurantId: string }
 
-    const published = await publishedMenu(restaurantId)
+    const query = req.query as {menuId?: string; lang?: string;catalogOnly?:string;prefetch?:string}
+    const catalogStarted=performance.now();const catalog=await readPublishedCatalog(restaurantId,{catalogOnly:query.catalogOnly==='1'}),published=catalog?.workspace;const catalogMs=performance.now()-catalogStarted
     if (published) {
-      const query = req.query as {menuId?: string; lang?: string}
       const selected = query.menuId ? published.menus.find(menu => menu.id === query.menuId) : published.menus[0]
-      const [rest] = await db.select().from(restaurants).where(and(eq(restaurants.id, restaurantId),eq(restaurants.active,true))).limit(1)
+      const rest=catalog!.restaurant
       if (!selected || !rest) return reply.code(404).send({error:{code:'NOT_FOUND',message:'Nessun menu attivo'}})
       const rs = rest.settings as any ?? {}
-      const lang = published.languages.includes(query.lang ?? '') ? query.lang : published.defaultLanguage
+      const lang = (COMMON_MENU_LANGUAGES as readonly string[]).includes(query.lang ?? '') ? query.lang : published.defaultLanguage
       let visitId: string|undefined
       try {
         const token=req.cookies?.tako_menu_visit
@@ -266,11 +262,12 @@ export async function customerRoutes(fastify: FastifyInstance) {
         if(payload?.kind==='menu_visit'&&payload.restaurantId===restaurantId)visitId=payload.sid
       }catch{/* Issue a fresh anonymous visit after expiry. */}
       if(!visitId){visitId=randomUUID();reply.setCookie('tako_menu_visit',fastify.jwt.sign({kind:'menu_visit',restaurantId,sid:visitId},{expiresIn:'2h'}),authCookieOptions(7200))}
-      try{
-        await recordMenuEvent(restaurantId,selected.id,'scan','',visitId,String(rs.timezone??'Europe/Rome'))
-        await recordMenuEvent(restaurantId,selected.id,'language',lang!,visitId,String(rs.timezone??'Europe/Rome'))
+      // I prefetch del menu pubblico non contano come visite.
+      const analyticsStarted=performance.now();if(query.prefetch!=='1')try{
+        await recordMenuEvents(restaurantId,selected.id,[{kind:'scan',lang:''},{kind:'language',lang:lang!}],visitId,String(rs.timezone??'Europe/Rome'))
       }catch{/* Analytics cannot interrupt menu service. */}
-      return {data: publicMenuProjection(selected,lang), menus: published.menus.map(menu => ({id:menu.id,name:menu.translations[lang!]?.name || menu.name})), design:published.design, foodTranslations:published.foodTranslations,foodCatalogs, languages:published.languages, defaultLanguage:published.defaultLanguage,
+      reply.header('Server-Timing',`catalog;dur=${catalogMs.toFixed(1)},analytics;dur=${(performance.now()-analyticsStarted).toFixed(1)}`)
+      return {data: publicMenuProjection(selected,lang,published.defaultLanguage), menus: published.menus.map(menu => ({id:menu.id,type:menu.type,name:menu.translations[lang!]?.name || menu.name})), design:published.design, foodTranslations:published.foodTranslations,foodCatalogs, languages:[...COMMON_MENU_LANGUAGES], defaultLanguage:published.defaultLanguage,
         features:{restaurantName:rest.name,reservationsEnabled:rs.reservationsEnabled??false,reviewUrl:rs.reviewRequestEnabled?rs.reviewUrl??'':'',customerOrderingEnabled:rs.customerOrderingEnabled!==false,coverCharge:rs.coverChargeEnabled?Number(rs.coverCharge)||0:0}}
     }
 
@@ -511,12 +508,12 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const payload = { ...order, items: insertedItems }
 
     // Emit to restaurant room (staff devices)
-    io.to(`restaurant:${restaurantId}`).emit('order:new', payload)
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'order:new', payload, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
 
     // Update table status
     if (tableId) {
       await db.update(tables).set({ status: 'occupied', openedAt: new Date() }).where(eq(tables.id, tableId))
-      io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId, status: 'occupied' })
+      deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'table:updated', { tableId, status: 'occupied' }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     }
 
     // Conto aperto get-or-create atomico (advisory lock per tavolo): evita conti
@@ -622,10 +619,11 @@ export async function customerRoutes(fastify: FastifyInstance) {
           set: { type },
         })
     } catch (err) {
+      if (usesPollingDelivery()) throw err // Edge cannot deliver a transient call without durable state.
       req.log.warn({ err }, 'waiter-call: persistenza fallita, evento comunque emesso')
     }
 
-    io.to(`restaurant:${restaurantId}`).emit('waiter:called', { tableId, tableNumber, type })
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'waiter:called', { tableId, tableNumber, type }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
 
 
     return { data: { success: true } }

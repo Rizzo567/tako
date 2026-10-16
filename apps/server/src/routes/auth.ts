@@ -1,3 +1,5 @@
+import { optionalLoginGuard } from '../lib/durable-login.js'
+import {isAgencyUser} from '../lib/agency-access.js'
 import { webOrigin } from '../lib/web-runtime.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
@@ -8,7 +10,6 @@ import { db, users, sessions, restaurants, menus, deviceEnrollCodes } from '@tak
 import { eq, and, sql, gt, desc, inArray } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE } from '../lib/cookies.js'
-import { qrWithOctopus } from '../lib/qr-octopus.js'
 
 const loginSchema = z.object({
   email: z.string().trim().email().transform(value => value.toLowerCase()),
@@ -75,6 +76,7 @@ function hashEnrollCode(code: string): string {
 }
 
 export async function authRoutes(fastify: FastifyInstance) {
+  const durableLogin=optionalLoginGuard()
   // Il controllo brute-force è applicato direttamente in /login (per ip+email),
   // dove l'email è disponibile. Vedi checkBruteForce/recordFailedLogin sopra.
 
@@ -127,11 +129,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         // Menu day-1: crea subito un menu di default così la SPA (loadMenu) trova un
         // menu esistente al primo accesso e le azioni menu non vanno su /menus/undefined/...
         // Campi presi da POST /api/menus (menu.ts): restaurantId + name; type ha default 'main'.
-        await tx.insert(menus).values({
-          restaurantId: restaurant!.id,
-          name: 'Menu',
-          type: 'main',
-        })
+        await tx.insert(menus).values([{restaurantId:restaurant!.id,name:'Cena',type:'dinner' as const,active:true},{restaurantId:restaurant!.id,name:'Drinks',type:'drinks' as const,active:false},{restaurantId:restaurant!.id,name:'Pranzo',type:'lunch' as const,active:false}])
 
         const [user] = await tx.insert(users).values({
           restaurantId: restaurant!.id,
@@ -174,10 +172,15 @@ export async function authRoutes(fastify: FastifyInstance) {
     // spraying da un singolo IP senza bloccare lo staff legittimo dietro NAT.
     const key = bruteKey(req.ip, body.data.email)
     const ipKey = `login-ip::${req.ip}`
-    if (!checkBruteForce(key) || !checkBruteForce(ipKey, LOGIN_IP_MAX_ATTEMPTS)) {
+    if (!durableLogin && (!checkBruteForce(key) || !checkBruteForce(ipKey, LOGIN_IP_MAX_ATTEMPTS))) {
       return reply.code(429).send({ error: { code: 'BRUTE_FORCE', message: 'Troppi tentativi. Riprova tra 15 minuti.' } })
     }
 
+    const reservation=durableLogin?await durableLogin.reserve(req.ip,body.data.email):undefined
+    if(durableLogin&&!reservation)return reply.code(429).send({error:{code:'BRUTE_FORCE',message:'Troppi tentativi. Riprova tra 15 minuti.'}})
+    let settled=false
+    const settle=async(outcome:'success'|'failure'|'abandon')=>{settled=true;if(reservation)await reservation.finish(outcome)}
+    try {
     // Legacy imports can retain mixed casing. Reject ambiguous legacy identities
     // rather than picking one tenant arbitrarily if duplicates differ only by case.
     const candidates = await db.select().from(users)
@@ -188,8 +191,8 @@ export async function authRoutes(fastify: FastifyInstance) {
     // (local_owner_secret_hash) impostata al pairing per l'accesso OFFLINE (SEC-001).
     // Il login offline non richiede mai il password_hash cloud (che non è sul box).
     if (!user || (!user.passwordHash && !user.localOwnerSecretHash)) {
-      recordFailedLogin(key)
-      recordFailedLogin(ipKey)
+      if(durableLogin)await settle('failure')
+      else {recordFailedLogin(key);recordFailedLogin(ipKey)}
       return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
     }
 
@@ -199,15 +202,16 @@ export async function authRoutes(fastify: FastifyInstance) {
     const matchLocalOwner = user.localOwnerSecretHash ? await bcrypt.compare(body.data.password, user.localOwnerSecretHash) : false
     const valid = matchClassic || matchLocalOwner
     if (!valid) {
-      recordFailedLogin(key)
-      recordFailedLogin(ipKey)
+      if(durableLogin)await settle('failure')
+      else {recordFailedLogin(key);recordFailedLogin(ipKey)}
       return reply.code(401).send({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } })
     }
 
     // Login riuscito: azzera il contatore per questa coppia. NON azzeriamo ipKey:
     // l'IP aggrega email diverse dietro NAT, quindi lasciamo scadere la finestra
     // naturalmente (15 min) anziché ricaricare il budget di uno spraying in corso.
-    loginAttempts.delete(key)
+    if(durableLogin)await settle('success')
+    else loginAttempts.delete(key)
 
     const token = nanoid(64)
     // Sessione DB allineata alla maxAge del cookie (7g), vedi /register.
@@ -217,7 +221,8 @@ export async function authRoutes(fastify: FastifyInstance) {
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, user.restaurantId!)).limit(1)
 
     reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
-    return { data: { user: { id: user.id, name: user.name, email: user.email, role: user.role }, restaurant } }
+    return { data: { user: { id: user.id, name: user.name, email: user.email, role: user.role, agency:isAgencyUser(user.id) }, restaurant } }
+    } finally {if(reservation&&!settled)await settle('abandon')}
   })
 
   // Reinvio email di verifica: la webapp non delega più la verifica al control-plane.
@@ -226,6 +231,8 @@ export async function authRoutes(fastify: FastifyInstance) {
     return { data: { message: 'Se l\'indirizzo è registrato, riceverai un\'email a breve.' } }
   })
 
+  // One authenticated bootstrap avoids repeating authentication for user and restaurant.
+  fastify.get('/bootstrap',{preHandler:requireAuth},async(req,reply)=>{const [restaurant]=await db.select().from(restaurants).where(eq(restaurants.id,req.user!.restaurantId)).limit(1);if(!restaurant)return reply.code(404).send({error:{code:'NOT_FOUND',message:'Restaurant not found'}});return {data:{user:req.user,restaurant:req.user!.role==='menu_editor'?{id:restaurant.id,name:restaurant.name}:restaurant}}})
   // Get current user
   fastify.get('/me', { preHandler: requireAuth }, async (req) => {
     return { data: req.user }
@@ -256,6 +263,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     const enrollUrl = `${webOrigin()}/owner/#enroll=${code}`
     let qrDataUrl: string | null = null
     try {
+      const {qrWithOctopus}=await import('../lib/qr-octopus.js')
       qrDataUrl = await qrWithOctopus(enrollUrl, 360)
     } catch (err) {
       // Il QR è una comodità: se il rendering fallisce restano URL e codice, che

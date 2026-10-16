@@ -1,0 +1,9 @@
+import {describe,it,expect,vi} from 'vitest'
+import {createHash} from 'node:crypto'
+import {initializeEdgeImages} from '../apps/server/src/lib/edge-image-initializer.js'
+const fixture=()=>{const wasm=new Uint8Array([1,2,3]);return {env:{TAKO_EXECUTION_RUNTIME:'edge',UPLOADS_DRIVER:'supabase',DATABASE_URL:'fixture',SUPABASE_URL:'fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture'},runtime:{},runtimeVersion:'0.0.44',wasm,expectedWasmSha256:createHash('sha256').update(wasm).digest('hex'),seeds:[{tenantId:'00000000-0000-0000-0000-000000000001',checkpoint:'fixture-checkpoint-1'}],query:vi.fn(async(_statement:string,_parameters:readonly unknown[])=>[{result:true}]),install:vi.fn(async()=>{})}}
+describe('Edge image startup gate',()=>{
+ it('installs only after seed and function readonly checks',async()=>{const f=fixture();expect(await initializeEdgeImages(f)).toMatchObject({seededTenants:1});expect(f.query).toHaveBeenCalledTimes(2);expect(f.install).toHaveBeenCalledTimes(1);expect(f.query.mock.calls.every(c=>String(c[0]).startsWith('SELECT'))).toBe(true)})
+ it.each(['secret','seed','functions','hash'])('fails closed for missing %s',async(reason)=>{const f=fixture();if(reason==='secret')f.env.SUPABASE_SERVICE_ROLE_KEY='';if(reason==='seed')f.query.mockResolvedValue([{result:false}]);if(reason==='functions')f.query.mockResolvedValueOnce([{result:true}]).mockResolvedValueOnce([{result:false}]);if(reason==='hash')f.expectedWasmSha256='0'.repeat(64);await expect(initializeEdgeImages(f)).rejects.toMatchObject({statusCode:503});expect(f.install).not.toHaveBeenCalled()})
+ it('does not expose query failure details',async()=>{const f=fixture();f.query.mockRejectedValue(new Error('private db credentials'));await expect(initializeEdgeImages(f)).rejects.toThrow('Edge image initialization unavailable');expect(f.install).not.toHaveBeenCalled()})
+})

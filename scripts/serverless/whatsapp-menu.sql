@@ -1,0 +1,16 @@
+BEGIN;
+CREATE TABLE IF NOT EXISTS tako_whatsapp_links(phone text PRIMARY KEY,restaurant_id uuid NOT NULL REFERENCES restaurants(id),actor_id uuid NOT NULL REFERENCES users(id),created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS tako_whatsapp_codes(code_hash text PRIMARY KEY,restaurant_id uuid NOT NULL REFERENCES restaurants(id),actor_id uuid NOT NULL REFERENCES users(id),expires_at timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS tako_whatsapp_proposals(phone text PRIMARY KEY,restaurant_id uuid NOT NULL REFERENCES restaurants(id),actor_id uuid NOT NULL REFERENCES users(id),revision integer NOT NULL,command jsonb NOT NULL,expires_at timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS tako_whatsapp_messages(sid text PRIMARY KEY,response text NOT NULL,created_at timestamptz NOT NULL DEFAULT now());
+ALTER TABLE tako_whatsapp_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tako_whatsapp_codes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tako_whatsapp_proposals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tako_whatsapp_messages ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON tako_whatsapp_links,tako_whatsapp_codes,tako_whatsapp_proposals,tako_whatsapp_messages FROM PUBLIC,anon,authenticated;
+GRANT SELECT,INSERT,UPDATE,DELETE ON tako_whatsapp_links,tako_whatsapp_codes,tako_whatsapp_proposals,tako_whatsapp_messages TO takomenu_runtime;
+CREATE POLICY runtime_whatsapp_links ON tako_whatsapp_links TO takomenu_runtime USING(true) WITH CHECK(true);
+CREATE POLICY runtime_whatsapp_codes ON tako_whatsapp_codes TO takomenu_runtime USING(true) WITH CHECK(true);
+CREATE POLICY runtime_whatsapp_proposals ON tako_whatsapp_proposals TO takomenu_runtime USING(true) WITH CHECK(true);
+CREATE POLICY runtime_whatsapp_messages ON tako_whatsapp_messages TO takomenu_runtime USING(true) WITH CHECK(true);
+COMMIT;

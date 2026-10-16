@@ -1,5 +1,5 @@
 import { describe,it,expect } from 'vitest'
-import { baselineLanguageConfiguration,normalizeBaselineTranslations } from '../apps/server/src/lib/menu-workspace-languages.js'
+import { COMMON_MENU_LANGUAGES,commonMenuLanguages,baselineLanguageConfiguration,normalizeBaselineTranslations } from '../apps/server/src/lib/menu-workspace-languages.js'
 describe('Baseline preserves configured and actual translation languages',()=>{
  it('retains configured default and appends translated legacy languages',()=>{expect(baselineLanguageConfiguration({languages:['fr','en'],defaultLanguage:'fr'},['de','en','es'])).toEqual({languages:['fr','en','de','es'],defaultLanguage:'fr'})})
  it('keeps valid explicit default even when absent from configured list',()=>{expect(baselineLanguageConfiguration({languages:['en'],defaultLanguage:'fr'},[])).toEqual({languages:['en','fr'],defaultLanguage:'fr'})})
@@ -7,3 +7,5 @@ describe('Baseline preserves configured and actual translation languages',()=>{
  it('uses Italian source fallback without dropping existing translations',()=>{expect(baselineLanguageConfiguration(undefined,['en','fr'])).toEqual({languages:['it','en','fr'],defaultLanguage:'it'});expect(baselineLanguageConfiguration({languages:['invalid tag','fr'],defaultLanguage:'not valid'},[]).defaultLanguage).toBe('fr')})
  it('fails without silently deleting data when more than 30 valid languages exist',()=>{const langs=Array.from({length:31},(_,n)=>'a'+String.fromCharCode(97+n%26)+String.fromCharCode(97+Math.floor(n/26)));expect(()=>baselineLanguageConfiguration({languages:langs,defaultLanguage:langs[0]},[])).toThrow('30 lingue');expect(langs).toHaveLength(31)})
 })
+
+it('exposes twelve fixed languages without modifying historical translations or source',()=>{const original={languages:['it','sv'],defaultLanguage:'it',foodTranslations:{sv:{allergens:'Allergener'}},menus:[{translations:{sv:{name:'Meny'}}}]};const result=commonMenuLanguages(original);expect(result.languages).toEqual([...COMMON_MENU_LANGUAGES]);expect(result.languages).toHaveLength(12);expect(original.languages).toEqual(['it','sv']);expect(result.menus).toBe(original.menus);expect(result.foodTranslations).toBe(original.foodTranslations)})

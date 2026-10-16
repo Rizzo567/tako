@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 // Middleware del modo cloud: risoluzione sessione owner + protezione CSRF.
 // SEPARATO da middleware/auth.ts (modo local), che resta invariato.
 import type { FastifyRequest, FastifyReply } from 'fastify'

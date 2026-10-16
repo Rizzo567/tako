@@ -20,57 +20,14 @@
   const { useState, useRef, useEffect } = React;
 
   // Keyframe per il pallino "live" pulsante e i puntini di caricamento dell'anteprima
-  // Streaming (iniettato una sola volta a livello di modulo).
-  if (typeof document !== "undefined" && !document.getElementById("tako-stream-css")) {
-    const st = document.createElement("style");
-    st.id = "tako-stream-css";
-    st.textContent = "@keyframes takoLivePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.32;transform:scale(.72)}}"
-      // POP "a molla" della card Streaming quando arriva in cima alla sidebar (fase 2):
-      // scale su ~1.04 e ritorno — solo geometria, nessuna opacity.
-      + "@keyframes takoPop{0%{transform:scale(1)}45%{transform:scale(1.045)}100%{transform:scale(1)}}";
-    (document.head || document.documentElement).appendChild(st);
-  }
-
-  /* ─────────────────── TARGET DINAMICO del widget "Streaming" ───────────────────
-     Il widget Streaming non mostra più SEMPRE gli Ordini: mostra l'interfaccia
-     pertinente all'ultima azione confermata in chat. Dopo un'azione su tavoli/sale
-     (create_table, update_table, delete_table, create_room, set_table_status,
-     refresh_table_qr…) il target passa a "sala"; dopo un'azione su ordini
-     (cancel_order) torna a "ordini". Altre azioni lasciano il target invariato.
-     Piccolo store a livello di modulo + evento custom letto dal widget con un hook. */
-  let __streamTarget = "ordini";
-  function setStreamTarget(t) {
-    if (t !== "sala" && t !== "ordini") return;   // solo target noti
-    if (t === __streamTarget) return;             // nessun cambio → nessun evento
-    __streamTarget = t;
-    try { window.dispatchEvent(new CustomEvent("tako-stream-target", { detail: t })); } catch (_) {}
-  }
-  // Deduce il target dal nome dell'azione appena eseguita; ritorna null se invariato.
-  function targetForAction(name) {
-    const n = String(name || "");
-    if (/table|room/i.test(n)) return "sala";     // create/update/delete_table, create_room, set_table_status, refresh_table_qr…
-    if (n === "cancel_order") return "ordini";    // azione ordine esplicita
-    return null;                                  // altrimenti lascia invariato
-  }
-  // Hook: legge il target corrente e si aggiorna sull'evento "tako-stream-target".
-  function useStreamTarget() {
-    const [t, setT] = useState(__streamTarget);
-    useEffect(() => {
-      const h = (e) => setT((e && e.detail) || __streamTarget);
-      window.addEventListener("tako-stream-target", h);
-      return () => window.removeEventListener("tako-stream-target", h);
-    }, []);
-    return t;
-  }
-
   const SUGGESTIONS = [
-    "Quanto ho incassato oggi?",
+    "Quali ordini sono in attesa?",
     "Segna la carbonara come esaurita",
     "Stato dei tavoli",
     "Statistiche degli ultimi 7 giorni",
   ];
 
-  const CHAT_INTRO = { role: "assistant", content: "Ciao! Sono Tako. Chiedimi incassi, statistiche, stato tavoli — o dimmi di segnare/eliminare/modificare un piatto. Scrivi o premi ⌘K per dettare." };
+  const CHAT_INTRO = { role: "assistant", content: "Ciao! Sono Tako. Chiedimi del menu, degli ordini e delle prenotazioni — o dimmi di segnare/eliminare/modificare un piatto. Scrivi o premi ⌘K per dettare." };
 
   /* ─────────────────────────── STORE MULTI-SESSIONE ───────────────────────────
      Sostituisce la vecchia singola conversazione a livello modulo. Le sessioni
@@ -180,10 +137,6 @@
         const res = await TakoAPI.post("/ai/owner/execute", { name: item.name, args: item.args });
         setMsg(res && res.summary ? res.summary : "Fatto.");
         setState("done");
-        // Aggiorna il target del widget Streaming in base all'azione eseguita
-        // (tavolo/sala → "sala", cancel_order → "ordini", altrimenti invariato).
-        const tgt = targetForAction(item.name);
-        if (tgt) setStreamTarget(tgt);
         if (window.toast) toast(res && res.summary ? res.summary : "Azione eseguita", { type: "success", icon: "check" });
         if (window.takoReload) { try { await window.takoReload(); } catch (_) {} }
         onDone && onDone();
@@ -430,213 +383,6 @@
     );
   }
 
-  /* ─────────────────────── ANTEPRIMA "STREAMING" (desktop) ───────────────────────
-     Riquadro nella sidebar destra del Cowork che mostra un'ALTRA interfaccia dell'app
-     in miniatura e in tempo reale, leggendo lo stato pubblicato da 07-app-root su
-     window.__takoLive ({ orders, badges, rooms, calls }).
-     La schermata mostrata dipende dal TARGET DINAMICO (__streamTarget): dopo un'azione
-     su tavoli/sale mostra la Sala live (ScreenSala), altrimenti gli Ordini (ScreenOrdini).
-     Al click parte l'animazione in 3 fasi: la card chat slida in alto e scompare →
-     la card Streaming risale al suo posto e fa un piccolo POP → espansione FLIP a
-     tutta pagina (geometrica pura, niente fade) → naviga davvero al target. */
-
-  // Hook: legge lo stato live pubblicato da App e si aggiorna sull'evento "tako-live".
-  // (niente useSyncExternalStore in questo runtime → useState + listener.)
-  function useTakoLive() {
-    const [live, setLive] = useState(() => (typeof window !== "undefined" && window.__takoLive) || null);
-    useEffect(() => {
-      const h = () => setLive(window.__takoLive || null);
-      window.addEventListener("tako-live", h);
-      h(); // stato iniziale nel caso App sia già montata (evento già passato)
-      return () => window.removeEventListener("tako-live", h);
-    }, []);
-    return live;
-  }
-
-  // Piccolo boundary: se ScreenOrdini in miniatura lancia in render, mostra il fallback
-  // invece di far crollare l'intera schermata Cowork.
-  class PreviewBoundary extends React.Component {
-    constructor(p) { super(p); this.state = { err: false }; }
-    static getDerivedStateFromError() { return { err: true }; }
-    render() { return this.state.err ? this.props.fallback : this.props.children; }
-  }
-
-  // Placeholder mostrato quando lo stato live non è ancora disponibile (o su errore).
-  function PreviewPlaceholder({ loading, text }) {
-    return (
-      <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", color: "var(--nav-ink-2,#9B9CA4)", fontSize: 12, fontWeight: 600 }}>
-        {loading ? (
-          <span style={{ display: "inline-flex", gap: 6 }}>
-            {[0, 1, 2].map((i) => (
-              <span key={i} style={{ width: 7, height: 7, borderRadius: 99, background: "var(--nav-ink-2,#9B9CA4)", animation: "takoLivePulse 1s ease-in-out infinite", animationDelay: i * 0.18 + "s" }} />
-            ))}
-          </span>
-        ) : (text || "Anteprima non disponibile")}
-      </div>
-    );
-  }
-
-  // Larghezza logica del render "desktop" da scalare nella miniatura (px). L'altezza
-  // deriva dal rapporto 16/10 del contenitore: MH = MW * 10/16, indipendente dalla scala.
-  const MW = 1100, MH = MW * 10 / 16;
-
-  function StreamingPreview({ onExpandStart, onExpandEnd }) {
-    const live = useTakoLive();
-    const target = useStreamTarget();               // "ordini" | "sala" (ultima azione in chat)
-    const liveOrders = live && Array.isArray(live.orders) ? live.orders : null;
-    const liveRooms = live && Array.isArray(live.rooms) ? live.rooms : null;
-    const liveCalls = live && Array.isArray(live.calls) ? live.calls : [];
-    const cardRef = useRef(null);   // card intera (rect di partenza per l'espansione)
-    const contRef = useRef(null);   // contenitore anteprima (per misurare la scala)
-    const animRef = useRef(false);  // true durante l'intera sequenza in 3 fasi
-    const [scale, setScale] = useState(0.22);
-    const [overlay, setOverlay] = useState(null); // { start, grown } durante l'espansione (fase 3)
-    const noop = () => {};
-
-    // Misura la larghezza reale del contenitore → scala così che 1100px riempiano l'area.
-    useEffect(() => {
-      const el = contRef.current; if (!el) return;
-      const measure = () => { const w = el.clientWidth; if (w) setScale(w / MW); };
-      measure();
-      let ro; try { ro = new ResizeObserver(measure); ro.observe(el); } catch (_) {}
-      window.addEventListener("resize", measure);
-      return () => { try { ro && ro.disconnect(); } catch (_) {} window.removeEventListener("resize", measure); };
-    }, []);
-
-    // Target EFFETTIVO: "sala" solo se ScreenSala è montabile e i dati sala sono
-    // pubblicati su window.__takoLive; altrimenti fallback su Ordini (niente crash).
-    const salaOk = typeof ScreenSala === "function" && !!liveRooms;
-    const effTarget = target === "sala" && salaOk ? "sala" : "ordini";
-    const targetLabel = effTarget === "sala" ? "Sala live" : "Ordini";
-    const canRender = effTarget === "sala" || (typeof ScreenOrdini === "function" && !!liveOrders);
-
-    // Render della schermata target (riusato in miniatura e nell'overlay full-screen).
-    // ScreenSala è il componente REALE (05-screens-sala-cassa.js): riceve rooms/calls
-    // live e un onSetTableState noop (sola lettura: pointerEvents:none blocca i click).
-    const renderTarget = () => effTarget === "sala"
-      ? <ScreenSala mobile={false} rooms={liveRooms} calls={liveCalls} onSetTableState={noop} />
-      : <ScreenOrdini mobile={false} orders={liveOrders || []} onConfirm={noop} onServe={noop} onCancel={noop} go={noop} />;
-
-    /* Sequenza al click — dinamica, fluida, senza tagli (specifica di Manuel):
-       1. t=0      la card CHAT esce visivamente (slide-up + fade .22s) — il layout
-                   NON cambia ancora (fase "hide" nel parent).
-       2. t≈210ms  il parent collassa il layout ISTANTANEAMENTE (fase "collapsed":
-                   max-height fuori dalla transition) → misuriamo la posizione prima
-                   (rect0) e dopo (rect1) e animiamo la RISALITA della card via FLIP
-                   con Web Animations: molla con overshoot (supera di qualche px e
-                   scala a ~1.05 al colmo) → movimento fisico, d'impatto.
-       3. a fine risalita → espansione FLIP a tutta pagina (curva energica, solo
-                   transform/border-radius: zero fade). A fine → takoGo(target). */
-    const expand = () => {
-      if (animRef.current) return;
-      animRef.current = true;
-      const tgt = effTarget; // congela il target per tutta la sequenza
-      const finish = () => {
-        try { window.takoGo && window.takoGo(tgt); } catch (_) {}
-        setOverlay(null); animRef.current = false;
-        onExpandEnd && onExpandEnd();
-        // NB: lo slide-in della sidebar sinistra parte all'INIZIO dell'espansione
-        // (in flipExpand), non qui: così sidebar + overlay si muovono insieme.
-      };
-      const flipExpand = () => {                 // fase 3 → espansione FLIP nell'area main
-        const el = cardRef.current;
-        if (!el) { finish(); return; }
-        const r = el.getBoundingClientRect();    // rect nella posizione in alto
-        // Espande nel RETTANGOLO del <main> (area destra), NON a tutto lo schermo: a fine
-        // espansione l'overlay combacia pixel-a-pixel con la schermata reale, quindi la
-        // parte destra non "scatta" da full-width a larghezza-con-sidebar. La sidebar
-        // sinistra scivola dentro CONTEMPORANEAMENTE nella sua striscia a sinistra.
-        const mainEl = document.querySelector("main");
-        const m = mainEl ? mainEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const start = `translate(${r.left - m.left}px, ${r.top - m.top}px) scale(${r.width / m.width}, ${r.height / m.height})`;
-        setOverlay({ start, grown: false, box: { left: m.left, top: m.top, width: m.width, height: m.height } });
-        try { window.dispatchEvent(new Event("tako-nav-slidein")); } catch (_) {} // sidebar in parallelo
-        requestAnimationFrame(() => requestAnimationFrame(() => setOverlay((o) => (o ? { ...o, grown: true } : o))));
-        setTimeout(finish, 470);
-      };
-      onExpandStart && onExpandStart("hide");    // fase 1 → chat esce (solo visivo)
-      setTimeout(() => {
-        const el = cardRef.current;
-        if (!el) { flipExpand(); return; }
-        const r0 = el.getBoundingClientRect();   // posizione PRIMA del collasso
-        onExpandStart && onExpandStart("collapsed"); // collasso layout istantaneo
-        requestAnimationFrame(() => {
-          const r1 = el.getBoundingClientRect(); // posizione DOPO (in alto)
-          const dy = r0.top - r1.top;
-          if (!dy || typeof el.animate !== "function") { flipExpand(); return; }
-          // fase 2 → risalita a molla: parte dalla vecchia posizione, supera di
-          // qualche px con un gonfiore (pop integrato), si assesta. Solo geometria.
-          const overshoot = Math.max(6, Math.min(14, dy * 0.06));
-          let flipped = false;
-          const flipOnce = () => { if (flipped) return; flipped = true; flipExpand(); };
-          const anim = el.animate([
-            { transform: `translateY(${dy}px) scale(1)`, easing: "cubic-bezier(.2,.8,.3,1)" },
-            { transform: `translateY(${-overshoot}px) scale(1.05)`, offset: 0.68, easing: "cubic-bezier(.35,0,.25,1)" },
-            { transform: "translateY(0) scale(1)" },
-          ], { duration: 560 });
-          anim.onfinish = flipOnce;
-          setTimeout(flipOnce, 700); // rete di sicurezza se onfinish non scatta
-        });
-      }, 210);
-    };
-
-    return (
-      <div ref={cardRef} style={{ padding: 14, background: "var(--nav,#25262A)", color: "var(--nav-ink,#E6E6EA)",
-        border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none" }}>
-        {/* Intestazione: pallino rosso live pulsante + titoletto dinamico per target */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-          <span style={{ width: 8, height: 8, borderRadius: 99, background: "#ef4444", animation: "takoLivePulse 1.4s ease-in-out infinite", flex: "none" }} />
-          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: .5, textTransform: "uppercase", color: "var(--nav-ink-2,#9B9CA4)" }}>
-            Streaming · {targetLabel}
-          </div>
-        </div>
-
-        {/* Riquadro anteprima cliccabile (16/10). Dentro: la schermata target scalata in miniatura. */}
-        <button onClick={expand} title={"Apri " + targetLabel} className="press"
-          style={{ display: "block", width: "100%", padding: 0, border: "1px solid var(--nav-line,rgba(255,255,255,.12))",
-            borderRadius: 12, overflow: "hidden", cursor: "pointer", position: "relative", background: "var(--bg,#FAF9F5)", aspectRatio: "16 / 10" }}>
-          <div ref={contRef} style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-            {canRender ? (
-              <PreviewBoundary key={effTarget} fallback={<PreviewPlaceholder text="Anteprima non disponibile" />}>
-                <div key={effTarget} style={{ width: MW, height: MH, transform: "scale(" + scale + ")", transformOrigin: "top left", pointerEvents: "none", display: "flex", flexDirection: "column" }}>
-                  {renderTarget()}
-                </div>
-              </PreviewBoundary>
-            ) : (
-              <PreviewPlaceholder loading />
-            )}
-          </div>
-          {/* velo leggero + etichetta in basso per invitare al click */}
-          <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "16px 10px 8px", pointerEvents: "none",
-            background: "linear-gradient(180deg, transparent, rgba(0,0,0,.42))", color: "#fff", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" /></svg>
-            Apri a schermo intero
-          </div>
-        </button>
-
-        {/* Overlay di espansione (FLIP, fase 3): full-screen renderizzato a scala 1,
-            transform iniziale che lo rimpicciolisce sul rect della card (post fase 2)
-            → anima a inset:0. Espansione GEOMETRICA PURA: transita solo transform e
-            border-radius, nessuna opacity/fade/ombra. */}
-        {overlay && ReactDOM.createPortal(
-          <div style={{ position: "fixed", left: overlay.box.left, top: overlay.box.top, width: overlay.box.width, height: overlay.box.height, zIndex: 300, transformOrigin: "top left",
-            overflow: "hidden", background: "var(--bg,#FAF9F5)", borderRadius: overlay.grown ? 0 : 12,
-            transform: overlay.grown ? "none" : overlay.start,
-            transition: "transform .45s cubic-bezier(.22,.9,.24,1), border-radius .45s ease" }}>
-            <div style={{ width: overlay.box.width, height: overlay.box.height, overflow: "hidden", display: "flex", flexDirection: "column", pointerEvents: "none" }}>
-              <PreviewBoundary fallback={<PreviewPlaceholder text="Anteprima non disponibile" />}>
-                {renderTarget()}
-              </PreviewBoundary>
-            </div>
-          </div>,
-          document.body
-        )}
-      </div>
-    );
-  }
-
-  // Schermata "Cowork": la chat con Tako vive QUI (sezione della sidebar app),
-  // riempie l'area principale. Sidebar sessioni a destra (drawer su mobile).
   function TakoChat({ mobile }) {
     const store = useCoworkStore();
     const active = store.sessions.find((s) => s.id === store.activeId) || store.sessions[0];
@@ -665,7 +411,6 @@
     const [leaving, setLeaving] = useState(false);
     const [dictState, setDictState] = useState("idle"); // idle | rec | busy
     const [drawer, setDrawer] = useState(false);         // pannello storico su mobile
-    const [streamExpanding, setStreamExpanding] = useState(false); // anteprima Streaming in espansione (desktop)
     const scrollRef = useRef(null);
     const inputRef = useRef(null);
     const inputValRef = useRef("");
@@ -731,44 +476,11 @@
       setBusy(true);
       focusInput(0); // mantieni il focus sul composer dopo l'invio
       try {
-        const r = await fetch("/api/ai/owner/chat/stream", {
-          method: "POST", credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msgOut, history, imageUrl: img ? img.url : undefined }),
-        });
-        if (!r.ok || !r.body) throw Object.assign(new Error("no-stream"), { status: r.status });
-        const reader = r.body.getReader();
-        const dec = new TextDecoder();
-        let buf = "", finished = false, errEv = null;
-        while (!finished) {
-          const { value, done } = await reader.read();
-          if (done) break;
-          buf += dec.decode(value, { stream: true });
-          let idx;
-          while ((idx = buf.indexOf("\n\n")) >= 0) {
-            const raw = buf.slice(0, idx); buf = buf.slice(idx + 2);
-            const line = raw.split("\n").find((l) => l.startsWith("data:"));
-            if (!line) continue; // riga di commento/heartbeat
-            let ev; try { ev = JSON.parse(line.slice(5).trim()); } catch (_) { continue; }
-            if (ev.type === "token") patchLast((a) => ({ ...a, content: (a.content || "") + ev.text }));
-            else if (ev.type === "reset") patchLast((a) => ({ ...a, content: "" }));
-            else if (ev.type === "done") { patchLast((a) => ({ ...a, content: (ev.message || a.content || "Fatto."), pending: Array.isArray(ev.pending) ? ev.pending : [], streaming: false })); finished = true; }
-            else if (ev.type === "error") { errEv = ev; finished = true; } // → fallback non-streaming
-          }
-        }
-        // Errore dallo stream: provo UNA volta il non-streaming prima di arrendermi.
-        if (errEv) throw Object.assign(new Error("stream-error"), { ev: errEv });
-        patchLast((a) => ({ ...a, streaming: false }));
+        const data = await TakoAPI.post("/ai/owner/chat", { message: msgOut, history, imageUrl: img ? img.url : undefined });
+        patchLast((a) => ({ ...a, content: data.message || "Fatto.", pending: Array.isArray(data.pending) ? data.pending : [], streaming: false }));
       } catch (ex) {
-        // Fallback: una volta sulla versione NON-streaming (SSE assente/proxy, oppure
-        // evento error dal server — es. quota esaurita sul modello grande).
-        try {
-          const data = await TakoAPI.post("/ai/owner/chat", { message: msgOut, history, imageUrl: img ? img.url : undefined });
-          patchLast((a) => ({ ...a, content: data.message || "Fatto.", pending: Array.isArray(data.pending) ? data.pending : [], streaming: false }));
-        } catch (ex2) {
-          const ev = (ex && ex.ev) || { code: ex2 && ex2.status === 503 ? "AI_UNAVAILABLE" : ex2 && ex2.status === 429 ? "AI_RATE_LIMITED" : "" };
-          patchLast((a) => ({ ...a, content: errMsg(ev), streaming: false }));
-        }
+        const ev = { code: ex && ex.status === 503 ? "AI_UNAVAILABLE" : ex && ex.status === 429 ? "AI_RATE_LIMITED" : "" };
+        patchLast((a) => ({ ...a, content: errMsg(ev), streaming: false }));
       } finally {
         setBusy(false);
         flushPersist();
@@ -894,7 +606,7 @@
             {DictBtn && <DictBtn onText={(seg) => typeInto(seg)} onStateChange={setDictState} size={36} />}
             <label aria-label="Allega immagine" title="Allega una foto da assegnare a un piatto"
               style={{ width: 36, height: 36, borderRadius: 12, display: "grid", placeItems: "center", cursor: imgBusy ? "wait" : "pointer", color: "var(--ink-2,#666)", border: "1px solid var(--hairline,#E5E5E5)", background: "transparent" }}>
-              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={onPickCopilotImage} disabled={imgBusy} style={{ position: "absolute", width: 0, height: 0, opacity: 0 }} />
+              <input type="file" accept="image/jpeg,image/png,image/webp" onChange={onPickCopilotImage} disabled={imgBusy} style={{ position: "absolute", width: 0, height: 0, opacity: 0 }} />
               {imgBusy
                 ? <span style={{ fontSize: 12 }}>…</span>
                 : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>}
@@ -1035,27 +747,18 @@
         <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", minHeight: 0 }}>
           {chatArea}
         </div>
-        {/* overflow VISIBILE durante la sequenza: il pop/l'ombra della card Streaming
-            non devono essere tagliati dai bordi dell'aside mentre risale ed è in cima. */}
+        {/* Storico conversazioni. */}
         <aside className="scroll" style={{ width: 272, flex: "none", alignSelf: "flex-start",
-          margin: "12px 12px 12px 0", maxHeight: "calc(100% - 24px)", overflowY: streamExpanding ? "visible" : "auto",
+          margin: "12px 12px 12px 0", maxHeight: "calc(100% - 24px)", overflowY: "auto",
           display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Card SESSIONI (chat): fase "hide" = esce visivamente (slide-up + fade, il
-              layout resta); fase "collapsed" = collasso layout ISTANTANEO (max-height
-              fuori dalla transition) così la card Streaming risale via FLIP spring. */}
+          {/* Sessioni e cronologia della chat. */}
           <div style={{ padding: 14, background: "var(--nav,#25262A)", color: "var(--nav-ink,#E6E6EA)",
             border: "1px solid var(--nav-line,rgba(255,255,255,.09))", borderRadius: 12, boxShadow: "var(--sh-2)", flex: "none",
-            transform: streamExpanding ? "translateY(-22px) scale(.97)" : "none", opacity: streamExpanding ? 0 : 1,
-            maxHeight: streamExpanding === "collapsed" ? 0 : 4000, overflow: streamExpanding ? "hidden" : "visible",
-            transition: streamExpanding === "collapsed"
-              ? "transform .22s var(--out), opacity .18s ease"
-              : "transform .22s var(--out), opacity .18s ease, max-height .35s var(--out)" }}>
+            overflow: "visible" }}>
             <SessionSidebar sessions={store.sessions} activeId={store.activeId}
               onNew={handleNew} onSelect={handleSelect} onDelete={handleDelete} onRename={handleRename}
               onDuplicate={handleDuplicate} onClear={handleClear} onDeleteAll={handleDeleteAll} />
           </div>
-          {/* Card STREAMING: anteprima live, al click risale con molla e si espande a tutta pagina */}
-          <StreamingPreview onExpandStart={(phase) => setStreamExpanding(phase || "hide")} onExpandEnd={() => setStreamExpanding(false)} />
         </aside>
       </div>
     );

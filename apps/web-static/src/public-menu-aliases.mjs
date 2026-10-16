@@ -1,0 +1,23 @@
+export const publicMenuAliases=Object.freeze({
+  "bim-bum-bar": "84fe4d77-2d87-5187-aa94-9c01840e99de",
+  "clandestino": "c86825fa-cf52-5f7e-a06b-0db7e39a849d",
+  "da-ori": "f1b13a69-b94f-5e8a-a381-3177a1b97728",
+  "il-poeta": "91bb150e-42a0-5aea-ab58-3175bb33d3e9",
+  "l-agora": "d4eeeb77-30d5-5287-ad8b-63a96ee3d815",
+  "l-osterietta-1": "6febb754-f7c9-5b42-adf1-a890f7894cfa",
+  "la-bakery-no-bakery": "9a875d3c-36fe-5b13-aae5-0e268ce2507f",
+  "la-bottega-del-gusto": "76beef6e-0356-570c-accc-14c52f4569e8",
+  "la-plaza": "430e082a-9d32-550e-a3ca-cc49a0876e82",
+  "panuzza": "591b7851-75bb-46ac-8230-5fd78d6f7126",
+  "patanegra": "2464d428-d5a2-579b-a79c-8e3df8f13137",
+  "pesce-farina": "6047c131-32cd-5eca-a2ea-5f893b6fe1cf",
+  "portofranco": "ce60ff85-57da-577d-aa39-aed9016d3ac8",
+  "pupos-pizza": "6fb9e9c4-1ca7-50dc-afa5-1d8c79aeb019",
+  "ristorante-gauguin": "e4cadb75-fe32-542c-a06f-b9941095d391",
+  "sahara-lounge": "21c6a07d-e5bd-5762-a8cf-70c5bbd53ed4",
+  "san-galdino": "5f01b318-bbb9-4aaf-9c0e-d318eec98919",
+  "tappa-fissa": "ff3491b6-d220-56b5-a43f-7f049e93b7fa",
+  "the-lab": "ee92e6be-6953-5d95-a764-8d8e447892fc",
+  "victoria-bar": "528e263c-634e-4695-9632-6c5cc6a3302f",
+  "zio-armando": "492b6760-6d34-53f1-a280-4a4a8cead501"
+});

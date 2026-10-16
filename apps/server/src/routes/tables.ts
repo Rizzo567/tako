@@ -2,19 +2,19 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { nanoid } from 'nanoid'
 import { db, tables, rooms, bills, orders, waiterCalls } from '@tako/db'
-import { eq, and, inArray, isNull, desc, sql } from 'drizzle-orm'
+import { eq, and, inArray, isNull, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
+import { deliverPersistedEvent } from '../lib/event-delivery.js'
 import { webOrigin } from '../lib/web-runtime.js'
-import { qrWithOctopus } from '../lib/qr-octopus.js'
 import { BILLABLE_STATUSES } from '../lib/billing.js'
+import { readRooms, readWaiterCalls } from '../lib/read-queries.js'
 
 export async function tableRoutes(fastify: FastifyInstance) {
   // Get all rooms with tables
-  fastify.get('/rooms', { preHandler: requireAuth }, async (req) => {
-    const allRooms = await db.select().from(rooms).where(and(eq(rooms.restaurantId, req.user!.restaurantId), eq(rooms.active, true)))
-    const allTables = await db.select().from(tables).where(and(eq(tables.restaurantId, req.user!.restaurantId), eq(tables.active, true)))
-    return { data: allRooms.map(r => ({ ...r, tables: allTables.filter(t => t.roomId === r.id) })) }
+  fastify.get('/rooms', { preHandler: requireAuth }, async (req, reply) => {
+    const r = await readRooms(req.user!.restaurantId)
+    return reply.code(r.status).send(r.body)
   })
 
   // Get all tables flat
@@ -60,7 +60,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
       throw err
     }
     // Notifica gli altri dispositivi (Sala/Gestione Tavoli fanno refetch su 'table:updated').
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId: table?.id ?? null })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'table:updated', { tableId: table?.id ?? null }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return reply.code(201).send({ data: table })
   })
 
@@ -110,7 +110,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     // B2: la mappa sala deve aggiornarsi live su tutti i device staff quando cambia
     // la posizione di un tavolo (drag&drop).
     if (parsed.data.posX !== undefined || parsed.data.posY !== undefined) {
-      io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId, posX: table.posX, posY: table.posY })
+      deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'table:updated', { tableId, posX: table.posX, posY: table.posY }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     }
     return { data: table }
   })
@@ -144,7 +144,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
 
     if (!table) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Tavolo non trovato' } })
 
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('table:updated', { tableId, status })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'table:updated', { tableId, status }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: table }
   })
 
@@ -153,18 +153,9 @@ export async function tableRoutes(fastify: FastifyInstance) {
   // mai. Questa route è ciò che permette all'app del ristoratore, aperta cinque minuti
   // dopo, di sapere che il tavolo 4 sta ancora aspettando.
   // Scoped al ristorante dell'utente: nessuna chiamata di altri tenant, mai.
-  fastify.get('/waiter-calls', { preHandler: requireAuth }, async (req) => {
-    const q = req.query as { open?: string }
-    const onlyOpen = q.open !== '0'
-    const rows = await db.select()
-      .from(waiterCalls)
-      .where(and(
-        eq(waiterCalls.restaurantId, req.user!.restaurantId),
-        ...(onlyOpen ? [isNull(waiterCalls.resolvedAt)] : []),
-      ))
-      .orderBy(desc(waiterCalls.createdAt))
-      .limit(100)
-    return { data: rows }
+  fastify.get('/waiter-calls', { preHandler: requireAuth }, async (req, reply) => {
+    const r = await readWaiterCalls(req.user!.restaurantId, req.query)
+    return reply.code(r.status).send(r.body)
   })
 
   // Risolvi una chiamata cameriere: lo staff la segna come gestita e l'evento
@@ -197,7 +188,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
       ))
     } catch { /* best-effort: la risoluzione è già avvenuta */ }
 
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('waiter:resolved', { tableId })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'waiter:resolved', { tableId }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: { success: true } }
   })
 
@@ -212,6 +203,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
     const url = `${webOrigin()}/r/${req.user!.restaurantId}/t/${table.qrToken}`
     const mode = 'cloud'
     const lanUrl = url, cloudUrl = url, ipUrl = url
+    const {qrWithOctopus}=await import('../lib/qr-octopus.js')
     const qrDataUrl = await qrWithOctopus(url, 400)
     return { data: { qrDataUrl, url, mode, lanUrl, cloudUrl, ipUrl, tableNumber: table.number } }
   })

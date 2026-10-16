@@ -52,7 +52,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
       if (ex.code === "EMAIL_NOT_VERIFIED") { setInfo(""); setVerifyEmail(email.trim()); return; }
       if (ex.code === "VERIFY_UNAVAILABLE") { setErr(ex.message || "Serve la connessione internet per completare la verifica email."); return; }
       if (isReg) setErr(ex.message && ex.status !== 500 ? ex.message : "Registrazione non riuscita. Controlla i dati o prova un'altra email.");
-      else setErr(ex.status === 429 ? "Troppi tentativi, riprova tra qualche minuto." : "Email o password non validi.");
+      else setErr(ex.status === 429 ? "Troppi tentativi, riprova tra qualche minuto." : ex.status === 401 ? "Email o password non validi." : ex.status === 400 ? "Controlla il formato dell’email e i dati inseriti." : "Accesso temporaneamente non disponibile. Controlla la connessione e riprova.");
     } finally { setBusy(false); }
   };
   const resend = async () => {
@@ -63,7 +63,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
   };
   const inp = { width: "100%", margin: "6px 0 14px", padding: "11px 12px", borderRadius: 11, border: "1px solid var(--hairline,#ddd)", fontSize: 14.5, background: "var(--sunken,#fafafa)" };
   const lab = { fontSize: 12.5, fontWeight: 700, color: "var(--ink2,#555)" };
-  const wrapStyle = { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 };
+  const wrapStyle = { minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 };
   const cardStyle = { width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" };
 
   // Schermata "conferma la tua email" (gate verifica attivo): niente sessione finché
@@ -80,7 +80,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
           <div style={{ fontSize: 12.5, color: "var(--ink3,#888)", marginBottom: 18 }}>Controlla anche la cartella spam.</div>
           {info && <div style={{ fontSize: 13, color: "var(--brand)", fontWeight: 700, margin: "0 0 12px" }}>{info}</div>}
           <button type="button" disabled={busy} onClick={() => { setVerifyEmail(""); setMode("login"); setErr(""); setInfo(""); }}
-            style={{ width: "100%", padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
+            style={{ width: "100%", height:48, display:"flex",alignItems:"center",justifyContent:"center",padding: "0 12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer" }}>
             Ho confermato — Accedi
           </button>
           <button type="button" disabled={busy} onClick={resend}
@@ -93,13 +93,10 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
   }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 }}>
+    <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 }}>
       <form onSubmit={submit} style={{ width: 360, maxWidth: "100%", background: "var(--surface,#fff)", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid var(--hairline,#eee)" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginBottom: 22 }}>
-          <img src="/staff/assets/takos/arancione/logo.png" alt="Tako"
-            onError={(e) => { if (e.currentTarget.src.indexOf('piatto') < 0) e.currentTarget.src = '/staff/assets/takos/arancione/piatto.png'; }}
-            style={{ width: 84, height: 84, objectFit: "contain" }} />
-          <div style={{ fontFamily: "var(--font-display, inherit)", fontWeight: 900, fontSize: 24, color: "var(--ink)" }}>Tako</div>
+          <span role="img" aria-label="Takomenu" style={{ display: "block", width: 228, height: 44, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
           <div style={{ fontSize: 13.5, color: "var(--ink3,#888)" }}>{isForgot ? "Recupera l’accesso" : isReset ? "Scegli una nuova password" : isReg ? "Crea il tuo ristorante" : "Accedi alla dashboard"}</div>
         </div>
         {isReg && (
@@ -124,7 +121,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
         {err && <div style={{ color: "var(--danger)", fontSize: 13, margin: "8px 0" }}>{err}</div>}
         <button type="submit" disabled={busy}
           style={{ width: "100%", marginTop: 14, padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer", opacity: busy ? .6 : 1 }}>
-          {busy ? "Attendi…" : isForgot ? "Invia istruzioni" : isReset ? "Aggiorna password" : isReg ? "Crea ristorante" : "Entra"}
+          {busy ? <TakoLoading variant="compact" label={isForgot?"Invio istruzioni…":isReset?"Aggiornamento password…":isReg?"Creazione ristorante…":"Accesso a Takomenu…"}/> : isForgot ? "Invia istruzioni" : isReset ? "Aggiorna password" : isReg ? "Crea ristorante" : "Entra"}
         </button>
         {webMode && !isReg && <button type="button" disabled={busy} onClick={()=>{setMode(isForgot||isReset?'login':'forgot');setErr('');setInfo('');}} style={{marginTop:12,background:'none',border:0,color:'var(--brand)',cursor:'pointer'}}>{isForgot||isReset?'Torna all’accesso':'Password dimenticata?'}</button>}
         {registrationAllowed && <div style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "var(--ink3,#888)" }}>
@@ -139,9 +136,10 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
 }
 
 function App({ session }) {
+  window.__takomenuAgency = session.user.agency === true;window.__takoUser=session.user;
   const role0 = ROLE_DB2UI[session.user.role] || "nonAutorizzato";
   ROLES[role0] = { ...ROLES[role0], name: session.user.name, initials: (session.user.name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() };
-  const [route, setRoute] = useState(() => safeRoute(role0, load("route", ROLE_HOME[role0] || "dashboard")));
+  const [route, setRoute] = useState(() => safeRoute(role0, session.user.agency&&["dashboard",null].includes(load("route",null))?"agency":load("route",session.user.agency?"agency":window.innerWidth<900&&role0==="owner"?"menu":ROLE_HOME[role0]||"dashboard")));
   const [settings, setSettings] = useState(() => {
     let ls = {}; try { ls = JSON.parse(localStorage.getItem("tako-dash-settings") || "{}"); } catch (_) { ls = {}; }
     // Backend vince: SETTINGS_DEFAULTS è già stato popolato dal backend in loadAll().
@@ -165,12 +163,14 @@ function App({ session }) {
   const mobile = frame === "mobile";
   const mobileRef = useRef(mobile); mobileRef.current = mobile;
 
+  useEffect(() => { window.__takoRoute = route; window.dispatchEvent(new Event("tako:route")); }, [route]);
   const [orders, setOrders] = useState(window._ORDERS);
   const [rooms, setRooms] = useState(window._ROOMS);
   const [bills, setBills] = useState(window._BILLS);
   const [calls, setCalls] = useState(window._WAITER || []);
   useEffect(() => { window._WAITER = calls; }, [calls]);
   useEffect(() => {
+    if (window.__TAKO_STATIC_TRANSPORT === "polling") return;
     let alive = true;
     TakoAPI.get("/tables/waiter-calls").then(rows => {
       if (alive && Array.isArray(rows)) setCalls(rows.map(c => ({ tavolo: String(c.tableNumber), motivo: CALL_TYPE_LABEL[c.type] || "Chiamata", min: minsSince(c.createdAt), _id: c.tableId, _t: new Date(c.createdAt).getTime() })));
@@ -182,6 +182,8 @@ function App({ session }) {
   // Browser connectivity and the realtime channel are separate signals in the webapp.
   const [online, setOnline] = useState(() => navigator.onLine !== false);
   const [realtimeOnline, setRealtimeOnline] = useState(false);
+  const [syncDelayed,setSyncDelayed]=useState(false);
+  useEffect(()=>{setSyncDelayed(false);if(!online||realtimeOnline)return;const timer=setTimeout(()=>setSyncDelayed(true),30000);return()=>clearTimeout(timer)},[online,realtimeOnline]);
   const bump = () => setTick((t) => t + 1);
   useEffect(() => {
     const update = () => setOnline(navigator.onLine !== false);
@@ -194,7 +196,7 @@ function App({ session }) {
     window.takoReload = async () => {
       if(window.__takoMenuLeaveGuard && !window.__takoMenuLeaveGuard())return;
       try { await loadAll(); setOrders(window._ORDERS); setRooms(window._ROOMS); setBills(window._BILLS); setDataVersion((v) => v + 1); bump();
-        const rows = await TakoAPI.get("/tables/waiter-calls");
+        const rows = window.__TAKO_STATIC_TRANSPORT === "polling" ? [] : await TakoAPI.get("/tables/waiter-calls");
         if (Array.isArray(rows)) setCalls(rows.map(c => ({ tavolo: String(c.tableNumber), motivo: CALL_TYPE_LABEL[c.type] || "Chiamata", min: minsSince(c.createdAt), _id: c.tableId, _t: new Date(c.createdAt).getTime() })));
       } catch (_) {}
     };
@@ -206,7 +208,7 @@ function App({ session }) {
   const prevRouteRef = useRef(route);
   useEffect(() => { const prev = prevRouteRef.current; prevRouteRef.current = route; if (prev !== route) sbPageRouteChanged(prev, route); }, [route]);
   useEffect(() => { try { localStorage.setItem("tako-dash-settings", JSON.stringify(settings)); } catch (_) {} }, [settings]);
-  useEffect(() => { const onR = () => setFrame(window.innerWidth < 900 ? "mobile" : "desktop"); window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, []);
+  useEffect(() => { const onR = () => { const next = window.innerWidth < 900 ? "mobile" : "desktop"; setFrame(prev => { if (prev !== next) window.__takoFrameChangedAt = Date.now(); return next; }); }; window.addEventListener("resize", onR); return () => window.removeEventListener("resize", onR); }, []);
   useEffect(() => { if (!canNavigate(role, route)) setRoute(safeRoute(role, route)); }, [role, route]);
 
   const go = (id) => {
@@ -237,7 +239,6 @@ function App({ session }) {
       else if (ev === "waiter:called") { setCalls((c) => [...c.filter((x) => x._id !== p.tableId), { tavolo: String(p.tableNumber), motivo: CALL_TYPE_LABEL[p.type] || "Chiamata", min: 0, _id: p.tableId, _t: Date.now() }]); if (settingsRef.current.suoniOrdini) playBeep(); if (window.toast) toast(`Tavolo ${p.tableNumber} chiama`, { type: "warn", icon: "bell" }); }
       else if (ev === "waiter:resolved") { setCalls((c) => c.filter((x) => x._id !== p.tableId)); }
       else if (ev === "menu:updated" || ev === "menu:item_availability") { loadAll().then(bump); }
-      else if (ev === "inventory:alert") { loadAll().then(bump); if (window.toast) toast(`Scorta bassa · ${p.name}`, { type: "warn" }); }
       else if (ev === "reservation:changed") { setDataVersion((v) => v + 1); }
       else if (ev === "connectivity") { /* Server internet status is not the browser connection. */ }
     });
@@ -283,7 +284,7 @@ function App({ session }) {
     setSettings(next);
     try { await TakoAPI.patch("/restaurants/me", { name: next.nome, address: next.indirizzo, phone: next.telefono,
       settings: { currency: next.valuta, vatRate: Number(next.iva), timezone: next.fuso, defaultLanguage: next.linguaDefault, languages: next.lingue,
-                  tableServiceEnabled: next.servizioTavolo, takeawayEnabled: next.asporto, payAtTableEnabled: next.pagaTavolo, aiEnabled: next.ai,
+                  tableServiceEnabled: next.servizioTavolo, takeawayEnabled: false, payAtTableEnabled: next.pagaTavolo, aiEnabled: next.ai,
                   printerIp: next.printerIp, printerPort: Number(next.printerPort) || 9100,
                   // preferenze operative ora persistite sul backend
                   coverCharge: Number(next.coperto) || 0, coverChargeEnabled: !!next.copertoOn, suggestedTips: !!next.manceSuggerite,
@@ -294,7 +295,7 @@ function App({ session }) {
                   autoStockDeductEnabled: !!next.scaricoAuto, dailyBriefingEnabled: !!next.briefingWa,
                   dailyBriefingHour: Number(next.briefingOra) || 9, aiContentEnabled: !!next.aiContenuti,
                   aiPhotoEnabled: !!next.fotoAi, aiPhotoProCode: next.fotoAiCodice || "",
-                  menuEngineeringEnabled: !!next.menuEngineering,
+                  menuEngineeringEnabled: false,
                   customerOrderingEnabled: next.ordiniClienti !== false, qrMode: next.qrMode === "cloud" ? "cloud" : "lan" } });
       toast("Impostazioni salvate", { type: "success" }); } catch (e) { toast(e.message, { type: "error" }); }
   };
@@ -313,33 +314,28 @@ function App({ session }) {
 
   let Screen;
   switch (route) {
+    case "agency_tasks": Screen = session.user.agency===true ? <window.ScreenAgencyDashboard mobile={mobile} tasksOnly/> : null; break;
+    case "account": Screen = <ScreenMobileAccount mobile={mobile} session={session} go={go}/>; break;
+    case "agency": Screen = session.user.agency === true && window.ScreenAgencyDashboard ? <window.ScreenAgencyDashboard mobile={mobile} /> : <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />; break;
     case "cowork": Screen = (role === "owner" && window.ScreenCowork) ? React.createElement(window.ScreenCowork, { key: "cowork", mobile }) : <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />; break;
     case "dashboard": Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />; break;
     case "ordini": Screen = <ScreenOrdini mobile={mobile} orders={orders} onConfirm={onConfirm} onServe={onServe} onCancel={onCancel} go={go} />; break;
     case "kds": Screen = <ScreenKDS mobile={mobile} orders={orders} onAdvanceItem={onAdvanceItem} onBump={onBump} settings={settings} />; break;
-    case "cassa": Screen = <ScreenCassa mobile={mobile} bills={bills} onClose={onCloseBill} settings={settings} />; break;
     case "comanda": Screen = <ScreenComanda key={"comanda" + dataVersion} mobile={mobile} />; break;
     case "sala": Screen = <ScreenSala mobile={mobile} rooms={rooms} calls={calls} onSetTableState={onSetTableState} />; break;
     case "chiamate": Screen = <ScreenChiamate mobile={mobile} calls={calls} onResolve={async (call) => { await TakoAPI.post(`/tables/${call._id}/waiter-resolve`); setCalls(c => c.filter(x => x._id !== call._id)); }} />; break;
-    case "tavoli": Screen = <ScreenTavoli key={"tavoli" + dataVersion} mobile={mobile} />; break;
     case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} />; break;
-    case "turni": Screen = <ScreenTurni key={"turni" + dataVersion} mobile={mobile} />; break;
-    case "qr": Screen = <ScreenQR key={"qr" + dataVersion} mobile={mobile} />; break;
-    case "dispositivi": Screen = <ScreenDispositivi key={"disp" + dataVersion} mobile={mobile} />; break;
     case "menu": Screen = ["owner", "menu_editor"].includes(role) && window.ScreenMenuWorkspace ? <window.ScreenMenuWorkspace key={"menu" + dataVersion} mobile={mobile} /> : <ScreenMenu key={"menu" + dataVersion} mobile={mobile} />; break;
-    case "inventario": Screen = <ScreenInventario key={"inv" + dataVersion} mobile={mobile} />; break;
     case "statistiche": Screen = role === "owner" && window.ScreenReportsWorkspace ? <window.ScreenReportsWorkspace mobile={mobile}/> : <ScreenStatistiche key={"stats" + dataVersion} mobile={mobile} />; break;
-    case "insights": Screen = <ScreenInsights key={"insights" + dataVersion} mobile={mobile} />; break;
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
     case "impostazioni": Screen = <ScreenImpostazioni mobile={mobile} settings={settings} setSettings={onSaveSettings} />; break;
-    case "collega": Screen = <ScreenCollega mobile={mobile} />; break;
     default: Screen = <ScreenDashboard mobile={mobile} go={go} orders={orders} settings={settings} role={role} />;
   }
 
   const sections = {
-    sala: [{ id: "sala", label: "Sala live" }, { id: "tavoli", label: "Configurazione" }],
-    statistiche: [{ id: "statistiche", label: "Statistiche" }, { id: "insights", label: "Menu engineering" }],
-    impostazioni: [{ id: "impostazioni", label: "Locale" }, { id: "staff", label: "Team" }, { id: "turni", label: "Turni" }, { id: "dispositivi", label: "Dispositivi" }, { id: "qr", label: "QR tavoli" }, { id: "collega", label: "Collegamenti" }],
+    sala: [{ id: "sala", label: "Sala live" }],
+    statistiche: [{ id: "statistiche", label: "Statistiche" }],
+    impostazioni: [{ id: "impostazioni", label: "Locale" }, { id: "staff", label: "Team" }],
   };
   const tabs = (sections[navParent(route)] || []).filter(it => canNavigate(role, it.id));
   const newOrder = ["sala", "ordini", "chiamate"].includes(route) && canNavigate(role, "comanda");
@@ -352,22 +348,22 @@ function App({ session }) {
 
   return (
     <>
-      {(!online || !realtimeOnline) && (
+      {!online && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, display: "flex", justifyContent: "center", pointerEvents: "none", paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}>
           <div role="status" aria-live="polite" style={{ pointerEvents: "auto", display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 15px", borderRadius: 99, background: "var(--danger)", color: "#fff", fontSize: 13, fontWeight: 700, boxShadow: "0 8px 24px rgba(0,0,0,.20)" }}>
             <Icon name="alert" size={16} stroke={2.4} />
-            {!online ? "Connessione assente — il servizio richiede internet" : "Collegamento in corso — i dati potrebbero non essere aggiornati"}
+            {"Connessione assente — il servizio richiede internet"}
           </div>
         </div>
       )}
       {mobile ? (
-        <div className="screen app-live mobile" style={{ width: "100vw", height: "100vh" }}>
+        <div className="screen app-live mobile" style={{ width: "100%", height: "100dvh", position:"fixed", inset:0 }}>
           <div style={{ width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--surface)" }}>
-            <div style={{ flex: 1, minHeight: 0, position: "relative", display: "flex", flexDirection: "column" }}>
+            <div className="mobile-header-shell" style={{flex:"none",zIndex:20,paddingTop:"env(safe-area-inset-top, 0px)",background:"var(--surface)"}}>
+              <MobileHeader syncDelayed={syncDelayed} route={route} openDrawer={() => setDrawer(true)} live role={role} badges={badges} nome={settings.nome || RESTAURANT.name} go={go} />
+            </div>
+            <div style={{ flex: 1, minHeight: 0, position: "relative", display: "flex", flexDirection: "column", overflow:"hidden" }}>
               {Content}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, background: "rgba(255,255,255,.72)", backdropFilter: "blur(16px) saturate(180%)", WebkitBackdropFilter: "blur(16px) saturate(180%)" }}>
-                <MobileHeader route={route} openDrawer={() => setDrawer(true)} live role={role} badges={badges} nome={settings.nome || RESTAURANT.name} go={go} />
-              </div>
             </div>
             <BottomBar route={route} go={go} role={role} badges={badges} openDrawer={() => setDrawer(true)} />
             <MobileDrawer open={drawer} onClose={() => setDrawer(false)} route={route} go={go} role={role} badges={badges} />
@@ -392,7 +388,7 @@ function App({ session }) {
 /* Shared workspace navigation keeps existing screens and their API contracts intact. */
 function WorkspaceNavigation({ mobile, tabs, route, go, newOrder, children }) {
   return <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
-    <div style={{ flex: "none", padding: mobile ? "112px 14px 0" : "26px 30px 0" }}>
+    <div style={{ flex: "none", padding: mobile ? "12px 14px 0" : "26px 30px 0" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <nav aria-label="Sezioni della pagina" style={{ display: "flex", flex: 1, gap: 6, flexWrap: "wrap" }}>
           {tabs.map(it => <Btn key={it.id} size="sm" kind={route === it.id ? "dark" : "soft"} onClick={() => go(it.id)}>{it.label}</Btn>)}
@@ -422,36 +418,37 @@ function ScreenChiamate({ mobile, calls, onResolve }) {
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <Icon name="bell" size={24} />
         <div style={{ flex: 1 }}><strong>Tavolo {call.tavolo}</strong><div style={{ color: "var(--ink-2)", fontSize: 13 }}>{call.motivo} · {relTime(call.min)}</div></div>
-        <Btn size="sm" disabled={!!pending[call._id]} onClick={() => resolve(call)}>{pending[call._id] ? "Attendi…" : "Gestita"}</Btn>
+        <Btn size="sm" disabled={!!pending[call._id]} onClick={() => resolve(call)}>{pending[call._id] ? <TakoLoading label="Chiusura richiesta…" variant="compact"/> : "Gestita"}</Btn>
       </div>
     </Card>)}
   </ScreenScroll>;
 }
 
 function Root() {
+  const [sessionGeneration,setSessionGeneration]=useState(0);
   const [state, setState] = useState({ phase: "loading", session: null });
   useEffect(() => {
     (async () => {
       try {
-        const me = await TakoAPI.get("/auth/me");
-        const restaurant = await TakoAPI.get("/restaurants/me").catch(() => null);
-        await loadAll(me);
+        const {user:me,restaurant} = await TakoAPI.get("/auth/bootstrap");
+        await loadAll(me,restaurant);
         setState({ phase: "app", session: { user: me, restaurant } });
       } catch (_) { setState({ phase: "login", session: null }); }
     })();
   }, []);
-  const onLogin = async (d) => { await loadAll(d.user); setState({ phase: "app", session: { user: d.user, restaurant: d.restaurant } }); };
-  if (state.phase === "loading") return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", color: "var(--ink-3)" }}>Caricamento…</div>;
+  useEffect(()=>{const switchSession=async()=>{const {user,restaurant}=await TakoAPI.get('/auth/bootstrap');await loadAll(user,restaurant);setSessionGeneration(v=>v+1);setState({phase:'app',session:{user,restaurant}})};window.takoSwitchSession=switchSession;return()=>{if(window.takoSwitchSession===switchSession)delete window.takoSwitchSession}},[]);
+  const onLogin = async (d) => { await loadAll(d.user,d.restaurant); setState({ phase: "app", session: { user: d.user, restaurant: d.restaurant } }); };
+  if (state.phase === "loading") return <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", color: "var(--ink-3)" }}><TakoLoading label="Accesso a Takomenu…" variant="screen"/></div>;
   if (state.phase === "login") return <LoginGate onDone={onLogin} />;
-  return <App session={state.session} />;
+  return <App key={state.session.user.restaurantId+':'+sessionGeneration} session={state.session} />;
 }
 
 /* ── schermata di crash (italiana) mostrata dall'ErrorBoundary ── */
 function CrashScreen({ onReload, onHome }) {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 }}>
+    <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", padding: 24 }}>
       <div style={{ width: 400, maxWidth: "100%", background: "#fff", borderRadius: 12, padding: 28, boxShadow: "0 8px 40px rgba(0,0,0,.08)", border: "1px solid #eee", textAlign: "center" }}>
-        <img src="assets/takos/arancione/pollice_in_su.png" alt="Tako" style={{ width: 84, height: 84, objectFit: "contain", margin: "0 auto 10px" }} />
+        <img src="assets/takos/arancione/pollice_in_su.png" alt="Takomenu" style={{ width: 84, height: 84, objectFit: "contain", margin: "0 auto 10px" }} />
         <div style={{ fontWeight: 900, fontSize: 21, color: "var(--ink)", marginBottom: 8 }}>Qualcosa è andato storto</div>
         <div style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.5, marginBottom: 22 }}>
           Si è verificato un errore imprevisto nella dashboard. Puoi ricaricare la pagina oppure tornare alla Dashboard.
@@ -489,3 +486,5 @@ class ErrorBoundary extends React.Component {
 }
 
 ReactDOM.createRoot(document.getElementById("stage")).render(<ErrorBoundary><Root /></ErrorBoundary>);
+
+function ScreenMobileAccount({mobile,session,go}){const [error,setError]=useState(''),[busy,setBusy]=useState(false);const logout=async()=>{if(busy)return;if(window.__takoMenuLeaveGuard&&!window.__takoMenuLeaveGuard())return;setBusy(true);setError('');try{await window.TakoActions.logout();localStorage.removeItem('tako-dash-route');location.reload();}catch(e){setError(e.message||'Impossibile uscire');setBusy(false)}};return <ScreenScroll mobile={mobile}><section className="mobile-account"><Card><h2>{session.user.name}</h2><p>{session.user.email}</p><Badge>{session.user.agency?'Amministratore agenzia':'Gestione ristorante'}</Badge></Card>{!session.user.agency&&<Card><h3>{session.restaurant?.name||'Il tuo ristorante'}</h3><p>Dati del locale e impostazioni</p><Btn full kind="soft" onClick={()=>go('impostazioni')}>Impostazioni del locale</Btn></Card>}{error&&<p role="alert">{error}</p>}<Btn full kind="soft" disabled={busy} onClick={logout}>{busy?'Uscita…':"Esci dall’account"}</Btn></section></ScreenScroll>}

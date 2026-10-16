@@ -1,0 +1,22 @@
+import {createRequire} from 'node:module'
+import {afterEach,beforeEach,expect,it,vi} from 'vitest'
+import {twilioSignature} from '../apps/server/src/lib/twilio-menu-command.js'
+const state=vi.hoisted(()=>({activate:vi.fn(),transport:vi.fn(),queue:vi.fn(),responses:new Map<string,string>()}))
+vi.mock('../apps/server/src/lib/onboarding-chat.js',()=>({expiredOnboardingNotice:async()=>null,startsOnboarding:()=>false,onboardingTransport:state.transport,queueOnboardingChat:state.queue}))
+vi.mock('../apps/server/src/lib/onboarding-owner-invite.js',()=>({activateOwnerInvite:state.activate}))
+const execute=async(q:any)=>{let text='';const params:any[]=[];for(const c of q.queryChunks)if(c&&typeof c==='object'&&Array.isArray(c.value))text+=c.value.join('');else{text+='$';params.push(c)}if(text.includes('pg_advisory'))return[];if(text.startsWith('SELECT response'))return state.responses.has(params[0])?[{response:state.responses.get(params[0])}]:[];if(text.startsWith('INSERT INTO tako_whatsapp_messages')){state.responses.set(params[0],params[1]);return[]};throw new Error('Unexpected SQL '+text)}
+vi.mock('../packages/db/src/index.ts',()=>({db:{execute:(q:any)=>execute(q),transaction:(fn:any)=>fn({execute})},sessions:{},users:{}}))
+import {twilioMenuRoutes} from '../apps/server/src/routes/twilio-menu.js'
+const Fastify=createRequire(new URL('../apps/server/package.json',import.meta.url))('fastify'),token='test-token',endpoint='https://takoitalia.com/api/whatsapp/twilio',account='AC'+'1'.repeat(32),phone='whatsapp:+390000000099',sender='whatsapp:+18382622788'
+let app:any
+beforeEach(async()=>{vi.stubEnv('TWILIO_AUTH_TOKEN',token);vi.stubEnv('TWILIO_WEBHOOK_URL',endpoint);vi.stubEnv('TWILIO_ACCOUNT_SID',account);vi.stubEnv('TWILIO_WHATSAPP_NUMBER',sender);state.responses.clear();state.transport.mockReset().mockResolvedValue(null);state.queue.mockReset();state.activate.mockReset().mockResolvedValue(['Benvenuto Mario nel Takomenu di Locale QA.','Prezzi, disponibilità e descrizioni.']);app=Fastify();await app.register(twilioMenuRoutes,{prefix:'/api'});await app.ready()})
+afterEach(async()=>{await app.close();vi.unstubAllEnvs()})
+const form=()=>({From:phone,To:sender,AccountSid:account,MessageSid:'SM'+'2'.repeat(32),Body:'attiva takomenu '+'3'.repeat(64),NumMedia:'0'})
+const post=(fields:Record<string,string>,valid=true)=>app.inject({method:'POST',url:'/api/whatsapp/twilio',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':valid?twilioSignature(token,endpoint,fields):'invalid'},payload:new URLSearchParams(fields).toString()})
+it('authenticates the provider before touching an owner invitation',async()=>{expect((await post(form(),false)).statusCode).toBe(403);expect(state.activate).not.toHaveBeenCalled()})
+it('returns two separate welcome messages and replays a cached delivery without consuming the token twice',async()=>{const first=await post(form());expect(first.statusCode).toBe(200);expect(first.body.match(/<Message>/g)).toHaveLength(2);expect(state.activate).toHaveBeenCalledWith(phone,form().Body);expect((await post(form())).body).toBe(first.body);expect(state.activate).toHaveBeenCalledTimes(1)})
+it('does not forward malformed activation commands to any other service',async()=>{state.activate.mockResolvedValue(null);const result=await post({...form(),Body:'attiva takomenu sbagliato'});expect(result.body).toContain('invito *non è valido*');expect(result.statusCode).toBe(200)})
+
+it.each(['avvia onboarding ','riprendi onboarding '])('never forwards an expired lifecycle token: %s',async command=>{vi.stubEnv('TAKO_WHATSAPP_ONBOARDING_ENABLED','1');const result=await post({...form(),Body:command+'4'.repeat(64)});expect(result.statusCode).toBe(200);expect(result.body).toContain('scaduto o non valido');expect(state.transport).toHaveBeenCalledOnce();expect(state.queue).not.toHaveBeenCalled()})
+it('never forwards a lifecycle token when onboarding is disabled',async()=>{vi.stubEnv('TAKO_WHATSAPP_ONBOARDING_ENABLED','0');const result=await post({...form(),Body:'avvia onboarding '+'4'.repeat(64)});expect(result.statusCode).toBe(200);expect(result.body).toContain('non è disponibile');expect(state.transport).not.toHaveBeenCalled()})
+it('rejects a malformed phone envelope for a lifecycle token rather than forwarding it',async()=>{vi.stubEnv('TAKO_WHATSAPP_ONBOARDING_ENABLED','1');expect((await post({...form(),From:'invalid',Body:'riprendi onboarding '+'4'.repeat(64)})).statusCode).toBe(400);expect(state.transport).not.toHaveBeenCalled()})

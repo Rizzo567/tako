@@ -386,9 +386,7 @@ function SwapText({ k, children, down = false, style }) {
   }, [k, children]);
   return <span className={"sb-swap" + (down ? " down" : "")} style={style}>{items.map(x => <span key={x.id} className={x.out ? "out" : (x.id ? "in" : "")} aria-hidden={x.out || undefined}>{x.node}</span>)}</span>;
 }
-function Spinner({ size = 15 }) {
-  return <svg className="sb-spin" width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ flex: "none" }}><circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity=".25" strokeWidth="2.4" /><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>;
-}
+function Spinner({size=26}) {return <picture className="tako-loading__figure"><source media="(prefers-reduced-motion: reduce)" srcSet="assets/loading/tako-loading-static.svg"/><img className="tako-loading__mascot" src="assets/loading/tako-loading.svg" alt="" aria-hidden="true" style={{width:Math.max(24,size),height:Math.max(24,size),flex:"none"}}/></picture>;}
 /* «Copia» → «✓ Copiato» sul posto, torna dopo 1,9 s come nel video */
 function CopyPill({ text, label = "Copia", style }) {
   const [done, setDone] = useState(false);
@@ -551,7 +549,7 @@ function QuickNewBill({ onClose, go }) {
             </div>
             <div style={{ height: 1, background: "#f0f0f0", margin: "12px 6px" }} />
             <SbPrimary k={busy ? "busy" : table ? "go" : "pick"} onClick={submit} disabled={!table} busy={busy}>
-              {busy ? <><Spinner />Invio…</> : table ? `Apri conto · Tavolo ${table.n}` : "Apri conto"}
+              {busy ? <TakoLoading label="Invio in cucina…" variant="compact"/> : table ? `Apri conto · Tavolo ${table.n}` : "Apri conto"}
             </SbPrimary>
             <SbError msg={err} />
           </div>
@@ -610,14 +608,14 @@ function QuickComanda({ onClose, go }) {
   };
   const busy = phase === "sending";
   const success = phase === "done" || phase === "undoing";
-  const primaryLabel = busy ? <><Spinner />Invio…</> : !table ? "Scegli il tavolo" : !count ? "Aggiungi i piatti" : <>Invia in cucina · <SwapText k={String(count)}>{count}</SwapText></>;
+  const primaryLabel = busy ? <TakoLoading label="Invio in cucina…" variant="compact"/> : !table ? "Scegli il tavolo" : !count ? "Aggiungi i piatti" : <>Invia in cucina · <SwapText k={String(count)}>{count}</SwapText></>;
   const cardRef = useRef(null);
   useEffect(() => { if (phase === "done" || (phase === "form" && note)) { const b = cardRef.current && [...cardRef.current.querySelectorAll("[data-focus=primary]:not(:disabled)")].pop(); if (b) b.focus({ preventScroll: true }); } }, [phase]);
   return <div style={SB_CARD} data-sb-quick="comanda" ref={cardRef}>
     <SizeMorph k={success ? "done" : "form"} style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
       {success && result ? (
         <SbSuccess mark={result.n} title={<>Inviata in cucina<br />Tavolo {result.n}</>} sub={`${result.count} ${result.count === 1 ? "piatto" : "piatti"} · ${euro(result.total)}`}>
-          <SbSecondary onClick={undo} disabled={phase === "undoing"} k={phase === "undoing" ? "u" : "a"}>{phase === "undoing" ? <><Spinner size={14} />Annullo…</> : "Annulla"}</SbSecondary>
+          <SbSecondary onClick={undo} disabled={phase === "undoing"} k={phase === "undoing" ? "u" : "a"}>{phase === "undoing" ? <TakoLoading label="Annullamento…" variant="compact"/> : "Annulla"}</SbSecondary>
           <SbPrimary k="fatto" onClick={onClose} style={{ flex: 1, height: 36, width: "auto" }}>Fatto</SbPrimary>
         </SbSuccess>
       ) : (
@@ -668,11 +666,11 @@ function SobrioShortcuts({ go, role }) {
   return <Card pad={18}>
     <h3 style={{ fontSize: 15, fontWeight: 500, marginBottom: 12 }}>Scorciatoie</h3>
     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-      {can("cassa") && <Btn kind="brand" size="sm" icon="cassa" data-morph-id="quick-conto" onClick={() => setQuick("conto")}>Nuovo conto</Btn>}
-      {can("comanda") && <Btn kind="brand" size="sm" icon="comanda" data-morph-id="quick-comanda" onClick={() => setQuick("comanda")}>Comanda</Btn>}
+      {can("cassa") && <Btn kind="soft" size="sm" icon="cassa" data-morph-id="quick-conto" onClick={() => setQuick("conto")}>Nuovo conto</Btn>}
+      {can("comanda") && <Btn kind="soft" size="sm" icon="comanda" data-morph-id="quick-comanda" onClick={() => setQuick("comanda")}>Comanda</Btn>}
       {can("sala") && <Btn kind="soft" size="sm" icon="map" data-morph-id="sala" onClick={morph("sala")}>Sala live</Btn>}
       {can("kds") && <Btn kind="soft" size="sm" icon="kitchen" data-morph-id="kds" onClick={morph("kds")}>Cucina</Btn>}
-      {role === "owner" && <Btn kind="soft" size="sm" icon="menu" data-morph-id="menu" onClick={(e) => { window.__takoOpenMenuSetup = true; sbPageMorphGo("menu", e.currentTarget, go); }}>Configura menu cliente</Btn>}
+      {role === "owner" && <Btn kind="soft" size="sm" icon="menu" data-morph-id="menu" onClick={(e) => { sbPageMorphGo("menu", e.currentTarget, go); }}>Menu</Btn>}
     </div>
     <Overlay open={quick === "conto"} onClose={close} anchor="center">{quick === "conto" && <QuickNewBill onClose={close} go={go} />}</Overlay>
     <Overlay open={quick === "comanda"} onClose={close} anchor="center">{quick === "comanda" && <QuickComanda onClose={close} go={go} />}</Overlay>

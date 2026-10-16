@@ -1,4 +1,5 @@
 'use client'
+import { TakoLoading } from './TakoLoading'
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -54,7 +55,7 @@ export function ReservationForm({ restaurantId }: { restaurantId: string }) {
 
   const field = 'w-full rounded-xl border border-[var(--hairline,#e5e5e5)] bg-[var(--sunken,#f6f3ec)] px-3.5 py-3 text-[15px] text-[var(--ink,#2a1f1a)] outline-none focus:border-[var(--brand,#1d1d1f)]'
 
-  if (loading) return <div className="grid min-h-dvh place-items-center text-[var(--ink-3,#999)]">{t('loading')}</div>
+  if (loading) return <TakoLoading label={t('loading')} variant="screen"/>
 
   if (!enabled) return (
     <div className="mx-auto grid min-h-dvh max-w-md place-items-center px-6 text-center">
@@ -118,7 +119,7 @@ export function ReservationForm({ restaurantId }: { restaurantId: string }) {
 
         <button onClick={submit} disabled={busy}
           className="mt-2 rounded-xl bg-[var(--brand,#ED7159)] py-3.5 text-[16px] font-bold text-white disabled:opacity-50">
-          {busy ? t('sending') : t('resvSubmit')}
+          {busy ? <TakoLoading label={t('sending')} variant="compact"/> : t('resvSubmit')}
         </button>
 
         {/* Consenso privacy discreto: linka all'informativa (nuova scheda per non perdere il form). */}

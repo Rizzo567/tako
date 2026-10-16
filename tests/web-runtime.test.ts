@@ -71,6 +71,22 @@ describe('real Fastify web boundary (no database/network)', () => {
     }
     await server.close()
   })
+  it('removes modules while preserving live room status and waiter resolution', async () => {
+    const { server } = await boundaryServer()
+    server.get('/api/tables/rooms', async () => ({ok:true}))
+    server.patch('/api/tables/t1/status', async () => ({ok:true}))
+    server.post('/api/tables/t1/waiter-resolve', async () => ({ok:true}))
+    server.post('/api/tables', async () => ({ok:true}))
+    server.get('/api/tables/t1/qr', async () => ({ok:true}))
+    for (const url of ['/api/bills','/api/inventory','/api/shifts','/api/devices','/api/insights/menu','/api/ai/owner/chat/stream','/api/customer/takeaway/r1/session','/api/tables','/api/%74ables']) {
+      expect((await server.inject({method:'POST',url,headers:{origin}})).statusCode).toBe(404)
+    }
+    expect((await server.inject({method:'GET',url:'/api/tables/t1/qr'})).statusCode).toBe(404)
+    expect((await server.inject({method:'GET',url:'/api/tables/rooms'})).statusCode).toBe(200)
+    expect((await server.inject({method:'PATCH',url:'/api/tables/t1/status',headers:{origin}})).statusCode).toBe(200)
+    expect((await server.inject({method:'POST',url:'/api/tables/t1/waiter-resolve',headers:{origin}})).statusCode).toBe(200)
+    await server.close()
+  })
   it('rejects writes from foreign or missing origins and accepts the public origin', async () => {
     const { server } = await boundaryServer()
     expect((await server.inject({ method: 'POST', url: '/api/orders', headers: { origin: 'https://evil.example.com' } })).json().error.code).toBe('ORIGIN_REJECTED')

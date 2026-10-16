@@ -35,3 +35,13 @@ materiali/
 # Hosted Tako credentials entered locally, never committed.
 .env.web
 .env.web.local
+
+# Local QA artifacts and deployment caches (never source)
+/tmp/
+/output/
+/videos/
+/deploy/cloudflare/.wrangler/
+/supabase/.temp/
+.env.*
+!.env.example
+!**/.env.example

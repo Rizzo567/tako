@@ -1,0 +1,186 @@
+{
+ "slug": "tako-verifica-web",
+ "restaurantId": "26050ecd-2e55-4057-a4c5-bff2b449cd47",
+ "ops": [
+  {
+   "op": "createMenu",
+   "temp": "colazione",
+   "name": "Colazione",
+   "type": "main",
+   "index": 0,
+   "reason": "collaudo createMenu",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": ""
+   }
+  },
+  {
+   "op": "createSection",
+   "temp": "brioche",
+   "menuTemp": "colazione",
+   "name": "Brioche e cornetti",
+   "index": 0,
+   "reason": "collaudo createSection",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": ""
+   }
+  },
+  {
+   "op": "createSection",
+   "temp": "sotto",
+   "menuId": "3af196fb-7c87-4ab5-84c3-7bb067efd377",
+   "parentSectionId": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+   "name": "Sottosezione di prova",
+   "description": "Figlia creata dal collaudo",
+   "reason": "collaudo createSection figlia",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": ""
+   }
+  },
+  {
+   "op": "moveItem",
+   "itemId": "2f0e9311-04cb-46cd-8ced-756cfe1cfdb2",
+   "toSectionTemp": "brioche",
+   "reason": "collaudo moveItem verso temp",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Cornetto di prova"
+   }
+  },
+  {
+   "op": "moveSection",
+   "sectionId": "62da38c5-b1f5-4fde-be63-9e8038fb5c1f",
+   "toMenuTemp": "colazione",
+   "index": 1,
+   "reason": "collaudo moveSection",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Sezione da spostare"
+   }
+  },
+  {
+   "op": "moveItem",
+   "itemId": "5bd72538-2635-4c07-b593-aac11a880292",
+   "toSectionId": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+   "index": 0,
+   "reason": "collaudo moveItem con index",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Voce da spostare"
+   }
+  },
+  {
+   "op": "deleteSection",
+   "sectionId": "9cee12f2-422a-49cf-8ec2-a5750535f076",
+   "reason": "collaudo deleteSection (vuota dopo moveItem)",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Sezione da eliminare"
+   }
+  },
+  {
+   "op": "updateItem",
+   "itemId": "a438bc55-960d-4126-ace6-9aa5f7499816",
+   "set": {
+    "name": "Piatto di verifica (collaudo)",
+    "description": "Descrizione aggiornata dal collaudo",
+    "price": 14,
+    "priceDisplay": "a partire da 14,00 €",
+    "allergens": [
+     "glutine",
+     "latte"
+    ]
+   },
+   "reason": "collaudo updateItem con priceDisplay",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Piatto di verifica"
+   }
+  },
+  {
+   "op": "updateItem",
+   "itemId": "5bd72538-2635-4c07-b593-aac11a880292",
+   "set": {
+    "hidden": true
+   },
+   "reason": "collaudo updateItem hidden",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Voce da spostare"
+   }
+  },
+  {
+   "op": "toVariants",
+   "baseItemId": "4c29c47d-a4b6-4b8f-b0ac-34ec832b00de",
+   "set": {
+    "name": "Calice di prova"
+   },
+   "variants": [
+    {
+     "name": "Piccolo",
+     "price": 5
+    },
+    {
+     "name": "Grande",
+     "price": 8,
+     "fromItemId": "0fc154b8-364e-421f-a77b-7f1c5bb6c83d"
+    }
+   ],
+   "reason": "collaudo toVariants",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Calice piccolo di prova 5 / Calice grande di prova 8"
+   }
+  },
+  {
+   "op": "updateSection",
+   "sectionId": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+   "set": {
+    "name": "Piatti di prova (collaudo)",
+    "description": "Sezione aggiornata dal collaudo"
+   },
+   "reason": "collaudo updateSection",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Piatti di prova"
+   }
+  },
+  {
+   "op": "updateMenu",
+   "menuId": "3af196fb-7c87-4ab5-84c3-7bb067efd377",
+   "set": {
+    "description": "Coperto di prova 2,00 € (collaudo)"
+   },
+   "reason": "collaudo updateMenu description",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": ""
+   }
+  },
+  {
+   "op": "deleteItem",
+   "itemId": "00530d75-830f-4f84-9123-d9925a28fb79",
+   "reason": "collaudo deleteItem",
+   "evidence": {
+    "source": "live",
+    "ref": "QA seed (scripts/menu-fix/qa/seed-qa.mjs)",
+    "quote": "Piatto da eliminare"
+   }
+  }
+ ],
+ "skipped": []
+}

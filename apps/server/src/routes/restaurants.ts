@@ -3,12 +3,12 @@ import { z } from 'zod'
 import { db, restaurants } from '@tako/db'
 import { eq } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
+import { readRestaurantMe } from '../lib/read-queries.js'
 
 export async function restaurantRoutes(fastify: FastifyInstance) {
   fastify.get('/me', { preHandler: requireAuth }, async (req, reply) => {
-    const [r] = await db.select().from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
-    if (!r) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Restaurant not found' } })
-    return { data: r }
+    const r = await readRestaurantMe(req.user!.restaurantId)
+    return reply.code(r.status).send(r.body)
   })
 
   // Solo l'owner può riscrivere le impostazioni del ristorante: contengono campi

@@ -1,0 +1,132 @@
+{
+  "name": "takomenu-public",
+  "main": "worker.mjs",
+  "account_id": "6978af99fd8949fba8ddb1d721e2a351",
+  "compatibility_date": "2026-06-18",
+  "assets": {
+    "directory": "../../release/public-menus",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "none",
+    "html_handling": "none"
+  },
+  "vars": {
+    "TAKO_BACKEND_READY": "true",
+    "TAKO_READ_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-read-candidate",
+    "TAKO_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-operational-candidate"
+  },
+  "routes": [
+    {
+      "pattern": "takoitalia.com/menu",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/menu/",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/r/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/api/customer/restaurant/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/takomenu-public/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/bim-bum-bar*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/clandestino*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/da-ori*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/il-poeta*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/l-agora*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/l-osterietta-1*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/la-bakery-no-bakery*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/la-bottega-del-gusto*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/la-plaza*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/panuzza*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/patanegra*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/pesce-farina*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/portofranco*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/pupos-pizza*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/ristorante-gauguin*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/sahara-lounge*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/san-galdino*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/tappa-fissa*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/the-lab*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/zio-armando*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/victoria-bar*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/onboarding-preview/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/onboarding-claim/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    }
+  ]
+}

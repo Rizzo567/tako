@@ -12,15 +12,15 @@ export function projectMenuPreview(doc:any,menuId:string,language:string,instant
  if(!doc||doc.schemaVersion!==1||!Array.isArray(doc.menus)||!doc.design||doc.menus.length>100)throw Error('Bozza non valida')
  const menu=doc.menus.find((m:any)=>m.id===menuId)
  if(!menu||typeof menu.name!=='string'||!Array.isArray(menu.sections)||menu.sections.length>500)throw Error('Menu non presente nella bozza')
- const localize=(entity:any)=>({...entity,name:entity.translations?.[language]?.name||entity.name,description:entity.translations?.[language]?.description||entity.description})
+ const localize=(entity:any)=>({...entity,sourceName:entity.name,name:entity.translations?.[language]?.name||entity.name,description:entity.translations?.[language]?.description||entity.description})
  const visible=(entity:any)=>entity.active!==false&&(!instant||previewScheduledVisible(entity.schedule,instant))
  const menuVisible=visible(menu)
  const sections=(instant&&!menuVisible?[]:menu.sections.filter((s:any)=>visible(s)&&(!s.parentSectionId||menu.sections.some((parent:any)=>parent.id===s.parentSectionId&&visible(parent))))).map((s:any)=>{
   if(typeof s.id!=='string'||typeof s.name!=='string'||!Array.isArray(s.items)||s.items.length>2000)throw Error('Categoria non valida')
-  return {...localize(s),items:s.items.filter((i:any)=>!instant||(i.available!==false&&previewScheduledVisible(i.schedule,instant))).map((i:any)=>{
+  return {...localize(s),items:s.items.filter((i:any)=>!i.hidden&&i.available!==false&&(!instant||previewScheduledVisible(i.schedule,instant))).map((i:any)=>{
    if(typeof i.id!=='string'||typeof i.name!=='string'||!Number.isFinite(i.price)||!Array.isArray(i.allergens)||!Array.isArray(i.tags))throw Error('Piatto non valido')
    const translated=localize(i);return {...translated,description:translated.description||undefined,imageUrl:i.imageUrl||undefined,available:i.available!==false}
   })}
  })
- return {menu:{id:menu.id,name:localize(menu).name,sections},design:doc.design,foodLabels:doc.foodTranslations?.[language||doc.defaultLanguage],menuVisible}
+ return {menu:{id:menu.id,name:localize(menu).name,description:(typeof localize(menu).description==='string'&&localize(menu).description.trim())||undefined,sections},design:doc.design,foodLabels:doc.foodTranslations?.[language||doc.defaultLanguage],menuVisible}
 }

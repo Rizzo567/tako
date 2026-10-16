@@ -22,10 +22,11 @@ import {readWorkspace} from './menu-workspace-store.js'
 // Riuso: nessuna logica duplicata di dominio "libera" — le mutation rispecchiano la stessa
 // validazione delle route (ownership per restaurantId, emit socket identici).
 
-import { db, restaurants, menus, menuSections, menuItems, menuItemTranslations, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, inventoryItems, inventoryMovements, staffShifts, users, sessions, loyaltyAccounts, recipes } from '@tako/db'
+import { db, restaurants, menus, menuSections, menuItems, menuItemTranslations, itemVariants, orders, orderItems, tables, rooms, bills, billPayments, reservations, waiterCalls, inventoryItems, inventoryMovements, staffShifts, users, sessions, loyaltyAccounts, recipes } from '@tako/db'
 import { eq, and, asc, desc, gte, lt, lte, ne, inArray, isNull, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { io } from '../index.js'
+import { deliverPersistedEvent } from './event-delivery.js'
 import { round2, restaurantTimezone, dayKeyInTz, dayStartInTz, coverUnit, billTotalsFromOrders, recomputeOpenBill, BILLABLE_STATUSES } from './billing.js'
 
 export type ActionScope = 'customer' | 'owner'
@@ -154,7 +155,7 @@ async function nextTableNumber(restaurantId: string): Promise<string> {
 // o WhatsApp NON passano dalle route HTTP, quindi senza questo il tavolo comparirebbe
 // solo dopo un reload manuale.
 function emitTablesChanged(restaurantId: string, tableId?: string): void {
-  try { io.to(`restaurant:${restaurantId}`).emit('table:updated', { tableId: tableId ?? null }) } catch { /* socket best-effort */ }
+  try { deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'table:updated', { tableId: tableId ?? null }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') }) } catch { /* socket best-effort */ }
 }
 
 // Coercizione booleana robusta per i flag che arrivano dall'LLM (true/"true"/1/"sì").
@@ -168,8 +169,8 @@ function flagTrue(v: unknown): boolean {
 // altrimenti non comparirebbero live né in dashboard né sul menu QR dei clienti.
 function emitMenuChanged(restaurantId: string): void {
   try {
-    io.to(`restaurant:${restaurantId}`).emit('menu:updated', {})
-    io.to(`menu:${restaurantId}`).emit('menu:updated', {})
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'menu:updated', {}, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
+    deliverPersistedEvent(io, `menu:${restaurantId}`, 'menu:updated', {}, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
   } catch { /* socket best-effort */ }
 }
 
@@ -344,7 +345,8 @@ const ACTIONS: ActionDef[] = [
     execute: async (ctx, args) => {
       if (!ctx.tableId) return { ok: false, summary: 'La chiamata al cameriere è disponibile solo con una sessione al tavolo.' }
       const reason = ['help', 'bill', 'water'].includes(args?.reason) ? args.reason : 'help'
-      io.to(`restaurant:${ctx.restaurantId}`).emit('waiter:called', { tableId: ctx.tableId, tableNumber: ctx.tableNumber, type: reason })
+      await db.insert(waiterCalls).values({ restaurantId: ctx.restaurantId, tableId: ctx.tableId, tableNumber: String(ctx.tableNumber ?? ''), type: reason }).onConflictDoUpdate({ target: waiterCalls.tableId, targetWhere: isNull(waiterCalls.resolvedAt), set: { type: reason } })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'waiter:called', { tableId: ctx.tableId, tableNumber: ctx.tableNumber, type: reason }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       return { ok: true, clientAction: { type: 'waiter_called', reason }, summary: 'Ho avvisato il cameriere, arriva subito.' }
     },
   },
@@ -482,8 +484,8 @@ const ACTIONS: ActionDef[] = [
         .where(and(eq(menuItems.id, match.id), eq(menuItems.restaurantId, ctx.restaurantId))).returning()
       if (!item) return { ok: false, summary: 'Aggiornamento non riuscito.' }
       // stessi emit della route menu.ts (dashboard + room pubblica menu)
-      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:item_availability', { itemId: item.id, available })
-      io.to(`menu:${ctx.restaurantId}`).emit('menu:item_availability', { itemId: item.id, available })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'menu:item_availability', { itemId: item.id, available }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
+      deliverPersistedEvent(io, `menu:${ctx.restaurantId}`, 'menu:item_availability', { itemId: item.id, available }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       return { ok: true, data: { id: item.id, name: item.name, available }, summary: `"${item.name}" ora è ${available ? 'disponibile' : 'esaurito'}.` }
     },
   },
@@ -729,11 +731,11 @@ const ACTIONS: ActionDef[] = [
       if (!item) return { ok: false, summary: 'Aggiornamento non riuscito.' }
       // stessi emit della PATCH /items/:id: riga completa alla dashboard, campi
       // pubblici (MAI costPrice) alla room menu pubblica.
-      io.to(`restaurant:${ctx.restaurantId}`).emit('menu:updated', { itemId: item.id, item })
-      io.to(`menu:${ctx.restaurantId}`).emit('menu:updated', { itemId: item.id, item: {
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'menu:updated', { itemId: item.id, item }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
+      deliverPersistedEvent(io, `menu:${ctx.restaurantId}`, 'menu:updated', { itemId: item.id, item: {
         id: item.id, sectionId: item.sectionId, name: item.name, description: item.description,
         price: item.price, imageUrl: item.imageUrl, allergens: item.allergens, tags: item.tags, available: item.available,
-      } })
+      } }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       return { ok: true, data: { id: item.id, name: item.name, price: item.price }, summary: `Aggiornato "${item.name}": ${changes.join(', ')}.` }
     },
   },
@@ -1134,12 +1136,12 @@ const ACTIONS: ActionDef[] = [
           return { row: row! }
         })
         if ('clash' in res) return { ok: false, summary: 'Il tavolo è già prenotato in quella fascia oraria.' }
-        io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: res.row.id })
+        deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'reservation:changed', { id: res.row.id }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
         const hh = new Intl.DateTimeFormat('it-IT', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(startsAt)
         return { ok: true, data: { id: res.row.id }, summary: `Prenotazione: ${name} x${partySize} il ${m[1]} alle ${hh} (tav ${args.tableNumber}).` }
       }
       const [row] = await db.insert(reservations).values(values).returning()
-      io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: row!.id })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'reservation:changed', { id: row!.id }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       const hh = new Intl.DateTimeFormat('it-IT', { hour: '2-digit', minute: '2-digit', timeZone: tz }).format(startsAt)
       return { ok: true, data: { id: row!.id }, summary: `Prenotazione: ${name} x${partySize} il ${m[1]} alle ${hh} (senza tavolo assegnato).` }
     },
@@ -1165,7 +1167,7 @@ const ACTIONS: ActionDef[] = [
         return { ok: false, summary: hits.length ? `Più prenotazioni corrispondono il ${dateStr}: ${list}. Specifica meglio.` : `Nessuna prenotazione di "${args?.customerName}" il ${dateStr}.` }
       }
       await db.update(reservations).set({ status: 'cancelled', updatedAt: new Date() }).where(eq(reservations.id, resv.id))
-      io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: resv.id })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'reservation:changed', { id: resv.id }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       return { ok: true, data: { id: resv.id }, summary: `Prenotazione di ${resv.customerName} (x${resv.partySize}) annullata.` }
     },
   },
@@ -1193,7 +1195,7 @@ const ACTIONS: ActionDef[] = [
         return { ok: false, summary: hits.length ? `Più prenotazioni corrispondono il ${dateStr}: ${list}.` : `Nessuna prenotazione di "${args?.customerName}" il ${dateStr}.` }
       }
       await db.update(reservations).set({ status, updatedAt: new Date() }).where(eq(reservations.id, resv.id))
-      io.to(`restaurant:${ctx.restaurantId}`).emit('reservation:changed', { id: resv.id })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'reservation:changed', { id: resv.id }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       const it: Record<string, string> = { confirmed: 'confermata', seated: 'accomodati', no_show: 'non presentati' }
       return { ok: true, data: { id: resv.id, status }, summary: `Prenotazione di ${resv.customerName}: ${it[status] ?? status}.` }
     },
@@ -1248,8 +1250,8 @@ const ACTIONS: ActionDef[] = [
         .where(and(eq(orders.id, current.id), eq(orders.restaurantId, ctx.restaurantId), eq(orders.status, current.status))).returning()
       if (!updated) return { ok: false, summary: 'L\'ordine è cambiato nel frattempo, ricontrolla.' }
       if (updated.tableId) await recomputeOpenBill(ctx.restaurantId, updated.tableId)
-      io.to(`restaurant:${ctx.restaurantId}`).emit('order:updated', { orderId: current.id, status: 'cancelled' })
-      if (updated!.tableId) io.to(`table:${updated!.tableId}`).emit('order:updated', { orderId: current.id, status: 'cancelled' })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'order:updated', { orderId: current.id, status: 'cancelled' }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
+      if (updated!.tableId) deliverPersistedEvent(io, `table:${updated!.tableId}`, 'order:updated', { orderId: current.id, status: 'cancelled' }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       return { ok: true, data: { id: current.id }, summary: `Ordine del tavolo ${t.number} annullato (il conto è stato ricalcolato).` }
     },
   },
@@ -1358,10 +1360,10 @@ const ACTIONS: ActionDef[] = [
       })
       if (result.conflict) return { ok: false, summary: 'Il conto non è (più) aperto o è già saldato.' }
       // emit post-commit, come la route
-      if (result.tableId) io.to(`restaurant:${ctx.restaurantId}`).emit('table:updated', { tableId: result.tableId, status: 'cleaning' })
+      if (result.tableId) deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'table:updated', { tableId: result.tableId, status: 'cleaning' }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       for (const orderId of result.paidOrderIds) {
-        io.to(`restaurant:${ctx.restaurantId}`).emit('order:updated', { orderId, status: 'paid' })
-        if (result.tableId) io.to(`table:${result.tableId}`).emit('order:updated', { orderId, status: 'paid' })
+        deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'order:updated', { orderId, status: 'paid' }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
+        if (result.tableId) deliverPersistedEvent(io, `table:${result.tableId}`, 'order:updated', { orderId, status: 'paid' }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       }
       const mIt: Record<string, string> = { cash: 'contanti', card: 'carta', digital: 'digitale' }
       return { ok: true, data: { billId: bill.id, amount: result.residuo }, summary: `Incassati €${result.residuo} (${mIt[method]}) dal tavolo ${table.number}. Conto chiuso, tavolo in pulizia.` }
@@ -1431,11 +1433,7 @@ const ACTIONS: ActionDef[] = [
         }).where(and(eq(inventoryItems.id, item.id), eq(inventoryItems.restaurantId, ctx.restaurantId))).returning()
         return { updated: updated! }
       })
-      // come la route: se sotto la soglia, avvisa la dashboard (badge scorte + toast)
-      const minQ = (item as any).minQuantity
-      if (minQ != null && Number(updated.quantity) <= Number(minQ)) {
-        io.to(`restaurant:${ctx.restaurantId}`).emit('inventory:alert', { itemId: item.id, name: item.name, quantity: updated.quantity })
-      }
+      // Inventory tools are excluded from the current product registry.
       const verb = type === 'load' ? 'caricati' : type === 'waste' ? 'segnati come spreco' : 'scaricati'
       return { ok: true, data: { id: item.id, quantity: updated.quantity }, summary: `${quantity}${item.unit} di "${item.name}" ${verb}: ora ${updated.quantity}${item.unit}.` }
     },
@@ -1599,7 +1597,7 @@ const ACTIONS: ActionDef[] = [
         status,
         openedAt: status === 'occupied' ? new Date() : status === 'free' ? null : undefined,
       }).where(and(eq(tables.id, t.id), eq(tables.restaurantId, ctx.restaurantId)))
-      io.to(`restaurant:${ctx.restaurantId}`).emit('table:updated', { tableId: t.id, status })
+      deliverPersistedEvent(io, `restaurant:${ctx.restaurantId}`, 'table:updated', { tableId: t.id, status }, { persisted: true, onError: error => console.warn('Post-commit socket notification failed', error instanceof Error ? error.name : 'Error') })
       const it: Record<string, string> = { free: 'libero', occupied: 'occupato', cleaning: 'in pulizia' }
       return { ok: true, data: { id: t.id, status }, summary: `Tavolo ${t.number} ora è ${it[status]}.` }
     },
@@ -1901,12 +1899,14 @@ const ACTIONS: ActionDef[] = [
   },
 ]
 
+const REMOVED_ACTIONS = new Set(['get_today_revenue', 'revenue_for_date', 'create_table', 'delete_table', 'update_table', 'create_room', 'refresh_table_qr', 'low_stock', 'reorder_list', 'open_bills', 'staff_on_shift', 'apply_bill_discount', 'close_bill', 'create_inventory_item', 'adjust_stock', 'clock_in_staff', 'clock_out_staff', 'set_recipe_ingredient', 'get_recipe', 'remove_recipe_ingredient', 'menu_engineering', 'menu_performance'])
+
 const BY_NAME = new Map(ACTIONS.map(a => [a.name, a]))
 
-export function getAction(name: string): ActionDef | undefined { return BY_NAME.get(name) }
+export function getAction(name: string): ActionDef | undefined { return REMOVED_ACTIONS.has(name) ? undefined : BY_NAME.get(name) }
 
 export function actionsForScope(scope: ActionScope, allow?: string[]): ActionDef[] {
-  return ACTIONS.filter(a => a.scope.includes(scope) && !a.hidden && (!allow || allow.includes(a.name)))
+  return ACTIONS.filter(a => !REMOVED_ACTIONS.has(a.name) && a.scope.includes(scope) && !a.hidden && (!allow || allow.includes(a.name)))
 }
 
 // Tool schema in formato OpenAI/Groq function-calling per lo scope indicato.
@@ -1930,7 +1930,7 @@ const TOOL_CATEGORIES: Record<string, string[]> = {
   orders: ['order_status', 'active_orders', 'cancel_order', 'add_to_cart', 'call_waiter'],
   reservations: ['todays_reservations', 'create_reservation', 'cancel_reservation', 'set_reservation_status'],
   inventory: ['low_stock', 'reorder_list', 'create_inventory_item', 'adjust_stock'],
-  ricette: ['set_recipe_ingredient', 'get_recipe', 'remove_recipe_ingredient'],
+  ricette: ['set_recipe_ingredient', 'get_recipe', 'remove_recipe_ingredient', 'menu_engineering', 'menu_performance'],
   fedelta: ['add_loyalty_points', 'loyalty_balance', 'redeem_loyalty_points'],
   staff: ['staff_on_shift', 'clock_in_staff', 'clock_out_staff', 'list_staff', 'create_staff', 'set_staff_active'],
   stats: ['get_today_revenue', 'get_stats', 'revenue_for_date', 'menu_performance'],
@@ -1994,7 +1994,7 @@ export function isGroqToolUseFailure(e: any): boolean {
 export async function executeAction(
   name: string, args: any, ctx: ActionContext, scope: ActionScope, opts?: { allowMutation?: boolean },
 ): Promise<ActionResult> {
-  const def = BY_NAME.get(name)
+  const def = getAction(name)
   if (!def) return { ok: false, summary: `Azione sconosciuta: ${name}` }
   if (!def.scope.includes(scope)) return { ok: false, summary: 'Azione non consentita per questo ruolo.' }
   // Autorizzazione per-RUOLO: il copilot owner è esposto a qualsiasi staff autenticato
@@ -2202,7 +2202,7 @@ export async function runAssistant(opts: {
     for (const tc of toolCalls) {
       let args: any = {}
       try { args = JSON.parse(tc.function?.arguments || '{}') } catch { args = {} }
-      const def = BY_NAME.get(tc.function?.name ?? '')
+      const def = getAction(tc.function?.name ?? '')
       let content = ''
       if (!def || !def.scope.includes(opts.scope)) {
         content = 'Azione non disponibile.'
@@ -2488,7 +2488,7 @@ async function createTableGate(opts: {
   history: { role: 'user' | 'assistant'; content: string }[]
   userMessage: string
 }): Promise<AssistantTurn | null> {
-  const def = BY_NAME.get('create_table')
+  const def = getAction('create_table')
   if (!def) return null
   const allRooms = await db.select({ name: rooms.name }).from(rooms)
     .where(and(eq(rooms.restaurantId, opts.ctx.restaurantId), eq(rooms.active, true)))
@@ -2731,7 +2731,7 @@ export async function runAssistantStream(opts: {
     for (const tc of toolCalls) {
       let args: any = {}
       try { args = JSON.parse(tc.function?.arguments || '{}') } catch { args = {} }
-      const def = BY_NAME.get(tc.function?.name ?? '')
+      const def = getAction(tc.function?.name ?? '')
       let out = ''
       if (!def || !def.scope.includes(opts.scope)) {
         out = 'Azione non disponibile.'

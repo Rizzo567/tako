@@ -4,10 +4,10 @@ import { db, inventoryItems, inventoryMovements } from '@tako/db'
 import { eq, and, lte, sql, desc, inArray, gte } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
 import { io } from '../index.js'
-import OpenAI from 'openai'
 
-function getAI() {
+async function getAI() {
   if (!process.env.GROQ_API_KEY) throw new Error('GROQ_API_KEY not set')
+  const {default:OpenAI}=await import('openai');
   return new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
 }
 
@@ -185,7 +185,7 @@ export async function inventoryRoutes(fastify: FastifyInstance) {
     const { text } = parsedBody.data
     let completion: any
     try {
-      const openai = getAI()
+      const openai = await getAI()
       completion = await openai.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         response_format: { type: 'json_object' },

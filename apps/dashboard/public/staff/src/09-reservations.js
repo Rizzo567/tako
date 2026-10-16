@@ -257,7 +257,7 @@ function ScreenPrenotazioni({ mobile }) {
       </Card>
 
       {loading ? (
-        <Card pad={40} style={{ textAlign: "center", color: "var(--ink-3)" }}>Carico…</Card>
+        <Card pad={40}><TakoLoading label="Caricamento prenotazioni…" variant="screen"/></Card>
       ) : list.length === 0 ? (
         <Empty tako="serve" title="Nessuna prenotazione" sub="Non ci sono prenotazioni per questo giorno."
           action={<Btn kind="brand" icon="plus" onClick={() => setModal({ reservation: null })}>Aggiungi prenotazione</Btn>} />

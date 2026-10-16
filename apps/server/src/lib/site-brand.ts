@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 /**
  * Colori e logo del brand ricavati da una pagina web pubblica (onboarding
  * «Configura menu cliente»). Il fetch è protetto contro SSRF:
@@ -117,6 +118,8 @@ export type LookupFn = (hostname: string) => Promise<LookupAddress[]>
 export interface SiteBrandDeps {
   /** Risoluzione DNS. Default: dns.promises.lookup(host, {all:true}). */
   lookup?: LookupFn
+  /** Require HTTPS on initial URL and every redirect. */
+  httpsOnly?: boolean
   /** Policy sugli indirizzi risolti. Default: !isBlockedAddress(address). */
   isAllowedAddress?: (address: string, hostname: string) => boolean
   /** Ammette porte diverse da 80/443 (server di test locali). */
@@ -145,6 +148,7 @@ export function validateSiteUrl(raw: string, deps: SiteBrandDeps = {}): URL {
   let url: URL
   const text = String(raw ?? '').trim()
   try { url = new URL(/^[a-z][a-z0-9+.-]*:/i.test(text) ? text : `https://${text}`) } catch { throw new SiteBrandError('VALIDATION', MSG.invalid) }
+  if (deps.httpsOnly && url.protocol !== 'https:') throw new SiteBrandError('VALIDATION', 'Usa un collegamento HTTPS pubblico.')
   if (url.protocol !== 'http:' && url.protocol !== 'https:') throw new SiteBrandError('VALIDATION', MSG.invalid)
   if (url.username || url.password) throw new SiteBrandError('VALIDATION', MSG.credentials)
   if (url.port && !['80', '443'].includes(url.port) && !deps.allowAnyPort) throw new SiteBrandError('VALIDATION', MSG.port)
@@ -172,17 +176,19 @@ export async function resolveSafeAddress(url: URL, deps: SiteBrandDeps = {}): Pr
 // ───────────────────────── Fetch protetto ─────────────────────────
 
 export interface GuardedResponse { url: string; contentType: string; body: Buffer }
-type Kind = 'html' | 'css' | 'image'
+type Kind = 'html' | 'css' | 'image' | 'source'
 
 const IMAGE_TYPES = new Set(['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon'])
 
 function contentTypeOk(kind: Kind, ct: string): boolean {
+  if (kind === 'source') return ['text/html', 'application/xhtml+xml', 'text/plain', 'text/csv', 'application/pdf', 'image/png', 'image/jpeg', 'image/webp'].includes(ct)
   if (kind === 'html') return ct === 'text/html' || ct === 'application/xhtml+xml'
   if (kind === 'css') return ct === '' || ct === 'text/css' || ct === 'text/plain'
   return IMAGE_TYPES.has(ct)
 }
 
 const ACCEPT: Record<Kind, string> = {
+  source: 'text/html,text/plain,text/csv,application/pdf,image/png,image/jpeg,image/webp',
   html: 'text/html,application/xhtml+xml;q=0.9',
   css: 'text/css,*/*;q=0.1',
   image: 'image/png,image/svg+xml,image/webp,image/*;q=0.8',

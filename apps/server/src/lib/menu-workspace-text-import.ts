@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 import type { Workspace } from './menu-workspace-contract.js'
 import { importWorkspaceCsv } from './menu-workspace-import.js'
 

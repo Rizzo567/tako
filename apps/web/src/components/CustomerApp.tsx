@@ -1,4 +1,5 @@
 'use client'
+import { TakoLoading } from './TakoLoading'
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { api } from '@/lib/api'
@@ -256,16 +257,7 @@ function CustomerShell({ token }: { token: string }) {
     setCartOpen(true)
   }
 
-  if (loading) return (
-    <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-4" style={{ background: 'var(--surface)' }}>
-      <div className="grid h-20 w-20 place-items-center" style={{ borderRadius: 'var(--r-card)', background: 'var(--raised)', boxShadow: 'var(--sh-2)' }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoUrl || '/tako/tako-chef.png'} alt="" className="h-14 w-14 rounded-2xl object-contain" />
-      </div>
-      <div className="h-1 w-8 animate-pulse rounded-full" style={{ background: 'var(--brand)' }} />
-      <p className="text-sm font-semibold text-[var(--ink-3)]">{t('loadingMenu')}</p>
-    </div>
-  )
+  if (loading) return <TakoLoading label={t('loadingMenu')} variant="screen"/>
 
   if (error) return (
     <div className="flex min-h-[100dvh] items-center justify-center p-6 text-center">

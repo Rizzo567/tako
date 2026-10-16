@@ -1,0 +1,14 @@
+/* One loader geometry: logo at the centre, text below; actions keep an inline mark. */
+.tako-loading{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;width:36px;height:36px;max-width:100%;color:#909090;vertical-align:middle;font-family:inherit;animation:tako-loading-enter 420ms cubic-bezier(.22,1,.36,1) both}
+.tako-loading__figure{display:block;flex:none;width:36px;height:36px;line-height:0}
+.tako-loading__mascot{display:block;width:36px;height:36px;flex:none}
+.tako-loading__text{position:absolute;left:50%;top:calc(50% + 30px);transform:translateX(-50%);width:max-content;max-width:min(320px,calc(100vw - 32px));text-align:center;font-size:16px;font-weight:500;line-height:24px;background:linear-gradient(100deg,#909090 35%,#343434 48%,#909090 61%);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:tako-loading-shimmer 2.4s linear infinite}
+.tako-loading--screen{position:fixed;inset:0;width:100%;height:100dvh;z-index:3;pointer-events:none}
+.tako-loading--page{display:flex;width:100%;height:100%;min-height:200px}
+.tako-loading--compact{width:auto;height:26px;gap:6px}
+.tako-loading--compact .tako-loading__figure,.tako-loading--compact .tako-loading__mascot{width:26px;height:26px}
+.tako-loading--compact .tako-loading__text{position:static;transform:none;width:auto;max-width:none;font-size:inherit;line-height:inherit;text-align:inherit}
+@keyframes tako-loading-shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+@keyframes tako-loading-enter{from{opacity:0;transform:translate3d(0,8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@media(prefers-reduced-motion:reduce){.tako-loading{animation:none}.tako-loading__text{animation:none;color:#909090;background:none}}
+.tako-loading[data-reduced-motion=true]{animation:none}.tako-loading[data-reduced-motion=true] .tako-loading__text{animation:none;color:#909090;background:none}

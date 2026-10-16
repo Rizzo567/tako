@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 // ─────────────────────── Tako — FOTO PIATTO con AI (Nano Banana Pro / Gemini) ───────────────────────
 // Quando l'owner carica la foto di un piatto (WhatsApp o dashboard/copilot) e il flag
 // `aiPhotoEnabled` è attivo, la trasformiamo in una foto da menù professionale con uno

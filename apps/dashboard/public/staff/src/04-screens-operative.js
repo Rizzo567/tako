@@ -8,13 +8,14 @@ function ScreenScroll({ mobile, children, dark }) {
   const onScroll = (e) => {
     if (!mobile) return;
     const t = e.currentTarget.scrollTop;
+    e.currentTarget.style.setProperty("--scroll-fade", String(1-Math.min(1,t/28)));
     if (Math.abs(t - last.current) < 6) return;
     setScrollDown(t > last.current && t > 40);
     last.current = t;
   };
   useEffect(() => { if (mobile) setScrollDown(false); }, [mobile]);
   return (
-    <div className="scroll" onScroll={onScroll} style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: mobile ? "112px 14px 104px" : "26px 30px 34px", background: dark ? "var(--nav)" : "transparent" }}>
+    <div className="scroll screen-scroll" onScroll={onScroll} style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: mobile ? "14px 14px 20px" : "26px 30px 34px", background: dark ? "var(--nav)" : "transparent" }}>
       <div style={{ maxWidth: dark ? "none" : 1180, margin: "0 auto" }}>{children}</div>
     </div>
   );
@@ -68,7 +69,7 @@ function CoworkCard({ go, entering }) {
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
         <div>
           <h3 style={{ fontSize: 16 }}>Tako Cowork</h3>
-          <p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>Chiedi incassi, stato tavoli — o detta un comando</p>
+          <p style={{ fontSize: 12.5, color: "var(--ink-2)" }}>Chiedi del menu, degli ordini o delle prenotazioni</p>
         </div>
       </div>
       <button className="press" onClick={() => go("cowork")}
@@ -184,7 +185,6 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
         </Card>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {incomplete && <SetupSlot go={go} setupDone={setupDone} allDone={allDone} role={role} />}
           <SobrioShortcuts go={go} role={role} />
         </div>
       </div>
@@ -269,7 +269,6 @@ function ScreenOrdini({ mobile, orders, onConfirm, onServe, onCancel, go }) {
                   {o.stato === "attesa" && <Btn size="sm" kind="brand" full icon="check" onClick={() => onConfirm(o.id)}>Conferma</Btn>}
                   {(o.stato === "confermato" || o.stato === "prep" || o.stato === "pronto") && <Btn size="sm" kind="ok" full icon="check" onClick={() => onServe(o.id)}>Segna servito</Btn>}
                   {o.stato !== "servito" && o.stato !== "annullato" && <Btn size="sm" kind="danger" icon="x" onClick={() => setConfirmCancel(o.id)}>Annulla</Btn>}
-                  {o.stato === "servito" && <Btn size="sm" kind="soft" full icon="cassa" onClick={() => go && go("cassa")}>Vai a cassa</Btn>}
                 </div>
               </Card>
             );

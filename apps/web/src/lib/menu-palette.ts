@@ -18,12 +18,20 @@ export function menuActiveBackground(value: unknown, accent: string): string {
 
 const rgb = (color: string) => { const c = hex(color); return c ? [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)) : null }
 
-/** Testo leggibile su uno sfondo (luminanza relativa WCAG). */
+const DARK_TEXT = '#1d1d1f'
+/** Luminanza relativa WCAG (0–1); null se non è un colore pieno. */
+export const luminance = (color: string): number | null => { const c = rgb(color); if (!c) return null; const [r, g, b] = c.map(v => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4 }); return 0.2126 * r + 0.7152 * g + 0.0722 * b }
+/** Rapporto di contrasto WCAG tra due colori esadecimali; null se uno dei due non è un colore pieno. */
+export function contrastRatio(a: string, b: string): number | null {
+  const x = luminance(a), y = luminance(b)
+  return x === null || y === null ? null : (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)
+}
+
+/** Testo leggibile su uno sfondo: bianco o scuro, quello con contrasto WCAG maggiore. */
 export function readableOn(background: string): string {
-  const c = rgb(background)
-  if (!c) return '#ffffff'
-  const [r, g, b] = c.map(v => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4 })
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.45 ? '#1d1d1f' : '#ffffff'
+  const onWhite = contrastRatio('#ffffff', background), onDark = contrastRatio(DARK_TEXT, background)
+  if (onWhite === null || onDark === null) return '#ffffff'
+  return onDark > onWhite ? DARK_TEXT : '#ffffff'
 }
 
 /** Distanza RGB tra due colori esadecimali; Infinity se uno dei due non è un colore pieno. */

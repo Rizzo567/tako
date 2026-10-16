@@ -908,7 +908,7 @@ function QrCard({ t, onDownload, onDelete }) {
   return (
     <Card pad={16} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%", minWidth: 0, overflow: "hidden" }}>
       {loading ? (
-        <div style={{ width: 120, height: 120, borderRadius: 10, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 12 }}>…</div>
+        <div style={{ width: 120, height: 120, borderRadius: 10, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--ink-3)", fontSize: 12 }}><TakoLoading label="QR…" variant="compact"/></div>
       ) : qrDataUrl ? (
         <img src={qrDataUrl} alt={`QR tavolo ${t.n}`} style={{ width: 120, height: 120, borderRadius: 10 }} />
       ) : (

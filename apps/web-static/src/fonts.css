@@ -1,0 +1,5 @@
+/* Same licensed local font files used by next/font/local in the Next app. */
+@font-face{font-family:'Tako DM Sans';src:url('../../web/src/fonts/DMSans.woff2') format('woff2'),url('../../web/src/fonts/DMSans.ttf') format('truetype');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Tako DM Serif';src:url('../../web/src/fonts/DMSerifDisplay-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Tako DM Serif';src:url('../../web/src/fonts/DMSerifDisplay-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap}
+:root{--font-display:'Tako DM Sans';--font-body:'Tako DM Sans';--font-serif:'Tako DM Serif'}

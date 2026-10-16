@@ -4,7 +4,6 @@
 // ristorante, quindi solo il titolare lo gestisce. Il motore vive in lib/whatsapp.ts.
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import QRCode from 'qrcode'
 import { requireAuth } from '../middleware/auth.js'
 import { startWhatsApp, stopWhatsApp, getWhatsAppStatus, setAllowedNumbers, regenerateBootstrapCode } from '../lib/whatsapp.js'
 
@@ -23,7 +22,7 @@ export async function whatsappRoutes(fastify: FastifyInstance) {
     const status = getWhatsAppStatus()
     let qrDataUrl: string | null = null
     if (status.qr) {
-      try { qrDataUrl = await QRCode.toDataURL(status.qr) } catch { qrDataUrl = null }
+      try { const {default:QRCode}=await import('qrcode');qrDataUrl = await QRCode.toDataURL(status.qr) } catch { qrDataUrl = null }
     }
     return { data: { ...status, qrDataUrl } }
   })

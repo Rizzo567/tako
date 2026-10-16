@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /** Precompile the original shared-global staff SPA; never mutate its source directory. */
 import { transform } from 'esbuild';
+import {createHash} from 'node:crypto';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { resolve, dirname, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -18,9 +19,9 @@ const boot = `(function () {
     if (!boot) return;
     shown = true;
     boot.replaceChildren();
-    var title = document.createElement('b'); title.textContent = 'Tako non si è avviato';
+    var title = document.createElement('b'); title.textContent = 'Takomenu non si è avviato';
     var detail = document.createElement('small'); detail.textContent = msg || '';
-    var help = document.createElement('small'); help.textContent = 'Controlla la connessione e ricarica la pagina. Se il problema continua, contatta l’assistenza Tako.';
+    var help = document.createElement('small'); help.textContent = 'Controlla la connessione e ricarica la pagina. Se il problema continua, contatta l’assistenza Takomenu.';
     var button = document.createElement('button'); button.textContent = 'Ricarica';
     button.addEventListener('click', function () { location.reload(); });
     boot.append(title, detail, help, button);
@@ -45,8 +46,10 @@ export async function buildStaffWeb(out = resolve(repo,'release/staff-web')) {
   const compiled = await transform(chunks.join('\n'),{loader:'jsx',format:'iife',target:['es2020'],minify:true,legalComments:'none'});
   html=html.replace(/<script\b[^>]*>\s*([\s\S]*?)<\/script>/gi,(tag,body)=> /\bsrc\s*=/.test(tag.split('>')[0]) ? tag : '<script src="boot.js"></script>');
   html=html.replace(/<script\b[^>]*src=["']lib\/babel\.js["'][^>]*>\s*<\/script>\s*/gi,'');
+  const appName='app.'+createHash('sha256').update(compiled.code).digest('hex').slice(0,12)+'.js';
+  html=html.replace('lib/react.js','lib/react-18.3.1.production.min.js').replace('lib/react-dom.js','lib/react-dom-18.3.1.production.min.js');
   let inserted=false;
-  html=html.replace(/<script\b[^>]*type=["']text\/babel["'][^>]*>\s*<\/script>\s*/gi,()=>{if(inserted)return '';inserted=true;return '<script src="app.js"></script>\n';});
+  html=html.replace(/<script\b[^>]*type=["']text\/babel["'][^>]*>\s*<\/script>\s*/gi,()=>{if(inserted)return '';inserted=true;return '<script src="'+appName+'"></script>\n';});
   if (/text\/babel|lib\/babel\.js|\bon\w+\s*=/i.test(html) || /<script\b(?![^>]*\bsrc=)/i.test(html)) throw new Error('Generated HTML still needs inline script or Babel');
   await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
   await cp(source,out,{recursive:true,filter:path=> {
@@ -58,8 +61,11 @@ export async function buildStaffWeb(out = resolve(repo,'release/staff-web')) {
   for(const name of ['cmaps','standard_fonts','wasm']) await cp(resolve(pdfjs,name),resolve(out,'lib/pdfjs',name),{recursive:true});
   await cp(resolve(pdfjs,'LICENSE'),resolve(out,'lib/pdfjs/LICENSE'));
   await writeFile(resolve(out,'index.html'),html);
-  await writeFile(resolve(out,'boot.js'),boot);
+  const motion=JSON.parse(await readFile(new URL('../apps/web/src/lib/menu-motion.tokens.json',import.meta.url),'utf8'));
+  await writeFile(resolve(out,'boot.js'),'window.TakoMenuMotion='+JSON.stringify(motion)+';\n'+boot);
   await writeFile(resolve(out,'app.js'),compiled.code);
+  await writeFile(resolve(out,appName),compiled.code);
+  await cp(resolve(repo,'apps/web/src/app/tako-loading.css'),resolve(out,'src/tako-loading.css'));
   return {out,sources:jsx.map(m=>m[1]),bytes:Buffer.byteLength(compiled.code)};
 }
 if(process.argv[1] && resolve(process.argv[1])===fileURLToPath(import.meta.url)) {

@@ -1,0 +1,5 @@
+import {readFile,writeFile} from 'node:fs/promises';import {call,json,login} from './san-galdino-api.mjs';
+const dir='/Users/manuel/.config/tako-webapp/san-galdino-import';const p=JSON.parse(await readFile(dir+'/provision.json'));await login();await call('/api/web-locations/switch',json({restaurantId:p.id}));
+let assets=await readFile(dir+'/assets.json','utf8').then(JSON.parse).catch(()=>({}));
+for(const [name,path] of [['hero','docs/webapp/san-galdino-import/hero-v1.png'],...(process.argv.includes('--logo')?[['logo','docs/webapp/san-galdino-import/logo-dark.png']]:[])]){if(assets[name])continue;const f=new FormData();f.append('file',new Blob([await readFile(path)],{type:'image/png'}),name+'.png');assets[name]=(await call('/api/uploads/image',{method:'POST',body:f})).data.url;await writeFile(dir+'/assets.json',JSON.stringify(assets),{mode:0o600});console.log(JSON.stringify({asset:name,saved:true}));}
+await call('/api/web-locations/switch',json({restaurantId:'84fe4d77-2d87-5187-aa94-9c01840e99de'}));

@@ -2,8 +2,8 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tako — Dashboard Ristoratore</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Takomenu — Dashboard Ristoratore</title>
 <link rel="icon" type="image/png" href="assets/takos/arancione/logo-chef.png">
 <style>*{box-sizing:border-box}html,body{margin:0;padding:0;height:100%;background:#ffffff;-webkit-font-smoothing:antialiased}
 #boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:system-ui,-apple-system,sans-serif;color:#0a0a0a;text-align:center;padding:24px}
@@ -12,15 +12,22 @@
 #boot button{margin-top:8px;padding:10px 18px;border:none;border-radius:999px;background:#0a0a0a;color:#fff;font-weight:500;font-size:14px;cursor:pointer}
 @keyframes spin{to{transform:rotate(360deg)}}</style>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="src/tako-loading.css">
+<link rel="preload" as="image" href="assets/loading/tako-loading.svg">
 <link rel="stylesheet" href="src/menu-workspace.css">
+<link rel="stylesheet" href="src/agency-dashboard.css">
 <link rel="stylesheet" href="src/sobrio.css">
+<link rel="stylesheet" href="src/daily-menu.css">
+<link rel="stylesheet" href="src/menu-images.css">
+<link rel="stylesheet" href="src/menu-translations.css">
+<link rel="stylesheet" href="src/ui-lock.css">
 </head>
 <body>
 <!-- Primo paint visibile: mai schermo bianco. #boot vive DENTRO #stage così
      React lo rimuove al mount (createRoot().render svuota il container). Se
      qualcosa fallisce (script non caricato, errore Babel, server giù) il
      watchdog/handler qui sotto mostra una diagnosi al posto del muro bianco. -->
-<div id="stage"><div id="boot"><div class="sp"></div><b>Avvio Tako…</b><small>Se resta così, il server potrebbe non essere raggiungibile.</small></div></div>
+<div id="stage"><div id="boot"><span role="status" aria-live="polite" class="tako-loading tako-loading--screen"><picture class="tako-loading__figure"><source media="(prefers-reduced-motion: reduce)" srcset="assets/loading/tako-loading-static.svg"><img class="tako-loading__mascot" src="assets/loading/tako-loading.svg" alt=""></picture><span class="tako-loading__text">Avvio Takomenu…</span></span></div></div>
 <script>
 (function () {
   var shown = false
@@ -29,9 +36,9 @@
     var boot = document.getElementById('boot')
     if (!boot) return
     boot.innerHTML =
-      '<b>Tako non si è avviato</b>' +
+      '<b>Takomenu non si è avviato</b>' +
       '<small>' + (msg || '') + '</small>' +
-      '<small>Controlla la connessione e ricarica la pagina. Se il problema continua, contatta l’assistenza Tako.</small>' +
+      '<small>Controlla la connessione e ricarica la pagina. Se il problema continua, contatta l’assistenza Takomenu.</small>' +
       '<button onclick="location.reload()">Ricarica</button>'
   }
   // Errori di caricamento/compilazione (es. SyntaxError Babel, script mancante):
@@ -50,6 +57,7 @@
 <script src="lib/react-dom.js"></script>
 <script src="lib/babel.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script type="text/babel" src="src/00-ui-lock.js"></script>
 <script type="text/babel" src="src/01-data.js"></script>
 <script type="text/babel" src="src/02-kit.js"></script>
 <script type="text/babel" src="src/19-sobrio.js"></script>
@@ -62,12 +70,18 @@
 <script type="text/babel" src="src/10-shifts.js"></script>
 <script type="text/babel" src="src/11-copilot.js"></script>
 <script type="text/babel" src="src/12-login-gate.js"></script>
+<script type="text/babel" src="src/12-menu-images.js"></script>
+<script type="text/babel" src="src/12-menu-translations.js"></script>
+<script type="text/babel" src="src/14-customer-paths.js"></script>
 <script type="text/babel" src="src/14-menu-print.js"></script>
 <script type="text/babel" src="src/15-menu-gallery-history.js"></script>
 <script type="text/babel" src="src/17-menu-import-translate.js"></script>
+<script type="text/babel" src="src/13-menu-category-icons.js"></script>
+<script type="text/babel" src="src/13-menu-live-sync.js"></script>
 <script type="text/babel" src="src/13-menu-workspace.js"></script>
 <script type="text/babel" src="src/16-web-locations.js"></script>
 <script type="text/babel" src="src/18-menu-metrics.js"></script>
+<script type="text/babel" src="src/20-agency-dashboard.js"></script>
 <script type="text/babel" src="src/07-app-root.js"></script>
 </body>
 </html>

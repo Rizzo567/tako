@@ -96,14 +96,22 @@ export interface AuthSession {
 export interface PublicMenu {
   id: string
   name: string
+  /** Nota del menu per il cliente (coperto, WiFi, pane, supplementi…), già tradotta se possibile. */
+  description?: string
+  /** Lingua di origine quando la nota non è tradotta nella lingua richiesta. */
+  descriptionLang?: string
   sections: PublicSection[]
 }
 
 export interface PublicSection {
+  sourceName?: string
   id: string
   parentSectionId?: string | null
   description?: string
   name: string
+  /** Lingua di origine quando nome/descrizione non sono tradotti nella lingua richiesta. */
+  nameLang?: string
+  descriptionLang?: string
   items: PublicItem[]
 }
 
@@ -111,6 +119,8 @@ export interface PublicItem {
   id: string
   name: string
   description?: string
+  nameLang?: string
+  descriptionLang?: string
   price: number
   imageUrl?: string
   allergens: string[]

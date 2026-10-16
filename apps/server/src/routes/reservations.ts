@@ -1,12 +1,14 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, reservations, tables } from '@tako/db'
-import { eq, and, gte, lt, ne, asc, sql } from 'drizzle-orm'
+import { eq, and, ne, sql } from 'drizzle-orm'
 import { requireAuth } from '../middleware/auth.js'
-import { restaurantTimezone, dayKeyInTz, dayStartInTz } from '../lib/billing.js'
+import { restaurantTimezone } from '../lib/billing.js'
 import { enqueueReservationReminder } from '../lib/web-mail.js'
 import { io } from '../index.js'
-import { checkReservationCapacity, lockReservationCapacity, nextCalendarDay, reservationLocalInstant } from '../lib/reservation-capacity.js'
+import { deliverPersistedEvent } from '../lib/event-delivery.js'
+import { readReservationsForDay } from '../lib/read-queries.js'
+import { checkReservationCapacity, lockReservationCapacity, reservationLocalInstant } from '../lib/reservation-capacity.js'
 
 const STATUSES = ['requested', 'confirmed', 'seated', 'no_show', 'cancelled'] as const
 
@@ -63,37 +65,13 @@ async function tableBelongs(restaurantId: string, tableId: string) {
   return !!t
 }
 
-/** arricchisce la prenotazione col numero tavolo (per la UI) */
-function withTableNumber(r: typeof reservations.$inferSelect, numByTable: Map<string, string>) {
-  return { ...r, tableNumber: r.tableId ? (numByTable.get(r.tableId) ?? null) : null }
-}
-
 const OVERLAP = { code: 'RESERVATION_OVERLAP', message: 'Il tavolo è già prenotato in quella fascia oraria.' }
 
 export async function reservationRoutes(fastify: FastifyInstance) {
   // Lista prenotazioni per giorno. ?date=YYYY-MM-DD (default: oggi nel fuso del ristorante).
   fastify.get('/', { preHandler: requireAuth }, async (req, reply) => {
-    const q = z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).safeParse(req.query)
-    if (!q.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: q.error.message } })
-    const tz = await restaurantTimezone(req.user!.restaurantId)
-    const dateStr = q.data.date ?? dayKeyInTz(new Date(), tz)
-    const dayStart = dayStartInTz(dateStr, tz)
-    if (isNaN(dayStart.getTime())) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Data non valida' } })
-    let dayEnd: Date
-    try { dayEnd = dayStartInTz(nextCalendarDay(dateStr), tz) } catch { return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Data non valida' } }) }
-
-    const rows = await db.select().from(reservations)
-      .where(and(
-        eq(reservations.restaurantId, req.user!.restaurantId),
-        gte(reservations.startsAt, dayStart),
-        lt(reservations.startsAt, dayEnd),
-      ))
-      .orderBy(asc(reservations.startsAt))
-
-    const allTables = await db.select({ id: tables.id, number: tables.number }).from(tables)
-      .where(eq(tables.restaurantId, req.user!.restaurantId))
-    const numByTable = new Map(allTables.map(t => [t.id, t.number]))
-    return { data: rows.map(r => withTableNumber(r, numByTable)) }
+    const r = await readReservationsForDay(req.user!.restaurantId, req.query)
+    return reply.code(r.status).send(r.body)
   })
 
   // Crea prenotazione.
@@ -151,7 +129,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       })
       if ('error' in result) return reply.code(409).send({ error: result.error })
       const row = result.row
-      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: row!.id })
+      deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id: row!.id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
       return reply.code(201).send({ data: row })
     }
 
@@ -171,7 +149,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     })
     if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
     if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
-    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id: res.row.id })
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id: res.row.id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return reply.code(201).send({ data: res.row })
   })
 
@@ -245,7 +223,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       })
       if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
     if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
-      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+      deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
       return { data: res.row }
     }
 
@@ -259,7 +237,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     })
     if ('capacityError' in result) return reply.code(409).send({ error: result.capacityError })
     const row = result.row
-    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: row }
   })
 
@@ -291,7 +269,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
       })
       if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
     if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
-      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+      deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
       return { data: res.row }
     }
 
@@ -305,7 +283,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     })
     if ('capacityError' in result) return reply.code(409).send({ error: result.capacityError })
     const row = result.row
-    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: row }
   })
 
@@ -323,7 +301,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     if (!parsed.data.tableId) {
       const [row] = await db.update(reservations).set({ tableId: null, updatedAt: new Date() })
         .where(and(eq(reservations.id, id), eq(reservations.restaurantId, restaurantId))).returning()
-      io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+      deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
       return { data: row }
     }
 
@@ -343,7 +321,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     })
     if ('capacityError' in res) return reply.code(409).send({ error: res.capacityError })
     if ('clash' in res) return reply.code(409).send({ error: OVERLAP })
-    io.to(`restaurant:${restaurantId}`).emit('reservation:changed', { id })
+    deliverPersistedEvent(io, `restaurant:${restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: res.row }
   })
 
@@ -353,7 +331,7 @@ export async function reservationRoutes(fastify: FastifyInstance) {
     const [row] = await db.delete(reservations)
       .where(and(eq(reservations.id, id), eq(reservations.restaurantId, req.user!.restaurantId))).returning()
     if (!row) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Prenotazione non trovata' } })
-    io.to(`restaurant:${req.user!.restaurantId}`).emit('reservation:changed', { id })
+    deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'reservation:changed', { id }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: { success: true } }
   })
 }

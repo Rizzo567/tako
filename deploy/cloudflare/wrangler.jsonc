@@ -1,0 +1,48 @@
+{
+  "name": "takomenu-web",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-06-18",
+  "assets": {
+    "directory": "../../release/serverless/static",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "none",
+    "html_handling": "none"
+  },
+  "vars": {
+    "TAKO_BACKEND_READY": "true",
+    "TAKO_READ_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-read-candidate",
+    "TAKO_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-operational-candidate"
+  },
+  "account_id": "6978af99fd8949fba8ddb1d721e2a351",
+  "routes": [
+    {
+      "pattern": "takoitalia.com/staff",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/staff/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/api/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/uploads/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/takomenu-app/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/menu-preview/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/socket.io/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 'use client'
+import { TakoLoading } from './TakoLoading'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Minus, Plus, Check, ArrowLeft } from 'lucide-react'
@@ -181,7 +182,7 @@ export function CartView({ onBack, onOrderPlaced }: { onBack: () => void; onOrde
         <button onClick={placeOrder} disabled={loading}
           className="flex h-[54px] w-full items-center justify-center gap-2 rounded-2xl text-[16px] font-bold text-[var(--on-brand)] active:scale-[0.98] disabled:opacity-60"
           style={{ background: 'var(--brand)', boxShadow: '0 8px 22px -8px var(--brand)' }}>
-          <Check size={18} strokeWidth={2.4} /> {loading ? t('sending') : t('confirmOrder')}
+          {loading ? <TakoLoading label={t('sending')} variant="compact"/> : <><Check size={18} strokeWidth={2.4}/>{t('confirmOrder')}</>}
         </button>
       </div>
     </>

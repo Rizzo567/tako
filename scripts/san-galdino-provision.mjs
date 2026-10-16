@@ -1,0 +1,6 @@
+import {readFile,writeFile} from 'node:fs/promises';import {call,json,login} from './san-galdino-api.mjs';
+const dir='/Users/manuel/.config/tako-webapp/san-galdino-import';await login();const locations=await call('/api/web-locations');const saved=await readFile(dir+'/provision.json','utf8').then(JSON.parse).catch(()=>null);const existing=locations.data.find(x=>x.slug==='san-galdino');if(existing&&!saved)throw Error('Unmapped target collision');
+let r=existing;if(!r){const result=await call('/api/web-locations',json({name:'San Galdino',slug:'san-galdino'}));r=result.data;await writeFile(dir+'/provision.json',JSON.stringify({id:r.id,sourceId:'f09ec6a7-11fa-4a97-8eef-1daccd64fb0d'}),{mode:0o600});}
+await call('/api/web-locations/switch',json({restaurantId:'84fe4d77-2d87-5187-aa94-9c01840e99de'}));const reference=await call('/api/menu-workspace');await writeFile(dir+'/reference.json',JSON.stringify(reference),{mode:0o600});
+await call('/api/web-locations/switch',json({restaurantId:r.id}));const target=await call('/api/menu-workspace');await writeFile(dir+'/target-initial.json',JSON.stringify(target),{mode:0o600});
+await call('/api/web-locations/switch',json({restaurantId:'84fe4d77-2d87-5187-aa94-9c01840e99de'}));console.log(JSON.stringify({id:r.id,name:r.name,created:!existing,initialRevision:target.revision}));

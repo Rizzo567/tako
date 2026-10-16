@@ -1,0 +1,5 @@
+import{readFileSync}from'node:fs';import{test}from'node:test';import assert from'node:assert/strict';
+const text=readFileSync(new URL('../../apps/dashboard/public/staff/src/13-menu-workspace.js',import.meta.url),'utf8');const code=text.slice(text.indexOf('const MW_PDF_REQUESTS='));
+const make=fetch=>new Function('window','fetch','AbortSignal','setTimeout',code+'return MW_RENDER_PDF;')({__takoRestaurantId:'test'},fetch,AbortSignal,fn=>{fn();});
+test('temporary PDF failure retries and duplicate callers share one request',async()=>{let calls=0;const render=make(async()=>{calls++;return calls===1?new Response(JSON.stringify({error:{message:'busy'}}),{status:503}):new Response('%PDF-1.7 test',{headers:{'Content-Type':'application/pdf'}})});const[a,b]=await Promise.all([render({menuIds:['m']}),render({menuIds:['m']})]);assert.equal(calls,2);assert.equal(a,b);assert.ok(a.size>5);});
+test('expired login reports its cause without retrying',async()=>{let calls=0;const render=make(async()=>{calls++;return new Response('{}',{status:401})});await assert.rejects(render({}),/sessione è scaduta/);assert.equal(calls,1);});

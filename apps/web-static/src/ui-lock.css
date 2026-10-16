@@ -1,0 +1,10 @@
+/* Interfaccia bloccata (14/10/2026): vedi src/ui-lock.ts (copia di apps/dashboard/public/staff/src/ui-lock.css). Niente doppio tocco per lo zoom, niente selezione/callout fuori dai campi. */
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button,a,[role=button],label,summary,select,input,textarea{touch-action:manipulation}
+input,textarea,select,[contenteditable]:not([contenteditable="false"]),[contenteditable]:not([contenteditable="false"]) *,.tako-selectable,.tako-selectable *{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+/* iOS ingrandisce la pagina al focus dei campi sotto i 16 px: su telefono/tablet tutti i campi di testo restano a 16 px o più.
+   :where() = specificità zero: le regole !important più specifiche (es. prezzo 20 px) vincono comunque. */
+@media (max-width:899px),(pointer:coarse){
+ :where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=button]):not([type=submit]),textarea,select){font-size:16px!important}
+}
