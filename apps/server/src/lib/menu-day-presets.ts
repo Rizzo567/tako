@@ -206,12 +206,19 @@ export async function saveDayPreset(restaurantId: string, input: { menuId: strin
  })
 }
 
+/** Punto di aggancio per F3+4 (stessa firma di `stampOnlyToday` in lib/menu-sales.ts sul ramo codex/feat-promo-scarsita):
+ * quando un preset va online, «Solo oggi» salvato nel preset deve valere per il giorno di servizio corrente.
+ * Al merge: `return stampOnlyToday(workspace, menuId, today)` (import da './menu-sales.js'). Oggi è un passaggio neutro. */
+export function presetOnlineStamp(workspace: Workspace, _menuId: string, _today: string): Workspace {
+ return workspace
+}
+
 export type PublishResult = { revision: number; presetId: string; menuId: string; discardedDraftVersionId: string | null; notices: string[] }
 /** Mette online un preset. `manual` (dashboard «Pubblica questo preset adesso», chat «metti online…»): parte dalla
  * bozza come ogni «Pubblica» e richiede la revisione vista dal titolare. `auto` (job delle 06:00): parte dal
  * pubblicato, una bozza pendente va persa ma viene salvata come versione recuperabile; le disponibilità della
  * giornata ripartono dal preset. Sempre via mutateWorkspace(publish): tabelle, versioni, PDF e live allineati. */
-export async function publishDayPreset(restaurantId: string, input: { presetId: string; mode?: 'manual' | 'auto'; expectedRevision?: number; actor?: string | null; serviceDayLabel?: string }, connection: DB = db): Promise<PublishResult> {
+export async function publishDayPreset(restaurantId: string, input: { presetId: string; mode?: 'manual' | 'auto'; expectedRevision?: number; actor?: string | null; serviceDayLabel?: string; now?: Date }, connection: DB = db): Promise<PublishResult> {
  const mode = input.mode ?? 'manual'
  const preset = await readDayPreset(restaurantId, { presetId: input.presetId }, connection)
  if (!preset) throw new DayPresetError('NOT_FOUND', 'Preset non trovato')
@@ -228,7 +235,8 @@ export async function publishDayPreset(restaurantId: string, input: { presetId: 
  const languages = allLanguages(base)
  fillTranslationsFromCache(sectionEntities(sections), languages, await readTranslationCache(restaurantId, workspaceTexts(sectionEntities(sections)), connection))
  menu.sections = sections
- const next = workspaceSchema.parse(base)
+ const tz = restaurantTimezone((await connection.execute(sql`SELECT settings FROM restaurants WHERE id=${restaurantId}`))[0]?.settings)
+ const next = workspaceSchema.parse(presetOnlineStamp(base, preset.menuId, serviceDay(input.now ?? new Date(), tz).date))
  const actor = input.actor || SYSTEM_ACTOR
  const label = `Preset «${preset.name}» online${mode === 'auto' ? ` (automatico${input.serviceDayLabel ? ' ' + input.serviceDayLabel : ''})` : ''}`
  const notices: string[] = []
@@ -296,7 +304,7 @@ export async function runDayPresetAutopublish(options: { now?: Date; connection?
    const preset = await readDayPreset(c.restaurant_id, { menuId: c.menu_id, weekday: day.weekday }, connection)
    if (!preset) { await finish('skipped_missing'); await warn('preset_missing', `Oggi (${dayLabel}) il ${menuName} non ha un preset: resta online il menu attuale.`); out.push({ ...base, status: 'skipped_missing' }); continue }
    if (!preset.itemCount) { await finish('skipped_empty', { presetId: preset.id }); await warn('preset_empty', `Il preset «${preset.name}» del ${menuName} è vuoto: resta online il menu attuale.`); out.push({ ...base, status: 'skipped_empty', presetId: preset.id }); continue }
-   const result = await publishDayPreset(c.restaurant_id, { presetId: preset.id, mode: 'auto', serviceDayLabel: day.date }, connection)
+   const result = await publishDayPreset(c.restaurant_id, { presetId: preset.id, mode: 'auto', serviceDayLabel: day.date, now }, connection)
    await finish('published', { presetId: preset.id, revision: result.revision, discarded: result.discardedDraftVersionId })
    out.push({ ...base, status: 'published', presetId: preset.id })
   } catch (e) {
