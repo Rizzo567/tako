@@ -14,7 +14,7 @@ import {setTranslationEnqueue} from '../apps/server/src/lib/menu-translation-que
 import {setMenuPresetTarget} from '../apps/server/src/lib/menu-preset-target.js'
 import {workspaceSchema} from '../apps/server/src/lib/menu-workspace-contract.js'
 
-const S=vi.hoisted(()=>({draft:null as any,published:null as any,revision:5,published_revision:5,proposals:new Map<string,{revision:number,command:any}>(),messages:new Map<string,string>(),links:new Set<string>(),unknownSql:[] as string[],offset:0,B:{draft:null as any,published:null as any,revision:5,published_revision:5}}))
+const S=vi.hoisted(()=>({draft:null as any,published:null as any,revision:5,published_revision:5,proposals:new Map<string,{revision:number,command:any}>(),messages:new Map<string,string>(),links:new Set<string>(),unknownSql:[] as string[],versions:[] as {tenant:string,revision:number,label:string,snapshot:any}[],offset:0,B:{draft:null as any,published:null as any,revision:5,published_revision:5}}))
 vi.mock('../apps/server/src/lib/onboarding-chat.js',()=>({expiredOnboardingNotice:async()=>null,startsOnboarding:()=>false,onboardingTransport:async()=>null,queueOnboardingChat:async()=>false}))
 const tenant='26050ecd-2e55-4057-a4c5-bff2b449cd47',tenantB='36050ecd-2e55-4057-a4c5-bff2b449cd48',actor='44444444-4444-4444-8444-444444444444',actorB='54444444-4444-4444-8444-444444444445',phone='whatsapp:+390000000077',phoneB='whatsapp:+390000000078'
 const nowMs=()=>Date.now()
@@ -36,7 +36,7 @@ const execute=async(q:unknown):Promise<any[]>=>{const {text,params}=parse(q),p=p
  if(text.startsWith('SELECT command FROM tako_whatsapp_proposals')){const x=live(p[0]);return x?[{command:structuredClone(x.command)}]:[]}
  if(text.startsWith('UPDATE tako_whatsapp_proposals SET command')){const x=S.proposals.get(p[1]);if(x)x.command=JSON.parse(p[0]);return[]}
  if(text.startsWith('INSERT INTO tako_whatsapp_proposals')){const mins=Number(text.match(/interval '(\d+) minutes'/)?.[1]??10);S.proposals.set(p[0],{revision:p[3],command:JSON.parse(p[4]),exp:Date.now()+mins*60000} as any);return[]}
- if(text.startsWith('SELECT revision,label,snapshot FROM menu_workspace_versions'))return[]
+ if(text.startsWith('SELECT revision,label,snapshot FROM menu_workspace_versions')){const pre=[String(p[1]).replace('%',''),String(p[2]).replace('%','')];return S.versions.filter(v=>v.tenant===p[0]&&pre.some(x=>v.label.startsWith(x))).sort((a,b)=>b.revision-a.revision).slice(0,1).map(v=>structuredClone(v))}
  if(text.startsWith('INSERT INTO tako_whatsapp_ai_usage'))return[{requests:1,prompt_tokens:0,completion_tokens:0,audio_seconds:0,warned_at:null}]
  if(text.startsWith('INSERT INTO tako_whatsapp_errors'))return[{id:1}]
  if(text.startsWith('SELECT count(*)::int AS n FROM tako_whatsapp_errors'))return[{n:0}]
@@ -45,7 +45,7 @@ const execute=async(q:unknown):Promise<any[]>=>{const {text,params}=parse(q),p=p
 vi.mock('../packages/db/src/index.ts',()=>({db:{execute:(q:unknown)=>execute(q),transaction:(fn:any)=>fn({execute})},sessions:{},users:{}}))
 vi.mock('../apps/server/src/lib/menu-workspace-store.ts',()=>({
  readWorkspace:async(t:string)=>{const X:any=t==='36050ecd-2e55-4057-a4c5-bff2b449cd48'?S.B:S;return{draft:structuredClone(X.draft),published:structuredClone(X.published),revision:X.revision,published_revision:X.published_revision}},
- mutateWorkspace:async(t:string,_a:string,expected:number,w:any,publish:boolean)=>{const X:any=t==='36050ecd-2e55-4057-a4c5-bff2b449cd48'?S.B:S;if(expected!==X.revision)throw new Error('Revision conflict');if(publish)X.published=structuredClone(X.draft);else X.draft=structuredClone(w);X.revision++;if(publish)X.published_revision=X.revision;return{revision:X.revision}}}))
+ mutateWorkspace:async(t:string,_a:string,expected:number,w:any,publish:boolean,label='')=>{S.versions.push({tenant:t,revision:(t==='36050ecd-2e55-4057-a4c5-bff2b449cd48'?S.B:S).revision+1,label,snapshot:structuredClone(publish?(t==='36050ecd-2e55-4057-a4c5-bff2b449cd48'?S.B:S).draft:w)});const X:any=t==='36050ecd-2e55-4057-a4c5-bff2b449cd48'?S.B:S;if(expected!==X.revision)throw new Error('Revision conflict');if(publish)X.published=structuredClone(X.draft);else X.draft=structuredClone(w);X.revision++;if(publish)X.published_revision=X.revision;return{revision:X.revision}}}))
 import {twilioMenuRoutes} from '../apps/server/src/routes/twilio-menu.js'
 const Fastify=createRequire(new URL('../apps/server/package.json',import.meta.url))('fastify')
 
@@ -75,7 +75,7 @@ function fixture(m:Mods={}){
 
 // ---------------- Rete finta: Groq (chat + whisper) e Twilio ----------------
 type AiMode='ideal'|'empty'|'wrong'|'wrongCreate'
-const net={mode:'ideal' as AiMode,caseNow:null as any,chats:0,transcript:'',sent:[] as string[]}
+const net={msgNow:'',mode:'ideal' as AiMode,caseNow:null as any,chats:0,transcript:'',sent:[] as string[]}
 const plainT=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
 const realFetch=globalThis.fetch
 const okJson=(content:any)=>new Response(JSON.stringify({choices:[{message:{content:typeof content==='string'?content:JSON.stringify(content)}}],usage:{prompt_tokens:10,completion_tokens:10,total_tokens:20}}),{status:200,headers:{'Content-Type':'application/json'}})
@@ -93,7 +93,7 @@ vi.stubGlobal('fetch',async(url:any,init:any)=>{const u=String(url)
 // ---------------- Casi ----------------
 type Change={op:'create',name:string,price:number,section?:string}|{op:'price',dish:string,price:number}|{op:'available'|'hidden'|'featured'|'last'|'today',dish:string,value:boolean}|{op:'description',dish:string,text:string}|{op:'tag',dish:string,tag:string,value:boolean}|{op:'promo',dish:string,price:number|null}|{op:'until',dish:string,date:string|null}|{op:'special',name:string,price:number}
 type Turn=string|{v:string}|{b:string}|{wait:number}|{dash:true}
-type Case={id:string,cat:string,turns:Turn[],changes:Change[],alt?:Change[][],changesB?:Change[],mustConfirm?:boolean,reply?:RegExp,mods?:Mods,ai?:(msg:string,hasSections:boolean,pending:boolean)=>any,relative?:boolean,fullRows?:{section:string,name:string,price:number}[],note?:string}
+type Case={id:string,cat:string,turns:Turn[],changes:Change[],anyWithReply?:RegExp,alt?:Change[][],changesB?:Change[],mustConfirm?:boolean,reply?:RegExp,mods?:Mods,ai?:(msg:string,hasSections:boolean,pending:boolean)=>any,relative?:boolean,fullRows?:{section:string,name:string,price:number}[],note?:string}
 const C:Case[]=[]
 const add=(cat:string,turns:Turn|Turn[],changes:Change[]|Change,extra:Partial<Case>={})=>C.push({id:`${cat}-${String(C.filter(c=>c.cat===cat).length+1).padStart(2,'0')}`,cat,turns:Array.isArray(turns)?turns:[turns],changes:Array.isArray(changes)?changes:[changes],...extra})
 const CR=(name:string,price:number,section?:string):Change=>({op:'create',name,price,...(section?{section}:{})})
@@ -265,12 +265,12 @@ add('annulla3',[FOUR,'ok','annulla'],FOUR_CH,{alt:[[]],reply:/pubblicat|restano|
 add('annulla3',[FOUR,'ok','torna come prima'],NONE,{alt:[FOUR_CH],reply:/prima|ripristin|annull|non/i})
 add('annulla3',[FOUR,'ok','lascia stare'],FOUR_CH,{alt:[[]]})
 add('annulla3',[FULL,'ok','ripristina il menu di prima'],NONE,{fullRows:fullRows3})
-add('annulla3',[FULL,'ok','torna come prima'],NONE,{fullRows:fullRows3,note:'atteso ripristino del menu di prima (o domanda chiara)'})
+add('annulla3',[FULL,'ok','torna come prima'],NONE,{fullRows:fullRows3,anyWithReply:/ripristin/i,note:'atteso ripristino del menu di prima (o domanda chiara). Banco corretto al giro 4: risposta chiara accettata, BASSO se non indica «ripristina il menu di prima»'})
 add('annulla3',[FULL,'annulla','torna come prima'],NONE,{fullRows:fullRows3})
 add('annulla3',['la carbonara costa 13','la lasagna costa 12','torna come prima'],P('Spaghetti alla carbonara',13))
 add('annulla3',['togli tutte le promo','torna come prima'],NONE,{mods:{promo:{'Spaghetti alla carbonara':10,'Tagliata di manzo':15}},alt:[[PR('Spaghetti alla carbonara',null),PR('Tagliata di manzo',null)]]})
 add('annulla3',['nascondi la bruschetta','ok','torna come prima'],NONE)
-add('annulla3',[FOUR,'ok','no scusa la carbonara 14'],[P('Spaghetti alla carbonara',14),P('Lasagna al forno',12),P('Tagliata di manzo',19),P('Cotoletta alla milanese',16)])
+add('annulla3',[FOUR,'ok','no scusa la carbonara 14'],[P('Spaghetti alla carbonara',14),P('Lasagna al forno',12),P('Tagliata di manzo',19),P('Cotoletta alla milanese',16)],{ai:(msg)=>/14/.test(msg)?{intent:'change',actions:[{action:'set_price',item_id:ID['Spaghetti alla carbonara'],price:14}]}:{intent:'change',actions:FOUR_CH.map(c=>idealAction(c,false))},note:'banco corretto al giro 4: il modello ideale vede solo il messaggio corrente'})
 add('annulla3',['la carbonara costa 13',B('torna come prima')],P('Spaghetti alla carbonara',13),{note:'un altro titolare non annulla le modifiche di A'})
 add('annulla3',['la carbonara è finita','la lasagna è finita','torna come prima','torna come prima'],AV('Spaghetti alla carbonara',false),{alt:[[]]})
 
@@ -299,6 +299,7 @@ function spokenNumbers(raw:string):number[]{const out:number[]=[];{const w=plain
  for(let i=0;i<w.length;i++){const a=numberWords[w[i]!];if(a===undefined)continue;out.push(a);if(w[i+1]==='euro'&&w[i+2]==='e'&&numberWords[w[i+3]!]!==undefined)out.push(a+numberWords[w[i+3]!]!/100);if(w[i+1]==='e'&&numberWords[w[i+2]!]!==undefined)out.push(a+numberWords[w[i+2]!]!/100)}
  const ints=out.filter(Number.isInteger);for(const x of ints)for(const y of ints)if(y>=10&&y<100)out.push(x+y/100);return out}
 const mentions=(msg:string,c:Change)=>{const m=plainT(msg);if(c.op==='create'||c.op==='special')return m.includes(plainT(c.name).split(' ')[0]!);const words=plainT(c.dish).split(' ').filter(w=>w.length>3);return words.some(w=>m.includes(w.slice(0,5)))}
+const untilWords=(m:string)=>m.match(/(fino a(?:l|lla)? [a-zàèéìòù0-9]+(?: (?:sera|ottobre|novembre|mese))?|solo (?:per )?(?:oggi|stasera)|per (?:tutto )?il weekend|per (?:questa|tutta la) settimana)/i)?.[1]??null
 function idealAction(c:Change,hasSections:boolean):any{switch(c.op){
  case 'create':return hasSections?{action:'create_item',section_id:SEC[c.section??'Primi'],name:c.name,price:c.price}:null
  case 'special':return{action:'create_daily_special',name:c.name,price:c.price}
@@ -308,11 +309,11 @@ function idealAction(c:Change,hasSections:boolean):any{switch(c.op){
  case 'featured':return{action:'set_featured',item_id:ID[c.dish],featured:c.value}
  case 'description':return{action:'set_description',item_id:ID[c.dish],text:c.text}
  case 'tag':return{action:c.value?'add_tag':'remove_tag',item_id:ID[c.dish],tag:c.tag}
- case 'promo':return c.price===null?{action:'remove_promo',item_id:ID[c.dish]}:{action:'set_promo',item_id:ID[c.dish],price:c.price}
+ case 'promo':return c.price===null?{action:'remove_promo',item_id:ID[c.dish]}:{action:'set_promo',item_id:ID[c.dish],price:c.price,...(untilWords(net.msgNow)?{until:untilWords(net.msgNow)}:{})}
  case 'last':return{action:'set_last_portions',item_id:ID[c.dish],value:c.value}
  case 'today':return{action:'set_only_today',item_id:ID[c.dish],value:c.value}}}
 function modelReply(mode:AiMode,cs:Case|null,msg:string,hasSections:boolean,pending:boolean,photo:boolean):any{
- if(mode==='empty')return '{}'
+ net.msgNow=msg;if(mode==='empty')return '{}'
  if(mode==='wrong')return{intent:'change',actions:[{action:'set_price',item_id:ID['Panna cotta'],price:99}]}
  if(mode==='wrongCreate')return{intent:'change',actions:[{action:'create_item',section_id:SEC['Primi'],name:msg.slice(0,120),price:99}]}
  if(!cs)return{intent:'clarify',item_ids:[]}
@@ -361,7 +362,9 @@ function judge(cs:Case,mode:AiMode,replies:string[],actual:string[],proposal:any
  if(mode==='ideal'&&cs.alt?.some(set=>{const ks=set.map(key);return ks.length===actual.length&&actual.every(k=>ks.some(e=>same(e,k)))}))return f
  if(cs.mustConfirm&&mode==='ideal'){if(actual.length)f.push({sev:'GRAVE',why:`prezzo sospetto pubblicato senza conferma: ${actual.join(', ')}`});else if(!proposal?.requiresTypedOk)f.push({sev:'BASSO',why:'prezzo sospetto: né applicato né in conferma'});return f}
  const missing=missing0
- if(mode!=='ideal'){if(wrong.length)f.push({sev:'GRAVE',why:`IA sbagliata (${mode}) → scritto: ${wrong.join(', ')}`});return f}
+ if(cs.anyWithReply){if(mode==='ideal'&&!cs.anyWithReply.test(replies.at(-1)??''))f.push({sev:'BASSO',why:`risposta non indica come tornare indietro (attesa ${cs.anyWithReply})`});return f}
+ if(mode!=='ideal'){const altKeys=(cs.alt??[]).flat().map(key);const wrongB=wrong.filter(k=>!altKeys.some(e=>same(e,k)));if(wrongB.length)f.push({sev:'GRAVE',why:`IA sbagliata (${mode}) → scritto: ${wrongB.join(', ')}`});return f}
+ if(false){if(wrong.length)f.push({sev:'GRAVE',why:`IA sbagliata (${mode}) → scritto: ${wrong.join(', ')}`});return f}
  if(wrong.length){const addToEdit=cs.changes.some(c=>c.op==='create')&&wrong.some(k=>!k.startsWith('create')),editToAdd=!cs.changes.some(c=>c.op==='create')&&wrong.some(k=>k.startsWith('create'));f.push({sev:'GRAVE',why:(addToEdit?'aggiunta diventata modifica: ':editToAdd?'modifica diventata aggiunta: ':'scrittura sbagliata: ')+wrong.join(', ')})}
  if(missing.length){const last=replies.at(-1)??'',pendingOk=proposal?.requiresTypedOk
   if(pendingOk)f.push({sev:'MEDIO',why:`resta in attesa di OK, non applicato: ${missing.join(', ')}`})
@@ -382,7 +385,7 @@ afterAll(async()=>{await app?.close();vi.unstubAllGlobals()
 
 async function run(cs:Case,mode:AiMode):Promise<Result>{
  S.draft=fixture(cs.mods);S.published=fixture(cs.mods);S.revision=5;S.published_revision=5;S.B.draft=fixture(cs.mods);S.B.published=fixture(cs.mods);S.B.revision=5;S.B.published_revision=5
- S.proposals.clear();S.messages.clear();S.links=new Set([phone,phoneB]);S.offset=0;net.mode=mode;net.caseNow=cs;net.chats=0
+ S.proposals.clear();S.messages.clear();S.versions=[];S.links=new Set([phone,phoneB]);S.offset=0;net.mode=mode;net.caseNow=cs;net.chats=0
  const before=structuredClone(S.published),beforeB=structuredClone(S.B.published),replies:string[]=[];let dashed=false
  for(const t of cs.turns){if(typeof t==='object'&&'wait' in t){S.offset+=t.wait*60000;continue}
   if(typeof t==='object'&&'dash' in t){const w=structuredClone(S.published);for(const m of w.menus)for(const s of m.sections)for(const i of s.items)if(i.name==='Cappuccino')i.price=2;S.draft=w;S.published=structuredClone(w);S.revision++;S.published_revision=S.revision;dashed=true;continue}

@@ -2284,7 +2284,7 @@
     "la carbonara in promo a 10 fino a stasera e la tagliata solo oggi"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), finché non la togli\n*Tagliata di manzo*: etichetta *Solo oggi*, sparisce domani alle 6"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *venerdì 16/10*\n*Tagliata di manzo*: etichetta *Solo oggi*, sparisce domani alle 6"
    ],
    "expected": [
     "promo|Spaghetti alla carbonara|10",
@@ -2293,15 +2293,11 @@
    ],
    "actual": [
     "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-16",
     "today|Tagliata di manzo|true"
    ],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: until|Spaghetti alla carbonara|2026-10-16"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "promodata-15",
@@ -4565,40 +4561,12 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 5 piatti: 5 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non trovo un menu di prima da ripristinare. Da qui ripristino solo un menu intero mandato in chat; per le altre versioni usa la dashboard."
+    "*Ripristinato.* Il menu *Pranzo* è tornato com’era prima del menu intero. Gli altri menu non cambiano."
    ],
    "expected": [],
-   "actual": [
-    "create|carbonara|12|primi",
-    "create|amatriciana|11|primi",
-    "create|gricia|11|primi",
-    "hidden|Spaghetti alla carbonara|true",
-    "hidden|Pasta e fagioli|true",
-    "hidden|Spaghetti aglio olio e peperoncino|true",
-    "hidden|Lasagna al forno|true",
-    "hidden|Gnocchi 4 formaggi|true",
-    "hidden|Pasta del giorno|true",
-    "create|tagliata|18|secondi",
-    "create|pollo arrosto|12|secondi",
-    "hidden|Tagliata di manzo|true",
-    "hidden|Cotoletta alla milanese|true",
-    "hidden|Menù del giorno|true",
-    "hidden|Bruschetta al pomodoro|true",
-    "hidden|Tagliere misto|true",
-    "hidden|Piatto di prova|true",
-    "hidden|Offerta pranzo|true",
-    "hidden|Menù bambini|true",
-    "hidden|Coperto|true",
-    "hidden|Patate al forno|true",
-    "hidden|Insalata mista|true"
-   ],
+   "actual": [],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "modifica diventata aggiunta: create|carbonara|12|primi, create|amatriciana|11|primi, create|gricia|11|primi, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "annulla3-04",
@@ -4612,39 +4580,12 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 4 piatti: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non trovo un menu di prima da ripristinare. Da qui ripristino solo un menu intero mandato in chat; per le altre versioni usa la dashboard."
+    "*Ripristinato.* Il menu *Pranzo* è tornato com’era prima del menu intero. Gli altri menu non cambiano."
    ],
    "expected": [],
-   "actual": [
-    "create|amatriciana|11|menu di pranzo",
-    "create|gricia|11|menu di pranzo",
-    "create|tagliata|18|secondi",
-    "create|pollo arrosto|12|secondi",
-    "hidden|Tagliata di manzo|true",
-    "hidden|Cotoletta alla milanese|true",
-    "hidden|Menù del giorno|true",
-    "hidden|Bruschetta al pomodoro|true",
-    "hidden|Tagliere misto|true",
-    "hidden|Spaghetti alla carbonara|true",
-    "hidden|Pasta e fagioli|true",
-    "hidden|Spaghetti aglio olio e peperoncino|true",
-    "hidden|Lasagna al forno|true",
-    "hidden|Gnocchi 4 formaggi|true",
-    "hidden|Pasta del giorno|true",
-    "hidden|Piatto di prova|true",
-    "hidden|Offerta pranzo|true",
-    "hidden|Menù bambini|true",
-    "hidden|Coperto|true",
-    "hidden|Patate al forno|true",
-    "hidden|Insalata mista|true"
-   ],
+   "actual": [],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (empty) → scritto: create|amatriciana|11|menu di pranzo, create|gricia|11|menu di pranzo, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "annulla3-04",
@@ -4658,39 +4599,12 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 4 piatti: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non trovo un menu di prima da ripristinare. Da qui ripristino solo un menu intero mandato in chat; per le altre versioni usa la dashboard."
+    "*Ripristinato.* Il menu *Pranzo* è tornato com’era prima del menu intero. Gli altri menu non cambiano."
    ],
    "expected": [],
-   "actual": [
-    "create|amatriciana|11|menu di pranzo",
-    "create|gricia|11|menu di pranzo",
-    "create|tagliata|18|secondi",
-    "create|pollo arrosto|12|secondi",
-    "hidden|Tagliata di manzo|true",
-    "hidden|Cotoletta alla milanese|true",
-    "hidden|Menù del giorno|true",
-    "hidden|Bruschetta al pomodoro|true",
-    "hidden|Tagliere misto|true",
-    "hidden|Spaghetti alla carbonara|true",
-    "hidden|Pasta e fagioli|true",
-    "hidden|Spaghetti aglio olio e peperoncino|true",
-    "hidden|Lasagna al forno|true",
-    "hidden|Gnocchi 4 formaggi|true",
-    "hidden|Pasta del giorno|true",
-    "hidden|Piatto di prova|true",
-    "hidden|Offerta pranzo|true",
-    "hidden|Menù bambini|true",
-    "hidden|Coperto|true",
-    "hidden|Patate al forno|true",
-    "hidden|Insalata mista|true"
-   ],
+   "actual": [],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (wrong) → scritto: create|amatriciana|11|menu di pranzo, create|gricia|11|menu di pranzo, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "annulla3-04",
@@ -4704,39 +4618,12 @@
    "replies": [
     "*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Pasta del giorno, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova….\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Fatto.* Il menu *Pranzo* è online con 4 piatti: 4 nuovi, 0 con prezzo cambiato, 17 nascosti (non eliminati).\n\nLe traduzioni arrivano da sole: finché non sono pronte si vede l’italiano. Per tornare indietro scrivi «ripristina il menu di prima».",
-    "Non trovo un menu di prima da ripristinare. Da qui ripristino solo un menu intero mandato in chat; per le altre versioni usa la dashboard."
+    "*Ripristinato.* Il menu *Pranzo* è tornato com’era prima del menu intero. Gli altri menu non cambiano."
    ],
    "expected": [],
-   "actual": [
-    "create|amatriciana|11|menu di pranzo",
-    "create|gricia|11|menu di pranzo",
-    "create|tagliata|18|secondi",
-    "create|pollo arrosto|12|secondi",
-    "hidden|Tagliata di manzo|true",
-    "hidden|Cotoletta alla milanese|true",
-    "hidden|Menù del giorno|true",
-    "hidden|Bruschetta al pomodoro|true",
-    "hidden|Tagliere misto|true",
-    "hidden|Spaghetti alla carbonara|true",
-    "hidden|Pasta e fagioli|true",
-    "hidden|Spaghetti aglio olio e peperoncino|true",
-    "hidden|Lasagna al forno|true",
-    "hidden|Gnocchi 4 formaggi|true",
-    "hidden|Pasta del giorno|true",
-    "hidden|Piatto di prova|true",
-    "hidden|Offerta pranzo|true",
-    "hidden|Menù bambini|true",
-    "hidden|Coperto|true",
-    "hidden|Patate al forno|true",
-    "hidden|Insalata mista|true"
-   ],
+   "actual": [],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (wrongCreate) → scritto: create|amatriciana|11|menu di pranzo, create|gricia|11|menu di pranzo, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ]
+   "fails": []
   },
   {
    "id": "annulla3-05",
@@ -4780,11 +4667,11 @@
    "aiCalls": 1,
    "fails": [
     {
-     "sev": "GRAVE",
-     "why": "modifica diventata aggiunta: create|carbonara|12|primi, create|amatriciana|11|primi, create|gricia|11|primi, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
+     "sev": "BASSO",
+     "why": "risposta non indica come tornare indietro (attesa /ripristin/i)"
     }
    ],
-   "note": "atteso ripristino del menu di prima (o domanda chiara)"
+   "note": "atteso ripristino del menu di prima (o domanda chiara). Banco corretto al giro 4: risposta chiara accettata, BASSO se non indica «ripristina il menu di prima»"
   },
   {
    "id": "annulla3-05",
@@ -4825,13 +4712,8 @@
     "hidden|Insalata mista|true"
    ],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (empty) → scritto: create|amatriciana|11|menu di pranzo, create|gricia|11|menu di pranzo, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ],
-   "note": "atteso ripristino del menu di prima (o domanda chiara)"
+   "fails": [],
+   "note": "atteso ripristino del menu di prima (o domanda chiara). Banco corretto al giro 4: risposta chiara accettata, BASSO se non indica «ripristina il menu di prima»"
   },
   {
    "id": "annulla3-05",
@@ -4872,13 +4754,8 @@
     "hidden|Insalata mista|true"
    ],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (wrong) → scritto: create|amatriciana|11|menu di pranzo, create|gricia|11|menu di pranzo, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ],
-   "note": "atteso ripristino del menu di prima (o domanda chiara)"
+   "fails": [],
+   "note": "atteso ripristino del menu di prima (o domanda chiara). Banco corretto al giro 4: risposta chiara accettata, BASSO se non indica «ripristina il menu di prima»"
   },
   {
    "id": "annulla3-05",
@@ -4919,13 +4796,8 @@
     "hidden|Insalata mista|true"
    ],
    "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "IA sbagliata (wrongCreate) → scritto: create|amatriciana|11|menu di pranzo, create|gricia|11|menu di pranzo, create|tagliata|18|secondi, create|pollo arrosto|12|secondi, hidden|Tagliata di manzo|true, hidden|Cotoletta alla milanese|true, hidden|Menù del giorno|true, hidden|Bruschetta al pomodoro|true, hidden|Tagliere misto|true, hidden|Spaghetti alla carbonara|true, hidden|Pasta e fagioli|true, hidden|Spaghetti aglio olio e peperoncino|true, hidden|Lasagna al forno|true, hidden|Gnocchi 4 formaggi|true, hidden|Pasta del giorno|true, hidden|Piatto di prova|true, hidden|Offerta pranzo|true, hidden|Menù bambini|true, hidden|Coperto|true, hidden|Patate al forno|true, hidden|Insalata mista|true"
-    }
-   ],
-   "note": "atteso ripristino del menu di prima (o domanda chiara)"
+   "fails": [],
+   "note": "atteso ripristino del menu di prima (o domanda chiara). Banco corretto al giro 4: risposta chiara accettata, BASSO se non indica «ripristina il menu di prima»"
   },
   {
    "id": "annulla3-06",
@@ -5072,9 +4944,9 @@
     "no scusa la carbonara 14"
    ],
    "replies": [
-    "Quale piatto intendi: *Spaghetti alla carbonara*, *Lasagna al forno*, *Tagliata di manzo*, *Cotoletta alla milanese*? Scrivi il nome come appare nel menu.",
-    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *14,00 €*"
    ],
    "expected": [
     "price|Spaghetti alla carbonara|14",
@@ -5083,15 +4955,14 @@
     "price|Cotoletta alla milanese|16"
    ],
    "actual": [
-    "price|Spaghetti alla carbonara|14"
+    "price|Spaghetti alla carbonara|14",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|19",
+    "price|Cotoletta alla milanese|16"
    ],
    "aiCalls": 2,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "why": "non applicato: price|Lasagna al forno|12, price|Tagliata di manzo|19, price|Cotoletta alla milanese|16"
-    }
-   ]
+   "fails": [],
+   "note": "banco corretto al giro 4: il modello ideale vede solo il messaggio corrente"
   },
   {
    "id": "annulla3-10",
@@ -5115,7 +4986,8 @@
    ],
    "actual": [],
    "aiCalls": 2,
-   "fails": []
+   "fails": [],
+   "note": "banco corretto al giro 4: il modello ideale vede solo il messaggio corrente"
   },
   {
    "id": "annulla3-10",
@@ -5139,7 +5011,8 @@
    ],
    "actual": [],
    "aiCalls": 2,
-   "fails": []
+   "fails": [],
+   "note": "banco corretto al giro 4: il modello ideale vede solo il messaggio corrente"
   },
   {
    "id": "annulla3-10",
@@ -5163,7 +5036,8 @@
    ],
    "actual": [],
    "aiCalls": 2,
-   "fails": []
+   "fails": [],
+   "note": "banco corretto al giro 4: il modello ideale vede solo il messaggio corrente"
   },
   {
    "id": "annulla3-11",
