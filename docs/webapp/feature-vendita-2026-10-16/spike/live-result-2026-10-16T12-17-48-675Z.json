@@ -1,0 +1,896 @@
+{
+ "summary": {
+  "tokensUsed": 8574,
+  "llmCalls": 8,
+  "budget": 15000,
+  "voice": {
+   "ok": 18,
+   "of": 24
+  },
+  "text": {
+   "ok": 30,
+   "of": 30
+  },
+  "notMeasured": []
+ },
+ "results": [
+  {
+   "id": "V1-euro-detti",
+   "kind": "voice",
+   "transcript": "Menù di oggi, primi, carbonara 10 euro, amatriciana 9 euro, risotto ai funghi 12 euro, secondi, tagliata 16 euro, saltimbocca 15 euro, dolci, tiramisù 5 euro, panna cotta 4 euro e 50, caffè 1 euro.",
+   "ms": 1063,
+   "rows": [
+    {
+     "section": "primi",
+     "name": "carbonara",
+     "price": 10
+    },
+    {
+     "section": "primi",
+     "name": "amatriciana",
+     "price": 9
+    },
+    {
+     "section": "primi",
+     "name": "risotto ai funghi",
+     "price": 12
+    },
+    {
+     "section": "secondi",
+     "name": "tagliata",
+     "price": 16
+    },
+    {
+     "section": "secondi",
+     "name": "saltimbocca",
+     "price": 15
+    },
+    {
+     "section": "dolci",
+     "name": "tiramisù",
+     "price": 5
+    }
+   ],
+   "missing": [
+    {
+     "name": "panna cotta",
+     "section": "dolci",
+     "reason": "price"
+    }
+   ],
+   "issues": [],
+   "score": {
+    "priced": 8,
+    "nameAndPrice": 6,
+    "per10": 7.5,
+    "withCategory": 6,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "carbonara",
+      "expected": 10,
+      "got": 10,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "amatriciana",
+      "expected": 9,
+      "got": 9,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "risotto",
+      "expected": 12,
+      "got": 12,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tagliata",
+      "expected": 16,
+      "got": 16,
+      "section": "secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "saltimbocca",
+      "expected": 15,
+      "got": 15,
+      "section": "secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tiramisu",
+      "expected": 5,
+      "got": 5,
+      "section": "dolci",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "panna cotta",
+      "expected": 4.5,
+      "got": null,
+      "ok": false
+     },
+     {
+      "dish": "caffe",
+      "expected": 1,
+      "got": null,
+      "ok": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "V2-senza-la-parola-euro",
+   "kind": "voice",
+   "transcript": "Allora, menù di lunedì, antipasti, bruschetta 5, tagliere 12 e 50, primi, spaghetti alle vongole 14, penne all'arrabbiata 8 e 50, lasagna 11, secondi, tagliata 18, cotoletta 15, dolci, tiramisù 5, panna cotta 5 e 50.",
+   "ms": 1511,
+   "rows": [
+    {
+     "section": "antipasti",
+     "name": "bruschetta",
+     "price": 5
+    },
+    {
+     "section": "primi",
+     "name": "spaghetti alle vongole",
+     "price": 14
+    },
+    {
+     "section": "primi",
+     "name": "lasagna",
+     "price": 11
+    },
+    {
+     "section": "secondi",
+     "name": "tagliata",
+     "price": 18
+    },
+    {
+     "section": "secondi",
+     "name": "cotoletta",
+     "price": 15
+    },
+    {
+     "section": "dolci",
+     "name": "tiramisù",
+     "price": 5
+    }
+   ],
+   "missing": [
+    {
+     "name": "tagliere 12 e 50",
+     "section": "antipasti",
+     "reason": "price"
+    },
+    {
+     "name": "penne all'arrabbiata 8 e 50",
+     "section": "primi",
+     "reason": "price"
+    },
+    {
+     "name": "panna cotta 5 e 50",
+     "section": "dolci",
+     "reason": "price"
+    }
+   ],
+   "issues": [],
+   "score": {
+    "priced": 9,
+    "nameAndPrice": 6,
+    "per10": 6.7,
+    "withCategory": 6,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "bruschetta",
+      "expected": 5,
+      "got": 5,
+      "section": "antipasti",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tagliere",
+      "expected": 12.5,
+      "got": null,
+      "ok": false
+     },
+     {
+      "dish": "vongole",
+      "expected": 14,
+      "got": 14,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "arrabbiata",
+      "expected": 8.5,
+      "got": null,
+      "ok": false
+     },
+     {
+      "dish": "lasagna",
+      "expected": 11,
+      "got": 11,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tagliata",
+      "expected": 18,
+      "got": 18,
+      "section": "secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "cotoletta",
+      "expected": 15,
+      "got": 15,
+      "section": "secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tiramisu",
+      "expected": 5,
+      "got": 5,
+      "section": "dolci",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "panna cotta",
+      "expected": 5.5,
+      "got": null,
+      "ok": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "V3-categorie-implicite",
+   "kind": "voice",
+   "transcript": "Oggi abbiamo risotto ai funghi 12 euro, gnocchi al gorgonzola 11 euro, poi come secondo il branzino al forno 19 euro e le polpette al sugo 13 euro, contorno patate al forno 4 euro, per finire cheesecake 6 euro e sorbetto al limone 3 euro e 50.",
+   "ms": 1030,
+   "rows": [
+    {
+     "section": "Menu",
+     "name": "risotto ai funghi",
+     "price": 12
+    },
+    {
+     "section": "Menu",
+     "name": "gnocchi al gorgonzola",
+     "price": 11
+    },
+    {
+     "section": "Menu",
+     "name": "branzino al forno",
+     "price": 19
+    },
+    {
+     "section": "Menu",
+     "name": "polpette al sugo",
+     "price": 13
+    },
+    {
+     "section": "Menu",
+     "name": "patate al forno",
+     "price": 4
+    },
+    {
+     "section": "Menu",
+     "name": "cheesecake",
+     "price": 6
+    }
+   ],
+   "missing": [
+    {
+     "name": "sorbetto al limone",
+     "section": null,
+     "reason": "price"
+    }
+   ],
+   "issues": [],
+   "score": {
+    "priced": 7,
+    "nameAndPrice": 6,
+    "per10": 8.6,
+    "withCategory": 3,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "risotto",
+      "expected": 12,
+      "got": 12,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     },
+     {
+      "dish": "gnocchi",
+      "expected": 11,
+      "got": 11,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     },
+     {
+      "dish": "branzino",
+      "expected": 19,
+      "got": 19,
+      "section": "Menu",
+      "ok": true,
+      "catOk": false
+     },
+     {
+      "dish": "polpette",
+      "expected": 13,
+      "got": 13,
+      "section": "Menu",
+      "ok": true,
+      "catOk": false
+     },
+     {
+      "dish": "patate",
+      "expected": 4,
+      "got": 4,
+      "section": "Menu",
+      "ok": true,
+      "catOk": false
+     },
+     {
+      "dish": "cheesecake",
+      "expected": 6,
+      "got": 6,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     },
+     {
+      "dish": "sorbetto",
+      "expected": 3.5,
+      "got": null,
+      "ok": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "T1-esempio-prompt",
+   "kind": "text",
+   "ms": 792,
+   "rows": [
+    {
+     "section": "Primi",
+     "name": "carbonara",
+     "price": 10
+    },
+    {
+     "section": "Primi",
+     "name": "amatriciana",
+     "price": 9
+    },
+    {
+     "section": "Secondi",
+     "name": "tagliata",
+     "price": 16
+    },
+    {
+     "section": "Dolci",
+     "name": "tiramisù",
+     "price": 5
+    }
+   ],
+   "missing": [],
+   "issues": [],
+   "score": {
+    "priced": 4,
+    "nameAndPrice": 4,
+    "per10": 10,
+    "withCategory": 4,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "carbonara",
+      "expected": 10,
+      "got": 10,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "amatriciana",
+      "expected": 9,
+      "got": 9,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tagliata",
+      "expected": 16,
+      "got": 16,
+      "section": "Secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tiramisu",
+      "expected": 5,
+      "got": 5,
+      "section": "Dolci",
+      "ok": true,
+      "catOk": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "T2-dodici-piatti-righe",
+   "kind": "text",
+   "ms": 1154,
+   "rows": [
+    {
+     "section": "Antipasti",
+     "name": "Bruschetta al pomodoro",
+     "price": 5
+    },
+    {
+     "section": "Antipasti",
+     "name": "Tagliere misto",
+     "price": 12.5
+    },
+    {
+     "section": "Primi",
+     "name": "Spaghetti alla carbonara",
+     "price": 10
+    },
+    {
+     "section": "Primi",
+     "name": "Penne all'arrabbiata",
+     "price": 8.5
+    },
+    {
+     "section": "Primi",
+     "name": "Lasagna della nonna",
+     "price": 11
+    },
+    {
+     "section": "Secondi",
+     "name": "Tagliata di manzo",
+     "price": 18
+    },
+    {
+     "section": "Secondi",
+     "name": "Cotoletta alla milanese con patate",
+     "price": 15
+    },
+    {
+     "section": "Secondi",
+     "name": "Saltimbocca alla romana",
+     "price": 16
+    },
+    {
+     "section": "Dolci",
+     "name": "Tiramisù",
+     "price": 5
+    },
+    {
+     "section": "Dolci",
+     "name": "Panna cotta ai frutti di bosco",
+     "price": 5.5
+    },
+    {
+     "section": "Dolci",
+     "name": "Caffè",
+     "price": 1.5
+    }
+   ],
+   "missing": [],
+   "issues": [],
+   "score": {
+    "priced": 11,
+    "nameAndPrice": 11,
+    "per10": 10,
+    "withCategory": 11,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "bruschetta",
+      "expected": 5,
+      "got": 5,
+      "section": "Antipasti",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tagliere",
+      "expected": 12.5,
+      "got": 12.5,
+      "section": "Antipasti",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "carbonara",
+      "expected": 10,
+      "got": 10,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "arrabbiata",
+      "expected": 8.5,
+      "got": 8.5,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "lasagna",
+      "expected": 11,
+      "got": 11,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tagliata",
+      "expected": 18,
+      "got": 18,
+      "section": "Secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "cotoletta",
+      "expected": 15,
+      "got": 15,
+      "section": "Secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "saltimbocca",
+      "expected": 16,
+      "got": 16,
+      "section": "Secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tiramisu",
+      "expected": 5,
+      "got": 5,
+      "section": "Dolci",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "panna cotta",
+      "expected": 5.5,
+      "got": 5.5,
+      "section": "Dolci",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "caffe",
+      "expected": 1.5,
+      "got": 1.5,
+      "section": "Dolci",
+      "ok": true,
+      "catOk": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "T3-una-riga-categorie-implicite",
+   "kind": "text",
+   "ms": 670,
+   "rows": [
+    {
+     "section": "Menu",
+     "name": "risotto ai funghi",
+     "price": 12
+    },
+    {
+     "section": "Menu",
+     "name": "lasagne",
+     "price": 11
+    },
+    {
+     "section": "Menu",
+     "name": "grigliata mista",
+     "price": 18
+    },
+    {
+     "section": "Menu",
+     "name": "patate al forno",
+     "price": 4
+    },
+    {
+     "section": "Menu",
+     "name": "tiramisù",
+     "price": 5
+    },
+    {
+     "section": "Menu",
+     "name": "sorbetto al limone",
+     "price": 4
+    }
+   ],
+   "missing": [],
+   "issues": [],
+   "score": {
+    "priced": 6,
+    "nameAndPrice": 6,
+    "per10": 10,
+    "withCategory": 4,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "risotto",
+      "expected": 12,
+      "got": 12,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     },
+     {
+      "dish": "lasagne",
+      "expected": 11,
+      "got": 11,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     },
+     {
+      "dish": "grigliata",
+      "expected": 18,
+      "got": 18,
+      "section": "Menu",
+      "ok": true,
+      "catOk": false
+     },
+     {
+      "dish": "patate",
+      "expected": 4,
+      "got": 4,
+      "section": "Menu",
+      "ok": true,
+      "catOk": false
+     },
+     {
+      "dish": "tiramisu",
+      "expected": 5,
+      "got": 5,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     },
+     {
+      "dish": "sorbetto",
+      "expected": 4,
+      "got": 4,
+      "section": "Menu",
+      "ok": true,
+      "catOk": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "T4-prezzi-in-lettere",
+   "kind": "text",
+   "ms": 1175,
+   "rows": [
+    {
+     "section": "primi",
+     "name": "carbonara",
+     "price": 10
+    },
+    {
+     "section": "primi",
+     "name": "amatriciana",
+     "price": 9.5
+    },
+    {
+     "section": "secondi",
+     "name": "saltimbocca",
+     "price": 16
+    },
+    {
+     "section": "dolci",
+     "name": "tiramisù",
+     "price": 5
+    },
+    {
+     "section": "dolci",
+     "name": "caffè",
+     "price": 1.5
+    }
+   ],
+   "missing": [
+    {
+     "name": "primi",
+     "section": "Menu pranzo",
+     "reason": "price"
+    }
+   ],
+   "issues": [],
+   "score": {
+    "priced": 5,
+    "nameAndPrice": 5,
+    "per10": 10,
+    "withCategory": 5,
+    "flagged": 0,
+    "flagOk": 0,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "carbonara",
+      "expected": 10,
+      "got": 10,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "amatriciana",
+      "expected": 9.5,
+      "got": 9.5,
+      "section": "primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "saltimbocca",
+      "expected": 16,
+      "got": 16,
+      "section": "secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "tiramisu",
+      "expected": 5,
+      "got": 5,
+      "section": "dolci",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "caffe",
+      "expected": 1.5,
+      "got": 1.5,
+      "section": "dolci",
+      "ok": true,
+      "catOk": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "T5-senza-prezzo-e-due-prezzi",
+   "kind": "text",
+   "ms": 1971,
+   "rows": [
+    {
+     "section": "Primi",
+     "name": "Risotto allo zafferano",
+     "price": 14
+    },
+    {
+     "section": "Primi",
+     "name": "Gnocchi al gorgonzola",
+     "price": 11
+    },
+    {
+     "section": "Secondi",
+     "name": "Branzino al forno",
+     "price": 19
+    },
+    {
+     "section": "Dolci",
+     "name": "Cheesecake",
+     "price": 6
+    }
+   ],
+   "missing": [
+    {
+     "name": "Arrosto della casa (prezzo da definire)",
+     "section": "Secondi",
+     "reason": "price"
+    }
+   ],
+   "issues": [
+    "Arrosto della casa senza prezzo esplicito",
+    "insalata mista con prezzo ambiguo 4 / 6"
+   ],
+   "score": {
+    "priced": 4,
+    "nameAndPrice": 4,
+    "per10": 10,
+    "withCategory": 4,
+    "flagged": 2,
+    "flagOk": 1,
+    "falseOnline": 0,
+    "detail": [
+     {
+      "dish": "risotto",
+      "expected": 14,
+      "got": 14,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "gnocchi",
+      "expected": 11,
+      "got": 11,
+      "section": "Primi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "branzino",
+      "expected": 19,
+      "got": 19,
+      "section": "Secondi",
+      "ok": true,
+      "catOk": true
+     },
+     {
+      "dish": "arrosto",
+      "expected": "segnalato",
+      "got": "segnalato",
+      "ok": true
+     },
+     {
+      "dish": "insalata",
+      "expected": "segnalato",
+      "got": "silenzio",
+      "ok": false
+     },
+     {
+      "dish": "cheesecake",
+      "expected": 6,
+      "got": 6,
+      "section": "Dolci",
+      "ok": true,
+      "catOk": true
+     }
+    ]
+   }
+  }
+ ]
+}
