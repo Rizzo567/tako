@@ -19,8 +19,18 @@ export function projectMenuPreview(doc:any,menuId:string,language:string,instant
   if(typeof s.id!=='string'||typeof s.name!=='string'||!Array.isArray(s.items)||s.items.length>2000)throw Error('Categoria non valida')
   return {...localize(s),items:s.items.filter((i:any)=>!i.hidden&&i.available!==false&&(!instant||previewScheduledVisible(i.schedule,instant))).map((i:any)=>{
    if(typeof i.id!=='string'||typeof i.name!=='string'||!Number.isFinite(i.price)||!Array.isArray(i.allergens)||!Array.isArray(i.tags))throw Error('Piatto non valido')
-   const translated=localize(i);return {...translated,description:translated.description||undefined,imageUrl:i.imageUrl||undefined,available:i.available!==false}
+   const translated=localize(i);return {...translated,description:translated.description||undefined,imageUrl:i.imageUrl||undefined,available:i.available!==false,...previewSales(i,instant??new Date())}
   })}
  })
  return {menu:{id:menu.id,name:localize(menu).name,description:(typeof localize(menu).description==='string'&&localize(menu).description.trim())||undefined,sections},design:doc.design,foodLabels:doc.foodTranslations?.[language||doc.defaultLanguage],menuVisible}
+}
+/** F3+F4 anteprima: stessa regola del server (giornata alle 06:00, Europe/Rome): solo promo/etichette valide adesso. */
+export function previewSales(item:any,now:Date,zone='Europe/Rome'):{promoPrice?:number,lastPortions?:true,onlyToday?:true}{
+ const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(now).map(v=>[v.type,v.value]))
+ let today=`${p.year}-${p.month}-${p.day}`;if(Number(p.hour)<6){const d=new Date(today+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-1);today=d.toISOString().slice(0,10)}
+ const promo=Number(item?.promo?.price),full=Number(item?.price),out:{promoPrice?:number,lastPortions?:true,onlyToday?:true}={}
+ if(promo>0&&full>0&&promo<full&&(!item.promo.until||today<=item.promo.until))out.promoPrice=promo
+ if(item?.scarcity?.lastPortions&&item.available!==false)out.lastPortions=true
+ if(item?.scarcity?.onlyToday&&item.scarcity.onlyToday===today)out.onlyToday=true
+ return out
 }
