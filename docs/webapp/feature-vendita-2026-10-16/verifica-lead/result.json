@@ -1,0 +1,125 @@
+{
+ "at": "2026-10-16T15:44:25.908Z",
+ "url": "https://takoitalia.com/staff/?view=leads",
+ "checks": {
+  "c1_load": {
+   "ok": true,
+   "evidence": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "httpErrors": 0
+   }
+  },
+  "c2_rows": {
+   "ok": true,
+   "evidence": {
+    "uiRows": 50,
+    "apiCount": 50,
+    "rowsWithStatus": 50,
+    "rowsWithOpenButton": 50,
+    "sameIdsAsApi": true,
+    "counter": "50 di 50 locali",
+    "metricTotal": "50"
+   }
+  },
+  "c3_filters": {
+   "ok": true,
+   "evidence": {
+    "statusFilter": {
+     "status": "demo_preparing",
+     "uiRows": 21,
+     "apiExpected": 21,
+     "classes": [
+      "al-status al-status-demo_preparing"
+     ],
+     "counter": "21 di 50 locali"
+    },
+    "search": {
+     "term": "Molinella (Selva Malvezzi)",
+     "uiRows": 1,
+     "apiExpected": 1,
+     "counter": "1 di 50 locali"
+    },
+    "noMatch": {
+     "rows": 0,
+     "emptyText": "Nessun risultato"
+    },
+    "afterReset": 50
+   }
+  },
+  "c4_detail": {
+   "ok": true,
+   "evidence": {
+    "leadId": "TK001",
+    "title": "Locanda Pincelli",
+    "apiTitle": "Locanda Pincelli",
+    "links": [
+     {
+      "text": "Sito ↗",
+      "host": "www.locandapincelli.it"
+     },
+     {
+      "text": "Fonte menu ↗",
+      "host": "www.locandapincelli.it"
+     },
+     {
+      "text": "Apri Takomenu ↗",
+      "host": "takoitalia.com"
+     },
+     {
+      "text": "0516907003",
+      "host": ""
+     }
+    ],
+    "error": null,
+    "activitiesApi": 0
+   }
+  },
+  "c5_statusControl": {
+   "ok": true,
+   "evidence": {
+    "exists": true,
+    "disabled": false,
+    "value": "demo_ready",
+    "options": 11,
+    "apiStatus": "demo_ready",
+    "saveButton": {
+     "text": "Salva modifiche",
+     "disabled": false
+    },
+    "note": "stato NON modificato, nessun salvataggio cliccato"
+   }
+  },
+  "noWritesAttempted": {
+   "ok": true,
+   "evidence": []
+  },
+  "logout": {
+   "ok": true,
+   "evidence": {
+    "called": true,
+    "oldCookieStillValid": false,
+    "meStatusAfter": 401
+   }
+  }
+ },
+ "consoleErrors": [],
+ "pageErrors": [],
+ "httpErrors": [],
+ "blockedWrites": [],
+ "logout": {
+  "called": true,
+  "oldCookieStillValid": false,
+  "meStatusAfter": 401
+ },
+ "api": {
+  "count": 50,
+  "byStatus": {
+   "demo_ready": 29,
+   "demo_preparing": 21
+  },
+  "withDemoUrl": 50,
+  "withSito": 50
+ },
+ "closedCleanly": true
+}

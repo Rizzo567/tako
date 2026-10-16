@@ -1,0 +1,240 @@
+{
+ "at": "2026-10-16T15:50:42.243Z",
+ "revision": 543,
+ "digest": {
+  "draft": "1fbfd995bdae6625",
+  "published": "1fbfd995bdae6625",
+  "restaurant": "9c4079d025da2f3e",
+  "items": "9186a6f7fc49a237",
+  "menus": "2e07fe6544ebe672",
+  "sections": "71685d6d590957ae",
+  "public": "f01dc414b7a09b8b"
+ },
+ "draft": {
+  "pdf": {
+   "font": "sans",
+   "footer": "",
+   "format": "A4",
+   "margin": 36,
+   "showQr": true,
+   "columns": 1,
+   "fontSize": 11,
+   "nameBold": true,
+   "showDate": false,
+   "showLogo": true,
+   "alignment": "left",
+   "logoShape": "rounded",
+   "marginTop": null,
+   "showCover": false,
+   "textColor": "#242628",
+   "background": "#ffffff",
+   "marginLeft": null,
+   "showImages": false,
+   "showPrices": true,
+   "marginRight": null,
+   "orientation": "portrait",
+   "headingColor": "#ed725b",
+   "marginBottom": null,
+   "showMenuName": true,
+   "showAllergens": true,
+   "backgroundSize": "cover",
+   "logoBackground": null,
+   "headingFontSize": 18,
+   "showFoodLegends": true,
+   "showPageNumbers": true,
+   "showDescriptions": true,
+   "verticalCentered": false,
+   "backgroundOpacity": 1,
+   "categoryPageBreak": false,
+   "descriptionItalic": false,
+   "translationPolicy": "fallback",
+   "backgroundImageUrl": null,
+   "includeUnavailable": false,
+   "translationNamesPolicy": "all"
+  },
+  "menus": [
+   {
+    "id": "3af196fb-7c87-4ab5-84c3-7bb067efd377",
+    "name": "Menu di verifica · web QA",
+    "type": "main",
+    "active": true,
+    "sections": [
+     {
+      "id": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+        "name": "Piatto di verifica",
+        "tags": [],
+        "price": 13.5,
+        "hidden": false,
+        "calories": null,
+        "featured": false,
+        "imageUrl": null,
+        "variants": [],
+        "additives": [],
+        "allergens": [],
+        "available": true,
+        "costPrice": null,
+        "description": "Solo dati di prova per il collaudo web",
+        "displayMode": "normal",
+        "externalLink": null,
+        "priceDisplay": null,
+        "translations": {},
+        "kitchenStation": null,
+        "prepTimeMinutes": 10
+       }
+      ],
+      "active": true,
+      "description": null,
+      "translations": {},
+      "parentSectionId": null
+     }
+    ],
+    "description": null,
+    "translations": {}
+   }
+  ],
+  "design": {
+   "font": "sans",
+   "link": {
+    "name": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    },
+    "price": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    },
+    "description": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    }
+   },
+   "text": "#242628",
+   "links": [],
+   "layout": "list",
+   "preset": "tako",
+   "logoUrl": null,
+   "primary": "#ED7159",
+   "spacing": 16,
+   "centered": {
+    "name": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    },
+    "price": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    },
+    "description": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    }
+   },
+   "coverUrl": null,
+   "fontSize": 16,
+   "standard": {
+    "name": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    },
+    "price": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    },
+    "description": {
+     "bold": false,
+     "align": "left",
+     "color": "#242628",
+     "italic": false,
+     "fontSize": 16,
+     "underline": false
+    }
+   },
+   "logoShape": "rounded",
+   "reviewUrl": null,
+   "background": "#f8f5ef",
+   "imageShape": "rounded",
+   "navigation": "tabs",
+   "showImages": true,
+   "showPrices": true,
+   "borderColor": "#e4ded3",
+   "borderWidth": 0,
+   "categoryGap": 24,
+   "headerTitle": "",
+   "reviewLabel": "Lascia una recensione",
+   "borderRadius": 12,
+   "categoryText": "#ffffff",
+   "headerSticky": false,
+   "categoryAlign": "left",
+   "showAllergens": true,
+   "backgroundBlur": 0,
+   "backgroundSize": "cover",
+   "showFoodLegends": true,
+   "backgroundRepeat": "no-repeat",
+   "showDescriptions": true,
+   "backgroundOpacity": 1,
+   "headerDescription": "",
+   "backgroundImageUrl": null,
+   "categoryActiveText": "#ffffff",
+   "categoryBackground": "#242628",
+   "categoryActiveBackground": "#ed725b"
+  },
+  "languages": [
+   "it",
+   "en",
+   "fr",
+   "de",
+   "es",
+   "pt",
+   "nl",
+   "pl",
+   "ru",
+   "ar",
+   "zh",
+   "ja"
+  ],
+  "pdfPresets": [],
+  "schemaVersion": 1,
+  "defaultLanguage": "it",
+  "foodTranslations": {},
+  "translationSettings": {
+   "glossary": [],
+   "protectedNames": []
+  }
+ }
+}

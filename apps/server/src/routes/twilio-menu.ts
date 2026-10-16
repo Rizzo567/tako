@@ -4,7 +4,7 @@ import {sql} from 'drizzle-orm'
 import {createHash,randomBytes} from 'node:crypto'
 import {requireRole} from '../middleware/auth.js'
 import {isAgencyUser} from '../lib/agency-access.js'
-import {readWorkspace,mutateWorkspace} from '../lib/menu-workspace-store.js'
+import {readWorkspace,mutateWorkspace,WorkspaceTrialLocked} from '../lib/menu-workspace-store.js'
 import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
 import {priceChoiceText,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
@@ -148,7 +148,7 @@ export async function recordUsage(e:UsageEvent){try{
 async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string,form:Record<string,string>){
  const budget:Budget={expired:false};let timer:ReturnType<typeof setTimeout>|undefined
  const timeout=new Promise<string>(resolve=>{timer=setTimeout(()=>{budget.expired=true;resolve(kind==='image'?copy.photoTimeout:copy.jobTimeout)},jobTimeoutMs())})
- const message=await Promise.race([jobMessage(kind,ctx,body,form,budget).catch(()=>{budget.failed=true;return kind==='image'?copy.photoDownload:copy.failed}),timeout]).finally(()=>clearTimeout(timer))
+ const message=await Promise.race([jobMessage(kind,ctx,body,form,budget).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:copy.failed}),timeout]).finally(()=>clearTimeout(timer))
  const problem:FailureKind|null=budget.expired?'job_timeout':budget.failed?'job_failed':null
  if(!message){if(problem)await reportFailure({kind:problem,tenant:ctx.tenant,phone:ctx.phone,detail:kind});return}const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
  try{await sendWhatsApp(accountSid,token,from,ctx.phone,message)}catch{await new Promise(r=>setTimeout(r,1500));try{await sendWhatsApp(accountSid,token,from,ctx.phone,message)}catch(error){await reportFailure({kind:'send_failed',tenant:ctx.tenant,phone:ctx.phone,detail:error instanceof Error?error.message:'Error'});return}}
@@ -242,7 +242,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  if(ctx.pending){await tx.execute(sql`UPDATE tako_whatsapp_links SET activated_at=now() WHERE phone=${phone} AND activated_at IS NULL`);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return answer(await welcomeFor(tx,ctx.tenant)+nextMessage+copy.help)}
  if(phone===testFaultPhone&&ctx.tenant===qaTenant&&normalizeMenuText(body)==='guasto di prova')throw new TestFault('Guasto simulato')
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return answer(copy.mediaOnly);await reserve(tx,sid);return{job,ctx,ack:''}}
- if(!body)return answer(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return answer(turn);if('llm' in turn&&!process.env.GROQ_API_KEY)return answer(copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?copy.photoWorking:''}}).catch(async error=>{req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
+ if(!body)return answer(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return answer(turn);if('llm' in turn&&!process.env.GROQ_API_KEY)return answer(copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?copy.photoWorking:''}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
  if(typeof result==='string')return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result))
  const job=runJob(result.job,result.ctx,sid,body,form).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result.ack))

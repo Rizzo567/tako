@@ -26,6 +26,14 @@ export async function ensureWorkspace(tenant:string):Promise<WorkspaceRow>{
 }
 export class WorkspaceConflict extends Error{}
 export class WorkspaceOwnership extends Error{}
+/** Menu PROVA della campagna lead (settings.takomenuTrial=true): privato, visibile solo dal link di prova.
+ * Non va mai sul menu pubblico, da nessuna strada (dashboard, preset automatici, WhatsApp, script): il blocco
+ * sta qui perché ogni pubblicazione passa da mutateWorkspace(publish). La bozza si salva comunque.
+ * Sblocco quando il lead diventa cliente: togliere il flag (settings.takomenuTrial=false), vedi
+ * docs/webapp/feature-vendita-2026-10-16/blocco-pubblicazione-prova.md. */
+export const TRIAL_PUBLISH_BLOCKED_MESSAGE='Questo è un menu di prova privato: non si può pubblicare sul menu pubblico finché il locale non diventa cliente. Le modifiche restano salvate in bozza.'
+export class WorkspaceTrialLocked extends Error{constructor(){super(TRIAL_PUBLISH_BLOCKED_MESSAGE)}}
+export async function isTrialRestaurant(tenant:string,connection:Pick<DB,'execute'>=db){return (await connection.execute(sql`SELECT 1 FROM restaurants WHERE id=${tenant} AND settings->>'takomenuTrial'='true'`)).length>0}
 async function verifyOwnership(tx:Pick<DB,'execute'>,tenant:string,w:Workspace){
  for(const url of [w.pdf.backgroundImageUrl,...w.pdfPresets.map(p=>p.config.backgroundImageUrl)].filter((u):u is string=>!!u))if(!url.startsWith(`/uploads/${tenant}/`)||/[?#]/.test(url)||url.slice(`/uploads/${tenant}/`.length).includes('/'))throw new WorkspaceOwnership('Foreign or invalid PDF image URL')
  const imageUrls=[w.design.logoUrl,w.design.coverUrl,w.design.backgroundImageUrl,w.pdf.backgroundImageUrl,...w.pdfPresets.map(p=>p.config.backgroundImageUrl),...w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>i.imageUrl)))].filter((u):u is string=>!!u)
@@ -39,6 +47,7 @@ async function verifyOwnership(tx:Pick<DB,'execute'>,tenant:string,w:Workspace){
 export async function mutateWorkspace(tenant:string,actor:string,expected:number,w:Workspace,publish=false,label='Salvataggio',connection:DB=db){
  return connection.transaction(async tx=>{
  const rows=await tx.execute(sql`SELECT revision,draft,published FROM menu_workspaces WHERE restaurant_id=${tenant} FOR UPDATE`)
+ if(publish&&await isTrialRestaurant(tenant,tx))throw new WorkspaceTrialLocked()
  if(Number(rows[0]?.revision)!==expected)throw new WorkspaceConflict('Revision conflict')
  if(publish){w=workspaceSchema.parse(rows[0]!.draft);const previous=rows[0]!.published?workspaceSchema.parse(rows[0]!.published):null;const previousItems=new Map(previous?.menus.filter(m=>m.active).flatMap(m=>m.sections.filter(s=>s.active).flatMap(s=>s.items.filter(i=>!i.hidden).map(i=>[i.id,i.available] as const)))??[]);const liveItems=await tx.select({id:menuItems.id,available:menuItems.available}).from(menuItems).where(eq(menuItems.restaurantId,tenant)).for('update');const live=new Map(liveItems.map(i=>[i.id,i.available]));for(const m of w.menus)for(const s of m.sections)for(const i of s.items)if(previousItems.get(i.id)===i.available&&live.has(i.id))i.available=live.get(i.id)!}
  await verifyOwnership(tx,tenant,w)

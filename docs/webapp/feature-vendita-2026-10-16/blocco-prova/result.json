@@ -1,0 +1,66 @@
+{
+ "at": "2026-10-16T15:50:20.592Z",
+ "checks": [
+  {
+   "name": "switch al PROVA",
+   "ok": true
+  },
+  {
+   "name": "publish (revisione sbagliata) → 403 TRIAL_MENU_PRIVATE",
+   "ok": true,
+   "detail": {
+    "status": 403,
+    "error": {
+     "code": "TRIAL_MENU_PRIVATE",
+     "message": "Questo è un menu di prova privato: non si può pubblicare sul menu pubblico finché il locale non diventa cliente. Le modifiche restano salvate in bozza."
+    }
+   }
+  },
+  {
+   "name": "publish (revisione corrente) → 403 col messaggio",
+   "ok": true,
+   "detail": {
+    "status": 403,
+    "message": "Questo è un menu di prova privato: non si può pubblicare sul menu pubblico finché il locale non diventa cliente. Le modifiche restano salvate in bozza."
+   }
+  },
+  {
+   "name": "revisione e revisione pubblicata identiche prima/dopo",
+   "ok": true,
+   "detail": {
+    "before": {
+     "status": 200,
+     "revision": 1,
+     "publishedRevision": null
+    },
+    "after": {
+     "status": 200,
+     "revision": 1,
+     "publishedRevision": null
+    }
+   }
+  },
+  {
+   "name": "logout, sessione non più valida",
+   "ok": true,
+   "detail": {
+    "logout": 200,
+    "me": 401
+   }
+  }
+ ],
+ "trial": {
+  "id": "97b9fbb0",
+  "name": "Agriturismo I Vigneti"
+ },
+ "before": {
+  "status": 200,
+  "revision": 1,
+  "publishedRevision": null
+ },
+ "after": {
+  "status": 200,
+  "revision": 1,
+  "publishedRevision": null
+ }
+}

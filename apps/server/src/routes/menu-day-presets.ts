@@ -5,7 +5,7 @@ import type { FastifyInstance, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { timingSafeEqual } from 'node:crypto'
 import { requireRole } from '../middleware/auth.js'
-import { ensureWorkspace, WorkspaceConflict, WorkspaceOwnership } from '../lib/menu-workspace-store.js'
+import { ensureWorkspace, WorkspaceConflict, WorkspaceOwnership, WorkspaceTrialLocked } from '../lib/menu-workspace-store.js'
 import { activateDayPresets, createDayPreset, deleteDayPreset, DayPresetError, listDayPresets, listOwnerNotices, markOwnerNoticeRead, presetSectionsSchema, publishDayPreset, readDayPreset, runDayPresetAutopublish, setDayPresetAutoPublish, setDayPresetsEnabled, updateDayPreset } from '../lib/menu-day-presets.js'
 import { processTranslationQueue } from '../lib/menu-text-translations.js'
 
@@ -15,6 +15,7 @@ const fail = (reply: FastifyReply, code: number, message: string) => reply.code(
 async function guarded<T>(reply: FastifyReply, work: () => Promise<T>) {
  try { return await work() } catch (e) {
   if (e instanceof DayPresetError) return fail(reply, e.code === 'NOT_FOUND' ? 404 : e.code === 'CONFLICT' ? 409 : 400, e.message)
+  if (e instanceof WorkspaceTrialLocked) return reply.code(403).send({ error: { code: 'TRIAL_MENU_PRIVATE', message: e.message } })
   if (e instanceof WorkspaceConflict) return fail(reply, 409, 'Il menu è cambiato: ricarica prima di pubblicare')
   if (e instanceof WorkspaceOwnership) return fail(reply, 404, 'Risorsa non trovata')
   if (e instanceof z.ZodError) return fail(reply, 400, 'Contenuto del preset non valido')
