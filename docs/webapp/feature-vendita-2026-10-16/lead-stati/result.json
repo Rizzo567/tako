@@ -1,0 +1,94 @@
+{
+ "at": "2026-10-16T16:20:16.334Z",
+ "lead": "ZZTEST1",
+ "checks": [
+  {
+   "name": "fixture: link di prova 200, locale in lista come PROVA",
+   "ok": true
+  },
+  {
+   "name": "switch al locale di test",
+   "ok": true
+  },
+  {
+   "name": "PROVA: publish bloccato (403)",
+   "ok": true,
+   "detail": 403
+  },
+  {
+   "name": "Prova attiva: stato salvato e takomenuTrial=false nella stessa richiesta",
+   "ok": true,
+   "detail": {
+    "status": 200,
+    "takomenuTrial": false
+   }
+  },
+  {
+   "name": "Prova attiva: in lista non più PROVA",
+   "ok": true
+  },
+  {
+   "name": "Prova attiva: pubblicabile (publish 200)",
+   "ok": true,
+   "detail": 200
+  },
+  {
+   "name": "Prova attiva: link di prova ancora 200",
+   "ok": true
+  },
+  {
+   "name": "riquadro nella pagina con titolo, Rimuovi rosso e Annulla; nessun confirm() del browser; nulla salvato prima della conferma",
+   "ok": true,
+   "detail": {
+    "title": "Rimuovere ZZ Test rimozione da Takomenu?",
+    "danger": "Rimuovi",
+    "bg": "rgb(180, 35, 24)",
+    "cancel": true,
+    "focus": "Annulla"
+   }
+  },
+  {
+   "name": "Rifiutato: lead nel CRM con stato Rifiutato",
+   "ok": true,
+   "detail": {
+    "http": 200,
+    "status": "not_interested",
+    "me": 200
+   }
+  },
+  {
+   "name": "Rifiutato: locale disattivato e marcato, menu conservato",
+   "ok": true,
+   "detail": {
+    "active": false
+   }
+  },
+  {
+   "name": "Rifiutato: link di prova 404",
+   "ok": true
+  },
+  {
+   "name": "Rifiutato: sparito dalla lista locali agenzia",
+   "ok": true
+  },
+  {
+   "name": "Rifiutato: switch al locale rifiutato (404)",
+   "ok": true,
+   "detail": 404
+  },
+  {
+   "name": "console pulita",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "logout",
+   "ok": true,
+   "detail": 200
+  },
+  {
+   "name": "pulizia: lead e locale di test cancellati",
+   "ok": true
+  }
+ ]
+}
