@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preset variante B</title>
+<meta name="description" content="Prototipo interazione Preset, variante B: [Menu ▾] … [Preset ▾] [🔍] [+]. Dati finti.">
+<link rel="stylesheet" href="preset.css">
+</head>
+<body data-variant="b">
+<div class="app">
+  <aside class="side" aria-label="Navigazione">
+    <div class="brand"><img src="assets/tako-logo.png" alt=""><div><span class="wordmark" role="img" aria-label="Takomenu"></span><small>Dashboard</small></div></div>
+    <nav><span>Panoramica</span><span>Ordini</span><span class="on">Menu</span><span>Tavoli</span><span>Clienti</span></nav>
+  </aside>
+  <main class="main">
+    <div class="mtop"><img src="assets/tako-logo.png" alt=""><span class="wordmark" role="img" aria-label="Takomenu"></span></div>
+    <div class="mw-studio">
+      <section class="mw-editor">
+        <nav class="mw-studio-sections" aria-label="Sezioni del menu"><button type="button" class="active" aria-current="page">Piatti</button><button type="button">Aspetto</button><button type="button">Condividi</button></nav>
+        <div class="mw-studio-toolbar" id="pp-toolbar"></div>
+        <div class="pp-stage" id="pp-stage">
+          <div class="pp-tray" id="pp-tray" role="group" aria-label="Preset del menu"><div class="pp-tray-inner"><ul class="pp-chips" id="pp-chips"></ul></div></div>
+          <div class="pp-list-wrap"><p class="pp-status" id="pp-status" aria-live="polite"></p><div class="mw-catalog-list" id="pp-list"></div></div>
+        </div>
+      </section>
+      <aside class="mw-right-glass" aria-label="Anteprima menu pubblico">
+        <div class="mw-tabs"><span class="on">Anteprima</span><span>PDF</span></div>
+        <div class="phone" id="pp-phone"></div>
+      </aside>
+    </div>
+  </main>
+</div>
+<dialog class="pp-dialog" id="pp-dialog" aria-labelledby="pp-dlg-title" aria-describedby="pp-dlg-text">
+  <div class="pp-dialog-body"><h2 id="pp-dlg-title"></h2><p id="pp-dlg-text"></p><p class="pp-error" id="pp-dlg-error" role="alert"></p></div>
+  <div class="pp-dialog-actions"><button type="button" class="pp-btn" id="pp-dlg-cancel">Annulla</button><button type="button" class="pp-btn" id="pp-dlg-discard">Scarta</button><button type="button" class="pp-btn pp-btn--primary" id="pp-dlg-save">Salva</button></div>
+</dialog>
+<div class="pp-toast" id="pp-toast" role="status" aria-live="polite"></div>
+<script src="motion-tokens.js"></script>
+<script src="data.js"></script>
+<script src="preset.js"></script>
+</body>
+</html>

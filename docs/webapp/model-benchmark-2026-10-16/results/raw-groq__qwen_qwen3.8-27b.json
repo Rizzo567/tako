@@ -1,0 +1,956 @@
+{
+ "provider": "groq",
+ "model": "qwen/qwen3.8-27b",
+ "started": "2026-10-16T09:57:57.853Z",
+ "finished": "2026-10-16T10:04:05.136Z",
+ "sample": 45,
+ "tpm": 7500,
+ "totalTokens": 39947,
+ "results": [
+  {
+   "id": "c001",
+   "ms": 672,
+   "jsonFail": 0,
+   "tin": 767,
+   "tout": 197,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 10,
+     "citazione": "Pranzo, categoria Primi, Pasta al pomodoro a 10 euro"
+    },
+    {
+     "op": "add",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 12,
+     "citazione": "Cena, categoria Panini, Burger classico a 12 euro"
+    },
+    {
+     "op": "none",
+     "citazione": "non pubblicare e non inviare inviti"
+    }
+   ]
+  },
+  {
+   "id": "c005",
+   "ms": 280,
+   "jsonFail": 0,
+   "tin": 753,
+   "tout": 84,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Porta il Burger classico a 13"
+    }
+   ]
+  },
+  {
+   "id": "c008",
+   "ms": 141,
+   "jsonFail": 0,
+   "tin": 796,
+   "tout": 6,
+   "valid": true,
+   "ops": []
+  },
+  {
+   "id": "c016",
+   "ms": 216,
+   "jsonFail": 0,
+   "tin": 795,
+   "tout": 36,
+   "valid": true,
+   "ops": [
+    {
+     "op": "remove",
+     "piatto": "Tiramisu",
+     "menu": "Pranzo",
+     "categoria": "Dolci",
+     "citazione": "Elimina il Tiramisu"
+    }
+   ]
+  },
+  {
+   "id": "c027",
+   "ms": 390,
+   "jsonFail": 0,
+   "tin": 761,
+   "tout": 85,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "alza il Burger classico a 13 euro"
+    }
+   ]
+  },
+  {
+   "id": "c030",
+   "ms": 281,
+   "jsonFail": 0,
+   "tin": 761,
+   "tout": 92,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Cambia il Burger classico da 12,50 a 13 euro"
+    }
+   ]
+  },
+  {
+   "id": "c033",
+   "ms": 291,
+   "jsonFail": 0,
+   "tin": 757,
+   "tout": 88,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Burger classico passa da 12 a 13 euro"
+    }
+   ]
+  },
+  {
+   "id": "c040",
+   "ms": 549,
+   "jsonFail": 0,
+   "tin": 762,
+   "tout": 145,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Porta il Burger classico a 13 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non cambiare la Pasta al pomodoro"
+    }
+   ]
+  },
+  {
+   "id": "c062",
+   "ms": 341,
+   "jsonFail": 0,
+   "tin": 766,
+   "tout": 89,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Pizza 4 formaggi",
+     "menu": "Pranzo",
+     "categoria": "Pizze",
+     "prezzo": 11,
+     "citazione": "aggiungi Pizza 4 formaggi a 11 euro"
+    }
+   ]
+  },
+  {
+   "id": "c070",
+   "ms": 286,
+   "jsonFail": 0,
+   "tin": 757,
+   "tout": 90,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 12.5,
+     "citazione": "Porta il Burger classico a 12,50 euro"
+    }
+   ]
+  },
+  {
+   "id": "c080",
+   "ms": 234,
+   "jsonFail": 0,
+   "tin": 748,
+   "tout": 27,
+   "valid": true,
+   "ops": [
+    {
+     "op": "none"
+    }
+   ]
+  },
+  {
+   "id": "c083",
+   "ms": 436,
+   "jsonFail": 0,
+   "tin": 816,
+   "tout": 85,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Bufalina",
+     "prezzo": 9,
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "citazione": "aggiungi la bufalina a 9 euro nelle pizze"
+    }
+   ]
+  },
+  {
+   "id": "c089",
+   "ms": 322,
+   "jsonFail": 0,
+   "tin": 811,
+   "tout": 54,
+   "valid": true,
+   "ops": [
+    {
+     "op": "unsupported",
+     "valore": "pubblicare menu",
+     "citazione": "come faccio a pubblicare il menu?"
+    }
+   ]
+  },
+  {
+   "id": "c107",
+   "ms": 367,
+   "jsonFail": 0,
+   "tin": 796,
+   "tout": 89,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Cappuccino",
+     "menu": "Colazione",
+     "categoria": "Caffetteria",
+     "prezzo": 1.7,
+     "citazione": "il cappuccino adesso è 1,70"
+    }
+   ]
+  },
+  {
+   "id": "c123",
+   "ms": 330,
+   "jsonFail": 0,
+   "tin": 770,
+   "tout": 54,
+   "valid": true,
+   "ops": [
+    {
+     "op": "ask",
+     "piatto": "Acqua",
+     "citazione": "l'acqua costa 2,50"
+    }
+   ]
+  },
+  {
+   "id": "c002",
+   "ms": 790,
+   "jsonFail": 0,
+   "tin": 790,
+   "tout": 259,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 11,
+     "citazione": "aggiungi Gnocchi al pesto a 11 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 12,
+     "citazione": "Mantieni Burger classico a 12 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 10,
+     "citazione": "Pasta al pomodoro a 10 euro"
+    },
+    {
+     "op": "none",
+     "citazione": "Non pubblicare"
+    }
+   ]
+  },
+  {
+   "id": "c015",
+   "ms": 320,
+   "jsonFail": 0,
+   "tin": 807,
+   "tout": 78,
+   "valid": true,
+   "ops": [
+    {
+     "op": "ask",
+     "piatto": "Tiramisu",
+     "menu": "Cena",
+     "categoria": "Dolci",
+     "citazione": "Nel menu Cena, categoria Dolci, elimina il Tiramisu"
+    }
+   ]
+  },
+  {
+   "id": "c023",
+   "ms": 469,
+   "jsonFail": 0,
+   "tin": 778,
+   "tout": 152,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 11,
+     "citazione": "aggiungi Gnocchi al pesto a 11 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "Il Burger classico a 12 euro va bene così"
+    }
+   ]
+  },
+  {
+   "id": "c038",
+   "ms": 1145,
+   "jsonFail": 0,
+   "tin": 759,
+   "tout": 142,
+   "valid": true,
+   "ops": [
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "Non cambiare la pasta"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Burger classico lo porto a 13 euro"
+    }
+   ]
+  },
+  {
+   "id": "c048",
+   "ms": 940,
+   "jsonFail": 0,
+   "tin": 757,
+   "tout": 82,
+   "valid": true,
+   "ops": [
+    {
+     "op": "ask",
+     "piatto": "Tiramisu",
+     "citazione": "Aggiungi il Tiramisu"
+    },
+    {
+     "op": "none",
+     "citazione": "mostra il riepilogo"
+    }
+   ]
+  },
+  {
+   "id": "c065",
+   "ms": 583,
+   "jsonFail": 0,
+   "tin": 759,
+   "tout": 89,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "prezzo": 1,
+     "citazione": "Nel menu Cena, categoria Bevande, aggiungi Caffè a un euro."
+    }
+   ]
+  },
+  {
+   "id": "c076",
+   "ms": 1142,
+   "jsonFail": 0,
+   "tin": 755,
+   "tout": 172,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Bruschetta al pomodoro",
+     "menu": "Menu di prova",
+     "categoria": "Antipasti",
+     "prezzo": 8,
+     "citazione": "Bruschetta al pomodoro — 8,00 €"
+    },
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Menu di prova",
+     "categoria": "Primi",
+     "prezzo": 10,
+     "citazione": "Pasta al pomodoro — 10,00 €"
+    }
+   ]
+  },
+  {
+   "id": "c090",
+   "ms": 690,
+   "jsonFail": 0,
+   "tin": 810,
+   "tout": 38,
+   "valid": true,
+   "ops": [
+    {
+     "op": "unsupported",
+     "valore": "allergeni"
+    }
+   ]
+  },
+  {
+   "id": "c102",
+   "ms": 1112,
+   "jsonFail": 0,
+   "tin": 820,
+   "tout": 139,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Crocchè",
+     "menu": "Menu",
+     "categoria": "Fritti",
+     "prezzo": 2,
+     "citazione": "metti la crocchè a 2"
+    },
+    {
+     "op": "remove",
+     "piatto": "Montanara",
+     "menu": "Menu",
+     "categoria": "Fritti",
+     "citazione": "il montanara lo tolgo"
+    }
+   ]
+  },
+  {
+   "id": "c112",
+   "ms": 883,
+   "jsonFail": 0,
+   "tin": 796,
+   "tout": 89,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Spremuta d'arancia",
+     "prezzo": 3,
+     "menu": "Colazione",
+     "categoria": "Caffetteria",
+     "citazione": "aggiungi spremuta d'arancia 3 euro"
+    }
+   ]
+  },
+  {
+   "id": "c124",
+   "ms": 423,
+   "jsonFail": 0,
+   "tin": 770,
+   "tout": 83,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Acqua",
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "prezzo": 3,
+     "citazione": "l'acqua di cena va a 3"
+    }
+   ]
+  },
+  {
+   "id": "c136",
+   "ms": 261,
+   "jsonFail": 0,
+   "tin": 798,
+   "tout": 17,
+   "valid": true,
+   "ops": [
+    {
+     "op": "none",
+     "citazione": "non pubblicare ancora"
+    }
+   ]
+  },
+  {
+   "id": "c148",
+   "ms": 499,
+   "jsonFail": 0,
+   "tin": 753,
+   "tout": 188,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "pasta al pomodoro",
+     "menu": "pranzo",
+     "categoria": "primi",
+     "prezzo": 10,
+     "citazione": "pranzo categoria primi pasta al pomodoro a dieci euro"
+    },
+    {
+     "op": "add",
+     "piatto": "burger classico",
+     "menu": "cena",
+     "categoria": "panini",
+     "prezzo": 12,
+     "citazione": "cena categoria panini burger classico a dodici euro"
+    },
+    {
+     "op": "none",
+     "citazione": "non pubblicare e non inviare inviti"
+    }
+   ]
+  },
+  {
+   "id": "c170",
+   "ms": 901,
+   "jsonFail": 0,
+   "tin": 758,
+   "tout": 84,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 11,
+     "citazione": "abbassa il burger classico a undici euro"
+    }
+   ]
+  },
+  {
+   "id": "c182",
+   "ms": 438,
+   "jsonFail": 0,
+   "tin": 759,
+   "tout": 143,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "porta il burger classico a tredici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non cambiare la pasta al pomodoro"
+    }
+   ]
+  },
+  {
+   "id": "c006",
+   "ms": 651,
+   "jsonFail": 0,
+   "tin": 782,
+   "tout": 228,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Risotto ai funghi",
+     "prezzo": 14,
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "Aggiungi Risotto ai funghi a quattordici euro nel Pranzo, categoria Primi"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "cambia Burger classico da dodici a tredici"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non cambiare Pasta al pomodoro"
+    }
+   ]
+  },
+  {
+   "id": "c051",
+   "ms": 417,
+   "jsonFail": 0,
+   "tin": 765,
+   "tout": 100,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Lascia o raddoppia",
+     "menu": "Cena",
+     "categoria": "Cocktail",
+     "prezzo": 8,
+     "citazione": "Nel menu Cena, categoria Cocktail, aggiungi Lascia o raddoppia a 8 euro"
+    }
+   ]
+  },
+  {
+   "id": "c059",
+   "ms": 1123,
+   "jsonFail": 0,
+   "tin": 766,
+   "tout": 161,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1.5,
+     "menu": "Pranzo",
+     "categoria": "Bevande",
+     "citazione": "Aggiungi Caffè a 1,50 euro al Pranzo"
+    },
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1.5,
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "citazione": "e alla Cena, categoria Bevande"
+    }
+   ]
+  },
+  {
+   "id": "c085",
+   "ms": 819,
+   "jsonFail": 0,
+   "tin": 841,
+   "tout": 264,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Capricciosa",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "prezzo": 9.5,
+     "citazione": "mettila a nove e cinquanta"
+    },
+    {
+     "op": "keep",
+     "piatto": "Diavola",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "citazione": "rimane uguale"
+    },
+    {
+     "op": "remove",
+     "piatto": "Marinara",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "citazione": "togli la marinara"
+    },
+    {
+     "op": "add",
+     "piatto": "Ortolana",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "prezzo": 8,
+     "citazione": "aggiungi la ortholana a otto"
+    }
+   ]
+  },
+  {
+   "id": "c105",
+   "ms": 294,
+   "jsonFail": 0,
+   "tin": 809,
+   "tout": 38,
+   "valid": true,
+   "ops": [
+    {
+     "op": "unsupported",
+     "valore": "traduzione menu"
+    }
+   ]
+  },
+  {
+   "id": "c126",
+   "ms": 381,
+   "jsonFail": 0,
+   "tin": 799,
+   "tout": 76,
+   "valid": true,
+   "ops": [
+    {
+     "op": "move",
+     "piatto": "Risotto ai funghi",
+     "menu": "Cena",
+     "categoria": "Secondi",
+     "citazione": "il risotto lo sposto a cena nei secondi"
+    }
+   ]
+  },
+  {
+   "id": "c138",
+   "ms": 316,
+   "jsonFail": 0,
+   "tin": 801,
+   "tout": 60,
+   "valid": true,
+   "ops": [
+    {
+     "op": "ask",
+     "piatto": "Risotto alla milanese",
+     "citazione": "aggiungi il risotto alla milanese a 15"
+    }
+   ]
+  },
+  {
+   "id": "c149",
+   "ms": 687,
+   "jsonFail": 0,
+   "tin": 778,
+   "tout": 238,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 11,
+     "citazione": "nel menu pranzo categoria primi aggiungo gnocchi al pesto a undici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "mantieni burger classico a dodici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "e pasta al pomodoro a dieci euro"
+    },
+    {
+     "op": "none",
+     "citazione": "non pubblicare"
+    }
+   ]
+  },
+  {
+   "id": "c158",
+   "ms": 586,
+   "jsonFail": 0,
+   "tin": 813,
+   "tout": 163,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 12.5,
+     "citazione": "mantieni il burger classico a dodici e cinquanta euro"
+    },
+    {
+     "op": "add",
+     "piatto": "Panna cotta",
+     "menu": "Pranzo",
+     "categoria": "Dolci",
+     "prezzo": 5,
+     "citazione": "panna cotta a cinque euro nel menu pranzo categoria dolci"
+    }
+   ]
+  },
+  {
+   "id": "c164",
+   "ms": 528,
+   "jsonFail": 0,
+   "tin": 770,
+   "tout": 155,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 11,
+     "citazione": "nel menu pranzo categoria primi aggiungi gnocchi al pesto a undici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "il burger classico a dodici euro resta com'è"
+    }
+   ]
+  },
+  {
+   "id": "c174",
+   "ms": 302,
+   "jsonFail": 0,
+   "tin": 754,
+   "tout": 86,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "il burger classico non costa dodici ma tredici euro"
+    }
+   ]
+  },
+  {
+   "id": "c181",
+   "ms": 461,
+   "jsonFail": 0,
+   "tin": 759,
+   "tout": 143,
+   "valid": true,
+   "ops": [
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non toccare la pasta"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "il burger classico mettilo a tredici euro"
+    }
+   ]
+  },
+  {
+   "id": "c188",
+   "ms": 323,
+   "jsonFail": 0,
+   "tin": 759,
+   "tout": 95,
+   "valid": true,
+   "ops": [
+    {
+     "op": "add",
+     "piatto": "Lascia o raddoppia",
+     "menu": "Cena",
+     "categoria": "Cocktail",
+     "prezzo": 8,
+     "citazione": "nel menu cena categoria cocktail aggiungi lascia o raddoppia a otto euro"
+    }
+   ]
+  },
+  {
+   "id": "c193",
+   "ms": 323,
+   "jsonFail": 0,
+   "tin": 773,
+   "tout": 80,
+   "valid": true,
+   "ops": [
+    {
+     "op": "set_price",
+     "piatto": "Acqua",
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "prezzo": 3,
+     "citazione": "aggiungi acqua a tre euro"
+    }
+   ]
+  },
+  {
+   "id": "c200",
+   "ms": 342,
+   "jsonFail": 0,
+   "tin": 751,
+   "tout": 79,
+   "valid": true,
+   "ops": [
+    {
+     "op": "delta_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "delta": 1,
+     "citazione": "costa uno euro in più"
+    }
+   ]
+  }
+ ]
+}
