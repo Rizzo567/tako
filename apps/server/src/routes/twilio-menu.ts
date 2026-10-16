@@ -13,11 +13,13 @@ import {parseIntent,findDishes,preselect,candidatesFor,resolveChoice,capabilityF
 import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
 import {reportFailure,inBackground,type FailureKind} from '../lib/twilio-menu-alerts.js'
 import {normalizeOwnerPhone,whatsappAddress} from '../lib/whatsapp-phone.js'
+import {parseSalesText,salesTurn,salesActionProblem,type SalesTemplate} from '../lib/twilio-menu-sales.js'
+import {businessDate} from '../lib/menu-sales.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
 async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const rows=await tx.execute(sql`SELECT u.id,u.restaurant_id,u.role,r.active FROM users u JOIN restaurants r ON r.id=${tenant} WHERE u.id=${actor} AND u.active=true`);const u=rows[0];if(!u||!u.active)return false;if(isAgencyUser(actor))return true;if(u.restaurant_id===tenant&&u.role==='owner')return true;const membership=await tx.execute(sql`SELECT role FROM web_location_memberships WHERE user_id=${actor} AND restaurant_id=${tenant}`);return membership[0]?.role==='owner'}
 const sent='\u0001'
-type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean};type Choice={kind:'choose',action:ChoiceAction,options:string[]};type Turn=string|{llm:true,photo?:Photo}|{upload:Extract<MenuAction,{kind:'image'}>[]}
+type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean}|SalesTemplate;type Choice={kind:'choose',action:ChoiceAction,options:string[]};type Turn=string|{llm:true,photo?:Photo}|{upload:Extract<MenuAction,{kind:'image'}>[]}
 const lock=(tx:Tx,phone:string)=>tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${phone},0))`)
 const reserve=(tx:Tx,sid:string)=>tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${sent}) ON CONFLICT DO NOTHING`)
 const propose=(tx:Tx,ctx:Ctx,revision:number,command:unknown)=>tx.execute(sql`INSERT INTO tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) VALUES(${ctx.phone},${ctx.tenant},${ctx.actor},${revision},${JSON.stringify(command)}::jsonb,now()+interval '10 minutes') ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,revision=EXCLUDED.revision,command=EXCLUDED.command,expires_at=EXCLUDED.expires_at`)
@@ -52,7 +54,11 @@ export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revisio
  else{let picked:MenuAction[]|null=null;if(choice){const target=resolveChoice(text,choice.options.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r));if(target)picked=[{...choice.action,id:target.id} as MenuAction]}
   const command=parseMenuCommand(text)
   if(!picked&&!command&&pending){const matches=dishMatches(text,refs);if(matches.length!==1)return matches.length>1?fill(copy.sameName,{opzioni:bold(matches.map(r=>itemLabel(r,refs))),esempio:itemLabel(matches[0]!,refs)}):{llm:true,photo:{mediaUrl:pending.mediaUrl,mediaType:pending.mediaType,...(pending.url?{url:pending.url}:{})}};picked=[{kind:'image',id:matches[0]!.id,mediaUrl:pending.mediaUrl,mediaType:pending.mediaType,...(pending.url?{url:pending.url}:{})}]}
-  if(!picked){if(isThanks(text))return copy.thanks;const capability=capabilityFromText(text);if(capability)return capabilityText(capability)
+  if(!picked){if(isThanks(text))return copy.thanks
+   // F3+F4: promo e scarsità prima di parseIntent («togli la promo…» non è «nascondi»).
+   if(!command&&parseSalesText(text)){const settings=await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${tenant}`),sale=salesTurn(text,workspace,refs,businessDate((settings[0]?.settings as any)?.timezone));if(sale&&'reply' in sale)return sale.reply;if(sale&&'choose' in sale){await propose(tx,ctx,row.revision,{kind:'choose',action:sale.choose.template,options:sale.choose.options.map(r=>r.id)});return fill(copy.choose,{opzioni:sale.choose.options.map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*`).join('\n')})}if(sale)picked=sale.actions}
+  }
+  if(!picked){const capability=capabilityFromText(text);if(capability)return capabilityText(capability)
    const intent:Intent|null=command?(command.kind==='price'?{kind:'price',target:command.name,price:command.price}:{kind:command.kind,target:command.name,value:command.value}):parseIntent(text)
    if(!intent){const parts=compoundIntents(text,refs);if(!parts)return{llm:true};picked=parts.map(({intent:i,ref})=>(i.kind==='price'?{kind:'price',id:ref.id,price:i.price}:i.kind==='description'?{kind:'description',id:ref.id,text:i.text}:i.kind==='tag'?{kind:'tag',id:ref.id,tag:i.tag,value:true}:{kind:i.kind,id:ref.id,value:i.value}) as MenuAction)}
    else{
@@ -64,6 +70,7 @@ export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revisio
    if(found.length>1){const options=found.slice(0,8);await propose(tx,ctx,row.revision,{kind:'choose',action:template,options:options.map(r=>r.id)});return fill(copy.choose,{opzioni:options.map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*`).join('\n')})}
    picked=[{...template,id:found[0]!.id} as MenuAction]}}
   actions=picked}
+ {const problem=salesActionProblem(actions,workspace);if(problem)return problem}
  actions=effectiveMenuActions(actions,workspace);
  if(!actions.length){if(batch)await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return batch?copy.pendingEmpty:copy.noChanges}
  const needsApproval=!!batch||actions.length>3;
