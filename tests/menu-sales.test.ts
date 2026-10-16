@@ -173,3 +173,17 @@ describe('traduzioni statiche delle etichette', () => {
     expect(readFileSync(new URL('../apps/server/src/lib/menu-sales.ts', import.meta.url), 'utf8')).not.toMatch(/groq|fetch\(/i)
   })
 })
+
+describe('esaurito operativo (PATCH availability) toglie «Ultime porzioni»', () => {
+  it('pulisce bozza e pubblicato del solo piatto, senza toccare revisione né «Solo oggi»', async () => {
+    const { stripLastPortions, clearLastPortionsOnSoldOut } = await import('../apps/server/src/lib/menu-sales-store.js')
+    const make = () => ({ menus: [{ sections: [{ items: [{ id: 'a', scarcity: { lastPortions: true, onlyToday: '2026-10-16' } }, { id: 'b', scarcity: { lastPortions: true, onlyToday: null } }] }] }] })
+    const d = make(); expect(stripLastPortions(d, 'b')).toBe(true); expect(d.menus[0]!.sections[0]!.items[1]).toEqual({ id: 'b' }); expect(stripLastPortions(d, 'b')).toBe(false)
+    expect(stripLastPortions(d, 'a')).toBe(true); expect(d.menus[0]!.sections[0]!.items[0]!.scarcity).toEqual({ lastPortions: false, onlyToday: '2026-10-16' })
+    const queries: string[] = [], row = { draft: make(), published: make() }
+    const tx = { execute: async (q: any) => { const text = q.queryChunks.map((c: any) => Array.isArray(c?.value) ? c.value.join('') : '$').join(''); queries.push(text); return text.startsWith('SELECT') ? [row] : [] } }
+    expect(await clearLastPortionsOnSoldOut('r1', 'b', { transaction: (fn: any) => fn(tx) } as any)).toBe(true)
+    expect(queries.filter(q => q.startsWith('UPDATE'))).toEqual(['UPDATE menu_workspaces SET draft=$::jsonb WHERE restaurant_id=$', 'UPDATE menu_workspaces SET published=$::jsonb WHERE restaurant_id=$'])
+    expect(queries.join(' ')).not.toMatch(/revision/)
+  })
+})

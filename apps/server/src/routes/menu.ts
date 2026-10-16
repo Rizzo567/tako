@@ -1,5 +1,6 @@
 import { imageErrorStatus } from '../lib/image-error-status.js'
 import {readWorkspace} from '../lib/menu-workspace-store.js'
+import { clearLastPortionsOnSoldOut } from '../lib/menu-sales-store.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, menus, menuSections, menuItems, itemVariants, orderItems, menuItemTranslations } from '@tako/db'
@@ -201,6 +202,8 @@ export async function menuRoutes(fastify: FastifyInstance) {
     const { available } = req.body as { available: boolean }
     const [item] = await db.update(menuItems).set({ available, updatedAt: new Date() }).where(and(eq(menuItems.id, itemId), eq(menuItems.restaurantId, req.user!.restaurantId))).returning()
     if (!item) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Item not found' } })
+    // F4: esaurito → via l'etichetta «Ultime porzioni» (best effort: l'esaurito resta valido anche se la pulizia fallisce).
+    if (available === false) await clearLastPortionsOnSoldOut(req.user!.restaurantId, itemId).catch(err => req.log.warn({ err }, 'Last portions cleanup failed'))
     deliverPersistedEvent(io, `restaurant:${req.user!.restaurantId}`, 'menu:item_availability', { itemId, available }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     deliverPersistedEvent(io, `menu:${req.user!.restaurantId}`, 'menu:item_availability', { itemId, available }, { persisted: true, onError: err => req.log.warn({ err }, 'Post-commit socket notification failed') })
     return { data: item }
