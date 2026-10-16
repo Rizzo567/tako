@@ -7,3 +7,5 @@ CRM integrato nella dashboard agenzia e salvato in due tabelle Postgres con RLS 
 Sorgenti pubbliche e asset remoti ufficiali (10loghi,8cover) verificati dall'agente ricerca. 262voci totali,254conprezzo. Le formule non sono state trasformate in prezziindividuali. Dataset e token restano fuori dalla repo pubblica.
 
 Durante il lavoro compaiono modifiche a onboarding-chat/clauses/menu-merge e test da altra sessione. Non sono parte di questa feature: build/deploy dalla copia pulita del solo commit della feature, lasciando intatti quei file nel checkout condiviso.
+
+Rilevato rilascio concorrente backend v81 dopo il primo deploy e QA riuscito; le API CRM sono state rimosse dal rilascio altrui. Adattamento: funzione tako-leads e Worker takomenu-leads con percorsi /leads/, /leads-demo/* e /api/agency/leads*. Isolamento per evitare ulteriori sovrascritture del bot. Le credenziali e i dati sono gli stessi già autorizzati; nessun accesso nuovo per il pubblico al CRM.

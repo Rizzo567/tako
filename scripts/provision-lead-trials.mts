@@ -49,7 +49,7 @@ try{
    await tx`insert into restaurants(id,name,slug,settings,logo_url,cover_url,primary_color) values(${p.restaurantId},${p.name},${p.slug},${tx.json(settings)},${p.workspace.design.logoUrl},${p.workspace.design.coverUrl},${p.workspace.design.primary}) on conflict(id) do nothing`;
    // Never overwrite subsequent admin edits when provisioning is rerun.
    await tx`insert into menu_workspaces(restaurant_id,draft,revision) values(${p.restaurantId},${tx.json(p.workspace)},1) on conflict(restaurant_id) do nothing`;
-   const info={demoUrl:'https://takoitalia.com/trial-menu/'+p.token,demoSourceUrl:p.source.sourceUrl,demoSourceDate:p.source.sourceDate,demoSourceNote:p.note,demoMissingPrices:p.missing,demoPrepared:true};
+   const info={data_menu:p.source.sourceDate||'Data non indicata nella fonte',fonte_menu:p.source.sourceUrl,demoUrl:'https://takoitalia.com/leads-demo/'+p.token,demoSourceUrl:p.source.sourceUrl,demoSourceDate:p.source.sourceDate,demoSourceNote:p.note,demoMissingPrices:p.missing,demoPrepared:true};
    await tx`update tako_agency_leads set restaurant_id=${p.restaurantId},demo_token_hash=${createHash('sha256').update(p.token).digest('hex')},source=source||${tx.json(info)},status=case when status in ('new','demo_preparing') then ${p.missing?'demo_preparing':'demo_ready'} else status end,revision=revision+1,updated_at=now() where id=${p.leadId}`;
   }
  });

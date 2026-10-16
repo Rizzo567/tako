@@ -1,0 +1,37 @@
+{
+  "name": "takomenu-leads",
+  "main": "leads-worker.mjs",
+  "account_id": "6978af99fd8949fba8ddb1d721e2a351",
+  "compatibility_date": "2026-06-18",
+  "assets": {
+    "directory": "../../release/public-menus",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "none",
+    "html_handling": "none"
+  },
+  "vars": {
+    "TAKO_BACKEND_READY": "true",
+    "TAKO_READ_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-read-candidate",
+    "TAKO_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-operational-candidate",
+    "TAKO_LEADS_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-leads"
+  },
+  "routes": [
+    {
+      "pattern": "takoitalia.com/leads",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/leads/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/leads-demo/*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    },
+    {
+      "pattern": "takoitalia.com/api/agency/leads*",
+      "zone_id": "6fafed1a729e8979bc49e6a89f80eff4"
+    }
+  ]
+}
