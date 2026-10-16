@@ -2,6 +2,7 @@ import {db,menuItems} from '@tako/db'
 import {and,eq,sql} from 'drizzle-orm'
 import { readWorkspace } from './menu-workspace-store.js'
 import { publicWorkspace } from './menu-workspace-schedule.js'
+import { salesTimezone } from './menu-sales.js'
 import type { Workspace } from './menu-workspace-contract.js'
 import type { PublicMenu } from '@tako/types'
 
@@ -22,7 +23,7 @@ export async function readPublishedCatalog(restaurantId:string,options:{catalogO
  COALESCE((SELECT jsonb_agg(i.id) FROM menu_items i WHERE i.restaurant_id=r.id AND i.available=true),'[]'::jsonb) AS available
  FROM restaurants r LEFT JOIN menu_workspaces w ON w.restaurant_id=r.id WHERE r.id=${restaurantId} AND r.active=true LIMIT 1`)
  const row=rows[0];if(!row?.published)return null
- const workspace=publicWorkspace(row.published as Workspace,new Date(),{ignoreSchedules:options.catalogOnly===true})
+ const workspace=publicWorkspace(row.published as Workspace,new Date(),{ignoreSchedules:options.catalogOnly===true,timezone:salesTimezone((row.settings as {timezone?:unknown}|null)?.timezone)})
  const ids=new Set(row.available as string[])
  for(const menu of workspace.menus)for(const section of menu.sections)section.items=section.items.filter(item=>ids.has(item.id))
  workspace.menus=workspace.menus.filter(menu=>menu.sections.some(section=>section.items.length>0))
@@ -53,6 +54,8 @@ export function publicMenuProjection(menu: Workspace['menus'][number], language?
         allergens: item.allergens, tags: item.tags, additives: item.additives,
         available: item.available, displayMode:item.displayMode,externalLink:item.externalLink??undefined,priceDisplay:item.priceDisplay??undefined,
         variants: item.variants.filter(variant => variant.available).map(({id, name, priceModifier}) => ({id, name, priceModifier})),
+        // F3+F4: già risolti da publicWorkspace (scaduti tolti); qui solo la forma pubblica.
+        ...(item.promo ? { promoPrice: item.promo.price } : {}), ...(item.scarcity?.lastPortions ? { lastPortions: true } : {}), ...(item.scarcity?.onlyToday ? { onlyToday: true } : {}),
       })),
     })),
   }

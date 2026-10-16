@@ -1,4 +1,5 @@
 import type { Schedule, Workspace } from './menu-workspace-contract.js'
+import { businessDate, resolveSalesItem, scheduleExpired } from './menu-sales.js'
 export function scheduledVisible(schedule: Schedule | undefined, now = new Date()): boolean {
  if(!schedule?.enabled) return true
  const parts = new Intl.DateTimeFormat('en-CA',{timeZone:schedule.timezone,year:'numeric',month:'2-digit',day:'2-digit',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now)
@@ -8,10 +9,13 @@ export function scheduledVisible(schedule: Schedule | undefined, now = new Date(
  const minutes=(v:string)=>Number(v.slice(0,2))*60+Number(v.slice(3))
  return schedule.windows.some(w=>{const a=minutes(w.start),b=minutes(w.end); return a===b?w.weekdays.includes(day):a<b?w.weekdays.includes(day)&&minute>=a&&minute<b:(w.weekdays.includes(day)&&minute>=a)||(w.weekdays.includes((day+6)%7)&&minute<b)})
 }
-export function publicWorkspace(workspace:Workspace, now=new Date(), options:{ignoreSchedules?:boolean}={}):Workspace {
- const visible=(schedule:Schedule|undefined)=>options.ignoreSchedules===true||scheduledVisible(schedule,now)
+// timezone = fuso del locale (settings.timezone, ripiego Europe/Rome): decide la giornata delle 06:00 per promo, «Solo oggi» e date di fine.
+export function publicWorkspace(workspace:Workspace, now=new Date(), options:{ignoreSchedules?:boolean,timezone?:string|null}={}):Workspace {
+ const today=businessDate(options.timezone,now)
+ // Una data di fine passata nasconde sempre (anche con ignoreSchedules: il «piatto del giorno» sulla pagina pubblica); le fasce orarie restano ignorabili.
+ const visible=(schedule:Schedule|undefined)=>!scheduleExpired(schedule,schedule?.timezone?businessDate(schedule.timezone,now):today)&&(options.ignoreSchedules===true||scheduledVisible(schedule,now))
  const result=structuredClone(workspace)
- result.menus=result.menus.filter(m=>m.active&&visible(m.schedule)).map(m=>{m.sections=m.sections.filter(s=>s.active&&visible(s.schedule)&&(!s.parentSectionId||m.sections.some(p=>p.id===s.parentSectionId&&p.active&&visible(p.schedule)))).map(s=>{s.items=s.items.filter(i=>!i.hidden&&i.available&&visible(i.schedule)).map(i=>({...i,costPrice:null,kitchenStation:null,prepTimeMinutes:0})); return s}); return m})
+ result.menus=result.menus.filter(m=>m.active&&visible(m.schedule)).map(m=>{m.sections=m.sections.filter(s=>s.active&&visible(s.schedule)&&(!s.parentSectionId||m.sections.some(p=>p.id===s.parentSectionId&&p.active&&visible(p.schedule)))).map(s=>{s.items=s.items.filter(i=>!i.hidden&&i.available&&visible(i.schedule)).map(i=>resolveSalesItem({...i,costPrice:null,kitchenStation:null,prepTimeMinutes:0},today)); return s}); return m})
  return result
 }
 export function workspaceDiff(before:Workspace,after:Workspace){
