@@ -25,17 +25,17 @@ try{
  await page.goto(h.origin,{waitUntil:'load'});await page.waitForSelector('.mw-dp-btn',{timeout:20000});await sleep(600);
  fs.mkdirSync(OUT,{recursive:true});
  recorder=await page.screencast({path:path.join(OUT,name+'.webm'),fps:30,quality:20,ffmpegPath:'/opt/homebrew/bin/ffmpeg'});await sleep(500);
- const box=async sel=>{const el=await page.waitForSelector(sel,{visible:true,timeout:8000});await el.evaluate(e=>e.scrollIntoView({block:'center'}));await sleep(mode==='reduced'?50:250);return el.boundingBox();};
+ const box=async sel=>{const el=await page.waitForSelector(sel,{visible:true,timeout:8000});await el.evaluate(e=>e.scrollIntoView({block:'center'}));await sleep(250);return el.boundingBox();};
  const tapXY=async(x,y)=>{if(mobile)await page.touchscreen.tap(x,y);else{await page.mouse.move(x,y,{steps:8});await page.mouse.click(x,y);}};
  const tap=async sel=>{const b=await box(sel);await tapXY(b.x+b.width/2,b.y+b.height/2);};
  const quick=async sel=>{const el=await page.$(sel);const b=await el.boundingBox();if(mobile)await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);else await page.mouse.click(b.x+b.width/2,b.y+b.height/2);};
  const byText=async(text,scope='button')=>{const handle=await page.waitForFunction((t,s)=>[...document.querySelectorAll(s)].find(e=>e.offsetParent&&e.textContent.replace(/\s+/g,' ').trim().startsWith(t)),{timeout:8000},text,scope);return handle.asElement();};
- const tapText=async(text,scope)=>{const el=await byText(text,scope);await el.evaluate(e=>e.scrollIntoView({block:'center'}));await sleep(mode==='reduced'?50:250);const b=await el.boundingBox();await tapXY(b.x+b.width/2,b.y+b.height/2);};
+ const tapText=async(text,scope)=>{const el=await byText(text,scope);await el.evaluate(e=>e.scrollIntoView({block:'center'}));await sleep(250);const b=await el.boundingBox();await tapXY(b.x+b.width/2,b.y+b.height/2);};
  const st=()=>page.evaluate(()=>{const b=document.querySelector('.mw-dp-btn'),w=document.querySelector('.mw-dp-list-wrap');return {expanded:b?.getAttribute('aria-expanded'),label:b?.querySelector('.mw-dp-label')?.textContent,y:w?+new DOMMatrix(getComputedStyle(w).transform).f.toFixed(1):null,dishes:[...document.querySelectorAll('.mw-catalog-section .mw-category-toggle .mw-catalog-category-name')].map(e=>e.textContent),counts:[...document.querySelectorAll('.mw-catalog-section .mw-category-toggle small')].map(e=>+e.textContent),current:document.querySelector('.mw-dp-chip[aria-current=true]')?.textContent,focus:document.activeElement?.className+'|'+(document.activeElement?.textContent||'').trim().slice(0,30)};});
  const typeInto=async(sel,value)=>{await page.waitForSelector(sel,{visible:true});await page.$eval(sel,e=>{e.scrollIntoView({block:'center'});e.focus();e.select();});await page.keyboard.type(String(value));};
  const qa=()=>page.evaluate(()=>window.__qa);
  const menuOf=(s,id)=>s.state.doc.menus.find(m=>m.id===id);
- const settle=()=>sleep(mode==='reduced'?120:900);
+ const settle=()=>sleep(900); // il finto backend risponde in 500ms anche con reduced motion
 
  if(mode!=='keyboard'){
   // 1. Pulsante spento → pannello «Attiva i preset per Pranzo» (M06: lista scende, poi il contenuto).
@@ -55,7 +55,7 @@ try{
   // 2. Lunedì: i chip escono, il pulsante diventa «Lunedì», la lista risale con il contenuto del preset; l'altezza converge.
   const before=(await st()).counts;
   await page.evaluate(()=>{window.__trace.length=0;});
-  await tapText('Lun','.mw-dp-chip');await sleep(mode==='reduced'?200:1300);s=await st();
+  await tapText('Lun','.mw-dp-chip');await sleep(1300);s=await st();
   const tr=await page.evaluate(()=>window.__trace.slice());
   check('scelta Lunedì: vassoio chiuso, etichetta «Lunedì», contenuto del preset',s.expanded==='false'&&s.label==='Lunedì'&&JSON.stringify(s.dishes)==='["Primi"]'&&s.y===0,{s,before});
   const hs=[...new Set(tr.map(t=>t[2]).filter(Boolean))];
@@ -77,7 +77,7 @@ try{
   const priceSel='input[aria-label="Prezzo Pasta e ceci"]';await page.waitForSelector(priceSel,{visible:true});
   await typeInto(priceSel,'9.5');await page.keyboard.press('Tab');await sleep(300);
   await tap('.mw-dp-btn');await settle();await tapText('Mar','.mw-dp-chip');
-  await page.waitForSelector('dialog.mw-dp-dialog[open]',{visible:true});await sleep(500);
+  await page.waitForSelector('dialog.mw-dp-dialog[open]',{visible:true,timeout:6000}).catch(async e=>{await page.screenshot({path:path.join(OUT,name+'-fail.png')});console.log('DEBUG',JSON.stringify(await st()));throw e;});await sleep(500);
   check('cambio con modifiche aperte: dialogo «Salva o scarta» con focus su Salva',await page.evaluate(()=>document.activeElement?.textContent==='Salva'&&document.querySelector('#mw-dp-dlg-title').textContent==='Salvare le modifiche a «Lunedì»?'));
   await tapText('Salva','dialog.mw-dp-dialog button');await sleep(100);
   check('Salva: attesa reale (aria-busy)',await page.evaluate(()=>!!document.querySelector('dialog.mw-dp-dialog [aria-busy=true]')));
@@ -109,7 +109,7 @@ try{
   await page.type('.mw-dp-create input','Venerdì pesce');const fri=(await qa()).state.presets.find(p=>p.menuId===state.ids.pranzo&&p.weekday===5);await page.select('.mw-dp-create select','preset:'+fri.id);await sleep(200);
   await tapText('Crea preset','.mw-dp-create button');await sleep(2000);
   s=await st();check('nuovo preset con nome libero, copia di Venerdì, aperto',s.label==='Venerdì pesce'&&s.counts.join()==='3',s);
-  await tapText('Elimina','.mw-dp-bar button');await page.waitForSelector('dialog.mw-dp-dialog[open]');await sleep(500);
+  await tapText('Elimina','.mw-dp-bar button');await page.waitForSelector('dialog.mw-dp-dialog[open]',{timeout:6000}).catch(async e=>{await page.screenshot({path:path.join(OUT,name+'-fail.png')});console.log('DEBUG',JSON.stringify(await page.evaluate(()=>({bar:document.querySelector('.mw-dp-bar')?.innerText,dlg:document.querySelectorAll('dialog').length}))));throw e;});await sleep(500);
   check('elimina chiede conferma',await page.$eval('#mw-dp-dlg-title',e=>e.textContent)==='Eliminare «Venerdì pesce»?');
   await tapText('Elimina','dialog.mw-dp-dialog button');await page.waitForFunction(()=>!document.querySelector('dialog.mw-dp-dialog'),{timeout:8000});await sleep(1300);
   s=await st();q=await qa();check('eliminato: si torna al menu attuale',s.label==='Preset'&&!q.state.presets.some(p=>p.name==='Venerdì pesce'),s);
@@ -144,7 +144,8 @@ try{
   check('Tab porta al pulsante Preset (focus visibile)',s.focus.startsWith('mw-dp-btn')&&await page.$eval('.mw-dp-btn',b=>getComputedStyle(b).outlineStyle!=='none'),s.focus);
   await page.keyboard.press('Enter');await settle();
   check('Invio apre il pannello di attivazione',(await st()).expanded==='true');
-  await page.keyboard.press('Tab');await page.keyboard.press('Enter');await page.waitForSelector('.mw-dp-chip',{visible:true});await settle();
+  check('pannello aperto da tastiera: focus sulla prima scelta',(await st()).focus.startsWith('mw-dp-option'),(await st()).focus);
+  await page.keyboard.press('Enter');await page.waitForSelector('.mw-dp-chip',{visible:true});await settle();
   await page.keyboard.press('Escape');await settle();s=await st();
   check('Esc chiude e riporta il focus al pulsante',s.expanded==='false'&&s.focus.startsWith('mw-dp-btn'),s);
   await page.keyboard.press('ArrowDown');await settle();s=await st();
@@ -158,7 +159,7 @@ try{
   // Modifica, poi cambio con errore di rete al primo Salva: dati conservati, riprova riesce.
   await page.keyboard.press('Escape');await settle();
   await page.evaluate(()=>document.querySelector('.mw-catalog-section .mw-category-toggle').click());await sleep(300);
-  const p='input[aria-label="Prezzo Lasagna"]';await page.focus(p);await page.keyboard.down('Meta');await page.keyboard.press('a');await page.keyboard.up('Meta');await page.keyboard.type('12');
+  const p='input[aria-label="Prezzo Carbonara"]';await typeInto(p,'12');
   await page.focus('.mw-dp-btn');await page.keyboard.press('ArrowDown');await settle();await page.keyboard.press('End');await page.keyboard.press('Enter');
   await page.waitForSelector('dialog.mw-dp-dialog[open]');await sleep(400);
   await page.evaluate(()=>{window.__qa.failNext=1;});await page.keyboard.press('Enter');await sleep(900);
@@ -168,8 +169,8 @@ try{
   check('riprova: salvato e poi «Menu attuale»',q.state.presets.find(x=>x.menuId===state.ids.pranzo&&x.weekday===3).sections[0].items[0].price===12&&s.label==='Preset',{s});
   // Esc nel dialogo = Annulla; Tab fuori dal vassoio lo chiude.
   await page.focus('.mw-dp-btn');await page.keyboard.press('ArrowDown');await settle();
-  for(let i=0;i<14;i++){await page.keyboard.press('Tab');if(!(await page.evaluate(()=>document.activeElement?.closest?.('.mw-dp-tray'))))break;}
-  await settle();check('Tab fuori dal vassoio lo chiude',(await st()).expanded==='false');
+  for(let i=0;i<14;i++){await page.keyboard.press('Tab');await sleep(150);if(!(await page.evaluate(()=>!!document.activeElement?.closest?.('.mw-dp-tray'))))break;}
+  await settle();{const z=await st();check('Tab fuori dal vassoio lo chiude',z.expanded==='false',z);}
   check('aree tocco ≥44px (chip, interruttore, pulsanti)',await page.evaluate(()=>[...document.querySelectorAll('.mw-dp-chip,.mw-dp-switch,.mw-dp-pill')].every(e=>{const r=e.getBoundingClientRect();return !r.width||r.height>=44;})));
  }
  check('nessuno scroll orizzontale',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));

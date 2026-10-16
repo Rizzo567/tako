@@ -80,7 +80,7 @@ function useMenuDayPresets({adapter,viewRef,menu,document,dirty,busy,refresh,sav
  const setEnabled=async enabled=>{setPending('enabled');setError('');try{await api.setDayPresetSettings(menuId,{enabled});if(!enabled&&viewing)await leave();await reload();toast(enabled?'Preset riattivati':'Preset disattivati: restano salvati',{type:'success'});}catch(e){setError(e.message);}finally{setPending('');}};
  /* M08: lo stato cambia al gesto; se il server rifiuta si torna indietro con un messaggio. */
  const setAuto=async autoPublish=>{const prev=data;setData(d=>d&&{...d,settings:[...d.settings.filter(s=>s.menuId!==menuId),{...settings,autoPublish}]});setError('');try{await api.setDayPresetSettings(menuId,{autoPublish});await reload();toast(autoPublish?'Pubblicazione automatica attiva dal prossimo cambio giornata (6:00)':'Pubblicazione automatica spenta',{type:'success'});}catch(e){setData(prev);setError(e.message||'Interruttore non aggiornato');}};
- const create=async(name,source,fromPresetId)=>{setPending('create');setError('');try{const p=await api.createDayPreset(menuId,name,source,fromPresetId);await reload();toast(`Creato «${p.name}»`,{type:'success'});guard(()=>enter(p));return true;}catch(e){setError(e.message);return false;}finally{setPending('');}};
+ const create=async(name,source,fromPresetId)=>{setPending('create');setError('');try{const p=await api.createDayPreset(menuId,name,source,fromPresetId);await reload();toast(`Creato «${p.name}»`,{type:'success'});setOpen(false);guard(()=>enter(p));return true;}catch(e){setError(e.message);return false;}finally{setPending('');}};
  const rename=async name=>{if(!viewing)return false;setPending('rename');setError('');try{const p=await api.updateDayPreset(viewing.presetId,{expectedRevision:viewRef.current?.revision??viewing.revision,name});Object.assign(viewRef.current,{name:p.name,revision:p.revision,updatedAt:p.updatedAt});setViewState({...viewRef.current});await reload();toast('Preset rinominato',{type:'success'});return true;}catch(e){setError(e.message);return false;}finally{setPending('');}};
  const remove=()=>{if(!viewing)return;const target=viewing;setConfirmState({title:`Eliminare «${target.name}»?`,text:target.online?'È il preset online: il menu dei clienti non cambia, ma il preset non tornerà disponibile.':'Il preset viene eliminato. Il menu online non cambia.',confirmLabel:'Elimina',danger:true,onConfirm:async()=>{await api.deleteDayPreset(target.presetId);discard();await leave();await reload();toast(`Eliminato «${target.name}»`,{type:'success'});}});};
  const markRead=async id=>{try{await api.markNoticeRead(id);}finally{reload();}};
@@ -155,9 +155,11 @@ function MenuDayPresetCreate({dp,onDone}){
 }
 /* «Attiva i preset per <Menu>»: stesso vassoio, tre scelte (più «riattiva» se ci sono già). */
 function MenuDayPresetActivate({dp}){
- const busy=k=>dp.pending===k;
+ const busy=k=>dp.pending===k,boxRef=useRef(null);
+ // Aperto da tastiera: il focus va alla prima scelta (il vassoio è dopo la barra nel DOM, Tab non ci arriverebbe).
+ useEffect(()=>{if(dp.open&&dp.kbOpen.current){dp.kbOpen.current=false;boxRef.current?.querySelector('.mw-dp-option')?.focus();}},[dp.open]);
  const opt=(key,label,sub,onClick)=><button type="button" className="mw-dp-option" aria-busy={busy(key)||undefined} disabled={!!dp.pending} onClick={onClick}><strong>{busy(key)?<><span className="mw-dp-spin mw-dp-spin--dark" aria-hidden="true"/>Attivo…</>:label}</strong><small>{sub}</small></button>;
- return <div className="mw-dp-activate"><p className="mw-dp-activate-title">Attiva i preset per {dp.menuName||'questo menu'}</p><p className="mw-dp-activate-sub">Un menu pronto per ogni giorno, da Lunedì a Domenica. Il menu online non cambia finché non pubblichi.</p>
+ return <div ref={boxRef} className="mw-dp-activate"><p className="mw-dp-activate-title">Attiva i preset per {dp.menuName||'questo menu'}</p><p className="mw-dp-activate-sub">Un menu pronto per ogni giorno, da Lunedì a Domenica. Il menu online non cambia finché non pubblichi.</p>
   <div className="mw-dp-options">
    {dp.presets.length>0&&opt('enabled',`Riattiva i ${dp.presets.length} preset salvati`,'Ritrovi i giorni come li avevi lasciati',()=>dp.setEnabled(true))}
    {dp.presets.length===0&&opt('activate:current','Copia il menu attuale in tutti i giorni','Poi cambi solo quello che varia',()=>dp.activate('current'))}
