@@ -25,11 +25,14 @@ function MenuWorkspaceSales({ item, onChange, disabled }) {
   const today = mwSalesToday(), full = Number(item.price);
   const shown = v => v == null ? '' : String(v).replace('.', ',');
   const [text, setText] = useState(shown(item.promo?.price));
-  // Un altro piatto o un aggiornamento esterno (bot, live) riallinea il campo al documento.
-  useEffect(() => { setText(shown(item.promo?.price)); }, [item.id, item.promo?.price]);
+  // Ultimo valore scritto da questo campo: un cambio esterno (altro piatto, bot, live) riallinea il testo,
+  // la propria scrittura no (altrimenti «1» → «13» svuoterebbe il campo mentre si digita).
+  const written = useRef(item.promo?.price);
+  useEffect(() => { written.current = item.promo?.price; setText(shown(item.promo?.price)); }, [item.id]);
+  useEffect(() => { if (item.promo?.price !== written.current) { written.current = item.promo?.price; setText(shown(item.promo?.price)); } }, [item.promo?.price]);
   const value = text.trim() === '' ? null : Number(text.trim().replace(',', '.'));
   const invalid = value !== null && !mwPromoValid(value, full);
-  const writePromo = (price, until) => onChange('promo', price === null ? undefined : { price: Math.round(price * 100) / 100, until: until || null });
+  const writePromo = (price, until) => { const next = price === null ? undefined : { price: Math.round(price * 100) / 100, until: until || null }; written.current = next?.price; onChange('promo', next); };
   const typePromo = next => {
     setText(next);
     const n = next.trim() === '' ? null : Number(next.trim().replace(',', '.'));
