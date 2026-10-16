@@ -1,6 +1,6 @@
 {
  "cases": 141,
- "runs": 249,
+ "runs": 246,
  "unknownSql": [],
  "results": [
   {
@@ -1507,17 +1507,15 @@
     "il primo è finito"
    ],
    "replies": [
-    "*Non trovo «primo».* Scrivi il nome come appare nel menu."
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Pasta e fagioli*\n3. *Spaghetti aglio olio e peperoncino*\n4. *Lasagna al forno*\n5. *Gnocchi 4 formaggi*\n6. *Pasta del giorno*\n\nRispondi con il *numero* o il *nome*."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /quale|1\\./i)"
-    }
-   ]
+   "fails": [],
+   "proposal": {
+    "kind": "choose"
+   }
   },
   {
    "id": "categoria-04",
@@ -1545,17 +1543,15 @@
     "il contorno è finito"
    ],
    "replies": [
-    "*Non trovo «contorno».* Scrivi il nome come appare nel menu."
+    "Quale piatto intendi?\n\n1. *Patate al forno*\n2. *Insalata mista*\n\nRispondi con il *numero* o il *nome*."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /quale|1\\.|patate|insalata/i)"
-    }
-   ]
+   "fails": [],
+   "proposal": {
+    "kind": "choose"
+   }
   },
   {
    "id": "categoria-06",
@@ -1566,7 +1562,7 @@
     "le patate"
    ],
    "replies": [
-    "*Non trovo «contorno».* Scrivi il nome come appare nel menu.",
+    "Quale piatto intendi?\n\n1. *Patate al forno*\n2. *Insalata mista*\n\nRispondi con il *numero* o il *nome*.",
     "*Confermato.* Ho aggiornato il menu.\n\n*Patate al forno*: *finito*"
    ],
    "expected": [
@@ -1575,64 +1571,7 @@
    "actual": [
     "available|Patate al forno|false"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "categoria-06",
-   "cat": "categoria",
-   "mode": "empty",
-   "turns": [
-    "il contorno è finito",
-    "le patate"
-   ],
-   "replies": [
-    "*Non trovo «contorno».* Scrivi il nome come appare nel menu.",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Patate al forno|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "categoria-06",
-   "cat": "categoria",
-   "mode": "wrong",
-   "turns": [
-    "il contorno è finito",
-    "le patate"
-   ],
-   "replies": [
-    "*Non trovo «contorno».* Scrivi il nome come appare nel menu.",
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "available|Patate al forno|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "categoria-06",
-   "cat": "categoria",
-   "mode": "wrongCreate",
-   "turns": [
-    "il contorno è finito",
-    "le patate"
-   ],
-   "replies": [
-    "*Non trovo «contorno».* Scrivi il nome come appare nel menu.",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Patate al forno|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1742,17 +1681,15 @@
     "il secondo costa 16"
    ],
    "replies": [
-    "*Non trovo «secondo».* Scrivi il nome come appare nel menu."
+    "Quale piatto intendi?\n\n1. *Tagliata di manzo*\n2. *Cotoletta alla milanese*\n3. *Menù del giorno*\n\nRispondi con il *numero* o il *nome*."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /quale|1\\./i)"
-    }
-   ]
+   "fails": [],
+   "proposal": {
+    "kind": "choose"
+   }
   },
   {
    "id": "categoria-13",
@@ -1781,17 +1718,15 @@
     "il contorno costa 5"
    ],
    "replies": [
-    "*Non trovo «contorno».* Scrivi il nome come appare nel menu."
+    "Quale piatto intendi?\n\n1. *Patate al forno*\n2. *Insalata mista*\n\nRispondi con il *numero* o il *nome*."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /quale|1\\.|patate/i)"
-    }
-   ]
+   "fails": [],
+   "proposal": {
+    "kind": "choose"
+   }
   },
   {
    "id": "categoria-15",

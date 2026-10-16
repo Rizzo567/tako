@@ -324,3 +324,29 @@ describe('chiave Groq dedicata alle traduzioni', () => {
   } finally { process.env = saved }
  })
 })
+
+describe('comandi dei preset in chat (bot del titolare, 16/10 sera)', () => {
+ it('«cosa c\'è martedì a pranzo?», «metti online il menu di martedì» + OK, «attiva/disattiva la pubblicazione automatica del pranzo»', async () => {
+  await pg.client.unsafe(`CREATE TABLE IF NOT EXISTS tako_whatsapp_proposals(phone text PRIMARY KEY,restaurant_id uuid,actor_id uuid,revision int,command jsonb,expires_at timestamptz)`)
+  const { presetChatCommand } = await import('../../apps/server/src/lib/menu-preset-target.js')
+  const { db } = await import('../../packages/db/src/client.js')
+  const ids = await seed(), ctx = { tenant: ids.tenant, actor: ids.actor, phone: 'whatsapp:+390000000001' }
+  expect(await presetChatCommand(db as never, ctx, 'cosa c\'è martedì a pranzo?')).toContain('preset')
+  await P.activateDayPresets(ids.tenant, ids.pranzo, { kind: 'current' }, { actor: ids.actor })
+  const tuesday = (await P.readDayPreset(ids.tenant, { menuId: ids.pranzo, weekday: 2 }))!
+  await P.updateDayPreset(ids.tenant, tuesday.id, { sections: [section('Primi', [{ name: 'Gnocchi al pesto', price: 11 }])] })
+  expect(await presetChatCommand(db as never, ctx, 'cosa c\'è martedì a pranzo?')).toContain('Gnocchi al pesto: 11,00 €')
+  expect(await presetChatCommand(db as never, ctx, 'la carbonara costa 12')).toBeNull()
+  expect(await presetChatCommand(db as never, ctx, 'ok')).toBeNull() // nessuna proposta preset in attesa
+  const ask = await presetChatCommand(db as never, ctx, 'metti online il menu di martedì')
+  expect(ask).toContain('Martedì · Pranzo'); expect(ask).toContain('*OK*')
+  expect(names(await publishedMenu(ids.tenant, ids.pranzo))).not.toContain('Gnocchi al pesto') // regola dell'OK: niente prima della conferma
+  expect(await presetChatCommand(db as never, ctx, 'ok va bene conferma')).toContain('*Confermato.*')
+  expect(names(await publishedMenu(ids.tenant, ids.pranzo))).toEqual(['Gnocchi al pesto'])
+  expect(await presetChatCommand(db as never, ctx, 'attiva la pubblicazione automatica del pranzo')).toContain('*attiva*')
+  expect((await P.readDayPresetSettings(ids.tenant, ids.pranzo)).autoPublish).toBe(true)
+  expect(await presetChatCommand(db as never, ctx, 'disattiva la pubblicazione automatica del pranzo')).toContain('*spenta*')
+  expect((await P.readDayPresetSettings(ids.tenant, ids.pranzo)).autoPublish).toBe(false)
+  expect(await presetChatCommand(db as never, ctx, 'metti online il menu di martedì a cena')).toContain('non ha un preset')
+ }, 30000)
+})

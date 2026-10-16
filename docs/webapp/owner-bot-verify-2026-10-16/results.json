@@ -1,7 +1,9 @@
 {
  "cases": 283,
- "runs": 631,
- "unknownSql": [],
+ "runs": 598,
+ "unknownSql": [
+  "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
+ ],
  "results": [
   {
    "id": "aggiungi-01",
@@ -1254,7 +1256,7 @@
    ],
    "replies": [
     "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
-    "Per pubblicare il riepilogo scrivi *OK* in chat. Puoi ancora mandarmi correzioni."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -1262,18 +1264,15 @@
     "price|Tagliata di manzo|19",
     "price|Cotoletta alla milanese|16"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "why": "resta in attesa di OK, non applicato: price|Spaghetti alla carbonara|13, price|Lasagna al forno|12, price|Tagliata di manzo|19, price|Cotoletta alla milanese|16"
-    }
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|19",
+    "price|Cotoletta alla milanese|16"
    ],
-   "note": "«conferma» scritto dopo il riepilogo",
-   "proposal": {
-    "kind": "batch"
-   }
+   "aiCalls": 1,
+   "fails": [],
+   "note": "«conferma» scritto dopo il riepilogo"
   },
   {
    "id": "turni-13",
@@ -1354,7 +1353,7 @@
    ],
    "replies": [
     "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
-    "Per pubblicare il riepilogo scrivi *OK* in chat. Puoi ancora mandarmi correzioni."
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -1362,18 +1361,15 @@
     "price|Tagliata di manzo|19",
     "price|Cotoletta alla milanese|16"
    ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "why": "resta in attesa di OK, non applicato: price|Spaghetti alla carbonara|13, price|Lasagna al forno|12, price|Tagliata di manzo|19, price|Cotoletta alla milanese|16"
-    }
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|19",
+    "price|Cotoletta alla milanese|16"
    ],
-   "note": "tutto a voce: conferma a voce",
-   "proposal": {
-    "kind": "batch"
-   }
+   "aiCalls": 1,
+   "fails": [],
+   "note": "tutto a voce: conferma a voce"
   },
   {
    "id": "turni-14",
@@ -5099,61 +5095,11 @@
     "cambia il nome della lasagna in lasagna della nonna"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Il *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /nome|rinomin|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "rinomina-02",
-   "cat": "rinomina",
-   "mode": "empty",
-   "turns": [
-    "cambia il nome della lasagna in lasagna della nonna"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-02",
-   "cat": "rinomina",
-   "mode": "wrong",
-   "turns": [
-    "cambia il nome della lasagna in lasagna della nonna"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-02",
-   "cat": "rinomina",
-   "mode": "wrongCreate",
-   "turns": [
-    "cambia il nome della lasagna in lasagna della nonna"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5164,61 +5110,11 @@
     "la diavola chiamala piccante"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Il *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /nome|rinomin|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "rinomina-03",
-   "cat": "rinomina",
-   "mode": "empty",
-   "turns": [
-    "la diavola chiamala piccante"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-03",
-   "cat": "rinomina",
-   "mode": "wrong",
-   "turns": [
-    "la diavola chiamala piccante"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-03",
-   "cat": "rinomina",
-   "mode": "wrongCreate",
-   "turns": [
-    "la diavola chiamala piccante"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5229,61 +5125,11 @@
     "chiama la margherita pizza margherita"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Il *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /nome|rinomin|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "rinomina-04",
-   "cat": "rinomina",
-   "mode": "empty",
-   "turns": [
-    "chiama la margherita pizza margherita"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-04",
-   "cat": "rinomina",
-   "mode": "wrong",
-   "turns": [
-    "chiama la margherita pizza margherita"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-04",
-   "cat": "rinomina",
-   "mode": "wrongCreate",
-   "turns": [
-    "chiama la margherita pizza margherita"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5294,61 +5140,11 @@
     "il piatto di prova chiamalo pasta al ragù"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Il *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /nome|rinomin|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "rinomina-05",
-   "cat": "rinomina",
-   "mode": "empty",
-   "turns": [
-    "il piatto di prova chiamalo pasta al ragù"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-05",
-   "cat": "rinomina",
-   "mode": "wrong",
-   "turns": [
-    "il piatto di prova chiamalo pasta al ragù"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "rinomina-05",
-   "cat": "rinomina",
-   "mode": "wrongCreate",
-   "turns": [
-    "il piatto di prova chiamalo pasta al ragù"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5359,61 +5155,11 @@
     "sposta la cotoletta tra gli antipasti"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Le *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /categori|spost|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "sposta-01",
-   "cat": "sposta",
-   "mode": "empty",
-   "turns": [
-    "sposta la cotoletta tra gli antipasti"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "sposta-01",
-   "cat": "sposta",
-   "mode": "wrong",
-   "turns": [
-    "sposta la cotoletta tra gli antipasti"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "sposta-01",
-   "cat": "sposta",
-   "mode": "wrongCreate",
-   "turns": [
-    "sposta la cotoletta tra gli antipasti"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5424,61 +5170,11 @@
     "sposta il tiramisù nei secondi"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Le *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /categori|spost|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "sposta-02",
-   "cat": "sposta",
-   "mode": "empty",
-   "turns": [
-    "sposta il tiramisù nei secondi"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "sposta-02",
-   "cat": "sposta",
-   "mode": "wrong",
-   "turns": [
-    "sposta il tiramisù nei secondi"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "sposta-02",
-   "cat": "sposta",
-   "mode": "wrongCreate",
-   "turns": [
-    "sposta il tiramisù nei secondi"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5554,61 +5250,11 @@
     "la pasta e fagioli spostala nei secondi"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Le *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /categori|spost|dashboard|non posso/i)"
-    }
-   ]
-  },
-  {
-   "id": "sposta-04",
-   "cat": "sposta",
-   "mode": "empty",
-   "turns": [
-    "la pasta e fagioli spostala nei secondi"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "sposta-04",
-   "cat": "sposta",
-   "mode": "wrong",
-   "turns": [
-    "la pasta e fagioli spostala nei secondi"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "sposta-04",
-   "cat": "sposta",
-   "mode": "wrongCreate",
-   "turns": [
-    "la pasta e fagioli spostala nei secondi"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -7682,61 +7328,11 @@
     "metti online il menu di martedì"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "I *preset* non sono attivi per nessun menu. Attivali dalla dashboard, nella scheda Piatti → «Preset»."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /marted|preset|giorn|dashboard|menu/i)"
-    }
-   ]
-  },
-  {
-   "id": "preset-02",
-   "cat": "preset",
-   "mode": "empty",
-   "turns": [
-    "metti online il menu di martedì"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-02",
-   "cat": "preset",
-   "mode": "wrong",
-   "turns": [
-    "metti online il menu di martedì"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-02",
-   "cat": "preset",
-   "mode": "wrongCreate",
-   "turns": [
-    "metti online il menu di martedì"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -7747,56 +7343,11 @@
     "cosa c è lunedì a pranzo?"
    ],
    "replies": [
-    "Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Non trovo il menu *pranzo*. Menu: ."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-03",
-   "cat": "preset",
-   "mode": "empty",
-   "turns": [
-    "cosa c è lunedì a pranzo?"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-03",
-   "cat": "preset",
-   "mode": "wrong",
-   "turns": [
-    "cosa c è lunedì a pranzo?"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-03",
-   "cat": "preset",
-   "mode": "wrongCreate",
-   "turns": [
-    "cosa c è lunedì a pranzo?"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -7807,61 +7358,11 @@
     "attiva il menu automatico per giorno"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "I *preset* non sono attivi per nessun menu. Attivali dalla dashboard, nella scheda Piatti → «Preset»."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /automat|preset|giorn|dashboard/i)"
-    }
-   ]
-  },
-  {
-   "id": "preset-04",
-   "cat": "preset",
-   "mode": "empty",
-   "turns": [
-    "attiva il menu automatico per giorno"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-04",
-   "cat": "preset",
-   "mode": "wrong",
-   "turns": [
-    "attiva il menu automatico per giorno"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "preset-04",
-   "cat": "preset",
-   "mode": "wrongCreate",
-   "turns": [
-    "attiva il menu automatico per giorno"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -8102,61 +7603,11 @@
     "che pizze ci sono"
    ],
    "replies": [
-    "Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "*Margherita*: *7,00 €* · disponibile\n*Pizza 4 formaggi*: *9,00 €* · disponibile\n*Diavola*: *8,50 €* · disponibile\n*Capricciosa*: *9,50 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /margherita|pizz/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda-10",
-   "cat": "domanda",
-   "mode": "empty",
-   "turns": [
-    "che pizze ci sono"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda-10",
-   "cat": "domanda",
-   "mode": "wrong",
-   "turns": [
-    "che pizze ci sono"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda-10",
-   "cat": "domanda",
-   "mode": "wrongCreate",
-   "turns": [
-    "che pizze ci sono"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

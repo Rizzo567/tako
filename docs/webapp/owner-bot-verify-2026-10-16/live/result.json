@@ -1,108 +1,128 @@
 {
- "at": "2026-10-16T17:53:22.444Z",
- "edge": "v103",
+ "at": "2026-10-16T18:17:34.581Z",
+ "edge": "v105",
  "turns": [
   {
-   "in": "togli piccante da tutte le pizze",
-   "out": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*",
+   "in": "il dolce è finito",
+   "out": "Quale piatto intendi? 1. *Tiramisù* 2. *Panna cotta* Rispondi con il *numero* o il *nome*.",
+   "revision": 1
+  },
+  {
+   "in": "che pizze ci sono",
+   "out": "*Margherita*: *7,00 €* · disponibile *Pizza diavola*: *8,00 €* · disponibile *Margherita con bufala*: *9,00 €* · disponibile",
+   "revision": 1
+  },
+  {
+   "in": "sposta il tiramisù nei secondi",
+   "out": "Le *categorie* si creano e si spostano dalla dashboard. Qui posso aggiungere un piatto in una categoria già presente.",
+   "revision": 1
+  },
+  {
+   "in": "cambia il nome della lasagna in lasagna della nonna",
+   "out": "Il *nome del piatto* si cambia dalla dashboard. Qui posso cambiare la descrizione: «nella caprese scrivi: …».",
+   "revision": 1
+  },
+  {
+   "in": "va bene così",
+   "out": "",
+   "revision": 1
+  },
+  {
+   "in": "ok va bene conferma",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €* *Lasagna al forno*: prezzo da 11,00 € a *12,00 €* *Tiramisù*: prezzo da 5,00 € a *6,00 €* *Panna cotta*: prezzo da 5,00 € a *6,00 €*",
    "revision": 3
   },
   {
-   "in": "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10* *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *sabato 17/10*",
+   "in": "cosa c'è martedì a pranzo?",
+   "out": "*Martedì* · Pranzo (preset «Martedì»): *Primi* - Gnocchi al pesto: 11,00 €",
+   "revision": 3
+  },
+  {
+   "in": "metti online il menu di martedì",
+   "out": "Metto online il preset *Martedì · Pranzo* (1 piatti) al posto del Pranzo attuale. Scrivi *OK* (o «conferma») per pubblicare, *ANNULLA* per lasciare tutto com&apos;è.",
+   "revision": 3
+  },
+  {
+   "in": "conferma",
+   "out": "*Confermato.* Il preset *Martedì · Pranzo* è online.",
    "revision": 5
   },
   {
-   "in": "stasera la panna cotta in promo a 4",
-   "out": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: in *promo* a *4,00 €* (prezzo pieno 5,00 €), fino a *venerdì 16/10*",
-   "revision": 7
+   "in": "attiva la pubblicazione automatica del pranzo",
+   "out": "*Confermato.* Pubblicazione automatica *attiva* per il Pranzo: dal prossimo cambio giornata (06:00) ogni giorno va online il suo preset.",
+   "revision": 5
   },
   {
-   "in": "tutte le bibite sono finite tranne l'acqua",
-   "out": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: *finito* *Birra*: *finito*",
-   "revision": 9
-  },
-  {
-   "in": "rimetti disponibili tutte le bibite",
-   "out": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: di nuovo *disponibile* *Birra*: di nuovo *disponibile*",
-   "revision": 11
-  },
-  {
-   "in": "togli tutte le promo dai primi",
-   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €",
-   "revision": 13
-  },
-  {
-   "in": "puoi dirmi se la lasagna è finita?",
-   "out": "*Lasagna al forno*: *11,00 €* · disponibile",
-   "revision": 13
-  },
-  {
-   "in": "potresti dirmi cosa è finito?",
-   "out": "Tutti i piatti sono *disponibili*.",
-   "revision": 13
-  },
-  {
-   "in": "la lasagna è finita",
-   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: *finito*",
-   "revision": 15
-  },
-  {
-   "in": "lascia stare la lasagna, è tornata",
-   "out": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: di nuovo *disponibile*",
-   "revision": 17
+   "in": "disattiva la pubblicazione automatica del pranzo",
+   "out": "*Confermato.* Pubblicazione automatica *spenta* per il Pranzo. Il menu online resta quello attuale.",
+   "revision": 5
   }
  ],
  "checks": [
   {
-   "name": "1: filtro di categoria (gli spaghetti piccanti restano)",
+   "name": "activatedAt nel pannello WhatsApp del titolare",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Pizza diavola*: tolgo l’etichetta *Piccante*"
+   "detail": "2026-10-16T18:17:41.787Z"
   },
   {
-   "name": "2: due promo, due date",
+   "name": "3: categoria → chiede quale",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10* *Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *sabato 17/10*"
+   "detail": "Quale piatto intendi? 1. *Tiramisù* 2. *Panna cotta* Rispondi con il *numero* o il *nome*."
   },
   {
-   "name": "2: «stasera» in testa",
+   "name": "3: lista della categoria",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Panna cotta*: in *promo* a *4,00 €* (prezzo pieno 5,00 €), fino a *venerdì 16/10*"
+   "detail": "*Margherita*: *7,00 €* · disponibile *Pizza diavola*: *8,00 €* · disponibile *Margherita con bufala*: *9,00 €* · disponibile"
   },
   {
-   "name": "3: gruppo con «tranne»",
+   "name": "3: limite in una riga",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: *finito* *Birra*: *finito*"
+   "detail": "Le *categorie* si creano e si spostano dalla dashboard. Qui posso aggiungere un piatto in una categoria già presente."
   },
   {
-   "name": "3: rimetti disponibili il gruppo",
+   "name": "3: rinomina, limite in una riga",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Coca Cola*: di nuovo *disponibile* *Birra*: di nuovo *disponibile*"
+   "detail": "Il *nome del piatto* si cambia dalla dashboard. Qui posso cambiare la descrizione: «nella caprese scrivi: …»."
   },
   {
-   "name": "3: promo tolte solo nel gruppo",
+   "name": "riepilogo di 4 modifiche in attesa (passa dall'IA, risposta asincrona)",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 € *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €"
+   "detail": "batch"
   },
   {
-   "name": "4: domanda cortese = lettura",
+   "name": "1: «va bene così» NON conferma il riepilogo",
    "ok": true,
-   "detail": "*Lasagna al forno*: *11,00 €* · disponibile"
+   "detail": ""
   },
   {
-   "name": "4: elenco dei finiti",
+   "name": "1: «ok va bene conferma» conferma",
    "ok": true,
-   "detail": "Tutti i piatti sono *disponibili*."
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €* *Lasagna al forno*: prezzo da 11,00 € a *12,00 €* *Tiramisù*: prezzo da 5,00 € a *6,00 €* *Panna cotta*: prezzo da 5,00 € a *6,00 €*"
   },
   {
-   "name": "esaurito",
+   "name": "2: lettura del preset",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: *finito*"
+   "detail": "*Martedì* · Pranzo (preset «Martedì»): *Primi* - Gnocchi al pesto: 11,00 €"
   },
   {
-   "name": "5: «lascia stare X, è tornata» la rimette disponibile",
+   "name": "2: pubblicazione preset → chiede OK",
    "ok": true,
-   "detail": "*Confermato.* Ho aggiornato il menu. *Lasagna al forno*: di nuovo *disponibile*"
+   "detail": "Metto online il preset *Martedì · Pranzo* (1 piatti) al posto del Pranzo attuale. Scrivi *OK* (o «conferma») per pubblicare, *ANNULLA* per lasciare tutto com&apos;è."
+  },
+  {
+   "name": "2: «conferma» → preset online",
+   "ok": true,
+   "detail": "*Confermato.* Il preset *Martedì · Pranzo* è online."
+  },
+  {
+   "name": "2: automatico acceso",
+   "ok": true,
+   "detail": "*Confermato.* Pubblicazione automatica *attiva* per il Pranzo: dal prossimo cambio giornata (06:00) ogni giorno va online il suo preset."
+  },
+  {
+   "name": "2: automatico spento",
+   "ok": true,
+   "detail": "*Confermato.* Pubblicazione automatica *spenta* per il Pranzo. Il menu online resta quello attuale."
   },
   {
    "name": "pulizia completa (locale, menu, collegamento)",

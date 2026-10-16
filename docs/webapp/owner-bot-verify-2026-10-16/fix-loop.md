@@ -183,3 +183,50 @@ Rollback: `cp ~/.config/tako-webapp/rollback-edge-20261016/candidate-index-v102-
 Locale temporaneo creato e poi cancellato; il QA e il numero di Manuel non sono stati toccati.
 10 frasi: piccante tolto solo alle pizze; due promo con due date; «stasera …» in testa; bibite finite tranne l'acqua; bibite rimesse disponibili; promo tolte solo ai primi; «puoi dirmi se la lasagna è finita?»; «potresti dirmi cosa è finito?»; esaurito poi «lascia stare la lasagna, è tornata».
 Groq: zero chiamate.
+
+# Giro finale (edge v104 → v105)
+
+| Batteria | Prima (v103) | Dopo (v105) |
+|---|---|---|
+| Round 1, 283 | 263 · 0 GRAVI · 2 MEDI · 18 BASSI | **275 OK · 0 · 0 · 8 BASSI** |
+| Round 2, 160 | 152 · 0 · 0 · 8 | 152 · 0 · 0 · 8 |
+| Round 3, 141 | 135 · 0 · 0 · 6 | **139 · 0 · 0 · 2** |
+| Round 4, 100 | 99 · 0 · 0 · 1 | 99 · 0 · 0 · 1 |
+
+## 1. Conferma del riepilogo (decisione di Manuel)
+Oltre 3 modifiche, il riepilogo si conferma con «OK», «conferma», «confermo», «va bene», «sì conferma», «ok va bene conferma», anche a voce. Conferma solo un messaggio fatto **solo** di parole di conferma: «va bene così» o «ok la prima a 30» non confermano. Il menu intero resta con la sua regola, cioè «OK» scritto.
+Contratto aggiornato in `tests/twilio-owner-batches.test.ts`, con un nuovo test per ciascuna parola, anche a voce. I 2 MEDI del round 1 sono chiusi.
+
+## 2. Comandi dei preset in chat (gestore reale in `menu-preset-target.ts`, funzioni F2)
+- «metti online il menu di martedì (a pranzo)»: riepilogo, poi OK/conferma (anche a voce), poi `publishDayPreset`. Rispetta la regola dell'OK e il blocco PROVA.
+- «attiva / disattiva la pubblicazione automatica del pranzo»: `setDayPresetAutoPublish`.
+- «cosa c'è lunedì / oggi / domani a pranzo?»: elenco del preset.
+
+Il menu si sceglie dal nome; se non è indicato, si usa l'unico menu con i preset attivi, altrimenti il bot chiede quale. Senza preset o con un preset vuoto il bot lo dice.
+Test: `tests/day-presets/day-presets.test.ts`, nuovo caso su Postgres locale. «menu di lunedì: …» resta verde in `menu-full-message-1016`.
+
+## 3. BASSI
+- Rinomina e sposta: una riga chiara su cosa si fa dalla dashboard.
+- «il dolce/primo/secondo è finito / costa N»: elenco dei piatti della categoria e domanda.
+- «che pizze ci sono»: lista della categoria.
+
+## Pannello WhatsApp del titolare
+`GET /api/menu-workspace/whatsapp/owner` restituisce anche `activatedAt` (ISO), cioè l'ora del collegamento da `tako_whatsapp_links`. Il frontend lo leggerà dopo.
+
+## Deploy
+v103 (`268f2a90…`) → v104 (`a7ed936c…`: conferma, preset in chat, bassi; v103 + sezioni `menu-preset-target` e `routes/twilio-menu`) → **v105** (`eb25599b…`: v104 + solo `activatedAt`, 2 righe).
+check-active prima di ogni deploy. v104 ha avuto 4 errori 500 di Supabase prima di riuscire.
+Rollback a v103: `cp ~/.config/tako-webapp/rollback-edge-20261016/candidate-index-v103-owner-bot-r4.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`. Per v104: `candidate-index-v104-owner-bot-final.ts`.
+
+## Live (15/15, v105)
+Locale temporaneo con un preset di martedì, poi cancellato; il QA e il numero di Manuel non sono stati toccati.
+- `activatedAt` presente.
+- «il dolce è finito» → domanda.
+- «che pizze ci sono» → lista.
+- «sposta …» e «cambia il nome …» → una riga di limite.
+- 4 modifiche → riepilogo; «va bene così» non conferma; «ok va bene conferma» conferma.
+- «cosa c'è martedì a pranzo?» → elenco.
+- «metti online il menu di martedì» → «conferma» → online.
+- Pubblicazione automatica attivata e poi spenta.
+
+Groq: poche chiamate. Il riepilogo di 4 modifiche e «va bene così» col riepilogo in attesa passano dall'IA, come previsto; in tutto molto sotto i 10k token.
