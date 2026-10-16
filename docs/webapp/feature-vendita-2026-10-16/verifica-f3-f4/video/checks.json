@@ -1,0 +1,448 @@
+[
+ {
+  "scenario": "pubblico-desktop",
+  "label": "prezzo pieno barrato 12,00 €",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "promo accanto 9,00 €",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "etichette Promo + Ultime porzioni",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "Tiramisù: Solo oggi",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "promo non valida (5,50 su 5,00) non mostrata",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "etichette ferme: nessuna animazione/transizione",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "etichette sobrie: colore del testo, non arancione",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "inglese: Offer · Last portions",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "inglese: Today only",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "lunedì 07:00: promo «fino a domenica» sparita",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "lunedì 07:00: Ultime porzioni resta, promo senza fine resta",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "lunedì 07:00: Solo oggi sparito",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "nessuno scroll orizzontale",
+  "ok": true,
+  "detail": 0
+ },
+ {
+  "scenario": "pubblico-desktop",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "prezzo pieno barrato 12,00 €",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "promo accanto 9,00 €",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "etichette Promo + Ultime porzioni",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "Tiramisù: Solo oggi",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "promo non valida (5,50 su 5,00) non mostrata",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "etichette ferme: nessuna animazione/transizione",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "etichette sobrie: colore del testo, non arancione",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "inglese: Offer · Last portions",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "inglese: Today only",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "lunedì 07:00: promo «fino a domenica» sparita",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "lunedì 07:00: Ultime porzioni resta, promo senza fine resta",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "lunedì 07:00: Solo oggi sparito",
+  "ok": true
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "nessuno scroll orizzontale",
+  "ok": true,
+  "detail": 0
+ },
+ {
+  "scenario": "pubblico-mobile",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "pdf-adesso",
+  "label": "pagina 1 renderizzata",
+  "ok": true
+ },
+ {
+  "scenario": "pdf-adesso",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "pdf-adesso-en",
+  "label": "pagina 1 renderizzata",
+  "ok": true
+ },
+ {
+  "scenario": "pdf-adesso-en",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "pdf-lunedi",
+  "label": "pagina 1 renderizzata",
+  "ok": true
+ },
+ {
+  "scenario": "pdf-lunedi",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "13 su 12: errore visibile, aria-invalid",
+  "ok": true,
+  "detail": [
+   "true",
+   "mw-sales-note is-visible Il prezzo promo deve essere più basso del prezzo pieno (12,00 €) e maggiore di zero: così non viene salvato."
+  ]
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "13 su 12: niente promo nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "nota con token micro 140ms",
+  "ok": true,
+  "detail": "0.14s"
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "9 su 12: promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "segno «Promo 9,00 €» sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "fine promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "Ultime porzioni + Solo oggi nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "segni sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "aree tocco ≥ 44px",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "esaurito: Ultime porzioni tolta, interruttore disattivato",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "campo vuoto: promo tolta",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-desktop",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "13 su 12: errore visibile, aria-invalid",
+  "ok": true,
+  "detail": [
+   "true",
+   "mw-sales-note is-visible Il prezzo promo deve essere più basso del prezzo pieno (12,00 €) e maggiore di zero: così non viene salvato."
+  ]
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "13 su 12: niente promo nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "nota con token micro 140ms",
+  "ok": true,
+  "detail": "0.14s"
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "9 su 12: promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "segno «Promo 9,00 €» sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "fine promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "Ultime porzioni + Solo oggi nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "segni sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "aree tocco ≥ 44px",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "esaurito: Ultime porzioni tolta, interruttore disattivato",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "campo vuoto: promo tolta",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-mobile",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "13 su 12: errore visibile, aria-invalid",
+  "ok": true,
+  "detail": [
+   "true",
+   "mw-sales-note is-visible Il prezzo promo deve essere più basso del prezzo pieno (12,00 €) e maggiore di zero: così non viene salvato."
+  ]
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "13 su 12: niente promo nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "reduced motion: nessuna transizione",
+  "ok": true,
+  "detail": "0s"
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "9 su 12: promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "segno «Promo 9,00 €» sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "fine promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "Ultime porzioni + Solo oggi nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "segni sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "aree tocco ≥ 44px",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "esaurito: Ultime porzioni tolta, interruttore disattivato",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "campo vuoto: promo tolta",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-reduced",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "13 su 12: errore visibile, aria-invalid",
+  "ok": true,
+  "detail": [
+   "true",
+   "mw-sales-note is-visible Il prezzo promo deve essere più basso del prezzo pieno (12,00 €) e maggiore di zero: così non viene salvato."
+  ]
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "13 su 12: niente promo nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "nota con token micro 140ms",
+  "ok": true,
+  "detail": "0.14s"
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "9 su 12: promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "segno «Promo 9,00 €» sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "fine promo salvata",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "Ultime porzioni + Solo oggi nel documento",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "segni sulla riga",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "focus visibile sul controllo",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "aree tocco ≥ 44px",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "esaurito: Ultime porzioni tolta, interruttore disattivato",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "campo vuoto: promo tolta",
+  "ok": true
+ },
+ {
+  "scenario": "drawer-keyboard",
+  "label": "nessun errore in pagina",
+  "ok": true,
+  "detail": []
+ }
+]

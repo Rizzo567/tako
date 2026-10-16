@@ -131,6 +131,11 @@ export interface PublicItem {
   priceDisplay?: string
   available: boolean
   variants?: PublicVariant[]
+  /** Prezzo promo valido adesso (0 < promo < price); il prezzo pieno resta in `price`. */
+  promoPrice?: number
+  /** Etichette di scarsità decise dal titolare, già filtrate per scadenza. */
+  lastPortions?: true
+  onlyToday?: true
 }
 
 export interface PublicVariant {

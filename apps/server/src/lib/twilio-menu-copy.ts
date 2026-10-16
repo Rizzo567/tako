@@ -16,6 +16,7 @@ Scrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubbl
 Esempio: «carbonara finita, diavola a 10 euro».
 
 Puoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Ti mostro il riepilogo e lo pubblico dopo il tuo *OK*.
+*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».
 
 *Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard.`,
  proposal:`*{locale}*: ecco le modifiche.
@@ -116,6 +117,8 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'create',can:true,text:'aggiungere un piatto in una categoria esistente',example:'«aggiungi tra i primi: pasta al ragù, 12 euro»'},
  {id:'special',can:true,text:'aggiungere un piatto del giorno',example:'«oggi piatto del giorno: risotto, 16 euro». Si nasconde a fine giornata.'},
  {id:'photo',can:true,text:'aggiungere una foto',example:'Manda la foto con il nome del piatto.'},
+ {id:'promo',can:true,text:'mettere o togliere un prezzo promo',example:'«carbonara in promo a 9 fino a domenica» o «togli la promo dalla carbonara». Il prezzo pieno resta barrato accanto.'},
+ {id:'scarcity',can:true,text:'segnare *Ultime porzioni* o *Solo oggi*',example:'«carbonara ultime porzioni», «tiramisù solo per oggi», «togli ultime porzioni». *Solo oggi* sparisce il giorno dopo alle 6.'},
  {id:'questions',can:true,text:'dirti prezzi e disponibilità',example:'«quanto costa la tagliata?» o «cosa è finito?»'},
  {id:'fullmenu',can:true,text:'cambiare tutto il menu del giorno',example:'«menu di oggi: primi carbonara 10, amatriciana 9; secondi tagliata 16», anche a voce. Ti mostro il riepilogo e aspetto il tuo *OK*. I piatti di prima si nascondono, non si eliminano.'},
  {id:'voice',can:true,text:'ricevere più richieste in un vocale',example:'Fino a *3 modifiche* pubblico subito. Per più modifiche aspetto il tuo *OK*.'},
@@ -178,3 +181,20 @@ export const alertCopy={
 export const helpWords=['cosa sai fare','cosa puoi fare','aiuto','help','come funziona','comandi','ciao']
 export const dailySectionName='Piatto del giorno'
 export const fill=(template:string,values:Record<string,string|number>)=>template.replace(/\{(\w+)\}/g,(m,k:string)=>k in values?String(values[k]):m)
+// F3+F4 (16/10): prezzo promo e scarsità. Chiavi nuove e separate, per non toccare i testi esistenti.
+export const salesLine={
+ promo:'*{piatto}*: in *promo* a *{promo}* (prezzo pieno {pieno}){fino}',
+ until:', fino a *{giorno}*',
+ noEnd:', finché non la togli',
+ promoOff:'*{piatto}*: tolgo la *promo*, torna a {pieno}',
+ lastOn:'*{piatto}*: etichetta *Ultime porzioni*',
+ lastOff:'*{piatto}*: tolgo *Ultime porzioni*',
+ todayOn:'*{piatto}*: etichetta *Solo oggi*, sparisce domani alle 6',
+ todayOff:'*{piatto}*: tolgo *Solo oggi*',
+}
+export const salesCopy={
+ promoInvalid:'*Non ho cambiato nulla.* Il prezzo promo di *{piatto}* ({promo}) deve essere *più basso del prezzo pieno* ({pieno}) e maggiore di zero.',
+ promoPriceText:'*Non ho cambiato nulla.* *{piatto}* mostra un prezzo scritto a testo («{testo}»): la promo non si vedrebbe. Toglilo dalla dashboard e riprova.',
+ untilUnclear:'*Non ho cambiato nulla.* Non ho capito *fino a quando* vale la promo. Scrivi per esempio «carbonara in promo a 9 fino a domenica» o «fino al 20/10».',
+ noneWithLabel:{promo:'Nessun piatto è in *promo* adesso.',lastPortions:'Nessun piatto ha l’etichetta *Ultime porzioni*.',onlyToday:'Nessun piatto ha l’etichetta *Solo oggi*.'} as Record<'promo'|'lastPortions'|'onlyToday',string>,
+}
