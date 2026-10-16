@@ -15,7 +15,7 @@ Scrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubbl
 
 Esempio: «carbonara finita, diavola a 10 euro».
 
-Puoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Ti mostro il riepilogo e lo pubblico dopo il tuo *OK*.
+Puoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.
 *Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».
 
 *Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard.`,
