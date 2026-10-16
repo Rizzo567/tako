@@ -41,7 +41,7 @@ describe('bot titolare: aggiunta di un piatto senza IA',()=>{
  })
  it('«piatto di …» è parte del nome (bug visto dal vivo: «aggiungi piatto di verifica 12 euro» → «Verifica»)',()=>{
   expect(created('aggiungi piatto di verifica 12 euro nei primi')).toMatchObject({name:'Piatto di verifica',price:12})
-  expect(created('aggiungi il piatto piatto del giorno 9 euro nei primi')).toMatchObject({name:'Piatto del giorno'})
+  expect(created('aggiungi il piatto piatto della casa 9 euro nei primi')).toMatchObject({name:'Piatto della casa'})
   expect(created('aggiungi nei primi un piatto chiamato pasta e ceci 10 euro')).toMatchObject({name:'Pasta e ceci',price:10})
  })
  it('piatto già presente: lo dice, non lo duplica',()=>{expect(step('aggiungi carbonara 12 euro nei primi')).toMatchObject({kind:'exists',name:'Carbonara',section:'Primi'})})

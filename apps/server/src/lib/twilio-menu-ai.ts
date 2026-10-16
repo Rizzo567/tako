@@ -26,7 +26,23 @@ const clarify=(ids:string[]=[]):MenuPlan=>({type:'clarify',ids:[...new Set(ids)]
 const cleanText=(v:unknown,max:number)=>typeof v==='string'&&v.trim().length>0&&v.trim().length<=max?v.trim().replace(/\s+/g,' '):null
 const priceOf=(v:unknown)=>{const n=typeof v==='string'?Number(v.replace(',','.').replace(/[€\s]/g,'')):v;return typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100000?Math.round(n*100)/100:null}
 export function parseJson(raw:unknown):any{if(typeof raw!=='string')return raw;try{return JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g,''))}catch{return null}}
-export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean}={}):MenuPlan{
+
+// G9 (16/10): il server non si fida dell'IA. Ogni azione deve riguardare un piatto nominato nel testo (match tollerante:
+// una parola distintiva del nome, anche con un refuso), ogni prezzo deve comparire nel messaggio (cifre o lettere,
+// o come differenza esplicita «aumenta di 1»), il nome di un piatto nuovo non contiene parole d'azione né la categoria.
+const g9Generic=new Set(['pasta','pizza','pizze','spaghetti','piatto','piatti','della','dello','delle','alla','alle','allo','con','menu','misto','mista','casa','fritto','fritti','sugo','bianco','rosso','media','grande','piccola','piccolo'])
+const g9Words:Record<string,number>={zero:0,uno:1,un:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,undici:11,dodici:12,tredici:13,quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19,venti:20,ventuno:21,ventidue:22,ventitre:23,ventiquattro:24,venticinque:25,trenta:30,trentacinque:35,quaranta:40,quarantacinque:45,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90,cento:100}
+const g9Near=(a:string,b:string)=>{if(a===b)return true;if(Math.abs(a.length-b.length)>1||Math.min(a.length,b.length)<6)return false;let i=0,j=0,e=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){i++;j++;continue}if(++e>1)return false;if(a.length>b.length)i++;else if(b.length>a.length)j++;else{i++;j++}}return e+(a.length-i)+(b.length-j)<=1}
+export function g9DishMentioned(name:string,message:string,refs:{name:string}[]=[]){const msg=plain(message).split(' '),words=plain(name).split(' ').filter(w=>w.length>=4&&!g9Generic.has(w)&&!/^\d/.test(w)),pool=words.length?words:plain(name).split(' ').filter(w=>w.length>=3)
+ if(pool.some(w=>msg.some(m=>m===w||(w.length>=5&&m.length>=5&&m.slice(0,5)===w.slice(0,5))||g9Near(m,w))))return true
+ // «gli spaghetti sono finiti»: una parola generica basta solo se nel menu c'è un solo piatto che la contiene.
+ return plain(name).split(' ').some(w=>g9Generic.has(w)&&w.length>=5&&msg.includes(w)&&refs.filter(r=>plain(r.name).split(' ').includes(w)).length===1)}
+export function g9Prices(message:string):number[]{const out:number[]=[];for(const m of plain(message).matchAll(/\b(\d+) centesimi\b/g))out.push(Number(m[1])/100);const t=message.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2');for(const m of t.matchAll(/\d+(?:\.\d{1,2})?/g))out.push(Number(m[0]))
+ const w=plain(message).split(' ');for(let i=0;i<w.length;i++){let a=g9Words[w[i]!];if(a===undefined)continue;if(g9Words[w[i+1]!]!==undefined&&a>=20&&g9Words[w[i+1]!]!<10){a+=g9Words[w[i+1]!]!}out.push(a);const k=w[i+1]==='euro'?i+2:i+1;if(w[k]==='e'){const c=g9Words[w[k+1]!]??(/^\d+$/.test(w[k+1]??'')?Number(w[k+1]):undefined);if(c!==undefined)out.push(a+c/100)}}
+ const ints=out.filter(Number.isInteger);for(const x of ints)for(const y of ints)if(y>=10&&y<100)out.push(x+y/100);return out.map(x=>Math.round(x*100)/100)}
+const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;if(current!==undefined&&/\b(aument\w*|alz\w*|sal\w*|abbass\w*|diminu\w*|scont\w*|togli\w*|meno|piu)\b/.test(plain(message)))return said.some(d=>Math.abs(Math.abs(price-current)-d)<0.005);return false}
+const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
+export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>}={}):MenuPlan{
  const data=parseJson(raw),sections=opts.sections??[],message=opts.message??'';if(!data||typeof data!=='object'||Array.isArray(data))return clarify()
  const byId=new Map(refs.map(r=>[r.id,r])),sectionIds=new Set(sections.map(s=>s.id)),known=(ids:unknown)=>Array.isArray(ids)?ids.filter((id):id is string=>typeof id==='string'&&byId.has(id)):[]
  if(data.intent==='capability'){const ids=Array.isArray(data.capability_ids)?data.capability_ids.filter((id:unknown):id is string=>typeof id==='string'&&(id==='all'||capabilities.some(c=>c.id===id))):[];const chosen=ids.length?[...new Set(ids)].slice(0,4) as string[]:[];return{type:'capability',ids:chosen.length&&!chosen.every(id=>id==='other')?chosen:capabilityHint(message)}}
@@ -40,15 +56,15 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
   if(a.action==='create_item'||a.action==='create_daily_special'){if(++created>200||!(a.action==='create_item'?wantsCreate(message):wantsSpecial(message)))return clarify(valid);const name=cleanText(a.name,300),price=priceOf(a.price),description=a.description==null||a.description===''?null:cleanText(a.description,4000)
    if(a.action==='create_item'&&(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)))return{type:'missing',missing:['section'],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
    if(!name||price===null||(a.description!=null&&a.description!==''&&!description))return{type:'missing',missing:[...(!name?['name' as const]:[]),...(price===null?['price' as const]:[])],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
-   if(!verbatim(name,message)||(description&&!verbatim(description,message)))return{type:'verbatim'};const extra=description&&!plain(description).includes(plain(name))?description:null
+   if(!verbatim(name,message)||(description&&!verbatim(description,message)))return{type:'verbatim'};if(g9ActionName.test(plain(name))||(a.action==='create_item'&&(' '+plain(name)+' ').includes(' '+plain(sections.find(x=>x.id===a.section_id)?.name??'\u0000')+' '))||!g9Said(price,message))return clarify(valid);const extra=description&&!plain(description).includes(plain(name))?description:null
    if(a.action==='create_item'){const twin=refs.find(r=>r.sectionId===a.section_id&&plain(r.name)===plain(name));if(twin)return{type:'exists',id:twin.id};actions.push({kind:'create',sectionId:a.section_id,name,price,description:extra})}else actions.push({kind:'special',name,price,description:extra});continue}
-  if(typeof a.item_id!=='string'||!byId.has(a.item_id))return clarify(valid);const key=a.item_id+a.action+(a.tag??'');if(seen.has(key))return clarify(valid);seen.add(key)
-  if(a.action==='set_price'){const price=priceOf(a.price);if(price===null)return clarify(valid);actions.push({kind:'price',id:a.item_id,price})}
+  if(typeof a.item_id!=='string'||!byId.has(a.item_id))return clarify(valid);if(!opts.trustedIds?.has(a.item_id)&&!g9DishMentioned(byId.get(a.item_id)!.name,message,refs))return clarify(valid);const key=a.item_id+a.action+(a.tag??'');if(seen.has(key))return clarify(valid);seen.add(key)
+  if(a.action==='set_price'){const price=priceOf(a.price);if(price===null||!g9Said(price,message,byId.get(a.item_id)!.price))return clarify(valid);actions.push({kind:'price',id:a.item_id,price})}
   else if(a.action==='set_available'&&typeof a.available==='boolean')actions.push({kind:'available',id:a.item_id,value:a.available})
   else if(a.action==='set_hidden'&&typeof a.hidden==='boolean')actions.push({kind:'hidden',id:a.item_id,value:a.hidden})
   else if(a.action==='set_featured'&&typeof a.featured==='boolean')actions.push({kind:'featured',id:a.item_id,value:a.featured})
   else if((a.action==='add_tag'||a.action==='remove_tag')&&typeof a.tag==='string'&&a.tag in allowedTags)actions.push({kind:'tag',id:a.item_id,tag:a.tag,value:a.action==='add_tag'})
-  else if(salesLlmActions.includes(a.action)){const sale=salesFromLlm(a,message);if(!sale)return clarify(valid);actions.push(sale)}
+  else if(salesLlmActions.includes(a.action)){const sale=salesFromLlm(a,message);if(!sale||(sale.kind==='promo'&&sale.price!==null&&!g9Said(sale.price,message,byId.get(a.item_id)!.price)))return clarify(valid);actions.push(sale)}
   else if(a.action==='set_description'){const text=cleanText(a.text,4000);if(!text)return clarify(valid);if(!verbatim(text,message))return{type:'verbatim'};actions.push({kind:'description',id:a.item_id,text})}
   else return clarify(valid)}
  // Full, unambiguous names explicitly present in a request must never disappear from its plan.
@@ -113,7 +129,7 @@ export function validatePendingMenuPlan(raw:unknown,refs:MenuRef[],sections:Sect
  }
  const restore=pendingPriceRestores(message,pending,refs),restoreKeys=new Set(restore.map(i=>actionKey(pending[i-1]!)));remove.push(...restore);
  if(!data.actions.length)return remove.length?{type:'change',actions:patched,remove:[...new Set(remove)] as number[]}:invalid();
- const plan=validateMenuPlan(data,refs,{sections,message,checkCompleteness:false});return plan.type==='change'?{...plan,actions:[...plan.actions,...patched].filter(a=>!restoreKeys.has(actionKey(a))),remove:[...new Set(remove)] as number[]}:plan
+ const plan=validateMenuPlan(data,refs,{sections,message,checkCompleteness:false,trustedIds:new Set(pending.flatMap(a=>'id' in a?[a.id]:[]))});return plan.type==='change'?{...plan,actions:[...plan.actions,...patched].filter(a=>!restoreKeys.has(actionKey(a))),remove:[...new Set(remove)] as number[]}:plan
 }
 export function proposalText(restaurant:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[]){
  return fill(copy.proposal,{locale:restaurant,righe:actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,sections)).join('\n')})

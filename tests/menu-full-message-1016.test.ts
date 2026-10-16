@@ -174,9 +174,10 @@ describe('F1 accettazione: correzioni, annulla e ripristina',()=>{
 })
 
 describe('F1 regressione: le modifiche singole si comportano come prima',()=>{
- it('«è finita la carbonara» e «prezzo branzino a 19» si applicano subito; «carbonara finita» va al pianificatore di sempre',async()=>{const a=await app()
+ it('«è finita la carbonara» e «prezzo branzino a 19» si applicano subito; «carbonara finita» ora deterministico (G8)',async()=>{const a=await app()
   expect(await say(a,'è finita la carbonara')).toContain('*Carbonara*: *finito*');expect(await say(a,'prezzo branzino a 19')).toContain('*Branzino*: prezzo da 18,00 € a *19,00 €*')
-  expect(net.planner).toBe(0);expect(await say(a,'carbonara finita')).toBe(copy.notUnderstood);expect(net.planner).toBe(1)
+  // G8 (16/10): «X finita» senza «è» ora è deterministico (prima andava al pianificatore).
+  expect(net.planner).toBe(0);expect(await say(a,'carbonara finita')).toBe(copy.noChanges);expect(net.planner).toBe(0)
   expect(net.chats).toBe(0);expect([...S.proposals.values()].some(p=>p.command.kind==='fullmenu')).toBe(false);expect(byName(S.published,PRANZO,'Lasagna').hidden).toBe(false);await a.close()})
  it('più prezzi su piatti già nel menu restano modifiche (non un menu intero)',()=>{const refs=items(fixture(),PRANZO).map((i:any)=>({...i,menu:'Pranzo',available:true,hidden:false}))
   for(const t of ['carbonara 12, lasagna 12, branzino 19, tiramisù 6','carbonara finita','branzino 18','porta la carbonara a 12 e la lasagna a 13','aggiungi tra i primi: pasta al ragù, 12 euro','quanto costa la tagliata?'])expect(fullMenuSignal(t,refs),t).toBeNull()

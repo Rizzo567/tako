@@ -52,15 +52,22 @@ export function capabilityFromText(raw:string):string[]|null{
 }
 // Frasi comuni con un solo piatto: niente IA. Le frasi composte («… e …») restano all'IA.
 export function parseIntent(raw:string):Intent|null{
+ // G4: una domanda non è mai un'azione («il tiramisù è finito?», «la carbonara costa 13?»): diventa una lettura.
+ const found=parseIntentCore(raw);if(found&&'target' in found&&found.kind!=='ask'&&/\?\s*$/.test(raw.trim()))return{kind:'ask',target:found.target};return found
+}
+const nluActionTarget=/\b(promo|offerta|offerte|sconto|scontat\w*|aggiung\w*|inserisc\w*|nuov[oa]|menu|categoria|descrizione|foto)\b/
+function parseIntentCore(raw:string):Intent|null{
  const original=raw.trim(),t=plainText(raw).replace(/(?<!\d)[,.]|[,.](?!\d)/g,' ').replace(/\s+/g,' ').trim()
  if(/^(cosa|che cosa|quali piatti|quali|che piatti) (e|sono|ci sono|risultano) (gia )?(finit|esaurit)\w*/.test(t)||/^(cosa|che cosa) (manca|non c e)/.test(t))return{kind:'read',read:'unavailable'}
  if(/^(cosa|che cosa|quali piatti|quali) (e|sono) nascost\w*/.test(t))return{kind:'read',read:'hidden'}
  const description=original.match(/^(?:nella|nel|nello|nei|negli|nelle|per (?:la|il|lo|i|gli|le)|alla|al|allo)\s+(.+?)\s+scrivi\s*:\s*(.+)$/i);if(description)return{kind:'description',target:description[1]!,text:description[2]!.trim()}
+ // G5: negazioni («non è finita», «non cambiare…», «non ci sarà») non sono comandi; restano «non c'è più», «non abbiamo più».
+ if(/\bnon\b/.test(t)&&!/\bnon (c e|ce|abbiamo) piu\b/.test(t))return null
  let m:RegExpMatchArray|null
  if((m=t.match(/^quanto (?:costa|costano|viene|vengono) (.+)$/)))return{kind:'ask',target:m[1]!}
  if((t.match(/\b(costa|costano|finit\w*|esaurit\w*|tornat\w*|nascondi|togli|rimetti|evidenza|mettil\w*|portal\w*|disponibil\w*|niente)\b/g)||[]).length>=2&&!/^oggi niente [a-z ]+ (finit|esaurit)\w*$/.test(t))return null
- if((m=t.match(new RegExp(`^(?:prezzo |(?:metti|porta|cambia|imposta)(?: il prezzo (?:di|del|della|dei|delle))? )(.+?) (?:a|=) ${num}(?: euro)?$`)))||(m=t.match(new RegExp(`^(.+?) (?:costa|costano|viene|vengono|(?:mettil|portal)[aeio](?: a)?|a) ${num}(?: euro)?$`)))){const price=amount(m[2]!);return price===null?null:{kind:'price',target:m[1]!,price}}
- if((m=t.match(/^(?:e |sono )?(?:finit|esaurit)[oaie] (.+)$/))||(m=t.match(/^(.+?) (?:e|sono) (?:gia )?(?:finit|esaurit)[oaie]$/))||(m=t.match(/^oggi niente (.+?)(?: (?:e )?(?:finit|esaurit)[oaie])?$/))||(m=t.match(/^(?:non c e piu|non ce piu|non abbiamo piu) (.+)$/))||(m=t.match(/^(.+?) non (?:c e|ce) piu$/))||(m=t.match(/^(?:esaurito|finito) (.+)$/)))return{kind:'available',target:m[1]!,value:false}
+ if((m=t.match(new RegExp(`^(?:prezzo |(?:metti|porta|cambia|imposta)(?: il prezzo (?:di|del|della|dei|delle))? )(.+?) (?:a|=) ${num}(?: euro)?$`)))||(m=t.match(new RegExp(`^(.+?) (?:costa|costano|viene|vengono|(?:mettil|portal)[aeio](?: a)?|a) ${num}(?: euro)?$`)))){const price=amount(m[2]!);return price===null||nluActionTarget.test(m[1]!)?null:{kind:'price',target:m[1]!,price}}
+ if((m=t.match(/^(?:e |sono )?(?:finit|esaurit)[oaie] (.+)$/))||(m=t.match(/^(.+?) (?:e|sono) (?:gia )?(?:finit|esaurit)[oaie]$/))||(m=t.match(/^oggi niente (.+?)(?: (?:e )?(?:finit|esaurit)[oaie])?$/))||(m=t.match(/^(?:non c e piu|non ce piu|non abbiamo piu) (.+)$/))||(m=t.match(/^(.+?) non (?:c e|ce) piu$/))||(m=t.match(/^(?:esaurito|finito) (.+)$/))||(m=t.match(/^(?!.*\b(?:e|sono)\b)(.{3,60}?) (?:finit|esaurit)[oaie]$/)))return{kind:'available',target:m[1]!,value:false}
  if((m=t.match(/^(.+?) (?:e|sono) (?:tornat[oaie]|di nuovo disponibil[ei]|disponibil[ei]|ritornat[oaie])$/))||(m=t.match(/^(?:e |sono )?(?:tornat[oaie]|ritornat[oaie]) (.+)$/))||(m=t.match(/^(?:disponibile|rendi disponibile|di nuovo disponibile) (.+)$/)))return{kind:'available',target:m[1]!,value:true}
  if((m=t.match(/^(?:togli|leva) (?:dall evidenza|dalla evidenza|dai piatti in evidenza) (.+)$/)))return{kind:'featured',target:m[1]!,value:false}
  if((m=t.match(/^metti in evidenza (.+)$/))||(m=t.match(/^(.+?) in evidenza$/)))return{kind:'featured',target:m[1]!,value:true}
@@ -74,7 +81,9 @@ const ordinals:[RegExp,number][]=[[/^(1|uno|il primo|la prima|primo|prima|l prim
 export function resolveChoice(raw:string,options:MenuRef[]):MenuRef|null{
  const t=plainText(raw).replace(/[.,!?]+/g,' ').replace(/\s+/g,' ').trim().replace(/^(il|la|lo|i|gli|le|l|quello|quella|quelli|quelle|numero)\s+/,'').trim()
  for(const [r,i] of ordinals)if(r.test(t)||r.test(plainText(raw).replace(/[.,!?]+/g,'').trim()))return options[i]??null
- const hits=findDishes(raw,options);return hits.length===1?hits[0]!:null
+ const hits=findDishes(raw,options);if(hits.length===1)return hits[0]!
+ // «quelli alla carbonara», «quelli aglio e olio»: una parola distintiva del nome basta, se indica una sola opzione.
+ const q=words(raw),tolerant=options.filter(o=>nameWords(o.name).some(n=>n.length>=4&&q.some(w=>sameWord(w,n))));return tolerant.length===1?tolerant[0]!:null
 }
 export const wantsCreateText=(m:string)=>/\b(aggiung\w*|inserisc\w*|inserire|nuov[oa]|crea\w*)\b/.test(plainText(m))
 export const wantsSpecialText=(m:string)=>/\b(del giorno|di oggi)\b/.test(plainText(m))

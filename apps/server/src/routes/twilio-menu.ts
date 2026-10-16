@@ -9,7 +9,7 @@ import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
 import {priceChoiceText,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
 import {copy,helpWords,fill} from '../lib/twilio-menu-copy.js'
-import {createStep,createQuestion,type CreateDraft} from '../lib/twilio-menu-create.js'
+import {createStep,createQuestion,followUp,undoFor,type CreateDraft,type LastApplied} from '../lib/twilio-menu-create.js'
 import {parseIntent,findDishes,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,isCompoundMessage,type Intent} from '../lib/twilio-menu-nlu.js'
 import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
 import {reportFailure,inBackground,type FailureKind} from '../lib/twilio-menu-alerts.js'
@@ -29,6 +29,11 @@ type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick
 const lock=(tx:Tx,phone:string)=>tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${phone},0))`)
 const reserve=(tx:Tx,sid:string)=>tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${sent}) ON CONFLICT DO NOTHING`)
 const propose=(tx:Tx,ctx:Ctx,revision:number,command:unknown)=>tx.execute(sql`INSERT INTO tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) VALUES(${ctx.phone},${ctx.tenant},${ctx.actor},${revision},${JSON.stringify(command)}::jsonb,now()+interval '10 minutes') ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,revision=EXCLUDED.revision,command=EXCLUDED.command,expires_at=EXCLUDED.expires_at`)
+// Memoria dell'ultima modifica applicata (G2/G3), fuori dalle proposte: chiave `last:<telefono>` in tako_whatsapp_messages
+// (nessuna migrazione, invisibile a conferma/annulla). Vale 10 minuti e solo se il menu non è cambiato nel frattempo.
+const lastKey=(phone:string)=>'last:'+phone
+async function readLast(tx:Tx,phone:string,revision:number):Promise<LastApplied|null>{let rows:any[];try{rows=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${lastKey(phone)}`)??[]}catch{return null}try{const v=JSON.parse(String(rows[0]?.response??'null'));return v&&v.kind==='last'&&v.revision===revision&&Date.now()-Number(v.at)<600000?v:null}catch{return null}}
+async function writeLast(tx:Tx,phone:string,value:(LastApplied&{revision:number,at:number})|null){const text=JSON.stringify(value);await tx.execute(sql`UPDATE tako_whatsapp_messages SET response=${text} WHERE sid=${lastKey(phone)}`);await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${lastKey(phone)},${text}) ON CONFLICT DO NOTHING`)}
 // activated_at NULL = pre-collegamento dalla dashboard: il numero è già di Takomenu (mai inoltrato a MenuSmart) e il primo messaggio lo attiva.
 async function linkedContext(tx:Tx,phone:string):Promise<Ctx|null>{const links=await tx.execute(sql`SELECT restaurant_id,actor_id,activated_at FROM tako_whatsapp_links WHERE phone=${phone}`),link=links[0];return link&&await permitted(tx,String(link.actor_id),String(link.restaurant_id))?{phone,tenant:String(link.restaurant_id),actor:String(link.actor_id),pending:link.activated_at==null}:null}
 async function welcomeFor(tx:Tx,tenant:string){const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`),current=await readWorkspace(tenant,tx),catalog=current?catalogOf(workspaceSchema.parse(current.draft)):{refs:[],sections:[]};return welcomeText(String(restaurant[0]?.name),catalog.refs,catalog.sections)}
@@ -40,7 +45,7 @@ const bold=(names:string[])=>names.map(n=>'*'+safe(n)+'*').join(', ')
 function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAction[]|null{
  if(command?.kind==='fullmenu')return null
  if(command?.kind==='batch'&&Array.isArray(command.actions))return command.actions.every((a:any)=>a.kind==='special'||(a.kind==='create'?sections.some(s=>s.id===a.sectionId):refs.some(r=>r.id===a.id)))?command.actions:null
- const legacy=command as MenuCommand|null,matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
+ const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
 }
 export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,uploads?:Map<string,string>}={}):Promise<Turn>{
  if(opts.isExpired?.())throw new Error('WhatsApp turn expired');
@@ -64,7 +69,9 @@ export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revisio
  // «prezzo Pasta e fagioli a 9»: la «e» del nome del piatto non rende composta la frase (era mandata all'IA, senza risposta in 45 s).
  // Aggiunta di un piatto: verbo iniziale o risposta alla domanda in attesa (bozza create_draft), sempre senza IA.
  let created:MenuAction[]|null=null
- if(!planned&&!pending&&!choice){const step=createStep(text,draft&&Number(proposal!.revision)===row.revision?draft:null,sections,refs,parseIntent)
+ // G2/G3: «anche la lasagna», «no scusa 14», «scusa no era la lasagna» riferiti all'ultima modifica applicata.
+ if(!planned&&!pending&&!choice&&!proposal){const last=await readLast(tx,phone,row.revision);if(last){const next=followUp(text,last,refs);if(next)created=next}}
+ if(!created&&!planned&&!pending&&!choice){const step=createStep(text,draft&&Number(proposal!.revision)===row.revision?draft:null,sections,refs,parseIntent)
   if(step.kind==='ask'){await propose(tx,ctx,row.revision,step.draft);return step.text}
   if(step.kind==='exists'){if(draft)await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return fill(copy.alreadyExists,{piatto:step.name,categoria:step.section})}
   if(step.kind==='create')created=[step.action]}
@@ -84,7 +91,9 @@ export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revisio
    if(intent.kind==='read')return readText({type:'read',read:intent.read},refs);if(intent.kind==='capability')return capabilityText(intent.ids)
    const matches=command?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(intent.target)):[];const found=matches.length===1?matches:findDishes(intent.target,refs)
    if(intent.kind==='ask')return found.length?readText({type:'read',read:'items',ids:found.slice(0,6).map(r=>r.id)},refs):fill(copy.notFoundNamed,{nome:shown(intent.target)})
-   if(!found.length)return preselect(text,refs).length&&!command?{llm:true}:fill(copy.notFoundNamed,{nome:shown(intent.target)})
+   // G1: mai «Non trovo «<frase>»» con un nome lungo o con verbi: si passa all'IA (che il validatore controlla).
+   const phrase=intent.target.trim().split(/\s+/).length>4||/\b(aggiung\w*|inserisc\w*|metti\w*|cambia|costa|costano|euro|prezzo|finit\w*|esaurit\w*|nascondi|togli|promo\w*|offerta|che)\b/.test(normalizeMenuText(intent.target))
+   if(!found.length)return (preselect(text,refs).length&&!command)||phrase?{llm:true}:fill(copy.notFoundNamed,{nome:shown(intent.target)})
    const template:ChoiceAction=intent.kind==='price'?{kind:'price',price:intent.price}:intent.kind==='description'?{kind:'description',text:intent.text}:intent.kind==='tag'?{kind:'tag',tag:intent.tag,value:true}:{kind:intent.kind,value:intent.value}
    if(found.length>1){const options=found.slice(0,8);await propose(tx,ctx,row.revision,{kind:'choose',action:template,options:options.map(r=>r.id)});return fill(copy.choose,{opzioni:options.map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*`).join('\n')})}
    picked=[{...template,id:found[0]!.id} as MenuAction]}}
@@ -92,12 +101,15 @@ export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:{planned?:{revisio
  {const problem=salesActionProblem(actions,workspace);if(problem)return problem}
  actions=effectiveMenuActions(actions,workspace);
  if(!actions.length){if(batch)await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return batch?copy.pendingEmpty:copy.noChanges}
- const needsApproval=!!batch||actions.length>3;
+ // G6: prezzo implausibile (oltre 500 € o oltre 3 volte quello attuale) → conferma scritta, mai online diretto.
+ const implausible=actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>3*r.price})())))
+ const needsApproval=!!batch||actions.length>3||implausible;
  if(needsApproval){await propose(tx,ctx,row.revision,{kind:'batch',actions,requiresTypedOk:true});const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`);return proposalText(String(restaurant[0]?.name),actions,refs,sections)}
  const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);
  if(photos.some(a=>!ready.has(a.id))){await propose(tx,ctx,row.revision,{kind:'batch',actions,autoApply:true});return{upload:photos.filter(a=>!ready.has(a.id))}}
+ const undo=undoFor(actions,refs);
  const restaurant=await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${tenant}`);applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace);
- if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return appliedMenuText(actions,refs,sections)
+ if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeLast(tx,phone,undo&&actions.length===1?{kind:'last',actions,undo,revision:saved.revision+1,at:Date.now()}:null);return appliedMenuText(actions,refs,sections)
 }
 const turnFor=(ctx:Ctx,text:string,opts?:Parameters<typeof menuTurn>[3])=>db.transaction(async tx=>{if(opts?.isExpired?.())throw new Error('WhatsApp turn expired');await lock(tx,ctx.phone);const live=await linkedContext(tx,ctx.phone);const result=live?await menuTurn(tx,live,text,opts):'';if(opts?.isExpired?.())throw new Error('WhatsApp turn expired');return result})
 type Budget={expired:boolean,failed?:boolean}

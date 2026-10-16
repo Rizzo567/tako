@@ -36,7 +36,8 @@ export function priceCount(text:string){
 export function fullMenuSignal(text:string,refs:MenuRef[]):'full'|'doubt'|null{
  const prices=priceCount(text);if(prices<2)return null
  const flat=text.normalize('NFD').replace(/[̀-ͯ]/g,''),header=headerRe.test(flat),headings=new Set([...flat.matchAll(headingRe)].map(m=>plain(m[1]!))).size,edit=editRe.test(plain(text))
- const known=refs.filter(r=>r.name.length>=3&&mentionsOnboardingDish(text,r.name)).length,unknownShare=Math.max(0,prices-known)/prices
+ // Nomi brevi («carbonara 13, lasagna 12…»): un piatto esistente conta come noto anche se citato con una sola parola distintiva.
+ const fullFlowWords=plain(text).split(' '),known=refs.filter(r=>r.name.length>=3&&(mentionsOnboardingDish(text,r.name)||plain(r.name).split(' ').some(w=>w.length>=5&&!['pasta','pizza','spaghetti','della','delle','alla','alle'].includes(w)&&fullFlowWords.includes(w)))).length,unknownShare=Math.max(0,prices-known)/prices
  if(!edit&&((header&&prices>=2)||(headings>=2&&prices>=3)||(prices>=6&&unknownShare>=0.5)))return 'full'
  if(header&&edit&&prices>=3)return 'doubt'
  if(!edit&&prices>=4&&unknownShare>=0.5)return 'doubt'
