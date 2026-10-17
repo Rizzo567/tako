@@ -55,7 +55,7 @@ it('blocca la pubblicazione di un locale PROVA senza cambiare nulla, salva la bo
 it('dashboard, preset e WhatsApp rispondono col messaggio del blocco',()=>{
  const src=(p:string)=>readFileSync(new URL('../apps/server/src/'+p,import.meta.url),'utf8')
  const workspace=src('routes/menu-workspace.ts'),presets=src('routes/menu-day-presets.ts'),whatsapp=src('routes/twilio-menu.ts'),store=src('lib/menu-workspace-store.ts')
- expect(store).toMatch(/if\(publish&&await isTrialRestaurant\(tenant,tx\)\)throw new WorkspaceTrialLocked\(\)/)
+ expect(store).toMatch(/if\(publish&&\(row\?row\.trial===true:await isTrialRestaurant\(tenant,tx\)\)\)throw new WorkspaceTrialLocked\(\)/)
  expect(workspace).toMatch(/fastify\.post\('\/publish'[^\n]*e instanceof WorkspaceTrialLocked\)return reply\.code\(403\)/)
  expect(presets).toMatch(/e instanceof WorkspaceTrialLocked\) return reply\.code\(403\)/)
  expect(whatsapp.match(/instanceof WorkspaceTrialLocked\)return error\.message/g)?.length).toBe(2)
