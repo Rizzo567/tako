@@ -68,7 +68,7 @@ function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAct
  const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
 }
 type TurnOpts={brainOff?:boolean,planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,uploads?:Map<string,string>,exclude?:Excluded[]}
-type TurnState={text?:string,exclude:Excluded[],note?:string,brain?:boolean,postDraft?:CreateDraft,postBatch?:any,alsoVerb?:'featured'|'hidden',seen?:string[]}
+type TurnState={text?:string,exclude:Excluded[],note?:string,brain?:boolean,postDraft?:CreateDraft,postBatch?:any,alsoVerb?:'featured'|'hidden',seen?:string[],batchClosed?:boolean}
 const choiceTemplate=(a:MenuAction):ChoiceAction|null=>{if(!('id' in a))return null;const {id:_id,...rest}=a as any;return ['price','available','hidden','featured','description','tag','promo','scarcity'].includes(a.kind)?rest as ChoiceAction:null}
 /** Turno del bot. Se il testo è stato ripulito (clausole negate) o ci sono piatti esclusi, il passaggio all'IA li porta con sé. */
 export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts={}):Promise<Turn>{
@@ -202,10 +202,19 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
    if(!acts.length&&!st.postDraft)return fill(copy.sectionExists,{categoria:safe(ex!.name)})
    if(!acts.length&&st.postDraft){await propose(tx,ctx,row.revision,st.postDraft);const q=createQuestion(st.postDraft,sections);st.postDraft=undefined;return fill(copy.sectionExists,{categoria:safe(ex!.name)})+' '+q}
    structPick=acts}}
+   // A8.5 (Y11/M4): dopo uno spostamento, «anche/pure la gricia» = stessa categoria; «anzi negli speciali», «no, nei primi» =
+   // gli stessi piatti nell'altra categoria (deve esistere: una categoria nuova la legge il resto del bot).
+  let movePick:MenuAction[]|null=null
+  if(!planned&&!opts.plannedFull&&!holdPick&&!negPick&&!proposal&&!structPick){const last=await readLast(tx,phone,row.revision)
+   if(last&&lastAge(last)<=600000&&last.actions.length&&last.actions.every(a=>a.kind==='move')){const to=(last.actions[0] as any).sectionId as string,ids=last.actions.map(a=>(a as any).id as string)
+    const also=normalized.match(/^(?:e\s+)?(?:anche|pure)\s+(.+)$|^(?:e\s+)?(.+?)\s+(?:anche|pure)$/)
+    if(also){const part=(also[1]??also[2])!,hit=findDishes(part,refs);const one=hit.length===1?hit:hit.length>1?[exactPick(part,hit)].filter((x):x is MenuRef=>!!x):[];if(one.length===1&&!ids.includes(one[0]!.id)&&one[0]!.sectionId!==to)movePick=[{kind:'move',id:one[0]!.id,sectionId:to}]}
+    const re=normalized.match(/^(?:(?:anzi|no|scusa|aspetta)\s+)+(?:(?:mettil[oaie]|spostal[oaie]|portal[oaie])\s+)?(?:nei|negli|nelle|nella|nel|in|tra|fra)\s+(?:i |gli |le |la |il |l )?(.+)$/)
+    if(!movePick&&re){const sec=sections.filter(x=>sameSection(x.name,re[1]!));if(sec.length===1&&sec[0]!.id!==to)movePick=ids.map(id=>({kind:'move',id,sectionId:sec[0]!.id}) as MenuAction)}}}
  // 17/10 (A1.1): con una bozza di aggiunta in sospeso, un messaggio che non la completa («no, intendevo…») va al cervello con
  // la bozza nel contesto; le risposte pulite (prezzo, categoria, «sono due piatti», «10 e 20») restano deterministiche.
  const draftStuck=draft&&Number(proposal!.revision)===row.revision?(()=>{const s0=createStep(text,draft,sections,refs,parseIntent);return s0.kind==='none'||s0.kind==='ask'&&JSON.stringify(s0.draft)===JSON.stringify(draft)&&s0.text===createQuestion(draft,sections)})():false
- if(!planned&&!opts.plannedFull&&!opts.brainOff&&!holdPick&&!negPick&&!structPick&&!swapPick&&!pending&&(!draft||draftStuck)&&(proposal?.command as any)?.kind!=='batch'&&(st.brain=botBrainEnabled((await restaurantSettings())[0]?.settings))){
+ if(!planned&&!opts.plannedFull&&!opts.brainOff&&!holdPick&&!negPick&&!structPick&&!swapPick&&!movePick&&!pending&&(!draft||draftStuck)&&(proposal?.command as any)?.kind!=='batch'&&(st.brain=botBrainEnabled((await restaurantSettings())[0]?.settings))){
   const mem=await memoryTurn(tx,tenant,text,refs);if(mem!==null)return mem
   const kind=(proposal?.command as any)?.kind??null,options=choice?choice.options.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r):null
   if(brainGate({text,proposalKind:kind,choiceOptions:options,undoish:revertLast||revertTarget(text)==='',freshHistory:await hasFreshHistory(tx,tenant,phone)})){
@@ -219,10 +228,26 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // A7.12 (sospeso-004): con un riepilogo in attesa, un comando nuovo chiaro su un piatto solo che il riepilogo non tocca
  // («la tagliata a 19») si applica da solo; il riepilogo resta in attesa del suo OK, mai pubblicato insieme.
  if(batch&&!planned&&!/,|\s(?:e|ed|anche|poi)\s/i.test(' '+text+' ')){const it=parseIntent(text);if(it&&it.kind==='price'){const h0=findDishes(it.target,refs),ex=h0.length>1?exactPick(it.target,h0):null,hits=ex?[ex]:h0;const inBatch=new Set(batch.flatMap(a=>'id' in a?[(a as any).id]:[]));if(hits.length===1&&!inBatch.has(hits[0]!.id)){st.postBatch=proposal!.command;holdPickSingle=[{kind:'price',id:hits[0]!.id,price:it.price}]}}}
+ // A8.2 (Y3/M1): una richiesta di eliminazione (o di categoria nuova) in attesa del «sì» si chiude con qualunque correzione o
+ // richiesta nuova: mai più un «sì» dopo che conferma la vecchia. «no, solo la parmigiana», «intendevo boh», «quello no, X» →
+ // nuova domanda solo per X; «tieni X» → X tolto dalla domanda; «no, nascondilo (e basta)», «mettilo solo finito» → quello sui
+ // piatti in attesa; ogni altro messaggio chiude la domanda e vale come richiesta nuova.
+ if(batch&&!planned&&!holdPickSingle&&batch.length&&batch.every(a=>a.kind==='delete'||a.kind==='create_section'||a.kind==='move')&&!/^(?:si|sì|ok|okay|no|annulla|conferma|confermo)$/.test(normalized)){
+  const pendIds=batch.flatMap(a=>a.kind==='delete'||a.kind==='move'?[(a as any).id as string]:[]),dels=batch.every(a=>a.kind==='delete')
+  const lead=normalized.replace(/^(?:(?:no|scusa|aspetta|anzi|ho sbagliato|errore)\s+)+/,'')
+  const only=lead.match(/^(?:quell[oaie] no\s+|(?:il|la|lo|l|i|gli|le)?\s*\S+(?: \S+)? no\s+)?(?:solo|soltanto|intendevo|volevo dire|era)?\s*(.+)$/),keep=normalized.match(/^(?:tieni|tienimi|lascia|lasciami|non (?:eliminare|cancellare|toccare))\s+(.+)$/)
+  const pron=lead.match(/^(?:(nascondil[oaie])|(?:mettil[oaie]|segnal[oaie])\s+(?:solo\s+)?(?:come\s+)?(finit[oaie]|esaurit[oaie]))(?:\s+e\s+basta|\s+solo|\s+soltanto)?$/)
+  const drop=async()=>{await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`)}
+  if(pron&&pendIds.length){await drop();st.batchClosed=true;holdPickSingle=pendIds.map(id=>(pron[1]?{kind:'hidden',id,value:true}:{kind:'available',id,value:false}) as MenuAction)}
+  else if(keep&&dels){const out=findDishes(keep[1]!,refs).map(r=>r.id),left=batch.filter(a=>!out.includes((a as any).id));if(out.length&&left.length<batch.length){if(!left.length){await drop();return fill(copy.negatedOnly,{piatti:keep[1]!})}
+   await propose(tx,ctx,row.revision,{kind:'batch',actions:left,requiresTypedOk:true});return proposalText('',left,refs,sections)}}
+  else{const target=only&&lead!==normalized||/^(?:solo|soltanto|intendevo|volevo dire|quell[oaie] no)\b/.test(normalized)?only![1]!:null,hits=target?findDishes(target.replace(/^(?:il|la|lo|l|i|gli|le)\s+/,''),refs).filter(r=>!pendIds.includes(r.id)||/\b(?:solo|soltanto)\b/.test(normalized)):[]
+   if(dels&&hits.length&&hits.length<=6&&!/\d|\b(?:nascond\w*|finit\w*|esaurit\w*|prezzo|evidenza|rinomin\w*|spost\w*)\b/.test(target!)){const acts=hits.map(r=>({kind:'delete',id:r.id}) as MenuAction);await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true});return proposalText('',acts,refs,sections)}
+   await drop();return menuTurnCore(tx,ctx,text,opts,st)}}
  if(batch&&!planned&&!holdPickSingle)return{llm:true};
  // «prezzo Pasta e fagioli a 9»: la «e» del nome del piatto non rende composta la frase (era mandata all'IA, senza risposta in 45 s).
  // Aggiunta di un piatto: verbo iniziale o risposta alla domanda in attesa (bozza create_draft), sempre senza IA.
- let created:MenuAction[]|null=holdPick??negPick??structPick??holdPickSingle??swapPick
+ let created:MenuAction[]|null=holdPick??negPick??structPick??holdPickSingle??swapPick??movePick
  // G2/G3: «anche la lasagna», «no scusa 14», «scusa no era la lasagna» riferiti all'ultima modifica applicata.
  let preUndo:MenuAction[]=[],reverted=false
  // Risposta a «quale prezzo: 13 o 14?» (caso 1/3): uno dei due valori completa la richiesta; un altro numero → si ripete la domanda.
@@ -347,7 +372,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // G6: prezzo implausibile (oltre 500 € o almeno 8 volte quello attuale: lo zero in più; round 2: 3× bloccava prezzi veri) → conferma scritta, mai online diretto.
  const implausible=actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})())))
  // Fase B: eliminare chiede SEMPRE conferma («Elimino X dal menu? Rispondi sì»), anche da sola.
- const needsApproval=(!!batch&&!st.postBatch)||actions.length>3||implausible||actions.some(a=>a.kind==='delete'&&!a.undoCreate);
+ const needsApproval=(!!batch&&!st.postBatch&&!st.batchClosed)||actions.length>3||implausible||actions.some(a=>a.kind==='delete'&&!a.undoCreate);
  // «elimina/cancella/rimuovi X»: nascosto, mai eliminato (17/10); lo si dice una volta nella risposta.
  {const hid=actions.find(a=>a.kind==='hidden'&&a.value);if(hid&&/\brimuov\w*/i.test(normalizeMenuText(text))&&!DELETE_VERB.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' '))&&'id' in hid){const r=refs.find(x=>x.id===hid.id);if(r)tail=[tail,fill(copy.hiddenNotDeletedPlain,{piatto:safe(r.name).toLowerCase()})].filter(Boolean).join('\n\n')}}
  const withTail=(s:string)=>tail?s+'\n\n'+tail:s
@@ -356,7 +381,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  if(photos.some(a=>!ready.has(a.id))){await propose(tx,ctx,row.revision,{kind:'batch',actions,autoApply:true});return{upload:photos.filter(a=>!ready.has(a.id))}}
  const waItems=new Map(workspace.menus.flatMap(m=>m.sections.flatMap(sec=>sec.items.map(i=>[i.id,structuredClone(i)] as const)))),memo=actions.slice(preUndoLen),undo=undoFor(memo,id=>waItems.get(id) as any);
  const beforeW=structuredClone(workspace),restaurant=await restaurantSettings();applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace);
- if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);if(st.postDraft)await propose(tx,ctx,saved.revision+1,st.postDraft);else if(st.postBatch)await propose(tx,ctx,saved.revision+1,st.postBatch);await rememberRenames(tx,tenant,actions,refs,(await restaurantSettings())[0]?.settings);await writeLast(tx,phone,!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+afterText(next)+(st.postDraft?'\n\n'+createQuestion(st.postDraft,catalogOf(next).sections):st.postBatch?'\n\n'+copy.batchStill:''))
+ if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);if(st.postDraft)await propose(tx,ctx,saved.revision+1,st.postDraft);else if(st.postBatch)await propose(tx,ctx,saved.revision+1,st.postBatch);await rememberRenames(tx,tenant,actions,refs,(await restaurantSettings())[0]?.settings);await writeLast(tx,phone,!reverted&&memo.length&&memo.every(a=>a.kind==='move')?{kind:'last',actions:memo,undo:memo.map(a=>({kind:'move',id:(a as any).id,sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??(a as any).sectionId}) as MenuAction),revision:saved.revision+1,at:Date.now()}:!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+afterText(next)+(st.postDraft?'\n\n'+createQuestion(st.postDraft,catalogOf(next).sections):st.postBatch?'\n\n'+copy.batchStill:''))
 }
 /** Fase B (B3.2): dopo «rinomina boh in Bollito» il vecchio nome resta un alias del piatto nella memoria del ristorante
  * (solo col cervello acceso), così «boh» continua a funzionare. Mai verso un nome che è di un altro piatto. */

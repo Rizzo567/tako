@@ -28,7 +28,7 @@ const FUNCTION=new Set(('il lo la i gli le l un uno una un di da del dello della
 const COURTESY=new Set(('favore perfavore piacere cortesia grazie mille ok okay dai allora ecco si va bene perfetto ciao buongiorno buonasera salve senti ehm eh ah oh mh '+
  'beh cioe insomma comunque subito adesso ora oggi intanto please thx thanks top raga ragazzi capo scusa scusami aspetta ops pardon '+
  // conferme («vai», «procedi»): rispondono a una domanda, non sono nomi
- 'vai procedi conferma confermo confermato certo esatto giusto daje '+
+ 'vai procedi conferma confermo confermato certo esatto giusto daje anzi '+
  'definitivamente completamente proprio totalmente sempre del tutto davvero').split(' '))
 // Numeri detti a parole e unità del prezzo.
 const NUMBER=new Set(('zero uno una due tre quattro cinque sei sette otto nove dieci undici dodici tredici quattordici quindici sedici diciassette diciotto diciannove venti '+

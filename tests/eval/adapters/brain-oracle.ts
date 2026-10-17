@@ -67,7 +67,11 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  const names=[...cat.code.keys()],expected=[...conv.changes,...(conv.interim??[])]
  literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');relDelta=relativeDelta(msg)?.delta??null
  // Struttura (fase B): categorie, spostamenti, anche dei piatti appena creati che ora vanno altrove.
- if(/\b(categori\w*|sezion\w*|spost\w*)\b/.test(p)){const acts:any[]=[]
+ // A8 (Y, M3): anche senza «sposta» («metti la carbonara nei secondi a 14») se il messaggio nomina la categoria di arrivo attesa;
+ // con lo spostamento il modello ideale fa anche le altre modifiche dette sui piatti del messaggio (prezzo detto, nascondi…).
+ const moveHere=expected.some(e=>e.op==='move'&&cat.code.has(e.dish)&&p.split(' ').some(w=>w.length>3&&plainT(e.section).split(' ').some(x=>x.slice(0,5)===w.slice(0,5)))&&hitStems(e.dish,msg).length>0)
+ if(/\b(categori\w*|sezion\w*|spost\w*)\b/.test(p)||moveHere){const acts:any[]=[],nums=spoken(msg)
+  for(const e of expected){if(e.op==='price'||e.op==='hidden'||e.op==='available'||e.op==='featured'){const mentioned=hitStems(e.dish,msg).length>0||(/\b\w+(?:la|lo|li|le)\b/.test(p)&&expected.some(m=>m.op==='move'&&m.dish===e.dish));if(mentioned&&(e.op!=='price'||nums.includes((e as any).price))){const a=act(e,cat,e.op==='price'?(e as any).price:null,null);if(a)acts.push(a)}}}
   for(const e of expected){if(e.op==='move'&&cat.code.has(e.dish))acts.push(act(e,cat,null,null))
    else if(e.op==='create'&&e.section){const have=names.find(n=>plainT(n)===plainT(e.name));if(have&&cat.sectionOf.get(have)&&plainT(cat.sectionOf.get(have)!)!==plainT(e.section))acts.push({action:'move_item',item:cat.code.get(have),section:secCodeOf(cat,e.section)??e.section});else if(!have&&p.includes(plainT(e.name).split(' ').slice(-1)[0]!))acts.push(act(e,cat,null,null))}}
   if(acts.length)return out({actions:acts})}
