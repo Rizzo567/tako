@@ -6,7 +6,7 @@
  * G6 prezzi implausibili → conferma scritta). I fatti nella risposta li scrive il server DOPO la rilettura (composeReply).
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
-import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
+import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier} from './twilio-menu-nlu.js'
 import {capabilities} from './twilio-menu-copy.js'
@@ -151,7 +151,7 @@ export function dominatedBy(id:string,message:string,refs:MenuRef[]):string[]{
  return refs.filter(o=>{if(o.id===id)return false;const theirs=hits(o);return theirs.length>mine.length&&mine.every(w=>theirs.some(x=>sameRoot(x,w)))}).map(o=>o.id)
 }
 // «la gricia a uno in meno», «due di più»: quel numero è una differenza, mai il prezzo.
-const relativeNumbers=(message:string)=>{const out=new Set<number>(),p=plain(message);for(const m of p.matchAll(/\b(\w+)(?: euro)? (?:in|di) (?:meno|piu)\b/g)){const v=g9Prices('a '+m[1]!);for(const x of v)out.add(x)}return out}
+const relativeNumbers=(message:string)=>{const out=new Set<number>(),p=plain(message);{const rd=relativeDelta(message);if(rd)out.add(Math.abs(rd.delta))}for(const m of p.matchAll(/\b(\w+)(?: euro)? (?:in|di) (?:meno|piu)\b/g)){const v=g9Prices('a '+m[1]!);for(const x of v)out.add(x)}return out}
 const BOT_QUESTION=/\?|\brispondi\b|\bquale\b|\bintendi\b|scrivi il|riscrivimi|due prezzi/i
 export const PENDING_MS=10*60*1000
 

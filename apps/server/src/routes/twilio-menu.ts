@@ -29,7 +29,7 @@ import {startsWithCreate,parseCreate,createCompound} from '../lib/twilio-menu-cr
 import {removeVerbRe} from '../lib/twilio-menu-nlu.js'
 import {unreadWords,nameIsExplicit} from '../lib/twilio-menu-reading.js'
 import {phoneticCandidates} from '../lib/twilio-menu-phonetic.js'
-import {relativeDelta,g9Prices} from '../lib/twilio-menu-ai.js'
+import {relativeDelta,relNormText,g9Prices} from '../lib/twilio-menu-ai.js'
 import {parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
 import {sqlBrainStore} from '../lib/owner-brain-memory.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
@@ -173,7 +173,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  if(!planned&&!opts.plannedFull&&!holdPick&&!negPick&&!proposal&&/\b(?:lascia\w*\s+(?:stare|perdere)|lascial\w*\s+(?:stare|perdere)|non\s+(?:lo|la|li|le)\s+(?:aggiungere|mettere|volevo)|toglil[oaie]|leval[oaie])\b/.test(normalized)){const rec=await readUndo(tx,phone)
   if(rec&&Date.now()-Number(rec.at)<=undoWindowMs){const fresh=new Set(rec.items.filter(i=>i.before===null).map(i=>i.id)),hit=refs.filter(r=>fresh.has(r.id)&&(' '+normalized+' ').includes(' '+normalizeMenuText(r.name).replace(/[^a-z0-9]+/g,' ').trim()+' '));if(hit.length)structPick=hit.map(r=>({kind:'delete',id:r.id,undoCreate:true}) as MenuAction)}}
  // A7.7: «aumenta la gricia di 1», «togli 2 euro alla tagliata», «la carbonara e la gricia +1»: prezzo attuale ± differenza.
- if(!planned&&!opts.plannedFull&&!holdPick&&!negPick&&!proposal&&!structPick){const rd=relativeDelta(text);if(rd){const rest=normalizeMenuText(text).replace(/[^a-z0-9+\-]+/g,' ').replace(normalizeMenuText(rd.text).replace(/[^a-z0-9+\-]+/g,' ').trim(),' '),parts=rest.split(/\s(?:e|ed)\s|,/).map(x=>x.trim()).filter(x=>words(x).length),ids:string[]=[]
+ if(!planned&&!opts.plannedFull&&!holdPick&&!negPick&&!proposal&&!structPick){const rd=relativeDelta(text);if(rd){const rdKeep=normalizeMenuText(rd.text).replace(/[^a-z0-9+\-.]+/g,' ').replace(/\b(?:aument\w*|alz\w*|rincar\w*|abbass\w*|scont\w*|diminu\w*|ribass\w*|togli\w*|lev[ai]\w*|scal[ai]\w*|ridu[cr]\w*|cal[ai]|calal[ao]|calare|meno|piu|di|in|euro|centesimi|cent|\d+(?:[.]\d+)?|un|uno|una|mezzo|al|alla|allo|ai|agli|alle|dal|dalla|dai|dalle)\b|[+\-]/g,' ').replace(/\s+/g,' ').trim(),rest=relNormText(normalizeMenuText(text)).replace(/[^a-z0-9+\-.]+/g,' ').replace(normalizeMenuText(rd.text).replace(/[^a-z0-9+\-.]+/g,' ').trim(),' '+rdKeep+' ').replace(/(?<!\d)\.|\.(?!\d)/g,' '),parts=rest.split(/\s(?:e|ed)\s|,/).map(x=>x.trim()).filter(x=>words(x).length),ids:string[]=[]
   for(const p of parts){const f=findDishes(p,refs),one=f.length===1?f[0]:f.length>1?exactPick(p,f):null;if(one&&!ids.includes(one.id))ids.push(one.id);else if(f.length){ids.length=0;break}}
   // «carbonara 13 e l'amatriciana un euro in meno»: la differenza è rispetto al prezzo detto prima nello stesso messaggio.
   const abs=g9Prices(normalizeMenuText(text).replace(normalizeMenuText(rd.text),' '))

@@ -54,22 +54,35 @@ const QTY_LEAD=new RegExp(`\\b(quei|quegli|quelle|questi|queste|quelli|i|gli|le|
 const QTY_NOUN=new RegExp(`\\b${QTY}\\s+(?=(?:piatt|prodott|pizz|dolc|cos[ae]\\b|vari|voci|categori|portat|prim[ie]\\b|second[ie]\\b|antipast|contorn|bibit|panin|porzion)\\w*)`,'giu')
 const QTY_ONE=/(?<!\b(?:a|di|costa|costano|costi|prezzo|da|per|sui|sugli|tipo|circa)\s+)\b(?:un|una|uno)\b(?!\s*(?:euro|eur|€|e\s+\p{L}+|e\s+\d|virgola|in\s+meno|in\s+piu|in\s+più|di\s+meno|di\s+piu|di\s+più))/giu
 // A8 (X nomi-016): «la tagliata 300 grammi a 22»: un numero con un'unità di misura è una quantità, mai un prezzo.
+const RW0:Record<string,number>={un:1,uno:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,venti:20,trenta:30,cinquanta:50}
 const QTY_UNIT=/\b\d+(?:[.,]\d+)?\s*(?:grammi|gr|g|kg|chili|etti|etto|cl|ml|litri|litro|lt|cm|pezzi|pz|porzioni|persone|fette)\b/giu
 export const withoutQuantities=(s:string)=>s.replace(QTY_UNIT,' ').replace(QTY_LEAD,'$1').replace(QTY_NOUN,'').replace(QTY_ONE,' ')
 // A7.7 (avversaria X, G8): prezzi relativi. «aumenta/alza di 1», «abbassa/sconta di 2», «togli/leva 2 euro alla X», «+1», «-2»,
 // «50 centesimi in più», «un euro in meno». Il numero è una DIFFERENZA: mai un prezzo detto; il prezzo nuovo = attuale ± differenza.
 const RNUM='(\\d+(?:[.,]\\d{1,2})?|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|cinquanta|venti|trenta)'
 const REL=[[new RegExp(`\\b(?:aument\\w*|alz\\w*|rincar\\w*)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),1],[new RegExp(`\\b(?:abbass\\w*|scont\\w*|diminu\\w*|ribass\\w*)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),-1],
- [new RegExp(`\\b(?:togli\\w*|lev[ai]\\w*)\\s+${RNUM}\\s+(euro|centesimi|cent)\\b`,'iu'),-1],[new RegExp(`${RNUM}\\s*(euro|centesimi|cent)?\\s+(?:in|di)\\s+piu\\b`,'iu'),1],[new RegExp(`${RNUM}\\s*(euro|centesimi|cent)?\\s+(?:in|di)\\s+meno\\b`,'iu'),-1],[/(?:^|\s)\+\s*(\d+(?:[.,]\d{1,2})?)\b()/u,1],[/(?:^|\s)-\s*(\d+(?:[.,]\d{1,2})?)\b()/u,-1]] as [RegExp,number][]
-const RW:Record<string,number>={un:1,uno:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,venti:20,trenta:30,cinquanta:50}
+ [new RegExp(`\\b(?:togli\\w*|lev[ai]\\w*)\\s+${RNUM}\\s+(euro|centesimi|cent)\\b`,'iu'),-1],
+ // A8.3 (Y7/Y8): «togli 1,50 alla tagliata» (decimale anche senza «euro»), «scala 2 euro dalla tagliata», «riduci/cala la carbonara
+ // di 2», «la carbonara meno 1 / più 1».
+ [/\b(?:togli\w*|lev[ai]\w*)\s+(\d+[.]\d{1,2})()\s+(?:a|al|alla|allo|ai|agli|alle|dal|dalla|dai|dalle|sul|sulla)\b/iu,-1],
+ [new RegExp(`\\b(?:scal[ai]\\w*)\\s+(?:di\\s+)?${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),-1],
+ [new RegExp(`\\b(?:ridu[cr]\\w*|cal[ai]|calal[ao]|calare)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),-1],
+ [new RegExp(`(?<!\\bin\\s|\\bdi\\s)\\bmeno\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?\\b`,'iu'),-1],[new RegExp(`(?<!\\bin\\s|\\bdi\\s|\\bnon\\s\\w+\\s)\\bpiu\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?\\b`,'iu'),1],[new RegExp(`${RNUM}\\s*(euro|centesimi|cent)?\\s+(?:in|di)\\s+piu\\b`,'iu'),1],[new RegExp(`${RNUM}\\s*(euro|centesimi|cent)?\\s+(?:in|di)\\s+meno\\b`,'iu'),-1],[/(?:^|\s)\+\s*(\d+(?:[.,]\d{1,2})?)\b()/u,1],[/(?:^|\s)-\s*(\d+(?:[.,]\d{1,2})?)\b()/u,-1]] as [RegExp,number][]
+const RW=RW0
 /** Differenza di prezzo detta nel messaggio (con segno), o null. */
-export function relativeDelta(message:string):{delta:number,text:string}|null{const m0=message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+// «un euro e mezzo», «1 euro e 50», «un euro e cinquanta», «1,50» → «1.50»: una differenza coi centesimi resta intera.
+const RWD:Record<string,number>={mezzo:50,dieci:10,venti:20,trenta:30,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90}
+export const relNormText=(t:string)=>relNorm(t)
+const relNorm=(t:string)=>t.replace(/\b(un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\b(?=\s+(?:euro\s+e\s+(?:mezzo|\d{1,2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b|e\s+mezzo\b))/g,w=>String(RW[w]))
+ .replace(/\b(\d+)\s+(?:euro\s+)?e\s+(mezzo|\d{2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b(?!\s*(?:euro\s+)?(?:alla|al|ai|a\s)?\s*(?:il|la|lo|l|i|gli|le)?\s*\w+\s+a\s+\d)/g,(_m,a:string,b:string)=>`${a}.${String(/^\d/.test(b)?Number(b):RWD[b]).padStart(2,'0')} euro`)
+ .replace(/(\d),(\d)/g,'$1.$2')
+export function relativeDelta(message:string):{delta:number,text:string}|null{const m0=relNorm(message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''))
  for(const [re,sign] of REL){const m=m0.match(re);if(!m)continue;const raw=m[1]!,n=/^\d/.test(raw)?Number(raw.replace(',','.')):RW[raw];if(n===undefined||!Number.isFinite(n)||n<=0)continue
   const unit=m[2]??'';const v=/^cent/.test(unit)?n/100:n;if(v>=100)continue;return{delta:sign*Math.round(v*100)/100,text:m[0]}}
  return null}
 export function g9Prices(message:string,cents=true):number[]{
  // A7.8: «tredici e novanta», «7 euro 90», «13 virgola 50» sono UN prezzo coi centesimi: le parti da sole non valgono.
- message=withoutQuantities(cents?spokenCents(spokenDecimals(message)):message);{const r=relativeDelta(message);if(r)message=message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(r.text,' ')}const out:number[]=[];{const p=plain(message);for(const m of p.matchAll(/\b(\w+) virgola (\w+)\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!),b=/^\d+$/.test(m[2]!)?Number(m[2]):g9WordNumber(m[2]!);if(a!==null&&b!==null)out.push(Number(`${a}.${b}`))}for(const m of p.matchAll(/\b(\w+)(?: euro)? e mezz[oa]\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!);if(a!==null)out.push(a+0.5)}}for(const m of plain(message).matchAll(/\b(\d+) centesimi\b/g))out.push(Number(m[1])/100);const t=message.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2');for(const m of t.matchAll(/\d+(?:\.\d{1,2})?/g))out.push(Number(m[0]))
+ message=withoutQuantities(cents?spokenCents(spokenDecimals(message)):message);const rd0=relativeDelta(message);{const r=rd0;if(r)message=relNorm(message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')).replace(r.text,' ')}const out:number[]=[];{const p=plain(message);for(const m of p.matchAll(/\b(\w+) virgola (\w+)\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!),b=/^\d+$/.test(m[2]!)?Number(m[2]):g9WordNumber(m[2]!);if(a!==null&&b!==null)out.push(Number(`${a}.${b}`))}for(const m of p.matchAll(/\b(\w+)(?: euro)? e mezz[oa]\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!);if(a!==null)out.push(a+0.5)}}for(const m of plain(message).matchAll(/\b(\d+) centesimi\b/g))out.push(Number(m[1])/100);const t=message.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2');for(const m of t.matchAll(/\d+(?:\.\d{1,2})?/g))out.push(Number(m[0]))
  const w=plain(message).split(' ');for(let i=0;i<w.length;i++){let a=g9Words[w[i]!]??g9WordNumber(w[i]!)??undefined;if(a===undefined)continue;if(g9Words[w[i+1]!]!==undefined&&a>=20&&g9Words[w[i+1]!]!<10){a+=g9Words[w[i+1]!]!}out.push(a);const k=w[i+1]==='euro'?i+2:i+1;if(w[k]==='e'){const c=g9Words[w[k+1]!]??(/^\d+$/.test(w[k+1]??'')?Number(w[k+1]):undefined);if(c!==undefined)out.push(a+c/100)}}
  const ints=out.filter(Number.isInteger);for(const x of ints)for(const y of ints)if(y>=10&&y<100)out.push(x+y/100);return out.map(x=>Math.round(x*100)/100)}
 const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;const r=relativeDelta(message);if(current!==undefined&&r)return Math.abs(price-(current+r.delta))<0.005;return false}
