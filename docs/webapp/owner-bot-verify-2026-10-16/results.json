@@ -1,6 +1,6 @@
 {
  "cases": 283,
- "runs": 556,
+ "runs": 553,
  "unknownSql": [
   "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
  ],
@@ -4661,16 +4661,18 @@
    "cat": "elimina",
    "mode": "ideal",
    "turns": [
-    "elimina la bruschetta"
+    "elimina la bruschetta",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti bruschetta al pomodoro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Bruschetta al pomodoro* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
    "fails": [],
@@ -4681,16 +4683,18 @@
    "cat": "elimina",
    "mode": "ideal",
    "turns": [
-    "cancella il piatto di prova"
+    "cancella il piatto di prova",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di prova*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti piatto di prova»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Piatto di prova* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di prova*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Piatto di prova|true"
+    "delete|Piatto di prova"
    ],
    "actual": [
-    "hidden|Piatto di prova|true"
+    "delete|Piatto di prova"
    ],
    "aiCalls": 0,
    "fails": [],
@@ -4704,7 +4708,7 @@
     "rimuovi la coca cola 33cl"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti coca cola 33cl»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina coca cola 33cl»."
    ],
    "expected": [
     "hidden|Coca Cola 33cl|true"
@@ -4721,72 +4725,20 @@
    "cat": "elimina",
    "mode": "ideal",
    "turns": [
-    "🎤 togli proprio la diavola dal menu non la facciamo più"
+    "🎤 togli proprio la diavola dal menu non la facciamo più",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Diavola* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Diavola|true"
+    "delete|Diavola"
    ],
    "actual": [
-    "hidden|Diavola|true"
+    "delete|Diavola"
    ],
-   "aiCalls": 1,
-   "fails": [],
-   "note": "eliminazione detta: nascondere è il massimo consentito"
-  },
-  {
-   "id": "elimina-04",
-   "cat": "elimina",
-   "mode": "empty",
-   "turns": [
-    "🎤 togli proprio la diavola dal menu non la facciamo più"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "hidden|Diavola|true"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [],
-   "note": "eliminazione detta: nascondere è il massimo consentito"
-  },
-  {
-   "id": "elimina-04",
-   "cat": "elimina",
-   "mode": "wrong",
-   "turns": [
-    "🎤 togli proprio la diavola dal menu non la facciamo più"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "hidden|Diavola|true"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [],
-   "note": "eliminazione detta: nascondere è il massimo consentito"
-  },
-  {
-   "id": "elimina-04",
-   "cat": "elimina",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 togli proprio la diavola dal menu non la facciamo più"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "hidden|Diavola|true"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": [],
    "note": "eliminazione detta: nascondere è il massimo consentito"
   },
@@ -4798,10 +4750,14 @@
     "rinomina la carbonara in carbonara classica"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: nuovo nome *Carbonara classica*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "rename|Spaghetti alla carbonara|Carbonara classica"
+   ],
+   "actual": [
+    "rename|Spaghetti alla carbonara|Carbonara classica"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4813,10 +4769,14 @@
     "cambia il nome della lasagna in lasagna della nonna"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: nuovo nome *Lasagna della nonna*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "rename|Lasagna al forno|Lasagna della nonna"
+   ],
+   "actual": [
+    "rename|Lasagna al forno|Lasagna della nonna"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4828,10 +4788,14 @@
     "la diavola chiamala piccante"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: nuovo nome *Piccante*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "rename|Diavola|Piccante"
+   ],
+   "actual": [
+    "rename|Diavola|Piccante"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4843,10 +4807,14 @@
     "chiama la margherita pizza margherita"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: nuovo nome *Pizza margherita*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "rename|Margherita|Pizza margherita"
+   ],
+   "actual": [
+    "rename|Margherita|Pizza margherita"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4858,10 +4826,14 @@
     "il piatto di prova chiamalo pasta al ragù"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di prova*: nuovo nome *Pasta al ragù*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "rename|Piatto di prova|Pasta al ragù"
+   ],
+   "actual": [
+    "rename|Piatto di prova|Pasta al ragù"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4873,10 +4845,14 @@
     "sposta la cotoletta tra gli antipasti"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: spostato in *Antipasti*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "move|Cotoletta alla milanese|Antipasti"
+   ],
+   "actual": [
+    "move|Cotoletta alla milanese|Antipasti"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4888,10 +4864,14 @@
     "sposta il tiramisù nei secondi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: spostato in *Secondi*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "move|Tiramisù|Secondi"
+   ],
+   "actual": [
+    "move|Tiramisù|Secondi"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4903,10 +4883,14 @@
     "metti la bruschetta nei primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: spostato in *Primi*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "move|Bruschetta al pomodoro|Primi"
+   ],
+   "actual": [
+    "move|Bruschetta al pomodoro|Primi"
+   ],
    "aiCalls": 0,
    "fails": []
   },
@@ -4918,10 +4902,14 @@
     "la pasta e fagioli spostala nei secondi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: spostato in *Secondi*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "move|Pasta e fagioli|Secondi"
+   ],
+   "actual": [
+    "move|Pasta e fagioli|Secondi"
+   ],
    "aiCalls": 0,
    "fails": []
   },

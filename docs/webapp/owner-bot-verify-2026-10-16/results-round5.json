@@ -4255,12 +4255,17 @@
     "metti il piatto di verifica nei primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: spostato in *Primi*"
    ],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "move|Piatto di verifica|Primi"
+   ],
+   "actual": [
+    "move|Piatto di verifica|Primi"
+   ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [],
+   "note": "fase B (17/10): spostare si fa dalla chat"
   },
   {
    "id": "dom-14",

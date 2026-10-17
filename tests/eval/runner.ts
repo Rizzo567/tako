@@ -2,7 +2,7 @@
 import {mkdirSync,writeFileSync} from 'node:fs'
 import {FIXTURES,initialMenu} from './fixtures/menus.js'
 import {judge,SAFETY} from './judge.js'
-import {FAMILIES,V_FAMILIES,A_FAMILIES,type BotUnderTest,type Conversation,type Verdict} from './types.js'
+import {FAMILIES,V_FAMILIES,A_FAMILIES,B_FAMILIES,type BotUnderTest,type Conversation,type Verdict} from './types.js'
 
 export async function runBench(bot:BotUnderTest,convs:Conversation[],onEach?:(v:Verdict)=>void):Promise<Verdict[]>{
  const out:Verdict[]=[]
@@ -17,7 +17,7 @@ export type Row={family:string,n:number,ok:number,success:number,grave:number,me
 export function summarize(vs:Verdict[]){
  const row=(family:string,xs:Verdict[]):Row=>{const turns=xs.reduce((a,v)=>a+v.replies.length,0),det=xs.filter(v=>!v.usedLlm)
   return{family,n:xs.length,ok:xs.filter(v=>worst(v)==='OK').length,success:xs.filter(v=>v.success).length,grave:xs.filter(v=>worst(v)==='GRAVE').length,medio:xs.filter(v=>worst(v)==='MEDIO').length,basso:xs.filter(v=>worst(v)==='BASSO').length,safety:xs.filter(v=>v.fails.some(f=>f.sev==='GRAVE'&&SAFETY.has(f.code))).length,clarRate:pct(xs.reduce((a,v)=>a+v.clarifications,0),turns),unexpectedClar:xs.reduce((a,v)=>a+v.unexpectedClarifications,0),usedLlm:xs.filter(v=>v.usedLlm).length,llmMissConvs:xs.filter(v=>v.llmMisses>0).length,detN:det.length,detSuccess:det.filter(v=>v.success).length}}
- const families=[...FAMILIES,...V_FAMILIES,...A_FAMILIES].filter(f=>vs.some(v=>v.family===f)).map(f=>row(f,vs.filter(v=>v.family===f)))
+ const families=[...FAMILIES,...V_FAMILIES,...A_FAMILIES,...B_FAMILIES].filter(f=>vs.some(v=>v.family===f)).map(f=>row(f,vs.filter(v=>v.family===f)))
  const lat=vs.flatMap(v=>v.latencyMs),est=vs.flatMap(v=>v.latencyMs.map((l,i)=>i===v.latencyMs.length-1?l+v.recordedLlmMs:l))
  const codes:Record<string,{GRAVE:number,MEDIO:number,BASSO:number}>={};for(const v of vs)for(const f of v.fails){codes[f.code]??={GRAVE:0,MEDIO:0,BASSO:0};codes[f.code]![f.sev]++}
  const multi=vs.filter(v=>v.replies.length>1)

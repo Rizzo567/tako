@@ -26,6 +26,8 @@ export type Change=
  |{op:'delete',dish:string}
  |{op:'rename',dish:string,name:string}
  |{op:'move',dish:string,section:string}
+ // Fase B: categoria nuova (anche vuota) o rinominata; il giudice la confronta solo se la conversazione la attende.
+ |{op:'section',name:string}
 
 /** Attesa dinamica: «sì la seconda» dipende dall'ordine delle opzioni che il bot ha mostrato al turno `turn`. */
 export type Pick={turn:number,pick:number|'all',make:(dish:string)=>Change}
@@ -53,7 +55,9 @@ export const FAMILIES=['anche','correzione','ripristino','chiarimento','multipla
 export const V_FAMILIES=['v-deixis','v-elimina','v-aggiunte','v-categorie','v-composti','v-correzioni','v-risposte','v-prezzi','v-verbi','v-asr','v-stato','v-annulla','v-misti','v-frasefissa','v-coerenza','v-rinomina'] as const
 // Batterie delle correzioni di fase A (17/10, docs/webapp/bot-correzioni-2026-10-17): tests/eval/cases/fix-a.ts.
 export const A_FAMILIES=['a1-composti','a2-prezzi','a3-nomi','a4-validatore','a5-asr'] as const
-export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]|typeof A_FAMILIES[number]
+// Batterie di fase B (17/10): tests/eval/cases/fix-b.ts.
+export const B_FAMILIES=['b1-elimina','b2-categorie','b3-sposta-rinomina'] as const
+export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]|typeof A_FAMILIES[number]|typeof B_FAMILIES[number]
 
 /** Traccia facoltativa del contesto usato dal bot in un turno (il bot nuovo la espone; l'attuale no). Vedi CONTRATTO.md §3. */
 export type ContextTrace={history:{role:'owner'|'bot',text:string,at:string}[],pending?:unknown,memory?:unknown,promptTokens?:number}

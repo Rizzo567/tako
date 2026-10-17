@@ -92,7 +92,7 @@ vi.stubGlobal('fetch',async(url:any,init:any)=>{const u=String(url)
 // il finto prendeva tutto il resto del menu, con più prezzi, e il server scartava giustamente la riga).
 function rowEvidence(source:string,name:string){const tail=source.slice(source.toLowerCase().indexOf(name.toLowerCase())),cut=tail.match(/^[^,.;\n]+/)![0],m=cut.slice(name.length).match(new RegExp('^.*?(?:\\d+(?:[.,]\\d{1,2})?|\\b(?:'+Object.keys(numberWords).join('|')+')\\b)(?:\\s*euro)?','i'));return m?cut.slice(0,name.length)+m[0]:cut}
 // ---------------- Casi ----------------
-type Change={op:'create',name:string,price:number,section?:string}|{op:'price',dish:string,price:number}|{op:'available'|'hidden'|'featured'|'last'|'today',dish:string,value:boolean}|{op:'description',dish:string,text:string}|{op:'tag',dish:string,tag:string,value:boolean}|{op:'promo',dish:string,price:number|null}|{op:'special',name:string,price:number}
+type Change={op:'create',name:string,price:number,section?:string}|{op:'price',dish:string,price:number}|{op:'available'|'hidden'|'featured'|'last'|'today',dish:string,value:boolean}|{op:'description',dish:string,text:string}|{op:'tag',dish:string,tag:string,value:boolean}|{op:'promo',dish:string,price:number|null}|{op:'special',name:string,price:number}|{op:'k',k:string}
 type Turn=string|{v:string}
 type Case={id:string,cat:string,turns:Turn[],changes:Change[],reply?:RegExp,mods?:Mods,ai?:(msg:string,hasSections:boolean,pending:boolean)=>any,relative?:boolean,fullRows?:{section:string,name:string,price:number}[],note?:string}
 const C:Case[]=[]
@@ -263,9 +263,10 @@ add('elimina','cancella il piatto di prova',HI('Piatto di prova',true),{note:'17
 add('elimina','rimuovi la coca cola 33cl',HI('Coca Cola 33cl',true),{note:'17/10 regola Manuel: rimuovi = nascondi'})
 add('elimina',V('togli proprio la diavola dal menu non la facciamo più'),HI('Diavola',true),{note:'eliminazione detta: nascondere è il massimo consentito'})
 
-// F) Rinomina / sposta (non supportati): niente scritture, risposta chiara
-for(const t of ['rinomina la carbonara in carbonara classica','cambia il nome della lasagna in lasagna della nonna','la diavola chiamala piccante','chiama la margherita pizza margherita','il piatto di prova chiamalo pasta al ragù'])add('rinomina',t,NONE,{reply:/nome|rinomin|dashboard|non posso/i})
-for(const t of ['sposta la cotoletta tra gli antipasti','sposta il tiramisù nei secondi','metti la bruschetta nei primi','la pasta e fagioli spostala nei secondi'])add('sposta',t,NONE,{reply:/categori|spost|dashboard|non posso/i})
+// F) Rinomina / sposta: dal 17/10 (fase B) si fanno dalla chat, sul piatto giusto e col nome detto.
+for(const [t,k] of [['rinomina la carbonara in carbonara classica','rename|Spaghetti alla carbonara|Carbonara classica'],['cambia il nome della lasagna in lasagna della nonna','rename|Lasagna al forno|Lasagna della nonna'],['la diavola chiamala piccante','rename|Diavola|Piccante'],['chiama la margherita pizza margherita','rename|Margherita|Pizza margherita']] as [string,string][])add('rinomina',t,{op:'k',k} as any)
+add('rinomina','il piatto di prova chiamalo pasta al ragù',{op:'k',k:'rename|Piatto di prova|Pasta al ragù'} as any)
+for(const [t,k] of [['sposta la cotoletta tra gli antipasti','move|Cotoletta alla milanese|Antipasti'],['sposta il tiramisù nei secondi','move|Tiramisù|Secondi'],['metti la bruschetta nei primi','move|Bruschetta al pomodoro|Primi'],['la pasta e fagioli spostala nei secondi','move|Pasta e fagioli|Secondi']] as [string,string][])add('sposta',t,{op:'k',k} as any)
 
 // G) Descrizione, etichette, evidenza, piatto del giorno, foto
 add('descrizione','nella carbonara scrivi: guanciale, pecorino e uovo',DE('Spaghetti alla carbonara','guanciale, pecorino e uovo'))
@@ -452,7 +453,7 @@ function diff(before:any,after:any):string[]{const a=flat(before),b=flat(after),
   const lx=!!x.scarcity?.lastPortions,ly=!!y.scarcity?.lastPortions;if(lx!==ly)out.push(`last|${y.name}|${lx}`)
   const ox=!!x.scarcity?.onlyToday,oy=!!y.scarcity?.onlyToday;if(ox!==oy)out.push(`today|${y.name}|${ox}`)}
  for(const [,y] of a)if(!b.has(y.id))out.push(`delete|${y.name}`);return out}
-const key=(c:Change)=>c.op==='create'?`create|${plainT(c.name)}|${c.price}|${c.section?plainT(c.section):'*'}`:c.op==='special'?`special|${plainT(c.name)}|${c.price}`:c.op==='price'?`price|${c.dish}|${c.price}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='tag'?`tag|${c.dish}|${c.tag}|${c.value}`:c.op==='promo'?`promo|${c.dish}|${c.price}`:`${c.op}|${c.dish}|${c.value}`
+const key=(c:Change)=>(c as any).op==='k'?(c as any).k:c.op==='create'?`create|${plainT(c.name)}|${c.price}|${c.section?plainT(c.section):'*'}`:c.op==='special'?`special|${plainT(c.name)}|${c.price}`:c.op==='price'?`price|${c.dish}|${c.price}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='tag'?`tag|${c.dish}|${c.tag}|${c.value}`:c.op==='promo'?`promo|${c.dish}|${c.price}`:`${c.op}|${c.dish}|${c.value}`
 const same=(exp:string,act:string)=>exp===act||exp.endsWith('|*')&&act.startsWith(exp.slice(0,-1))
 const priceOf=(k:string)=>{const p=k.split('|');return p[0]==='create'||p[0]==='special'?Number(p[2]):p[0]==='price'||p[0]==='promo'?Number(p[2]):null}
 
@@ -496,6 +497,10 @@ async function run(cs:Case,mode:AiMode):Promise<Result>{
  const actual=diff(before,S.published),proposal=S.proposals.get(phone)?.command
  const res:Result={id:cs.id,cat:cs.cat,mode,turns:cs.turns.map(t=>typeof t==='string'?t:'🎤 '+t.v),replies,expected:cs.changes.map(key),actual,aiCalls:net.chats,fails:[],...(cs.note?{note:cs.note}:{}),...(proposal?{proposal:{kind:proposal.kind,stage:proposal.stage}}:{})}
  res.fails=judge(cs,mode,replies,actual,proposal);results.push(res);return res}
+
+// Fase B (17/10, decisione Manuel): «elimina / cancella / … proprio» = ELIMINARE, solo dopo conferma. I casi scritti quando
+// eliminare voleva dire nascondere diventano: richiesta → domanda «Elimino X dal menu?» → «sì» → piatto eliminato (più severo).
+for(const cs of C as any[]){const t=(x:any)=>typeof x==='string'?x:x.v??x.b??'';if(cs.turns.length===1&&/\b(?:elimin|cancell)\w*|\b(?:togl|lev)\w* proprio\b/i.test(t(cs.turns[0]))&&cs.changes.length&&cs.changes.every((c:any)=>c.op==='hidden'&&c.value===true)){cs.turns=[...cs.turns,'sì'];cs.changes=cs.changes.map((c:any)=>({op:'k',k:'delete|'+c.dish}));if(cs.replyAt)cs.replyAt=cs.replyAt.map(([i,re]:any)=>[i,/non li elimino/.test(String(re))?/Elimino/:re]);delete cs.ai;delete cs.reply}}
 
 describe('bot titolare: verifica avversaria',()=>{
  it('ha almeno 200 casi',()=>{expect(C.length).toBeGreaterThanOrEqual(200)})

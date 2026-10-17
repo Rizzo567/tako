@@ -15,7 +15,7 @@ import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section'] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
@@ -27,7 +27,7 @@ export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'obj
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
-  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>a!=='restore'&&a!=='create_item'&&a!=='create_daily_special')]},value:nullable('boolean'),price:nullable('number')}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section'].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 
@@ -158,7 +158,13 @@ function legacyAction(a:any,map:(v:unknown)=>string|null):any{
   case 'set_featured':return{...base,featured:a.value}
   case 'set_description':return{...base,text:a.text}
   case 'add_tag':case 'remove_tag':return{...base,tag:a.tag}
-  case 'create_item':return{action:a.action,section_id:map(a.section),name:a.name,price:a.price,description:a.text}
+  case 'create_item':return{action:a.action,section_id:map(a.section),section_name:map(a.section)?null:a.section,name:a.name,price:a.price,description:a.text}
+  // Fase B (17/10): struttura del menu. Una categoria nuova si indica col suo nome in section (non ha un codice).
+  case 'delete_item':return base
+  case 'rename_item':return{...base,name:a.name}
+  case 'move_item':return{...base,section_id:map(a.section),section_name:map(a.section)?null:a.section}
+  case 'create_section':return{action:a.action,name:a.name??a.section}
+  case 'rename_section':return{action:a.action,section_id:map(a.section),name:a.name}
   case 'create_daily_special':return{action:a.action,name:a.name,price:a.price,description:a.text}
   case 'set_promo':return{...base,price:a.price,until:a.until}
   case 'remove_promo':return base
@@ -313,7 +319,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   return{intent:'change',plan,exclude,aliasesUsed,replyDraft:'',notes}}
  // Con contesto o azioni derivate: le azioni «normali» passano dal validatore attuale sul testo con il contesto; i prezzi devono
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
- const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false}):{type:'change',actions:[]} as MenuPlan
+ const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
  if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
   // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio

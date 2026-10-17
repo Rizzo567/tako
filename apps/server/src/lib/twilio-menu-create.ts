@@ -11,8 +11,8 @@ import {categoryItems} from './twilio-menu-sales.js'
 
 // 17/10 (correzioni A1/A3): `names` = «X e Y» che può essere due piatti (`split` null = da chiedere, true = due, false = uno solo),
 // `prices` = prezzo per ciascuno; `sectionName` = categoria chiesta che nel menu non c'è (si chiede dove metterlo).
-export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null,names?:string[],split?:boolean|null,prices?:(number|null)[],sectionName?:string|null}
-export type CreateParse={name:string|null,price:number|null,sectionId:string|null,unknownSection:boolean,sectionName?:string|null}
+export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null,names?:string[],split?:boolean|null,prices?:(number|null)[],sectionName?:string|null,newSection?:boolean}
+export type CreateParse={name:string|null,price:number|null,sectionId:string|null,unknownSection:boolean,sectionName?:string|null,sectionNew?:boolean}
 
 const waNewFold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
 const waNewNumbers:Record<string,number>={zero:0,uno:1,un:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,undici:11,dodici:12,tredici:13,quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19,venti:20,ventuno:21,ventidue:22,ventitre:23,ventiquattro:24,venticinque:25,trenta:30,trentacinque:35,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90,cento:100}
@@ -70,7 +70,7 @@ export function parseCreate(raw:string,sections:SectionRef[],verbRequired=true):
   while(from>0&&['costa','costano','che','a','al','prezzo','di','viene','vengono','e'].includes(t[from-1]!.p))from--
   t=[...t.slice(0,from),...t.slice(to)];break}
  // categoria: «tra (i) X», «nella categoria X», «in/nei/nella X», tollerante a maiuscole e accenti
- let sectionId:string|null=early,unknownSection=false,sectionName:string|null=null
+ let sectionId:string|null=early,unknownSection=false,sectionName:string|null=null,sectionNew=false
  const preps=new Set(['tra','fra','in','nei','negli','nelle','nella','nel','nello','ai','agli','alle','al','categoria','sezione','nuova','nuovo'])
  const ordered=[...sections].sort((a,b)=>b.name.length-a.name.length)
  outer:for(let i=0;i<t.length&&!sectionId;i++){if(!preps.has(t[i]!.p))continue
@@ -79,7 +79,7 @@ export function parseCreate(raw:string,sections:SectionRef[],verbRequired=true):
    if(variants.some(v=>v.every((w,k)=>t[j+k]?.p===w))){sectionId=s.id;let from=i;while(from>0&&['tra','fra','nella','nel','una','un','uno'].includes(t[from-1]!.p))from--;t=[...t.slice(0,from),...t.slice(j+sp.length)];break outer}}
   // 17/10 (A3.2): categoria che nel menu non c'è («nei primi pasti», «in una categoria nuova che si chiama speciali», «tra i
   // primi»): le sue parole escono dal nome e diventano la categoria richiesta; il nome del piatto resta.
-  const u=unknownSectionAt(t,i);if(u){unknownSection=true;sectionName=u.name;t=[...t.slice(0,u.from),...t.slice(u.to)];break}
+  const u=unknownSectionAt(t,i);if(u){unknownSection=true;sectionName=u.name;sectionNew=u.explicit;t=[...t.slice(0,u.from),...t.slice(u.to)];break}
   if(['tra','fra','categoria','sezione'].includes(t[i]!.p)){unknownSection=true;t=t.slice(0,i);break}}
  if(!sectionId&&!unknownSection&&sections.length===1)sectionId=sections[0]!.id
  // nome: senza «il piatto», articoli iniziali e «che» finale
@@ -101,7 +101,7 @@ export function parseCreate(raw:string,sections:SectionRef[],verbRequired=true):
  // «una bibita», «un piatto», «un dolce»: parola generica o nome della categoria → il nome manca e il bot lo chiede.
  const generic=(w:string)=>{const p=waNewFold(w).replace(/[^a-z0-9]+/g,' ').trim(),forms=(x:string)=>[x,x.replace(/i$/,'o'),x.replace(/e$/,'a'),x.replace(/i$/,'e')];return /^(?:piatt[oi]|bibit[ae]|bevand[ae]|dolc[ei]|prim[oi]|second[oi]|antipast[oi]|contorn[oi]|pizz[ae]|vin[oi]|cocktail|panin[oi]|cosa|roba|qualcosa)$/.test(p)||sections.some(s=>forms(waNewFold(s.name).replace(/[^a-z0-9]+/g,' ').trim()).includes(p))}
  const name=quotedName??(words2&&(piattoGone||!generic(words2))?words2.charAt(0).toLocaleUpperCase('it')+words2.slice(1):null)
- return {name,price,sectionId,unknownSection,...(sectionName?{sectionName}:{})}
+ return {name,price,sectionId,unknownSection,...(sectionName?{sectionName}:{}),...(sectionName&&sectionNew?{sectionNew:true}:{})}
 }
 
 const COURTESY=new Set(['favore','piacere','cortesia'])
@@ -110,7 +110,7 @@ const preps0=new Set(['tra','fra','in','nei','negli','nelle','nella','nel'])
 const CAT_WORDS=/^(?:prim[oi]|second[oi]|antipast[oi]|dolc[ei]|dessert|contorn[oi]|pizz[ae]|special[ei]|specialita|bibit[ae]|bevand[ae]|insalat[ae]|panin[oi]|fritt[oi]|frittur[ae]|vin[oi]|birr[ae]|cocktail|aperitiv[oi]|burger|hamburger|crud[oi]|grigliat[ae]|carn[ei]|pesc[ei]|zupp[ae]|focacc[ei]\w*|piadin[ae]|novita|proposte)$/
 const SEC_NAME_STOP=new Set(['con','e','il','la','lo','i','gli','le','a','al','che','costa','dentro','prezzo','euro'])
 /** Categoria richiesta che nel menu non c'è, a partire dalla preposizione in posizione i. null = nessuna. */
-function unknownSectionAt(t:Tok[],i:number):{from:number,to:number,name:string}|null{
+function unknownSectionAt(t:Tok[],i:number):{from:number,to:number,name:string,explicit:boolean}|null{
  const p=t[i]!.p;let k=i+1
  const skip=()=>{while(['i','gli','le','la','il','lo','l','una','un','uno','altra','altro','nuova','nuovo','della','dei'].includes(t[k]?.p??''))k++}
  skip();let named=false
@@ -121,12 +121,14 @@ function unknownSectionAt(t:Tok[],i:number):{from:number,to:number,name:string}|
  if(k===start)return null
  let from=i;while(from>0&&['tra','fra','nella','nel','in','una','un','uno'].includes(t[from-1]!.p))from--
  const name=t.slice(start,k).map(x=>x.o).join(' ')
- return{from,to:k,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)}
+ // «in una categoria nuova che si chiama X», «in un'altra categoria X»: la categoria nuova è chiesta, non serve chiedere «la creo?».
+ const explicit=t.slice(i,start).some(x=>['nuova','nuovo','altra','altro','chiama','chiamata','chiamato'].includes(x.p))
+ return{from,to:k,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1),explicit}
 }
 
 /** Unisce la risposta alla bozza: i pezzi nuovi completano o sostituiscono quelli mancanti. */
 export function mergeDraft(draft:CreateDraft,next:CreateParse):CreateDraft{const sectionId=next.sectionId??draft.sectionId,sectionName=sectionId?null:next.sectionName??draft.sectionName??null
- return {kind:'create_draft',name:draft.name??next.name,price:next.price??draft.price,sectionId,...(sectionName?{sectionName}:{}),...(draft.names?{names:draft.names,split:draft.split??null,prices:draft.prices??draft.names.map(()=>null)}:{})}}
+ return {kind:'create_draft',name:draft.name??next.name,price:next.price??draft.price,sectionId,...(sectionName?{sectionName}:{}),...(sectionName&&(draft.newSection||next.sectionNew)?{newSection:true}:{}),...(draft.names?{names:draft.names,split:draft.split??null,prices:draft.prices??draft.names.map(()=>null)}:{})}}
 
 const sectionList=(sections:SectionRef[])=>sections.slice(0,15).map(s=>s.name).join(', ')
 const missingSection=(d:CreateDraft,unknownSection:boolean)=>d.sectionName?`Nel menu non c'è la categoria *${d.sectionName}*. `:unknownSection?"Quella categoria nel menu non c'è. ":''
@@ -134,14 +136,16 @@ const missingSection=(d:CreateDraft,unknownSection:boolean)=>d.sectionName?`Nel 
 export function createQuestion(d:CreateDraft,sections:SectionRef[],unknownSection=false){
  if(d.names?.length&&d.split!==false)return multiQuestion(d,sections)
  const piatto=d.name?`*${d.name}*`:'il piatto'
- if(!d.sectionId)return `${missingSection(d,unknownSection)}In quale categoria metto ${piatto}? Categorie: ${sectionList(sections)}.`
+ // Fase B (17/10): una categoria che non c'è si può creare: si chiede «la creo?».
+ if(!d.sectionId&&d.sectionName&&!d.newSection)return `Nel menu non c'è la categoria *${d.sectionName}*: la creo e ci metto ${piatto}? Rispondi *sì*, oppure dimmi in quale categoria metterlo. Categorie: ${sectionList(sections)}. Non ho ancora aggiunto nulla.`
+ if(!d.sectionId&&!(d.sectionName&&d.newSection))return `${missingSection(d,unknownSection)}In quale categoria metto ${piatto}? Categorie: ${sectionList(sections)}.`
  if(d.price===null)return `Quanto costa ${piatto}?`
  return `Come si chiama il piatto da aggiungere in *${sections.find(s=>s.id===d.sectionId)?.name??''}* a ${d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2})} €?`
 }
 export const draftComplete=(d:CreateDraft):d is CreateDraft&{name:string,price:number,sectionId:string}=>!!d.name&&d.price!==null&&!!d.sectionId
 
 type CreateAction={kind:'create',sectionId:string,name:string,price:number,description:null}
-export type CreateStep={kind:'none'}|{kind:'unhide',id:string}|{kind:'ask',draft:CreateDraft,text:string}|{kind:'exists',name:string,section:string}|{kind:'create',action:CreateAction}|{kind:'createMany',actions:CreateAction[]}
+export type CreateStep={kind:'actions',actions:MenuAction[]}|{kind:'none'}|{kind:'unhide',id:string}|{kind:'ask',draft:CreateDraft,text:string}|{kind:'exists',name:string,section:string}|{kind:'create',action:CreateAction}|{kind:'createMany',actions:CreateAction[]}
 
 // ===================== 17/10 (correzioni A1): «X e Y» = due piatti o un nome composto =====================
 // Coppie che formano UN piatto (glossario di cucina): la «e» non separa due piatti. Più «pasta/riso/pane e …» in testa.
@@ -213,7 +217,14 @@ function multiAnswer(text:string,draft:CreateDraft,sections:SectionRef[],refs:{i
  if(!vals.length&&split===(draft.split??null)&&sectionId===draft.sectionId)return null
  return{kind:'ask',draft:nd,text:multiQuestion(nd,sections)}}
 
+/** Bozza con una categoria nuova accettata («sì creala») e il prezzo: categoria + piatto (o piatti) nella stessa pubblicazione. */
+function newSectionStep(d:CreateDraft,_sections:SectionRef[]):CreateStep|null{
+ if(!d.newSection||!d.sectionName||d.sectionId)return null
+ const id=crypto.randomUUID(),names=d.names?.length&&d.split===true?d.names:d.name?[d.name]:[],prices=d.names?.length&&d.split===true?d.prices??[]:[d.price]
+ if(!names.length||prices.length<names.length||prices.some(p=>p==null))return null
+ return{kind:'actions',actions:[{kind:'create_section',newSectionId:id,name:d.sectionName,menuId:''},...names.map((n,i)=>({kind:'create',sectionId:id,name:n,price:prices[i]!,description:null}) as MenuAction)]}}
 function finish(d:CreateDraft,sections:SectionRef[],refs:{id?:string,name:string,sectionId?:string|null}[],verbFirst=false,unknownSection=false):CreateStep{
+ {const ns=newSectionStep(d,sections);if(ns)return ns}
  if(!draftComplete(d))return{kind:'ask',draft:d,text:createQuestion(d,sections,unknownSection&&!d.sectionId)}
  const wordsOf=(x:string)=>waNewFold(x).replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(w=>w&&!['il','la','lo','i','gli','le','di','al','alla','alle','ai','con','e'].includes(w)),mine=wordsOf(d.name)
  // Il nome detto in risposta a «Come si chiama?» è esplicito: solo un nome identico è un doppione («Birra» ≠ «Birra media»).
@@ -239,7 +250,7 @@ export function createStep(text:string,draft:CreateDraft|null,sections:SectionRe
  const verbFirst=startsWithCreate(text)
  if(verbFirst&&createCompound(text))return pairedCreate(text,sections,refs)??{kind:'none'}
  const folded=waNewFold(text).replace(/[^a-z0-9]+/g,' ').trim()
- if(!verbFirst&&draft&&YES.test(folded)){if(draft.sectionName&&!draft.sectionId)return{kind:'ask',draft,text:`Per ora una categoria nuova si crea dalla dashboard. In quale categoria metto ${draft.names?.length&&draft.split!==false?bolds(draft.names):draft.name?`*${draft.name}*`:'il piatto'}? Categorie: ${sectionList(sections)}.`};return{kind:'ask',draft,text:createQuestion(draft,sections)}}
+ if(!verbFirst&&draft&&YES.test(folded)){if(draft.sectionName&&!draft.sectionId){const ok:CreateDraft={...draft,newSection:true};return newSectionStep(ok,sections)??{kind:'ask',draft:ok,text:createQuestion(ok,sections)}};return{kind:'ask',draft,text:createQuestion(draft,sections)}}
  // Bozza con due nomi («X e Y»): «sono due piatti», «uno solo», «10 e 20», «uno a 10 e uno a 20», «la prima 10 la seconda 20».
  if(!verbFirst&&draft?.names?.length&&draft.split!==false&&!waNewNotCreate.test(folded)){const m=multiAnswer(text,draft,sections,refs);if(m)return m}
  if(!verbFirst){if(!draft||waNewNotCreate.test(folded))return{kind:'none'};const other=otherIntent(text);if(other&&other.kind!=='price')return{kind:'none'}}

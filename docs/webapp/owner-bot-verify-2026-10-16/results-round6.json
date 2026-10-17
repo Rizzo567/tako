@@ -65,16 +65,18 @@
    "cat": "togli",
    "mode": "ideal",
    "turns": [
-    "elimina boh"
+    "elimina boh",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|boh|true"
+    "delete|boh"
    ],
    "actual": [
-    "hidden|boh|true"
+    "delete|boh"
    ],
    "aiCalls": 0,
    "fails": []
@@ -84,16 +86,18 @@
    "cat": "togli",
    "mode": "ideal",
    "turns": [
-    "cancella boh"
+    "cancella boh",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|boh|true"
+    "delete|boh"
    ],
    "actual": [
-    "hidden|boh|true"
+    "delete|boh"
    ],
    "aiCalls": 0,
    "fails": []
@@ -106,7 +110,7 @@
     "rimuovi boh"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina boh»."
    ],
    "expected": [
     "hidden|boh|true"
@@ -217,16 +221,18 @@
    "cat": "togli",
    "mode": "ideal",
    "turns": [
-    "elimina il tiramisù"
+    "elimina il tiramisù",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti tiramisù»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Tiramisù|true"
+    "delete|Tiramisù"
    ],
    "actual": [
-    "hidden|Tiramisù|true"
+    "delete|Tiramisù"
    ],
    "aiCalls": 0,
    "fails": []
@@ -236,16 +242,18 @@
    "cat": "togli",
    "mode": "ideal",
    "turns": [
-    "cancella la cotoletta"
+    "cancella la cotoletta",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti cotoletta alla milanese»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Cotoletta alla milanese* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Cotoletta alla milanese|true"
+    "delete|Cotoletta alla milanese"
    ],
    "actual": [
-    "hidden|Cotoletta alla milanese|true"
+    "delete|Cotoletta alla milanese"
    ],
    "aiCalls": 0,
    "fails": []
@@ -258,7 +266,7 @@
     "rimuovi la tagliata"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti tagliata di manzo»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina tagliata di manzo»."
    ],
    "expected": [
     "hidden|Tagliata di manzo|true"
@@ -274,16 +282,18 @@
    "cat": "togli",
    "mode": "ideal",
    "turns": [
-    "eliminami la bruschetta"
+    "eliminami la bruschetta",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti bruschetta al pomodoro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Bruschetta al pomodoro* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
    "fails": []
@@ -293,16 +303,18 @@
    "cat": "togli",
    "mode": "ideal",
    "turns": [
-    "cancellami il piatto di verifica"
+    "cancellami il piatto di verifica",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti piatto di verifica»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Piatto di verifica* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Piatto di verifica|true"
+    "delete|Piatto di verifica"
    ],
    "actual": [
-    "hidden|Piatto di verifica|true"
+    "delete|Piatto di verifica"
    ],
    "aiCalls": 0,
    "fails": []
@@ -315,7 +327,7 @@
     "rimuovimi la margherita"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti margherita»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina margherita»."
    ],
    "expected": [
     "hidden|Margherita|true"
@@ -521,16 +533,18 @@
    "cat": "togliv",
    "mode": "ideal",
    "turns": [
-    "🎤 Elimina il tiramisù."
+    "🎤 Elimina il tiramisù.",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti tiramisù»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Tiramisù|true"
+    "delete|Tiramisù"
    ],
    "actual": [
-    "hidden|Tiramisù|true"
+    "delete|Tiramisù"
    ],
    "aiCalls": 0,
    "fails": []
@@ -578,16 +592,18 @@
    "cat": "togliv",
    "mode": "ideal",
    "turns": [
-    "🎤 Cancella la diavola."
+    "🎤 Cancella la diavola.",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti diavola»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Diavola* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Diavola|true"
+    "delete|Diavola"
    ],
    "actual": [
-    "hidden|Diavola|true"
+    "delete|Diavola"
    ],
    "aiCalls": 0,
    "fails": []
@@ -619,7 +635,7 @@
     "🎤 Rimuovi che ne sacc."
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti che ne sacc»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina che ne sacc»."
    ],
    "expected": [
     "hidden|Che ne sacc|true"
@@ -1010,18 +1026,20 @@
    "cat": "togliai",
    "mode": "ideal",
    "turns": [
-    "elimina la lasagna e la diavola"
+    "elimina la lasagna e la diavola",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu\n*Diavola*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti lasagna al forno»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Lasagna al forno* e *Diavola* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *eliminato* dal menu\n*Diavola*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Lasagna al forno|true",
-    "hidden|Diavola|true"
+    "delete|Lasagna al forno",
+    "delete|Diavola"
    ],
    "actual": [
-    "hidden|Lasagna al forno|true",
-    "hidden|Diavola|true"
+    "delete|Lasagna al forno",
+    "delete|Diavola"
    ],
    "aiCalls": 0,
    "fails": []
@@ -1247,7 +1265,7 @@
     "elimina il tiramisù e la panna cotta costa 6"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n*Panna cotta*: prezzo da 5,00 € a *6,00 €*\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti tiramisù»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n*Panna cotta*: prezzo da 5,00 € a *6,00 €*"
    ],
    "expected": [
     "hidden|Tiramisù|true",
@@ -1421,7 +1439,7 @@
     "aggiungi nei primi la gricia a 11 ed elimina la lasagna"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Gricia* in *Primi*: *11,00 €*\n*Lasagna al forno*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti lasagna al forno»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Gricia* in *Primi*: *11,00 €*\n*Lasagna al forno*: *nascosto* dal menu"
    ],
    "expected": [
     "create|gricia|11|primi",
@@ -3073,12 +3091,21 @@
     "puoi cancellare la carbonara?"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nDa questa chat non posso *eliminare* un piatto.\n\nPuoi nasconderlo: «nascondi il polpo»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Spaghetti alla carbonara* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": []
+   "fails": [],
+   "proposal": {
+    "kind": "batch",
+    "actions": [
+     {
+      "kind": "delete",
+      "id": "55555555-5555-4555-8555-000000000003"
+     }
+    ]
+   }
   },
   {
    "id": "fp-13",
@@ -3088,7 +3115,7 @@
     "elimina la categoria dolci"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nDa questa chat non posso *eliminare* un piatto.\n\nPuoi nasconderlo: «nascondi il polpo».\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPosso *eliminare un piatto (ti chiedo conferma, poi per 10 minuti puoi annullare)*.\n«elimina il polpo»; «togli il polpo» invece lo nasconde\n\nPosso *creare categorie e spostare piatti*.\n«crea la categoria speciali» o «sposta il polpo nei secondi»"
    ],
    "expected": [],
    "actual": [],
@@ -3786,16 +3813,18 @@
    "cat": "storpia",
    "mode": "ideal",
    "turns": [
-    "🎤 Elimina che ne sacc."
+    "🎤 Elimina che ne sacc.",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti che ne sacc»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Che ne sacc* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|Che ne sacc|true"
+    "delete|Che ne sacc"
    ],
    "actual": [
-    "hidden|Che ne sacc|true"
+    "delete|Che ne sacc"
    ],
    "aiCalls": 0,
    "fails": []
@@ -4290,8 +4319,8 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti lasagna al forno».",
-    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Lasagna al forno*: com’era prima"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Lasagna al forno* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
    ],
    "expected": [],
    "actual": [],

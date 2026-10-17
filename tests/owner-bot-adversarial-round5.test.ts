@@ -98,7 +98,7 @@ vi.stubGlobal('fetch',async(url:any,init:any)=>{const u=String(url)
  return realFetch(url,init)})
 
 // ---------------- Casi ----------------
-type Change={op:'create',name:string,price:number,section?:string}|{op:'price',dish:string,price:number}|{op:'available'|'hidden'|'featured'|'last'|'today',dish:string,value:boolean}|{op:'description',dish:string,text:string}|{op:'tag',dish:string,tag:string,value:boolean}|{op:'promo',dish:string,price:number|null}|{op:'until',dish:string,date:string|null}|{op:'special',name:string,price:number}
+type Change={op:'create',name:string,price:number,section?:string}|{op:'price',dish:string,price:number}|{op:'available'|'hidden'|'featured'|'last'|'today',dish:string,value:boolean}|{op:'description',dish:string,text:string}|{op:'tag',dish:string,tag:string,value:boolean}|{op:'promo',dish:string,price:number|null}|{op:'until',dish:string,date:string|null}|{op:'special',name:string,price:number}|{op:'k',k:string}
 type Turn=string|{v:string}|{b:string}|{wait:number}|{dash:true|[string,string,any]}
 type Case={id:string,cat:string,turns:Turn[],changes:Change[],anyWithReply?:RegExp,alt?:Change[][],changesB?:Change[],mustConfirm?:boolean,reply?:RegExp,mods?:Mods,ai?:(msg:string,hasSections:boolean,pending:boolean)=>any,relative?:boolean,fullRows?:{section:string,name:string,price:number}[],note?:string}
 const C:Case[]=[]
@@ -312,7 +312,7 @@ add('dom','ce la fai a dirmi cosa è finito?',NONE,{reply:/finit|nessun/i})
 add('dom','volevo sapere il prezzo del piatto di verifica',NONE,{reply:/13,50/})
 add('dom','metti una foto al piatto di verifica',NONE,{reply:/foto/i})
 add('dom','aumenta tutti i piatti di prova di un euro',NONE,{reply:/tutt/i})
-add('dom','metti il piatto di verifica nei primi',NONE,{reply:/categori|dashboard/i})
+add('dom','metti il piatto di verifica nei primi',{op:'k',k:'move|Piatto di verifica|Primi'} as any,{note:'fase B (17/10): spostare si fa dalla chat'})
 add('dom','il coperto passa a 8',NONE,{mustConfirm:true})
 add('dom','la carbonara costa 13?',NONE)
 add('dom','il piatto di verifica costa ancora 13,50?',NONE)
@@ -390,7 +390,7 @@ function diff(before:any,after:any):string[]{const a=flat(before),b=flat(after),
   const lx=!!x.scarcity?.lastPortions,ly=!!y.scarcity?.lastPortions;if(lx!==ly)out.push(`last|${y.name}|${lx}`)
   const ox=!!x.scarcity?.onlyToday,oy=!!y.scarcity?.onlyToday;if(ox!==oy)out.push(`today|${y.name}|${ox}`)}
  for(const [,y] of a)if(!b.has(y.id))out.push(`delete|${y.name}`);return out}
-const key=(c:Change):string=>c.op==='until'?`until|${c.dish}|${c.date}`:c.op==='create'?`create|${plainT(c.name)}|${c.price}|${c.section?plainT(c.section):'*'}`:c.op==='special'?`special|${plainT(c.name)}|${c.price}`:c.op==='price'?`price|${c.dish}|${c.price}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='tag'?`tag|${c.dish}|${c.tag}|${c.value}`:c.op==='promo'?`promo|${c.dish}|${c.price}`:`${c.op}|${c.dish}|${c.value}`
+const key=(c:Change):string=>(c as any).op==='k'?(c as any).k:c.op==='until'?`until|${c.dish}|${c.date}`:c.op==='create'?`create|${plainT(c.name)}|${c.price}|${c.section?plainT(c.section):'*'}`:c.op==='special'?`special|${plainT(c.name)}|${c.price}`:c.op==='price'?`price|${c.dish}|${c.price}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='tag'?`tag|${c.dish}|${c.tag}|${c.value}`:c.op==='promo'?`promo|${c.dish}|${c.price}`:`${c.op}|${c.dish}|${c.value}`
 const same=(exp:string,act:string)=>exp===act||exp.endsWith('|*')&&act.startsWith(exp.slice(0,-1))
 const priceOf=(k:string)=>{const p=k.replace(/^B:/,'').split('|');return p[0]==='create'||p[0]==='special'?Number(p[2]):p[0]==='price'||p[0]==='promo'?Number(p[2]):null}
 
@@ -448,6 +448,10 @@ async function run(cs:Case,mode:AiMode):Promise<Result>{
  const was=new Set([...flat(before).keys()]),made=[...flat(S.published).values()].filter(i=>!was.has(i.id))
  for(const c of cs.changes)if(c.op==='create'){const got=made.find(i=>plainT(i.name)===plainT(c.name));if(got&&got.name.slice(1)!==c.name.slice(1))res.fails.push({sev:'MEDIO',why:`nome alterato: «${got.name}» invece di «${c.name}»`})}
  results.push(res);return res}
+
+// Fase B (17/10, decisione Manuel): «elimina / cancella / … proprio» = ELIMINARE, solo dopo conferma. I casi scritti quando
+// eliminare voleva dire nascondere diventano: richiesta → domanda «Elimino X dal menu?» → «sì» → piatto eliminato (più severo).
+for(const cs of C as any[]){const t=(x:any)=>typeof x==='string'?x:x.v??x.b??'';if(cs.turns.length===1&&/\b(?:elimin|cancell)\w*|\b(?:togl|lev)\w* proprio\b/i.test(t(cs.turns[0]))&&cs.changes.length&&cs.changes.every((c:any)=>c.op==='hidden'&&c.value===true)){cs.turns=[...cs.turns,'sì'];cs.changes=cs.changes.map((c:any)=>({op:'k',k:'delete|'+c.dish}));if(cs.replyAt)cs.replyAt=cs.replyAt.map(([i,re]:any)=>[i,/non li elimino/.test(String(re))?/Elimino/:re]);delete cs.ai;delete cs.reply}}
 
 describe('bot titolare: verifica avversaria, quinto giro (QA WhatsApp 17/10)',()=>{
  it('ha tra 150 e 200 casi nuovi (quinto giro)',()=>{expect(C.length).toBeGreaterThanOrEqual(150);expect(C.length).toBeLessThanOrEqual(200)})

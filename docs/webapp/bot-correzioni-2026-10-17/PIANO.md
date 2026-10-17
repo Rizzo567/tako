@@ -65,19 +65,19 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 ## FASE B — capacità nuove da WhatsApp
 
 ### B1. Elimina con conferma
-- [ ] B1.1 Azione `delete` nello schema del cervello e nel percorso deterministico; «elimina/cancella/rimuovi completamente/levalo proprio» → conferma → cancellazione logica; «togli» resta nascondi.
-- [ ] B1.2 «annulla» entro 10 min ripristina; dopo → definitiva (SQL additivo se serve + rollback.sql). Coerenza tra cervello e deterministico (oggi si contraddicono).
-- [ ] B1.3 Batteria B1 (≥150 frasi) verde.
+- [x] B1.1 Azione `delete` nello schema del cervello e nel percorso deterministico; «elimina/cancella/rimuovi completamente/levalo proprio» → conferma → cancellazione logica; «togli» resta nascondi. — *F: `twilio-menu-structure.ts` (verbi, lettura deterministica, applicazione) + `delete_item` nel cervello e nel validatore (verbo nel messaggio di ADESSO); eliminare propone sempre «Elimino X dal menu? Rispondi sì».*
+- [x] B1.2 «annulla» entro 10 min ripristina; dopo → definitiva (SQL additivo se serve + rollback.sql). Coerenza tra cervello e deterministico (oggi si contraddicono). — *F: annulla col menu intero di prima (impronta di quello di dopo) per eliminazioni/spostamenti/categorie; oltre 10 minuti definitiva. **Nessun SQL**: la cancellazione logica è il record `undo:` (10 min) + il ritiro «morbido» dei piatti tolti che la pubblicazione fa già (`items_off`). Capacità «non posso eliminare» tolta dalle copy: cervello e deterministico coerenti.*
+- [x] B1.3 Batteria B1 (≥150 frasi) verde. — *F: b1-elimina 150, oracolo 150/150; Groq giù e avversario 0 GRAVI di sicurezza; invariante «eliminato-senza-conferma» 0.*
 
 ### B2. Categorie
-- [ ] B2.1 Crea categoria («aggiungi la categoria primi», «crea una categoria che si chiama speciali»), anche dentro una richiesta con piatti («crea primi e mettici pasta al pesto»).
-- [ ] B2.2 Rinomina categoria; nessun doppione; ordine sensato nel menu pubblico.
-- [ ] B2.3 Batteria B2 (≥150 frasi) verde.
+- [x] B2.1 Crea categoria («aggiungi la categoria primi», «crea una categoria che si chiama speciali»), anche dentro una richiesta con piatti («crea primi e mettici pasta al pesto»). — *F: esplicita → subito; implicita («tra i primi» che non c'è) → «la creo?» → sì; prezzo mancante → bozza nella categoria nuova.*
+- [x] B2.2 Rinomina categoria; nessun doppione; ordine sensato nel menu pubblico. — *F: `courseRank` (antipasti → … → bevande) e menu scelto per portata; doppioni rifiutati (singolare/plurale).*
+- [x] B2.3 Batteria B2 (≥150 frasi) verde. — *F: b2-categorie 150, oracolo 150/150; invarianti «categoria-doppia» 0 e «categoria-fuori-ordine» 0.*
 
 ### B3. Sposta e rinomina piatti
-- [ ] B3.1 Sposta piatto/i tra categorie («sposta il caviale negli speciali», «metti quei due nei primi»).
-- [ ] B3.2 Rinomina piatto («cambia il nome di X in Y», «chiamala Z»), con alias appreso nella memoria del ristorante.
-- [ ] B3.3 Batteria B3 (≥150 frasi) verde.
+- [x] B3.1 Sposta piatto/i tra categorie («sposta il caviale negli speciali», «metti quei due nei primi»). — *F: deterministico per i comandi espliciti, cervello per i rimandi; categoria che non c'è → «la creo?».*
+- [x] B3.2 Rinomina piatto («cambia il nome di X in Y», «chiamala Z»), con alias appreso nella memoria del ristorante. — *F: vecchio nome → alias attivo (solo col cervello acceso), mai verso un nome di un altro piatto; nome già preso → domanda.*
+- [x] B3.3 Batteria B3 (≥150 frasi) verde. — *F: b3-sposta-rinomina 152, oracolo 152/152; avversario (elimina al posto di nascondere, rinomina/sposta a caso, categorie inventate): 0 GRAVI di sicurezza.*
 
 ### B4. Chiusura fase B
 - [ ] B4.1 Tutte le batterie A+B: 0 GRAVI, MEDI ≤ 2%; round1–6* 0/0/0; suite = 12 rossi noti.
@@ -91,3 +91,21 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 - [ ] G2 ≥ 90% successo, 0 GRAVI di sicurezza, tasso JSON invalido/ripiego 20b, token in cache, p50 latenza sul QA.
 - [ ] G3 Se sotto obiettivo: giri di fix (max 3) → ridistribuire su QA.
 - [ ] G4 Report finale a Manuel; accensione per i clienti solo su suo via.
+
+## A7 — correzioni dalla verifica avversaria X (aggiunto 17/10 sera, dopo A6.4)
+Fonte: branch `codex/bot-adv-1017` (13d4354 + REPORT-X), `docs/webapp/bot-correzioni-2026-10-17/avversaria/REPORT-X.md`; runner `TAKO_ADV=1 npx vitest run tests/eval/eval-adv-a.test.ts` e 31 sonde `tests/owner-brain-adv-a.test.ts`. Si fa dopo B4.1 (stessi file). Prima: merge di codex/bot-adv-1017 in codex/bot-fix-1017.
+- [x] A6.4 Verifica avversaria eseguita (508 conversazioni, ~79 GRAVI / ~65 MEDI) — X, 13d4354
+- [ ] A7.1 G1/G2 somiglianza parole troppo larga (torna→Torta, pollo→polpo, torno→tonno)
+- [ ] A7.2 G3 «togli N euro» = ribasso di prezzo, non nascondi
+- [ ] A7.3 G4 code e teste nel nome del piatto nuovo (se puoi, dai, per stasera, da domani, al/sul menu…)
+- [ ] A7.4 G5 «X e Y a N» → domanda uno/due piatti anche col prezzo; M6 prezzi nella risposta («8 tutti e due»)
+- [ ] A7.5 G6/M12 bozza in sospeso + «lascia stare/lascia perdere/niente» chiude la bozza
+- [ ] A7.6 G7/G11 ipotesi fonetiche e match su una sola parola: mai verso piatto con parole diverse; «sì» a un'ipotesi sbagliata non scrive l'altro piatto
+- [ ] A7.7 G8 prezzi relativi (aumenta/abbassa di N, +1, N centesimi in più) → calcolo dal prezzo attuale, direzione verificata
+- [ ] A7.8 G9/M7 centesimi («7 euro 90», «quindici e novanta», «13 virgola 50», «3 e 50»)
+- [ ] A7.9 G10/M8 ordinali e rimandi a elenchi del bot sempre verificati
+- [ ] A7.10 G12/M5 correzioni: «lasciala stare» sul piatto toccato = ripristino; «anzi no» da solo = annulla ultima azione
+- [ ] A7.11 M1/M2/M3/M4 misti, saluti in testa, domande, «boh» come esitazione
+- [ ] A7.12 M9/M10/M11 domanda giusta invece di «non ho capito»; Groq spento → riserva utile, non «C'è stato un problema»; categoria dedotta
+- [ ] A7.13 Runner avversario: oracolo 0 GRAVI, off e avversario 0 GRAVI di sicurezza; 31 sonde verdi; fix-a, B, round1–6* non peggiorano; suite = 12 rossi
+- [ ] A7.14 Secondo giro avversario indipendente (≥200 conversazioni nuove) → se GRAVI, ripetere A7 (max 3 giri)

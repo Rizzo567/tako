@@ -111,10 +111,11 @@ for(let i=0;i<32;i++){const n=pick(NAMES,i+2),p=pick([12,15,9,20],i),t=pick(FORM
 // categoria che non c'è: il nome resta pulito, si chiede dove metterlo
 const UNK=(n:string,p:number)=>[`aggiungi ${n} a ${p} nei primi pasti`,`aggiungi ${n} a ${p} nei primi`,`aggiungi tra i secondi ${n} a ${p}`,`aggiungi ${n} a ${p} in una categoria nuova che si chiama speciali`,`aggiungi ${n} a ${p} nella categoria dolci`,`aggiungi la ${n} a ${p} tra i primi`]
 const WHERE=['nei piatti di prova','piatti di prova','mettilo nei piatti di prova','va bene, nei piatti di prova']
-for(let i=0;i<30;i++){const n=pick(NAMES,i),p=pick([12,15,9,20,11],i+1);c('qa',[pick(UNK(n,p),i),pick(WHERE,i)],CR(n,p,PP),{ask:[1]})}
-// conferme mai come nome
+// Fase B (17/10): «in una categoria nuova che si chiama speciali» la crea subito (è chiesta); le altre si chiedono.
+for(let i=0;i<30;i++){const n=pick(NAMES,i),p=pick([12,15,9,20,11],i+1),t=pick(UNK(n,p),i);if(/categoria nuova che si chiama/.test(t))c('qa',t,CR(n,p,'Speciali'));else c('qa',[t,pick(WHERE,i)],CR(n,p,PP),{ask:[1]})}
+// conferme mai come nome. Fase B (17/10): il «sì» alla domanda «la creo?» crea la categoria e ci mette il piatto col SUO nome.
 const YES=['sì creala','ok','sì','vai','creala','sì, crea pure']
-for(let i=0;i<24;i++){const n=pick(NAMES,i+1),p=pick([12,15,9,20],i);c('qa',[`aggiungi tra i primi ${n} a ${p}`,pick(YES,i),pick(WHERE,i+1)],CR(n,p,PP),{ask:[1,2]})}
+for(let i=0;i<24;i++){const n=pick(NAMES,i+1),p=pick([12,15,9,20],i);c('qa',[`aggiungi tra i primi ${n} a ${p}`,pick(YES,i)],CR(n,p,'Primi'),{ask:[1]})}
 for(let i=0;i<8;i++){const n=pick(NAMES,i);c('qa',['aggiungi un piatto a 12',pick(['ok','sì','vai','va bene'],i),n],CR(n,12,PP),{ask:[1,2]})}
 // mario: altre categorie esistenti
 const SEC:[string,string][]=[['tra i dolci','Dolci'],['nei secondi','Secondi'],['negli antipasti','Antipasti'],['nei contorni','Contorni']]

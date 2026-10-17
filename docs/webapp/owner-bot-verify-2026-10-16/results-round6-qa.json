@@ -216,16 +216,18 @@
    "cat": "live",
    "mode": "ideal",
    "turns": [
-    "elimina boh"
+    "elimina boh",
+    "sì"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
-    "hidden|boh|true"
+    "delete|boh"
    ],
    "actual": [
-    "hidden|boh|true"
+    "delete|boh"
    ],
    "aiCalls": 0,
    "fails": []

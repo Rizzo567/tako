@@ -95,3 +95,28 @@ describe('A5 nomi storpiati (solo verso piatti del menu, con soglia)',()=>{
   expect(phoneticCandidates('mojito',mario)).toEqual([])
  })
 })
+
+import {parseStructure,applyStructAction,courseRank} from '../apps/server/src/lib/twilio-menu-structure.js'
+import {undoRecordFor,applyUndo} from '../apps/server/src/lib/twilio-menu-hold.js'
+describe('fase B: comandi di struttura e annulla del menu intero',()=>{
+ const refs2=[{id:'b',name:'boh',sectionId:'s1'},{id:'r',name:'pasta al ragù',sectionId:'s1'},{id:'f',name:'Pasta e fagioli',sectionId:'s2'}],secs=[{id:'s1',name:'Piatti di prova',menu:'M'},{id:'s2',name:'Primi',menu:'M'}]
+ it.each([
+  ['elimina boh',{kind:'delete',ids:['b']}],['cancella pasta al ragù e boh',{kind:'delete',ids:['r','b']}],['boh levalo proprio dal menu',{kind:'delete',ids:['b']}],['elimina la pasta e fagioli',{kind:'delete',ids:['f']}],
+  ['cambia il nome di boh in Bollito misto',{kind:'rename',id:'b',name:'Bollito misto'}],['boh chiamalo Bollito',{kind:'rename',id:'b',name:'Bollito'}],
+  ['sposta boh nei primi',{kind:'move',ids:['b'],sectionId:'s2',sectionName:'Primi'}],['rinomina la categoria primi in Primi piatti',{kind:'rename_section',sectionId:'s2',name:'Primi piatti'}],
+  ['crea la categoria speciali',{kind:'create_section',name:'Speciali',rest:''}],['crea la categoria dolci e mettici tiramisù a 6,50',{kind:'create_section',name:'Dolci',rest:'tiramisù a 6,50'}],
+ ] as [string,unknown][])('%s',(t,want)=>{expect(parseStructure(t,refs2,secs)).toEqual(want)})
+ it('mai un comando su piatti che non ci sono o con nomi già presi; «togli» non è eliminare',()=>{
+  expect(parseStructure('elimina la lasagna',refs2,secs)).toBeNull();expect(parseStructure('togli boh',refs2,secs)).toBeNull()
+  expect(parseStructure('rinomina boh in pasta al ragù',refs2,secs)).toMatchObject({kind:'ask'})
+  expect(parseStructure("aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto",refs2,secs)).toBeNull()
+ })
+ it('categoria nuova in ordine di portata; annulla rimette tutto (eliminato, spostato, categoria) solo se il menu non è cambiato',()=>{
+  const w:any={menus:[{id:'m',sections:[{id:'s1',name:'Antipasti',items:[{id:'b',name:'boh',price:5}]},{id:'s3',name:'Dolci',items:[]}]}]},before=structuredClone(w)
+  applyStructAction(w,{kind:'create_section',newSectionId:'s9',name:'Primi',menuId:'m'});expect(w.menus[0].sections.map((s:any)=>s.name)).toEqual(['Antipasti','Primi','Dolci'])
+  applyStructAction(w,{kind:'move',id:'b',sectionId:'s9'});applyStructAction(w,{kind:'delete',id:'b'})
+  const rec=undoRecordFor(before,w)!;expect(rec.full).toBeTruthy();const now=structuredClone(w);expect(applyUndo(now,rec)).toMatchObject({ok:true});expect(now.menus).toEqual(before.menus)
+  const changed=structuredClone(w);changed.menus[0].sections[0].name='X';expect(applyUndo(changed,rec)).toMatchObject({ok:false})
+  expect(courseRank('Primi pasti')).toBe(2);expect(courseRank('Bevande')).toBe(8)
+ })
+})

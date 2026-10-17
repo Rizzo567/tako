@@ -21,7 +21,7 @@ Generato da tests/eval (groq=oracle, riferimento=attuale-oracle, tetto=20000, co
 | multi-turno | 207 | 189 (91.3%) | 189 | 14 | 4 | 0 | 0 | 22.5% | 39 | 163 | 0 |
 | TOTALE | 318 | 296 (93.1%) | 294 | 14 | 8 | 2 | 0 | 22.7% | 46 | 217 | 0 |
 
-Latenza harness (webhook→risposta, senza rete) p50 2 ms · p95 6 ms. Con la latenza Groq registrata: p50 2 ms · p95 6 ms.
+Latenza harness (webhook→risposta, senza rete) p50 2 ms · p95 6.1 ms. Con la latenza Groq registrata: p50 2 ms · p95 6.1 ms.
 IA: 246 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
 
 | Codice | GRAVE | MEDIO | BASSO |

@@ -86,6 +86,8 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
   const f=holdFlat(p);if(findDishes(p,refs).length||preselect(p,refs,1).length||words(p).length===0||/\d/.test(f)||f.split(' ').some(w=>wordNumber(w)!==null)
    ||/\b(promo\w*|offert\w*|scont\w*|evidenza|porzion\w*|rest\w*|riman\w*|finit\w*|esaurit\w*|esclus\w*|tranne|eccetto|happy|hour|ore|giorn\w*|oggi|domani|sera|pranzo|cena|menu|piatt\w*|prezz\w*|euro|cost\w*|metti\w*|togli\w*|nascond\w*|aggiung\w*|cambi\w*|ultim\w*|disponibil\w*|tutt\w*|non|no|ma|pero|cosi|anche|pure)\b/.test(f))return false
   asks.push({type:'unknown',word:word(p)});unclear++;return true}
+ // Fase B: «… in un'altra categoria, speciali» non è un elenco di piatti: la categoria la legge l'aggiunta.
+ if(startsWithCreate(text)&&/\b(?:categori[ae]|sezion[ei])\b/i.test(text))return null
  if(startsWithCreate(text)){
   // Aggiunta di più piatti: «aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo».
   const body0=text.replace(holdCreateVerb,''),cut=holdCutSection(body0,sections),sectionId=cut?.sectionId??(sections.length===1?sections[0]!.id:null);if(!sectionId)return null
@@ -226,21 +228,29 @@ export function clearChanges(text:string,refs:MenuRef[]):MenuAction[]|null{const
  return out.length?out:null}
 // ---------------- Annulla vero (10 minuti) ----------------
 export type UndoItem={id:string,sectionId:string,before:any|null,after:any|null}
-export type UndoRecord={kind:'undo',at:number,items:UndoItem[]}
+// Fase B (17/10): eliminazioni, spostamenti e categorie nuove/rinominate cambiano la struttura: si salva il menu INTERO di prima
+// (`full.before`) e l'impronta di quello di dopo; «annulla» lo rimette solo se nel frattempo il menu non è cambiato.
+export type UndoRecord={kind:'undo',at:number,items:UndoItem[],full?:{before:any[],after:string,names:{restored:string[],removed:string[]}}}
+const holdHash=(s:string)=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16)+':'+s.length}
 export const undoWindowMs=10*60*1000
 const holdCanon=(v:any):string=>v===null||typeof v!=='object'?JSON.stringify(v??null):Array.isArray(v)?'['+v.map(holdCanon).join(',')+']':'{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+holdCanon(v[k])).join(',')+'}'
 const holdItemsOf=(w:any)=>new Map<string,{item:any,sectionId:string}>(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,{item:i,sectionId:s.id}]))))
 const holdSectionShape=(w:any)=>holdCanon(w.menus.map((m:any)=>m.sections.map((s:any)=>({...s,items:undefined}))))
 /** Le voci cambiate da una pubblicazione WhatsApp (prima/dopo). null se cambia altro oltre ai piatti (sezioni, design). */
 export function undoRecordFor(before:any,after:any,now=Date.now()):UndoRecord|null{
- if(holdCanon({...before,menus:undefined})!==holdCanon({...after,menus:undefined})||holdSectionShape(before)!==holdSectionShape(after))return null
+ if(holdCanon({...before,menus:undefined})!==holdCanon({...after,menus:undefined}))return null
  const a=holdItemsOf(before),b=holdItemsOf(after),items:UndoItem[]=[]
+ const structural=holdSectionShape(before)!==holdSectionShape(after)||[...a].some(([id,y])=>!b.has(id)||b.get(id)!.sectionId!==y.sectionId)
+ if(structural){const restored=[...a].filter(([id,y])=>!b.has(id)||b.get(id)!.sectionId!==y.sectionId||holdCanon(b.get(id)!.item)!==holdCanon(y.item)).map(([,y])=>String(y.item.name??'')),removed=[...b].filter(([id])=>!a.has(id)).map(([,x])=>String(x.item.name??''))
+  return{kind:'undo',at:now,items:[],full:{before:structuredClone(before.menus),after:holdHash(holdCanon(after.menus)),names:{restored:[...new Set(restored)],removed}}}}
  for(const [id,x] of b){const y=a.get(id);if(!y)items.push({id,sectionId:x.sectionId,before:null,after:structuredClone(x.item)});else if(holdCanon(y.item)!==holdCanon(x.item)||y.sectionId!==x.sectionId)items.push({id,sectionId:x.sectionId,before:structuredClone(y.item),after:structuredClone(x.item)})}
  for(const [id,y] of a)if(!b.has(id))return null
  return items.length&&items.length<=60?{kind:'undo',at:now,items}:null}
 export const isUndoRequest=(text:string)=>/^(?:(?:no|scusa|aspetta|anzi|ok|allora|ops|ehm|senti)\s+)*(?:annulla(?: tutto| l ultima(?: modifica| cosa)?| la modifica(?: di prima)?| le modifiche(?: di prima)?| quello che hai fatto| quello| questo| la richiesta)?|torna(?:re)? indietro|torna (?:come|com) (?:prima|era)|torna com era|rimetti(?: tutto)? (?:come prima|com era|come era|come stava|come stavano)|rimettilo com era|rimettila com era|ripristina (?:come prima|com era)|disfa(?: tutto)?|undo)(?:\s+(?:per favore|grazie|dai))?$/.test(holdFlat(text))
 /** Ripristina le voci se nessuna è cambiata dopo (dashboard o altro). Muta `w`. */
 export function applyUndo(w:any,rec:UndoRecord):{ok:true,restored:string[],removed:string[]}|{ok:false,changed:string[]}{
+ if(rec.full){if(holdHash(holdCanon(w.menus))!==rec.full.after){const b=holdItemsOf({menus:rec.full.before}),n=holdItemsOf(w),changed=[...n].filter(([id,x])=>{const y=b.get(id);return !y||holdCanon(y.item)!==holdCanon(x.item)}).map(([,x])=>String(x.item.name??''));return{ok:false,changed:changed.length?[...new Set(changed)].slice(0,4):['il menu']}}
+  w.menus=structuredClone(rec.full.before);return{ok:true,restored:rec.full.names.restored,removed:rec.full.names.removed}}
  const now=holdItemsOf(w),changed:string[]=[]
  for(const it of rec.items){const cur=now.get(it.id);if(!cur||holdCanon(cur.item)!==holdCanon(it.after))changed.push(String((cur?.item??it.after??it.before)?.name??'?'))}
  if(changed.length)return{ok:false,changed:[...new Set(changed)]}

@@ -7,9 +7,10 @@ import {isSalesAction,salesActionKey,salesActionChanged,applySalesAction,describ
 import {businessDate} from './menu-sales.js'
 import {priceAlternatives,priceAlternativeDish,isExcluded,type Excluded} from './twilio-menu-clarify.js'
 import {removeVerbRe} from './twilio-menu-nlu.js'
+import {isStructAction,applyStructAction,orderActions,DELETE_VERB,RENAME_VERB,MOVE_VERB,SECTION_WORD,sameSection,menuForSection,type StructAction} from './twilio-menu-structure.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string}
-export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction
+export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction|StructAction
 // `after` (17/10, A4.4): risposta alla domanda dello stesso messaggio, scritta dal server DOPO aver salvato la modifica.
 export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[],after?:{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'capability',ids:string[]}}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'clarify',ids:string[],actions?:MenuAction[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
 export const groqBase=()=>process.env.GROQ_API_BASE||'https://api.groq.com/openai/v1'
@@ -59,7 +60,7 @@ export function g9Prices(message:string):number[]{message=withoutQuantities(mess
 const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;if(current!==undefined&&/\b(aument\w*|alz\w*|sal\w*|abbass\w*|diminu\w*|scont\w*|togli\w*|meno|piu)\b/.test(plain(message)))return said.some(d=>Math.abs(Math.abs(price-current)-d)<0.005);return false}
 const finishWords=/\b(?:finit\w*|esaurit\w*|fernut\w*|finid\w*|finia|terminat\w*|non c e piu|non ce piu|nun ce sta|un c e piu|non abbiamo piu|non ce n e piu)\b/
 const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
-export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[]}={}):MenuPlan{
+export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[],verbText?:string}={}):MenuPlan{
  const data=parseJson(raw),sections=opts.sections??[],message=opts.message??'';if(!data||typeof data!=='object'||Array.isArray(data))return clarify()
  const byId=new Map(refs.map(r=>[r.id,r])),sectionIds=new Set(sections.map(s=>s.id)),known=(ids:unknown)=>Array.isArray(ids)?ids.filter((id):id is string=>typeof id==='string'&&byId.has(id)):[]
  if(data.intent==='capability'){const ids=Array.isArray(data.capability_ids)?data.capability_ids.filter((id:unknown):id is string=>typeof id==='string'&&(id==='all'||capabilities.some(c=>c.id===id))):[];const chosen=ids.length?[...new Set(ids)].slice(0,4) as string[]:[];return{type:'capability',ids:chosen.length&&!chosen.every(id=>id==='other')?chosen:capabilityHint(message)}}
@@ -70,16 +71,31 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
  data.actions=data.actions.map((a:any)=>a&&typeof a==='object'&&!a.action&&Object.keys(a).length===1&&a[Object.keys(a)[0]!]&&typeof a[Object.keys(a)[0]!]==='object'?{action:Object.keys(a)[0],...a[Object.keys(a)[0]!]}:a)
  const actions:MenuAction[]=[],seen=new Set<string>(),valid=known(data.actions.map((a:any)=>a?.item_id));let created=0,twins=0,lastTwin:string|null=null
  // 17/10 (A4.1): con UNA sola categoria nel menu una creazione senza categoria va lì, senza chiedere.
- if(sections.length===1)for(const a of data.actions)if(a&&typeof a==='object'&&a.action==='create_item'&&(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)))a.section_id=sections[0]!.id
+ // Fase B (17/10): categorie nuove dello stesso piano prima di tutto (le creazioni e gli spostamenti le usano per nome).
+ // Verbi e nomi nuovi della struttura solo dal messaggio di ADESSO (mai dalla cronologia: «rinomina» detto prima non vale ora).
+ const vt=opts.verbText??message,pm=plain(vt),newSecs=new Map<string,string>()
+ for(const a of data.actions){if(!a||typeof a!=='object'||a.action!=='create_section')continue;const name=cleanText(a.name,120)
+  if(!name||!verbatim(name,vt)||!(SECTION_WORD.test(pm)||/\b(?:cre\w*|nuov[ao])\b/.test(pm)))return clarify(valid)
+  const ex=sections.find(x=>sameSection(x.name,name));if(ex){newSecs.set(plain(name),ex.id);continue};if(newSecs.has(plain(name)))continue
+  const id=randomUUID();newSecs.set(plain(name),id);actions.push({kind:'create_section',newSectionId:id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1),menuId:''})}
+ const secByName=(v:unknown)=>{const n=cleanText(v,120);if(!n)return null;const ex=sections.find(x=>sameSection(x.name,n));if(ex)return ex.id;for(const [k,id] of newSecs)if(sameSection(k,n))return id;return null}
+ for(const a of data.actions)if(a&&typeof a==='object'&&(a.action==='create_item'||a.action==='move_item')&&(typeof a.section_id!=='string'||!sectionIds.has(a.section_id))){const byName=secByName(a.section_name);if(byName)a.section_id=byName}
+ if(sections.length===1)for(const a of data.actions)if(a&&typeof a==='object'&&a.action==='create_item'&&!a.section_name&&(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)))a.section_id=sections[0]!.id
+ const okSection=(id:unknown)=>typeof id==='string'&&(sectionIds.has(id)||[...newSecs.values()].includes(id))
  for(const a of data.actions){if(!a||typeof a!=='object')return clarify(valid)
+  if(a.action==='create_section')continue
+  if(a.action==='rename_section'){const name=cleanText(a.name,120);if(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)||!name||!verbatim(name,vt)||!RENAME_VERB.test(pm)||sections.some(x=>x.id!==a.section_id&&sameSection(x.name,name)))return clarify(valid);actions.push({kind:'rename_section',sectionId:a.section_id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)});continue}
   if(a.action==='create_item'||a.action==='create_daily_special'){if(++created>200||!(a.action==='create_item'?wantsCreate(message):wantsSpecial(message)))return clarify(valid);const name=cleanText(a.name,300),price=priceOf(a.price),description=a.description==null||a.description===''?null:cleanText(a.description,4000)
-   if(a.action==='create_item'&&(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)))return{type:'missing',missing:['section'],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
+   if(a.action==='create_item'&&!okSection(a.section_id))return{type:'missing',missing:['section'],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
    if(!name||price===null||(a.description!=null&&a.description!==''&&!description))return{type:'missing',missing:[...(!name?['name' as const]:[]),...(price===null?['price' as const]:[])],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
    if(!verbatim(name,message)||(description&&!verbatim(description,message)))return{type:'verbatim'};if(g9ActionName.test(plain(name))||(a.action==='create_item'&&(' '+plain(name)+' ').includes(' '+plain(sections.find(x=>x.id===a.section_id)?.name??'\u0000')+' '))||!g9Said(price,message))return clarify(valid);const extra=description&&!plain(description).includes(plain(name))?description:null
    // 17/10 (A4.3): «aggiungi X a 10» con X già nel menu: col prezzo detto diverso è un cambio di prezzo, uguale si salta;
    // le altre parti della richiesta restano (prima la richiesta intera diventava «c'è già»).
    if(a.action==='create_item'){const twin=refs.find(r=>r.sectionId===a.section_id&&plain(r.name)===plain(name));if(twin){twins++;lastTwin=twin.id;if(Math.abs(twin.price-price)>=0.005&&!seen.has(twin.id+'set_price')){seen.add(twin.id+'set_price');actions.push({kind:'price',id:twin.id,price})}continue};actions.push({kind:'create',sectionId:a.section_id,name,price,description:extra})}else actions.push({kind:'special',name,price,description:extra});continue}
   if(typeof a.item_id!=='string'||!byId.has(a.item_id))return clarify(valid);if(!opts.trustedIds?.has(a.item_id)&&!g9DishMentioned(byId.get(a.item_id)!.name,message,refs))return clarify(valid);const key=a.item_id+a.action+(a.tag??'');if(seen.has(key))return clarify(valid);seen.add(key)
+  if(a.action==='delete_item'){if(!DELETE_VERB.test(pm))return clarify(valid);actions.push({kind:'delete',id:a.item_id});continue}
+  if(a.action==='rename_item'){const name=cleanText(a.name,300);if(!name||!verbatim(name,vt)||!RENAME_VERB.test(pm)||plain(name)===plain(byId.get(a.item_id)!.name)||refs.some(r=>r.id!==a.item_id&&plain(r.name)===plain(name)))return clarify(valid);actions.push({kind:'rename',id:a.item_id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)});continue}
+  if(a.action==='move_item'){if(!okSection(a.section_id)||!(MOVE_VERB.test(pm)||/\b(?:metti\w*|mettil\w*|mettel\w*|aggiung\w*|mettici)\b/.test(pm)))return clarify(valid);actions.push({kind:'move',id:a.item_id,sectionId:a.section_id});continue}
   if(a.action==='set_price'){const price=priceOf(a.price);if(price===null||!g9Said(price,message,byId.get(a.item_id)!.price))return clarify(valid);actions.push({kind:'price',id:a.item_id,price})}
   else if(a.action==='set_available'&&typeof a.available==='boolean')actions.push({kind:'available',id:a.item_id,value:a.available})
   else if(a.action==='set_hidden'&&typeof a.hidden==='boolean')actions.push({kind:'hidden',id:a.item_id,value:a.hidden})
@@ -109,7 +125,16 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
 export const safe=(s:string)=>s.replace(/[*_~]/g,c=>c==='*'?'✱':c==='_'?' ':'-').trim()
 export function itemLabel(ref:MenuRef,refs:MenuRef[]){const name=safe(ref.name);return refs.filter(r=>r.name.toLowerCase()===ref.name.toLowerCase()).length>1?`${name} (${safe(ref.menu)})`:name}
 const short=(s:string,n=160)=>s.length>n?s.slice(0,n-1)+'…':s
+/** Categorie dopo le azioni: quelle nuove di questo piano (create_section) hanno già il loro nome per la risposta. */
+export const withNewSections=(sections:SectionRef[],actions:MenuAction[]):SectionRef[]=>[...sections.map(s=>{const r=actions.find(a=>a.kind==='rename_section'&&a.sectionId===s.id) as any;return r?{...s,name:r.name}:s}),...actions.flatMap(a=>a.kind==='create_section'&&!sections.some(s=>s.id===a.newSectionId)?[{id:a.newSectionId,name:a.name,menu:''} as SectionRef]:[])]
 export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]=[]){
+ if(isStructAction(a)){const sec=(id:string)=>sections.find(s=>s.id===id)?.name??'?'
+  if(a.kind==='create_section')return fill(line.newSection,{categoria:safe(a.name)})
+  if(a.kind==='rename_section')return fill(line.renameSection,{prima:safe(refs.find(r=>r.sectionId===a.sectionId)?.section??sec(a.sectionId)),nome:safe(a.name)})
+  const ref=refs.find(r=>r.id===a.id),piatto=ref?itemLabel(ref,refs):'?'
+  if(a.kind==='delete')return fill(a.undoCreate?line.deletedNew:line.deleted,{piatto})
+  if(a.kind==='rename')return fill(line.renamed,{piatto,nome:safe(a.name)})
+  return fill(line.moved,{piatto,categoria:safe(sec(a.sectionId))})}
  if(a.kind==='create'){const section=sections.find(s=>s.id===a.sectionId);return fill(line.create,{piatto:safe(a.name),categoria:section?safe(section.name):'?',prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})}
  if(a.kind==='special')return fill(line.special,{piatto:safe(a.name),prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})
  const ref=refs.find(r=>r.id===a.id)!,piatto=itemLabel(ref,refs)
@@ -123,16 +148,21 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
  if(a.kind==='tag')return fill(a.value?line.tagAdd:line.tagRemove,{piatto,etichetta:allowedTags[a.tag]!});return piatto
 }
 /** Canonical field identity lets corrections replace a value without dropping the rest of a pending batch. */
-export const actionKey=(a:MenuAction)=>isSalesAction(a)?salesActionKey(a):a.kind==='create'?`create:${a.sectionId}:${plain(a.name)}`:a.kind==='special'?`special:${plain(a.name)}`:`${a.id}:${a.kind}:${a.kind==='tag'?a.tag:''}`
+export const actionKey=(a:MenuAction)=>isSalesAction(a)?salesActionKey(a):a.kind==='create_section'?`section:${plain(a.name)}`:a.kind==='rename_section'?`${a.sectionId}:rename_section`:a.kind==='create'?`create:${a.sectionId}:${plain(a.name)}`:a.kind==='special'?`special:${plain(a.name)}`:`${a.id}:${a.kind}:${a.kind==='tag'?a.tag:''}`
 export function mergeMenuActions(previous:MenuAction[],delta:MenuAction[],remove:number[]=[]){
  const replacementKeys=new Set(delta.map(actionKey)),retained=previous.filter((a,i)=>!remove.includes(i+1)||replacementKeys.has(actionKey(a))),byKey=new Map(retained.map(a=>[actionKey(a),a]));for(const a of delta)byKey.set(actionKey(a),a);return [...byKey.values()]
 }
 /** Count actual field changes, not repeated instructions or values already in the published menu. */
 export function effectiveMenuActions(actions:MenuAction[],workspace:any):MenuAction[]{
  const items=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i]))));
- return mergeMenuActions([],actions).filter(a=>{if(a.kind==='create'||a.kind==='special'||a.kind==='image')return true;const item=items.get(a.id);if(!item)throw new Error('Item missing');if(isSalesAction(a))return salesActionChanged(a,item);if(a.kind==='price')return item.price!==a.price;if(a.kind==='description')return (item.description??'')!==a.text;if(a.kind==='tag')return (item.tags??[]).includes(a.tag)!==a.value;return (a.kind==='available'?item.available!==false:!!item[a.kind])!==a.value})
+ const sections=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.map((s:any)=>[s.id,s])))
+ const where=new Map<string,string>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,s.id]))))
+ return mergeMenuActions([],actions).filter(a=>{if(a.kind==='create'||a.kind==='special'||a.kind==='image'||a.kind==='create_section')return true
+  if(a.kind==='rename_section')return !!sections.get(a.sectionId)&&sections.get(a.sectionId).name!==a.name
+  const item=items.get(a.id);if(a.kind==='delete')return !!item;if(!item)throw new Error('Item missing')
+  if(a.kind==='rename')return item.name!==a.name;if(a.kind==='move')return where.get(a.id)!==a.sectionId;if(isSalesAction(a))return salesActionChanged(a,item);if(a.kind==='price')return item.price!==a.price;if(a.kind==='description')return (item.description??'')!==a.text;if(a.kind==='tag')return (item.tags??[]).includes(a.tag)!==a.value;return (a.kind==='available'?item.available!==false:!!item[a.kind])!==a.value})
 }
-export const appliedMenuText=(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[])=>'*Confermato.* Ho aggiornato il menu.\n\n'+actions.map(a=>describeAction(a,refs,sections)).join('\n')
+export const appliedMenuText=(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[])=>{const all=withNewSections(sections,actions);return '*Confermato.* Ho aggiornato il menu.\n\n'+actions.map(a=>describeAction(a,refs,all)).join('\n')+(actions.some(a=>a.kind==='delete'&&!a.undoCreate)?'\n\n'+copy.deleteUndoHint:'')}
 /** Explicit requests to keep the published price cancel only that pending price row. */
 export function pendingPriceRestores(message:string,pending:MenuAction[],refs:MenuRef[]){
  const indices:number[]=[];for(const clause of message.split(/[.!?;\n]+/)){const text=' '+plain(clause)+' ';if(!/\b(lascia|lasciamo|mantieni|tieni|non cambiare|non modificare)\b/.test(text)||!/\bprezzo\b/.test(text)||!/\b(com e|come e|invariato|uguale|originale|attuale)\b/.test(text))continue;
@@ -164,7 +194,10 @@ export function validatePendingMenuPlan(raw:unknown,refs:MenuRef[],sections:Sect
  const plan=validateMenuPlan(data,refs,{sections,message,checkCompleteness:false,trustedIds:new Set(pending.flatMap(a=>'id' in a?[a.id]:[]))});return plan.type==='change'?{...plan,actions:[...plan.actions,...patched].filter(a=>!restoreKeys.has(actionKey(a))),remove:[...new Set(remove)] as number[]}:plan
 }
 export function proposalText(restaurant:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[]){
- return fill(copy.proposal,{locale:restaurant,righe:actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,sections)).join('\n')})
+ const all=withNewSections(sections,actions)
+ // Solo eliminazioni: domanda diretta «Elimino X dal menu? Rispondi sì» (decisione 17/10).
+ if(actions.length&&actions.every(a=>a.kind==='delete')){const names=actions.map(a=>{const r=refs.find(x=>x.id===(a as any).id);return '*'+(r?itemLabel(r,refs):'?')+'*'});return fill(copy.deleteAsk,{piatti:names.length>1?names.slice(0,-1).join(', ')+' e '+names.at(-1):names[0]!})}
+ return fill(copy.proposal,{locale:restaurant,righe:actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,all)).join('\n')})
 }
 export function readText(plan:Extract<MenuPlan,{type:'read'}>,refs:MenuRef[]){
  if(plan.read==='items')return plan.ids.map(id=>{const r=refs.find(x=>x.id===id)!;return fill(line.read,{piatto:itemLabel(r,refs),prezzo:euro(r.price),stato:r.available?'disponibile':'finito',extra:(r.hidden?' · nascosto':'')+(r.featured?' · in evidenza':'')})}).join('\n')
@@ -200,7 +233,8 @@ export function localDate(timezone:string,now=new Date()){let zone='Europe/Rome'
 // Applica azioni già validate a un workspace (da ri-validare con workspaceSchema prima di salvare). Restituisce i nomi toccati.
 export function applyActions(w:any,actions:MenuAction[],opts:{uploads?:Map<string,string>,timezone?:string,now?:Date}={}){
  const items=new Map<string,any>(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i])))),names:string[]=[]
- for(const a of actions){
+ for(const a of orderActions(actions)){
+  if(isStructAction(a)){const n=applyStructAction(w,a);if(!names.includes(n))names.push(n);continue}
   if(a.kind==='create'){const section=w.menus.flatMap((m:any)=>m.sections).find((s:any)=>s.id===a.sectionId);if(!section)throw new Error('Section missing');section.items.push({id:randomUUID(),name:a.name,price:a.price,description:a.description});names.push(a.name);continue}
   if(a.kind==='special'){const {zone,date}=localDate(opts.timezone??'Europe/Rome',opts.now),schedule={timezone:zone,enabled:true,windows:[{weekdays:[0,1,2,3,4,5,6],start:'00:00',end:'00:00'}],from:date,until:date}
    const menu=w.menus.find((m:any)=>m.active!==false&&(m.type??'main')==='main')??w.menus.find((m:any)=>m.active!==false);if(!menu)throw new Error('Menu missing')
