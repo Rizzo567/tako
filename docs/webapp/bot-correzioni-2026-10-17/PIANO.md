@@ -122,3 +122,49 @@ A7.14 NON superato: Y (codex/bot-adv2-1017 cd777a8, `avversaria-y/REPORT-Y.md`) 
 - [ ] A8.6 M2/M3/M5/M8 domanda sul nome mancante; parti perse nei misti; «a 0» → domanda, negativi rifiutati; formati «13€», «€ 13», «13,00» anche senza IA — non iniziato (a 0 / negativi, nome categoria mancante, formati prezzo senza IA)
 - [ ] A8.7 Runner Y + X: oracolo 0 GRAVI, off e avversario 0 GRAVI di sicurezza, MEDI ≤ 2%; fix-a, fix-b, round1–6*, banco E, V non peggiorano; suite = 12 rossi — non raggiunto: Y oracolo 29 GRAVI (era 140), off 8 e avversario 10 di sicurezza; X 0 GRAVI, fix-a/fix-b verdi, round1–6* 1721/1721, banco E 298/318, V invariato
 - [ ] A8.8 Terzo e ultimo giro avversario indipendente (Z, ≥300 conv. nuove). Se restano GRAVI → STOP: niente deploy delle parti coinvolte, report a Manuel (exit del piano: max 3 giri)
+
+---
+# FASE R — un solo cervello (decisione Manuel 17/10 notte)
+«Il bot vecchio non deve più esserci» + «messaggi e azioni prestabiliti da togliere» + Groq giù = opzione A. A8 si ferma qui (WIP 6004b81): il percorso a regole NON decide più. Le parti utili di A–A8 restano solo come VALIDATORE del piano del modello (piatto esiste, prezzo detto con lettore indipendente, parti perse, rimandi, polarità prezzi relativi, nomi puliti, cancellazione solo con conferma, conferme in sospeso chiuse da correzioni).
+
+## Decisioni ritoccabili
+1. **Instradamento**: ogni messaggio del titolare → cervello (contesto: scheda generale → scheda ristoratore → cronologia ≤10 scambi/30 min → operazioni in sospeso [bozze, conferme, riepiloghi, domande aperte] → messaggio). Nessun percorso deterministico che interpreta frasi.
+2. **Risposte**: il testo lo scrive il modello (`reply_draft`); il server aggiunge solo i fatti riletti dal DB (cosa è cambiato, prezzi da→a). Testi fissi ammessi SOLO: riga «assistente automatico» al primo messaggio (AI Act) e messaggio «non disponibile» (Groq giù). Niente elenchi di comandi, niente «Rimandami…».
+3. **Azioni**: il modello sceglie tra strumenti primitivi (prezzo, nascondi/mostra, finito/disponibile, crea piatto, elimina→conferma, crea/rinomina categoria, sposta, rinomina piatto, descrizione, promo, evidenza, piatto del giorno, annulla, domanda). Nessun flusso a copione: le conferme e le domande le formula il modello; il server impone solo i vincoli (es. elimina richiede «sì» al turno dopo).
+4. **Validatore fallito** → il server rimanda al modello l'errore una volta (auto-correzione); se ancora fallisce → il modello formula una domanda; mai scrittura.
+5. **Groq giù / 429 / JSON invalido dopo ripiego 20b** → «Sono momentaneamente non disponibile, riprova tra un minuto.», nessuna modifica.
+6. Interruttore `settings.botBrain` resta (solo QA) finché il gate Developer non passa; con l'interruttore spento i clienti restano sul comportamento v112.
+
+## Goal / verifier / stop
+- Tutte le batterie (round1–6*, fix-a, fix-b, V 143, X 508, Y 558, banco E 318) con l'oracolo: 0 GRAVI, MEDI ≤ 2%; il modello avversario: 0 GRAVI di sicurezza (il validatore ferma tutto).
+- Nessun testo fisso fuori dai 2 ammessi (test che scansiona le risposte).
+- Gate Developer (18/10, gpt-oss vero): ≥ 97% sulle famiglie di comandi semplici (era il calo 97→58 misurato da N) e ≥ 90% complessivo, 0 GRAVI di sicurezza, p50 ≤ 3 s.
+- Exit: max 5 giri; se col modello vero i comandi semplici restano < 90% dopo 3 giri di prompt → stop e report a Manuel (non si torna alle regole senza il suo via).
+
+## Task
+### R0 Scoperta
+- [x] R0.1 UNKNOWNS-R.md: perché le famiglie semplici calavano 97→58 col cervello su tutto (prompt? validatore? oracolo?); cosa del percorso deterministico è interpretazione (da togliere) e cosa è vincolo (da tenere nel validatore); stati in sospeso oggi gestiti a copione. — *R 17/10: UNKNOWNS-R.md; spike misurato (cervello su tutto senza strumenti: E 298→281, fix-a 809→538): il calo è architettura (stati in sospeso senza strumenti), testi fissi del server e oracolo, non gpt-oss.*
+- [x] R0.2 Mappa dei testi fissi in twilio-menu-copy.ts e simili: quali spariscono, quali diventano fatti del server, i 2 ammessi. — *R: MAPPA-TESTI-R.md (valida solo a cervello acceso; clienti invariati).*
+### R1 Instradamento unico
+- [ ] R1.1 Route: tutti i messaggi al cervello quando `botBrain` è acceso; percorso deterministico non più chiamato per interpretare.
+- [ ] R1.2 Operazioni in sospeso (bozze, conferme elimina, riepiloghi, domande aperte, scelte numerate) passate nel contesto e risolte dal modello; il server tiene solo lo stato e i vincoli.
+- [ ] R1.3 Groq giù → messaggio A, nessuna modifica; test con Groq finto in errore/429/JSON rotto.
+### R2 Strumenti e validatore
+- [ ] R2.1 Schema azioni completo (incl. fase B: elimina, categorie, sposta, rinomina) nello schema strict.
+- [ ] R2.2 Validatore unico: riusa i controlli di A–A8 (lettore prezzi indipendente, parti perse, rimandi, polarità, nomi, conferma elimina, conferme chiuse da correzioni, quantità ≠ prezzi, formati prezzo).
+- [ ] R2.3 Auto-correzione: errore del validatore rimandato al modello una volta; poi domanda.
+### R3 Risposte generate
+- [ ] R3.1 Rimozione dei testi fissi (tranne i 2 ammessi); fatti del server in coda alla bozza del modello.
+- [ ] R3.2 Test che scansiona tutte le risposte di tutte le batterie: 0 testi fissi vietati.
+### R4 Scheda e prompt
+- [ ] R4.1 Scheda generale: comandi semplici con esempi (dalle batterie round1–6 e dai vocali di Manuel), regole del titolare, glossario; misura token (target ≤ 3,5k tipico).
+- [ ] R4.2 Oracolo del banco aggiornato al nuovo instradamento (documentato).
+### R5 Misura
+- [ ] R5.1 Tutte le batterie con oracolo e avversario → goal sopra; suite senza nuovi rossi oltre i 12 noti (i test del vecchio percorso che cambiano significato vanno aggiornati e motivati in implementation-notes).
+- [ ] R5.2 Campione gpt-oss vero solo se le chiavi di test hanno quota (tetto 40k), altrimenti gate Developer.
+### R6 Avversaria Z
+- [ ] R6.1 Terzo giro avversario indipendente (≥300 conv. nuove) sulla nuova struttura; GRAVI → fix (max 3 giri).
+### R7 Gate Developer e rilascio
+- [ ] R7.1 Banco completo + tutte le batterie con gpt-oss vero (chiave Developer).
+- [ ] R7.2 Deploy edge sul QA (check-active, diff, rollback), live solo TwiML, ripristino per hash, 0 messaggi a Manuel; rifare la sequenza vocale delle 17:26.
+- [ ] R7.3 Fast-forward main/release-1016; REPORT-R.md; accensione clienti solo col via di Manuel.
