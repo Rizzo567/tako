@@ -1,0 +1,1589 @@
+{
+ "bot": "nuovo-record",
+ "meta": {
+  "groq": "record",
+  "riferimento": "attuale-oracle-n2",
+  "tetto": 320000,
+  "conversazioni": 38
+ },
+ "summary": {
+  "total": {
+   "family": "TOTALE",
+   "n": 38,
+   "ok": 25,
+   "success": 25,
+   "grave": 7,
+   "medio": 6,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 14.5,
+   "unexpectedClar": 4,
+   "usedLlm": 38,
+   "llmMissConvs": 2,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "multi": {
+   "family": "multi-turno",
+   "n": 29,
+   "ok": 18,
+   "success": 18,
+   "grave": 7,
+   "medio": 4,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 13.3,
+   "unexpectedClar": 3,
+   "usedLlm": 29,
+   "llmMissConvs": 2,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "families": [
+   {
+    "family": "anche",
+    "n": 3,
+    "ok": 3,
+    "success": 3,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "correzione",
+    "n": 3,
+    "ok": 1,
+    "success": 1,
+    "grave": 2,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 1,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "ripristino",
+    "n": 3,
+    "ok": 2,
+    "success": 2,
+    "grave": 1,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "chiarimento",
+    "n": 3,
+    "ok": 1,
+    "success": 1,
+    "grave": 1,
+    "medio": 1,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 33.3,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "multipla",
+    "n": 3,
+    "ok": 1,
+    "success": 1,
+    "grave": 2,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 33.3,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 1,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "scaduto",
+    "n": 3,
+    "ok": 1,
+    "success": 1,
+    "grave": 0,
+    "medio": 2,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 33.3,
+    "unexpectedClar": 1,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "domanda",
+    "n": 3,
+    "ok": 3,
+    "success": 3,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "negazione",
+    "n": 3,
+    "ok": 3,
+    "success": 3,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 33.3,
+    "unexpectedClar": 1,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "ambiguita",
+    "n": 3,
+    "ok": 1,
+    "success": 1,
+    "grave": 0,
+    "medio": 2,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 33.3,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "togli",
+    "n": 3,
+    "ok": 3,
+    "success": 3,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "vocale",
+    "n": 3,
+    "ok": 1,
+    "success": 1,
+    "grave": 1,
+    "medio": 1,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 20,
+    "unexpectedClar": 1,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "qa1710",
+    "n": 1,
+    "ok": 1,
+    "success": 1,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 1,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "manuel",
+    "n": 1,
+    "ok": 1,
+    "success": 1,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 33.3,
+    "unexpectedClar": 1,
+    "usedLlm": 1,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "batterie",
+    "n": 3,
+    "ok": 3,
+    "success": 3,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   }
+  ],
+  "codes": {
+   "correzione-non-applicata": {
+    "GRAVE": 3,
+    "MEDIO": 0,
+    "BASSO": 0
+   },
+   "richiesta-persa": {
+    "GRAVE": 4,
+    "MEDIO": 0,
+    "BASSO": 0
+   },
+   "opzioni-non-leggibili": {
+    "GRAVE": 0,
+    "MEDIO": 1,
+    "BASSO": 0
+   },
+   "chiarimento-mancante": {
+    "GRAVE": 0,
+    "MEDIO": 4,
+    "BASSO": 0
+   },
+   "chiede-invece-di-agire": {
+    "GRAVE": 0,
+    "MEDIO": 2,
+    "BASSO": 0
+   }
+  },
+  "latency": {
+   "harnessP50": 620.8,
+   "harnessP95": 1203.4,
+   "withRecordedGroqP50": 1085.2,
+   "withRecordedGroqP95": 2644.7
+  },
+  "llm": {
+   "calls": 44,
+   "misses": 3,
+   "tokens": 151619
+  }
+ },
+ "groqStats": {
+  "calls": 47,
+  "hits": 2,
+  "misses": 3,
+  "recorded": 42,
+  "tokens": 151619,
+  "recordedMs": 36779,
+  "refused": 0,
+  "rateLimited": 0,
+  "oracle": 0
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "anche-001",
+   "family": "anche",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13",
+    "price|Parmigiana di melanzane|13"
+   ],
+   "actual": [
+    "price|Carbonara|13",
+    "price|Parmigiana di melanzane|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Parmigiana di melanzane*: prezzo da 10,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "metti la carbonara a 13",
+    "fallo anche con la parmigiana e mettila allo stesso prezzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    17.5,
+    27
+   ],
+   "recordedLlmMs": 1112,
+   "usedLlm": true,
+   "source": "prompt E: caso tipo"
+  },
+  {
+   "id": "anche-002",
+   "family": "anche",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13",
+    "price|Gricia|13"
+   ],
+   "actual": [
+    "price|Carbonara|13",
+    "price|Gricia|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "e la gricia uguale"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3623,
+   "latencyMs": [
+    3.3,
+    1131.1
+   ],
+   "recordedLlmMs": 1115,
+   "usedLlm": true
+  },
+  {
+   "id": "anche-003",
+   "family": "anche",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Panna cotta|false",
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Panna cotta|false",
+    "available|Tiramisù|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: *finito*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+   ],
+   "turns": [
+    "la panna cotta è finita",
+    "e il tiramisù uguale"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3596,
+   "latencyMs": [
+    22.9,
+    1079.7
+   ],
+   "recordedLlmMs": 1062,
+   "usedLlm": true
+  },
+  {
+   "id": "correzione-001",
+   "family": "correzione",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|14"
+   ],
+   "actual": [
+    "price|Carbonara|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 13,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "no scusa, 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 2,
+   "llmTokens": 0,
+   "latencyMs": [
+    14.4,
+    1413
+   ],
+   "recordedLlmMs": 1392,
+   "usedLlm": true
+  },
+  {
+   "id": "correzione-002",
+   "family": "correzione",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|Carbonara|13"
+    }
+   ],
+   "expected": [
+    "price|Amatriciana|13"
+   ],
+   "actual": [
+    "price|Amatriciana|13",
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "no intendevo l'amatriciana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3569,
+   "latencyMs": [
+    10.3,
+    755.8
+   ],
+   "recordedLlmMs": 737,
+   "usedLlm": true,
+   "note": "la carbonara torna a 12"
+  },
+  {
+   "id": "correzione-003",
+   "family": "correzione",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: available|Gricia|false"
+    }
+   ],
+   "expected": [
+    "available|Cacio e pepe|false"
+   ],
+   "actual": [
+    "available|Cacio e pepe|false",
+    "available|Gricia|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: *finito*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cacio e pepe*: *finito*"
+   ],
+   "turns": [
+    "la gricia è finita",
+    "no, intendevo la cacio e pepe"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3650,
+   "latencyMs": [
+    9.1,
+    1203.4
+   ],
+   "recordedLlmMs": 1184,
+   "usedLlm": true
+  },
+  {
+   "id": "ripristino-005",
+   "family": "ripristino",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|Carbonara|13"
+    }
+   ],
+   "expected": [
+    "price|Gricia|12"
+   ],
+   "actual": [
+    "price|Carbonara|13",
+    "price|Gricia|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*",
+    "Non ho capito cosa cambiare per *Carbonara*. Scrivimelo in una frase, per esempio «Carbonara costa 12» oppure «Carbonara è finito»."
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "la gricia costa 12",
+    "rimetti la carbonara com'era"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 8428,
+   "latencyMs": [
+    8.4,
+    650.3,
+    1015.7
+   ],
+   "recordedLlmMs": 1629,
+   "usedLlm": true
+  },
+  {
+   "id": "ripristino-006",
+   "family": "ripristino",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: *in evidenza*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: non più in evidenza"
+   ],
+   "turns": [
+    "metti in evidenza la carbonara",
+    "togli l'evidenza"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3587,
+   "latencyMs": [
+    7.1,
+    820.6
+   ],
+   "recordedLlmMs": 802,
+   "usedLlm": true,
+   "note": "«togli l'evidenza» toglie l'evidenza, non nasconde il piatto"
+  },
+  {
+   "id": "ripristino-007",
+   "family": "ripristino",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *14,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 14,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "🎤 a carbonara mettila a quattordici",
+    "🎤 no rimettila come prima"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3535,
+   "latencyMs": [
+    12.6,
+    1057.8
+   ],
+   "recordedLlmMs": 1040,
+   "usedLlm": true
+  },
+  {
+   "id": "chiarimento-001",
+   "family": "chiarimento",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Supplì classico|3"
+   ],
+   "actual": [
+    "price|Supplì classico|3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Supplì classico*, *Supplì cacio e pepe*? Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Supplì classico*: prezzo da 2,50 € a *3,00 €*"
+   ],
+   "turns": [
+    "il supplì costa 3",
+    "quello classico"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 7073,
+   "latencyMs": [
+    1034.7,
+    649.2
+   ],
+   "recordedLlmMs": 1670,
+   "usedLlm": true
+  },
+  {
+   "id": "chiarimento-002",
+   "family": "chiarimento",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "richiesta-persa",
+     "why": "richiesta persa: price|Supplì cacio e pepe|3.5"
+    }
+   ],
+   "expected": [
+    "price|Supplì cacio e pepe|3.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Supplì classico*, *Supplì cacio e pepe*? Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla.",
+    "Non ho capito cosa cambiare per *Supplì cacio e pepe*. Scrivimelo in una frase, per esempio «Supplì cacio e pepe costa 12» oppure «Supplì cacio e pepe è finito»."
+   ],
+   "turns": [
+    "il supplì costa 3,50",
+    "sì la seconda"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 7032,
+   "latencyMs": [
+    601.3,
+    562
+   ],
+   "recordedLlmMs": 1133,
+   "usedLlm": true
+  },
+  {
+   "id": "chiarimento-003",
+   "family": "chiarimento",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "opzioni-non-leggibili",
+     "why": "al turno 1 il bot non ha mostrato un'opzione n.1"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessun piatto è *finito*: sono tutti disponibili.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "il supplì è finito",
+    "1"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 6910,
+   "latencyMs": [
+    910.8,
+    609
+   ],
+   "recordedLlmMs": 1492,
+   "usedLlm": true
+  },
+  {
+   "id": "multipla-001",
+   "family": "multipla",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "richiesta-persa",
+     "why": "richiesta persa: price|Carbonara|13, price|Gricia|12, price|Supplì classico|3"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13",
+    "price|Gricia|12",
+    "price|Supplì classico|3"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Carbonara*, *Gricia*, *Supplì classico*, *Supplì cacio e pepe*? Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla.",
+    "Non ho capito cosa cambiare per *Carbonara*. Scrivimelo in una frase, per esempio «Carbonara costa 12» oppure «Carbonara è finito»."
+   ],
+   "turns": [
+    "la carbonara a 13, la gricia a 12 e il supplì a 3",
+    "il classico"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 7515,
+   "latencyMs": [
+    1335.2,
+    1188.5
+   ],
+   "recordedLlmMs": 2508,
+   "usedLlm": true
+  },
+  {
+   "id": "multipla-002",
+   "family": "multipla",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "richiesta-persa",
+     "why": "richiesta persa: price|Carbonara|13"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ho capito cosa cambiare per *Carbonara*. Scrivimelo in una frase, per esempio «Carbonara costa 12» oppure «Carbonara è finito»."
+   ],
+   "turns": [
+    "la carbonara a 13 e la lasagna a 12",
+    "lascia stare la lasagna, fai solo la carbonara"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 1,
+   "llmTokens": 6988,
+   "latencyMs": [
+    1944,
+    620.4
+   ],
+   "recordedLlmMs": 2539,
+   "usedLlm": true,
+   "note": "la lasagna non è nel menu"
+  },
+  {
+   "id": "multipla-003",
+   "family": "multipla",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tiramisù|false",
+    "price|Vino della casa bianco 1/4|4.5"
+   ],
+   "actual": [
+    "available|Tiramisù|false",
+    "price|Vino della casa bianco 1/4|4.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. *Tiramisù*: *finito*\n\nper «il vino della casa» quale intendi? 1. *Vino della casa rosso 1/4* · 2. *Vino della casa bianco 1/4*\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*\n*Vino della casa bianco 1/4*: prezzo da 4,00 € a *4,50 €*"
+   ],
+   "turns": [
+    "il tiramisù è finito e il vino della casa costa 4,50",
+    "il bianco"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3644,
+   "latencyMs": [
+    1052.5,
+    8.1
+   ],
+   "recordedLlmMs": 1038,
+   "usedLlm": true
+  },
+  {
+   "id": "scaduto-001",
+   "family": "scaduto",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 2: doveva chiedere un chiarimento («Non ho capito cosa cambiare per *Gricia*. Scrivimelo in una frase, per esempio «»)"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Non ho capito cosa cambiare per *Gricia*. Scrivimelo in una frase, per esempio «Gricia costa 12» oppure «Gricia è finito»."
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "[+35 min]",
+    "anche la gricia"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3500,
+   "latencyMs": [
+    7.5,
+    818.2
+   ],
+   "recordedLlmMs": 804,
+   "usedLlm": true,
+   "note": "riferimento scaduto: deve chiedere, non applicare"
+  },
+  {
+   "id": "scaduto-002",
+   "family": "scaduto",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "[+40 min]",
+    "no scusa 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3592,
+   "latencyMs": [
+    8.2,
+    1162.4
+   ],
+   "recordedLlmMs": 1151,
+   "usedLlm": true
+  },
+  {
+   "id": "scaduto-004",
+   "family": "scaduto",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Gricia|13"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13",
+    "price|Gricia|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "[+15 min]",
+    "anche la gricia"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 5048,
+   "latencyMs": [
+    7.1,
+    489.9
+   ],
+   "recordedLlmMs": 479,
+   "usedLlm": true,
+   "note": "entro 30 minuti il contesto vale"
+  },
+  {
+   "id": "domanda-006",
+   "family": "domanda",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Gricia*: *11,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ la gricia a quanto sta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3439,
+   "latencyMs": [
+    536.1
+   ],
+   "recordedLlmMs": 517,
+   "usedLlm": true
+  },
+  {
+   "id": "domanda-009",
+   "family": "domanda",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Supplì classico*: *2,50 €* · disponibile"
+   ],
+   "turns": [
+    "🎤 ma er supplì classico quanto lo famo?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3458,
+   "latencyMs": [
+    929.5
+   ],
+   "recordedLlmMs": 902,
+   "usedLlm": true
+  },
+  {
+   "id": "domanda-014",
+   "family": "domanda",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Diavola|false"
+   ],
+   "actual": [
+    "available|Diavola|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *finito*",
+    "*Piatti finiti (1)*\n- Diavola"
+   ],
+   "turns": [
+    "la diavola è finita",
+    "❓ cosa è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3412,
+   "latencyMs": [
+    11,
+    704.9
+   ],
+   "recordedLlmMs": 694,
+   "usedLlm": true
+  },
+  {
+   "id": "negazione-004",
+   "family": "negazione",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|12"
+   ],
+   "actual": [
+    "price|Amatriciana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "🎤 la cacio e pepe nun la toccà, l'amatriciana a dodici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3642,
+   "latencyMs": [
+    963
+   ],
+   "recordedLlmMs": 941,
+   "usedLlm": true
+  },
+  {
+   "id": "negazione-005",
+   "family": "negazione",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nDimmi pure cosa vuoi cambiare nel menu."
+   ],
+   "turns": [
+    "non cambiare niente"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3424,
+   "latencyMs": [
+    489.9
+   ],
+   "recordedLlmMs": 470,
+   "usedLlm": true
+  },
+  {
+   "id": "negazione-007",
+   "family": "negazione",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessun piatto è *finito*: sono tutti disponibili."
+   ],
+   "turns": [
+    "🎤 nun è finita la carbonara"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3512,
+   "latencyMs": [
+    1041
+   ],
+   "recordedLlmMs": 1025,
+   "usedLlm": true,
+   "note": "negazione: non è un esaurito"
+  },
+  {
+   "id": "ambiguita-001",
+   "family": "ambiguita",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Supplì classico*, *Supplì cacio e pepe*? Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "il supplì costa 3"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    15.1
+   ],
+   "recordedLlmMs": 1029,
+   "usedLlm": true
+  },
+  {
+   "id": "ambiguita-002",
+   "family": "ambiguita",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessun piatto è *finito*: sono tutti disponibili."
+   ],
+   "turns": [
+    "il vino della casa è finito"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3467,
+   "latencyMs": [
+    658.1
+   ],
+   "recordedLlmMs": 648,
+   "usedLlm": true
+  },
+  {
+   "id": "ambiguita-005",
+   "family": "ambiguita",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Gricia*. Scrivimelo in una frase, per esempio «Gricia costa 12» oppure «Gricia è finito»."
+   ],
+   "turns": [
+    "anche la gricia"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3518,
+   "latencyMs": [
+    711.3
+   ],
+   "recordedLlmMs": 696,
+   "usedLlm": true,
+   "note": "«anche» senza niente prima"
+  },
+  {
+   "id": "togli-005",
+   "family": "togli",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "togli la gricia",
+    "rimettila"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3569,
+   "latencyMs": [
+    8,
+    749.7
+   ],
+   "recordedLlmMs": 729,
+   "usedLlm": true
+  },
+  {
+   "id": "togli-011",
+   "family": "togli",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Ginseng|true",
+    "hidden|Orzo|true"
+   ],
+   "actual": [
+    "hidden|Ginseng|true",
+    "hidden|Orzo|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Ginseng*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Orzo*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "togli il ginseng",
+    "anche l'orzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3474,
+   "latencyMs": [
+    6.4,
+    890.3
+   ],
+   "recordedLlmMs": 874,
+   "usedLlm": true
+  },
+  {
+   "id": "togli-013",
+   "family": "togli",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Cannolo|true",
+    "hidden|Cassata|true"
+   ],
+   "actual": [
+    "hidden|Cannolo|true",
+    "hidden|Cassata|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cassata*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cannolo*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "togli la cassata",
+    "anche il cannolo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3460,
+   "latencyMs": [
+    7.1,
+    1101.7
+   ],
+   "recordedLlmMs": 1086,
+   "usedLlm": true
+  },
+  {
+   "id": "vocale-001",
+   "family": "vocale",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 ah checco, a carbonara mettila a tredici euri"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3528,
+   "latencyMs": [
+    773.6
+   ],
+   "recordedLlmMs": 753,
+   "usedLlm": true
+  },
+  {
+   "id": "vocale-031",
+   "family": "vocale",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Gricia|13"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13",
+    "price|Gricia|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 a carbonara a tredici",
+    "🎤 e pure a gricia"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3521,
+   "latencyMs": [
+    10.2,
+    875.3
+   ],
+   "recordedLlmMs": 866,
+   "usedLlm": true
+  },
+  {
+   "id": "vocale-032",
+   "family": "vocale",
+   "menu": "pesce",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "richiesta-persa",
+     "why": "richiesta persa: price|Caponata|8, price|Panelle|5"
+    }
+   ],
+   "expected": [
+    "price|Caponata|8",
+    "price|Panelle|5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Caponata*. Scrivimelo in una frase, per esempio «Caponata costa 12» oppure «Caponata è finito».",
+    "Non ho capito cosa cambiare per *Panelle*. Scrivimelo in una frase, per esempio «Panelle costa 12» oppure «Panelle è finito»."
+   ],
+   "turns": [
+    "🎤 a caponata a ottu",
+    "🎤 e puru i panelli a cincu"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 6924,
+   "latencyMs": [
+    853,
+    779.8
+   ],
+   "recordedLlmMs": 1605,
+   "usedLlm": true
+  },
+  {
+   "id": "qa1710-004",
+   "family": "qa1710",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "actual": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 14,00 € a *13,50 €*",
+    "*Piatto di verifica*: *13,50 €* · disponibile"
+   ],
+   "turns": [
+    "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta",
+    "Piatto di verifica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3544,
+   "latencyMs": [
+    10.9,
+    548.2
+   ],
+   "recordedLlmMs": 537,
+   "usedLlm": true,
+   "source": "QA 17/10 caso 3 (11:09→11:11)"
+  },
+  {
+   "id": "manuel-005",
+   "family": "manuel",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "🎤 il tiramisù a 6 euro e tojibo",
+    "no, togli bo",
+    "rimetti boh com'era"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3683,
+   "latencyMs": [
+    8.9,
+    6,
+    696.5
+   ],
+   "recordedLlmMs": 679,
+   "usedLlm": true,
+   "source": "Manuel 17/10 + ripristino"
+  },
+  {
+   "id": "batterie-001",
+   "family": "batterie",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "scusa, la lasagna è finita"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3576,
+   "latencyMs": [
+    8.8,
+    620.8
+   ],
+   "recordedLlmMs": 600,
+   "usedLlm": true,
+   "source": "round2 scusa-01"
+  },
+  {
+   "id": "batterie-002",
+   "family": "batterie",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "la carbonara è finita",
+    "scusa, anche la lasagna"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3588,
+   "latencyMs": [
+    10.1,
+    971.6
+   ],
+   "recordedLlmMs": 947,
+   "usedLlm": true,
+   "source": "round2 scusa-09"
+  },
+  {
+   "id": "batterie-003",
+   "family": "batterie",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "turns": [
+    "la carbonara costa 13",
+    "anche la tagliata costa 20"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3590,
+   "latencyMs": [
+    8,
+    1006.8
+   ],
+   "recordedLlmMs": 990,
+   "usedLlm": true,
+   "source": "round2 scusa-11"
+  }
+ ]
+}

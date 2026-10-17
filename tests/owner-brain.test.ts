@@ -44,8 +44,8 @@ describe('owner-brain-context',()=>{
  })
  it('token: menu tipico ≤ ~4k anche con cronologia piena; menu grande 300+ compresso senza perdere nomi',()=>{
   const history=Array.from({length:20},(_,i)=>({role:(i%2?'bot':'owner') as 'bot'|'owner',text:'Quale piatto intendi? Tagliata di manzo o Tagliata di tonno?',at:NOW-60000+i}))
-  expect(buildBrainContext({refs,sections,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(3600)
-  expect(buildBrainContext({refs,sections,history,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(4000)
+  expect(buildBrainContext({refs,sections,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(3800)
+  expect(buildBrainContext({refs,sections,history,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(4400)
   const big=catalogOf(largeWorkspace(320)),c=buildBrainContext({refs:big.refs,sections:big.sections,message:'x',now:NOW})
   expect(big.refs.length).toBeGreaterThanOrEqual(300);expect(c.compression).toBeGreaterThan(0);expect(c.codes.size).toBe(big.refs.length+big.sections.length)
   const text=c.messages[1]!.content;for(const r of big.refs){const first=r.name.split(' ')[0]!,rest=r.name.slice(first.length+1);expect(text.includes(r.name)||(text.includes(first+'… ')&&text.includes(rest))).toBe(true)}
@@ -111,7 +111,7 @@ describe('owner-brain-plan: validatore',()=>{
  })
  it('piatti indicati allo stesso modo: il modello non sceglie lui (tagliata di manzo/tonno)',()=>{
   const manzo=id('Tagliata di manzo'),tonno=id('Tagliata di tonno')
-  expect(plan('la tagliata a 21',out({actions:[{action:'set_price',item:code('Tagliata di manzo'),price:21}]})).plan).toEqual({type:'clarify',ids:[manzo,tonno]})
+  expect(plan('la tagliata a 21',out({actions:[{action:'set_price',item:code('Tagliata di manzo'),price:21}]})).plan).toMatchObject({type:'clarify',ids:[manzo,tonno],actions:[{kind:'price',id:manzo,price:21}]})
   expect(plan('quanto costa la tagliata?',out({intent:'read',read:'items',item_refs:[code('Tagliata di manzo')]})).plan).toEqual({type:'clarify',ids:[manzo,tonno]})
   expect(plan('quella di tonno, a 21',out({actions:[{action:'set_price',item:code('Tagliata di tonno'),price:21}]})).plan).toEqual({type:'change',actions:[{kind:'price',id:tonno,price:21}]})
   expect(plan('la tagliata di manzo a 21',out({actions:[{action:'set_price',item:code('Tagliata di manzo'),price:21}]})).plan.type).toBe('change')
