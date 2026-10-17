@@ -8,6 +8,9 @@
 import {createRequire} from 'node:module'
 import {writeFileSync,mkdirSync} from 'node:fs'
 import {afterAll,beforeAll,describe,expect,it,vi} from 'vitest'
+// Orologio fissato (17/10): il risultato non dipende dall'ora del run (alle 3 di notte «oggi» è ancora la giornata di ieri).
+// Venerdì 16/10/2026 alle 12:00 di Roma, come la validazione del 16/10. TAKO_TEST_NOW=<ISO> per provare un altro istante.
+vi.hoisted(()=>{vi.useFakeTimers({toFake:['Date']});vi.setSystemTime(new Date(process.env.TAKO_TEST_NOW||'2026-10-16T10:00:00Z'))})
 import {twilioSignature} from '../apps/server/src/lib/twilio-menu-command.js'
 import {copy} from '../apps/server/src/lib/twilio-menu-copy.js'
 import {setTranslationEnqueue} from '../apps/server/src/lib/menu-translation-queue.js'

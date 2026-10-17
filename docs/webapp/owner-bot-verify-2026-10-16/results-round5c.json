@@ -1,0 +1,7236 @@
+{
+ "cases": 186,
+ "runs": 384,
+ "unknownSql": [],
+ "results": [
+  {
+   "id": "altfp-01",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "metti la carbonara in promo a 10 fino al 25-10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 25/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-25"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-25"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altfp-02",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "promo carbonara a 10 fino al 25.10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 25/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-25"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-25"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: data col punto"
+  },
+  {
+   "id": "altfp-03",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "birra media in promo a 4, happy hour 18-20"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Birra media*: in *promo* a *4,00 €* (prezzo pieno 5,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Birra media|4"
+   ],
+   "actual": [
+    "promo|Birra media|4"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "18-20 è un orario"
+  },
+  {
+   "id": "altfp-03",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "birra media in promo a 4, happy hour 18-20"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Birra media|4"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "18-20 è un orario"
+  },
+  {
+   "id": "altfp-03",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "birra media in promo a 4, happy hour 18-20"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "promo|Birra media|4"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "18-20 è un orario"
+  },
+  {
+   "id": "altfp-03",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "birra media in promo a 4, happy hour 18-20"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Birra media|4"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "18-20 è un orario"
+  },
+  {
+   "id": "altfp-04",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "offerta pranzo a 11, valida 12-15"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Offerta pranzo*: prezzo da 10,00 € a *11,00 €*"
+   ],
+   "expected": [
+    "price|Offerta pranzo|11"
+   ],
+   "actual": [
+    "price|Offerta pranzo|11"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: 12-15 orario del pranzo"
+  },
+  {
+   "id": "altfp-04",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "offerta pranzo a 11, valida 12-15"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Offerta pranzo|11"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: 12-15 orario del pranzo"
+  },
+  {
+   "id": "altfp-04",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "offerta pranzo a 11, valida 12-15"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Offerta pranzo|11"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: 12-15 orario del pranzo"
+  },
+  {
+   "id": "altfp-04",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "offerta pranzo a 11, valida 12-15"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Offerta pranzo|11"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: 12-15 orario del pranzo"
+  },
+  {
+   "id": "altfp-05",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "menù bambini a 9 per bimbi 3-10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Menù bambini*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "expected": [
+    "price|Menù bambini|9"
+   ],
+   "actual": [
+    "price|Menù bambini|9"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "3-10 sono anni"
+  },
+  {
+   "id": "altfp-05",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "menù bambini a 9 per bimbi 3-10"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Menù bambini|9"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "3-10 sono anni"
+  },
+  {
+   "id": "altfp-05",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "menù bambini a 9 per bimbi 3-10"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Menù bambini|9"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "3-10 sono anni"
+  },
+  {
+   "id": "altfp-05",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "menù bambini a 9 per bimbi 3-10"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Menù bambini|9"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "3-10 sono anni"
+  },
+  {
+   "id": "altfp-06",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "cotoletta: ultime 4 o 5"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: etichetta *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "last|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "4 o 5 pezzi rimasti, non prezzi"
+  },
+  {
+   "id": "altfp-06",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "cotoletta: ultime 4 o 5"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "4 o 5 pezzi rimasti, non prezzi"
+  },
+  {
+   "id": "altfp-06",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "cotoletta: ultime 4 o 5"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "last|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "4 o 5 pezzi rimasti, non prezzi"
+  },
+  {
+   "id": "altfp-06",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "cotoletta: ultime 4 o 5"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "4 o 5 pezzi rimasti, non prezzi"
+  },
+  {
+   "id": "altfp-07",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "pizza mezzo metro a 20, basta per 2 o 3"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "actual": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-07",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "pizza mezzo metro a 20, basta per 2 o 3"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-07",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "pizza mezzo metro a 20, basta per 2 o 3"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-07",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "pizza mezzo metro a 20, basta per 2 o 3"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-08",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "tagliere misto per 2 o 3 a 16"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliere misto*: prezzo da 14,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Tagliere misto|16"
+   ],
+   "actual": [
+    "price|Tagliere misto|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altfp-09",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "metti la lasagna nelle ultime porzioni, ne restano cinque o sei"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: etichetta *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Lasagna al forno|true"
+   ],
+   "actual": [
+    "last|Lasagna al forno|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-09",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "metti la lasagna nelle ultime porzioni, ne restano cinque o sei"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-09",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "metti la lasagna nelle ultime porzioni, ne restano cinque o sei"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "last|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-09",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "metti la lasagna nelle ultime porzioni, ne restano cinque o sei"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-10",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "ultime 2 o 3 porzioni di tiramisù"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: etichetta *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Tiramisù|true"
+   ],
+   "actual": [
+    "last|Tiramisù|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-10",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "ultime 2 o 3 porzioni di tiramisù"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Tiramisù|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-10",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "ultime 2 o 3 porzioni di tiramisù"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "last|Tiramisù|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-10",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "ultime 2 o 3 porzioni di tiramisù"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Tiramisù|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-11",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "🎤 ultime due o tre porzioni di panna cotta"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: etichetta *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Panna cotta|true"
+   ],
+   "actual": [
+    "last|Panna cotta|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-11",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "🎤 ultime due o tre porzioni di panna cotta"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Panna cotta|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-11",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "🎤 ultime due o tre porzioni di panna cotta"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "last|Panna cotta|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-11",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 ultime due o tre porzioni di panna cotta"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "last|Panna cotta|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-12",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata per 1 o 2 persone a 20"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-12",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "la tagliata per 1 o 2 persone a 20"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-12",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata per 1 o 2 persone a 20"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-12",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata per 1 o 2 persone a 20"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-13",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, o meglio 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "autocorrezione nella stessa frase"
+  },
+  {
+   "id": "altfp-13",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, o meglio 14"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "autocorrezione nella stessa frase"
+  },
+  {
+   "id": "altfp-13",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, o meglio 14"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "autocorrezione nella stessa frase"
+  },
+  {
+   "id": "altfp-13",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, o meglio 14"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "autocorrezione nella stessa frase"
+  },
+  {
+   "id": "altfp-14",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13... anzi 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-14",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "carbonara 13... anzi 14"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-14",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "carbonara 13... anzi 14"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-14",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "carbonara 13... anzi 14"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-15",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13? no, a 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: autocorrezione dopo il punto di domanda"
+  },
+  {
+   "id": "altfp-15",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13? no, a 14"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: autocorrezione dopo il punto di domanda"
+  },
+  {
+   "id": "altfp-15",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13? no, a 14"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: autocorrezione dopo il punto di domanda"
+  },
+  {
+   "id": "altfp-15",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13? no, a 14"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: autocorrezione dopo il punto di domanda"
+  },
+  {
+   "id": "altfp-16",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "il caffè passa da 1,20 a 1,30"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: prezzo da 1,20 € a *1,30 €*"
+   ],
+   "expected": [
+    "price|Caffè|1.3"
+   ],
+   "actual": [
+    "price|Caffè|1.3"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-16",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "il caffè passa da 1,20 a 1,30"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Caffè|1.3"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-16",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "il caffè passa da 1,20 a 1,30"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Caffè|1.3"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-16",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "il caffè passa da 1,20 a 1,30"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Caffè|1.3"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-17",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "la cotoletta da 15 a 16"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altfp-18",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "tagliata a 20, tra 10 e 15 giorni la ritocco"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-18",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "tagliata a 20, tra 10 e 15 giorni la ritocco"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-18",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "tagliata a 20, tra 10 e 15 giorni la ritocco"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-18",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "tagliata a 20, tra 10 e 15 giorni la ritocco"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-19",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "descrizione del tagliere misto: ideale per 2 o 3"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliere misto*: descrizione «ideale per 2 o 3»"
+   ],
+   "expected": [
+    "description|Tagliere misto|ideale per 2 o 3"
+   ],
+   "actual": [
+    "description|Tagliere misto|ideale per 2 o 3"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: testo della descrizione"
+  },
+  {
+   "id": "altfp-19",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "descrizione del tagliere misto: ideale per 2 o 3"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "description|Tagliere misto|ideale per 2 o 3"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: testo della descrizione"
+  },
+  {
+   "id": "altfp-19",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "descrizione del tagliere misto: ideale per 2 o 3"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "description|Tagliere misto|ideale per 2 o 3"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: testo della descrizione"
+  },
+  {
+   "id": "altfp-19",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "descrizione del tagliere misto: ideale per 2 o 3"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "description|Tagliere misto|ideale per 2 o 3"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: testo della descrizione"
+  },
+  {
+   "id": "altfp-20",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "mezza porzione bimbi a 7, per bimbi di 3 o 4 anni"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Mezza porzione bimbi*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "expected": [
+    "price|Mezza porzione bimbi|7"
+   ],
+   "actual": [
+    "price|Mezza porzione bimbi|7"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-20",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "mezza porzione bimbi a 7, per bimbi di 3 o 4 anni"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Mezza porzione bimbi|7"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-20",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "mezza porzione bimbi a 7, per bimbi di 3 o 4 anni"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Mezza porzione bimbi|7"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-20",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "mezza porzione bimbi a 7, per bimbi di 3 o 4 anni"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Mezza porzione bimbi|7"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-21",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "il menù degustazione a 35 per 2 o 3 portate"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Menù degustazione*: prezzo da 30,00 € a *35,00 €*"
+   ],
+   "expected": [
+    "price|Menù degustazione|35"
+   ],
+   "actual": [
+    "price|Menù degustazione|35"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-21",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "il menù degustazione a 35 per 2 o 3 portate"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Menù degustazione|35"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-21",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "il menù degustazione a 35 per 2 o 3 portate"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Menù degustazione|35"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-21",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "il menù degustazione a 35 per 2 o 3 portate"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Menù degustazione|35"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-22",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "coca cola 33cl a 3,50 e acqua 0,5 l a 2"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: prezzo da 3,00 € a *3,50 €*\n*Acqua 0,5 l*: prezzo da 1,50 € a *2,00 €*"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5",
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [
+    "price|Acqua 0,5 l|2",
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-22",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "coca cola 33cl a 3,50 e acqua 0,5 l a 2"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5",
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-22",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "coca cola 33cl a 3,50 e acqua 0,5 l a 2"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5",
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-22",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "coca cola 33cl a 3,50 e acqua 0,5 l a 2"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5",
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-23",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "la diavola in promo a 7 dalle 19-23"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: in *promo* a *7,00 €* (prezzo pieno 8,50 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Diavola|7"
+   ],
+   "actual": [
+    "promo|Diavola|7"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: fascia oraria non rappresentabile"
+  },
+  {
+   "id": "altfp-23",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "la diavola in promo a 7 dalle 19-23"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Diavola|7"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: fascia oraria non rappresentabile"
+  },
+  {
+   "id": "altfp-23",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "la diavola in promo a 7 dalle 19-23"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "promo|Diavola|7"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: fascia oraria non rappresentabile"
+  },
+  {
+   "id": "altfp-23",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la diavola in promo a 7 dalle 19-23"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Diavola|7"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: fascia oraria non rappresentabile"
+  },
+  {
+   "id": "altfp-24",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "bruschetta al pomodoro 5 o 6 pezzi a 6"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-24",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "bruschetta al pomodoro 5 o 6 pezzi a 6"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-24",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "bruschetta al pomodoro 5 o 6 pezzi a 6"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-24",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "bruschetta al pomodoro 5 o 6 pezzi a 6"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-25",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "bruschetta al pomodoro 4 o 5 fette a 6"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-25",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "bruschetta al pomodoro 4 o 5 fette a 6"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-25",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "bruschetta al pomodoro 4 o 5 fette a 6"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-25",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "bruschetta al pomodoro 4 o 5 fette a 6"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Bruschetta al pomodoro|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-26",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "🎤 la diavola in promo a sette euro fino al venticinque ottobre"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: in *promo* a *7,00 €* (prezzo pieno 8,50 €), fino a *domenica 25/10*"
+   ],
+   "expected": [
+    "promo|Diavola|7",
+    "until|Diavola|2026-10-25"
+   ],
+   "actual": [
+    "promo|Diavola|7",
+    "until|Diavola|2026-10-25"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: il modello finto passa la data in lettere"
+  },
+  {
+   "id": "altfp-27",
+   "cat": "altfp",
+   "mode": "ideal",
+   "turns": [
+    "coperto 2 o 2,50?"
+   ],
+   "replies": [
+    "*Coperto* ora costa *1,00 €*. Se vuoi cambiarlo, quale prezzo: *2* o *2,50*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "controllo: questa è davvero un'alternativa",
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "altrisp-01",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13 o 14?",
+    "no scusa 14"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altrisp-02",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13 o 14?",
+    "14 grazie"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altrisp-03",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13 o 14?",
+    "facciamo 14 dai"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altrisp-04",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13 o 14?",
+    "13,50"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "Per *Spaghetti alla carbonara* rispondi *13* o *14*, oppure riscrivi la richiesta. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile, in conflitto con round5b altrisp-06 (atteso: nessuna scrittura). Scelta conservativa del giro 3: un prezzo fuori dalle due opzioni non si applica, il bot ripete la domanda. Da confermare con Manuel.",
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "altrisp-05",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13 o 14?",
+    "lascia stare"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altrisp-06",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "la lasagna 12 o 13?",
+    "il primo"
+   ],
+   "replies": [
+    "*Lasagna al forno* ora costa *11,00 €*. Se vuoi cambiarlo, quale prezzo: *12* o *13*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [
+    "price|Lasagna al forno|12"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altrisp-07",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "carbonara 13 o 14?",
+    "tutti e due"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "Per *Spaghetti alla carbonara* rispondi *13* o *14*, oppure riscrivi la richiesta. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "altrisp-08",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "gnocchi 4 formaggi 11 o 12",
+    "12"
+   ],
+   "replies": [
+    "Per *Gnocchi 4 formaggi*, quale prezzo vuoi: *11* o *12*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "actual": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "altrisp-09",
+   "cat": "altrisp",
+   "mode": "ideal",
+   "turns": [
+    "pizza 4 formaggi 10 o 11?",
+    "4"
+   ],
+   "replies": [
+    "*Pizza 4 formaggi* ora costa *9,00 €*. Se vuoi cambiarlo, quale prezzo: *10* o *11*? Non ho cambiato nulla.",
+    "Per *Pizza 4 formaggi* rispondi *10* o *11*, oppure riscrivi la richiesta. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«4» non è uno dei due prezzi (e non è il 4 del nome)",
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "negfp-01",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non c'è più la carbonara"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-02",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara non c'è più"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-03",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara non è più disponibile"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-03",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara non è più disponibile"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-03",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara non è più disponibile"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-03",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara non è più disponibile"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-04",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non abbiamo più il tiramisù"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Tiramisù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-05",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non ho capito"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-05",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non ho capito"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-05",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non ho capito"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-05",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non ho capito"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-06",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "boh non è più in promo"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: tolgo la *promo*, torna a 20,00 €"
+   ],
+   "expected": [
+    "promo|boh|null"
+   ],
+   "actual": [
+    "promo|boh|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-07",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "che ne sacc non è più in promo"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: tolgo la *promo*, torna a 20,00 €"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [
+    "promo|Che ne sacc|null"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-07",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "che ne sacc non è più in promo"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-07",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "che ne sacc non è più in promo"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-07",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "che ne sacc non è più in promo"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-08",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non mettere più in evidenza la tagliata"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: non più in evidenza"
+   ],
+   "expected": [
+    "featured|Tagliata di manzo|false"
+   ],
+   "actual": [
+    "featured|Tagliata di manzo|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-08",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non mettere più in evidenza la tagliata"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "featured|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-08",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non mettere più in evidenza la tagliata"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "featured|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-08",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non mettere più in evidenza la tagliata"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "featured|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-09",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non nascondere più la panna cotta"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: di nuovo *visibile* nel menu"
+   ],
+   "expected": [
+    "hidden|Panna cotta|false"
+   ],
+   "actual": [
+    "hidden|Panna cotta|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-09",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non nascondere più la panna cotta"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Panna cotta|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-09",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non nascondere più la panna cotta"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Panna cotta|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-09",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non nascondere più la panna cotta"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Panna cotta|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-10",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non segnare più la carbonara come finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: di nuovo *disponibile*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|true"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-10",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non segnare più la carbonara come finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-10",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non segnare più la carbonara come finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-10",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non segnare più la carbonara come finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-11",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non togliere la promo a boh, togli quella di che ne sacc"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: tolgo la *promo*, torna a 20,00 €"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [
+    "promo|Che ne sacc|null"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-11",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non togliere la promo a boh, togli quella di che ne sacc"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-11",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non togliere la promo a boh, togli quella di che ne sacc"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-11",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non togliere la promo a boh, togli quella di che ne sacc"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-12",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara non costa più 12, ora costa 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-12",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara non costa più 12, ora costa 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-12",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara non costa più 12, ora costa 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-12",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara non costa più 12, ora costa 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-13",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la lasagna non è più finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *disponibile*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|true"
+   ],
+   "actual": [
+    "available|Lasagna al forno|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-13",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "la lasagna non è più finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-13",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "la lasagna non è più finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-13",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la lasagna non è più finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-14",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "niente più lasagna per oggi, è finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-14",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "niente più lasagna per oggi, è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-14",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "niente più lasagna per oggi, è finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-14",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "niente più lasagna per oggi, è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-15",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "a parte la carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «a parte» = oltre a"
+  },
+  {
+   "id": "negfp-15",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "a parte la carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «a parte» = oltre a"
+  },
+  {
+   "id": "negfp-15",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "a parte la carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «a parte» = oltre a"
+  },
+  {
+   "id": "negfp-15",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "a parte la carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «a parte» = oltre a"
+  },
+  {
+   "id": "negfp-16",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "oltre alla carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-16",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "oltre alla carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-16",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "oltre alla carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-16",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "oltre alla carbonara è finita anche la lasagna"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-17",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara resta così, ma è finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «resta così» riferito al prezzo"
+  },
+  {
+   "id": "negfp-17",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara resta così, ma è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «resta così» riferito al prezzo"
+  },
+  {
+   "id": "negfp-17",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara resta così, ma è finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «resta così» riferito al prezzo"
+  },
+  {
+   "id": "negfp-17",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara resta così, ma è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «resta così» riferito al prezzo"
+  },
+  {
+   "id": "negfp-18",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara la lasciamo in promo a 10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-19",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "il tiramisù lo lascio a 5 e la panna cotta a 6"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "expected": [
+    "price|Panna cotta|6"
+   ],
+   "actual": [
+    "price|Panna cotta|6"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-20",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara resta disponibile, la lasagna è finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-20",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara resta disponibile, la lasagna è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-20",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara resta disponibile, la lasagna è finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-20",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara resta disponibile, la lasagna è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-21",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata resta in evidenza, togli la cotoletta dall'evidenza"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: non più in evidenza"
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-21",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "la tagliata resta in evidenza, togli la cotoletta dall'evidenza"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-21",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata resta in evidenza, togli la cotoletta dall'evidenza"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-21",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata resta in evidenza, togli la cotoletta dall'evidenza"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-22",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "il menù del giorno a 16, escluso il caffè"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Menù del giorno*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Menù del giorno|16"
+   ],
+   "actual": [
+    "price|Menù del giorno|16"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-22",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "il menù del giorno a 16, escluso il caffè"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Menù del giorno|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-22",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "il menù del giorno a 16, escluso il caffè"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Menù del giorno|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-22",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "il menù del giorno a 16, escluso il caffè"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Menù del giorno|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-23",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "offerta pranzo a 12 escluse le bevande"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Offerta pranzo*: prezzo da 10,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Offerta pranzo|12"
+   ],
+   "actual": [
+    "price|Offerta pranzo|12"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-23",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "offerta pranzo a 12 escluse le bevande"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Offerta pranzo|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-23",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "offerta pranzo a 12 escluse le bevande"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Offerta pranzo|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-23",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "offerta pranzo a 12 escluse le bevande"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Offerta pranzo|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-24",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13",
+    "lascia stare, ho sbagliato"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "annulla l'ultima modifica"
+  },
+  {
+   "id": "negfp-25",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13",
+    "no scusa a 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-26",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13",
+    "no, la lasagna"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Lasagna al forno|13"
+   ],
+   "actual": [
+    "price|Lasagna al forno|13"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: correzione del piatto, la carbonara torna a 12"
+  },
+  {
+   "id": "negfp-27",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "no no la lasagna è finita, non la carbonara"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-27",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "no no la lasagna è finita, non la carbonara"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-27",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "no no la lasagna è finita, non la carbonara"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-27",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "no no la lasagna è finita, non la carbonara"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-28",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non è la carbonara che è finita, è la lasagna"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-28",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non è la carbonara che è finita, è la lasagna"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-28",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non è la carbonara che è finita, è la lasagna"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-28",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non è la carbonara che è finita, è la lasagna"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-29",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "boh, mettiamo la carbonara a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "«boh» intercalare, non il piatto"
+  },
+  {
+   "id": "negfp-29",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "boh, mettiamo la carbonara a 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "«boh» intercalare, non il piatto"
+  },
+  {
+   "id": "negfp-29",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "boh, mettiamo la carbonara a 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "«boh» intercalare, non il piatto"
+  },
+  {
+   "id": "negfp-29",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "boh, mettiamo la carbonara a 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "«boh» intercalare, non il piatto"
+  },
+  {
+   "id": "negfp-30",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "🎤 boh, mettiamo la panna cotta a sei"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "expected": [
+    "price|Panna cotta|6"
+   ],
+   "actual": [
+    "price|Panna cotta|6"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-30",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "🎤 boh, mettiamo la panna cotta a sei"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Panna cotta|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-30",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "🎤 boh, mettiamo la panna cotta a sei"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Panna cotta|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-30",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 boh, mettiamo la panna cotta a sei"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Panna cotta|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-31",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "e che ne so, la lasagna è finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-31",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "e che ne so, la lasagna è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-31",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "e che ne so, la lasagna è finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-31",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "e che ne so, la lasagna è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-32",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "che ne sacc è finito"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *finito*"
+   ],
+   "expected": [
+    "available|Che ne sacc|false",
+    "last|Che ne sacc|false"
+   ],
+   "actual": [
+    "available|Che ne sacc|false",
+    "last|Che ne sacc|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-33",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "ma no, la carbonara costa 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-33",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "ma no, la carbonara costa 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-33",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "ma no, la carbonara costa 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-33",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "ma no, la carbonara costa 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-34",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "no, il tiramisù è finito"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Tiramisù|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-34",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "no, il tiramisù è finito"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-34",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "no, il tiramisù è finito"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-34",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "no, il tiramisù è finito"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-35",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "nessuna modifica alla lasagna, la carbonara è finita"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-35",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "nessuna modifica alla lasagna, la carbonara è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-35",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "nessuna modifica alla lasagna, la carbonara è finita"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-35",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "nessuna modifica alla lasagna, la carbonara è finita"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-36",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti sono finiti",
+    "la carbonara no"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti aglio olio e peperoncino|false"
+   ],
+   "actual": [
+    "available|Spaghetti aglio olio e peperoncino|false"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: «la carbonara no» = l'altro"
+  },
+  {
+   "id": "negfp-37",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "togli il piccante dalla diavola, gli spaghetti aglio olio no"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: tolgo l’etichetta *Piccante*"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [
+    "tag|Diavola|piccante|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-37",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "togli il piccante dalla diavola, gli spaghetti aglio olio no"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-37",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "togli il piccante dalla diavola, gli spaghetti aglio olio no"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-37",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "togli il piccante dalla diavola, gli spaghetti aglio olio no"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-38",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "la lasagna no, è finita la carbonara"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "negfp-39",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "non lo so, la carbonara mettila a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-39",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "non lo so, la carbonara mettila a 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-39",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "non lo so, la carbonara mettila a 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-39",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "non lo so, la carbonara mettila a 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-40",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "lasagna no 🙅, carbonara 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-40",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "lasagna no 🙅, carbonara 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-40",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "lasagna no 🙅, carbonara 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-40",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "lasagna no 🙅, carbonara 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-41",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "cabonara a 13 , lasgna no"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "refusi"
+  },
+  {
+   "id": "negfp-42",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "nn toccare la lasagan, carbonara 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refusi"
+  },
+  {
+   "id": "negfp-42",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "nn toccare la lasagan, carbonara 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refusi"
+  },
+  {
+   "id": "negfp-42",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "nn toccare la lasagan, carbonara 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refusi"
+  },
+  {
+   "id": "negfp-42",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "nn toccare la lasagan, carbonara 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refusi"
+  },
+  {
+   "id": "negfp-43",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "🍝 carbonara 13 👍"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-43",
+   "cat": "negfp",
+   "mode": "empty",
+   "turns": [
+    "🍝 carbonara 13 👍"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-43",
+   "cat": "negfp",
+   "mode": "wrong",
+   "turns": [
+    "🍝 carbonara 13 👍"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-43",
+   "cat": "negfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "🍝 carbonara 13 👍"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "negfp-44",
+   "cat": "negfp",
+   "mode": "ideal",
+   "turns": [
+    "tiramisù finito 😭"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Tiramisù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-01",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i dolci sono finiti tranne il tiramisù"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: *finito*\n*Dolce del giorno*: *finito*"
+   ],
+   "expected": [
+    "available|Panna cotta|false",
+    "available|Dolce del giorno|false"
+   ],
+   "actual": [
+    "available|Panna cotta|false",
+    "available|Dolce del giorno|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-02",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "togli il piccante da tutti tranne la diavola"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: tolgo l’etichetta *Piccante*"
+   ],
+   "expected": [
+    "tag|Spaghetti aglio olio e peperoncino|piccante|false"
+   ],
+   "actual": [
+    "tag|Spaghetti aglio olio e peperoncino|piccante|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-03",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "togli tutte le promo tranne boh"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: tolgo la *promo*, torna a 20,00 €"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [
+    "promo|Che ne sacc|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-04",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "togli le ultime porzioni da tutti tranne che ne sacc"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: tolgo *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|boh|false"
+   ],
+   "actual": [
+    "last|boh|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-05",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "nascondi tutta la caffetteria tranne il cappuccino"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Caffè|true"
+   ],
+   "actual": [
+    "hidden|Caffè|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "tranne-05",
+   "cat": "tranne",
+   "mode": "empty",
+   "turns": [
+    "nascondi tutta la caffetteria tranne il cappuccino"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Caffè|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "tranne-05",
+   "cat": "tranne",
+   "mode": "wrong",
+   "turns": [
+    "nascondi tutta la caffetteria tranne il cappuccino"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Caffè|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "tranne-05",
+   "cat": "tranne",
+   "mode": "wrongCreate",
+   "turns": [
+    "nascondi tutta la caffetteria tranne il cappuccino"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Caffè|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "tranne-06",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i secondi sono finiti eccetto la tagliata"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *finito*\n*Menù del giorno*: *finito*\n*Grigliata del venerdì*: *finito*"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false",
+    "available|Menù del giorno|false",
+    "available|Grigliata del venerdì|false"
+   ],
+   "actual": [
+    "available|Cotoletta alla milanese|false",
+    "available|Menù del giorno|false",
+    "available|Grigliata del venerdì|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-07",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutte le pizze sono finite a parte la margherita",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Pizza 4 formaggi*: *finito*\n2. *Diavola*: *finito*\n3. *Capricciosa*: *finito*\n4. *Margherita con bufala*: *finito*\n5. *Pizza del lunedì*: *finito*\n6. *Pizza mezzo metro*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pizza 4 formaggi*: *finito*\n*Diavola*: *finito*\n*Capricciosa*: *finito*\n*Margherita con bufala*: *finito*\n*Pizza del lunedì*: *finito*\n*Pizza mezzo metro*: *finito*"
+   ],
+   "expected": [
+    "available|Pizza 4 formaggi|false",
+    "available|Diavola|false",
+    "available|Capricciosa|false",
+    "available|Margherita con bufala|false",
+    "available|Pizza del lunedì|false",
+    "available|Pizza mezzo metro|false"
+   ],
+   "actual": [
+    "available|Pizza 4 formaggi|false",
+    "available|Diavola|false",
+    "available|Capricciosa|false",
+    "available|Margherita con bufala|false",
+    "available|Pizza del lunedì|false",
+    "available|Pizza mezzo metro|false"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: «la margherita» non è «Margherita con bufala»"
+  },
+  {
+   "id": "tranne-08",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i primi sono finiti tranne pasta e fagioli",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: *finito*\n2. *Spaghetti aglio olio e peperoncino*: *finito*\n3. *Lasagna al forno*: *finito*\n4. *Gnocchi 4 formaggi*: *finito*\n5. *Pasta del giorno*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Spaghetti aglio olio e peperoncino*: *finito*\n*Lasagna al forno*: *finito*\n*Gnocchi 4 formaggi*: *finito*\n*Pasta del giorno*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Spaghetti aglio olio e peperoncino|false",
+    "available|Lasagna al forno|false",
+    "available|Gnocchi 4 formaggi|false",
+    "available|Pasta del giorno|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Spaghetti aglio olio e peperoncino|false",
+    "available|Lasagna al forno|false",
+    "available|Gnocchi 4 formaggi|false",
+    "available|Pasta del giorno|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-09",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i primi sono finiti tranne la lasagna e la pasta e fagioli",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: *finito*\n2. *Spaghetti aglio olio e peperoncino*: *finito*\n3. *Gnocchi 4 formaggi*: *finito*\n4. *Pasta del giorno*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Spaghetti aglio olio e peperoncino*: *finito*\n*Gnocchi 4 formaggi*: *finito*\n*Pasta del giorno*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Spaghetti aglio olio e peperoncino|false",
+    "available|Gnocchi 4 formaggi|false",
+    "available|Pasta del giorno|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Spaghetti aglio olio e peperoncino|false",
+    "available|Gnocchi 4 formaggi|false",
+    "available|Pasta del giorno|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-10",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i piatti di prova sono finiti tranne il piatto di verifica",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Piatto di prova*: *finito*\n2. *Che ne sacc*: *finito*\n3. *boh*: *finito*\n4. *pasta al ragù*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di prova*: *finito*\n*Che ne sacc*: *finito*\n*boh*: *finito*\n*pasta al ragù*: *finito*"
+   ],
+   "expected": [
+    "available|Piatto di prova|false",
+    "available|Che ne sacc|false",
+    "last|Che ne sacc|false",
+    "available|boh|false",
+    "last|boh|false",
+    "available|pasta al ragù|false"
+   ],
+   "actual": [
+    "available|Piatto di prova|false",
+    "available|Che ne sacc|false",
+    "last|Che ne sacc|false",
+    "available|boh|false",
+    "last|boh|false",
+    "available|pasta al ragù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-11",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "metti in evidenza tutte le pizze tranne la diavola",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Margherita*: *in evidenza*\n2. *Pizza 4 formaggi*: *in evidenza*\n3. *Capricciosa*: *in evidenza*\n4. *Margherita con bufala*: *in evidenza*\n5. *Pizza del lunedì*: *in evidenza*\n6. *Pizza mezzo metro*: *in evidenza*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: *in evidenza*\n*Pizza 4 formaggi*: *in evidenza*\n*Capricciosa*: *in evidenza*\n*Margherita con bufala*: *in evidenza*\n*Pizza del lunedì*: *in evidenza*\n*Pizza mezzo metro*: *in evidenza*"
+   ],
+   "expected": [
+    "featured|Margherita|true",
+    "featured|Pizza 4 formaggi|true",
+    "featured|Capricciosa|true",
+    "featured|Margherita con bufala|true",
+    "featured|Pizza del lunedì|true",
+    "featured|Pizza mezzo metro|true"
+   ],
+   "actual": [
+    "featured|Margherita|true",
+    "featured|Pizza 4 formaggi|true",
+    "featured|Capricciosa|true",
+    "featured|Margherita con bufala|true",
+    "featured|Pizza del lunedì|true",
+    "featured|Pizza mezzo metro|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-12",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i dolci sono finiti tranne la panna cotta e il tiramisù"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Dolce del giorno*: *finito*"
+   ],
+   "expected": [
+    "available|Dolce del giorno|false"
+   ],
+   "actual": [
+    "available|Dolce del giorno|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-13",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "🎤 tutte le bibite sono finite tranne l'acqua"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *finito*\n*Birra media*: *finito*"
+   ],
+   "expected": [
+    "available|Coca Cola 33cl|false",
+    "available|Birra media|false"
+   ],
+   "actual": [
+    "available|Coca Cola 33cl|false",
+    "available|Birra media|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-14",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "tutti i primi sono finiti tranne gli spaghetti aglio olio e peperoncino",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: *finito*\n2. *Pasta e fagioli*: *finito*\n3. *Lasagna al forno*: *finito*\n4. *Gnocchi 4 formaggi*: *finito*\n5. *Pasta del giorno*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Pasta e fagioli*: *finito*\n*Lasagna al forno*: *finito*\n*Gnocchi 4 formaggi*: *finito*\n*Pasta del giorno*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false",
+    "available|Gnocchi 4 formaggi|false",
+    "available|Pasta del giorno|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false",
+    "available|Gnocchi 4 formaggi|false",
+    "available|Pasta del giorno|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tranne-15",
+   "cat": "tranne",
+   "mode": "ideal",
+   "turns": [
+    "nascondi tutte le bibite eccetto la coca cola"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: *nascosto* dal menu\n*Birra media*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Acqua 0,5 l|true",
+    "hidden|Birra media|true"
+   ],
+   "actual": [
+    "hidden|Acqua 0,5 l|true",
+    "hidden|Birra media|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-01",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pasta e fagioli a 10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "expected": [
+    "price|Pasta e fagioli|10"
+   ],
+   "actual": [
+    "price|Pasta e fagioli|10"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-02",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "la pasta e fagioli resta a 9, la lasagna a 12"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [
+    "price|Lasagna al forno|12"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-02",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "la pasta e fagioli resta a 9, la lasagna a 12"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-02",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "la pasta e fagioli resta a 9, la lasagna a 12"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-02",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "la pasta e fagioli resta a 9, la lasagna a 12"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-03",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "non toccare la pasta e fagioli, la carbonara a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-04",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "spaghetti aglio olio e peperoncino a 9"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti aglio olio e peperoncino|9"
+   ],
+   "actual": [
+    "price|Spaghetti aglio olio e peperoncino|9"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-05",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti aglio olio e peperoncino non si toccano, carbonara a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-05",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "gli spaghetti aglio olio e peperoncino non si toccano, carbonara a 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-05",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "gli spaghetti aglio olio e peperoncino non si toccano, carbonara a 13"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-05",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "gli spaghetti aglio olio e peperoncino non si toccano, carbonara a 13"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-06",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "menù del giorno a 16"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Menù del giorno*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Menù del giorno|16"
+   ],
+   "actual": [
+    "price|Menù del giorno|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-07",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pizza 4 formaggi a 10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pizza 4 formaggi*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "expected": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "actual": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-08",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "gnocchi 4 formaggi 12"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "actual": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-08",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "gnocchi 4 formaggi 12"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-08",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "gnocchi 4 formaggi 12"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-08",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "gnocchi 4 formaggi 12"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Gnocchi 4 formaggi|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-09",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "gnocchi 4 formaggi 11 o 12"
+   ],
+   "replies": [
+    "Per *Gnocchi 4 formaggi*, quale prezzo vuoi: *11* o *12*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "nomi-10",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "mezzo litro di vino a 7"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Mezzo litro di vino*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "expected": [
+    "price|Mezzo litro di vino|7"
+   ],
+   "actual": [
+    "price|Mezzo litro di vino|7"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-11",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "mezzo litro di vino 7 o 8"
+   ],
+   "replies": [
+    "Per *Mezzo litro di vino*, quale prezzo vuoi: *7* o *8*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "nomi-12",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "🎤 il mezzo litro di vino a sette euro"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Mezzo litro di vino*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "expected": [
+    "price|Mezzo litro di vino|7"
+   ],
+   "actual": [
+    "price|Mezzo litro di vino|7"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-13",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "acqua 0,5 l a 2"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: prezzo da 1,50 € a *2,00 €*"
+   ],
+   "expected": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-14",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "acqua 0,5 a 1,80"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: prezzo da 1,50 € a *1,80 €*"
+   ],
+   "expected": [
+    "price|Acqua 0,5 l|1.8"
+   ],
+   "actual": [
+    "price|Acqua 0,5 l|1.8"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-15",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "coca cola 33cl a 3,50"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: prezzo da 3,00 € a *3,50 €*"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "actual": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-16",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "🎤 coca cola trentatré a tre e cinquanta"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: prezzo da 3,00 € a *3,50 €*"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "actual": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-16",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "🎤 coca cola trentatré a tre e cinquanta"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-16",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "🎤 coca cola trentatré a tre e cinquanta"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-16",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 coca cola trentatré a tre e cinquanta"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Coca Cola 33cl|3.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-17",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "boh a 22"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *22,00 €*"
+   ],
+   "expected": [
+    "price|boh|22"
+   ],
+   "actual": [
+    "price|boh|22"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-18",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "che ne sacc a 22"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: prezzo da 20,00 € a *22,00 €*"
+   ],
+   "expected": [
+    "price|Che ne sacc|22"
+   ],
+   "actual": [
+    "price|Che ne sacc|22"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-19",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "che ne sacc no, boh a 22"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *22,00 €*"
+   ],
+   "expected": [
+    "price|boh|22"
+   ],
+   "actual": [
+    "price|boh|22"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-20",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "piatto di prova no, piatto di verifica a 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Piatto di verifica|14"
+   ],
+   "actual": [
+    "price|Piatto di verifica|14"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-21",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "il piatto di prova è finito"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di prova*: *finito*"
+   ],
+   "expected": [
+    "available|Piatto di prova|false"
+   ],
+   "actual": [
+    "available|Piatto di prova|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-22",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pasta del giorno a 10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pasta del giorno*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "expected": [
+    "price|Pasta del giorno|10"
+   ],
+   "actual": [
+    "price|Pasta del giorno|10"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-23",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pasta del giorno 10 o 11"
+   ],
+   "replies": [
+    "Per *Pasta del giorno*, quale prezzo vuoi: *10* o *11*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "nomi-24",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "🎤 pizza quattro formaggi a dieci"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pizza 4 formaggi*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "expected": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "actual": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-24",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "🎤 pizza quattro formaggi a dieci"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-24",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "🎤 pizza quattro formaggi a dieci"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-24",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 pizza quattro formaggi a dieci"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Pizza 4 formaggi|10"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-25",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "🎤 acqua mezzo litro a due euro"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: prezzo da 1,50 € a *2,00 €*"
+   ],
+   "expected": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «mezzo litro» richiama anche il vino"
+  },
+  {
+   "id": "nomi-25",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "🎤 acqua mezzo litro a due euro"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «mezzo litro» richiama anche il vino"
+  },
+  {
+   "id": "nomi-25",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "🎤 acqua mezzo litro a due euro"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «mezzo litro» richiama anche il vino"
+  },
+  {
+   "id": "nomi-25",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 acqua mezzo litro a due euro"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Acqua 0,5 l|2"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: «mezzo litro» richiama anche il vino"
+  },
+  {
+   "id": "nomi-26",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pasta e fagioli a 10 e lasagna a 12"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: prezzo da 9,00 € a *10,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Pasta e fagioli|10",
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [
+    "price|Pasta e fagioli|10",
+    "price|Lasagna al forno|12"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-26",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "pasta e fagioli a 10 e lasagna a 12"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Pasta e fagioli|10",
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-26",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "pasta e fagioli a 10 e lasagna a 12"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Pasta e fagioli|10",
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-26",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "pasta e fagioli a 10 e lasagna a 12"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Pasta e fagioli|10",
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-27",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pasta e fagioli e lasagna finite"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: *finito*\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-27",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "pasta e fagioli e lasagna finite"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-27",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "pasta e fagioli e lasagna finite"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-27",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "pasta e fagioli e lasagna finite"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Pasta e fagioli|false",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-28",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "menù del giorno no, menù bambini a 9"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Menù bambini*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "expected": [
+    "price|Menù bambini|9"
+   ],
+   "actual": [
+    "price|Menù bambini|9"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-29",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "pizza 4 formaggi finita, la diavola no"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Pizza 4 formaggi*: *finito*"
+   ],
+   "expected": [
+    "available|Pizza 4 formaggi|false"
+   ],
+   "actual": [
+    "available|Pizza 4 formaggi|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "nomi-30",
+   "cat": "nomi",
+   "mode": "ideal",
+   "turns": [
+    "la pizza mezzo metro non si tocca, margherita a 8"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: prezzo da 7,00 € a *8,00 €*"
+   ],
+   "expected": [
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "price|Margherita|8"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-01",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Pasta e fagioli"
+   ],
+   "replies": [
+    "*Pasta e fagioli*: *9,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-02",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "pasta e fagioli?"
+   ],
+   "replies": [
+    "*Pasta e fagioli*: *9,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-03",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Mezzo litro di vino"
+   ],
+   "replies": [
+    "*Mezzo litro di vino*: *6,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-04",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Acqua 0,5 l"
+   ],
+   "replies": [
+    "*Acqua 0,5 l*: *1,50 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-05",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Pizza 4 formaggi"
+   ],
+   "replies": [
+    "*Pizza 4 formaggi*: *9,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-06",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Coca Cola 33cl"
+   ],
+   "replies": [
+    "*Coca Cola 33cl*: *3,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-07",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Menù del giorno"
+   ],
+   "replies": [
+    "*Menù del giorno*: *15,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-08",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "pasta del giorno"
+   ],
+   "replies": [
+    "*Pasta del giorno*: *9,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-09",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "Che ne sacc"
+   ],
+   "replies": [
+    "*Che ne sacc*: *20,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-10",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "piatto di prova"
+   ],
+   "replies": [
+    "*Piatto di prova*: *10,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-11",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "spaghetti aglio olio e peperoncino"
+   ],
+   "replies": [
+    "*Spaghetti aglio olio e peperoncino*: *8,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-12",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti"
+   ],
+   "replies": [
+    "*Spaghetti alla carbonara*: *12,00 €* · disponibile\n*Spaghetti aglio olio e peperoncino*: *8,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-13",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "la diavola"
+   ],
+   "replies": [
+    "*Diavola*: *8,50 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-14",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "🎤 pasta e fagioli"
+   ],
+   "replies": [
+    "*Pasta e fagioli*: *9,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sola-15",
+   "cat": "sola",
+   "mode": "ideal",
+   "turns": [
+    "gnocchi 4 formaggi"
+   ],
+   "replies": [
+    "*Gnocchi 4 formaggi*: *10,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-01",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "spaghetti aglio olio"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "actual": [
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-02",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "tutti e due"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-03",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti sono finiti",
+    "entrambi"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Spaghetti aglio olio e peperoncino*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Spaghetti aglio olio e peperoncino|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "available|Spaghetti aglio olio e peperoncino|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-04",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "no, la carbonara"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-05",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "la carbonara no, l'altro"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "actual": [
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile"
+  },
+  {
+   "id": "sosp-06",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "boh"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*boh* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«boh» = non so: mai scrivere sul piatto boh"
+  },
+  {
+   "id": "sosp-07",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "che ne sacc"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Che ne sacc* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«che ne sacc» = non so: mai scrivere sul piatto omonimo"
+  },
+  {
+   "id": "sosp-08",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "tutti"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-09",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "il menù costa 16",
+    "tutti e due"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Menù del giorno*\n2. *Menù bambini*\n3. *Menù della domenica*\n4. *Menù degustazione*\n\nRispondi con il *numero* o il *nome*.",
+    "Rispondi con il *numero* o il *nome* del piatto, oppure riscrivi la richiesta completa. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "più di due opzioni: «tutti e due» non vale",
+   "proposal": {
+    "kind": "choose"
+   }
+  },
+  {
+   "id": "sosp-10",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "Piatto di verifica",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "il nome letto non deve far perdere il riepilogo"
+  },
+  {
+   "id": "sosp-10",
+   "cat": "sosp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "Piatto di verifica",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Piatto di verifica*: *13,50 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "il nome letto non deve far perdere il riepilogo"
+  },
+  {
+   "id": "sosp-10",
+   "cat": "sosp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "Piatto di verifica",
+    "ok"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "*Piatto di verifica*: *13,50 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "il nome letto non deve far perdere il riepilogo"
+  },
+  {
+   "id": "sosp-10",
+   "cat": "sosp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "Piatto di verifica",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Piatto di verifica*: *13,50 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "il nome letto non deve far perdere il riepilogo"
+  },
+  {
+   "id": "sosp-11",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "la lasagna no",
+    "ok"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Va bene, *Lasagna al forno* resta com’è. Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: togliere dal riepilogo"
+  },
+  {
+   "id": "sosp-11",
+   "cat": "sosp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "la lasagna no",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Va bene, *Lasagna al forno* resta com’è. Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: togliere dal riepilogo"
+  },
+  {
+   "id": "sosp-11",
+   "cat": "sosp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "la lasagna no",
+    "ok"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Va bene, *Lasagna al forno* resta com’è. Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: togliere dal riepilogo"
+  },
+  {
+   "id": "sosp-11",
+   "cat": "sosp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "la lasagna no",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Va bene, *Lasagna al forno* resta com’è. Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: togliere dal riepilogo"
+  },
+  {
+   "id": "sosp-12",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "annulla, no anzi conferma"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile: ripensamento nella stessa frase"
+  },
+  {
+   "id": "sosp-12",
+   "cat": "sosp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "annulla, no anzi conferma"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "discutibile: ripensamento nella stessa frase"
+  },
+  {
+   "id": "sosp-12",
+   "cat": "sosp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "annulla, no anzi conferma"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "discutibile: ripensamento nella stessa frase"
+  },
+  {
+   "id": "sosp-12",
+   "cat": "sosp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "annulla, no anzi conferma"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "discutibile: ripensamento nella stessa frase"
+  },
+  {
+   "id": "sosp-13",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "boh",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "discutibile"
+  },
+  {
+   "id": "sosp-13",
+   "cat": "sosp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "boh",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*boh*: *20,00 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile"
+  },
+  {
+   "id": "sosp-13",
+   "cat": "sosp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "boh",
+    "ok"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "*boh*: *20,00 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile"
+  },
+  {
+   "id": "sosp-13",
+   "cat": "sosp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "boh",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*boh*: *20,00 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "discutibile"
+  },
+  {
+   "id": "sosp-14",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "pasta e fagioli",
+    "ok"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 2,
+   "fails": []
+  },
+  {
+   "id": "sosp-14",
+   "cat": "sosp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "pasta e fagioli",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Pasta e fagioli*: *9,00 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-14",
+   "cat": "sosp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "pasta e fagioli",
+    "ok"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "*Pasta e fagioli*: *9,00 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-14",
+   "cat": "sosp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "pasta e fagioli",
+    "ok"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Pasta e fagioli*: *9,00 €* · disponibile",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-15",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "ok grazie"
+   ],
+   "replies": [
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-15",
+   "cat": "sosp",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "ok grazie"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Di nulla. Se ti serve altro, scrivimi."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-15",
+   "cat": "sosp",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "ok grazie"
+   ],
+   "replies": [
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Di nulla. Se ti serve altro, scrivimi."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-15",
+   "cat": "sosp",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 13, la lasagna a 12, la tagliata a 20 e la cotoletta a 16",
+    "ok grazie"
+   ],
+   "replies": [
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Di nulla. Se ti serve altro, scrivimi."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12",
+    "price|Tagliata di manzo|20",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "sosp-16",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i contorni un piatto a 5",
+    "Fagioli"
+   ],
+   "replies": [
+    "Come si chiama il piatto da aggiungere in *Contorni* a 5,00 €?",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Fagioli* in *Contorni*: *5,00 €*"
+   ],
+   "expected": [
+    "create|fagioli|5|contorni"
+   ],
+   "actual": [
+    "create|fagioli|5|contorni"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "nome uguale a una parola di «Pasta e fagioli»: completa la bozza, non è una lettura"
+  },
+  {
+   "id": "sosp-17",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi un piatto a 16",
+    "Milanese"
+   ],
+   "replies": [
+    "Come si chiama il piatto da aggiungere in *Secondi* a 16,00 €?",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Milanese* in *Secondi*: *16,00 €*"
+   ],
+   "expected": [
+    "create|milanese|16|secondi"
+   ],
+   "actual": [
+    "create|milanese|16|secondi"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: il bot lo legge come la Cotoletta alla milanese"
+  },
+  {
+   "id": "sosp-18",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra gli antipasti un piatto a 8",
+    "Bufala"
+   ],
+   "replies": [
+    "Come si chiama il piatto da aggiungere in *Antipasti* a 8,00 €?",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Bufala* in *Antipasti*: *8,00 €*"
+   ],
+   "expected": [
+    "create|bufala|8|antipasti"
+   ],
+   "actual": [
+    "create|bufala|8|antipasti"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-19",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le bibite una bibita a 3",
+    "Birra"
+   ],
+   "replies": [
+    "Come si chiama il piatto da aggiungere in *Bibite* a 3,00 €?",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Birra* in *Bibite*: *3,00 €*"
+   ],
+   "expected": [
+    "create|birra|3|bibite"
+   ],
+   "actual": [
+    "create|birra|3|bibite"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-20",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i contorni un piatto a 5",
+    "boh"
+   ],
+   "replies": [
+    "Come si chiama il piatto da aggiungere in *Contorni* a 5,00 €?",
+    "Come si chiama il piatto da aggiungere in *Contorni* a 5,00 €?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: «boh» come nome = non so",
+   "proposal": {
+    "kind": "create_draft"
+   }
+  },
+  {
+   "id": "sosp-21",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti costano 13",
+    "spaghetti aglio olio e peperoncino, grazie"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "actual": [
+    "price|Spaghetti aglio olio e peperoncino|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-22",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "nascondi gli spaghetti",
+    "la carbonara"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Spaghetti alla carbonara|true"
+   ],
+   "actual": [
+    "hidden|Spaghetti alla carbonara|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-23",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "gli spaghetti in promo a 7",
+    "tutti e due"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *7,00 €* (prezzo pieno 12,00 €), finché non la togli\n*Spaghetti aglio olio e peperoncino*: in *promo* a *7,00 €* (prezzo pieno 8,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|7",
+    "promo|Spaghetti aglio olio e peperoncino|7"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|7",
+    "promo|Spaghetti aglio olio e peperoncino|7"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "sosp-24",
+   "cat": "sosp",
+   "mode": "ideal",
+   "turns": [
+    "il menù costa 16",
+    "il menù del giorno"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Menù del giorno*\n2. *Menù bambini*\n3. *Menù della domenica*\n4. *Menù degustazione*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Menù del giorno*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "price|Menù del giorno|16"
+   ],
+   "actual": [
+    "price|Menù del giorno|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-01",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi pasta al pesto a 11"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Primi*: *11,00 €*"
+   ],
+   "expected": [
+    "create|pasta al pesto|11|primi"
+   ],
+   "actual": [
+    "create|pasta al pesto|11|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-02",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi un nuovo piatto: tagliatelle 12 tra i primi"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tagliatelle* in *Primi*: *12,00 €*"
+   ],
+   "expected": [
+    "create|tagliatelle|12|primi"
+   ],
+   "actual": [
+    "create|tagliatelle|12|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-03",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci il tiramisù al caffè a 6"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tiramisù al caffè* in *Dolci*: *6,00 €*"
+   ],
+   "expected": [
+    "create|tiramisu al caffe|6|dolci"
+   ],
+   "actual": [
+    "create|tiramisu al caffe|6|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-04",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi la pasta e ceci a 9"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta e ceci* in *Primi*: *9,00 €*"
+   ],
+   "expected": [
+    "create|pasta e ceci|9|primi"
+   ],
+   "actual": [
+    "create|pasta e ceci|9|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-05",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi pollo e patate a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pollo e patate* in *Secondi*: *13,00 €*"
+   ],
+   "expected": [
+    "create|pollo e patate|13|secondi"
+   ],
+   "actual": [
+    "create|pollo e patate|13|secondi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-06",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi pasta senza glutine a 12"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta senza glutine* in *Primi*: *12,00 €*"
+   ],
+   "expected": [
+    "create|pasta senza glutine|12|primi"
+   ],
+   "actual": [
+    "create|pasta senza glutine|12|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-07",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le bibite acqua frizzante 0,75 l a 2"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Acqua frizzante 0,75 l* in *Bibite*: *2,00 €*"
+   ],
+   "expected": [
+    "create|acqua frizzante 0 75 l|2|bibite"
+   ],
+   "actual": [
+    "create|acqua frizzante 0 75 l|2|bibite"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-08",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le bibite Coca Cola zero 33cl a 3"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Coca Cola zero 33cl* in *Bibite*: *3,00 €*"
+   ],
+   "expected": [
+    "create|coca cola zero 33cl|3|bibite"
+   ],
+   "actual": [
+    "create|coca cola zero 33cl|3|bibite"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-09",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra gli antipasti tagliere per 2 a 20"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tagliere per 2* in *Antipasti*: *20,00 €*"
+   ],
+   "expected": [
+    "create|tagliere per 2|20|antipasti"
+   ],
+   "actual": [
+    "create|tagliere per 2|20|antipasti"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-10",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le pizze la pizza 4 stagioni a 9"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pizza 4 stagioni* in *Pizze*: *9,00 €*"
+   ],
+   "expected": [
+    "create|pizza 4 stagioni|9|pizze"
+   ],
+   "actual": [
+    "create|pizza 4 stagioni|9|pizze"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-11",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi la tagliata di pollo a 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tagliata di pollo* in *Secondi*: *14,00 €*"
+   ],
+   "expected": [
+    "create|tagliata di pollo|14|secondi"
+   ],
+   "actual": [
+    "create|tagliata di pollo|14|secondi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-12",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi l'orata al forno a 17"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Orata al forno* in *Secondi*: *17,00 €*"
+   ],
+   "expected": [
+    "create|orata al forno|17|secondi"
+   ],
+   "actual": [
+    "create|orata al forno|17|secondi"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "discutibile: articolo apostrofato tolto"
+  },
+  {
+   "id": "crea-13",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci \"Non ti scordar di me\" a 6"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Non ti scordar di me* in *Dolci*: *6,00 €*"
+   ],
+   "expected": [
+    "create|non ti scordar di me|6|dolci"
+   ],
+   "actual": [
+    "create|non ti scordar di me|6|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-14",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi la grigliata mista 18 o 20"
+   ],
+   "replies": [
+    "Quale prezzo vuoi: *18* o *20*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-15",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le proposte un burger di nome Smash burger a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Smash burger* in *Proposte*: *13,00 €*"
+   ],
+   "expected": [
+    "create|smash burger|13|proposte"
+   ],
+   "actual": [
+    "create|smash burger|13|proposte"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-16",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi un piatto che si chiama Pollo alla brace a 14"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pollo alla brace* in *Secondi*: *14,00 €*"
+   ],
+   "expected": [
+    "create|pollo alla brace|14|secondi"
+   ],
+   "actual": [
+    "create|pollo alla brace|14|secondi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-17",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "🎤 aggiungi tra i primi la pasta e fagioli con le cozze a dodici euro"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta e fagioli con le cozze* in *Primi*: *12,00 €*"
+   ],
+   "expected": [
+    "create|pasta e fagioli con le cozze|12|primi"
+   ],
+   "actual": [
+    "create|pasta e fagioli con le cozze|12|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-18",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le bibite birra 0,4 l a 5"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Birra 0,4 l* in *Bibite*: *5,00 €*"
+   ],
+   "expected": [
+    "create|birra 0 4 l|5|bibite"
+   ],
+   "actual": [
+    "create|birra 0 4 l|5|bibite"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-19",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi gli spaghetti alle vongole a 15"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Spaghetti alle vongole* in *Primi*: *15,00 €*"
+   ],
+   "expected": [
+    "create|spaghetti alle vongole|15|primi"
+   ],
+   "actual": [
+    "create|spaghetti alle vongole|15|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-20",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i contorni le patate fritte a 4, non cambiare le patate al forno"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Patate fritte* in *Contorni*: *4,00 €*"
+   ],
+   "expected": [
+    "create|patate fritte|4|contorni"
+   ],
+   "actual": [
+    "create|patate fritte|4|contorni"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-21",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi la carbonara di mare a 16"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Carbonara di mare* in *Primi*: *16,00 €*"
+   ],
+   "expected": [
+    "create|carbonara di mare|16|primi"
+   ],
+   "actual": [
+    "create|carbonara di mare|16|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "crea-22",
+   "cat": "crea",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi il piatto Pasta e fagioli alla veneta a 10"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta e fagioli alla veneta* in *Primi*: *10,00 €*"
+   ],
+   "expected": [
+    "create|pasta e fagioli alla veneta|10|primi"
+   ],
+   "actual": [
+    "create|pasta e fagioli alla veneta|10|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  }
+ ]
+}

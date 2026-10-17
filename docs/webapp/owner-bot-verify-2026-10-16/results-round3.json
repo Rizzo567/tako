@@ -1,6 +1,6 @@
 {
  "cases": 141,
- "runs": 246,
+ "runs": 231,
  "unknownSql": [],
  "results": [
   {
@@ -1754,62 +1754,15 @@
     "il primo del pranzo costa 11"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Quale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Pasta e fagioli*\n3. *Spaghetti aglio olio e peperoncino*\n4. *Lasagna al forno*\n5. *Gnocchi 4 formaggi*\n6. *Pasta del giorno*\n\nRispondi con il *numero* o il *nome*."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /quale|1\\./i)"
-    }
-   ]
-  },
-  {
-   "id": "categoria-16",
-   "cat": "categoria",
-   "mode": "empty",
-   "turns": [
-    "il primo del pranzo costa 11"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "categoria-16",
-   "cat": "categoria",
-   "mode": "wrong",
-   "turns": [
-    "il primo del pranzo costa 11"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "categoria-16",
-   "cat": "categoria",
-   "mode": "wrongCreate",
-   "turns": [
-    "il primo del pranzo costa 11"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
+   "aiCalls": 0,
+   "fails": [],
+   "proposal": {
+    "kind": "choose"
+   }
   },
   {
    "id": "categoria-17",
@@ -1821,7 +1774,7 @@
    ],
    "replies": [
     "Quale piatto intendi?\n\n1. *Margherita*\n2. *Pizza 4 formaggi*\n3. *Diavola*\n4. *Capricciosa*\n5. *Margherita con bufala*\n\nRispondi con il *numero* o il *nome*.",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Margherita*: *finito*\n2. *Pizza 4 formaggi*: *finito*\n3. *Diavola*: *finito*\n4. *Capricciosa*: *finito*\n5. *Margherita con bufala*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
    ],
    "expected": [
     "available|Margherita|false",
@@ -1831,88 +1784,37 @@
     "available|Margherita con bufala|false"
    ],
    "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": [],
    "proposal": {
-    "kind": "choose"
-   }
-  },
-  {
-   "id": "categoria-17",
-   "cat": "categoria",
-   "mode": "empty",
-   "turns": [
-    "la pizza è finita",
-    "tutte"
-   ],
-   "replies": [
-    "Quale piatto intendi?\n\n1. *Margherita*\n2. *Pizza 4 formaggi*\n3. *Diavola*\n4. *Capricciosa*\n5. *Margherita con bufala*\n\nRispondi con il *numero* o il *nome*.",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Margherita|false",
-    "available|Pizza 4 formaggi|false",
-    "available|Diavola|false",
-    "available|Capricciosa|false",
-    "available|Margherita con bufala|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [],
-   "proposal": {
-    "kind": "choose"
-   }
-  },
-  {
-   "id": "categoria-17",
-   "cat": "categoria",
-   "mode": "wrong",
-   "turns": [
-    "la pizza è finita",
-    "tutte"
-   ],
-   "replies": [
-    "Quale piatto intendi?\n\n1. *Margherita*\n2. *Pizza 4 formaggi*\n3. *Diavola*\n4. *Capricciosa*\n5. *Margherita con bufala*\n\nRispondi con il *numero* o il *nome*.",
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "available|Margherita|false",
-    "available|Pizza 4 formaggi|false",
-    "available|Diavola|false",
-    "available|Capricciosa|false",
-    "available|Margherita con bufala|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [],
-   "proposal": {
-    "kind": "choose"
-   }
-  },
-  {
-   "id": "categoria-17",
-   "cat": "categoria",
-   "mode": "wrongCreate",
-   "turns": [
-    "la pizza è finita",
-    "tutte"
-   ],
-   "replies": [
-    "Quale piatto intendi?\n\n1. *Margherita*\n2. *Pizza 4 formaggi*\n3. *Diavola*\n4. *Capricciosa*\n5. *Margherita con bufala*\n\nRispondi con il *numero* o il *nome*.",
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Margherita|false",
-    "available|Pizza 4 formaggi|false",
-    "available|Diavola|false",
-    "available|Capricciosa|false",
-    "available|Margherita con bufala|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": [],
-   "proposal": {
-    "kind": "choose"
+    "kind": "batch",
+    "actions": [
+     {
+      "kind": "available",
+      "value": false,
+      "id": "55555555-5555-4555-8555-000000000012"
+     },
+     {
+      "kind": "available",
+      "value": false,
+      "id": "55555555-5555-4555-8555-000000000013"
+     },
+     {
+      "kind": "available",
+      "value": false,
+      "id": "55555555-5555-4555-8555-000000000014"
+     },
+     {
+      "kind": "available",
+      "value": false,
+      "id": "55555555-5555-4555-8555-000000000015"
+     },
+     {
+      "kind": "available",
+      "value": false,
+      "id": "55555555-5555-4555-8555-000000000034"
+     }
+    ]
    }
   },
   {
@@ -2554,62 +2456,22 @@
     "il coperto passa a 8"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Coperto*: prezzo da 1,00 € a *8,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "prezzo sospetto: né applicato né in conferma"
-    }
-   ]
-  },
-  {
-   "id": "soglia-03",
-   "cat": "soglia",
-   "mode": "empty",
-   "turns": [
-    "il coperto passa a 8"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "soglia-03",
-   "cat": "soglia",
-   "mode": "wrong",
-   "turns": [
-    "il coperto passa a 8"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "soglia-03",
-   "cat": "soglia",
-   "mode": "wrongCreate",
-   "turns": [
-    "il coperto passa a 8"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
+   "aiCalls": 0,
+   "fails": [],
+   "proposal": {
+    "kind": "batch",
+    "actions": [
+     {
+      "kind": "price",
+      "price": 8,
+      "id": "55555555-5555-4555-8555-000000000030"
+     }
+    ]
+   }
   },
   {
    "id": "soglia-04",
@@ -2627,58 +2489,7 @@
    "actual": [
     "price|Coperto|7.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "soglia-04",
-   "cat": "soglia",
-   "mode": "empty",
-   "turns": [
-    "il coperto passa a 7,50"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|7.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "soglia-04",
-   "cat": "soglia",
-   "mode": "wrong",
-   "turns": [
-    "il coperto passa a 7,50"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Coperto|7.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "soglia-04",
-   "cat": "soglia",
-   "mode": "wrongCreate",
-   "turns": [
-    "il coperto passa a 7,50"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|7.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -2959,58 +2770,7 @@
    "actual": [
     "price|Tagliata di manzo|21.9"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-04",
-   "cat": "lettere",
-   "mode": "empty",
-   "turns": [
-    "🎤 la tagliata costa ventuno euro e novanta"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Tagliata di manzo|21.9"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-04",
-   "cat": "lettere",
-   "mode": "wrong",
-   "turns": [
-    "🎤 la tagliata costa ventuno euro e novanta"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Tagliata di manzo|21.9"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-04",
-   "cat": "lettere",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 la tagliata costa ventuno euro e novanta"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Tagliata di manzo|21.9"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

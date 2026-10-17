@@ -5,10 +5,11 @@ import {copy,line,capabilities,allowedTags,dailySectionName,fill} from './twilio
 import {menuSystemPrompt,dishSystemPrompt} from './twilio-menu-prompt.js'
 import {isSalesAction,salesActionKey,salesActionChanged,applySalesAction,describeSalesAction,salesFromLlm,salesLlmActions,type SalesAction} from './twilio-menu-sales.js'
 import {businessDate} from './menu-sales.js'
+import {priceAlternatives,priceAlternativeDish,isExcluded,type Excluded} from './twilio-menu-clarify.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string}
 export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction
-export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[]}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'clarify',ids:string[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
+export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[]}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'clarify',ids:string[],actions?:MenuAction[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
 export const groqBase=()=>process.env.GROQ_API_BASE||'https://api.groq.com/openai/v1'
 export const twilioBase=()=>process.env.TWILIO_API_BASE||'https://api.twilio.com'
 export const chatModels=['openai/gpt-oss-120b','openai/gpt-oss-20b']
@@ -47,7 +48,7 @@ export function g9Prices(message:string):number[]{const out:number[]=[];{const p
  const ints=out.filter(Number.isInteger);for(const x of ints)for(const y of ints)if(y>=10&&y<100)out.push(x+y/100);return out.map(x=>Math.round(x*100)/100)}
 const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;if(current!==undefined&&/\b(aument\w*|alz\w*|sal\w*|abbass\w*|diminu\w*|scont\w*|togli\w*|meno|piu)\b/.test(plain(message)))return said.some(d=>Math.abs(Math.abs(price-current)-d)<0.005);return false}
 const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
-export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>}={}):MenuPlan{
+export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[]}={}):MenuPlan{
  const data=parseJson(raw),sections=opts.sections??[],message=opts.message??'';if(!data||typeof data!=='object'||Array.isArray(data))return clarify()
  const byId=new Map(refs.map(r=>[r.id,r])),sectionIds=new Set(sections.map(s=>s.id)),known=(ids:unknown)=>Array.isArray(ids)?ids.filter((id):id is string=>typeof id==='string'&&byId.has(id)):[]
  if(data.intent==='capability'){const ids=Array.isArray(data.capability_ids)?data.capability_ids.filter((id:unknown):id is string=>typeof id==='string'&&(id==='all'||capabilities.some(c=>c.id===id))):[];const chosen=ids.length?[...new Set(ids)].slice(0,4) as string[]:[];return{type:'capability',ids:chosen.length&&!chosen.every(id=>id==='other')?chosen:capabilityHint(message)}}
@@ -74,10 +75,13 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
   else return clarify(valid)}
  // Full, unambiguous names explicitly present in a request must never disappear from its plan.
  // An omitted/negated/unsupported clause leads to clarification of the whole request, never partial publication.
- const normalizedMessage=' '+plain(message)+' ',changedIds=new Set(actions.flatMap(a=>'id' in a?[a.id]:[]));
- const named=refs.filter(r=>plain(r.name).length>=3&&normalizedMessage.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1);
- if(opts.checkCompleteness!==false&&named.some(r=>!changedIds.has(r.id))&&!actions.some(a=>a.kind==='create'||a.kind==='special'))return clarify(named.map(r=>r.id));
- return{type:'change',actions}
+ // 17/10: un piatto negato («non cambiare boh», «tranne la lasagna») non si cambia mai e non rende ambiguo il resto.
+ const exclude=opts.exclude??[],kept=actions.filter(a=>!isExcluded(a as any,exclude)),excludedIds=new Set(exclude.map(e=>e.id))
+ const normalizedMessage=' '+plain(message)+' ',changedIds=new Set(kept.flatMap(a=>'id' in a?[a.id]:[]));
+ const named=refs.filter(r=>!excludedIds.has(r.id)&&plain(r.name).length>=3&&normalizedMessage.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1);
+ // Chiarimento con l'azione già capita: il bot la tiene in sospeso e la risposta «X» la completa (QA 17/10, caso 3).
+ if(opts.checkCompleteness!==false&&named.some(r=>!changedIds.has(r.id))&&!kept.some(a=>a.kind==='create'||a.kind==='special'))return{type:'clarify',ids:[...new Set(named.map(r=>r.id))].slice(0,5),actions:kept};
+ return{type:'change',actions:kept}
 }
 export const safe=(s:string)=>s.replace(/[*_~]/g,c=>c==='*'?'✱':c==='_'?' ':'-').trim()
 export function itemLabel(ref:MenuRef,refs:MenuRef[]){const name=safe(ref.name);return refs.filter(r=>r.name.toLowerCase()===ref.name.toLowerCase()).length>1?`${name} (${safe(ref.menu)})`:name}
@@ -144,14 +148,19 @@ export function readText(plan:Extract<MenuPlan,{type:'read'}>,refs:MenuRef[]){
  const list=refs.filter(r=>plan.read==='hidden'?r.hidden:!r.available).map(r=>'- '+itemLabel(r,refs));if(!list.length)return copy.readNone[plan.read]
  return fill(copy.readList[plan.read],{n:list.length,elenco:list.slice(0,40).join('\n')+(list.length>40?'\n…':'')})
 }
-/** A clear dish with two alternative amounts needs a price question, not another dish lookup. */
-export function priceChoiceText(message:string,refs:MenuRef[]):string|null{
- const text=message.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(),normalized=' '+plain(message)+' ';
- if(/[?]|\bquanto\b/.test(text)||!/\b(metti\w*|porta\w*|fai|costa\w*|prezzo)\b/.test(text))return null;
- const amount='(?:\\d+(?:[.,]\\d{1,2})?|zero|uno|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|tredici|quattordici|quindici|sedici|diciassette|diciotto|diciannove|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta|cento)',alternatives=text.match(new RegExp('\\b('+amount+')\\s*(?:euro|euri|€)?\\s+(?:oppure|o)\\s+('+amount+')\\b'));
- if(!alternatives)return null;const named=refs.filter(r=>normalized.includes(' '+plain(r.name)+' '));if(named.length!==1)return null;
- return fill(copy.choosePrice,{piatto:itemLabel(named[0]!,refs),primo:alternatives[1]!,secondo:alternatives[2]!})
+/** Due prezzi alternativi («13 o 14», «13/14», «tra 13 e 14», «13 oppure 14 euro», anche in lettere o con «?»): una domanda,
+ * mai una scrittura (QA 17/10). `store` = piatto unico e richiesta fatta solo di quel prezzo: la risposta «14» la completa. */
+export function priceChoice(message:string,refs:MenuRef[]):{text:string,store?:{id:string,prices:[number,number],labels:[string,string]}}|null{
+ const text=message.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();if(/\bquanto\b/.test(text))return null
+ const alt=priceAlternatives(message,refs);if(!alt)return null
+ const {dish,many}=priceAlternativeDish(message,refs,alt),labels:[string,string]=[alt.first,alt.second]
+ if(!dish)return{text:fill(copy.choosePriceNoDish,{primo:alt.first,secondo:alt.second})}
+ const piatto=itemLabel(dish,refs)
+ if(many)return{text:fill(copy.choosePriceMulti,{piatto,primo:alt.first,secondo:alt.second})}
+ const asked=/\?\s*$/.test(message.trim())&&!/\b(metti\w*|porta\w*|fai|falla|fallo|cambia\w*|imposta)\b/.test(text)
+ return{text:fill(asked?copy.choosePriceNow:copy.choosePrice,{piatto,attuale:euro(dish.price),primo:alt.first,secondo:alt.second}),store:{id:dish.id,prices:[alt.a,alt.b],labels}}
 }
+export const priceChoiceText=(message:string,refs:MenuRef[])=>priceChoice(message,refs)?.text??null
 export function clarifyText(ids:string[],refs:MenuRef[]){const names=ids.map(id=>refs.find(r=>r.id===id)).filter(Boolean).map(r=>'*'+itemLabel(r!,refs)+'*');if(names.length===1)return `Non ho capito cosa cambiare per ${names[0]}. Scrivimelo in una frase, per esempio «${names[0]!.replace(/\*/g,'')} costa 12» oppure «${names[0]!.replace(/\*/g,'')} è finito».`;return names.length?fill(copy.whichDish,{opzioni:names.join(', ')}):copy.notUnderstood}
 export function capabilityText(ids:string[]){if(!ids.length||ids.includes('all')||ids.length>2)return copy.help;return ids.map(id=>capabilities.find(c=>c.id===id)??capabilities.find(c=>c.id==='other')!).map(c=>c.can?fill(copy.capabilityYes,{testo:c.text,esempio:c.example!}):fill(copy.capabilityNo,{testo:c.text,alternativa:c.alternative!})).join('\n\n')}
 export function planText(plan:Exclude<MenuPlan,{type:'change'}>,refs:MenuRef[],sections:SectionRef[]=[]){

@@ -58,11 +58,15 @@ export function capabilityFromText(raw:string):string[]|null{
 export function parseIntent(raw:string):Intent|null{
  // G4: una domanda non è mai un'azione («il tiramisù è finito?», «la carbonara costa 13?»): diventa una lettura.
  // Round 2: domande senza «?» («c'è ancora la tagliata», «sai se la carbonara è finita», «la lasagna è finita vero»).
- const q=plainText(raw).replace(/[,.!]/g,' ').replace(/\s+/g,' ').trim(),spoken=q.match(/^(?:c e ancora|ce ancora|ci sono ancora|abbiamo ancora|avete ancora) (.+)$/)
+ const q=plainText(raw).replace(/(?<!\d)[,.!]|[,.!](?!\d)/g,' ').replace(/\s+/g,' ').trim(),spoken=q.match(/^(?:c e ancora|ce ancora|ci sono ancora|abbiamo ancora|avete ancora|ce l abbiamo ancora|ce lo abbiamo ancora|ce la abbiamo ancora|ce l hai ancora|ce l avete ancora|e rimast[oaie] (?:ancora )?) (.+)$/)
  if(spoken)return{kind:'ask',target:spoken[1]!.replace(/ vero$/,'')}
- const lead=q.match(/^(?:sai se|mi sai dire se|mi sapresti dire se|mi dici se|dimmi se|puoi dirmi se|potresti dirmi se|mi puoi dire se|mi confermi che|confermami che|mi confermi se|e vero che|ma) (.+)$/),tail=/ vero$/.test(q)
+ // 17/10 (bassi round 2): «volevo sapere il prezzo della pizza 4 formaggi», «la lasagna è ancora disponibile», «… o no», «… o ce n'è ancora».
+ const priceAsk=q.match(/^(?:volevo|vorrei|voglio) sapere (?:il prezzo|quanto costa|quanto costano|quanto viene) (?:di |del |della |dello |dei |degli |delle |dell |de )?(.+)$/);if(priceAsk)return{kind:'ask',target:priceAsk[1]!}
+ const still=q.match(/^(?:ma )?(.+?) (?:e|sono) ancora (?:disponibil\w*|finit\w*|esaurit\w*|nel menu|in menu|online)$/);if(still&&!/\b(?:metti|togli|nascondi|aggiungi)\b/.test(still[1]!))return{kind:'ask',target:still[1]!}
+ const orNo=q.match(/^(?:ma )?(.+?) o (?:no|non|ce n e ancora|c e ancora|ancora c e|e finit\w*|e disponibil\w*|e tornat\w*)$/);if(orNo){const inner=parseIntentCore(orNo[1]!);if(inner&&'target' in inner)return{kind:'ask',target:inner.target};if(inner&&inner.kind==='read')return inner}
+ const lead=q.match(/^(?:volevo sapere se|vorrei sapere se|ti volevo chiedere se|volevo chiederti se|volevo chiedere se|ti chiedo se|sai se|mi sai dire se|mi sapresti dire se|mi dici se|dimmi se|puoi dirmi se|potresti dirmi se|mi puoi dire se|mi confermi che|confermami che|mi confermi se|e vero che|ma) (.+)$/),tail=/ vero$/.test(q)
  // Round 4: «potresti dirmi cosa è finito?», «mi dici se ho messo la tagliata in evidenza?» → letture.
- const told=q.match(/^(?:puoi|potresti|mi sai|mi sapresti|mi puoi) dirmi (cosa|che cosa|quali piatti|quanto) (.+)$/);if(told)return parseIntentCore(`${told[1]} ${told[2]}`)
+ const told=q.match(/^(?:puoi|potresti|mi sai|mi sapresti|mi puoi|ce la fai a|riesci a|riusciresti a|sai|sapresti) dirmi (cosa|che cosa|quali piatti|quali|quanto) (.+)$/);if(told)return parseIntentCore(`${told[1]} ${told[2]}`)
  if(lead&&q.startsWith('ma ')===false||tail){const inner=parseIntentCore((lead?lead[1]!:q).replace(/ vero$/,'').replace(/^(?:ho|abbiamo|hai) (?:messo|segnato|tolto|nascosto|cambiato) /,''));if(inner&&'target' in inner)return{kind:'ask',target:inner.target.replace(/^(?:ho|abbiamo) (?:messo|segnato) /,'')}
   if(inner&&inner.kind==='read')return inner}
  const found=parseIntentCore(raw);if(found&&'target' in found&&found.kind!=='ask'&&/\?\s*$/.test(raw.trim()))return{kind:'ask',target:found.target};return found
@@ -71,10 +75,13 @@ const nluActionTarget=/\b(promo|offerta|offerte|sconto|scontat\w*|aggiung\w*|ins
 const nluUnits:Record<string,number>={uno:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9},nluTeens:Record<string,number>={dieci:10,undici:11,dodici:12,tredici:13,quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19},nluTens:[string,number][]=[['venti',20],['vent',20],['trenta',30],['trent',30],['quaranta',40],['quarant',40],['cinquanta',50],['cinquant',50],['sessanta',60],['sessant',60],['settanta',70],['settant',70],['ottanta',80],['ottant',80],['novanta',90],['novant',90]]
 function nluBelow100(w:string):number|null{if(!w)return 0;if(w in nluUnits)return nluUnits[w]!;if(w in nluTeens)return nluTeens[w]!;for(const [p,v] of nluTens)if(w.startsWith(p)){const r=w.slice(p.length);if(!r)return v;if(r in nluUnits)return v+nluUnits[r]!}return null}
 function nluWordNumber(w:string):number|null{const m=w.match(/^(due|tre|quattro|cinque|sei|sette|otto|nove)?cento?(.*)$/);if(m&&w.includes('cent')){const r=nluBelow100(m[2]!);return r===null?null:(m[1]?nluUnits[m[1]]!:1)*100+r}const v=w?nluBelow100(w):null;return v===0?null:v}
+/** Numero in lettere fino a 999 («tredici», «centoventi»), null se non è un numero. */
+export const wordNumber=(w:string)=>nluWordNumber(w)
 function parseIntentCore(raw:string):Intent|null{
  const original=raw.trim(),t=plainText(raw).replace(/(?<!\d)[,.]|[,.](?!\d)/g,' ').replace(/\s+/g,' ').trim()
  if(/^(cosa|che cosa|quali piatti|quali|che piatti) (e|sono|ci sono|risultano) (gia )?(finit|esaurit)\w*/.test(t)||/^(cosa|che cosa) (manca|non c e)/.test(t))return{kind:'read',read:'unavailable'}
- if(/^(cosa|che cosa|quali piatti|quali) (e|sono) nascost\w*/.test(t))return{kind:'read',read:'hidden'}
+ if(/^(cosa|che cosa|quali piatti|quali|che piatti) (e|sono|abbiamo|ho|hai|avete|risultano) (gia )?nascost\w*/.test(t))return{kind:'read',read:'hidden'}
+ if(/^(cosa|che cosa|quali piatti|quali|che piatti) (abbiamo|ho|hai|avete) (gia )?(finit|esaurit)\w*/.test(t))return{kind:'read',read:'unavailable'}
  const description=original.match(/^(?:nella|nel|nello|nei|negli|nelle|per (?:la|il|lo|i|gli|le)|alla|al|allo)\s+(.+?)\s+scrivi\s*:\s*(.+)$/i);if(description)return{kind:'description',target:description[1]!,text:description[2]!.trim()}
  // Round 2: «costa novantacinque euro» → «costa 95 euro» (numeri in lettere fino a 999, solo davanti a «euro»).
  // Round 3 (E): decimali a voce «dieci virgola cinque», «tredici e mezzo».
@@ -86,8 +93,9 @@ function parseIntentCore(raw:string):Intent|null{
  if(/\bnon\b/.test(t)&&!/\bnon (c e|ce|abbiamo) piu\b/.test(t))return null
  let m:RegExpMatchArray|null
  if((m=t.match(/^quanto (?:costa|costano|viene|vengono) (.+)$/)))return{kind:'ask',target:m[1]!}
+ if((m=t.match(/^(?:(?:ma|e|allora|senti|ciao|scusa) )*(.+?) quanto (?:costa|costano|viene|vengono)(?: adesso| ora| oggi)?$/)))return{kind:'ask',target:m[1]!}
  if((t.match(/\b(costa|costano|finit\w*|esaurit\w*|tornat\w*|nascondi|togli|rimetti|evidenza|mettil\w*|portal\w*|disponibil\w*|niente)\b/g)||[]).length>=2&&!/^oggi niente [a-z ]+ (finit|esaurit)\w*$/.test(t))return null
- if((m=t.match(new RegExp(`^(?:prezzo |(?:metti|porta|cambia|imposta)(?: il prezzo (?:di|del|della|dei|delle))? )(.+?) (?:a|=) ${num}(?: euro)?$`)))||(m=t.match(new RegExp(`^(.+?) (?:costa|costano|viene|vengono|(?:mettil|portal)[aeio](?: a)?|a) ${num}(?: euro)?$`)))){const price=amount(m[2]!);return price===null||nluActionTarget.test(m[1]!)?null:{kind:'price',target:m[1]!,price}}
+ if((m=t.match(new RegExp(`^(?:prezzo |(?:metti|porta|cambia|imposta)(?: il prezzo (?:di|del|della|dei|delle))? )(.+?) (?:a|=) ${num}(?: euro)?$`)))||(m=t.match(new RegExp(`^(.+?) (?:(?:costa|costano)(?: (?:sempre|ancora|ora|adesso|da oggi))?|viene|vengono|(?:mettil|portal)[aeio](?: a)?|(?:passa|passano|sale|salgono|scende|scendono) a|a) ${num}(?: euro)?$`)))){const price=amount(m[2]!);return price===null||nluActionTarget.test(m[1]!)?null:{kind:'price',target:m[1]!,price}}
  if((m=t.match(/^(?:e |sono )?(?:finit|esaurit)[oaie] (.+)$/))||(m=t.match(/^(.+?) (?:e|sono) (?:gia )?(?:finit|esaurit)[oaie]$/))||(m=t.match(/^oggi niente (.+?)(?: (?:e )?(?:finit|esaurit)[oaie])?$/))||(m=t.match(/^(?:non c e piu|non ce piu|non abbiamo piu) (.+)$/))||(m=t.match(/^(.+?) non (?:c e|ce) piu$/))||(m=t.match(/^(?:esaurito|finito) (.+)$/))||(m=t.match(/^(?!.*\b(?:e|sono)\b)(.{3,60}?) (?:finit|esaurit)[oaie]$/)))return{kind:'available',target:m[1]!,value:false}
  if((m=t.match(/^(.+?) (?:e|sono) (?:tornat[oaie]|di nuovo disponibil[ei]|disponibil[ei]|ritornat[oaie])$/))||(m=t.match(/^(?:e |sono )?(?:tornat[oaie]|ritornat[oaie]) (.+)$/))||(m=t.match(/^(?:disponibile|rendi disponibile|di nuovo disponibile) (.+)$/)))return{kind:'available',target:m[1]!,value:true}
  if((m=t.match(/^(?:togli|leva) (?:dall evidenza|dalla evidenza|dai piatti in evidenza) (.+)$/)))return{kind:'featured',target:m[1]!,value:false}
@@ -112,9 +120,17 @@ export const wantsSpecialText=(m:string)=>/\b(del giorno|di oggi)\b/.test(plainT
 // mettere…», «puoi segnare finita…», «… ? mettila a 13»); «lascia stare X, <comando>» tiene solo il comando.
 // Restituisce il testo riscritto come comando, oppure null se il messaggio va lasciato com'è.
 /** Round 3 (E): «dieci virgola cinque» → 10.5, «tredici e mezzo» → 13.5 (prima del controllo «frase composta»). */
-export function spokenDecimals(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w));return raw.replace(/\b([\p{L}\d]+)\s+virgola\s+([\p{L}\d]+)\b/giu,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null?all:`${x},${y}`}).replace(/\b([\p{L}\d]+)(\s+euro)?\s+e\s+mezz[oa]\b/giu,(all,a,e)=>{const x=nv(a);return x===null?all:`${x},5${e??''}`})}
+/** 17/10 (QA 11:13): «tredici euro e cinquanta» → «13,50 euro»: il centesimo detto dopo «euro» non rende composta la frase.
+ * Solo per le modifiche singole: il menu intero da messaggio legge il testo originale. */
+export function spokenCents(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w))
+ return raw.replace(/\b([\p{L}\d]+)\s+euro\s+e\s+([\p{L}\d]+)\b(?!\s*(?:euro|€))/giu,(all,a,b)=>{const x=nv(a),y=/^\d{1,2}$/.test(b)?Number(b):nluWordNumber(plainText(b));return x===null||y===null||y<1||y>=100?all:`${x},${String(y).padStart(2,'0')} euro`})}
+export function spokenDecimals(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w))
+ return raw.replace(/\b([\p{L}\d]+)\s+virgola\s+([\p{L}\d]+)\b/giu,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null?all:`${x},${y}`}).replace(/\b([\p{L}\d]+)(\s+euro)?\s+e\s+mezz[oa]\b/giu,(all,a,e)=>{const x=nv(a);return x===null?all:`${x},5${e??''}`})}
 export function politeCommand(raw:string):string|null{
  let t=raw.trim(),changed=false
+ // 17/10: «la carbonara la lasciamo in promo a 10», «il tiramisù lo mettiamo a 6» → «la carbonara in promo a 10», «il tiramisù a 6».
+ const keep=t.match(/^(.+?)\s+(?:la|lo|li|le|l')\s*(?:lasciamo|lascio|lasciate|mettiamo|metto|facciamo|faccio)\s+((?:in (?:promo|offerta) )?a\s+\d+(?:[.,]\d{1,2})?(?:\s*(?:euro|€))?)\s*[.!]?$/i)
+ if(keep){t=`${keep[1]} ${/^in /i.test(keep[2]!)?keep[2]:'costa '+keep[2]!.replace(/^a\s+/i,'')}`;return t}
  const two=t.match(/^(.+?)\?\s*(mettil[aoie]|portal[aoie]|fall[aoie]) a (\d+(?:[.,]\d{1,2})?)(?:\s*(?:euro|€))?[.!]?$/i)
  if(two){const asked=parseIntentCore(two[1]!);if(asked&&'target' in asked)return `prezzo ${asked.target} a ${two[3]}`}
  const lead=/^(?:ciao |allora |senti )?(?:per (?:piacere|favore) )?(?:mi |ci |me l[ao] |ce l[ao] |me li |me le )?(?:(?:puoi|potresti|possiamo|potete|riesci a|riusciresti a|ce la fai a|vorrei|volevo|dovresti|devi)\s+)?(?:mi |me l[ao] |ce l[ao] )?/i

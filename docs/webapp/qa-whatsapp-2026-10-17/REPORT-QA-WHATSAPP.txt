@@ -1,0 +1,213 @@
+TAKOMENU — REPORT QA WHATSAPP — 17 OTTOBRE 2026
+Stato: collaudo parziale; nessuna correzione di codice, prompt, backend o configurazione.
+Locale unico: Tako · Verifica web — 26050ecd-2e55-4057-a4c5-bff2b449cd47
+Messaggi WhatsApp effettivamente inviati: 21 / 30. Nessun vocale o allegato inviato.
+Finestra cliente Dia in incognito, viewport 400×800. Nessun refresh manuale durante le prove.
+
+PROBLEMI RIPRODUCIBILI — COMPRENSIONE/CONTESTO
+Le cause interne del modello o del parser non sono state indagate: questo è un report del comportamento osservato.
+
+1. Ambiguità sul prezzo non gestita con una domanda — MEDIO
+Input 10:43: «piatto di verifica 13 o 14?»
+Risposta: «Piatto di verifica: 13,00 € · disponibile».
+Atteso: chiedere quale dei due prezzi utilizzare. Reale: legge soltanto il prezzo corrente; non modifica nulla.
+
+2. Negazione su un altro piatto confonde il destinatario della modifica — MEDIO
+Input 11:09: «non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta».
+Risposta: «Quale piatto intendi: Piatto di verifica, boh? Scrivi il nome come appare nel menu.»
+Atteso: ignorare la modifica negata a boh e applicare soltanto 13,50 a Piatto di verifica.
+Reale: nessuna modifica, richiesta di chiarimento superflua. I prezzi restano 14 e 21.
+
+3. Il chiarimento richiesto dal bot perde l’operazione pendente — MEDIO
+Subito dopo il caso 2, input 11:11: «Piatto di verifica».
+Risposta: «Piatto di verifica: 14,00 € · disponibile».
+Atteso: riprendere il cambio a 13,50 oppure spiegare che serve ripetere la richiesta.
+Reale: risponde come a una domanda informativa; il prezzo richiesto non viene applicato.
+Controprova 11:13: ripetendo l’intero comando senza negazione, 13,50 viene applicato correttamente.
+
+4. Nome del nuovo piatto normalizzato in modo inatteso — DA RIVEDERE / MEDIO
+Input 10:56: «aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro».
+Risposta e menu reale: «Test QA», categoria Piatti di prova, 9,00 €.
+Atteso nel caso di test: nome «Piatto test QA». La parola iniziale Piatto è stata eliminata.
+Limite del caso: il testo contiene due volte la parola piatto; non è stata eseguita la controprova con nome fra virgolette.
+Evidenza: nome-nuovo-piatto-alterato.png. Il piatto è stato successivamente nascosto, non eliminato definitivamente.
+
+LIMITI DI PRODOTTO DICHIARATI DAL BOT — DISTINTI DAI BUG
+- Aumento generico di tutti i piatti: rifiuta chiaramente e chiede piatti specifici/menu completo. Nessun cambiamento silenzioso.
+- «annulla» dopo una modifica pubblicata: nessun undo; spiega che le modifiche pubblicate restano e chiede cosa ripristinare.
+- «togli il piatto Test QA»: significa nascondere dal menu, non cancellare il record. La risposta usa correttamente “nascosto”.
+- Inglese: pagina segnala esplicitamente testi non tradotti, già presenti nello stato iniziale. Non prova di un nuovo guasto alle traduzioni provocato da WhatsApp.
+
+VERIFICHE POSITIVE
+- Domanda prezzo: risposta corretta, nessuna scrittura osservata.
+- Prezzo singolo, finito, di nuovo disponibile, nascondi e mostra: conferma coerente e cambiamento reale nel cliente senza refresh.
+- Richiesta foto: spiega di inviare foto e nome; nessuna immagine inventata o modifica osservata.
+- Quattro modifiche esplicite: riepilogo preciso, prezzi invariati prima dell’OK.
+- «ok va bene»: accettato, tutte e quattro le modifiche applicate. Promo 15/10, descrizioni e categoria preservate.
+- Prezzo in lettere isolato: tredici euro e cinquanta => 13,50.
+- Tre modifiche esplicite: applicate automaticamente senza conferma, prezzi finali corretti.
+- «annulla» su riepilogo non pubblicato: annullamento effettivo, menu invariato.
+
+TEMPI DASHBOARD => CLIENTE
+Prezzo prova 1: 1,499 s; prezzo prova 2: 2,057 s.
+Nome prova 1: 1,714 s; nome prova 2: 1,622 s. Scroll 341 px prima e dopo entrambi i cambi nome.
+Nascondi: 1,614 s; mostra: 2,450 s. Offset scroll 341→241 e 241→341 con rimozione/reinserimento sopra il contenuto: da verificare con video per distinguere ancoraggio da salto. Nessun salto in cima osservato.
+Prezzo con cliente in inglese: 2,222 s, una prova.
+Sono misure del tempo fino alla prima osservazione DOM, non misure fotogramma per fotogramma; lampeggi non certificati.
+Un controllo iniziale prima della conferma finale di pubblicazione è stato escluso: non è un bug di sincronizzazione.
+
+REGISTRO COMPLETO WHATSAPP
+
+1. 17/10/26, 10:32 (orario WhatsApp; secondi non rilevati)
+INVIATO: quanto costa il piatto di verifica?
+RISPOSTA: Piatto di verifica: 13,50 € · disponibile
+ESITO: PASS
+
+2. 17/10/26, 10:35:57
+INVIATO: il piatto di verifica costa 13 euro
+RISPOSTA: Confermato. Ho aggiornato il menu.
+ESITO: non classificato
+
+3. 17/10/26, 10:38:14
+INVIATO: il piatto di verifica è finito
+RISPOSTA: Confermato. Ho aggiornato il menu. Piatto di verifica: finito
+ESITO: PASS
+
+4. 17/10/26, 10:41:16
+INVIATO: il piatto di verifica è tornato disponibile
+RISPOSTA: Confermato. Ho aggiornato il menu. Piatto di verifica: di nuovo disponibile
+ESITO: PASS
+
+5. 17/10/26, 10:43:25
+INVIATO: piatto di verifica 13 o 14?
+RISPOSTA: Piatto di verifica: 13,00 € · disponibile
+ESITO: FAIL — Non cambia il prezzo, ma non chiede chiarimento tra 13 e 14 come richiesto.
+
+6. 17/10/26, 10:45:28
+INVIATO: cosa è finito?
+RISPOSTA: Tutti i piatti sono disponibili.
+ESITO: PASS
+
+7. 17/10/26, 10:47:31
+INVIATO: aumenta tutti i piatti della categoria Piatti di prova di un euro
+RISPOSTA: Non applico modifiche generiche a tutto il menu. Indica i piatti e i cambiamenti; menu completo dopo OK.
+ESITO: PASS — Rifiuto esplicito, nessun prezzo cambiato
+
+8. 17/10/26, 10:49:41
+INVIATO: metti una foto al piatto di verifica
+RISPOSTA: Posso aggiungere una foto. Manda la foto con il nome del piatto.
+ESITO: PASS
+
+9. 17/10/26, 10:51:40
+INVIATO: nascondi il piatto di verifica
+RISPOSTA: Confermato. Piatto di verifica: nascosto dal menu
+ESITO: PASS
+
+10. 17/10/26, 10:53:43
+INVIATO: mostra il piatto di verifica
+RISPOSTA: Confermato. Piatto di verifica: di nuovo visibile nel menu
+ESITO: PASS
+
+11. 17/10/26, 10:56:34
+INVIATO: aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro
+RISPOSTA: Confermato. Nuovo piatto Test QA in Piatti di prova: 9,00 €
+ESITO: FAIL — Nome richiesto Piatto test QA, nome creato Test QA: persa parola Piatto; categoria e prezzo corretti.
+
+12. 17/10/26, 11:01:36
+INVIATO: togli il piatto Test QA
+RISPOSTA: Confermato. Test QA: nascosto dal menu
+ESITO: PASS — Togli interpretato come nascondi, non eliminazione: piatto resta da rimuovere dalla bozza nel ripristino.
+
+13. 17/10/26, 11:03:34
+INVIATO: annulla
+RISPOSTA: Non ci sono modifiche in attesa. Quelle già pubblicate restano nel menu. Dimmi cosa vuoi ripristinare.
+ESITO: PASS — Nessun undo delle modifiche già pubblicate; limite dichiarato, nessun falso ripristino.
+
+14. 17/10/26, 11:05:36
+INVIATO: metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Tako · Verifica web: ecco le modifiche.
+
+1.⁠ ⁠Piatto di verifica: prezzo da 13,00 € a 14,00 €
+2.⁠ ⁠Che ne sacc: prezzo da 20,00 € a 21,00 €
+3.⁠ ⁠boh: prezzo da 20,00 € a 21,00 €
+4.⁠ ⁠pasta al ragù: prezzo da 12,00 € a 13,00 €
+
+Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi OK per pubblicare tutto.
+
+ANNULLA lascia il menu invariato. Il riepilogo vale 10 minuti., 11:05, ‎Ricevuto da Takomenu
+ESITO: PASS — Quattro modifiche: riepilogo corretto, prezzi invariati prima di OK
+
+15. 17/10/26, 11:07:25
+INVIATO: ok va bene
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Confermato. Ho aggiornato il menu.
+
+Piatto di verifica: prezzo da 13,00 € a 14,00 €
+Che ne sacc: prezzo da 20,00 € a 21,00 €
+boh: prezzo da 20,00 € a 21,00 €
+pasta al ragù: prezzo da 12,00 € a 13,00 €, 11:07, ‎Ricevuto da Takomenu
+ESITO: PASS — OK va bene accettato: quattro prezzi applicati, promo 15/10 e descrizioni preservate
+
+16. 17/10/26, 11:09:26
+INVIATO: non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Quale piatto intendi: Piatto di verifica, boh? Scrivi il nome come appare nel menu., 11:09, ‎Ricevuto da Takomenu
+ESITO: FAIL — Richiesta chiara con negazione trattata come ambigua tra due piatti; nessuna modifica applicata
+
+17. 17/10/26, 11:11:20
+INVIATO: Piatto di verifica
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Value: ‎messaggio, Piatto di verifica: 14,00 € · disponibile, 11:11, ‎Ricevuto da Takomenu, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia
+ESITO: FAIL — Dopo il chiarimento chiesto dal bot, il contesto modifica/prezzo è perso: risponde come interrogazione
+
+18. 17/10/26, 11:13:28
+INVIATO: metti il piatto di verifica a tredici euro e cinquanta
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Confermato. Ho aggiornato il menu.
+
+Piatto di verifica: prezzo da 14,00 € a 13,50 €, 11:13, ‎Ricevuto da Takomenu
+ESITO: PASS
+
+19. 17/10/26, 11:15:24
+INVIATO: metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Confermato. Ho aggiornato il menu.
+
+Che ne sacc: prezzo da 21,00 € a 20,00 €
+boh: prezzo da 21,00 € a 20,00 €
+pasta al ragù: prezzo da 13,00 € a 12,00 €, 11:15, ‎Ricevuto da Takomenu
+ESITO: PASS
+
+20. 17/10/26, 11:18:35
+INVIATO: metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Tako · Verifica web: ecco le modifiche.
+
+1.⁠ ⁠Piatto di verifica: prezzo da 13,50 € a 14,00 €
+2.⁠ ⁠Che ne sacc: prezzo da 20,00 € a 21,00 €
+3.⁠ ⁠boh: prezzo da 20,00 € a 21,00 €
+4.⁠ ⁠pasta al ragù: prezzo da 12,00 € a 13,00 €
+
+Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi OK per pubblicare tutto.
+
+ANNULLA lascia il menu invariato. Il riepilogo vale 10 minuti., 11:18, ‎Ricevuto da Takomenu
+ESITO: PASS
+
+21. 17/10/26, 11:19:27
+INVIATO: annulla
+RISPOSTA: Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Value: ‎messaggio, Annullato. Il menu è rimasto invariato., 11:19, ‎Ricevuto da Takomenu, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia
+ESITO: PASS
+
+RIPRISTINO
+Prezzi pubblici osservati: Piatto di verifica 13,50; Che ne sacc 20 (promo 15); boh 20 (promo 10); pasta al ragù 12.
+I quattro nomi, descrizioni, disponibilità/visibilità dei piatti originali risultano ripristinati nel cliente.
+NON scrivo “ripristino OK”: resta da verificare/eliminare dalla bozza il solo Test QA nascosto e confermare la pubblicazione finale.
+Il click Elimina piatto ha bloccato il controllo della dashboard; nessuna eliminazione confermata.
+
+PROVE NON ESEGUITE
+- Dashboard bloccata durante eliminazione del piatto temporaneo: interrotte ulteriori modifiche
+- Nota vocale non eseguita
+- A1 non completata: seconde prove visibilità, inserimento/eliminazione via dashboard, categoria, esaurito da dashboard e background controllato non eseguiti
+- Tempi WhatsApp non misurati con precisione: conferme e risultati reali osservati, non tempi esatti
+- Inglese: traduzioni di base mancanti già nello stato iniziale; prova prezzo effettuata, cambio nome tradotto non certificato
+
+EVIDENZE
+registro.json: stato iniziale e risultati osservati.
+nome-nuovo-piatto-alterato.png: nome reale dopo l’inserimento WhatsApp.
+cliente-prezzi-ripristinati.png: stato pubblico finale osservato.
+cliente-nome-live.png: aggiornamento nome da dashboard.
+Nessuna conclusione universale su ogni richiesta, dialetto o voce.

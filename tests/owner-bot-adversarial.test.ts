@@ -6,6 +6,9 @@
 import {createRequire} from 'node:module'
 import {writeFileSync,mkdirSync} from 'node:fs'
 import {afterAll,beforeAll,describe,expect,it,vi} from 'vitest'
+// Orologio fissato (17/10): il risultato non dipende dall'ora del run (alle 3 di notte «oggi» è ancora la giornata di ieri).
+// Venerdì 16/10/2026 alle 12:00 di Roma, come la validazione del 16/10. TAKO_TEST_NOW=<ISO> per provare un altro istante.
+vi.hoisted(()=>{vi.useFakeTimers({toFake:['Date']});vi.setSystemTime(new Date(process.env.TAKO_TEST_NOW||'2026-10-16T10:00:00Z'))})
 import {twilioSignature} from '../apps/server/src/lib/twilio-menu-command.js'
 import {copy} from '../apps/server/src/lib/twilio-menu-copy.js'
 import {setTranslationEnqueue} from '../apps/server/src/lib/menu-translation-queue.js'
@@ -77,7 +80,7 @@ const okJson=(content:any)=>new Response(JSON.stringify({choices:[{message:{cont
 vi.stubGlobal('fetch',async(url:any,init:any)=>{const u=String(url)
  if(u.includes('/chat/completions')){net.chats++;const body=JSON.parse(init.body),system=String(body.messages[0]?.content??''),user=String(body.messages[1]?.content??'')
   let source:string|null=null;try{source=JSON.parse(user).source??null}catch{}
-  if(source!==null)return okJson(net.mode==='ideal'&&net.caseNow?.fullRows?{rows:net.caseNow.fullRows.filter((r:any)=>source!.toLowerCase().includes(r.name.toLowerCase())).map((r:any)=>({section:r.section,name:r.name,price:r.price,description:'',evidence:source!.slice(source!.toLowerCase().indexOf(r.name.toLowerCase())).match(/^[^,.;\n]+/)![0]})),issues:[]}:{rows:[],issues:[]})
+  if(source!==null)return okJson(net.mode==='ideal'&&net.caseNow?.fullRows?{rows:net.caseNow.fullRows.filter((r:any)=>source!.toLowerCase().includes(r.name.toLowerCase())).map((r:any)=>({section:r.section,name:r.name,price:r.price,description:'',evidence:rowEvidence(source!,r.name)})),issues:[]}:{rows:[],issues:[]})
   const message=(user.split(/\n(?:MESSAGGIO|NOME INDICATO)\n/)[1]??'').trim(),hasSections=user.startsWith('CATEGORIE'),pending=system.includes('ESISTE UNA PROPOSTA')
   return okJson(modelReply(net.mode,net.caseNow,message,hasSections,pending,system.includes('Il ristoratore ha mandato una foto')))}
  if(u.includes('/audio/transcriptions'))return new Response(JSON.stringify({text:net.transcript,duration:5}),{status:200,headers:{'Content-Type':'application/json'}})
@@ -85,6 +88,9 @@ vi.stubGlobal('fetch',async(url:any,init:any)=>{const u=String(url)
  if(u.includes('/Media/'))return new Response(new Uint8Array([79,103,103,83]),{status:200,headers:{'Content-Type':'audio/ogg'}})
  return realFetch(url,init)})
 
+// Evidenza della riga come la dà un modello vero: dal nome fino al suo prezzo (17/10: in un vocale senza punteggiatura
+// il finto prendeva tutto il resto del menu, con più prezzi, e il server scartava giustamente la riga).
+function rowEvidence(source:string,name:string){const tail=source.slice(source.toLowerCase().indexOf(name.toLowerCase())),cut=tail.match(/^[^,.;\n]+/)![0],m=cut.slice(name.length).match(new RegExp('^.*?(?:\\d+(?:[.,]\\d{1,2})?|\\b(?:'+Object.keys(numberWords).join('|')+')\\b)(?:\\s*euro)?','i'));return m?cut.slice(0,name.length)+m[0]:cut}
 // ---------------- Casi ----------------
 type Change={op:'create',name:string,price:number,section?:string}|{op:'price',dish:string,price:number}|{op:'available'|'hidden'|'featured'|'last'|'today',dish:string,value:boolean}|{op:'description',dish:string,text:string}|{op:'tag',dish:string,tag:string,value:boolean}|{op:'promo',dish:string,price:number|null}|{op:'special',name:string,price:number}
 type Turn=string|{v:string}

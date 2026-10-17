@@ -1,6 +1,6 @@
 {
  "cases": 100,
- "runs": 154,
+ "runs": 148,
  "unknownSql": [],
  "results": [
   {
@@ -1446,7 +1446,7 @@
     "potresti dirmi cosa è finito?"
    ],
    "replies": [
-    "Tutti i piatti sono *disponibili*."
+    "Nessun piatto è *finito*: sono tutti disponibili."
    ],
    "expected": [],
    "actual": [],
@@ -1465,52 +1465,7 @@
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domcort-05",
-   "cat": "domcort",
-   "mode": "empty",
-   "turns": [
-    "riesci a dirmi quanto costa la diavola?"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domcort-05",
-   "cat": "domcort",
-   "mode": "wrong",
-   "turns": [
-    "riesci a dirmi quanto costa la diavola?"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domcort-05",
-   "cat": "domcort",
-   "mode": "wrongCreate",
-   "turns": [
-    "riesci a dirmi quanto costa la diavola?"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1641,61 +1596,11 @@
     "ce la fai a dirmi quali piatti sono nascosti?"
    ],
    "replies": [
-    "*Piatto di prova*: *10,00 €* · disponibile"
+    "Non ci sono piatti *nascosti*."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /nascost|nessun/i)"
-    }
-   ]
-  },
-  {
-   "id": "domcort-08",
-   "cat": "domcort",
-   "mode": "empty",
-   "turns": [
-    "ce la fai a dirmi quali piatti sono nascosti?"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domcort-08",
-   "cat": "domcort",
-   "mode": "wrong",
-   "turns": [
-    "ce la fai a dirmi quali piatti sono nascosti?"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domcort-08",
-   "cat": "domcort",
-   "mode": "wrongCreate",
-   "turns": [
-    "ce la fai a dirmi quali piatti sono nascosti?"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

@@ -1,6 +1,6 @@
 {
  "cases": 160,
- "runs": 388,
+ "runs": 352,
  "unknownSql": [],
  "results": [
   {
@@ -26,61 +26,11 @@
     "🎤 ce l'abbiamo ancora la tagliata"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Tagliata di manzo*: *18,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /tagliata/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-02",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 ce l'abbiamo ancora la tagliata"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-02",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 ce l'abbiamo ancora la tagliata"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-02",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 ce l'abbiamo ancora la tagliata"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -91,61 +41,11 @@
     "🎤 la lasagna è ancora disponibile"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Lasagna al forno*: *11,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /lasagna/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-03",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 la lasagna è ancora disponibile"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-03",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 la lasagna è ancora disponibile"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-03",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 la lasagna è ancora disponibile"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -336,61 +236,11 @@
     "🎤 è finito il tiramisù o no"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Tiramisù*: *5,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /tiramis/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-07",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 è finito il tiramisù o no"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-07",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 è finito il tiramisù o no"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-07",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 è finito il tiramisù o no"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -431,61 +281,11 @@
     "🎤 volevo sapere il prezzo della pizza 4 formaggi"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Pizza 4 formaggi*: *9,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /9,00/)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-10",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 volevo sapere il prezzo della pizza 4 formaggi"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-10",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 volevo sapere il prezzo della pizza 4 formaggi"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-10",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 volevo sapere il prezzo della pizza 4 formaggi"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -500,52 +300,7 @@
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-11",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 ma la carbonara quanto costa adesso"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-11",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 ma la carbonara quanto costa adesso"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-11",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 ma la carbonara quanto costa adesso"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -616,61 +371,11 @@
     "🎤 quali piatti abbiamo nascosto"
    ],
    "replies": [
-    "*Piatto di prova*: *10,00 €* · disponibile"
+    "Non ci sono piatti *nascosti*."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /nascost/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-13",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 quali piatti abbiamo nascosto"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-13",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 quali piatti abbiamo nascosto"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-13",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 quali piatti abbiamo nascosto"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -681,61 +386,11 @@
     "ma il tiramisù è finito o ce n è ancora"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Tiramisù*: *5,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /tiramis/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-14",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "ma il tiramisù è finito o ce n è ancora"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-14",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "ma il tiramisù è finito o ce n è ancora"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-14",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "ma il tiramisù è finito o ce n è ancora"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -811,61 +466,11 @@
     "🎤 ti volevo chiedere se la cotoletta costa sempre 15"
    ],
    "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "*Cotoletta alla milanese*: *15,00 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 1,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /15|cotoletta/i)"
-    }
-   ]
-  },
-  {
-   "id": "domanda2-19",
-   "cat": "domanda2",
-   "mode": "empty",
-   "turns": [
-    "🎤 ti volevo chiedere se la cotoletta costa sempre 15"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-19",
-   "cat": "domanda2",
-   "mode": "wrong",
-   "turns": [
-    "🎤 ti volevo chiedere se la cotoletta costa sempre 15"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "domanda2-19",
-   "cat": "domanda2",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 ti volevo chiedere se la cotoletta costa sempre 15"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -899,58 +504,7 @@
    "actual": [
     "available|Spaghetti alla carbonara|false"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "negazione-01",
-   "cat": "negazione",
-   "mode": "empty",
-   "turns": [
-    "la carbonara è finita ma non la lasagna"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Spaghetti alla carbonara|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "negazione-01",
-   "cat": "negazione",
-   "mode": "wrong",
-   "turns": [
-    "la carbonara è finita ma non la lasagna"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "available|Spaghetti alla carbonara|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "negazione-01",
-   "cat": "negazione",
-   "mode": "wrongCreate",
-   "turns": [
-    "la carbonara è finita ma non la lasagna"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "available|Spaghetti alla carbonara|false"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -3110,58 +2664,7 @@
    "actual": [
     "price|Coperto|3.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-04",
-   "cat": "prezzo3x",
-   "mode": "empty",
-   "turns": [
-    "il coperto passa a 3,50"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|3.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-04",
-   "cat": "prezzo3x",
-   "mode": "wrong",
-   "turns": [
-    "il coperto passa a 3,50"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Coperto|3.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-04",
-   "cat": "prezzo3x",
-   "mode": "wrongCreate",
-   "turns": [
-    "il coperto passa a 3,50"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|3.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -3199,58 +2702,7 @@
    "actual": [
     "price|Bottiglia di Brunello|150"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-06",
-   "cat": "prezzo3x",
-   "mode": "empty",
-   "turns": [
-    "la bottiglia di brunello passa a 150 euro"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Bottiglia di Brunello|150"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-06",
-   "cat": "prezzo3x",
-   "mode": "wrong",
-   "turns": [
-    "la bottiglia di brunello passa a 150 euro"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Bottiglia di Brunello|150"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-06",
-   "cat": "prezzo3x",
-   "mode": "wrongCreate",
-   "turns": [
-    "la bottiglia di brunello passa a 150 euro"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Bottiglia di Brunello|150"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -3392,58 +2844,7 @@
    "actual": [
     "price|Coperto|3"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-12",
-   "cat": "prezzo3x",
-   "mode": "empty",
-   "turns": [
-    "il coperto passa a 3"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|3"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-12",
-   "cat": "prezzo3x",
-   "mode": "wrong",
-   "turns": [
-    "il coperto passa a 3"
-   ],
-   "replies": [
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Coperto|3"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo3x-12",
-   "cat": "prezzo3x",
-   "mode": "wrongCreate",
-   "turns": [
-    "il coperto passa a 3"
-   ],
-   "replies": [
-    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|3"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -4647,17 +4048,15 @@
     "il menù costa 16"
    ],
    "replies": [
-    "*Non trovo «menu».* Scrivi il nome come appare nel menu."
+    "Quale piatto intendi?\n\n1. *Menù del giorno*\n2. *Menù bambini*\n3. *Menù degustazione*\n\nRispondi con il *numero* o il *nome*."
    ],
    "expected": [],
    "actual": [],
    "aiCalls": 0,
-   "fails": [
-    {
-     "sev": "BASSO",
-     "why": "risposta non pertinente (attesa /quale|1\\.|menù/i)"
-    }
-   ]
+   "fails": [],
+   "proposal": {
+    "kind": "choose"
+   }
   },
   {
    "id": "generico-07",

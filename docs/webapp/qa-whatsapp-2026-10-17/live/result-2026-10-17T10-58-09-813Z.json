@@ -1,0 +1,343 @@
+{
+ "at": "2026-10-17T10:58:09.815Z",
+ "results": [
+  {
+   "id": "caso1",
+   "turns": [
+    "piatto di verifica 13 o 14?"
+   ],
+   "replies": [
+    {
+     "ms": 1469,
+     "text": "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  },
+  {
+   "id": "caso1-risposta",
+   "turns": [
+    "piatto di verifica 13 o 14?",
+    "14"
+   ],
+   "replies": [
+    {
+     "ms": 1485,
+     "text": "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+    },
+    {
+     "ms": 1649,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*"
+    }
+   ],
+   "expected": [
+    "price|Piatto di verifica|14"
+   ],
+   "got": [
+    "price|Piatto di verifica|14"
+   ],
+   "pass": true
+  },
+  {
+   "id": "caso2",
+   "turns": [
+    "metti il piatto di verifica a 14",
+    "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta"
+   ],
+   "replies": [
+    {
+     "ms": 1725,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*"
+    },
+    {
+     "ms": 1752,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 14,00 € a *13,50 €*"
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  },
+  {
+   "id": "caso2-variante",
+   "turns": [
+    "non cambiare boh; metti il piatto di verifica a dodici euro e cinquanta"
+   ],
+   "replies": [
+    {
+     "ms": 1603,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *12,50 €*"
+    }
+   ],
+   "expected": [
+    "price|Piatto di verifica|12.5"
+   ],
+   "got": [
+    "price|Piatto di verifica|12.5"
+   ],
+   "pass": true
+  },
+  {
+   "id": "caso3",
+   "turns": [
+    "il piatto costa 15",
+    "Piatto di verifica"
+   ],
+   "replies": [
+    {
+     "ms": 1484,
+     "text": "Quale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*."
+    },
+    {
+     "ms": 1765,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *15,00 €*"
+    }
+   ],
+   "expected": [
+    "price|Piatto di verifica|15"
+   ],
+   "got": [
+    "price|Piatto di verifica|15"
+   ],
+   "pass": true
+  },
+  {
+   "id": "caso4",
+   "turns": [
+    "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro"
+   ],
+   "replies": [
+    {
+     "ms": 1621,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Piatto test QA* in *Piatti di prova*: *9,00 €*"
+    }
+   ],
+   "expected": [
+    "create|Piatto test QA|9|Piatti di prova"
+   ],
+   "got": [
+    "create|Piatto test QA|9|Piatti di prova"
+   ],
+   "pass": true
+  },
+  {
+   "id": "v01",
+   "turns": [
+    "boh 21 o 22",
+    "22"
+   ],
+   "replies": [
+    {
+     "ms": 1400,
+     "text": "Per *boh*, quale prezzo vuoi: *21* o *22*? Non ho cambiato nulla."
+    },
+    {
+     "ms": 1775,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *22,00 €*"
+    }
+   ],
+   "expected": [
+    "price|boh|22"
+   ],
+   "got": [
+    "price|boh|22"
+   ],
+   "pass": true
+  },
+  {
+   "id": "v02",
+   "turns": [
+    "metti la pasta al ragù a 13 oppure 14 euro"
+   ],
+   "replies": [
+    {
+     "ms": 1468,
+     "text": "Per *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla."
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  },
+  {
+   "id": "v03",
+   "turns": [
+    "pasta al ragù tra 13 e 14 euro",
+    "la seconda"
+   ],
+   "replies": [
+    {
+     "ms": 1358,
+     "text": "Per *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla."
+    },
+    {
+     "ms": 2147,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+    }
+   ],
+   "expected": [
+    "price|pasta al ragù|14"
+   ],
+   "got": [
+    "price|pasta al ragù|14"
+   ],
+   "pass": true
+  },
+  {
+   "id": "v04",
+   "turns": [
+    "che ne sacc a 21, boh no"
+   ],
+   "replies": [
+    {
+     "ms": 2059,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: prezzo da 20,00 € a *21,00 €*"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|21"
+   ],
+   "got": [
+    "price|Che ne sacc|21"
+   ],
+   "pass": true
+  },
+  {
+   "id": "v05",
+   "turns": [
+    "lascia stare boh, pasta al ragù a 13"
+   ],
+   "replies": [
+    {
+     "ms": 1439,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+    }
+   ],
+   "expected": [
+    "price|pasta al ragù|13"
+   ],
+   "got": [
+    "price|pasta al ragù|13"
+   ],
+   "pass": true
+  },
+  {
+   "id": "v06",
+   "turns": [
+    "non toccare che ne sacc; boh è finito"
+   ],
+   "replies": [
+    {
+     "ms": 1966,
+     "text": "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*"
+    }
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "got": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "pass": true
+  },
+  {
+   "id": "v07",
+   "turns": [
+    "Piatto di verifica"
+   ],
+   "replies": [
+    {
+     "ms": 2023,
+     "text": "*Piatto di verifica*: *13,50 €* · disponibile"
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  },
+  {
+   "id": "v08",
+   "turns": [
+    "il piatto di verifica costa 13 o 14 euro?"
+   ],
+   "replies": [
+    {
+     "ms": 1369,
+     "text": "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  },
+  {
+   "id": "v09",
+   "turns": [
+    "il piatto costa 15",
+    "boh"
+   ],
+   "replies": [
+    {
+     "ms": 1349,
+     "text": "Quale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*."
+    },
+    {
+     "ms": 1415,
+     "text": "*boh* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  },
+  {
+   "id": "v10",
+   "turns": [
+    "13 o 14?"
+   ],
+   "replies": [
+    {
+     "ms": 1850,
+     "text": "Quale prezzo vuoi: *13* o *14*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+    }
+   ],
+   "expected": [],
+   "got": [],
+   "pass": true
+  }
+ ],
+ "stopped": null,
+ "restore": {
+  "before": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "items": "8786f8cb03cd7c90",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "77ce229f82e35f60"
+  },
+  "after": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "items": "8786f8cb03cd7c90",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "77ce229f82e35f60"
+  },
+  "ok": true,
+  "extraRows": [
+   {
+    "name": "Piatto test QA",
+    "available": false,
+    "inMenu": false
+   }
+  ],
+  "memory": true
+ }
+}

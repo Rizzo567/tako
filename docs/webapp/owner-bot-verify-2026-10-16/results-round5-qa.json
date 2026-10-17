@@ -1,0 +1,322 @@
+{
+ "cases": 16,
+ "runs": 16,
+ "unknownSql": [],
+ "results": [
+  {
+   "id": "qa-01",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "piatto di verifica 13 o 14?"
+   ],
+   "replies": [
+    "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "caso1",
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "qa-02",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "piatto di verifica 13 o 14?",
+    "14"
+   ],
+   "replies": [
+    "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|Piatto di verifica|14"
+   ],
+   "actual": [
+    "price|Piatto di verifica|14"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "caso1-risposta"
+  },
+  {
+   "id": "qa-03",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "metti il piatto di verifica a 14",
+    "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 14,00 € a *13,50 €*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "caso2"
+  },
+  {
+   "id": "qa-04",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "non cambiare boh; metti il piatto di verifica a dodici euro e cinquanta"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *12,50 €*"
+   ],
+   "expected": [
+    "price|Piatto di verifica|12.5"
+   ],
+   "actual": [
+    "price|Piatto di verifica|12.5"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "caso2-variante"
+  },
+  {
+   "id": "qa-05",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "il piatto costa 15",
+    "Piatto di verifica"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *15,00 €*"
+   ],
+   "expected": [
+    "price|Piatto di verifica|15"
+   ],
+   "actual": [
+    "price|Piatto di verifica|15"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "caso3"
+  },
+  {
+   "id": "qa-06",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Piatto test QA* in *Piatti di prova*: *9,00 €*"
+   ],
+   "expected": [
+    "create|piatto test qa|9|piatti di prova"
+   ],
+   "actual": [
+    "create|piatto test qa|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "caso4"
+  },
+  {
+   "id": "qa-07",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "boh 21 o 22",
+    "22"
+   ],
+   "replies": [
+    "Per *boh*, quale prezzo vuoi: *21* o *22*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *22,00 €*"
+   ],
+   "expected": [
+    "price|boh|22"
+   ],
+   "actual": [
+    "price|boh|22"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v01"
+  },
+  {
+   "id": "qa-08",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "metti la pasta al ragù a 13 oppure 14 euro"
+   ],
+   "replies": [
+    "Per *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v02",
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "qa-09",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "pasta al ragù tra 13 e 14 euro",
+    "la seconda"
+   ],
+   "replies": [
+    "Per *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "expected": [
+    "price|pasta al ragù|14"
+   ],
+   "actual": [
+    "price|pasta al ragù|14"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v03"
+  },
+  {
+   "id": "qa-10",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "che ne sacc a 21, boh no"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: prezzo da 20,00 € a *21,00 €*"
+   ],
+   "expected": [
+    "price|Che ne sacc|21"
+   ],
+   "actual": [
+    "price|Che ne sacc|21"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v04"
+  },
+  {
+   "id": "qa-11",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "lascia stare boh, pasta al ragù a 13"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|pasta al ragù|13"
+   ],
+   "actual": [
+    "price|pasta al ragù|13"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v05"
+  },
+  {
+   "id": "qa-12",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "non toccare che ne sacc; boh è finito"
+   ],
+   "replies": [
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*"
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "actual": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v06"
+  },
+  {
+   "id": "qa-13",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "Piatto di verifica"
+   ],
+   "replies": [
+    "*Piatto di verifica*: *13,50 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v07"
+  },
+  {
+   "id": "qa-14",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "il piatto di verifica costa 13 o 14 euro?"
+   ],
+   "replies": [
+    "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v08",
+   "proposal": {
+    "kind": "choose_price"
+   }
+  },
+  {
+   "id": "qa-15",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "il piatto costa 15",
+    "boh"
+   ],
+   "replies": [
+    "Quale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*.",
+    "*boh* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v09"
+  },
+  {
+   "id": "qa-16",
+   "cat": "qa",
+   "mode": "ideal",
+   "turns": [
+    "13 o 14?"
+   ],
+   "replies": [
+    "Quale prezzo vuoi: *13* o *14*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "v10"
+  }
+ ]
+}

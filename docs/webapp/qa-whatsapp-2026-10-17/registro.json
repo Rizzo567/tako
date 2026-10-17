@@ -1,0 +1,284 @@
+{
+  "startedAt": "2026-10-17T07:57:22.041Z",
+  "restaurantId": "26050ecd-2e55-4057-a4c5-bff2b449cd47",
+  "baseline": [
+    {
+      "name": "Piatto di verifica",
+      "price": 13.5,
+      "description": "Solo dati di prova per il collaudo web",
+      "category": "Piatti di prova",
+      "hidden": false
+    },
+    {
+      "name": "Che ne sacc",
+      "price": 20,
+      "promo": 15,
+      "lastPortions": true,
+      "description": "yes",
+      "category": "Piatti di prova"
+    },
+    {
+      "name": "boh",
+      "price": 20,
+      "promo": 10,
+      "lastPortions": true,
+      "description": "uohg",
+      "category": "Piatti di prova"
+    },
+    {
+      "name": "pasta al ragù",
+      "price": 12,
+      "category": "Piatti di prova"
+    }
+  ],
+  "tests": [
+    {
+      "test": "Preparazione prezzo",
+      "pass": null,
+      "note": "Il primo clic apriva la conferma: nessuna pubblicazione ancora eseguita; misura esclusa."
+    },
+    {
+      "test": "A1-prezzo-1",
+      "at": "2026-10-17T08:07:37.188Z",
+      "seconds": 1.499,
+      "pass": true
+    },
+    {
+      "test": "A1-prezzo-2",
+      "at": "2026-10-17T08:13:11.970Z",
+      "seconds": 2.057,
+      "pass": true,
+      "scroll": 341
+    },
+    {
+      "test": "A1-nome-1",
+      "origin": "dashboard",
+      "at": "2026-10-17T08:16:12.375Z",
+      "seconds": 1.714,
+      "pass": true,
+      "scrollBefore": 341,
+      "scrollAfter": 341
+    },
+    {
+      "test": "A1-nome-2",
+      "origin": "dashboard",
+      "at": "2026-10-17T08:18:07.599Z",
+      "seconds": 1.622,
+      "pass": true,
+      "scrollBefore": 341,
+      "scrollAfter": 341
+    },
+    {
+      "test": "A1-nascondi-1",
+      "at": "2026-10-17T08:22:01.536Z",
+      "seconds": 1.614,
+      "pass": true,
+      "scrollBefore": 341,
+      "scrollAfter": 241
+    },
+    {
+      "test": "A1-mostra-1",
+      "origin": "dashboard",
+      "at": "2026-10-17T08:26:55.245Z",
+      "seconds": 2.45,
+      "pass": true,
+      "scrollBefore": 241,
+      "scrollAfter": 341
+    },
+    {
+      "test": "A1-prezzo-inglese-1",
+      "origin": "dashboard",
+      "at": "2026-10-17T08:34:37.690Z",
+      "seconds": 2.222,
+      "pass": true,
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    {
+      "test": "A2-prezzo",
+      "origin": "WhatsApp",
+      "at": "2026-10-17T08:35:57.786Z",
+      "pass": true,
+      "note": "Aggiornamento osservato senza refresh dopo il primo controllo; latenza precisa non misurata."
+    },
+    {
+      "test": "A2-finito",
+      "pass": true,
+      "note": "Piatto non più presente nel cliente senza refresh; tempo preciso non misurato"
+    },
+    {
+      "test": "A2-disponibile",
+      "pass": true,
+      "note": "Ricompasa nel cliente senza refresh"
+    },
+    {
+      "test": "A2-nascondi",
+      "pass": true,
+      "note": "Non più presente nel cliente senza refresh"
+    },
+    {
+      "test": "A2-mostra",
+      "pass": true
+    }
+  ],
+  "whatsapp": [
+    {
+      "text": "quanto costa il piatto di verifica?",
+      "at": "2026-10-17T08:28:56.257Z",
+      "purpose": "B domanda senza modifica",
+      "actuallySentAt": "2026-10-17T08:32:00Z",
+      "response": "Piatto di verifica: 13,50 € · disponibile",
+      "pass": true,
+      "timingNote": "Invio effettivo alle 10:32 mostrato da WhatsApp; secondi non rilevati. Il primo timestamp era il tentativo di click senza invio."
+    },
+    {
+      "text": "il piatto di verifica costa 13 euro",
+      "at": "2026-10-17T08:35:57.786Z",
+      "response": "Confermato. Ho aggiornato il menu."
+    },
+    {
+      "text": "il piatto di verifica è finito",
+      "at": "2026-10-17T08:38:14.958Z",
+      "response": "Confermato. Ho aggiornato il menu. Piatto di verifica: finito",
+      "pass": true
+    },
+    {
+      "text": "il piatto di verifica è tornato disponibile",
+      "at": "2026-10-17T08:41:16.286Z",
+      "response": "Confermato. Ho aggiornato il menu. Piatto di verifica: di nuovo disponibile",
+      "pass": true
+    },
+    {
+      "text": "piatto di verifica 13 o 14?",
+      "at": "2026-10-17T08:43:25.873Z",
+      "response": "Piatto di verifica: 13,00 € · disponibile",
+      "pass": false,
+      "severity": "medio",
+      "note": "Non cambia il prezzo, ma non chiede chiarimento tra 13 e 14 come richiesto."
+    },
+    {
+      "text": "cosa è finito?",
+      "at": "2026-10-17T08:45:28.824Z",
+      "response": "Tutti i piatti sono disponibili.",
+      "pass": true
+    },
+    {
+      "text": "aumenta tutti i piatti della categoria Piatti di prova di un euro",
+      "at": "2026-10-17T08:47:31.828Z",
+      "response": "Non applico modifiche generiche a tutto il menu. Indica i piatti e i cambiamenti; menu completo dopo OK.",
+      "pass": true,
+      "note": "Rifiuto esplicito, nessun prezzo cambiato"
+    },
+    {
+      "text": "metti una foto al piatto di verifica",
+      "at": "2026-10-17T08:49:41.744Z",
+      "response": "Posso aggiungere una foto. Manda la foto con il nome del piatto.",
+      "pass": true
+    },
+    {
+      "text": "nascondi il piatto di verifica",
+      "at": "2026-10-17T08:51:40.116Z",
+      "response": "Confermato. Piatto di verifica: nascosto dal menu",
+      "pass": true
+    },
+    {
+      "text": "mostra il piatto di verifica",
+      "at": "2026-10-17T08:53:43.863Z",
+      "response": "Confermato. Piatto di verifica: di nuovo visibile nel menu",
+      "pass": true
+    },
+    {
+      "text": "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro",
+      "at": "2026-10-17T08:56:34.255Z",
+      "response": "Confermato. Nuovo piatto Test QA in Piatti di prova: 9,00 €",
+      "pass": false,
+      "severity": "grave",
+      "note": "Nome richiesto Piatto test QA, nome creato Test QA: persa parola Piatto; categoria e prezzo corretti."
+    },
+    {
+      "text": "togli il piatto Test QA",
+      "at": "2026-10-17T09:01:36.507Z",
+      "response": "Confermato. Test QA: nascosto dal menu",
+      "pass": true,
+      "note": "Togli interpretato come nascondi, non eliminazione: piatto resta da rimuovere dalla bozza nel ripristino."
+    },
+    {
+      "text": "annulla",
+      "at": "2026-10-17T09:03:34.115Z",
+      "response": "Non ci sono modifiche in attesa. Quelle già pubblicate restano nel menu. Dimmi cosa vuoi ripristinare.",
+      "pass": true,
+      "note": "Nessun undo delle modifiche già pubblicate; limite dichiarato, nessun falso ripristino."
+    },
+    {
+      "text": "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+      "at": "2026-10-17T09:05:36.603Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Tako · Verifica web: ecco le modifiche.\n\n1.⁠ ⁠Piatto di verifica: prezzo da 13,00 € a 14,00 €\n2.⁠ ⁠Che ne sacc: prezzo da 20,00 € a 21,00 €\n3.⁠ ⁠boh: prezzo da 20,00 € a 21,00 €\n4.⁠ ⁠pasta al ragù: prezzo da 12,00 € a 13,00 €\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi OK per pubblicare tutto.\n\nANNULLA lascia il menu invariato. Il riepilogo vale 10 minuti., 11:05, ‎Ricevuto da Takomenu",
+      "pass": true,
+      "note": "Quattro modifiche: riepilogo corretto, prezzi invariati prima di OK"
+    },
+    {
+      "text": "ok va bene",
+      "at": "2026-10-17T09:07:25.718Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Confermato. Ho aggiornato il menu.\n\nPiatto di verifica: prezzo da 13,00 € a 14,00 €\nChe ne sacc: prezzo da 20,00 € a 21,00 €\nboh: prezzo da 20,00 € a 21,00 €\npasta al ragù: prezzo da 12,00 € a 13,00 €, 11:07, ‎Ricevuto da Takomenu",
+      "pass": true,
+      "note": "OK va bene accettato: quattro prezzi applicati, promo 15/10 e descrizioni preservate"
+    },
+    {
+      "text": "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta",
+      "at": "2026-10-17T09:09:26.130Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Quale piatto intendi: Piatto di verifica, boh? Scrivi il nome come appare nel menu., 11:09, ‎Ricevuto da Takomenu",
+      "pass": false,
+      "severity": "medio",
+      "note": "Richiesta chiara con negazione trattata come ambigua tra due piatti; nessuna modifica applicata"
+    },
+    {
+      "text": "Piatto di verifica",
+      "at": "2026-10-17T09:11:20.222Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Value: ‎messaggio, Piatto di verifica: 14,00 € · disponibile, 11:11, ‎Ricevuto da Takomenu, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia",
+      "pass": false,
+      "severity": "medio",
+      "note": "Dopo il chiarimento chiesto dal bot, il contesto modifica/prezzo è perso: risponde come interrogazione"
+    },
+    {
+      "text": "metti il piatto di verifica a tredici euro e cinquanta",
+      "at": "2026-10-17T09:13:28.853Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Confermato. Ho aggiornato il menu.\n\nPiatto di verifica: prezzo da 14,00 € a 13,50 €, 11:13, ‎Ricevuto da Takomenu",
+      "pass": true
+    },
+    {
+      "text": "metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro",
+      "at": "2026-10-17T09:15:24.513Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Confermato. Ho aggiornato il menu.\n\nChe ne sacc: prezzo da 21,00 € a 20,00 €\nboh: prezzo da 21,00 € a 20,00 €\npasta al ragù: prezzo da 13,00 € a 12,00 €, 11:15, ‎Ricevuto da Takomenu",
+      "pass": true
+    },
+    {
+      "text": "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+      "at": "2026-10-17T09:18:35.162Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia, Value: ‎messaggio, Tako · Verifica web: ecco le modifiche.\n\n1.⁠ ⁠Piatto di verifica: prezzo da 13,50 € a 14,00 €\n2.⁠ ⁠Che ne sacc: prezzo da 20,00 € a 21,00 €\n3.⁠ ⁠boh: prezzo da 20,00 € a 21,00 €\n4.⁠ ⁠pasta al ragù: prezzo da 12,00 € a 13,00 €\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi OK per pubblicare tutto.\n\nANNULLA lascia il menu invariato. Il riepilogo vale 10 minuti., 11:18, ‎Ricevuto da Takomenu",
+      "pass": true
+    },
+    {
+      "text": "annulla",
+      "at": "2026-10-17T09:19:27.413Z",
+      "response": "Description: Takomenu, Help: ‎Tocca due volte per aprire la chat, ‎Tocca due volte e tieni premuto per altre opzioni, Value: ‎messaggio, Annullato. Il menu è rimasto invariato., 11:19, ‎Ricevuto da Takomenu, Secondary Actions: Cancel, ‎Non letto, ‎Fissa chat, ‎Altro, ‎Archivia",
+      "pass": true
+    }
+  ],
+  "messagesSent": 21,
+  "finishedAt": "2026-10-17T09:27:08.849Z",
+  "restore": {
+    "prices": true,
+    "names": true,
+    "visibilityOriginals": true,
+    "availabilityOriginals": true,
+    "temporaryItem": "Test QA nascosto; eliminazione definitiva non verificata dopo blocco dashboard",
+    "complete": false
+  },
+  "limits": [
+    "Dashboard bloccata durante eliminazione del piatto temporaneo: interrotte ulteriori modifiche",
+    "Nota vocale non eseguita",
+    "A1 non completata: seconde prove visibilità, inserimento/eliminazione via dashboard, categoria, esaurito da dashboard e background controllato non eseguiti",
+    "Tempi WhatsApp non misurati con precisione: conferme e risultati reali osservati, non tempi esatti",
+    "Inglese: traduzioni di base mancanti già nello stato iniziale; prova prezzo effettuata, cambio nome tradotto non certificato"
+  ]
+}

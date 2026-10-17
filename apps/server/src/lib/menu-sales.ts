@@ -83,12 +83,16 @@ const weekdays: [RegExp, number][] = [[/^domenic/, 0], [/^luned/, 1], [/^marted/
 const months = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
 const validDate = (y: number, m: number, d: number) => { const iso = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`; const t = new Date(iso + 'T12:00:00Z'); return Number.isFinite(t.getTime()) && t.toISOString().slice(0, 10) === iso ? iso : null }
 /** Ultimo giorno incluso della promo, o null se l'espressione non è chiara. Le date passate passano all'anno/mese successivo. */
+const dayUnits: Record<string, number> = { uno: 1, primo: 1, due: 2, tre: 3, quattro: 4, cinque: 5, sei: 6, sette: 7, otto: 8, nove: 9, dieci: 10, undici: 11, dodici: 12, tredici: 13, quattordici: 14, quindici: 15, sedici: 16, diciassette: 17, diciotto: 18, diciannove: 19, venti: 20, trenta: 30 }
+function dayWord(w: string): number | null { if (w in dayUnits) return dayUnits[w]!; const m = w.match(/^(vent|trent)(uno|due|tre|quattro|cinque|sei|sette|otto|nove)$/) ?? w.match(/^(venti|trenta)(due|tre|quattro|cinque|sei|sette|nove)$/); if (!m) return null; const v = (m[1]!.startsWith('vent') ? 20 : 30) + dayUnits[m[2]!]!; return v <= 31 ? v : null }
 export function resolveUntil(phrase: string, today: string): string | null {
   const t = phrase.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9/.\- ]+/g, ' ').replace(/\s+/g, ' ').trim()
     .replace(/^solo\s+(?:per\s+)?/, '')
     .replace(/^(?:fino|finoa|sino)\s+(?:a|al|alla|all|ad)?\s*|^(?:entro|per)\s+(?:il|la|l)?\s*/, '').replace(/^(?:il|la|l)\s+/, '').replace(/^tutto il weekend$/, 'weekend').trim()
     .replace(/^(lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|oggi) sera$/, '$1')
   if (!t) return null
+  // 17/10: giorno in lettere dettato a voce («fino al venticinque ottobre» → «25 ottobre»).
+  { const w = t.match(/^([a-z]+)(\s+[a-z]+(?:\s+\d{4})?)$/), n = w ? dayWord(w[1]!) : null; if (w && n !== null && months.includes(w[2]!.trim().split(' ')[0]!)) return resolveUntil(n + w[2]!, today) }
   // Round 3: «fine mese» = ultimo giorno del mese del giorno di servizio.
   if (/^fine (?:del )?mese$/.test(t)) { const d = new Date(today.slice(0, 7) + '-01T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1); d.setUTCDate(0); return d.toISOString().slice(0, 10) }
   if (/^(?:tutto |questo )?(?:il )?weekend$/.test(t)) return addDays(today, (7 - weekdayOf(today)) % 7)
