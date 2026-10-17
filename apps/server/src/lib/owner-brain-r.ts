@@ -65,6 +65,7 @@ const REASON:Record<string,string>={
  elimina_fuori_portata:'un piatto da eliminare è detto in una parte del messaggio con un\u2019altra azione (nascondi, prezzo, finito…): elimina solo i piatti del verbo «elimina/cancella»',
  riferimento_come_bersaglio:'il prezzo è stato cambiato al piatto di riferimento («uguale alla X»): va cambiato all\u2019altro piatto, X resta com\u2019è',
  nome_con_coda:'un nome nuovo (piatto, categoria, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
+ azione_fuori_portata:'un piatto è nascosto o segnato finito ma nel messaggio è detto in una parte con un\u2019altra azione (prezzo, aggiungi…): l\u2019azione vale solo per i piatti del suo verbo',
  categoria_non_detta:'il titolare ha nominato una categoria che nel menu non c\u2019è: chiedi in quale categoria metterlo o se crearla, non usarne un\u2019altra',
  bozza_non_sicura:'reply_draft non va bene: non dire che qualcosa è fatto/aggiornato se non lo è e non scrivere prezzi non detti'}
 export const reasonText=(notes:string[])=>{const out:string[]=[];for(const n of notes){const k=n.split(':')[0]!;const r=REASON[k];if(r&&!out.includes(r))out.push(r+(k==='parte_persa'&&n.includes(':')?' («'+n.split(':').slice(1).join(':').replace(/,/g,'», «')+'»)':''))}return out.join('; ')||'il piano non supera i controlli del server'}
@@ -82,7 +83,7 @@ export type Outcome=
 type Decision={intent:string,plan:any,hold?:Hold,notes:string[],exclude:{id:string}[]}
 const VALIDATOR_HOLD=new Set(['parte_persa','piatto_ambiguo','nome_a_suono'])
 /** Esito del turno dal piano del modello già passato dal validatore. `raw` = JSON del modello (intento e azioni originali). */
-export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,message:string,pend:Pend,undoOK:boolean,sections:SectionRef[],refs?:MenuRef[]}):Outcome{
+export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,message:string,pend:Pend,undoOK:boolean,sections:SectionRef[],refs?:MenuRef[],lastBot?:string}):Outcome{
  const {decision:d,control,raw,message,pend}=o,rawIntent=String(raw?.intent??''),rawActs=(Array.isArray(raw?.actions)?raw.actions:[]).filter((a:any)=>a&&!CONTROL_ACTIONS.includes(a.action))
  const reject=(note:string,ids:string[]=[],actions:MenuAction[]=[],hold?:Hold):Outcome=>({kind:'reject',reason:reasonText([note]),ids,actions,...(hold?{hold}:{})})
  const changeActs=d.plan?.type==='change'&&!d.hold?d.plan.actions as MenuAction[]:[]
@@ -98,7 +99,7 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!control.length&&d.exclude.some(e=>pend.actions.some(a=>'id' in a&&(a as any).id===e.id)))return{kind:'change',actions:changeActs}
  if(d.intent==='chat'||d.intent==='capability'||(!rawActs.length&&(rawIntent==='chat'||rawIntent==='capability')))return{kind:'say'}
  if(d.plan?.type==='read')return d.notes.includes('domanda_zero_scritture')&&rawIntent==='change'?{kind:'read',plan:d.plan}:{kind:'read',plan:d.plan}
- if(d.plan?.type==='change'&&!d.hold){if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions,o.refs??[]))return reject('piatto_doppio',[],[]);if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
+ if(d.plan?.type==='change'&&!d.hold){if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions,o.refs??[]))return reject('piatto_doppio',[],[]);if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'');if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
  // Domande del modello (intent=clarify) e parti incerte che il modello stesso ha segnato: domanda, stato in sospeso.
  const modelAsk=rawIntent==='clarify'||(d.hold&&d.notes.includes('parti_incerte')&&!d.notes.some(n=>VALIDATOR_HOLD.has(n.split(':')[0]!)))
  if(modelAsk){const cr=rawActs.find((a:any)=>a.action==='create_item'),sec=cr&&typeof cr.section==='string'?o.sections.find(s=>s.id===cr.section||plain(s.name)===plain(cr.section)):undefined
@@ -110,6 +111,17 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  // Il modello voleva modificare e il validatore non lo permette: rifiuto, con il motivo per l'auto-correzione.
  return{kind:'reject',reason:reasonText(d.notes.length?d.notes:['nessuna_azione']),ids:d.plan?.ids?.length?d.plan.ids:(d.hold?.asks??[]).flatMap((a:any)=>a.options??(a.action?.id?[a.action.id]:[])),actions:d.hold?d.hold.actions:d.plan?.actions??[],...(d.hold?{hold:d.hold}:{})}}
 
+/** Vincolo (V, «aggiungi la parmigiana a 10, il tiramisù a 6 e togli bo»): nascondere / segnare finito vale solo per i piatti
+ * nella portata del suo verbo (stessa lettura per parti di deleteScopeProblem). Piatti non nominati (pronomi) non si controllano. */
+const HIDE_V=/\b(?:nascond\w*|togli\w*|toglil\w*|lev[ai]\w*|levall?\w*|rimuov\w*|non (?:lo |la |li |le )?(?:fa\w* )?vedere)\b/,FIN_V=/\b(?:finit\w*|esaurit\w*|terminat\w*|fernut\w*|non c e piu|sold out)\b/
+export function verbScopeProblem(message:string,actions:MenuAction[],refs:MenuRef[]):string[]{
+ const want:[string,string][]=actions.flatMap((a):[string,string][]=>a.kind==='hidden'&&a.value?[[a.id,'hide']]:a.kind==='available'&&!a.value?[[a.id,'fin']]:[]);if(!want.length)return[]
+ const parts=message.split(/[,;]|\s+(?:e|ed|poi|anche)\s+/i).map(x=>plain(x)).filter(Boolean),scope=new Map<string,Set<string>>();let cur='none'
+ for(const p of parts){const h=HIDE_V.test(p),f=FIN_V.test(p),other=/\b(?:aggiung\w*|metti\w*|mettil\w*|costa\w*|prezzo|spost\w*|rinomin\w*|evidenza|aument\w*|abbass\w*)\b|\b(?:a|costa)\s+\d/.test(p.replace(HIDE_V,' ').replace(FIN_V,' '))
+  if(h&&!other)cur='hide';else if(f&&!other)cur='fin';else if(h||f)cur=h?'hide':'fin';else if(other)cur='other'
+  for(const r of refs){const n=plain(r.name);if((' '+p+' ').includes(' '+n+' ')||(!n.includes(' ')&&/h/.test(n)&&(' '+p+' ').includes(' '+n.replace(/h/g,'')+' '))){const s=scope.get(r.id)??new Set<string>();s.add((h||f)&&other?'mixed':cur);scope.set(r.id,s)}}}
+ // Solo un piatto detto in una parte con un'altra azione esplicita (prezzo, aggiungi…) e mai nella portata del verbo.
+ return want.filter(([id,k])=>{const s=scope.get(id);return !!s&&s.has('other')&&!s.has(k)&&!s.has('mixed')}).map(([id])=>id)}
 /** Vincolo (A3.2): un piatto nuovo va in una categoria esistente diversa da quella che il titolare ha nominato («nei primi»
  * con un menu senza Primi) → rifiuto: si chiede, non si sceglie un'altra categoria. */
 export function namedSectionMismatch(message:string,actions:MenuAction[],sections:SectionRef[]):boolean{
@@ -152,6 +164,14 @@ export function lostClauses(message:string,actions:MenuAction[],refs:MenuRef[],e
  const touched=new Set(actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])),ex=new Set(exclude.map(e=>e.id)),out:string[]=[]
  const words=(s:string)=>' '+plain(s)+' ',named=(r:MenuRef,c:string)=>{const w=words(c),n=plain(r.name);return w.includes(' '+n+' ')||(!n.includes(' ')&&/h/.test(n)&&w.includes(' '+n.replace(/h/g,'')+' '))}
  for(const c of message.split(/[,;.]|\s+(?:e|ed|poi)\s+/)){if(!ACT_VERB.test(plain(c)))continue;const ds=refs.filter(r=>named(r,c));if(!ds.length||ds.some(r=>touched.has(r.id)||ex.has(r.id)))continue;out.push(c.trim().slice(0,40))}
+ return out}
+/** Vincolo: uno spostamento va nella categoria che il titolare nomina (o in una creata in questo piano, o in quella dell'ultimo
+ * spostamento scritto dal bot per «anche X»). Il modello non sceglie la categoria. */
+export function moveTargetProblem(message:string,actions:MenuAction[],sections:SectionRef[],lastBot=''):string[]{
+ const p=' '+plain(message)+' ',bot=plain(lastBot),fresh=new Map(actions.flatMap(a=>a.kind==='create_section'?[[a.newSectionId,a.name] as const]:[])),out:string[]=[]
+ for(const a of actions){if(a.kind!=='move')continue;const name=fresh.get(a.sectionId)??sections.find(s=>s.id===a.sectionId)?.name;if(!name){out.push(a.id);continue}
+  const ws=plain(name).split(' ').filter(w=>w.length>=3),said=ws.some(w=>p.includes(' '+w.slice(0,Math.min(5,w.length))))||sameSection(name,plain(message))
+  if(!said&&!fresh.has(a.sectionId)&&!bot.includes('spostato in '+plain(name)))out.push(a.id)}
  return out}
 /** Richiesta cortese in forma di domanda («potresti inserire X a 11?», «mi aggiungi la lasagna a 13?»): è un comando, non una
  * domanda (il vincolo «domande = zero scritture» non vale). Serve un verbo d'azione esplicito. */

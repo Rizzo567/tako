@@ -145,7 +145,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // piatti nominati (anche quelli che il titolare poi toglie dal riepilogo), non solo a quelli dello stato finale atteso.
  if(d.intent==='change'&&(d.actions??[]).length){const kinds=new Set((d.actions as any[]).map(a=>a.action+':'+a.value)),only=kinds.size===1?[...kinds][0]!:null
   if(only&&/^(set_hidden|set_available|set_featured):(true|false)$/.test(only)&&!/\b(tranne|eccetto|non|no|lascia\w*)\b/.test(p)&&!/\?/.test(msg)&&!/\b(quanto|quanti|quali|cosa)\b/.test(p)){const [action,v]=only.split(':')
-   for(const n of [...cat.code.keys()].filter(n=>(' '+p+' ').includes(' '+plainT(n)+' ')))if(!(d.actions as any[]).some(a=>a.item===cat.code.get(n)))d.actions.push({action,item:cat.code.get(n),value:v==='true'})}}
+   const vre=action==='set_hidden'?/\b(nascond\w*|togli\w*|lev\w*)\b/:action==='set_available'?/\b(finit\w*|esaurit\w*|tornat\w*)\b/:/\bevidenza\b/,vi=p.search(vre),after=vi>=0?p.slice(vi):''
+   if(after&&!/\b(aggiung\w*|a \d|costa)\b/.test(after))for(const n of [...cat.code.keys()].filter(n=>(' '+after+' ').includes(' '+plainT(n)+' ')))if(!(d.actions as any[]).some(a=>a.item===cat.code.get(n)))d.actions.push({action,item:cat.code.get(n),value:v==='true'})}}
  // Regola del titolare: «elimina / levalo proprio / togli del tutto» è un'eliminazione (con conferma), mai un nascondi, anche
  // quando poi il titolare dice di no (l'attesa finale non ha l'eliminazione: il modello letterale la propone lo stesso).
  const DEL=DELETE_VERB
@@ -204,3 +205,15 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  if(d.intent==='chat'&&/^(?:ciao|buongiorno|buonasera|salve|grazie)\b/.test(p)&&p.split(' ').length>3){const rest=msg.replace(/^\s*\S+[\s,!.]*/,'');const d2=JSON.parse(brainOracle(conv,{...body,messages:[...msgs.slice(0,-1),{role:'user',content:(head?head+'\nMESSAGGIO\n':'MESSAGGIO\n')+rest}]})!);if(d2.intent!=='chat')return JSON.stringify(d2)}
  d.actions=(d.actions??[]).map((a:any)=>({...blank,...a}))
  return JSON.stringify(withDraft(d,cat,p,sectionNames))}
+
+/** Fase R, modello AVVERSARIO: oltre agli errori sulle azioni (nei runner), usa gli strumenti di controllo a sproposito —
+ * conferma una proposta senza che il titolare l'abbia detto, annulla l'ultima pubblicazione, scarta, ed elimina un piatto a caso
+ * insieme a una conferma. Il server deve fermarli tutti (conferma solo con un messaggio di sola conferma, annulla solo se chiesto). */
+export function attackR(d:any,k:number,codes:string[]):any{
+ const acts=Array.isArray(d.actions)?d.actions:(d.actions=[])
+ if(k%9===4)acts.push({...blank,action:'confirm_pending'})
+ if(k%11===5)acts.push({...blank,action:'undo_last'})
+ if(k%13===6)acts.push({...blank,action:'cancel_pending'})
+ if(k%17===8&&codes.length){acts.push({...blank,action:'confirm_pending'});acts.push({...blank,action:'delete_item',item:codes[k%codes.length]})}
+ if(k%19===9&&codes.length)acts.push({...blank,action:'delete_item',item:codes[(k>>3)%codes.length]})
+ return d}

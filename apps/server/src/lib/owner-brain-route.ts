@@ -48,7 +48,7 @@ const ownerBefore=(h:BrainTurn[],at:number)=>[...h].reverse().find(t=>t.role==='
 
 export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?:string[],
  /** Fase R: testo recente del titolare (numeri ammessi nella bozza del modello). */
- ownerRecent?:string}
+ ownerRecent?:string,lastBot?:string}
 /** Piano del cervello per un turno. null = riserva (Groq giù, quota, JSON non valido, contesto impossibile). */
 export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null,
  /** Fase R: annulla possibile (ultima pubblicazione ≤10 min) e auto-correzione. */
@@ -77,7 +77,7 @@ export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurant
  if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',reason:decision.reason}));return null}
  // A4.5: i piatti di cui si stava parlando (ultimi messaggi del titolare e ultima risposta), per una domanda che li cita.
  const recentText=[...history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text),bot?.text??''].join(' \n '),recentIds=history.length?o.refs.filter(r=>g9DishMentioned(r.name,recentText,o.refs)).map(r=>r.id).slice(0,3):[]
- return{decision,clarifyIds:choice?.length?choice:clarify?.itemIds?.length?clarify.itemIds:null,recentIds,ownerRecent:history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text).join(' \n ')}
+ return{decision,clarifyIds:choice?.length?choice:clarify?.itemIds?.length?clarify.itemIds:null,recentIds,ownerRecent:history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text).join(' \n '),lastBot:bot?.text??''}
 }
 
 /** Cronologia breve: il messaggio del titolare (testo o trascrizione) e la risposta, solo se il cervello è acceso per il locale. */

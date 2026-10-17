@@ -23,6 +23,7 @@ import {closeHarness,createRouteBot,installNet} from './route-harness.js'
 import {runBench,writeResults} from './runner.js'
 import {createNewBot} from './adapters/new-bot.js'
 import {brainOracle} from './adapters/brain-oracle.js'
+import {attackR} from './adapters/brain-oracle-r.js'
 import {currentOracle} from './adapters/current-oracle.js'
 import {FIXTURES,initialMenu} from './fixtures/menus.js'
 import {diff,flat,SAFETY} from './judge.js'
@@ -88,6 +89,7 @@ function adversary(conv:any,body:any):string|null{const good=brainOracle(conv,bo
  if(k%7===3)(d.actions??=[]).push({action:'create_section',item:null,section:null,price:null,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:msg.split(/\s+/).slice(0,2).join(' '),until:null})
  for(const a of d.actions??[]){if(typeof a.price==='number')a.price=wrongPrice(a.price);if(a.item&&codes.length&&k%3===0)a.item=codes[(codes.indexOf(a.item)+1)%codes.length]}
  if(k%4===0)(d.actions??=[]).push({action:'create_item',item:null,section:'c1',price:wrongPrice(12),price_ref:null,price_delta:null,value:null,tag:null,text:null,name:msg.split(/\s+/).slice(-3).join(' '),until:null})
+ d=attackR(d,k,codes) // fase R: conferme/annulla/scarta a caso, eliminazioni insieme a una conferma
  return JSON.stringify(d)}
 
 const SECURITY=new Set([...SAFETY,'prezzo-non-detto','eliminato-senza-conferma','categoria-doppia'])

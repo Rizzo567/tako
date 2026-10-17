@@ -372,6 +372,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    const deix=answering||(input.clarifyIds??[]).length>1?null:deixisReferents(message,owners,refs,botList)
    const deixBad=deix?(bare.length&&(bare.some(id=>!deix.ids.includes(id))||(deix.kind==='set'&&deix.ids.some(id=>!ids.includes(id)))||!deix.ids.length)):false
    const bad=deix?(deixBad?bare:[]).concat(bare.filter(priceBare)):bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg)&&!answering)||priceBare(id))
+   // «anche gli altri due»: gli «altri» non sono i piatti di cui si parlava (mai lo stesso piatto di prima).
+   if(/\b(?:gli altri|le altre|l altro|l altra|altri due|altre due|altri tre)\b/.test(msg)){const again=bare.filter(id=>pd.includes(id));if(again.length)bad.push(...again)}
    if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...pd,...bad])].filter(id=>byId.has(id)).slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'rimando_incerto']}}
   // Scelta aperta tra più piatti: «sì», «ok», «vai» non scelgono. Serve il nome, un ordinale o «tutti e due».
   const open=(input.clarifyIds??[]).filter(id=>byId.has(id))
