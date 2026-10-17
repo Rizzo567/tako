@@ -9,12 +9,14 @@ const RETRY = [429, 502, 503, 504]
 /** Errore con lo stato HTTP (e Retry-After sui 429), per chi rilegge senza ritentare. */
 export class MenuRequestError extends Error { status: number; retryAfterMs: number; constructor(status: number, retryAfterMs = 0) { super('Menu non disponibile'); this.status = status; this.retryAfterMs = retryAfterMs } }
 
-async function request(restaurantId: string, menuId: string, lang: string, prefetch: boolean, signal?: AbortSignal, retry = true) {
+async function request(restaurantId: string, menuId: string, lang: string, prefetch: boolean, signal?: AbortSignal, retry = true, token = '') {
   const query = new URLSearchParams()
   if (menuId) query.set('menuId', menuId)
   if (lang) query.set('lang', lang)
   // I prefetch non contano come visite nelle statistiche.
   if (prefetch) query.set('prefetch', '1')
+  // Rilettura dopo un segnale: il gettone del cambio fa condividere ai telefoni dello stesso data center una sola lettura (Worker).
+  if (token && /^[a-f0-9]{16}$/.test(token)) query.set('live', token)
   for (let attempt = 0; ; attempt++) {
     const response = await fetch(`/api/customer/restaurant/${encodeURIComponent(restaurantId)}/menu?${query}`, { signal })
     if (response.ok) return await response.json() as Response
@@ -40,11 +42,11 @@ export function cachedMenu(restaurantId: string, menuId = '', lang = '') {
 }
 
 /** Richiesta deduplicata: chiamate uguali in volo condividono la stessa risposta. */
-export function loadMenu(restaurantId: string, menuId = '', lang = '', options: { prefetch?: boolean; signal?: AbortSignal; live?: boolean } = {}) {
-  const k = key(restaurantId, menuId, lang) + (options.live ? '|l' : options.prefetch ? '|p' : '')
+export function loadMenu(restaurantId: string, menuId = '', lang = '', options: { prefetch?: boolean; signal?: AbortSignal; live?: boolean; token?: string } = {}) {
+  const k = key(restaurantId, menuId, lang) + (options.live ? '|l' + (options.token || '') : options.prefetch ? '|p' : '')
   const running = inflight.get(k)
   if (running) return running
-  const promise = request(restaurantId, menuId, lang, !!options.prefetch || !!options.live, options.signal, !options.live)
+  const promise = request(restaurantId, menuId, lang, !!options.prefetch || !!options.live, options.signal, !options.live, options.live ? options.token : '')
     .then(data => { store(restaurantId, menuId, lang, data); return data })
     .finally(() => inflight.delete(k))
   inflight.set(k, promise)
