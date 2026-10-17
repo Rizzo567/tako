@@ -11,7 +11,7 @@
     "piatto di verifica 13 o 14?"
    ],
    "replies": [
-    "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -31,7 +31,7 @@
     "14"
    ],
    "replies": [
-    "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*"
    ],
    "expected": [
@@ -53,7 +53,7 @@
     "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 14,00 € a *13,50 €*"
    ],
    "expected": [],
@@ -70,7 +70,7 @@
     "non cambiare boh; metti il piatto di verifica a dodici euro e cinquanta"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *12,50 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *12,50 €*"
    ],
    "expected": [
     "price|Piatto di verifica|12.5"
@@ -91,7 +91,7 @@
     "Piatto di verifica"
    ],
    "replies": [
-    "Quale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*.",
     "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *15,00 €*"
    ],
    "expected": [
@@ -112,7 +112,7 @@
     "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Piatto test QA* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Piatto test QA* in *Piatti di prova*: *9,00 €*"
    ],
    "expected": [
     "create|piatto test qa|9|piatti di prova"
@@ -133,7 +133,7 @@
     "22"
    ],
    "replies": [
-    "Per *boh*, quale prezzo vuoi: *21* o *22*? Non ho cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *boh*, quale prezzo vuoi: *21* o *22*? Non ho cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *22,00 €*"
    ],
    "expected": [
@@ -154,7 +154,7 @@
     "metti la pasta al ragù a 13 oppure 14 euro"
    ],
    "replies": [
-    "Per *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -174,7 +174,7 @@
     "la seconda"
    ],
    "replies": [
-    "Per *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *pasta al ragù*, quale prezzo vuoi: *13* o *14*? Non ho cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
    ],
    "expected": [
@@ -195,7 +195,7 @@
     "che ne sacc a 21, boh no"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: prezzo da 20,00 € a *21,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: prezzo da 20,00 € a *21,00 €*"
    ],
    "expected": [
     "price|Che ne sacc|21"
@@ -215,7 +215,7 @@
     "lascia stare boh, pasta al ragù a 13"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
    ],
    "expected": [
     "price|pasta al ragù|13"
@@ -235,7 +235,7 @@
     "non toccare che ne sacc; boh è finito"
    ],
    "replies": [
-    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*"
    ],
    "expected": [
     "available|boh|false",
@@ -257,7 +257,7 @@
     "Piatto di verifica"
    ],
    "replies": [
-    "*Piatto di verifica*: *13,50 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Piatto di verifica*: *13,50 €* · disponibile"
    ],
    "expected": [],
    "actual": [],
@@ -273,7 +273,7 @@
     "il piatto di verifica costa 13 o 14 euro?"
    ],
    "replies": [
-    "*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Piatto di verifica* ora costa *13,50 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -293,7 +293,7 @@
     "boh"
    ],
    "replies": [
-    "Quale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Piatto di verifica*\n\nRispondi con il *numero* o il *nome*.",
     "*boh* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
    ],
    "expected": [],
@@ -310,7 +310,7 @@
     "13 o 14?"
    ],
    "replies": [
-    "Quale prezzo vuoi: *13* o *14*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *13* o *14*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],

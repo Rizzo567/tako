@@ -1,0 +1,5613 @@
+{
+ "cases": 200,
+ "runs": 284,
+ "unknownSql": [],
+ "results": [
+  {
+   "id": "togli-01",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "togli la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Spaghetti alla carbonara|true"
+   ],
+   "actual": [
+    "hidden|Spaghetti alla carbonara|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-02",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "leva la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-03",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "levami la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-04",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "elimina la panna cotta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti panna cotta»."
+   ],
+   "expected": [
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [
+    "hidden|Panna cotta|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-05",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "cancella il tiramisù dal menu"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti tiramisù»."
+   ],
+   "expected": [
+    "hidden|Tiramisù|true"
+   ],
+   "actual": [
+    "hidden|Tiramisù|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-06",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "rimuovi la bruschetta dal menu"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti bruschetta al pomodoro»."
+   ],
+   "expected": [
+    "hidden|Bruschetta al pomodoro|true"
+   ],
+   "actual": [
+    "hidden|Bruschetta al pomodoro|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-07",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "toglici boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-08",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "togliamo che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Che ne sacc|true"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-09",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "eliminiamo la diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti diavola»."
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-10",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "rimuoviamo il piatto di verifica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti piatto di verifica»."
+   ],
+   "expected": [
+    "hidden|Piatto di verifica|true"
+   ],
+   "actual": [
+    "hidden|Piatto di verifica|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-11",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "TOGLI BOH"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-12",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "togli boh!!"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-13",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "leva dalla carta la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-14",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "togli la lasagna dalla lista di oggi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-15",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "anzi, togli la diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-16",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "ok togli boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-17",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "scusa togli il caffè"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Caffè|true"
+   ],
+   "actual": [
+    "hidden|Caffè|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-18",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "leva la coca cola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Coca Cola 33cl|true"
+   ],
+   "actual": [
+    "hidden|Coca Cola 33cl|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togli-19",
+   "cat": "togli",
+   "mode": "ideal",
+   "turns": [
+    "nascondimi gli gnocchi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gnocchi 4 formaggi*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Gnocchi 4 formaggi|true"
+   ],
+   "actual": [
+    "hidden|Gnocchi 4 formaggi|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-01",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Leva boh dal menù."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-02",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Togli la Carbonara."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Spaghetti alla carbonara|true"
+   ],
+   "actual": [
+    "hidden|Spaghetti alla carbonara|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-03",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Levami il tiramisu."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tiramisù|true"
+   ],
+   "actual": [
+    "hidden|Tiramisù|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-04",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Toglimi la tagliata, per favore."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-04",
+   "cat": "togliv",
+   "mode": "empty",
+   "turns": [
+    "🎤 Toglimi la tagliata, per favore."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-04",
+   "cat": "togliv",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Toglimi la tagliata, per favore."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-04",
+   "cat": "togliv",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Toglimi la tagliata, per favore."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-05",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Elimina la cotoletta alla milanese."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti cotoletta alla milanese»."
+   ],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-06",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Rimuovi la diavola dal menu."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti diavola»."
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-07",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Togli bò."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "togliv-08",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Togli la lasagna e basta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-08",
+   "cat": "togliv",
+   "mode": "empty",
+   "turns": [
+    "🎤 Togli la lasagna e basta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-08",
+   "cat": "togliv",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Togli la lasagna e basta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-08",
+   "cat": "togliv",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Togli la lasagna e basta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliv-09",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Tolgi la lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refuso del verbo: passa dall’IA (ideale = nascondere)"
+  },
+  {
+   "id": "togliv-09",
+   "cat": "togliv",
+   "mode": "empty",
+   "turns": [
+    "🎤 Tolgi la lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refuso del verbo: passa dall’IA (ideale = nascondere)"
+  },
+  {
+   "id": "togliv-09",
+   "cat": "togliv",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Tolgi la lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refuso del verbo: passa dall’IA (ideale = nascondere)"
+  },
+  {
+   "id": "togliv-09",
+   "cat": "togliv",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Tolgi la lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "refuso del verbo: passa dall’IA (ideale = nascondere)"
+  },
+  {
+   "id": "togliv-10",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Lèvame 'a lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "napoletano: passa dall’IA"
+  },
+  {
+   "id": "togliv-10",
+   "cat": "togliv",
+   "mode": "empty",
+   "turns": [
+    "🎤 Lèvame 'a lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "napoletano: passa dall’IA"
+  },
+  {
+   "id": "togliv-10",
+   "cat": "togliv",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Lèvame 'a lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "napoletano: passa dall’IA"
+  },
+  {
+   "id": "togliv-10",
+   "cat": "togliv",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Lèvame 'a lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "napoletano: passa dall’IA"
+  },
+  {
+   "id": "togliv-11",
+   "cat": "togliv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Toglila diavola."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "Whisper attacca il pronome: «toglila diavola»"
+  },
+  {
+   "id": "togliv-11",
+   "cat": "togliv",
+   "mode": "empty",
+   "turns": [
+    "🎤 Toglila diavola."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "Whisper attacca il pronome: «toglila diavola»"
+  },
+  {
+   "id": "togliv-11",
+   "cat": "togliv",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Toglila diavola."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "Whisper attacca il pronome: «toglila diavola»"
+  },
+  {
+   "id": "togliv-11",
+   "cat": "togliv",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Toglila diavola."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Diavola|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "Whisper attacca il pronome: «toglila diavola»"
+  },
+  {
+   "id": "finito-01",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-02",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "oggi niente cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *finito*"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [
+    "available|Cotoletta alla milanese|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-03",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "non abbiamo più tiramisù"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Tiramisù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-04",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "è esaurito che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *finito*"
+   ],
+   "expected": [
+    "available|Che ne sacc|false",
+    "last|Che ne sacc|false"
+   ],
+   "actual": [
+    "available|Che ne sacc|false",
+    "last|Che ne sacc|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-05",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "la capricciosa non c'è più"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Capricciosa*: *finito*"
+   ],
+   "expected": [
+    "available|Capricciosa|false"
+   ],
+   "actual": [
+    "available|Capricciosa|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-06",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Il tiramisù è finito."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+   ],
+   "expected": [
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Tiramisù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-07",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Non c'è più la diavola."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *finito*"
+   ],
+   "expected": [
+    "available|Diavola|false"
+   ],
+   "actual": [
+    "available|Diavola|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "finito-08",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Nun ce sta cchiù boh."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*"
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "actual": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-08",
+   "cat": "finito",
+   "mode": "empty",
+   "turns": [
+    "🎤 Nun ce sta cchiù boh."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-08",
+   "cat": "finito",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Nun ce sta cchiù boh."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-08",
+   "cat": "finito",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Nun ce sta cchiù boh."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-09",
+   "cat": "finito",
+   "mode": "ideal",
+   "turns": [
+    "🎤 La tagliata s'è fernuta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *finito*"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [
+    "available|Tagliata di manzo|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-09",
+   "cat": "finito",
+   "mode": "empty",
+   "turns": [
+    "🎤 La tagliata s'è fernuta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-09",
+   "cat": "finito",
+   "mode": "wrong",
+   "turns": [
+    "🎤 La tagliata s'è fernuta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-09",
+   "cat": "finito",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 La tagliata s'è fernuta."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-01",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "levami sia la tagliata che la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n*Cotoletta alla milanese*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-01",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "levami sia la tagliata che la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-01",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "levami sia la tagliata che la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-01",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "levami sia la tagliata che la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-02",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Allora, mi togli la diavola e la capricciosa, grazie."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu\n*Capricciosa*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-02",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "🎤 Allora, mi togli la diavola e la capricciosa, grazie."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-02",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Allora, mi togli la diavola e la capricciosa, grazie."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-02",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Allora, mi togli la diavola e la capricciosa, grazie."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-03",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "per stasera togli la tagliata e anche la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n*Cotoletta alla milanese*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-03",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "per stasera togli la tagliata e anche la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-03",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "per stasera togli la tagliata e anche la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-03",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "per stasera togli la tagliata e anche la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-04",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "la cotoletta è finita, togli invece la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *finito*\n*Tagliata di manzo*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "available|Cotoletta alla milanese|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-04",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "la cotoletta è finita, togli invece la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-04",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "la cotoletta è finita, togli invece la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-04",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "la cotoletta è finita, togli invece la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-05",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "togli invece la tagliata, la cotoletta è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n*Cotoletta alla milanese*: *finito*"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "available|Cotoletta alla milanese|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-05",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "togli invece la tagliata, la cotoletta è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-05",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "togli invece la tagliata, la cotoletta è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-05",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "togli invece la tagliata, la cotoletta è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-06",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "dal menu di stasera elimina sia la diavola sia la capricciosa"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu\n*Capricciosa*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti diavola»."
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-06",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "dal menu di stasera elimina sia la diavola sia la capricciosa"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-06",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "dal menu di stasera elimina sia la diavola sia la capricciosa"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-06",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "dal menu di stasera elimina sia la diavola sia la capricciosa"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Diavola|true",
+    "hidden|Capricciosa|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-07",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Leva la tagliata. La cotoletta pure leva."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n*Cotoletta alla milanese*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-07",
+   "cat": "togliai",
+   "mode": "empty",
+   "turns": [
+    "🎤 Leva la tagliata. La cotoletta pure leva."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-07",
+   "cat": "togliai",
+   "mode": "wrong",
+   "turns": [
+    "🎤 Leva la tagliata. La cotoletta pure leva."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-07",
+   "cat": "togliai",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 Leva la tagliata. La cotoletta pure leva."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togliai-08",
+   "cat": "togliai",
+   "mode": "ideal",
+   "turns": [
+    "rimuovi dalla carta tagliata, cotoletta e diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n*Cotoletta alla milanese*: *nascosto* dal menu\n*Diavola*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti tagliata di manzo»."
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Diavola|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Diavola|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-01",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20 e togli la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-02",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "togli boh, la diavola costa 9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*Diavola*: prezzo da 8,50 € a *9,00 €*"
+   ],
+   "expected": [
+    "hidden|boh|true",
+    "price|Diavola|9"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "price|Diavola|9"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-03",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "togli la panna cotta e il tiramisù costa 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Panna cotta*: *nascosto* dal menu\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "expected": [
+    "hidden|Panna cotta|true",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "price|Tiramisù|6",
+    "hidden|Panna cotta|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-04",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "levami la lasagna e la tagliata è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu\n*Tagliata di manzo*: *finito*"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true",
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true",
+    "available|Tagliata di manzo|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-05",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "il piatto di verifica costa 15 e leva boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *15,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Piatto di verifica|15",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "price|Piatto di verifica|15",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-06",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "togli boh, che ne sacc e pasta al ragù"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*Che ne sacc*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|Che ne sacc|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|true",
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-07",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "togli la tagliata e la cotoletta costa 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true",
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-08",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara è finita e leva la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false",
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false",
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-09",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "boh costa 18 e togli che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *18,00 €*\n*Che ne sacc*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|boh|18",
+    "hidden|Che ne sacc|true"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|true",
+    "price|boh|18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-10",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "togli boh e rimetti la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*Lasagna al forno*: di nuovo *visibile* nel menu"
+   ],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|Lasagna al forno|false"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|false",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-11",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i secondi il polpettone a 14 e togli la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Polpettone* in *Secondi*: *14,00 €*\n*Cotoletta alla milanese*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|polpettone|14|secondi",
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true",
+    "create|polpettone|14|secondi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-12",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6, la bufalina a 10 e leva la diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Marinara* in *Pizze*: *6,00 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Diavola*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|marinara|6|pizze",
+    "create|bufalina|10|pizze",
+    "hidden|Diavola|true"
+   ],
+   "actual": [
+    "hidden|Diavola|true",
+    "create|marinara|6|pizze",
+    "create|bufalina|10|pizze"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-13",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il tiramisù è finito"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n*Tiramisù*: *finito*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "available|Tiramisù|false"
+   ],
+   "actual": [
+    "available|Tiramisù|false",
+    "create|crostata|4|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-14",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi ai contorni le zucchine grigliate a 5 e togli le patate al forno"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Zucchine grigliate* in *Contorni*: *5,00 €*\n*Patate al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|zucchine grigliate|5|contorni",
+    "hidden|Patate al forno|true"
+   ],
+   "actual": [
+    "hidden|Patate al forno|true",
+    "create|zucchine grigliate|5|contorni"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-15",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei primi la amatriciana a 12 e levami la lasagna."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Amatriciana* in *Primi*: *12,00 €*\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|amatriciana|12|primi",
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true",
+    "create|amatriciana|12|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "multi-16",
+   "cat": "multi",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro e toglie bo."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«toglie bo» è un verbo vero: niente domanda, si pubblica subito"
+  },
+  {
+   "id": "hold-01",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo.",
+    "sì sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-02",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "certo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-03",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "si toglilo pure"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-04",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "toglilo dal menu"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-05",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "levalo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-06",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "no, intendevo togli boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-07",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "nascondi boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-08",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "leva bo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-09",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "Sì, esatto!"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-10",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo.",
+    "🎤 Sì sì, toglilo."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-11",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "no grazie"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\nNon ho toccato *boh*."
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "actual": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-12",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "non toglierlo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\nNon ho toccato *boh*."
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "actual": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-13",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "lascialo stare"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\nNon ho toccato *boh*."
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "actual": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-14",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "annulla tutto"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-15",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "non fare niente"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "hold-16",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "quanto costa la tagliata?",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Tagliata di manzo*: *18,00 €* · disponibile",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "domanda: la richiesta in sospeso resta"
+  },
+  {
+   "id": "hold-17",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "cosa è finito?",
+    "si"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Nessun piatto è *finito*: sono tutti disponibili.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "domanda di lettura: la richiesta resta"
+  },
+  {
+   "id": "hold-18",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "mah",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Ho capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "non è una risposta: si ripete la domanda"
+  },
+  {
+   "id": "hold-19",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "la tagliata è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *finito*\n\nLa richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela."
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [
+    "available|Tagliata di manzo|false"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "comando nuovo: la richiesta si scarta e lo dice"
+  },
+  {
+   "id": "hold-20",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "togli la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "correzione: la parte incerta era la lasagna; per la regola «no, togli X» completa tutto"
+  },
+  {
+   "id": "hold-21",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "[+9 min]",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "entro 10 minuti"
+  },
+  {
+   "id": "hold-22",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "[+11 min]",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "proposta scaduta"
+  },
+  {
+   "id": "hold-23",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "[dashboard: Tagliata di manzo price 20]",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Il menu è cambiato nel frattempo. *Non ho applicato nulla.* Rimandami la richiesta."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "dashboard nel frattempo: niente pubblicato"
+  },
+  {
+   "id": "hold-24",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "boh è finito"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*\n\nLa richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela."
+   ],
+   "expected": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "actual": [
+    "available|boh|false",
+    "last|boh|false"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«boh è finito» è un comando nuovo, non la risposta: esaurito e la richiesta si scarta"
+  },
+  {
+   "id": "hold-25",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "sì e la tagliata costa 20",
+    "ok"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Trattoria Da Mario*: ecco le modifiche.\n\n1. Nuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n2. Nuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n3. *boh*: *nascosto* dal menu\n4. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true",
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "sì + comando nello stesso messaggio; 4 modifiche → riepilogo con OK (regola del 16/10), correzione dell'attesa (Q)"
+  },
+  {
+   "id": "hold-26",
+   "cat": "hold",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro e tojibo",
+    "sì, poi la tagliata costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n*boh*: *nascosto* dal menu\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "hidden|boh|true",
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "sì + comando, 3 modifiche: pubblicate subito"
+  },
+  {
+   "id": "holdv-01",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova tojibo, la caprese a 9 euro e la frittata a 7 euro.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-02",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro e poi tojibo.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-03",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro; tojibo.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-04",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e togliboh.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«togliboh» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-05",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e toji-bo.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«toji-bo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-06",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e levabboh.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«levabboh» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-07",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tolichenesac.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tolichenesac» non è nel menu. Intendi *togliere Che ne sacc* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*Che ne sacc*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|Che ne sacc|true"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-08",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e toglipastaalragù.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«toglipastaalragù» non è nel menu. Intendi *togliere pasta al ragù* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-09",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 AGGIUNGI NEI PIATTI DI PROVA LA CAPRESE A 9 EURO, LA FRITTATA A 7 EURO E TOJIBO",
+    "si"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *CAPRESE* in *Piatti di prova*: *9,00 €*\nNuovo piatto *FRITTATA* in *Piatti di prova*: *7,00 €*\n\n«TOJIBO» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *CAPRESE* in *Piatti di prova*: *9,00 €*\nNuovo piatto *FRITTATA* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-10",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a nove euro, la frittata a sette euro e tojibo.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-11",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo.",
+    "🎤 No, levalo."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|frittata|7|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "holdv-12",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Tojibo, e aggiungi nei piatti di prova la caprese a 9 euro.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n\n«Tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "parte incerta in testa al messaggio"
+  },
+  {
+   "id": "holdv-13",
+   "cat": "holdv",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi tra i dolci la crostata a 4 euro e tojibo.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|crostata|4|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-01",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "3 euro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,00 €*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-02",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "tre"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,00 €*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-03",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "costa 3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,00 €*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-04",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "mettilo a 3,50"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,50 €*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3.5|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3.5|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-05",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "no lascia stare"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nNon ho aggiunto *Cannolo*."
+   ],
+   "expected": [
+    "create|crostata|4|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-06",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "non lo aggiungere"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nNon ho aggiunto *Cannolo*."
+   ],
+   "expected": [
+    "create|crostata|4|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "negazione esplicita = no"
+  },
+  {
+   "id": "prezzo-07",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "lascia perdere"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-08",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6 e la bufalina",
+    "🎤 Dieci euro."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Marinara* in *Pizze*: *6,00 €*\n\nQuanto costa *Bufalina*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Marinara* in *Pizze*: *6,00 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "expected": [
+    "create|marinara|6|pizze",
+    "create|bufalina|10|pizze"
+   ],
+   "actual": [
+    "create|marinara|6|pizze",
+    "create|bufalina|10|pizze"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-09",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "la tagliata costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\nLa richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-10",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "quanto costa il tiramisù?",
+    "3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Tiramisù*: *5,00 €* · disponibile",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,00 €*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-11",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Aggiungi tra i dolci la crostata a quattro euro e il cannolo.",
+    "🎤 Tre euro."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,00 €*"
+   ],
+   "expected": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "actual": [
+    "create|crostata|4|dolci",
+    "create|cannolo|3|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "prezzo-12",
+   "cat": "prezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "[+11 min]",
+    "3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "scaduta: «3» da solo non pubblica nulla"
+  },
+  {
+   "id": "prezzo-12",
+   "cat": "prezzo",
+   "mode": "empty",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "[+11 min]",
+    "3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "scaduta: «3» da solo non pubblica nulla"
+  },
+  {
+   "id": "prezzo-12",
+   "cat": "prezzo",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "[+11 min]",
+    "3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "scaduta: «3» da solo non pubblica nulla"
+  },
+  {
+   "id": "prezzo-12",
+   "cat": "prezzo",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "[+11 min]",
+    "3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "scaduta: «3» da solo non pubblica nulla"
+  },
+  {
+   "id": "incerto-01",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20 e tojibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-02",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20, tojibo",
+    "no"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\nNon ho toccato *boh*."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-03",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "tojibo e la tagliata a 20",
+    "esatto"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-04",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "la cotoletta è finita e toglichenesacc",
+    "ok"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Cotoletta alla milanese*: *finito*\n\n«toglichenesacc» non è nel menu. Intendi *togliere Che ne sacc* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *finito*\n*Che ne sacc*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false",
+    "hidden|Che ne sacc|true"
+   ],
+   "actual": [
+    "available|Cotoletta alla milanese|false",
+    "hidden|Che ne sacc|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-05",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "togibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«togibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-06",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "🎤 Toglibo.",
+    "🎤 Sì, esatto."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«Toglibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-07",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "tojibo",
+    "no"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Non ho toccato *boh*. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-08",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "levabo",
+    "lascia perdere"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«levabo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-09",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "toglipastaalragù",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«toglipastaalragù» non è nel menu. Intendi *togliere pasta al ragù* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-10",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "la diavola a 9, la capricciosa a 10 e tojibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Diavola*: prezzo da 8,50 € a *9,00 €*\n*Capricciosa*: prezzo da 9,50 € a *10,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: prezzo da 8,50 € a *9,00 €*\n*Capricciosa*: prezzo da 9,50 € a *10,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Diavola|9",
+    "price|Capricciosa|10",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "price|Diavola|9",
+    "price|Capricciosa|10"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-11",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "il tiramisù è finito e tolibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tiramisù*: *finito*\n\n«tolibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "available|Tiramisù|false",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "available|Tiramisù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-12",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "🎤 La tagliata a venti e tojibo.",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-13",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "tojibo",
+    "togli boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-14",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "tojibo",
+    "nascondilo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-15",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "tojibo",
+    "quanto costa boh?",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*boh*: *20,00 €* · disponibile",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "domanda sul piatto in sospeso: resta la proposta"
+  },
+  {
+   "id": "incerto-16",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20 e tojibo",
+    "la cotoletta costa 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n\nLa richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela."
+   ],
+   "expected": [
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-17",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20 e tojibo",
+    "[+12 min]",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "incerto-18",
+   "cat": "incerto",
+   "mode": "ideal",
+   "turns": [
+    "tojibo",
+    "boh vabbè"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "risposta non valida: si ripete la domanda, nulla pubblicato",
+   "proposal": {
+    "kind": "hold",
+    "actions": []
+   }
+  },
+  {
+   "id": "fp-01",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togli la promo dalla tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €"
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|null"
+   ],
+   "actual": [
+    "promo|Tagliata di manzo|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-02",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "leva lo sconto da che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: tolgo la *promo*, torna a 20,00 €"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [
+    "promo|Che ne sacc|null"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-02",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "leva lo sconto da che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-02",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "leva lo sconto da che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-02",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "leva lo sconto da che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Che ne sacc|null"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-03",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togli le ultime porzioni da che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: tolgo *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Che ne sacc|false"
+   ],
+   "actual": [
+    "last|Che ne sacc|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-04",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togli l'etichetta ultime porzioni dalla pasta al ragù"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: tolgo *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|pasta al ragù|false"
+   ],
+   "actual": [
+    "last|pasta al ragù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-05",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togli dall'evidenza la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: non più in evidenza"
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-05",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "togli dall'evidenza la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-05",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "togli dall'evidenza la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-05",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "togli dall'evidenza la cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "featured|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-06",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togli il tag piccante dalla diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: tolgo l’etichetta *Piccante*"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [
+    "tag|Diavola|piccante|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-06",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "togli il tag piccante dalla diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-06",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "togli il tag piccante dalla diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-06",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "togli il tag piccante dalla diavola"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-07",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci il togliattino a 4"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Togliattino* in *Dolci*: *4,00 €*"
+   ],
+   "expected": [
+    "create|togliattino|4|dolci"
+   ],
+   "actual": [
+    "create|togliattino|4|dolci"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-08",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei primi le levatine a 9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Levatine* in *Primi*: *9,00 €*"
+   ],
+   "expected": [
+    "create|levatine|9|primi"
+   ],
+   "actual": [
+    "create|levatine|9|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-09",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nelle pizze la toibo a 8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Toibo* in *Pizze*: *8,00 €*"
+   ],
+   "expected": [
+    "create|toibo|8|pizze"
+   ],
+   "actual": [
+    "create|toibo|8|pizze"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "piatto nuovo che suona come «togli boh»: niente domanda"
+  },
+  {
+   "id": "fp-10",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nelle pizze la levabo a 8 e la marinara a 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Levabo* in *Pizze*: *8,00 €*\nNuovo piatto *Marinara* in *Pizze*: *6,00 €*"
+   ],
+   "expected": [
+    "create|levabo|8|pizze",
+    "create|marinara|6|pizze"
+   ],
+   "actual": [
+    "create|levabo|8|pizze",
+    "create|marinara|6|pizze"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-10",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "aggiungi nelle pizze la levabo a 8 e la marinara a 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|levabo|8|pizze",
+    "create|marinara|6|pizze"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-10",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi nelle pizze la levabo a 8 e la marinara a 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "create|levabo|8|pizze",
+    "create|marinara|6|pizze"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-10",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi nelle pizze la levabo a 8 e la marinara a 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|levabo|8|pizze",
+    "create|marinara|6|pizze"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-11",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova il tojibo a 5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tojibo* in *Piatti di prova*: *5,00 €*"
+   ],
+   "expected": [
+    "create|tojibo|5|piatti di prova"
+   ],
+   "actual": [
+    "create|tojibo|5|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-12",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togliamo il dubbio: la tagliata costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-12",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "togliamo il dubbio: la tagliata costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-12",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "togliamo il dubbio: la tagliata costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-12",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "togliamo il dubbio: la tagliata costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-13",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "togli boh?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-14",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "hai tolto boh?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-14",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "hai tolto boh?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-14",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "hai tolto boh?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-14",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "hai tolto boh?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-15",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "perché hai tolto la lasagna?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Lasagna al forno*: *11,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-15",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "perché hai tolto la lasagna?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-15",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "perché hai tolto la lasagna?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-15",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "perché hai tolto la lasagna?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-16",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "non levare la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVa bene, *Lasagna al forno* resta com’è. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-17",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "boh, togli la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«boh,» intercalare in testa"
+  },
+  {
+   "id": "fp-18",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "cancella la sezione contorni"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nDa questa chat non posso *eliminare* un piatto.\n\nPuoi nasconderlo: «nascondi il polpo».\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-19",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "rimuovi la foto della tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-19",
+   "cat": "fp",
+   "mode": "empty",
+   "turns": [
+    "rimuovi la foto della tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-19",
+   "cat": "fp",
+   "mode": "wrong",
+   "turns": [
+    "rimuovi la foto della tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-19",
+   "cat": "fp",
+   "mode": "wrongCreate",
+   "turns": [
+    "rimuovi la foto della tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "fp-20",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "rimetti la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *visibile* nel menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|false"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-21",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "la lasagna è tornata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *disponibile*"
+   ],
+   "expected": [
+    "available|Lasagna al forno|true"
+   ],
+   "actual": [
+    "available|Lasagna al forno|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "fp-22",
+   "cat": "fp",
+   "mode": "ideal",
+   "turns": [
+    "tojibo è finito?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non trovo «tojibo».* Scrivi il nome come appare nel menu."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "corr-01",
+   "cat": "corr",
+   "mode": "ideal",
+   "turns": [
+    "togli la lasagna",
+    "anche la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "corr-02",
+   "cat": "corr",
+   "mode": "ideal",
+   "turns": [
+    "leva boh",
+    "anche che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|Che ne sacc|true"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|true",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "corr-03",
+   "cat": "corr",
+   "mode": "ideal",
+   "turns": [
+    "togli la lasagna",
+    "no scusa la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *visibile* nel menu\n*Tagliata di manzo*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "hidden|Tagliata di manzo|true"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "correzione del piatto: lasagna rimessa, tagliata nascosta"
+  },
+  {
+   "id": "corr-04",
+   "cat": "corr",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata è finita",
+    "no, togli la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *finito*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "available|Tagliata di manzo|false",
+    "hidden|Tagliata di manzo|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "corr-05",
+   "cat": "corr",
+   "mode": "ideal",
+   "turns": [
+    "la cotoletta costa 16",
+    "no, togli boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Cotoletta alla milanese|16",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "price|Cotoletta alla milanese|16",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-01",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-02",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "annulla per favore"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-03",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "scusa annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-04",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "torna indietro grazie"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-05",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "rimetti tutto come prima"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-06",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "ripristina com'era"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-07",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "annulla la modifica di prima"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-08",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "undo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-09",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "ops, annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-10",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "🎤 Torna come prima."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-11",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "🎤 Annulla l'ultima modifica."
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-12",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Marinara* in *Pizze*: *6,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Marinara*: tolto (era stato aggiunto)"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-13",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6 e la bufalina a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Marinara* in *Pizze*: *6,00 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Marinara*: tolto (era stato aggiunto)\n*Bufalina*: tolto (era stato aggiunto)"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-13",
+   "cat": "annulla",
+   "mode": "empty",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6 e la bufalina a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-13",
+   "cat": "annulla",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6 e la bufalina a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-13",
+   "cat": "annulla",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi nelle pizze la marinara a 6 e la bufalina a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-14",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "togli la cotoletta",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Cotoletta alla milanese*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-15",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la cotoletta è finita",
+    "rimetti com'era"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *finito*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Cotoletta alla milanese*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-16",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "togli boh e che ne sacc",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*Che ne sacc*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Che ne sacc*: com’era prima\n*boh*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-17",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20 e togli la cotoletta",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima\n*Cotoletta alla milanese*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-18",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "boh in promo a 7",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: in *promo* a *7,00 €* (prezzo pieno 20,00 €), finché non la togli",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*boh*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-19",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "metti in evidenza la tagliata",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *in evidenza*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-20",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "boh è finito",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*boh*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "ripristina anche le ultime porzioni"
+  },
+  {
+   "id": "annulla-21",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "rimetti la lasagna",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *visibile* nel menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Lasagna al forno*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-22",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, la frittata a 7 euro e tojibo",
+    "sì",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *7,00 €*\n*boh*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*boh*: com’era prima\n*Caprese*: tolto (era stato aggiunto)\n*Frittata*: tolto (era stato aggiunto)"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-23",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i dolci la crostata a 4 e il cannolo",
+    "3",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\n\nQuanto costa *Cannolo*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *4,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *3,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Crostata*: tolto (era stato aggiunto)\n*Cannolo*: tolto (era stato aggiunto)"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-24",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20 e tojibo",
+    "sì",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*boh*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima\n*boh*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-25",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "[+9 min]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-26",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "[+12 min]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "Posso annullare solo le modifiche fatte qui negli *ultimi 10 minuti*. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-27",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "[+30 min]",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "Posso annullare solo le modifiche fatte qui negli *ultimi 10 minuti*. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-28",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "[dashboard: Tagliata di manzo price 22]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Non annullo*: nel frattempo *Tagliata di manzo* è stato cambiato dalla dashboard. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-29",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "[dashboard: Cotoletta alla milanese price 17]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "dashboard su un’altra voce: annulla"
+  },
+  {
+   "id": "annulla-30",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "togli la cotoletta",
+    "[dashboard: Cotoletta alla milanese featured true]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu",
+    "*Non annullo*: nel frattempo *Cotoletta alla milanese* è stato cambiato dalla dashboard. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "dashboard sulla stessa voce (altro campo): non tocca"
+  },
+  {
+   "id": "annulla-31",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "la cotoletta costa 16",
+    "annulla",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Cotoletta alla milanese*: com’era prima",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [
+    "price|Tagliata di manzo|20"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "solo l’ultima pubblicazione"
+  },
+  {
+   "id": "annulla-32",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "ok",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n2. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n3. *Diavola*: prezzo da 8,50 € a *9,00 €*\n4. *Capricciosa*: prezzo da 9,50 € a *10,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Diavola*: prezzo da 8,50 € a *9,00 €*\n*Capricciosa*: prezzo da 9,50 € a *10,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima\n*Cotoletta alla milanese*: com’era prima\n*Diavola*: com’era prima\n*Capricciosa*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-32",
+   "cat": "annulla",
+   "mode": "empty",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "ok",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-32",
+   "cat": "annulla",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "ok",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-32",
+   "cat": "annulla",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "ok",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-33",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n2. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n3. *Diavola*: prezzo da 8,50 € a *9,00 €*\n4. *Capricciosa*: prezzo da 9,50 € a *10,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-33",
+   "cat": "annulla",
+   "mode": "empty",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-33",
+   "cat": "annulla",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-33",
+   "cat": "annulla",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-34",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*\n2. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n3. *Diavola*: prezzo da 8,50 € a *9,00 €*\n4. *Capricciosa*: prezzo da 9,50 € a *10,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Quale piatto intendi: *Tagliata di manzo*, *Cotoletta alla milanese*, *Diavola*, *Capricciosa*? Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "riepilogo in attesa: torna indietro non pubblica",
+   "proposal": {
+    "kind": "batch",
+    "actions": [
+     {
+      "kind": "price",
+      "id": "55555555-5555-4555-8555-000000000008",
+      "price": 20
+     },
+     {
+      "kind": "price",
+      "id": "55555555-5555-4555-8555-000000000009",
+      "price": 16
+     },
+     {
+      "kind": "price",
+      "id": "55555555-5555-4555-8555-000000000014",
+      "price": 9
+     },
+     {
+      "kind": "price",
+      "id": "55555555-5555-4555-8555-000000000015",
+      "price": 10
+     }
+    ]
+   }
+  },
+  {
+   "id": "annulla-34",
+   "cat": "annulla",
+   "mode": "empty",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "riepilogo in attesa: torna indietro non pubblica"
+  },
+  {
+   "id": "annulla-34",
+   "cat": "annulla",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "riepilogo in attesa: torna indietro non pubblica"
+  },
+  {
+   "id": "annulla-34",
+   "cat": "annulla",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata a 20, la cotoletta a 16, la diavola a 9 e la capricciosa a 10",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 2,
+   "fails": [],
+   "note": "riepilogo in attesa: torna indietro non pubblica"
+  },
+  {
+   "id": "annulla-35",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "togli la cotoletta",
+    "no"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu",
+    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«no» da solo non annulla"
+  },
+  {
+   "id": "annulla-36",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "togli la cotoletta",
+    "no annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Cotoletta alla milanese*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-37",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "annulla l'ultima modifica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-38",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-38",
+   "cat": "annulla",
+   "mode": "empty",
+   "turns": [
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-38",
+   "cat": "annulla",
+   "mode": "wrong",
+   "turns": [
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-38",
+   "cat": "annulla",
+   "mode": "wrongCreate",
+   "turns": [
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "annulla-39",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "annulla",
+    "[+1 min]",
+    "la cotoletta costa 16",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Cotoletta alla milanese*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-40",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata costa 20",
+    "annulla",
+    "[+1 min]",
+    "la cotoletta costa 16",
+    "[+11 min]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *20,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Posso annullare solo le modifiche fatte qui negli *ultimi 10 minuti*. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Cotoletta alla milanese|16"
+   ],
+   "actual": [
+    "price|Cotoletta alla milanese|16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "annulla-41",
+   "cat": "annulla",
+   "mode": "ideal",
+   "turns": [
+    "togli la lasagna",
+    "anche la tagliata",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Tagliata di manzo*: com’era prima"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "annulla solo «anche la tagliata»"
+  }
+ ]
+}

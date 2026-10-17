@@ -1,0 +1,51 @@
+{
+ "at": "2026-10-17T12:33:59.268Z",
+ "results": [
+  {
+   "id": "manuel",
+   "turns": [
+    "aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo",
+    "no, togli bo"
+   ],
+   "replies": [
+    {
+     "ms": 1528,
+     "text": ""
+    }
+   ],
+   "expected": [
+    "create|Parmigiana|10|Piatti di prova",
+    "create|Tiramisù|6|Piatti di prova",
+    "hidden|boh|true"
+   ],
+   "got": [],
+   "aiOnce": false,
+   "wantOk": false,
+   "pass": false
+  }
+ ],
+ "stopped": "manuel: risposta vuota o stato 200 a «aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo» (passato all'IA?): mi fermo",
+ "restore": {
+  "before": {
+   "draft": "0373b7a1000f3865",
+   "published": "0373b7a1000f3865",
+   "items": "86b2b42b306ea552",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "899d20b2a40f8547"
+  },
+  "after": {
+   "draft": "0373b7a1000f3865",
+   "published": "0373b7a1000f3865",
+   "items": "86b2b42b306ea552",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "899d20b2a40f8547"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

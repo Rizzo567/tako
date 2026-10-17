@@ -258,9 +258,9 @@ add('mostra','mostra la bruschetta',HI('Bruschetta al pomodoro',false),{mods:{hi
 add('mostra','rimetti nel menu il tagliere misto',HI('Tagliere misto',false),{mods:{hidden:['Tagliere misto']}})
 add('mostra','fai rivedere la diavola',HI('Diavola',false),{mods:{hidden:['Diavola']}})
 add('mostra','rimetti la pasta e fagioli',HI('Pasta e fagioli',false),{mods:{hidden:['Pasta e fagioli']}})
-add('elimina','elimina la bruschetta',NONE,{reply:/elimin|nascond|dashboard|non posso/i})
-add('elimina','cancella il piatto di prova',NONE,{reply:/elimin|nascond|dashboard|non posso/i})
-add('elimina','rimuovi la coca cola 33cl',NONE,{reply:/elimin|nascond|dashboard|non posso/i})
+add('elimina','elimina la bruschetta',HI('Bruschetta al pomodoro',true),{note:'17/10 regola Manuel: elimina = nascondi'})
+add('elimina','cancella il piatto di prova',HI('Piatto di prova',true),{note:'17/10 regola Manuel: cancella = nascondi'})
+add('elimina','rimuovi la coca cola 33cl',HI('Coca Cola 33cl',true),{note:'17/10 regola Manuel: rimuovi = nascondi'})
 add('elimina',V('togli proprio la diavola dal menu non la facciamo più'),HI('Diavola',true),{note:'eliminazione detta: nascondere è il massimo consentito'})
 
 // F) Rinomina / sposta (non supportati): niente scritture, risposta chiara
