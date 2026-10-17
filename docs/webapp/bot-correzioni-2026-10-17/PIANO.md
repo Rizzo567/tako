@@ -95,17 +95,17 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 ## A7 — correzioni dalla verifica avversaria X (aggiunto 17/10 sera, dopo A6.4)
 Fonte: branch `codex/bot-adv-1017` (13d4354 + REPORT-X), `docs/webapp/bot-correzioni-2026-10-17/avversaria/REPORT-X.md`; runner `TAKO_ADV=1 npx vitest run tests/eval/eval-adv-a.test.ts` e 31 sonde `tests/owner-brain-adv-a.test.ts`. Si fa dopo B4.1 (stessi file). Prima: merge di codex/bot-adv-1017 in codex/bot-fix-1017.
 - [x] A6.4 Verifica avversaria eseguita (508 conversazioni, ~79 GRAVI / ~65 MEDI) — X, 13d4354
-- [ ] A7.1 G1/G2 somiglianza parole troppo larga (torna→Torta, pollo→polpo, torno→tonno)
-- [ ] A7.2 G3 «togli N euro» = ribasso di prezzo, non nascondi
-- [ ] A7.3 G4 code e teste nel nome del piatto nuovo (se puoi, dai, per stasera, da domani, al/sul menu…)
-- [ ] A7.4 G5 «X e Y a N» → domanda uno/due piatti anche col prezzo; M6 prezzi nella risposta («8 tutti e due»)
-- [ ] A7.5 G6/M12 bozza in sospeso + «lascia stare/lascia perdere/niente» chiude la bozza
-- [ ] A7.6 G7/G11 ipotesi fonetiche e match su una sola parola: mai verso piatto con parole diverse; «sì» a un'ipotesi sbagliata non scrive l'altro piatto
-- [ ] A7.7 G8 prezzi relativi (aumenta/abbassa di N, +1, N centesimi in più) → calcolo dal prezzo attuale, direzione verificata
-- [ ] A7.8 G9/M7 centesimi («7 euro 90», «quindici e novanta», «13 virgola 50», «3 e 50»)
-- [ ] A7.9 G10/M8 ordinali e rimandi a elenchi del bot sempre verificati
-- [ ] A7.10 G12/M5 correzioni: «lasciala stare» sul piatto toccato = ripristino; «anzi no» da solo = annulla ultima azione
-- [ ] A7.11 M1/M2/M3/M4 misti, saluti in testa, domande, «boh» come esitazione
-- [ ] A7.12 M9/M10/M11 domanda giusta invece di «non ho capito»; Groq spento → riserva utile, non «C'è stato un problema»; categoria dedotta
-- [ ] A7.13 Runner avversario: oracolo 0 GRAVI, off e avversario 0 GRAVI di sicurezza; 31 sonde verdi; fix-a, B, round1–6* non peggiorano; suite = 12 rossi
+- [x] A7.1 G1/G2 somiglianza parole troppo larga (torna→Torta, pollo→polpo, torno→tonno) — famiglie X lev1/suono a 0 GRAVI (softEdit su consonanti 5–6 lettere); c8dfb22
+- [x] A7.2 G3 «togli N euro» = ribasso di prezzo, non nascondi — «togli/leva N euro» → ribasso dal prezzo attuale; famiglie toglieuro/relativi 0 GRAVI; c8dfb22
+- [x] A7.3 G4 code e teste nel nome del piatto nuovo (se puoi, dai, per stasera, da domani, al/sul menu…) — code/teste tolte dal nome; famiglia code 0 GRAVI; c8dfb22
+- [x] A7.4 G5 «X e Y a N» → domanda uno/due piatti anche col prezzo; M6 prezzi nella risposta («8 tutti e due») — «X e Y a N» → due piatti / domanda; «8 tutti e due»; famiglia coppie 0 GRAVI; c8dfb22
+- [x] A7.5 G6/M12 bozza in sospeso + «lascia stare/lascia perdere/niente» chiude la bozza — bozza chiusa da «lascia stare/niente/annulla/no», mai nome; lasciastare/sospeso 0 GRAVI; 4134c28 (note 27–28)
+- [x] A7.6 G7/G11 ipotesi fonetiche e match su una sola parola: mai verso piatto con parole diverse; «sì» a un'ipotesi sbagliata non scrive l'altro piatto — ipotesi deboli solo con parole allineate; «sì» non scrive l'altro piatto; ipotesi/sospeso2 0 GRAVI; 4134c28 (nota 29)
+- [x] A7.7 G8 prezzi relativi (aumenta/abbassa di N, +1, N centesimi in più) → calcolo dal prezzo attuale, direzione verificata — differenze dal prezzo attuale, comparativo «e la X uno in meno» dal prezzo appena messo; 4134c28 (nota 36)
+- [x] A7.8 G9/M7 centesimi («7 euro 90», «quindici e novanta», «13 virgola 50», «3 e 50») — centesimi in g9Prices/spokenCents; famiglia centesimi 0 GRAVI; c8dfb22
+- [x] A7.9 G10/M8 ordinali e rimandi a elenchi del bot sempre verificati — elenco del bot come riferimento, «il primo e l'ultimo», verbo diverso ≠ scelta; deixis/ordinali 0 GRAVI; 4134c28 (nota 32)
+- [x] A7.10 G12/M5 correzioni: «lasciala stare» sul piatto toccato = ripristino; «anzi no» da solo = annulla ultima azione — «lasciala stare» = ripristino del piatto toccato, «anzi no» da solo = annulla; anzino 0 GRAVI; c8dfb22
+- [x] A7.11 M1/M2/M3/M4 misti, saluti in testa, domande, «boh» come esitazione — misti, saluti, domande, «boh» intercalare; misti/misti2/vocali 0 GRAVI; c8dfb22 + 4134c28 (nota 33)
+- [x] A7.12 M9/M10/M11 domanda giusta invece di «non ho capito»; Groq spento → riserva utile, non «C'è stato un problema»; categoria dedotta — scelta numerata invece di «non ho capito», Groq giù → aiDown e correzioni lette senza IA; 4134c28 (note 34–35)
+- [x] A7.13 Runner avversario: oracolo 0 GRAVI, off e avversario 0 GRAVI di sicurezza; 31 sonde verdi; fix-a, B, round1–6* non peggiorano; suite = 12 rossi — oracolo 0 GRAVI / 9 MEDI (1,8%) su 508; off 0 e avversario 0 GRAVI di sicurezza; 31 sonde verdi; fix-a/fix-b verdi, round1–6* 1673/1673, banco E 298/318 (93,7%, multi 191/207, 0 GRAVI sicurezza), suite 12 rossi (stessi file d'ambiente); 4134c28
 - [ ] A7.14 Secondo giro avversario indipendente (≥200 conversazioni nuove) → se GRAVI, ripetere A7 (max 3 giri)
