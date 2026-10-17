@@ -54,7 +54,16 @@ export const mario=build('mario',5,{restaurant:'Trattoria Da Mario',menus:[['Pra
  ['Bevande','drinks',[['Bibite',[['Acqua 0,5 l',1.5],['Coca Cola 33cl',3],['Birra media',5]]],['Caffetteria',[['Caffè',1.2],['Cappuccino',1.8]]]]]]})
 for(const s of mario.menu.menus.flatMap(m=>m.sections))for(const i of s.items)if(i.name==='Che ne sacc')i.promo={price:15,until:null};else if(i.name==='boh')i.promo={price:10,until:null}
 
-export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario}
+// VERIFICA-V 17/10: il QA «Tako · Verifica web» com'era alle 17:26 (prove vocali di Manuel): UNA sola categoria.
+export const qa=build('qa',6,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',12],['la parmigiana',10],['tiramisù',6]]]]]]})
+for(const s of qa.menu.menus.flatMap(m=>m.sections))for(const i of s.items)if(i.name==='Che ne sacc')i.promo={price:15,until:null};else if(i.name==='boh')i.promo={price:10,until:null}
+// Lo stesso QA con il piatto nato dalla frase («Inserisce il piatto la parmigiana», nascosto) della sessione delle 13:16.
+export const qasporco=build('qasporco',7,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',12],['Inserisce il piatto la parmigiana',12],['la parmigiana',10],['tiramisù',6]]]]]]})
+for(const s of qasporco.menu.menus.flatMap(m=>m.sections))for(const i of s.items)if(i.name==='Inserisce il piatto la parmigiana')i.hidden=true
+
+export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco}
 
 /** Menu iniziale di una conversazione: fixture + variazioni `mods` (copia profonda). */
 export function initialMenu(key:string,mods:Mods={}):EvalMenu{

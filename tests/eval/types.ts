@@ -22,6 +22,10 @@ export type Change=
  |{op:'promo',dish:string,price:number|null}
  |{op:'create',name:string,price:number,section?:string}
  |{op:'description',dish:string,text:string}
+ // VERIFICA-V 17/10: capacità che il bot oggi non ha (eliminare, rinominare, spostare tra categorie); il giudice le vede già nel diff.
+ |{op:'delete',dish:string}
+ |{op:'rename',dish:string,name:string}
+ |{op:'move',dish:string,section:string}
 
 /** Attesa dinamica: «sì la seconda» dipende dall'ordine delle opzioni che il bot ha mostrato al turno `turn`. */
 export type Pick={turn:number,pick:number|'all',make:(dish:string)=>Change}
@@ -45,7 +49,9 @@ export type Conversation={
 export type Mods={prices?:Record<string,number>,unavail?:string[],hidden?:string[],featured?:string[],promo?:Record<string,number>,last?:string[]}
 
 export const FAMILIES=['anche','correzione','ripristino','chiarimento','multipla','scaduto','domanda','negazione','ambiguita','togli','vocale','qa1710','manuel','batterie'] as const
-export type Family=typeof FAMILIES[number]
+// Famiglie della verifica V (17/10, tests/eval/cases/manuel-1017.ts): fuori dal banco principale, che resta com'è.
+export const V_FAMILIES=['v-deixis','v-elimina','v-aggiunte','v-categorie','v-composti','v-correzioni','v-risposte','v-prezzi','v-verbi','v-asr','v-stato','v-annulla','v-misti','v-frasefissa','v-coerenza','v-rinomina'] as const
+export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]
 
 /** Traccia facoltativa del contesto usato dal bot in un turno (il bot nuovo la espone; l'attuale no). Vedi CONTRATTO.md §3. */
 export type ContextTrace={history:{role:'owner'|'bot',text:string,at:string}[],pending?:unknown,memory?:unknown,promptTokens?:number}

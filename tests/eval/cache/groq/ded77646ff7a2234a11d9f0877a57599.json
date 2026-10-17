@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-17657c28-2961-4155-88b7-7a674720455f",
+  "object": "chat.completion",
+  "created": 1792254431,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A quale piatto ti riferisci con \\\"kenesac\\\"?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to parse. \"nel kenesac metti la promo a 12 euro\". \"kenesac\" likely refers to an item name? Not in menu. Might be ambiguous. No matching item. So unclear item. Intent? It's a change: set promo. But item unknown. So uncertain part. Provide uncertain with phrase, candidates empty, action set_promo, price 12, value? set_promo requires item, price, until text. until null. So uncertain entry. No other actions. intent=clarify? Since ambiguous item, we should ask clarification. According to spec, if ambiguous, intent=clarify with question and item_refs candidates. Here no candidates. So produce clarify with question maybe \"A quale piatto ti riferisci con 'kenesac'?\" item_refs empty. Also uncertain? Probably just clarify. Use clarify field. No actions. reply_draft ask. Let's output."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.418030412,
+   "prompt_tokens": 3030,
+   "prompt_time": 0.123100323,
+   "completion_tokens": 296,
+   "completion_time": 0.612239538,
+   "total_tokens": 3326,
+   "total_time": 0.735339861,
+   "completion_tokens_details": {
+    "reasoning_tokens": 189
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_ca5edfaab2",
+  "x_groq": {
+   "id": "req_01m55b0kdnekvtgtx6hhjzdaye",
+   "seed": 1362524259
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3030,
+  "completion_tokens": 296,
+  "total_tokens": 3326
+ },
+ "ms": 1456,
+ "recordedAt": "2026-10-17T16:27:11.720Z",
+ "conv": "v-asr-003"
+}

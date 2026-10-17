@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-e9ce0017-a46d-4a7e-8277-b21542179f34",
+  "object": "chat.completion",
+  "created": 1792254553,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p5\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p6\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p5\", \"p6\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. Intent: change (set_hidden true) for two items: parmigiana p5 and tiramisù p6. reply_draft empty. No uncertainties. alias none. capability empty. read none. item_refs maybe list items? Probably include item_refs of affected items. Provide actions array."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.056091405,
+   "prompt_tokens": 3143,
+   "prompt_time": 0.038948454,
+   "completion_tokens": 320,
+   "completion_time": 0.663728773,
+   "total_tokens": 3463,
+   "total_time": 0.702677227,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 66
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m55b4af2ecsbc3rr6mh2kyca",
+   "seed": 2089089928
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3143,
+  "completion_tokens": 320,
+  "total_tokens": 3463
+ },
+ "ms": 949,
+ "recordedAt": "2026-10-17T16:29:13.276Z",
+ "conv": "v-deixis-013"
+}

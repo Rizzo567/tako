@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-80ca31a6-1bf0-4167-8479-b5748de4e395",
+  "object": "chat.completion",
+  "created": 1792254451,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_description\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": \"Joe fa schifo\",\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"Kenesac\",\n      \"candidates\": [],\n      \"action\": \"set_promo\",\n      \"value\": null,\n      \"price\": 12\n    }\n  ],\n  \"alias_used\": [\n    {\n      \"phrase\": \"Bo\",\n      \"item\": \"p3\"\n    }\n  ],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to parse. Piatti: \"Bo\" likely refers to p3 name \"boh\". So item p3. Change description to \"Joe fa schifo\". Action set_description. Also \"Kenesac\" not in menu; ambiguous? No such item. So unclear. Should be clarify. Provide actions for known part, uncertain for unknown. Also alias? \"Bo\" alias for p3. alias_used entry. Intent change. reply_draft empty. uncertain entry for Kenesac with action set_promo, price 12, candidates empty. item_refs list includes p3? item_refs maybe for actions? Probably include p3. read none. capability empty. Clarify none. Let's craft."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.299903414,
+   "prompt_tokens": 3052,
+   "prompt_time": 0.134280396,
+   "completion_tokens": 388,
+   "completion_time": 0.809594189,
+   "total_tokens": 3440,
+   "total_time": 0.943874585,
+   "completion_tokens_details": {
+    "reasoning_tokens": 146
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m55b16t2ee9v5t9f1362zhh7",
+   "seed": 1480661489
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3052,
+  "completion_tokens": 388,
+  "total_tokens": 3440
+ },
+ "ms": 1413,
+ "recordedAt": "2026-10-17T16:27:31.688Z",
+ "conv": "v-asr-010"
+}
