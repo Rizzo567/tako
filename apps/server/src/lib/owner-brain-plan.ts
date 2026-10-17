@@ -9,6 +9,7 @@
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier} from './twilio-menu-nlu.js'
+import {lostParts} from './twilio-menu-reading.js'
 import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
@@ -182,7 +183,17 @@ function legacyAction(a:any,map:(v:unknown)=>string|null):any{
 // Numeri detti in dialetto (siciliano/napoletano/romanesco) → italiano, solo per i controlli del server («a ottu» = 8, «cincu» = 5).
 const DIALECT_NUM:Record<string,string>={unu:'uno',dui:'due',tri:'tre',quattru:'quattro',cincu:'cinque',cinche:'cinque',seie:'sei',setti:'sette',ottu:'otto',novi:'nove',deci:'dieci',unnici:'undici',dudici:'dodici',tririci:'tredici',quattordici:'quattordici',quinnici:'quindici',sidici:'sedici',diciassetti:'diciassette',diciottu:'diciotto',diciannovi:'diciannove',vinti:'venti',trenta:'trenta',euri:'euro',euru:'euro',menzu:'mezzo',menza:'mezza'}
 export const dialectNumbers=(s:string)=>s.replace(/\b[\p{L}]+\b/gu,w=>DIALECT_NUM[w.toLowerCase()]??w)
-export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
+export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:Parameters<typeof validateBrainPlanCore>[2]):ReturnType<typeof validateBrainPlanCore>{
+ const d=validateBrainPlanCore(raw,ctx,input)
+ // A8.0 (Y, parti perse): il piano deve usare i numeri detti e avere l'azione di ogni verbo esplicito del messaggio.
+ if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)){const mix=mixedMessage(input.message),lost=lostParts(mix?mix.command:input.message,d.plan.actions,input.refs,input.sections)
+  if(lost.length){
+   // Le parti capite restano in sospeso (proposta `hold`) e si chiede della parte non letta, citandola: mai pubblicate a metà.
+   const text=mix?mix.command:input.message,parts=text.split(/\s*[,;]\s*|\s+(?:e|ed|poi)\s+/).map(x=>x.trim()).filter(Boolean),fold0=(x:string)=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+   const bad=[...new Set(lost.map(w=>parts.find(p=>fold0(p).replace(/,/g,'.').includes(w))??w))].slice(0,3)
+   return{...d,intent:'clarify',plan:{type:'clarify',ids:[]} as MenuPlan,hold:{kind:'hold',actions:d.plan.actions,asks:bad.map(w=>({type:'unknown' as const,word:w}))},notes:[...d.notes,'parte_persa:'+lost.slice(0,3).join(',')]}}}
+ return d}
+function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections}=input,message=dialectNumbers(input.message),byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
  const map=(v:unknown)=>typeof v==='string'?ctx.codes.get(v.trim().toLowerCase())??null:null
  const empty={type:'clarify',ids:[]} as MenuPlan

@@ -637,9 +637,9 @@ for(const k of CODE)c(Y,`aggiungi nei secondi la grigliata a 22 ${k}`,CR('grigli
 
 // ======================= GIRO 3: conferme delle famiglie nuove (categoria-spazzatura al «sì», relativi coi decimali, rimandi) =======================
 fam='r3-conferme'
-c(Y,['sposta la carbonara nei secondi e mettila a 14','sì'],[MV('Carbonara','Secondi'),P('Carbonara',14)],{ask:[1],alt:[[MV('Carbonara','Secondi')],NONE],note:'il «sì» non deve creare la categoria «Secondi e mettila a 14»'})
-c(Y,['sposta la carbonara nei secondi e nascondi la gricia','sì'],[MV('Carbonara','Secondi'),HI('Gricia')],{ask:[1],alt:[[MV('Carbonara','Secondi')],NONE]})
-c(Y,[V('il tiramisù spostalo negli speciali e la panna cotta pure'),'sì'],[MV('Tiramisù','Speciali'),MV('Panna cotta','Speciali')],{ask:[1],alt:[[MV('Tiramisù','Speciali')],NONE]})
+c(Y,['sposta la carbonara nei secondi e mettila a 14','sì'],[MV('Carbonara','Secondi'),P('Carbonara',14)],{alt:[[MV('Carbonara','Secondi')],NONE],note:'il «sì» non deve creare la categoria «Secondi e mettila a 14» (A8: ask tolto, con ≤3 modifiche il bot pubblica subito come nel caso senza «sì»)'})
+c(Y,['sposta la carbonara nei secondi e nascondi la gricia','sì'],[MV('Carbonara','Secondi'),HI('Gricia')],{alt:[[MV('Carbonara','Secondi')],NONE]})
+c(Y,[V('il tiramisù spostalo negli speciali e la panna cotta pure'),'sì'],[MV('Tiramisù','Speciali'),MV('Panna cotta','Speciali')],{alt:[[MV('Tiramisù','Speciali')],NONE]})
 c(Y,['sposta la carbonara negli speciali per favore'],MV('Carbonara','Speciali'))
 c(Y,['sposta la carbonara negli speciali grazie mille'],MV('Carbonara','Speciali'))
 c(Y,['sposta la carbonara negli speciali se puoi','sì'],MV('Carbonara','Speciali'),{alt:[NONE]})

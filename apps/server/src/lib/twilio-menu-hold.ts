@@ -166,7 +166,8 @@ function holdAnswerMulti(text:string,hold:Hold,refs:MenuRef[]):HoldAnswer{
  const label=(a:HoldAsk)=>a.type==='remove'?safe(byId(a.id)?.name??a.word):a.type==='price'?safe(a.name):safe(a.word)
  const close=(i:number,acts:MenuAction[]|null)=>{open[i]=false;if(acts)got.push(...acts);else dropped.push(label(asks[i]!))}
  // «no» da solo: pubblica le parti chiare (Manuel 17/10); «sì» da solo: accetta le ipotesi (togliere X, conferme).
- if(no.test(t)){asks.forEach((_a,i)=>close(i,null));return{actions:[...hold.actions],note:fill(copy.holdNotTouched,{piatto:dropped.join(', ')})}}
+ // A8 («lascia perdere la bianca», «niente, solo il babà», «non importa»): come «no», solo le parti chiare.
+ if(no.test(t)||/^(?:no\s+)?(?:lascia(?:la|lo)?\s+(?:perdere|stare)|niente|non importa|fa niente|lascia)\b/.test(t)&&asks.every(a=>a.type==='unknown')||/^(?:niente\s+)?solo\s+/.test(t)&&asks.every(a=>a.type==='unknown')&&hold.actions.every(a=>!('id' in a)||(()=>{const r=byId((a as any).id);return !!r&&holdFlat(t).includes(holdFlat(r.name).split(' ')[0]!)})())){asks.forEach((_a,i)=>close(i,null));return{actions:[...hold.actions],note:fill(copy.holdNotTouched,{piatto:dropped.join(', ')})}}
  if(yes.test(t)){let any=false;asks.forEach((a,i)=>{if(a.type==='remove'){close(i,[{kind:'hidden',id:a.id,value:true}]);any=true}else if(a.type==='confirm'){close(i,[a.action]);any=true}});if(!any)return null}
  else{
   const pieces=splitParts(text,refs).map(x=>x.trim()).filter(Boolean)

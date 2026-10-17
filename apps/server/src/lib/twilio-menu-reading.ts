@@ -6,7 +6,7 @@
 // (con il validatore) o, con Groq spento, a una domanda breve che cita quel testo. Le liste qui sotto sono il vocabolario
 // che il deterministico SA leggere: una parola nuova non allarga mai una scrittura, la manda al cervello.
 import type {MenuAction,MenuRef,SectionRef} from './twilio-menu-ai.js'
-import {sameWord,nearWord} from './twilio-menu-nlu.js'
+import {sameWord,nearWord,spokenCents,spokenDecimals} from './twilio-menu-nlu.js'
 import {phoneScore} from './twilio-menu-phonetic.js'
 import {g9WordNumber} from './twilio-menu-ai.js'
 
@@ -23,7 +23,7 @@ const FUNCTION=new Set(('il lo la i gli le l un uno una un di da del dello della
  'primo prima secondo seconda terzo terza quarto quarta ultimo ultima numero tranne eccetto esclus escluso esclusa esclusi escluse parte meno fino sino entro da '+
  'stasera domani dopodomani sera pranzo cena settimana weekend giorno giorni lunedi martedi mercoledi giovedi venerdi sabato domenica mese '+
  // modali e ausiliari («devi creare», «vorrei», «deve essere a 18»)
- 'devi deve devono dovresti puoi potresti posso possiamo vorrei voglio volevo vogliamo essere sia siano stato stata fare facciamo fammi').split(' '))
+ 'devi deve devono dovresti puoi potresti posso possiamo vorrei voglio volevo vogliamo essere sia siano stato stata fare facciamo fammi stare perdere').split(' '))
 // Cortesia e riempitivi noti (detti da soli o in coda): non sono mai parte di un nome nuovo.
 const COURTESY=new Set(('favore perfavore piacere cortesia grazie mille ok okay dai allora ecco si va bene perfetto ciao buongiorno buonasera salve senti ehm eh ah oh mh '+
  'beh cioe insomma comunque subito adesso ora oggi intanto please thx thanks top raga ragazzi capo scusa scusami aspetta ops pardon '+
@@ -45,7 +45,7 @@ const VERBS:[RegExp,Kind[]][]=[
  [/^nascond\w*$/,['hidden']],
  [/^(?:togli|tolg|tolt|lev)\w*$/,['hidden','price','featured','delete','tag','promo']],
  [/^(?:rimett|mostr|riattiv)\w*$/,['hidden','available','featured','price','restore' as Kind]],
- [/^(?:finit|esaurit|fernut|terminat|finid|finia)\w*$/,['available']],
+ [/^(?:finit|esaurit|fernut|terminat|finid|finia)\w*$/,['available','hidden']],
  [/^(?:tornat|torna|disponibil)\w*$/,['available','price','hidden']],
  [/^(?:evidenz|evidenza)\w*$/,['featured']],
  [/^(?:rinomin|chiam)\w*$/,['rename','rename_section','create','create_section']],
@@ -99,12 +99,30 @@ export function unreadWords(text:string,actions:MenuAction[],refs:MenuRef[],sect
  for(const a of actions){const pr=(a as any).price;if(typeof pr==='number'){nums.add(r2(pr));const old=refs.find(r=>r.id===(a as any).id)?.price;if(typeof old==='number')nums.add(r2(Math.abs(pr-old)))}}
  // Il prezzo attuale di un piatto toccato («la parmigiana a 10», già a 10) è letto: dice che resta com'è.
  for(const r of refs)if(touched.has(r.id)&&typeof r.price==='number')nums.add(r2(r.price))
+ // Prezzo già attuale di un piatto nominato per intero («pasta al ragù a 12» già a 12): non è una parte persa.
+ {const ft=' '+words(text).join(' ')+' ';for(const r of refs)if(typeof r.price==='number'&&ft.includes(' '+words(r.name).join(' ')+' '))nums.add(r2(r.price))}
  const numOk=(w:string)=>{if(opts.lenientNumbers)return true;const n=Number(w.replace(/^[+]/,''));if(!Number.isFinite(n))return false;return nums.has(r2(Math.abs(n)))||[...nums].some(x=>Math.abs(x-n)<0.005)}
  const out:string[]=[]
  for(const w of words(text)){
-  if(/^[+\-]?\d/.test(w)){if(numOk(w)||newWords.has(w)||nameWords.includes(w))continue;out.push(w);continue}
+  if(/^[+\-]?\d/.test(w)){if(numOk(w)||newWords.has(w)||nameWords.some(n=>n===w||(n.startsWith(w)&&/^\d+[a-z]+$/.test(n))))continue;out.push(w);continue}
   if(FUNCTION.has(w)||COURTESY.has(w)||NUMBER.has(w)||DOMAIN.has(w)||w.length<=1||g9WordNumber(w)!==null)continue
   if(newWords.has(w)||hitName(w))continue
   const k=verbKinds(w);if(k){if(k.includes('any')||k.some(x=>kinds.has(x)))continue;out.push(w);continue}
   out.push(w)}
  return [...new Set(out)]}
+
+/** A8.0 applicata al cervello (parti perse): un piano del modello che non usa un numero detto (non quantità né data) o che lascia
+ * un verbo d'azione senza la sua azione («rinomina … e mettila a 12» con la sola rinomina; «elimina X» letto come nascondi) non
+ * si pubblica: si chiede. Le parole sconosciute invece le lascia al modello (dialetto, sinonimi). */
+export function lostParts(message:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string[]{
+ // Due letture di «N e MM» (centesimi o due prezzi): è persa una parte solo se lo è in tutte e due.
+ const plain0=spokenCents(spokenDecimals(message)),alt=plain0.replace(/\b(\d+)\s+(?:euro\s+)?e\s+(\d{2})\b/g,'$1.$2')
+ if(alt!==plain0&&!lostParts0(plain0,actions,refs,sections).length)return []
+ return lostParts0(alt,actions,refs,sections)}
+function lostParts0(clean0:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string[]{
+ const clean=clean0.replace(/\bcome si (?:chiama|dice)\b|\bdiciamo\b/gi,' ').replace(/\b\d{1,2}[\/-]\d{1,2}(?:[\/-]\d{2,4})?\b/g,' ').replace(/\b(?:alle|ore|entro il|fino al|fino a|dal|dalle)\s+\d+\b/gi,' ').replace(/\b\d+(?:[.,]\d+)?\s*(?:grammi|gr|g|kg|chili|etti|etto|cl|ml|litri|litro|lt|cm|pezzi|pz|porzioni|persone|fette|%|percento|per cento)\b/gi,' ')
+ // «a 12, anzi no a 13», «19 anzi 20», «19 no 21»: il numero ritirato prima della correzione non è una parte persa.
+ const fixed=clean.replace(/\d+(?:[.,]\d+)?(?=[^\d]*?\b(?:anzi|no|aspetta|cioe|cioè|o meglio|scusa)\b[^\d]*\d)/gi,' ')
+ const un=unreadWords(fixed,actions,refs,sections)
+ const creates=actions.some(a=>a.kind==='create'||a.kind==='special')
+ return un.filter(w=>!(creates&&verbKinds(w)?.every(k=>k==='featured'||k==='tag'))).filter(w=>/^[+\-]?\d/.test(w)||(()=>{const k=verbKinds(w);return !!k&&!k.includes('any')})())}

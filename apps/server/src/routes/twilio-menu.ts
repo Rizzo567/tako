@@ -236,7 +236,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   const pendIds=batch.flatMap(a=>a.kind==='delete'||a.kind==='move'?[(a as any).id as string]:[]),dels=batch.every(a=>a.kind==='delete')
   const lead=normalized.replace(/^(?:(?:no|scusa|aspetta|anzi|ho sbagliato|errore)\s+)+/,'')
   const only=lead.match(/^(?:quell[oaie] no\s+|(?:il|la|lo|l|i|gli|le)?\s*\S+(?: \S+)? no\s+)?(?:solo|soltanto|intendevo|volevo dire|era)?\s*(.+)$/),keep=normalized.match(/^(?:tieni|tienimi|lascia|lasciami|non (?:eliminare|cancellare|toccare))\s+(.+)$/)
-  const pron=lead.match(/^(?:(nascondil[oaie])|(?:mettil[oaie]|segnal[oaie])\s+(?:solo\s+)?(?:come\s+)?(finit[oaie]|esaurit[oaie]))(?:\s+e\s+basta|\s+solo|\s+soltanto)?$/)
+  const pron=lead.match(/^(?:solo\s+|soltanto\s+)?(?:(nascondil[oaie]|nascost[oaie])|(?:(?:mettil[oaie]|segnal[oaie])\s+(?:solo\s+)?(?:come\s+)?)?(finit[oaie]|esaurit[oaie]))(?:\s+e\s+basta|\s+solo|\s+soltanto)?$/)
   const drop=async()=>{await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`)}
   if(pron&&pendIds.length){await drop();st.batchClosed=true;holdPickSingle=pendIds.map(id=>(pron[1]?{kind:'hidden',id,value:true}:{kind:'available',id,value:false}) as MenuAction)}
   else if(keep&&dels){const out=findDishes(keep[1]!,refs).map(r=>r.id),left=batch.filter(a=>!out.includes((a as any).id));if(out.length&&left.length<batch.length){if(!left.length){await drop();return fill(copy.negatedOnly,{piatti:keep[1]!})}

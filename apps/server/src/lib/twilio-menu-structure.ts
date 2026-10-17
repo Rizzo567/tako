@@ -68,6 +68,8 @@ const clean=(s:string)=>{let t=fold(s).replace(TAIL,'').trim();for(let i=0;i<4;i
 /** Il piatto di un pezzo di frase: nome esatto, oppure un solo piatto il cui nome contiene tutte le parole. */
 export function dishOf(part:string,refs:Ref[]):Ref[]{
  const t=clean(part);if(!t)return []
+ // M6: «il primo», «il secondo», «l'ultimo» da soli sono posizioni (in un elenco del bot), non «Primo/Secondo del giorno».
+ if(/^(?:prim[oaie]|second[oaie]|terz[oaie]|quart[oaie]|ultim[oaie])$/.test(t)&&!refs.some(r=>fold(r.name)===t))return []
  const exact=refs.filter(r=>fold(r.name)===t||fold(r.name).replace(ARTS,'')===t);if(exact.length)return exact
  const ws=t.split(' ').filter(w=>w.length>=3&&!['del','della','con','alla','allo','alle','agli'].includes(w));if(!ws.length)return []
  return refs.filter(r=>{const n=' '+fold(r.name)+' ';return ws.every(w=>n.includes(' '+w+' ')||n.includes(' '+w.slice(0,Math.max(4,w.length-1))))})}
@@ -82,7 +84,7 @@ const COURTESY_ONLY=/^\s*(?:(?:se puoi|se riesci|per favore|per piacere|per cort
 export function nameSlot(part:string):{name:string,rest:string}{const m=SLOT_STOP.exec(part);if(!m)return{name:part.trim(),rest:''};return{name:part.slice(0,m.index).trim(),rest:part.slice(m.index).trim()}}
 const courtesyOnly=(rest:string)=>!rest||COURTESY_ONLY.test(rest)
 /** Nome tra virgolette («Tagliata di manzo», "Gricia romana", 'Crudi'): è il nome esatto. */
-export function quotedName(raw:string):string|null{const m=raw.match(/[«“"]([^«»“”"]{1,80})[»”"]/)??raw.match(/(?:^|\s)'([^']{2,80})'(?=\s|[.,!?]|$)/);return m?m[1]!.trim():null}
+export function quotedName(raw:string):string|null{const all=[...raw.matchAll(/[«“"]([^«»“”"]{1,80})[»”"]/g)];if(all.length)return all.at(-1)![1]!.trim();const m=raw.match(/(?:^|\s)'([^']{2,80})'(?=\s|[.,!?]|$)/);return m?m[1]!.trim():null}
 
 export type StructParse={kind:'delete',ids:string[]}|{kind:'rename',id:string,name:string}|{kind:'move',ids:string[],sectionId:string|null,sectionName:string}
  |{kind:'create_section',name:string,rest:string}|{kind:'rename_section',sectionId:string,name:string}|{kind:'ask',text:string}
