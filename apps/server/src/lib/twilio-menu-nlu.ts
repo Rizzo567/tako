@@ -37,6 +37,26 @@ export const nearWord=(a:string,b:string)=>{if(sameWord(a,b))return true;
  if(a.length<5||b.length<4)return false;const ka=soundKey(a),kb=soundKey(b);if(ka===kb)return ka.length>=4;const n=Math.min(ka.length,kb.length),max=n<=4?0:n<=6?1:2,head=n>=7?1:2;return max>0&&ka.slice(0,head)===kb.slice(0,head)&&Math.abs(ka.length-kb.length)<=1&&swaps(ka,kb)<=max}
 // Ripiego senza IA quando il match normale non trova niente: stessa regola (tutte le parole, nome coperto per intero vince), parole tolleranti a errori di battitura e dettatura.
 export function fuzzyDishes(query:string,refs:MenuRef[]):MenuRef[]{return matchDishes(query,refs,nearWord)}
+/** A7.12 (G: «la torta a 7» con Torta della nonna e Tortino al cioccolato; «la bombe» con Bomba e Bombette): un bersaglio di una
+ * parola sola che non è il nome intero del piatto trovato, e che è la radice di una parola più lunga di un altro piatto
+ * (torta → tortino, bomb → bombette), può essere l'uno o l'altro: si chiede. */
+export function diminutiveRivals(target:string,found:MenuRef,refs:MenuRef[]):MenuRef[]{
+ const q=words(target);if(q.length!==1)return [];const w=q[0]!,root=stem(w);if(root.length<4)return []
+ if(nameWords(found.name).join(' ')===w)return []
+ // «polpo» detto per intero non è «polpette»: con la parola esatta conta solo il diminutivo vero (-ino), con una parola storpiata
+ // («bombe») anche le altre parole della stessa radice.
+ const mine=nameWords(found.name),exact=mine.includes(w);return refs.filter(o=>o.id!==found.id&&nameWords(o.name).some(x=>x.length>w.length&&x.startsWith(root)&&!mine.includes(x)&&x!==w&&(!exact||/^(?:in[oaie])$/.test(x.slice(root.length)))))}
+/** A7.12 (lev1: «la torta al limone è finita» → mai la Torta della nonna): nel messaggio una parola del piatto seguita da
+ * «al/alla/con/di… X» con X che nel nome del piatto non c'è, e nessun piatto del menu che abbia sia la parola sia X: è un
+ * altro piatto, non questo. */
+export function foreignQualifier(message:string,dish:MenuRef,refs:MenuRef[]):boolean{
+ const t=plainText(message).replace(/[,.]/g,' ').split(' ').filter(Boolean),mine=nameWords(dish.name)
+ // Il nome intero del piatto detto nel messaggio («aggiungi pasta al pesto… pasta al ragù a 10») vale: niente dubbio.
+ if((' '+t.join(' ')+' ').includes(' '+plainText(dish.name).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim()+' '))return false
+ for(let i=0;i+2<t.length;i++){if(!mine.some(n=>sameWord(t[i]!,n)))continue;if(!/^(?:al|alla|allo|ai|agli|alle|con|di|del|della|dei|delle|in)$/.test(t[i+1]!))continue
+  const x=t[i+2]!;if(x.length<4||stop.has(x)||/^\d/.test(x))continue;if(mine.some(n=>sameWord(x,n)||nearWord(x,n)||(n[0]===x[0]&&Math.abs(n.length-x.length)<=2)))continue
+  if(refs.some(r=>nameWords(r.name).some(n=>sameWord(t[i]!,n))&&nameWords(r.name).some(n=>sameWord(x,n))))continue;return true}
+ return false}
 export function findDishes(query:string,refs:MenuRef[]):MenuRef[]{const hits=matchDishes(query,refs);return hits.length?hits:fuzzyDishes(query,refs)}
 // Preselezione per l'IA: piatti con almeno una parola in comune, ordinati per numero di parole nel nome.
 export function preselect(text:string,refs:MenuRef[],max=12):MenuRef[]{

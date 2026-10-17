@@ -36,7 +36,13 @@ export function phoneticHits(message:string,refs:MenuRef[]):{strong:string[],wea
    if(sc===1&&['piatto','piatti'].includes(words[i-1]??''))named.add(r.id)}}
  const ranked=[...best].filter(([,s])=>s>=WEAK).sort((a,b)=>b[1]-a[1])
  const strong=ranked.filter(([id,s])=>s>=STRONG&&(phoneKey(refs.find(r=>r.id===id)!.name).length>=4||named.has(id))&&!ranked.some(([o,t])=>o!==id&&phrase.get(o)===phrase.get(id)&&t>=s-0.1)).map(([id])=>id)
- return{strong,weak:ranked.map(([id])=>id).filter(id=>!strong.includes(id)),phrase}}
+ // A7.6 (G: «risotto alla zucca» → mai «Polpo alla griglia»): un'ipotesi debole vale solo se le parole piene della frase
+ // corrispondono una a una a quelle del nome, ognuna con un suono vicino; altrimenti non è un nome storpiato.
+ const aligned=(id:string)=>{const r=refs.find(x=>x.id===id),ph=phrase.get(id);if(!r||!ph)return false;const a=fold(ph).split(' ').filter(w=>w.length>=3&&!SERVICE.has(w)),b=fold(r.name).split(' ').filter(w=>w&&!SERVICE.has(w));if(a.length<=1&&b.length<=1)return true;if(a.length>b.length)return false
+  // Ogni parola detta somiglia a una parola del nome (anche un nome parziale: «patane» = Frittatina di *patate*); con una
+  // parola uguale basta una somiglianza più larga sulle altre («granita di mennula» = Granita di mandorla).
+  const sc=a.map(w=>Math.max(...b.map(x=>phoneScore(w,x))));return sc.filter(x=>x>=0.6).length>=Math.ceil(a.length/2)&&Math.max(...sc)>=0.8}
+ return{strong,weak:ranked.map(([id])=>id).filter(id=>!strong.includes(id)&&aligned(id)),phrase}}
 
 /** Candidati per un bersaglio non trovato («kenesac», «Bu»): il migliore se supera la soglia debole e non ha rivali vicini. */
 export function phoneticCandidates(target:string,refs:MenuRef[]):MenuRef[]{

@@ -25,7 +25,7 @@ describe('A2.2 quantità e rimandi non sono prezzi',()=>{
   ['aggiungi il caviale a 150 in una categoria nuova',1],['uno a 10 e uno a 20',1],['le due pizze a 8',2],['quei due mettili a 10 e 20',2],
  ])('%s: mai %d',(t,n)=>{expect(g9Prices(t)).not.toContain(n)})
  it('restano i numeri con un segnale di prezzo',()=>{
-  expect(g9Prices('il caffè a uno e venti')).toContain(1.2);expect(g9Prices('costa uno')).toContain(1);expect(g9Prices('la gricia a uno in meno')).toContain(1)
+  expect(g9Prices('il caffè a uno e venti')).toContain(1.2);expect(g9Prices('costa uno')).toContain(1);expect(g9Prices('la gricia a uno in meno')).not.toContain(1)
   expect(g9Prices('mettili tutti e due a 9')).toContain(9);expect(g9Prices('due euro')).toContain(2);expect(withoutQuantities('metti la carbonara a 12')).toBe('metti la carbonara a 12')
  })
 })

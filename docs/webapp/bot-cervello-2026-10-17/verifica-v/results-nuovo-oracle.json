@@ -10,47 +10,47 @@
   "total": {
    "family": "TOTALE",
    "n": 143,
-   "ok": 72,
-   "success": 73,
-   "grave": 51,
-   "medio": 19,
+   "ok": 130,
+   "success": 131,
+   "grave": 5,
+   "medio": 7,
    "basso": 1,
-   "safety": 30,
-   "clarRate": 26.3,
-   "unexpectedClar": 39,
-   "usedLlm": 70,
+   "safety": 4,
+   "clarRate": 21.1,
+   "unexpectedClar": 23,
+   "usedLlm": 59,
    "llmMissConvs": 0,
-   "detN": 73,
-   "detSuccess": 46
+   "detN": 84,
+   "detSuccess": 78
   },
   "multi": {
    "family": "multi-turno",
    "n": 70,
-   "ok": 33,
-   "success": 33,
-   "grave": 27,
-   "medio": 10,
+   "ok": 63,
+   "success": 63,
+   "grave": 5,
+   "medio": 2,
    "basso": 0,
-   "safety": 23,
-   "clarRate": 29.7,
-   "unexpectedClar": 29,
-   "usedLlm": 42,
+   "safety": 4,
+   "clarRate": 24.5,
+   "unexpectedClar": 17,
+   "usedLlm": 39,
    "llmMissConvs": 0,
-   "detN": 28,
-   "detSuccess": 17
+   "detN": 31,
+   "detSuccess": 30
   },
   "families": [
    {
     "family": "v-deixis",
     "n": 13,
-    "ok": 1,
-    "success": 1,
-    "grave": 8,
-    "medio": 4,
+    "ok": 13,
+    "success": 13,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
-    "safety": 6,
-    "clarRate": 14.7,
-    "unexpectedClar": 5,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
     "usedLlm": 13,
     "llmMissConvs": 0,
     "detN": 0,
@@ -61,76 +61,76 @@
     "n": 10,
     "ok": 2,
     "success": 2,
-    "grave": 7,
-    "medio": 1,
+    "grave": 2,
+    "medio": 6,
     "basso": 0,
-    "safety": 4,
-    "clarRate": 14.3,
-    "unexpectedClar": 2,
-    "usedLlm": 5,
+    "safety": 2,
+    "clarRate": 57.1,
+    "unexpectedClar": 8,
+    "usedLlm": 3,
     "llmMissConvs": 0,
-    "detN": 5,
+    "detN": 7,
     "detSuccess": 2
    },
    {
     "family": "v-aggiunte",
     "n": 11,
-    "ok": 5,
-    "success": 5,
-    "grave": 3,
-    "medio": 3,
+    "ok": 11,
+    "success": 11,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
-    "safety": 2,
-    "clarRate": 53.3,
-    "unexpectedClar": 5,
+    "safety": 0,
+    "clarRate": 26.7,
+    "unexpectedClar": 1,
     "usedLlm": 5,
     "llmMissConvs": 0,
     "detN": 6,
-    "detSuccess": 5
+    "detSuccess": 6
    },
    {
     "family": "v-categorie",
     "n": 8,
-    "ok": 0,
-    "success": 1,
-    "grave": 6,
-    "medio": 1,
+    "ok": 6,
+    "success": 7,
+    "grave": 1,
+    "medio": 0,
     "basso": 1,
-    "safety": 2,
-    "clarRate": 27.3,
-    "unexpectedClar": 3,
-    "usedLlm": 2,
+    "safety": 1,
+    "clarRate": 9.1,
+    "unexpectedClar": 0,
+    "usedLlm": 1,
     "llmMissConvs": 0,
-    "detN": 6,
-    "detSuccess": 1
+    "detN": 7,
+    "detSuccess": 7
    },
    {
     "family": "v-composti",
     "n": 11,
-    "ok": 7,
-    "success": 7,
-    "grave": 2,
-    "medio": 2,
+    "ok": 11,
+    "success": 11,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
-    "safety": 2,
-    "clarRate": 40,
-    "unexpectedClar": 6,
-    "usedLlm": 3,
+    "safety": 0,
+    "clarRate": 26.7,
+    "unexpectedClar": 4,
+    "usedLlm": 2,
     "llmMissConvs": 0,
-    "detN": 8,
-    "detSuccess": 6
+    "detN": 9,
+    "detSuccess": 9
    },
    {
     "family": "v-correzioni",
     "n": 11,
-    "ok": 9,
-    "success": 9,
-    "grave": 1,
-    "medio": 1,
+    "ok": 11,
+    "success": 11,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
-    "safety": 1,
-    "clarRate": 21.1,
-    "unexpectedClar": 2,
+    "safety": 0,
+    "clarRate": 15.8,
+    "unexpectedClar": 1,
     "usedLlm": 8,
     "llmMissConvs": 0,
     "detN": 3,
@@ -139,62 +139,62 @@
    {
     "family": "v-risposte",
     "n": 9,
-    "ok": 6,
-    "success": 6,
-    "grave": 3,
+    "ok": 9,
+    "success": 9,
+    "grave": 0,
     "medio": 0,
     "basso": 0,
-    "safety": 3,
+    "safety": 0,
     "clarRate": 50,
     "unexpectedClar": 0,
     "usedLlm": 1,
     "llmMissConvs": 0,
     "detN": 8,
-    "detSuccess": 5
+    "detSuccess": 8
    },
    {
     "family": "v-prezzi",
     "n": 9,
-    "ok": 4,
-    "success": 4,
-    "grave": 4,
-    "medio": 1,
+    "ok": 9,
+    "success": 9,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
-    "safety": 4,
-    "clarRate": 41.7,
-    "unexpectedClar": 1,
-    "usedLlm": 4,
+    "safety": 0,
+    "clarRate": 50,
+    "unexpectedClar": 0,
+    "usedLlm": 1,
     "llmMissConvs": 0,
-    "detN": 5,
-    "detSuccess": 1
+    "detN": 8,
+    "detSuccess": 8
    },
    {
     "family": "v-verbi",
     "n": 10,
-    "ok": 6,
-    "success": 6,
-    "grave": 4,
+    "ok": 10,
+    "success": 10,
+    "grave": 0,
     "medio": 0,
     "basso": 0,
-    "safety": 4,
+    "safety": 0,
     "clarRate": 28.6,
     "unexpectedClar": 4,
     "usedLlm": 1,
     "llmMissConvs": 0,
     "detN": 9,
-    "detSuccess": 5
+    "detSuccess": 9
    },
    {
     "family": "v-asr",
     "n": 10,
-    "ok": 7,
-    "success": 7,
-    "grave": 1,
-    "medio": 2,
+    "ok": 10,
+    "success": 10,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
     "safety": 0,
-    "clarRate": 27.3,
-    "unexpectedClar": 2,
+    "clarRate": 18.2,
+    "unexpectedClar": 0,
     "usedLlm": 4,
     "llmMissConvs": 0,
     "detN": 6,
@@ -203,30 +203,30 @@
    {
     "family": "v-stato",
     "n": 8,
-    "ok": 8,
-    "success": 8,
-    "grave": 0,
-    "medio": 0,
-    "basso": 0,
-    "safety": 0,
-    "clarRate": 0,
-    "unexpectedClar": 0,
-    "usedLlm": 5,
-    "llmMissConvs": 0,
-    "detN": 3,
-    "detSuccess": 3
-   },
-   {
-    "family": "v-annulla",
-    "n": 8,
     "ok": 7,
     "success": 7,
     "grave": 1,
     "medio": 0,
     "basso": 0,
     "safety": 0,
-    "clarRate": 16.7,
-    "unexpectedClar": 3,
+    "clarRate": 7.1,
+    "unexpectedClar": 1,
+    "usedLlm": 3,
+    "llmMissConvs": 0,
+    "detN": 5,
+    "detSuccess": 4
+   },
+   {
+    "family": "v-annulla",
+    "n": 8,
+    "ok": 8,
+    "success": 8,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 5.6,
+    "unexpectedClar": 1,
     "usedLlm": 5,
     "llmMissConvs": 0,
     "detN": 3,
@@ -235,14 +235,14 @@
    {
     "family": "v-misti",
     "n": 7,
-    "ok": 3,
-    "success": 3,
-    "grave": 3,
-    "medio": 1,
+    "ok": 7,
+    "success": 7,
+    "grave": 0,
+    "medio": 0,
     "basso": 0,
     "safety": 0,
-    "clarRate": 12.5,
-    "unexpectedClar": 1,
+    "clarRate": 0,
+    "unexpectedClar": 0,
     "usedLlm": 6,
     "llmMissConvs": 0,
     "detN": 1,
@@ -251,14 +251,14 @@
    {
     "family": "v-frasefissa",
     "n": 6,
-    "ok": 3,
-    "success": 3,
-    "grave": 0,
-    "medio": 3,
+    "ok": 4,
+    "success": 4,
+    "grave": 1,
+    "medio": 1,
     "basso": 0,
-    "safety": 0,
-    "clarRate": 75,
-    "unexpectedClar": 4,
+    "safety": 1,
+    "clarRate": 37.5,
+    "unexpectedClar": 1,
     "usedLlm": 3,
     "llmMissConvs": 0,
     "detN": 3,
@@ -267,73 +267,53 @@
    {
     "family": "v-coerenza",
     "n": 6,
-    "ok": 4,
-    "success": 4,
-    "grave": 2,
+    "ok": 6,
+    "success": 6,
+    "grave": 0,
     "medio": 0,
     "basso": 0,
-    "safety": 2,
-    "clarRate": 9.1,
-    "unexpectedClar": 1,
-    "usedLlm": 4,
+    "safety": 0,
+    "clarRate": 18.2,
+    "unexpectedClar": 2,
+    "usedLlm": 3,
     "llmMissConvs": 0,
-    "detN": 2,
-    "detSuccess": 2
+    "detN": 3,
+    "detSuccess": 3
    },
    {
     "family": "v-rinomina",
     "n": 6,
-    "ok": 0,
-    "success": 0,
-    "grave": 6,
+    "ok": 6,
+    "success": 6,
+    "grave": 0,
     "medio": 0,
     "basso": 0,
     "safety": 0,
     "clarRate": 0,
     "unexpectedClar": 0,
-    "usedLlm": 1,
+    "usedLlm": 0,
     "llmMissConvs": 0,
-    "detN": 5,
-    "detSuccess": 0
+    "detN": 6,
+    "detSuccess": 6
    }
   ],
   "codes": {
-   "modifica-sbagliata": {
-    "GRAVE": 7,
+   "modifica-non-richiesta": {
+    "GRAVE": 3,
     "MEDIO": 0,
     "BASSO": 0
    },
    "chiede-invece-di-agire": {
     "GRAVE": 0,
-    "MEDIO": 21,
+    "MEDIO": 9,
     "BASSO": 0
    },
-   "non-applicato": {
-    "GRAVE": 37,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
-   "correzione-non-applicata": {
+   "modifica-sbagliata": {
     "GRAVE": 4,
     "MEDIO": 0,
     "BASSO": 0
    },
-   "modifica-non-richiesta": {
-    "GRAVE": 24,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
-   "richiesta-persa": {
-    "GRAVE": 7,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
-   "frase-fissa": {
-    "GRAVE": 0,
-    "MEDIO": 2,
-    "BASSO": 0
-   },
-   "chiarimento-mancante": {
+   "in-attesa-ok": {
     "GRAVE": 0,
     "MEDIO": 2,
     "BASSO": 0
@@ -341,28 +321,28 @@
    "risposta-non-pertinente": {
     "GRAVE": 0,
     "MEDIO": 0,
-    "BASSO": 2
+    "BASSO": 1
    },
-   "scrive-invece-di-chiedere": {
-    "GRAVE": 2,
+   "non-applicato": {
+    "GRAVE": 1,
     "MEDIO": 0,
     "BASSO": 0
    }
   },
   "latency": {
-   "harnessP50": 1.3,
-   "harnessP95": 3.8,
-   "withRecordedGroqP50": 1.3,
-   "withRecordedGroqP95": 3.8
+   "harnessP50": 1.1,
+   "harnessP95": 4.1,
+   "withRecordedGroqP50": 1.1,
+   "withRecordedGroqP95": 4.1
   },
   "llm": {
-   "calls": 88,
+   "calls": 76,
    "misses": 0,
    "tokens": 0
   }
  },
  "groqStats": {
-  "calls": 88,
+  "calls": 76,
   "hits": 0,
   "misses": 0,
   "recorded": 0,
@@ -370,7 +350,7 @@
   "recordedMs": 0,
   "refused": 0,
   "rateLimited": 0,
-  "oracle": 88
+  "oracle": 76
  },
  "unknownSql": [],
  "verdicts": [
@@ -378,19 +358,8 @@
    "id": "v-deixis-001",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|tiramisù|10"
-    },
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: hidden|la parmigiana|true, hidden|tiramisù|true, price|la parmigiana|15, price|tiramisù|15"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|boh|true",
     "hidden|la parmigiana|true",
@@ -400,27 +369,30 @@
    ],
    "actual": [
     "hidden|boh|true",
-    "price|tiramisù|10"
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *10,00 €*",
-    "Cosa vuoi cambiare per *tiramisù*? Per esempio «tiramisù a 13» oppure «tiramisù è finito». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
    ],
    "turns": [
     "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
     "🎤 Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.",
     "🎤 Ok, adesso nascondi quei due piatti."
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    29.9,
-    13.6,
-    5.7
+    32.5,
+    22,
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -430,19 +402,8 @@
    "id": "v-deixis-002",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|la parmigiana|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: hidden|la parmigiana|true, hidden|tiramisù|true, price|la parmigiana|15"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|la parmigiana|true",
     "hidden|tiramisù|true",
@@ -450,12 +411,14 @@
     "price|tiramisù|15"
    ],
    "actual": [
-    "price|la parmigiana|2",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true",
+    "price|la parmigiana|15",
     "price|tiramisù|15"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 15,00 € a *2,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
    ],
    "turns": [
     "la parmigiana a 15 e il tiramisù a 15",
@@ -467,8 +430,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    4.2
+    6.8,
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -477,14 +440,8 @@
    "id": "v-deixis-003",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: hidden|la parmigiana|true, hidden|tiramisù|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|la parmigiana|true",
     "hidden|tiramisù|true",
@@ -492,28 +449,30 @@
     "price|tiramisù|7"
    ],
    "actual": [
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true",
     "price|la parmigiana|12",
     "price|tiramisù|7"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*",
-    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
    ],
    "turns": [
     "la parmigiana costa 12",
     "il tiramisù costa 7",
     "nascondi entrambi"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.8,
-    2.2
+    2,
+    3.5,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -522,42 +481,37 @@
    "id": "v-deixis-004",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: hidden|tiramisù|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|tiramisù|true",
     "price|la parmigiana|12",
     "price|tiramisù|7"
    ],
    "actual": [
+    "hidden|tiramisù|true",
     "price|la parmigiana|12",
     "price|tiramisù|7"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*",
-    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu"
    ],
    "turns": [
     "la parmigiana costa 12",
     "il tiramisù costa 7",
     "nascondi l'ultimo"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    3.2,
-    2.8
+    2.8,
+    3.5,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -566,36 +520,20 @@
    "id": "v-deixis-005",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: price|la parmigiana|12"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|tiramisù|11"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|la parmigiana|11, price|tiramisù|7"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|la parmigiana|11",
     "price|tiramisù|7"
    ],
    "actual": [
-    "price|la parmigiana|12",
-    "price|tiramisù|11"
+    "price|la parmigiana|11",
+    "price|tiramisù|7"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 7,00 € a *11,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 12,00 € a *11,00 €*"
    ],
    "turns": [
     "la parmigiana costa 12",
@@ -608,9 +546,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    2.5,
-    2.4
+    0.9,
+    2.6,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -619,14 +557,8 @@
    "id": "v-deixis-006",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: featured|la parmigiana|true, featured|tiramisù|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "featured|la parmigiana|true",
     "featured|tiramisù|true",
@@ -634,28 +566,30 @@
     "price|tiramisù|7"
    ],
    "actual": [
+    "featured|la parmigiana|true",
+    "featured|tiramisù|true",
     "price|la parmigiana|12",
     "price|tiramisù|7"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*",
-    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *in evidenza*\n*tiramisù*: *in evidenza*"
    ],
    "turns": [
     "la parmigiana costa 12",
     "il tiramisù costa 7",
     "quelli mettili in evidenza"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.3,
-    1.7
+    1,
+    2.1,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -664,30 +598,17 @@
    "id": "v-deixis-007",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: featured|la parmigiana|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: featured|tiramisù|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "featured|boh|true"
    ],
    "actual": [
-    "featured|boh|true",
-    "featured|la parmigiana|true",
-    "featured|tiramisù|true"
+    "featured|boh|true"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *in evidenza*\n*tiramisù*: *in evidenza*\n*boh*: *in evidenza*",
-    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: non più in evidenza\n*tiramisù*: non più in evidenza"
    ],
    "turns": [
     "metti in evidenza la parmigiana, il tiramisù e boh",
@@ -699,8 +620,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    3.7
+    3.2,
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -709,24 +630,19 @@
    "id": "v-deixis-008",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|tiramisù|9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|la parmigiana|9",
     "price|tiramisù|9"
    ],
    "actual": [
-    "price|la parmigiana|9"
+    "price|la parmigiana|9",
+    "price|tiramisù|9"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*la parmigiana*: *10,00 €* · disponibile\n*tiramisù*: *6,00 €* · disponibile",
-    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *9,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *9,00 €*\n*tiramisù*: prezzo da 6,00 € a *9,00 €*"
    ],
    "turns": [
     "❓ quanto costano la parmigiana e il tiramisù?",
@@ -738,8 +654,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.5
+    1.9,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -748,37 +664,32 @@
    "id": "v-deixis-009",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: featured|la parmigiana|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "featured|la parmigiana|true",
     "price|la parmigiana|15"
    ],
    "actual": [
+    "featured|la parmigiana|true",
     "price|la parmigiana|15"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*",
-    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *in evidenza*"
    ],
    "turns": [
     "la parmigiana a 15",
     "e mettila anche in evidenza"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.3
+    0.9,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -805,8 +716,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    2.1
+    0.9,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -815,19 +726,8 @@
    "id": "v-deixis-011",
    "family": "v-deixis",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Lasagna al forno|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: featured|Lasagna al forno|true, featured|Spaghetti alla carbonara|true, price|Lasagna al forno|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "featured|Lasagna al forno|true",
     "featured|Spaghetti alla carbonara|true",
@@ -835,13 +735,15 @@
     "price|Spaghetti alla carbonara|13"
    ],
    "actual": [
-    "price|Lasagna al forno|2",
+    "featured|Lasagna al forno|true",
+    "featured|Spaghetti alla carbonara|true",
+    "price|Lasagna al forno|12",
     "price|Spaghetti alla carbonara|13"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 12,00 € a *2,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *in evidenza*\n*Lasagna al forno*: *in evidenza*"
    ],
    "turns": [
     "la carbonara costa 13",
@@ -854,9 +756,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    5.2,
-    4.9
+    3,
+    6.2,
+    7.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -865,19 +767,8 @@
    "id": "v-deixis-012",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|boh|3"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: hidden|boh|true, hidden|la parmigiana|true, hidden|tiramisù|true, price|boh|25"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|boh|true",
     "hidden|la parmigiana|true",
@@ -887,7 +778,10 @@
     "price|tiramisù|7"
    ],
    "actual": [
-    "price|boh|3",
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true",
+    "price|boh|25",
     "price|la parmigiana|12",
     "price|tiramisù|7"
    ],
@@ -895,7 +789,7 @@
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*",
     "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *25,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 25,00 € a *3,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*boh*: *nascosto* dal menu"
    ],
    "turns": [
     "la parmigiana costa 12",
@@ -910,9 +804,9 @@
    "llmTokens": 0,
    "latencyMs": [
     0.9,
-    2,
+    1.9,
     1.7,
-    2.5
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -921,19 +815,8 @@
    "id": "v-deixis-013",
    "family": "v-deixis",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: price|boh|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: hidden|la parmigiana|true, hidden|tiramisù|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|boh|true",
     "hidden|la parmigiana|true",
@@ -941,11 +824,12 @@
    ],
    "actual": [
     "hidden|boh|true",
-    "price|boh|2"
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *2,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
    ],
    "turns": [
     "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
@@ -957,8 +841,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.5
+    2.5,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -971,6 +855,16 @@
    "success": false,
    "fails": [
     {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|la parmigiana|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|tiramisù|15"
+    },
+    {
      "sev": "MEDIO",
      "code": "chiede-invece-di-agire",
      "why": "domanda invece di agire / contesto perso: delete|la parmigiana, delete|tiramisù"
@@ -982,12 +876,14 @@
     "hidden|boh|true"
    ],
    "actual": [
-    "hidden|boh|true"
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.",
-    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
-    "Cosa vuoi cambiare per *la parmigiana*? Per esempio «la parmigiana a 13» oppure «la parmigiana è finito». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
+    "Elimino *la parmigiana* e *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
@@ -1000,9 +896,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2,
-    1.7
+    1.4,
+    3.2,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1016,35 +912,28 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|pasta al ragù|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: delete|pasta al ragù"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|pasta al ragù"
     }
    ],
    "expected": [
     "delete|pasta al ragù"
    ],
-   "actual": [
-    "hidden|pasta al ragù|true"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti pasta al ragù»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *pasta al ragù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "elimina il piatto pasta al ragù"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1057,35 +946,28 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|boh|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: delete|boh"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|boh"
     }
    ],
    "expected": [
     "delete|boh"
    ],
-   "actual": [
-    "hidden|boh|true"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "cancella boh"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1097,9 +979,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: delete|boh"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|boh"
     }
    ],
    "expected": [
@@ -1107,21 +989,21 @@
    ],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "boh levalo proprio dal menu"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    0.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "note": "«leva» ≈ togli (= nascondi); «proprio» spinge verso eliminare: accettati entrambi"
   },
   {
@@ -1148,7 +1030,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1161,9 +1043,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: delete|tiramisù"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|tiramisù"
     }
    ],
    "expected": [
@@ -1171,21 +1053,21 @@
    ],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "elimina definitivamente il tiramisù dal menu"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    1.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-elimina-007",
@@ -1212,7 +1094,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
-    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+    "Elimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "nascondi boh",
@@ -1224,8 +1106,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.6
+    0.7,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1243,7 +1125,7 @@
     "hidden|la parmigiana|true"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti la parmigiana»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina la parmigiana»."
    ],
    "turns": [
     "rimuovi la parmigiana"
@@ -1254,7 +1136,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1267,42 +1149,29 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|boh|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|pasta al ragù|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: delete|boh, delete|pasta al ragù"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|boh, delete|pasta al ragù"
     }
    ],
    "expected": [
     "delete|boh",
     "delete|pasta al ragù"
    ],
-   "actual": [
-    "hidden|boh|true",
-    "hidden|pasta al ragù|true"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti pasta al ragù»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *pasta al ragù* e *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "cancella pasta al ragù e boh"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1314,9 +1183,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: delete|la parmigiana, delete|tiramisù"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|la parmigiana, delete|tiramisù"
     }
    ],
    "expected": [
@@ -1331,20 +1200,20 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
-    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Elimino *la parmigiana* e *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "la parmigiana a 15 e il tiramisù a 15",
     "eliminali tutti e due"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.6
+    2.3,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1353,22 +1222,20 @@
    "id": "v-aggiunte-001",
    "family": "v-aggiunte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: create|caviale|150|piatti di prova, create|pasta al pesto|15|piatti di prova, price|pasta al ragù|10"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|caviale|150|piatti di prova",
     "create|pasta al pesto|15|piatti di prova",
     "price|pasta al ragù|10"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *pasta al ragù*. Scrivimelo in una frase, per esempio «pasta al ragù costa 12» oppure «pasta al ragù è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro."
@@ -1379,7 +1246,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1390,32 +1257,29 @@
    "id": "v-aggiunte-002",
    "family": "v-aggiunte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|caviale|150|piatti di prova, create|pasta al pesto|15|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|caviale|150|piatti di prova",
     "create|pasta al pesto|15|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «aggiungi pasta al pesto a 15 e caviale a» intendi: pasta al ragù: prezzo da 12,00 € a 15,00 €?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto a 15 e caviale a 150"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1444,7 +1308,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1454,33 +1318,31 @@
    "id": "v-aggiunte-004",
    "family": "v-aggiunte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|lasagna|20|piatti di prova, create|pasta al pesto|15|piatti di prova, create|polpette|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|15|piatti di prova",
     "create|polpette|9|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «aggiungi pasta al pesto a 15, lasagna a » intendi: pasta al ragù: prezzo da 12,00 € a 15,00 €?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto a 15, lasagna a 20 e polpette a 9"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1489,29 +1351,19 @@
    "id": "v-aggiunte-005",
    "family": "v-aggiunte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|20|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|20|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *20,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto e lasagna",
@@ -1524,7 +1376,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1544,7 +1396,7 @@
     "create|pasta al pesto|15|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*\n\nQuanto costa *Lasagna*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
@@ -1558,7 +1410,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1.2
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1567,32 +1419,29 @@
    "id": "v-aggiunte-007",
    "family": "v-aggiunte",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|pasta al pesto|13|primi, create|trofie|12|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta al pesto|13|primi",
     "create|trofie|12|primi"
    ],
-   "actual": [],
+   "actual": [
+    "create|pasta al pesto|13|primi",
+    "create|trofie|12|primi"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Pasta e fagioli*\n2. *Pasta del giorno*\n3. *pasta al ragù*\n\nRispondi con il *numero* o il *nome*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Primi*: *13,00 €*\nNuovo piatto *trofie* in *Primi*: *12,00 €*"
    ],
    "turns": [
     "aggiungi tra i primi pasta al pesto a 13 e trofie a 12"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.4
+    10.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1623,8 +1472,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.8
+    1.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1633,19 +1482,8 @@
    "id": "v-aggiunte-009",
    "family": "v-aggiunte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: price|pasta al ragù|15"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|gnocchi|11|piatti di prova, create|lasagna|20|piatti di prova, create|pasta al pesto|15|piatti di prova, create|polpette|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|gnocchi|11|piatti di prova",
     "create|lasagna|20|piatti di prova",
@@ -1653,24 +1491,27 @@
     "create|polpette|9|piatti di prova"
    ],
    "actual": [
-    "price|pasta al ragù|15"
+    "create|gnocchi|11|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «aggiungi pasta al pesto 15, lasagna 20, » intendi: pasta al ragù: prezzo da 12,00 € a 15,00 €?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *15,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. Nuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\n2. Nuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\n3. Nuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\n4. Nuovo piatto *gnocchi* in *Piatti di prova*: *11,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *gnocchi* in *Piatti di prova*: *11,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto 15, lasagna 20, polpette 9 e gnocchi 11",
     "ok"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.1
+    2.7,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1699,7 +1540,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1713,7 +1554,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*pasta al ragù* è già in *Piatti di prova*. Dimmi cosa vuoi cambiare, per esempio «pasta al ragù costa 12 euro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*pasta al ragù* è già in *Piatti di prova*: non l’ho aggiunto di nuovo. Se vuoi cambiarlo, dimmi cosa."
    ],
    "turns": [
     "aggiungi pasta al ragù a 12"
@@ -1724,7 +1565,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1737,14 +1578,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|caviale|150|speciali, create|pasta al pesto|15|primi, move|pasta al ragù|Primi, price|pasta al ragù|10"
+     "sev": "GRAVE",
+     "code": "modifica-sbagliata",
+     "why": "valore sbagliato: create|caviale|150|piatti di prova"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-sbagliata",
+     "why": "valore sbagliato: create|pasta al pesto|15|piatti di prova"
     },
     {
      "sev": "MEDIO",
-     "code": "frase-fissa",
-     "why": "turno 1: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »"
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: create|caviale|150|speciali, create|pasta al pesto|15|primi, move|pasta al ragù|Primi"
     }
    ],
    "expected": [
@@ -1753,23 +1599,27 @@
     "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere *pasta al pesto* manca *la categoria*.\nCategorie disponibili: Piatti di prova.\n\nRimandami la richiesta completa: «aggiungi tra piatti di prova: pasta al pesto, 12 euro».",
-    "Per aggiungere il piatto manca *il prezzo*.\n\nRimandami la richiesta completa: «aggiungi tra piatti di prova: pasta al ragù, 12 euro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*",
+    "*Tako · Verifica web*: ecco le modifiche.\n\n1. Nuova categoria *Primi*\n2. Nuova categoria *Speciali*\n3. *pasta al ragù*: spostato in *Primi*\n4. *pasta al pesto*: spostato in *Primi*\n5. *caviale*: spostato in *Speciali*\n6. *pasta al ragù*: prezzo da 10,00 € a *12,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
     "🎤 No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali."
    ],
-   "clarifications": 2,
-   "unexpectedClarifications": 2,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.4
+    2.7,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1780,64 +1630,49 @@
    "id": "v-categorie-002",
    "family": "v-categorie",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al sugo nei primi pasti|12|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|pasta al sugo|12|primi pasti"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta al sugo|12|primi pasti"
    ],
    "actual": [
-    "create|pasta al sugo nei primi pasti|12|piatti di prova"
+    "create|pasta al sugo|12|primi pasti"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla.",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al sugo nei primi pasti* in *Piatti di prova*: *12,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuova categoria *Primi pasti*",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al sugo* in *Primi pasti*: *12,00 €*"
    ],
    "turns": [
     "🎤 Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\".",
     "aggiungi pasta al sugo a 12 nei primi pasti"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.9
+    2.2,
+    1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "Manuel 17:38 («Le categorie si creano dalla dashboard»)"
   },
   {
    "id": "v-categorie-003",
    "family": "v-categorie",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: create|caviale|150|speciali"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|caviale|150|speciali"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|speciali"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo quella categoria. In quale categoria metto il piatto? Categorie: Piatti di prova."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuova categoria *Speciali*\nNuovo piatto *Caviale* in *Speciali*: *150,00 €*"
    ],
    "turns": [
     "aggiungi una categoria speciali con il caviale a 150"
@@ -1848,7 +1683,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1857,20 +1692,16 @@
    "id": "v-categorie-004",
    "family": "v-categorie",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: move|Lasagna al forno|Secondi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "move|Lasagna al forno|Secondi"
    ],
-   "actual": [],
+   "actual": [
+    "move|Lasagna al forno|Secondi"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: spostato in *Secondi*"
    ],
    "turns": [
     "sposta la lasagna nei secondi"
@@ -1881,7 +1712,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1890,20 +1721,16 @@
    "id": "v-categorie-005",
    "family": "v-categorie",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: move|Bruschetta al pomodoro|Primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "move|Bruschetta al pomodoro|Primi"
    ],
-   "actual": [],
+   "actual": [
+    "move|Bruschetta al pomodoro|Primi"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: spostato in *Primi*"
    ],
    "turns": [
     "metti la bruschetta nei primi"
@@ -1914,7 +1741,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1923,45 +1750,29 @@
    "id": "v-categorie-006",
    "family": "v-categorie",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiarimento-mancante",
-     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|creala|15|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|15|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta al pesto|15|primi"
    ],
    "actual": [
-    "create|creala|15|piatti di prova"
+    "create|pasta al pesto|15|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo quella categoria. In quale categoria metto il piatto? Categorie: Piatti di prova.",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Creala* in *Piatti di prova*: *15,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c'è la categoria *Primi*: la creo e ci metto *Pasta al pesto*? Rispondi *sì*, oppure dimmi in quale categoria metterlo. Categorie: Piatti di prova. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuova categoria *Primi*\nNuovo piatto *Pasta al pesto* in *Primi*: *15,00 €*"
    ],
    "turns": [
     "aggiungi tra i primi la pasta al pesto a 15",
     "sì creala"
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -1983,7 +1794,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *categorie* si creano e si spostano dalla dashboard.\n\nQui posso aggiungere un piatto in una categoria già presente."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPosso *creare categorie e spostare piatti*.\n«crea la categoria speciali» o «sposta il polpo nei secondi»"
    ],
    "turns": [
     "❓ che categorie ho?"
@@ -1994,7 +1805,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2003,20 +1814,16 @@
    "id": "v-categorie-008",
    "family": "v-categorie",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: create|caviale|150|speciali"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|caviale|150|speciali"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|speciali"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo quella categoria. In quale categoria metto *Caviale in una*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuova categoria *Speciali*\nNuovo piatto *Caviale* in *Speciali*: *150,00 €*"
    ],
    "turns": [
     "aggiungi il caviale a 150 in una categoria nuova che si chiama speciali"
@@ -2027,7 +1834,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2036,30 +1843,20 @@
    "id": "v-composti-001",
    "family": "v-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|10.01|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|10.01|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "Quanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *10,01 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "Quanto costano *Pasta al pesto* e *Lasagna*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "🎤 Allora aggiungi il piatto pasta al pesto e lasagna.",
@@ -2072,8 +1869,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.7,
+    0.9,
+    1,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -2104,7 +1901,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2133,7 +1930,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2162,7 +1959,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2171,66 +1968,60 @@
    "id": "v-composti-005",
    "family": "v-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «aggiungi pasta al pesto e lasagna a 10 e» intendi: pasta al ragù: prezzo da 12,00 € a 10,00 €?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto e lasagna a 10 e 20"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.2
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-composti-006",
    "family": "v-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «aggiungi pasta al pesto a 10 e lasagna a» intendi: pasta al ragù: prezzo da 12,00 € a 10,00 €?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto a 10 e lasagna a 20"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2259,7 +2050,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2291,7 +2082,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2300,30 +2091,20 @@
    "id": "v-composti-009",
    "family": "v-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|20|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|20|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "Quanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *20,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "Quanto costano *Pasta al pesto* e *Lasagna*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi il piatto pasta al pesto e lasagna",
@@ -2336,8 +2117,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    0.4,
+    0.7,
+    0.5,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2367,7 +2148,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2383,10 +2164,11 @@
     "create|polpette|9|piatti di prova"
    ],
    "actual": [
-    "create|gnocchi e polpette|9|piatti di prova"
+    "create|gnocchi|9|piatti di prova",
+    "create|polpette|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Gnocchi e polpette* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Gnocchi* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Polpette* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi gnocchi e polpette a 9"
@@ -2412,8 +2194,8 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "Quanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "Quanto costano *Pasta al pesto* e *Lasagna*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla."
    ],
    "turns": [
     "🎤 Allora aggiungi il piatto pasta al pesto e lasagna.",
@@ -2426,7 +2208,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2459,7 +2241,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    2
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2488,7 +2270,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2519,7 +2301,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2551,7 +2333,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2583,7 +2365,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    0.8,
     2
    ],
    "recordedLlmMs": 0,
@@ -2593,28 +2375,17 @@
    "id": "v-correzioni-007",
    "family": "v-correzioni",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: create|caviale|1|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|caviale|150|speciali"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|caviale|150|speciali"
    ],
    "actual": [
-    "create|caviale|1|piatti di prova"
+    "create|caviale|150|speciali"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caviale* in *Piatti di prova*: *150,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Caviale*: prezzo da 150,00 € a *1,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\nNuova categoria *Speciali*\n*Caviale*: spostato in *Speciali*"
    ],
    "turns": [
     "aggiungi caviale a 150",
@@ -2626,8 +2397,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    2.1
+    0.7,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2658,8 +2429,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.9
+    0.7,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2690,8 +2461,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.4
+    1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2707,7 +2478,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 12,00 € a *10,00 €*"
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*la parmigiana*: com’era prima"
    ],
    "turns": [
     "la parmigiana costa 12",
@@ -2719,8 +2490,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.9
+    0.7,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2729,35 +2500,32 @@
    "id": "v-correzioni-011",
    "family": "v-correzioni",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|pasta al pesto|15|piatti di prova, price|pasta al ragù|10"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta al pesto|15|piatti di prova",
     "price|pasta al ragù|10"
    ],
-   "actual": [],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *pasta al ragù*. Scrivimelo in una frase, per esempio «pasta al ragù costa 12» oppure «pasta al ragù è finito».",
-    "A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*caviale*: tolto (l’avevo appena aggiunto)"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
     "no, il caviale lascialo stare"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 2,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.4
+    3.1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2766,29 +2534,19 @@
    "id": "v-risposte-001",
    "family": "v-risposte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|20|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|20|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *20,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto e lasagna",
@@ -2800,7 +2558,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    0.5,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2810,29 +2568,19 @@
    "id": "v-risposte-002",
    "family": "v-risposte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|10.01|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|10.01|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *10,01 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto e lasagna",
@@ -2844,8 +2592,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.7
+    0.5,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2864,7 +2612,7 @@
     "create|lasagna|20|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
@@ -2896,7 +2644,7 @@
     "create|lasagna|20|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
@@ -2928,7 +2676,7 @@
     "create|lasagna|20|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
@@ -2973,7 +2721,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5,
+    4.2,
     1.9
    ],
    "recordedLlmMs": 0,
@@ -2992,7 +2740,7 @@
     "create|lasagna|20|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
@@ -3005,8 +2753,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.8
+    0.8,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3024,7 +2772,7 @@
     "create|lasagna|10.5|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *10,50 €*"
    ],
    "turns": [
@@ -3037,7 +2785,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -3047,29 +2795,19 @@
    "id": "v-risposte-009",
    "family": "v-risposte",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|20|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|20|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *20,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto e lasagna",
@@ -3081,7 +2819,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.6,
     0.8
    ],
    "recordedLlmMs": 0,
@@ -3091,39 +2829,26 @@
    "id": "v-prezzi-001",
    "family": "v-prezzi",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "scrive-invece-di-chiedere",
-     "why": "turno 2: doveva chiedere, ha scritto create|lasagna|10.01|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|lasagna|10.01|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "create|lasagna|10.01|piatti di prova"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *10,01 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
+    "*Lasagna* è uno solo: quale prezzo metto, 10 o 20 €? Se sono più piatti, dimmi i nomi. Non ho ancora aggiunto nulla."
    ],
    "turns": [
     "aggiungi la lasagna",
     "uno deve essere a 10 euro e uno a 20"
    ],
-   "clarifications": 1,
+   "clarifications": 2,
    "unexpectedClarifications": 0,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.7
+    0.4,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3133,39 +2858,26 @@
    "id": "v-prezzi-002",
    "family": "v-prezzi",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "scrive-invece-di-chiedere",
-     "why": "turno 2: doveva chiedere, ha scritto create|lasagna|10.01|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|lasagna|10.01|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "create|lasagna|10.01|piatti di prova"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *10,01 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?",
+    "*Lasagna* è uno solo: quale prezzo metto, 10 o 20 €? Se sono più piatti, dimmi i nomi. Non ho ancora aggiunto nulla."
    ],
    "turns": [
     "aggiungi la lasagna",
     "10 euro e uno a 20"
    ],
-   "clarifications": 1,
+   "clarifications": 2,
    "unexpectedClarifications": 0,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.6
+    0.3,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3180,7 +2892,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?"
    ],
    "turns": [
     "aggiungi la lasagna"
@@ -3191,7 +2903,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3216,14 +2928,14 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    0.9
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-prezzi-005",
@@ -3245,44 +2957,40 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    0.9
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-prezzi-006",
    "family": "v-prezzi",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: price|tiramisù|20"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|tiramisù|20"
    ],
-   "actual": [],
+   "actual": [
+    "price|tiramisù|20"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *tiramisù*\n2. *la parmigiana*\n\nRispondi con il *numero* o il *nome*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *20,00 €*"
    ],
    "turns": [
     "metti la parmigiana e il tiramisù a 10 e 20 euro"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3292,29 +3000,19 @@
    "id": "v-prezzi-007",
    "family": "v-prezzi",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al pesto e lasagna|10.01|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova",
     "create|pasta al pesto|10|piatti di prova"
    ],
    "actual": [
-    "create|pasta al pesto e lasagna|10.01|piatti di prova"
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Pasta al pesto e lasagna*? Scrivimi il prezzo, per esempio «12 euro».",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto e lasagna* in *Piatti di prova*: *10,01 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Pasta al pesto* e *Lasagna*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "🎤 Aggiungi il piatto pasta al pesto e lasagna.",
@@ -3327,7 +3025,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3336,27 +3034,16 @@
    "id": "v-prezzi-008",
    "family": "v-prezzi",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: create|lasagna|20.01|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|lasagna|20|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|lasagna|20|piatti di prova"
    ],
    "actual": [
-    "create|lasagna|20.01|piatti di prova"
+    "create|lasagna|20|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,01 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
    ],
    "turns": [
     "aggiungi lasagna a 20 euro e uno"
@@ -3367,7 +3054,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3393,40 +3080,29 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    0.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-verbi-001",
    "family": "v-verbi",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|inserisce il piatto la parmigiana|12|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|parmigiana|12|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|parmigiana|12|primi"
    ],
    "actual": [
-    "create|inserisce il piatto la parmigiana|12|primi"
+    "create|parmigiana|12|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Inserisce il piatto la parmigiana* in *Primi*: *12,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Primi*: *12,00 €*"
    ],
    "turns": [
     "🎤 Inserisce il piatto la parmigiana a 12 euro nei primi"
@@ -3437,7 +3113,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3471,9 +3147,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    0.8,
-    1.2
+    1.3,
+    0.9,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3512,27 +3188,16 @@
    "id": "v-verbi-004",
    "family": "v-verbi",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|per favore la pasta alla norma|12|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|pasta alla norma|12|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta alla norma|12|primi"
    ],
    "actual": [
-    "create|per favore la pasta alla norma|12|primi"
+    "create|pasta alla norma|12|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Per favore la pasta alla norma* in *Primi*: *12,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta alla norma* in *Primi*: *12,00 €*"
    ],
    "turns": [
     "mi aggiungi per favore la pasta alla norma a 12 nei primi?"
@@ -3543,7 +3208,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3552,27 +3217,16 @@
    "id": "v-verbi-005",
    "family": "v-verbi",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|inserisce il piatto pasta al pesto|15|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|15|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta al pesto|15|piatti di prova"
    ],
    "actual": [
-    "create|inserisce il piatto pasta al pesto|15|piatti di prova"
+    "create|pasta al pesto|15|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Inserisce il piatto pasta al pesto* in *Piatti di prova*: *15,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*"
    ],
    "turns": [
     "inserisce il piatto pasta al pesto a 15"
@@ -3583,7 +3237,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3612,7 +3266,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3641,7 +3295,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3668,7 +3322,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3709,29 +3363,18 @@
    "id": "v-verbi-010",
    "family": "v-verbi",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|inserisce il piatto la parmigiana|12|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|parmigiana|12|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|parmigiana|12|primi"
    ],
    "actual": [
-    "create|inserisce il piatto la parmigiana|12|primi"
+    "create|parmigiana|12|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Inserisce il piatto la parmigiana*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria.",
-    "In quale categoria metto *Inserisce il piatto la parmigiana*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria.",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Inserisce il piatto la parmigiana* in *Primi*: *12,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Parmigiana*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria.",
+    "In quale categoria metto *Parmigiana*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Primi*: *12,00 €*"
    ],
    "turns": [
     "🎤 Inserisce il piatto la parmigiana.",
@@ -3744,9 +3387,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    0.9,
-    1.3
+    1.6,
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3756,39 +3399,30 @@
    "id": "v-asr-001",
    "family": "v-asr",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiarimento-mancante",
-     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
-    },
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: price|boh|40"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|boh|40"
    ],
-   "actual": [],
+   "actual": [
+    "price|boh|40"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
-    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «bu» intendi: boh: prezzo da 20,00 € a 40,00 €?\n\nRispondi *sì* o *no*. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *40,00 €*"
    ],
    "turns": [
     "🎤 Bu costa 40 euro",
     "sì"
    ],
    "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    18.6
+    1.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3818,7 +3452,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3828,20 +3462,16 @@
    "id": "v-asr-003",
    "family": "v-asr",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: promo|Che ne sacc|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "promo|Che ne sacc|12"
    ],
-   "actual": [],
+   "actual": [
+    "promo|Che ne sacc|12"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli"
    ],
    "turns": [
     "🎤 nel kenesac metti la promo a 12 euro"
@@ -3852,7 +3482,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3882,7 +3512,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3907,7 +3537,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3936,7 +3566,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3965,7 +3595,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3994,7 +3624,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -4024,7 +3654,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4033,32 +3663,29 @@
    "id": "v-asr-010",
    "family": "v-asr",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: description|boh|joe fa schifo, promo|Che ne sacc|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "description|boh|joe fa schifo",
     "promo|Che ne sacc|12"
    ],
-   "actual": [],
+   "actual": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «Allora nel piatto Bo cambia la descrizio» intendi: Piatto di verifica: in promo a 12,00 € (prezzo pieno 13,50 €), finché non la togli?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: descrizione «Joe fa schifo»\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli"
    ],
    "turns": [
     "🎤 Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4090,7 +3717,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.7,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -4123,7 +3750,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    0.6
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4155,7 +3782,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4180,7 +3807,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4199,7 +3826,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*",
-    "*Pasta al pesto*: *15,00 €* · disponibile"
+    "*Piatto di verifica*: *13,50 €* · disponibile\n*Che ne sacc*: *20,00 €* · disponibile\n*boh*: *20,00 €* · disponibile\n*pasta al ragù*: *12,00 €* · disponibile\n*la parmigiana*: *10,00 €* · disponibile\n*tiramisù*: *6,00 €* · disponibile\n*Pasta al pesto*: *15,00 €* · disponibile"
    ],
    "turns": [
     "aggiungi pasta al pesto a 15",
@@ -4207,15 +3834,15 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.6
+    0.7,
+    0.5
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-stato-006",
@@ -4243,8 +3870,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.5
+    1.1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4265,44 +3892,48 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    0.7
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "Manuel 17:26 (ok dal vivo)"
   },
   {
    "id": "v-stato-008",
    "family": "v-stato",
    "menu": "qa",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: delete|boh"
+    }
+   ],
    "expected": [
     "delete|boh"
    ],
-   "actual": [
-    "hidden|boh|true"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh».",
-    "*boh*: *20,00 €* · disponibile · nascosto"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
+    "*boh*: *20,00 €* · disponibile\n\nLa richiesta di prima aspetta ancora la tua risposta: *sì* per procedere, *no* per lasciar perdere."
    ],
    "turns": [
     "elimina boh",
     "❓ boh c'è ancora nel menu?"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.7
+    0.3,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4330,7 +3961,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2,
-    0.7
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4363,9 +3994,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.9,
-    0.5
+    0.7,
+    1.6,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4393,8 +4024,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    0.5
+    0.8,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4421,8 +4052,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.5
+    1.3,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4431,37 +4062,30 @@
    "id": "v-annulla-005",
    "family": "v-annulla",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: price|tiramisù|7"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|la parmigiana|12"
    ],
    "actual": [
-    "price|la parmigiana|12",
-    "price|tiramisù|7"
+    "price|la parmigiana|12"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n*tiramisù*: prezzo da 6,00 € a *7,00 €*",
-    "Cosa vuoi cambiare per *tiramisù*? Per esempio «tiramisù a 13» oppure «tiramisù è finito». Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 7,00 € a *6,00 €*"
    ],
    "turns": [
     "la parmigiana a 12 e il tiramisù a 7",
     "rimetti il tiramisù com'era"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.6
+    2,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4493,8 +4117,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    0.3
+    0.7,
+    0.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -4509,8 +4133,8 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *Che ne sacc*: prezzo da 20,00 € a *22,00 €*\n2. *la parmigiana*: prezzo da 10,00 € a *12,00 €*\n3. *tiramisù*: prezzo da 6,00 € a *7,00 €*\n4. *boh*: prezzo da 20,00 € a *25,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: prezzo da 20,00 € a *22,00 €*\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n*tiramisù*: prezzo da 6,00 € a *7,00 €*\n*boh*: prezzo da 20,00 € a *25,00 €*",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *la parmigiana*: prezzo da 10,00 € a *12,00 €*\n2. *tiramisù*: prezzo da 6,00 € a *7,00 €*\n3. *boh*: prezzo da 20,00 € a *25,00 €*\n4. *Che ne sacc*: prezzo da 20,00 € a *22,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n*tiramisù*: prezzo da 6,00 € a *7,00 €*\n*boh*: prezzo da 20,00 € a *25,00 €*\n*Che ne sacc*: prezzo da 20,00 € a *22,00 €*",
     "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Che ne sacc*: com’era prima\n*boh*: com’era prima\n*la parmigiana*: com’era prima\n*tiramisù*: com’era prima"
    ],
    "turns": [
@@ -4524,8 +4148,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    0.7,
+    2.2,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -4540,21 +4164,21 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *pasta al ragù*. Scrivimelo in una frase, per esempio «pasta al ragù costa 12» oppure «pasta al ragù è finito».",
-    "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*pasta al ragù*: com’era prima\n*pasta al pesto*: tolto (era stato aggiunto)\n*caviale*: tolto (era stato aggiunto)"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
     "annulla"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    0.2
+    2.6,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4592,36 +4216,27 @@
    "id": "v-misti-002",
    "family": "v-misti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: price|la parmigiana|12"
-    },
-    {
-     "sev": "BASSO",
-     "code": "risposta-non-pertinente",
-     "why": "risposta finale senza /6/"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|la parmigiana|12"
    ],
-   "actual": [],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *la parmigiana*\n2. *tiramisù*\n\nRispondi con il *numero* o il *nome*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n\n*tiramisù*: *6,00 €* · disponibile"
    ],
    "turns": [
     "metti la parmigiana a 12 e dimmi quanto costa il tiramisù"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4630,20 +4245,16 @@
    "id": "v-misti-003",
    "family": "v-misti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: available|la parmigiana|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|la parmigiana|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|la parmigiana|false"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*la parmigiana*: *10,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *finito*\n\n*Piatti finiti (1)*\n- la parmigiana"
    ],
    "turns": [
     "la parmigiana è finita, cosa altro è finito?"
@@ -4654,7 +4265,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4663,20 +4274,16 @@
    "id": "v-misti-004",
    "family": "v-misti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|tiramisù|7"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|tiramisù|7"
    ],
-   "actual": [],
+   "actual": [
+    "price|tiramisù|7"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*tiramisù*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*"
    ],
    "turns": [
     "il tiramisù costa ancora 6? se sì mettilo a 7"
@@ -4687,7 +4294,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4696,20 +4303,16 @@
    "id": "v-misti-005",
    "family": "v-misti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: hidden|boh|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|boh|true"
    ],
-   "actual": [],
+   "actual": [
+    "hidden|boh|true"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*boh*: *20,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
    ],
    "turns": [
     "🎤 Ciao cosa sai fare? intanto nascondi boh"
@@ -4720,7 +4323,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4752,7 +4355,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.2,
-    2.3
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4770,7 +4373,7 @@
     "hidden|boh|true"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- boh"
    ],
    "turns": [
     "nascondi boh e dimmi quali piatti sono nascosti"
@@ -4781,7 +4384,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4790,32 +4393,29 @@
    "id": "v-frasefissa-001",
    "family": "v-frasefissa",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|caviale|150|piatti di prova, create|pasta al pesto|15|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|caviale|150|piatti di prova",
     "create|pasta al pesto|15|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nper «aggiungi pasta al pesto a 15 e caviale a» intendi: pasta al ragù: prezzo da 12,00 € a 15,00 €?\n\nRispondi a ogni domanda (anche con le lettere, per esempio «A sì, B 2»): poi pubblico tutto insieme. *No* pubblica solo le parti chiare, *annulla* non pubblica niente. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
    ],
    "turns": [
     "aggiungi pasta al pesto a 15 e caviale a 150"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4827,14 +4427,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|caviale|150|speciali, create|pasta al pesto|15|primi, move|pasta al ragù|Primi, price|pasta al ragù|10"
+     "sev": "GRAVE",
+     "code": "modifica-sbagliata",
+     "why": "valore sbagliato: create|caviale|150|piatti di prova"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-sbagliata",
+     "why": "valore sbagliato: create|pasta al pesto|15|piatti di prova"
     },
     {
      "sev": "MEDIO",
-     "code": "frase-fissa",
-     "why": "turno 1: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »"
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: create|caviale|150|speciali, create|pasta al pesto|15|primi, move|pasta al ragù|Primi"
     }
    ],
    "expected": [
@@ -4843,23 +4448,27 @@
     "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
-   "actual": [],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere *pasta al pesto* manca *la categoria*.\nCategorie disponibili: Piatti di prova.\n\nRimandami la richiesta completa: «aggiungi tra piatti di prova: pasta al pesto, 12 euro».",
-    "Per aggiungere il piatto manca *il prezzo*.\n\nRimandami la richiesta completa: «aggiungi tra piatti di prova: pasta al ragù, 12 euro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*",
+    "*Tako · Verifica web*: ecco le modifiche.\n\n1. Nuova categoria *Primi*\n2. Nuova categoria *Speciali*\n3. *pasta al ragù*: spostato in *Primi*\n4. *pasta al pesto*: spostato in *Primi*\n5. *caviale*: spostato in *Speciali*\n6. *pasta al ragù*: prezzo da 10,00 € a *12,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
     "🎤 No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali."
    ],
-   "clarifications": 2,
-   "unexpectedClarifications": 2,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.2
+    2.6,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4889,7 +4498,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
-    "Cosa vuoi cambiare per *la parmigiana*? Per esempio «la parmigiana a 13» oppure «la parmigiana è finito». Non ho cambiato nulla."
+    "Elimino *la parmigiana* e *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla."
    ],
    "turns": [
     "la parmigiana e il tiramisù a 15",
@@ -4901,8 +4510,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.8
+    2,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4916,7 +4525,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*? Scrivimi il prezzo, per esempio «12 euro»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?"
    ],
    "turns": [
     "aggiungi lasagna"
@@ -4927,7 +4536,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4952,7 +4561,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4981,7 +4590,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4990,28 +4599,17 @@
    "id": "v-coerenza-001",
    "family": "v-coerenza",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|pasta al sugo nei primi pasti|12|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|pasta al sugo|12|primi pasti"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|pasta al sugo|12|primi pasti"
    ],
    "actual": [
-    "create|pasta al sugo nei primi pasti|12|piatti di prova"
+    "create|pasta al sugo|12|primi pasti"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?",
-    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al sugo nei primi pasti* in *Piatti di prova*: *12,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuova categoria *Primi pasti*",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al sugo* in *Primi pasti*: *12,00 €*"
    ],
    "turns": [
     "crea la categoria primi pasti",
@@ -5019,15 +4617,15 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    0.9,
+    1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-coerenza-002",
@@ -5055,7 +4653,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.7,
     1.3
    ],
    "recordedLlmMs": 0,
@@ -5085,7 +4683,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -5117,7 +4715,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    0.7,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -5137,7 +4735,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al sugo* in *Piatti di prova*: *12,00 €*",
-    "*Pasta al sugo* è già in *Piatti di prova*. Dimmi cosa vuoi cambiare, per esempio «Pasta al sugo costa 12 euro»."
+    "*Pasta al sugo* è già in *Piatti di prova*: non l’ho aggiunto di nuovo. Se vuoi cambiarlo, dimmi cosa."
    ],
    "turns": [
     "aggiungi pasta al sugo a 12",
@@ -5149,7 +4747,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    1.1,
     0.4
    ],
    "recordedLlmMs": 0,
@@ -5159,34 +4757,26 @@
    "id": "v-coerenza-006",
    "family": "v-coerenza",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|boh|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "hidden|boh|true"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *boh* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
     "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
    ],
    "turns": [
     "elimina boh",
     "rimetti boh"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.2
+    0.3,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5196,20 +4786,16 @@
    "id": "v-rinomina-001",
    "family": "v-rinomina",
    "menu": "qasporco",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: rename|Inserisce il piatto la parmigiana|Parmigiana di melanzane"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "rename|Inserisce il piatto la parmigiana|Parmigiana di melanzane"
    ],
-   "actual": [],
+   "actual": [
+    "rename|Inserisce il piatto la parmigiana|Parmigiana di melanzane"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Inserisce il piatto la parmigiana*: nuovo nome *Parmigiana di melanzane*"
    ],
    "turns": [
     "rinomina «Inserisce il piatto la parmigiana» in «Parmigiana di melanzane»"
@@ -5220,7 +4806,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5229,20 +4815,16 @@
    "id": "v-rinomina-002",
    "family": "v-rinomina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: rename|boh|Bollito misto"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "rename|boh|Bollito misto"
    ],
-   "actual": [],
+   "actual": [
+    "rename|boh|Bollito misto"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: nuovo nome *Bollito misto*"
    ],
    "turns": [
     "cambia il nome di boh in Bollito misto"
@@ -5253,7 +4835,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -5263,20 +4845,16 @@
    "id": "v-rinomina-003",
    "family": "v-rinomina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: rename|boh|Bollito"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "rename|boh|Bollito"
    ],
-   "actual": [],
+   "actual": [
+    "rename|boh|Bollito"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: nuovo nome *Bollito*"
    ],
    "turns": [
     "boh chiamalo Bollito"
@@ -5287,7 +4865,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5296,21 +4874,18 @@
    "id": "v-rinomina-004",
    "family": "v-rinomina",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: move|Burger classico|Speciali, move|Nuovo burger|Speciali"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "move|Burger classico|Speciali",
     "move|Nuovo burger|Speciali"
    ],
-   "actual": [],
+   "actual": [
+    "move|Burger classico|Speciali",
+    "move|Nuovo burger|Speciali"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nCategoria *Proposte*: nuovo nome *Speciali*"
    ],
    "turns": [
     "rinomina la categoria Proposte in Speciali"
@@ -5321,7 +4896,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5330,53 +4905,45 @@
    "id": "v-rinomina-005",
    "family": "v-rinomina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "richiesta-persa",
-     "why": "richiesta persa: rename|Piatto di verifica|Piatto del giorno"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "rename|Piatto di verifica|Piatto del giorno"
    ],
-   "actual": [],
+   "actual": [
+    "rename|Piatto di verifica|Piatto del giorno"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: nuovo nome *Piatto del giorno*"
    ],
    "turns": [
     "il piatto di verifica da oggi si chiama Piatto del giorno"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": false
   },
   {
    "id": "v-rinomina-006",
    "family": "v-rinomina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: rename|boh|bollito"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "rename|boh|bollito"
    ],
-   "actual": [],
+   "actual": [
+    "rename|boh|Bollito"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *nome del piatto* si cambia dalla dashboard.\n\nQui posso cambiare la descrizione: «nella caprese scrivi: …»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: nuovo nome *Bollito*"
    ],
    "turns": [
     "🎤 Cambia il nome del piatto boh, mettici bollito."
@@ -5387,7 +4954,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false

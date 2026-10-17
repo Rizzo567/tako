@@ -11,7 +11,7 @@ import {categoryItems} from './twilio-menu-sales.js'
 
 // 17/10 (correzioni A1/A3): `names` = «X e Y» che può essere due piatti (`split` null = da chiedere, true = due, false = uno solo),
 // `prices` = prezzo per ciascuno; `sectionName` = categoria chiesta che nel menu non c'è (si chiede dove metterlo).
-export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null,names?:string[],split?:boolean|null,prices?:(number|null)[],sectionName?:string|null,newSection?:boolean}
+export type CreateDraft={kind:'create_draft',name:string|null,price:number|null,sectionId:string|null,names?:string[],split?:boolean|null,prices?:(number|null)[],sectionName?:string|null,newSection?:boolean,special?:boolean}
 export type CreateParse={name:string|null,price:number|null,sectionId:string|null,unknownSection:boolean,sectionName?:string|null,sectionNew?:boolean}
 
 const waNewFold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
@@ -259,20 +259,35 @@ function pairedCreate(text:string,sections:SectionRef[],refs:{id?:string,name:st
  const d:CreateDraft={kind:'create_draft',name:c.name,price:null,sectionId:c.sectionId,names,split:true,prices:[Number(m[2]!.replace(',','.')),Number(m[3]!.replace(',','.'))],...(c.sectionName?{sectionName:c.sectionName}:{})}
  return multiAnswer('',d,sections,refs)??{kind:'ask',draft:d,text:multiQuestion(d,sections)}}
 
-const NAME_BAD=/\b(?:quanto|quanti|costa|costano|prezzo|euro|cosa|quale|quali|dimmi|finit\w*|esaurit\w*|nascond\w*|togli\w*|metti\w*|cambia\w*|annulla|aspetta|elimina\w*|cancella\w*)\b/
+const specialPrice=(t:string):number|null=>{const m=waNewFold(t).replace(/[^a-z0-9,.]+/g,' ').trim().match(/^(?:(?:a|costa|sono|fa|lo metto|mettilo|metti)\s+)*(\d{1,3}(?:[.,]\d{1,2})?)(?:\s*euro)?$/);return m?Number(m[1]!.replace(',','.')):null}
+function specialParse(text:string):{name:string,price:number|null}|null{
+ const t=text.replace(/€/g,' euro ').replace(/\s+/g,' ').trim()
+ const m=t.match(/^(?:(?:oggi|stasera|per oggi|domani)[\s,]+)?(?:(?:il|come)\s+)?(?:piatto del giorno|speciale del giorno|fuori menu(?:\s+(?:di\s+)?oggi)?)(?:\s+di\s+oggi)?\s*(?:[:,\-]|\s+(?:è|e|sarà|sono)\s+)?\s*(.+?)\s*$/i);if(!m)return null
+ let rest=m[1]!.replace(/[.!]+$/,'').trim(),price:number|null=null
+ const pm=rest.match(/^(.*?)(?:,)?\s+(?:a|da|costa|che costa)\s+(\d{1,3}(?:[.,]\d{1,2})?)(?:\s*euro)?$/i);if(pm){rest=pm[1]!.trim();price=Number(pm[2]!.replace(',','.'))}
+ rest=rest.replace(/^(?:(?:abbiamo|c[’']?è|ce|ci sono|facciamo|faccio|ho|propongo|proponiamo|serviamo|c'è)\s+)?(?:(?:il|lo|la|i|gli|le|un|una|uno)\s+|l['’]\s*)?/i,'').trim()
+ if(!rest||rest.split(' ').length>7||NAME_BAD.test(waNewFold(rest))||/\?|\d/.test(rest))return null
+ return{name:rest.charAt(0).toUpperCase()+rest.slice(1),price}}
+const NAME_BAD=/\b(?:lascia\w*|niente|nulla|importa|annulla\w*|quanto|quanti|costa|costano|prezzo|euro|cosa|quale|quali|dimmi|finit\w*|esaurit\w*|nascond\w*|togli\w*|metti\w*|cambia\w*|annulla|aspetta|elimina\w*|cancella\w*)\b/
 // Risposte di conferma: mai il nome di un piatto (A3.3, «sì creala» era diventato il piatto «Creala»).
 const YES=/^(?:(?:si|ok|okay|va bene|vai|certo|esatto|giusto|perfetto|d accordo|confermo|procedi)\s*)+(?:(?:creala|crealo|creale|creali|crea|falla|fallo|fai|aggiungila|aggiungilo|aggiungi|mettila|mettilo|pure)\s*)*$|^(?:creala|crealo|crea|crea la categoria|fallo|falla)$/
 /** Decide se il messaggio è un'aggiunta (verbo iniziale) o la risposta a una domanda di aggiunta in attesa.
  * Con una bozza in attesa, un messaggio riconosciuto come altro comando (finito, nascondi…) non è una risposta;
  * un «cambio prezzo» sì (è il caso «… che costa 12 euro» del vocale). */
 export function createStep(text:string,draft:CreateDraft|null,sections:SectionRef[],refs:{id?:string,name:string,sectionId?:string|null,hidden?:boolean}[],otherIntent:(t:string)=>{kind:string}|null):CreateStep{
+ // A7.12 (piatto del giorno): «(oggi) piatto del giorno: risotto alla zucca a 14» è un piatto del giorno, non un prezzo da
+ // indovinare per suono; senza prezzo si chiede quanto costa, e il numero che arriva dopo completa la stessa bozza.
+ {const sp=specialParse(text);if(sp){if(sp.price!==null)return{kind:'actions',actions:[{kind:'special',name:sp.name,price:sp.price,description:null}]};const d:CreateDraft={kind:'create_draft',name:sp.name,price:null,sectionId:null,special:true};return{kind:'ask',draft:d,text:`Quanto costa *${sp.name}*, il piatto del giorno?`}}
+  if(draft?.special&&draft.name){const v=specialPrice(text);if(v!==null)return{kind:'actions',actions:[{kind:'special',name:draft.name,price:v,description:null}]};return{kind:'none'}}}
  const verbFirst=startsWithCreate(text)
  if(verbFirst&&createCompound(text))return pairedCreate(text,sections,refs)??{kind:'none'}
  const folded=waNewFold(text).replace(/[^a-z0-9]+/g,' ').trim()
  if(!verbFirst&&draft&&YES.test(folded)){if(draft.sectionName&&!draft.sectionId){const ok:CreateDraft={...draft,newSection:true};return newSectionStep(ok,sections)??{kind:'ask',draft:ok,text:createQuestion(ok,sections)}};return{kind:'ask',draft,text:createQuestion(draft,sections)}}
  // Bozza con due nomi («X e Y»): «sono due piatti», «uno solo», «10 e 20», «uno a 10 e uno a 20», «la prima 10 la seconda 20».
  if(!verbFirst&&draft?.names?.length&&draft.split!==false&&!waNewNotCreate.test(folded)){const m=multiAnswer(text,draft,sections,refs);if(m)return m}
- if(!verbFirst){if(!draft||waNewNotCreate.test(folded))return{kind:'none'};const other=otherIntent(text);if(other&&other.kind!=='price')return{kind:'none'}}
+ if(!verbFirst){if(!draft||waNewNotCreate.test(folded))return{kind:'none'};const other=otherIntent(text);if(other&&other.kind!=='price')return{kind:'none'}
+  // A7.5: «il tiramisù a 7» con la bozza delle trofie in sospeso è un cambio di prezzo del tiramisù, non il prezzo delle trofie.
+  if(other&&(other as any).target&&refs.length&&findDishes(String((other as any).target),refs as any).length)return{kind:'none'}}
  // «boh», «non so» in risposta a «Come si chiama?»: non è un nome, la domanda resta.
  if(!verbFirst&&draft&&!draft.name&&/^(?:boh|bho|mah|non so|non lo so|boh non so|non saprei|vedi tu|decidi tu)$/.test(waNewFold(text).replace(/[^a-z ]+/g,' ').trim()))return{kind:'ask',draft,text:createQuestion(draft,sections)}
  // Una sola parte di una bozza con due prezzi detti per un piatto solo («uno a 10 e uno a 20» per la lasagna): si chiede.
@@ -330,6 +345,8 @@ export function followUp(text:string,last:LastApplied,refs:MenuRef[],ageMs=0,tod
   return undo}
  if(ageMs>600000)return null
  if(last.actions.length!==1)return null;const prev=last.actions[0]!;if(!('id' in prev))return null
+ // A7.13 (suono/anzino, Groq giù): «torna a 13», «riportala a 13» dopo un cambio di prezzo = quel piatto a 13.
+ {const back=t.match(/^(?:(?:no|anzi|scusa|ok)\s+)*(?:torna|tornala|tornalo|rimettila|rimettilo|riportala|riportalo|riporta|rimetti)\s+(?:a\s+)?(\d{1,3}(?:\.\d{1,2})?)(?:\s*euro)?$/);if(back&&prev.kind==='price')return[{...prev,price:Number(back[1])} as MenuAction]}
  const lead=t.match(/^((?:(?:no|scusa|scusami|anzi|ops|pardon|aspetta|ancora|errore|sbagliato|volevo dire|intendevo|e|anche|pure|era|non)\s+)+)(.*)$/)
  if(!lead)return null
  const words=lead[1]!.trim().split(/\s+/),also=words.includes('anche')||words.includes('pure'),correction=words.some(w=>['no','scusa','scusami','anzi','ops','pardon','errore','sbagliato','volevo','intendevo','era'].includes(w))

@@ -2,29 +2,29 @@
 
 | Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
 |---|---|---|---|---|---|
-| coppie | 30 | 21 | 1 | 0 | 8 |
-| prezzi | 32 | 17 | 1 | 0 | 14 |
+| coppie | 30 | 26 | 0 | 0 | 4 |
+| prezzi | 32 | 20 | 0 | 0 | 12 |
 | centesimi | 25 | 15 | 0 | 0 | 10 |
-| nomi | 31 | 21 | 7 | 0 | 3 |
-| deixis | 35 | 13 | 7 | 2 | 15 |
-| anzino | 30 | 9 | 14 | 0 | 7 |
-| misti | 30 | 16 | 8 | 0 | 6 |
-| asr | 50 | 40 | 4 | 4 | 6 |
-| parole | 22 | 10 | 0 | 0 | 12 |
-| vocali | 25 | 6 | 1 | 0 | 18 |
-| sospeso | 25 | 15 | 5 | 0 | 5 |
-| suono | 25 | 16 | 3 | 0 | 6 |
-| code | 31 | 10 | 20 | 0 | 1 |
-| relativi | 20 | 11 | 2 | 0 | 7 |
+| nomi | 31 | 28 | 2 | 0 | 1 |
+| deixis | 35 | 21 | 3 | 0 | 11 |
+| anzino | 30 | 12 | 11 | 0 | 7 |
+| misti | 30 | 22 | 0 | 0 | 8 |
+| asr | 50 | 44 | 0 | 0 | 6 |
+| parole | 22 | 11 | 0 | 0 | 11 |
+| vocali | 25 | 7 | 1 | 0 | 17 |
+| sospeso | 25 | 18 | 4 | 0 | 3 |
+| suono | 25 | 19 | 1 | 0 | 5 |
+| code | 31 | 30 | 0 | 0 | 1 |
+| relativi | 20 | 14 | 0 | 0 | 6 |
 | cent2 | 14 | 3 | 0 | 0 | 11 |
-| misti2 | 18 | 2 | 12 | 2 | 4 |
+| misti2 | 18 | 8 | 0 | 0 | 10 |
 | ordinali | 8 | 0 | 6 | 0 | 2 |
-| sospeso2 | 15 | 10 | 5 | 0 | 0 |
-| lev1 | 14 | 11 | 2 | 0 | 1 |
-| lasciastare | 10 | 4 | 3 | 0 | 3 |
+| sospeso2 | 15 | 13 | 0 | 0 | 2 |
+| lev1 | 14 | 12 | 1 | 0 | 1 |
+| lasciastare | 10 | 4 | 0 | 0 | 6 |
 | ipotesi | 8 | 8 | 0 | 0 | 0 |
-| toglieuro | 10 | 6 | 3 | 0 | 1 |
-| TOTALE | 508 | 264 | 104 | 8 | 140 |
+| toglieuro | 10 | 9 | 0 | 0 | 1 |
+| TOTALE | 508 | 344 | 29 | 0 | 135 |
 
 ## Fallimenti
 
@@ -40,26 +40,6 @@
   - turni: la cacio e pepe a 11 e la gricia a 12
   - atteso: price|Cacio e pepe|11, price|Gricia|12 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Pasta al ragù*, *Cacio e pepe*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-coppie-011** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|gnocchi e tagliatelle|10|primi · GRAVE non-applicato: non applicato: create|gnocchi|10|primi, create|tagliatelle|10|primi
-  - turni: aggiungi nei primi gnocchi e tagliatelle a 10
-  - atteso: create|gnocchi|10|primi, create|tagliatelle|10|primi · ottenuto: create|gnocchi e tagliatelle|10|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Gnocchi e tagliatelle* in *Primi*: *10,00 €*»
-- **adv-coppie-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · MEDIO senza-contesto: turno 3
-  - turni: aggiungi ravioli e cappelletti ⏎ sono due ⏎ 8 tutti e due
-  - atteso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto » ⏎ «Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.» ⏎ «A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
-- **adv-coppie-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · MEDIO senza-contesto: turno 3
-  - turni: aggiungi ravioli e cappelletti ⏎ due piatti ⏎ entrambi a 8
-  - atteso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto » ⏎ «Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.» ⏎ «A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
-- **adv-coppie-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|ravioli e cappelletti|14|piatti di prova
-  - turni: aggiungi ravioli e cappelletti ⏎ uno solo, a 14
-  - atteso: create|ravioli e cappelletti|14|piatti di prova · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto » ⏎ «*Ravioli* e *Cappelletti*: un piatto solo a 14 € o due piatti separati? Non ho ancora aggiunto nulla.»
-- **adv-coppie-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova · MEDIO senza-contesto: turno 3
-  - turni: aggiungi tortelli e agnolotti ⏎ sono due piatti ⏎ tutti e due a 10
-  - atteso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tortelli* e *Agnolotti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto n» ⏎ «Quanto costano *Tortelli* e *Agnolotti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.» ⏎ «A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
 - **adv-coppie-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13, price|Tagliata di tonno|21
   - turni: carbonara e tagliata di tonno a 13 e 21
   - atteso: price|Carbonara|13, price|Tagliata di tonno|21 · ottenuto: nessuna modifica
@@ -92,18 +72,6 @@
   - turni: carbonara 13 e amatriciana uguale
   - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Carbonara*, *Amatriciana*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-prezzi-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12, price|Carbonara|13
-  - turni: carbonara 13 e l'amatriciana un euro in meno
-  - atteso: price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Amatriciana*, *Gricia*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-prezzi-013** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: price|Gricia|1 · GRAVE non-applicato: non applicato: price|Gricia|12
-  - turni: aumenta la gricia di 1 euro
-  - atteso: price|Gricia|12 · ottenuto: price|Gricia|1
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: prezzo da 11,00 € a *1,00 €*»
-- **adv-prezzi-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
-  - turni: abbassa la tagliata di 2 euro
-  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tagliata*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-prezzi-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra piccola|3.5
   - turni: la birra media a 5 e la piccola a 3 e 50
   - atteso: price|Birra piccola|3.5 · ottenuto: nessuna modifica
@@ -127,7 +95,7 @@
 - **adv-centesimi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
   - turni: carbonara dodici e cinquanta
   - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-centesimi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
   - turni: carbonara dodici euro e mezzo
   - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
@@ -135,15 +103,15 @@
 - **adv-centesimi-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
   - turni: la carbonara dodici virgola cinque
   - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-centesimi-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|17.5
   - turni: il polpo diciassette e cinquanta
   - atteso: price|Polpo alla griglia|17.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpette al sugo*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-centesimi-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|3.5
   - turni: la bomba tre e cinquanta
   - atteso: price|Bomba|3.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Bomba*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-centesimi-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|7.9
   - turni: il tiramisù sette euro e novanta centesimi
   - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
@@ -164,10 +132,6 @@
   - turni: la margherita a sette e cinquanta e la marinara a sei e cinquanta
   - atteso: price|Margherita|7.5, price|Marinara|6.5 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Marinara*, *Bufala*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-nomi-003** [GRAVE] GRAVE non-applicato: non applicato: create|paccheri alla genovese|13|primi
-  - turni: nei primi aggiungimi i paccheri alla genovese a 13, ok?
-  - atteso: create|paccheri alla genovese|13|primi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del g»
 - **adv-nomi-004** [GRAVE] GRAVE richiesta-persa: richiesta persa: create|tagliere di salumi|15|antipasti
   - turni: allora tipo aggiungi negli antipasti il tagliere di salumi a 15 diciamo
   - atteso: create|tagliere di salumi|15|antipasti · ottenuto: nessuna modifica
@@ -176,33 +140,9 @@
   - turni: aggiungi nei dolci la torta caprese a 6 e già che ci sei metti il tiramisù a 7
   - atteso: create|torta caprese|6|dolci, price|Tiramisù|7 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-nomi-008** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|tagliatelle ai funghi porcini ok grazie ciao|14|primi · GRAVE non-applicato: non applicato: create|tagliatelle ai funghi porcini|14|primi
-  - turni: aggiungi nei primi le tagliatelle ai funghi porcini a 14 ok grazie ciao
-  - atteso: create|tagliatelle ai funghi porcini|14|primi · ottenuto: create|tagliatelle ai funghi porcini ok grazie ciao|14|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Tagliatelle ai funghi porcini ok grazie ciao* in *Primi*: *14,00 €*»
-- **adv-nomi-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|panna cotta|5|dolci
-  - turni: aggiungi un dolce ⏎ va bene ⏎ panna cotta, 5
-  - atteso: create|panna cotta|5|dolci · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. In quale categoria metto il piatto? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.» ⏎ «In quale categoria metto il piatto? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.» ⏎ «In quale categoria metto *Panna cotta*? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.»
-- **adv-nomi-026** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|al menu la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: ciao, vorrei aggiungere al menu la burrata a 9
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|al menu la burrata|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Al menu la burrata* in *Piatti di prova*: *9,00 €*»
-- **adv-nomi-027** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata che ne dici|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 che ne dici?
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata che ne dici|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata che ne dici* in *Piatti di prova*: *9,00 €*»
 - **adv-nomi-029** [GRAVE] GRAVE richiesta-persa: richiesta persa: create|burrata|9|piatti di prova
   - turni: fammi un favore, aggiungi la burrata a 9 euro e basta
   - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **adv-nomi-030** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata al menu del pranzo|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 al menu del pranzo
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata al menu del pranzo|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata al menu del pranzo* in *Piatti di prova*: *9,00 €*»
-- **adv-nomi-031** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: in carta vini aggiungi il prosecco calice a 5
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
 - **adv-deixis-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Amatriciana|true, hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
   - turni: carbonara 13 ⏎ amatriciana 12 ⏎ quei due nascondili
@@ -220,18 +160,10 @@
   - turni: nascondi carbonara, gricia e amatriciana ⏎ rimettili tutti tranne la gricia
   - atteso: hidden|Gricia|true · ottenuto: hidden|Amatriciana|true, hidden|Carbonara|true, hidden|Gricia|true
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *nascosto* dal menu *Gricia*: *nascosto* dal menu *Amatriciana*: *nascosto* dal » ⏎ «Quale piatto intendi: *Carbonara*, *Amatriciana*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-deixis-006** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13
-  - turni: la carbonara a 13 ⏎ no aspetta, il prezzo di prima era giusto
-  - atteso: nessuna modifica · ottenuto: price|Carbonara|13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-deixis-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13
   - turni: la carbonara a 13 ⏎ e anche l'amatriciana
   - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: price|Carbonara|13
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-deixis-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13, price|Gricia|12
-  - turni: ❓ quanto costano carbonara e gricia? ⏎ alza entrambi di un euro
-  - atteso: price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Pasta al sugo*: *9,00 €* · disponibile *Carbonara*: *12,00 €* · disponibile *Gricia*: *11,00 €* · disponibile *Marinara*: *6,00 €» ⏎ «Quale piatto intendi: *Carbonara*, *Gricia*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
 - **adv-deixis-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
   - turni: ❓ quanto costa la tagliata? ⏎ mettila a 20
   - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
@@ -240,38 +172,14 @@
   - turni: ❓ quanto costa la tagliata? ⏎ ❓ e quella di tonno? ⏎ mettile tutte e due a 19
   - atteso: price|Tagliata di tonno|19, price|Tagliata|19 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tagliata*: *18,00 €* · disponibile» ⏎ «*Bruschetta*: *5,00 €* · disponibile *Tagliata di tonno*: *20,00 €* · disponibile» ⏎ «Quale piatto intendi: *Tagliata di tonno*, *Pollo al curry*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-deixis-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Gricia|false, hidden|Pasta al sugo|false
-  - turni: ❓ quali piatti sono nascosti? ⏎ rimettili tutti
-  - atteso: hidden|Gricia|false, hidden|Pasta al sugo|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Piatti nascosti (2)* - Gricia - Pasta al sugo» ⏎ «Cosa vuoi cambiare per *Supplì*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-deixis-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|true, available|Tiramisù|true
-  - turni: ❓ cosa è finito? ⏎ sono tornati entrambi
-  - atteso: available|Carbonara|true, available|Tiramisù|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Piatti finiti (2)* - Carbonara - Tiramisù» ⏎ «Ti riferisci a *Carbonara* o *Tiramisù*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla.»
-- **adv-deixis-017** [GRAVE] GRAVE non-applicato: non applicato: featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+- **adv-deixis-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
   - turni: carbonara 13 ⏎ gricia 12 ⏎ amatriciana 12 ⏎ il primo e l'ultimo mettili in evidenza
-  - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: featured|Amatriciana|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «*Confermato.* Ho aggiornato il menu. *Amatriciana*: *in evidenza*»
-- **adv-deixis-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
-  - turni: la pasta a 10 ⏎ quella al sugo
-  - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «Cosa vuoi cambiare per *Pasta al sugo*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-deixis-019** [MEDIO] MEDIO opzioni-non-leggibili: al turno 1 il bot non ha mostrato un'opzione n.2 · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: la pasta a 10 ⏎ la seconda
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «Cosa vuoi cambiare per *Pasta al sugo*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Quale piatto intendi: *Amatriciana*, *Carbonara*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
 - **adv-deixis-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta al pesto|true
   - turni: nascondi la pasta ⏎ tutte
   - atteso: hidden|Pasta al pesto|true · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Pasta al pesto*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Ti riferisci a *Pasta al sugo* o *Pasta al pesto*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla.»
-- **adv-deixis-021** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Torta della nonna|7
-  - turni: la torta a 7 ⏎ quella della nonna
-  - atteso: price|Torta della nonna|7 · ottenuto: price|Torta della nonna|7
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*» ⏎ «Cosa vuoi cambiare per *Torta della nonna*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-deixis-022** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Torta della nonna|7 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|7 · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tortino al cioccolato|7
-  - turni: la torta a 7 ⏎ il tortino
-  - atteso: price|Tortino al cioccolato|7 · ottenuto: price|Torta della nonna|7
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*» ⏎ «Cosa vuoi cambiare per *Torta della nonna*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-deixis-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Tagliata di tonno|true
   - turni: nascondi la tagliata ⏎ anche quella di tonno
   - atteso: hidden|Tagliata di tonno|true, hidden|Tagliata|true · ottenuto: hidden|Tagliata|true
@@ -300,10 +208,6 @@
   - turni: carbonara 13 ⏎ anzi no, 14 ⏎ no scusa avevi ragione 13
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-anzino-003** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
-  - turni: nascondi la gricia ⏎ anzi no
-  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: *nascosto* dal menu» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-anzino-005** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Carbonara|false · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Amatriciana|false
   - turni: la carbonara è finita ⏎ no l'amatriciana
   - atteso: available|Amatriciana|false · ottenuto: available|Carbonara|false
@@ -344,10 +248,6 @@
   - turni: la tagliata a 20 ⏎ anzi no, a 19, e mettila in evidenza
   - atteso: featured|Tagliata|true, price|Tagliata|19 · ottenuto: price|Tagliata|20
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: prezzo da 18,00 € a *20,00 €*» ⏎ «Cosa vuoi cambiare per *Tagliata*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-anzino-021** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Carbonara|false
-  - turni: la carbonara è finita ⏎ no scusa, è finita la gricia, la carbonara c'è
-  - atteso: available|Gricia|false · ottenuto: available|Carbonara|false, available|Gricia|false
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *finito*» ⏎ «*Confermato.* Ho aggiornato il menu. *Gricia*: *finito*»
 - **adv-anzino-022** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Bufala|true · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Bufala|true
   - turni: nascondi la bufala ⏎ anzi no, mettila in evidenza
   - atteso: featured|Bufala|true · ottenuto: hidden|Bufala|true
@@ -368,10 +268,6 @@
   - turni: la birra media a 6 ⏎ no la piccola
   - atteso: price|Birra piccola|6 · ottenuto: price|Birra media|6
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Birra media*: prezzo da 5,00 € a *6,00 €*» ⏎ «Cosa vuoi cambiare per *Birra piccola*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-anzino-029** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Tiramisù|true
-  - turni: nascondi il tiramisù ⏎ anzi no, è solo finito
-  - atteso: available|Tiramisù|false · ottenuto: available|Tiramisù|false, hidden|Tiramisù|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tiramisù*: *nascosto* dal menu» ⏎ «*Confermato.* Ho aggiornato il menu. *Tiramisù*: *finito*»
 - **adv-anzino-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12, price|Gricia|13
   - turni: carbonara a 13 e gricia a 12 ⏎ no, al contrario
   - atteso: price|Carbonara|12, price|Gricia|13 · ottenuto: nessuna modifica
@@ -379,15 +275,11 @@
 - **adv-misti-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
   - turni: metti la carbonara a 13, e la gricia quanto la tengo?
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Pasta e ceci*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-misti-002** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|false
-  - turni: la tagliata è finita, il polpo c'è ancora?
-  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tiramisù*: *6,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile *Polpo alla griglia*: *16,00 €* · disponibile»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-misti-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Bomba|true
   - turni: nascondi la bomba. quanti piatti ho nei primi?
   - atteso: hidden|Bomba|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Bomba*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-misti-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: la carbonara costa 12? se sì mettila a 13
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
@@ -400,34 +292,14 @@
   - turni: quanto costa la gricia? e mettimi l'amatriciana a 12
   - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-misti-012** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+- **adv-misti-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: ciao! la carbonara a 13 grazie, come va?
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tortino al cioccolato*: *7,00 €* · disponibile *Carbonara*: *12,00 €* · disponibile *Marinara*: *6,00 €* · disponibile»
-- **adv-misti-013** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «ho alzato la carbonara»»
-  - turni: ❓ ho alzato la carbonara a 13?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «ho alzato la carbonara».* Scrivi il nome come appare nel menu.»
-- **adv-misti-014** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «hai messo la carbonara»»
-  - turni: ❓ hai messo la carbonara a 13?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «hai messo la carbonara».* Scrivi il nome come appare nel menu.»
-- **adv-misti-015** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «perche la carbonara e»»
-  - turni: ❓ perché la carbonara è a 12?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «perche la carbonara e».* Scrivi il nome come appare nel menu.»
-- **adv-misti-023** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «posso mettere la bomba»»
-  - turni: ❓ posso mettere la bomba a 5?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «posso mettere la bomba».* Scrivi il nome come appare nel menu.»
-- **adv-misti-025** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «come faccio a mettere la carbonara»»
-  - turni: ❓ come faccio a mettere la carbonara a 13?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «come faccio a mettere la carbonara».* Scrivi il nome come appare nel menu.»
-- **adv-misti-029** [GRAVE] GRAVE non-applicato: non applicato: available|Polpo alla griglia|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-misti-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
   - turni: il polpo è finito, e la tagliata di tonno quanto costa?
   - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Bombette pugliesi*: *9,00 €* · disponibile *Tagliata di tonno*: *20,00 €* · disponibile *Polpo alla griglia*: *16,00 €* · disponi»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-misti-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Polpo alla griglia|true · BASSO risposta-non-pertinente: risposta finale senza /gricia/i
   - turni: metti in evidenza il polpo e dimmi cosa è finito
   - atteso: featured|Polpo alla griglia|true · ottenuto: nessuna modifica
@@ -436,34 +308,18 @@
   - turni: 🎤 la carbonata a 13
   - atteso: nessuna modifica · ottenuto: price|Carbonara|13
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*»
-- **adv-asr-009** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Bomba|5 · GRAVE modifica-non-richiesta: non richiesto: price|Bomba|5
-  - turni: 🎤 la bombe a 5
-  - atteso: nessuna modifica · ottenuto: price|Bomba|5
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bomba*: prezzo da 4,00 € a *5,00 €*»
 - **adv-asr-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
   - turni: 🎤 pasta alla gricia a 12
   - atteso: price|Gricia|12 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-asr-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|17
-  - turni: 🎤 il polpo a 17
-  - atteso: price|Polpo alla griglia|17 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-asr-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pollo al curry|15
-  - turni: 🎤 il pollo a 15
-  - atteso: price|Pollo al curry|15 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Pollo al curry*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-asr-021** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Polpo alla griglia|15 · GRAVE modifica-non-richiesta: non richiesto: price|Polpo alla griglia|15
+- **adv-asr-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
   - turni: 🎤 il pollo alla griglia a 15
-  - atteso: nessuna modifica · ottenuto: price|Polpo alla griglia|15
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Polpo alla griglia*: prezzo da 16,00 € a *15,00 €*»
-- **adv-asr-022** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Pollo al curry|15 · GRAVE modifica-non-richiesta: non richiesto: price|Pollo al curry|15
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+- **adv-asr-022** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
   - turni: 🎤 il polpo al curry a 15
-  - atteso: nessuna modifica · ottenuto: price|Pollo al curry|15
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Pollo al curry*: prezzo da 14,00 € a *15,00 €*»
-- **adv-asr-025** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Torta della nonna|7 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|7
-  - turni: 🎤 la torta a 7
-  - atteso: nessuna modifica · ottenuto: price|Torta della nonna|7
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*»
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
 - **adv-asr-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Marinara|7
   - turni: 🎤 la marinera 7
   - atteso: price|Marinara|7 · ottenuto: nessuna modifica
@@ -479,15 +335,11 @@
 - **adv-parole-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|15.9
   - turni: la carbonara quindici e novanta
   - atteso: price|Carbonara|15.9 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-parole-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|7.5
   - turni: la margherita sette e mezzo
   - atteso: price|Margherita|7.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Marinara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-parole-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|16.5
-  - turni: il polpo a sedici euro e cinquanta
-  - atteso: price|Polpo alla griglia|16.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Margherita*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-parole-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|24
   - turni: la tagliata ventiquattro euro
   - atteso: price|Tagliata|24 · ottenuto: nessuna modifica
@@ -580,10 +432,6 @@
   - turni: 🎤 allora, uno: la carbonara a tredici. due: la gricia finita. tre: niente
   - atteso: available|Gricia|false, price|Carbonara|13 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Carbonara*, *Gricia*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-vocali-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
-  - turni: 🎤 aspetta che controllo... sì, la carbonara è finita, e il tiramisù... no il tiramisù c'è
-  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Carbonara* 2. *Tiramisù* Rispondi con il *numero* o il *nome*.»
 - **adv-vocali-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|11.5
   - turni: 🎤 allora metti la gricia a dodici no dico a undici e cinquanta
   - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
@@ -596,10 +444,6 @@
   - turni: 🎤 mi raccomando non toccare la carbonara, solo la gricia a tredici
   - atteso: price|Gricia|13 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-sospeso-004** [GRAVE] GRAVE richiesta-persa: richiesta persa: price|Tagliata|19
-  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ la tagliata a 19
-  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Osteria dei Simili*: ecco le modifiche. 1. *Carbonara*: *nascosto* dal menu 2. *Gricia*: *nascosto* dal menu 3. *Amatriciana*: *n» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
 - **adv-sospeso-007** [GRAVE] GRAVE richiesta-persa: richiesta persa: price|Birra piccola|4, price|Torta della nonna|7
   - turni: la torta a 7 e la birra a 4 ⏎ la nonna e la piccola
   - atteso: price|Birra piccola|4, price|Torta della nonna|7 · ottenuto: nessuna modifica
@@ -616,38 +460,18 @@
   - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ la nonna
   - atteso: price|Carbonara|13, price|Torta della nonna|7 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Amatriciana*, *Acqua*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.» ⏎ «Ti riferisci a *Carbonara*, *Amatriciana* o *Torta della nonna*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla.»
-- **adv-sospeso-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto alla zucca|14|piatto del giorno
+- **adv-sospeso-012** [GRAVE] GRAVE non-applicato: non applicato: create|risotto alla zucca|14|piatto del giorno
   - turni: piatto del giorno: risotto alla zucca a 14 ⏎ la carbonara a 13 ⏎ annulla
   - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
-- **adv-sospeso-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE richiesta-persa: richiesta persa: create|risotto ai funghi|14|piatto del giorno
-  - turni: oggi piatto del giorno risotto ai funghi ⏎ 14
-  - atteso: create|risotto ai funghi|14|piatto del giorno · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **adv-sospeso-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto ai funghi|15|piatto del giorno · MEDIO senza-contesto: turno 2
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Piatto del giorno *Risotto alla zucca*: *14,00 €*. Si nasconde a fine giornata» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «*Annullato.* Il menu è tornato com’era prima dell’ultima modifica. *Risotto alla zucca*: tolto (era stato aggiunto)»
+- **adv-sospeso-015** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: create|risotto ai funghi|14|piatto del giorno · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto ai funghi|15|piatto del giorno
   - turni: piatto del giorno risotto ai funghi a 14 ⏎ no a 15
-  - atteso: create|risotto ai funghi|15|piatto del giorno · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
-- **adv-sospeso-019** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|trofie|12|piatti di prova
-  - turni: aggiungi le trofie ⏎ lascia perdere ⏎ 12
-  - atteso: nessuna modifica · ottenuto: create|trofie|12|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Trofie*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Trofie* in *Piatti di prova*: *12,00 €*»
+  - atteso: create|risotto ai funghi|15|piatto del giorno · ottenuto: create|risotto ai funghi|14|piatto del giorno
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Piatto del giorno *Risotto ai funghi*: *14,00 €*. Si nasconde a fine giornata» ⏎ «Cosa vuoi cambiare per *Risotto ai funghi*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-sospeso-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
   - turni: la carbonara a 13 ⏎ annulla ⏎ la gricia a 12
   - atteso: price|Gricia|12 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Annullato.* Il menu è tornato com’era prima dell’ultima modifica. *Carbonara*: com’era prima» ⏎ «Cosa vuoi cambiare per *Cacio e pepe*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-suono-007** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|7
-  - turni: torna a 7
-  - atteso: nessuna modifica · ottenuto: price|Torta della nonna|7
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*»
-- **adv-suono-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
-  - turni: la carbonara a 13 grazie
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-suono-011** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
-  - turni: grazie, la carbonara a 13
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Di nulla.»
 - **adv-suono-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: 🎤 poi la carbonara a tredici
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
@@ -672,102 +496,14 @@
   - turni: 🎤 allora la torta della nonna a sette
   - atteso: price|Torta della nonna|7 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Torta della nonna*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-code-003** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata se puoi|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 se puoi
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata se puoi|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata se puoi* in *Piatti di prova*: *9,00 €*»
-- **adv-code-004** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata dai|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 dai
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata dai|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata dai* in *Piatti di prova*: *9,00 €*»
-- **adv-code-005** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata va bene|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 va bene?
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata va bene|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata va bene* in *Piatti di prova*: *9,00 €*»
-- **adv-code-006** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata nel menu|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 nel menu
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata nel menu|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata nel menu* in *Piatti di prova*: *9,00 €*»
-- **adv-code-007** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata sul menu|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 sul menu
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata sul menu|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata sul menu* in *Piatti di prova*: *9,00 €*»
-- **adv-code-008** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata nella carta|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 nella carta
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata nella carta|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata nella carta* in *Piatti di prova*: *9,00 €*»
-- **adv-code-009** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata per stasera|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 per stasera
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata per stasera|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata per stasera* in *Piatti di prova*: *9,00 €*»
-- **adv-code-010** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata da oggi|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 da oggi
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata da oggi|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata da oggi* in *Piatti di prova*: *9,00 €*»
-- **adv-code-011** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata da domani|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 da domani
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata da domani|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata da domani* in *Piatti di prova*: *9,00 €*»
-- **adv-code-012** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata subito|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 subito
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata subito|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata subito* in *Piatti di prova*: *9,00 €*»
-- **adv-code-014** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata grazie eh|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi la burrata a 9 grazie eh
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata grazie eh|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata grazie eh* in *Piatti di prova*: *9,00 €*»
-- **adv-code-017** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|al menu la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi al menu la burrata a 9
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|al menu la burrata|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Al menu la burrata* in *Piatti di prova*: *9,00 €*»
-- **adv-code-019** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|sul menu la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: inserisci sul menu la burrata a 9
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|sul menu la burrata|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Sul menu la burrata* in *Piatti di prova*: *9,00 €*»
-- **adv-code-020** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|nella lista la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi nella lista la burrata a 9
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|nella lista la burrata|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Nella lista la burrata* in *Piatti di prova*: *9,00 €*»
-- **adv-code-021** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|in carta la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungi in carta la burrata a 9
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|in carta la burrata|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *In carta la burrata* in *Piatti di prova*: *9,00 €*»
-- **adv-code-022** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|al menu una burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
-  - turni: aggiungimi al menu una burrata a 9
-  - atteso: create|burrata|9|piatti di prova · ottenuto: create|al menu una burrata|9|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Al menu una burrata* in *Piatti di prova*: *9,00 €*»
-- **adv-code-025** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|linguine allo scoglio da stasera|18|primi · GRAVE non-applicato: non applicato: create|linguine allo scoglio|18|primi
-  - turni: aggiungi nei primi le linguine allo scoglio a 18 da stasera
-  - atteso: create|linguine allo scoglio|18|primi · ottenuto: create|linguine allo scoglio da stasera|18|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Linguine allo scoglio da stasera* in *Primi*: *18,00 €*»
 - **adv-code-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine allo scoglio|18|primi
   - turni: aggiungi nei primi le linguine allo scoglio a 18 e mettile in evidenza
   - atteso: create|linguine allo scoglio|18|primi · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
-- **adv-code-027** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|linguine allo scoglio solo per oggi|18|primi · GRAVE non-applicato: non applicato: create|linguine allo scoglio|18|primi
-  - turni: aggiungi nei primi le linguine allo scoglio a 18 solo per oggi
-  - atteso: create|linguine allo scoglio|18|primi · ottenuto: create|linguine allo scoglio solo per oggi|18|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Linguine allo scoglio solo per oggi* in *Primi*: *18,00 €*»
-- **adv-code-029** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|ravioli e tortellini|12|primi · GRAVE non-applicato: non applicato: create|ravioli|12|primi, create|tortellini|12|primi
-  - turni: aggiungi nei primi ravioli e tortellini a 12
-  - atteso: create|ravioli|12|primi, create|tortellini|12|primi · ottenuto: create|ravioli e tortellini|12|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Ravioli e tortellini* in *Primi*: *12,00 €*»
-- **adv-code-030** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|crostata e cheesecake|5|dolci · GRAVE non-applicato: non applicato: create|cheesecake|5|dolci, create|crostata|5|dolci
-  - turni: aggiungi nei dolci crostata e cheesecake a 5
-  - atteso: create|cheesecake|5|dolci, create|crostata|5|dolci · ottenuto: create|crostata e cheesecake|5|dolci
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Crostata e cheesecake* in *Dolci*: *5,00 €*»
-- **adv-relativi-001** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: price|Gricia|1 · GRAVE non-applicato: non applicato: price|Gricia|12
-  - turni: alza la gricia di 1 euro
-  - atteso: price|Gricia|12 · ottenuto: price|Gricia|1
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: prezzo da 11,00 € a *1,00 €*»
 - **adv-relativi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
   - turni: abbassa la tagliata di 2
   - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tagliata di tonno*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-relativi-004** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Tagliata|true · GRAVE non-applicato: non applicato: price|Tagliata|16
-  - turni: togli 2 euro alla tagliata
-  - atteso: price|Tagliata|16 · ottenuto: hidden|Tagliata|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: *nascosto* dal menu»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Tagliata di tonno* 2. *Tagliata* Rispondi con il *numero* o il *nome*.»
 - **adv-relativi-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|5
   - turni: abbassa il tiramisù di un euro
   - atteso: price|Tiramisù|5 · ottenuto: nessuna modifica
@@ -788,10 +524,6 @@
   - turni: ❓ quanto costa la tagliata? ⏎ abbassala di 3
   - atteso: price|Tagliata|15 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tagliata*: *18,00 €* · disponibile» ⏎ «Cosa vuoi cambiare per *Tagliata*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-relativi-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|18
-  - turni: aumenta il polpo di due euro
-  - atteso: price|Polpo alla griglia|18 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-cent2-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|11.9
   - turni: la gricia undici e novanta
   - atteso: price|Gricia|11.9 · ottenuto: nessuna modifica
@@ -807,15 +539,15 @@
 - **adv-cent2-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.9
   - turni: la carbonara 13 e 90
   - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-cent2-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.9
   - turni: la carbonara tredici e novanta
   - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-cent2-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.9
   - turni: la carbonara tredici virgola novanta
   - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-cent2-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.5
   - turni: la carbonara 13 virgola 50
   - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
@@ -827,23 +559,23 @@
 - **adv-cent2-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|4.8
   - turni: 🎤 la bomba quattro e ottanta
   - atteso: price|Bomba|4.8 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Bomba*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-cent2-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|16.9
   - turni: 🎤 il polpo sedici e novanta
   - atteso: price|Polpo alla griglia|16.9 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpette al sugo*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpo alla griglia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-cent2-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|7.5
   - turni: 🎤 la margherita sette euro e cinquanta
   - atteso: price|Margherita|7.5 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Marinara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-misti2-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+- **adv-misti2-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
   - turni: la carbonara a 13, e la gricia quanto costa?
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tagliata*: *18,00 €* · disponibile *Carbonara*: *12,00 €* · disponibile *Gricia*: *11,00 €* · disponibile *Marinara*: *6,00 €* · »
-- **adv-misti2-002** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «carbonara a 13 la gricia»» · GRAVE richiesta-persa: richiesta persa: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-misti2-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
   - turni: la carbonara a 13. la gricia quanto costa?
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «carbonara a 13 la gricia».* Scrivi il nome come appare nel menu.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-misti2-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
   - turni: metti la carbonara a 13 e poi dimmi quanto costa la gricia
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
@@ -852,54 +584,30 @@
   - turni: nascondi la bomba, quanti piatti ho nei primi?
   - atteso: hidden|Bomba|true · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Bomba*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-misti2-005** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|false
+- **adv-misti2-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|false
   - turni: la tagliata è finita. il polpo c'è ancora?
   - atteso: available|Tagliata|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Coca Cola 33cl*: *3,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile *Polpo alla griglia*: *16,00 €* · disponibile»
-- **adv-misti2-006** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tagliata*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-misti2-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|false
   - turni: la tagliata è finita, ma il polpo c'è?
   - atteso: available|Tagliata|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Gricia*: *11,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile *Polpo alla griglia*: *16,00 €* · disponibile»
-- **adv-misti2-007** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
-  - turni: buongiorno! la carbonara a 13 grazie
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Di nulla.»
-- **adv-misti2-008** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tagliata di tonno*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-misti2-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: la carbonara a 13, come va?
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Amatriciana*: *11,00 €* · disponibile *Carbonara*: *12,00 €* · disponibile *Marinara*: *6,00 €* · disponibile»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-misti2-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
   - turni: ciao come stai? la carbonara è finita
   - atteso: available|Carbonara|false · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-misti2-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
-  - turni: la carbonara a 13, ok?
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Cacio e pepe*: *10,00 €* · disponibile *Carbonara*: *12,00 €* · disponibile *Marinara*: *6,00 €* · disponibile»
 - **adv-misti2-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: metti la carbonara a 13, poi ti chiedo una cosa
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-misti2-014** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «polpo e finito la tagliata di tonno»» · GRAVE richiesta-persa: richiesta persa: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
+- **adv-misti2-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
   - turni: il polpo è finito. la tagliata di tonno quanto costa?
   - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «polpo e finito la tagliata di tonno».* Scrivi il nome come appare nel menu.»
-- **adv-misti2-015** [GRAVE] GRAVE fatto-falso: turno 1: dice fatto ma non ha scritto nulla («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE frase-come-piatto: turno 1: «Non trovo «ho messo la carbonara»»
-  - turni: ❓ ho messo la carbonara a 13 o no?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «ho messo la carbonara».* Scrivi il nome come appare nel menu.»
-- **adv-misti2-016** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «chi ha messo la carbonara»»
-  - turni: ❓ chi ha messo la carbonara a 12?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «chi ha messo la carbonara».* Scrivi il nome come appare nel menu.»
-- **adv-misti2-017** [GRAVE] GRAVE fatto-falso: turno 1: dice fatto ma non ha scritto nulla («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE frase-come-piatto: turno 1: «Non trovo «quando ho messo la gricia»»
-  - turni: ❓ quando ho messo la gricia a 11?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «quando ho messo la gricia».* Scrivi il nome come appare nel menu.»
-- **adv-misti2-018** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «perche hai messo la bomba»»
-  - turni: ❓ perché hai messo la bomba a 4?
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «perche hai messo la bomba».* Scrivi il nome come appare nel menu.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Polpette al sugo*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-ordinali-001** [GRAVE] GRAVE non-applicato: non applicato: price|Amatriciana|12, price|Carbonara|13
   - turni: carbonara 13 ⏎ amatriciana 12 ⏎ l'ultimo mettilo in evidenza
   - atteso: featured|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: featured|Amatriciana|true
@@ -932,30 +640,14 @@
   - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo a 11
   - atteso: price|Bufala|11, price|Marinara|7 · ottenuto: price|Bufala|10
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: prezzo da 9,00 € a *10,00 €*» ⏎ «Cosa vuoi cambiare per *Marinara*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *Marinara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-sospeso2-009** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
-  - turni: nascondi la gricia ⏎ anzi no, lasciala
-  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: *nascosto* dal menu» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-sospeso2-010** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
-  - turni: nascondi la gricia ⏎ no anzi no
-  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: *nascosto* dal menu» ⏎ «Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-sospeso2-011** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13
-  - turni: la carbonara a 13 ⏎ anzi no
-  - atteso: nessuna modifica · ottenuto: price|Carbonara|13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-sospeso2-012** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Carbonara|false
-  - turni: la carbonara è finita ⏎ anzi no
-  - atteso: nessuna modifica · ottenuto: available|Carbonara|false
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *finito*» ⏎ «Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-sospeso2-014** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|niente lascia stare|11|piatti di prova · GRAVE non-applicato: non applicato: price|la parmigiana|11
+- **adv-sospeso2-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|la parmigiana|11
   - turni: aggiungi le trofie ⏎ no niente, lascia stare ⏎ la parmigiana a 11
-  - atteso: price|la parmigiana|11 · ottenuto: create|niente lascia stare|11|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Niente lascia stare*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Niente lascia stare* in *Piatti di prova*: *11,00 €*»
-- **adv-lev1-001** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|9
-  - turni: torna a 9
-  - atteso: nessuna modifica · ottenuto: price|Torta della nonna|9
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *9,00 €*»
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-sospeso2-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|la parmigiana|false
+  - turni: aggiungi le trofie ⏎ lascia perdere ⏎ la parmigiana è finita
+  - atteso: available|la parmigiana|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-lev1-002** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13 · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|14
   - turni: la carbonara a 13 ⏎ portala a 14
   - atteso: price|Carbonara|14 · ottenuto: price|Carbonara|13
@@ -964,42 +656,30 @@
   - turni: torta della nonna e tortino finiti
   - atteso: available|Torta della nonna|false, available|Tortino al cioccolato|false · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi: *Torta della nonna*, *Acqua*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **adv-lasciastare-001** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|niente lascia stare|11|piatti di prova · GRAVE non-applicato: non applicato: price|la parmigiana|11
+- **adv-lasciastare-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|la parmigiana|11
   - turni: aggiungi le trofie ⏎ no niente, lascia stare ⏎ la parmigiana a 11
-  - atteso: price|la parmigiana|11 · ottenuto: create|niente lascia stare|11|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Niente lascia stare*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Niente lascia stare* in *Piatti di prova*: *11,00 €*»
-- **adv-lasciastare-002** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|trofie|7|piatti di prova · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-lasciastare-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|tiramisù|7
   - turni: aggiungi le trofie ⏎ niente, lascia perdere ⏎ il tiramisù a 7
-  - atteso: price|tiramisù|7 · ottenuto: create|trofie|7|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Trofie* in *Piatti di prova*: *7,00 €*»
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-lasciastare-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|la parmigiana|true
+  - turni: aggiungi le trofie ⏎ anzi no lascia perdere ⏎ nascondi la parmigiana
+  - atteso: hidden|la parmigiana|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-lasciastare-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|la parmigiana|11
   - turni: aggiungi le trofie ⏎ lascia stare dai ⏎ la parmigiana a 11
   - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «*Annullato.* Il menu è rimasto invariato.» ⏎ «Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-lasciastare-006** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|non fa niente|7|piatti di prova · GRAVE non-applicato: non applicato: price|tiramisù|7
+- **adv-lasciastare-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|tiramisù|7
   - turni: aggiungi le trofie ⏎ no, non fa niente ⏎ il tiramisù a 7
-  - atteso: price|tiramisù|7 · ottenuto: create|non fa niente|7|piatti di prova
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Non fa niente*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Non fa niente* in *Piatti di prova*: *7,00 €*»
-- **adv-lasciastare-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|boh|false
-  - turni: aggiungi le trofie ⏎ niente ⏎ boh è finito
-  - atteso: available|boh|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «Cosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **adv-lasciastare-008** [MEDIO] MEDIO senza-contesto: turno 2
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+- **adv-lasciastare-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|la parmigiana|true
   - turni: aggiungi le trofie ⏎ annulla tutto ⏎ nascondi la parmigiana
-  - atteso: hidden|la parmigiana|true · ottenuto: hidden|la parmigiana|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: *nascosto* dal menu»
-- **adv-toglieuro-001** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Carbonara|true · GRAVE non-applicato: non applicato: price|Carbonara|11
-  - turni: togli 1 euro alla carbonara
-  - atteso: price|Carbonara|11 · ottenuto: hidden|Carbonara|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *nascosto* dal menu»
-- **adv-toglieuro-002** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Tiramisù|true · GRAVE non-applicato: non applicato: price|Tiramisù|5
-  - turni: togli un euro al tiramisù
-  - atteso: price|Tiramisù|5 · ottenuto: hidden|Tiramisù|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tiramisù*: *nascosto* dal menu»
-- **adv-toglieuro-003** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Tagliata|true · GRAVE non-applicato: non applicato: price|Tagliata|16
-  - turni: leva 2 euro alla tagliata
-  - atteso: price|Tagliata|16 · ottenuto: hidden|Tagliata|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: *nascosto* dal menu»
+  - atteso: hidden|la parmigiana|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Va bene, non aggiungo *Trofie*. Non ho cambiato nulla.» ⏎ «Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-toglieuro-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Tagliata|null
   - turni: togli lo sconto dalla tagliata
   - atteso: promo|Tagliata|null · ottenuto: nessuna modifica

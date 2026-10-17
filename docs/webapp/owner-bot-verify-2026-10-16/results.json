@@ -1,6 +1,6 @@
 {
  "cases": 283,
- "runs": 544,
+ "runs": 541,
  "unknownSql": [
   "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
  ],
@@ -5861,58 +5861,7 @@
    "actual": [
     "special|baccala con polenta|14"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "giorno-02",
-   "cat": "giorno",
-   "mode": "empty",
-   "turns": [
-    "oggi come piatto del giorno abbiamo il baccalà con polenta a 14"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "special|baccala con polenta|14"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "giorno-02",
-   "cat": "giorno",
-   "mode": "wrong",
-   "turns": [
-    "oggi come piatto del giorno abbiamo il baccalà con polenta a 14"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "special|baccala con polenta|14"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "giorno-02",
-   "cat": "giorno",
-   "mode": "wrongCreate",
-   "turns": [
-    "oggi come piatto del giorno abbiamo il baccalà con polenta a 14"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "special|baccala con polenta|14"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

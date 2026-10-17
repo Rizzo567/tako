@@ -8,7 +8,7 @@
  * percorso deterministico attuale, invariato. */
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
-import {looksLikeQuestion,politeCommand,parseIntent,findDishes} from './twilio-menu-nlu.js'
+import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier} from './twilio-menu-nlu.js'
 import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
@@ -67,13 +67,16 @@ export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|
 const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
 const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
 const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
-export function deixisReferents(msg:string,owners:string[],refs:MenuRef[]):{kind:'set'|'one',ids:string[]}|null{
- const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
+export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botList:string[]=[]):{kind:'set'|'one',ids:string[]}|null{
+ const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),ords=[...p.matchAll(new RegExp(DEIX_ORD.source,'g'))],except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
  if(!ord&&!plural&&!except)return null
  const posOf=(name:string,t:string)=>{const ws=plain(name).split(' ').filter(w=>w.length>=4);let best=Infinity;for(const w of ws.length?ws:plain(name).split(' ')){const i=t.search(new RegExp('\\b'+w.slice(0,5).replace(/[^a-z0-9]/g,'')));if(i>=0&&i<best)best=i}return best}
  const lists=owners.map(o=>{const t=' '+plain(o)+' ';return refs.filter(r=>g9DishMentioned(r.name,o,refs)).sort((a,b)=>posOf(a.name,t)-posOf(b.name,t)).map(r=>r.id)})
- const lastMulti=[...lists].reverse().find(l=>l.length>0)
+ // A7.9: l'elenco dell'ultima risposta del bot («Piatti nascosti: Gricia, Pasta al sugo») è il riferimento più recente.
+ const lastMulti=botList.length?botList:[...lists].reverse().find(l=>l.length>0)
  const chrono:string[]=[];for(const l of lists)for(const id of l)if(!chrono.includes(id))chrono.push(id)
+ // «il primo e l'ultimo», «il primo e il terzo»: più posizioni insieme.
+ if(ords.length>=2){const seq=lastMulti&&lastMulti.length>=2?lastMulti:chrono,at=(w:string)=>/^prim/.test(w)?0:/^second/.test(w)?1:/^terz/.test(w)?2:seq.length-1;const ids=[...new Set(ords.map(m=>seq[at(m[1]!)]).filter((x):x is string=>!!x))];return{kind:'set',ids}}
  if(ord&&!plural){const seq=lastMulti&&lastMulti.length>=2?lastMulti:chrono,w=ord[1]!,i=/^prim/.test(w)?0:/^second/.test(w)?1:/^terz/.test(w)?2:seq.length-1;return{kind:'one',ids:seq[i]?[seq[i]!]:[]}}
  if(except){const named=refs.filter(r=>g9DishMentioned(r.name,except[1]!,refs)).map(r=>r.id);return{kind:'set',ids:(lastMulti&&lastMulti.length>=2?lastMulti:chrono).filter(id=>!named.includes(id))}}
  const nm=p.match(/\b(?:tutti|tutte|quei|quelle|questi|queste|i|le|gli|ambedue) (?:e )?(due|tre|quattro|2|3|4)\b/),n=nm?DEIX_N[nm[1]!]!:/\bentramb\w*|\bambedue\b/.test(p)?2:null
@@ -91,7 +94,7 @@ export function priceClauseProblem(actions:MenuAction[],message:string,refs:Menu
  // Un pezzo con un prezzo e senza piatto («…, anzi no a 13», «mettila a 15») rende l'attribuzione incerta: niente controllo.
  if(parts.some(x=>g9Prices(x).length&&!refs.some(r=>g9DishMentioned(r.name,x,refs))))return[]
  for(const a of actions){if(!('id' in a)||!(a.kind==='price'||(a.kind==='promo'&&a.price!==null)))continue;const r=byId.get(a.id);if(!r)continue
-  const mine=parts.filter(x=>g9DishMentioned(r.name,x,refs));if(mine.length!==1)continue;const nums=g9Prices(mine[0]!);if(!nums.length)continue
+  const mine=parts.filter(x=>g9DishMentioned(r.name,x,refs));if(mine.length!==1)continue;const nums=[...g9Prices(mine[0]!),...g9Prices(mine[0]!,false)];if(!nums.length)continue
   if(!nums.includes(Math.round((a.price as number)*100)/100))out.push(a.id)}
  return out}
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
@@ -114,7 +117,7 @@ const MIX_CMD=/\b(?:metti\w*|mettil\w*|nascond\w*|togli\w*|toglil\w*|segna\w*|ag
 const MIX_ASK=/^(?:e\s+)?(?:dimmi|dammi|fammi sapere|quanto|quanti|quali|qual|cosa|cos|che cosa|che piatti|c e|ce|e ancora)\b/
 export function mixedMessage(message:string):{command:string,question:string,conditional:boolean}|null{
  // A7.11: anche «…, e la gricia quanto la tengo?», «la tagliata è finita, il polpo c'è ancora?», «nascondi la bomba. quanti…?».
- const parts=message.split(/(?<=[?.!])\s+|(?<=\?)(?=\S)|,\s*(?:(?:e|ma|poi)\s+)?|\s+e\s+(?=dimmi\b|dammi\b|fammi sapere\b)/i).map(x=>x.trim()).filter(Boolean)
+ const parts=message.split(/(?<=[?.!])\s+|(?<=\?)(?=\S)|,\s*(?:(?:e|ma|poi)\s+)?|\s+e\s+(?:poi\s+)?(?=dimmi\b|dammi\b|fammi sapere\b)/i).map(x=>x.trim()).filter(Boolean)
  if(parts.length<2)return null
  const q:string[]=[],c:string[]=[];for(const p of parts){const pl=plain(p);if(/\?\s*$/.test(p)||MIX_ASK.test(pl))q.push(p);else c.push(p)}
  if(!q.length||!c.length)return null
@@ -303,6 +306,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   {const swapped=priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs);if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
   {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
+  {const foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&foreignQualifier(message,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
   // Rimando senza nome («mettila a 13», «no scusa 14»): vale solo per il piatto (unico) del messaggio precedente del titolare
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
@@ -312,7 +316,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)
    // Risposta a una domanda del bot sulla richiesta di prima: quella richiesta (anche con più piatti) torna valida per intero.
    const answering=BOT_QUESTION.test(lastBotText)
-   const deix=answering||(input.clarifyIds??[]).length>1?null:deixisReferents(message,owners,refs)
+   const botList=/(?:^|\s)[-•]\s+\S/.test(lastBotText)&&!/\?/.test(lastBotText)?refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).sort((a,b)=>lastBotText.indexOf(a.name)-lastBotText.indexOf(b.name)).map(r=>r.id):[]
+   const deix=answering||(input.clarifyIds??[]).length>1?null:deixisReferents(message,owners,refs,botList)
    const deixBad=deix?(bare.length&&(bare.some(id=>!deix.ids.includes(id))||(deix.kind==='set'&&deix.ids.some(id=>!ids.includes(id)))||!deix.ids.length)):false
    const bad=deix?(deixBad?bare:[]).concat(bare.filter(priceBare)):bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg)&&!answering)||priceBare(id))
    if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...pd,...bad])].filter(id=>byId.has(id)).slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'rimando_incerto']}}
@@ -355,7 +360,21 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // il nome contenuto nel nome di un piatto toccato («caffè» dentro «caffè macchiato»). Con un riepilogo in sospeso non si controlla.
  const touched=refs.filter(r=>covered.has(r.id)&&padded.includes(' '+plain(r.name)+' ')).map(r=>' '+plain(r.name)+' ')
  const missed=input.pendingActions?.length?[]:refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1&&!touched.some(t=>t!==' '+plain(r.name)+' '&&t.includes(' '+plain(r.name)+' ')))
- if(missed.length)return{intent:'clarify',plan:{type:'clarify',ids:missed.map(r=>r.id).slice(0,5),actions:out},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_nominato_senza_azione']}
+ // A7.12 (vocali): un piatto nominato in una parte che dice di lasciarlo («l'amatriciana lasciala com'è», «la carbonara la
+ // tengo a dodici», «no il tiramisù c'è») non manca: è detto che resta com'è. «boh» detto come intercalare («boh fai tu», «e poi…
+ // boh…») non è il piatto Boh se in quella parte non c'è nessun'azione.
+ const KEEP=/\b(?:lascia\w*|lasci|tengo|teniamo|resta|rimane|c[’'\s]?è|c e|com era|come prima|uguale|non (?:la |lo |li |le )?(?:tocc\w*|cambi\w*))\b/i,FILLER=new Set(['boh','bho','mah','beh','bo','eh','ecco','niente'])
+ const clauses=message.split(/[,;.!?…]+|\s+e\s+/)
+ const ACTV=/\d|\b(?:finit\w*|esaurit\w*|nascond\w*|togli\w*|rimett\w*|evidenza|prezzo|costa|elimin\w*|cancell\w*|rinomin\w*|spost\w*|mett\w*|port\w*)\b/i
+ const said=missed.filter(r=>{const idx=clauses.map((x,i)=>(' '+plain(x)+' ').includes(' '+plain(r.name)+' ')?i:-1).filter(i=>i>=0),parts=idx.map(i=>clauses[i]!);if(!parts.length)return true
+  // «la bomba... no aspetta, le bombette»: il piatto detto e subito ritirato non manca.
+  if(idx.every(i=>!ACTV.test(clauses[i]!)&&/^\s*(?:no\s+aspetta|no\s+scusa|anzi|cioe|cioè|no\s+no|aspetta)\b/i.test(clauses[i+1]??'')))return false
+  // «la tagliata, quella di tonno non quella normale»: il nome è dentro quello di un piatto toccato e la sua parte non ha azioni.
+  if(parts.every(x=>!ACTV.test(x))&&refs.some(o=>covered.has(o.id)&&o.id!==r.id&&(' '+plain(o.name)+' ').includes(' '+plain(r.name)+' ')))return false
+  if([parts.at(-1)!].every(x=>(KEEP.test(x)||KEEP.test(plain(x)))&&!/\d/.test(x.replace(KEEP,''))&&!/\b(?:finit\w*|esaurit\w*|nascond\w*|evidenza|mett\w*\s+a)\b/i.test(x)))return false
+  if(FILLER.has(plain(r.name))&&parts.every(x=>!/\d|\b(?:finit\w*|esaurit\w*|nascond\w*|togli\w*|rimett\w*|evidenza|prezzo|costa|elimin\w*|cancell\w*|rinomin\w*|spost\w*)\b/i.test(x)))return false
+  return true})
+ if(said.length)return{intent:'clarify',plan:{type:'clarify',ids:said.map(r=>r.id).slice(0,5),actions:out},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_nominato_senza_azione']}
  if(!out.length&&asks.length===1&&asks[0]!.type==='confirm')return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:[],asks},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'nome_a_suono']}
  if(!out.length)return asks.length>=2?withHold({intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes}):no('nessuna_azione')
  const res0=withHold(guard({type:'change',actions:out})),res=twinIds.length&&res0.plan.type==='change'&&!mix?{...res0,plan:{...res0.plan,after:{type:'read' as const,read:'items' as const,ids:twinIds.slice(0,6)}},notes:[...res0.notes,'gia_nel_menu']}:res0

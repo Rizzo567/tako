@@ -9,9 +9,9 @@
   "total": {
    "family": "TOTALE",
    "n": 452,
-   "ok": 411,
-   "success": 411,
-   "grave": 41,
+   "ok": 416,
+   "success": 416,
+   "grave": 36,
    "medio": 0,
    "basso": 0,
    "safety": 0,
@@ -25,9 +25,9 @@
   "multi": {
    "family": "multi-turno",
    "n": 226,
-   "ok": 187,
-   "success": 187,
-   "grave": 39,
+   "ok": 190,
+   "success": 190,
+   "grave": 36,
    "medio": 0,
    "basso": 0,
    "safety": 0,
@@ -42,9 +42,9 @@
    {
     "family": "b1-elimina",
     "n": 150,
-    "ok": 131,
-    "success": 131,
-    "grave": 19,
+    "ok": 134,
+    "success": 134,
+    "grave": 16,
     "medio": 0,
     "basso": 0,
     "safety": 0,
@@ -58,9 +58,9 @@
    {
     "family": "b2-categorie",
     "n": 150,
-    "ok": 148,
-    "success": 148,
-    "grave": 2,
+    "ok": 150,
+    "success": 150,
+    "grave": 0,
     "medio": 0,
     "basso": 0,
     "safety": 0,
@@ -89,18 +89,13 @@
    }
   ],
   "codes": {
-   "errore-generico": {
-    "GRAVE": 33,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
    "chiarimento-mancante": {
     "GRAVE": 0,
     "MEDIO": 16,
     "BASSO": 0
    },
    "correzione-non-applicata": {
-    "GRAVE": 8,
+    "GRAVE": 24,
     "MEDIO": 0,
     "BASSO": 0
    },
@@ -126,14 +121,14 @@
    }
   },
   "latency": {
-   "harnessP50": 0.6,
-   "harnessP95": 1.9,
-   "withRecordedGroqP50": 0.6,
-   "withRecordedGroqP95": 1.9
+   "harnessP50": 0.7,
+   "harnessP95": 1.8,
+   "withRecordedGroqP50": 0.7,
+   "withRecordedGroqP95": 1.8
   },
   "llm": {
    "calls": 0,
-   "misses": 170,
+   "misses": 154,
    "tokens": 0
   }
  },
@@ -164,7 +159,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.9,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -197,7 +192,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -228,8 +223,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.5
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -260,7 +255,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -292,7 +287,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -356,7 +351,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -389,7 +384,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -484,7 +479,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -581,7 +576,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -677,7 +672,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -708,7 +703,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -740,7 +735,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -772,8 +767,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.6
+    0.8,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -804,8 +799,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.5
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -836,7 +831,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -932,7 +927,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -964,8 +959,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.6
+    0.6,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1157,7 +1152,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1220,8 +1215,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.5
+    0.7,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1252,7 +1247,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -1445,7 +1440,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1477,7 +1472,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1541,7 +1536,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1604,7 +1599,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    1,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -1637,7 +1632,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1669,7 +1664,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1732,8 +1727,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.2
+    1,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1764,8 +1759,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.2
+    0.8,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1797,7 +1792,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1829,7 +1824,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1893,7 +1888,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.6
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1925,7 +1920,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2021,7 +2016,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2052,8 +2047,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.2
+    0.8,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2117,7 +2112,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.9,
-    1.4
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2148,8 +2143,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    2
+    0.5,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2180,8 +2175,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    3
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2214,7 +2209,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.3,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -2384,8 +2379,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.6
+    0.4,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2418,7 +2413,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -2452,7 +2447,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -2486,7 +2481,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -2577,7 +2572,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5
+    0.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2614,19 +2609,13 @@
    "id": "b1-elimina-078",
    "family": "b1-elimina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *pasta al ragù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "rimuovi completamente pasta al ragù",
@@ -2639,7 +2628,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2667,7 +2656,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.1
+    0.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2732,19 +2721,13 @@
    "id": "b1-elimina-082",
    "family": "b1-elimina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *la parmigiana* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "elimina il piatto la parmigiana",
@@ -2841,7 +2824,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5
+    0.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2850,19 +2833,13 @@
    "id": "b1-elimina-086",
    "family": "b1-elimina",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Piatto di verifica* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "rimuovi completamente Piatto di verifica",
@@ -2904,7 +2881,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.7,
     0.5,
     0.4
    ],
@@ -2966,7 +2943,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5,
     0.4
    ],
@@ -2997,8 +2974,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.9,
+    0.4,
+    0.5,
     0.4
    ],
    "recordedLlmMs": 0,
@@ -3029,8 +3006,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5,
-    0.5
+    0.8,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3059,7 +3036,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.5,
     0.4
    ],
@@ -3123,7 +3100,7 @@
    "latencyMs": [
     0.3,
     0.5,
-    0.7
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3154,7 +3131,7 @@
    "latencyMs": [
     0.3,
     0.5,
-    0.4
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3183,7 +3160,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5,
     0.4
    ],
@@ -3214,7 +3191,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5,
     0.4
    ],
@@ -3281,9 +3258,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.3,
     0.5,
-    0.1
+    0.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3319,8 +3296,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5,
-    0.1
+    0.8,
+    0.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3355,7 +3332,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5,
     0.1
    ],
@@ -3394,7 +3371,7 @@
    "latencyMs": [
     0.3,
     0.5,
-    0.1
+    0.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3430,8 +3407,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.6,
-    0.2
+    0.5,
+    0.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3468,7 +3445,7 @@
    "latencyMs": [
     0.3,
     0.5,
-    0.4
+    0.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3481,14 +3458,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3509,7 +3481,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3524,7 +3496,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    2.6,
+    3.3,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -3537,14 +3509,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3565,7 +3532,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3580,7 +3547,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.9,
+    2.3,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -3593,14 +3560,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3621,7 +3583,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3636,7 +3598,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    2.1,
+    2,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -3649,14 +3611,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3677,7 +3634,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3691,8 +3648,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1.5,
+    0.8,
+    1.9,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -3705,14 +3662,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3733,7 +3685,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3749,7 +3701,7 @@
    "latencyMs": [
     0.7,
     1.7,
-    0.6
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3761,14 +3713,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3789,7 +3736,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3804,8 +3751,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.7,
-    0.3
+    1.6,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3817,14 +3764,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3845,7 +3787,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3873,14 +3815,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
     },
     {
      "sev": "GRAVE",
@@ -3901,7 +3838,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3916,7 +3853,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.8,
+    1.5,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -3929,19 +3866,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|la parmigiana|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|tiramisù|15"
     },
     {
      "sev": "MEDIO",
@@ -3953,10 +3890,13 @@
     "delete|la parmigiana",
     "delete|tiramisù"
    ],
-   "actual": [],
+   "actual": [
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -3967,11 +3907,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 8,
+   "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
+    1.8,
     1.9,
-    1.4,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -3985,11 +3925,6 @@
    "fails": [
     {
      "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
-     "sev": "GRAVE",
      "code": "frase-come-piatto",
      "why": "turno 2: «Non trovo «completamente quei due piatti»»"
     },
@@ -3997,6 +3932,16 @@
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
      "why": "turno 2: doveva chiedere un chiarimento («*Non trovo «completamente quei due piatti».* Scrivi il nome come appare nel menu»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|boh|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|pasta al ragù|15"
     },
     {
      "sev": "MEDIO",
@@ -4008,9 +3953,12 @@
     "delete|boh",
     "delete|pasta al ragù"
    ],
-   "actual": [],
+   "actual": [
+    "price|boh|15",
+    "price|pasta al ragù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *15,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *15,00 €*",
     "*Non trovo «completamente quei due piatti».* Scrivi il nome come appare nel menu.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
@@ -4022,11 +3970,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 6,
+   "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.1,
+    1.8,
+    1.7,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -4039,14 +3987,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
      "why": "turno 2: doveva chiedere un chiarimento («*Non trovo «entrambi».* Scrivi il nome come appare nel menu.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|la parmigiana|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|tiramisù|15"
     },
     {
      "sev": "MEDIO",
@@ -4058,9 +4011,12 @@
     "delete|la parmigiana",
     "delete|tiramisù"
    ],
-   "actual": [],
+   "actual": [
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
     "*Non trovo «entrambi».* Scrivi il nome come appare nel menu.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
@@ -4072,12 +4028,12 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 6,
+   "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.4,
-    0.2
+    1.9,
+    1.5,
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4089,14 +4045,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
      "why": "turno 2: doveva chiedere un chiarimento («*Non trovo «quei 2».* Scrivi il nome come appare nel menu.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|boh|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|pasta al ragù|15"
     },
     {
      "sev": "MEDIO",
@@ -4108,9 +4069,12 @@
     "delete|boh",
     "delete|pasta al ragù"
    ],
-   "actual": [],
+   "actual": [
+    "price|boh|15",
+    "price|pasta al ragù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *15,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *15,00 €*",
     "*Non trovo «quei 2».* Scrivi il nome come appare nel menu.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
@@ -4122,11 +4086,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 6,
+   "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
     1.7,
+    1.3,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -4139,19 +4103,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
-     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)"
+     "why": "turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assi»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|la parmigiana|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|tiramisù|15"
     },
     {
      "sev": "MEDIO",
@@ -4163,10 +4127,13 @@
     "delete|la parmigiana",
     "delete|tiramisù"
    ],
-   "actual": [],
+   "actual": [
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "turns": [
@@ -4177,11 +4144,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 8,
+   "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
     1.6,
-    1.4,
+    1.8,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -4195,11 +4162,6 @@
    "fails": [
     {
      "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
-     "sev": "GRAVE",
      "code": "frase-come-piatto",
      "why": "turno 2: «Non trovo «completamente quei due piatti»»"
     },
@@ -4207,6 +4169,16 @@
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
      "why": "turno 2: doveva chiedere un chiarimento («*Non trovo «completamente quei due piatti».* Scrivi il nome come appare nel menu»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|boh|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|pasta al ragù|15"
     },
     {
      "sev": "MEDIO",
@@ -4218,9 +4190,12 @@
     "delete|boh",
     "delete|pasta al ragù"
    ],
-   "actual": [],
+   "actual": [
+    "price|boh|15",
+    "price|pasta al ragù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *15,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *15,00 €*",
     "*Non trovo «completamente quei due piatti».* Scrivi il nome come appare nel menu.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
@@ -4232,11 +4207,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 6,
+   "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
+    1.7,
     1.5,
-    2,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -4249,14 +4224,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
      "why": "turno 2: doveva chiedere un chiarimento («*Non trovo «entrambi».* Scrivi il nome come appare nel menu.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|la parmigiana|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|tiramisù|15"
     },
     {
      "sev": "MEDIO",
@@ -4268,9 +4248,12 @@
     "delete|la parmigiana",
     "delete|tiramisù"
    ],
-   "actual": [],
+   "actual": [
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
     "*Non trovo «entrambi».* Scrivi il nome come appare nel menu.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
@@ -4282,11 +4265,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 6,
+   "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
     1.6,
-    1.4,
+    1.6,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -4299,14 +4282,19 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    },
-    {
      "sev": "MEDIO",
      "code": "chiarimento-mancante",
      "why": "turno 2: doveva chiedere un chiarimento («*Non trovo «quei 2».* Scrivi il nome come appare nel menu.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|boh|15"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|pasta al ragù|15"
     },
     {
      "sev": "MEDIO",
@@ -4318,9 +4306,12 @@
     "delete|boh",
     "delete|pasta al ragù"
    ],
-   "actual": [],
+   "actual": [
+    "price|boh|15",
+    "price|pasta al ragù|15"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *15,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *15,00 €*",
     "*Non trovo «quei 2».* Scrivi il nome come appare nel menu.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
@@ -4332,11 +4323,11 @@
    "clarifications": 1,
    "unexpectedClarifications": 1,
    "llmCalls": 0,
-   "llmMisses": 6,
+   "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.8,
+    1.7,
+    1.3,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -4405,7 +4396,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.5,
     0.3,
     0.5
    ],
@@ -4442,7 +4433,7 @@
    "latencyMs": [
     0.3,
     0.3,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4476,8 +4467,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.6,
-    1
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4580,7 +4571,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.6,
     0.3,
     0.5
    ],
@@ -4675,7 +4666,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4762,7 +4753,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4820,7 +4811,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4878,7 +4869,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4907,7 +4898,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4965,7 +4956,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4994,7 +4985,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5081,7 +5072,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5131,7 +5122,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5181,7 +5172,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5231,7 +5222,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5260,7 +5251,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5289,7 +5280,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5434,7 +5425,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5521,7 +5512,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5666,7 +5657,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5753,7 +5744,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5811,7 +5802,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5898,7 +5889,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5989,7 +5980,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6113,7 +6104,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6175,7 +6166,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6237,7 +6228,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6299,7 +6290,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6330,7 +6321,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6361,7 +6352,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6392,7 +6383,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6485,7 +6476,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6547,7 +6538,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6671,7 +6662,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6704,7 +6695,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -6738,7 +6729,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -6806,7 +6797,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -6841,7 +6832,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.6
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6874,7 +6865,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -6909,7 +6900,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.8
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6943,7 +6934,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7044,7 +7035,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.6,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7078,8 +7069,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.5
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7112,7 +7103,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7215,7 +7206,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7283,7 +7274,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.9
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7351,7 +7342,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7382,8 +7373,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.6
+    0.5,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7414,7 +7405,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.7,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7478,7 +7469,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7574,7 +7565,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.7,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7638,7 +7629,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7702,8 +7693,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.5
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7734,7 +7725,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.6,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -7769,7 +7760,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7802,8 +7793,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.8
+    0.6,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7870,8 +7861,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.9
+    0.8,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7905,7 +7896,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7938,8 +7929,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.9
+    0.6,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7973,7 +7964,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8006,8 +7997,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.9
+    0.9,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8041,7 +8032,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8074,7 +8065,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.6,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -8109,7 +8100,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8142,7 +8133,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.8,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -8193,7 +8184,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8268,7 +8259,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8343,7 +8334,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8393,7 +8384,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8418,7 +8409,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8443,7 +8434,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8472,7 +8463,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8559,7 +8550,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8617,7 +8608,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8646,7 +8637,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8706,7 +8697,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8737,7 +8728,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8801,7 +8792,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8832,7 +8823,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8894,7 +8885,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8927,7 +8918,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -8989,7 +8980,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9020,7 +9011,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9084,7 +9075,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9115,7 +9106,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9179,7 +9170,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9208,7 +9199,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9237,7 +9228,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9266,7 +9257,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9295,7 +9286,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9353,7 +9344,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9382,7 +9373,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9411,7 +9402,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9440,7 +9431,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9469,7 +9460,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9527,7 +9518,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9556,7 +9547,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9585,7 +9576,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9614,7 +9605,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9643,7 +9634,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9702,18 +9693,12 @@
    "id": "b2-categorie-147",
    "family": "b2-categorie",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la categoria bibite chiamala caffetteria"
@@ -9724,7 +9709,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9749,7 +9734,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9774,7 +9759,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9783,18 +9768,12 @@
    "id": "b2-categorie-150",
    "family": "b2-categorie",
    "menu": "mario",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 1: errore generico"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la categoria bibite chiamala caffetteria"
@@ -9805,7 +9784,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9834,7 +9813,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9863,7 +9842,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9892,7 +9871,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9921,7 +9900,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9950,7 +9929,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -9979,7 +9958,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10008,7 +9987,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10037,7 +10016,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10124,7 +10103,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10182,7 +10161,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10240,7 +10219,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10356,7 +10335,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10385,7 +10364,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10443,7 +10422,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10472,7 +10451,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10530,7 +10509,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10559,7 +10538,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10617,7 +10596,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10704,7 +10683,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10762,7 +10741,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10791,7 +10770,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10849,7 +10828,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10878,7 +10857,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10965,7 +10944,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10996,7 +10975,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11027,7 +11006,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11058,7 +11037,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11089,7 +11068,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11120,7 +11099,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11151,7 +11130,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11182,7 +11161,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11273,7 +11252,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11340,7 +11319,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.5,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -11408,7 +11387,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.8,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -11442,7 +11421,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.5,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -11477,7 +11456,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11511,7 +11490,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.4
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11646,7 +11625,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    1,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -11680,7 +11659,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.5,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -11739,7 +11718,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11768,7 +11747,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11855,7 +11834,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11971,7 +11950,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12029,7 +12008,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12087,7 +12066,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12145,7 +12124,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12203,7 +12182,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12406,7 +12385,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12435,7 +12414,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12464,7 +12443,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12493,7 +12472,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12551,7 +12530,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12667,7 +12646,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12696,7 +12675,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12725,7 +12704,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12783,7 +12762,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12812,7 +12791,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12918,7 +12897,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12970,7 +12949,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -13087,7 +13066,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -13126,8 +13105,8 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.4
+    0.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13165,7 +13144,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -13204,8 +13183,8 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    1.3
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13243,8 +13222,8 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.3
+    0.6,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13282,8 +13261,8 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    1.3
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13322,7 +13301,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13360,8 +13339,8 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.4
+    0.6,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13470,7 +13449,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.7,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -13503,7 +13482,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13534,8 +13513,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    0.7
+    1.3,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13598,8 +13577,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    0.6
+    1.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13630,7 +13609,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -13662,8 +13641,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    0.7
+    1.3,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13708,11 +13687,6 @@
    "fails": [
     {
      "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
-    {
-     "sev": "GRAVE",
      "code": "non-applicato",
      "why": "non applicato: move|Lasagna al forno|Secondi"
     }
@@ -13726,7 +13700,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 11,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la lasagna costa 13",
@@ -13738,8 +13712,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    3.5
+    1.5,
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13750,11 +13724,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -13770,7 +13739,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: prezzo da 5,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la bruschetta costa 13",
@@ -13782,8 +13751,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.3
+    1.6,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13794,11 +13763,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -13814,7 +13778,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la tagliata costa 13",
@@ -13826,8 +13790,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    3.3
+    1.5,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13838,11 +13802,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -13858,7 +13817,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 5,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "il tiramisù costa 13",
@@ -13870,8 +13829,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.2
+    1.5,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13882,11 +13841,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -13902,7 +13856,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la cotoletta costa 13",
@@ -13914,8 +13868,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.2
+    1.6,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13926,11 +13880,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -13946,7 +13895,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: prezzo da 8,50 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la diavola costa 13",
@@ -13958,8 +13907,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.3
+    1.5,
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13970,11 +13919,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -13990,7 +13934,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Patate al forno*: prezzo da 4,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "le patate al forno costa 13",
@@ -14002,8 +13946,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.2
+    1.5,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14014,11 +13958,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -14034,7 +13973,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliere misto*: prezzo da 14,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "il tagliere misto costa 13",
@@ -14046,8 +13985,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.3
+    1.6,
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14058,11 +13997,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -14078,7 +14012,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 11,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la lasagna costa 13",
@@ -14090,8 +14024,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.1
+    1.6,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14102,11 +14036,6 @@
    "menu": "mario",
    "success": false,
    "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "errore-generico",
-     "why": "turno 2: errore generico"
-    },
     {
      "sev": "GRAVE",
      "code": "non-applicato",
@@ -14122,7 +14051,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: prezzo da 5,00 € a *13,00 €*",
-    "*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco."
+    "*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita»."
    ],
    "turns": [
     "la bruschetta costa 13",
@@ -14134,8 +14063,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.2
+    1.6,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14162,8 +14091,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    1.4,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14218,8 +14147,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    1.3,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14274,8 +14203,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    0.9
+    1.3,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14330,8 +14259,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    1.3,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14386,8 +14315,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.3
+    0.6,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14414,8 +14343,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.3
+    0.9,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14443,7 +14372,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.3
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14498,8 +14427,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.7
+    1.2,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14526,8 +14455,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    0.7
+    1.3,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false

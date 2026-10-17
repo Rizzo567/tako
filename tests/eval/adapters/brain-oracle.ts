@@ -63,6 +63,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  const msgs=body.messages as {role:string,content:string}[],cat=catalog(msgs[1]!.content),last=msgs.at(-1)!.content
  const msg=(last.split('\nMESSAGGIO\n')[1]??last.replace(/^MESSAGGIO\n/,'')).trim(),p=plainT(msg),pAll=p
  const hist=msgs.slice(2,-1),owners=hist.filter(m=>m.role==='user').map(m=>m.content),bot=[...hist].reverse().find(m=>m.role==='assistant')?.content??''
+
  const names=[...cat.code.keys()],expected=[...conv.changes,...(conv.interim??[])]
  literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');relDelta=relativeDelta(msg)?.delta??null
  // Struttura (fase B): categorie, spostamenti, anche dei piatti appena creati che ora vanno altrove.
@@ -147,8 +148,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   for(const n of prevD){const e=conv.changes.find(c=>c.op==='price'&&c.dish===n) as any;if(!e)continue;const v=said.includes(e.price)?e.price:prevSaid.includes(e.price)?e.price:null;if(v!==null)actions.push({action:'set_price',item:cat.code.get(n),price:v})}}
  // Rimandi a più piatti o per posizione («quei due», «entrambi», «tutti e tre», «il primo», «tutti tranne boh»): il modello ideale
  // li risolve sui messaggi recenti del titolare (correzioni A, 17/10) e applica l'azione detta a ciascuno.
- if(!actions.length&&(!relevantHere.length||exceptAll)){const deix=deixisReferents(msg,owners.slice(-3),names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''})))
-  if(deix?.ids.length){const verb=DELETE_VERB.test(p)?'delete':/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*|rimett\w*|mostra\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':said.length?'price':null
+ if(!actions.length&&(!relevantHere.length||exceptAll)){const botList=/(?:^|\s)[-•]\s+\S/.test(bot)&&!/\?/.test(bot)?names.filter(n=>bot.includes(n)).sort((a,b)=>bot.indexOf(a)-bot.indexOf(b)):[],deix=deixisReferents(msg,owners.slice(-3),names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''})),botList)
+  if(deix?.ids.length){const verb=DELETE_VERB.test(p)?'delete':/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*|rimett\w*|mostra\w*)\b/.test(p)?'hidden':/finit|esaurit|tornat|disponibil/.test(p)?'available':said.length?'price':null
    for(const n of deix.ids){const e=expected.find(c=>c.op!=='create'&&c.dish===n&&c.op===verb)??(verb==='price'&&said.length?{op:'price',dish:n,price:said.at(-1)!} as Change:null);if(!e)continue
     const a=act(e,cat,e.op==='price'?(said.includes((e as any).price)?(e as any).price:said.at(-1)!):null,null);if(a&&'value' in a&&typeof a.value==='boolean')a.value=valueFor(e.op,a.value);if(a)actions.push(a)}}}
  // Nessun piatto nel messaggio: rimando al piatto del contesto («mettila a 13», «no scusa 14», «rimettila com'era»).
@@ -159,7 +160,9 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    // «anzi no, a 19, e mettila in evidenza»: anche le altre azioni dette sul piatto del contesto.
    const verb=/evidenza/.test(p)?'featured':/\b(nascond\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':null;const more=verb?expected.find(c=>c.op===verb&&(c as any).dish===ctxDish):null;if(more){const a=act(more,cat,null,null);if(a)actions.push(a)}}
   else{const verb=DELETE_VERB.test(p)?'delete':/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':null
-   const fin=conv.changes.find(c=>c.op!=='create'&&c.dish===ctxDish&&(verb?c.op===verb:c.op!=='price'));if(fin&&fin.op!=='price'){const a=act(fin,cat,null,null);if(a)actions.push(a)}}}
+   // «toglilo» subito dopo «in evidenza»: il modello ideale toglie l'evidenza appena messa (A7.9).
+   if(/^(?:no\s+)?(?:togli\w*|levalo|levala)$/.test(p)&&/evidenza/.test(bot)){actions.push({action:'set_featured',item:cat.code.get(ctxDish),value:false})}
+   const fin=actions.length?null:conv.changes.find(c=>c.op!=='create'&&c.dish===ctxDish&&(verb?c.op===verb:c.op!=='price'));if(fin&&fin.op!=='price'){const a=act(fin,cat,null,null);if(a)actions.push(a)}}}
  // Richiesta multipla con piatti ambigui accanto a parti chiare: le chiare in actions, ogni ambigua in uncertain.
  const residual=here.reduce((t,h)=>plainT(t).replace(plainT(h),' '),msg)
  const uncertain:any[]=[];if(actions.length){const seen=new Set<string>(here);for(const n of amb){if(seen.has(n)||!hitStems(n,residual).length)continue;const pool=[n,...rivalsOf(n,msg)];pool.forEach(x=>seen.add(x))
