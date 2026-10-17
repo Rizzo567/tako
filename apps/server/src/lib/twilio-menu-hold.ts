@@ -64,7 +64,7 @@ function holdCutSection(body:string,sections:SectionRef[]):{rest:string,sectionI
   const f=holdFold(body),m=f.match(re);if(m){const from=m.index!,to=from+m[0].length;return{rest:(body.slice(0,from)+' '+body.slice(to)).replace(/\s+/g,' ').trim(),sectionId:s.id}}}
  return null}
 const holdCreateVerb=/^\s*(?:(?:allora|ok|ciao|senti|mi|ci|puoi|potresti|vorrei|voglio)\s+)*(?:aggiung\w*|aggiun\w*|aggin\w*|agiung\w*|inserisc\w*|inserire|metti\w*\s+nel\s+menu)\s*[:,]?\s*/i
-export type HoldStart={hold:Hold,text:string}|{actions:MenuAction[],note?:string}
+export type HoldStart={hold:Hold,text:string}|{actions:MenuAction[],note?:string,seen?:string[]}
 /** Divide sui separatori senza spezzare i nomi dei piatti che li contengono («Pasta e fagioli»). */
 function splitParts(text:string,refs:MenuRef[]):string[]{
  const names=[...new Set(refs.map(r=>r.name.replace(/\s+/g,' ').trim()).filter(n=>n.length>=3&&HOLD_SEP.test(' '+n+' ')))].sort((a,b)=>b.length-a.length),keep:string[]=[]
@@ -107,7 +107,7 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
   // Tutto chiaro: con un comando dentro l'aggiunta si applica qui (prima il nome diventava «Parmigiana e togli boh»),
   // altrimenti resta al flusso di sempre.
   const notes=exists.map(r=>fill(copy.holdExists,{piatto:safe(r.name),categoria:safe(r.section??''),prezzo:euroText(r.price)}))
-  if(!uncertain)return commands&&(clear.length>commands||exists.length)?{actions:clear,...(notes.length?{note:notes.join('\n')}:{})}:null
+  if(!uncertain)return commands&&(clear.length>commands||exists.length)?{actions:clear,...(notes.length?{note:notes.join('\n')}:{}),seen:exists.map(r=>r.id)}:null
   if(!createCompound(text)&&!clear.some(a=>a.kind==='create')&&!exists.length)return null
   if(notes.length)holdNotes=notes
  }else{

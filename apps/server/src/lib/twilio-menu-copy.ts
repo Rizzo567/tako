@@ -67,6 +67,7 @@ Indica anche il menu, per esempio «{esempio}».`,
  readNone:{unavailable:'Nessun piatto è *finito*: sono tutti disponibili.',hidden:'Non ci sono piatti *nascosti*.'},
  readList:{unavailable:'*Piatti finiti ({n})*\n{elenco}',hidden:'*Piatti nascosti ({n})*\n{elenco}'},
  // A7.13 (off): Groq giù su una richiesta che serve all'IA → mai «c'è stato un problema»: si dice cosa funziona adesso.
+ unreadAsk:'Non sono sicuro di aver capito tutta la richiesta: cosa intendi con «{testo}»? Non ho cambiato nulla.',
  aiDown:'*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbonara 13» o «la gricia è finita».',
  noAi:'L’assistente è *temporaneamente non disponibile*. Puoi usare comandi semplici: «prezzo Carbonara a 12», «esaurito Carbonara», «nascondi Carbonara».',
  failed:'*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.',

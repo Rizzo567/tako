@@ -27,6 +27,7 @@ import {composeReply,REFERS,mixedMessage} from '../lib/owner-brain-plan.js'
 import {stripLeadBeforeRemoval,clearChanges,holdFromMessage,holdAnswer,holdQuestion,undoRecordFor,isUndoRequest,applyUndo,undoText,undoWindowMs,type Hold,type UndoRecord} from '../lib/twilio-menu-hold.js'
 import {startsWithCreate,parseCreate,createCompound} from '../lib/twilio-menu-create.js'
 import {removeVerbRe} from '../lib/twilio-menu-nlu.js'
+import {unreadWords,nameIsExplicit} from '../lib/twilio-menu-reading.js'
 import {phoneticCandidates} from '../lib/twilio-menu-phonetic.js'
 import {relativeDelta,g9Prices} from '../lib/twilio-menu-ai.js'
 import {parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
@@ -67,7 +68,7 @@ function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAct
  const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
 }
 type TurnOpts={brainOff?:boolean,planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,uploads?:Map<string,string>,exclude?:Excluded[]}
-type TurnState={text?:string,exclude:Excluded[],note?:string,brain?:boolean,postDraft?:CreateDraft,postBatch?:any,alsoVerb?:'featured'|'hidden'}
+type TurnState={text?:string,exclude:Excluded[],note?:string,brain?:boolean,postDraft?:CreateDraft,postBatch?:any,alsoVerb?:'featured'|'hidden',seen?:string[]}
 const choiceTemplate=(a:MenuAction):ChoiceAction|null=>{if(!('id' in a))return null;const {id:_id,...rest}=a as any;return ['price','available','hidden','featured','description','tag','promo','scarcity'].includes(a.kind)?rest as ChoiceAction:null}
 /** Turno del bot. Se il testo è stato ripulito (clausole negate) o ci sono piatti esclusi, il passaggio all'IA li porta con sé. */
 export async function menuTurn(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts={}):Promise<Turn>{
@@ -112,6 +113,8 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  const {phone,tenant,actor}=ctx,{planned,uploads}=opts,normalized=normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ').trim(),intent=replyIntent(text),open=intent&&!['annulla','no','conferma','si','ok'].includes(normalized)?(await tx.execute(sql`SELECT 1 FROM tako_whatsapp_proposals WHERE phone=${phone} AND expires_at>now()`)).length>0:true,reply=open?intent:null;
  // Impostazioni del locale lette una volta per turno (prima fino a 3 letture uguali nello stesso turno).
  let settingsRows:Promise<any[]>|undefined;const restaurantSettings=()=>settingsRows??=Promise.resolve(tx.execute(sql`SELECT settings FROM restaurants WHERE id=${tenant}`)) as Promise<any[]>
+ // A8.0: testo non letto → cervello (se acceso e disponibile) o domanda breve; mai una scrittura.
+ const notRead=async(un:string[]):Promise<Turn>=>{if(!opts.brainOff){if(botBrainEnabled((await restaurantSettings())[0]?.settings))st.brain=true;return{llm:true}};return fill(copy.unreadAsk,{testo:safe(un.slice(0,4).join(' '))})}
  const revertLast=/^(no |scusa |aspetta |anzi )*(aspetta )?(lascia stare|lascia perdere|annulla l ultima( modifica)?|torna come prima|rimetti come prima)$/.test(normalized)
  // 17/10: «annulla / torna indietro / rimetti com'era» senza riepilogo in attesa = annulla l'ultima pubblicazione da WhatsApp (10 minuti).
  let undoRec:UndoRecord|null=null
@@ -242,7 +245,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
    if(revert!==undefined&&(!last||!last.undo.length))return revert?`Non ho una modifica recente su *${revert}* da annullare. Dimmi cosa vuoi, per esempio «${revert} è di nuovo disponibile».`:'Non c\'è un\'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima».'
    if(last){const next=followUp(text,last,refs,lastAge(last),businessDate(String(((await restaurantSettings())[0]?.settings as any)?.timezone??'Europe/Rome')));if(next&&'reply' in next)return next.reply;if(next){created=next;reverted=revert!==undefined;const v=st.alsoVerb,f=next.find(a=>'id' in a);if(v&&f&&'id' in f)created=[...next,{kind:v,id:f.id,value:true} as MenuAction]}}}}
  // 17/10 (vocale di Manuel): richiesta multipla con una parte incerta («… e tojibo» = «togli boh»?) → le parti chiare in sospeso + una domanda.
- if(!created&&!planned&&!pending&&!choice&&!proposal){const h=holdFromMessage(text,sections,refs);if(h){if('hold' in h){await propose(tx,ctx,row.revision,h.hold);return h.text}created=h.actions;if(h.note)tail=[tail,h.note].filter(Boolean).join('\n\n')}}
+ if(!created&&!planned&&!pending&&!choice&&!proposal){const h=holdFromMessage(text,sections,refs);if(h){if('hold' in h){await propose(tx,ctx,row.revision,h.hold);return h.text}created=h.actions;if((h as any).seen)st.seen=(h as any).seen;if(h.note)tail=[tail,h.note].filter(Boolean).join('\n\n')}}
  if(!created&&!planned&&!pending&&!choice){const step=createStep(text,draft&&Number(proposal!.revision)===row.revision?draft:null,sections,refs,parseIntent)
   if(step.kind==='ask'){await propose(tx,ctx,row.revision,step.draft);return step.text}
   if(step.kind==='exists'){if(draft)await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return fill(copy.alreadyExists,{piatto:step.name,categoria:step.section})}
@@ -330,6 +333,10 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  const preUndoLen=preUndo.length;if(preUndo.length)actions=[...preUndo,...actions]
  // Mai cambiare un piatto negato (caso 2), da qualunque percorso arrivi l'azione.
  if(st.exclude.length){actions=actions.filter(a=>(a as any).fromRestore||!isExcluded(a as any,st.exclude));if(!actions.length){if(batch)return copy.pendingEmpty;return fill(copy.negatedOnly,{piatti:[...new Set(st.exclude.map(e=>refs.find(r=>r.id===e.id)?.name).filter((n):n is string=>!!n))].slice(0,4).map(safe).join(', ')})}}
+ // A8.0 «lettura completa»: una scrittura dal percorso deterministico solo se ogni parola del messaggio è spiegata dalle azioni
+ // capite; altrimenti cervello (validatore) o, con Groq spento, una domanda che cita il testo non letto.
+ // Esenti: annulla/ripristini (grammatica chiusa) e le azioni del percorso vendite (promo, etichette, scarsità).
+ if(!planned&&!holdPick&&!swapPick&&!negPick&&!reverted&&!preUndo.length&&!actions.some(a=>(a as any).fromRestore)&&!actions.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag')){const un=unreadWords(text,actions,refs,sections,{excludedIds:[...st.exclude.map(e=>e.id),...(st.seen??[])],known:draft?[draft.name??'',...(draft.names??[]),draft.sectionName??'']:[]});if(un.length)return notRead(un)}
  {const problem=salesActionProblem(actions,workspace);if(problem)return problem}
  actions=effectiveMenuActions(actions,workspace);
  // A4.4: la risposta alla domanda dello stesso messaggio segue la modifica (letta sul menu dopo il salvataggio).
