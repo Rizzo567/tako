@@ -1,6 +1,6 @@
 {
  "cases": 200,
- "runs": 281,
+ "runs": 287,
  "unknownSql": [],
  "results": [
   {
@@ -272,7 +272,58 @@
    "actual": [
     "hidden|Lasagna al forno|true"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togli-14",
+   "cat": "togli",
+   "mode": "empty",
+   "turns": [
+    "togli la lasagna dalla lista di oggi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togli-14",
+   "cat": "togli",
+   "mode": "wrong",
+   "turns": [
+    "togli la lasagna dalla lista di oggi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "togli-14",
+   "cat": "togli",
+   "mode": "wrongCreate",
+   "turns": [
+    "togli la lasagna dalla lista di oggi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -883,7 +934,58 @@
    "actual": [
     "available|Cotoletta alla milanese|false"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-02",
+   "cat": "finito",
+   "mode": "empty",
+   "turns": [
+    "oggi niente cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-02",
+   "cat": "finito",
+   "mode": "wrong",
+   "turns": [
+    "oggi niente cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "finito-02",
+   "cat": "finito",
+   "mode": "wrongCreate",
+   "turns": [
+    "oggi niente cotoletta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Cotoletta alla milanese|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {

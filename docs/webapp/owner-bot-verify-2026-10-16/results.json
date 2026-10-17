@@ -1,6 +1,6 @@
 {
  "cases": 283,
- "runs": 541,
+ "runs": 547,
  "unknownSql": [
   "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
  ],
@@ -1771,7 +1771,58 @@
    "actual": [
     "price|Tagliata di manzo|20"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "prezzo-08",
+   "cat": "prezzo",
+   "mode": "empty",
+   "turns": [
+    "la tagliata di manzo viene 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "prezzo-08",
+   "cat": "prezzo",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata di manzo viene 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "prezzo-08",
+   "cat": "prezzo",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata di manzo viene 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliata di manzo|20"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -1898,58 +1949,7 @@
    "actual": [
     "price|Diavola|9.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-12",
-   "cat": "prezzo",
-   "mode": "empty",
-   "turns": [
-    "aumenta la diavola di 1 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Diavola|9.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-12",
-   "cat": "prezzo",
-   "mode": "wrong",
-   "turns": [
-    "aumenta la diavola di 1 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "price|Diavola|9.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-12",
-   "cat": "prezzo",
-   "mode": "wrongCreate",
-   "turns": [
-    "aumenta la diavola di 1 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Diavola|9.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -1968,58 +1968,7 @@
    "actual": [
     "price|Tagliata di manzo|16"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-13",
-   "cat": "prezzo",
-   "mode": "empty",
-   "turns": [
-    "abbassa la tagliata di 2 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Tagliata di manzo|16"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-13",
-   "cat": "prezzo",
-   "mode": "wrong",
-   "turns": [
-    "abbassa la tagliata di 2 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "price|Tagliata di manzo|16"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-13",
-   "cat": "prezzo",
-   "mode": "wrongCreate",
-   "turns": [
-    "abbassa la tagliata di 2 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Tagliata di manzo|16"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -2057,7 +2006,58 @@
    "actual": [
     "price|Tiramisù|4.5"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "prezzo-15",
+   "cat": "prezzo",
+   "mode": "empty",
+   "turns": [
+    "il tiramisù costa 50 centesimi in meno"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tiramisù|4.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "prezzo-15",
+   "cat": "prezzo",
+   "mode": "wrong",
+   "turns": [
+    "il tiramisù costa 50 centesimi in meno"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "price|Tiramisù|4.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "prezzo-15",
+   "cat": "prezzo",
+   "mode": "wrongCreate",
+   "turns": [
+    "il tiramisù costa 50 centesimi in meno"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tiramisù|4.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -3231,7 +3231,58 @@
    "actual": [
     "available|Tagliata di manzo|false"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "esaurito-03",
+   "cat": "esaurito",
+   "mode": "empty",
+   "turns": [
+    "oggi niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "esaurito-03",
+   "cat": "esaurito",
+   "mode": "wrong",
+   "turns": [
+    "oggi niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "esaurito-03",
+   "cat": "esaurito",
+   "mode": "wrongCreate",
+   "turns": [
+    "oggi niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -5060,7 +5111,58 @@
    "actual": [
     "description|Pasta e fagioli|ricetta della nonna"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "descrizione-05",
+   "cat": "descrizione",
+   "mode": "empty",
+   "turns": [
+    "per la pasta e fagioli scrivi: ricetta della nonna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "description|Pasta e fagioli|ricetta della nonna"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "descrizione-05",
+   "cat": "descrizione",
+   "mode": "wrong",
+   "turns": [
+    "per la pasta e fagioli scrivi: ricetta della nonna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "description|Pasta e fagioli|ricetta della nonna"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "descrizione-05",
+   "cat": "descrizione",
+   "mode": "wrongCreate",
+   "turns": [
+    "per la pasta e fagioli scrivi: ricetta della nonna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "description|Pasta e fagioli|ricetta della nonna"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {

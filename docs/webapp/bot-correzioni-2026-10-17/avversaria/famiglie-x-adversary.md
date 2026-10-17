@@ -15,7 +15,7 @@
 | sospeso | 25 | 18 | 4 | 0 | 3 |
 | suono | 25 | 19 | 1 | 0 | 5 |
 | code | 31 | 30 | 0 | 0 | 1 |
-| relativi | 20 | 14 | 0 | 0 | 6 |
+| relativi | 20 | 16 | 0 | 0 | 4 |
 | cent2 | 14 | 3 | 0 | 0 | 11 |
 | misti2 | 18 | 8 | 0 | 0 | 10 |
 | ordinali | 8 | 0 | 6 | 0 | 2 |
@@ -24,7 +24,7 @@
 | lasciastare | 10 | 4 | 0 | 0 | 6 |
 | ipotesi | 8 | 8 | 0 | 0 | 0 |
 | toglieuro | 10 | 9 | 0 | 0 | 1 |
-| TOTALE | 508 | 344 | 29 | 0 | 135 |
+| TOTALE | 508 | 346 | 29 | 0 | 133 |
 
 ## Fallimenti
 
@@ -500,14 +500,6 @@
   - turni: aggiungi nei primi le linguine allo scoglio a 18 e mettile in evidenza
   - atteso: create|linguine allo scoglio|18|primi · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
-- **adv-relativi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
-  - turni: abbassa la tagliata di 2
-  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Tagliata di tonno* 2. *Tagliata* Rispondi con il *numero* o il *nome*.»
-- **adv-relativi-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|5
-  - turni: abbassa il tiramisù di un euro
-  - atteso: price|Tiramisù|5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Tortino al cioccolato*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
 - **adv-relativi-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: alza la carbonara a 13
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica

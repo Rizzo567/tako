@@ -1,6 +1,6 @@
 {
  "cases": 189,
- "runs": 243,
+ "runs": 249,
  "unknownSql": [],
  "results": [
   {
@@ -3503,7 +3503,58 @@
    "actual": [
     "create|piatto del pescatore|18|primi"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nome-07",
+   "cat": "nome",
+   "mode": "empty",
+   "turns": [
+    "aggiungi nei primi il piatto Piatto del pescatore a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|piatto del pescatore|18|primi"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nome-07",
+   "cat": "nome",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi nei primi il piatto Piatto del pescatore a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "create|piatto del pescatore|18|primi"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nome-07",
+   "cat": "nome",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi nei primi il piatto Piatto del pescatore a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|piatto del pescatore|18|primi"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -3693,7 +3744,58 @@
    "actual": [
     "create|spaghetti del pescatore|16|primi"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nome-17",
+   "cat": "nome",
+   "mode": "empty",
+   "turns": [
+    "aggiungi «Spaghetti del pescatore» tra i primi a 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|spaghetti del pescatore|16|primi"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nome-17",
+   "cat": "nome",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi «Spaghetti del pescatore» tra i primi a 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "create|spaghetti del pescatore|16|primi"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nome-17",
+   "cat": "nome",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi «Spaghetti del pescatore» tra i primi a 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|spaghetti del pescatore|16|primi"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {

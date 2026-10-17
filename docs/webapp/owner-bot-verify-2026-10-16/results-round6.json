@@ -1,6 +1,6 @@
 {
  "cases": 177,
- "runs": 216,
+ "runs": 222,
  "unknownSql": [],
  "results": [
   {
@@ -1275,7 +1275,61 @@
     "hidden|Tiramisù|true",
     "price|Panna cotta|6"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "multi-04",
+   "cat": "multi",
+   "mode": "empty",
+   "turns": [
+    "elimina il tiramisù e la panna cotta costa 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tiramisù|true",
+    "price|Panna cotta|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "multi-04",
+   "cat": "multi",
+   "mode": "wrong",
+   "turns": [
+    "elimina il tiramisù e la panna cotta costa 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "hidden|Tiramisù|true",
+    "price|Panna cotta|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "multi-04",
+   "cat": "multi",
+   "mode": "wrongCreate",
+   "turns": [
+    "elimina il tiramisù e la panna cotta costa 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "hidden|Tiramisù|true",
+    "price|Panna cotta|6"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -1449,7 +1503,61 @@
     "hidden|Lasagna al forno|true",
     "create|gricia|11|primi"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "multi-12",
+   "cat": "multi",
+   "mode": "empty",
+   "turns": [
+    "aggiungi nei primi la gricia a 11 ed elimina la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|gricia|11|primi",
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "multi-12",
+   "cat": "multi",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi nei primi la gricia a 11 ed elimina la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "create|gricia|11|primi",
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "multi-12",
+   "cat": "multi",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi nei primi la gricia a 11 ed elimina la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|gricia|11|primi",
+    "hidden|Lasagna al forno|true"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {

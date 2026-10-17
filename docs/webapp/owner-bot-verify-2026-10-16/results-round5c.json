@@ -1,6 +1,6 @@
 {
  "cases": 186,
- "runs": 384,
+ "runs": 387,
  "unknownSql": [],
  "results": [
   {
@@ -428,7 +428,58 @@
    "actual": [
     "price|Tagliere misto|16"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-08",
+   "cat": "altfp",
+   "mode": "empty",
+   "turns": [
+    "tagliere misto per 2 o 3 a 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliere misto|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-08",
+   "cat": "altfp",
+   "mode": "wrong",
+   "turns": [
+    "tagliere misto per 2 o 3 a 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "price|Tagliere misto|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "altfp-08",
+   "cat": "altfp",
+   "mode": "wrongCreate",
+   "turns": [
+    "tagliere misto per 2 o 3 a 16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Tagliere misto|16"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {

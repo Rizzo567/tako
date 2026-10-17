@@ -3,11 +3,11 @@
 | Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
 |---|---|---|---|---|---|
 | coppie | 30 | 26 | 4 | 0 | 0 |
-| prezzi | 32 | 18 | 14 | 0 | 0 |
+| prezzi | 32 | 20 | 12 | 0 | 0 |
 | centesimi | 25 | 16 | 9 | 0 | 0 |
 | nomi | 31 | 28 | 3 | 0 | 0 |
 | deixis | 35 | 10 | 19 | 0 | 6 |
-| anzino | 30 | 16 | 12 | 0 | 2 |
+| anzino | 30 | 15 | 13 | 0 | 2 |
 | misti | 30 | 17 | 13 | 0 | 0 |
 | asr | 50 | 28 | 21 | 0 | 1 |
 | parole | 22 | 12 | 10 | 0 | 0 |
@@ -15,7 +15,7 @@
 | sospeso | 25 | 18 | 4 | 0 | 3 |
 | suono | 25 | 17 | 7 | 0 | 1 |
 | code | 31 | 30 | 1 | 0 | 0 |
-| relativi | 20 | 12 | 8 | 0 | 0 |
+| relativi | 20 | 15 | 5 | 0 | 0 |
 | cent2 | 14 | 3 | 11 | 0 | 0 |
 | misti2 | 18 | 8 | 10 | 0 | 0 |
 | ordinali | 8 | 0 | 7 | 0 | 1 |
@@ -24,7 +24,7 @@
 | lasciastare | 10 | 10 | 0 | 0 | 0 |
 | ipotesi | 8 | 8 | 0 | 0 | 0 |
 | toglieuro | 10 | 8 | 2 | 0 | 0 |
-| TOTALE | 508 | 313 | 181 | 0 | 14 |
+| TOTALE | 508 | 317 | 177 | 0 | 14 |
 
 ## Fallimenti
 
@@ -71,14 +71,6 @@
 - **adv-prezzi-009** [GRAVE] GRAVE non-applicato: non applicato: price|Amatriciana|13, price|Carbonara|13
   - turni: carbonara 13 e amatriciana uguale
   - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
-- **adv-prezzi-013** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12
-  - turni: aumenta la gricia di 1 euro
-  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
-- **adv-prezzi-015** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16
-  - turni: abbassa la tagliata di 2 euro
-  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
 - **adv-prezzi-022** [GRAVE] GRAVE non-applicato: non applicato: price|Birra piccola|3.5
   - turni: la birra media a 5 e la piccola a 3 e 50
@@ -256,6 +248,10 @@
   - turni: carbonara 13 ⏎ anzi no, 14 ⏎ no scusa avevi ragione 13
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame» ⏎ «*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbon» ⏎ «*Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneamente non disponibile*. Funzionano i comandi semplici, un piatto per messaggio, come «carbon»
+- **adv-anzino-006** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13 · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13
+  - turni: la carbonara a 13 ⏎ no, intendevo l'amatriciana
+  - atteso: price|Amatriciana|13 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «Non sono sicuro di aver capito tutta la richiesta: cosa intendi con «intendevo»? Non ho cambiato nulla.»
 - **adv-anzino-007** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13
   - turni: la carbonara a 13 ⏎ no, l'amatriciana a 13, la carbonara lasciala stare
   - atteso: price|Amatriciana|13 · ottenuto: price|Amatriciana|13, price|Carbonara|13
@@ -645,18 +641,6 @@
 - **adv-code-026** [GRAVE] GRAVE non-applicato: non applicato: create|linguine allo scoglio|18|primi
   - turni: aggiungi nei primi le linguine allo scoglio a 18 e mettile in evidenza
   - atteso: create|linguine allo scoglio|18|primi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
-- **adv-relativi-001** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12
-  - turni: alza la gricia di 1 euro
-  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
-- **adv-relativi-002** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16
-  - turni: abbassa la tagliata di 2
-  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
-- **adv-relativi-012** [GRAVE] GRAVE non-applicato: non applicato: price|Tiramisù|5
-  - turni: abbassa il tiramisù di un euro
-  - atteso: price|Tiramisù|5 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* Questa richiesta adesso non la riesco a leggere: l’assistente che capisce le frasi lunghe è *temporaneame»
 - **adv-relativi-013** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
   - turni: alza la carbonara a 13

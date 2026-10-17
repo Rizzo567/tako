@@ -1,6 +1,6 @@
 {
  "cases": 160,
- "runs": 352,
+ "runs": 355,
  "unknownSql": [],
  "results": [
   {
@@ -3639,7 +3639,58 @@
    "actual": [
     "description|Pasta del giorno|oggi amatriciana"
    ],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-22",
+   "cat": "nomi",
+   "mode": "empty",
+   "turns": [
+    "nella pasta del giorno scrivi: oggi amatriciana"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "description|Pasta del giorno|oggi amatriciana"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-22",
+   "cat": "nomi",
+   "mode": "wrong",
+   "turns": [
+    "nella pasta del giorno scrivi: oggi amatriciana"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "description|Pasta del giorno|oggi amatriciana"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "nomi-22",
+   "cat": "nomi",
+   "mode": "wrongCreate",
+   "turns": [
+    "nella pasta del giorno scrivi: oggi amatriciana"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "description|Pasta del giorno|oggi amatriciana"
+   ],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
