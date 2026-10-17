@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-af441e28-7564-4462-a6fb-8acdd8f72fd8",
+  "object": "chat.completion",
+  "created": 1792239717,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"change\",\"actions\":[{\"action\":\"set_available\",\"item_id\":\"p12\",\"available\":false},{\"action\":\"set_price\",\"item_id\":\"p13\",\"price\":18}]}",
+     "reasoning": "User gave catalog and message. Need interpret: \"u pisci spada nun si tocca, u tunnu a diciottu\". Likely means \"il pesce spada non si tocca, il tonno a diciotto\". So request: set price of pesce spada (p12) to 18? Actually \"u pisci spada nun si tocca\" means fish sword not to touch = maybe unavailable? \"nun si tocca\" = not to be touched = set unavailable false? Actually \"nun si tocca\" means do not touch = make unavailable? Probably set_available false (finito). And \"u tunnu a diciottu\" means tuna at 18 euros = set price of tonno (p13) to 18. So two actions: set_available false for p12, set_price 18 for p13.\n\nReturn change intent with actions. Use item_ids. Ensure correct fields. JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.049030275,
+   "prompt_tokens": 1453,
+   "prompt_time": 0.063202775,
+   "completion_tokens": 242,
+   "completion_time": 0.498843474,
+   "total_tokens": 1695,
+   "total_time": 0.562046249,
+   "completion_tokens_details": {
+    "reasoning_tokens": 194
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_64b2f1c926",
+  "x_groq": {
+   "id": "req_01m54wzjt3e1ra66j4xyhvk47s",
+   "seed": 1855853740
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1453,
+  "completion_tokens": 242,
+  "total_tokens": 1695
+ },
+ "ms": 673,
+ "recordedAt": "2026-10-17T12:21:57.645Z",
+ "conv": "negazione-015"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-2f71db6f-a435-4642-bc7a-923315c34396",
+  "object": "chat.completion",
+  "created": 1792239747,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"change\",\"actions\":[{\"action\":\"set_price\",\"item_id\":\"p2\",\"price\":5.5}]}",
+     "reasoning": "User provides catalog and message: wants to change price of \"marinara\" to 5.50. Need item id p2. Action set_price. Return change JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.210389627,
+   "prompt_tokens": 1417,
+   "prompt_time": 0.035375473,
+   "completion_tokens": 76,
+   "completion_time": 0.166628377,
+   "total_tokens": 1493,
+   "total_time": 0.20200385,
+   "prompt_tokens_details": {
+    "cached_tokens": 768
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 37
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_19b184c447",
+  "x_groq": {
+   "id": "req_01m54x0g3qeff87wrqesrch4js",
+   "seed": 747407099
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1417,
+  "completion_tokens": 76,
+  "total_tokens": 1493
+ },
+ "ms": 465,
+ "recordedAt": "2026-10-17T12:22:27.451Z",
+ "conv": "vocale-010"
+}

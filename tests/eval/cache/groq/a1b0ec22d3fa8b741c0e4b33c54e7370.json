@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-f7c81422-5a8b-48e2-b39b-a3b99374695d",
+  "object": "chat.completion",
+  "created": 1792239409,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"clarify\",\"item_ids\":[]}",
+     "reasoning": "User wants to revert item to previous state? \"rimettila com'era\" means \"put it back as it was\". No specifics which item. Ambiguous. Must return clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.049236975,
+   "prompt_tokens": 1620,
+   "prompt_time": 0.069187156,
+   "completion_tokens": 58,
+   "completion_time": 0.119737713,
+   "total_tokens": 1678,
+   "total_time": 0.188924869,
+   "completion_tokens_details": {
+    "reasoning_tokens": 39
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m54wp611ekh8zgsmv9zbfqrt",
+   "seed": 1820216357
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1620,
+  "completion_tokens": 58,
+  "total_tokens": 1678
+ },
+ "ms": 277,
+ "recordedAt": "2026-10-17T12:16:49.279Z",
+ "conv": "ripristino-001"
+}
