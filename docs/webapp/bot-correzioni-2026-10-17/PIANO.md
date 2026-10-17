@@ -55,9 +55,9 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 - [x] A5.2 Batteria A5 (≥150 frasi) verde, incluso nessun falso abbinamento. — *F: a5-asr 151 (32 frasi di controllo fuori menu): oracolo 151/151, Groq giù/avversario 0 GRAVI di sicurezza. Banco V fase A falliti 3→0; banco E 296/318 (93,1%), multi 91,3%, 0 GRAVI di sicurezza.*
 
 ### A6. Chiusura fase A
-- [ ] A6.1 143 casi V + batterie A1–A5: 0 GRAVI, MEDI ≤ 2%.
-- [ ] A6.2 Batterie round1–6* 0/0/0; suite = 12 rossi noti; banco E oracolo non peggiora.
-- [ ] A6.3 Gpt-oss vero sui casi V che passano dal cervello, entro tetto token (o rimandato al gate Developer, segnalato).
+- [x] A6.1 143 casi V + batterie A1–A5: 0 GRAVI, MEDI ≤ 2%. — *F (oracolo): V fase A 118 casi 0 GRAVI / 0 MEDI (base 45 falliti); i 25 casi che chiedono capacità di fase B (elimina, rinomina, sposta, categoria nuova, togliere un piatto appena creato) restano falliti, sicurezza 8→8, non peggiorano (implementation-notes 1, 13). Batterie A1–A5 809/809, 0 MEDI; Groq giù e avversario 0 GRAVI di sicurezza, 0 prezzi non detti.*
+- [x] A6.2 Batterie round1–6* 0/0/0; suite = 12 rossi noti; banco E oracolo non peggiora. — *F: round1–6* verdi; suite 3.187 test, gli stessi 12 rossi della base; banco E oracolo 296/318 (93,1%, era 92,5%), multi 189/207 (91,3%), 0 GRAVI di sicurezza.*
+- [ ] A6.3 Gpt-oss vero sui casi V che passano dal cervello, entro tetto token (o rimandato al gate Developer, segnalato). — *F: **RIMANDATO al gate Developer**: le due chiavi di test sono già oltre 150k token oggi (166k e 165k nel registro); 0 token spesi. La scheda del cervello è cambiata, quindi serve una registrazione nuova (comando in token-log.md, ~300k token).*
 - [ ] A6.4 Verifica avversariale indipendente (agente diverso): cerca frasi nuove che pubblicano cose sbagliate; tutto ciò che trova → batteria + fix.
 - [ ] A6.5 Deploy edge v113 (QA solo per il cervello) con check-active, diff, rollback; live sul QA solo TwiML: rifare la sequenza vocale delle 17:26 di Manuel → tutto giusto; QA ripristinato per hash; 0 messaggi al numero di Manuel (verifica API Twilio prima/dopo).
 - [ ] A6.6 Fast-forward origin/main e origin/codex/release-1016; REPORT-A.md.

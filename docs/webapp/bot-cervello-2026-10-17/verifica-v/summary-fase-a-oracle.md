@@ -1,4 +1,4 @@
-# Banco E · a5-oracle
+# Banco E · fase-a-oracle
 
 Generato da tests/eval (groq=oracle, bot=nuovo, tetto=20000, conversazioni=143).
 
