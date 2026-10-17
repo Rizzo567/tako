@@ -56,10 +56,10 @@ export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,rest
 export type BrainDecision={path:'brain',intent:'change'|'read'|'clarify'|'capability'|'chat',plan:MenuPlan,hold?:Hold,exclude:Excluded[],aliasesUsed:{phrase:string,itemId:string}[],replyDraft:string,notes:string[],usage:BrainUsage,tokens:BrainContext['tokens']}
 export type BrainFallback={path:'fallback',reason:string,usage?:BrainUsage,tokens?:BrainContext['tokens']}
 
-const SAME_PRICE=/\b(stess[oa]|stesso costo|come (?:il|la|lo|l|i|le|gli)\b|ugual\w*|identic[oa]|pari|idem|allineal\w*|allinea\w*|anche|pure)\b/
+const SAME_PRICE=/\b(puru|stess[oa]|stesso costo|come (?:il|la|lo|l|i|le|gli)\b|ugual\w*|identic[oa]|pari|idem|allineal\w*|allinea\w*|anche|pure)\b/
 // Rimandi alla cronologia: pronomi, «anche/pure/uguale», correzioni, scelte («la seconda»).
 const SWAP=/\b(intendevo|volevo dire|era (?:la|il|lo|l)|non (?:la|il|lo) .{0,20}(?:ma|era)|no(?:,)? (?:la|il|lo|l|i|le|gli)\b|scusa(?:,)? (?:la|il|lo|l|i|le|gli)\b|ho sbagliato)/
-export const REFERS=/\b(fai|solo|anche|pure|uguale|ugual\w*|idem|stess[oa]|mettil\w*|fall[aoie]\w*|portal\w*|toglil\w*|nascondil\w*|rimettil\w*|segnal\w*|quell[aoie]|quelli|quest[aoi]|no|scusa|anzi|invece|intendevo|volevo|sbagliato|errore|prim[oa]|second[oa]|terz[oa]|ultim[oa]|tutt\w*|entramb\w*|altr[oa])\b/
+export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|mettil\w*|fall[aoie]\w*|portal\w*|toglil\w*|nascondil\w*|rimettil\w*|segnal\w*|quell[aoie]|quelli|quest[aoi]|no|scusa|anzi|invece|intendevo|volevo|sbagliato|errore|prim[oa]|second[oa]|terz[oa]|ultim[oa]|tutt\w*|entramb\w*|altr[oa])\b/
 const ORDINAL=/\b(prim[oa]|second[oa]|terz[oa]|quart[oa]|quint[oa]|ultim[oa]|[1-8]|tutt[ie]|entramb\w*|altr[oa])\b/
 const UP=/\b(aument\w*|alz\w*|sal\w*|piu)\b/,DOWN=/\b(abbass\w*|diminu\w*|scont\w*|scal\w*|meno|togli\w*)\b/
 
@@ -87,7 +87,7 @@ export function dominatedBy(id:string,message:string,refs:MenuRef[]):string[]{
 }
 // «la gricia a uno in meno», «due di più»: quel numero è una differenza, mai il prezzo.
 const relativeNumbers=(message:string)=>{const out=new Set<number>(),p=plain(message);for(const m of p.matchAll(/\b(\w+)(?: euro)? (?:in|di) (?:meno|piu)\b/g)){const v=g9Prices(m[1]!);for(const x of v)out.add(x)}return out}
-const BOT_QUESTION=/\?|\brispondi\b|\bquale\b|\bintendi\b|scrivi il/i
+const BOT_QUESTION=/\?|\brispondi\b|\bquale\b|\bintendi\b|scrivi il|riscrivimi|due prezzi/i
 export const PENDING_MS=10*60*1000
 
 /** Riconverte i codici e normalizza un'azione del modello nel formato del validatore attuale. */
@@ -109,7 +109,7 @@ function legacyAction(a:any,map:(v:unknown)=>string|null):any{
 /** Validatore del cervello. Riusa le regole attuali e aggiunge: riferimenti di prezzo risolti dal menu vero, domande = zero
  * scritture, memoria attiva come «piatto nominato» (trustedIds), alias riportati solo verso piatti esistenti. */
 // Numeri detti in dialetto (siciliano/napoletano/romanesco) → italiano, solo per i controlli del server («a ottu» = 8, «cincu» = 5).
-const DIALECT_NUM:Record<string,string>={unu:'uno',dui:'due',tri:'tre',quattru:'quattro',cincu:'cinque',cinche:'cinque',seie:'sei',setti:'sette',ottu:'otto',novi:'nove',deci:'dieci',unnici:'undici',dudici:'dodici',tririci:'tredici',quattordici:'quattordici',quinnici:'quindici',sidici:'sedici',diciassetti:'diciassette',diciottu:'diciotto',diciannovi:'diciannove',vinti:'venti',trenta:'trenta',euri:'euro',euru:'euro'}
+const DIALECT_NUM:Record<string,string>={unu:'uno',dui:'due',tri:'tre',quattru:'quattro',cincu:'cinque',cinche:'cinque',seie:'sei',setti:'sette',ottu:'otto',novi:'nove',deci:'dieci',unnici:'undici',dudici:'dodici',tririci:'tredici',quattordici:'quattordici',quinnici:'quindici',sidici:'sedici',diciassetti:'diciassette',diciottu:'diciotto',diciannovi:'diciannove',vinti:'venti',trenta:'trenta',euri:'euro',euru:'euro',menzu:'mezzo',menza:'mezza'}
 export const dialectNumbers=(s:string)=>s.replace(/\b[\p{L}]+\b/gu,w=>DIALECT_NUM[w.toLowerCase()]??w)
 export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[]}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections}=input,message=dialectNumbers(input.message),byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
@@ -139,11 +139,21 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
  if(intent==='read'){const ids=refIds(data.item_refs);if(data.read==='unavailable'||data.read==='hidden')return{intent,plan:{type:'read',read:data.read},exclude,aliasesUsed,replyDraft:reply,notes};const rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
   if(rivals.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...ids,...rivals])].slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
   return{intent,plan:ids.length?{type:'read',read:'items',ids:ids.slice(0,10)}:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:reply,notes}}
+ // «e pure la gricia», «anche la gricia» subito dopo una modifica di prezzo confermata: il modello a volte chiede il prezzo;
+ // è la stessa modifica (stesso prezzo del piatto appena cambiato). Si riscrive come price_ref e passa dai controlli normali.
+ if(intent==='clarify'&&Array.isArray(data.clarify?.missing)&&data.clarify.missing.includes('price')&&/\b(anche|pure|puru|ugual\w*|idem|stess[oa])\b/.test(msg)){
+  const hist=recentHistory(input.history??[],input.now),bot=[...hist].reverse().find(t=>t.role==='bot'),lab=bot&&!BOT_QUESTION.test(bot.text)?[...bot.text.matchAll(/\*([^*\n]{2,80})\*\s*:\s*prezzo da/g)].map(m=>plain(m[1]!)):[]
+  const ids0=refIds(data.clarify?.item_refs),codeOf=new Map([...ctx.codes].map(([c,id])=>[id,c])),w=refs.find(r=>lab.length===1&&plain(r.name)===lab[0])
+  if(w&&ids0.length===1&&ids0[0]!==w.id){data.intent='change';data.actions=[{action:'set_price',item:codeOf.get(ids0[0]!),price:null,price_ref:codeOf.get(w.id),price_delta:null}];return validateBrainPlan(JSON.stringify(data),ctx,input)}}
  if(intent==='clarify'){const ids=refIds(data.clarify?.item_refs?.length?data.clarify.item_refs:data.item_refs),missing=Array.isArray(data.clarify?.missing)?data.clarify.missing:[]
   let plan=missing.length?validateMenuPlan({intent:'clarify',missing,name:null,section_ids:[]},refs,{sections,message}):{type:'clarify',ids:ids.slice(0,8)} as MenuPlan
   // Chiarimento con l'azione già capita (QA 17/10 caso 3): un'azione sola, sul primo candidato, con i valori detti nel messaggio.
   // Il route la tiene in sospeso come scelta («choose»): «2», «quello classico», «sì la seconda» la completano.
   const acts=Array.isArray(data.actions)?data.actions:[]
+  // Un solo candidato con l'azione capita («la pasta costa 12» → Pasta e fagioli?): domanda di conferma sì/no (hold «confirm»).
+  if(plan.type==='clarify'&&ids.length===1&&acts.length===1&&BRAIN_ACTIONS.includes(acts[0]?.action)&&acts[0].action!=='restore'&&!question){const a=acts[0],id=ids[0]!
+   const v=validateMenuPlan({intent:'change',actions:[legacyAction(a,x=>x===a.item?id:map(x))]},refs,{sections,message,exclude,trustedIds:new Set([id]),checkCompleteness:false})
+   if(v.type==='change'&&v.actions.length===1)return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:[],asks:[{type:'confirm',word:message.slice(0,60),action:v.actions[0]!}]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'conferma']}}
   if(plan.type==='clarify'&&ids.length>1&&acts.length===1&&BRAIN_ACTIONS.includes(acts[0]?.action)&&acts[0].action!=='restore'&&!question){const a=acts[0],id=map(a.item)??ids[0]!
    if(ids.includes(id)&&!(a.action==='set_price'&&a.price==null)){const v=validateMenuPlan({intent:'change',actions:[legacyAction(a,x=>x===a.item?id:map(x))]},refs,{sections,message,exclude,trustedIds:new Set(ids),checkCompleteness:false})
     if(v.type==='change'&&v.actions.length===1)plan={type:'clarify',ids:ids.slice(0,8),actions:v.actions}}}
@@ -166,7 +176,7 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
  // Contesto (fase 2): un messaggio che rimanda a prima («mettila a 13», «e la gricia uguale», «no scusa 14», «sì la seconda»)
  // può riferirsi a piatti nominati nella cronologia (ultimi messaggi del titolare + ultima risposta del bot) e a prezzi detti
  // DAL TITOLARE nella cronologia. Mai prezzi presi dalle risposte del bot; mai creazioni dal contesto.
- const history=input.history??[],owners=history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text),lastBotText=[...history].reverse().find(t=>t.role==='bot')?.text??''
+ const history=input.history??[],owners=history.filter(t=>t.role==='owner').slice(-3).map(t=>dialectNumbers(t.text)),lastBotText=[...history].reverse().find(t=>t.role==='bot')?.text??''
  const hasCreate=actions.some((a:any)=>a?.action==='create_item'||a?.action==='create_daily_special')
 const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!!lastBotTurn&&BOT_QUESTION.test(lastBotTurn.text)&&(input.now??Date.now())-lastBotTurn.at>PENDING_MS
  // Una domanda del bot vale 10 minuti (come le proposte in sospeso): dopo, la risposta breve non la completa più.
@@ -213,8 +223,10 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   if(ctxOK){const prevOwner=owners.at(-1)??'',pd=refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)).map(r=>r.id),bd=refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).map(r=>r.id)
    const bare=ids.filter(id=>!trustedHas(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)&&!derived.some(d=>d.refId===id))
    // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
-   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length
-   const bad=bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg))||priceBare(id))
+   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)
+   // Risposta a una domanda del bot sulla richiesta di prima: quella richiesta (anche con più piatti) torna valida per intero.
+   const answering=BOT_QUESTION.test(lastBotText)
+   const bad=bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg)&&!answering)||priceBare(id))
    if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...pd,...bad])].filter(id=>byId.has(id)).slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'rimando_incerto']}}
   // Scelta aperta tra più piatti: «sì», «ok», «vai» non scelgono. Serve il nome, un ordinale o «tutti e due».
   const open=(input.clarifyIds??[]).filter(id=>byId.has(id))

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d9f19d6a-9cc9-4d6c-b0a1-780d155793cf",
+  "object": "chat.completion",
+  "created": 1792248671,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Vuoi impostare il prezzo della Gricia uguale a quello di quale piatto?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Vuoi che la Gricia abbia lo stesso prezzo di un altro piatto?\"\n}",
+     "reasoning": "Need to parse: \"e la gricia uguale\" meaning set price of Gricia same as previous? previous was 11 already. So price same as what? likely same as carbonara? ambiguous. Should clarify. Provide intent clarify with question."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.025051704,
+   "prompt_tokens": 3429,
+   "prompt_time": 0.164011138,
+   "completion_tokens": 173,
+   "completion_time": 0.362398497,
+   "total_tokens": 3602,
+   "total_time": 0.526409635,
+   "completion_tokens_details": {
+    "reasoning_tokens": 52
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_49bfac06f1",
+  "x_groq": {
+   "id": "req_01m555gthhevvbxcb47t7rwk5j",
+   "seed": 1309225591
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3429,
+  "completion_tokens": 173,
+  "total_tokens": 3602
+ },
+ "ms": 729,
+ "recordedAt": "2026-10-17T14:51:11.282Z",
+ "conv": "anche-002"
+}

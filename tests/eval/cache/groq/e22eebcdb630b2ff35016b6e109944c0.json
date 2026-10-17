@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-b0e8b374-dc9a-44aa-aa2a-186672e4e24d",
+  "object": "chat.completion",
+  "created": 1792247469,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Vuoi rendere disponibile la Gricia o modificarne qualche aspetto?\",\n    \"item_refs\": [\"p10\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Vuoi rendere disponibile la Gricia o modificarne qualcosa?\"\n}",
+     "reasoning": "User says \"anche la gricia\". Means also the gricia (p10). Likely wants to add? Probably set available? ambiguous. Probably wants to make it available? Could be ask if available. It's a question? \"anche la gricia\" maybe wants to include it in menu? ambiguous. We'll ask clarify. intent=clarify, question maybe \"Vuoi renderla disponibile o modificarla?\" item_refs candidate p10. reply_draft ask."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.025905308,
+   "prompt_tokens": 3281,
+   "prompt_time": 0.158600881,
+   "completion_tokens": 219,
+   "completion_time": 0.460134095,
+   "total_tokens": 3500,
+   "total_time": 0.618734976,
+   "completion_tokens_details": {
+    "reasoning_tokens": 95
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_87b3c396db",
+  "x_groq": {
+   "id": "req_01m554c4ndentbrmk36tc5vq1p",
+   "seed": 854031408
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3281,
+  "completion_tokens": 219,
+  "total_tokens": 3500
+ },
+ "ms": 804,
+ "recordedAt": "2026-10-17T14:31:09.288Z",
+ "conv": "scaduto-001"
+}

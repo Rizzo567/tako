@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-5c2cafe9-dd95-4d9f-a54a-17ffb2b702cb",
+  "object": "chat.completion",
+  "created": 1792248280,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"restore\",\n      \"item\": \"p13\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. Intent restore? He wants to revert boh to previous state. boh is p13 hidden. Restore should revert to before last change (which was hide). So restore action on p13. reply_draft empty. No other."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055102209,
+   "prompt_tokens": 3461,
+   "prompt_time": 0.05381883,
+   "completion_tokens": 222,
+   "completion_time": 0.460899554,
+   "total_tokens": 3683,
+   "total_time": 0.514718384,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 52
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m5554wsxeh29hdjbf1y7nexy",
+   "seed": 1095620050
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3461,
+  "completion_tokens": 222,
+  "total_tokens": 3683
+ },
+ "ms": 679,
+ "recordedAt": "2026-10-17T14:44:40.304Z",
+ "conv": "manuel-005"
+}

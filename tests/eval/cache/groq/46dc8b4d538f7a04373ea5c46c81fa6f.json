@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-ea512092-087f-4cdc-b4d0-3d99b77260f0",
+  "object": "chat.completion",
+  "created": 1792249915,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p11\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to read intent: user just says \"Piatto di verifica\". Likely wants read info. So intent read, item_refs p11. reply_draft ask? Actually just a question? Probably wants price? ambiguous. We'll set intent=read, read=items, item_refs [\"p11\"], no actions. reply_draft empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.025553562,
+   "prompt_tokens": 3466,
+   "prompt_time": 0.062347758,
+   "completion_tokens": 167,
+   "completion_time": 0.355055155,
+   "total_tokens": 3633,
+   "total_time": 0.417402913,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 71
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_49bfac06f1",
+  "x_groq": {
+   "id": "req_01m556psvseabavbdn0bv2ya4c",
+   "seed": 2037869933
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3466,
+  "completion_tokens": 167,
+  "total_tokens": 3633
+ },
+ "ms": 529,
+ "recordedAt": "2026-10-17T15:11:55.573Z",
+ "conv": "qa1710-004"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-356bf25b-062a-4c72-aff7-2160fa924e25",
+  "object": "chat.completion",
+  "created": 1792249354,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p10\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need read intent, item_refs p10. No actions. reply_draft empty? For read question, reply_draft empty. intent read, read items? It's asking price, so read intent? Probably read with item_refs. read maybe \"items\"? Use read=\"items\". reply_draft \"\"."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055668241,
+   "prompt_tokens": 4382,
+   "prompt_time": 0.004772326,
+   "completion_tokens": 158,
+   "completion_time": 0.331093104,
+   "total_tokens": 4540,
+   "total_time": 0.33586543,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 62
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m5565nykeqe850mpn7xygckq",
+   "seed": 789040237
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4382,
+  "completion_tokens": 158,
+  "total_tokens": 4540
+ },
+ "ms": 482,
+ "recordedAt": "2026-10-17T15:02:34.464Z",
+ "conv": "domanda-006"
+}

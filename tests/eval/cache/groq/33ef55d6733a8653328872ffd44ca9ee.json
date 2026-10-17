@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-cac399b6-fec8-4b66-bb30-dd866126d2f3",
+  "object": "chat.completion",
+  "created": 1792247239,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A quale supplì ti riferisci?\",\n    \"item_refs\": [\"p1\", \"p2\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"A quale supplì ti riferisci?\"\n}",
+     "reasoning": "We need to set price of supplì. Which supplì? There are p1 Supplì classico price 2.5, p2 Supplì cacio e pepe price 3. The message \"il supplì costa 3,50\" ambiguous which. Both are supplì. Need clarify. Provide intent=clarify with candidates p1,p2. No actions. reply_draft ask which."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054221988,
+   "prompt_tokens": 3285,
+   "prompt_time": 0.012886139,
+   "completion_tokens": 202,
+   "completion_time": 0.418308106,
+   "total_tokens": 3487,
+   "total_time": 0.431194245,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 86
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554546fewkagqse7w91hthx",
+   "seed": 741365935
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3285,
+  "completion_tokens": 202,
+  "total_tokens": 3487
+ },
+ "ms": 588,
+ "recordedAt": "2026-10-17T14:27:19.231Z",
+ "conv": "chiarimento-002"
+}

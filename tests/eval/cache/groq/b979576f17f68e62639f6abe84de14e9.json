@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-e086313e-26bd-4820-982b-6d8ec36cdac4",
+  "object": "chat.completion",
+  "created": 1792249234,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Cosa vuoi fare con la Gricia?\",\n    \"item_refs\": [\"p10\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Cosa vuoi fare con la Gricia?\"\n}",
+     "reasoning": "User says \"anche la gricia\". Means also the gricia (p10). Likely wants same action as previous? No prior context. Probably wants to add something? ambiguous. Probably wants to set same price as previous? No prior. Might be request to add? Probably wants to make it featured? unclear. So uncertain. No clear action. We'll ask clarification: which action? Provide clarify with item_refs p10. No actions. reply_draft ask what to do."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055115607,
+   "prompt_tokens": 3356,
+   "prompt_time": 0.051445768,
+   "completion_tokens": 212,
+   "completion_time": 0.439016994,
+   "total_tokens": 3568,
+   "total_time": 0.490462762,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 98
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m55620qdepdt2fsspsrwsqer",
+   "seed": 459883841
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3356,
+  "completion_tokens": 212,
+  "total_tokens": 3568
+ },
+ "ms": 646,
+ "recordedAt": "2026-10-17T15:00:34.588Z",
+ "conv": "scaduto-001"
+}

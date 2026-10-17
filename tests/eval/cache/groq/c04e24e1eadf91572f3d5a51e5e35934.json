@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-23c2653e-eae8-4883-8cd6-a398ce5d6a8d",
+  "object": "chat.completion",
+  "created": 1792248190,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 5,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p4\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to parse: \"e puru i panelli a cincu\" likely means panelle price 5? \"panelli\" = panelle p4, price set to 5. So intent change, action set_price item p4 price 5. reply_draft empty. No uncertainties."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.053846322,
+   "prompt_tokens": 3243,
+   "prompt_time": 0.163252688,
+   "completion_tokens": 237,
+   "completion_time": 0.495751397,
+   "total_tokens": 3480,
+   "total_time": 0.659004085,
+   "completion_tokens_details": {
+    "reasoning_tokens": 62
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m55524taemdr9msvf2415nd6",
+   "seed": 1053890307
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3243,
+  "completion_tokens": 237,
+  "total_tokens": 3480
+ },
+ "ms": 768,
+ "recordedAt": "2026-10-17T14:43:10.352Z",
+ "conv": "vocale-032"
+}

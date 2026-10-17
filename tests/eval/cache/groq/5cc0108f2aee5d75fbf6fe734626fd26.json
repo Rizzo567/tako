@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-bcf9a5b2-38c6-48f0-80c9-386f8dad63d5",
+  "object": "chat.completion",
+  "created": 1792248831,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"restore\",\n      \"item\": \"p10\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p9\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p9\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to produce JSON. User says no, intended cacio e pepe. So previous action was set_available false on p10 (Gricia). Now restore that and set same action on p9 (Cacio e pepe). So intent change, actions: restore p10, set_available p9 false. reply_draft empty. No uncertainties. alias none. capability empty. read none. item_refs maybe both items. unclear but include item_refs list."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054784857,
+   "prompt_tokens": 3425,
+   "prompt_time": 0.176313744,
+   "completion_tokens": 341,
+   "completion_time": 0.707243638,
+   "total_tokens": 3766,
+   "total_time": 0.883557382,
+   "completion_tokens_details": {
+    "reasoning_tokens": 92
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_64b2f1c926",
+  "x_groq": {
+   "id": "req_01m555npw6e1jvakar77k5z3gx",
+   "seed": 189787111
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3425,
+  "completion_tokens": 341,
+  "total_tokens": 3766
+ },
+ "ms": 1111,
+ "recordedAt": "2026-10-17T14:53:51.746Z",
+ "conv": "correzione-003"
+}

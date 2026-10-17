@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-f5eae363-e955-4e1a-bcfd-1388bfc18541",
+  "object": "chat.completion",
+  "created": 1792247559,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A che prezzo vuoi impostare la Gricia?\",\n    \"item_refs\": [\"p10\"],\n    \"missing\": [\"price\"]\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"A che prezzo vuoi impostare la Gricia?\"\n}",
+     "reasoning": "User says \"anche la gricia\". Means also set price? No price given. Probably wants same price as carbonara? ambiguous. Should clarify price. So intent clarify. Provide question. No actions. reply_draft ask price."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.024339679,
+   "prompt_tokens": 4888,
+   "prompt_time": 0.003899815,
+   "completion_tokens": 160,
+   "completion_time": 0.332550307,
+   "total_tokens": 5048,
+   "total_time": 0.336450122,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 48
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_854fa9be4c",
+  "x_groq": {
+   "id": "req_01m554ewk9eckt8791eft78zdv",
+   "seed": 472728476
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4888,
+  "completion_tokens": 160,
+  "total_tokens": 5048
+ },
+ "ms": 479,
+ "recordedAt": "2026-10-17T14:32:38.994Z",
+ "conv": "scaduto-004"
+}

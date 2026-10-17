@@ -77,7 +77,9 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  const amb=names.filter(n=>hitStems(n,msg).length>0&&rivalsOf(n,msg).length>0&&!here.includes(n))
  const relevantHere=here.filter(n=>expected.some(c=>c.op!=='create'&&c.dish===n))
  const sectionHit=[...cat.sections.keys()].find(s=>plainT(s).split(' ').some(w=>w.length>3&&p.split(' ').some(x=>x.slice(0,4)===w.slice(0,4))))
- if(!relevantHere.length&&(amb.length||(!here.length&&sectionHit&&!lastOwnerDishes.length))){const pool=amb.length?[...new Set(amb.flatMap(n=>[n,...rivalsOf(n,msg)]))]:names.filter(n=>cat.sectionOf.get(n)===sectionHit)
+ // Parola generica («la pasta», «la pizza») che indica più piatti del menu: il modello ideale chiede quale.
+ const generic=!here.length&&!amb.length?[...GENERIC].find(g=>p.split(' ').includes(g)&&names.filter(n=>plainT(n).split(' ').includes(g)).length>=1):undefined
+ if(!relevantHere.length&&(amb.length||generic||(!here.length&&sectionHit&&!lastOwnerDishes.length))){const pool=amb.length?[...new Set(amb.flatMap(n=>[n,...rivalsOf(n,msg)]))]:generic?names.filter(n=>plainT(n).split(' ').includes(generic)):names.filter(n=>cat.sectionOf.get(n)===sectionHit)
   const price=said[0]??null,promo=/\b(promo\w*|offert\w*)\b/.test(p),a=price!==null?{action:promo?'set_promo':'set_price',item:cat.code.get(pool[0]!),price}:/finit|esaurit|fernut/.test(p)?{action:'set_available',item:cat.code.get(pool[0]!),value:false}:/nascond|togli|lev/.test(p)?{action:'set_hidden',item:cat.code.get(pool[0]!),value:true}:null
   return out({intent:'clarify',clarify:{question:'Quale intendi?',item_refs:pool.slice(0,8).map(n=>cat.code.get(n)!),missing:[]},actions:a?[a]:[]})}
  // Creazioni come currentOracle.
@@ -95,6 +97,9 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    if(e.op==='price'&&price===null&&!ref)continue
    if(e.op==='price'&&price!==null&&!said.includes(price)&&!ownSaid.includes(price))continue
    const a=act(e,cat,price,ref);if(a&&'value' in a&&typeof a.value==='boolean')a.value=valueFor(e.op,a.value);if(a&&!actions.some(x=>x.item===a.item&&x.action===a.action))actions.push(a);break}}
+ // Risposta a una domanda del bot sulla richiesta di prima («hai scritto due prezzi: 9 o 9,50?» → «9»): la richiesta intera.
+ if(!actions.length&&!here.length&&said.length&&/\?|riscrivimi|due prezzi/i.test(bot)){const prevD=lastOwnerDishes,prevSaid=spoken(owners.at(-1)??'')
+  for(const n of prevD){const e=conv.changes.find(c=>c.op==='price'&&c.dish===n) as any;if(!e)continue;const v=said.includes(e.price)?e.price:prevSaid.includes(e.price)?e.price:null;if(v!==null)actions.push({action:'set_price',item:cat.code.get(n),price:v})}}
  // Nessun piatto nel messaggio: rimando al piatto del contesto («mettila a 13», «no scusa 14», «rimettila com'era»).
  if(!actions.length&&!here.length&&ctxDish){const e=expected.filter(c=>c.op!=='create'&&c.dish===ctxDish)
   if(/\b(rimett\w*|com era|come prima|annull\w*|torna\w*)\b/.test(p)&&!e.some(c=>conv.changes.includes(c)))actions.push({action:'restore',item:cat.code.get(ctxDish)})

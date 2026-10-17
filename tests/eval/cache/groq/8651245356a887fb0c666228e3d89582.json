@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-599d8040-165b-4179-8e79-e1c285e58df4",
+  "object": "chat.completion",
+  "created": 1792249394,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p1\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to interpret: ask price of supplì classico. That's a read intent. item_refs p1. read items? It's a question about price, so read intent, no actions. reply_draft empty? For read we provide reply_draft maybe empty? Probably reply_draft empty. Clarify none. uncertain empty. alias_used empty. capability_ids empty. item_refs list. read maybe \"items\"? Actually read intent for price query: read maybe \"items\"? The schema read enum: items, unavailable, hidden, none. Use items. Provide."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055133564,
+   "prompt_tokens": 4387,
+   "prompt_time": 0.004418127,
+   "completion_tokens": 211,
+   "completion_time": 0.437303347,
+   "total_tokens": 4598,
+   "total_time": 0.441721474,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 115
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m5566x0me15s0ms6h7sxg488",
+   "seed": 1567598664
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4387,
+  "completion_tokens": 211,
+  "total_tokens": 4598
+ },
+ "ms": 573,
+ "recordedAt": "2026-10-17T15:03:14.565Z",
+ "conv": "domanda-009"
+}

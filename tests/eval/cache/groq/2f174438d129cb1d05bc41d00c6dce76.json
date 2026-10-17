@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-21bd8c95-44ef-4a8f-853a-5ef3f040c840",
+  "object": "chat.completion",
+  "created": 1792248415,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p9\",\n      \"section\": null,\n      \"price\": 20,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p9\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. Intent change. item p9 tagliata. set_price to 20. reply_draft empty. No uncertainties. alias none."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.210483165,
+   "prompt_tokens": 3381,
+   "prompt_time": 0.155256693,
+   "completion_tokens": 209,
+   "completion_time": 0.442690211,
+   "total_tokens": 3590,
+   "total_time": 0.597946904,
+   "completion_tokens_details": {
+    "reasoning_tokens": 34
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_9241e9962b",
+  "x_groq": {
+   "id": "req_01m55590p1egg9yd0m3250n8mz",
+   "seed": 736555235
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3381,
+  "completion_tokens": 209,
+  "total_tokens": 3590
+ },
+ "ms": 990,
+ "recordedAt": "2026-10-17T14:46:55.672Z",
+ "conv": "batterie-003"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-209092df-74ef-4a2f-b493-b74b9a1c2bd3",
+  "object": "chat.completion",
+  "created": 1792247694,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"unavailable\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. User asks \"cosa è finito?\" It's a read question. intent read, item_refs? ambiguous? They ask which item is finished. We have one known finished: p3 Diavola is esaurito. So read items? Actually they ask what is finished. Should be read intent with item_refs maybe none and read=unavailable? Probably intent=read, read=\"unavailable\", item_refs empty. reply_draft ask? No reply needed? For read, reply_draft empty? Probably provide empty. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.051598887,
+   "prompt_tokens": 3202,
+   "prompt_time": 0.05604761,
+   "completion_tokens": 210,
+   "completion_time": 0.434623589,
+   "total_tokens": 3412,
+   "total_time": 0.490671199,
+   "prompt_tokens_details": {
+    "cached_tokens": 2048
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 116
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554k0eheb5aqdpnhdzvp5ad",
+   "seed": 549488053
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3202,
+  "completion_tokens": 210,
+  "total_tokens": 3412
+ },
+ "ms": 694,
+ "recordedAt": "2026-10-17T14:34:54.261Z",
+ "conv": "domanda-014"
+}

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-255ef2d4-6d12-4a8e-9064-32582010c7d7",
+  "object": "chat.completion",
+  "created": 1792248144,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A che prezzo vuoi impostare la Gricia?\",\n    \"item_refs\": [\"p10\"],\n    \"missing\": [\"price\"]\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"A che prezzo vuoi impostare la Gricia?\"\n}",
+     "reasoning": "User says \"e pure a gricia\". Likely wants to set price? No price given. Maybe wants to add? Probably wants same price as carbonara? ambiguous. Need clarify. Provide intent=clarify with missing price. item_refs ambiguous? gricia is p10. So unclear action. Probably wants set price same as carbonara? ambiguous. Ask price."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.214007343,
+   "prompt_tokens": 3327,
+   "prompt_time": 0.156427112,
+   "completion_tokens": 194,
+   "completion_time": 0.401285932,
+   "total_tokens": 3521,
+   "total_time": 0.557713044,
+   "completion_tokens_details": {
+    "reasoning_tokens": 76
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_c868cf1eaa",
+  "x_groq": {
+   "id": "req_01m5550r2eefd9qkf28bpjhy91",
+   "seed": 2143404810
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3327,
+  "completion_tokens": 194,
+  "total_tokens": 3521
+ },
+ "ms": 866,
+ "recordedAt": "2026-10-17T14:42:24.589Z",
+ "conv": "vocale-031"
+}

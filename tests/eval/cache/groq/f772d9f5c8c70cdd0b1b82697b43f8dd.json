@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-06a87422-9af4-4d0d-b337-7fcc44b9d21c",
+  "object": "chat.completion",
+  "created": 1792249114,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p10\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"il supplì\",\n      \"candidates\": [\"p1\", \"p2\"],\n      \"action\": \"set_price\",\n      \"value\": null,\n      \"price\": 3\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need change intent, actions for each. Identify items: carbonara p7, price 13 (change price). gricia p10 price 12. supplì ambiguous: there are p1 Supplì classico (2.5) and p2 Supplì cacio e pepe (3). \"il supplì a 3\" could be p2 already 3, but maybe wants set price to 3 for generic supplì? ambiguous. Provide uncertain for supplì. So actions for p7 and p10. uncertain for supplì phrase \"il supplì\". candidates p1,p2. action set_price price 3? but ambiguous, we put action none? According spec: uncertain includes action/value/price if understood. Here price known 3, but item ambiguous. So action set_price, price 3, candidates list. Provide. No alias. reply_draft empty. intent change. read none. capability empty. clarify none."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055099999,
+   "prompt_tokens": 3372,
+   "prompt_time": 0.022479087,
+   "completion_tokens": 495,
+   "completion_time": 1.124537336,
+   "total_tokens": 3867,
+   "total_time": 1.147016423,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 197
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m555yaasedtasx8zhc50yn14",
+   "seed": 102995721
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3372,
+  "completion_tokens": 495,
+  "total_tokens": 3867
+ },
+ "ms": 1351,
+ "recordedAt": "2026-10-17T14:58:34.063Z",
+ "conv": "multipla-001"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-a2708a5a-888a-4295-91d9-e832a1e9f0ab",
+  "object": "chat.completion",
+  "created": 1792249554,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to interpret: \"nun è finita la carbonara\" means not finished, i.e., it's not out of stock. So set_available true for carbonara (p7). It's a change. No uncertainty. reply_draft empty. intent change. actions list one action set_available item p7 value true. read none. others empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055643096,
+   "prompt_tokens": 4639,
+   "prompt_time": 0.003807007,
+   "completion_tokens": 243,
+   "completion_time": 0.511462396,
+   "total_tokens": 4882,
+   "total_time": 0.515269403,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 72
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8ea50c0161",
+  "x_groq": {
+   "id": "req_01m556bsbcewybsd2b2gxj4m60",
+   "seed": 1344457433
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4639,
+  "completion_tokens": 243,
+  "total_tokens": 4882
+ },
+ "ms": 671,
+ "recordedAt": "2026-10-17T15:05:54.730Z",
+ "conv": "negazione-007"
+}

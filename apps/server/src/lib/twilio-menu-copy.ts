@@ -30,6 +30,7 @@ Hai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure
 
 Scrivi *CONFERMA* per pubblicarla o *ANNULLA* per lasciare il menu invariato. Hai *10 minuti*.`,
  photoReplaces:'; sostituisce quella attuale',
+ brainWhatFor:'Cosa vuoi cambiare per *{piatto}*? Per esempio «{piatto} a 13» oppure «{piatto} è finito». Non ho cambiato nulla.',
  brainNoContext:'A cosa ti riferisci? Non ho una richiesta recente a cui collegarlo: scrivimi il piatto e la modifica, per esempio «la gricia a 13». Non ho cambiato nulla.',
  noChanges:'Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.',
  pendingEmpty:'Ho tolto tutte le modifiche dal riepilogo. Il menu è *invariato*.',

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-fd15e3b3-c45e-4103-97aa-e5c986f0491c",
+  "object": "chat.completion",
+  "created": 1792248711,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p21\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p21\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to parse: first message set panna cotta unavailable. Already done. Now \"e il tiramisù uguale\" means same action (set unavailable) on tiramisù. So change action set_available item p21 value=false. No reply. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.303587159,
+   "prompt_tokens": 3425,
+   "prompt_time": 0.13659675,
+   "completion_tokens": 229,
+   "completion_time": 0.477366744,
+   "total_tokens": 3654,
+   "total_time": 0.613963494,
+   "completion_tokens_details": {
+    "reasoning_tokens": 55
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_5a93aea882",
+  "x_groq": {
+   "id": "req_01m555j1m0envsp2hyregbs06d",
+   "seed": 2061687667
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3425,
+  "completion_tokens": 229,
+  "total_tokens": 3654
+ },
+ "ms": 1050,
+ "recordedAt": "2026-10-17T14:51:51.632Z",
+ "conv": "anche-003"
+}

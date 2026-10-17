@@ -217,6 +217,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
    // «il menù costa 16»: il bersaglio è fatto solo di parole comuni («menu», «piatto»); se dei piatti le contengono si chiede quale.
    if(!found.length&&!words(intent.target).length){const toks=normalizeMenuText(intent.target).replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(w=>w.length>=3&&!['del','della','dello','dei','degli','delle','una','uno'].includes(w)),cands=toks.length?refs.filter(r=>{const n=normalizeMenuText(r.name).replace(/[^a-z0-9]+/g,' ').split(' ');return toks.every(w=>n.includes(w))}).slice(0,8):[]
     if(cands.length){const t0:ChoiceAction=intent.kind==='price'?{kind:'price',price:intent.price}:intent.kind==='description'?{kind:'description',text:intent.text}:intent.kind==='tag'?{kind:'tag',tag:intent.tag,value:true}:{kind:intent.kind,value:intent.value};await propose(tx,ctx,row.revision,{kind:'choose',action:t0,options:cands.map(r=>r.id)});return fill(copy.choose,{opzioni:cands.map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*`).join('\n')})}}
+   if(!found.length&&st.brain)return{llm:true}
    if(!found.length)return (preselect(text,refs).length&&!command)||phrase?{llm:true}:fill(copy.notFoundNamed,{nome:shown(intent.target)})
    const template:ChoiceAction=intent.kind==='price'?{kind:'price',price:intent.price}:intent.kind==='description'?{kind:'description',text:intent.text}:intent.kind==='tag'?{kind:'tag',tag:intent.tag,value:true}:{kind:intent.kind,value:intent.value}
    if(found.length>1){const only=exactPick(intent.target,found);if(only)found.splice(0,found.length,only)}
@@ -295,6 +296,8 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
   const d=run.decision
   if(d.intent==='chat'&&d.plan.type==='clarify'&&!d.plan.ids.length)return composeReply(d,refs,sections)
   // Rimando senza contesto valido («anche la gricia», «no scusa 14» dopo 30 minuti): una domanda, non «non ho capito».
+  // Un solo piatto e nessuna azione capita: una domanda («Cosa vuoi cambiare per X?»), non «non ho capito».
+  if(!d.hold&&d.plan.type==='clarify'&&d.plan.ids.length===1&&!d.plan.actions?.length){const r=refs.find(x=>x.id===(d.plan as any).ids[0]);if(r)return fill(copy.brainWhatFor,{piatto:safe(r.name)})}
   if(!d.hold&&d.plan.type==='clarify'&&!d.plan.ids.length&&!d.plan.actions?.length&&REFERS.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ')))return copy.brainNoContext
   // Più parti incerte: parti chiare in sospeso (proposta `hold`, 10 minuti) e una domanda per ciascuna, in un solo messaggio.
   if(d.hold){const hold=d.hold;return db.transaction(async tx=>{await lock(tx,ctx.phone);const live=await readWorkspace(ctx.tenant,tx);if(!live||live.revision!==row.revision)return copy.menuChanged;await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);await propose(tx,ctx,row.revision,hold);return holdQuestion(hold,refs,sections)})}

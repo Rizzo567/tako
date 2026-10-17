@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-333fb46e-d48d-4592-b941-6372d87e8689",
+  "object": "chat.completion",
+  "created": 1792248992,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 3,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need change price of supplì. Which item? Supplì classico p1 price 2.5. Also Supplì cacio e pepe p2 price 3 already. \"il supplì costa 3\" ambiguous? Could refer to generic supplì, likely classico. So set_price item p1 price 3. Also maybe ambiguous with p2 already 3, but they say cost 3, maybe want to set p1 to 3. We'll treat as change. No uncertainty. reply_draft empty. intent change. actions list one."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054005708,
+   "prompt_tokens": 3358,
+   "prompt_time": 0.055040304,
+   "completion_tokens": 290,
+   "completion_time": 0.706230156,
+   "total_tokens": 3648,
+   "total_time": 0.76127046,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 118
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m555tm40e5b8snrp20x88zw2",
+   "seed": 822323559
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3358,
+  "completion_tokens": 290,
+  "total_tokens": 3648
+ },
+ "ms": 969,
+ "recordedAt": "2026-10-17T14:56:32.616Z",
+ "conv": "chiarimento-001"
+}
