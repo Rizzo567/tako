@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-9477e0c9-e104-4aa6-82ff-bab9b1c8c37c",
+  "object": "chat.completion",
+  "created": 1792239408,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"clarify\",\"item_ids\":[\"p6\"]}",
+     "reasoning": "User wants to set price of parmigiana same as something? \"fallo anche con la parmigiana e mettila allo stesso prezzo\". Likely refer to previous action? No prior. Probably wants to set price of parmigiana (p6) same as something else maybe supplì? ambiguous. Need clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.293454196,
+   "prompt_tokens": 1628,
+   "prompt_time": 0.069054308,
+   "completion_tokens": 88,
+   "completion_time": 0.182311726,
+   "total_tokens": 1716,
+   "total_time": 0.251366034,
+   "completion_tokens_details": {
+    "reasoning_tokens": 66
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4727af4560",
+  "x_groq": {
+   "id": "req_01m54wp4zqe1vbc0w3c3z90t1b",
+   "seed": 192519782
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1628,
+  "completion_tokens": 88,
+  "total_tokens": 1716
+ },
+ "ms": 629,
+ "recordedAt": "2026-10-17T12:16:48.521Z",
+ "conv": "anche-001"
+}

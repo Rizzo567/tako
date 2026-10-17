@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-49816068-dbcf-40a6-9b0c-d7dc5b4b3532",
+  "object": "chat.completion",
+  "created": 1792239399,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"clarify\",\"item_ids\":[\"p12\",\"p13\",\"p14\"]}",
+     "reasoning": "User gave catalog and message \"no, togli bo\". Likely wants to remove tag? \"bo\" unclear. Could be ambiguous. Should respond clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.208864476,
+   "prompt_tokens": 1632,
+   "prompt_time": 0.079556008,
+   "completion_tokens": 61,
+   "completion_time": 0.127240342,
+   "total_tokens": 1693,
+   "total_time": 0.20679635,
+   "completion_tokens_details": {
+    "reasoning_tokens": 33
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_90620edd96",
+  "x_groq": {
+   "id": "req_01m54wnwcreg4tn95wgg4emnvh",
+   "seed": 518930992
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1632,
+  "completion_tokens": 61,
+  "total_tokens": 1693
+ },
+ "ms": 580,
+ "recordedAt": "2026-10-17T12:16:39.594Z",
+ "conv": "manuel-001"
+}

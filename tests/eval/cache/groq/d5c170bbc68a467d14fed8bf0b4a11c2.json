@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-0d9d4e70-a204-430f-adb0-327f4c0eafe7",
+  "object": "chat.completion",
+  "created": 1792239409,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"clarify\",\"item_ids\":[]}",
+     "reasoning": "User says \"no no quattordici\". Likely wants change price to 14? ambiguous. It's a request to set price to 14 for something unspecified. Need clarify. Return clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.210592013,
+   "prompt_tokens": 1620,
+   "prompt_time": 0.077176014,
+   "completion_tokens": 60,
+   "completion_time": 0.128074264,
+   "total_tokens": 1680,
+   "total_time": 0.205250278,
+   "completion_tokens_details": {
+    "reasoning_tokens": 41
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8655ddce88",
+  "x_groq": {
+   "id": "req_01m54wp5jpexasern6gm5mghz1",
+   "seed": 1527576861
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1620,
+  "completion_tokens": 60,
+  "total_tokens": 1680
+ },
+ "ms": 447,
+ "recordedAt": "2026-10-17T12:16:48.990Z",
+ "conv": "correzione-005"
+}

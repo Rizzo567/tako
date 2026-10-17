@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-44717dc5-823e-4562-b92b-552ee30fa3d8",
+  "object": "chat.completion",
+  "created": 1792239765,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"clarify\",\"item_ids\":[]}",
+     "reasoning": "User wants to set price of something to 13 but not specified which item. Ambiguous. Must return clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.297691481,
+   "prompt_tokens": 1619,
+   "prompt_time": 0.066841315,
+   "completion_tokens": 43,
+   "completion_time": 0.096249874,
+   "total_tokens": 1662,
+   "total_time": 0.163091189,
+   "completion_tokens_details": {
+    "reasoning_tokens": 24
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4a7bb72c24",
+  "x_groq": {
+   "id": "req_01m54x11ene0xtj9vr2x8tff69",
+   "seed": 384893113
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1619,
+  "completion_tokens": 43,
+  "total_tokens": 1662
+ },
+ "ms": 576,
+ "recordedAt": "2026-10-17T12:22:45.265Z",
+ "conv": "anche-012"
+}
