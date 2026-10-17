@@ -95,13 +95,13 @@ export function negatedClauses(raw:string,refs:MenuRef[],opts:{keepLeadingLascia
   {re:/(?:^|(?<=[,;\s(]))(?:tranne|eccetto|escluso|esclusa|esclusi|escluse|fuorche)\s+/g,keepText:true}]
  for(const p of patterns)for(const m of t.matchAll(p.re)){const start=m.index!+m[0].length;if(opts.keepLeadingLascia&&m.index===0&&/^lascia (?:stare|perdere)\b/.test(m[0].trim()))continue
   const g=grab(start),x=g.x.trim();if(!x)continue;const kinds=/prezz/.test(m[0])?['price']:/promo|offerta|sconto/.test(m[0])?['promo']:null;hits.push({from:m.index!,to:start+g.x.length,target:x,parts:g.parts,strong:true,...(kinds?{kinds}:{}),...(p.keepText?{keepText:true}:{})})}
- // «X no», «X resta com'è / rimane così / resta 20», «X non si tocca», «X non la toccare», «X lasciala com'è», «X la lasciamo»: il piatto viene prima.
+ // «X no», «X lascia stare» (17/10, perimetro N: «la amatriciana costa 9, la carbonara lascia stare»), «X resta com'è / rimane così / resta 20», «X non si tocca», «X non la toccare», «X lasciala com'è», «X la lasciamo»: il piatto viene prima.
  const after=[new RegExp(String.raw`\s+(?:no|nn)(?=\s*(?:[,;.\n!?)]|$))`,'g'),
   new RegExp(String.raw`\s+(?:invece\s+|pero\s+|pure\s+|anche\s+)?(?:resta|rimane|restano|rimangono)\s+(?:com'?\s?e|come e|com'?\s?era|cosi|uguale|invariat[oaie]|a posto|come sta|(?:a\s+)?\d+(?:[.,]\d{1,2})?(?:\s*euro)?)${NEG_LOOK}`,'g'),
   new RegExp(String.raw`\s+non\s+si\s+(?:tocca|toccano|cambia|cambiano|modifica)${NEG_LOOK}`,'g'),
   new RegExp(String.raw`\s+non\s+(?:(?:la|lo|li|le|l')\s*(?:toccare|cambiare|modificare|toccate|cambiate)|(?:toccarl|cambiarl|modificarl)[aoie])${NEG_LOOK}`,'g'),
   new RegExp(String.raw`\s+nun\s+(?:'?[oa]\s*|l[oa]\s+)?(?:tucc|tocc|cagn)\w*${NEG_LOOK}`,'g'),
-  new RegExp(String.raw`\s+(?:lasciala|lascialo|lasciali|lasciale|lassala|lassalo|lassali|lassale)\s+(?:stare|star|sta|perdere|com'?\s?e|come e|cosi|uguale|invariat[oaie]|in pace)${NEG_LOOK}`,'g'),
+  new RegExp(String.raw`\s+(?:lasciala|lascialo|lasciali|lasciale|lassala|lassalo|lassali|lassale|lascia|lassa)\s+(?:stare|star|sta|perdere|com'?\s?e|come e|cosi|uguale|invariat[oaie]|in pace)${NEG_LOOK}`,'g'),
   new RegExp(String.raw`\s+(?:la|lo|li|le|l')\s*(?:lasciamo|lascio|lasci|lasciate)(?:\s+(?:cosi|stare|perdere|com'?\s?e|come sta|in pace|a\s+\d+(?:[.,]\d{1,2})?(?:\s*euro)?))?${NEG_LOOK}`,'g')]
  for(const re of after)for(const m of t.matchAll(re)){const head=t.slice(0,m.index!),cut=Math.max(head.search(/[^,;.\n!?(]*$/),0);let from=cut;const seg=head.slice(cut);const conj=seg.match(/^(.*\s)(?:e|ma|pero|anzi)\s+/);if(conj)from=cut+conj[1]!.length
   let x=t.slice(from,m.index!).trim().replace(/^(?:e|ma|pero|anzi)\s+/,'');if(!x)continue

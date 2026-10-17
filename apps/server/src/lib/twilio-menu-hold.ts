@@ -113,7 +113,7 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
  return{hold,text:holdQuestion(hold,refs,sections)}
 }
 export function holdQuestion(hold:Hold,refs:MenuRef[],sections:SectionRef[]):string{
- const head=(hold.actions.length?fill(copy.holdHead,{righe:hold.actions.map(a=>describeAction(a,refs,sections)).join('\n')})+'\n\n':'')+(hold.notes?.length?hold.notes.join('\n')+'\n\n':'')
+ const head=(hold.actions.length?fill(copy.holdHead,{righe:hold.actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,sections)).join('\n')})+'\n\n':'')+(hold.notes?.length?hold.notes.join('\n')+'\n\n':'')
  if(hold.ask.type==='remove'){const r=refs.find(x=>x.id===(hold.ask as any).id);return head+fill(copy.holdRemove,{parola:safe(hold.ask.word).slice(0,40),piatto:safe(r?.name??'?')})}
  return head+fill(copy.holdPrice,{piatto:safe(hold.ask.name)})}
 

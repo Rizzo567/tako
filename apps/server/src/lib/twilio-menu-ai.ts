@@ -206,7 +206,7 @@ export type GroqOptions={meter?:(e:UsageEvent)=>unknown,onWait?:()=>unknown,budg
 const pause=(ms:number)=>new Promise(r=>setTimeout(r,ms))
 export function retryAfterMs(headers:Headers){const direct=Number(headers.get('retry-after'));if(Number.isFinite(direct)&&direct>0)return direct*1000;const reset=headers.get('x-ratelimit-reset-tokens')||headers.get('x-ratelimit-reset-requests')||'';const m=reset.match(/^(?:(\d+)m)?(?:([\d.]+)s)?$/);return m&&reset?Math.ceil((Number(m[1]||0)*60+Number(m[2]||0))*1000):10000}
 // Limiti Groq (429): una sola notifica di attesa, poi riprova rispettando retry-after; usa il modello di riserva appena libero; oltre il budget → GroqBusy.
-async function withRateLimit<T>(models:string[],call:(model:string)=>Promise<Response>,read:(model:string,response:Response)=>Promise<T>,opts:GroqOptions):Promise<T>{
+export async function withRateLimit<T>(models:string[],call:(model:string)=>Promise<Response>,read:(model:string,response:Response)=>Promise<T>,opts:GroqOptions):Promise<T>{
  const deadline=Date.now()+(opts.budgetMs??60000),blocked=new Map<string,number>(),failed=new Set<string>(),sleep=opts.sleep??pause;let waited=false,limited=false,last:unknown
  for(;;){const now=Date.now(),model=models.find(m=>!failed.has(m)&&(blocked.get(m)??0)<=now)
   if(!model){const open=models.filter(m=>!failed.has(m));if(!open.length)throw limited?new GroqBusy():last;const next=Math.min(...open.map(m=>blocked.get(m)??0));if(next>deadline)throw new GroqBusy();await sleep(Math.max(0,next-now));continue}

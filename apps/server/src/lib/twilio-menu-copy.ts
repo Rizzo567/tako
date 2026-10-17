@@ -99,7 +99,7 @@ Indica anche il menu, per esempio «{esempio}».`,
  // 17/10 (AI Act art. 50): detto una sola volta per numero, al collegamento o al primo messaggio.
  aiDisclosure:'Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.',
  // 17/10 (vocale di Manuel): richiesta multipla con una parte incerta. Le parti chiare restano in sospeso, mai perse.
- holdHead:'Ho capito:\n{righe}',
+ holdHead:'Ho capito, *non ancora pubblicato*:\n{righe}',
  holdRemove:'«{parola}» non è nel menu. Intendi *togliere {piatto}* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.',
  holdPrice:'Quanto costa *{piatto}*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.',
  holdNotTouched:'Non ho toccato *{piatto}*.',

@@ -22,6 +22,8 @@ import {fullMenuCopy} from '../lib/twilio-menu-copy.js'
 import {parseSalesText,salesTurn,salesActionProblem,categoryItems,type SalesTemplate} from '../lib/twilio-menu-sales.js'
 import {businessDate} from '../lib/menu-sales.js'
 import {negatedClauses,isExcluded,bareDish,looksLikeAnswer,pickPrice,allOptions,leadingInterjection,confirmCleanup,type Excluded} from '../lib/twilio-menu-clarify.js'
+import {brainGate,hasFreshHistory,brainPlan,memoryTurn,rememberTurn,learnAfter,botBrainEnabled,trackChange,readRestorable} from '../lib/owner-brain-route.js'
+import {composeReply} from '../lib/owner-brain-plan.js'
 import {stripLeadBeforeRemoval,clearChanges,holdFromMessage,holdAnswer,holdQuestion,undoRecordFor,isUndoRequest,applyUndo,undoText,undoWindowMs,type Hold,type UndoRecord} from '../lib/twilio-menu-hold.js'
 import {startsWithCreate} from '../lib/twilio-menu-create.js'
 import {removeVerbRe} from '../lib/twilio-menu-nlu.js'
@@ -29,7 +31,7 @@ const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/wh
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
 async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const rows=await tx.execute(sql`SELECT u.id,u.restaurant_id,u.role,r.active FROM users u JOIN restaurants r ON r.id=${tenant} WHERE u.id=${actor} AND u.active=true`);const u=rows[0];if(!u||!u.active)return false;if(isAgencyUser(actor))return true;if(u.restaurant_id===tenant&&u.role==='owner')return true;const membership=await tx.execute(sql`SELECT role FROM web_location_memberships WHERE user_id=${actor} AND restaurant_id=${tenant}`);return membership[0]?.role==='owner'}
 const sent='\u0001'
-type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean}|SalesTemplate;type Choice={kind:'choose',action:ChoiceAction,options:string[]};type ChoicePrice={kind:'choose_price',id:string,prices:[number,number],labels:[string,string]};type Turn=string|{llm:true,photo?:Photo,text?:string,fullmenu?:FullMenuJob,exclude?:Excluded[],note?:string}|{upload:Extract<MenuAction,{kind:'image'}>[]}
+type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean}|SalesTemplate;type Choice={kind:'choose',action:ChoiceAction,options:string[]};type ChoicePrice={kind:'choose_price',id:string,prices:[number,number],labels:[string,string]};type Turn=string|{llm:true,brain?:true,photo?:Photo,text?:string,fullmenu?:FullMenuJob,exclude?:Excluded[],note?:string}|{upload:Extract<MenuAction,{kind:'image'}>[]}
 const lock=(tx:Tx,phone:string)=>tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${phone},0))`)
 const reserve=(tx:Tx,sid:string)=>tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${sent}) ON CONFLICT DO NOTHING`)
 const propose=(tx:Tx,ctx:Ctx,revision:number,command:unknown)=>tx.execute(sql`INSERT INTO tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) VALUES(${ctx.phone},${ctx.tenant},${ctx.actor},${revision},${JSON.stringify(command)}::jsonb,now()+interval '10 minutes') ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,revision=EXCLUDED.revision,command=EXCLUDED.command,expires_at=EXCLUDED.expires_at`)
@@ -59,7 +61,7 @@ function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAct
  if(command?.kind==='batch'&&Array.isArray(command.actions))return command.actions.every((a:any)=>a.kind==='special'||(a.kind==='create'?sections.some(s=>s.id===a.sectionId):refs.some(r=>r.id===a.id)))?command.actions:null
  const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
 }
-type TurnOpts={planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,uploads?:Map<string,string>,exclude?:Excluded[]}
+type TurnOpts={brainOff?:boolean,planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,uploads?:Map<string,string>,exclude?:Excluded[]}
 type TurnState={text?:string,exclude:Excluded[],note?:string}
 const choiceTemplate=(a:MenuAction):ChoiceAction|null=>{if(!('id' in a))return null;const {id:_id,...rest}=a as any;return ['price','available','hidden','featured','description','tag','promo','scarcity'].includes(a.kind)?rest as ChoiceAction:null}
 /** Turno del bot. Se il testo è stato ripulito (clausole negate) o ci sono piatti esclusi, il passaggio all'IA li porta con sé. */
@@ -122,6 +124,14 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);if(photos.some(a=>!ready.has(a.id)))return{upload:photos.filter(a=>!ready.has(a.id))}
   const beforeW=structuredClone(workspace),restaurant=await restaurantSettings(),names=applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')}),next=workspaceSchema.parse(workspace)
   if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: bozza confermata',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione confermata',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeUndo(tx,phone,undoRecordFor(beforeW,next));void names;return appliedMenuText(actions,refs,sections)}
+ // Cervello (17/10, perimetro N; settings.botBrain, spento di default): il modello capisce per primo con il contesto (cronologia,
+ // memoria, scelta in sospeso). Restano deterministici: riepiloghi, foto, bozze, annulla, parte incerta («tojibo»), scelte già chiare.
+ if(!planned&&!opts.plannedFull&&!opts.brainOff&&!holdPick&&!negPick&&!pending&&!draft&&botBrainEnabled((await restaurantSettings())[0]?.settings)){
+  const mem=await memoryTurn(tx,tenant,text,refs);if(mem!==null)return mem
+  const kind=(proposal?.command as any)?.kind??null,options=choice?choice.options.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r):null
+  if(brainGate({text,proposalKind:kind,choiceOptions:options,undoish:revertLast||revertTarget(text)==='',freshHistory:await hasFreshHistory(tx,tenant,phone)})){
+   const h=kind?null:holdFromMessage(text,sections,refs);if(h&&'hold' in h){await propose(tx,ctx,row.revision,h.hold);return h.text}
+   if(!h)return{llm:true,brain:true}}}
  const batch=proposal&&(proposal.command as any)?.kind==='batch'?storedActions(proposal.command,refs,sections):null;
  if(batch&&Number(proposal!.revision)!==row.revision){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return copy.menuChanged}
  if(batch&&!planned)return{llm:true};
@@ -270,6 +280,19 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
  if(turn.fullmenu){let extraction:FullMenuExtraction;try{extraction=await extractFullMenu(turn.fullmenu.text,key,fullMenuFetcher())}catch(error){if(error instanceof OnboardingBusy)return copy.busy;return fullMenuCopy.failed}
   if(budget.expired)return '';const done=await turnFor(ctx,turn.fullmenu.text,{voice:turn.fullmenu.voice,isExpired:()=>budget.expired,plannedFull:{revision:row.revision,job:turn.fullmenu,extraction}});return typeof done==='string'?done:copy.failed}
  if(turn.text)text=turn.text;const exclude=turn.exclude??[]
+ if(!turn.brain&&!turn.photo&&!turn.fullmenu&&!(turn as any).noBrain&&botBrainEnabled((await db.execute(sql`SELECT settings FROM restaurants WHERE id=${ctx.tenant}`))[0]?.settings))return resolveTurnCore(ctx,text,{...turn,brain:true},key,ai,budget)
+ if(turn.brain){const pend=(await db.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))[0]?.command??null
+  const name=String((await db.execute(sql`SELECT name FROM restaurants WHERE id=${ctx.tenant}`))[0]?.name??'')
+  const run=text.length<=30000&&refs.length<=1500?await brainPlan(db,{tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:pend,key,ai,undo:await (async()=>{const a=await readRestorable(db,ctx.phone),b=await readUndo(db,ctx.phone),items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before});return items.length?{at:Date.now(),items}:null})()}):null
+  if(budget.expired)return ''
+  // Riserva: Groq giù / quota / JSON non valido → il turno di oggi, identico (deterministico e poi la vecchia chiamata IA).
+  if(!run){const done=await turnFor(ctx,text,{brainOff:true,isExpired:()=>budget.expired});return typeof done==='string'?done:await resolveTurnCore(ctx,text,'llm' in done?{...done,brain:undefined,noBrain:true} as any:done,key,ai,budget)}
+  const d=run.decision
+  if(d.intent==='chat'&&d.plan.type==='clarify'&&!d.plan.ids.length)return composeReply(d,refs,sections)
+  const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,planned:{revision:row.revision,plan:d.plan,proposalRevision:JSON.stringify(pend)},exclude:[...exclude,...d.exclude]})
+  if(typeof done==='string'){if(d.plan.type==='change'&&/Confermato/.test(done))await trackChange(db,ctx.phone,await readUndo(db,ctx.phone))
+   if(d.plan.type==='change')inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run,applied:/Confermato/.test(done),key,meter:ai.meter}));return done}
+  return 'upload' in done?await resolveTurn(ctx,text,done,key,ai,budget):copy.notUnderstood}
  const pendingRows=await db.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`),pendingCommand=pendingRows[0]?.command,pending=storedActions(pendingCommand,refs,sections);
  // Reject oversize requests explicitly rather than applying a truncated transcript/catalog.
  if(text.length>30000||refs.length>1500)return 'La richiesta è *troppo lunga*. Non ho cambiato nulla. Dividila in più messaggi.';
@@ -312,6 +335,7 @@ async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:R
     }
    }if(budget.expired)return '';const turn=await turnFor(ctx,text,{voice:kind==='audio',isExpired:()=>budget.expired});response=typeof turn==='string'?turn:await resolveTurn(ctx,text,turn,key,ai,budget)}}
  }catch(error){if(!(error instanceof GroqBusy))budget.failed=true;response=error instanceof GroqBusy?copy.busy:kind==='audio'&&!prefix?copy.voiceFailed:kind==='image'?copy.photoDownload:copy.failed}
+ if(response&&kind!=='image'&&!budget.expired)await rememberTurn(db,ctx.tenant,ctx.phone,text,prefix+response)
  return response?prefix+response:''
 }
 export async function twilioMenuRoutes(app:FastifyInstance){
@@ -377,7 +401,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  if(lifecycleCommand)return reply.code(400).send('Invalid onboarding message');
  const linked=await db.execute(sql`SELECT 1 FROM tako_whatsapp_links WHERE phone=${form.From||''}`);if(!shouldHandleInTako(linked.length>0,form.Body||''))try{const forwarded=await forwardTwilioWebhook(process.env.MENUSMART_WHATSAPP_WEBHOOK_URL||menusmartWebhook,process.env.TWILIO_AUTH_TOKEN||'',form);if(forwarded.contentType)reply.header('Content-Type',forwarded.contentType);return reply.code(forwarded.status).send(forwarded.body)}catch(error){req.log.error({error:error instanceof Error?error.name:'Error'},'MenuSmart WhatsApp forward failed');await inBackground(reportFailure({kind:'menusmart_forward',detail:error instanceof Error?error.name:'Error'}));return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(''))}
  const phone=form.From||'',sid=form.MessageSid||'',body=(form.Body||'').trim(),media=Number(form.NumMedia||0);if(!/^whatsapp:\+\d{8,15}$/.test(phone)||!(/^SM[a-f0-9]{32}$/i.test(sid)||linked.length>0&&/^MM[a-f0-9]{32}$/i.test(sid))||body.length>2000)return reply.code(400).send('Invalid message');
- const scope:{tenant?:string}={};const result=await db.transaction(async tx=>{await lock(tx,phone);const cached=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${sid}`);if(cached.length){const text=String(cached[0]!.response);return text.startsWith(sent)?'':text}
+ const scope:{tenant?:string,cached?:boolean}={};const result=await db.transaction(async tx=>{await lock(tx,phone);const cached=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${sid}`);if(cached.length){scope.cached=true;const text=String(cached[0]!.response);return text.startsWith(sent)?'':text}
  const answer=async(text:string)=>{await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${text}) ON CONFLICT DO NOTHING`);return text};
  const pair=body.match(/^collega tako ([a-f0-9]{24})$/i);if(pair){const codes=await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE code_hash=${digest(pair[1]!.toLowerCase())} AND expires_at>now() RETURNING restaurant_id,actor_id`);const code=codes[0];if(!code||!await permitted(tx,String(code.actor_id),String(code.restaurant_id)))return answer(copy.codeInvalid);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone} OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id})`);await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id} AND phone<>${phone}`);await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${phone},${code.restaurant_id},${code.actor_id},now()) ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,created_at=now(),activated_at=now()`);await discloseOnce(tx,phone);return answer(copy.aiDisclosure+'\n\n'+await welcomeFor(tx,String(code.restaurant_id)))}
  const ctx=await linkedContext(tx,phone);if(!ctx)return answer('');scope.tenant=ctx.tenant
@@ -388,7 +412,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  const disclose=await discloseOnce(tx,phone),say=(t:string)=>answer(disclose&&t?copy.aiDisclosure+'\n\n'+t:t),prefix=disclose?copy.aiDisclosure+'\n\n':''
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);return{job,ctx,ack:'',prefix}}
  if(!body)return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!process.env.GROQ_API_KEY)return say(copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
- if(typeof result==='string')return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result))
+ if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result))}
  const job=runJob(result.job,result.ctx,sid,body,form,result.prefix).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result.ack))
  })
