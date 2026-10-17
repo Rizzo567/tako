@@ -1,0 +1,4872 @@
+{
+ "tag": "local-g1",
+ "startedAt": "2026-10-17T01:26:29.304Z",
+ "mode": "bundle locale (intercettazione)",
+ "rounds": 5,
+ "results": [
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 0,
+   "t0": 1792200419085,
+   "signal": {
+    "fromCommitMs": -5,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2398,
+    "publishMs": 2012
+   },
+   "commitAt": 1792200423497,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4417,
+     "fromPublishMs": 2019,
+     "botMs": 4412,
+     "liveMs": 5,
+     "fromSignalMs": 10,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4417,
+     "fromPublishMs": 2019,
+     "botMs": 4412,
+     "liveMs": 5,
+     "fromSignalMs": 10,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4416,
+     "fromPublishMs": 2018,
+     "botMs": 4412,
+     "liveMs": 4,
+     "fromSignalMs": 9,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 1,
+   "t0": 1792200431066,
+   "signal": {
+    "fromCommitMs": 2,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2051,
+    "publishMs": 2324
+   },
+   "commitAt": 1792200435431,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4374,
+     "fromPublishMs": 2323,
+     "botMs": 4365,
+     "liveMs": 9,
+     "fromSignalMs": 7,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4379,
+     "fromPublishMs": 2328,
+     "botMs": 4365,
+     "liveMs": 14,
+     "fromSignalMs": 12,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4374,
+     "fromPublishMs": 2323,
+     "botMs": 4365,
+     "liveMs": 9,
+     "fromSignalMs": 7,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 2,
+   "t0": 1792200442979,
+   "signal": {
+    "fromCommitMs": -2,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1961,
+    "publishMs": 1997
+   },
+   "commitAt": 1792200446929,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 3952,
+     "fromPublishMs": 1991,
+     "botMs": 3950,
+     "liveMs": 2,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 3956,
+     "fromPublishMs": 1995,
+     "botMs": 3950,
+     "liveMs": 6,
+     "fromSignalMs": 8,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 3959,
+     "fromPublishMs": 1998,
+     "botMs": 3950,
+     "liveMs": 9,
+     "fromSignalMs": 11,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 3,
+   "t0": 1792200454281,
+   "signal": {
+    "fromCommitMs": -24,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1854,
+    "publishMs": 2007
+   },
+   "commitAt": 1792200458159,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 3860,
+     "fromPublishMs": 2006,
+     "botMs": 3878,
+     "liveMs": -18,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 3860,
+     "fromPublishMs": 2006,
+     "botMs": 3878,
+     "liveMs": -18,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 3860,
+     "fromPublishMs": 2006,
+     "botMs": 3878,
+     "liveMs": -18,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 4,
+   "t0": 1792200465458,
+   "signal": {
+    "fromCommitMs": 84,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2249,
+    "publishMs": 2872
+   },
+   "commitAt": 1792200470487,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5119,
+     "fromPublishMs": 2870,
+     "botMs": 5029,
+     "liveMs": 90,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5122,
+     "fromPublishMs": 2873,
+     "botMs": 5029,
+     "liveMs": 93,
+     "fromSignalMs": 9,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5122,
+     "fromPublishMs": 2873,
+     "botMs": 5029,
+     "liveMs": 93,
+     "fromSignalMs": 9,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "name",
+   "i": 0,
+   "t0": 1792200477821,
+   "signal": {
+    "fromCommitMs": -14,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2086,
+    "publishMs": 2012
+   },
+   "commitAt": 1792200481924,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4097,
+     "fromPublishMs": 2011,
+     "botMs": 4103,
+     "liveMs": -6,
+     "fromSignalMs": 8,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4097,
+     "fromPublishMs": 2011,
+     "botMs": 4103,
+     "liveMs": -6,
+     "fromSignalMs": 8,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4102,
+     "fromPublishMs": 2016,
+     "botMs": 4103,
+     "liveMs": -1,
+     "fromSignalMs": 13,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "name",
+   "i": 1,
+   "t0": 1792200489354,
+   "signal": {
+    "fromCommitMs": 8,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1957,
+    "publishMs": 2087
+   },
+   "commitAt": 1792200493349,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4007,
+     "fromPublishMs": 2050,
+     "botMs": 3995,
+     "liveMs": 12,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4009,
+     "fromPublishMs": 2052,
+     "botMs": 3995,
+     "liveMs": 14,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4009,
+     "fromPublishMs": 2052,
+     "botMs": 3995,
+     "liveMs": 14,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "name",
+   "i": 2,
+   "t0": 1792200501371,
+   "signal": {
+    "fromCommitMs": -35,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1868,
+    "publishMs": 1713
+   },
+   "commitAt": 1792200504977,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 3608,
+     "fromPublishMs": 1740,
+     "botMs": 3606,
+     "liveMs": 2,
+     "fromSignalMs": 37,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 3608,
+     "fromPublishMs": 1740,
+     "botMs": 3606,
+     "liveMs": 2,
+     "fromSignalMs": 37,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 3608,
+     "fromPublishMs": 1740,
+     "botMs": 3606,
+     "liveMs": 2,
+     "fromSignalMs": 37,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "name",
+   "i": 3,
+   "t0": 1792200512312,
+   "signal": {
+    "fromCommitMs": 74,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1885,
+    "publishMs": 2126
+   },
+   "commitAt": 1792200516241,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4020,
+     "fromPublishMs": 2135,
+     "botMs": 3929,
+     "liveMs": 91,
+     "fromSignalMs": 17,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4020,
+     "fromPublishMs": 2135,
+     "botMs": 3929,
+     "liveMs": 91,
+     "fromSignalMs": 17,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4020,
+     "fromPublishMs": 2135,
+     "botMs": 3929,
+     "liveMs": 91,
+     "fromSignalMs": 17,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "name",
+   "i": 4,
+   "t0": 1792200523577,
+   "signal": {
+    "fromCommitMs": 186,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1531,
+    "publishMs": 2094
+   },
+   "commitAt": 1792200527008,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 3622,
+     "fromPublishMs": 2091,
+     "botMs": 3431,
+     "liveMs": 191,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 3623,
+     "fromPublishMs": 2092,
+     "botMs": 3431,
+     "liveMs": 192,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 3622,
+     "fromPublishMs": 2091,
+     "botMs": 3431,
+     "liveMs": 191,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "tname",
+   "i": 0,
+   "t0": 1792200534693,
+   "signal": {
+    "fromCommitMs": 49,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1949,
+    "publishMs": 2094
+   },
+   "commitAt": 1792200538681,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4039,
+     "fromPublishMs": 2090,
+     "botMs": 3988,
+     "liveMs": 51,
+     "fromSignalMs": 2,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4042,
+     "fromPublishMs": 2093,
+     "botMs": 3988,
+     "liveMs": 54,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4042,
+     "fromPublishMs": 2093,
+     "botMs": 3988,
+     "liveMs": 54,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "tname",
+   "i": 1,
+   "t0": 1792200546273,
+   "signal": {
+    "fromCommitMs": 66,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2176,
+    "publishMs": 2873
+   },
+   "commitAt": 1792200551252,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5049,
+     "fromPublishMs": 2873,
+     "botMs": 4979,
+     "liveMs": 70,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5050,
+     "fromPublishMs": 2874,
+     "botMs": 4979,
+     "liveMs": 71,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5050,
+     "fromPublishMs": 2874,
+     "botMs": 4979,
+     "liveMs": 71,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "tname",
+   "i": 2,
+   "t0": 1792200558831,
+   "signal": {
+    "fromCommitMs": -36,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2323,
+    "publishMs": 2795
+   },
+   "commitAt": 1792200563946,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5081,
+     "fromPublishMs": 2758,
+     "botMs": 5115,
+     "liveMs": -34,
+     "fromSignalMs": 2,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5086,
+     "fromPublishMs": 2763,
+     "botMs": 5115,
+     "liveMs": -29,
+     "fromSignalMs": 7,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5085,
+     "fromPublishMs": 2762,
+     "botMs": 5115,
+     "liveMs": -30,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "tname",
+   "i": 3,
+   "t0": 1792200571461,
+   "signal": {
+    "fromCommitMs": 0,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2106,
+    "publishMs": 1991
+   },
+   "commitAt": 1792200575547,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4089,
+     "fromPublishMs": 1983,
+     "botMs": 4086,
+     "liveMs": 3,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4091,
+     "fromPublishMs": 1985,
+     "botMs": 4086,
+     "liveMs": 5,
+     "fromSignalMs": 5,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4092,
+     "fromPublishMs": 1986,
+     "botMs": 4086,
+     "liveMs": 6,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "tname",
+   "i": 4,
+   "t0": 1792200583028,
+   "signal": {
+    "fromCommitMs": 187,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1894,
+    "publishMs": 2137
+   },
+   "commitAt": 1792200586867,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4030,
+     "fromPublishMs": 2136,
+     "botMs": 3839,
+     "liveMs": 191,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4032,
+     "fromPublishMs": 2138,
+     "botMs": 3839,
+     "liveMs": 193,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4032,
+     "fromPublishMs": 2138,
+     "botMs": 3839,
+     "liveMs": 193,
+     "fromSignalMs": 6,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 0,
+   "t0": 1792200594015,
+   "signal": {
+    "fromCommitMs": 41,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 0,
+    "publishMs": 1790
+   },
+   "commitAt": 1792200595717,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 1745,
+     "fromPublishMs": 1745,
+     "botMs": 1702,
+     "liveMs": 43,
+     "fromSignalMs": 2,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 1747,
+     "fromPublishMs": 1747,
+     "botMs": 1702,
+     "liveMs": 45,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 1750,
+     "fromPublishMs": 1750,
+     "botMs": 1702,
+     "liveMs": 48,
+     "fromSignalMs": 7,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 1,
+   "t0": 1792200605378,
+   "signal": {
+    "fromCommitMs": 141,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 0,
+    "publishMs": 1785
+   },
+   "commitAt": 1792200606968,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 1716,
+     "fromPublishMs": 1716,
+     "botMs": 1590,
+     "liveMs": 126,
+     "fromSignalMs": -15,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 1719,
+     "fromPublishMs": 1719,
+     "botMs": 1590,
+     "liveMs": 129,
+     "fromSignalMs": -12,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 1720,
+     "fromPublishMs": 1720,
+     "botMs": 1590,
+     "liveMs": 130,
+     "fromSignalMs": -11,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 2,
+   "t0": 1792200617318,
+   "signal": {
+    "fromCommitMs": 46,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 0,
+    "publishMs": 1793
+   },
+   "commitAt": 1792200619015,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 1743,
+     "fromPublishMs": 1743,
+     "botMs": 1697,
+     "liveMs": 46,
+     "fromSignalMs": 0,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 1743,
+     "fromPublishMs": 1743,
+     "botMs": 1697,
+     "liveMs": 46,
+     "fromSignalMs": 0,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 1746,
+     "fromPublishMs": 1746,
+     "botMs": 1697,
+     "liveMs": 49,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 3,
+   "t0": 1792200628827,
+   "signal": {
+    "fromCommitMs": 26,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 0,
+    "publishMs": 1859
+   },
+   "commitAt": 1792200630638,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 1837,
+     "fromPublishMs": 1837,
+     "botMs": 1811,
+     "liveMs": 26,
+     "fromSignalMs": 0,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 1840,
+     "fromPublishMs": 1840,
+     "botMs": 1811,
+     "liveMs": 29,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 1840,
+     "fromPublishMs": 1840,
+     "botMs": 1811,
+     "liveMs": 29,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 4,
+   "t0": 1792200640492,
+   "signal": {
+    "fromCommitMs": -4,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 0,
+    "publishMs": 1808
+   },
+   "commitAt": 1792200642248,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 1761,
+     "fromPublishMs": 1761,
+     "botMs": 1756,
+     "liveMs": 5,
+     "fromSignalMs": 9,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 1760,
+     "fromPublishMs": 1760,
+     "botMs": 1756,
+     "liveMs": 4,
+     "fromSignalMs": 8,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 1761,
+     "fromPublishMs": 1761,
+     "botMs": 1756,
+     "liveMs": 5,
+     "fromSignalMs": 9,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "hide",
+   "i": 0,
+   "t0": 1792200652418,
+   "signal": {
+    "fromCommitMs": 138,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2044,
+    "publishMs": 1782
+   },
+   "commitAt": 1792200656092,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 3815,
+     "fromPublishMs": 1771,
+     "botMs": 3674,
+     "liveMs": 141,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 3813,
+     "fromPublishMs": 1769,
+     "botMs": 3674,
+     "liveMs": 139,
+     "fromSignalMs": 1,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 3815,
+     "fromPublishMs": 1771,
+     "botMs": 3674,
+     "liveMs": 141,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "hide",
+   "i": 1,
+   "t0": 1792200669519,
+   "signal": {
+    "fromCommitMs": 20,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1854,
+    "publishMs": 2770
+   },
+   "commitAt": 1792200674111,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4613,
+     "fromPublishMs": 2759,
+     "botMs": 4592,
+     "liveMs": 21,
+     "fromSignalMs": 1,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4615,
+     "fromPublishMs": 2761,
+     "botMs": 4592,
+     "liveMs": 23,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4615,
+     "fromPublishMs": 2761,
+     "botMs": 4592,
+     "liveMs": 23,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "hide",
+   "i": 2,
+   "t0": 1792200687046,
+   "signal": {
+    "fromCommitMs": -6,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 1918,
+    "publishMs": 2454
+   },
+   "commitAt": 1792200691418,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4367,
+     "fromPublishMs": 2449,
+     "botMs": 4372,
+     "liveMs": -5,
+     "fromSignalMs": 1,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4370,
+     "fromPublishMs": 2452,
+     "botMs": 4372,
+     "liveMs": -2,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4369,
+     "fromPublishMs": 2451,
+     "botMs": 4372,
+     "liveMs": -3,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "hide",
+   "i": 3,
+   "t0": 1792200705530,
+   "signal": {
+    "fromCommitMs": 12,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2156,
+    "publishMs": 2059
+   },
+   "commitAt": 1792200709724,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4207,
+     "fromPublishMs": 2051,
+     "botMs": 4194,
+     "liveMs": 13,
+     "fromSignalMs": 1,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4209,
+     "fromPublishMs": 2053,
+     "botMs": 4194,
+     "liveMs": 15,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4210,
+     "fromPublishMs": 2054,
+     "botMs": 4194,
+     "liveMs": 16,
+     "fromSignalMs": 4,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "hide",
+   "i": 4,
+   "t0": 1792200722842,
+   "signal": {
+    "fromCommitMs": -13,
+    "delta": true,
+    "n": 1
+   },
+   "api": {
+    "saveMs": 2633,
+    "publishMs": 1821
+   },
+   "commitAt": 1792200727303,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4456,
+     "fromPublishMs": 1823,
+     "botMs": 4461,
+     "liveMs": -5,
+     "fromSignalMs": 8,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4451,
+     "fromPublishMs": 1818,
+     "botMs": 4461,
+     "liveMs": -10,
+     "fromSignalMs": 3,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4455,
+     "fromPublishMs": 1822,
+     "botMs": 4461,
+     "liveMs": -6,
+     "fromSignalMs": 7,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "new",
+   "i": 0,
+   "t0": 1792200740107,
+   "signal": {
+    "fromCommitMs": -28,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1981,
+    "publishMs": 2164
+   },
+   "commitAt": 1792200744209,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4903,
+     "fromPublishMs": 2922,
+     "botMs": 4102,
+     "liveMs": 801,
+     "fromSignalMs": 829,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 930,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4899,
+     "fromPublishMs": 2918,
+     "botMs": 4102,
+     "liveMs": 797,
+     "fromSignalMs": 825,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 100,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4716,
+     "fromPublishMs": 2735,
+     "botMs": 4102,
+     "liveMs": 614,
+     "fromSignalMs": 642,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 930,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "new",
+   "i": 1,
+   "t0": 1792200752248,
+   "signal": {
+    "fromCommitMs": 115,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1960,
+    "publishMs": 2493
+   },
+   "commitAt": 1792200756578,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5084,
+     "fromPublishMs": 3124,
+     "botMs": 4330,
+     "liveMs": 754,
+     "fromSignalMs": 639,
+     "before": {
+      "scrollY": 930,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1030,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5140,
+     "fromPublishMs": 3180,
+     "botMs": 4330,
+     "liveMs": 810,
+     "fromSignalMs": 695,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "813e6816-2107-443e-989a-ee3e1c72a836",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 100,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5103,
+     "fromPublishMs": 3143,
+     "botMs": 4330,
+     "liveMs": 773,
+     "fromSignalMs": 658,
+     "before": {
+      "scrollY": 930,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1030,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "new",
+   "i": 2,
+   "t0": 1792200764705,
+   "signal": {
+    "fromCommitMs": 65,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1895,
+    "publishMs": 2009
+   },
+   "commitAt": 1792200768542,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4570,
+     "fromPublishMs": 2675,
+     "botMs": 3837,
+     "liveMs": 733,
+     "fromSignalMs": 668,
+     "before": {
+      "scrollY": 1030,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1130,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4434,
+     "fromPublishMs": 2539,
+     "botMs": 3837,
+     "liveMs": 597,
+     "fromSignalMs": 532,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "aa855d04-0264-45c2-b057-3df8d98c208d",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 100,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4612,
+     "fromPublishMs": 2717,
+     "botMs": 3837,
+     "liveMs": 775,
+     "fromSignalMs": 710,
+     "before": {
+      "scrollY": 1030,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1130,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "new",
+   "i": 3,
+   "t0": 1792200776949,
+   "signal": {
+    "fromCommitMs": -22,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1961,
+    "publishMs": 2264
+   },
+   "commitAt": 1792200781076,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4940,
+     "fromPublishMs": 2979,
+     "botMs": 4127,
+     "liveMs": 813,
+     "fromSignalMs": 835,
+     "before": {
+      "scrollY": 1130,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1230,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4836,
+     "fromPublishMs": 2875,
+     "botMs": 4127,
+     "liveMs": 709,
+     "fromSignalMs": 731,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "e68a8ffc-67a6-4cec-8c3a-6bdc845a331e",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 100,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4985,
+     "fromPublishMs": 3024,
+     "botMs": 4127,
+     "liveMs": 858,
+     "fromSignalMs": 880,
+     "before": {
+      "scrollY": 1130,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1230,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "new",
+   "i": 4,
+   "t0": 1792200789281,
+   "signal": {
+    "fromCommitMs": -3,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1904,
+    "publishMs": 2857
+   },
+   "commitAt": 1792200794020,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5539,
+     "fromPublishMs": 3635,
+     "botMs": 4739,
+     "liveMs": 800,
+     "fromSignalMs": 803,
+     "before": {
+      "scrollY": 1230,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1330,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5227,
+     "fromPublishMs": 3323,
+     "botMs": 4739,
+     "liveMs": 488,
+     "fromSignalMs": 491,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "e5ca1707-951a-435b-808e-8d1f1cd21b18",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 100,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5636,
+     "fromPublishMs": 3732,
+     "botMs": 4739,
+     "liveMs": 897,
+     "fromSignalMs": 900,
+     "before": {
+      "scrollY": 1230,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1330,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "delete",
+   "i": 0,
+   "t0": 1792200802759,
+   "signal": {
+    "fromCommitMs": -28,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2703,
+    "publishMs": 2919
+   },
+   "commitAt": 1792200808381,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 6203,
+     "fromPublishMs": 3500,
+     "botMs": 5622,
+     "liveMs": 581,
+     "fromSignalMs": 609,
+     "before": {
+      "scrollY": 1330,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1230,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 6393,
+     "fromPublishMs": 3690,
+     "botMs": 5622,
+     "liveMs": 771,
+     "fromSignalMs": 799,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "621b879a-36e2-4f13-8e51-264214f61983",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": null,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 6394,
+     "fromPublishMs": 3691,
+     "botMs": 5622,
+     "liveMs": 772,
+     "fromSignalMs": 800,
+     "before": {
+      "scrollY": 1330,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1230,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "delete",
+   "i": 1,
+   "t0": 1792200817170,
+   "signal": {
+    "fromCommitMs": 8,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2074,
+    "publishMs": 2348
+   },
+   "commitAt": 1792200821587,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5202,
+     "fromPublishMs": 3128,
+     "botMs": 4417,
+     "liveMs": 785,
+     "fromSignalMs": 777,
+     "before": {
+      "scrollY": 1230,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1130,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5189,
+     "fromPublishMs": 3115,
+     "botMs": 4417,
+     "liveMs": 772,
+     "fromSignalMs": 764,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "e5ca1707-951a-435b-808e-8d1f1cd21b18",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": null,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5139,
+     "fromPublishMs": 3065,
+     "botMs": 4417,
+     "liveMs": 722,
+     "fromSignalMs": 714,
+     "before": {
+      "scrollY": 1230,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1130,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "delete",
+   "i": 2,
+   "t0": 1792200830438,
+   "signal": {
+    "fromCommitMs": -31,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2224,
+    "publishMs": 2956
+   },
+   "commitAt": 1792200835638,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 6093,
+     "fromPublishMs": 3869,
+     "botMs": 5200,
+     "liveMs": 893,
+     "fromSignalMs": 924,
+     "before": {
+      "scrollY": 1130,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1030,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5794,
+     "fromPublishMs": 3570,
+     "botMs": 5200,
+     "liveMs": 594,
+     "fromSignalMs": 625,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "e68a8ffc-67a6-4cec-8c3a-6bdc845a331e",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": null,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5687,
+     "fromPublishMs": 3463,
+     "botMs": 5200,
+     "liveMs": 487,
+     "fromSignalMs": 518,
+     "before": {
+      "scrollY": 1130,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 1030,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "delete",
+   "i": 3,
+   "t0": 1792200844428,
+   "signal": {
+    "fromCommitMs": -27,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2657,
+    "publishMs": 2118
+   },
+   "commitAt": 1792200849215,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5491,
+     "fromPublishMs": 2834,
+     "botMs": 4787,
+     "liveMs": 704,
+     "fromSignalMs": 731,
+     "before": {
+      "scrollY": 1030,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 930,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5695,
+     "fromPublishMs": 3038,
+     "botMs": 4787,
+     "liveMs": 908,
+     "fromSignalMs": 935,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "aa855d04-0264-45c2-b057-3df8d98c208d",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": null,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5518,
+     "fromPublishMs": 2861,
+     "botMs": 4787,
+     "liveMs": 731,
+     "fromSignalMs": 758,
+     "before": {
+      "scrollY": 1030,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 930,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "delete",
+   "i": 4,
+   "t0": 1792200857933,
+   "signal": {
+    "fromCommitMs": 109,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1896,
+    "publishMs": 2007
+   },
+   "commitAt": 1792200861772,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4618,
+     "fromPublishMs": 2722,
+     "botMs": 3839,
+     "liveMs": 779,
+     "fromSignalMs": 670,
+     "before": {
+      "scrollY": 930,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4891,
+     "fromPublishMs": 2995,
+     "botMs": 3839,
+     "liveMs": 1052,
+     "fromSignalMs": 943,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "813e6816-2107-443e-989a-ee3e1c72a836",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": null,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4620,
+     "fromPublishMs": 2724,
+     "botMs": 3839,
+     "liveMs": 781,
+     "fromSignalMs": 672,
+     "before": {
+      "scrollY": 930,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "category",
+   "i": 0,
+   "t0": 1792200870272,
+   "signal": {
+    "fromCommitMs": 152,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1955,
+    "publishMs": 2495
+   },
+   "commitAt": 1792200874561,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5090,
+     "fromPublishMs": 3135,
+     "botMs": 4289,
+     "liveMs": 801,
+     "fromSignalMs": 649,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5119,
+     "fromPublishMs": 3164,
+     "botMs": 4289,
+     "liveMs": 830,
+     "fromSignalMs": 678,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5292,
+     "fromPublishMs": 3337,
+     "botMs": 4289,
+     "liveMs": 1003,
+     "fromSignalMs": 851,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "category",
+   "i": 1,
+   "t0": 1792200890452,
+   "signal": {
+    "fromCommitMs": -18,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1947,
+    "publishMs": 2108
+   },
+   "commitAt": 1792200894520,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4852,
+     "fromPublishMs": 2905,
+     "botMs": 4068,
+     "liveMs": 784,
+     "fromSignalMs": 802,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4590,
+     "fromPublishMs": 2643,
+     "botMs": 4068,
+     "liveMs": 522,
+     "fromSignalMs": 540,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4658,
+     "fromPublishMs": 2711,
+     "botMs": 4068,
+     "liveMs": 590,
+     "fromSignalMs": 608,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "category",
+   "i": 2,
+   "t0": 1792200911543,
+   "signal": {
+    "fromCommitMs": 95,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2582,
+    "publishMs": 2459
+   },
+   "commitAt": 1792200916483,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5740,
+     "fromPublishMs": 3158,
+     "botMs": 4940,
+     "liveMs": 800,
+     "fromSignalMs": 705,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5899,
+     "fromPublishMs": 3317,
+     "botMs": 4940,
+     "liveMs": 959,
+     "fromSignalMs": 864,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5797,
+     "fromPublishMs": 3215,
+     "botMs": 4940,
+     "liveMs": 857,
+     "fromSignalMs": 762,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "category",
+   "i": 3,
+   "t0": 1792200930385,
+   "signal": {
+    "fromCommitMs": 456,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1898,
+    "publishMs": 2144
+   },
+   "commitAt": 1792200933963,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4617,
+     "fromPublishMs": 2719,
+     "botMs": 3578,
+     "liveMs": 1039,
+     "fromSignalMs": 583,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4767,
+     "fromPublishMs": 2869,
+     "botMs": 3578,
+     "liveMs": 1189,
+     "fromSignalMs": 733,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4770,
+     "fromPublishMs": 2872,
+     "botMs": 3578,
+     "liveMs": 1192,
+     "fromSignalMs": 736,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "category",
+   "i": 4,
+   "t0": 1792200950557,
+   "signal": {
+    "fromCommitMs": 161,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2718,
+    "publishMs": 2032
+   },
+   "commitAt": 1792200955140,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5391,
+     "fromPublishMs": 2673,
+     "botMs": 4583,
+     "liveMs": 808,
+     "fromSignalMs": 647,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5402,
+     "fromPublishMs": 2684,
+     "botMs": 4583,
+     "liveMs": 819,
+     "fromSignalMs": 658,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5513,
+     "fromPublishMs": 2795,
+     "botMs": 4583,
+     "liveMs": 930,
+     "fromSignalMs": 769,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "menu",
+   "i": 0,
+   "t0": 1792200971247,
+   "signal": {
+    "fromCommitMs": 66,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1816,
+    "publishMs": 2824
+   },
+   "commitAt": 1792200975810,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5346,
+     "fromPublishMs": 3530,
+     "botMs": 4563,
+     "liveMs": 783,
+     "fromSignalMs": 717,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5426,
+     "fromPublishMs": 3610,
+     "botMs": 4563,
+     "liveMs": 863,
+     "fromSignalMs": 797,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5460,
+     "fromPublishMs": 3644,
+     "botMs": 4563,
+     "liveMs": 897,
+     "fromSignalMs": 831,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "menu",
+   "i": 1,
+   "t0": 1792200992053,
+   "signal": {
+    "fromCommitMs": -7,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2608,
+    "publishMs": 2456
+   },
+   "commitAt": 1792200997123,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5657,
+     "fromPublishMs": 3049,
+     "botMs": 5070,
+     "liveMs": 587,
+     "fromSignalMs": 594,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5773,
+     "fromPublishMs": 3165,
+     "botMs": 5070,
+     "liveMs": 703,
+     "fromSignalMs": 710,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5731,
+     "fromPublishMs": 3123,
+     "botMs": 5070,
+     "liveMs": 661,
+     "fromSignalMs": 668,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "menu",
+   "i": 2,
+   "t0": 1792201013300,
+   "signal": {
+    "fromCommitMs": 203,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 2273,
+    "publishMs": 2804
+   },
+   "commitAt": 1792201018174,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5743,
+     "fromPublishMs": 3470,
+     "botMs": 4874,
+     "liveMs": 869,
+     "fromSignalMs": 666,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5913,
+     "fromPublishMs": 3640,
+     "botMs": 4874,
+     "liveMs": 1039,
+     "fromSignalMs": 836,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5887,
+     "fromPublishMs": 3614,
+     "botMs": 4874,
+     "liveMs": 1013,
+     "fromSignalMs": 810,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "menu",
+   "i": 3,
+   "t0": 1792201034469,
+   "signal": {
+    "fromCommitMs": 98,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1815,
+    "publishMs": 2022
+   },
+   "commitAt": 1792201038173,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4681,
+     "fromPublishMs": 2866,
+     "botMs": 3704,
+     "liveMs": 977,
+     "fromSignalMs": 879,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4623,
+     "fromPublishMs": 2808,
+     "botMs": 3704,
+     "liveMs": 919,
+     "fromSignalMs": 821,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4771,
+     "fromPublishMs": 2956,
+     "botMs": 3704,
+     "liveMs": 1067,
+     "fromSignalMs": 969,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "menu",
+   "i": 4,
+   "t0": 1792201053928,
+   "signal": {
+    "fromCommitMs": 171,
+    "delta": false,
+    "n": null
+   },
+   "api": {
+    "saveMs": 1916,
+    "publishMs": 2387
+   },
+   "commitAt": 1792201058048,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 5190,
+     "fromPublishMs": 3274,
+     "botMs": 4120,
+     "liveMs": 1070,
+     "fromSignalMs": 899,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 5077,
+     "fromPublishMs": 3161,
+     "botMs": 4120,
+     "liveMs": 957,
+     "fromSignalMs": 786,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true",
+      "stable": true
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 5044,
+     "fromPublishMs": 3128,
+     "botMs": 4120,
+     "liveMs": 924,
+     "fromSignalMs": 753,
+     "before": {
+      "scrollY": 830,
+      "anchor": {
+       "id": "57526963-72a3-41ec-adc8-8f1df5cbf277",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 830,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false",
+      "stable": true
+     }
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "checks": [
+  {
+   "name": "pagine aperte con socket live",
+   "ok": true,
+   "detail": "it-scroll:ws=1 en-lingue-aperte:ws=1 it-desktop:ws=1"
+  },
+  {
+   "name": "QA ripristinato identico (bozza, pubblicato, locale, piatti, categorie, menu, risposta pubblica it+en)",
+   "ok": false,
+   "detail": "[\"menus\"]"
+  },
+  {
+   "name": "collegamento WhatsApp finto rimosso",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "console pulita (nessun errore/avviso) su tutte le pagine",
+   "ok": true,
+   "detail": "it-scroll:0 en-lingue-aperte:0 it-desktop:0"
+  },
+  {
+   "name": "price: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": true,
+   "detail": "live p50 6 p95 93 max 93 · con delta 5/5 · segnale +-2 ms"
+  },
+  {
+   "name": "price: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/price: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "name: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": true,
+   "detail": "live p50 14 p95 192 max 192 · con delta 5/5 · segnale +8 ms"
+  },
+  {
+   "name": "name: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/name: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "tname: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": true,
+   "detail": "live p50 54 p95 193 max 193 · con delta 5/5 · segnale +49 ms"
+  },
+  {
+   "name": "tname: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/tname: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "soldout: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": true,
+   "detail": "live p50 45 p95 130 max 130 · con delta 5/5 · segnale +41 ms"
+  },
+  {
+   "name": "soldout: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/soldout: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "hide: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": true,
+   "detail": "live p50 15 p95 141 max 141 · con delta 5/5 · segnale +12 ms"
+  },
+  {
+   "name": "hide: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/hide: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "new: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": false,
+   "detail": "live p50 775 p95 897 max 897 · con delta 0/5 · segnale +-3 ms"
+  },
+  {
+   "name": "new: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/new: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "delete: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": false,
+   "detail": "live p50 772 p95 1052 max 1052 · con delta 0/5 · segnale +-27 ms"
+  },
+  {
+   "name": "delete: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/delete: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "category: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": false,
+   "detail": "live p50 830 p95 1192 max 1192 · con delta 0/5 · segnale +152 ms"
+  },
+  {
+   "name": "category: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/category: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "menu: 5 giri, commit→schermo p50 ≤ 600 ms e p95 ≤ 1200 ms",
+   "ok": false,
+   "detail": "live p50 919 p95 1070 max 1070 · con delta 0/5 · segnale +98 ms"
+  },
+  {
+   "name": "menu: nessun secondo cambio dopo la riconferma (delta = rilettura)",
+   "ok": true,
+   "detail": "instabili 0"
+  },
+  {
+   "name": "dashboard/menu: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  }
+ ],
+ "foreignRevisions": [],
+ "restore": {
+  "before": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "54e6cde26671e28d",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "77ce229f82e35f60"
+  },
+  "after": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "54e6cde26671e28d",
+   "menus": "1c69c452c2d14d04",
+   "sections": "71685d6d590957ae",
+   "public": "77ce229f82e35f60"
+  },
+  "revisionBefore": 746,
+  "revisionAfter": 860
+ },
+ "console_it-scroll": [],
+ "console_en-lingue-aperte": [],
+ "console_it-desktop": [],
+ "summary": [
+  {
+   "path": "dashboard",
+   "type": "price",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 4374,
+    "p95": 5122,
+    "max": 5122
+   },
+   "bot": {
+    "p50": 4365,
+    "p95": 5029
+   },
+   "live": {
+    "p50": 6,
+    "p95": 93,
+    "max": 93
+   },
+   "fromPublish": {
+    "p50": 2019,
+    "p95": 2873
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 5,
+   "segnale": {
+    "p50": -2
+   },
+   "fromSignal": {
+    "p50": 8,
+    "p95": 12
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "name",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 4009,
+    "p95": 4102,
+    "max": 4102
+   },
+   "bot": {
+    "p50": 3929,
+    "p95": 4103
+   },
+   "live": {
+    "p50": 14,
+    "p95": 192,
+    "max": 192
+   },
+   "fromPublish": {
+    "p50": 2052,
+    "p95": 2135
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 5,
+   "segnale": {
+    "p50": 8
+   },
+   "fromSignal": {
+    "p50": 8,
+    "p95": 37
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "tname",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 4091,
+    "p95": 5086,
+    "max": 5086
+   },
+   "bot": {
+    "p50": 4086,
+    "p95": 5115
+   },
+   "live": {
+    "p50": 54,
+    "p95": 193,
+    "max": 193
+   },
+   "fromPublish": {
+    "p50": 2138,
+    "p95": 2874
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 5,
+   "segnale": {
+    "p50": 49
+   },
+   "fromSignal": {
+    "p50": 5,
+    "p95": 7
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 1747,
+    "p95": 1840,
+    "max": 1840
+   },
+   "bot": {
+    "p50": 1702,
+    "p95": 1811
+   },
+   "live": {
+    "p50": 45,
+    "p95": 130,
+    "max": 130
+   },
+   "fromPublish": {
+    "p50": 1747,
+    "p95": 1840
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 5,
+   "segnale": {
+    "p50": 41
+   },
+   "fromSignal": {
+    "p50": 3,
+    "p95": 9
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "hide",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 4369,
+    "p95": 4615,
+    "max": 4615
+   },
+   "bot": {
+    "p50": 4372,
+    "p95": 4592
+   },
+   "live": {
+    "p50": 15,
+    "p95": 141,
+    "max": 141
+   },
+   "fromPublish": {
+    "p50": 2053,
+    "p95": 2761
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 5,
+   "segnale": {
+    "p50": 12
+   },
+   "fromSignal": {
+    "p50": 3,
+    "p95": 8
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "new",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 4940,
+    "p95": 5636,
+    "max": 5636
+   },
+   "bot": {
+    "p50": 4127,
+    "p95": 4739
+   },
+   "live": {
+    "p50": 775,
+    "p95": 897,
+    "max": 897
+   },
+   "fromPublish": {
+    "p50": 2979,
+    "p95": 3732
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 0,
+   "segnale": {
+    "p50": -3
+   },
+   "fromSignal": {
+    "p50": 710,
+    "p95": 900
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "delete",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 5518,
+    "p95": 6394,
+    "max": 6394
+   },
+   "bot": {
+    "p50": 4787,
+    "p95": 5622
+   },
+   "live": {
+    "p50": 772,
+    "p95": 1052,
+    "max": 1052
+   },
+   "fromPublish": {
+    "p50": 3115,
+    "p95": 3869
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 0,
+   "segnale": {
+    "p50": -27
+   },
+   "fromSignal": {
+    "p50": 758,
+    "p95": 943
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "category",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 5119,
+    "p95": 5899,
+    "max": 5899
+   },
+   "bot": {
+    "p50": 4289,
+    "p95": 4940
+   },
+   "live": {
+    "p50": 830,
+    "p95": 1192,
+    "max": 1192
+   },
+   "fromPublish": {
+    "p50": 2872,
+    "p95": 3337
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 0,
+   "segnale": {
+    "p50": 152
+   },
+   "fromSignal": {
+    "p50": 705,
+    "p95": 864
+   }
+  },
+  {
+   "path": "dashboard",
+   "type": "menu",
+   "giri": 5,
+   "misure": 15,
+   "mancate": 0,
+   "total": {
+    "p50": 5426,
+    "p95": 5913,
+    "max": 5913
+   },
+   "bot": {
+    "p50": 4563,
+    "p95": 5070
+   },
+   "live": {
+    "p50": 919,
+    "p95": 1070,
+    "max": 1070
+   },
+   "fromPublish": {
+    "p50": 3165,
+    "p95": 3644
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0,
+   "instabili": 0,
+   "conDelta": 0,
+   "segnale": {
+    "p50": 98
+   },
+   "fromSignal": {
+    "p50": 797,
+    "p95": 969
+   }
+  }
+ ],
+ "menuReads": {
+  "it-scroll": 67,
+  "en-lingue-aperte": 69,
+  "it-desktop": 67
+ },
+ "pass": 26,
+ "total": 31
+}

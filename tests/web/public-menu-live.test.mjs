@@ -53,19 +53,41 @@ test('a dropped socket reconnects with backoff and re-reads once after rejoining
  // Join rifiutato (es. troppi collegamenti): nuovo tentativo, intanto riserva a 60 s.
  env.sockets[1].reply({topic:'realtime:menu-live:r1',event:'phx_error',payload:{}});advance(61000);assert.ok(reasons.includes('poll')||env.sockets.length>2);stop()}finally{mock.timers.reset()}
 })
-test('jitter spreads phones on a push (0.15–3.5 s) and is short on resume',async()=>{
+test('jitter: a structural push re-reads at once (shared read in the Worker), the reconcile after a delta is spread (0.15–3.5 s), resume is short',async()=>{
  const live=await loadModule('apps/web/src/lib/public-menu-live.ts',environment().ctx)
- assert.equal(live.liveJitter('push',()=>0),150);assert.equal(live.liveJitter('push',()=>1),3500);assert.ok(live.liveJitter('resume',()=>1)<=800)
+ assert.equal(live.liveJitter('push',()=>0),0);assert.equal(live.liveJitter('push',()=>1),0)
+ assert.equal(live.liveJitter('reconcile',()=>0),150);assert.equal(live.liveJitter('reconcile',()=>1),3500);assert.ok(live.liveJitter('resume',()=>1)<=800)
+})
+test('the published delta of the signal is passed to the page (old {at}-only signals still mean «re-read»)',async()=>{
+ mock.timers.enable({apis:['setTimeout','Date']});try{
+ const env=environment(),live=await loadModule('apps/web/src/lib/public-menu-live.ts',env.ctx),got=[]
+ const stop=live.watchPublicMenu('r1',(r,sig)=>got.push([r,sig]),{WebSocketImpl:env.FakeSocket,now:()=>Date.now()})
+ advance(1);const s=env.sockets[0];join(s)
+ s.reply({topic:'realtime:menu-live:r1',event:'broadcast',payload:{type:'broadcast',event:'v',payload:{at:1,k:'a',d:[{i:'x',a:false}]}}})
+ s.reply({topic:'realtime:menu-live:r1',event:'broadcast',payload:{type:'broadcast',event:'v',payload:{at:2}}})
+ assert.equal(got.length,2);assert.equal(got[0][0],'push');assert.equal(got[0][1].d[0].i,'x');assert.equal(got[1][1].d,undefined);stop()}finally{mock.timers.reset()}
+})
+test('phone locked (timers frozen, socket maybe dead): on return after ≥ 15 s the socket is reopened and the menu re-read once',async()=>{
+ mock.timers.enable({apis:['setTimeout','Date']});try{
+ const env=environment(),live=await loadModule('apps/web/src/lib/public-menu-live.ts',env.ctx),reasons=[];let clock=Date.now()
+ const stop=live.watchPublicMenu('r1',r=>reasons.push(r),{WebSocketImpl:env.FakeSocket,now:()=>clock})
+ advance(1);join(env.sockets[0])
+ // Nascosta 9 s (timer congelati: l'orologio avanza, i timer no): socket tenuto ma una rilettura di sicurezza.
+ env.document.visibilityState='hidden';env.fire('doc','visibilitychange');clock+=9000
+ env.document.visibilityState='visible';env.fire('doc','visibilitychange');assert.deepEqual(reasons,['resume']);assert.equal(env.sockets.length,1)
+ // Nascosta 40 s con i timer congelati: il socket «vivo» viene sostituito e si rilegge.
+ env.document.visibilityState='hidden';env.fire('doc','visibilitychange');clock+=40000
+ env.document.visibilityState='visible';env.fire('doc','visibilitychange');assert.deepEqual(reasons,['resume','resume']);assert.ok(env.sockets[0].closed);advance(1);assert.equal(env.sockets.length,2);stop()}finally{mock.timers.reset()}
 })
 test('live reads are prefetch-marked, never retried on 429, and invalidation is per restaurant',async()=>{
  const calls=[];const cache=await loadModule('apps/web/src/lib/public-menu-cache.ts',{fetch:async url=>{calls.push(url);return url.includes('/r9/')?{ok:false,status:429,headers:{get:k=>k==='Retry-After'?'12':null}}:{ok:true,status:200,json:async()=>({data:{id:'m1'},defaultLanguage:'it'})}},URLSearchParams,setTimeout,DOMException,globalThis:{}})
- await cache.loadMenu('r1','m1','en',{live:true});assert.match(calls[0],/prefetch=1/)
+ await cache.loadMenu('r1','m1','en',{live:true});assert.match(calls[0],/prefetch=1/);await cache.loadMenu('r1','m1','en',{live:true,token:'0123456789abcdef'});assert.match(calls[1],/live=0123456789abcdef/);await cache.loadMenu('r1','m1','en',{live:true,token:'<bad>'});assert.ok(!calls[2].includes('live='))
  await assert.rejects(cache.loadMenu('r9','','',{live:true}),e=>e.status===429&&e.retryAfterMs===12000);assert.equal(calls.filter(u=>u.includes('/r9/')).length,1)
  await cache.loadMenu('r2','m1','');assert.ok(cache.cachedMenu('r1','m1','en'));cache.invalidateMenus('r1');assert.equal(cache.cachedMenu('r1','m1','en'),undefined);assert.ok(cache.cachedMenu('r2','m1',''))
 })
 test('the public menu keeps the reading point and skips sibling prefetch after a live refresh',()=>{
  const menu=readFileSync('apps/web/src/components/DigitalMenu.tsx','utf8'),renderer=readFileSync('apps/web/src/components/WorkspaceMenuRenderer.tsx','utf8')
- assert.ok(menu.includes('watchPublicMenu(restaurantId'));assert.ok(menu.includes('readingAnchor()'));assert.ok(menu.includes('restoreReadingAnchor(anchor)'));assert.ok(menu.includes("{live:true}"));assert.ok(menu.includes('if(liveRef.current){liveRef.current=false;return}'))
+ assert.ok(menu.includes('watchPublicMenu(restaurantId'));assert.ok(menu.includes('readingAnchor()'));assert.ok(menu.includes('restoreReadingAnchor(anchor)'));assert.ok(menu.includes("{live:true,token:tokenRef.current}"));assert.ok(menu.includes('if(liveRef.current){liveRef.current=false;return}'))
  assert.ok(renderer.includes('data-item-id={it.id}'))
 })
 test('a socket that stops answering heartbeats is replaced (no silent dead connection)',async()=>{

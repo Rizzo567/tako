@@ -72,14 +72,45 @@ export async function proxy(request, env, fetcher = fetch) {
     return new Response(upstream.body,{status:upstream.status,statusText:upstream.statusText,headers:responseHeaders});
   } catch { return unavailable(); }
 }
+// Rilettura live (17/10): dopo un segnale del menu i telefoni rileggono con ?live=<k> (gettone casuale del cambio, 16 hex).
+// Il primo telefono del data center legge dall'origine; gli altri, nello stesso momento, aspettano la sua copia
+// (Cache API del data center, 60 s, chiave = locale + menuId + lang + k) invece di colpire tutti insieme la read-edge.
+// Solo risposte 200, senza Set-Cookie. k nuovo a ogni cambio: nessuna copia può essere più vecchia del segnale che l'ha chiesta.
+const LIVE_TOKEN=/^[a-f0-9]{16}$/,LIVE_WAIT_MS=1500,LIVE_POLL_MS=50
+export function liveCacheKeys(request){
+  const url=new URL(request.url),k=url.searchParams.get('live');
+  if(request.method!=='GET'||!customerMenuPath(url.pathname)||!k||!LIVE_TOKEN.test(k))return null;
+  const key=new URL('https://takoitalia.com/__live-menu'+url.pathname);
+  for(const name of ['menuId','lang'])key.searchParams.set(name,url.searchParams.get(name)||'');
+  key.searchParams.set('k',k);
+  const lock=new URL(key);lock.searchParams.set('lock','1');
+  return {key:new Request(key,{method:'GET'}),lock:new Request(lock,{method:'GET'})};
+}
+const liveCopy=(response,state)=>{const headers=new Headers(response.headers);headers.delete('Set-Cookie');headers.set('Cache-Control','no-store');headers.set('X-Takomenu-Live',state);return new Response(response.body,{status:200,headers})};
+export async function liveMenu(request,ctx,load,cache=caches.default,sleep=ms=>new Promise(r=>setTimeout(r,ms))){
+  const keys=liveCacheKeys(request);if(!keys)return load();
+  try{
+    let hit=await cache.match(keys.key);if(hit)return liveCopy(hit,'HIT');
+    if(await cache.match(keys.lock)){
+      for(let waited=0;waited<LIVE_WAIT_MS;waited+=LIVE_POLL_MS){await sleep(LIVE_POLL_MS);hit=await cache.match(keys.key);if(hit)return liveCopy(hit,'WAIT');if(!(await cache.match(keys.lock)))break}
+    }else await cache.put(keys.lock,new Response('1',{headers:{'Cache-Control':'public, s-maxage=10'}}));
+  }catch{return load()}
+  const response=await load();
+  try{
+    if(response.status===200){const copy=new Headers(response.headers);copy.delete('Set-Cookie');copy.set('Cache-Control','public, s-maxage=60');const saving=cache.put(keys.key,new Response(await response.clone().arrayBuffer(),{status:200,headers:copy})).catch(()=>{});if(ctx?.waitUntil)ctx.waitUntil(saving);else await saving}
+    else{const clearing=cache.delete(keys.lock).catch(()=>{});if(ctx?.waitUntil)ctx.waitUntil(clearing)}
+  }catch{}
+  const headers=new Headers(response.headers);headers.set('X-Takomenu-Live','MISS');return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+}
 // File con hash Vite nel nome (assets/nome-XXXXXXXX.ext): il contenuto non cambia mai, cache di un anno.
 export function hashedAsset(path,response){if(!response.ok||!/^\/assets\/[^/]+-[A-Za-z0-9_-]{8}\.(?:js|css|ttf|woff2|png|svg|webp|jpg)$/.test(path))return response;const headers=new Headers(response.headers);headers.set('Cache-Control','public, max-age=31536000, immutable');return new Response(response.body,{status:response.status,headers})}
-export default {
+const worker = {
   async fetch(request, env,ctx) {
     const path = new URL(request.url).pathname;
     // An activated gateway reads published data from the operational backend.
     // Immutable snapshots are used only while the cloud backend is disabled.
     if(customerMenuPath(path)&&!['GET','HEAD'].includes(request.method))return Response.json({error:'Metodo non consentito'},{status:405,headers:{Allow:'GET, HEAD'}});
+    if(customerMenuPath(path)&&request.method==='GET'&&backendURL(env)&&new URL(request.url).searchParams.has('live')&&typeof caches!=='undefined'){const plain=new URL(request.url);plain.searchParams.delete('live');return liveMenu(request,ctx,()=>worker.fetch(new Request(plain,request),env,ctx))}
     if (/^\/(api|uploads)(\/|$)/.test(path) && backendURL(env)) {
       const isImage=/^\/uploads\/[a-f0-9-]{36}\/[A-Za-z0-9_-]{16}\.(?:jpg|png|webp|gif)$/.test(path)&&['GET','HEAD'].includes(request.method);
       const cacheKey=isImage?new Request(new URL(path,request.url),{method:'GET'}):null;
@@ -108,3 +139,4 @@ export default {
     const asset=await env.ASSETS.fetch(request);if(/^\/staff\/(?:app\.[a-f0-9]{12}\.js|lib\/react(?:-dom)?-18\.3\.1\.production\.min\.js)$/.test(path)&&asset.ok){const headers=new Headers(asset.headers);headers.set('Cache-Control','public, max-age=31536000, immutable');return new Response(asset.body,{status:asset.status,headers})}return asset;
   }
 };
+export default worker;

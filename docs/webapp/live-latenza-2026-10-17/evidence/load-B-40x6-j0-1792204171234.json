@@ -1,0 +1,30 @@
+{
+ "at": "2026-10-17T02:29:31.230Z",
+ "phones": 40,
+ "liveCache": {
+  "MISS": 9,
+  "WAIT": 127,
+  "HIT": 144
+ },
+ "coalescing": true,
+ "changes": 6,
+ "jitterMs": 0,
+ "durationS": 95,
+ "joined": 40,
+ "pushesReceived": 280,
+ "withDelta": 160,
+ "reads": 280,
+ "retries": 0,
+ "status": {
+  "200": 280
+ },
+ "readMsP50": 273,
+ "readMsP95": 483,
+ "structural": {
+  "reads": 120,
+  "failed": 0,
+  "signalToReadP50": 439,
+  "signalToReadP95": 499,
+  "max": 500
+ }
+}
