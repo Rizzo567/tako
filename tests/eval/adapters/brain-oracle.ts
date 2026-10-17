@@ -4,7 +4,11 @@
 // prende dal messaggio (o, per i rimandi, dai messaggi recenti del titolare), il piatto dal messaggio o dal contesto.
 // È un TETTO dell'architettura (contesto + validatore), non gpt-oss: i numeri «oracolo» non sono la resa del modello vero.
 import {plainT} from '../judge.js'
-import {spoken} from './current-oracle.js'
+import {spoken as spokenRaw} from './current-oracle.js'
+import {withoutQuantities} from '../../../apps/server/src/lib/twilio-menu-ai.js'
+import {deixisReferents} from '../../../apps/server/src/lib/owner-brain-plan.js'
+// Correzioni A (17/10): il modello ideale non legge le quantità come prezzi («quei due», «tutti e tre», «in una categoria»).
+const spoken=(t:string)=>spokenRaw(withoutQuantities(t))
 import type {Change,Conversation} from '../types.js'
 
 const GENERIC=new Set(['alla','allo','alle','della','dello','delle','con','pasta','pizza','piatto','casa'])
@@ -54,7 +58,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   :op==='hidden'?(/\b(rimett\w*|mostra\w*|fallo vedere)\b/.test(p)?false:/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)?true:fallback):op==='featured'?(/\btogli\w* (l )?evidenza\b|non in evidenza/.test(p)?false:fallback):fallback
  // Candidati aperti: dal blocco IN SOSPESO o dall'elenco dell'ultima risposta del bot.
  const pend=last.match(/candidati ((?:p\d+,?)+)/)?.[1]?.split(',')??[]
- const listed=pend.length?pend.map(c=>names.find(n=>cat.code.get(n)===c)!).filter(Boolean):[...bot.matchAll(/\*([^*]+)\*/g)].map(m=>m[1]!.replace(/\s*\(.*\)$/,'')).filter(n=>cat.code.has(n))
+ // Le opzioni sono quelle di una DOMANDA (blocco IN SOSPESO o risposta del bot con «?»), non l'elenco di un «Confermato» (correzioni A).
+ const listed=pend.length?pend.map(c=>names.find(n=>cat.code.get(n)===c)!).filter(Boolean):[...bot.matchAll(/\*([^*]+)\*/g)].map(m=>m[1]!.replace(/\s*\(.*\)$/,'')).filter(n=>cat.code.has(n)&&/\?/.test(bot))
  const sourceMsg=last.match(/sul messaggio «([^»]+)»/)?.[1]??owners.at(-1)??''
  // Il piatto che spiega più parole vince: «spritz aperol» non nomina lo Spritz Campari, «cornetti integrali» non il Cornetto.
  const covered=(n:string,t:string)=>{const h=hitStems(n,t);return names.some(o=>o!==n&&hitStems(o,t).length>h.length&&h.every(w=>hitStems(o,t).includes(w)))}
@@ -73,6 +78,12 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    const srcAll=spoken(sourceMsg),acts=chosen.map(n=>{const e=expected.find(c=>c.op!=='create'&&c.dish===n);if(e)return act(e,cat,e.op==='price'?(srcAll.includes((e as any).price)?(e as any).price:srcPrice):null,null)
     return srcPrice!==null?{action:'set_price',item:cat.code.get(n),price:srcPrice}:/finit|esaurit/.test(src)?{action:'set_available',item:cat.code.get(n),value:false}:/nascond|togli|lev/.test(src)?{action:'set_hidden',item:cat.code.get(n),value:true}:null}).filter(Boolean)
    if(acts.length)return out({actions:acts})}}
+ // Creazioni prima di tutto (correzioni A 17/10): «aggiungi pasta al pesto a 15» non è una parola generica «pasta» da chiarire.
+ // Insieme alle creazioni, le altre attese sui piatti nominati con il loro prezzo detto («aggiungi pasta al ragù a 10» = prezzo).
+ {const creates=expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!))
+  if(creates.length&&/aggiung|inserisc|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}})
+   const more=here.flatMap(n=>expected.filter(c=>c.op==='price'&&c.dish===n&&said.includes((c as any).price)).map(c=>act(c,cat,(c as any).price,null)))
+   return out({actions:[...creates.map(c=>act(c,cat,null,null)),...more]})}}
  // Piatti ambigui nel messaggio → chiarimento con l'azione capita.
  const amb=names.filter(n=>hitStems(n,msg).length>0&&rivalsOf(n,msg).length>0&&!here.includes(n))
  const relevantHere=here.filter(n=>expected.some(c=>c.op!=='create'&&c.dish===n))
@@ -100,11 +111,18 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // Risposta a una domanda del bot sulla richiesta di prima («hai scritto due prezzi: 9 o 9,50?» → «9»): la richiesta intera.
  if(!actions.length&&!here.length&&said.length&&/\?|riscrivimi|due prezzi/i.test(bot)){const prevD=lastOwnerDishes,prevSaid=spoken(owners.at(-1)??'')
   for(const n of prevD){const e=conv.changes.find(c=>c.op==='price'&&c.dish===n) as any;if(!e)continue;const v=said.includes(e.price)?e.price:prevSaid.includes(e.price)?e.price:null;if(v!==null)actions.push({action:'set_price',item:cat.code.get(n),price:v})}}
+ // Rimandi a più piatti o per posizione («quei due», «entrambi», «tutti e tre», «il primo», «tutti tranne boh»): il modello ideale
+ // li risolve sui messaggi recenti del titolare (correzioni A, 17/10) e applica l'azione detta a ciascuno.
+ if(!actions.length&&!relevantHere.length){const deix=deixisReferents(msg,owners.slice(-3),names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''})))
+  if(deix?.ids.length){const verb=/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*|rimett\w*|mostra\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':said.length?'price':null
+   for(const n of deix.ids){const e=expected.find(c=>c.op!=='create'&&c.dish===n&&c.op===verb)??(verb==='price'&&said.length?{op:'price',dish:n,price:said.at(-1)!} as Change:null);if(!e)continue
+    const a=act(e,cat,e.op==='price'?(said.includes((e as any).price)?(e as any).price:said.at(-1)!):null,null);if(a&&'value' in a&&typeof a.value==='boolean')a.value=valueFor(e.op,a.value);if(a)actions.push(a)}}}
  // Nessun piatto nel messaggio: rimando al piatto del contesto («mettila a 13», «no scusa 14», «rimettila com'era»).
  if(!actions.length&&!here.length&&ctxDish){const e=expected.filter(c=>c.op!=='create'&&c.dish===ctxDish)
   if(/\b(rimett\w*|com era|come prima|annull\w*|torna\w*)\b/.test(p)&&!e.some(c=>conv.changes.includes(c)))actions.push({action:'restore',item:cat.code.get(ctxDish)})
   else if(said.length)actions.push({action:'set_price',item:cat.code.get(ctxDish),price:said[0]})
-  else{const fin=conv.changes.find(c=>c.op!=='create'&&c.dish===ctxDish);if(fin&&fin.op!=='price'){const a=act(fin,cat,null,null);if(a)actions.push(a)}}}
+  else{const verb=/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':null
+   const fin=conv.changes.find(c=>c.op!=='create'&&c.dish===ctxDish&&(verb?c.op===verb:c.op!=='price'));if(fin&&fin.op!=='price'){const a=act(fin,cat,null,null);if(a)actions.push(a)}}}
  // Richiesta multipla con piatti ambigui accanto a parti chiare: le chiare in actions, ogni ambigua in uncertain.
  const residual=here.reduce((t,h)=>plainT(t).replace(plainT(h),' '),msg)
  const uncertain:any[]=[];if(actions.length){const seen=new Set<string>(here);for(const n of amb){if(seen.has(n)||!hitStems(n,residual).length)continue;const pool=[n,...rivalsOf(n,msg)];pool.forEach(x=>seen.add(x))

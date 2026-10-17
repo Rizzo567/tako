@@ -133,7 +133,9 @@ export const wantsSpecialText=(m:string)=>/\b(del giorno|di oggi)\b/.test(plainT
 /** 17/10 (QA 11:13): «tredici euro e cinquanta» → «13,50 euro»: il centesimo detto dopo «euro» non rende composta la frase.
  * Solo per le modifiche singole: il menu intero da messaggio legge il testo originale. */
 export function spokenCents(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w))
- return raw.replace(/\b([\p{L}\d]+)\s+euro\s+e\s+([\p{L}\d]+)\b(?!\s*(?:euro|€))/giu,(all,a,b)=>{const x=nv(a),y=/^\d{1,2}$/.test(b)?Number(b):nluWordNumber(plainText(b));return x===null||y===null||y<1||y>=100?all:`${x},${String(y).padStart(2,'0')} euro`})}
+ // 17/10 (A2.1): centesimi solo se il secondo numero (10–99) chiude la frase o la parte («… e 50», «… e cinquanta centesimi»,
+ // «… e 50, il tiramisù…»): «10 euro e uno deve essere…» non è 10,01.
+ return raw.replace(/\b([\p{L}\d]+)\s+euro\s+e\s+([\p{L}\d]+)\b(?!\s*(?:euro|€))(?=\s*(?:centesimi\b|cent\b|[.,;:!?)]|$|\s+(?:nei|nel|nella|nelle|negli|tra|fra|in|per|invece|poi|anche|e\s+(?:il|la|lo|i|gli|le|l|la|metti|togli|nascondi)\b)))/giu,(all,a,b)=>{const x=nv(a),y=/^\d{1,2}$/.test(b)?Number(b):nluWordNumber(plainText(b));return x===null||y===null||y<10||y>=100?all:`${x},${String(y).padStart(2,'0')} euro`}).replace(/(\d+,\d{2} euro)\s+(?:centesimi|cent)\b/g,'$1')}
 export function spokenDecimals(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w))
  return raw.replace(/\b([\p{L}\d]+)\s+virgola\s+([\p{L}\d]+)\b/giu,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null?all:`${x},${y}`}).replace(/\b([\p{L}\d]+)(\s+euro)?\s+e\s+mezz[oa]\b/giu,(all,a,e)=>{const x=nv(a);return x===null?all:`${x},5${e??''}`})}
 export function politeCommand(raw:string):string|null{

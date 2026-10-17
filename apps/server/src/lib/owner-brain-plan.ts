@@ -12,7 +12,7 @@ import {looksLikeQuestion,politeCommand,parseIntent,findDishes} from './twilio-m
 import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
-import {buildBrainContext,recentHistory,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
+import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
 export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions] as const
 const nullable=(type:string)=>({type:[type,'null']})
@@ -60,6 +60,38 @@ const SAME_PRICE=/\b(puru|stess[oa]|stesso costo|come (?:il|la|lo|l|i|le|gli)\b|
 // Rimandi alla cronologia: pronomi, «anche/pure/uguale», correzioni, scelte («la seconda»).
 const SWAP=/\b(intendevo|volevo dire|era (?:la|il|lo|l)|non (?:la|il|lo) .{0,20}(?:ma|era)|no(?:,)? (?:la|il|lo|l|i|le|gli)\b|scusa(?:,)? (?:la|il|lo|l|i|le|gli)\b|ho sbagliato)/
 export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|mettil\w*|fall[aoie]\w*|portal\w*|toglil\w*|nascondil\w*|rimettil\w*|segnal\w*|quell[aoie]|quelli|quest[aoi]|no|scusa|anzi|invece|intendevo|volevo|sbagliato|errore|prim[oa]|second[oa]|terz[oa]|ultim[oa]|tutt\w*|entramb\w*|altr[oa])\b/
+// 17/10 (correzioni A, v-deixis): rimandi a PIÙ piatti o per posizione nei messaggi recenti del titolare. «quei due», «entrambi»,
+// «tutti e tre», «quelli», «mettili» → l'insieme dei piatti; «il primo», «l'ultimo» → uno solo; «tutti tranne X». Il validatore
+// accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
+const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
+const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
+const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
+export function deixisReferents(msg:string,owners:string[],refs:MenuRef[]):{kind:'set'|'one',ids:string[]}|null{
+ const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
+ if(!ord&&!plural&&!except)return null
+ const posOf=(name:string,t:string)=>{const ws=plain(name).split(' ').filter(w=>w.length>=4);let best=Infinity;for(const w of ws.length?ws:plain(name).split(' ')){const i=t.search(new RegExp('\\b'+w.slice(0,5).replace(/[^a-z0-9]/g,'')));if(i>=0&&i<best)best=i}return best}
+ const lists=owners.map(o=>{const t=' '+plain(o)+' ';return refs.filter(r=>g9DishMentioned(r.name,o,refs)).sort((a,b)=>posOf(a.name,t)-posOf(b.name,t)).map(r=>r.id)})
+ const lastMulti=[...lists].reverse().find(l=>l.length>0)
+ const chrono:string[]=[];for(const l of lists)for(const id of l)if(!chrono.includes(id))chrono.push(id)
+ if(ord&&!plural){const seq=lastMulti&&lastMulti.length>=2?lastMulti:chrono,w=ord[1]!,i=/^prim/.test(w)?0:/^second/.test(w)?1:/^terz/.test(w)?2:seq.length-1;return{kind:'one',ids:seq[i]?[seq[i]!]:[]}}
+ if(except){const named=refs.filter(r=>g9DishMentioned(r.name,except[1]!,refs)).map(r=>r.id);return{kind:'set',ids:(lastMulti&&lastMulti.length>=2?lastMulti:chrono).filter(id=>!named.includes(id))}}
+ const nm=p.match(/\b(?:tutti|tutte|quei|quelle|questi|queste|i|le|gli|ambedue) (?:e )?(due|tre|quattro|2|3|4)\b/),n=nm?DEIX_N[nm[1]!]!:/\bentramb\w*|\bambedue\b/.test(p)?2:null
+ if(lastMulti&&lastMulti.length>=(n??2))return{kind:'set',ids:n?lastMulti.slice(0,n):lastMulti}
+ const back:string[]=[];for(const l of [...lists].reverse())for(const id of [...l].reverse())if(!back.includes(id))back.push(id)
+ const want=n??2;if(back.length<want)return{kind:'set',ids:[]}
+ const pick=back.slice(0,want);return{kind:'set',ids:chrono.filter(id=>pick.includes(id))}}
+const FEAT_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|lev[ai]) (?:\w+ ){0,2}evidenza\b|\bnon (?:piu |più )?in evidenza\b|\bdall evidenza\b|\bdalla evidenza\b/,FEAT_ON=/\b(?:mett\w*|metti\w*) (?:\w+ ){0,5}in evidenza\b|\bevidenzia\w*\b/
+const HID_ON=/\b(?:nascond\w*|togli\w*|lev\w*)\b/,HID_OFF=/\b(?:rimett\w*|mostr\w*|fa\w* vedere|visibil\w*|ricompar\w*)\b/
+const AV_OFF=/\b(?:finit\w*|esaurit\w*|fernut\w*|terminat\w*)\b/,AV_ON=/\b(?:tornat\w*|disponibil\w*|di nuovo|ce di nuovo)\b/
+/** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
+export function polarityProblem(actions:MenuAction[],msg:string):string[]{const m=' '+msg+' ',out:string[]=[]
+ const fOff=FEAT_OFF.test(m),fOn=FEAT_ON.test(m)&&!fOff,hOn=HID_ON.test(m)&&!HID_OFF.test(m)&&!/evidenza|promo|offert|scont|etichett/.test(m),hOff=HID_OFF.test(m)&&!HID_ON.test(m),aOff=AV_OFF.test(m)&&!AV_ON.test(m),aOn=AV_ON.test(m)&&!AV_OFF.test(m)
+ for(const a of actions){if(!('id' in a))continue
+  if(a.kind==='featured'&&((fOff&&a.value)||(fOn&&!a.value)))out.push(a.id)
+  if(a.kind==='hidden'&&((hOn&&!a.value)||(hOff&&a.value)))out.push(a.id)
+  if(a.kind==='available'&&((aOff&&a.value)||(aOn&&!a.value)))out.push(a.id)}
+ return [...new Set(out)]}
+const LEAVE=/\b(?:lascia\w* stare|lascia\w* perdere|lascial[oaie]\w*|non (?:lo |la |li |le )?(?:toccare|cambiare)|non toccarl\w*)\b/
 const ORDINAL=/\b(prim[oa]|second[oa]|terz[oa]|quart[oa]|quint[oa]|ultim[oa]|[1-8]|tutt[ie]|entramb\w*|altr[oa])\b/
 const UP=/\b(aument\w*|alz\w*|sal\w*|piu)\b/,DOWN=/\b(abbass\w*|diminu\w*|scont\w*|scal\w*|meno|togli\w*)\b/
 
@@ -86,7 +118,7 @@ export function dominatedBy(id:string,message:string,refs:MenuRef[]):string[]{
  return refs.filter(o=>{if(o.id===id)return false;const theirs=hits(o);return theirs.length>mine.length&&mine.every(w=>theirs.some(x=>sameRoot(x,w)))}).map(o=>o.id)
 }
 // «la gricia a uno in meno», «due di più»: quel numero è una differenza, mai il prezzo.
-const relativeNumbers=(message:string)=>{const out=new Set<number>(),p=plain(message);for(const m of p.matchAll(/\b(\w+)(?: euro)? (?:in|di) (?:meno|piu)\b/g)){const v=g9Prices(m[1]!);for(const x of v)out.add(x)}return out}
+const relativeNumbers=(message:string)=>{const out=new Set<number>(),p=plain(message);for(const m of p.matchAll(/\b(\w+)(?: euro)? (?:in|di) (?:meno|piu)\b/g)){const v=g9Prices('a '+m[1]!);for(const x of v)out.add(x)}return out}
 const BOT_QUESTION=/\?|\brispondi\b|\bquale\b|\bintendi\b|scrivi il|riscrivimi|due prezzi/i
 export const PENDING_MS=10*60*1000
 
@@ -111,7 +143,7 @@ function legacyAction(a:any,map:(v:unknown)=>string|null):any{
 // Numeri detti in dialetto (siciliano/napoletano/romanesco) → italiano, solo per i controlli del server («a ottu» = 8, «cincu» = 5).
 const DIALECT_NUM:Record<string,string>={unu:'uno',dui:'due',tri:'tre',quattru:'quattro',cincu:'cinque',cinche:'cinque',seie:'sei',setti:'sette',ottu:'otto',novi:'nove',deci:'dieci',unnici:'undici',dudici:'dodici',tririci:'tredici',quattordici:'quattordici',quinnici:'quindici',sidici:'sedici',diciassetti:'diciassette',diciottu:'diciotto',diciannovi:'diciannove',vinti:'venti',trenta:'trenta',euri:'euro',euru:'euro',menzu:'mezzo',menza:'mezza'}
 export const dialectNumbers=(s:string)=>s.replace(/\b[\p{L}]+\b/gu,w=>DIALECT_NUM[w.toLowerCase()]??w)
-export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[]}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
+export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections}=input,message=dialectNumbers(input.message),byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
  const map=(v:unknown)=>typeof v==='string'?ctx.codes.get(v.trim().toLowerCase())??null:null
  const empty={type:'clarify',ids:[]} as MenuPlan
@@ -181,7 +213,7 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
 const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!!lastBotTurn&&BOT_QUESTION.test(lastBotTurn.text)&&(input.now??Date.now())-lastBotTurn.at>PENDING_MS
  // Una domanda del bot vale 10 minuti (come le proposte in sospeso): dopo, la risposta breve non la completa più.
  const ctxOK=!hasCreate&&history.length>0&&!staleQuestion&&(REFERS.test(msg)||msg.split(' ').length<=4)
- const dishText=ctxOK?[message,...owners,lastBotText].join(' \n '):message,priceText=ctxOK?[message,...owners].join(' \n '):message
+ const dishText=ctxOK?[message,...owners,lastBotText].join(' \n '):hasCreate&&input.draftText?message+' \n '+input.draftText:message,priceText=ctxOK?[message,...owners].join(' \n '):message
  const botLabels=[...lastBotText.matchAll(/\*([^*\n]{2,80})\*\s*:/g)].map(m=>plain(m[1]!))
  const mentioned=(id:string)=>trusted.has(id)||g9DishMentioned(byId.get(id)!.name,dishText,refs)
  // Prezzo ricavato: «aumenta di 1» (delta sul prezzo attuale) e «stesso prezzo di X» (valore riletto dal menu).
@@ -217,6 +249,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    const asks2:HoldAsk[]=amb.map(a=>{const {id,...template}=a as any;return{type:'choose' as const,word:refs.find(r=>r.id===id)?.name??'',options:doubt.get(id)!.slice(0,8),template}})
    if(!clear.length&&asks2.length===1)return{intent:'clarify',plan:{type:'clarify',ids:asks2[0]!.type==='choose'?asks2[0]!.options:[],actions:[amb[0]!]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
    return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:clear,asks:[...asks2,...asks]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}}
+  // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
+  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
   // Rimando senza nome («mettila a 13», «no scusa 14»): vale solo per il piatto (unico) del messaggio precedente del titolare
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
@@ -226,7 +260,9 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)
    // Risposta a una domanda del bot sulla richiesta di prima: quella richiesta (anche con più piatti) torna valida per intero.
    const answering=BOT_QUESTION.test(lastBotText)
-   const bad=bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg)&&!answering)||priceBare(id))
+   const deix=answering||(input.clarifyIds??[]).length>1?null:deixisReferents(message,owners,refs)
+   const deixBad=deix?(bare.length&&(bare.some(id=>!deix.ids.includes(id))||(deix.kind==='set'&&deix.ids.some(id=>!ids.includes(id)))||!deix.ids.length)):false
+   const bad=deix?(deixBad?bare:[]).concat(bare.filter(priceBare)):bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg)&&!answering)||priceBare(id))
    if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...pd,...bad])].filter(id=>byId.has(id)).slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'rimando_incerto']}}
   // Scelta aperta tra più piatti: «sì», «ok», «vai» non scelgono. Serve il nome, un ordinale o «tutti e due».
   const open=(input.clarifyIds??[]).filter(id=>byId.has(id))
@@ -242,7 +278,10 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   const ctxPrices=new Set(refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)||g9DishMentioned(r.name,lastBotText,refs)).map(r=>Math.round(r.price*100)/100))
   // Dopo una domanda del bot (≤10 minuti) la risposta completa la richiesta di prima: valgono anche i prezzi di quel messaggio.
   const afterQuestion=BOT_QUESTION.test(lastBotText)?g9Prices(prevOwner):[]
-  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(said.includes(v)&&ctxPrices.has(v)))return no('prezzo_non_detto',[a.id])}}
+  // 17/10 (A2.3): un prezzo del contesto vale solo con un rimando esplicito («uguale», «anche», «no, il tiramisù»), mai in un
+  // messaggio che dice di lasciare stare («no, il caviale lascialo stare» era diventato il caviale a 10 €).
+  const ctxPriceOK=(SAME_PRICE.test(msg)||SWAP.test(msg))&&!LEAVE.test(msg)
+  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v)))return no('prezzo_non_detto',[a.id])}}
  const out:MenuAction[]=[...base.actions]
  for(const d of derived){if(!mentioned(d.id))return no('piatto_non_nominato',[d.id])
   for(const x of d.actions){if(out.some(a=>'id' in a&&a.id===d.id&&a.kind===x.kind))return no('azione_doppia',[d.id]);out.push(x)}
@@ -265,7 +304,7 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCal
  let call:BrainCall
  try{call=await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'RAW '+call.content+'\n')).catch(()=>{})
- const decision=validateBrainPlan(call.content,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source,clarifyIds:input.pending?.clarify?.itemIds,history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude})
+ const decision=validateBrainPlan(call.content,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source,clarifyIds:input.pending?.clarify?.itemIds,history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,draftText:draftText(input.pending?.draft)})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens}
 }

@@ -26,7 +26,8 @@ export function brainGate(o:{text:string,proposalKind:string|null,choiceOptions:
  // Senza cronologia recente o senza rimandi a prima, il turno deterministico di oggi resta il primo (è già al 93–100% sui comandi
  // completi); il cervello prende i messaggi che hanno bisogno del contesto e tutti quelli che oggi andrebbero all'IA.
  if(!o.freshHistory||!(REFERS.test(plain(o.text))||plain(o.text).split(' ').length<=4))return false
- if(!o.proposalKind)return true
+ // Bozza di aggiunta in sospeso (17/10, A1.1): il route manda qui solo i messaggi che non la completano.
+ if(!o.proposalKind||o.proposalKind==='create_draft')return true
  if(o.proposalKind!=='choose'||!o.choiceOptions)return false
  return !allOptions(o.text,o.choiceOptions.length)&&!resolveChoice(o.text,o.choiceOptions)
 }
@@ -54,11 +55,13 @@ export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurant
  const cmd=o.pendingCommand,choice=cmd?.kind==='choose'&&Array.isArray(cmd.options)?cmd.options.filter((id:unknown):id is string=>typeof id==='string'&&o.refs.some(r=>r.id===id)):null
  const bot=lastBot(history),clarify=choice?.length?{question:(bot?.text??'Quale piatto intendi?').slice(0,300),itemIds:choice,source:bot?ownerBefore(history,bot.at)?.text:undefined}:null
  const proposal:MenuAction[]|null=cmd?.kind==='batch'&&Array.isArray(cmd.actions)?cmd.actions:null
+ // Bozza di aggiunta non finita (A1.1): nel contesto, e i suoi nomi/prezzi valgono come detti dal titolare per le creazioni.
+ const draft=cmd?.kind==='create_draft'?{name:typeof cmd.name==='string'?cmd.name:null,names:Array.isArray(cmd.names)?cmd.names.filter((x:unknown):x is string=>typeof x==='string'):undefined,price:typeof cmd.price==='number'?cmd.price:null,prices:Array.isArray(cmd.prices)?cmd.prices:undefined,section:o.sections.find(s=>s.id===cmd.sectionId)?.name??null,sectionName:typeof cmd.sectionName==='string'?cmd.sectionName:null}:null
  // «no, intendevo X» / «rimettila com'era»: si può rimettere solo ciò che l'ultima pubblicazione da WhatsApp (10 minuti) ha cambiato.
  const restorable=new Map<string,MenuAction[]>();if(o.undo&&now-o.undo.at<=RESTORE_WINDOW_MS)for(const it of o.undo.items){const r=o.refs.find(x=>x.id===it.id),b=it.before;if(!r||!b)continue;const back:MenuAction[]=[]
   if(typeof b.price==='number'&&Math.abs(b.price-r.price)>=0.005)back.push({kind:'price',id:r.id,price:b.price});if((b.available!==false)!==r.available)back.push({kind:'available',id:r.id,value:b.available!==false});if(!!b.hidden!==r.hidden)back.push({kind:'hidden',id:r.id,value:!!b.hidden});if(!!b.featured!==!!r.featured)back.push({kind:'featured',id:r.id,value:!!b.featured})
   if(back.length)restorable.set(r.id,back)}
- const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,pending:{proposal,clarify},pendingActions:proposal,message:o.text,now},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
+ const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,pending:{proposal,clarify,draft},pendingActions:proposal,message:o.text,now},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
  if(process.env.TAKO_BRAIN_DEBUG)dbg('BRAIN',JSON.stringify({text:o.text,history:history.length,decision:decision.path==='brain'?{intent:decision.intent,plan:decision.plan,notes:decision.notes}:decision}))
  if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',reason:decision.reason}));return null}
  return{decision,clarifyIds:choice?.length?choice:null}

@@ -37,7 +37,8 @@ describe('bot titolare: aggiunta di un piatto senza IA',()=>{
   const n=step('aggiungi nei primi a 12 euro');expect(n.kind==='ask'&&n.text).toContain('Come si chiama');if(n.kind!=='ask')return
   expect(created('pasta al ragù',n.draft)).toMatchObject({name:'Pasta al ragù',price:12})
   const one=createStep('aggiungi pasta al ragù 12 euro',null,[sections[0]!],refs,parseIntent);expect(one).toMatchObject({kind:'create',action:{sectionId:'s1'}})
-  const unknown=step('aggiungi tra i secondi la tagliata 18 euro');expect(unknown.kind==='ask'&&unknown.text).toContain('Non trovo quella categoria')
+  // 17/10 (A3.2): la categoria che non c'è è detta per nome e il nome del piatto resta (prima si perdeva).
+  const unknown=step('aggiungi tra i secondi la tagliata 18 euro');expect(unknown.kind==='ask'&&unknown.text).toContain("Nel menu non c'è la categoria *Secondi*");expect(unknown.kind==='ask'&&unknown.draft).toMatchObject({name:'Tagliata',price:18,sectionId:null,sectionName:'Secondi'})
  })
  it('«piatto di …» è parte del nome (bug visto dal vivo: «aggiungi piatto di verifica 12 euro» → «Verifica»)',()=>{
   expect(created('aggiungi piatto di verifica 12 euro nei primi')).toMatchObject({name:'Piatto di verifica',price:12})

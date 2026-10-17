@@ -11,7 +11,10 @@ import {allowedTags,capabilities} from './twilio-menu-copy.js'
 
 export type BrainTurn={role:'owner'|'bot',text:string,at:number}
 export type BrainMemoryEntry={phrase:string,kind:'alias'|'asr'|'habit',itemId:string|null,meaning:string,state:'candidate'|'active'|'review',confirmations:number,uses:number,lastUsedAt:number|null}
-export type BrainPending={proposal?:MenuAction[]|null,clarify?:{question:string,itemIds:string[],source?:string}|null}
+export type BrainDraft={name:string|null,names?:string[],price:number|null,prices?:(number|null)[],section:string|null,sectionName?:string|null}
+export type BrainPending={proposal?:MenuAction[]|null,clarify?:{question:string,itemIds:string[],source?:string}|null,draft?:BrainDraft|null}
+/** Testo della bozza che vale come «detto dal titolare» per le creazioni (nomi e prezzi già dati nei messaggi prima). */
+export const draftText=(d:BrainDraft|null|undefined)=>d?[...(d.names??(d.name?[d.name]:[])),...(d.price!=null?['a '+d.price]:[]),...((d.prices??[]).filter((x):x is number=>typeof x==='number').map(x=>'a '+x))].join(' \n '):''
 export type BrainContextInput={restaurantName?:string,refs:MenuRef[],sections:SectionRef[],memory?:BrainMemoryEntry[],history?:BrainTurn[],pending?:BrainPending|null,message:string,now?:number}
 export type BrainMessage={role:'system'|'user'|'assistant',content:string}
 export type BrainTokens={general:number,restaurant:number,history:number,pending:number,message:number,total:number}
@@ -109,6 +112,7 @@ function describePending(a:MenuAction,codeOf:Map<string,string>,refs:MenuRef[]):
 export function pendingText(pending:BrainPending|null|undefined,codeOf:Map<string,string>,refs:MenuRef[]){
  const out:string[]=[]
  if(pending?.proposal?.length)out.push('IN SOSPESO (proposta non confermata)\n'+pending.proposal.slice(0,30).map((a,i)=>(i+1)+'. '+describePending(a,codeOf,refs)).join('\n'))
+ if(pending?.draft){const d=pending.draft,num=(x:number|null|undefined)=>x==null?'?':String(x);out.push('IN SOSPESO (aggiunta di un piatto non finita, tua domanda aperta): '+(d.names?.length?'«'+d.names.map(n=>oneLine(n,60)).join('» e «')+'» (due piatti o uno solo «'+oneLine(d.name??'',80)+'»?) prezzi '+(d.prices??d.names.map(()=>null)).map(num).join(', '):'«'+oneLine(d.name??'?',80)+'» prezzo '+num(d.price))+' categoria '+(d.section?'«'+oneLine(d.section,60)+'»':d.sectionName?'«'+oneLine(d.sectionName,60)+'» (non esiste nel menu)':'?'))}
  if(pending?.clarify)out.push('IN SOSPESO (tua domanda aperta): '+oneLine(pending.clarify.question,200)+(pending.clarify.source?' — sul messaggio «'+oneLine(pending.clarify.source,200)+'»':'')+(pending.clarify.itemIds.length?' candidati '+pending.clarify.itemIds.map(id=>codeOf.get(id)).filter(Boolean).join(','):''))
  return out.join('\n')
 }

@@ -51,7 +51,9 @@ export type Mods={prices?:Record<string,number>,unavail?:string[],hidden?:string
 export const FAMILIES=['anche','correzione','ripristino','chiarimento','multipla','scaduto','domanda','negazione','ambiguita','togli','vocale','qa1710','manuel','batterie'] as const
 // Famiglie della verifica V (17/10, tests/eval/cases/manuel-1017.ts): fuori dal banco principale, che resta com'è.
 export const V_FAMILIES=['v-deixis','v-elimina','v-aggiunte','v-categorie','v-composti','v-correzioni','v-risposte','v-prezzi','v-verbi','v-asr','v-stato','v-annulla','v-misti','v-frasefissa','v-coerenza','v-rinomina'] as const
-export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]
+// Batterie delle correzioni di fase A (17/10, docs/webapp/bot-correzioni-2026-10-17): tests/eval/cases/fix-a.ts.
+export const A_FAMILIES=['a1-composti','a2-prezzi','a3-nomi','a4-validatore','a5-asr'] as const
+export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]|typeof A_FAMILIES[number]
 
 /** Traccia facoltativa del contesto usato dal bot in un turno (il bot nuovo la espone; l'attuale no). Vedi CONTRATTO.md §3. */
 export type ContextTrace={history:{role:'owner'|'bot',text:string,at:string}[],pending?:unknown,memory?:unknown,promptTokens?:number}
