@@ -57,7 +57,9 @@ export const V_FAMILIES=['v-deixis','v-elimina','v-aggiunte','v-categorie','v-co
 export const A_FAMILIES=['a1-composti','a2-prezzi','a3-nomi','a4-validatore','a5-asr'] as const
 // Batterie di fase B (17/10): tests/eval/cases/fix-b.ts.
 export const B_FAMILIES=['b1-elimina','b2-categorie','b3-sposta-rinomina'] as const
-export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]|typeof A_FAMILIES[number]|typeof B_FAMILIES[number]
+// Banco vero (18/10): conversazioni reali di Manuel 14–17/10, tests/eval/cases/banco-vero.ts.
+export const R_FAMILIES=['bv-semplici','bv-domande','bv-multiple','bv-correzioni','bv-deixis','bv-aggiunte','bv-elimina','bv-categorie','bv-annulla','bv-dialetto','bv-asr','bv-fuori'] as const
+export type Family=typeof FAMILIES[number]|typeof V_FAMILIES[number]|typeof A_FAMILIES[number]|typeof B_FAMILIES[number]|typeof R_FAMILIES[number]
 
 /** Traccia facoltativa del contesto usato dal bot in un turno (il bot nuovo la espone; l'attuale no). Vedi CONTRATTO.md §3. */
 export type ContextTrace={history:{role:'owner'|'bot',text:string,at:string}[],pending?:unknown,memory?:unknown,promptTokens?:number}

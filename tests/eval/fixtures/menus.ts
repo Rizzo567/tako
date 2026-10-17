@@ -63,7 +63,31 @@ export const qasporco=build('qasporco',7,{restaurant:'Tako · Verifica web',menu
  ['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',12],['Inserisce il piatto la parmigiana',12],['la parmigiana',10],['tiramisù',6]]]]]]})
 for(const s of qasporco.menu.menus.flatMap(m=>m.sections))for(const i of s.items)if(i.name==='Inserisce il piatto la parmigiana')i.hidden=true
 
-export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco}
+// BANCO VERO 18/10 (tests/eval/cases/banco-vero.ts): stati del QA e di Victoria Bar ricostruiti dalle chat vere di Manuel 14–17/10.
+// QA la mattina del 17/10 e alle 13:16 (prima di parmigiana e tiramisù).
+export const qamattina=build('qamattina',8,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',12]]]]]]})
+// QA il 16/10 sera, prima che esistesse la pasta al ragù.
+export const qa1016=build('qa1016',9,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20]]]]]]})
+// QA alle 13:23 del 17/10: c'è il piatto nato dalla frase, visibile; pasta al ragù nascosta (mods).
+export const qa1323=build('qa1323',10,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',20],['Inserisce il piatto la parmigiana',12]]]]]]})
+for(const f of [qamattina,qa1016,qa1323])for(const s of f.menu.menus.flatMap(m=>m.sections))for(const i of s.items)if(i.name==='Che ne sacc')i.promo={price:15,until:null};else if(i.name==='boh')i.promo={price:10,until:null}
+// QA del 15/10 pomeriggio (collaudo prezzi): i quattro piatti «collaudo» con i prezzi delle 15:42.
+export const collaudo=build('collaudo',11,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Piatti di prova',[['Piatto di verifica',13.5],['Pasta collaudo',10],['Pizza collaudo',12],['Tiramisu collaudo',5],['Acqua collaudo',2]]]]]]})
+// Victoria Bar (14–15/10): categorie vere (elenco del bot alle 14:00 del 15/10); piatti veri citati in chat con i prezzi veri
+// (Bruschetta Victoria 8, tre tagliate 20/24/20); Polpo rucola e patate a prezzo NON noto (14 di comodo) e pochi riempitivi.
+export const victoria=build('victoria',12,{restaurant:'Victoria Bar',menus:[['Menu','lunch',[
+ ['Antipasti di mare',[['Polpo rucola e patate',14],['Sautè di cozze',12]]],
+ ['Antipasti di terra',[['Bruschetta Victoria',8],['Tagliere di salumi',15]]],
+ ['Primi piatti',[['Spaghetti alle vongole',15],['Paccheri al ragù',13]]],
+ ['Secondi di carne',[['Tagliata rucola e grana',20],['Tagliata con funghi porcini e panna',24]]],
+ ['Secondi di pesce',[['Tagliata di orata o branzino con rucola e grana',20]]],
+ ['Contorni',[['Patate al forno',5]]],['Dolci',[['Tiramisù della casa',6]]],['Pizze e calzoni',[['Margherita',7]]],['Bevande',[['Acqua naturale',2]]]]]]})
+
+export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco,qamattina,qa1016,qa1323,collaudo,victoria}
 
 /** Menu iniziale di una conversazione: fixture + variazioni `mods` (copia profonda). */
 export function initialMenu(key:string,mods:Mods={}):EvalMenu{
