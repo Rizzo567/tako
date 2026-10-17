@@ -9,87 +9,62 @@
   "total": {
    "family": "TOTALE",
    "n": 508,
-   "ok": 362,
-   "success": 362,
-   "grave": 115,
-   "medio": 31,
+   "ok": 451,
+   "success": 451,
+   "grave": 31,
+   "medio": 26,
    "basso": 0,
-   "safety": 74,
-   "clarRate": 21.7,
-   "unexpectedClar": 99,
-   "usedLlm": 344,
+   "safety": 15,
+   "clarRate": 20,
+   "unexpectedClar": 86,
+   "usedLlm": 321,
    "llmMissConvs": 0,
-   "detN": 164,
-   "detSuccess": 111
+   "detN": 187,
+   "detSuccess": 169
   },
   "multi": {
    "family": "multi-turno",
    "n": 151,
-   "ok": 106,
-   "success": 106,
-   "grave": 29,
-   "medio": 16,
+   "ok": 125,
+   "success": 125,
+   "grave": 15,
+   "medio": 11,
    "basso": 0,
-   "safety": 14,
-   "clarRate": 31.7,
-   "unexpectedClar": 65,
-   "usedLlm": 128,
+   "safety": 10,
+   "clarRate": 28.9,
+   "unexpectedClar": 55,
+   "usedLlm": 120,
    "llmMissConvs": 0,
-   "detN": 23,
-   "detSuccess": 17
+   "detN": 31,
+   "detSuccess": 27
   },
   "families": [
    {
     "family": "a1-composti",
     "n": 508,
-    "ok": 362,
-    "success": 362,
-    "grave": 115,
-    "medio": 31,
+    "ok": 451,
+    "success": 451,
+    "grave": 31,
+    "medio": 26,
     "basso": 0,
-    "safety": 74,
-    "clarRate": 21.7,
-    "unexpectedClar": 99,
-    "usedLlm": 344,
+    "safety": 15,
+    "clarRate": 20,
+    "unexpectedClar": 86,
+    "usedLlm": 321,
     "llmMissConvs": 0,
-    "detN": 164,
-    "detSuccess": 111
+    "detN": 187,
+    "detSuccess": 169
    }
   ],
   "codes": {
-   "modifica-non-richiesta": {
-    "GRAVE": 45,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
-   "non-applicato": {
-    "GRAVE": 81,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
    "chiede-invece-di-agire": {
     "GRAVE": 0,
-    "MEDIO": 27,
-    "BASSO": 0
-   },
-   "senza-contesto": {
-    "GRAVE": 0,
-    "MEDIO": 5,
-    "BASSO": 0
-   },
-   "modifica-sbagliata": {
-    "GRAVE": 28,
-    "MEDIO": 0,
+    "MEDIO": 21,
     "BASSO": 0
    },
    "chiarimento-mancante": {
     "GRAVE": 0,
-    "MEDIO": 6,
-    "BASSO": 0
-   },
-   "correzione-non-applicata": {
-    "GRAVE": 11,
-    "MEDIO": 0,
+    "MEDIO": 7,
     "BASSO": 0
    },
    "opzioni-non-leggibili": {
@@ -98,7 +73,17 @@
     "BASSO": 0
    },
    "scrive-invece-di-chiedere": {
-    "GRAVE": 6,
+    "GRAVE": 4,
+    "MEDIO": 0,
+    "BASSO": 0
+   },
+   "modifica-non-richiesta": {
+    "GRAVE": 12,
+    "MEDIO": 0,
+    "BASSO": 0
+   },
+   "correzione-non-applicata": {
+    "GRAVE": 2,
     "MEDIO": 0,
     "BASSO": 0
    },
@@ -110,6 +95,16 @@
    "richiesta-persa": {
     "GRAVE": 4,
     "MEDIO": 0,
+    "BASSO": 0
+   },
+   "non-applicato": {
+    "GRAVE": 10,
+    "MEDIO": 0,
+    "BASSO": 0
+   },
+   "senza-contesto": {
+    "GRAVE": 0,
+    "MEDIO": 2,
     "BASSO": 0
    },
    "risposta-non-pertinente": {
@@ -124,13 +119,13 @@
    }
   },
   "latency": {
-   "harnessP50": 2.8,
+   "harnessP50": 2.3,
    "harnessP95": 6.1,
-   "withRecordedGroqP50": 2.8,
+   "withRecordedGroqP50": 2.3,
    "withRecordedGroqP95": 6.1
   },
   "llm": {
-   "calls": 397,
+   "calls": 371,
    "misses": 0,
    "tokens": 0
   }
@@ -160,7 +155,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    18
+    20.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -191,7 +186,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    10.3
+    12
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -221,7 +216,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -253,7 +248,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    24.3
+    24.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -285,7 +280,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.7
+    8.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -317,7 +312,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.6
+    8.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -349,7 +344,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.7
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -381,7 +376,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.3
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -413,7 +408,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.5
+    7.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -443,7 +438,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -453,28 +448,18 @@
    "id": "adv-coppie-011",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|gnocchi e tagliatelle|10|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|gnocchi|10|primi, create|tagliatelle|10|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|gnocchi|10|primi",
     "create|tagliatelle|10|primi"
    ],
    "actual": [
-    "create|gnocchi e tagliatelle|10|primi"
+    "create|gnocchi|10|primi",
+    "create|tagliatelle|10|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Gnocchi e tagliatelle* in *Primi*: *10,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Gnocchi* in *Primi*: *10,00 €*\nNuovo piatto *Tagliatelle* in *Primi*: *10,00 €*"
    ],
    "turns": [
     "aggiungi nei primi gnocchi e tagliatelle a 10"
@@ -485,7 +470,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -518,7 +503,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -548,7 +533,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -578,7 +563,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -589,46 +574,38 @@
    "id": "adv-coppie-015",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova"
-    },
-    {
-     "sev": "MEDIO",
-     "code": "senza-contesto",
-     "why": "turno 3"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|cappelletti|8|piatti di prova",
     "create|ravioli|8|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|cappelletti|8|piatti di prova",
+    "create|ravioli|8|piatti di prova"
+   ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
     "Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.",
-    "A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Ravioli* in *Piatti di prova*: *8,00 €*\nNuovo piatto *Cappelletti* in *Piatti di prova*: *8,00 €*"
    ],
    "turns": [
     "aggiungi ravioli e cappelletti",
     "sono due",
     "8 tutti e due"
    ],
-   "clarifications": 3,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    0.7,
-    3
+    0.8,
+    1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:coppie",
    "note": "«due» non è un prezzo"
   },
@@ -636,46 +613,38 @@
    "id": "adv-coppie-016",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova"
-    },
-    {
-     "sev": "MEDIO",
-     "code": "senza-contesto",
-     "why": "turno 3"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|cappelletti|8|piatti di prova",
     "create|ravioli|8|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|cappelletti|8|piatti di prova",
+    "create|ravioli|8|piatti di prova"
+   ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
     "Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.",
-    "A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Ravioli* in *Piatti di prova*: *8,00 €*\nNuovo piatto *Cappelletti* in *Piatti di prova*: *8,00 €*"
    ],
    "turns": [
     "aggiungi ravioli e cappelletti",
     "due piatti",
     "entrambi a 8"
    ],
-   "clarifications": 3,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.5,
-    2.3
+    1,
+    0.4,
+    0.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:coppie"
   },
   {
@@ -708,7 +677,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     0.5,
     1
    ],
@@ -720,34 +689,30 @@
    "id": "adv-coppie-018",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|ravioli e cappelletti|14|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|ravioli e cappelletti|14|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|ravioli e cappelletti|14|piatti di prova"
+   ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
-    "*Ravioli* e *Cappelletti*: un piatto solo a 14 € o due piatti separati? Non ho ancora aggiunto nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Ravioli e cappelletti* in *Piatti di prova*: *14,00 €*"
    ],
    "turns": [
     "aggiungi ravioli e cappelletti",
     "uno solo, a 14"
    ],
-   "clarifications": 2,
-   "unexpectedClarifications": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -780,8 +745,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.5,
-    0.7
+    0.4,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -818,9 +783,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    0.4,
-    1
+    0.8,
+    1.8,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -830,46 +795,38 @@
    "id": "adv-coppie-021",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova"
-    },
-    {
-     "sev": "MEDIO",
-     "code": "senza-contesto",
-     "why": "turno 3"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|agnolotti|10|piatti di prova",
     "create|tortelli|10|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|agnolotti|10|piatti di prova",
+    "create|tortelli|10|piatti di prova"
+   ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tortelli* e *Agnolotti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto nulla.",
     "Quanto costano *Tortelli* e *Agnolotti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.",
-    "A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla."
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tortelli* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Agnolotti* in *Piatti di prova*: *10,00 €*"
    ],
    "turns": [
     "aggiungi tortelli e agnolotti",
     "sono due piatti",
     "tutti e due a 10"
    ],
-   "clarifications": 3,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
     0.5,
     0.4,
-    2.1
+    0.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:coppie"
   },
   {
@@ -959,7 +916,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -989,7 +946,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1050,7 +1007,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.4
+    6.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1114,7 +1071,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.3
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1146,7 +1103,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1180,7 +1137,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.1
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1214,7 +1171,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.7
+    8.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1244,7 +1201,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.1
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1279,7 +1236,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    5.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1306,7 +1263,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1336,7 +1293,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1428,7 +1385,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1438,35 +1395,32 @@
    "id": "adv-prezzi-010",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: price|Amatriciana|12, price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Amatriciana|12",
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Amatriciana|12",
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Amatriciana*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n*Amatriciana*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "carbonara 13 e l'amatriciana un euro in meno"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    2
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:prezzi"
   },
   {
@@ -1491,7 +1445,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1519,7 +1473,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1529,27 +1483,16 @@
    "id": "adv-prezzi-013",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|12"
    ],
    "actual": [
-    "price|Gricia|1"
+    "price|Gricia|12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *1,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "aumenta la gricia di 1 euro"
@@ -1560,7 +1503,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1575,50 +1518,41 @@
    "expected": [
     "price|Gricia|12"
    ],
-   "actual": [],
+   "actual": [
+    "price|Gricia|12"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "la gricia un euro in più"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:prezzi"
   },
   {
    "id": "adv-prezzi-015",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tagliata|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|16"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|16"
    ],
    "actual": [
-    "price|Tagliata|2"
+    "price|Tagliata|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *2,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *16,00 €*"
    ],
    "turns": [
     "abbassa la tagliata di 2 euro"
@@ -1629,7 +1563,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1657,7 +1591,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1686,7 +1620,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1747,7 +1681,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.8
+    8.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1777,7 +1711,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1806,7 +1740,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1841,7 +1775,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1932,7 +1866,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    7.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1962,7 +1896,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -1993,7 +1927,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2019,7 +1953,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2052,7 +1986,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.7
+    6.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2078,7 +2012,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.2
+    5.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2109,7 +2043,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2139,7 +2073,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2167,7 +2101,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2198,7 +2132,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2231,7 +2165,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2263,7 +2197,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2293,7 +2227,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2323,7 +2257,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2353,7 +2287,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2363,20 +2297,16 @@
    "id": "adv-centesimi-008",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|12.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|12.5"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|12.5"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *12,50 €*"
    ],
    "turns": [
     "la carbonara dodici virgola cinque"
@@ -2387,7 +2317,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2417,7 +2347,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2447,7 +2377,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2477,7 +2407,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2507,7 +2437,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2517,41 +2447,30 @@
    "id": "adv-centesimi-013",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tiramisù|7"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tiramisù|7.9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tiramisù|7.9"
    ],
    "actual": [
-    "price|Tiramisù|7"
+    "price|Tiramisù|7.9"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 6,00 € a *7,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 6,00 € a *7,90 €*"
    ],
    "turns": [
     "il tiramisù a 7 euro 90"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    2
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:centesimi"
   },
   {
@@ -2608,7 +2527,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2638,7 +2557,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2668,7 +2587,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2698,7 +2617,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2756,7 +2675,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2788,7 +2707,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.3
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2849,7 +2768,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2881,7 +2800,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2913,7 +2832,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7
+    7.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2943,7 +2862,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2984,34 +2903,30 @@
    "id": "adv-nomi-003",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|paccheri alla genovese|13|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|paccheri alla genovese|13|primi"
    ],
-   "actual": [],
+   "actual": [
+    "create|paccheri alla genovese|13|primi"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Paccheri alla genovese* in *Primi*: *13,00 €*"
    ],
    "turns": [
     "nei primi aggiungimi i paccheri alla genovese a 13, ok?"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5
+    1.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:nomi"
   },
   {
@@ -3038,7 +2953,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.7
+    7.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3098,7 +3013,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3130,7 +3045,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.9
+    9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3140,27 +3055,16 @@
    "id": "adv-nomi-008",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|tagliatelle ai funghi porcini ok grazie ciao|14|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|tagliatelle ai funghi porcini|14|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|tagliatelle ai funghi porcini|14|primi"
    ],
    "actual": [
-    "create|tagliatelle ai funghi porcini ok grazie ciao|14|primi"
+    "create|tagliatelle ai funghi porcini|14|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tagliatelle ai funghi porcini ok grazie ciao* in *Primi*: *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Tagliatelle ai funghi porcini* in *Primi*: *14,00 €*"
    ],
    "turns": [
     "aggiungi nei primi le tagliatelle ai funghi porcini a 14 ok grazie ciao"
@@ -3171,7 +3075,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3201,7 +3105,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3231,7 +3135,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3261,7 +3165,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3349,7 +3253,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3379,7 +3283,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3533,7 +3437,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3567,9 +3471,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    17.5,
-    1.7
+    0.6,
+    17.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3616,37 +3520,33 @@
    "id": "adv-nomi-023",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: create|panna cotta|5|dolci"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|panna cotta|5|dolci"
    ],
-   "actual": [],
+   "actual": [
+    "create|panna cotta|5|dolci"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto il piatto? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.",
-    "In quale categoria metto il piatto? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.",
-    "In quale categoria metto *Panna cotta*? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa il piatto?",
+    "Quanto costa il piatto?",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Panna cotta* in *Dolci*: *5,00 €*"
    ],
    "turns": [
     "aggiungi un dolce",
     "va bene",
     "panna cotta, 5"
    ],
-   "clarifications": 3,
-   "unexpectedClarifications": 1,
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
     0.5,
     0.5,
-    0.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3680,9 +3580,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    1.2,
-    1.1
+    0.6,
+    1.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3722,27 +3622,16 @@
    "id": "adv-nomi-026",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|al menu la burrata|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|al menu la burrata|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Al menu la burrata* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "ciao, vorrei aggiungere al menu la burrata a 9"
@@ -3753,7 +3642,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3763,27 +3652,16 @@
    "id": "adv-nomi-027",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata che ne dici|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata che ne dici|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata che ne dici* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 che ne dici?"
@@ -3854,7 +3732,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3864,27 +3742,16 @@
    "id": "adv-nomi-030",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata al menu del pranzo|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata al menu del pranzo|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata al menu del pranzo* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 al menu del pranzo"
@@ -3895,7 +3762,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -3905,32 +3772,26 @@
    "id": "adv-nomi-031",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiarimento-mancante",
-     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Prosecco calice in carta vini*? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande."
    ],
    "turns": [
     "in carta vini aggiungi il prosecco calice a 5"
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    0.9
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:nomi",
    "note": "categoria inesistente: domanda (fase B)"
   },
@@ -3968,9 +3829,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    4.8,
-    5.7
+    3.1,
+    5.3,
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4004,9 +3865,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    4.2,
-    5.4
+    3.3,
+    4.3,
+    5.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4044,9 +3905,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
+    3.3,
     4.3,
-    5.2
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4078,8 +3939,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7,
-    9.4
+    4.9,
+    9.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4111,7 +3972,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.6,
     7.6
    ],
    "recordedLlmMs": 0,
@@ -4122,37 +3983,29 @@
    "id": "adv-deixis-006",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "price|Carbonara|13"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
-    "Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Carbonara*: com’era prima"
    ],
    "turns": [
     "la carbonara a 13",
     "no aspetta, il prezzo di prima era giusto"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    3
+    0.9
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:deixis"
   },
   {
@@ -4183,7 +4036,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.9,
     4.7
    ],
    "recordedLlmMs": 0,
@@ -4194,35 +4047,19 @@
    "id": "adv-deixis-008",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13, price|Gricia|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13",
     "price|Gricia|12"
    ],
    "actual": [
-    "price|Carbonara|1",
-    "price|Gricia|1"
+    "price|Carbonara|13",
+    "price|Gricia|12"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Gricia*: *11,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *1,00 €*\n*Gricia*: prezzo da 11,00 € a *1,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "❓ quanto costano carbonara e gricia?",
@@ -4234,8 +4071,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    5.2
+    2.8,
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4267,8 +4104,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    3.6
+    0.8,
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4304,8 +4141,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    3.5,
+    0.8,
+    3.2,
     6
    ],
    "recordedLlmMs": 0,
@@ -4332,7 +4169,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4359,7 +4196,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4385,7 +4222,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4422,8 +4259,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    3.1
+    1,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4494,7 +4331,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    6.1
+    5.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4543,9 +4380,9 @@
    "llmTokens": 0,
    "latencyMs": [
     2.9,
-    4.5,
-    4.6,
-    5.1
+    4.4,
+    4.2,
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4586,8 +4423,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    2.8
+    2.5,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4626,8 +4463,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.5
+    2.5,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4663,8 +4500,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.3
+    2.2,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4702,8 +4539,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    3.2
+    1.9,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4752,7 +4589,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    3
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4787,8 +4624,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    5.2
+    1.5,
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4824,8 +4661,8 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.6,
-    3
+    4.8,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4860,8 +4697,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    4.2
+    1.5,
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4899,8 +4736,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    5.7
+    1.4,
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4945,10 +4782,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
+    2.7,
+    4.2,
     4.1,
-    3.8,
-    7.7
+    7.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4980,10 +4817,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.5,
     4.5,
-    1.1,
-    6
+    1,
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5019,9 +4856,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    4.2,
-    5.7
+    2.7,
+    4,
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5054,7 +4891,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.1
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5090,7 +4927,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.7
+    5.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5124,9 +4961,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    3.1,
-    4
+    3,
+    4.9,
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5160,8 +4997,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    5.3
+    1.6,
+    5.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5193,12 +5030,12 @@
    ],
    "clarifications": 1,
    "unexpectedClarifications": 1,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8,
-    2.3
+    1.9,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5233,8 +5070,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    5.2
+    1.5,
+    5.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5264,7 +5101,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5298,9 +5135,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    4.2,
-    4.9
+    3.2,
+    4.5,
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5310,37 +5147,29 @@
    "id": "adv-anzino-003",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: hidden|Gricia|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "hidden|Gricia|true"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: *nascosto* dal menu",
-    "Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Gricia*: com’era prima"
    ],
    "turns": [
     "nascondi la gricia",
     "anzi no"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.2
+    1.9,
+    0.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:anzino"
   },
   {
@@ -5370,7 +5199,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    5.6
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5402,8 +5231,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    7.8
+    1.4,
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5435,8 +5264,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    5.7
+    1.6,
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5446,24 +5275,17 @@
    "id": "adv-anzino-007",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Amatriciana|13"
    ],
    "actual": [
-    "price|Amatriciana|13",
-    "price|Carbonara|13"
+    "price|Amatriciana|13"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *13,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *13,00 €*\n*Carbonara*: prezzo da 13,00 € a *12,00 €*"
    ],
    "turns": [
     "la carbonara a 13",
@@ -5475,8 +5297,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    6
+    1.3,
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5510,8 +5332,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    6.4
+    1.3,
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5544,7 +5366,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.5,
-    4.9
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5617,7 +5439,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.1
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5650,7 +5472,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    3.9
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5679,8 +5501,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    0.9
+    3,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5714,9 +5536,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
+    3.2,
     4,
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5746,7 +5568,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
+    3,
     0.7,
     0.5
    ],
@@ -5785,9 +5607,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    4.2,
-    0.7,
+    2.8,
+    4.6,
+    0.8,
     0.2
    ],
    "recordedLlmMs": 0,
@@ -5817,8 +5639,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    0.8
+    1.3,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -5851,7 +5673,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.7,
     0.2
    ],
    "recordedLlmMs": 0,
@@ -5890,9 +5712,9 @@
    "llmTokens": 0,
    "latencyMs": [
     2.8,
-    3.8,
-    4,
-    2.3
+    4.1,
+    3.9,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5902,24 +5724,19 @@
    "id": "adv-anzino-020",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: featured|Tagliata|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "featured|Tagliata|true",
     "price|Tagliata|19"
    ],
    "actual": [
+    "featured|Tagliata|true",
     "price|Tagliata|19"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *20,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 20,00 € a *19,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 20,00 € a *19,00 €*\n*Tagliata*: *in evidenza*"
    ],
    "turns": [
     "la tagliata a 20",
@@ -5932,7 +5749,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.9
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5942,24 +5759,17 @@
    "id": "adv-anzino-021",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: available|Carbonara|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Gricia|false"
    ],
    "actual": [
-    "available|Carbonara|false",
     "available|Gricia|false"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: *finito*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: *finito*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: di nuovo *disponibile*\n*Gricia*: *finito*"
    ],
    "turns": [
     "la carbonara è finita",
@@ -5971,8 +5781,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    6.1
+    1.4,
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5982,24 +5792,17 @@
    "id": "adv-anzino-022",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: hidden|Bufala|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "featured|Bufala|true"
    ],
    "actual": [
-    "featured|Bufala|true",
-    "hidden|Bufala|true"
+    "featured|Bufala|true"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bufala*: *nascosto* dal menu",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Bufala*: *in evidenza*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Bufala*: *in evidenza*\n*Bufala*: di nuovo *visibile* nel menu"
    ],
    "turns": [
     "nascondi la bufala",
@@ -6011,8 +5814,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    4.6
+    1.4,
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6041,7 +5844,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.6
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6077,9 +5880,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.4,
     1.6,
-    5.4
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6111,8 +5914,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    5.5
+    1.4,
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6140,12 +5943,12 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
-    4.6
+    1.8,
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6177,8 +5980,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    5
+    1.3,
+    5.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6213,8 +6016,8 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.6,
-    4.2
+    4.8,
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6224,24 +6027,17 @@
    "id": "adv-anzino-029",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: hidden|Tiramisù|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Tiramisù|false"
    ],
    "actual": [
-    "available|Tiramisù|false",
-    "hidden|Tiramisù|true"
+    "available|Tiramisù|false"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *finito*\n*Tiramisù*: di nuovo *visibile* nel menu"
    ],
    "turns": [
     "nascondi il tiramisù",
@@ -6254,7 +6050,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.3
+    4.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6287,8 +6083,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9,
-    3
+    4,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6299,20 +6095,16 @@
    "id": "adv-misti-001",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Gricia*: *11,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n\n*Gricia*: *11,00 €* · disponibile"
    ],
    "turns": [
     "metti la carbonara a 13, e la gricia quanto la tengo?"
@@ -6323,7 +6115,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6333,20 +6125,16 @@
    "id": "adv-misti-002",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: available|Tagliata|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Tagliata|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|Tagliata|false"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliata*: *18,00 €* · disponibile\n*Polpo alla griglia*: *16,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: *finito*\n\n*Polpo alla griglia*: *16,00 €* · disponibile"
    ],
    "turns": [
     "la tagliata è finita, il polpo c'è ancora?"
@@ -6357,7 +6145,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6367,20 +6155,16 @@
    "id": "adv-misti-003",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: hidden|Bomba|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|Bomba|true"
    ],
-   "actual": [],
+   "actual": [
+    "hidden|Bomba|true"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Bomba*: *4,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bomba*: *nascosto* dal menu"
    ],
    "turns": [
     "nascondi la bomba. quanti piatti ho nei primi?"
@@ -6391,7 +6175,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6477,7 +6261,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6589,7 +6373,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6619,7 +6403,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6629,20 +6413,16 @@
    "id": "adv-misti-012",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
    ],
    "turns": [
     "ciao! la carbonara a 13 grazie, come va?"
@@ -6653,7 +6433,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6749,7 +6529,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -6775,7 +6555,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6805,7 +6585,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6831,7 +6611,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6857,7 +6637,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6913,7 +6693,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6939,7 +6719,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6971,7 +6751,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -6997,7 +6777,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7081,7 +6861,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7107,7 +6887,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7117,20 +6897,16 @@
    "id": "adv-misti-029",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: available|Polpo alla griglia|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Polpo alla griglia|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|Polpo alla griglia|false"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliata di tonno*: *20,00 €* · disponibile\n*Polpo alla griglia*: *16,00 €* · disponibile\n*Tagliata*: *18,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: *finito*\n\n*Tagliata di tonno*: *20,00 €* · disponibile\n*Tagliata*: *18,00 €* · disponibile"
    ],
    "turns": [
     "il polpo è finito, e la tagliata di tonno quanto costa?"
@@ -7141,7 +6917,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    5.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7171,7 +6947,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7201,7 +6977,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7231,7 +7007,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7261,7 +7037,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7291,7 +7067,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7325,7 +7101,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7356,7 +7132,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7418,7 +7194,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7457,7 +7233,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7488,7 +7264,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7518,7 +7294,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7547,7 +7323,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7573,7 +7349,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7631,7 +7407,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7661,7 +7437,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7691,7 +7467,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7717,14 +7493,14 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    1.7
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:asr"
   },
   {
@@ -7747,14 +7523,14 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:asr",
    "note": "mai polpo"
   },
@@ -7778,7 +7554,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7791,36 +7567,29 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "scrive-invece-di-chiedere",
-     "why": "turno 1: doveva chiedere, ha scritto price|Polpo alla griglia|15"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: price|Polpo alla griglia|15"
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
     }
    ],
    "expected": [],
-   "actual": [
-    "price|Polpo alla griglia|15"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: prezzo da 16,00 € a *15,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
    ],
    "turns": [
     "🎤 il pollo alla griglia a 15"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 0,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    3.6
    ],
    "recordedLlmMs": 0,
-   "usedLlm": false,
+   "usedLlm": true,
    "source": "adv:asr",
    "note": "pollo al curry o polpo alla griglia: domanda"
   },
@@ -7831,36 +7600,29 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "scrive-invece-di-chiedere",
-     "why": "turno 1: doveva chiedere, ha scritto price|Pollo al curry|15"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: price|Pollo al curry|15"
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
     }
    ],
    "expected": [],
-   "actual": [
-    "price|Pollo al curry|15"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pollo al curry*: prezzo da 14,00 € a *15,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
    ],
    "turns": [
     "🎤 il polpo al curry a 15"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 0,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    3.6
    ],
    "recordedLlmMs": 0,
-   "usedLlm": false,
+   "usedLlm": true,
    "source": "adv:asr"
   },
   {
@@ -7887,7 +7649,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7918,7 +7680,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7957,7 +7719,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -7988,7 +7750,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8018,7 +7780,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8044,7 +7806,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8074,7 +7836,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8104,7 +7866,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8134,7 +7896,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8194,7 +7956,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8254,7 +8016,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8281,7 +8043,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8312,7 +8074,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8342,7 +8104,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8372,7 +8134,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8398,7 +8160,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8425,7 +8187,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8452,7 +8214,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    5.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8481,7 +8243,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8511,7 +8273,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8541,7 +8303,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8571,7 +8333,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8597,7 +8359,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8626,7 +8388,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8654,7 +8416,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8680,7 +8442,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8710,7 +8472,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8740,7 +8502,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8810,27 +8572,16 @@
    "id": "adv-parole-005",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|15"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|15.9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|15.9"
    ],
    "actual": [
-    "price|Carbonara|15"
+    "price|Carbonara|15.9"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *15,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *15,90 €*"
    ],
    "turns": [
     "la carbonara quindici e novanta"
@@ -8841,7 +8592,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8871,7 +8622,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8901,7 +8652,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8931,7 +8682,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -8957,14 +8708,14 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    1.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:parole"
   },
   {
@@ -8991,7 +8742,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9021,7 +8772,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9051,7 +8802,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9081,7 +8832,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9121,27 +8872,16 @@
    "id": "adv-parole-015",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|13"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13.5"
    ],
    "actual": [
-    "price|Carbonara|13"
+    "price|Carbonara|13.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,50 €*"
    ],
    "turns": [
     "la carbonara tredici virgola cinquanta"
@@ -9152,7 +8892,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9182,7 +8922,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.9
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9214,7 +8954,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.7
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9304,7 +9044,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -9334,7 +9074,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -9433,7 +9173,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7
+    6.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9533,7 +9273,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.1
+    7.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9563,7 +9303,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7
+    7.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9597,7 +9337,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9692,7 +9432,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.7
+    5.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9722,7 +9462,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9756,7 +9496,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9782,7 +9522,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9812,7 +9552,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -9838,7 +9578,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9873,7 +9613,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9907,7 +9647,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    7.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9939,7 +9679,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.7
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -9971,7 +9711,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8
+    6.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10001,7 +9741,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.6
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10027,7 +9767,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9
+    7.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10062,7 +9802,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10092,7 +9832,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5
+    5.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10126,7 +9866,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10156,7 +9896,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    5.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10184,7 +9924,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1.2,
     0.2
    ],
    "recordedLlmMs": 0,
@@ -10290,7 +10030,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    2.2
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10320,8 +10060,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.5
+    0.8,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -10364,7 +10104,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    2,
+    1.8,
     1
    ],
    "recordedLlmMs": 0,
@@ -10399,8 +10139,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9,
-    2.8
+    4,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10432,7 +10172,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.2,
+    5.5,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -10507,7 +10247,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4,
+    5.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -10537,7 +10277,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6,
+    3.7,
     0.2
    ],
    "recordedLlmMs": 0,
@@ -10577,7 +10317,7 @@
    "llmTokens": 0,
    "latencyMs": [
     4.1,
-    5.4,
+    5.5,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -10608,7 +10348,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9,
+    4,
     0.2
    ],
    "recordedLlmMs": 0,
@@ -10693,7 +10433,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5,
+    4.8,
     3.1
    ],
    "recordedLlmMs": 0,
@@ -10726,8 +10466,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    1.6
+    0.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10764,8 +10504,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1.5,
-    1
+    1.6,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -10936,7 +10676,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    0.9,
+    1,
     3.9
    ],
    "recordedLlmMs": 0,
@@ -11032,7 +10772,7 @@
    "llmTokens": 0,
    "latencyMs": [
     4.8,
-    1
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11066,9 +10806,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    7.3,
-    5.4
+    1.4,
+    4.5,
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11098,7 +10838,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    4.2
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11128,7 +10868,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.7,
-    4.6
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11156,7 +10896,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
+    1.3,
     5.4
    ],
    "recordedLlmMs": 0,
@@ -11226,34 +10966,26 @@
    "id": "adv-suono-007",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: price|Torta della nonna|7"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "price|Torta della nonna|7"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Torta della nonna*: prezzo da 6,00 € a *7,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
    ],
    "turns": [
     "torna a 7"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 0,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    3
    ],
    "recordedLlmMs": 0,
-   "usedLlm": false,
+   "usedLlm": true,
    "source": "adv:suono",
    "note": "senza contesto: mai la Torta della nonna"
   },
@@ -11277,7 +11009,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11303,7 +11035,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11330,14 +11062,14 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    1.3
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:suono",
    "note": "«grazie» ≠ gricia"
   },
@@ -11399,7 +11131,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11430,7 +11162,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11460,7 +11192,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11490,7 +11222,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11520,7 +11252,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -11581,7 +11313,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -11638,8 +11370,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    5.2
+    1.6,
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11703,7 +11435,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -11733,7 +11465,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11763,7 +11495,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11793,7 +11525,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11809,20 +11541,22 @@
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
-   "actual": [],
+   "actual": [
+    "create|burrata|9|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*\n\nQuanto costa *Grazie mille ciao*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9, grazie mille ciao"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -11862,27 +11596,16 @@
    "id": "adv-code-003",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata se puoi|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata se puoi|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata se puoi* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 se puoi"
@@ -11903,71 +11626,19 @@
    "id": "adv-code-004",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata dai|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata dai|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata dai* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 dai"
-   ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 0,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    0.6
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": false,
-   "source": "adv:code"
-  },
-  {
-   "id": "adv-code-005",
-   "family": "a1-composti",
-   "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata va bene|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
-   "expected": [
-    "create|burrata|9|piatti di prova"
-   ],
-   "actual": [
-    "create|burrata va bene|9|piatti di prova"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata va bene* in *Piatti di prova*: *9,00 €*"
-   ],
-   "turns": [
-    "aggiungi la burrata a 9 va bene?"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
@@ -11982,30 +11653,49 @@
    "source": "adv:code"
   },
   {
-   "id": "adv-code-006",
+   "id": "adv-code-005",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata nel menu|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata nel menu|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata nel menu* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "aggiungi la burrata a 9 va bene?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "adv:code"
+  },
+  {
+   "id": "adv-code-006",
+   "family": "a1-composti",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|burrata|9|piatti di prova"
+   ],
+   "actual": [
+    "create|burrata|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 nel menu"
@@ -12016,7 +11706,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12026,27 +11716,16 @@
    "id": "adv-code-007",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata sul menu|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata sul menu|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata sul menu* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 sul menu"
@@ -12067,27 +11746,16 @@
    "id": "adv-code-008",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata nella carta|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata nella carta|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata nella carta* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 nella carta"
@@ -12108,27 +11776,16 @@
    "id": "adv-code-009",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata per stasera|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata per stasera|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata per stasera* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 per stasera"
@@ -12149,27 +11806,16 @@
    "id": "adv-code-010",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata da oggi|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata da oggi|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata da oggi* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 da oggi"
@@ -12190,27 +11836,16 @@
    "id": "adv-code-011",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata da domani|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata da domani|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata da domani* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 da domani"
@@ -12221,7 +11856,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12231,27 +11866,16 @@
    "id": "adv-code-012",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata subito|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata subito|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata subito* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 subito"
@@ -12262,7 +11886,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12292,7 +11916,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12302,27 +11926,16 @@
    "id": "adv-code-014",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|burrata grazie eh|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|burrata grazie eh|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata grazie eh* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi la burrata a 9 grazie eh"
@@ -12333,7 +11946,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12361,7 +11974,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12389,7 +12002,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12399,27 +12012,16 @@
    "id": "adv-code-017",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|al menu la burrata|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|al menu la burrata|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Al menu la burrata* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi al menu la burrata a 9"
@@ -12460,7 +12062,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12470,27 +12072,16 @@
    "id": "adv-code-019",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|sul menu la burrata|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|sul menu la burrata|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Sul menu la burrata* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "inserisci sul menu la burrata a 9"
@@ -12501,7 +12092,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12511,27 +12102,16 @@
    "id": "adv-code-020",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|nella lista la burrata|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|nella lista la burrata|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Nella lista la burrata* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi nella lista la burrata a 9"
@@ -12542,7 +12122,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12552,27 +12132,16 @@
    "id": "adv-code-021",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|in carta la burrata|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|in carta la burrata|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *In carta la burrata* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungi in carta la burrata a 9"
@@ -12593,27 +12162,16 @@
    "id": "adv-code-022",
    "family": "a1-composti",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|al menu una burrata|9|piatti di prova"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|burrata|9|piatti di prova"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|burrata|9|piatti di prova"
    ],
    "actual": [
-    "create|al menu una burrata|9|piatti di prova"
+    "create|burrata|9|piatti di prova"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Al menu una burrata* in *Piatti di prova*: *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Burrata* in *Piatti di prova*: *9,00 €*"
    ],
    "turns": [
     "aggiungimi al menu una burrata a 9"
@@ -12624,7 +12182,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12690,27 +12248,16 @@
    "id": "adv-code-025",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|linguine allo scoglio da stasera|18|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|linguine allo scoglio|18|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|linguine allo scoglio|18|primi"
    ],
    "actual": [
-    "create|linguine allo scoglio da stasera|18|primi"
+    "create|linguine allo scoglio|18|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Linguine allo scoglio da stasera* in *Primi*: *18,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Linguine allo scoglio* in *Primi*: *18,00 €*"
    ],
    "turns": [
     "aggiungi nei primi le linguine allo scoglio a 18 da stasera"
@@ -12721,7 +12268,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12761,27 +12308,16 @@
    "id": "adv-code-027",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|linguine allo scoglio solo per oggi|18|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|linguine allo scoglio|18|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|linguine allo scoglio|18|primi"
    ],
    "actual": [
-    "create|linguine allo scoglio solo per oggi|18|primi"
+    "create|linguine allo scoglio|18|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Linguine allo scoglio solo per oggi* in *Primi*: *18,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Linguine allo scoglio* in *Primi*: *18,00 €*"
    ],
    "turns": [
     "aggiungi nei primi le linguine allo scoglio a 18 solo per oggi"
@@ -12792,7 +12328,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12824,7 +12360,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -12834,28 +12370,18 @@
    "id": "adv-code-029",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|ravioli e tortellini|12|primi"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|ravioli|12|primi, create|tortellini|12|primi"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|ravioli|12|primi",
     "create|tortellini|12|primi"
    ],
    "actual": [
-    "create|ravioli e tortellini|12|primi"
+    "create|ravioli|12|primi",
+    "create|tortellini|12|primi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Ravioli e tortellini* in *Primi*: *12,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Ravioli* in *Primi*: *12,00 €*\nNuovo piatto *Tortellini* in *Primi*: *12,00 €*"
    ],
    "turns": [
     "aggiungi nei primi ravioli e tortellini a 12"
@@ -12876,28 +12402,18 @@
    "id": "adv-code-030",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: create|crostata e cheesecake|5|dolci"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: create|cheesecake|5|dolci, create|crostata|5|dolci"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "create|cheesecake|5|dolci",
     "create|crostata|5|dolci"
    ],
    "actual": [
-    "create|crostata e cheesecake|5|dolci"
+    "create|cheesecake|5|dolci",
+    "create|crostata|5|dolci"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata e cheesecake* in *Dolci*: *5,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crostata* in *Dolci*: *5,00 €*\nNuovo piatto *Cheesecake* in *Dolci*: *5,00 €*"
    ],
    "turns": [
     "aggiungi nei dolci crostata e cheesecake a 5"
@@ -12949,27 +12465,16 @@
    "id": "adv-relativi-001",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|12"
    ],
    "actual": [
-    "price|Gricia|1"
+    "price|Gricia|12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *1,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "alza la gricia di 1 euro"
@@ -12980,7 +12485,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -12990,27 +12495,16 @@
    "id": "adv-relativi-002",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tagliata|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|16"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|16"
    ],
    "actual": [
-    "price|Tagliata|2"
+    "price|Tagliata|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *2,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *16,00 €*"
    ],
    "turns": [
     "abbassa la tagliata di 2"
@@ -13031,27 +12525,16 @@
    "id": "adv-relativi-003",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tagliata|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|16"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|16"
    ],
    "actual": [
-    "price|Tagliata|2"
+    "price|Tagliata|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *2,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *16,00 €*"
    ],
    "turns": [
     "sconta la tagliata di 2 euro"
@@ -13062,7 +12545,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13072,27 +12555,16 @@
    "id": "adv-relativi-004",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|Tagliata|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|16"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|16"
    ],
    "actual": [
-    "hidden|Tagliata|true"
+    "price|Tagliata|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *16,00 €*"
    ],
    "turns": [
     "togli 2 euro alla tagliata"
@@ -13103,7 +12575,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -13118,153 +12590,117 @@
    "expected": [
     "price|Gricia|12"
    ],
-   "actual": [],
+   "actual": [
+    "price|Gricia|12"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "metti 1 euro in più sulla gricia"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:relativi"
   },
   {
    "id": "adv-relativi-006",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|12"
    ],
    "actual": [
-    "price|Gricia|1"
+    "price|Gricia|12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *1,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "la gricia +1"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    1.1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:relativi"
   },
   {
    "id": "adv-relativi-007",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tagliata|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|16"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|16"
    ],
    "actual": [
-    "price|Tagliata|2"
+    "price|Tagliata|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *2,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *16,00 €*"
    ],
    "turns": [
     "la tagliata -2"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    1.1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:relativi"
   },
   {
    "id": "adv-relativi-008",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13, price|Gricia|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13",
     "price|Gricia|12"
    ],
    "actual": [
-    "price|Carbonara|1",
-    "price|Gricia|1"
+    "price|Carbonara|13",
+    "price|Gricia|12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *1,00 €*\n*Gricia*: prezzo da 11,00 € a *1,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "aumenta di 1 euro la carbonara e la gricia"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    1.5
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:relativi"
   },
   {
@@ -13297,27 +12733,16 @@
    "id": "adv-relativi-010",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|50"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|11.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|11.5"
    ],
    "actual": [
-    "price|Gricia|50"
+    "price|Gricia|11.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *50,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *11,50 €*"
    ],
    "turns": [
     "aumenta la gricia di 50 centesimi"
@@ -13338,68 +12763,46 @@
    "id": "adv-relativi-011",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|50"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|11.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|11.5"
    ],
    "actual": [
-    "price|Gricia|50"
+    "price|Gricia|11.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *50,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *11,50 €*"
    ],
    "turns": [
     "la gricia 50 centesimi in più"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    1.2
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:relativi"
   },
   {
    "id": "adv-relativi-012",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tiramisù|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tiramisù|5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tiramisù|5"
    ],
    "actual": [
-    "price|Tiramisù|1"
+    "price|Tiramisù|5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 6,00 € a *1,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 6,00 € a *5,00 €*"
    ],
    "turns": [
     "abbassa il tiramisù di un euro"
@@ -13410,7 +12813,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13440,7 +12843,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13470,7 +12873,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13496,7 +12899,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13525,7 +12928,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13535,28 +12938,17 @@
    "id": "adv-relativi-017",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|12"
    ],
    "actual": [
-    "price|Gricia|1"
+    "price|Gricia|12"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Gricia*: *11,00 €* · disponibile",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *1,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*"
    ],
    "turns": [
     "❓ quanto costa la gricia?",
@@ -13568,8 +12960,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    4.5
+    0.9,
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13579,28 +12971,17 @@
    "id": "adv-relativi-018",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Gricia|1"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|13"
    ],
    "actual": [
-    "price|Gricia|1"
+    "price|Gricia|13"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *12,00 €*",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 12,00 € a *1,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 12,00 € a *13,00 €*"
    ],
    "turns": [
     "la gricia a 12",
@@ -13612,8 +12993,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    4.6
+    1.6,
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13623,28 +13004,17 @@
    "id": "adv-relativi-019",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Tagliata|3"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|15"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|15"
    ],
    "actual": [
-    "price|Tagliata|3"
+    "price|Tagliata|15"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliata*: *18,00 €* · disponibile",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *3,00 €*"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *15,00 €*"
    ],
    "turns": [
     "❓ quanto costa la tagliata?",
@@ -13657,7 +13027,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    4.9
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13667,27 +13037,16 @@
    "id": "adv-relativi-020",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Polpo alla griglia|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Polpo alla griglia|18"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Polpo alla griglia|18"
    ],
    "actual": [
-    "price|Polpo alla griglia|2"
+    "price|Polpo alla griglia|18"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: prezzo da 16,00 € a *2,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: prezzo da 16,00 € a *18,00 €*"
    ],
    "turns": [
     "aumenta il polpo di due euro"
@@ -13698,7 +13057,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13708,20 +13067,16 @@
    "id": "adv-cent2-001",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Gricia|11.9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Gricia|11.9"
    ],
-   "actual": [],
+   "actual": [
+    "price|Gricia|11.9"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: prezzo da 11,00 € a *11,90 €*"
    ],
    "turns": [
     "la gricia undici e novanta"
@@ -13732,7 +13087,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13742,27 +13097,16 @@
    "id": "adv-cent2-002",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Polpo alla griglia|17"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Polpo alla griglia|17.8"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Polpo alla griglia|17.8"
    ],
    "actual": [
-    "price|Polpo alla griglia|17"
+    "price|Polpo alla griglia|17.8"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: prezzo da 16,00 € a *17,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: prezzo da 16,00 € a *17,80 €*"
    ],
    "turns": [
     "il polpo diciassette e ottanta"
@@ -13773,7 +13117,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13803,7 +13147,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13833,7 +13177,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13843,27 +13187,16 @@
    "id": "adv-cent2-005",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|13"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13.9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13.9"
    ],
    "actual": [
-    "price|Carbonara|13"
+    "price|Carbonara|13.9"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,90 €*"
    ],
    "turns": [
     "la carbonara tredici e novanta"
@@ -13874,7 +13207,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13884,27 +13217,16 @@
    "id": "adv-cent2-006",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|13"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13.9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13.9"
    ],
    "actual": [
-    "price|Carbonara|13"
+    "price|Carbonara|13.9"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,90 €*"
    ],
    "turns": [
     "la carbonara tredici virgola novanta"
@@ -13915,7 +13237,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13925,27 +13247,16 @@
    "id": "adv-cent2-007",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|13"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13.5"
    ],
    "actual": [
-    "price|Carbonara|13"
+    "price|Carbonara|13.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,50 €*"
    ],
    "turns": [
     "la carbonara 13 virgola 50"
@@ -13956,7 +13267,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -13966,27 +13277,16 @@
    "id": "adv-cent2-008",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|13"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13.5"
    ],
    "actual": [
-    "price|Carbonara|13"
+    "price|Carbonara|13.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,50 €*"
    ],
    "turns": [
     "la carbonara 13 euro 50"
@@ -13997,7 +13297,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14007,41 +13307,30 @@
    "id": "adv-cent2-009",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|13"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13.5"
    ],
    "actual": [
-    "price|Carbonara|13"
+    "price|Carbonara|13.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,50 €*"
    ],
    "turns": [
     "la carbonara a 13 euro 50"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    1.7
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:cent2"
   },
   {
@@ -14053,9 +13342,11 @@
    "expected": [
     "price|Supplì|3.2"
    ],
-   "actual": [],
+   "actual": [
+    "price|Supplì|3.2"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Supplì*: prezzo da 3,00 € a *3,20 €*"
    ],
    "turns": [
     "il supplì 3 euro 20"
@@ -14066,7 +13357,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14096,7 +13387,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14106,20 +13397,16 @@
    "id": "adv-cent2-012",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Bomba|4.8"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Bomba|4.8"
    ],
-   "actual": [],
+   "actual": [
+    "price|Bomba|4.8"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bomba*: prezzo da 4,00 € a *4,80 €*"
    ],
    "turns": [
     "🎤 la bomba quattro e ottanta"
@@ -14130,7 +13417,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14140,20 +13427,16 @@
    "id": "adv-cent2-013",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Polpo alla griglia|16.9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Polpo alla griglia|16.9"
    ],
-   "actual": [],
+   "actual": [
+    "price|Polpo alla griglia|16.9"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Polpo alla griglia*: prezzo da 16,00 € a *16,90 €*"
    ],
    "turns": [
     "🎤 il polpo sedici e novanta"
@@ -14164,7 +13447,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14194,7 +13477,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.6
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14204,20 +13487,16 @@
    "id": "adv-misti2-001",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Gricia*: *11,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n\n*Gricia*: *11,00 €* · disponibile"
    ],
    "turns": [
     "la carbonara a 13, e la gricia quanto costa?"
@@ -14228,7 +13507,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    5.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14272,7 +13551,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -14311,7 +13590,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14341,7 +13620,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.5
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14351,20 +13630,16 @@
    "id": "adv-misti2-005",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: available|Tagliata|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Tagliata|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|Tagliata|false"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliata*: *18,00 €* · disponibile\n*Polpo alla griglia*: *16,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: *finito*\n\n*Polpo alla griglia*: *16,00 €* · disponibile"
    ],
    "turns": [
     "la tagliata è finita. il polpo c'è ancora?"
@@ -14375,7 +13650,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14385,20 +13660,16 @@
    "id": "adv-misti2-006",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: available|Tagliata|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Tagliata|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|Tagliata|false"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliata*: *18,00 €* · disponibile\n*Polpo alla griglia*: *16,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: *finito*\n\n*Polpo alla griglia*: *16,00 €* · disponibile"
    ],
    "turns": [
     "la tagliata è finita, ma il polpo c'è?"
@@ -14409,7 +13680,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14453,20 +13724,16 @@
    "id": "adv-misti2-008",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
    ],
    "turns": [
     "la carbonara a 13, come va?"
@@ -14477,7 +13744,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14507,7 +13774,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.2
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14517,34 +13784,30 @@
    "id": "adv-misti2-010",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
    ],
    "turns": [
     "la carbonara a 13, ok?"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    1.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:misti2"
   },
   {
@@ -14556,23 +13819,25 @@
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
    ],
    "turns": [
     "la carbonara a 13 va bene?"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    1.6
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:misti2"
   },
   {
@@ -14584,9 +13849,11 @@
    "expected": [
     "price|Carbonara|13"
    ],
-   "actual": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile\n*Marinara*: *6,00 €* · disponibile"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
    ],
    "turns": [
     "la carbonara a 13, si può fare?"
@@ -14597,7 +13864,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14627,7 +13894,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14671,7 +13938,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -14740,7 +14007,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -14809,7 +14076,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -14847,9 +14114,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
-    5.1,
-    5.8
+    2.9,
+    4.1,
+    5.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14891,10 +14158,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
-    4.7,
-    5.1,
-    4.9
+    2.8,
+    4.2,
+    4.1,
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14932,9 +14199,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5,
-    4.7,
-    4.7
+    3,
+    4.2,
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -14964,13 +14231,13 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    5.1,
-    5.8
+    1.6,
+    1.5,
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15008,9 +14275,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    4.8,
-    6
+    1.4,
+    4.6,
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15048,9 +14315,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    4.6,
-    6
+    1.3,
+    4.5,
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15090,9 +14357,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    4.7,
-    6.6
+    1.4,
+    4.8,
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15128,9 +14395,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.3,
     4.6,
-    5.5
+    5.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15173,8 +14440,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7,
-    1.4
+    4.1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15205,8 +14472,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7,
-    0.5
+    4.1,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15236,8 +14503,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    0.5
+    3.6,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15267,8 +14534,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.5,
-    0.6
+    4.9,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15299,8 +14566,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.6,
-    0.5
+    4.9,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15375,8 +14642,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.6
+    0.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15404,7 +14671,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    1,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -15441,8 +14708,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.7
+    1.4,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15452,111 +14719,87 @@
    "id": "adv-sospeso2-010",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: hidden|Gricia|true"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "hidden|Gricia|true"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Gricia*: *nascosto* dal menu",
-    "Cosa vuoi cambiare per *Gricia*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Gricia*: com’era prima"
    ],
    "turns": [
     "nascondi la gricia",
     "no anzi no"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
     1.5,
-    3.1
+    0.7
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:sospeso2"
   },
   {
    "id": "adv-sospeso2-011",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: price|Carbonara|13"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "price|Carbonara|13"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
-    "Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Carbonara*: com’era prima"
    ],
    "turns": [
     "la carbonara a 13",
     "anzi no"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    3.1
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:sospeso2"
   },
   {
    "id": "adv-sospeso2-012",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "correzione-non-applicata",
-     "why": "resta la modifica poi corretta/annullata: available|Carbonara|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "available|Carbonara|false"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: *finito*",
-    "Cosa vuoi cambiare per *Carbonara*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Carbonara*: com’era prima"
    ],
    "turns": [
     "la carbonara è finita",
     "anzi no"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.6
+    1.3,
+    0.7
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:sospeso2"
   },
   {
@@ -15581,8 +14824,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.4
+    0.4,
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -15628,8 +14871,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.8,
-    0.7
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -15663,9 +14906,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.4,
-    1.9
+    0.6,
+    0.3,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15675,34 +14918,26 @@
    "id": "adv-lev1-001",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: price|Torta della nonna|9"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
-   "actual": [
-    "price|Torta della nonna|9"
-   ],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Torta della nonna*: prezzo da 6,00 € a *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
    ],
    "turns": [
     "torna a 9"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 0,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": false,
+   "usedLlm": true,
    "source": "adv:lev1"
   },
   {
@@ -15731,8 +14966,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    4.5
+    1.6,
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15758,7 +14993,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15785,7 +15020,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15816,7 +15051,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.5
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15843,7 +15078,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15878,7 +15113,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.5
+    4.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15904,7 +15139,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15931,7 +15166,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.3
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15958,7 +15193,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -15984,7 +15219,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16015,7 +15250,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16045,7 +15280,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16078,7 +15313,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.1
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16123,9 +15358,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.3,
     0.4,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16171,9 +15406,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    1.5,
-    1.3
+    0.3,
+    1.4,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16208,9 +15443,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.2,
-    1.8
+    0.3,
+    0.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16245,9 +15480,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.4,
-    1.7
+    0.3,
+    0.3,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16282,9 +15517,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.2,
-    1.8
+    0.3,
+    0.1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16330,9 +15565,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    0.5,
-    0.7
+    0.6,
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16367,9 +15602,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    1.3,
-    1.7
+    0.3,
+    1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16410,9 +15645,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    1,
-    1.6
+    0.3,
+    0.9,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16441,7 +15676,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.7,
     0.4
    ],
    "recordedLlmMs": 0,
@@ -16474,8 +15709,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    1.5,
+    0.3,
+    1.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -16506,8 +15741,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5,
-    0.6
+    4.5,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16538,8 +15773,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    1.3
+    4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16570,7 +15805,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
+    1.9,
     0.3
    ],
    "recordedLlmMs": 0,
@@ -16615,8 +15850,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5,
-    1.5
+    4.4,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16646,8 +15881,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9,
-    0.9
+    3.4,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16677,8 +15912,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.4,
-    1.1
+    5.8,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16708,8 +15943,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    0.9
+    5.3,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16739,8 +15974,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9,
-    0.5
+    3.6,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16750,27 +15985,16 @@
    "id": "adv-toglieuro-001",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|Carbonara|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|11"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|11"
    ],
    "actual": [
-    "hidden|Carbonara|true"
+    "price|Carbonara|11"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *11,00 €*"
    ],
    "turns": [
     "togli 1 euro alla carbonara"
@@ -16781,7 +16005,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16792,27 +16016,16 @@
    "id": "adv-toglieuro-002",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|Tiramisù|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tiramisù|5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tiramisù|5"
    ],
    "actual": [
-    "hidden|Tiramisù|true"
+    "price|Tiramisù|5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: prezzo da 6,00 € a *5,00 €*"
    ],
    "turns": [
     "togli un euro al tiramisù"
@@ -16823,7 +16036,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16833,27 +16046,16 @@
    "id": "adv-toglieuro-003",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-non-richiesta",
-     "why": "non richiesto: hidden|Tagliata|true"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Tagliata|16"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Tagliata|16"
    ],
    "actual": [
-    "hidden|Tagliata|true"
+    "price|Tagliata|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata*: prezzo da 18,00 € a *16,00 €*"
    ],
    "turns": [
     "leva 2 euro alla tagliata"
@@ -16864,7 +16066,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16879,23 +16081,25 @@
    "expected": [
     "price|Bomba|3.5"
    ],
-   "actual": [],
+   "actual": [
+    "price|Bomba|3.5"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Osteria dei Simili*: ecco le modifiche.\n\n1. *Bomba*: prezzo da 4,00 € a *50,00 €*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bomba*: prezzo da 4,00 € a *3,50 €*"
    ],
    "turns": [
     "togli 50 centesimi alla bomba"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    1.1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:toglieuro"
   },
   {
@@ -16922,7 +16126,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -16953,7 +16157,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -16983,7 +16187,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -17023,41 +16227,30 @@
    "id": "adv-toglieuro-009",
    "family": "a1-composti",
    "menu": "simili",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "modifica-sbagliata",
-     "why": "valore sbagliato: price|Carbonara|2"
-    },
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|Carbonara|10"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Carbonara|10"
    ],
    "actual": [
-    "price|Carbonara|2"
+    "price|Carbonara|10"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *2,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Carbonara*: prezzo da 12,00 € a *10,00 €*"
    ],
    "turns": [
     "alla carbonara togli 2 euro"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    1.1
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true,
+   "usedLlm": false,
    "source": "adv:toglieuro"
   },
   {
@@ -17069,7 +16262,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Margherita*\n2. *Marinara*\n3. *Bufala*\n4. *Bomba*\n\nRispondi con il *numero* o il *nome*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Margherita*, *Marinara*, *Bufala*, *Bomba*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
    ],
    "turns": [
     "togli 2 euro a tutte le pizze"
@@ -17080,7 +16273,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,

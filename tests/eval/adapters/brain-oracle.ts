@@ -5,7 +5,7 @@
 // È un TETTO dell'architettura (contesto + validatore), non gpt-oss: i numeri «oracolo» non sono la resa del modello vero.
 import {plainT} from '../judge.js'
 import {spoken as spokenRaw} from './current-oracle.js'
-import {withoutQuantities} from '../../../apps/server/src/lib/twilio-menu-ai.js'
+import {withoutQuantities,relativeDelta} from '../../../apps/server/src/lib/twilio-menu-ai.js'
 import {deixisReferents,mixedMessage} from '../../../apps/server/src/lib/owner-brain-plan.js'
 import {DELETE_VERB} from '../../../apps/server/src/lib/twilio-menu-structure.js'
 import {phoneticHits} from '../../../apps/server/src/lib/twilio-menu-phonetic.js'
@@ -37,6 +37,8 @@ const ORD:[RegExp,number][]=[[/\b(prim[oa]|1)\b/,0],[/\b(second[oa]|2)\b/,1],[/\
 
 // Una categoria nuova si usa solo se il messaggio la nomina (il modello letterale non anticipa le richieste dopo).
 let literal=(_n:string)=>true
+// A7.7: con una differenza detta il modello ideale manda price_delta, mai il numero come prezzo.
+let relDelta:number|null=null
 function act(c:Change,cat:Cat,price:number|null,ref:string|null):any{const item=c.op==='create'?null:cat.code.get(c.dish)??null
  const secCode=(n:string)=>cat.sections.get(n)??[...cat.sections].find(([k])=>plainT(k)===plainT(n))?.[1]??null
  switch(c.op){case 'create':return{action:'create_item',section:c.section?secCode(c.section)??(literal(c.section)?c.section:null):null,name:c.name,price:c.price}
@@ -44,7 +46,7 @@ function act(c:Change,cat:Cat,price:number|null,ref:string|null):any{const item=
   case 'delete':return{action:'delete_item',item}
   case 'rename':return{action:'rename_item',item,name:c.name}
   case 'move':return{action:'move_item',item,section:secCode(c.section)??c.section}
-  case 'price':return price!==null?{action:'set_price',item,price}:ref?{action:'set_price',item,price_ref:ref}:null
+  case 'price':return relDelta!==null?{action:'set_price',item,price:null,price_delta:relDelta}:price!==null?{action:'set_price',item,price}:ref?{action:'set_price',item,price_ref:ref}:null
   case 'available':return{action:'set_available',item,value:c.value}
   case 'hidden':return{action:'set_hidden',item,value:c.value}
   case 'featured':return{action:'set_featured',item,value:c.value}
@@ -59,10 +61,10 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  if(fmt!=='owner_brain_plan')return null
  if(!conv)return out({intent:'clarify'})
  const msgs=body.messages as {role:string,content:string}[],cat=catalog(msgs[1]!.content),last=msgs.at(-1)!.content
- const msg=(last.split('\nMESSAGGIO\n')[1]??last.replace(/^MESSAGGIO\n/,'')).trim(),p=plainT(msg)
+ const msg=(last.split('\nMESSAGGIO\n')[1]??last.replace(/^MESSAGGIO\n/,'')).trim(),p=plainT(msg),pAll=p
  const hist=msgs.slice(2,-1),owners=hist.filter(m=>m.role==='user').map(m=>m.content),bot=[...hist].reverse().find(m=>m.role==='assistant')?.content??''
  const names=[...cat.code.keys()],expected=[...conv.changes,...(conv.interim??[])]
- literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ')
+ literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');relDelta=relativeDelta(msg)?.delta??null
  // Struttura (fase B): categorie, spostamenti, anche dei piatti appena creati che ora vanno altrove.
  if(/\b(categori\w*|sezion\w*|spost\w*)\b/.test(p)){const acts:any[]=[]
   for(const e of expected){if(e.op==='move'&&cat.code.has(e.dish))acts.push(act(e,cat,null,null))
@@ -71,7 +73,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // «a uno in meno»: quel numero è una differenza, non un prezzo.
  const rel=(t:string)=>new Set([...plainT(t).matchAll(/\b(\w+)(?: euro)? (?:in|di) (?:meno|piu)\b/g)].flatMap(m=>spoken(m[1]!)))
  const said=spoken(msg).filter(x=>!rel(msg).has(x)),ownSaid=owners.slice(-3).flatMap(o=>spoken(o).filter(x=>!rel(o).has(x)))
- const valueFor=(op:string,fallback:boolean)=>op==='available'?(/\b(tornat\w*|di nuovo|ce sta ancora|disponibil\w*|rimett\w*|c e)\b/.test(p)&&!/\b(finit\w*|esaurit\w*|fernut\w*|non c e)\b/.test(p)?true:/\b(finit\w*|esaurit\w*|fernut\w*|non c e piu|nun ce sta)\b/.test(p)?false:fallback)
+ // Il verso si legge nella parte del messaggio che nomina il piatto («è finita la gricia, la carbonara c'è»).
+ const valueFor=(op:string,fallback:boolean,p:string=pAll)=>op==='available'?(/\b(tornat\w*|di nuovo|ce sta ancora|disponibil\w*|rimett\w*|c e)\b/.test(p)&&!/\b(finit\w*|esaurit\w*|fernut\w*|non c e)\b/.test(p)?true:/\b(finit\w*|esaurit\w*|fernut\w*|non c e piu|nun ce sta)\b/.test(p)?false:fallback)
   :op==='hidden'?(/\b(rimett\w*|mostra\w*|fallo vedere)\b/.test(p)?false:/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)?true:fallback):op==='featured'?(/\btogli\w* (l )?evidenza\b|non in evidenza/.test(p)?false:fallback):fallback
  // Candidati aperti: dal blocco IN SOSPESO o dall'elenco dell'ultima risposta del bot.
  const pend=last.match(/candidati ((?:p\d+,?)+)/)?.[1]?.split(',')??[]
@@ -138,7 +141,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    const ref=e.op==='price'&&price===null&&SAME.test(p)&&ctxDish&&ctxDish!==n?cat.code.get(ctxDish)!:null
    if(e.op==='price'&&price===null&&!ref)continue
    if(e.op==='price'&&price!==null&&!said.includes(price)&&!ownSaid.includes(price))continue
-   const a=act(e,cat,price,ref);if(a&&'value' in a&&typeof a.value==='boolean')a.value=valueFor(e.op,a.value);if(a&&!actions.some(x=>x.item===a.item&&x.action===a.action))actions.push(a);break}}
+   const a=act(e,cat,price,ref),cl=msg.split(/[,;]|\s+e\s+/).find(x=>hitStems(n,x).length>0);if(a&&'value' in a&&typeof a.value==='boolean')a.value=valueFor(e.op,a.value,cl?plainT(cl):pAll);if(a&&!actions.some(x=>x.item===a.item&&x.action===a.action))actions.push(a);break}}
  // Risposta a una domanda del bot sulla richiesta di prima («hai scritto due prezzi: 9 o 9,50?» → «9»): la richiesta intera.
  if(!actions.length&&!here.length&&said.length&&/\?|riscrivimi|due prezzi/i.test(bot)){const prevD=lastOwnerDishes,prevSaid=spoken(owners.at(-1)??'')
   for(const n of prevD){const e=conv.changes.find(c=>c.op==='price'&&c.dish===n) as any;if(!e)continue;const v=said.includes(e.price)?e.price:prevSaid.includes(e.price)?e.price:null;if(v!==null)actions.push({action:'set_price',item:cat.code.get(n),price:v})}}
@@ -151,7 +154,10 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // Nessun piatto nel messaggio: rimando al piatto del contesto («mettila a 13», «no scusa 14», «rimettila com'era»).
  if(!actions.length&&!here.length&&ctxDish){const e=expected.filter(c=>c.op!=='create'&&c.dish===ctxDish)
   if(/\b(rimett\w*|com era|come prima|annull\w*|torna\w*)\b/.test(p)&&!e.some(c=>conv.changes.includes(c)))actions.push({action:'restore',item:cat.code.get(ctxDish)})
-  else if(said.length)actions.push({action:'set_price',item:cat.code.get(ctxDish),price:said[0]})
+  else if(relDelta!==null)actions.push({action:'set_price',item:cat.code.get(ctxDish),price:null,price_delta:relDelta})
+  else if(said.length){actions.push({action:'set_price',item:cat.code.get(ctxDish),price:said[0]})
+   // «anzi no, a 19, e mettila in evidenza»: anche le altre azioni dette sul piatto del contesto.
+   const verb=/evidenza/.test(p)?'featured':/\b(nascond\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':null;const more=verb?expected.find(c=>c.op===verb&&(c as any).dish===ctxDish):null;if(more){const a=act(more,cat,null,null);if(a)actions.push(a)}}
   else{const verb=DELETE_VERB.test(p)?'delete':/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':null
    const fin=conv.changes.find(c=>c.op!=='create'&&c.dish===ctxDish&&(verb?c.op===verb:c.op!=='price'));if(fin&&fin.op!=='price'){const a=act(fin,cat,null,null);if(a)actions.push(a)}}}
  // Richiesta multipla con piatti ambigui accanto a parti chiare: le chiare in actions, ogni ambigua in uncertain.

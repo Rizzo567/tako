@@ -1,6 +1,6 @@
 {
  "cases": 283,
- "runs": 553,
+ "runs": 544,
  "unknownSql": [
   "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
  ],
@@ -440,58 +440,7 @@
    "actual": [
     "create|pollo arrosto con patate|12|secondi"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "aggiungi-23",
-   "cat": "aggiungi",
-   "mode": "empty",
-   "turns": [
-    "tra i secondi aggiungi pollo arrosto con patate 12 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "create|pollo arrosto con patate|12|secondi"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "aggiungi-23",
-   "cat": "aggiungi",
-   "mode": "wrong",
-   "turns": [
-    "tra i secondi aggiungi pollo arrosto con patate 12 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "create|pollo arrosto con patate|12|secondi"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "aggiungi-23",
-   "cat": "aggiungi",
-   "mode": "wrongCreate",
-   "turns": [
-    "tra i secondi aggiungi pollo arrosto con patate 12 euro"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "create|pollo arrosto con patate|12|secondi"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -2089,58 +2038,7 @@
    "actual": [
     "price|Capricciosa|10.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-14",
-   "cat": "prezzo",
-   "mode": "empty",
-   "turns": [
-    "la capricciosa costa un euro in più"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Capricciosa|10.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-14",
-   "cat": "prezzo",
-   "mode": "wrong",
-   "turns": [
-    "la capricciosa costa un euro in più"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "price|Capricciosa|10.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-14",
-   "cat": "prezzo",
-   "mode": "wrongCreate",
-   "turns": [
-    "la capricciosa costa un euro in più"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Capricciosa|10.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -2159,58 +2057,7 @@
    "actual": [
     "price|Tiramisù|4.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-15",
-   "cat": "prezzo",
-   "mode": "empty",
-   "turns": [
-    "il tiramisù costa 50 centesimi in meno"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Tiramisù|4.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-15",
-   "cat": "prezzo",
-   "mode": "wrong",
-   "turns": [
-    "il tiramisù costa 50 centesimi in meno"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "price|Tiramisù|4.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-15",
-   "cat": "prezzo",
-   "mode": "wrongCreate",
-   "turns": [
-    "il tiramisù costa 50 centesimi in meno"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Tiramisù|4.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

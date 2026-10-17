@@ -56,6 +56,12 @@ export function parseCreate(raw:string,sections:SectionRef[],verbRequired=true):
   while(t.length&&fill.has(t[0]!.p)&&!(t[0]!.p==='costa'&&false))t=t.slice(1)
   // «il piatto si chiama X», «il nome è X» (17/10).
   if(/^piatt[oi]$/.test(t[0]?.p??'')&&t[1]?.p==='si'&&t[2]?.p==='chiama')t=t.slice(3);else if(t[0]?.p==='nome'&&['e','è'].includes(t[1]?.p??''))t=t.slice(2)}
+ // A7.3 (17/10, avversaria X): «al menu la burrata», «sul menu…», «nella lista…», «in carta…» in testa e code di cortesia,
+ // di tempo o di posto in fondo («se puoi», «dai», «va bene?», «nel menu», «per stasera», «da domani», «subito», «grazie eh»)
+ // non sono il nome del piatto.
+ {const P=new Set(['al','sul','nel','nella','in','alla','nei','dentro']),W=new Set(['menu','carta','lista','listino','menù'])
+  for(let k=0;k<3&&t.length>2;k++){if(P.has(t[0]!.p)&&W.has(t[1]!.p))t=t.slice(2);else if(t[0]!.p==='a'&&W.has(t[1]!.p))t=t.slice(2);else break}}
+ t=stripTails(t)
  // prezzo: «che costa N euro», «a N euro», «N euro», «N€», «prezzo N», N finale
  let price:number|null=null
  for(let i=0;i<t.length;i++){const v=waNewValue(t[i]!.p);if(v===null)continue
@@ -101,10 +107,17 @@ export function parseCreate(raw:string,sections:SectionRef[],verbRequired=true):
  // «una bibita», «un piatto», «un dolce»: parola generica o nome della categoria → il nome manca e il bot lo chiede.
  const generic=(w:string)=>{const p=waNewFold(w).replace(/[^a-z0-9]+/g,' ').trim(),forms=(x:string)=>[x,x.replace(/i$/,'o'),x.replace(/e$/,'a'),x.replace(/i$/,'e')];return /^(?:piatt[oi]|bibit[ae]|bevand[ae]|dolc[ei]|prim[oi]|second[oi]|antipast[oi]|contorn[oi]|pizz[ae]|vin[oi]|cocktail|panin[oi]|cosa|roba|qualcosa)$/.test(p)||sections.some(s=>forms(waNewFold(s.name).replace(/[^a-z0-9]+/g,' ').trim()).includes(p))}
  const name=quotedName??(words2&&(piattoGone||!generic(words2))?words2.charAt(0).toLocaleUpperCase('it')+words2.slice(1):null)
+ // A7.12 (M11): «aggiungi un dolce» → la categoria Dolci, si chiede solo il nome e il prezzo.
+ if(!name&&words2&&!sectionId){const p0=waNewFold(words2).replace(/[^a-z0-9]+/g,' ').trim(),forms=(x:string)=>[x,x.replace(/i$/,'o'),x.replace(/e$/,'a'),x.replace(/i$/,'e')];const hit=sections.filter(s=>forms(waNewFold(s.name).replace(/[^a-z0-9]+/g,' ').trim()).includes(p0));if(hit.length===1)sectionId=hit[0]!.id}
  return {name,price,sectionId,unknownSection,...(sectionName?{sectionName}:{}),...(sectionName&&sectionNew?{sectionNew:true}:{})}
 }
 
 const COURTESY=new Set(['favore','piacere','cortesia'])
+// Code da togliere dal fondo (in parole «piane»), dalla più lunga.
+const TAILS=['ok grazie ciao','grazie mille','grazie eh','grazie','che ne dici','se puoi','se ce la fai','per favore','per piacere','per cortesia','va bene','va bene cosi','dai','ok','ciao','subito','adesso','ora','per stasera','per oggi','solo per oggi','solo oggi','da oggi','da domani','da stasera','da stasera in poi','da lunedi','nel menu','sul menu','nella carta','in carta','nel listino','al menu','nella lista','pure','anche','grazie ciao','perfetto'].map(x=>x.split(' ')).sort((a,b)=>b.length-a.length)
+function stripTails(t:Tok[]):Tok[]{for(let guard=0;guard<6;guard++){
+  // «… al menu del pranzo», «… nel menu di stasera»
+  {const n=t.length;if(n>4&&['al','nel','sul','nella','in'].includes(t[n-4]!.p)&&['menu','carta','listino'].includes(t[n-3]!.p)&&['del','della','di','per'].includes(t[n-2]!.p)){t=t.slice(0,n-4);continue}}const hit=TAILS.find(w=>w.length<t.length&&w.every((x,k)=>t[t.length-w.length+k]!.p===x));if(!hit)break;t=t.slice(0,t.length-hit.length)}return t}
 const preps0=new Set(['tra','fra','in','nei','negli','nelle','nella','nel'])
 // Parole che indicano una categoria anche se nel menu non c'è (17/10, A3.2).
 const CAT_WORDS=/^(?:prim[oi]|second[oi]|antipast[oi]|dolc[ei]|dessert|contorn[oi]|pizz[ae]|special[ei]|specialita|bibit[ae]|bevand[ae]|insalat[ae]|panin[oi]|fritt[oi]|frittur[ae]|vin[oi]|birr[ae]|cocktail|aperitiv[oi]|burger|hamburger|crud[oi]|grigliat[ae]|carn[ei]|pesc[ei]|zupp[ae]|focacc[ei]\w*|piadin[ae]|novita|proposte)$/
@@ -150,7 +163,9 @@ export type CreateStep={kind:'actions',actions:MenuAction[]}|{kind:'none'}|{kind
 // ===================== 17/10 (correzioni A1): «X e Y» = due piatti o un nome composto =====================
 // Coppie che formano UN piatto (glossario di cucina): la «e» non separa due piatti. Più «pasta/riso/pane e …» in testa.
 const PAIRS=new Set(['cacio e pepe','pasta e fagioli','pasta e ceci','pasta e patate','pasta e lenticchie','pasta e piselli','pasta e broccoli','pasta e zucca','pane e coperto','pane e panelle','panelle e crocche','aglio e olio','olio e peperoncino','olio e aceto','sale e pepe','burro e salvia','burro e alici','burro e parmigiano','salsiccia e friarielli','salsiccia e funghi','funghi e salsiccia','salsiccia e patate','prosciutto e melone','prosciutto e funghi','prosciutto e fichi','cozze e vongole','vongole e cozze','gamberi e zucchine','zucchine e gamberi','zucchine e gamberetti','pomodoro e mozzarella','mozzarella e pomodoro','pomodoro e basilico','pere e gorgonzola','pere e formaggio','ricotta e spinaci','spinaci e ricotta','speck e noci','speck e brie','noci e gorgonzola','gorgonzola e noci','zucca e salsiccia','riso e patate','riso e piselli','uova e pancetta','piselli e pancetta','pancetta e piselli','panna e prosciutto','prosciutto e panna','tonno e cipolla','tonno e cipolle','crudo e bufala','crudo e mozzarella','bresaola e rucola','rucola e grana','rucola e parmigiano','pomodorini e rucola','alici e pomodorini','latte e caffe','caffe e latte','pane e pomodoro','pane e olio','pane e salame','pane e burro','fagioli e cotiche','salsicce e fagioli','mare e monti','terra e mare','pesce e patatine','fish e chips','spaghetti e polpette','patate e cozze','limone e pepe','cipolla e patate','pollo e patate','carne e patate','mozzarella e alici','fiori e alici','zucchine e menta','melanzane e ricotta','pistacchio e mortadella','mortadella e pistacchio'])
-const LEAD_ONE=new Set(['pasta','riso','pane','zuppa','minestra','crema','vellutata','risotto','insalata','tagliere','frittata','torta','crostata','focaccia','piadina'])
+// A7.4: una «e» seguita da un ingrediente o contorno («polpo e patate», «panna e fragole», «vongole e bottarga») è UN piatto.
+const INGREDIENT=new Set(['patate','patatine','ceci','fagioli','lenticchie','piselli','fave','fragole','frutti','bottarga','funghi','porcini','salsiccia','zucchine','zucca','rucola','grana','parmigiano','pecorino','pomodoro','pomodorini','mozzarella','bufala','burrata','olive','capperi','cipolla','cipolle','peperoni','melanzane','noci','miele','cioccolato','crema','panna','limone','pistacchio','pistacchi','nocciole','mandorle','speck','prosciutto','pancetta','guanciale','tartufo','gamberi','gamberetti','vongole','cozze','salvia','burro','basilico','menta','asparagi','carciofi','spinaci','ricotta','gorgonzola','pere','mele','fichi','uvetta','pinoli','acciughe','alici','tonno','olio','aceto','pepe','peperoncino','aglio','verdure','insalata','friarielli','broccoli','cavolo','senape','maionese','ketchup','gelato','caramello','amarene','cannella','zenzero','mezzo','mezza','quarto','metro','litro','chilo','etto'])
+const LEAD_ONE=new Set(['pasta','riso','pane','zuppa','minestra','crema','vellutata','risotto','insalata','tagliere','frittata'])
 const STOP_WORD=new Set(['il','lo','la','l','i','gli','le','un','una','uno','di','del','della','al','alla','alle','ai','con','e','ed','a','in'])
 const cap=(x:string)=>x.charAt(0).toLocaleUpperCase('it')+x.slice(1)
 const foldW=(x:string)=>waNewFold(x).replace(/[^a-z0-9]+/g,'')
@@ -162,6 +177,8 @@ export function splitPair(name:string,refs:{name:string}[]=[]):string[]|null{
  if(cuts.length!==1)return null
  const k=cuts[0]!,left=w.slice(0,k),right=w.slice(k+1);while(right.length>1&&STOP_WORD.has(foldW(right[0]!)))right.shift()
  const content=(xs:string[])=>xs.some(x=>foldW(x).length>=3&&!STOP_WORD.has(foldW(x))&&!/^\d/.test(x))
+ if(right.length===1&&INGREDIENT.has(foldW(right[0]!)))return null
+ if(left.length===1&&INGREDIENT.has(foldW(left[0]!)))return null
  if(!content(left)||!content(right))return null
  return [cap(left.join(' ')),cap(right.join(' '))]}
 
@@ -176,7 +193,7 @@ export function multiQuestion(d:CreateDraft,sections:SectionRef[]){
  return `${missingSection(d,false)}In quale categoria metto ${bolds(names)}? Categorie: ${sectionList(sections)}.`}
 
 const TWO=/\b(?:due piatti|2 piatti|sono due|sono 2|separat\w*|distint\w*|divis\w*|piatti diversi|due diversi|due cose|sono piatti|tutti e due|entrambi)\b/
-const ONE=/^(?:(?:no|si|ok|allora|guarda|e)\s+)*(?:e\s+)?(?:uno|uno solo|un solo piatto|un piatto solo|un piatto|un unico piatto|piatto unico|unico piatto|un piatto unico|e un piatto|e uno solo|e un piatto unico|tutto insieme|insieme|uno unico)(?:\s+(?:solo|unico))?$/
+const ONE=/^(?:(?:no|si|ok|allora|guarda|e)\s+)*(?:e\s+)?(?:uno|uno solo|un solo piatto|un piatto solo|un piatto|un unico piatto|piatto unico|unico piatto|un piatto unico|e un piatto|e uno solo|e un piatto unico|tutto insieme|insieme|uno unico)(?:\s+(?:solo|unico))?(?:$|\s+(?:a|costa|da|di)\s+\S+(?:\s+euro)?$|\s+\d\S*(?:\s+euro)?$)/
 const ORDS:[RegExp,number][]=[[/^(?:prim[oa]|1)$/,0],[/^(?:second[oa]|2)$/,1],[/^(?:terz[oa]|3)$/,2]]
 /** Prezzi di una risposta per più piatti, con il piatto (o l'ordinale) a cui si riferiscono se detto. */
 export function answerPrices(text:string,names:string[]):{value:number,idx:number|null}[]{
@@ -202,6 +219,8 @@ function multiAnswer(text:string,draft:CreateDraft,sections:SectionRef[],refs:{i
  if(split===false){const single:CreateDraft={kind:'create_draft',name:draft.name,price:draft.price??(vals.length===1?vals[0]!.value:null),sectionId,...(draft.sectionName&&!sectionId?{sectionName:draft.sectionName}:{})}
   if(vals.length>1)return{kind:'ask',draft:single,text:`*${draft.name}* è un piatto solo: quale prezzo metto, ${vals.map(v=>v.value.toLocaleString('it-IT')).join(' o ')} €? Non ho ancora aggiunto nulla.`}
   return finish(single,sections,refs)}
+ // «8 tutti e due», «entrambi a 9», «stesso prezzo, 10»: un prezzo per tutti (A7.4, M6).
+ if(vals.length===1&&/\b(?:tutti e due|tutte e due|entramb\w*|ciascun\w*|uguale|stesso prezzo|tutti a|tutte a|tutti e tre)\b/.test(t)){split=true;for(let i=0;i<prices.length;i++)if(prices[i]==null)prices[i]=vals[0]!.value;vals.length=0}
  if(vals.length>=2)split=true
  const named=vals.filter(v=>v.idx!==null),free=vals.filter(v=>v.idx===null)
  for(const v of named)prices[v.idx!]=v.value
@@ -274,6 +293,8 @@ export function createStep(text:string,draft:CreateDraft|null,sections:SectionRe
  const bare=!parsed.sectionId?sections.find(s=>waNewFold(s.name).replace(/[^a-z0-9]+/g,' ').trim()===folded):undefined
  const d=mergeDraft(draft??{kind:'create_draft',name:null,price:null,sectionId:null},bare?{name:null,price:null,sectionId:bare.id,unknownSection:false}:parsed)
  // «aggiungi pasta al pesto e lasagna» senza prezzo: due piatti o uno solo? Mai una bozza unica in silenzio (A1.2).
+ // A7.4: «aggiungi nei primi ravioli e tortellini a 12» (non è un nome composto) → due piatti a 12 ciascuno.
+ if(verbFirst&&d.name&&d.price!==null&&!d.names&&d.sectionId){const parts=splitPair(d.name,refs);if(parts){const acts=parts.filter(n=>!refs.some(r=>r.sectionId===d.sectionId&&waNewFold(r.name).trim()===waNewFold(n).trim())).map(n=>({kind:'create' as const,sectionId:d.sectionId!,name:n,price:d.price!,description:null}));if(acts.length)return{kind:'createMany',actions:acts}}}
  if(d.name&&d.price===null&&!d.names){const parts=splitPair(d.name,refs);if(parts){const nd:CreateDraft={...d,names:parts,split:null,prices:parts.map(()=>null)};return{kind:'ask',draft:nd,text:multiQuestion(nd,sections)}}}
  return finish(d,sections,refs,verbFirst,parsed.unknownSection)
 }

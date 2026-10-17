@@ -6,7 +6,7 @@ import {menuSystemPrompt,dishSystemPrompt} from './twilio-menu-prompt.js'
 import {isSalesAction,salesActionKey,salesActionChanged,applySalesAction,describeSalesAction,salesFromLlm,salesLlmActions,type SalesAction} from './twilio-menu-sales.js'
 import {businessDate} from './menu-sales.js'
 import {priceAlternatives,priceAlternativeDish,isExcluded,type Excluded} from './twilio-menu-clarify.js'
-import {removeVerbRe} from './twilio-menu-nlu.js'
+import {removeVerbRe,spokenCents,spokenDecimals} from './twilio-menu-nlu.js'
 import {isStructAction,applyStructAction,orderActions,DELETE_VERB,RENAME_VERB,MOVE_VERB,SECTION_WORD,sameSection,menuForSection,type StructAction} from './twilio-menu-structure.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string}
@@ -54,10 +54,23 @@ const QTY_LEAD=new RegExp(`\\b(quei|quegli|quelle|questi|queste|quelli|i|gli|le|
 const QTY_NOUN=new RegExp(`\\b${QTY}\\s+(?=(?:piatt|prodott|pizz|dolc|cos[ae]\\b|vari|voci|categori|portat|prim[ie]\\b|second[ie]\\b|antipast|contorn|bibit|panin|porzion)\\w*)`,'giu')
 const QTY_ONE=/(?<!\b(?:a|di|costa|costano|costi|prezzo|da|per|sui|sugli|tipo|circa)\s+)\b(?:un|una|uno)\b(?!\s*(?:euro|eur|€|e\s+\p{L}+|e\s+\d|virgola|in\s+meno|in\s+piu|in\s+più|di\s+meno|di\s+piu|di\s+più))/giu
 export const withoutQuantities=(s:string)=>s.replace(QTY_LEAD,'$1').replace(QTY_NOUN,'').replace(QTY_ONE,' ')
-export function g9Prices(message:string):number[]{message=withoutQuantities(message);const out:number[]=[];{const p=plain(message);for(const m of p.matchAll(/\b(\w+) virgola (\w+)\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!),b=/^\d+$/.test(m[2]!)?Number(m[2]):g9WordNumber(m[2]!);if(a!==null&&b!==null)out.push(Number(`${a}.${b}`))}for(const m of p.matchAll(/\b(\w+)(?: euro)? e mezz[oa]\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!);if(a!==null)out.push(a+0.5)}}for(const m of plain(message).matchAll(/\b(\d+) centesimi\b/g))out.push(Number(m[1])/100);const t=message.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2');for(const m of t.matchAll(/\d+(?:\.\d{1,2})?/g))out.push(Number(m[0]))
+// A7.7 (avversaria X, G8): prezzi relativi. «aumenta/alza di 1», «abbassa/sconta di 2», «togli/leva 2 euro alla X», «+1», «-2»,
+// «50 centesimi in più», «un euro in meno». Il numero è una DIFFERENZA: mai un prezzo detto; il prezzo nuovo = attuale ± differenza.
+const RNUM='(\\d+(?:[.,]\\d{1,2})?|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|cinquanta|venti|trenta)'
+const REL=[[new RegExp(`\\b(?:aument\\w*|alz\\w*|rincar\\w*)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),1],[new RegExp(`\\b(?:abbass\\w*|scont\\w*|diminu\\w*|ribass\\w*)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),-1],
+ [new RegExp(`\\b(?:togli\\w*|lev[ai]\\w*)\\s+${RNUM}\\s+(euro|centesimi|cent)\\b`,'iu'),-1],[new RegExp(`${RNUM}\\s*(euro|centesimi|cent)?\\s+(?:in|di)\\s+piu\\b`,'iu'),1],[new RegExp(`${RNUM}\\s*(euro|centesimi|cent)?\\s+(?:in|di)\\s+meno\\b`,'iu'),-1],[/(?:^|\s)\+\s*(\d+(?:[.,]\d{1,2})?)\b()/u,1],[/(?:^|\s)-\s*(\d+(?:[.,]\d{1,2})?)\b()/u,-1]] as [RegExp,number][]
+const RW:Record<string,number>={un:1,uno:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,venti:20,trenta:30,cinquanta:50}
+/** Differenza di prezzo detta nel messaggio (con segno), o null. */
+export function relativeDelta(message:string):{delta:number,text:string}|null{const m0=message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+ for(const [re,sign] of REL){const m=m0.match(re);if(!m)continue;const raw=m[1]!,n=/^\d/.test(raw)?Number(raw.replace(',','.')):RW[raw];if(n===undefined||!Number.isFinite(n)||n<=0)continue
+  const unit=m[2]??'';const v=/^cent/.test(unit)?n/100:n;if(v>=100)continue;return{delta:sign*Math.round(v*100)/100,text:m[0]}}
+ return null}
+export function g9Prices(message:string):number[]{
+ // A7.8: «tredici e novanta», «7 euro 90», «13 virgola 50» sono UN prezzo coi centesimi: le parti da sole non valgono.
+ message=withoutQuantities(spokenCents(spokenDecimals(message)));{const r=relativeDelta(message);if(r)message=message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(r.text,' ')}const out:number[]=[];{const p=plain(message);for(const m of p.matchAll(/\b(\w+) virgola (\w+)\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!),b=/^\d+$/.test(m[2]!)?Number(m[2]):g9WordNumber(m[2]!);if(a!==null&&b!==null)out.push(Number(`${a}.${b}`))}for(const m of p.matchAll(/\b(\w+)(?: euro)? e mezz[oa]\b/g)){const a=/^\d+$/.test(m[1]!)?Number(m[1]):g9WordNumber(m[1]!);if(a!==null)out.push(a+0.5)}}for(const m of plain(message).matchAll(/\b(\d+) centesimi\b/g))out.push(Number(m[1])/100);const t=message.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2');for(const m of t.matchAll(/\d+(?:\.\d{1,2})?/g))out.push(Number(m[0]))
  const w=plain(message).split(' ');for(let i=0;i<w.length;i++){let a=g9Words[w[i]!]??g9WordNumber(w[i]!)??undefined;if(a===undefined)continue;if(g9Words[w[i+1]!]!==undefined&&a>=20&&g9Words[w[i+1]!]!<10){a+=g9Words[w[i+1]!]!}out.push(a);const k=w[i+1]==='euro'?i+2:i+1;if(w[k]==='e'){const c=g9Words[w[k+1]!]??(/^\d+$/.test(w[k+1]??'')?Number(w[k+1]):undefined);if(c!==undefined)out.push(a+c/100)}}
  const ints=out.filter(Number.isInteger);for(const x of ints)for(const y of ints)if(y>=10&&y<100)out.push(x+y/100);return out.map(x=>Math.round(x*100)/100)}
-const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;if(current!==undefined&&/\b(aument\w*|alz\w*|sal\w*|abbass\w*|diminu\w*|scont\w*|togli\w*|meno|piu)\b/.test(plain(message)))return said.some(d=>Math.abs(Math.abs(price-current)-d)<0.005);return false}
+const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;const r=relativeDelta(message);if(current!==undefined&&r)return Math.abs(price-(current+r.delta))<0.005;return false}
 const finishWords=/\b(?:finit\w*|esaurit\w*|fernut\w*|finid\w*|finia|terminat\w*|non c e piu|non ce piu|nun ce sta|un c e piu|non abbiamo piu|non ce n e piu)\b/
 const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
 export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[],verbText?:string}={}):MenuPlan{

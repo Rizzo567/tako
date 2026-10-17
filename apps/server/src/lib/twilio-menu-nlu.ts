@@ -6,7 +6,11 @@ export const plainText=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toL
 const stop=new Set('il lo la i gli le l un uno una di da del dello della dei degli delle al allo alla ai agli alle dal dallo dalla dai dagli dalle nel nello nella nei negli nelle con col coi sul sulla e ed o a in per tra fra che mi ci si ti oggi niente piu non c e sono costa costano euro eur prezzo metti mettila mettilo mettili mettile porta portala portalo cambia imposta finito finita finiti finite esaurito esaurita esauriti esaurite tornato tornata tornati tornate disponibile disponibili nascondi togli leva levami toglimi elimina cancella rimuovi rimetti mostra menu evidenza piatto piatti scrivi quanto cosa ancora adesso ora stasera domani grazie ciao per favore perfavore anche pure'.split(' '))
 export const stem=(w:string)=>w.length>4?w.replace(/[aeiou]+$/,''):w
 const lev=(a:string,b:string)=>{if(Math.abs(a.length-b.length)>1)return 2;const d=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let prev=d[0]!;d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j]!;d[j]=Math.min(d[j]!+1,d[j-1]!+1,prev+(a[i-1]===b[j-1]?0:1));prev=t}}return d[b.length]!}
-export const sameWord=(a:string,b:string)=>a===b||stem(a)===stem(b)||(a.length>=5&&b.length>=5&&(lev(a,b)<=1||a.startsWith(b)||b.startsWith(a)))
+// A7.1 (avversaria X, G1/G2): con parole corte (5–6 lettere) una consonante diversa è un'altra parola («torna»≠«torta»,
+// «pollo»≠«polpo», «torno»≠«tonno»); restano i refusi su vocali e doppie («parmiggiana»), e dalle 7 lettere ogni refuso singolo.
+const softEdit=(a:string,b:string)=>{if(Math.min(a.length,b.length)>=7)return true;if(a.length!==b.length){const [l,s0]=a.length>b.length?[a,b]:[b,a];for(let i=0;i<l.length;i++)if(l.slice(0,i)+l.slice(i+1)===s0)return /[aeiou]/.test(l[i]!)||l[i]===l[i-1]||l[i]===l[i+1];return false}
+ const k=[...a].findIndex((ch,i)=>ch!==b[i]);if(k<0)return true;const x=a[k]!,y=b[k]!;return (/[aeiou]/.test(x)&&/[aeiou]/.test(y))||['dt','bp','gc','vf','sz','ck','gk'].some(p=>p===x+y||p===y+x)}
+export const sameWord=(a:string,b:string)=>a===b||stem(a)===stem(b)||(a.length>=5&&b.length>=5&&((lev(a,b)<=1&&softEdit(a,b))||a.startsWith(b)||b.startsWith(a)))
 export const words=(s:string)=>plainText(s).replace(/[,.]/g,' ').split(' ').filter(w=>w.length>=2&&!stop.has(w)&&!/^\d+$/.test(w))
 const nameWords=(s:string)=>plainText(s).replace(/[,.]/g,' ').split(' ').filter(w=>w.length>=2&&!['il','lo','la','i','gli','le','di','da','del','della','dei','delle','al','alla','alle','ai','agli','con','e','o','a','in','con','allo','dello'].includes(w))
 // Piatti che contengono tutte le parole della richiesta (nome o categoria, almeno una nel nome). Un nome coperto per intero vince.
@@ -59,6 +63,8 @@ export function capabilityFromText(raw:string):string[]|null{
 }
 // Frasi comuni con un solo piatto: niente IA. Le frasi composte («… e …») restano all'IA.
 export function parseIntent(raw:string):Intent|null{
+ // A7.2: «togli 2 euro alla tagliata» è un ribasso di prezzo (lo calcola il route dal prezzo attuale), mai «nascondi».
+ if(/\b(?:togli\w*|lev[ai]\w*)\s+(?:\d+(?:[.,]\d{1,2})?|un|uno|una|due|tre|quattro|cinque|dieci|cinquanta)\s+(?:euro|centesimi|cent)\b/i.test(raw.normalize('NFD').replace(/[̀-ͯ]/g,'')))return null
  // G4: una domanda non è mai un'azione («il tiramisù è finito?», «la carbonara costa 13?»): diventa una lettura.
  // Round 2: domande senza «?» («c'è ancora la tagliata», «sai se la carbonara è finita», «la lasagna è finita vero»).
  const q=plainText(raw).replace(/(?<!\d)[,.!]|[,.!](?!\d)/g,' ').replace(/\s+/g,' ').trim(),spoken=q.match(/^(?:c e ancora|ce ancora|ci sono ancora|abbiamo ancora|avete ancora|ce l abbiamo ancora|ce lo abbiamo ancora|ce la abbiamo ancora|ce l hai ancora|ce l avete ancora|e rimast[oaie] (?:ancora )?) (.+)$/)
@@ -136,11 +142,15 @@ export function spokenCents(raw:string):string{const nv=(w:string)=>/^\d+$/.test
  // 17/10 (A2.1): centesimi solo se il secondo numero (10–99) chiude la frase o la parte («… e 50», «… e cinquanta centesimi»,
  // «… e 50, il tiramisù…»): «10 euro e uno deve essere…» non è 10,01.
  return raw.replace(/\b([\p{L}\d]+)\s+euro\s+e\s+([\p{L}\d]+)\b(?!\s*(?:euro|€))(?=\s*(?:centesimi\b|cent\b|[.,;:!?)]|$|\s+(?:nei|nel|nella|nelle|negli|tra|fra|in|per|invece|poi|anche|e\s+(?:il|la|lo|i|gli|le|l|la|metti|togli|nascondi)\b)))/giu,(all,a,b)=>{const x=nv(a),y=/^\d{1,2}$/.test(b)?Number(b):nluWordNumber(plainText(b));return x===null||y===null||y<10||y>=100?all:`${x},${String(y).padStart(2,'0')} euro`}).replace(/(\d+,\d{2} euro)\s+(?:centesimi|cent)\b/g,'$1')
+ // A7.8: «7 euro 90», «13 euro 50» → 7,90 / 13,50 euro.
+ .replace(/\b(\d{1,3})\s+euro\s+(\d{2})\b(?!\s*(?:euro|€|,\d))/giu,(_a,x,y)=>`${x},${y} euro`)
+ // «la carbonara tredici e novanta», «la bomba quattro e ottanta»: un piatto solo e due numeri in fondo (secondo 10–99).
+ .replace(/^([^,\d]*?\p{L}+)\s+([\p{L}\d]+)\s+e\s+([\p{L}\d]+)\s*[.!]?\s*$/iu,(all,head,a,b)=>{if(/\s(?:e|ed)\s/i.test(head)||/\b(?:aggiung\w*|inserisc\w*)\b/i.test(head)||/\b(?:tra|fra|da|o|oppure|tipo|circa)$/i.test(head.trim()))return all;const x=nv(a),y=/^\d{2}$/.test(b)?Number(b):nluWordNumber(plainText(b));return x===null||y===null||y<10||y>=100||x>=1000?all:`${head} ${x},${String(y).padStart(2,'0')} euro`})
  // «la parmigiana costa 12 e 50», «boh a dieci e venti»: senza «euro», solo per UN piatto (niente «e»/virgole prima: «la
  // parmigiana e il tiramisù a 10 e 20» sono due prezzi) e col secondo numero 10–99 in fondo.
  .replace(/^([^,]*?\b(?:costa|costano|a|prezzo|per))\s+([\p{L}\d]+)\s+e\s+([\p{L}\d]+)(\s+(?:euro|centesimi))?\s*(?=$|[.,;:!?]|\s+grazie\b)/iu,(all,head,a,b)=>{if(/\s(?:e|ed)\s/i.test(head))return all;const x=nv(a),y=/^\d{2}$/.test(b)?Number(b):nluWordNumber(plainText(b));return x===null||y===null||y<10||y>=100?all:`${head} ${x},${String(y).padStart(2,'0')} euro`})}
 export function spokenDecimals(raw:string):string{const nv=(w:string)=>/^\d+$/.test(w)?Number(w):nluWordNumber(plainText(w))
- return raw.replace(/\b([\p{L}\d]+)\s+virgola\s+([\p{L}\d]+)\b/giu,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null?all:`${x},${y}`}).replace(/\b([\p{L}\d]+)(\s+euro)?\s+e\s+mezz[oa]\b/giu,(all,a,e)=>{const x=nv(a);return x===null?all:`${x},5${e??''}`})}
+ return raw.replace(/\b([\p{L}\d]+)\s+virgola\s+([\p{L}\d]+)\b/giu,(all,a,b)=>{const x=nv(a),y=nv(b);return x===null||y===null||y>99?all:`${x},${String(y).length===1?y+'0':y}`}).replace(/\b([\p{L}\d]+)(\s+euro)?\s+e\s+mezz[oa]\b/giu,(all,a,e)=>{const x=nv(a);return x===null?all:`${x},5${e??''}`})}
 export function politeCommand(raw:string):string|null{
  let t=raw.trim(),changed=false
  // 17/10: «la carbonara la lasciamo in promo a 10», «il tiramisù lo mettiamo a 6» → «la carbonara in promo a 10», «il tiramisù a 6».

@@ -83,7 +83,7 @@ export function deixisReferents(msg:string,owners:string[],refs:MenuRef[]):{kind
  const pick=back.slice(0,want);return{kind:'set',ids:chrono.filter(id=>pick.includes(id))}}
 const FEAT_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|lev[ai]) (?:\w+ ){0,2}evidenza\b|\bnon (?:piu |più )?in evidenza\b|\bdall evidenza\b|\bdalla evidenza\b/,FEAT_ON=/\b(?:mett\w*|metti\w*) (?:\w+ ){0,5}in evidenza\b|\bevidenzia\w*\b/
 const HID_ON=/\b(?:nascond\w*|togli\w*|lev\w*)\b/,HID_OFF=/\b(?:rimett\w*|mostr\w*|fa\w* vedere|visibil\w*|ricompar\w*)\b/
-const AV_OFF=/\b(?:finit\w*|esaurit\w*|fernut\w*|terminat\w*)\b/,AV_ON=/\b(?:tornat\w*|disponibil\w*|di nuovo|ce di nuovo)\b/
+const AV_OFF=/\b(?:finit\w*|esaurit\w*|fernut\w*|terminat\w*)\b/,AV_ON=/\b(?:tornat\w*|disponibil\w*|di nuovo|ce di nuovo)\b|(?<!\b(?:non|nun|un|piu) )\bc e\b(?! piu)/
 /** Prezzi messi sul piatto sbagliato: la parte del messaggio che nomina il piatto ha dei numeri ma non quel prezzo. */
 export function priceClauseProblem(actions:MenuAction[],message:string,refs:MenuRef[]):string[]{
  const parts=message.split(/(?<!\d)[,;\n]|[,;\n](?!\d)|\s+(?:e|ed|poi|invece)\s+(?=(?:il|la|lo|l|i|gli|le|un|una)\b)/iu).map(x=>x.trim()).filter(Boolean);if(parts.length<2)return[]
@@ -95,7 +95,9 @@ export function priceClauseProblem(actions:MenuAction[],message:string,refs:Menu
   if(!nums.includes(Math.round((a.price as number)*100)/100))out.push(a.id)}
  return out}
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
-export function polarityProblem(actions:MenuAction[],msg:string):string[]{const m=' '+msg+' ',out:string[]=[]
+export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[]):string[]{const m=' '+msg+' ',out:string[]=[]
+ // Verso per parte: «è finita la gricia, la carbonara c'è» → la carbonara non può diventare finita.
+ if(refs)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=msg.split(/ (?:e|ed|ma) | , /).find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;const on=AV_ON.test(' '+part+' ')&&!AV_OFF.test(' '+part+' '),off=AV_OFF.test(' '+part+' ')&&!AV_ON.test(' '+part+' ');if((on&&!a.value)||(off&&a.value))out.push(a.id)}
  // «non è finita», «nun è finita» (dialetto): una negazione del verbo vieta proprio quell'azione.
  const notFinished=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(m)
  for(const a of actions)if(notFinished&&'id' in a&&a.kind==='available'&&!a.value)out.push(a.id)
@@ -111,7 +113,8 @@ export function polarityProblem(actions:MenuAction[],msg:string):string[]{const 
 const MIX_CMD=/\b(?:metti\w*|mettil\w*|nascond\w*|togli\w*|toglil\w*|segna\w*|aggiung\w*|finit\w*|esaurit\w*|evidenza|cambia\w*|alza\w*|abbass\w*|aument\w*|rimetti\w*|porta\w*)\b|\b(?:a|costa) \d/
 const MIX_ASK=/^(?:e\s+)?(?:dimmi|dammi|fammi sapere|quanto|quanti|quali|qual|cosa|cos|che cosa|che piatti|c e|ce|e ancora)\b/
 export function mixedMessage(message:string):{command:string,question:string,conditional:boolean}|null{
- const parts=message.split(/(?<=\?)\s*|,\s*(?=(?:e\s+)?(?:dimmi|cosa|cos'|cos’|quali|quanto|quanti|che piatti)\b)|\s+e\s+(?=dimmi\b|dammi\b|fammi sapere\b)/i).map(x=>x.trim()).filter(Boolean)
+ // A7.11: anche «…, e la gricia quanto la tengo?», «la tagliata è finita, il polpo c'è ancora?», «nascondi la bomba. quanti…?».
+ const parts=message.split(/(?<=[?.!])\s+|(?<=\?)(?=\S)|,\s*(?:(?:e|ma|poi)\s+)?|\s+e\s+(?=dimmi\b|dammi\b|fammi sapere\b)/i).map(x=>x.trim()).filter(Boolean)
  if(parts.length<2)return null
  const q:string[]=[],c:string[]=[];for(const p of parts){const pl=plain(p);if(/\?\s*$/.test(p)||MIX_ASK.test(pl))q.push(p);else c.push(p)}
  if(!q.length||!c.length)return null
@@ -268,7 +271,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const no=(note:string,ids:(string|null)[]=[])=>({intent:'clarify' as const,plan:{type:'clarify' as const,ids:ids.filter((x):x is string=>!!x&&byId.has(x))},exclude,aliasesUsed,replyDraft:'',notes:[...notes,note]})
  for(const a of actions){if(!a||typeof a!=='object'||!BRAIN_ACTIONS.includes(a.action))return no('azione_sconosciuta',actions.map((x:any)=>map(x?.item)))
   const id=map(a.item)
-  if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back});continue}
+  if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if(!dir.test(msg))return no('delta_senza_verbo',[id]);legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref)
    // Il piatto di riferimento è nominato in questo messaggio, oppure è proprio quello dell'ultima risposta del bot («*Carbonara*: …»).
@@ -280,7 +283,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // rimettere quello sbagliato, il server lo rimette com'era (solo se è l'unico piatto del messaggio precedente e si può ripristinare).
  if(ctxOK&&SWAP.test(msg)){const prev=refs.filter(r=>g9DishMentioned(r.name,owners.at(-1)??'',refs)).map(r=>r.id)
   if(prev.length===1){const w=prev[0]!,acted=[...legacy.map((a:any)=>a.item_id),...derived.map(d=>d.id)];const named=refs.filter(r=>r.id!==w&&g9DishMentioned(r.name,message,refs)).map(r=>r.id)
-   if(!acted.includes(w)&&!g9DishMentioned(byId.get(w)!.name,message,refs)&&named.some(id=>acted.includes(id))&&input.restorable?.get(w)?.length){derived.push({id:w,actions:input.restorable.get(w)!});notes.push('ripristino_automatico')}}}
+   if(!acted.includes(w)&&!g9DishMentioned(byId.get(w)!.name,message,refs)&&named.some(id=>acted.includes(id))&&input.restorable?.get(w)?.length){derived.push({id:w,actions:input.restorable.get(w)!.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});notes.push('ripristino_automatico')}}}
  const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size||weakIds.size?new Set([...trusted,...weakIds]):undefined}
  const withHold=(d:Omit<BrainDecision,'path'|'usage'|'tokens'>):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(!asks.length)return d
   if(d.plan.type!=='change'&&!(d.plan.type==='clarify'&&!d.plan.ids.length))return d
@@ -299,7 +302,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // che nomina quel piatto: un modello che scambia i prezzi tra i piatti non scrive.
   {const swapped=priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs);if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
-  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
+  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
   // Rimando senza nome («mettila a 13», «no scusa 14»): vale solo per il piatto (unico) del messaggio precedente del titolare
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
@@ -335,6 +338,13 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  for(const d of derived){if(!mentioned(d.id))return no('piatto_non_nominato',[d.id])
   for(const x of d.actions){if(out.some(a=>'id' in a&&a.id===d.id&&a.kind===x.kind))return no('azione_doppia',[d.id]);out.push(x)}
   notes.push(d.refId?'prezzo_da_riferimento':'ripristino')}
+ // A7.10 (G12): una correzione («anzi no, mettila in evidenza», «no scusa, è finita la gricia, la carbonara c'è», «…la carbonara
+ // lasciala stare») rimette com'era quello che l'ultima modifica aveva cambiato e che il messaggio non ripete.
+ if(input.restorable?.size&&/^(?:anzi(?:\s+no)?|no(?:\s+scusa|\s+aspetta)?|scusa(?:\s+no)?)\b/.test(msg)){
+  const add=(id:string,back:MenuAction[])=>{if(out.some(a=>a.kind==='delete'&&a.id===id))return;const kinds=new Set(out.filter(a=>'id' in a&&a.id===id).map(a=>a.kind)),extra=back.filter(b=>!kinds.has(b.kind)).map(b=>({...b,fromRestore:true}) as unknown as MenuAction);if(extra.length){out.push(...extra);derived.push({id,actions:extra})}}
+  for(const id of new Set(out.flatMap(a=>'id' in a&&!(a as any).fromRestore?[a.id]:[])))if(input.restorable.get(id))add(id,input.restorable.get(id)!)
+  for(const r of refs){if(out.some(a=>'id' in a&&a.id===r.id))continue;const back=input.restorable.get(r.id);if(!back)continue
+   const part=message.split(/[,;]|\s+e\s+/).find(x=>g9DishMentioned(r.name,x,refs))??'';if(/\b(?:lascia\w*\s+stare|lascia\w*\s+perdere|c[’'\s]?è|c e|resta|rimane|va bene com era|com era)\b/i.test(part))add(r.id,back)}}
  for(const a of [...out])if('id' in a&&weakIds.has(a.id)){out.splice(out.indexOf(a),1);asks.push({type:'confirm',word:(sound.phrase.get(a.id)??byId.get(a.id)!.name).slice(0,60),action:a})}
  // A4.3: «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: non è un piatto «nominato senza azione».
  const twinIds=refs.filter(r=>legacy.some((a:any)=>a?.action==='create_item'&&typeof a.name==='string'&&plain(a.name)===plain(r.name)&&!out.some(o=>'id' in o&&o.id===r.id))).map(r=>r.id)

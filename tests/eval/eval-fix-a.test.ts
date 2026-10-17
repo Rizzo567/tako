@@ -40,7 +40,9 @@ export function saidPrices(text:string):number[]{const t=text.toLowerCase().norm
  for(let i=0;i<t.length;i++){const v=num(t[i]);if(v===null)continue;const prev=t[i-1]??'',next=t[i+1]??''
   if(['un','una','uno'].includes(t[i]!)&&!['a','costa','costano','di','da','prezzo'].includes(prev)&&next!=='euro'&&next!=='e')continue
   if(v<=10&&next!=='euro'&&(QTY_PREV.has(prev)||(prev==='e'&&['tutti','tutte'].includes(t[i-2]??''))))continue
-  o.push(v);let k=i+1;if(t[k]==='euro')k++
+  // «50 centesimi»: un valore in euro (correzione A7 dell'invariante: prima contava 50 €).
+  if(next==='centesimi'||next==='cent'){o.push(v/100);continue}
+  o.push(v);let k=i+1;if(t[k]==='euro'){k++;if(/^\d{2}$/.test(t[k]??''))o.push(v+Number(t[k])/100)}
   if(t[k]==='e'){const c=num(t[k+1]);if(c!==null&&c>=10&&c<100)o.push(v+c/100);if(/^mezz/.test(t[k+1]??''))o.push(v+0.5)}
   if(t[k]==='virgola'){const c=num(t[k+1]);if(c!==null)o.push(Number(`${v}.${c}`))}}
  return o.map(x=>Math.round(x*100)/100)}

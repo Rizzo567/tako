@@ -1,6 +1,6 @@
 {
  "cases": 193,
- "runs": 310,
+ "runs": 307,
  "unknownSql": [],
  "results": [
   {
@@ -4948,58 +4948,7 @@
    "actual": [
     "create|piatto ricco|13|piatti di prova"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "nome-02",
-   "cat": "nome",
-   "mode": "empty",
-   "turns": [
-    "nei piatti di prova aggiungi il piatto \"Piatto ricco\" a 13"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "create|piatto ricco|13|piatti di prova"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "nome-02",
-   "cat": "nome",
-   "mode": "wrong",
-   "turns": [
-    "nei piatti di prova aggiungi il piatto \"Piatto ricco\" a 13"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "create|piatto ricco|13|piatti di prova"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "nome-02",
-   "cat": "nome",
-   "mode": "wrongCreate",
-   "turns": [
-    "nei piatti di prova aggiungi il piatto \"Piatto ricco\" a 13"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "create|piatto ricco|13|piatti di prova"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
