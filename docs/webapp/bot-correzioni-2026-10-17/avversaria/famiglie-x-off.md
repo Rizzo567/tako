@@ -1,0 +1,1496 @@
+# Avversaria X · modo off
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| coppie | 30 | 17 | 9 | 1 | 4 |
+| prezzi | 32 | 6 | 26 | 0 | 0 |
+| centesimi | 25 | 8 | 17 | 0 | 0 |
+| nomi | 31 | 21 | 9 | 4 | 1 |
+| deixis | 35 | 7 | 24 | 2 | 4 |
+| anzino | 30 | 8 | 22 | 4 | 0 |
+| misti | 30 | 2 | 28 | 0 | 0 |
+| asr | 50 | 24 | 23 | 4 | 3 |
+| parole | 22 | 10 | 11 | 0 | 1 |
+| vocali | 25 | 1 | 24 | 0 | 0 |
+| sospeso | 25 | 9 | 16 | 1 | 0 |
+| suono | 25 | 7 | 17 | 3 | 1 |
+| code | 31 | 9 | 22 | 20 | 0 |
+| relativi | 20 | 1 | 19 | 1 | 0 |
+| cent2 | 14 | 0 | 14 | 0 | 0 |
+| misti2 | 18 | 0 | 18 | 2 | 0 |
+| ordinali | 8 | 0 | 7 | 0 | 1 |
+| sospeso2 | 15 | 2 | 13 | 1 | 0 |
+| lev1 | 14 | 1 | 13 | 1 | 0 |
+| lasciastare | 10 | 7 | 3 | 3 | 0 |
+| ipotesi | 8 | 0 | 8 | 0 | 0 |
+| toglieuro | 10 | 2 | 8 | 3 | 0 |
+| TOTALE | 508 | 142 | 351 | 50 | 15 |
+
+## Fallimenti
+
+- **adv-coppie-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Carbonara|false, available|Gricia|false
+  - turni: carbonara e gricia finite
+  - atteso: available|Carbonara|false, available|Gricia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Amatriciana|12, price|Carbonara|13
+  - turni: metti carbonara e amatriciana a 13 e 12
+  - atteso: price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: cacio e pepe e gricia a 12
+  - atteso: price|Cacio e pepe|12, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: pasta e ceci e pasta al sugo a 10
+  - atteso: price|Pasta al sugo|10, price|Pasta e ceci|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Cacio e pepe|11, price|Gricia|12
+  - turni: la cacio e pepe a 11 e la gricia a 12
+  - atteso: price|Cacio e pepe|11, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-011** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|gnocchi e tagliatelle|10|primi · GRAVE non-applicato: non applicato: create|gnocchi|10|primi, create|tagliatelle|10|primi
+  - turni: aggiungi nei primi gnocchi e tagliatelle a 10
+  - atteso: create|gnocchi|10|primi, create|tagliatelle|10|primi · ottenuto: create|gnocchi e tagliatelle|10|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Gnocchi e tagliatelle* in *Primi*: *10,00 €*»
+- **adv-coppie-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ sono due ⏎ 8 tutti e due
+  - atteso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto » ⏎ «Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.» ⏎ «Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.»
+- **adv-coppie-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ due piatti ⏎ entrambi a 8
+  - atteso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto » ⏎ «Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.» ⏎ «Quanto costano *Ravioli* e *Cappelletti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.»
+- **adv-coppie-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|ravioli e cappelletti|14|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ uno solo, a 14
+  - atteso: create|ravioli e cappelletti|14|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Ravioli* e *Cappelletti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto » ⏎ «*Ravioli* e *Cappelletti*: un piatto solo a 14 € o due piatti separati? Non ho ancora aggiunto nulla.»
+- **adv-coppie-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova
+  - turni: aggiungi tortelli e agnolotti ⏎ sono due piatti ⏎ tutti e due a 10
+  - atteso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tortelli* e *Agnolotti*: sono due piatti o uno solo? Se sono separati dimmi anche quanto costa ciascuno. Non ho ancora aggiunto n» ⏎ «Quanto costano *Tortelli* e *Agnolotti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.» ⏎ «Quanto costano *Tortelli* e *Agnolotti*? Dimmi un prezzo per ciascuno. Non ho ancora aggiunto nulla.»
+- **adv-coppie-027** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13, price|Tagliata di tonno|21
+  - turni: carbonara e tagliata di tonno a 13 e 21
+  - atteso: price|Carbonara|13, price|Tagliata di tonno|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-029** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: tiramisù e torta della nonna a 7
+  - atteso: price|Tiramisù|7, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-coppie-030** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Pollo al curry|false, available|Polpo alla griglia|false
+  - turni: pollo al curry e polpo alla griglia finiti
+  - atteso: available|Pollo al curry|false, available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5
+  - turni: carbonara 13, amatriciana 12 e gricia 12,50
+  - atteso: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5
+  - turni: carbonara a 13 amatriciana a 12 gricia a 12 e 50
+  - atteso: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: tiramisù 6 e 50 e tortino 7
+  - atteso: price|Tiramisù|6.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Acqua|2.5
+  - turni: l'acqua 2 e 50 e la birra media 5
+  - atteso: price|Acqua|2.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|20
+  - turni: la tagliata 19 anzi 20
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|21
+  - turni: la tagliata 19 no 21
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|22
+  - turni: la tagliata a 19... no aspetta, 22
+  - atteso: price|Tagliata|22 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Amatriciana|13, price|Carbonara|13
+  - turni: carbonara 13 e amatriciana uguale
+  - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 e l'amatriciana un euro in meno
+  - atteso: price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: l'amatriciana costa come la carbonara
+  - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la gricia stesso prezzo della carbonara
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: aumenta la gricia di 1 euro
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la gricia un euro in più
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|16
+  - turni: abbassa la tagliata di 2 euro
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la pasta al sugo la metà della carbonara
+  - atteso: price|Pasta al sugo|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-017** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la bufala il doppio della marinara
+  - atteso: price|Bufala|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-018** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ne restano 3 di carbonara
+  - atteso: last|Carbonara|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-019** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara ultime 2 porzioni
+  - atteso: last|Carbonara|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-020** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: abbiamo solo 5 tiramisù oggi
+  - atteso: last|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-021** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: mi restano 4 bombe
+  - atteso: last|Bomba|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-022** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Birra piccola|3.5
+  - turni: la birra media a 5 e la piccola a 3 e 50
+  - atteso: price|Birra piccola|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-025** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Acqua 0,5 l|2
+  - turni: l'acqua da mezzo litro a 2
+  - atteso: price|Acqua 0,5 l|2 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-027** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Gnocchi 4 formaggi|11
+  - turni: gnocchi 4 formaggi 11
+  - atteso: price|Gnocchi 4 formaggi|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-029** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Birra media|6, price|Coca Cola 33cl|3.5
+  - turni: metti la birra media a 6 e la coca a 3 e 50
+  - atteso: price|Birra media|6, price|Coca Cola 33cl|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-030** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la tagliata per 2 persone a 35
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-prezzi-031** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: promo|Carbonara|9.9
+  - turni: metti la promo sulla carbonara a 9 e 90
+  - atteso: promo|Carbonara|9.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara a 13 e 20 la tagliata di tonno
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il tiramisù 7 e 18 la tagliata
+  - atteso: price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la gricia a 12 e 15 il polpo
+  - atteso: price|Gricia|12, price|Polpo alla griglia|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 12 e 50 la carbonara e 7 il tiramisù
+  - atteso: price|Carbonara|12.5, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|12.5
+  - turni: carbonara dodici e cinquanta
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|12.5
+  - turni: carbonara dodici euro e mezzo
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|12.5
+  - turni: la carbonara dodici virgola cinque
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Polpo alla griglia|17.5
+  - turni: il polpo diciassette e cinquanta
+  - atteso: price|Polpo alla griglia|17.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Bomba|3.5
+  - turni: la bomba tre e cinquanta
+  - atteso: price|Bomba|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tiramisù|7.9
+  - turni: il tiramisù sette euro e novanta centesimi
+  - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il tiramisù a 7 euro 90
+  - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tiramisù|7.9
+  - turni: il tiramisù 7.90
+  - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tiramisù|7.5
+  - turni: il tiramisù €7,50
+  - atteso: price|Tiramisù|7.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-020** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara 12 euro e 2 amatriciane finite
+  - atteso: available|Amatriciana|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-021** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara a 13 e 2 porzioni rimaste
+  - atteso: last|Carbonara|true, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-024** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Fritto misto|14.9, price|Supplì|3.5
+  - turni: il fritto misto a 14,90 e il supplì a 3,50
+  - atteso: price|Fritto misto|14.9, price|Supplì|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-centesimi-025** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Margherita|7.5, price|Marinara|6.5
+  - turni: la margherita a sette e cinquanta e la marinara a sei e cinquanta
+  - atteso: price|Margherita|7.5, price|Marinara|6.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-nomi-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: create|paccheri alla genovese|13|primi
+  - turni: nei primi aggiungimi i paccheri alla genovese a 13, ok?
+  - atteso: create|paccheri alla genovese|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-nomi-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: create|tagliere di salumi|15|antipasti
+  - turni: allora tipo aggiungi negli antipasti il tagliere di salumi a 15 diciamo
+  - atteso: create|tagliere di salumi|15|antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-nomi-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: create|torta caprese|6|dolci, price|Tiramisù|7
+  - turni: aggiungi nei dolci la torta caprese a 6 e già che ci sei metti il tiramisù a 7
+  - atteso: create|torta caprese|6|dolci, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-nomi-008** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|tagliatelle ai funghi porcini ok grazie ciao|14|primi · GRAVE non-applicato: non applicato: create|tagliatelle ai funghi porcini|14|primi
+  - turni: aggiungi nei primi le tagliatelle ai funghi porcini a 14 ok grazie ciao
+  - atteso: create|tagliatelle ai funghi porcini|14|primi · ottenuto: create|tagliatelle ai funghi porcini ok grazie ciao|14|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Tagliatelle ai funghi porcini ok grazie ciao* in *Primi*: *14,00 €*»
+- **adv-nomi-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|panna cotta|5|dolci
+  - turni: aggiungi un dolce ⏎ va bene ⏎ panna cotta, 5
+  - atteso: create|panna cotta|5|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. In quale categoria metto il piatto? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.» ⏎ «In quale categoria metto il piatto? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.» ⏎ «In quale categoria metto *Panna cotta*? Categorie: Antipasti, Primi, Secondi, Pizze, Dolci, Bevande.»
+- **adv-nomi-026** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|al menu la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: ciao, vorrei aggiungere al menu la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|al menu la burrata|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Al menu la burrata* in *Piatti di prova*: *9,00 €*»
+- **adv-nomi-027** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata che ne dici|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 che ne dici?
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata che ne dici|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata che ne dici* in *Piatti di prova*: *9,00 €*»
+- **adv-nomi-029** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: fammi un favore, aggiungi la burrata a 9 euro e basta
+  - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-nomi-030** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata al menu del pranzo|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 al menu del pranzo
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata al menu del pranzo|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata al menu del pranzo* in *Piatti di prova*: *9,00 €*»
+- **adv-nomi-031** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: in carta vini aggiungi il prosecco calice a 5
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: hidden|Amatriciana|true, hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ quei due nascondili
+  - atteso: hidden|Amatriciana|true, hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ l'ultimo rimettilo com'era
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ il primo mettilo in evidenza
+  - atteso: featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: featured|Gricia|true
+  - turni: metti in evidenza carbonara, gricia e amatriciana ⏎ a tutti tranne la gricia togli l'evidenza
+  - atteso: featured|Gricia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-005** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Amatriciana|true · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Carbonara|true
+  - turni: nascondi carbonara, gricia e amatriciana ⏎ rimettili tutti tranne la gricia
+  - atteso: hidden|Gricia|true · ottenuto: hidden|Amatriciana|true, hidden|Carbonara|true, hidden|Gricia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *nascosto* dal menu *Gricia*: *nascosto* dal menu *Amatriciana*: *nascosto* dal » ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-006** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ no aspetta, il prezzo di prima era giusto
+  - atteso: nessuna modifica · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13, price|Gricia|12
+  - turni: ❓ quanto costano carbonara e gricia? ⏎ alza entrambi di un euro
+  - atteso: price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-009** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|20
+  - turni: ❓ quanto costa la tagliata? ⏎ mettila a 20
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tagliata*: *18,00 €* · disponibile» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-010** [GRAVE] GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: price|Tagliata di tonno|19, price|Tagliata|19
+  - turni: ❓ quanto costa la tagliata? ⏎ ❓ e quella di tonno? ⏎ mettile tutte e due a 19
+  - atteso: price|Tagliata di tonno|19, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tagliata*: *18,00 €* · disponibile» ⏎ «*Tagliata di tonno*: *20,00 €* · disponibile» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nascondi entrambi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «entrambi».* Scrivi il nome come appare nel menu.»
+- **adv-deixis-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: quei due mettili a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «quei due».* Scrivi il nome come appare nel menu.»
+- **adv-deixis-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: mettilo a 15
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-014** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: hidden|Gricia|false, hidden|Pasta al sugo|false
+  - turni: ❓ quali piatti sono nascosti? ⏎ rimettili tutti
+  - atteso: hidden|Gricia|false, hidden|Pasta al sugo|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Piatti nascosti (2)* - Gricia - Pasta al sugo» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-015** [GRAVE] GRAVE richiesta-persa: richiesta persa: available|Carbonara|true, available|Tiramisù|true
+  - turni: ❓ cosa è finito? ⏎ sono tornati entrambi
+  - atteso: available|Carbonara|true, available|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Piatti finiti (2)* - Carbonara - Tiramisù» ⏎ «*Non trovo «entrambi».* Scrivi il nome come appare nel menu.»
+- **adv-deixis-016** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: available|Carbonara|true
+  - turni: ❓ cosa è finito? ⏎ la carbonara è tornata, l'altro no
+  - atteso: available|Carbonara|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Piatti finiti (2)* - Carbonara - Tiramisù» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-017** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE errore-generico: turno 4: errore generico · GRAVE non-applicato: non applicato: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+  - turni: carbonara 13 ⏎ gricia 12 ⏎ amatriciana 12 ⏎ il primo e l'ultimo mettili in evidenza
+  - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-020** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true
+  - turni: nascondi la pasta ⏎ tutte
+  - atteso: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Pasta al ragù* 2. *Pasta al sugo* 3. *Pasta al pesto* 4. *Pasta e ceci* Rispondi con il *numero* o il *n» ⏎ «*Osteria dei Simili*: ecco le modifiche. 1. *Pasta al ragù*: *nascosto* dal menu 2. *Pasta al sugo*: *nascosto* dal menu 3. *Pasta al pesto*: *nascosto* dal menu 4. *Pasta e ceci*: *nascosto* dal menu Hai dimenticato qua»
+- **adv-deixis-021** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Torta della nonna|7
+  - turni: la torta a 7 ⏎ quella della nonna
+  - atteso: price|Torta della nonna|7 · ottenuto: price|Torta della nonna|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*» ⏎ «*Torta della nonna*: *7,00 €* · disponibile»
+- **adv-deixis-022** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Torta della nonna|7 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|7 · GRAVE non-applicato: non applicato: price|Tortino al cioccolato|7
+  - turni: la torta a 7 ⏎ il tortino
+  - atteso: price|Tortino al cioccolato|7 · ottenuto: price|Torta della nonna|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*» ⏎ «*Tortino al cioccolato*: *7,00 €* · disponibile»
+- **adv-deixis-026** [GRAVE] GRAVE errore-generico: turno 2: errore generico · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»)
+  - turni: la carbonara è finita ⏎ anche gli altri due primi romani
+  - atteso: available|Carbonara|false · ottenuto: available|Carbonara|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *finito*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-027** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE errore-generico: turno 4: errore generico · GRAVE non-applicato: non applicato: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ gricia 12 ⏎ tutti tranne la gricia in evidenza
+  - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-028** [GRAVE] GRAVE errore-generico: turno 4: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Tiramisù|true
+  - turni: nascondi il tiramisù ⏎ e il tortino ⏎ e la torta della nonna ⏎ rimettili tutti e tre
+  - atteso: nessuna modifica · ottenuto: hidden|Tiramisù|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tiramisù*: *nascosto* dal menu» ⏎ «*Tortino al cioccolato*: *7,00 €* · disponibile» ⏎ «*Torta della nonna*: *6,00 €* · disponibile» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-029** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE richiesta-persa: richiesta persa: price|Amatriciana|14, price|Carbonara|14
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ metti quei due a 14
+  - atteso: price|Amatriciana|14, price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non trovo «quei due».* Scrivi il nome come appare nel menu.»
+- **adv-deixis-030** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Non trovo «seconda».* Scrivi il nome come appare nel menu.»)
+  - turni: la carbonara a 13 ⏎ la seconda a 12
+  - atteso: price|Carbonara|13 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non trovo «seconda».* Scrivi il nome come appare nel menu.»
+- **adv-deixis-031** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Gricia|13
+  - turni: la carbonara a 13 ⏎ e la stessa cosa per la gricia
+  - atteso: price|Carbonara|13, price|Gricia|13 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-032** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico
+  - turni: la bomba è finita ⏎ rimettila disponibile ⏎ no anzi è finita davvero
+  - atteso: available|Bomba|false · ottenuto: available|Bomba|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bomba*: *finito*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-033** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: hidden|Bombette pugliesi|true
+  - turni: nascondi la bomba ⏎ e anche quelle pugliesi
+  - atteso: hidden|Bomba|true, hidden|Bombette pugliesi|true · ottenuto: hidden|Bomba|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bomba*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-deixis-035** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Tagliata di tonno|19
+  - turni: la tagliata a 19 ⏎ quella di tonno uguale
+  - atteso: price|Tagliata di tonno|19, price|Tagliata|19 · ottenuto: price|Tagliata|19
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: prezzo da 18,00 € a *19,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13.5
+  - turni: carbonara 13, anzi no 14, anzi 13 e 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: carbonara 13 ⏎ anzi no, 14 ⏎ no scusa avevi ragione 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-003** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
+  - turni: nascondi la gricia ⏎ anzi no
+  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-008** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE modifica-sbagliata: valore sbagliato: price|Carbonara|13 · GRAVE non-applicato: non applicato: price|Carbonara|12.5, price|Gricia|13
+  - turni: la carbonara a 13 ⏎ no, 13 la gricia, la carbonara 12,50
+  - atteso: price|Carbonara|12.5, price|Gricia|13 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-010** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: featured|Tagliata di tonno|true
+  - turni: metti in evidenza la tagliata ⏎ no anzi tutte e due
+  - atteso: featured|Tagliata di tonno|true, featured|Tagliata|true · ottenuto: featured|Tagliata|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: *in evidenza*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-011** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: create|trofie|11|primi · GRAVE non-applicato: non applicato: create|trofie|12|primi
+  - turni: aggiungi nei primi le trofie a 11 ⏎ anzi 12
+  - atteso: create|trofie|12|primi · ottenuto: create|trofie|11|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Trofie* in *Primi*: *11,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-012** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: aggiungi nei primi le trofie a 11 ⏎ no scusa, si chiamano trofie al pesto
+  - atteso: create|trofie al pesto|11|primi · ottenuto: create|trofie|11|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Trofie* in *Primi*: *11,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara 13 ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-anzino-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara 13 ⏎ l'amatriciana 12 ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-anzino-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara 13 ⏎ annulla ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-anzino-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara 13 ⏎ l'amatriciana 12 ⏎ annulla ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-anzino-019** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE errore-generico: turno 4: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|15
+  - turni: carbonara 13 ⏎ no 14 ⏎ no 15 ⏎ ok così
+  - atteso: price|Carbonara|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-020** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE modifica-sbagliata: valore sbagliato: price|Tagliata|20 · GRAVE non-applicato: non applicato: featured|Tagliata|true, price|Tagliata|19
+  - turni: la tagliata a 20 ⏎ anzi no, a 19, e mettila in evidenza
+  - atteso: featured|Tagliata|true, price|Tagliata|19 · ottenuto: price|Tagliata|20
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: prezzo da 18,00 € a *20,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-021** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Carbonara|false · GRAVE non-applicato: non applicato: available|Gricia|false
+  - turni: la carbonara è finita ⏎ no scusa, è finita la gricia, la carbonara c'è
+  - atteso: available|Gricia|false · ottenuto: available|Carbonara|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *finito*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-022** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Bufala|true · GRAVE non-applicato: non applicato: featured|Bufala|true
+  - turni: nascondi la bufala ⏎ anzi no, mettila in evidenza
+  - atteso: featured|Bufala|true · ottenuto: hidden|Bufala|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-023** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Margherita|8
+  - turni: la margherita a 8 ⏎ anzi lasciala a 7
+  - atteso: nessuna modifica · ottenuto: price|Margherita|8
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Margherita*: prezzo da 7,00 € a *8,00 €*» ⏎ «*Non trovo «anzi lasciala».* Scrivi il nome come appare nel menu.»
+- **adv-anzino-024** [GRAVE] GRAVE errore-generico: turno 3: errore generico · GRAVE modifica-sbagliata: valore sbagliato: price|Marinara|7 · GRAVE non-applicato: non applicato: price|Marinara|6.5
+  - turni: la margherita a 8 ⏎ e la marinara a 7 ⏎ no, la marinara a 6,50
+  - atteso: price|Margherita|8, price|Marinara|6.5 · ottenuto: price|Margherita|8, price|Marinara|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Margherita*: prezzo da 7,00 € a *8,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Marinara*: prezzo da 6,00 € a *7,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-025** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13 · GRAVE non-applicato: non applicato: price|Gricia|13
+  - turni: la carbonara a 13 ⏎ scusa ho sbagliato piatto, era la gricia
+  - atteso: price|Gricia|13 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-026** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: available|Pollo al curry|false
+  - turni: il polpo è finito ⏎ no aspetta, è finito il pollo
+  - atteso: available|Pollo al curry|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Pollo al curry* 2. *Polpo alla griglia* Rispondi con il *numero* o il *nome*.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-028** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: price|Carbonara|14 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|13 · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 14 ⏎ torna a 13
+  - atteso: price|Carbonara|13 · ottenuto: price|Carbonara|14, price|Torta della nonna|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 13,00 € a *14,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *13,00 €*»
+- **adv-anzino-029** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Tiramisù|true · GRAVE non-applicato: non applicato: available|Tiramisù|false
+  - turni: nascondi il tiramisù ⏎ anzi no, è solo finito
+  - atteso: available|Tiramisù|false · ottenuto: hidden|Tiramisù|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tiramisù*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-anzino-030** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|12, price|Gricia|13
+  - turni: carbonara a 13 e gricia a 12 ⏎ no, al contrario
+  - atteso: price|Carbonara|12, price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: metti la carbonara a 13, e la gricia quanto la tengo?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Tagliata|false
+  - turni: la tagliata è finita, il polpo c'è ancora?
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: hidden|Bomba|true
+  - turni: nascondi la bomba. quanti piatti ho nei primi?
+  - atteso: hidden|Bomba|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara costa 12? se sì mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara costa 15? se sì mettila a 13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: featured|Tagliata|true
+  - turni: cosa ho in evidenza? metti anche la tagliata
+  - atteso: featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ la carbonara non è finita, vero?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: mi dici il prezzo della gricia e poi la metti a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Amatriciana|12
+  - turni: quanto costa la gricia? e mettimi l'amatriciana a 12
+  - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: ciao! la carbonara a 13 grazie, come va?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-013** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «ho alzato la carbonara»»
+  - turni: ❓ ho alzato la carbonara a 13?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «ho alzato la carbonara».* Scrivi il nome come appare nel menu.»
+- **adv-misti-014** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «hai messo la carbonara»»
+  - turni: ❓ hai messo la carbonara a 13?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «hai messo la carbonara».* Scrivi il nome come appare nel menu.»
+- **adv-misti-015** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «perche la carbonara e»»
+  - turni: ❓ perché la carbonara è a 12?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «perche la carbonara e».* Scrivi il nome come appare nel menu.»
+- **adv-misti-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ ma la carbonara non doveva essere a 13?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-017** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: se la carbonara costa 12 mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-018** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: se la carbonara costa 15 mettila a 13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-019** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ secondo te la carbonara a 13 va bene?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-020** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: hidden|Pasta al sugo|true
+  - turni: dimmi i prezzi dei primi e intanto nascondi la pasta al sugo
+  - atteso: hidden|Pasta al sugo|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-021** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ la gricia a 12 è troppo?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-022** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ quanto costerebbe la tagliata a 20 rispetto a quella di tonno?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-023** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «posso mettere la bomba»»
+  - turni: ❓ posso mettere la bomba a 5?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «posso mettere la bomba».* Scrivi il nome come appare nel menu.»
+- **adv-misti-024** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ si può nascondere la bomba?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-025** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «come faccio a mettere la carbonara»»
+  - turni: ❓ come faccio a mettere la carbonara a 13?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «come faccio a mettere la carbonara».* Scrivi il nome come appare nel menu.»
+- **adv-misti-026** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: ❓ cosa succede se nascondo la gricia?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-027** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 Ma il tiramisù a quanto sta adesso?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-misti-028** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 Ma la tagliata di tonno l'abbiamo ancora?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-misti-029** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
+  - turni: il polpo è finito, e la tagliata di tonno quanto costa?
+  - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti-030** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: featured|Polpo alla griglia|true · BASSO risposta-non-pertinente: risposta finale senza /gricia/i
+  - turni: metti in evidenza il polpo e dimmi cosa è finito
+  - atteso: featured|Polpo alla griglia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-asr-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 la carbonata a 13
+  - atteso: nessuna modifica · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*»
+- **adv-asr-009** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Bomba|5 · GRAVE modifica-non-richiesta: non richiesto: price|Bomba|5
+  - turni: 🎤 la bombe a 5
+  - atteso: nessuna modifica · ottenuto: price|Bomba|5
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bomba*: prezzo da 4,00 € a *5,00 €*»
+- **adv-asr-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 pasta al rago a 13
+  - atteso: price|Pasta al ragù|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 pasta al succo a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 pasta al pesce a 14
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: 🎤 pasta alla gricia a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|17
+  - turni: 🎤 il polpo a 17
+  - atteso: price|Polpo alla griglia|17 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Pollo al curry* 2. *Polpo alla griglia* Rispondi con il *numero* o il *nome*.»
+- **adv-asr-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pollo al curry|15
+  - turni: 🎤 il pollo a 15
+  - atteso: price|Pollo al curry|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Pollo al curry* 2. *Polpo alla griglia* Rispondi con il *numero* o il *nome*.»
+- **adv-asr-021** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Polpo alla griglia|15 · GRAVE modifica-non-richiesta: non richiesto: price|Polpo alla griglia|15
+  - turni: 🎤 il pollo alla griglia a 15
+  - atteso: nessuna modifica · ottenuto: price|Polpo alla griglia|15
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Polpo alla griglia*: prezzo da 16,00 € a *15,00 €*»
+- **adv-asr-022** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Pollo al curry|15 · GRAVE modifica-non-richiesta: non richiesto: price|Pollo al curry|15
+  - turni: 🎤 il polpo al curry a 15
+  - atteso: nessuna modifica · ottenuto: price|Pollo al curry|15
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Pollo al curry*: prezzo da 14,00 € a *15,00 €*»
+- **adv-asr-023** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 la tagliata di manzo a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-025** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Torta della nonna|7 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|7
+  - turni: 🎤 la torta a 7
+  - atteso: nessuna modifica · ottenuto: price|Torta della nonna|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*»
+- **adv-asr-027** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 la torta al cioccolato a 8
+  - atteso: price|Tortino al cioccolato|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-030** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Marinara|7
+  - turni: 🎤 la marinera 7
+  - atteso: price|Marinara|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-031** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 la bufalina 10
+  - atteso: price|Bufala|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-033** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Cacio e pepe|false
+  - turni: 🎤 caccio e pepe finita
+  - atteso: available|Cacio e pepe|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-035** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 le polpette al ragù a 12
+  - atteso: price|Polpette al sugo|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-041** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 la pasta e fagioli a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-042** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 il tiramisu al pistacchio a 7
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-043** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 a carbonar a tridici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-044** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Amatriciana|false
+  - turni: 🎤 'a matriciana è fernuta
+  - atteso: available|Amatriciana|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-045** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Gricia|false
+  - turni: 🎤 a gricia nun ce sta cchiù
+  - atteso: available|Gricia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-047** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 nun è fernuta a carbonara
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-048** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 a carbonara nun è cchiù fernuta
+  - atteso: available|Carbonara|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-049** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 u purpu è finutu
+  - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-asr-050** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 a bomba mettila a cinche
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-parole-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|21
+  - turni: la tagliata ventuno
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|15.9
+  - turni: la carbonara quindici e novanta
+  - atteso: price|Carbonara|15.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Margherita|7.5
+  - turni: la margherita sette e mezzo
+  - atteso: price|Margherita|7.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|16.5
+  - turni: il polpo a sedici euro e cinquanta
+  - atteso: price|Polpo alla griglia|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Pollo al curry* 2. *Polpo alla griglia* Rispondi con il *numero* o il *nome*.»
+- **adv-parole-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|24
+  - turni: la tagliata ventiquattro euro
+  - atteso: price|Tagliata|24 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Birra media|5.5
+  - turni: la birra media cinque e cinquanta
+  - atteso: price|Birra media|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Acqua|2.5
+  - turni: l'acqua due euro e cinquanta
+  - atteso: price|Acqua|2.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Gricia|11.5
+  - turni: la gricia undici e cinquanta
+  - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13.5
+  - turni: la carbonara tredici virgola cinquanta
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata di tonno|22
+  - turni: la tagliata diciotto e la tagliata di tonno ventidue
+  - atteso: price|Tagliata di tonno|22 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-017** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Cacio e pepe|9, price|Gricia|10
+  - turni: la gricia dieci e la cacio e pepe nove
+  - atteso: price|Cacio e pepe|9, price|Gricia|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-parole-022** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Bufala|10, price|Margherita|8
+  - turni: la bufala a dieci euro e la margherita a otto
+  - atteso: price|Bufala|10, price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-vocali-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 allora ehm... la carbonara, la carbonara mettila a... a tredici, sì tredici, e poi... boh... l'amatriciana lasciala com'è
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Gricia|false, price|Tiramisù|7
+  - turni: 🎤 ok allora praticamente volevo dire che la gricia è finita, eh, e niente, poi il tiramisù mettilo a sette, grazie ciao
+  - atteso: available|Gricia|false, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|17
+  - turni: 🎤 eh niente boh non so, la tagliata costa troppo, mettila a diciassette
+  - atteso: price|Tagliata|17 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bombette pugliesi|10
+  - turni: 🎤 senti una cosa, ehm, la bomba... no aspetta, le bombette, mettile a dieci euro
+  - atteso: price|Bombette pugliesi|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Cacio e pepe|false, available|Carbonara|false
+  - turni: 🎤 allora oggi abbiamo, ehm, finito la carbonara e anche, come si chiama, la cacio e pepe, poi per il resto tutto uguale
+  - atteso: available|Cacio e pepe|false, available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al ragù|12.5
+  - turni: 🎤 mettimi la... com'è... la pasta al ragù a tredici, no anzi a dodici e cinquanta
+  - atteso: price|Pasta al ragù|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|21
+  - turni: 🎤 la tagliata, quella di tonno non quella normale, a ventuno
+  - atteso: price|Tagliata di tonno|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13, price|Carbonara|13
+  - turni: 🎤 allora la carbonara a tredici e l'amatriciana pure, e la gricia invece la lasci a undici
+  - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Polpo alla griglia|false
+  - turni: 🎤 praticamente il polpo non c'è più per oggi però domani torna
+  - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine al limone|12|primi
+  - turni: 🎤 ehm aggiungi nei primi, aspetta, sì nei primi, le linguine al limone a dodici euro
+  - atteso: create|linguine al limone|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta al pesto|true
+  - turni: 🎤 allora allora allora, nascondi la pasta al pesto e... e... basta
+  - atteso: hidden|Pasta al pesto|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 boh fai tu, la carbonara mettila a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 Bo, non lo so, quanto costa la gricia?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 bo, mettilo a dieci
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
+  - turni: 🎤 non so boh, la carbonara è finita
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-017** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tiramisù|false, featured|Bomba|true, price|Carbonara|13
+  - turni: 🎤 e niente, tre cose: la carbonara a tredici, il tiramisù finito, e la bomba in evidenza
+  - atteso: available|Tiramisù|false, featured|Bomba|true, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-018** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12, price|Tagliata|20
+  - turni: 🎤 due cose veloci, la gricia a dodici e la tagliata a venti
+  - atteso: price|Gricia|12, price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-019** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Gricia|false, price|Carbonara|13
+  - turni: 🎤 allora, uno: la carbonara a tredici. due: la gricia finita. tre: niente
+  - atteso: available|Gricia|false, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-020** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 cioè tipo la carbonara la metti a tredici però solo a pranzo eh
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-021** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 ascolta, quella cosa di ieri, la tagliata, rimettila a diciotto, cioè non cambiarla, lasciala così
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-022** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
+  - turni: 🎤 aspetta che controllo... sì, la carbonara è finita, e il tiramisù... no il tiramisù c'è
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-023** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|11.5
+  - turni: 🎤 allora metti la gricia a dodici no dico a undici e cinquanta
+  - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-024** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12
+  - turni: 🎤 la carbonara la tengo a dodici, l'amatriciana invece la porto a dodici pure lei
+  - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-vocali-025** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|13
+  - turni: 🎤 mi raccomando non toccare la carbonara, solo la gricia a tredici
+  - atteso: price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-sospeso-004** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Osteria dei Simili*: ecco le modifiche. 1. *Carbonara*: *nascosto* dal menu 2. *Gricia*: *nascosto* dal menu 3. *Amatriciana*: *n» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso-006** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ sì ma anche la bomba ⏎ ok
+  - atteso: hidden|Amatriciana|true, hidden|Bomba|true, hidden|Cacio e pepe|true, hidden|Carbonara|true, hidden|Gricia|true · ottenuto: hidden|Amatriciana|true, hidden|Cacio e pepe|true, hidden|Carbonara|true, hidden|Gricia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Osteria dei Simili*: ecco le modifiche. 1. *Carbonara*: *nascosto* dal menu 2. *Gricia*: *nascosto* dal menu 3. *Amatriciana*: *n» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: *nascosto* dal menu *Gricia*: *nascosto* dal menu *Amatriciana*: *nascosto* dal menu *Cacio e pepe*: *nascosto* dal menu»
+- **adv-sospeso-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Birra piccola|4, price|Torta della nonna|7
+  - turni: la torta a 7 e la birra a 4 ⏎ la nonna e la piccola
+  - atteso: price|Birra piccola|4, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ no
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-sospeso-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Birra media|4, price|Carbonara|13, price|Torta della nonna|7
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ la nonna e la media
+  - atteso: price|Birra media|4, price|Carbonara|13, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13, price|Torta della nonna|7
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ la nonna
+  - atteso: price|Carbonara|13, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Torta della nonna*: *6,00 €* · disponibile»
+- **adv-sospeso-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la torta a 7 e la birra a 4 ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-sospeso-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: create|risotto alla zucca|14|piatto del giorno
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ la carbonara a 13 ⏎ annulla
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Annullato.* Il menu è tornato com’era prima dell’ultima modifica. *Carbonara*: com’era prima»
+- **adv-sospeso-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: oggi piatto del giorno lasagne a 12 ⏎ annulla
+  - atteso: create|lasagne|12|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-sospeso-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: create|risotto ai funghi|14|piatto del giorno
+  - turni: oggi piatto del giorno risotto ai funghi ⏎ 14
+  - atteso: create|risotto ai funghi|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE richiesta-persa: richiesta persa: create|risotto ai funghi|15|piatto del giorno
+  - turni: piatto del giorno risotto ai funghi a 14 ⏎ no a 15
+  - atteso: create|risotto ai funghi|15|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non trovo «no».* Scrivi il nome come appare nel menu.»
+- **adv-sospeso-017** [GRAVE] GRAVE errore-generico: turno 3: errore generico
+  - turni: aggiungi le trofie ⏎ la parmigiana è finita ⏎ 12
+  - atteso: available|la parmigiana|false, create|trofie|12|piatti di prova · ottenuto: available|la parmigiana|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: *finito*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso-019** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|trofie|12|piatti di prova
+  - turni: aggiungi le trofie ⏎ lascia perdere ⏎ 12
+  - atteso: nessuna modifica · ottenuto: create|trofie|12|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Trofie*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Trofie* in *Piatti di prova*: *12,00 €*»
+- **adv-sospeso-020** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: aggiungi le trofie ⏎ [+15 min] ⏎ 12
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso-024** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ annulla ⏎ annulla
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
+- **adv-sospeso-025** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ la carbonara no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Va bene, *Carbonara* resta com’è. Non ho cambiato nulla.»
+- **adv-suono-001** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: price|Carbonara|14 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|13 · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 14 ⏎ torna a 13
+  - atteso: price|Carbonara|13 · ottenuto: price|Carbonara|14, price|Torta della nonna|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 13,00 € a *14,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *13,00 €*»
+- **adv-suono-002** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Gricia|12 · GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|11
+  - turni: la gricia a 12 ⏎ torna a 11
+  - atteso: nessuna modifica · ottenuto: price|Gricia|12, price|Torta della nonna|11
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: prezzo da 11,00 € a *12,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *11,00 €*»
+- **adv-suono-004** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: la tagliata di tonno a 21 ⏎ torno a 20, scusa
+  - atteso: nessuna modifica · ottenuto: price|Tagliata di tonno|21
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata di tonno*: prezzo da 20,00 € a *21,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-suono-006** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: nascondi la carbonara ⏎ torna visibile
+  - atteso: nessuna modifica · ottenuto: hidden|Carbonara|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-suono-007** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|7
+  - turni: torna a 7
+  - atteso: nessuna modifica · ottenuto: price|Torta della nonna|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *7,00 €*»
+- **adv-suono-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: torna disponibile
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-suono-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara torna a 12
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-suono-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 grazie
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-suono-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: grazie, la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-suono-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 poi la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-suono-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 bon, la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-suono-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
+  - turni: 🎤 vabbò la carbonara è finita
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-suono-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 mo la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-suono-020** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ tornala a 12
+  - atteso: nessuna modifica · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non trovo «tornala».* Scrivi il nome come appare nel menu.»
+- **adv-suono-021** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Confermato.* Ho aggiornato il menu.
+
+*Tagliata di tonno*: prezzo da 20,00 € a *»)
+  - turni: la bufala a 10 ⏎ tonno a 9
+  - atteso: price|Bufala|10 · ottenuto: price|Bufala|10, price|Tagliata di tonno|9
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: prezzo da 9,00 € a *10,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Tagliata di tonno*: prezzo da 20,00 € a *9,00 €*»
+- **adv-suono-023** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra media|6
+  - turni: 🎤 allora birra media sei
+  - atteso: price|Birra media|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-suono-024** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Torta della nonna|7
+  - turni: 🎤 allora la torta della nonna a sette
+  - atteso: price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-suono-025** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: 🎤 tolta la carbonara
+  - atteso: hidden|Carbonara|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-code-003** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata se puoi|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 se puoi
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata se puoi|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata se puoi* in *Piatti di prova*: *9,00 €*»
+- **adv-code-004** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata dai|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 dai
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata dai|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata dai* in *Piatti di prova*: *9,00 €*»
+- **adv-code-005** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata va bene|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 va bene?
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata va bene|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata va bene* in *Piatti di prova*: *9,00 €*»
+- **adv-code-006** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata nel menu|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 nel menu
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata nel menu|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata nel menu* in *Piatti di prova*: *9,00 €*»
+- **adv-code-007** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata sul menu|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 sul menu
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata sul menu|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata sul menu* in *Piatti di prova*: *9,00 €*»
+- **adv-code-008** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata nella carta|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 nella carta
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata nella carta|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata nella carta* in *Piatti di prova*: *9,00 €*»
+- **adv-code-009** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata per stasera|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 per stasera
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata per stasera|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata per stasera* in *Piatti di prova*: *9,00 €*»
+- **adv-code-010** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata da oggi|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 da oggi
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata da oggi|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata da oggi* in *Piatti di prova*: *9,00 €*»
+- **adv-code-011** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata da domani|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 da domani
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata da domani|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata da domani* in *Piatti di prova*: *9,00 €*»
+- **adv-code-012** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata subito|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 subito
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata subito|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata subito* in *Piatti di prova*: *9,00 €*»
+- **adv-code-014** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|burrata grazie eh|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi la burrata a 9 grazie eh
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|burrata grazie eh|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Burrata grazie eh* in *Piatti di prova*: *9,00 €*»
+- **adv-code-017** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|al menu la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi al menu la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|al menu la burrata|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Al menu la burrata* in *Piatti di prova*: *9,00 €*»
+- **adv-code-019** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|sul menu la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: inserisci sul menu la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|sul menu la burrata|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Sul menu la burrata* in *Piatti di prova*: *9,00 €*»
+- **adv-code-020** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|nella lista la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi nella lista la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|nella lista la burrata|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Nella lista la burrata* in *Piatti di prova*: *9,00 €*»
+- **adv-code-021** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|in carta la burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungi in carta la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|in carta la burrata|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *In carta la burrata* in *Piatti di prova*: *9,00 €*»
+- **adv-code-022** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|al menu una burrata|9|piatti di prova · GRAVE non-applicato: non applicato: create|burrata|9|piatti di prova
+  - turni: aggiungimi al menu una burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: create|al menu una burrata|9|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Al menu una burrata* in *Piatti di prova*: *9,00 €*»
+- **adv-code-023** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: voglio mettere nel menu la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-code-025** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|linguine allo scoglio da stasera|18|primi · GRAVE non-applicato: non applicato: create|linguine allo scoglio|18|primi
+  - turni: aggiungi nei primi le linguine allo scoglio a 18 da stasera
+  - atteso: create|linguine allo scoglio|18|primi · ottenuto: create|linguine allo scoglio da stasera|18|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Linguine allo scoglio da stasera* in *Primi*: *18,00 €*»
+- **adv-code-026** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: create|linguine allo scoglio|18|primi
+  - turni: aggiungi nei primi le linguine allo scoglio a 18 e mettile in evidenza
+  - atteso: create|linguine allo scoglio|18|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-code-027** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|linguine allo scoglio solo per oggi|18|primi · GRAVE non-applicato: non applicato: create|linguine allo scoglio|18|primi
+  - turni: aggiungi nei primi le linguine allo scoglio a 18 solo per oggi
+  - atteso: create|linguine allo scoglio|18|primi · ottenuto: create|linguine allo scoglio solo per oggi|18|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Linguine allo scoglio solo per oggi* in *Primi*: *18,00 €*»
+- **adv-code-029** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|ravioli e tortellini|12|primi · GRAVE non-applicato: non applicato: create|ravioli|12|primi, create|tortellini|12|primi
+  - turni: aggiungi nei primi ravioli e tortellini a 12
+  - atteso: create|ravioli|12|primi, create|tortellini|12|primi · ottenuto: create|ravioli e tortellini|12|primi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Ravioli e tortellini* in *Primi*: *12,00 €*»
+- **adv-code-030** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|crostata e cheesecake|5|dolci · GRAVE non-applicato: non applicato: create|cheesecake|5|dolci, create|crostata|5|dolci
+  - turni: aggiungi nei dolci crostata e cheesecake a 5
+  - atteso: create|cheesecake|5|dolci, create|crostata|5|dolci · ottenuto: create|crostata e cheesecake|5|dolci
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Crostata e cheesecake* in *Dolci*: *5,00 €*»
+- **adv-relativi-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: alza la gricia di 1 euro
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|16
+  - turni: abbassa la tagliata di 2
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: sconta la tagliata di 2 euro
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-004** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Tagliata|true · GRAVE non-applicato: non applicato: price|Tagliata|16
+  - turni: togli 2 euro alla tagliata
+  - atteso: price|Tagliata|16 · ottenuto: hidden|Tagliata|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: *nascosto* dal menu»
+- **adv-relativi-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: metti 1 euro in più sulla gricia
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la gricia +1
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la tagliata -2
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: aumenta di 1 euro la carbonara e la gricia
+  - atteso: price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: aumenta la gricia di 50 centesimi
+  - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la gricia 50 centesimi in più
+  - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tiramisù|5
+  - turni: abbassa il tiramisù di un euro
+  - atteso: price|Tiramisù|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: alza la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|11
+  - turni: abbassa la carbonara a 11
+  - atteso: price|Carbonara|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-015** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: alza la carbonara a 11
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-016** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la gricia come la carbonara più 1
+  - atteso: price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-017** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: ❓ quanto costa la gricia? ⏎ alzala di 1
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Gricia*: *11,00 €* · disponibile» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-018** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: la gricia a 12 ⏎ alzala ancora di 1
+  - atteso: price|Gricia|13 · ottenuto: price|Gricia|12
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: prezzo da 11,00 € a *12,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-019** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|15
+  - turni: ❓ quanto costa la tagliata? ⏎ abbassala di 3
+  - atteso: price|Tagliata|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tagliata*: *18,00 €* · disponibile» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-relativi-020** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Polpo alla griglia|18
+  - turni: aumenta il polpo di due euro
+  - atteso: price|Polpo alla griglia|18 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Gricia|11.9
+  - turni: la gricia undici e novanta
+  - atteso: price|Gricia|11.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Polpo alla griglia|17.8
+  - turni: il polpo diciassette e ottanta
+  - atteso: price|Polpo alla griglia|17.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Tagliata|19.5
+  - turni: la tagliata diciannove e cinquanta
+  - atteso: price|Tagliata|19.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13.9
+  - turni: la carbonara 13 e 90
+  - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13.9
+  - turni: la carbonara tredici e novanta
+  - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13.9
+  - turni: la carbonara tredici virgola novanta
+  - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13.5
+  - turni: la carbonara 13 virgola 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara 13 euro 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara a 13 euro 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il supplì 3 euro 20
+  - atteso: price|Supplì|3.2 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Birra media|5.5
+  - turni: la birra media cinque euro e cinquanta centesimi
+  - atteso: price|Birra media|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-cent2-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|4.8
+  - turni: 🎤 la bomba quattro e ottanta
+  - atteso: price|Bomba|4.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-cent2-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|16.9
+  - turni: 🎤 il polpo sedici e novanta
+  - atteso: price|Polpo alla griglia|16.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-cent2-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|7.5
+  - turni: 🎤 la margherita sette euro e cinquanta
+  - atteso: price|Margherita|7.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non riesco ad ascoltare il vocale.* Puoi mandarlo di nuovo o scrivere la richiesta?»
+- **adv-misti2-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: la carbonara a 13, e la gricia quanto costa?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-002** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «carbonara a 13 la gricia»» · GRAVE richiesta-persa: richiesta persa: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: la carbonara a 13. la gricia quanto costa?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «carbonara a 13 la gricia».* Scrivi il nome come appare nel menu.»
+- **adv-misti2-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: metti la carbonara a 13 e poi dimmi quanto costa la gricia
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: hidden|Bomba|true
+  - turni: nascondi la bomba, quanti piatti ho nei primi?
+  - atteso: hidden|Bomba|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Tagliata|false
+  - turni: la tagliata è finita. il polpo c'è ancora?
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Tagliata|false
+  - turni: la tagliata è finita, ma il polpo c'è?
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: buongiorno! la carbonara a 13 grazie
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13, come va?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Carbonara|false
+  - turni: ciao come stai? la carbonara è finita
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13, ok?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara a 13 va bene?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-012** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la carbonara a 13, si può fare?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: metti la carbonara a 13, poi ti chiedo una cosa
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-misti2-014** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «polpo e finito la tagliata di tonno»» · GRAVE richiesta-persa: richiesta persa: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
+  - turni: il polpo è finito. la tagliata di tonno quanto costa?
+  - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «polpo e finito la tagliata di tonno».* Scrivi il nome come appare nel menu.»
+- **adv-misti2-015** [GRAVE] GRAVE fatto-falso: turno 1: dice fatto ma non ha scritto nulla («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE frase-come-piatto: turno 1: «Non trovo «ho messo la carbonara»»
+  - turni: ❓ ho messo la carbonara a 13 o no?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «ho messo la carbonara».* Scrivi il nome come appare nel menu.»
+- **adv-misti2-016** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «chi ha messo la carbonara»»
+  - turni: ❓ chi ha messo la carbonara a 12?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «chi ha messo la carbonara».* Scrivi il nome come appare nel menu.»
+- **adv-misti2-017** [GRAVE] GRAVE fatto-falso: turno 1: dice fatto ma non ha scritto nulla («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE frase-come-piatto: turno 1: «Non trovo «quando ho messo la gricia»»
+  - turni: ❓ quando ho messo la gricia a 11?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «quando ho messo la gricia».* Scrivi il nome come appare nel menu.»
+- **adv-misti2-018** [GRAVE] GRAVE frase-come-piatto: turno 1: «Non trovo «perche hai messo la bomba»»
+  - turni: ❓ perché hai messo la bomba a 4?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non trovo «perche hai messo la bomba».* Scrivi il nome come appare nel menu.»
+- **adv-ordinali-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: featured|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ l'ultimo mettilo in evidenza
+  - atteso: featured|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-ordinali-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE errore-generico: turno 4: errore generico · GRAVE non-applicato: non applicato: hidden|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ gricia 12 ⏎ il secondo nascondilo
+  - atteso: hidden|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-ordinali-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE errore-generico: turno 2: errore generico · GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ il primo nascondilo
+  - atteso: hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-ordinali-004** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Bomba|true · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Polpo alla griglia|true
+  - turni: nascondi la bomba ⏎ metti in evidenza il polpo ⏎ il primo rimettilo
+  - atteso: featured|Polpo alla griglia|true · ottenuto: hidden|Bomba|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bomba*: *nascosto* dal menu» ⏎ «Quale piatto intendi? 1. *Pollo al curry* 2. *Polpo alla griglia* Rispondi con il *numero* o il *nome*.» ⏎ «Rispondi con il *numero* o il *nome* del piatto. Non ho cambiato nulla.»
+- **adv-ordinali-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Bufala|false
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo è finito
+  - atteso: available|Bufala|false, price|Bufala|10, price|Marinara|7 · ottenuto: price|Bufala|10, price|Marinara|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: prezzo da 9,00 € a *10,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Marinara*: prezzo da 6,00 € a *7,00 €*» ⏎ «Quale piatto intendi? 1. *Carbonara* 2. *Amatriciana* 3. *Gricia* 4. *Cacio e pepe* 5. *Pasta al ragù* 6. *Pasta al sugo* 7. *Pasta al pesto* 8. *Pasta e ceci* Rispondi con il *numero* o il *nome*.»
+- **adv-ordinali-006** [GRAVE] GRAVE richiesta-persa: richiesta persa: available|Marinara|false
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ l'ultimo è finito
+  - atteso: available|Marinara|false, price|Bufala|10, price|Marinara|7 · ottenuto: price|Bufala|10, price|Marinara|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: prezzo da 9,00 € a *10,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Marinara*: prezzo da 6,00 € a *7,00 €*» ⏎ «*Non trovo «ultimo».* Scrivi il nome come appare nel menu.»
+- **adv-ordinali-007** [GRAVE] GRAVE errore-generico: turno 3: errore generico · GRAVE non-applicato: non applicato: featured|Bufala|true, featured|Marinara|true
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ tutti e due in evidenza
+  - atteso: featured|Bufala|true, featured|Marinara|true, price|Bufala|10, price|Marinara|7 · ottenuto: price|Bufala|10, price|Marinara|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: prezzo da 9,00 € a *10,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Marinara*: prezzo da 6,00 € a *7,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-ordinali-008** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Bufala|10 · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bufala|11
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo a 11
+  - atteso: price|Bufala|11, price|Marinara|7 · ottenuto: price|Bufala|10, price|Marinara|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Bufala*: prezzo da 9,00 € a *10,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Marinara*: prezzo da 6,00 € a *7,00 €*» ⏎ «Quale piatto intendi? 1. *Carbonara* 2. *Amatriciana* 3. *Gricia* 4. *Cacio e pepe* 5. *Pasta al ragù* 6. *Pasta al sugo* 7. *Pasta al pesto* 8. *Pasta e ceci* Rispondi con il *numero* o il *nome*.»
+- **adv-sospeso2-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ sì
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-sospeso2-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: lasagne al forno a 12 ⏎ sì
+  - atteso: create|lasagne al forno|12|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-sospeso2-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: oggi piatto del giorno trippa a 13 ⏎ sì
+  - atteso: create|trippa|13|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-sospeso2-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: pollo alle mandorle a 15 ⏎ sì
+  - atteso: create|pollo alle mandorle|15|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-sospeso2-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: gricia ai carciofi a 13 ⏎ sì
+  - atteso: create|gricia ai carciofi|13|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-sospeso2-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ sì
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-sospeso2-007** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ la bomba è finita
+  - atteso: available|Bomba|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Osteria dei Simili*: ecco le modifiche. 1. *Carbonara*: *nascosto* dal menu 2. *Gricia*: *nascosto* dal menu 3. *Amatriciana*: *n» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso2-008** [GRAVE] GRAVE errore-generico: turno 2: errore generico
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ anzi no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Osteria dei Simili*: ecco le modifiche. 1. *Carbonara*: *nascosto* dal menu 2. *Gricia*: *nascosto* dal menu 3. *Amatriciana*: *n» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso2-009** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
+  - turni: nascondi la gricia ⏎ anzi no, lasciala
+  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso2-010** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
+  - turni: nascondi la gricia ⏎ no anzi no
+  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: *nascosto* dal menu» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso2-011** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ anzi no
+  - atteso: nessuna modifica · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso2-012** [GRAVE] GRAVE errore-generico: turno 2: errore generico · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Carbonara|false
+  - turni: la carbonara è finita ⏎ anzi no
+  - atteso: nessuna modifica · ottenuto: available|Carbonara|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *finito*» ⏎ «*Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-sospeso2-014** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|niente lascia stare|11|piatti di prova · GRAVE non-applicato: non applicato: price|la parmigiana|11
+  - turni: aggiungi le trofie ⏎ no niente, lascia stare ⏎ la parmigiana a 11
+  - atteso: price|la parmigiana|11 · ottenuto: create|niente lascia stare|11|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Niente lascia stare*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Niente lascia stare* in *Piatti di prova*: *11,00 €*»
+- **adv-lev1-001** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: price|Torta della nonna|9
+  - turni: torna a 9
+  - atteso: nessuna modifica · ottenuto: price|Torta della nonna|9
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Torta della nonna*: prezzo da 6,00 € a *9,00 €*»
+- **adv-lev1-002** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Carbonara|13 · GRAVE richiesta-persa: richiesta persa: price|Carbonara|14
+  - turni: la carbonara a 13 ⏎ portala a 14
+  - atteso: price|Carbonara|14 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Non trovo «portala».* Scrivi il nome come appare nel menu.»
+- **adv-lev1-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il pollo arrosto a 15
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il pollo fritto è finito
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il polpo al forno a 17
+  - atteso: price|Polpo alla griglia|17 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la torta di mele a 6
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la torta al limone è finita
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la bomba alla crema a 3
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la tagliata di pollo è finita
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la pasta al forno a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-011** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: la birra grande a 6
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-013** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: tolta la gricia
+  - atteso: hidden|Gricia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lev1-014** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: available|Torta della nonna|false, available|Tortino al cioccolato|false
+  - turni: torta della nonna e tortino finiti
+  - atteso: available|Torta della nonna|false, available|Tortino al cioccolato|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-lasciastare-001** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|niente lascia stare|11|piatti di prova · GRAVE non-applicato: non applicato: price|la parmigiana|11
+  - turni: aggiungi le trofie ⏎ no niente, lascia stare ⏎ la parmigiana a 11
+  - atteso: price|la parmigiana|11 · ottenuto: create|niente lascia stare|11|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Niente lascia stare*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Niente lascia stare* in *Piatti di prova*: *11,00 €*»
+- **adv-lasciastare-002** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|trofie|7|piatti di prova · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - turni: aggiungi le trofie ⏎ niente, lascia perdere ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: create|trofie|7|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Trofie*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Trofie* in *Piatti di prova*: *7,00 €*»
+- **adv-lasciastare-006** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: create|non fa niente|7|piatti di prova · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - turni: aggiungi le trofie ⏎ no, non fa niente ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: create|non fa niente|7|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Trofie*?» ⏎ «Quanto costa *Non fa niente*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Non fa niente* in *Piatti di prova*: *7,00 €*»
+- **adv-ipotesi-001** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: zuppa di farro a 9 ⏎ sì
+  - atteso: create|zuppa di farro|9|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-002** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: oggi come piatto del giorno polpette di melanzane a 10 ⏎ sì
+  - atteso: create|polpette di melanzane|10|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-003** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: risotto agli asparagi a 15 ⏎ sì
+  - atteso: create|risotto agli asparagi|15|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: fuori menu oggi risotto alla zucca a 14 ⏎ sì
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-005** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: metti come piatto del giorno il risotto a 14 ⏎ sì
+  - atteso: create|risotto|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ sì
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ sì
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-ipotesi-008** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: il piatto nuovo di oggi è il risotto alla zucca a 14 ⏎ sì
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
+- **adv-toglieuro-001** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Carbonara|true · GRAVE non-applicato: non applicato: price|Carbonara|11
+  - turni: togli 1 euro alla carbonara
+  - atteso: price|Carbonara|11 · ottenuto: hidden|Carbonara|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: *nascosto* dal menu»
+- **adv-toglieuro-002** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Tiramisù|true · GRAVE non-applicato: non applicato: price|Tiramisù|5
+  - turni: togli un euro al tiramisù
+  - atteso: price|Tiramisù|5 · ottenuto: hidden|Tiramisù|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tiramisù*: *nascosto* dal menu»
+- **adv-toglieuro-003** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: hidden|Tagliata|true · GRAVE non-applicato: non applicato: price|Tagliata|16
+  - turni: leva 2 euro alla tagliata
+  - atteso: price|Tagliata|16 · ottenuto: hidden|Tagliata|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: *nascosto* dal menu»
+- **adv-toglieuro-004** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: togli 50 centesimi alla bomba
+  - atteso: price|Bomba|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-toglieuro-006** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: featured|Bufala|false
+  - turni: togli l'evidenza alla bufala
+  - atteso: featured|Bufala|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-toglieuro-007** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: promo|Tagliata|null
+  - turni: togli lo sconto dalla tagliata
+  - atteso: promo|Tagliata|null · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-toglieuro-009** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: alla carbonara togli 2 euro
+  - atteso: price|Carbonara|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
+- **adv-toglieuro-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico
+  - turni: togli 2 euro a tutte le pizze
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho cambiato nulla.* C’è stato un problema. Riprova tra poco.»
