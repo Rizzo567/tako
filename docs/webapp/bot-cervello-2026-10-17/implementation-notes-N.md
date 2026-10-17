@@ -1,0 +1,14 @@
+# implementation-notes-N (fase 1, 17/10/2026)
+
+Deviazioni dal piano/prompt, tutte nell'opzione conservativa.
+
+1. **Client Groq duplicato in `owner-brain-plan.ts` (`callBrain`)**. `groqJson`/`withRateLimit` di `twilio-menu-ai.ts` non sono esportati e il file è di Q fino al merge. Ho riscritto la stessa politica (429 → modello di riserva o attesa entro budget; errore → modello successivo) riusando gli export (`chatModels`, `groqBase`, `retryAfterMs`, `parseJson`, `GroqOptions.meter`). Dopo il merge di Q: esportare `withRateLimit` e far usare quello a `callBrain` (stessa firma).
+2. **Formato azioni**: lo schema strict usa il vocabolario attuale (`set_price`, `set_available`…) con campi piatti e `null`, poi il server lo converte e lo passa a `validateMenuPlan` (nessuna regola riscritta). Campi nuovi solo `price_ref` («stesso prezzo di X», risolto dal server) e `price_delta` («aumenta di N», trasformato in prezzo assoluto e riverificato dal G9).
+3. **Guardia nuova «piatto ambiguo»** (`rivalDishes`): nello spike, con gpt-oss-20b di riserva (120b in 429 per TPM), «quanto costa la tagliata?» è diventata una lettura della sola Tagliata di manzo. Il G9 attuale non lo blocca (la parola «tagliata» è nel nome). Ora se un altro piatto spiega le parole del messaggio almeno quanto quello scelto → chiarimento. Batteria avversaria 310 frasi in `tests/owner-brain-battery.test.ts`.
+4. **Negazioni in coda** (`trailingNegations`): «la amatriciana costa 9, la carbonara lascia stare» non è coperta da `negatedClauses` (file di Q). Aggiunta solo come esclusione nel cervello; da proporre a Q/fase 2 per il percorso deterministico.
+5. **Stima token tarata**: 2,7 caratteri/token + 300 token fissi per lo schema strict (misurati: stima 3.131 vs reale 3.127; 6.050 vs 6.285 sul menu grande).
+6. **Compressione livello 3** per i menu grandi (piatti con la stessa parola iniziale in una riga). Guadagno solo ~18%: un menu da 324 piatti resta ~6,3k token di prompt. I nomi restano tutti ricostruibili (test).
+7. **Imparare «la solita»**: il segnale forte (risposta a un chiarimento) richiede la frase del messaggio che aveva causato il dubbio. Aggiunto `pending.clarify.source` nel contesto e `alias_used` accettato anche se la frase è in quel messaggio.
+8. **Adattatore banco E**: `CONTRATTO.md` non esiste ancora; i tipi di E (`tests/eval/types.ts`) sì. `brainBotUnderTest` ne segue la forma (BotUnderTest/BotRun/TurnResult) senza importare dal worktree di E. La strada definitiva consigliata da E è il route vero con `settings.botBrain=true` + tabelle emulate: possibile solo dopo l'integrazione (fase 2).
+9. **Nessuna `groq-key-test.txt`**: giro reale con la chiave del bot, 23.263 token (tetto 25k).
+10. Test di suite esistenti che importano il route (`twilio-menu-sales.test.ts`) falliscono anche sulla base in questo worktree: manca `@tako/db` nei node_modules del worktree (ambiente, non codice).
