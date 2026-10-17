@@ -10,7 +10,7 @@ import type {Change,Conversation} from '../types.js'
 const GENERIC=new Set(['alla','allo','alle','della','dello','delle','con','pasta','pizza','piatto','casa'])
 const stems=(name:string)=>plainT(name).split(' ').filter(w=>w.length>3&&!GENERIC.has(w))
 const skel=(w:string)=>w.replace(/[aeiou]/g,'')
-const wordHit=(w:string,msg:string[])=>msg.some(m=>m===w||(m.length>=4&&w.length>=4&&m.slice(0,5)===w.slice(0,5))||(skel(m).length>=3&&skel(m)===skel(w)))
+const wordHit=(w:string,msg:string[])=>msg.some(m=>m===w||(m.length>=6&&w.length>=6?m.slice(0,6)===w.slice(0,6):m.length>=4&&w.length>=4&&m.slice(0,5)===w.slice(0,5))||(skel(m).length>=3&&skel(m)===skel(w)))
 const hitStems=(name:string,msg:string)=>{const m=plainT(msg).split(' ');return stems(name).filter(w=>wordHit(w,m))}
 const rivals=(dish:string,msg:string,names:string[])=>{const hit=hitStems(dish,msg),all=stems(dish);if(!hit.length||hit.length===all.length)return[];return names.filter(n=>n!==dish&&hit.every(w=>stems(n).some(x=>wordHit(w,[x])))&&hitStems(n,msg).length<=hit.length)}
 
@@ -21,7 +21,7 @@ function catalog(card:string):Cat{const code=new Map<string,string>(),price=new 
  return{code,price,sections,sectionOf}}
 
 const blank={action:'set_price',item:null,section:null,price:null,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:null,until:null}
-const out=(o:any)=>JSON.stringify({intent:'change',read:'none',item_refs:[],capability_ids:[],clarify:{question:null,item_refs:[],missing:[]},alias_used:[],reply_draft:'',...o,actions:(o.actions??[]).map((a:any)=>({...blank,...a}))})
+const out=(o:any)=>JSON.stringify({intent:'change',read:'none',item_refs:[],capability_ids:[],clarify:{question:null,item_refs:[],missing:[]},uncertain:[],alias_used:[],reply_draft:'',...o,actions:(o.actions??[]).map((a:any)=>({...blank,...a}))})
 const QUESTION=/\?|^(?:quanto|quanti|cosa|che|quali|qual|com e|ce |c e )\b/
 const SAME=/\b(ugual\w*|stess[oa]|idem|anche|pure|come)\b/
 const CORRECT=/\b(no|scusa|intendevo|volevo|sbagliato|anzi|era|invece|ho detto)\b/
@@ -83,11 +83,14 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // Creazioni come currentOracle.
  const creates=expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!))
  if(creates.length&&/aggiung|inserisc|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}});return out({actions:creates.map(c=>act(c,cat,null,null))})}
- const ctxDish=lastOwnerDishes.find(n=>expected.some(c=>c.op!=='create'&&c.dish===n))??lastOwnerDishes[0]
+ const botLabel=[...bot.matchAll(/\*([^*\n]{2,80})\*\s*:/g)].map(m=>m[1]!).find(n=>cat.code.has(n))
+ const ctxDish=botLabel&&!/\?/.test(bot)?botLabel:lastOwnerDishes.find(n=>expected.some(c=>c.op!=='create'&&c.dish===n))??lastOwnerDishes[0]
  const actions:any[]=[]
  // Correzione verso un altro piatto: «no, intendevo l'amatriciana» → rimetti il piatto di prima + stessa azione sul nuovo.
  if(CORRECT.test(p)&&relevantHere.length&&ctxDish&&!here.includes(ctxDish)&&!conv.changes.some(c=>c.op!=='create'&&c.dish===ctxDish))actions.push({action:'restore',item:cat.code.get(ctxDish)})
- for(const n of relevantHere){for(const e of expected.filter(c=>c.op!=='create'&&c.dish===n)){const price=e.op==='price'?(said.find(x=>x===(e as any).price)??said[0]??(CORRECT.test(p)||/\b(lui|lei|pure|anche)\b/.test(p)?ownSaid.at(-1)??null:null)):null
+ // «torna come prima la lasagna», «rimetti la carbonara com'era»: ripristino del piatto nominato.
+ const back=/\b(torna\w* come prima|com era|come prima|com eri)\b/.test(p)?here:[];for(const n of back)actions.push({action:'restore',item:cat.code.get(n)})
+ if(!back.length)for(const n of relevantHere){for(const e of expected.filter(c=>c.op!=='create'&&c.dish===n)){const price=e.op==='price'?(said.find(x=>x===(e as any).price)??said[0]??(CORRECT.test(p)&&!SAME.test(p)?ownSaid[0]??null:null)):null
    const ref=e.op==='price'&&price===null&&SAME.test(p)&&ctxDish&&ctxDish!==n?cat.code.get(ctxDish)!:null
    if(e.op==='price'&&price===null&&!ref)continue
    if(e.op==='price'&&price!==null&&!said.includes(price)&&!ownSaid.includes(price))continue
@@ -97,4 +100,10 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   if(/\b(rimett\w*|com era|come prima|annull\w*|torna\w*)\b/.test(p)&&!e.some(c=>conv.changes.includes(c)))actions.push({action:'restore',item:cat.code.get(ctxDish)})
   else if(said.length)actions.push({action:'set_price',item:cat.code.get(ctxDish),price:said[0]})
   else{const fin=conv.changes.find(c=>c.op!=='create'&&c.dish===ctxDish);if(fin&&fin.op!=='price'){const a=act(fin,cat,null,null);if(a)actions.push(a)}}}
- return actions.length?out({actions}):out({intent:'clarify'})}
+ // Richiesta multipla con piatti ambigui accanto a parti chiare: le chiare in actions, ogni ambigua in uncertain.
+ const residual=here.reduce((t,h)=>plainT(t).replace(plainT(h),' '),msg)
+ const uncertain:any[]=[];if(actions.length){const seen=new Set<string>(here);for(const n of amb){if(seen.has(n)||!hitStems(n,residual).length)continue;const pool=[n,...rivalsOf(n,msg)];pool.forEach(x=>seen.add(x))
+   const e=expected.find(c=>c.op!=='create'&&pool.includes(c.dish)),phrase=msg.split(/,|\se\s/).find(x=>hitStems(n,x).length>0)?.trim()??n
+   const a=e?act(e,cat,e.op==='price'?(e as any).price:null,null):null
+   uncertain.push({phrase,candidates:pool.map(x=>cat.code.get(x)),action:a?.action??'none',value:a&&'value' in a?a.value:null,price:a&&typeof a.price==='number'?a.price:null})}}
+ return actions.length?out({actions,uncertain}):out({intent:'clarify'})}

@@ -12,12 +12,19 @@
  */
 import type {MenuRef,SectionRef,MenuAction} from './twilio-menu-ai.js'
 import {describeAction,safe,euro as euroText} from './twilio-menu-ai.js'
-import {plainText,findDishes,parseIntent,removeVerbRe,wordNumber} from './twilio-menu-nlu.js'
+import {plainText,findDishes,parseIntent,removeVerbRe,wordNumber,resolveChoice,words,preselect} from './twilio-menu-nlu.js'
+import {allOptions} from './twilio-menu-clarify.js'
 import {startsWithCreate,createCompound,parseCreate} from './twilio-menu-create.js'
 import {copy,fill} from './twilio-menu-copy.js'
 
+// 17/10 sera (Manuel): con DUE O PIÙ parti incerte le parti chiare restano in sospeso e per OGNI parte incerta c'è una domanda,
+// tutte in un solo messaggio: ipotesi quando c'è («intendi togliere boh?», «quale supplì?»), altrimenti «"xyz" non l'ho capito».
+// Le risposte completano ciascuna parte; «no» pubblica le parti chiare, «annulla» niente.
 export type HoldAsk={type:'remove',id:string,word:string}|{type:'price',name:string,sectionId:string}
-export type Hold={kind:'hold',actions:MenuAction[],ask:HoldAsk,notes?:string[]}
+ |{type:'choose',word:string,options:string[],template:any}|{type:'confirm',word:string,action:MenuAction}|{type:'unknown',word:string}
+export type Hold={kind:'hold',actions:MenuAction[],ask?:HoldAsk,asks?:HoldAsk[],notes?:string[]}
+export const holdAsks=(h:Hold):HoldAsk[]=>h.asks?.length?h.asks:h.ask?[h.ask]:[]
+const multiHold=(h:Hold)=>!h.ask||holdAsks(h).length>1||holdAsks(h).some(a=>a.type==='choose'||a.type==='confirm'||a.type==='unknown')
 
 const holdFold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
 const holdFlat=(s:string)=>holdFold(s).replace(/[^a-z0-9]+/g,' ').trim()
@@ -67,9 +74,18 @@ function splitParts(text:string,refs:MenuRef[]):string[]{
  * Aggiunta con un comando chiaro dentro («aggiungi … la parmigiana a 10 e togli boh») → `actions`. null = flusso di sempre. */
 export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]):HoldStart|null{
  if(text.length>600)return null
- const clear:MenuAction[]=[],exists:MenuRef[]=[];let ask:HoldAsk|null=null,uncertain=0,commands=0
+ const clear:MenuAction[]=[],exists:MenuRef[]=[],asks:HoldAsk[]=[];let ask:HoldAsk|null=null,uncertain=0,commands=0,unclear=0
  let holdNotes:string[]=[]
- const guessAsk=(p:string,g:MenuRef):HoldAsk=>({type:'remove',id:g.id,word:p.replace(/^(?:e|ed|poi)\s+/i,'').replace(/[.!?]+$/,'').trim()})
+ const guessAsk=(p:string,g:MenuRef):HoldAsk=>{const a:HoldAsk={type:'remove',id:g.id,word:p.replace(/^(?:e|ed|poi)\s+/i,'').replace(/[.!?]+$/,'').trim()};asks.push(a);return a}
+ const word=(p:string)=>p.replace(/^(?:e|ed|poi|e poi)\s+/i,'').replace(/[.!?]+$/,'').trim().slice(0,60)
+ // Parte incerta di tipo nuovo (solo con almeno due parti incerte): piatto ambiguo con un comando chiaro → scelta;
+ // nessun piatto riconoscibile → «non l'ho capito». Un piatto riconosciuto con un comando che non so leggere resta all'IA.
+ const unclearPart=(p:string):boolean=>{const i=parseIntent(p);if(i&&'target' in i&&i.kind!=='ask'&&!/\b(promo\w*|offert\w*|evidenza|porzion\w*|rest\w*|riman\w*|esclus\w*|tranne|eccetto|del giorno)\b/.test(holdFlat(p))){const hits=findDishes(i.target,refs);if(hits.length>1){const {target:_t,kind,...rest}=i as any;asks.push({type:'choose',word:word(p),options:hits.slice(0,8).map(h=>h.id),template:kind==='price'?{kind:'price',price:(i as any).price}:kind==='description'?{kind:'description',text:(i as any).text}:kind==='tag'?{kind:'tag',tag:(i as any).tag,value:true}:{kind,value:(rest as any).value}});unclear++;return true}}
+  // «non l'ho capito» solo per parti davvero incomprensibili: niente piatti (anche parziali), niente numeri, niente parole del
+  // servizio (promo, evidenza, porzioni, resta, finito, escluso…): quelle restano al flusso di prima, che le sa leggere.
+  const f=holdFlat(p);if(findDishes(p,refs).length||preselect(p,refs,1).length||words(p).length===0||/\d/.test(f)||f.split(' ').some(w=>wordNumber(w)!==null)
+   ||/\b(promo\w*|offert\w*|scont\w*|evidenza|porzion\w*|rest\w*|riman\w*|finit\w*|esaurit\w*|esclus\w*|tranne|eccetto|happy|hour|ore|giorn\w*|oggi|domani|sera|pranzo|cena|menu|piatt\w*|prezz\w*|euro|cost\w*|metti\w*|togli\w*|nascond\w*|aggiung\w*|cambi\w*|ultim\w*|disponibil\w*|tutt\w*|non|no|ma|pero|cosi|anche|pure)\b/.test(f))return false
+  asks.push({type:'unknown',word:word(p)});unclear++;return true}
  if(startsWithCreate(text)){
   // Aggiunta di più piatti: «aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo».
   const body0=text.replace(holdCreateVerb,''),cut=holdCutSection(body0,sections),sectionId=cut?.sectionId??(sections.length===1?sections[0]!.id:null);if(!sectionId)return null
@@ -81,10 +97,10 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
   if(parts.length<2)return null
   for(const p of parts){const change=command(p);if(change){clear.push(change);commands++;continue}
    const guess=removalGuess(p,refs);if(guess){uncertain++;ask=guessAsk(p,guess);continue}
-   const c=parseCreate(p,sections,false);if(!c||!c.name||/\b(?:euro|costa|costano|aggiung\w*|togli\w*|nascond\w*|finit\w*|esaurit\w*)\b/i.test(c.name)||c.name.length>80)return null
+   const c=parseCreate(p,sections,false);if(!c||!c.name||/\b(?:euro|costa|costano|aggiung\w*|togli\w*|nascond\w*|finit\w*|esaurit\w*)\b/i.test(c.name)||c.name.length>80){if(unclearPart(p))continue;return null}
    // Il piatto c'è già in quella categoria (QA 17/10: «la parmigiana» aggiunta da un vocale precedente): non si raddoppia, lo si dice.
    const name=c.name,twin=refs.find(r=>r.sectionId===sectionId&&holdBare(r.name)===holdBare(name));if(twin){exists.push(twin);continue}
-   if(c.price===null){uncertain++;ask={type:'price',name,sectionId};continue}
+   if(c.price===null){uncertain++;ask={type:'price',name,sectionId};asks.push(ask);continue}
    clear.push({kind:'create',sectionId,name,price:c.price,description:null})}
   // Tutto chiaro: con un comando dentro l'aggiunta si applica qui (prima il nome diventava «Parmigiana e togli boh»),
   // altrimenti resta al flusso di sempre.
@@ -101,10 +117,16 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
    // «togli boh e che ne sacc»: un nome da solo dopo un «togli» eredita il verbo.
    const prev=clear.at(-1),hits=prev&&prev.kind==='hidden'&&prev.value&&!/\d|\b(?:costa\w*|prezzo|euro|finit\w*|esaurit\w*|promo\w*|evidenza|metti\w*)\b/i.test(holdFlat(p))?findDishes(p,refs):[];if(hits.length===1){clear.push({kind:'hidden',id:hits[0]!.id,value:true});continue}
    const guess=removalGuess(p,refs);if(guess){uncertain++;ask=guessAsk(p,guess);continue}
+   if(unclearPart(p))continue
    return null}
  }
  // Tutto chiaro su piatti esistenti con un «togli» dentro («togli boh e il piatto di verifica costa 14»): si applica qui, senza IA.
- if(!uncertain&&!startsWithCreate(text))return clear.length>1&&clear.some(a=>a.kind==='hidden'&&a.value)&&new Set(clear.map(a=>'id' in a?a.id:'')).size===clear.length?{actions:clear}:null
+ if(!uncertain&&!unclear&&!startsWithCreate(text))return clear.length>1&&clear.some(a=>a.kind==='hidden'&&a.value)&&new Set(clear.map(a=>'id' in a?a.id:'')).size===clear.length?{actions:clear}:null
+ // Due o più parti incerte (anche di tipi diversi): una domanda per ciascuna, tutte nello stesso messaggio.
+ if(uncertain+unclear>=2){if(new Set(asks.flatMap(a=>a.type==='remove'?[a.id]:[])).size!==asks.filter(a=>a.type==='remove').length)return null
+  if(asks.some(a=>a.type==='remove'&&clear.some(c=>'id' in c&&c.id===a.id)))return null
+  const hold:Hold={kind:'hold',actions:clear,asks,...(holdNotes.length?{notes:holdNotes}:{})};return{hold,text:holdQuestion(hold,refs,sections)}}
+ if(unclear)return null
  if(uncertain!==1||!ask)return null
  if(!clear.length&&ask.type!=='remove')return null
  // Il piatto da togliere non deve essere già toccato da una parte chiara.
@@ -113,21 +135,70 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
  return{hold,text:holdQuestion(hold,refs,sections)}
 }
 export function holdQuestion(hold:Hold,refs:MenuRef[],sections:SectionRef[]):string{
+ if(multiHold(hold))return holdQuestionMulti(hold,refs,sections)
+ if(!hold.ask)return ''
  const head=(hold.actions.length?fill(copy.holdHead,{righe:hold.actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,sections)).join('\n')})+'\n\n':'')+(hold.notes?.length?hold.notes.join('\n')+'\n\n':'')
  if(hold.ask.type==='remove'){const r=refs.find(x=>x.id===(hold.ask as any).id);return head+fill(copy.holdRemove,{parola:safe(hold.ask.word).slice(0,40),piatto:safe(r?.name??'?')})}
- return head+fill(copy.holdPrice,{piatto:safe(hold.ask.name)})}
+ return head+fill(copy.holdPrice,{piatto:safe((hold.ask as any).name)})}
 
-export type HoldAnswer={actions:MenuAction[],note?:string,rest?:string}|'cancel'|null
+function holdQuestionMulti(hold:Hold,refs:MenuRef[],sections:SectionRef[]):string{
+ const name=(id:string)=>safe(refs.find(r=>r.id===id)?.name??'?'),asks=holdAsks(hold)
+ const head=(hold.actions.length?fill(copy.holdHead,{righe:hold.actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,sections)).join('\n')})+'\n\n':'')+(hold.notes?.length?hold.notes.join('\n')+'\n\n':'')
+ const lines=asks.map((a,i)=>{const n=asks.length>1?`${String.fromCharCode(65+i)}) `:''
+  switch(a.type){case 'remove':return n+fill(copy.holdAskRemove,{parola:safe(a.word).slice(0,40),piatto:name(a.id)})
+   case 'price':return n+fill(copy.holdAskPrice,{piatto:safe(a.name)})
+   case 'choose':return n+fill(copy.holdAskChoose,{parola:safe(a.word).slice(0,40),opzioni:a.options.map((id,j)=>`${j+1}. *${name(id)}*`).join(' · ')})
+   case 'confirm':return n+fill(copy.holdAskConfirm,{parola:safe(a.word).slice(0,40),cosa:describeAction(a.action,refs,sections).replace(/\*/g,'')})
+   case 'unknown':return n+fill(copy.holdAskUnknown,{parola:safe(a.word).slice(0,40)})}})
+ return head+lines.join('\n')+'\n\n'+copy.holdAskFooter}
+
+/** Risposta a una richiesta con più parti incerte: ogni pezzo della risposta completa la domanda a cui si adatta.
+ * Restano `remaining` le domande senza risposta (il bot le ripete). null = non è una risposta. */
+function holdAnswerMulti(text:string,hold:Hold,refs:MenuRef[]):HoldAnswer{
+ const t=holdFlat(text).replace(/\b(?:per favore|grazie mille|grazie)\b/g,' ').replace(/\s+/g,' ').trim();if(!t)return null
+ if(holdCancelWords.test(t))return 'cancel'
+ const asks=holdAsks(hold),open=asks.map(()=>true),got:MenuAction[]=[],dropped:string[]=[],byId=(id:string)=>refs.find(r=>r.id===id)
+ const label=(a:HoldAsk)=>a.type==='remove'?safe(byId(a.id)?.name??a.word):a.type==='price'?safe(a.name):safe(a.word)
+ const close=(i:number,acts:MenuAction[]|null)=>{open[i]=false;if(acts)got.push(...acts);else dropped.push(label(asks[i]!))}
+ // «no» da solo: pubblica le parti chiare (Manuel 17/10); «sì» da solo: accetta le ipotesi (togliere X, conferme).
+ if(no.test(t)){asks.forEach((_a,i)=>close(i,null));return{actions:[...hold.actions],note:fill(copy.holdNotTouched,{piatto:dropped.join(', ')})}}
+ if(yes.test(t)){let any=false;asks.forEach((a,i)=>{if(a.type==='remove'){close(i,[{kind:'hidden',id:a.id,value:true}]);any=true}else if(a.type==='confirm'){close(i,[a.action]);any=true}});if(!any)return null}
+ else{
+  const pieces=splitParts(text,refs).map(x=>x.trim()).filter(Boolean)
+  // Risposte in ordine con le lettere: «A sì, B la seconda, C niente».
+  for(const raw of pieces){let p=raw,forced=-1;const L=holdFlat(p).match(/^([a-e])\b\s*[).:,-]?\s*(.*)$/);if(L&&asks.length>1&&L[1]!.charCodeAt(0)-97<asks.length){forced=L[1]!.charCodeAt(0)-97;p=raw.replace(/^\s*[A-Ea-e]\b\s*[).:,-]?\s*/,'')||'si'}
+   const f=holdFlat(p),lead=f.replace(/^(?:(?:no|scusa|anzi|si|ok|allora|intendevo|volevo dire|ho detto|era|cioe|esatto)\s+)+/,'').trim()
+   const fits=(a:HoldAsk):MenuAction[]|null|false=>{
+    if(a.type==='remove'||a.type==='confirm'){if(yes.test(f))return a.type==='remove'?[{kind:'hidden',id:a.id,value:true}]:[a.action];if(no.test(f))return null
+     if(a.type==='remove'){const i=parseIntent(lead||f);const hit=i&&i.kind==='hidden'&&i.value?findDishes(i.target,refs).find(h=>h.id===a.id):removalGuess(lead||f,refs)?.id===a.id?byId(a.id):null;if(hit)return[{kind:'hidden',id:a.id,value:true}]}
+     return false}
+    if(a.type==='price'){const m=f.replace(/(\d) (\d{1,2})$/,'$1.$2').match(/^(?:(?:si|ok|costa|fa|a|al|prezzo|mettilo a|mettila a|sono)\s+)*(\d+(?:[.,]\d{1,2})?|[a-z]+)(?:\s+(?:euro|eur|euri))?$/);if(m){const v=/^\d/.test(m[1]!)?Number(m[1]!.replace(',','.')):wordNumber(m[1]!);if(v!==null&&v>0&&v<=500)return[{kind:'create',sectionId:a.sectionId,name:a.name,price:Math.round(v*100)/100,description:null}]}if(no.test(f))return null;return false}
+    if(a.type==='choose'){const opts=a.options.map(byId).filter((r):r is MenuRef=>!!r);if(allOptions(p,opts.length))return opts.map(r=>({...a.template,id:r.id}) as MenuAction)
+     const ord=f.match(/\b(?:(?:la|il|lo|l)\s+)?(prim[oa]|second[oa]|terz[oa]|quart[oa]|[1-8])\b/);if(ord){const k=/^\d$/.test(ord[1]!)?Number(ord[1])-1:['prim','second','terz','quart'].findIndex(x=>ord[1]!.startsWith(x));if(opts[k])return[{...a.template,id:opts[k]!.id}]}
+     const r=resolveChoice(p,opts);if(r)return[{...a.template,id:r.id}];if(no.test(f)||/^(?:niente|nessuno|lascia stare)$/.test(f))return null;return false}
+    // unknown: la risposta è il comando chiaro che intendeva («la panna cotta è finita»), oppure niente.
+    const c=clearChanges(p,refs);if(c)return c;if(no.test(f)||/^(?:niente|nulla|lascia stare|lascia perdere|niente di che)$/.test(f))return null;return false}
+   const order=forced>=0?[forced]:asks.map((_a,i)=>i).filter(i=>open[i])
+   for(const i of order){if(!open[i])continue;const r=fits(asks[i]!);if(r===false)continue;close(i,r);break}}
+ }
+ if(open.every(o=>o))return null
+ const remaining=asks.filter((_a,i)=>open[i])
+ return{actions:[...hold.actions,...got],...(dropped.length?{note:fill(copy.holdNotTouched,{piatto:dropped.join(', ')})}:{}),...(remaining.length?{remaining}:{})}
+}
+
+export type HoldAnswer={actions:MenuAction[],note?:string,rest?:string,remaining?:HoldAsk[]}|'cancel'|null
 const yes=/^(?:(?:si|sii|esatto|giusto|certo|certamente|ok|okay|confermo|conferma|va bene|proprio|appunto|perfetto|bravo|quello|quella|esattamente|sicuro|dai|vai|procedi|pubblica)\s*)+(?:(?:toglil[oa]|leval[oa]|nascondil[oa]|grazie|proprio|quello|quella|quello li|pure|tutto)\s*)*$/
 const no=/^(?:no|nono|no no|no grazie|non toglierl[oa]|non lo togliere|non la togliere|lascial[oa](?: stare| perdere| com e)?|no lascial[oa](?: stare)?|no lascia stare|no non toglierl[oa]|no quello no|no resta|resta|no non quello|(?:no )?non (?:l[oaie] |l )?(?:aggiunger\w*|metter\w*|toglier\w*|toccar\w*|inserir\w*|cambiar\w*)(?: (?:quello|quella|pure|piu|niente|nulla|ancora))?|(?:no )?non (?:aggiungerl|metterl|toglierl|toccarl|inserirl)[oaie]|(?:no )?non serve|(?:no )?lascia perdere (?:quello|quella|quest\w+))$/
 const holdCancelWords=/^(?:annulla(?: tutto)?|lascia (?:stare|perdere)(?: tutto)?|non fare niente|niente|lascia perdere tutto|stop|annulla annulla)$/
 /** Risposta alla domanda della proposta `hold`. null = non è una risposta (comando nuovo o altro). */
 export function holdAnswer(text:string,hold:Hold,refs:MenuRef[]):HoldAnswer{
+ if(multiHold(hold))return holdAnswerMulti(text,hold,refs)
+ if(!hold.ask)return null
  const t=holdFlat(text).replace(/\b(?:per favore|grazie mille|grazie)\b/g,' ').replace(/\s+/g,' ').trim();if(!t)return null
  if(holdCancelWords.test(t))return 'cancel'
  const lead=t.replace(/^(?:(?:no|scusa|anzi|si|ok|allora|intendevo|volevo dire|dicevo|ho detto|era|cioe|esatto)\s+)+/,'').trim()
  // «no, togli bo», «sì togli boh», «togli il boh», «toglibo»: il verbo di rimozione su un piatto esistente.
- const removal=():MenuRef|null=>{if(!lead)return null;const i=parseIntent(lead);if(i&&i.kind==='hidden'&&i.value){const hits=findDishes(i.target,refs);if(hits.length===1)return hits[0]!;if(hits.length>1&&hold.ask.type==='remove'){const want=(hold.ask as any).id;return hits.find(h=>h.id===want)??null}}
+ const removal=():MenuRef|null=>{if(!lead)return null;const i=parseIntent(lead);if(i&&i.kind==='hidden'&&i.value){const hits=findDishes(i.target,refs);if(hits.length===1)return hits[0]!;if(hits.length>1&&hold.ask?.type==='remove'){const want=(hold.ask as any).id;return hits.find(h=>h.id===want)??null}}
   return removalGuess(lead,refs)}
  const asked=hold.ask.type==='remove'?refs.find(r=>r.id===(hold.ask as any).id)??null:null
  if(hold.ask.type==='remove'){if(!asked)return null

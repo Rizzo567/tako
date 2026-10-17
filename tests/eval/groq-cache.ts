@@ -17,18 +17,23 @@ const realDay=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Rome'}).form
 
 export function requestHash(path:string,body:any){const b={path,model:body?.model,messages:body?.messages,response_format:body?.response_format,temperature:body?.temperature,reasoning_effort:body?.reasoning_effort,max_completion_tokens:body?.max_completion_tokens};return createHash('sha256').update(JSON.stringify(b)).digest('hex').slice(0,32)}
 
-function keyFile(){const env=process.env.TAKO_EVAL_GROQ_KEY_FILE,dir=join(homedir(),'.config/tako-webapp'),test=join(dir,'groq-key-test.txt')
- const file=env||(existsSync(test)?test:join(dir,'groq-key.txt'));if(/traduzioni/i.test(file))throw new Error('La chiave traduzioni non si usa mai per i test')
- return{file,kind:file.endsWith('groq-key-test.txt')?'test':'bot'}}
+// Chiavi (17/10 sera, Manuel): prima groq-key-test.txt, al 429/quota groq-key-test-2.txt (account separati, ≤150k token/giorno
+// ciascuna). La chiave del bot solo se non esiste nessuna chiave di test. Mai stampate né scritte.
+function keyFiles():{file:string,kind:string}[]{const env=process.env.TAKO_EVAL_GROQ_KEY_FILE,dir=join(homedir(),'.config/tako-webapp')
+ const list=env?[env]:[join(dir,'groq-key-test.txt'),join(dir,'groq-key-test-2.txt')].filter(f=>existsSync(f));const files=list.length?list:[join(dir,'groq-key.txt')]
+ for(const f of files)if(/traduzioni/i.test(f))throw new Error('La chiave traduzioni non si usa mai per i test')
+ return files.map(f=>({file:f,kind:f.endsWith('groq-key-test.txt')?'test':f.endsWith('groq-key-test-2.txt')?'test-2':'bot'}))}
 
 export function createGroq(opts:{mode?:GroqMode,cacheDir:string,ledgerFile:string,maxTokens?:number,realFetch:typeof fetch,oracle?:(conv:any,body:any)=>string|null}){
  const mode:GroqMode=opts.mode??((process.env.TAKO_EVAL_GROQ as GroqMode)||'replay'),maxTokens=opts.maxTokens??Number(process.env.TAKO_EVAL_GROQ_MAX_TOKENS||20000)
  const stats:GroqStats={calls:0,hits:0,misses:0,recorded:0,tokens:0,recordedMs:0,refused:0,rateLimited:0,oracle:0}
  mkdirSync(opts.cacheDir,{recursive:true})
- let conv='',convObj:any=null,stopped=false,lastReal=0,key:string|null=null,kind=''
+ let conv='',convObj:any=null,stopped=false,lastReal=0,key:string|null=null,kind='',keyIndex=0
+ const perKey=Number(process.env.TAKO_EVAL_GROQ_MAX_TOKENS_PER_KEY||150000)
  const readLedger=():Ledger=>{try{return JSON.parse(readFileSync(opts.ledgerFile,'utf8'))}catch{return{days:{}}}}
  const spentToday=()=>readLedger().days[realDay()]?.tokens??0
- const charge=(tokens:number)=>{const l=readLedger(),d=realDay(),row=l.days[d]??{tokens:0,calls:0,key:kind};row.tokens+=tokens;row.calls++;row.key=kind;l.days[d]=row;writeFileSync(opts.ledgerFile,JSON.stringify(l,null,1)+'\n')}
+ const spentKey=(k:string)=>(readLedger().days[realDay()+'|'+k]?.tokens??0)
+ const charge=(tokens:number)=>{const l=readLedger(),d=realDay(),row=l.days[d]??{tokens:0,calls:0,key:kind};row.tokens+=tokens;row.calls++;row.key=kind;l.days[d]=row;const kr=l.days[d+'|'+kind]??{tokens:0,calls:0,key:kind};kr.tokens+=tokens;kr.calls++;l.days[d+'|'+kind]=kr;writeFileSync(opts.ledgerFile,JSON.stringify(l,null,1)+'\n')}
  const unavailable=()=>new Response(JSON.stringify({error:{message:'eval: Groq non disponibile (off/miss)'}}),{status:503,headers:{'Content-Type':'application/json'}})
  const ok=(e:Entry)=>new Response(JSON.stringify(e.body),{status:200,headers:{'Content-Type':'application/json'}})
  async function handle(url:string,init:any):Promise<{response:Response,hit:boolean,miss:boolean,tokens:number,ms:number}>{
@@ -38,9 +43,14 @@ export function createGroq(opts:{mode?:GroqMode,cacheDir:string,ledgerFile:strin
   // Senza cache: in replay/off è come Groq giù. In record si chiama davvero solo se resta tetto (stima prudente prima della chiamata).
   const estimate=Math.ceil(JSON.stringify(body.messages??'').length/3)+1200
   if(mode!=='record'||stopped||spentToday()+estimate>maxTokens){stats.misses++;if(mode==='record')stats.refused++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms:0}}
-  if(key===null){const k=keyFile();kind=k.kind;key=readFileSync(k.file,'utf8').trim()}
-  const t0=realNow();lastReal=t0;const res=await opts.realFetch(url,{...init,headers:{...(init?.headers??{}),Authorization:'Bearer '+key}}),ms=Math.round(realNow()-t0)
-  if(res.status===429){stats.rateLimited++;stopped=true;stats.misses++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms}}
+  const files=keyFiles()
+  const pick=()=>{while(keyIndex<files.length&&spentKey(files[keyIndex]!.kind)+estimate>perKey)keyIndex++;if(keyIndex>=files.length)return false;kind=files[keyIndex]!.kind;key=readFileSync(files[keyIndex]!.file,'utf8').trim();return true}
+  if(!pick()){stats.misses++;stats.refused++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms:0}}
+  let t0=realNow();lastReal=t0;let res=await opts.realFetch(url,{...init,headers:{...(init?.headers??{}),Authorization:'Bearer '+key}}),ms=Math.round(realNow()-t0)
+  // 429 (minuto o giorno) → chiave successiva, una volta; finite le chiavi ci si ferma.
+  if(res.status===429){stats.rateLimited++;await res.body?.cancel();keyIndex++;if(!pick()){stopped=true;stats.misses++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms}}
+   t0=realNow();lastReal=t0;res=await opts.realFetch(url,{...init,headers:{...(init?.headers??{}),Authorization:'Bearer '+key}});ms=Math.round(realNow()-t0)
+   if(res.status===429){stats.rateLimited++;stopped=true;stats.misses++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms}}}
   const data=await res.json().catch(()=>null),usage={prompt_tokens:Number(data?.usage?.prompt_tokens)||0,completion_tokens:Number(data?.usage?.completion_tokens)||0,total_tokens:Number(data?.usage?.total_tokens)||0}
   if(!usage.total_tokens)usage.total_tokens=usage.prompt_tokens+usage.completion_tokens
   charge(usage.total_tokens);stats.tokens+=usage.total_tokens;stats.calls++

@@ -190,6 +190,6 @@ function bulkTurn(intent: SalesIntent, workspace: Doc, refs: MenuRef[], today: s
     return true }
   if (!collect(intent)) return { reply: fill(copy.notFoundNamed, { nome: (intent as { target?: string }).target ?? '' }) }
   if (unclear) return { reply: salesCopy.untilUnclear }
-  if (!out.length) return { reply: 'Non ci sono etichette, promo o ultime porzioni da togliere: il menu è *già aggiornato* così.' }
+  if (!out.length) return { reply: 'Non ci sono etichette, promo o ultime porzioni da togliere: il menu è *già così*. Non ho cambiato nulla.' }
   return { actions: out }
 }

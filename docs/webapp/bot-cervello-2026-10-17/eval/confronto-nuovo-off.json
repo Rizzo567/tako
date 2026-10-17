@@ -1,0 +1,93 @@
+{
+ "goal": {
+  "graviSicurezza": true,
+  "medi2pct": false,
+  "multiTurnoPiu10": false
+ },
+ "attuale": {
+  "family": "TOTALE",
+  "n": 318,
+  "ok": 164,
+  "success": 164,
+  "grave": 150,
+  "medio": 4,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 24.3,
+  "unexpectedClar": 73,
+  "usedLlm": 142,
+  "llmMissConvs": 142,
+  "detN": 176,
+  "detSuccess": 164
+ },
+ "nuovo": {
+  "family": "TOTALE",
+  "n": 318,
+  "ok": 180,
+  "success": 180,
+  "grave": 132,
+  "medio": 6,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 23.8,
+  "unexpectedClar": 69,
+  "usedLlm": 217,
+  "llmMissConvs": 217,
+  "detN": 101,
+  "detSuccess": 94
+ },
+ "multiAttuale": {
+  "family": "multi-turno",
+  "n": 207,
+  "ok": 105,
+  "success": 105,
+  "grave": 99,
+  "medio": 3,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 19.5,
+  "unexpectedClar": 42,
+  "usedLlm": 92,
+  "llmMissConvs": 92,
+  "detN": 115,
+  "detSuccess": 105
+ },
+ "multiNuovo": {
+  "family": "multi-turno",
+  "n": 207,
+  "ok": 118,
+  "success": 118,
+  "grave": 86,
+  "medio": 3,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 19,
+  "unexpectedClar": 39,
+  "usedLlm": 163,
+  "llmMissConvs": 163,
+  "detN": 44,
+  "detSuccess": 41
+ },
+ "migliorate": [
+  "ripristino-001",
+  "ripristino-002",
+  "ripristino-003",
+  "ripristino-004",
+  "ripristino-008",
+  "ripristino-016",
+  "ripristino-017",
+  "ripristino-020",
+  "ripristino-021",
+  "scaduto-003",
+  "scaduto-013",
+  "togli-007",
+  "togli-009",
+  "togli-014",
+  "manuel-001",
+  "manuel-002",
+  "manuel-003"
+ ],
+ "peggiorate": [
+  "batterie-035"
+ ]
+}

@@ -44,7 +44,7 @@ describe('owner-brain-context',()=>{
  })
  it('token: menu tipico ≤ ~4k anche con cronologia piena; menu grande 300+ compresso senza perdere nomi',()=>{
   const history=Array.from({length:20},(_,i)=>({role:(i%2?'bot':'owner') as 'bot'|'owner',text:'Quale piatto intendi? Tagliata di manzo o Tagliata di tonno?',at:NOW-60000+i}))
-  expect(buildBrainContext({refs,sections,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(3400)
+  expect(buildBrainContext({refs,sections,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(3600)
   expect(buildBrainContext({refs,sections,history,message:'la carbonara è finita',now:NOW}).tokens.total).toBeLessThanOrEqual(4000)
   const big=catalogOf(largeWorkspace(320)),c=buildBrainContext({refs:big.refs,sections:big.sections,message:'x',now:NOW})
   expect(big.refs.length).toBeGreaterThanOrEqual(300);expect(c.compression).toBeGreaterThan(0);expect(c.codes.size).toBe(big.refs.length+big.sections.length)

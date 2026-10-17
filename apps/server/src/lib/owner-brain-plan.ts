@@ -10,13 +10,14 @@ import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,de
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand} from './twilio-menu-nlu.js'
 import {capabilities} from './twilio-menu-copy.js'
+import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
 import {buildBrainContext,recentHistory,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
 export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
- required:['intent','actions','read','item_refs','capability_ids','clarify','alias_used','reply_draft'],
+ required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
  properties:{
   intent:{type:'string',enum:['change','read','clarify','capability','chat']},
   actions:{type:'array',items:{type:'object',additionalProperties:false,required:['action','item','section','price','price_ref','price_delta','value','tag','text','name','until'],properties:{
@@ -25,6 +26,7 @@ export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'obj
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>a!=='restore'&&a!=='create_item'&&a!=='create_daily_special')]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 
@@ -50,8 +52,8 @@ export async function callBrain(ctx:BrainContext,key:string,opts:BrainCallOption
  catch(error){if(error instanceof GroqBusy)throw new BrainUnavailable('busy');throw new BrainUnavailable(timedOut?'timeout':lastStatus===400||lastStatus===-1?'invalid_json':'http',String(lastStatus))}
 }
 
-export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,restorable?:Map<string,MenuAction[]>}
-export type BrainDecision={path:'brain',intent:'change'|'read'|'clarify'|'capability'|'chat',plan:MenuPlan,exclude:Excluded[],aliasesUsed:{phrase:string,itemId:string}[],replyDraft:string,notes:string[],usage:BrainUsage,tokens:BrainContext['tokens']}
+export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,restorable?:Map<string,MenuAction[]>,exclude?:Excluded[]}
+export type BrainDecision={path:'brain',intent:'change'|'read'|'clarify'|'capability'|'chat',plan:MenuPlan,hold?:Hold,exclude:Excluded[],aliasesUsed:{phrase:string,itemId:string}[],replyDraft:string,notes:string[],usage:BrainUsage,tokens:BrainContext['tokens']}
 export type BrainFallback={path:'fallback',reason:string,usage?:BrainUsage,tokens?:BrainContext['tokens']}
 
 const SAME_PRICE=/\b(stess[oa]|stesso costo|come (?:il|la|lo|l|i|le|gli)\b|ugual\w*|identic[oa]|pari|idem|allineal\w*|allinea\w*|anche|pure)\b/
@@ -105,7 +107,7 @@ function legacyAction(a:any,map:(v:unknown)=>string|null):any{
 
 /** Validatore del cervello. Riusa le regole attuali e aggiunge: riferimenti di prezzo risolti dal menu vero, domande = zero
  * scritture, memoria attiva come «piatto nominato» (trustedIds), alias riportati solo verso piatti esistenti. */
-export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
+export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[]}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections,message}=input,byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
  const map=(v:unknown)=>typeof v==='string'?ctx.codes.get(v.trim().toLowerCase())??null:null
  const empty={type:'clarify',ids:[]} as MenuPlan
@@ -121,7 +123,7 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
  const trusted=new Set((input.memory??[]).filter(m=>m.state==='active'&&m.itemId&&byId.has(m.itemId)&&mentionedPhrase(m.phrase)).map(m=>m.itemId!))
  const trustedHas=(id:string)=>trusted.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
- const neg=negatedClauses(message,refs),exclude:Excluded[]=neg?.excluded??[]
+ const neg=negatedClauses(message,refs),exclude:Excluded[]=[...(neg?.excluded??[]),...(input.exclude??[]).filter(e=>!neg?.excluded.some(x=>x.id===e.id))]
  // Domande → zero scritture, qualunque cosa dica il modello («la carbonara 13 o 14?», «quanto costa la carbonara?»).
  const question=(looksLikeQuestion(message)&&!politeCommand(message))||!!priceAlternatives(message,refs)
  if(intent==='chat')return{intent,plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:reply,notes}
@@ -141,6 +143,18 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
  // change
  const actions=Array.isArray(data.actions)?data.actions.slice(0,201):[]
  if(question){const ids=refIds([...actions.map((a:any)=>a?.item),...(Array.isArray(data.item_refs)?data.item_refs:[])]);notes.push('domanda_zero_scritture');return{intent:'read',plan:ids.length?{type:'read',read:'items',ids:ids.slice(0,10)}:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes}}
+ // Parti incerte (Manuel 17/10 sera): le parti chiare restano in sospeso e per ogni parte incerta c'è una domanda.
+ const unc=(Array.isArray(data.uncertain)?data.uncertain:[]).filter((u:any)=>u&&typeof u.phrase==='string'&&u.phrase.trim()&&inText(plain(u.phrase),msg)).slice(0,6)
+ const asks:HoldAsk[]=[],candCovered:string[]=[]
+ const clearIds=new Set(actions.map((a:any)=>map(a?.item)).filter(Boolean) as string[]),negIds=new Set(exclude.map(e=>e.id))
+ for(const u of unc){const all=refIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
+  // Candidati già toccati da una parte chiara o negati: quell'ambiguità non c'è più (resta solo se rimangono ≥2 piatti o nessuno era indicato).
+  if(all.length&&cands.length<(all.length>=2?2:1))continue
+  candCovered.push(...cands);const word=String(u.phrase).trim().slice(0,60)
+  const tmpl=(id:string):MenuAction|null=>{if(u.action==='none')return null;const v=validateMenuPlan({intent:'change',actions:[legacyAction({...u,item:'x',price:u.price},x=>x==='x'?id:map(x))]},refs,{sections,message,exclude,trustedIds:new Set([id]),checkCompleteness:false});return v.type==='change'&&v.actions.length===1?v.actions[0]!:null}
+  if(cands.length>=2){const a=tmpl(cands[0]!);if(a){const {id:_i,...template}=a as any;asks.push({type:'choose',word,options:cands,template});continue}}
+  if(cands.length===1){const a=tmpl(cands[0]!);if(a){asks.push({type:'confirm',word,action:a});continue}}
+  asks.push({type:'unknown',word})}
  // Contesto (fase 2): un messaggio che rimanda a prima («mettila a 13», «e la gricia uguale», «no scusa 14», «sì la seconda»)
  // può riferirsi a piatti nominati nella cronologia (ultimi messaggi del titolare + ultima risposta del bot) e a prezzi detti
  // DAL TITOLARE nella cronologia. Mai prezzi presi dalle risposte del bot; mai creazioni dal contesto.
@@ -150,6 +164,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // Una domanda del bot vale 10 minuti (come le proposte in sospeso): dopo, la risposta breve non la completa più.
  const ctxOK=!hasCreate&&history.length>0&&!staleQuestion&&(REFERS.test(msg)||msg.split(' ').length<=4)
  const dishText=ctxOK?[message,...owners,lastBotText].join(' \n '):message,priceText=ctxOK?[message,...owners].join(' \n '):message
+ const botLabels=[...lastBotText.matchAll(/\*([^*\n]{2,80})\*\s*:/g)].map(m=>plain(m[1]!))
  const mentioned=(id:string)=>trusted.has(id)||g9DishMentioned(byId.get(id)!.name,dishText,refs)
  // Prezzo ricavato: «aumenta di 1» (delta sul prezzo attuale) e «stesso prezzo di X» (valore riletto dal menu).
  const explicit=new Map<string,number>();for(const a of actions)if(a?.action==='set_price'&&typeof a.price==='number'){const id=map(a.item);if(id)explicit.set(id,a.price)}
@@ -159,10 +174,17 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   const id=map(a.item)
   if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back});continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if(!dir.test(msg))return no('delta_senza_verbo',[id]);legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
-  if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref);if(!id||!refId||!byId.has(id)||!byId.has(refId)||refId===id||!SAME_PRICE.test(msg)||!mentioned(refId))return no('riferimento_prezzo_non_valido',[id,refId])
+  if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref)
+   // Il piatto di riferimento è nominato in questo messaggio, oppure è proprio quello dell'ultima risposta del bot («*Carbonara*: …»).
+   const labelled=refId?botLabels.includes(plain(byId.get(refId)?.name??'')):false
+   if(!id||!refId||!byId.has(id)||!byId.has(refId)||refId===id||!SAME_PRICE.test(msg)||!(g9DishMentioned(byId.get(refId)!.name,message,refs)||trusted.has(refId)||(ctxOK&&labelled)))return no('riferimento_prezzo_non_valido',[id,refId])
    derived.push({id,actions:[{kind:'price',id,price:explicit.get(refId)??byId.get(refId)!.price}],refId});continue}
   legacy.push(legacyAction(a,map))}
- const opts={sections,message,exclude,trustedIds:trusted.size?trusted:undefined}
+ const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size?trusted:undefined}
+ const withHold=(d:Omit<BrainDecision,'path'|'usage'|'tokens'>):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(!asks.length)return d
+  if(d.plan.type!=='change'&&!(d.plan.type==='clarify'&&!d.plan.ids.length))return d
+  const clear=d.plan.type==='change'?d.plan.actions:[];if(asks.length<2&&!clear.length)return d
+  return{...d,intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:clear,asks},notes:[...d.notes,'parti_incerte']}}
  const guard=(plan:MenuPlan):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(plan.type!=='change')return{intent:'clarify',plan,exclude,aliasesUsed,replyDraft:'',notes}
   const ids=[...new Set(plan.actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))],rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
   if(rivals.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...ids,...rivals])].slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
@@ -173,27 +195,35 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
   if(ctxOK){const prevOwner=owners.at(-1)??'',pd=refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)).map(r=>r.id),bd=refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).map(r=>r.id)
    const bare=ids.filter(id=>!trustedHas(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)&&!derived.some(d=>d.refId===id))
-   const bad=bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg)))
+   // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
+   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length
+   const bad=bare.filter(id=>!(pd.includes(id)||bd.includes(id))||(pd.length>1&&!bd.includes(id)&&!ORDINAL.test(msg))||priceBare(id))
    if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...pd,...bad])].filter(id=>byId.has(id)).slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'rimando_incerto']}}
   // Scelta aperta tra più piatti: «sì», «ok», «vai» non scelgono. Serve il nome, un ordinale o «tutti e due».
   const open=(input.clarifyIds??[]).filter(id=>byId.has(id))
   if(open.length>1&&ids.some(id=>open.includes(id))&&!ids.every(id=>!open.includes(id)||trustedHas(id)||g9DishMentioned(byId.get(id)!.name,message,refs))&&!ORDINAL.test(msg))return{intent:'clarify',plan:{type:'clarify',ids:open.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'scelta_non_detta']}
   return{intent:'change',plan,exclude,aliasesUsed,replyDraft:'',notes}}
- if(!derived.length&&!ctxOK)return guard(input.pendingActions?.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,checkCompleteness:false}):validateMenuPlan({intent:'change',actions:legacy},refs,opts))
  // Con contesto o azioni derivate: le azioni «normali» passano dal validatore attuale sul testo con il contesto; i prezzi devono
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
  const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
- if(ctxOK){const said=g9Prices(priceText);for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)&&!said.includes(Math.round((a.price as number)*100)/100))return no('prezzo_non_detto',[a.id])}
+ if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
+  // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio
+  // precedente («e la gricia uguale» = stesso prezzo della carbonara appena cambiata), mai un numero sparso («sei e cinquanta» → 50).
+  const ctxPrices=new Set(refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)||g9DishMentioned(r.name,lastBotText,refs)).map(r=>Math.round(r.price*100)/100))
+  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!(said.includes(v)&&ctxPrices.has(v)))return no('prezzo_non_detto',[a.id])}}
  const out:MenuAction[]=[...base.actions]
  for(const d of derived){if(!mentioned(d.id))return no('piatto_non_nominato',[d.id])
   for(const x of d.actions){if(out.some(a=>'id' in a&&a.id===d.id&&a.kind===x.kind))return no('azione_doppia',[d.id]);out.push(x)}
   notes.push(d.refId?'prezzo_da_riferimento':'ripristino')}
  const covered=new Set([...out.flatMap(a=>'id' in a?[a.id]:[]),...derived.flatMap(d=>d.refId?[d.refId,d.id]:[d.id]),...exclude.map(e=>e.id)]),padded=' '+msg+' '
- const missed=refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1)
+ // Completezza (come il validatore attuale): un piatto nominato per intero e non toccato rende la richiesta incompleta. Non conta
+ // il nome contenuto nel nome di un piatto toccato («caffè» dentro «caffè macchiato»). Con un riepilogo in sospeso non si controlla.
+ const touched=refs.filter(r=>covered.has(r.id)&&padded.includes(' '+plain(r.name)+' ')).map(r=>' '+plain(r.name)+' ')
+ const missed=input.pendingActions?.length?[]:refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1&&!touched.some(t=>t!==' '+plain(r.name)+' '&&t.includes(' '+plain(r.name)+' ')))
  if(missed.length)return{intent:'clarify',plan:{type:'clarify',ids:missed.map(r=>r.id).slice(0,5),actions:out},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_nominato_senza_azione']}
- if(!out.length)return no('nessuna_azione')
- return guard({type:'change',actions:out})
+ if(!out.length)return asks.length>=2?withHold({intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes}):no('nessuna_azione')
+ return withHold(guard({type:'change',actions:out}))
 }
 
 /** Pianifica un messaggio del titolare: contesto → una chiamata → validatore. Mai eccezioni verso il route: o una decisione, o la riserva. */
@@ -204,7 +234,7 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCal
  let call:BrainCall
  try{call=await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'RAW '+call.content+'\n')).catch(()=>{})
- const decision=validateBrainPlan(call.content,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source,clarifyIds:input.pending?.clarify?.itemIds,history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now})
+ const decision=validateBrainPlan(call.content,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source,clarifyIds:input.pending?.clarify?.itemIds,history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens}
 }

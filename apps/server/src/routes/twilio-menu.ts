@@ -23,7 +23,7 @@ import {parseSalesText,salesTurn,salesActionProblem,categoryItems,type SalesTemp
 import {businessDate} from '../lib/menu-sales.js'
 import {negatedClauses,isExcluded,bareDish,looksLikeAnswer,pickPrice,allOptions,leadingInterjection,confirmCleanup,type Excluded} from '../lib/twilio-menu-clarify.js'
 import {brainGate,hasFreshHistory,brainPlan,memoryTurn,rememberTurn,learnAfter,botBrainEnabled,trackChange,readRestorable} from '../lib/owner-brain-route.js'
-import {composeReply} from '../lib/owner-brain-plan.js'
+import {composeReply,REFERS} from '../lib/owner-brain-plan.js'
 import {stripLeadBeforeRemoval,clearChanges,holdFromMessage,holdAnswer,holdQuestion,undoRecordFor,isUndoRequest,applyUndo,undoText,undoWindowMs,type Hold,type UndoRecord} from '../lib/twilio-menu-hold.js'
 import {startsWithCreate} from '../lib/twilio-menu-create.js'
 import {removeVerbRe} from '../lib/twilio-menu-nlu.js'
@@ -80,6 +80,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if(hold){const row0=await readWorkspace(ctx.tenant,tx);if(!row0||!row0.published||row0.revision!==row0.published_revision||Number(hr!.revision)!==row0.revision){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return copy.menuChanged}
    const cat0=catalogOf(workspaceSchema.parse(row0.draft)),ans=holdAnswer(text,hold,cat0.refs)
    if(ans==='cancel'){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return copy.cancelled}
+   if(ans&&ans.remaining?.length){const next:Hold={kind:'hold',actions:ans.actions,asks:ans.remaining,...(hold.notes?.length?{notes:hold.notes}:{})};await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);await propose(tx,ctx,row0.revision,next);return (ans.note?ans.note+'\n\n':'')+holdQuestion(next,cat0.refs,cat0.sections)}
    if(ans){if(!ans.actions.length){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return (ans.note?ans.note+' ':'')+'Non ho cambiato nulla.'}holdPick=ans.actions;tail=[...(hold.notes??[]),ans.note??''].filter(Boolean).join('\n')
     if(ans.rest){const more=clearChanges(spokenDecimals(ans.rest),cat0.refs);if(more)holdPick=[...holdPick,...more];else tail=[tail,fill(copy.holdRestUnclear,{testo:safe(ans.rest).slice(0,80)})].filter(Boolean).join('\n\n')}}
    else{const i=parseIntent(text),question=looksLikeQuestion(text)||i?.kind==='ask'||i?.kind==='read'||i?.kind==='capability',fresh=!question&&(!!parseMenuCommand(text)||!!i||startsWithCreate(text)||isCompoundMessage(text,cat0.refs)||!!parseSalesText(text)||/\d/.test(text)&&words(text).length>0)
@@ -217,6 +218,9 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
    if(!found.length)return (preselect(text,refs).length&&!command)||phrase?{llm:true}:fill(copy.notFoundNamed,{nome:shown(intent.target)})
    const template:ChoiceAction=intent.kind==='price'?{kind:'price',price:intent.price}:intent.kind==='description'?{kind:'description',text:intent.text}:intent.kind==='tag'?{kind:'tag',tag:intent.tag,value:true}:{kind:intent.kind,value:intent.value}
    if(found.length>1){const only=exactPick(intent.target,found);if(only)found.splice(0,found.length,only)}
+   // Cervello acceso: prima di chiedere «quale?» per un nome che combacia con più piatti decide il cervello (con i controlli del
+   // validatore): «il caffè macchiato», «la tagliata» col tagliere nel menu non sono ambigui per chi legge la frase intera.
+   if(found.length>1&&!opts.brainOff&&!choice&&botBrainEnabled((await restaurantSettings())[0]?.settings))return{llm:true,brain:true}
    if(found.length>1){const options=found.slice(0,8);await propose(tx,ctx,row.revision,{kind:'choose',action:template,options:options.map(r=>r.id)});return fill(copy.choose,{opzioni:options.map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*`).join('\n')})}
    picked=[{...template,id:found[0]!.id} as MenuAction]}}
   actions=picked}
@@ -283,12 +287,16 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
  if(!turn.brain&&!turn.photo&&!turn.fullmenu&&!(turn as any).noBrain&&botBrainEnabled((await db.execute(sql`SELECT settings FROM restaurants WHERE id=${ctx.tenant}`))[0]?.settings))return resolveTurnCore(ctx,text,{...turn,brain:true},key,ai,budget)
  if(turn.brain){const pend=(await db.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))[0]?.command??null
   const name=String((await db.execute(sql`SELECT name FROM restaurants WHERE id=${ctx.tenant}`))[0]?.name??'')
-  const run=text.length<=30000&&refs.length<=1500?await brainPlan(db,{tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:pend,key,ai,undo:await (async()=>{const a=await readRestorable(db,ctx.phone),b=await readUndo(db,ctx.phone),items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before});return items.length?{at:Date.now(),items}:null})()}):null
+  const run=text.length<=30000&&refs.length<=1500?await brainPlan(db,{tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:pend,key,ai,exclude,undo:await (async()=>{const a=await readRestorable(db,ctx.phone),b=await readUndo(db,ctx.phone),items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before});return items.length?{at:Date.now(),items}:null})()}):null
   if(budget.expired)return ''
   // Riserva: Groq giù / quota / JSON non valido → il turno di oggi, identico (deterministico e poi la vecchia chiamata IA).
   if(!run){const done=await turnFor(ctx,text,{brainOff:true,isExpired:()=>budget.expired});return typeof done==='string'?done:await resolveTurnCore(ctx,text,'llm' in done?{...done,brain:undefined,noBrain:true} as any:done,key,ai,budget)}
   const d=run.decision
   if(d.intent==='chat'&&d.plan.type==='clarify'&&!d.plan.ids.length)return composeReply(d,refs,sections)
+  // Rimando senza contesto valido («anche la gricia», «no scusa 14» dopo 30 minuti): una domanda, non «non ho capito».
+  if(!d.hold&&d.plan.type==='clarify'&&!d.plan.ids.length&&!d.plan.actions?.length&&REFERS.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ')))return copy.brainNoContext
+  // Più parti incerte: parti chiare in sospeso (proposta `hold`, 10 minuti) e una domanda per ciascuna, in un solo messaggio.
+  if(d.hold){const hold=d.hold;return db.transaction(async tx=>{await lock(tx,ctx.phone);const live=await readWorkspace(ctx.tenant,tx);if(!live||live.revision!==row.revision)return copy.menuChanged;await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);await propose(tx,ctx,row.revision,hold);return holdQuestion(hold,refs,sections)})}
   const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,planned:{revision:row.revision,plan:d.plan,proposalRevision:JSON.stringify(pend)},exclude:[...exclude,...d.exclude]})
   if(typeof done==='string'){if(d.plan.type==='change'&&/Confermato/.test(done))await trackChange(db,ctx.phone,await readUndo(db,ctx.phone))
    if(d.plan.type==='change')inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run,applied:/Confermato/.test(done),key,meter:ai.meter}));return done}
