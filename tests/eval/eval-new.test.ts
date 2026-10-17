@@ -38,6 +38,6 @@ describe.skipIf(!process.env.TAKO_EVAL)('banco E: bot nuovo',()=>{
    const goal={graviSicurezza:s.total.safety===0,medi2pct:s.total.medio<=Math.floor(s.total.n*0.02)&&s.total.medio<b.summary.total.medio,multiTurnoPiu10:Math.round(s.multi.success/s.multi.n*100)>=Math.round(b.summary.multi.success/b.summary.multi.n*100)+10}
    writeFileSync(new URL(`confronto-${name}.json`,out),JSON.stringify({goal,attuale:b.summary.total,nuovo:s.total,multiAttuale:b.summary.multi,multiNuovo:s.multi,migliorate:better,peggiorate:worse},null,1)+'\n')
    console.log(JSON.stringify({goal,migliorate:better.length,peggiorate:worse.length}))}
-  expect(vs.length).toBe(convs.length)},600000)
+  expect(vs.length).toBe(convs.length)},Number(process.env.TAKO_EVAL_TIMEOUT_MS||600000))
  it.skipIf(bot.ready)('adattatore del bot nuovo non ancora pronto (CONTRATTO.md)',()=>{expect(bot.ready).toBe(false)})
 })

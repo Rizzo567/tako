@@ -24,5 +24,5 @@ describe.skipIf(!process.env.TAKO_EVAL)('banco E: bot attuale',()=>{
   const bot=createRouteBot({name:'attuale'}),vs=await runBench(bot,convs)
   const s=writeResults(new URL('../../docs/webapp/bot-cervello-2026-10-17/eval/',import.meta.url),process.env.TAKO_EVAL_OUT||`attuale-${groq.mode}`,vs,{groq:groq.mode,tetto:groq.maxTokens,orologio:process.env.TAKO_TEST_NOW||'2026-10-16T10:00:00Z',conversazioni:convs.length},{groqStats:groq.stats,unknownSql:[...S.unknownSql]})
   console.log(JSON.stringify({total:s.total,llm:s.llm,groq:groq.stats,latency:s.latency}))
-  expect(vs.length).toBe(convs.length)},600000)
+  expect(vs.length).toBe(convs.length)},Number(process.env.TAKO_EVAL_TIMEOUT_MS||600000))
 })

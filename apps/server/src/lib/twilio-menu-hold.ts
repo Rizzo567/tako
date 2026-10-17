@@ -123,6 +123,8 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
  // Tutto chiaro su piatti esistenti con un «togli» dentro («togli boh e il piatto di verifica costa 14»): si applica qui, senza IA.
  if(!uncertain&&!unclear&&!startsWithCreate(text))return clear.length>1&&clear.some(a=>a.kind==='hidden'&&a.value)&&new Set(clear.map(a=>'id' in a?a.id:'')).size===clear.length?{actions:clear}:null
  // Due o più parti incerte (anche di tipi diversi): una domanda per ciascuna, tutte nello stesso messaggio.
+ // Elenchi (descrizioni «guanciale, pecorino e uovo», menu interi dettati) non sono parti incerte: restano al flusso di prima.
+ if(unclear&&(clear.some(a=>a.kind==='description')||text.length>300||asks.length>4))return null
  if(uncertain+unclear>=2){if(new Set(asks.flatMap(a=>a.type==='remove'?[a.id]:[])).size!==asks.filter(a=>a.type==='remove').length)return null
   if(asks.some(a=>a.type==='remove'&&clear.some(c=>'id' in c&&c.id===a.id)))return null
   const hold:Hold={kind:'hold',actions:clear,asks,...(holdNotes.length?{notes:holdNotes}:{})};return{hold,text:holdQuestion(hold,refs,sections)}}
