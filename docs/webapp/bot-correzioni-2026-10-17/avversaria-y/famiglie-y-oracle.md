@@ -3,449 +3,233 @@
 | Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
 |---|---|---|---|---|---|
 | el-conferma | 49 | 48 | 0 | 0 | 1 |
-| el-multi | 16 | 15 | 0 | 0 | 1 |
-| el-misto | 16 | 0 | 3 | 0 | 13 |
-| el-annulla | 16 | 13 | 2 | 0 | 1 |
-| cat-crea | 25 | 21 | 2 | 0 | 2 |
-| cat-piatti | 22 | 18 | 1 | 0 | 3 |
-| cat-rinomina | 19 | 16 | 0 | 0 | 3 |
-| sposta | 37 | 33 | 1 | 0 | 3 |
-| rinomina | 24 | 16 | 0 | 0 | 8 |
-| lunghe | 14 | 7 | 7 | 3 | 0 |
-| cambio | 14 | 12 | 0 | 0 | 2 |
+| el-multi | 16 | 14 | 0 | 0 | 2 |
+| el-misto | 16 | 14 | 0 | 0 | 2 |
+| el-annulla | 16 | 16 | 0 | 0 | 0 |
+| cat-crea | 25 | 23 | 0 | 0 | 2 |
+| cat-piatti | 22 | 18 | 0 | 0 | 4 |
+| cat-rinomina | 19 | 15 | 0 | 0 | 4 |
+| sposta | 37 | 30 | 0 | 0 | 7 |
+| rinomina | 24 | 18 | 1 | 0 | 5 |
+| lunghe | 14 | 9 | 4 | 1 | 1 |
+| cambio | 14 | 14 | 0 | 0 | 0 |
 | ripeti | 12 | 12 | 0 | 0 | 0 |
-| numeri | 31 | 27 | 2 | 2 | 2 |
-| unita | 17 | 8 | 0 | 0 | 9 |
+| numeri | 31 | 29 | 0 | 0 | 2 |
+| unita | 17 | 15 | 0 | 0 | 2 |
 | emoji | 15 | 15 | 0 | 0 | 0 |
-| refusi | 23 | 22 | 0 | 0 | 1 |
+| refusi | 23 | 23 | 0 | 0 | 0 |
 | vuoti | 15 | 15 | 0 | 0 | 0 |
-| fuoritempo | 11 | 8 | 1 | 0 | 2 |
-| varianti | 37 | 31 | 2 | 0 | 4 |
-| r2-el-misto | 20 | 6 | 1 | 0 | 13 |
+| fuoritempo | 11 | 10 | 0 | 0 | 1 |
+| varianti | 37 | 34 | 0 | 0 | 3 |
+| r2-el-misto | 20 | 20 | 0 | 0 | 0 |
 | r2-el-si | 17 | 17 | 0 | 0 | 0 |
-| r2-rinomina | 18 | 12 | 4 | 3 | 2 |
-| r2-cat | 16 | 14 | 1 | 1 | 1 |
-| r2-sposta | 16 | 15 | 1 | 1 | 0 |
-| r2-relativi | 16 | 16 | 0 | 0 | 0 |
-| r2-code | 16 | 15 | 1 | 0 | 0 |
-| r3-conferme | 26 | 22 | 0 | 0 | 4 |
-| TOTALE | 558 | 454 | 29 | 10 | 75 |
+| r2-rinomina | 18 | 16 | 0 | 0 | 2 |
+| r2-cat | 16 | 16 | 0 | 0 | 0 |
+| r2-sposta | 16 | 13 | 0 | 0 | 3 |
+| r2-relativi | 16 | 15 | 0 | 0 | 1 |
+| r2-code | 16 | 16 | 0 | 0 | 0 |
+| r3-conferme | 26 | 23 | 0 | 0 | 3 |
+| TOTALE | 558 | 508 | 5 | 1 | 45 |
 
 ## Fallimenti
 
-- **y-el-conferma-040** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina ⏎ il tiramisù ⏎ sì
+- **y-el-conferma-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|tiramisù
+  - turni: il tiramisù non lo facciamo più, eliminalo ⏎ confermo
   - atteso: delete|tiramisù · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
-- **y-el-multi-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina tutti i dolci ⏎ sì
-  - atteso: delete|Dolce del giorno, delete|Panna cotta, delete|Tiramisù · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *eliminare un piatto (ti chiedo conferma, poi per 10 minuti puoi annullare)*. «elimina il polpo»; «togli il polpo» invece lo» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
-- **y-el-misto-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina il tiramisù e metti la parmigiana a 11 ⏎ sì
-  - atteso: delete|tiramisù, price|la parmigiana|11 · ottenuto: delete|tiramisù, price|la parmigiana|11
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *la parmigiana*: prezzo da 10,00 € a *11,00 €* 2. *tiramisù*: *eliminato* dal menu Ha» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: prezzo da 10,00 € a *11,00 €* *tiramisù*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: metti boh a 18 e cancella il tiramisù ⏎ sì
-  - atteso: delete|tiramisù, price|boh|18 · ottenuto: delete|tiramisù, price|boh|18
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: *eliminato* dal menu 2. *boh*: prezzo da 20,00 € a *18,00 €* Hai dimentic» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu *boh*: prezzo da 20,00 € a *18,00 €* Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: togli boh ed elimina il tiramisù ⏎ sì
-  - atteso: delete|tiramisù, hidden|boh|true · ottenuto: delete|tiramisù, hidden|boh|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: *eliminato* dal menu 2. *boh*: *nascosto* dal menu Hai dimenticato qualco» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu *boh*: *nascosto* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|la parmigiana|true
-  - turni: elimina il tiramisù e nascondi la parmigiana ⏎ no
-  - atteso: hidden|la parmigiana|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *la parmigiana* 2. *tiramisù* Rispondi con il *numero* o il *nome*.» ⏎ «*Annullato.* Il menu è rimasto invariato.»
-- **y-el-misto-005** [GRAVE] GRAVE non-applicato: non applicato: price|la parmigiana|9
-  - turni: elimina il tiramisù e la parmigiana mettila a 9 ⏎ no
-  - atteso: price|la parmigiana|9 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *la parmigiana* 2. *tiramisù* Rispondi con il *numero* o il *nome*.» ⏎ «*Annullato.* Il menu è rimasto invariato.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **y-el-multi-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|la parmigiana
+  - turni: elimina tiramisù e parmigiana ⏎ no, solo la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Elimino *tiramisù* e *la parmigiana* dal menu? Rispondi sì. Da eliminare, serve il tuo sì: 1. *tiramisù*: da eliminare 2. *la parm» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **y-el-multi-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|Supplì, hidden|Crocchette|true
+  - turni: nascondi supplì e crocchette ⏎ elimina il primo ⏎ sì
+  - atteso: delete|Supplì, hidden|Crocchette|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-el-misto-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|tiramisù|true
   - turni: elimina il tiramisù, anzi no, nascondilo
   - atteso: hidden|tiramisù|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *tiramisù*: *nascosto* dal menu «elimina il tiramisù» non l’ho capito: cosa intendevi? Risp»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-el-misto-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|la parmigiana
   - turni: nascondi la parmigiana, anzi eliminala ⏎ sì
   - atteso: delete|la parmigiana · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *la parmigiana*: *eliminato* dal menu «nascondi la parmigiana» non l’ho capito: cosa intend» ⏎ «Ho capito, *non ancora pubblicato*: 1. *la parmigiana*: *eliminato* dal menu «nascondi la parmigiana» non l’ho capito: cosa intendevi? Rispondi e pubblico tutto insieme: *no* pubblica solo le parti chiare, *annulla* non »
-- **y-el-misto-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|panna cotta|5|piatti di prova, delete|tiramisù
-  - turni: elimina il tiramisù e aggiungi la panna cotta a 5 ⏎ sì
-  - atteso: create|panna cotta|5|piatti di prova, delete|tiramisù · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
-- **y-el-misto-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: il tiramisù cancellalo, boh a 22 e la parmigiana finita ⏎ sì
-  - atteso: available|la parmigiana|false, delete|tiramisù, price|boh|22 · ottenuto: available|la parmigiana|false, delete|tiramisù, price|boh|22
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *la parmigiana*: *finito* 2. *tiramisù*: *eliminato* dal menu 3. *boh*: prezzo da 20,» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: *finito* *tiramisù*: *eliminato* dal menu *boh*: prezzo da 20,00 € a *22,00 €* Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina il tiramisù e metti boh a 18 ⏎ sì ⏎ annulla
-  - atteso: price|boh|18 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: *eliminato* dal menu 2. *boh*: prezzo da 20,00 € a *18,00 €* Hai dimentic» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu *boh*: prezzo da 20,00 € a *18,00 €* Per 10 minuti puoi scrivere «annulla» per rimetterlo.» ⏎ «*Annullato.* Il menu è tornato com’era prima dell’ultima modifica. *boh*: com’era prima *tiramisù*: com’era prima»
-- **y-el-misto-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|Primo del giorno, move|Carbonara|Speciali
-  - turni: elimina il primo del giorno e sposta la carbonara negli speciali ⏎ sì
-  - atteso: delete|Primo del giorno, move|Carbonara|Speciali · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Primo del giorno*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.»
-- **y-el-misto-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la diavola e metti la margherita a 8 ⏎ sì
-  - atteso: delete|Diavola, price|Margherita|8 · ottenuto: delete|Diavola, price|Margherita|8
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Margherita*: prezzo da 7,00 € a *8,00 €* 2. *Diavola*: *eliminato* dal menu Ha» ⏎ «*Confermato.* Ho aggiornato il menu. *Margherita*: prezzo da 7,00 € a *8,00 €* *Diavola*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la tagliata, la carbonara a 13 ⏎ sì
-  - atteso: delete|Tagliata, price|Carbonara|13 · ottenuto: delete|Tagliata, price|Carbonara|13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Carbonara*: prezzo da 12,00 € a *13,00 €* 2. *Tagliata*: *eliminato* dal menu » ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €* *Tagliata*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-014** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
-  - turni: elimina la tagliata, la carbonara a 13 ⏎ no
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Carbonara* 2. *Tagliata* Rispondi con il *numero* o il *nome*.» ⏎ «*Annullato.* Il menu è rimasto invariato.»
-- **y-el-misto-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la tagliata e togli 2 euro al pollo ⏎ sì
-  - atteso: delete|Tagliata, price|Pollo arrosto|12 · ottenuto: delete|Tagliata, price|Pollo arrosto|12
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Tagliata*: *eliminato* dal menu 2. *Pollo arrosto*: prezzo da 14,00 € a *12,00» ⏎ «*Confermato.* Ho aggiornato il menu. *Tagliata*: *eliminato* dal menu *Pollo arrosto*: prezzo da 14,00 € a *12,00 €* Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-misto-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: 🎤 allora la tagliata eliminala, il pollo arrosto lo metti a quindici e il tiramisù è finito ⏎ sì
-  - atteso: available|Tiramisù|false, delete|Tagliata, price|Pollo arrosto|15 · ottenuto: available|Tiramisù|false, delete|Tagliata, price|Pollo arrosto|15
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Tagliata*: *eliminato* dal menu 2. *Pollo arrosto*: prezzo da 14,00 € a *15,00» ⏎ «*Confermato.* Ho aggiornato il menu. *Tagliata*: *eliminato* dal menu *Pollo arrosto*: prezzo da 14,00 € a *15,00 €* *Tiramisù*: *finito* Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-el-annulla-005** [MEDIO] MEDIO senza-contesto: turno 3
-  - turni: elimina il tiramisù ⏎ sì ⏎ rimettilo
-  - atteso: nessuna modifica · ottenuto: delete|tiramisù
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Elimino *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.» ⏎ «A quale piatto ti riferisci, e cosa vuoi cambiare? Non ho cambiato nulla.»
-- **y-el-annulla-007** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: delete|tiramisù
-  - turni: elimina il tiramisù ⏎ sì ⏎ ho sbagliato, annulla
-  - atteso: nessuna modifica · ottenuto: delete|tiramisù
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Elimino *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.» ⏎ «A) «ho sbagliato» non l’ho capito: cosa intendevi? B) «annulla» non l’ho capito: cosa intendevi? Rispondi a ogni domanda (anche con le lettere, per esempio «A sì, B la seconda»): poi pubblico tutto insieme. *No* pubblica»
-- **y-el-annulla-013** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: delete|tiramisù
-  - turni: elimina il tiramisù ⏎ sì ⏎ annulla il tiramisù
-  - atteso: nessuna modifica · ottenuto: delete|tiramisù
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Elimino *tiramisù* dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-cat-crea-012** [GRAVE] GRAVE richiesta-persa: richiesta persa: section|crudi
-  - turni: voglio una categoria nuova: Crudi
-  - atteso: section|crudi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **y-cat-crea-015** [MEDIO] MEDIO categoria-fuori-ordine: turno 1: Primi piatti
   - turni: crea la categoria primi piatti
   - atteso: section|primi piatti · ottenuto: section|primi piatti
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuova categoria *Primi piatti*»
-- **y-cat-crea-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: crea una categoria
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-cat-crea-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE richiesta-persa: richiesta persa: section|crudi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. Nuova categoria *Primi piatti*»
+- **y-cat-crea-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: section|crudi
   - turni: crea una categoria ⏎ crudi
   - atteso: section|crudi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **y-cat-piatti-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|caffe corretto|2|caffe
   - turni: aggiungi nel caffè il caffè corretto a 2
   - atteso: create|caffe corretto|2|caffe · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. In quale categoria metto *Caffè il caffè corretto*? Categorie: Antipasti, Primi, Secondi, Fritti, Insalate, Pizze, Dolci, Speciali»
-- **y-cat-piatti-018** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE richiesta-persa: richiesta persa: create|tartare|16|crudi, section|crudi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-cat-piatti-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tartare|16|crudi, section|crudi
   - turni: crea la categoria crudi con la tartare ⏎ 16
   - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-cat-piatti-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
   - turni: crea la categoria crudi con la tartare ⏎ lascia stare la tartare
-  - atteso: section|crudi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+  - atteso: section|crudi · ottenuto: section|crudi
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. Nuova categoria *Crudi*» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **y-cat-piatti-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tartare|16|crudi, section|crudi
   - turni: crea la categoria crudi con la tartare a 16, poi elimina la bruschetta
   - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Bruschetta*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-cat-rinomina-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Speciale della casa|Specialità dello chef
   - turni: chiama la categoria speciali 'Specialità dello chef'
   - atteso: move|Speciale della casa|Specialità dello chef · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Speciale della casa*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-cat-rinomina-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Primo del giorno|Pasta del giorno
   - turni: rinomina il primo del giorno in Pasta del giorno
   - atteso: rename|Primo del giorno|Pasta del giorno · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Primo del giorno*: nuovo nome *Pasta del giorno* «rinomina il primo del giorno in Pasta de»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Per «rinomina il primo del giorno in Pasta del giorno» cosa intendi? Non ancora pubblicato: 1. *Primo del giorno*: nuovo nome *Pas»
 - **y-cat-rinomina-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Dolce del giorno|Torta del giorno
   - turni: rinomina il dolce del giorno in Torta del giorno
   - atteso: rename|Dolce del giorno|Torta del giorno · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Dolce del giorno*: nuovo nome *Torta del giorno* «rinomina il dolce del giorno in Torta de»
-- **y-sposta-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Crocchette|Antipasti, move|Supplì|Antipasti
-  - turni: nascondi supplì e crocchette ⏎ quei due mettili negli antipasti
-  - atteso: hidden|Crocchette|true, hidden|Supplì|true, move|Crocchette|Antipasti, move|Supplì|Antipasti · ottenuto: hidden|Crocchette|true, hidden|Supplì|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Supplì*: *nascosto* dal menu *Crocchette*: *nascosto* dal menu» ⏎ «Quale piatto intendi: *Supplì*, *Crocchette*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Per «rinomina il dolce del giorno in Torta del giorno» cosa intendi? Non ancora pubblicato: 1. *Dolce del giorno*: nuovo nome *Tor»
+- **y-cat-rinomina-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Caffè|Caffetteria, move|Cappuccino|Caffetteria
+  - turni: rinomina la categoria caffè in caffetteria
+  - atteso: move|Caffè|Caffetteria, move|Cappuccino|Caffetteria · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-sposta-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Crocchette|Antipasti, move|Olive ascolane|Antipasti, move|Supplì|Antipasti
   - turni: ❓ quali sono i fritti? ⏎ spostali tutti negli antipasti
   - atteso: move|Crocchette|Antipasti, move|Olive ascolane|Antipasti, move|Supplì|Antipasti · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Pizza fritta*: *7,00 €* · disponibile *Supplì*: *3,00 €* · disponibile» ⏎ «Quale piatto intendi: *Supplì*, *Crocchette*, *Olive ascolane*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **y-sposta-016** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, price|Carbonara|14
-  - turni: metti la carbonara a 14 nei secondi
-  - atteso: move|Carbonara|Secondi, price|Carbonara|14 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *creare categorie e spostare piatti*. «crea la categoria speciali» o «sposta il polpo nei secondi»»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Pizza fritta*: *7,00 €* · disponibile» ⏎ «Quale intendi? 1. *Supplì* (3,00 €) 2. *Crocchette* (4,00 €) 3. *Olive ascolane* (5,00 €)»
+- **y-sposta-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Caffè|Bibite
+  - turni: sposta il caffè nelle bibite
+  - atteso: move|Caffè|Bibite · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-sposta-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Birra|Caffè
+  - turni: sposta la birra nel caffè
+  - atteso: move|Birra|Caffè · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-sposta-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Pollo arrosto|Speciali, move|Tagliata|Speciali
   - turni: la tagliata a 19 ⏎ e il pollo a 15 ⏎ spostali negli speciali
   - atteso: move|Pollo arrosto|Speciali, move|Tagliata|Speciali, price|Pollo arrosto|15, price|Tagliata|19 · ottenuto: price|Pollo arrosto|15, price|Tagliata|19
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: prezzo da 18,00 € a *19,00 €*» ⏎ «*Confermato.* Ho aggiornato il menu. *Pollo arrosto*: prezzo da 14,00 € a *15,00 €*» ⏎ «Quale piatto intendi: *Pollo arrosto*, *Tagliata*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **y-rinomina-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
-  - turni: rinomina la gricia in Gricia romana ⏎ la gricia a 12
-  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: rename|Gricia|Gricia romana
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: nuovo nome *Gricia romana*» ⏎ «Cosa vuoi cambiare per *Gricia romana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **y-rinomina-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
-  - turni: rinomina la gricia in Gricia romana ⏎ gricia romana a 12
-  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: rename|Gricia|Gricia romana
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: nuovo nome *Gricia romana*» ⏎ «Cosa vuoi cambiare per *Gricia romana*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **y-rinomina-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12, rename|Gricia|Gricia romana
-  - turni: rinomina la gricia in Gricia romana e mettila a 12
-  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Gricia*: nuovo nome *Gricia romana* «mettila a 12» non l’ho capito: cosa intendevi? Rispon»
-- **y-rinomina-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: rinomina il tiramisù
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *cambiare il nome di un piatto o di una categoria*. «rinomina il polpo in Polpo alla griglia»»
-- **y-rinomina-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Tiramisù|Tiramisù della casa
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Tagliata*: prezzo da 18,00 € a *19,00 €*» ⏎ «Fatto. *Pollo arrosto*: prezzo da 14,00 € a *15,00 €*» ⏎ «Quale intendi? 1. *Pollo arrosto* (15,00 €) 2. *Tagliata* (19,00 €)»
+- **y-sposta-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Panna cotta|Speciali, move|Tiramisù|Speciali
+  - turni: sposta il tiramisù negli speciali ⏎ anche la panna cotta
+  - atteso: move|Panna cotta|Speciali, move|Tiramisù|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Tiramisù* (6,00 €) 2. *Panna cotta* (5,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-sposta-035** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Pizza fritta|Speciali
+  - turni: sposta la pizza negli speciali ⏎ la fritta
+  - atteso: move|Pizza fritta|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-sposta-036** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Pizza fritta|Speciali
+  - turni: sposta la pizza negli speciali ⏎ la seconda
+  - atteso: move|Pizza fritta|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-rinomina-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo
+  - turni: chiama la tagliata 'Tagliata di manzo' ⏎ la tagliata di manzo a 20
+  - atteso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-rinomina-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Pollo arrosto|Pollo alla diavola
+  - turni: rinomina il pollo in Pollo alla diavola
+  - atteso: rename|Pollo arrosto|Pollo alla diavola · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-rinomina-014** [GRAVE] GRAVE non-applicato: non applicato: rename|Pollo arrosto|Pollo alla diavola
+  - turni: rinomina il pollo in Pollo alla diavola ⏎ la diavola a 9
+  - atteso: price|Diavola|9, rename|Pollo arrosto|Pollo alla diavola · ottenuto: price|Diavola|9
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Fatto. *Diavola*: prezzo da 8,00 € a *9,00 €*»
+- **y-rinomina-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Tiramisù|Tiramisù della casa
   - turni: rinomina il tiramisù ⏎ Tiramisù della casa
   - atteso: rename|Tiramisù|Tiramisù della casa · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *cambiare il nome di un piatto o di una categoria*. «rinomina il polpo in Polpo alla griglia»» ⏎ «Cosa vuoi cambiare per *Tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
-- **y-rinomina-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: rinomina il tiramisù ⏎ lascia stare
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *cambiare il nome di un piatto o di una categoria*. «rinomina il polpo in Polpo alla griglia»» ⏎ «Non c'è un'ultima modifica da annullare (o è passato troppo tempo). Dimmi cosa vuoi cambiare. Per annullare un menu intero scrivi «ripristina il menu di prima».»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-rinomina-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Panna cotta|6
   - turni: cambia nome alla panna cotta: Panna cotta al caramello ⏎ e mettila a 6
   - atteso: price|Panna cotta|6, rename|Panna cotta|Panna cotta al caramello · ottenuto: rename|Panna cotta|Panna cotta al caramello
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Panna cotta*: nuovo nome *Panna cotta al caramello*» ⏎ «Cosa vuoi cambiare per *Panna cotta al caramello*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Panna cotta*: nuovo nome *Panna cotta al caramello*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-rinomina-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Supplì|Antipasti, rename|Supplì|Supplì al telefono
   - turni: rinomina il supplì in Supplì al telefono e spostalo negli antipasti
   - atteso: move|Supplì|Antipasti, rename|Supplì|Supplì al telefono · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Supplì*: spostato in *Antipasti* «rinomina il supplì in Supplì al telefono» non l’ho capit»
-- **y-lunghe-003** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: price|Carbonara|11 · GRAVE non-applicato: non applicato: price|Carbonara|13, price|Gricia|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-lunghe-003** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|13
   - turni: ciao ⏎ la carbonara a 13 ⏎ ❓ quanto costa la gricia? ⏎ mettila uguale alla carbonara ⏎ grazie
-  - atteso: price|Carbonara|13, price|Gricia|13 · ottenuto: price|Carbonara|11
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del g» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Gricia*: *11,00 €* · disponibile» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 13,00 € a *11,00 €*» ⏎ «Di nulla.»
+  - atteso: price|Carbonara|13, price|Gricia|13 · ottenuto: price|Carbonara|13
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Di nulla.» ⏎ «Fatto. *Carbonara*: prezzo da 12,00 € a *13,00 €*» ⏎ «*Gricia*: *11,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
 - **y-lunghe-004** [GRAVE] GRAVE non-applicato: non applicato: featured|cacio e pepe|true
   - turni: aggiungi la cacio e pepe ⏎ nei primi ⏎ 12 ⏎ mettila in evidenza ⏎ ❓ che primi ho? ⏎ ok grazie
   - atteso: create|cacio e pepe|12|primi, featured|cacio e pepe|true · ottenuto: create|cacio e pepe|12|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. In quale categoria metto *Cacio e pepe*? Categorie: Antipasti, Primi, Secondi, Fritti, Insalate, Pizze, Dolci, Speciali, Bibite, C» ⏎ «Quanto costa *Cacio e pepe*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Cacio e pepe* in *Primi*: *12,00 €*» ⏎ «Cosa vuoi cambiare per *Cacio e pepe*: il prezzo, se è finito o altro? Non ho cambiato nulla.» ⏎ «*Primo del giorno*: *10,00 €* · disponibile» ⏎ «Di nulla.»
-- **y-lunghe-005** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Supplì|true
-  - turni: nascondi supplì ⏎ nascondi crocchette ⏎ nascondi olive ascolane ⏎ ❓ quali sono nascosti? ⏎ rimettili tutti
-  - atteso: nessuna modifica · ottenuto: hidden|Supplì|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Supplì*: *nascosto* dal menu» ⏎ «*Confermato.* Ho aggiornato il menu. *Crocchette*: *nascosto* dal menu» ⏎ «*Confermato.* Ho aggiornato il menu. *Olive ascolane*: *nascosto* dal menu» ⏎ «*Supplì*: *3,00 €* · disponibile · nascosto» ⏎ «*Confermato.* Ho aggiornato il menu. *Crocchette*: di nuovo *visibile* nel menu *Olive ascolane*: di nuovo *visibile* nel menu»
-- **y-lunghe-010** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Dolce del giorno|false · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Panna cotta|false · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Tiramisù|false
-  - turni: tiramisù finito ⏎ panna cotta finita ⏎ dolce del giorno finito ⏎ sono tornati tutti i dolci
-  - atteso: nessuna modifica · ottenuto: available|Dolce del giorno|false, available|Panna cotta|false, available|Tiramisù|false
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tiramisù*: *finito*» ⏎ «*Confermato.* Ho aggiornato il menu. *Panna cotta*: *finito*» ⏎ «*Confermato.* Ho aggiornato il menu. *Dolce del giorno*: *finito*» ⏎ «Quale piatto intendi: *Primo del giorno*, *Secondo del giorno*, *Dolce del giorno*? Dimmi quale e cosa cambiare. Non ho cambiato nulla.»
-- **y-lunghe-012** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Diavola|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa cacio e pepe? In quale categoria lo metto?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Fatto. Nuovo piatto *cacio e pepe* in *Primi*: *12,00 €*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «*Primo del giorno*: *10,00 €* · disponibile» ⏎ «Di nulla.»
+- **y-lunghe-007** [GRAVE] GRAVE non-applicato: non applicato: create|carpaccio|14|crudi di mare, create|tartare|16|crudi di mare, move|Insalata di mare|Crudi di mare
+  - turni: crea la categoria crudi ⏎ aggiungi nei crudi la tartare a 16 ⏎ aggiungi nei crudi il carpaccio a 14 ⏎ sposta l'insalata di mare nei crudi ⏎ rinomina la categoria crudi in Crudi di mare ⏎ ❓ cosa c'è nei crudi di mare?
+  - atteso: create|carpaccio|14|crudi di mare, create|tartare|16|crudi di mare, move|Insalata di mare|Crudi di mare, section|crudi di mare · ottenuto: section|crudi di mare
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. Nuova categoria *Crudi*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Fatto. Categoria *Crudi di mare*: nuovo nome *Crudi di mare*» ⏎ «*Insalata di mare*: *13,00 €* · disponibile»
+- **y-lunghe-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Diavola|true
   - turni: nascondi la diavola ⏎ ❓ la diavola è nascosta? ⏎ rimettila ⏎ ❓ e adesso? ⏎ mettila in evidenza
-  - atteso: featured|Diavola|true · ottenuto: featured|Diavola|true, hidden|Diavola|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Diavola*: *nascosto* dal menu» ⏎ «*Diavola*: *8,00 €* · disponibile · nascosto» ⏎ «*Confermato.* Ho aggiornato il menu. *Diavola*: *in evidenza*» ⏎ «*Diavola*: *8,00 €* · disponibile · nascosto · in evidenza» ⏎ «Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.»
-- **y-lunghe-013** [GRAVE] GRAVE eliminato-senza-conferma: turno 4: delete|Lasagna
+  - atteso: featured|Diavola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Diavola*: *nascosto* dal menu» ⏎ «*Piatti nascosti (1)* - Diavola» ⏎ «Fatto. *Diavola*: di nuovo *visibile* nel menu» ⏎ «*Diavola*: *8,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-lunghe-013** [GRAVE] GRAVE eliminato-senza-conferma: turno 4: delete|lasagna
   - turni: aggiungi la lasagna ⏎ 14 ⏎ mettila in evidenza ⏎ anzi no ⏎ nascondi boh ⏎ il tiramisù a 7 ⏎ annulla
   - atteso: create|lasagna|14|piatti di prova, hidden|boh|true · ottenuto: hidden|boh|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Lasagna*?» ⏎ «*Confermato.* Ho aggiornato il menu. Nuovo piatto *Lasagna* in *Piatti di prova*: *14,00 €*» ⏎ «Ti riferisci a *Piatto di verifica* o *Lasagna*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla.» ⏎ «*Annullato.* Il menu è tornato com’era prima dell’ultima modifica. *Lasagna*: tolto (era stato aggiunto)» ⏎ «*Confermato.* Ho aggiornato il menu. *boh*: *nascosto* dal menu» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: prezzo da 6,00 € a *7,00 €*» ⏎ «*Annullato.* Il menu è tornato com’era prima dell’ultima modifica. *tiramisù*: com’era prima»
-- **y-lunghe-014** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: price|Carbonara|11 · GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: price|Gricia|12 · GRAVE non-applicato: non applicato: price|Carbonara|13
-  - turni: 🎤 allora oggi la carbonara a tredici la gricia a dodici e il tiramisù è finito ⏎ ❓ ok, cosa hai cambiato? ⏎ la gricia no, lasciala a 11
-  - atteso: available|Tiramisù|false, price|Carbonara|13 · ottenuto: available|Tiramisù|false, price|Carbonara|11, price|Gricia|12
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €* *Gricia*: prezzo da 11,00 € a *12,00 €* *Tiramisù*» ⏎ «*Carbonara*: *13,00 €* · disponibile *Gricia*: *12,00 €* · disponibile *Tiramisù*: *6,00 €* · finito» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 13,00 € a *11,00 €*»
-- **y-cambio-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: rinomina il tiramisù ⏎ la carbonara a 13
-  - atteso: price|Carbonara|13 · ottenuto: price|Carbonara|13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *cambiare il nome di un piatto o di una categoria*. «rinomina il polpo in Polpo alla griglia»» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*»
-- **y-cambio-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: crea una categoria ⏎ la carbonara a 13
-  - atteso: price|Carbonara|13 · ottenuto: price|Carbonara|13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €*»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa lasagna?» ⏎ «Fatto. Nuovo piatto *lasagna* in *Piatti di prova*: *14,00 €*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Ho annullato l’ultima modifica. *lasagna*: tolto (era stato aggiunto)» ⏎ «Fatto. *boh*: *nascosto* dal menu» ⏎ «Fatto. *tiramisù*: prezzo da 6,00 € a *7,00 €*» ⏎ «Ho annullato l’ultima modifica. *tiramisù*: com’era prima»
 - **y-numeri-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Caffè|1.3
   - turni: il caffè a un euro e trenta
   - atteso: price|Caffè|1.3 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Cosa vuoi cambiare per *Caffè*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-numeri-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Caffè|1.3
   - turni: il caffè a 1 e 30
   - atteso: price|Caffè|1.3 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Caffè* 2. *Cappuccino* Rispondi con il *numero* o il *nome*.»
-- **y-numeri-026** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto price|Carbonara|0
-  - turni: la carbonara a 0
-  - atteso: nessuna modifica · ottenuto: price|Carbonara|0
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *0,00 €*»
-- **y-numeri-027** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: price|Carbonara|11
-  - turni: la carbonara a -1
-  - atteso: nessuna modifica · ottenuto: price|Carbonara|11
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *11,00 €*»
-- **y-unita-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
-  - turni: la tagliata a porzione 19
-  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Tagliata*: prezzo da 18,00 € a *19,00 €* «la tagliata a porzione 19» non l’ho capito: cosa»
-- **y-unita-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
-  - turni: la tagliata 19 a porzione
-  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Tagliata*: prezzo da 18,00 € a *19,00 €* «la tagliata 19 a porzione» non l’ho capito: cosa»
-- **y-unita-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: il vino rosso 5 al calice e 18 la bottiglia
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-unita-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|6
   - turni: la birra da 66 a 6
   - atteso: price|Birra|6 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Birra*: prezzo da 5,00 € a *6,00 €* «la birra da 66 a 6» non l’ho capito: cosa intendevi? »
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-unita-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|5.5
   - turni: la birra 0,4 l a 5,50
   - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Birra*: prezzo da 5,00 € a *5,50 €* «0.4» non l’ho capito: cosa intendevi? Rispondi e pubb»
-- **y-unita-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: il supplì 2 pezzi 5 euro
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-unita-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: le crocchette 4 per 3 euro
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-unita-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: la tagliata per due a 34
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-unita-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: la pizza fritta mezzo metro 15
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-refusi-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la diavla
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-fuoritempo-002** [GRAVE] GRAVE richiesta-persa: richiesta persa: create|lasagna|14|piatti di prova
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-fuoritempo-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|lasagna|14|piatti di prova
   - turni: aggiungi la lasagna ⏎ [+20 min] ⏎ 14
   - atteso: create|lasagna|14|piatti di prova · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa *Lasagna*?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-fuoritempo-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: rinomina il tiramisù ⏎ [+35 min] ⏎ Tiramisù della casa
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *cambiare il nome di un piatto o di una categoria*. «rinomina il polpo in Polpo alla griglia»» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-fuoritempo-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: crea una categoria ⏎ [+35 min] ⏎ crudi
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-varianti-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|11.5
-  - turni: togli 50 centesimi alla carbonara
-  - atteso: price|Carbonara|11.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Carbonara*: prezzo da 12,00 € a *11,50 €* «togli 50 centesimi alla carbonara» non l’ho cap»
-- **y-varianti-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine|14|primi
-  - turni: aggiungi nei primi le linguine a 14 e basta
-  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. Nuovo piatto *Linguine* in *Primi*: *14,00 €* Quanto costa *Basta*? Poi pubblico tutto insi»
-- **y-varianti-021** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
-  - turni: aggiungi nei primi le linguine a 14 capito?
-  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Primo del giorno*: *10,00 €* · disponibile»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa lasagna?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **y-varianti-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
+  - turni: la tagliata 2 euro in meno
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **y-varianti-031** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|4.5
   - turni: abbassa di 50 cent la birra
   - atteso: price|Birra|4.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Birra*: prezzo da 5,00 € a *4,50 €* «abbassa di 50 cent la birra» non l’ho capito: cosa in»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-varianti-032** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|5.5
   - turni: la birra 50 cent in più
   - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Birra*: prezzo da 5,00 € a *5,50 €* «la birra 50 cent in più» non l’ho capito: cosa intend»
-- **y-varianti-037** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Margherita|true
-  - turni: nascondi la diavola e la margherita ⏎ la seconda no
-  - atteso: hidden|Diavola|true · ottenuto: hidden|Diavola|true, hidden|Margherita|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Diavola*: *nascosto* dal menu *Margherita*: *nascosto* dal menu» ⏎ «Va bene, *Secondo del giorno* resta com’è. Non ho cambiato nulla.»
-- **y-r2-el-misto-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: cancella il tiramisù e nascondi boh ⏎ sì
-  - atteso: delete|tiramisù, hidden|boh|true · ottenuto: delete|tiramisù, hidden|boh|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: *eliminato* dal menu 2. *boh*: *nascosto* dal menu Hai dimenticato qualco» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *eliminato* dal menu *boh*: *nascosto* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: la parmigiana a 12 ed elimina boh ⏎ sì
-  - atteso: delete|boh, price|la parmigiana|12 · ottenuto: delete|boh, price|la parmigiana|12
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *la parmigiana*: prezzo da 10,00 € a *12,00 €* 2. *boh*: *eliminato* dal menu Hai dim» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: prezzo da 10,00 € a *12,00 €* *boh*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina boh, la parmigiana è finita ⏎ sì
-  - atteso: available|la parmigiana|false, delete|boh · ottenuto: available|la parmigiana|false, delete|boh
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *la parmigiana*: *finito* 2. *boh*: *eliminato* dal menu Hai dimenticato qualcosa o v» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: *finito* *boh*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina boh e il tiramisù e metti la parmigiana a 12 ⏎ sì
-  - atteso: delete|boh, delete|tiramisù, price|la parmigiana|12 · ottenuto: delete|boh, delete|tiramisù, price|la parmigiana|12
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *la parmigiana*: prezzo da 10,00 € a *12,00 €* 2. *tiramisù*: *eliminato* dal menu 3.» ⏎ «*Confermato.* Ho aggiornato il menu. *la parmigiana*: prezzo da 10,00 € a *12,00 €* *tiramisù*: *eliminato* dal menu *boh*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: cancella boh e metti in evidenza il tiramisù ⏎ sì
-  - atteso: delete|boh, featured|tiramisù|true · ottenuto: delete|boh, featured|tiramisù|true
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: *in evidenza* 2. *boh*: *eliminato* dal menu Hai dimenticato qualcosa o v» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: *in evidenza* *boh*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina boh e aumenta il tiramisù di 1 ⏎ sì
-  - atteso: delete|boh, price|tiramisù|7 · ottenuto: delete|boh, price|tiramisù|7
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: prezzo da 6,00 € a *7,00 €* 2. *boh*: *eliminato* dal menu Hai dimenticat» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: prezzo da 6,00 € a *7,00 €* *boh*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: 🎤 allora boh eliminalo e il tiramisù lo metti a sette ⏎ sì
-  - atteso: delete|boh, price|tiramisù|7 · ottenuto: delete|boh, price|tiramisù|7
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tako · Verifica web*: ecco le modifiche. 1. *tiramisù*: prezzo da 6,00 € a *7,00 €* 2. *boh*: *eliminato* dal menu Hai dimenticat» ⏎ «*Confermato.* Ho aggiornato il menu. *tiramisù*: prezzo da 6,00 € a *7,00 €* *boh*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina boh, la parmigiana e il tiramisù ⏎ no
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?» ⏎ «Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare.»
-- **y-r2-el-misto-013** [GRAVE] GRAVE non-applicato: non applicato: hidden|Margherita|true
-  - turni: elimina la diavola e nascondi la margherita ⏎ no
-  - atteso: hidden|Margherita|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Margherita* 2. *Diavola* Rispondi con il *numero* o il *nome*.» ⏎ «*Annullato.* Il menu è rimasto invariato.»
-- **y-r2-el-misto-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la diavola e la margherita mettila a 8 ⏎ sì
-  - atteso: delete|Diavola, price|Margherita|8 · ottenuto: delete|Diavola, price|Margherita|8
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Margherita*: prezzo da 7,00 € a *8,00 €* 2. *Diavola*: *eliminato* dal menu Ha» ⏎ «*Confermato.* Ho aggiornato il menu. *Margherita*: prezzo da 7,00 € a *8,00 €* *Diavola*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la diavola e togli 1 euro alla margherita ⏎ sì
-  - atteso: delete|Diavola, price|Margherita|6 · ottenuto: delete|Diavola, price|Margherita|6
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Margherita*: prezzo da 7,00 € a *6,00 €* 2. *Diavola*: *eliminato* dal menu Ha» ⏎ «*Confermato.* Ho aggiornato il menu. *Margherita*: prezzo da 7,00 € a *6,00 €* *Diavola*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
-- **y-r2-el-misto-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|8
-  - turni: elimina la diavla e la margherita a 8 ⏎ sì
-  - atteso: price|Margherita|8 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Margherita*: prezzo da 7,00 € a *8,00 €* «elimina la diavla» non l’ho capito: cosa intende» ⏎ «Ho capito, *non ancora pubblicato*: 1. *Margherita*: prezzo da 7,00 € a *8,00 €* «elimina la diavla» non l’ho capito: cosa intendevi? Rispondi e pubblico tutto insieme: *no* pubblica solo le parti chiare, *annulla* non p»
-- **y-r2-el-misto-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la tagliatta
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-r2-el-misto-020** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la panacotta
-  - atteso: nessuna modifica · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-r2-rinomina-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Gricia|true, rename|Gricia|Gricia romana
   - turni: rinomina la gricia in Gricia romana e mettila in evidenza
   - atteso: featured|Gricia|true, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Gricia*: nuovo nome *Gricia romana* «mettila in evidenza» non l’ho capito: cosa intendevi?»
-- **y-r2-rinomina-003** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: rename|Gricia|Gricia romana, la carbonara a 13 · GRAVE non-applicato: non applicato: price|Carbonara|13, rename|Gricia|Gricia romana
-  - turni: rinomina la gricia in Gricia romana, la carbonara a 13
-  - atteso: price|Carbonara|13, rename|Gricia|Gricia romana · ottenuto: rename|Gricia|Gricia romana, la carbonara a 13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: nuovo nome *Gricia romana, la carbonara a 13*»
-- **y-r2-rinomina-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12, rename|Gricia|Gricia romana
-  - turni: cambia il nome della gricia in Gricia romana e il prezzo a 12
-  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Gricia*: nuovo nome *Gricia romana* «il prezzo a 12» non l’ho capito: cosa intendevi? Risp»
-- **y-r2-rinomina-013** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: rename|Gricia|Gricia romana a 12 · GRAVE non-applicato: non applicato: price|Gricia|12, rename|Gricia|Gricia romana
-  - turni: rinomina la gricia in Gricia romana a 12
-  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: rename|Gricia|Gricia romana a 12
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Gricia*: nuovo nome *Gricia romana a 12*»
-- **y-r2-rinomina-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
-  - turni: rinomina la gricia in Gricia romana ed eliminare la carbonara
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-r2-rinomina-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Gricia|Gricia romana
+  - turni: chiama la gricia "Gricia romana"
   - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Posso *eliminare un piatto (ti chiedo conferma, poi per 10 minuti puoi annullare)*. «elimina il polpo»; «togli il polpo» invece lo»
-- **y-r2-rinomina-015** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: rename|Supplì|Supplì classico e anche le crocchette in Crocchette di patate · GRAVE non-applicato: non applicato: rename|Crocchette|Crocchette di patate, rename|Supplì|Supplì classico
-  - turni: rinomina il supplì in Supplì classico e anche le crocchette in Crocchette di patate
-  - atteso: rename|Crocchette|Crocchette di patate, rename|Supplì|Supplì classico · ottenuto: rename|Supplì|Supplì classico e anche le crocchette in Crocchette di patate
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Supplì*: nuovo nome *Supplì classico e anche le crocchette in Crocchette di patate*»
-- **y-r2-cat-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: crea la categoria crudi ed elimina la bruschetta
-  - atteso: section|crudi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?»
-- **y-r2-cat-015** [GRAVE] GRAVE scrive-invece-di-chiedere: turno 1: doveva chiedere, ha scritto create|gnocchi|10|primi, create|ravioli|50|primi · GRAVE modifica-non-richiesta: non richiesto: create|gnocchi|10|primi · GRAVE modifica-non-richiesta: non richiesto: create|ravioli|50|primi
-  - turni: aggiungi nei primi gnocchi e ravioli a 10 e 50
-  - atteso: nessuna modifica · ottenuto: create|gnocchi|10|primi, create|ravioli|50|primi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. Nuovo piatto *Gnocchi* in *Primi*: *10,00 €* Nuovo piatto *Ravioli* in *Primi*: *50,00 €*»
-- **y-r2-sposta-003** [GRAVE] GRAVE modifica-non-richiesta: non richiesto: move|Gricia|Secondi · GRAVE non-applicato: non applicato: price|Gricia|12
-  - turni: sposta la carbonara nei secondi, e la gricia a 12
-  - atteso: move|Carbonara|Secondi, price|Gricia|12 · ottenuto: move|Carbonara|Secondi, move|Gricia|Secondi
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Carbonara*: spostato in *Secondi* *Gricia*: spostato in *Secondi*»
-- **y-r2-code-007** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
-  - turni: aggiungi nei secondi la grigliata a 22 capito?
-  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Secondo del giorno*: *15,00 €* · disponibile *Gricia*: *11,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-r2-sposta-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: sposta la carbonara nei secondi ⏎ e anche la gricia
+  - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-r2-sposta-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: sposta la carbonara nei secondi ⏎ pure la gricia
+  - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-r2-sposta-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: sposta la carbonara nei secondi ⏎ la gricia uguale
+  - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-r2-relativi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara 1 euro in più
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **y-r3-conferme-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|11.5
   - turni: togli 50 cent alla carbonara
   - atteso: price|Carbonara|11.5 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Ho capito, *non ancora pubblicato*: 1. *Carbonara*: prezzo da 12,00 € a *11,50 €* «togli 50 cent alla carbonara» non l’ho capito: »
-- **y-r3-conferme-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
-  - turni: elimina la gricia e aumenta la carbonara di 1
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale piatto intendi? 1. *Carbonara* 2. *Gricia* Rispondi con il *numero* o il *nome*.»
-- **y-r3-conferme-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
-  - turni: elimina la gricia e aumenta la carbonara di 1 ⏎ sì
-  - atteso: delete|Gricia, price|Carbonara|13 · ottenuto: delete|Gricia, price|Carbonara|13
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Trattoria delle Categorie*: ecco le modifiche. 1. *Carbonara*: prezzo da 12,00 € a *13,00 €* 2. *Gricia*: *eliminato* dal menu Ha» ⏎ «*Confermato.* Ho aggiornato il menu. *Carbonara*: prezzo da 12,00 € a *13,00 €* *Gricia*: *eliminato* dal menu Per 10 minuti puoi scrivere «annulla» per rimetterlo.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **y-r3-conferme-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Tagliata|Tagliata di manzo
+  - turni: chiama la tagliata «Tagliata di manzo»
+  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-r3-conferme-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Tagliata|true
   - turni: rinomina la tagliata in Tagliata di manzo ⏎ nascondila
   - atteso: hidden|Tagliata|true, rename|Tagliata|Tagliata di manzo · ottenuto: rename|Tagliata|Tagliata di manzo
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Confermato.* Ho aggiornato il menu. *Tagliata*: nuovo nome *Tagliata di manzo*» ⏎ «Cosa vuoi cambiare per *Tagliata di manzo*: il prezzo, se è finito o altro? Non ho cambiato nulla.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Tagliata*: nuovo nome *Tagliata di manzo*» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»

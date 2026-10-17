@@ -16,3 +16,12 @@ TAKO_EVAL=1 TAKO_EVAL_GROQ=record TAKO_EVAL_GROQ_KEY_FILE=<file chiave Developer
 node tests/eval/fix-a-count.mjs docs/webapp/bot-cervello-2026-10-17/verifica-v/results-fase-a-record.json --list
 ```
 Stima: 66 conversazioni V passano dal cervello, 84 chiamate × ~3,6k token ≈ 300k token.
+
+## Fase R (agente R, 17/10 notte)
+
+| Quando | Cosa | Chiave | Token |
+|---|---|---|---|
+| 17/10 22:00–23:40 | tutte le batterie (fix-a, fix-b, X, Y, V, banco E) × oracolo/Groq giù/avversario, test R: solo modelli finti | nessuna | 0 |
+| 17/10 23:20 | R5.2 campione gpt-oss: **non eseguito**. Registro: `groq-key-test` 166.114, `groq-key-test-2` 164.728 token oggi, oltre il tetto di 150k/giorno per chiave. Rimandato al gate Developer | — | 0 |
+
+**Totale fase R: 0 token** (tetto 40.000).

@@ -146,22 +146,22 @@ A7.14 NON superato: Y (codex/bot-adv2-1017 cd777a8, `avversaria-y/REPORT-Y.md`) 
 - [x] R0.1 UNKNOWNS-R.md: perché le famiglie semplici calavano 97→58 col cervello su tutto (prompt? validatore? oracolo?); cosa del percorso deterministico è interpretazione (da togliere) e cosa è vincolo (da tenere nel validatore); stati in sospeso oggi gestiti a copione. — *R 17/10: UNKNOWNS-R.md; spike misurato (cervello su tutto senza strumenti: E 298→281, fix-a 809→538): il calo è architettura (stati in sospeso senza strumenti), testi fissi del server e oracolo, non gpt-oss.*
 - [x] R0.2 Mappa dei testi fissi in twilio-menu-copy.ts e simili: quali spariscono, quali diventano fatti del server, i 2 ammessi. — *R: MAPPA-TESTI-R.md (valida solo a cervello acceso; clienti invariati).*
 ### R1 Instradamento unico
-- [ ] R1.1 Route: tutti i messaggi al cervello quando `botBrain` è acceso; percorso deterministico non più chiamato per interpretare.
-- [ ] R1.2 Operazioni in sospeso (bozze, conferme elimina, riepiloghi, domande aperte, scelte numerate) passate nel contesto e risolte dal modello; il server tiene solo lo stato e i vincoli.
-- [ ] R1.3 Groq giù → messaggio A, nessuna modifica; test con Groq finto in errore/429/JSON rotto.
+- [x] R1.1 Route: tutti i messaggi al cervello quando `botBrain` è acceso; percorso deterministico non più chiamato per interpretare. — *R: `brainEntry` in testa a `menuTurnCore` + `brainTurnR` nel job: col cervello acceso nessun messaggio passa dal percorso a regole (fuori solo foto/menu intero/preset/memoria, nota 49). Misurato su tutte le batterie.*
+- [x] R1.2 Operazioni in sospeso (bozze, conferme elimina, riepiloghi, domande aperte, scelte numerate) passate nel contesto e risolte dal modello; il server tiene solo lo stato e i vincoli. — *R: stati `batch` (why), `hold` (source), `brain_ask` e annulla possibile nel contesto; il modello conferma/scarta/completa, il server tiene stato e vincoli (note 50–51).*
+- [x] R1.3 Groq giù → messaggio A, nessuna modifica; test con Groq finto in errore/429/JSON rotto. — *R: `copy.brainDown` per 503/429/timeout/JSON rotto/nessuna chiave, nessuna modifica: `tests/owner-brain-r.test.ts` 20/20; Groq giù su tutte le batterie 0 GRAVI di sicurezza.*
 ### R2 Strumenti e validatore
-- [ ] R2.1 Schema azioni completo (incl. fase B: elimina, categorie, sposta, rinomina) nello schema strict.
-- [ ] R2.2 Validatore unico: riusa i controlli di A–A8 (lettore prezzi indipendente, parti perse, rimandi, polarità, nomi, conferma elimina, conferme chiuse da correzioni, quantità ≠ prezzi, formati prezzo).
-- [ ] R2.3 Auto-correzione: errore del validatore rimandato al modello una volta; poi domanda.
+- [x] R2.1 Schema azioni completo (incl. fase B: elimina, categorie, sposta, rinomina) nello schema strict. — *R: `confirm_pending`/`cancel_pending`/`undo_last` nello schema strict (fase B era già dentro).*
+- [x] R2.2 Validatore unico: riusa i controlli di A–A8 (lettore prezzi indipendente, parti perse, rimandi, polarità, nomi, conferma elimina, conferme chiuse da correzioni, quantità ≠ prezzi, formati prezzo). — *R: validatore di A–A8 riusato + vincoli nuovi e allentamenti misurati (nota 55); avversario con anche gli strumenti di controllo a sproposito: 0 GRAVI di sicurezza su fix-a/fix-b/X/Y.*
+- [x] R2.3 Auto-correzione: errore del validatore rimandato al modello una volta; poi domanda. — *R: un rifiuto torna al modello una volta col motivo, poi domanda del modello; banco E 12 auto-correzioni su 547 turni (nota 52).*
 ### R3 Risposte generate
-- [ ] R3.1 Rimozione dei testi fissi (tranne i 2 ammessi); fatti del server in coda alla bozza del modello.
-- [ ] R3.2 Test che scansiona tutte le risposte di tutte le batterie: 0 testi fissi vietati.
+- [x] R3.1 Rimozione dei testi fissi (tranne i 2 ammessi); fatti del server in coda alla bozza del modello. — *R: testi fissi del percorso a regole via col cervello acceso; restano `aiDisclosure`, `copy.brainDown` e fatti di stato (nota 53, MAPPA-TESTI-R.md).*
+- [x] R3.2 Test che scansiona tutte le risposte di tutte le batterie: 0 testi fissi vietati. — *R: `tests/owner-brain-r-texts.test.ts`: 16 file di risultati, 0 frammenti vietati.*
 ### R4 Scheda e prompt
-- [ ] R4.1 Scheda generale: comandi semplici con esempi (dalle batterie round1–6 e dai vocali di Manuel), regole del titolare, glossario; misura token (target ≤ 3,5k tipico).
-- [ ] R4.2 Oracolo del banco aggiornato al nuovo instradamento (documentato).
+- [x] R4.1 Scheda generale: comandi semplici con esempi (dalle batterie round1–6 e dai vocali di Manuel), regole del titolare, glossario; misura token (target ≤ 3,5k tipico). — *R: scheda riscritta, riga ESEMPI dai round e dai vocali, accorciata: 2,8k token la scheda, contesto tipico 3,2–3,5k (≤3,9k con 10 scambi) (nota 59).*
+- [x] R4.2 Oracolo del banco aggiornato al nuovo instradamento (documentato). — *R: `brain-oracle-r.ts` + avversario `attackR`, documentati (nota 58): misura instradamento/contesto/strumenti/validatore, non gpt-oss.*
 ### R5 Misura
-- [ ] R5.1 Tutte le batterie con oracolo e avversario → goal sopra; suite senza nuovi rossi oltre i 12 noti (i test del vecchio percorso che cambiano significato vanno aggiornati e motivati in implementation-notes).
-- [ ] R5.2 Campione gpt-oss vero solo se le chiavi di test hanno quota (tetto 40k), altrimenti gate Developer.
+- [ ] R5.1 Tutte le batterie con oracolo e avversario → goal sopra; suite senza nuovi rossi oltre i 12 noti (i test del vecchio percorso che cambiano significato vanno aggiornati e motivati in implementation-notes). — *R: NON raggiunto. Oracolo: fix-a 809/809, fix-b 452/452, X 502/508 (0 GRAVI, 6 MEDI 1,2%), banco E 306/318 (era 298; 7 GRAVI non di sicurezza, 5 MEDI), V 128/143 (era 131; 4 GRAVI di cui 2 di sicurezza già nella base, 11 MEDI), Y 508/558 (era 454; 5 GRAVI, 1 di sicurezza = falso positivo noto y-lunghe-013, 45 MEDI 8%). Avversario e Groq giù 0 GRAVI di sicurezza ovunque. Round1–6* col cervello spento 1679/1679, suite = gli stessi 14 rossi di 6004b81.*
+- [ ] R5.2 Campione gpt-oss vero solo se le chiavi di test hanno quota (tetto 40k), altrimenti gate Developer. — *R: RIMANDATO al gate Developer: chiavi di test oltre 150k/giorno (166k e 165k), 0 token (nota 61).*
 ### R6 Avversaria Z
 - [ ] R6.1 Terzo giro avversario indipendente (≥300 conv. nuove) sulla nuova struttura; GRAVI → fix (max 3 giri).
 ### R7 Gate Developer e rilascio
