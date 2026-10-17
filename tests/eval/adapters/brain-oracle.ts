@@ -73,8 +73,10 @@ export function brainOracleBase(conv:Conversation|null,body:any):string|null{
  const msg=(last.split('\nMESSAGGIO\n')[1]??last.replace(/^MESSAGGIO\n/,'')).trim(),p=plainT(msg),pAll=p
  const hist=msgs.slice(2,-1),owners=hist.filter(m=>m.role==='user').map(m=>m.content),bot=[...hist].reverse().find(m=>m.role==='assistant')?.content??''
 
- const names=[...cat.code.keys()],expected=[...conv.changes,...(conv.interim??[])]
- literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');secSaid=(n:string)=>plainT(n).split(' ').filter(w=>w.length>=4).some(w=>new RegExp(`\\b(?:un|una|uno)\\s+${w.slice(0,4)}`).test(p))||!!sectionAnswer&&plainT(n).slice(0,5)===sectionAnswer.slice(0,5)||cat.sections.size===1&&!otherSection(p,[...cat.sections.keys()])||plainT(n).split(' ').filter(w=>w.length>=4).some(w=>new RegExp(`\\b(?:nei|negli|nelle|nel|nella|tra|fra|in|categoria|sezione|ai|agli|alle)\\s+(?:i\\s+|gli\\s+|le\\s+|la\\s+|il\\s+|l\\s+)?${w.slice(0,5)}`).test(p));relDelta=relativeDelta(msg)?.delta??null
+ // Fase R: dopo una rinomina il menu ha il nome nuovo, le attese sono scritte col nome vecchio: il modello ideale le collega.
+ const ren0=new Map([...conv.changes,...(conv.interim??[])].flatMap(c=>c.op==='rename'&&cat.code.has(c.name)&&!cat.code.has(c.dish)?[[c.dish,c.name] as const]:[]))
+ const names=[...cat.code.keys()],expected=[...conv.changes,...(conv.interim??[])].map(c=>c.op!=='create'&&c.op!=='section'&&c.op!=='rename'&&ren0.has((c as any).dish)?{...c,dish:ren0.get((c as any).dish)!} as Change:c)
+ literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');secSaid=(n:string)=>plainT(n).split(' ').filter(w=>w.length>=4).some(w=>new RegExp(`\\b(?:un|una|uno|chiama|chiamata|chiamato|nome|nuova)\\s+${w.slice(0,4)}`).test(p))||!!sectionAnswer&&plainT(n).slice(0,5)===sectionAnswer.slice(0,5)||cat.sections.size===1&&!otherSection(p,[...cat.sections.keys()])||plainT(n).split(' ').filter(w=>w.length>=4).some(w=>new RegExp(`\\b(?:nei|negli|nelle|nel|nella|tra|fra|in|categoria|sezione|ai|agli|alle)\\s+(?:i\\s+|gli\\s+|le\\s+|la\\s+|il\\s+|l\\s+)?${w.slice(0,5)}`).test(p));relDelta=relativeDelta(msg)?.delta??null
  // Struttura (fase B): categorie, spostamenti, anche dei piatti appena creati che ora vanno altrove.
  // A8 (Y, M3): anche senza «sposta» («metti la carbonara nei secondi a 14») se il messaggio nomina la categoria di arrivo attesa;
  // con lo spostamento il modello ideale fa anche le altre modifiche dette sui piatti del messaggio (prezzo detto, nascondi…).
@@ -100,7 +102,7 @@ export function brainOracleBase(conv:Conversation|null,body:any):string|null{
  // Nomi storpiati dalla trascrizione (A5): il modello ideale li riconosce a suono, il server decide se chiedere.
  const pseudo=names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''}))
  const byEar=(t:string)=>{const h=phoneticHits(t,pseudo as any);return[...h.strong,...h.weak].filter(n=>!names.some(o=>o!==n&&plainT(t).includes(plainT(o))&&plainT(o).includes(plainT(n))))}
- const mentionedIn=(t:string)=>names.filter(n=>hitStems(n,t).length>0&&!rivalsOf(n,t).length&&!covered(n,t)).concat(names.filter(n=>plainT(t).includes(plainT(n)))).concat(byEar(t))
+ const mentionedIn=(t:string)=>names.filter(n=>hitStems(n,t).length>0&&!rivalsOf(n,t).length&&!covered(n,t)).concat(names.filter(n=>plainT(t).includes(plainT(n)))).concat(byEar(t).filter(n=>!covered(n,t)))
  const rivalsOf=(n:string,t:string)=>rivals(n,t,names)
  const here=[...new Set(mentionedIn(msg))]
  const lastOwnerDishes=(()=>{for(const o of [...owners].reverse()){const d=[...new Set(mentionedIn(o))];if(d.length)return d}return[] as string[]})()
@@ -115,7 +117,7 @@ export function brainOracleBase(conv:Conversation|null,body:any):string|null{
  // Scelta tra opzioni mostrate: ordinale, «tutti e due», o il nome di una delle opzioni.
  if(listed.length>1){const all=/\b(tutt[ie]|entramb\w*)\b/.test(p),ord=ORD.find(([re])=>re.test(p)),byName=listed.filter(n=>hitStems(n,msg).length>0),other=/\b(altr[oa])\b/.test(p)
   const negated=listed.filter(n=>new RegExp(`\\b${plainT(n).split(' ').slice(-1)[0]}\\b[^,]*\\bno\\b`).test(p))
-  const chosen=all?listed:ord?[listed[ord[1]]!].filter(Boolean):byName.length===1?byName:other&&negated.length?listed.filter(n=>!negated.includes(n)):[]
+  const chosen=all?listed:ord?[listed[ord[1]]!].filter(Boolean):other&&negated.length?listed.filter(n=>!negated.includes(n)):byName.length===1?byName:[]
   if(chosen.length){const src=plainT(sourceMsg),srcPrice=spoken(sourceMsg)[0]??null
    const srcAll=spoken(sourceMsg),acts=chosen.map(n=>{const e=expected.find(c=>c.op!=='create'&&c.dish===n);if(e)return act(e,cat,e.op==='price'?(srcAll.includes((e as any).price)?(e as any).price:srcPrice):null,null)
     return srcPrice!==null?{action:'set_price',item:cat.code.get(n),price:srcPrice}:/finit|esaurit/.test(src)?{action:'set_available',item:cat.code.get(n),value:false}:/nascond|togli|lev/.test(src)?{action:'set_hidden',item:cat.code.get(n),value:true}:null}).filter(Boolean)

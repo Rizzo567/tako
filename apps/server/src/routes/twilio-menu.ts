@@ -429,7 +429,9 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  const undoNames=undoOK?(undoRec!.full?[...undoRec!.full.names.restored,...undoRec!.full.names.removed]:undoRec!.items.map(i=>String(refs.find(r=>r.id===i.id)?.name??i.after?.name??i.before?.name??'')).filter(Boolean)):[]
  const name=String((await db.execute(sql`SELECT name FROM restaurants WHERE id=${ctx.tenant}`))[0]?.name??'')
  const restorable=await (async()=>{const a=await readRestorable(db,ctx.phone),b=undoRec,items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before});return items.length?{at:Date.now(),items}:null})()
- const base={tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,undo:restorable,undoInfo:undoOK&&undoNames.length?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames}:null}
+ const last=await readLast(db,ctx.phone,row.revision),extraRestore=last?last.undo.flatMap(a=>'id' in a?[{id:(a as any).id as string,actions:last.undo.filter(b=>'id' in b&&(b as any).id===(a as any).id)}]:[]):[]
+ const freshIds=new Set(undoOK&&!undoRec!.full?undoRec!.items.filter(i=>i.before===null).map(i=>i.id):[])
+ const base={tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (categorie)']}:null}
  const decide=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>decideTurn({decision:run.decision as any,control:run.decision.control??[],raw:run.decision.raw,message:text,pend,undoOK,sections,refs})
  const numbersOK=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>,extra:number[]=[])=>[...numbersIn(text),...numbersIn(run.ownerRecent??''),...extra]
  // Una domanda (o una risposta senza scrittura) senza testo del modello utilizzabile vale come piano da rifare.
@@ -455,19 +457,25 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const drop=()=>tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`)
   const say=(facts:string,wrote:boolean,extra:number[]=[])=>{const d=cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
   const pricesOf=(acts:MenuAction[])=>acts.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[]).concat(acts.flatMap(a=>'id' in a?[refs.find(r=>r.id===(a as any).id)?.price??-1]:[]))
+  // Scrive e pubblica, poi rilegge dal DB: i fatti della risposta sono quelli riletti.
+  const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number}>=>{
+   const beforeW=structuredClone(workspace);applyActions(workspace,effective,{uploads:new Map(),timezone:String(settings?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace)
+   if(budget.expired)throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,label[0],tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired');await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,label[1],tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
+   const waItems=new Map(beforeW.menus.flatMap((m:any)=>m.sections.flatMap((sec:any)=>sec.items.map((i:any)=>[i.id,structuredClone(i)] as const)))),back=undoFor(effective,id=>waItems.get(id) as any)
+   await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,back?{kind:'last',actions:effective,undo:back,revision:saved.revision+1,at:Date.now()}:null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
+   const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
+   inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter}))
+   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
+   return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1}}
   const publish=async(actions:MenuAction[]):Promise<string>=>{const effective=effectiveMenuActions(actions,workspace)
    if(!effective.length){await drop();return say(copy.noChanges,false)}
    {const problem=salesActionProblem(effective,workspace);if(problem){await drop();return problem}}
    const why=approvalFor(effective,refs,text)
+   // Eliminazioni insieme ad altre modifiche (Y1): le parti chiare si pubblicano subito, le eliminazioni aspettano il «sì».
+   if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
+    if(rest.length&&!approvalFor(rest,refs,text)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
    if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});return say(pendingFacts(why,effective,refs,sections),false,pricesOf(effective))}
-   const beforeW=structuredClone(workspace);applyActions(workspace,effective,{uploads:new Map(),timezone:String(settings?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace)
-   if(budget.expired)throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired');await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
-   await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
-   // I fatti si scrivono sul menu RILETTO dal DB dopo la pubblicazione.
-   const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
-   inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter}))
-   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
-   return say(facts,!failed.length,pricesOf(effective))}
+   const r=await applyNow(effective);return say(r.facts,r.allOk,pricesOf(effective))}
   switch(out.kind){
    case 'undo':{const res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
@@ -477,11 +485,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     const all=pend!.kind==='hold'?mergeMenuActions(stored,out.extra):stored
     // Una conferma di riepilogo pubblica; le risposte alle parti incerte passano dagli stessi vincoli di una richiesta nuova.
     if(pend!.kind==='batch'){const effective=effectiveMenuActions(all,workspace);if(!effective.length){await drop();return say(copy.noChanges,false)}
-     const beforeW=structuredClone(workspace);applyActions(workspace,effective,{uploads:new Map(),timezone:String(settings?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace)
-     const saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: bozza confermata',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: pubblicazione confermata',tx as unknown as DB)
-     await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
-     const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
-     return say([ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):''].filter(Boolean).join('\n\n'),!failed.length,pricesOf(effective))}
+     const r=await applyNow(effective,['WhatsApp: bozza confermata','WhatsApp: pubblicazione confermata']);return say(r.facts,r.allOk,pricesOf(effective))}
     return publish(all)}
    case 'change':{
     // Riepilogo in attesa dell'OK: le correzioni lo aggiornano (e i piatti esclusi escono), resta in attesa.

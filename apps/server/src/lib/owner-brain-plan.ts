@@ -15,6 +15,7 @@ import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
 import {CONTROL_ACTIONS,politeRequest,isAffirmative,type ControlAction} from './owner-brain-r.js'
+import {sameSection} from './twilio-menu-structure.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
 export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS] as const
@@ -55,7 +56,7 @@ export async function callBrain(ctx:BrainContext,key:string,opts:BrainCallOption
  catch(error){if(error instanceof GroqBusy)throw new BrainUnavailable('busy');throw new BrainUnavailable(timedOut?'timeout':lastStatus===400||lastStatus===-1?'invalid_json':'http',String(lastStatus))}
 }
 
-export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,restorable?:Map<string,MenuAction[]>,exclude?:Excluded[],correction?:{previous:string,reason:string}|null}
+export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,restorable?:Map<string,MenuAction[]>,exclude?:Excluded[],correction?:{previous:string,reason:string}|null,freshIds?:Set<string>}
 export type BrainDecision={path:'brain',intent:'change'|'read'|'clarify'|'capability'|'chat',plan:MenuPlan,hold?:Hold,exclude:Excluded[],aliasesUsed:{phrase:string,itemId:string}[],replyDraft:string,notes:string[],usage:BrainUsage,tokens:BrainContext['tokens'],
  /** Fase R: strumenti di controllo scelti dal modello (li verifica il route), JSON del modello e bozza originale. */
  control?:ControlAction[],raw?:any,content?:string,draft?:string}
@@ -205,14 +206,14 @@ function quantitiesRead(text:string,actions:MenuAction[]){let t=text
 export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:Parameters<typeof validateBrainPlanCore>[2]):ReturnType<typeof validateBrainPlanCore>{
  const d=validateBrainPlanCore(raw,ctx,input)
  // A8.0 (Y, parti perse): il piano deve usare i numeri detti e avere l'azione di ogni verbo esplicito del messaggio.
- if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)){const mix=mixedMessage(input.message),lost=lostParts(quantitiesRead(mix?mix.command:input.message,d.plan.actions),d.plan.actions,input.refs,input.sections)
+ if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)&&!(input.clarifyIds?.length&&plain(input.message).split(' ').length<=3)){const mix=mixedMessage(input.message),lost=lostParts(quantitiesRead(mix?mix.command:input.message,d.plan.actions),d.plan.actions,input.refs,input.sections)
   if(lost.length){
    // Le parti capite restano in sospeso (proposta `hold`) e si chiede della parte non letta, citandola: mai pubblicate a metà.
    const text=mix?mix.command:input.message,parts=text.split(/\s*[,;]\s*|\s+(?:e|ed|poi)\s+/).map(x=>x.trim()).filter(Boolean),fold0=(x:string)=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
    const bad=[...new Set(lost.map(w=>parts.find(p=>fold0(p).replace(/,/g,'.').includes(w))??w))].slice(0,3)
    return{...d,intent:'clarify',plan:{type:'clarify',ids:[]} as MenuPlan,hold:{kind:'hold',actions:d.plan.actions,asks:bad.map(w=>({type:'unknown' as const,word:w}))},notes:[...d.notes,'parte_persa:'+lost.slice(0,3).join(',')]}}}
  return d}
-function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
+function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{freshIds?:Set<string>,refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections}=input,message=dialectNumbers(input.message),byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
  const map=(v:unknown)=>typeof v==='string'?ctx.codes.get(v.trim().toLowerCase())??null:null
  const empty={type:'clarify',ids:[]} as MenuPlan
@@ -235,10 +236,13 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // Fase R: «bò»/«bo» = «boh» (solo accento o h muta): è il nome, non un suono incerto.
  for(const id of sound.weak){const ph=sound.phrase.get(id);if(ph&&plain(ph).replace(/h/g,'')===plain(byId.get(id)!.name).replace(/h/g,''))trusted.add(id)}
  const weakIds=new Set(sound.weak.filter(id=>!trusted.has(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)))
+ // Fase R: «sono tornati tutti i dolci», «nascondi tutte le pizze»: la categoria nominata per intero nomina i suoi piatti.
+ for(const m of msg.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)/g)){const secs=sections.filter(s=>sameSection(s.name,m[1]!));if(secs.length===1)for(const r of refs)if(r.sectionId===secs[0]!.id)trusted.add(r.id)}
  const trustedHas=(id:string)=>trusted.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
  // «no, la parmigiana no»: il «no,» in testa non è una clausola (stessa normalizzazione del percorso di prima).
- const neg=negatedClauses(message.replace(/^\s*no\s*[,;.!]\s*(?=.+\bno\s*[.!]?\s*$)/i,''),refs),exclude:Excluded[]=[...(neg?.excluded??[]),...(input.exclude??[]).filter(e=>!neg?.excluded.some(x=>x.id===e.id))]
+ // «la gricia no, lasciala a 11»: un valore detto per il piatto «negato» è una correzione, non un'esclusione.
+ const neg0=negatedClauses(message.replace(/^\s*no\s*[,;.!]\s*(?=.+\bno\s*[.!]?\s*$)/i,''),refs),neg=neg0&&/\b(?:lascial[aoie]|tienil[aoie]|mettil[aoie]|rimettil[aoie])\s+a\s+\d/i.test(message)?null:neg0,exclude:Excluded[]=[...(neg?.excluded??[]),...(input.exclude??[]).filter(e=>!neg?.excluded.some(x=>x.id===e.id))]
  // Domande → zero scritture, qualunque cosa dica il modello («la carbonara 13 o 14?», «quanto costa la carbonara?»).
  // Messaggio misto (A4.4): la parte di domanda non blocca la modifica detta nell'altra parte.
  const mix=mixedMessage(message)
@@ -246,7 +250,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  const dishLead=!/\?/.test(message)&&/^(?:che|come|quando|cosa)\b/.test(msg)&&(refs.some(r=>msg.startsWith(plain(r.name)+' '))||sound.strong.some(id=>msg.startsWith((sound.phrase.get(id)??'\u0000')+' ')))
  // «…a 13, ok?», «…, va bene?» in coda a un comando non fanno del messaggio una domanda.
   const qText=message.trim().split(/\s+/).length>=4?message.replace(/[,\s]+(?:ok|okay|va bene|d['’ ]?accordo|grazie|perfetto|si|sì)\s*[?!.]*\s*$/i,''):message
-  const question=!mix&&!dishLead&&((looksLikeQuestion(qText)&&!politeCommand(qText)&&!politeRequest(qText))||!!priceAlternatives(message,refs))
+  // Prezzi alternativi («la coda a 17 o 18») segnati dal modello come parte incerta: le parti chiare restano, si chiede.
+  const altQ=!!priceAlternatives(message,refs)&&!(Array.isArray(data.uncertain)&&data.uncertain.length>0&&Array.isArray(data.actions))
+  const question=!mix&&!dishLead&&((looksLikeQuestion(qText)&&!politeCommand(qText)&&!politeRequest(qText)&&!(altQ===false&&!!priceAlternatives(message,refs)&&!/\?\s*$/.test(message)))||altQ)
  // Misto con azioni: anche se il modello lo legge come domanda/chiacchiera/capacità, la parte di modifica si valida come change.
  const mixAsChange=!!mix&&Array.isArray(data.actions)&&data.actions.length>0&&['read','capability','chat'].includes(intent)
  if(mix?.conditional){const qp=plain(mix.question),m=qp.match(/\bcosta(?:no)? (?:ancora |sempre )?(\w+)/),n=m?g9Prices('a '+m[1]!)[0]:undefined,d=refs.find(r=>g9DishMentioned(r.name,mix.question,refs))
@@ -293,6 +299,8 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
   const tmpl=(id:string):MenuAction|null=>{if(u.action==='none')return null;const v=validateMenuPlan({intent:'change',actions:[legacyAction({...u,item:'x',price:u.price},x=>x==='x'?id:map(x))]},refs,{sections,message,exclude,trustedIds:new Set([id]),checkCompleteness:false});return v.type==='change'&&v.actions.length===1?v.actions[0]!:null}
   if(cands.length>=2){const a=tmpl(cands[0]!);if(a){const {id:_i,...template}=a as any;asks.push({type:'choose',word,options:cands,template});continue}}
   if(cands.length===1){const a=tmpl(cands[0]!);if(a){asks.push({type:'confirm',word,action:a});continue}}
+  // Fase R: piatto chiaro ma valore da chiedere («la coda a 17 o 18»): la domanda porta il candidato (la risposta «17» lo usa).
+  if(cands.length>=1){asks.push({type:'choose',word,options:cands,template:null});continue}
   asks.push({type:'unknown',word})}
  // Contesto (fase 2): un messaggio che rimanda a prima («mettila a 13», «e la gricia uguale», «no scusa 14», «sì la seconda»)
  // può riferirsi a piatti nominati nella cronologia (ultimi messaggi del titolare + ultima risposta del bot) e a prezzi detti
@@ -302,7 +310,8 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
 const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!!lastBotTurn&&BOT_QUESTION.test(lastBotTurn.text)&&(input.now??Date.now())-lastBotTurn.at>PENDING_MS
  // Una domanda del bot vale 10 minuti (come le proposte in sospeso): dopo, la risposta breve non la completa più.
  // Fase R: con una domanda aperta del bot (candidati in sospeso) la risposta usa sempre il contesto («la nonna e la media»).
- const ctxOK=!hasCreate&&history.length>0&&!staleQuestion&&(REFERS.test(msg)||msg.split(' ').length<=4||!!input.clarifyIds?.length)
+ const compar0=/^(?:e|ed|anche|pure)\b/.test(msg)&&!!relativeDelta(message)
+ const ctxOK=!hasCreate&&history.length>0&&!staleQuestion&&(REFERS.test(msg)||msg.split(' ').length<=4||!!input.clarifyIds?.length||compar0)
  const dishText=ctxOK?[message,...owners,lastBotText].join(' \n '):hasCreate&&input.draftText?message+' \n '+input.draftText:message,priceText=ctxOK?[message,...owners].join(' \n '):message
  const botLabels=[...lastBotText.matchAll(/\*([^*\n]{2,80})\*\s*:/g)].map(m=>plain(m[1]!))
  const mentioned=(id:string)=>trusted.has(id)||g9DishMentioned(byId.get(id)!.name,dishText,refs)
@@ -335,7 +344,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // Piatti indicati in modo ambiguo o coperti da un altro: le azioni chiare restano, per ognuna ambigua una domanda «quale?»
   // con l'azione già capita (proposta hold o scelta), mai una scelta del modello e mai la richiesta intera persa.
   const dim=(id:string)=>{const t=byId.get(id)!;return message.split(/[,;]|\s+e\s+/).filter(x=>g9DishMentioned(t.name,x,refs)).flatMap(x=>diminutiveRivals(x,t,refs).map(o=>o.id))}
-   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id);if(r.length)doubt.set(id,[id,...new Set(r)])}
+   const openSet=new Set(input.clarifyIds??[]),inOpen=(x:string)=>!openSet.size||!openSet.has(id0)||openSet.has(x);let id0=''
+   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;id0=id;const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id&&inOpen(x));if(r.length)doubt.set(id,[id,...new Set(r)])}
   if(doubt.size){const clear=plan.actions.filter(a=>!('id' in a)||!doubt.has((a as any).id)),amb=plan.actions.filter(a=>'id' in a&&doubt.has((a as any).id))
    const asks2:HoldAsk[]=amb.map(a=>{const {id,...template}=a as any;return{type:'choose' as const,word:refs.find(r=>r.id===id)?.name??'',options:doubt.get(id)!.slice(0,8),template}})
    if(!clear.length&&asks2.length===1)return{intent:'clarify',plan:{type:'clarify',ids:asks2[0]!.type==='choose'?asks2[0]!.options:[],actions:[amb[0]!]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
@@ -345,14 +355,17 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   {const swapped=[...priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs),...priceOfOtherClause(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs)];if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
   {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
-  {const foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&foreignQualifier(message,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
+  // Il nome nuovo di una rinomina («rinomina il pollo in Pollo alla diavola») non è un qualificatore del piatto.
+  {const fq=plan.actions.reduce((m,a)=>a.kind==='rename'?m.replace(new RegExp(a.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'),' '):m,message),foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&foreignQualifier(fq,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
   // Rimando senza nome («mettila a 13», «no scusa 14»): vale solo per il piatto (unico) del messaggio precedente del titolare
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
   if(ctxOK){const prevOwner=owners.at(-1)??'',pd=refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)).map(r=>r.id),bd=refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).map(r=>r.id)
    const bare=ids.filter(id=>!trustedHas(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)&&!derived.some(d=>d.refId===id))
    // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
-   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)
+   // Fase R: «anche la lasagna» → «no scusa 14»: il prezzo cambiato l'ha scritto il server nell'ultima risposta (riga «X: prezzo da»).
+   const botChanged=(id:string)=>{const r=byId.get(id);return !!r&&plain(lastBotText).includes(plain(r.name)+' prezzo da')}
+   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)&&!botChanged(id)
    // Risposta a una domanda del bot sulla richiesta di prima: quella richiesta (anche con più piatti) torna valida per intero.
    const answering=BOT_QUESTION.test(lastBotText)
    const botList=/(?:^|\s)[-•]\s+\S/.test(lastBotText)&&!/\?/.test(lastBotText)?refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).sort((a,b)=>lastBotText.indexOf(a.name)-lastBotText.indexOf(b.name)).map(r=>r.id):[]
@@ -366,7 +379,9 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   return{intent:'change',plan,exclude,aliasesUsed,replyDraft:'',notes}}
  // Con contesto o azioni derivate: le azioni «normali» passano dal validatore attuale sul testo con il contesto; i prezzi devono
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
- const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message,implicitSections:true}):{type:'change',actions:[]} as MenuPlan
+ // Fase R: «no, nei primi» subito dopo uno spostamento corregge lo spostamento (il verbo era nel messaggio di prima).
+ const moveFix=/^(?:no|anzi|scusa)\b/.test(msg)&&/\b(?:nei|negli|nelle|nella|nel|tra|fra|in)\s/.test(msg)&&/\b(?:spost\w*|mett\w*)\b/.test(plain(owners.at(-1)??''))
+ const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
  if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
   // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio
@@ -377,18 +392,27 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // 17/10 (A2.3): un prezzo del contesto vale solo con un rimando esplicito («uguale», «anche», «no, il tiramisù»), mai in un
   // messaggio che dice di lasciare stare («no, il caviale lascialo stare» era diventato il caviale a 10 €).
   const ctxPriceOK=(SAME_PRICE.test(msg)||SWAP.test(msg))&&!LEAVE.test(msg)
-  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v)))return no('prezzo_non_detto',[a.id])}}
+  const refPlusOK=(v:number)=>{const rd=relativeDelta(message);return !!rd&&refs.some(r=>new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg)&&Math.abs(r.price+rd.delta-v)<0.005)}
+  // «metti la carbonara a 13» → «e la gricia a uno in meno» = 12: la differenza è rispetto al prezzo appena scritto (riga del bot).
+  const rdc=relativeDelta(message),botNew=[...lastBotText.replace(/\*/g,'').matchAll(/prezzo da [\d.,]+\s*€ a ([\d.,]+)\s*€/g)].map(m=>Number(m[1]!.replace(/\./g,'').replace(',','.'))),compar=!!rdc&&/^(?:e|ed|anche|pure)\b/.test(msg)
+  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v))&&!(compar&&botNew.some(b=>Math.abs(b+rdc!.delta-v)<0.005))&&!refPlusOK(v))return no('prezzo_non_detto',[a.id])}
+  // Comparativo con una differenza applicata al prezzo attuale dell'altro piatto: ambiguo, si chiede (o si scrive il prezzo esplicito).
+  if(compar&&botNew.length&&deltaIds.size)return no('differenza_come_prezzo',[...deltaIds])}
+  // «la gricia come la carbonara più 1»: la differenza è rispetto al piatto di riferimento, non al prezzo attuale.
+  {const rdr=relativeDelta(message),refR=rdr?refs.find(r=>new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg)):undefined
+   if(refR){if([...deltaIds].some(id=>id!==refR.id))return no('differenza_come_prezzo',[...deltaIds])
+    for(const a of base.actions)if(a.kind==='price'&&a.id!==refR.id&&Math.abs(a.price-(refR.price+rdr!.delta))>=0.005&&!g9Prices(message).includes(Math.round(a.price*100)/100))return no('prezzo_non_detto',[a.id])}}
  const out:MenuAction[]=[...base.actions]
  for(const d of derived){if(!mentioned(d.id))return no('piatto_non_nominato',[d.id])
   for(const x of d.actions){if(out.some(a=>'id' in a&&a.id===d.id&&a.kind===x.kind))return no('azione_doppia',[d.id]);out.push(x)}
   notes.push(d.refId?'prezzo_da_riferimento':'ripristino')}
  // A7.10 (G12): una correzione («anzi no, mettila in evidenza», «no scusa, è finita la gricia, la carbonara c'è», «…la carbonara
  // lasciala stare») rimette com'era quello che l'ultima modifica aveva cambiato e che il messaggio non ripete.
- if(input.restorable?.size&&/^(?:anzi(?:\s+no)?|no(?:\s+scusa|\s+aspetta)?|scusa(?:\s+no)?)\b/.test(msg)){
+ if(input.restorable?.size&&/^(?:anzi(?:\s+no)?|no(?:\s+scusa|\s+aspetta)?|scusa(?:\s+no)?|ho sbagliato|lascia\w* (?:stare|perdere))\b/.test(msg)){
   const add=(id:string,back:MenuAction[])=>{if(out.some(a=>a.kind==='delete'&&a.id===id))return;const kinds=new Set(out.filter(a=>'id' in a&&a.id===id).map(a=>a.kind)),extra=back.filter(b=>!kinds.has(b.kind)).map(b=>({...b,fromRestore:true}) as unknown as MenuAction);if(extra.length){out.push(...extra);derived.push({id,actions:extra})}}
   for(const id of new Set(out.flatMap(a=>'id' in a&&!(a as any).fromRestore?[a.id]:[])))if(input.restorable.get(id))add(id,input.restorable.get(id)!)
   for(const r of refs){if(out.some(a=>'id' in a&&a.id===r.id))continue;const back=input.restorable.get(r.id);if(!back)continue
-   const part=message.split(/[,;]|\s+e\s+/).find(x=>g9DishMentioned(r.name,x,refs))??'';if(/\b(?:lascia\w*\s+stare|lascia\w*\s+perdere|c[’'\s]?è|c e|resta|rimane|va bene com era|com era)\b/i.test(part))add(r.id,back)}}
+   const part=message.split(/[,;]|\s+e\s+/).find(x=>g9DishMentioned(r.name,x,refs))??'';if(/\b(?:lascia\w*\s+stare|lascia\w*\s+perdere|c[’'\s]?è|c e|resta|rimane|va bene com era|com era)\b|\bno\s*$/i.test(part))add(r.id,back)}}
  for(const a of [...out])if('id' in a&&weakIds.has(a.id)){out.splice(out.indexOf(a),1);asks.push({type:'confirm',word:(sound.phrase.get(a.id)??byId.get(a.id)!.name).slice(0,60),action:a})}
  // A4.3: «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: non è un piatto «nominato senza azione».
  const twinIds=refs.filter(r=>legacy.some((a:any)=>a?.action==='create_item'&&typeof a.name==='string'&&plain(a.name)===plain(r.name)&&!out.some(o=>'id' in o&&o.id===r.id))).map(r=>r.id)
@@ -399,7 +423,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // il nome contenuto nel nome di un piatto toccato («caffè» dentro «caffè macchiato»). Con un riepilogo in sospeso non si controlla.
  const touched=refs.filter(r=>covered.has(r.id)&&padded.includes(' '+plain(r.name)+' ')).map(r=>' '+plain(r.name)+' ')
  // Fase R: un piatto esistente il cui nome è dentro il nome di un piatto NUOVO («pasta e fagioli alla napoletana») non manca.
- const createdNames=out.flatMap(a=>a.kind==='create'||a.kind==='special'?[' '+plain(a.name)+' ']:[]);for(const r of refs)if(createdNames.some(n=>n.includes(' '+plain(r.name)+' ')))covered.add(r.id)
+ const createdNames=out.flatMap(a=>a.kind==='create'||a.kind==='special'||a.kind==='rename'?[' '+plain(a.name)+' ']:[]);for(const r of refs)if(createdNames.some(n=>n.includes(' '+plain(r.name)+' ')))covered.add(r.id)
  const missed=input.pendingActions?.length?[]:refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1&&!touched.some(t=>t!==' '+plain(r.name)+' '&&t.includes(' '+plain(r.name)+' ')))
  // A7.12 (vocali): un piatto nominato in una parte che dice di lasciarlo («l'amatriciana lasciala com'è», «la carbonara la
  // tengo a dodici», «no il tiramisù c'è») non manca: è detto che resta com'è. «boh» detto come intercalare («boh fai tu», «e poi…
@@ -407,7 +431,11 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const KEEP=/\b(?:lascia\w*|lasci|tengo|teniamo|resta|rimane|c[’'\s]?è|c e|com era|come prima|uguale|non (?:la |lo |li |le )?(?:tocc\w*|cambi\w*))\b/i,FILLER=new Set(['boh','bho','mah','beh','bo','eh','ecco','niente'])
  const clauses=message.split(/[,;.!?…]+|\s+e\s+/)
  const ACTV=/\d|\b(?:finit\w*|esaurit\w*|nascond\w*|togli\w*|rimett\w*|evidenza|prezzo|costa|elimin\w*|cancell\w*|rinomin\w*|spost\w*|mett\w*|port\w*)\b/i
- const said=missed.filter(r=>{const idx=clauses.map((x,i)=>(' '+plain(x)+' ').includes(' '+plain(r.name)+' ')?i:-1).filter(i=>i>=0),parts=idx.map(i=>clauses[i]!);if(!parts.length)return true
+ const openIds=new Set(input.clarifyIds??[]),shortAnswer=openIds.size>0&&msg.split(' ').length<=5
+ const said=missed.filter(r=>{if(shortAnswer&&!openIds.has(r.id))return false
+  // «metti il tiramisù a 6 come la panna cotta»: il piatto di riferimento non manca (se il prezzo detto è il suo).
+  if(out.every(a=>a.kind!=='price'||Math.abs(a.price-r.price)<0.005)&&new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*|pari)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg))return false
+ const idx=clauses.map((x,i)=>(' '+plain(x)+' ').includes(' '+plain(r.name)+' ')?i:-1).filter(i=>i>=0),parts=idx.map(i=>clauses[i]!);if(!parts.length)return true
   // «la bomba... no aspetta, le bombette»: il piatto detto e subito ritirato non manca.
   if(idx.every(i=>!ACTV.test(clauses[i]!)&&/^\s*(?:no\s+aspetta|no\s+scusa|anzi|cioe|cioè|no\s+no|aspetta)\b/i.test(clauses[i+1]??'')))return false
   // «la tagliata, quella di tonno non quella normale»: il nome è dentro quello di un piatto toccato e la sua parte non ha azioni.
@@ -438,7 +466,7 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCal
  // Strumenti di controllo (confirm_pending, cancel_pending, undo_last): fuori dal validatore delle azioni, li verifica il route.
  const parsed=parseJson(call.content),control:ControlAction[]=parsed&&Array.isArray(parsed.actions)?[...new Set<ControlAction>(parsed.actions.filter((a:any)=>a&&CONTROL_ACTIONS.includes(a.action)).map((a:any)=>a.action as ControlAction))]:[]
  const rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
- const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n ')})
+ const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n ')})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }

@@ -52,7 +52,9 @@ export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?
 /** Piano del cervello per un turno. null = riserva (Groq giù, quota, JSON non valido, contesto impossibile). */
 export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null,
  /** Fase R: annulla possibile (ultima pubblicazione ≤10 min) e auto-correzione. */
- undoInfo?:{minutes:number,names:string[]}|null,correction?:{previous:string,reason:string}|null}):Promise<BrainRun|null>{
+ undoInfo?:{minutes:number,names:string[]}|null,correction?:{previous:string,reason:string}|null,
+ /** Fase R: «rimetti com'era X» fino a 60 minuti a menu invariato (stessa memoria `last:` del percorso di prima). */
+ extraRestore?:{id:string,actions:MenuAction[]}[],freshIds?:Set<string>}):Promise<BrainRun|null>{
  const now=o.now??Date.now(),store=sqlBrainStore(db)
  let memory:Awaited<ReturnType<typeof store.listMemory>>=[],history:BrainTurn[]=[]
  try{await reconcile(store,o.tenant,o.refs);memory=await store.listMemory(o.tenant);history=await store.readHistory(o.tenant,o.phone,now)}catch{/* tabelle assenti → contesto senza memoria né cronologia */}
@@ -67,10 +69,10 @@ export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurant
  // Bozza di aggiunta non finita (A1.1): nel contesto, e i suoi nomi/prezzi valgono come detti dal titolare per le creazioni.
  const draft=ask?.draft?{name:ask.draft.name??null,price:ask.draft.price??null,section:o.sections.find(s=>s.id===ask.draft.sectionId)?.name??null,sectionName:ask.draft.sectionName??null}:cmd?.kind==='create_draft'?{name:typeof cmd.name==='string'?cmd.name:null,names:Array.isArray(cmd.names)?cmd.names.filter((x:unknown):x is string=>typeof x==='string'):undefined,price:typeof cmd.price==='number'?cmd.price:null,prices:Array.isArray(cmd.prices)?cmd.prices:undefined,section:o.sections.find(s=>s.id===cmd.sectionId)?.name??null,sectionName:typeof cmd.sectionName==='string'?cmd.sectionName:null}:null
  // «no, intendevo X» / «rimettila com'era»: si può rimettere solo ciò che l'ultima pubblicazione da WhatsApp (10 minuti) ha cambiato.
- const restorable=new Map<string,MenuAction[]>();if(o.undo&&now-o.undo.at<=RESTORE_WINDOW_MS)for(const it of o.undo.items){const r=o.refs.find(x=>x.id===it.id),b=it.before;if(!r||!b)continue;const back:MenuAction[]=[]
+ const restorable=new Map<string,MenuAction[]>();for(const e of o.extraRestore??[])if(e.actions.length)restorable.set(e.id,e.actions);if(o.undo&&now-o.undo.at<=RESTORE_WINDOW_MS)for(const it of o.undo.items){const r=o.refs.find(x=>x.id===it.id),b=it.before;if(!r||!b)continue;const back:MenuAction[]=[]
   if(typeof b.price==='number'&&Math.abs(b.price-r.price)>=0.005)back.push({kind:'price',id:r.id,price:b.price});if((b.available!==false)!==r.available)back.push({kind:'available',id:r.id,value:b.available!==false});if(!!b.hidden!==r.hidden)back.push({kind:'hidden',id:r.id,value:!!b.hidden});if(!!b.featured!==!!r.featured)back.push({kind:'featured',id:r.id,value:!!b.featured})
   if(back.length)restorable.set(r.id,back)}
- const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null},pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
+ const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,freshIds:o.freshIds,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null},pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
  if(process.env.TAKO_BRAIN_DEBUG)dbg('BRAIN',JSON.stringify({text:o.text,history:history.length,decision:decision.path==='brain'?{intent:decision.intent,plan:decision.plan,notes:decision.notes}:decision}))
  if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',reason:decision.reason}));return null}
  // A4.5: i piatti di cui si stava parlando (ultimi messaggi del titolare e ultima risposta), per una domanda che li cita.

@@ -64,6 +64,7 @@ const REASON:Record<string,string>={
  piatto_doppio:'il piano crea un piatto che c\u2019è già nel menu (o due volte lo stesso): per un piatto esistente usa le sue azioni, altrimenti chiedi',
  elimina_fuori_portata:'un piatto da eliminare è detto in una parte del messaggio con un\u2019altra azione (nascondi, prezzo, finito…): elimina solo i piatti del verbo «elimina/cancella»',
  riferimento_come_bersaglio:'il prezzo è stato cambiato al piatto di riferimento («uguale alla X»): va cambiato all\u2019altro piatto, X resta com\u2019è',
+ nome_con_coda:'un nome nuovo (piatto, categoria, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
  categoria_non_detta:'il titolare ha nominato una categoria che nel menu non c\u2019è: chiedi in quale categoria metterlo o se crearla, non usarne un\u2019altra',
  bozza_non_sicura:'reply_draft non va bene: non dire che qualcosa è fatto/aggiornato se non lo è e non scrivere prezzi non detti'}
 export const reasonText=(notes:string[])=>{const out:string[]=[];for(const n of notes){const k=n.split(':')[0]!;const r=REASON[k];if(r&&!out.includes(r))out.push(r+(k==='parte_persa'&&n.includes(':')?' («'+n.split(':').slice(1).join(':').replace(/,/g,'», «')+'»)':''))}return out.join('; ')||'il piano non supera i controlli del server'}
@@ -97,7 +98,7 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!control.length&&d.exclude.some(e=>pend.actions.some(a=>'id' in a&&(a as any).id===e.id)))return{kind:'change',actions:changeActs}
  if(d.intent==='chat'||d.intent==='capability'||(!rawActs.length&&(rawIntent==='chat'||rawIntent==='capability')))return{kind:'say'}
  if(d.plan?.type==='read')return d.notes.includes('domanda_zero_scritture')&&rawIntent==='change'?{kind:'read',plan:d.plan}:{kind:'read',plan:d.plan}
- if(d.plan?.type==='change'&&!d.hold){if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions,o.refs??[]))return reject('piatto_doppio',[],[]);{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
+ if(d.plan?.type==='change'&&!d.hold){if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions,o.refs??[]))return reject('piatto_doppio',[],[]);if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
  // Domande del modello (intent=clarify) e parti incerte che il modello stesso ha segnato: domanda, stato in sospeso.
  const modelAsk=rawIntent==='clarify'||(d.hold&&d.notes.includes('parti_incerte')&&!d.notes.some(n=>VALIDATOR_HOLD.has(n.split(':')[0]!)))
  if(modelAsk){const cr=rawActs.find((a:any)=>a.action==='create_item'),sec=cr&&typeof cr.section==='string'?o.sections.find(s=>s.id===cr.section||plain(s.name)===plain(cr.section)):undefined
@@ -139,6 +140,18 @@ export function referenceAsTarget(message:string,actions:MenuAction[],refs:MenuR
  const p=' '+plain(message)+' ',out:string[]=[]
  for(const a of actions){if(a.kind!=='price')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const w=plain(r.name).split(' ')[0]!
   if(new RegExp('\\b(?:ugual\\w*|come|stess\\w* prezzo|pari|identic\\w*)\\s+(?:(?:a|al|alla|allo|all|ai|alle|del|della|dello|di|la|il|lo|l)\\s+)*'+w+'\\b').test(p)&&!(' '+plain(message)+' ').includes(' '+w+' a '))out.push(a.id)}
+ return out}
+/** Vincolo (Y4/Y5/Y9): un nome nuovo non finisce con una cortesia o una coda del messaggio. */
+const NAME_TAIL=/\b(?:per favore|per piacere|se puoi|se riesci|grazie(?: mille)?|dai|ok|okay|subito|eh|thx|please|ti prego|quando hai tempo|mi raccomando|appena puoi|oggi stesso|capito|top|a dopo|tutto qui|va bene|perfetto|ciao|e mettil\w*.*|e spostal\w*.*|e poi.*|poi .*)$/
+export const nameWithTail=(name:unknown)=>typeof name==='string'&&NAME_TAIL.test(plain(name))&&plain(name).split(' ').length>1
+/** Vincolo (parti perse, per parte): una parte del messaggio con un verbo d'azione e un piatto nominato deve avere almeno
+ * un'azione su quel piatto («…e togli bo» con «bo» = boh: senza un'azione su boh il piano ha perso una parte). Parti senza
+ * piatto (pronomi) o con piatti esclusi dal titolare non si controllano. */
+const ACT_VERB=/\b(?:togli\w*|toglil\w*|nascond\w*|lev[ai]\w*|finit\w*|esaurit\w*|elimin\w*|cancell\w*|rimett\w*|evidenza|spost\w*|rinomin\w*)\b/
+export function lostClauses(message:string,actions:MenuAction[],refs:MenuRef[],exclude:{id:string}[]=[]):string[]{
+ const touched=new Set(actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])),ex=new Set(exclude.map(e=>e.id)),out:string[]=[]
+ const words=(s:string)=>' '+plain(s)+' ',named=(r:MenuRef,c:string)=>{const w=words(c),n=plain(r.name);return w.includes(' '+n+' ')||(!n.includes(' ')&&/h/.test(n)&&w.includes(' '+n.replace(/h/g,'')+' '))}
+ for(const c of message.split(/[,;.]|\s+(?:e|ed|poi)\s+/)){if(!ACT_VERB.test(plain(c)))continue;const ds=refs.filter(r=>named(r,c));if(!ds.length||ds.some(r=>touched.has(r.id)||ex.has(r.id)))continue;out.push(c.trim().slice(0,40))}
  return out}
 /** Richiesta cortese in forma di domanda («potresti inserire X a 11?», «mi aggiungi la lasagna a 13?»): è un comando, non una
  * domanda (il vincolo «domande = zero scritture» non vale). Serve un verbo d'azione esplicito. */
