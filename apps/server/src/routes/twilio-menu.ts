@@ -187,11 +187,13 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if(ids.length&&ids.every(id=>{const r=refs.find(x=>x.id===id)!;return r.price+rd.delta>0}))structPick=ids.map(id=>{const r=refs.find(x=>x.id===id)!;return{kind:'price',id,price:Math.round((r.price+rd.delta)*100)/100} as MenuAction})}}
  if(!planned&&!opts.plannedFull&&!holdPick&&!negPick&&!proposal&&!structPick){const sp=parseStructure(text,refs,sections)
   if(sp?.kind==='ask')return sp.text
-  if(sp?.kind==='delete'){const acts=sp.ids.map(id=>({kind:'delete',id}) as MenuAction);await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true});return proposalText('',acts,refs,sections)}
+  // A8.0: anche le conferme di struttura (elimina, categoria nuova) solo con la lettura completa del messaggio.
+  const unreadStruct=(acts:MenuAction[],extra:string[]=[])=>unreadWords(text,acts,refs,sections,{excludedIds:st.exclude.map(e=>e.id),extraNames:extra})
+  if(sp?.kind==='delete'){const acts=sp.ids.map(id=>({kind:'delete',id}) as MenuAction);{const un=unreadStruct(acts);if(un.length)return notRead(un)};await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true});return proposalText('',acts,refs,sections)}
   if(sp?.kind==='rename')structPick=[{kind:'rename',id:sp.id,name:sp.name}]
   if(sp?.kind==='rename_section')structPick=[{kind:'rename_section',sectionId:sp.sectionId,name:sp.name}]
   if(sp?.kind==='move'){if(sp.sectionId)structPick=sp.ids.map(id=>({kind:'move',id,sectionId:sp.sectionId!}) as MenuAction)
-   else{const sid=randomUUID(),acts=[{kind:'create_section',newSectionId:sid,name:sp.sectionName,menuId:''} as MenuAction,...sp.ids.map(id=>({kind:'move',id,sectionId:sid}) as MenuAction)];await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true})
+   else{const sid=randomUUID(),acts=[{kind:'create_section',newSectionId:sid,name:sp.sectionName,menuId:''} as MenuAction,...sp.ids.map(id=>({kind:'move',id,sectionId:sid}) as MenuAction)];{const un=unreadStruct(acts);if(un.length)return notRead(un)};await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true})
     return fill(copy.sectionAsk,{categoria:safe(sp.sectionName),piatti:bold(sp.ids.map(id=>refs.find(r=>r.id===id)!.name)),categorie:sections.slice(0,15).map(x=>x.name).join(', ')})}}
   if(sp?.kind==='create_section'){const ex=sections.find(x=>sameSection(x.name,sp.name)),sid=ex?.id??randomUUID(),acts:MenuAction[]=ex?[]:[{kind:'create_section',newSectionId:sid,name:sp.name,menuId:''}]
    if(sp.rest){const c=parseCreate('aggiungi '+sp.rest.replace(/^(?:anche|dentro|ci)\s+/,''),[{id:sid,name:sp.name,menu:''}],true)
@@ -336,7 +338,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // A8.0 «lettura completa»: una scrittura dal percorso deterministico solo se ogni parola del messaggio è spiegata dalle azioni
  // capite; altrimenti cervello (validatore) o, con Groq spento, una domanda che cita il testo non letto.
  // Esenti: annulla/ripristini (grammatica chiusa) e le azioni del percorso vendite (promo, etichette, scarsità).
- if(!planned&&!holdPick&&!swapPick&&!negPick&&!reverted&&!preUndo.length&&!actions.some(a=>(a as any).fromRestore)&&!actions.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag')){const un=unreadWords(text,actions,refs,sections,{excludedIds:[...st.exclude.map(e=>e.id),...(st.seen??[])],known:draft?[draft.name??'',...(draft.names??[]),draft.sectionName??'']:[]});if(un.length)return notRead(un)}
+ if(!planned&&!holdPick&&!swapPick&&!negPick&&!reverted&&!preUndo.length&&!actions.some(a=>(a as any).fromRestore)&&!actions.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag')){const un=unreadWords(text,actions,refs,sections,{excludedIds:[...st.exclude.map(e=>e.id),...(st.seen??[])],known:draft?[draft.name??'',...(draft.names??[]),draft.sectionName??'']:[],lenientNumbers:!!choice||!!choicePrice});if(un.length)return notRead(un)}
  {const problem=salesActionProblem(actions,workspace);if(problem)return problem}
  actions=effectiveMenuActions(actions,workspace);
  // A4.4: la risposta alla domanda dello stesso messaggio segue la modifica (letta sul menu dopo il salvataggio).

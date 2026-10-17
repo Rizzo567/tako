@@ -73,6 +73,17 @@ export function dishOf(part:string,refs:Ref[]):Ref[]{
  return refs.filter(r=>{const n=' '+fold(r.name)+' ';return ws.every(w=>n.includes(' '+w+' ')||n.includes(' '+w.slice(0,Math.max(4,w.length-1))))})}
 export const sectionOf=(text:string,sections:Sec[])=>{const t=clean(text).replace(/^(?:categoria|sezione)\s+/,'');return t?sections.filter(s=>sameSection(s.name,t)):[]}
 
+// A8.0 (Y4/Y5): un nome nuovo finisce dove comincia un secondo verbo, un'altra parte («e la panna cotta pure», «, poi…») o
+// una cortesia in coda («se puoi», «per favore»). Se dopo il nome resta qualcosa che non è cortesia, la frase non è un
+// comando di struttura semplice: la legge il cervello (o, a Groq spento, si chiede).
+const VERB0='(?:mett|nascond|togl|lev|elimin|cancell|rimuov|aggiung|inserisc|spost|port|rinomin|chiam|crea|cre[ao]|alz|abbass|aument|ridu|rimett|segn|fai|fall|cambi|imposta)\\w*'
+const SLOT_STOP=new RegExp('\\s+(?:e|ed|poi|e poi|e anche|anche)\\s+(?='+VERB0+'\\b)|\\s+(?:e|ed)\\s+(?=(?:il|lo|la|l|i|gli|le|un|una)\\s)|\\s*[,;]\\s*|\\s+poi\\s+|\\s+(?='+VERB0+'\\b)|\\s+(?=(?:se puoi|se riesci|per favore|per piacere|per cortesia|grazie|ok|dai|please|thx|subito|quando puoi|appena puoi|mi raccomando)\\b)')
+const COURTESY_ONLY=/^\s*(?:(?:se puoi|se riesci|per favore|per piacere|per cortesia|grazie(?: mille)?|ok|okay|dai|please|thx|subito|quando puoi|appena puoi|mi raccomando|eh|grazie eh|top|perfetto)[\s,.!]*)*$/
+export function nameSlot(part:string):{name:string,rest:string}{const m=SLOT_STOP.exec(part);if(!m)return{name:part.trim(),rest:''};return{name:part.slice(0,m.index).trim(),rest:part.slice(m.index).trim()}}
+const courtesyOnly=(rest:string)=>!rest||COURTESY_ONLY.test(rest)
+/** Nome tra virgolette («Tagliata di manzo», "Gricia romana", 'Crudi'): è il nome esatto. */
+export function quotedName(raw:string):string|null{const m=raw.match(/[«“"]([^«»“”"]{1,80})[»”"]/)??raw.match(/(?:^|\s)'([^']{2,80})'(?=\s|[.,!?]|$)/);return m?m[1]!.trim():null}
+
 export type StructParse={kind:'delete',ids:string[]}|{kind:'rename',id:string,name:string}|{kind:'move',ids:string[],sectionId:string|null,sectionName:string}
  |{kind:'create_section',name:string,rest:string}|{kind:'rename_section',sectionId:string,name:string}|{kind:'ask',text:string}
 /** Comando di struttura detto in modo esplicito. Con piatti ambigui o non trovati → null (decide il resto del bot). */
@@ -80,13 +91,14 @@ export function parseStructure(raw:string,refs:Ref[],sections:Sec[]):StructParse
  const t=fold(raw).replace(/^(?:(?:ok|allora|senti|ciao|e|ed|poi|anzi|no|si|per favore|scusa|adesso|ora|devi|dovresti|puoi|potresti|mi|vorrei|voglio|fai una cosa|fammi)\s+)+/,'')
  // Rinomina categoria: «rinomina la categoria X in Y», «cambia il nome della categoria X in Y», «la categoria X chiamala Y».
  {const m=t.match(/^(?:rinomin\w*|cambi\w* (?:il )?nome (?:al|alla|della|del)?)\s*(?:la |alla )?(?:categoria|sezione)\s+(.+?)\s+(?:in|con|a)\s+(.+)$/)??t.match(/^(?:la )?(?:categoria|sezione)\s+(.+?)\s+(?:chiamal\w*|rinominal\w*|da oggi si chiama|ora si chiama)\s+(.+)$/)
-  if(m){const s=sectionOf(m[1]!,sections),name=cleanName(raw,m[2]!);if(s.length===1&&name&&!sections.some(x=>x.id!==s[0]!.id&&sameSection(x.name,name)))return{kind:'rename_section',sectionId:s[0]!.id,name};return null}}
+  if(m){const q=quotedName(raw),sl=nameSlot(m[2]!);if(!q&&!courtesyOnly(sl.rest))return null;const s=sectionOf(m[1]!,sections),name=q?cap(q):cleanName(raw,sl.name);if(s.length===1&&name&&!sections.some(x=>x.id!==s[0]!.id&&sameSection(x.name,name)))return{kind:'rename_section',sectionId:s[0]!.id,name};return null}}
  // Crea categoria: «crea (una) categoria (che si chiama|chiamata)? X (e mettici …)», «aggiungi un'altra categoria X».
  {const m=t.match(/^(?:cre\w*|aggiung\w*|apri|fai|inserisc\w*|metti)\s+(?:anche\s+)?(?:una?\s+|un altra\s+|l altra\s+|la\s+|le\s+)?(?:nuova\s+|altra\s+)?(?:categoria|sezione)\s+(?:nuova\s+)?(?:che si chiama\s+|chiamata\s+|di nome\s+|dei\s+|degli\s+|delle\s+)?(.+)$/)
   // Frasi lunghe o con rimandi («ovvero primi, e lì aggiungi quei due piatti che ti ho detto…»): le legge il cervello.
   if(m&&(/\b(?:quei|quelli|quelle|questi|queste|li|che ti ho detto|categoria|sezione)\b/.test(m[1]!)||m[1]!.split(' ').length>10))return null
   if(m){const body=m[1]!.replace(/^(?:ovvero|cioe|tipo|chiamata|chiamandola|di nome)\s+/,''),split=body.match(/^(.+?)\s+(?:e\s+(?:li\s+|la\s+|ci\s+)?(?:mettici|metti|aggiungi|aggiungici|inserisci|dentro)\b|con\s+(?:il|la|lo|l|i|gli|le|dentro)?\b|e\s+(?:mettici|aggiungici)|,)\s*(.*)$/)
-   const name=cleanName(raw,(split?split[1]!:body).replace(/\s+(?:nel|al)\s+menu\b.*$/,''));if(!name)return null
+   const q=quotedName(raw),sl=nameSlot((split?split[1]!:body).replace(/\s+(?:nel|al)\s+menu\b.*$/,''));if(!q&&!courtesyOnly(sl.rest))return null
+   const name=q?cap(q):cleanName(raw,sl.name);if(!name)return null
    // Il resto («il caviale a 150», «tiramisù al pistacchio a 7,50») dal testo ORIGINALE: accenti e decimali intatti.
    const rawRest=split?raw.match(/(?:\s+e\s+(?:li\s+|la\s+|ci\s+)?(?:mettici|metti|aggiungi|aggiungici|inserisci|dentro)\b|\s+con\s+|,)\s*(.*)$/i)?.[1]??split[2]!:''
    return{kind:'create_section',name,rest:rawRest.trim()}}}
@@ -94,11 +106,17 @@ export function parseStructure(raw:string,refs:Ref[],sections:Sec[]):StructParse
  {const m=t.match(/^(?:rinomin\w*|cambi\w* (?:il )?nome (?:a|al|alla|allo|ai|di|del|della|dello)?)\s*(?:il piatto |piatto )?(.+?)\s*(?:\s(?:in|con)\s|,?\s*(?:mettici|metti|chiamal\w*)\s+)(.+)$/)??t.match(/^(?:il piatto |piatto )?(.+?)\s+(?:chiamal[aoie]|da oggi si chiama|ora si chiama|adesso si chiama|si chiamera)\s+(.+)$/)
   // «chiama la margherita pizza margherita»: il piatto è il pezzo più lungo che indica un solo piatto, il resto è il nome.
   const ch=!m?t.match(/^chiama\s+(?:il |la |lo |l |i |gli |le )?(.+)$/):null
-  if(ch){const ws=ch[1]!.split(' ');for(let k=ws.length-1;k>=1;k--){const d=dishOf(ws.slice(0,k).join(' '),refs);if(d.length===1){const name=cleanName(raw,ws.slice(k).join(' '));if(name&&fold(name)!==fold(d[0]!.name)&&!refs.some(r=>r.id!==d[0]!.id&&fold(r.name)===fold(name)))return{kind:'rename',id:d[0]!.id,name};break}}}
-  if(m&&!SECTION_WORD.test(m[1]!)){const d=dishOf(m[1]!,refs),name=cleanName(raw,m[2]!);if(d.length===1&&name&&fold(name)!==fold(d[0]!.name)){if(refs.some(r=>r.id!==d[0]!.id&&fold(r.name)===fold(name)))return{kind:'ask',text:`*${name}* c'è già nel menu: dimmi un altro nome per *${d[0]!.name}*. Non ho cambiato nulla.`};return{kind:'rename',id:d[0]!.id,name}};return null}}
+  if(ch){const ws=ch[1]!.split(' ');for(let k=ws.length-1;k>=1;k--){const d=dishOf(ws.slice(0,k).join(' '),refs);if(d.length===1){const q=quotedName(raw),sl=nameSlot(ws.slice(k).join(' '));if(!q&&!courtesyOnly(sl.rest))return null;const name=q?cap(q):cleanName(raw,sl.name);if(name&&fold(name)!==fold(d[0]!.name)&&!refs.some(r=>r.id!==d[0]!.id&&fold(r.name)===fold(name)))return{kind:'rename',id:d[0]!.id,name};break}}}
+  if(m&&!SECTION_WORD.test(m[1]!)){const q=quotedName(raw),sl=nameSlot(m[2]!);if(!q&&!courtesyOnly(sl.rest))return null;const d=dishOf(m[1]!,refs),name=q?cap(q):cleanName(raw,sl.name);if(d.length===1&&name&&fold(name)!==fold(d[0]!.name)){if(refs.some(r=>r.id!==d[0]!.id&&fold(r.name)===fold(name)))return{kind:'ask',text:`*${name}* c'è già nel menu: dimmi un altro nome per *${d[0]!.name}*. Non ho cambiato nulla.`};return{kind:'rename',id:d[0]!.id,name}};return null}}
  // Sposta: «sposta X nei/in/tra Y», «X spostalo nei Y».
  {const m=t.match(/^(?:spost\w*|trasferisc\w*|porta)\s+(.+?)\s+(?:nei|negli|nelle|nella|nel|in|tra|fra|sotto|dentro)\s+(?:i |gli |le |la |il |l |categoria |sezione )?(.+)$/)??t.match(/^(.+?)\s+(?:spostal\w*|spostamel\w*|portal\w*)\s+(?:nei|negli|nelle|nella|nel|in|tra|fra|sotto|dentro)\s+(?:i |gli |le |la |il |l |categoria |sezione )?(.+)$/)
-  if(m){const ids=multiDish(m[1]!,refs);if(!ids)return null;const target=m[2]!.replace(/\s+(?:per favore|grazie)$/,''),s=sectionOf(target,sections)
+  // Y10: «porta i dolci negli speciali» = la categoria Dolci (se esiste), non il solo «Dolce del giorno».
+  const fromSec=m?sectionOf(m[1]!.replace(/^(?:tutt[ie]\s+)?/,''),sections):[]
+  if(m&&fromSec.length===1&&/^(?:tutt[ie]\s+)?(?:i|gli|le|la|il)?\s*\S+$/.test(m[1]!.trim())){const items=refs.filter(r=>r.sectionId===fromSec[0]!.id).map(r=>r.id);const sl=nameSlot(m[2]!),s2=sectionOf(sl.name,sections);if(!items.length||!courtesyOnly(sl.rest)||s2.length!==1||s2[0]!.id===fromSec[0]!.id)return null;return{kind:'move',ids:items,sectionId:s2[0]!.id,sectionName:s2[0]!.name}}
+  if(m){const ids=multiDish(m[1]!,refs);if(!ids)return null;const sl=nameSlot(m[2]!)
+   // «… negli speciali e la panna cotta pure»: anche quel piatto va nella stessa categoria.
+   if(!courtesyOnly(sl.rest)){const more=sl.rest.match(/^(?:e|ed)\s+(?:anche\s+|pure\s+)?(.+?)(?:\s+(?:pure|anche))?\s*[.!]?$/);const extra=more&&!new RegExp('\\b'+VERB0+'\\b').test(more[1]!)?multiDish(more[1]!,refs):null;if(!extra)return null;ids.push(...extra.filter(x=>!ids.includes(x)))}
+   const target=sl.name,s=sectionOf(target,sections)
    if(s.length>1)return null;return{kind:'move',ids,sectionId:s[0]?.id??null,sectionName:cleanName(raw,target)??cap(target)}}}
  // Elimina: verbo esplicito di eliminazione + piatti nominati.
  if(DELETE_VERB.test(t)){const body=t.replace(/^(?:per favore\s+|mi\s+|puoi\s+|potresti\s+)*/,'').replace(DELETE_VERB,' ').replace(/\s+/g,' ').trim()

@@ -53,7 +53,9 @@ const QTY_AFTER='(?!\\s*(?:euro|eur|€|[.,]\\d|e\\s+mezz|virgola))'
 const QTY_LEAD=new RegExp(`\\b(quei|quegli|quelle|questi|queste|quelli|i|gli|le|ai|agli|alle|dei|degli|delle|tutti\\s+e|tutte\\s+e|tutti\\s+i|tutte\\s+le|entrambi\\s+i|entrambe\\s+le|gli\\s+altri|le\\s+altre|ultimi|ultime|primi|prime)\\s+${QTY}\\b${QTY_AFTER}`,'giu')
 const QTY_NOUN=new RegExp(`\\b${QTY}\\s+(?=(?:piatt|prodott|pizz|dolc|cos[ae]\\b|vari|voci|categori|portat|prim[ie]\\b|second[ie]\\b|antipast|contorn|bibit|panin|porzion)\\w*)`,'giu')
 const QTY_ONE=/(?<!\b(?:a|di|costa|costano|costi|prezzo|da|per|sui|sugli|tipo|circa)\s+)\b(?:un|una|uno)\b(?!\s*(?:euro|eur|€|e\s+\p{L}+|e\s+\d|virgola|in\s+meno|in\s+piu|in\s+più|di\s+meno|di\s+piu|di\s+più))/giu
-export const withoutQuantities=(s:string)=>s.replace(QTY_LEAD,'$1').replace(QTY_NOUN,'').replace(QTY_ONE,' ')
+// A8 (X nomi-016): «la tagliata 300 grammi a 22»: un numero con un'unità di misura è una quantità, mai un prezzo.
+const QTY_UNIT=/\b\d+(?:[.,]\d+)?\s*(?:grammi|gr|g|kg|chili|etti|etto|cl|ml|litri|litro|lt|cm|pezzi|pz|porzioni|persone|fette)\b/giu
+export const withoutQuantities=(s:string)=>s.replace(QTY_UNIT,' ').replace(QTY_LEAD,'$1').replace(QTY_NOUN,'').replace(QTY_ONE,' ')
 // A7.7 (avversaria X, G8): prezzi relativi. «aumenta/alza di 1», «abbassa/sconta di 2», «togli/leva 2 euro alla X», «+1», «-2»,
 // «50 centesimi in più», «un euro in meno». Il numero è una DIFFERENZA: mai un prezzo detto; il prezzo nuovo = attuale ± differenza.
 const RNUM='(\\d+(?:[.,]\\d{1,2})?|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|cinquanta|venti|trenta)'

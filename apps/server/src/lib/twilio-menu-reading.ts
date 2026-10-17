@@ -28,7 +28,8 @@ const FUNCTION=new Set(('il lo la i gli le l un uno una un di da del dello della
 const COURTESY=new Set(('favore perfavore piacere cortesia grazie mille ok okay dai allora ecco si va bene perfetto ciao buongiorno buonasera salve senti ehm eh ah oh mh '+
  'beh cioe insomma comunque subito adesso ora oggi intanto please thx thanks top raga ragazzi capo scusa scusami aspetta ops pardon '+
  // conferme («vai», «procedi»): rispondono a una domanda, non sono nomi
- 'vai procedi conferma confermo confermato certo esatto giusto daje').split(' '))
+ 'vai procedi conferma confermo confermato certo esatto giusto daje '+
+ 'definitivamente completamente proprio totalmente sempre del tutto davvero').split(' '))
 // Numeri detti a parole e unità del prezzo.
 const NUMBER=new Set(('zero uno una due tre quattro cinque sei sette otto nove dieci undici dodici tredici quattordici quindici sedici diciassette diciotto diciannove venti '+
  'ventuno ventidue ventitre ventiquattro venticinque ventisei ventisette ventotto ventinove trenta quaranta cinquanta sessanta settanta ottanta novanta cento mezzo mezza '+
@@ -76,7 +77,7 @@ export function nameIsExplicit(name:string,text:string):boolean{
 
 export type Reading={unread:string[]}
 /** Parole del messaggio che le azioni capite non spiegano (vuoto = lettura completa). */
-export function unreadWords(text:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[],opts:{excludedIds?:string[],extraNames?:string[],known?:string[]}={}):string[]{
+export function unreadWords(text:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[],opts:{excludedIds?:string[],extraNames?:string[],known?:string[],lenientNumbers?:boolean}={}):string[]{
  const kinds=new Set<string>(actions.map(a=>a.kind));if(actions.some(a=>(a as any).fromRestore))kinds.add('restore')
  const touched=new Set<string>([...actions.flatMap(a=>'id' in a?[(a as any).id as string]:[]),...(opts.excludedIds??[])])
  const nameWords:string[]=[]
@@ -92,9 +93,17 @@ export function unreadWords(text:string,actions:MenuAction[],refs:MenuRef[],sect
  // «tutti i primi finiti tranne la lasagna e la pasta e fagioli»: i piatti dopo «tranne» sono letti (esclusi dall'azione).
  const exc=fold(text).match(/\b(?:tranne|eccetto|esclus\w*|a parte|meno che)\b(.*)$/)
  if(exc){const tail=new Set(words(exc[1]!));for(const r of refs)if(words(r.name).some(w=>tail.has(w)))nameWords.push(...words(r.name))}
+ // Un numero è letto solo se è un prezzo delle azioni o la differenza di un cambio di prezzo («aumenta di 1»): un prezzo detto
+ // e non usato («sposta la carbonara nei secondi e mettila a 14» letta come solo spostamento) è una parte persa.
+ const nums=new Set<number>();const r2=(x:number)=>Math.round(x*100)/100
+ for(const a of actions){const pr=(a as any).price;if(typeof pr==='number'){nums.add(r2(pr));const old=refs.find(r=>r.id===(a as any).id)?.price;if(typeof old==='number')nums.add(r2(Math.abs(pr-old)))}}
+ // Il prezzo attuale di un piatto toccato («la parmigiana a 10», già a 10) è letto: dice che resta com'è.
+ for(const r of refs)if(touched.has(r.id)&&typeof r.price==='number')nums.add(r2(r.price))
+ const numOk=(w:string)=>{if(opts.lenientNumbers)return true;const n=Number(w.replace(/^[+]/,''));if(!Number.isFinite(n))return false;return nums.has(r2(Math.abs(n)))||[...nums].some(x=>Math.abs(x-n)<0.005)}
  const out:string[]=[]
  for(const w of words(text)){
-  if(FUNCTION.has(w)||COURTESY.has(w)||NUMBER.has(w)||DOMAIN.has(w)||/^[+\-]?\d/.test(w)||w.length<=1||g9WordNumber(w)!==null)continue
+  if(/^[+\-]?\d/.test(w)){if(numOk(w)||newWords.has(w)||nameWords.includes(w))continue;out.push(w);continue}
+  if(FUNCTION.has(w)||COURTESY.has(w)||NUMBER.has(w)||DOMAIN.has(w)||w.length<=1||g9WordNumber(w)!==null)continue
   if(newWords.has(w)||hitName(w))continue
   const k=verbKinds(w);if(k){if(k.includes('any')||k.some(x=>kinds.has(x)))continue;out.push(w);continue}
   out.push(w)}
