@@ -9,6 +9,8 @@ export async function bundleCandidate(source,root){
   if(argument.path.startsWith('@tako/db')){const pkg=JSON.parse(await readFile(path.join(root,'packages/db/package.json'),'utf8'));const sub=argument.path==='@tako/db'?'.':'.'+argument.path.slice(8);if(!pkg.exports[sub])throw new Error('Unknown database export');return {path:path.resolve(root,'packages/db',pkg.exports[sub])};}
   if(argument.path==='@tako/types')return {path:path.join(root,'packages/types/src/index.ts')};
   // sharp è un addon nativo: sull'Edge non si carica mai (vedi edge-sharp-stub.mjs). Fuori dal bundle Edge.
+  // magick-wasm: file separato accanto a index.ts nel deploy (vedi build-operational-candidate), mai fuso nel bundle.
+  if(argument.path==='./magick-wasm-0.0.44.js')return {path:argument.path,external:true};
   if(argument.path==='sharp')return {path:path.join(root,'scripts/serverless/edge-sharp-stub.mjs')};
   if(builtins.has(argument.path))return {path:argument.path.startsWith('node:')?argument.path:'node:'+argument.path,external:true};
   if(argument.path.startsWith('.')||argument.path.startsWith('/')||argument.path.startsWith('node:'))return;
