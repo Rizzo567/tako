@@ -129,7 +129,7 @@ export function mergeDraft(draft:CreateDraft,next:CreateParse):CreateDraft{const
  return {kind:'create_draft',name:draft.name??next.name,price:next.price??draft.price,sectionId,...(sectionName?{sectionName}:{}),...(draft.names?{names:draft.names,split:draft.split??null,prices:draft.prices??draft.names.map(()=>null)}:{})}}
 
 const sectionList=(sections:SectionRef[])=>sections.slice(0,15).map(s=>s.name).join(', ')
-const missingSection=(d:CreateDraft,unknownSection:boolean)=>d.sectionName?`Nel menu non c'è la categoria *${d.sectionName}*. `:unknownSection?'Non trovo quella categoria. ':''
+const missingSection=(d:CreateDraft,unknownSection:boolean)=>d.sectionName?`Nel menu non c'è la categoria *${d.sectionName}*. `:unknownSection?"Quella categoria nel menu non c'è. ":''
 /** Una sola domanda, nell'ordine: categoria (se più di una), prezzo, nome. */
 export function createQuestion(d:CreateDraft,sections:SectionRef[],unknownSection=false){
  if(d.names?.length&&d.split!==false)return multiQuestion(d,sections)

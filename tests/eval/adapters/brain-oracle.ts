@@ -102,8 +102,12 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // Correzione verso un altro piatto: «no, intendevo l'amatriciana» → rimetti il piatto di prima + stessa azione sul nuovo.
  if(CORRECT.test(p)&&relevantHere.length&&ctxDish&&!here.includes(ctxDish)&&!conv.changes.some(c=>c.op!=='create'&&c.dish===ctxDish))actions.push({action:'restore',item:cat.code.get(ctxDish)})
  // «torna come prima la lasagna», «rimetti la carbonara com'era»: ripristino del piatto nominato.
+ // «la parmigiana e il tiramisù a 10 e 20»: tanti prezzi quanti piatti → in ordine, anche quello che non cambia (correzioni A).
+ {const nums=[...msg.replace(/(\d),(\d)/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]));const pw=plainT(msg).split(' '),pos=(n:string)=>{const st=stems(n).length?stems(n):plainT(n).split(' ');let best=1e9;for(const w of st){const i=pw.findIndex(m=>wordHit(w,[m]));if(i>=0&&i<best)best=i}return best},order=[...new Set(here)].sort((a,b)=>pos(a)-pos(b))
+  if(!actions.length&&here.length>=2&&nums.length===here.length&&!/\b(promo\w*|offert\w*|scont\w*)\b/.test(p)&&order.every((n,i)=>cat.price.get(n)===nums[i]||[...conv.changes,...(conv.interim??[])].some(c=>c.op==='price'&&c.dish===n&&c.price===nums[i])))order.forEach((n,i)=>actions.push({action:'set_price',item:cat.code.get(n),price:nums[i]}))}
+ const exceptAll=/\btutt[ie] (?:tranne|eccetto|esclus\w*|meno)\b/.test(p)
  const back=/\b(torna\w* come prima|com era|come prima|com eri)\b/.test(p)?here:[];for(const n of back)actions.push({action:'restore',item:cat.code.get(n)})
- if(!back.length)for(const n of relevantHere){for(const e of expected.filter(c=>c.op!=='create'&&c.dish===n)){const price=e.op==='price'?(said.find(x=>x===(e as any).price)??said[0]??(CORRECT.test(p)&&!SAME.test(p)?ownSaid[0]??null:null)):null
+ if(!back.length&&!exceptAll)for(const n of relevantHere){for(const e of expected.filter(c=>c.op!=='create'&&c.dish===n)){const price=e.op==='price'?(said.find(x=>x===(e as any).price)??said[0]??(CORRECT.test(p)&&!SAME.test(p)?ownSaid[0]??null:null)):null
    const ref=e.op==='price'&&price===null&&SAME.test(p)&&ctxDish&&ctxDish!==n?cat.code.get(ctxDish)!:null
    if(e.op==='price'&&price===null&&!ref)continue
    if(e.op==='price'&&price!==null&&!said.includes(price)&&!ownSaid.includes(price))continue
@@ -113,7 +117,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   for(const n of prevD){const e=conv.changes.find(c=>c.op==='price'&&c.dish===n) as any;if(!e)continue;const v=said.includes(e.price)?e.price:prevSaid.includes(e.price)?e.price:null;if(v!==null)actions.push({action:'set_price',item:cat.code.get(n),price:v})}}
  // Rimandi a più piatti o per posizione («quei due», «entrambi», «tutti e tre», «il primo», «tutti tranne boh»): il modello ideale
  // li risolve sui messaggi recenti del titolare (correzioni A, 17/10) e applica l'azione detta a ciascuno.
- if(!actions.length&&!relevantHere.length){const deix=deixisReferents(msg,owners.slice(-3),names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''})))
+ if(!actions.length&&(!relevantHere.length||exceptAll)){const deix=deixisReferents(msg,owners.slice(-3),names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''})))
   if(deix?.ids.length){const verb=/evidenza/.test(p)?'featured':/\b(nascond\w*|togli\w*|lev\w*|rimett\w*|mostra\w*)\b/.test(p)?'hidden':/finit|esaurit/.test(p)?'available':said.length?'price':null
    for(const n of deix.ids){const e=expected.find(c=>c.op!=='create'&&c.dish===n&&c.op===verb)??(verb==='price'&&said.length?{op:'price',dish:n,price:said.at(-1)!} as Change:null);if(!e)continue
     const a=act(e,cat,e.op==='price'?(said.includes((e as any).price)?(e as any).price:said.at(-1)!):null,null);if(a&&'value' in a&&typeof a.value==='boolean')a.value=valueFor(e.op,a.value);if(a)actions.push(a)}}}

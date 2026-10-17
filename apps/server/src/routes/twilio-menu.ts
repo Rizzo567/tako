@@ -116,7 +116,13 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
    // Risposta a «Quale piatto intendi?» per esclusione: «la carbonara no (, l'altro)» con due opzioni → l'altra.
    const left=choice?choice.options.filter(id=>!neg.excluded.some(e=>e.id===id)):[]
    if(choice&&left.length===1&&left.length<choice.options.length&&(!rest||/^(?:l altr[oa]|quell altr[oa]|l altro piatto|l altra|altro|altra|quello|quella)$/.test(rest)))negPick=[{...choice.action,id:left[0]!} as MenuAction]
-   else if(!rest||/^(?:ok|okay|va bene|grazie|grazie mille|basta|niente|nient altro|solo questo)$/.test(rest))return fill(copy.negatedOnly,{piatti:neg.names.map(safe).join(', ')})
+   else if(!rest||/^(?:ok|okay|va bene|grazie|grazie mille|basta|niente|nient altro|solo questo)$/.test(rest)){
+    // 17/10 (correzioni A): «la lasagna no» con un riepilogo in attesa la toglie DAVVERO dal riepilogo (prima diceva «resta com'è»
+    // e l'«ok» dopo la pubblicava lo stesso).
+    const pb=(proposal?.command as any)?.kind==='batch'&&Number(proposal!.revision)===row.revision&&Array.isArray((proposal!.command as any).actions)?proposal!.command as any:null,said=fill(copy.negatedOnly,{piatti:neg.names.map(safe).join(', ')})
+    if(pb){const left=(pb.actions as MenuAction[]).filter(a=>!isExcluded(a as any,neg.excluded));if(left.length!==pb.actions.length){if(!left.length){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return said}
+     await tx.execute(sql`UPDATE tako_whatsapp_proposals SET command=${JSON.stringify({...pb,actions:left})}::jsonb WHERE phone=${phone}`);const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`);return said+'\n\n'+proposalText(String(restaurant[0]?.name),left,refs,sections)}}
+    return said}
    else{text=neg.rest;st.text=text}}}}
  // QA 17/10, caso 1: due prezzi alternativi → domanda, mai una scrittura. Con un piatto solo la risposta «14» la completa (10 minuti).
  if(!planned&&!holdPick){const pc=priceChoice(text,refs);if(pc){if(pc.store&&!proposal)await propose(tx,ctx,row.revision,{kind:'choose_price',...pc.store});return pc.text}}

@@ -98,6 +98,9 @@ for(let i=0;i<8;i++){const d=pick(QA_D,i);c('qa',`${d} a ${pick([10,12,14,9],i)}
 for(let i=0;i<8;i++){const n=pick(NEWD,i),p=pick([150,15,22,9],i);c('qa',pick([`aggiungi ${n} a ${p} in una categoria nuova`,`aggiungi ${n} a ${p} in un'altra categoria`],i),NONE,{ask:[1],note:'categoria nuova: fase B; intanto domanda, mai prezzo 1'})}
 for(let i=0;i<8;i++){const [a,b]=pick(PAIRQ,i),p=pick([13,15,9,11],i);c('qa',[`${a} costa ${p}`,`e ${b.replace(/^(la|il) /,'')} uguale`],[P(a,p),P(b,p)])}
 
+// «metti X e Y a 10 e 20»: due prezzi in ordine, anche se uno non cambia (mai 10,20)
+for(let i=0;i<8;i++){const [a,b]=pick(PAIRQ,i),[pa,pb]=pick([[14,9],[11,16],[13,7],[8,18]] as [number,number][],i);c('qa',pick([`metti ${a} e ${b} a ${pa} e ${pb} euro`,`${a} e ${b} a ${pa} e ${pb}`],i),[P(a,pa),P(b,pb)])}
+
 // ===================== A3 · nomi del piatto puliti =====================
 fam='a3-nomi'
 const NAMES=['pasta alla norma','lasagna verde','tagliolini al tartufo','ravioli di ricotta','bucatini al tonno']

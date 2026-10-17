@@ -1,6 +1,6 @@
 {
  "cases": 141,
- "runs": 231,
+ "runs": 219,
  "unknownSql": [],
  "results": [
   {
@@ -2662,58 +2662,7 @@
    "actual": [
     "price|Spaghetti alla carbonara|12.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-01",
-   "cat": "lettere",
-   "mode": "empty",
-   "turns": [
-    "🎤 la carbonara costa dodici e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Spaghetti alla carbonara|12.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-01",
-   "cat": "lettere",
-   "mode": "wrong",
-   "turns": [
-    "🎤 la carbonara costa dodici e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Spaghetti alla carbonara|12.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-01",
-   "cat": "lettere",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 la carbonara costa dodici e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Spaghetti alla carbonara|12.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -2884,58 +2833,7 @@
    "actual": [
     "price|Margherita|7.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-10",
-   "cat": "lettere",
-   "mode": "empty",
-   "turns": [
-    "🎤 la margherita costa sette e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Margherita|7.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-10",
-   "cat": "lettere",
-   "mode": "wrong",
-   "turns": [
-    "🎤 la margherita costa sette e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Margherita|7.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-10",
-   "cat": "lettere",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 la margherita costa sette e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Margherita|7.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -3024,58 +2922,7 @@
    "actual": [
     "price|Coperto|2.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-12",
-   "cat": "lettere",
-   "mode": "empty",
-   "turns": [
-    "🎤 il coperto costa due e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|2.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-12",
-   "cat": "lettere",
-   "mode": "wrong",
-   "turns": [
-    "🎤 il coperto costa due e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Coperto|2.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-12",
-   "cat": "lettere",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 il coperto costa due e cinquanta"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coperto|2.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -3113,58 +2960,7 @@
    "actual": [
     "price|Menù bambini|9.99"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-14",
-   "cat": "lettere",
-   "mode": "empty",
-   "turns": [
-    "🎤 il menù bambini costa nove e novantanove"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Menù bambini|9.99"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-14",
-   "cat": "lettere",
-   "mode": "wrong",
-   "turns": [
-    "🎤 il menù bambini costa nove e novantanove"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Menù bambini|9.99"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "lettere-14",
-   "cat": "lettere",
-   "mode": "wrongCreate",
-   "turns": [
-    "🎤 il menù bambini costa nove e novantanove"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Menù bambini|9.99"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {

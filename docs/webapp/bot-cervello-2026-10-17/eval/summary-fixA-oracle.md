@@ -14,15 +14,15 @@ Generato da tests/eval (groq=oracle, riferimento=attuale-oracle, tetto=20000, co
 | negazione | 21 | 20 (95.2%) | 20 | 0 | 1 | 0 | 0 | 17.4% | 4 | 9 | 0 |
 | ambiguita | 20 | 19 (95%) | 19 | 0 | 1 | 0 | 0 | 90% | 1 | 13 | 0 |
 | togli | 17 | 16 (94.1%) | 16 | 0 | 1 | 0 | 0 | 5% | 1 | 7 | 0 |
-| vocale | 32 | 30 (93.8%) | 30 | 2 | 0 | 0 | 0 | 0% | 0 | 24 | 0 |
+| vocale | 32 | 30 (93.8%) | 30 | 2 | 0 | 0 | 0 | 0% | 0 | 22 | 0 |
 | qa1710 | 8 | 8 (100%) | 8 | 0 | 0 | 0 | 0 | 25% | 0 | 1 | 0 |
 | manuel | 5 | 4 (80%) | 4 | 0 | 1 | 0 | 0 | 50% | 4 | 1 | 0 |
 | batterie | 36 | 31 (86.1%) | 31 | 4 | 1 | 0 | 0 | 24.4% | 14 | 20 | 0 |
 | multi-turno | 207 | 189 (91.3%) | 189 | 15 | 3 | 0 | 0 | 20.6% | 31 | 163 | 0 |
-| TOTALE | 318 | 294 (92.5%) | 292 | 17 | 7 | 2 | 0 | 21.2% | 38 | 219 | 0 |
+| TOTALE | 318 | 294 (92.5%) | 292 | 17 | 7 | 2 | 0 | 21.2% | 38 | 217 | 0 |
 
-Latenza harness (webhook→risposta, senza rete) p50 1.8 ms · p95 4.7 ms. Con la latenza Groq registrata: p50 1.8 ms · p95 4.7 ms.
-IA: 249 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
+Latenza harness (webhook→risposta, senza rete) p50 1.8 ms · p95 4.8 ms. Con la latenza Groq registrata: p50 1.8 ms · p95 4.8 ms.
+IA: 246 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
 
 | Codice | GRAVE | MEDIO | BASSO |
 |---|---|---|---|

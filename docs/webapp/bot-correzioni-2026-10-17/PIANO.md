@@ -31,16 +31,16 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 - [x] A1.4 Batteria A1 (≥150 frasi, multi-turno) verde. — *F: `tests/eval/cases/fix-a.ts` a1-composti 186 conv., `eval-fix-a.test.ts` oracolo 186/186, Groq giù 186/186, avversario 186/186, 0 GRAVI. Banco V fase A falliti 46→13 (oracolo), banco E 294/318 invariato, round1–6* verdi.*
 
 ### A2. Prezzi inventati (GRAVE, 4 casi + rischio validatore)
-- [ ] A2.1 `spokenCents` (`twilio-menu-nlu.ts:135`): centesimi solo da forme esplicite («10 e 50», «10,50», «dieci e cinquanta»); «10 euro e uno deve…» → 10,00 + resto della frase.
-- [ ] A2.2 Validatore cervello (`owner-brain-plan.ts:239`): un prezzo è «detto» solo se compare come prezzo nel testo/cronologia; quantità e rimandi («quei due», «entrambi», «tutti e tre») non valgono come prezzo.
-- [ ] A2.3 Invariante globale: nessuna scrittura con prezzo assente dal testo dell'utente (o da un'operazione esplicita «stesso prezzo di X»/«+1 euro»).
-- [ ] A2.4 Batteria A2 (≥150 frasi) verde.
+- [x] A2.1 `spokenCents` (`twilio-menu-nlu.ts:135`): centesimi solo da forme esplicite («10 e 50», «10,50», «dieci e cinquanta»); «10 euro e uno deve…» → 10,00 + resto della frase. — *F: secondo numero 10–99 in fondo alla parte; anche «costa 12 e 50» senza «euro» per un piatto solo; stessa regola in `parseCreate`.*
+- [x] A2.2 Validatore cervello (`owner-brain-plan.ts:239`): un prezzo è «detto» solo se compare come prezzo nel testo/cronologia; quantità e rimandi («quei due», «entrambi», «tutti e tre») non valgono come prezzo. — *F: `withoutQuantities` dentro `g9Prices`; `deixisReferents` («quei due», «tutti e tre», «il primo», «tutti tranne X»): un'azione senza nome deve toccare esattamente quei piatti.*
+- [x] A2.3 Invariante globale: nessuna scrittura con prezzo assente dal testo dell'utente (o da un'operazione esplicita «stesso prezzo di X»/«+1 euro»). — *F: alle fonti (centesimi, quantità, prezzo dal contesto solo con rimando esplicito e mai con «lascialo stare», prezzo sul piatto della sua parte `priceClauseProblem`) + invariante `prezzo-non-detto` nelle batterie su 3 modelli: 0. Niente guardia unica nel route (vedi implementation-notes 7).*
+- [x] A2.4 Batteria A2 (≥150 frasi) verde. — *F: a2-prezzi 160 conv.: oracolo 160/160; Groq giù e avversario 0 GRAVI di sicurezza, 0 prezzi non detti. Unità: `tests/owner-brain-fix-a.test.ts` 34/34.*
 
 ### A3. Nomi del piatto sporchi (GRAVE, 6 casi)
-- [ ] A3.1 Pulizia nome: verbi/forme di cortesia in testa («inserisce/inserisci il piatto», «per favore», «mi metti», «voglio che…») tolti.
-- [ ] A3.2 Code di categoria tolte dal nome («nei primi pasti», «in una categoria nuova che si chiama…», «tra i primi») → diventano categoria richiesta (esistente → usata; inesistente → fase B / domanda).
-- [ ] A3.3 Risposte di conferma («sì creala», «ok», «vai») mai usate come nome.
-- [ ] A3.4 Batteria A3 (≥150 frasi) verde.
+- [x] A3.1 Pulizia nome: verbi/forme di cortesia in testa («inserisce/inserisci il piatto», «per favore», «mi metti», «voglio che…») tolti. — *F: forme dei vocali («Inserisce», «aggiungere», «aggiunga») e cortesia ovunque nella frase.*
+- [x] A3.2 Code di categoria tolte dal nome («nei primi pasti», «in una categoria nuova che si chiama…», «tra i primi») → diventano categoria richiesta (esistente → usata; inesistente → fase B / domanda). — *F: `unknownSectionAt`; la bozza tiene nome e `sectionName`, domanda «Nel menu non c'è la categoria *X*. In quale categoria metto…?».*
+- [x] A3.3 Risposte di conferma («sì creala», «ok», «vai») mai usate come nome. — *F: anche domande e comandi senza verbo iniziale non diventano nome (`NAME_BAD`).*
+- [x] A3.4 Batteria A3 (≥150 frasi) verde. — *F: a3-nomi 156 conv.: 156/156 in tutti e 3 i modi. Banco V fase A falliti 13→10, banco E 294/318 (91,3% multi), 0 GRAVI di sicurezza.*
 
 ### A4. Validatore e copy (MEDI)
 - [ ] A4.1 Una sola categoria → usata senza chiedere (validatore `twilio-menu-ai.ts:58-65`).

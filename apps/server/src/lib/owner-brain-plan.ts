@@ -59,7 +59,7 @@ export type BrainFallback={path:'fallback',reason:string,usage?:BrainUsage,token
 const SAME_PRICE=/\b(puru|stess[oa]|stesso costo|come (?:il|la|lo|l|i|le|gli)\b|ugual\w*|identic[oa]|pari|idem|allineal\w*|allinea\w*|anche|pure)\b/
 // Rimandi alla cronologia: pronomi, «anche/pure/uguale», correzioni, scelte («la seconda»).
 const SWAP=/\b(intendevo|volevo dire|era (?:la|il|lo|l)|non (?:la|il|lo) .{0,20}(?:ma|era)|no(?:,)? (?:la|il|lo|l|i|le|gli)\b|scusa(?:,)? (?:la|il|lo|l|i|le|gli)\b|ho sbagliato)/
-export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|mettil\w*|fall[aoie]\w*|portal\w*|toglil\w*|nascondil\w*|rimettil\w*|segnal\w*|quell[aoie]|quelli|quest[aoi]|no|scusa|anzi|invece|intendevo|volevo|sbagliato|errore|prim[oa]|second[oa]|terz[oa]|ultim[oa]|tutt\w*|entramb\w*|altr[oa])\b/
+export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|mettil\w*|fall[aoie]\w*|portal\w*|toglil\w*|nascondil\w*|rimettil\w*|segnal\w*|quell[aoie]|quelli|quei|quegli|ambedue|quest[aoi]|no|scusa|anzi|invece|intendevo|volevo|sbagliato|errore|prim[oa]|second[oa]|terz[oa]|ultim[oa]|tutt\w*|entramb\w*|altr[oa])\b/
 // 17/10 (correzioni A, v-deixis): rimandi a PIÙ piatti o per posizione nei messaggi recenti del titolare. «quei due», «entrambi»,
 // «tutti e tre», «quelli», «mettili» → l'insieme dei piatti; «il primo», «l'ultimo» → uno solo; «tutti tranne X». Il validatore
 // accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
@@ -83,6 +83,16 @@ export function deixisReferents(msg:string,owners:string[],refs:MenuRef[]):{kind
 const FEAT_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|lev[ai]) (?:\w+ ){0,2}evidenza\b|\bnon (?:piu |più )?in evidenza\b|\bdall evidenza\b|\bdalla evidenza\b/,FEAT_ON=/\b(?:mett\w*|metti\w*) (?:\w+ ){0,5}in evidenza\b|\bevidenzia\w*\b/
 const HID_ON=/\b(?:nascond\w*|togli\w*|lev\w*)\b/,HID_OFF=/\b(?:rimett\w*|mostr\w*|fa\w* vedere|visibil\w*|ricompar\w*)\b/
 const AV_OFF=/\b(?:finit\w*|esaurit\w*|fernut\w*|terminat\w*)\b/,AV_ON=/\b(?:tornat\w*|disponibil\w*|di nuovo|ce di nuovo)\b/
+/** Prezzi messi sul piatto sbagliato: la parte del messaggio che nomina il piatto ha dei numeri ma non quel prezzo. */
+export function priceClauseProblem(actions:MenuAction[],message:string,refs:MenuRef[]):string[]{
+ const parts=message.split(/(?<!\d)[,;\n]|[,;\n](?!\d)|\s+(?:e|ed|poi|invece)\s+(?=(?:il|la|lo|l|i|gli|le|un|una)\b)/iu).map(x=>x.trim()).filter(Boolean);if(parts.length<2)return[]
+ const byId=new Map(refs.map(r=>[r.id,r])),out:string[]=[]
+ // Un pezzo con un prezzo e senza piatto («…, anzi no a 13», «mettila a 15») rende l'attribuzione incerta: niente controllo.
+ if(parts.some(x=>g9Prices(x).length&&!refs.some(r=>g9DishMentioned(r.name,x,refs))))return[]
+ for(const a of actions){if(!('id' in a)||!(a.kind==='price'||(a.kind==='promo'&&a.price!==null)))continue;const r=byId.get(a.id);if(!r)continue
+  const mine=parts.filter(x=>g9DishMentioned(r.name,x,refs));if(mine.length!==1)continue;const nums=g9Prices(mine[0]!);if(!nums.length)continue
+  if(!nums.includes(Math.round((a.price as number)*100)/100))out.push(a.id)}
+ return out}
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
 export function polarityProblem(actions:MenuAction[],msg:string):string[]{const m=' '+msg+' ',out:string[]=[]
  const fOff=FEAT_OFF.test(m),fOn=FEAT_ON.test(m)&&!fOff,hOn=HID_ON.test(m)&&!HID_OFF.test(m)&&!/evidenza|promo|offert|scont|etichett/.test(m),hOff=HID_OFF.test(m)&&!HID_ON.test(m),aOff=AV_OFF.test(m)&&!AV_ON.test(m),aOn=AV_ON.test(m)&&!AV_OFF.test(m)
@@ -249,6 +259,9 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    const asks2:HoldAsk[]=amb.map(a=>{const {id,...template}=a as any;return{type:'choose' as const,word:refs.find(r=>r.id===id)?.name??'',options:doubt.get(id)!.slice(0,8),template}})
    if(!clear.length&&asks2.length===1)return{intent:'clarify',plan:{type:'clarify',ids:asks2[0]!.type==='choose'?asks2[0]!.options:[],actions:[amb[0]!]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
    return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:clear,asks:[...asks2,...asks]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}}
+  // 17/10 (correzioni A): in una richiesta con più piatti e prezzi («carbonara 13, lasagna 12») ogni prezzo deve stare nella parte
+  // che nomina quel piatto: un modello che scambia i prezzi tra i piatti non scrive.
+  {const swapped=priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs);if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
   {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}

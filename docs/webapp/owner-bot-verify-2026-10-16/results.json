@@ -1,6 +1,6 @@
 {
  "cases": 283,
- "runs": 559,
+ "runs": 556,
  "unknownSql": [
   "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
  ],
@@ -2553,58 +2553,7 @@
    "actual": [
     "price|Coca Cola 33cl|3.5"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-25",
-   "cat": "prezzo",
-   "mode": "empty",
-   "turns": [
-    "coca cola a 3 e 50"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coca Cola 33cl|3.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-25",
-   "cat": "prezzo",
-   "mode": "wrong",
-   "turns": [
-    "coca cola a 3 e 50"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
-   ],
-   "expected": [
-    "price|Coca Cola 33cl|3.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "prezzo-25",
-   "cat": "prezzo",
-   "mode": "wrongCreate",
-   "turns": [
-    "coca cola a 3 e 50"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "price|Coca Cola 33cl|3.5"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
