@@ -75,3 +75,23 @@ describe('A1 «X e Y» e risposte con più prezzi',()=>{
   expect(answerPrices('No, sono due piatti separati.',names)).toEqual([])
  })
 })
+
+import {phoneticHits,phoneticCandidates,phoneKey} from '../apps/server/src/lib/twilio-menu-phonetic.js'
+describe('A5 nomi storpiati (solo verso piatti del menu, con soglia)',()=>{
+ const qa=['Piatto di verifica','Che ne sacc','boh','pasta al ragù','la parmigiana','tiramisù'].map((n,i)=>R('q'+i,n))
+ it('suono forte → piatto; debole → solo ipotesi',()=>{
+  expect(phoneKey('kenesac')).toBe(phoneKey('che ne sacc'))
+  expect(phoneticHits('nel kenesac metti la promo a 12 euro',qa).strong).toEqual(['q1'])
+  expect(phoneticHits('che nesac costa 16',qa).strong).toEqual(['q1'])
+  expect(phoneticHits('Bu costa 40 euro',qa)).toMatchObject({strong:[],weak:['q2']})
+  expect(phoneticHits('nel piatto Bo cambia la descrizione',qa).strong).toEqual(['q2'])
+  expect(phoneticCandidates('kenesac',qa).map(r=>r.name)).toEqual(['Che ne sacc'])
+ })
+ it('nessun falso abbinamento: parole di servizio, nomi parziali, parole fuori menu',()=>{
+  const mario=['Bruschetta al pomodoro','Spaghetti alla carbonara','Lasagna al forno','Cotoletta alla milanese','Margherita','Diavola','Tiramisù','Caffè','Cappuccino','Coca Cola 33cl','Birra media','Nuovo burger','Frittatina di pasta','Frittatina di patate'].map((n,i)=>R('m'+i,n))
+  for(const t of ['no scusa 7','la costata è finita','metti la costa a 12','il burger vegano costa 12','la frittatina costa 3,50','la lasagna verde costa 12'])expect(phoneticHits(t,mario).strong,t).toEqual([])
+  expect(phoneticHits('la margarita a 8',mario).strong).toEqual(['m4'])
+  expect(phoneticHits('il capuccino costa 2',mario).strong).toEqual(['m8'])
+  expect(phoneticCandidates('mojito',mario)).toEqual([])
+ })
+})

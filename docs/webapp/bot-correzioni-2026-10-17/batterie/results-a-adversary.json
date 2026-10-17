@@ -3,37 +3,37 @@
  "meta": {
   "groq": "adversary",
   "bot": "nuovo",
-  "conversazioni": 658
+  "conversazioni": 809
  },
  "summary": {
   "total": {
    "family": "TOTALE",
-   "n": 658,
-   "ok": 488,
-   "success": 488,
+   "n": 809,
+   "ok": 584,
+   "success": 584,
    "grave": 44,
-   "medio": 126,
+   "medio": 181,
    "basso": 0,
    "safety": 3,
-   "clarRate": 51,
-   "unexpectedClar": 206,
-   "usedLlm": 224,
+   "clarRate": 50.4,
+   "unexpectedClar": 267,
+   "usedLlm": 311,
    "llmMissConvs": 0,
-   "detN": 434,
-   "detSuccess": 434
+   "detN": 498,
+   "detSuccess": 498
   },
   "multi": {
    "family": "multi-turno",
-   "n": 352,
+   "n": 368,
    "ok": 270,
    "success": 270,
    "grave": 16,
-   "medio": 66,
+   "medio": 82,
    "basso": 0,
    "safety": 3,
-   "clarRate": 57.1,
-   "unexpectedClar": 138,
-   "usedLlm": 114,
+   "clarRate": 58.6,
+   "unexpectedClar": 154,
+   "usedLlm": 130,
    "llmMissConvs": 0,
    "detN": 238,
    "detSuccess": 238
@@ -102,12 +102,28 @@
     "llmMissConvs": 0,
     "detN": 44,
     "detSuccess": 44
+   },
+   {
+    "family": "a5-asr",
+    "n": 151,
+    "ok": 96,
+    "success": 96,
+    "grave": 0,
+    "medio": 55,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 46.1,
+    "unexpectedClar": 61,
+    "usedLlm": 87,
+    "llmMissConvs": 0,
+    "detN": 64,
+    "detSuccess": 64
    }
   ],
   "codes": {
    "chiede-invece-di-agire": {
     "GRAVE": 0,
-    "MEDIO": 130,
+    "MEDIO": 185,
     "BASSO": 0
    },
    "non-applicato": {
@@ -137,13 +153,13 @@
    }
   },
   "latency": {
-   "harnessP50": 0.6,
-   "harnessP95": 1.6,
-   "withRecordedGroqP50": 0.6,
-   "withRecordedGroqP95": 1.6
+   "harnessP50": 0.7,
+   "harnessP95": 2,
+   "withRecordedGroqP50": 0.7,
+   "withRecordedGroqP95": 2
   },
   "llm": {
-   "calls": 302,
+   "calls": 397,
    "misses": 0,
    "tokens": 0
   }
@@ -177,7 +193,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    0.8,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -211,8 +227,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.7
+    0.7,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -313,8 +329,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1
+    0.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -381,8 +397,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.6
+    0.8,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -449,8 +465,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.6
+    0.7,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -483,7 +499,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -551,8 +567,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.5
+    0.8,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -586,7 +602,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -653,7 +669,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -721,8 +737,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.6
+    0.8,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -755,7 +771,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -823,8 +839,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -857,8 +873,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.8
+    0.6,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -993,7 +1009,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.6,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1027,8 +1043,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.9
+    0.7,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1062,7 +1078,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1096,7 +1112,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1130,7 +1146,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1163,8 +1179,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.6
+    0.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1299,7 +1315,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1333,7 +1349,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.6,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1368,7 +1384,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1401,8 +1417,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.7
+    0.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1469,7 +1485,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1503,7 +1519,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.6,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1538,7 +1554,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1639,8 +1655,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1673,7 +1689,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    1,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1775,7 +1791,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -1809,8 +1825,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.7
+    0.7,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1844,7 +1860,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1878,7 +1894,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1945,8 +1961,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    1
+    0.7,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1979,7 +1995,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.8,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2081,7 +2097,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.6,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2115,8 +2131,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.6
+    0.4,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2149,8 +2165,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.6
+    0.5,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2183,7 +2199,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -2217,7 +2233,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.6,
     0.8
    ],
    "recordedLlmMs": 0,
@@ -2286,7 +2302,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2353,8 +2369,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7
+    0.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2387,8 +2403,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.8
+    0.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2421,7 +2437,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -2456,7 +2472,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2489,8 +2505,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7
+    0.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2558,7 +2574,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2591,7 +2607,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.8
    ],
    "recordedLlmMs": 0,
@@ -2627,7 +2643,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.3,
     0.6
    ],
@@ -2740,7 +2756,7 @@
    "latencyMs": [
     0.3,
     0.3,
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2776,7 +2792,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.3,
+    0.2,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -2812,9 +2828,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.3,
-    0.7
+    0.4,
+    0.2,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2887,8 +2903,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5,
-    0.6
+    0.6,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2998,8 +3014,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.2,
-    0.5
+    0.3,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3035,7 +3051,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.4,
+    0.5,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -3184,7 +3200,7 @@
    "latencyMs": [
     0.3,
     0.6,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3220,8 +3236,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.3,
-    0.6
+    0.2,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3330,7 +3346,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     0.3,
     0.6
    ],
@@ -3367,7 +3383,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.3,
     0.6
    ],
@@ -3404,9 +3420,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.4,
-    0.6
+    0.3,
+    0.3,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3442,7 +3458,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.3,
+    0.2,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -3478,8 +3494,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.2,
+    0.7,
+    0.3,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -3515,7 +3531,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3723,7 +3739,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     0.3,
     0.5
    ],
@@ -3760,7 +3776,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3794,7 +3810,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.3,
+    0.2,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -3864,7 +3880,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.2,
+    0.3,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -3935,7 +3951,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     0.2,
     0.5
    ],
@@ -4009,7 +4025,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.2,
     0.5
    ],
@@ -4046,7 +4062,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.2,
     0.5
    ],
@@ -4252,7 +4268,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4280,7 +4296,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4531,8 +4547,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.4
+    0.3,
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4643,8 +4659,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    0.6
+    0.5,
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4789,7 +4805,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4847,7 +4863,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5035,7 +5051,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -5199,7 +5215,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.8,
     1.3
    ],
    "recordedLlmMs": 0,
@@ -5267,8 +5283,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.3
+    1.1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5301,8 +5317,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1.3
+    0.9,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5335,8 +5351,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.4
+    1.6,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5370,7 +5386,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5403,7 +5419,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    1.1,
     1.3
    ],
    "recordedLlmMs": 0,
@@ -5439,7 +5455,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.6,
     1.1
    ],
@@ -5476,7 +5492,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.9,
     0.7,
     1.1
    ],
@@ -5513,7 +5529,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.7,
     1.1
    ],
@@ -5550,7 +5566,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.7,
     1.1
    ],
@@ -5698,9 +5714,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.5,
-    1.1
+    0.7,
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5803,7 +5819,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.3,
     0.5
    ],
@@ -6158,7 +6174,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6192,7 +6208,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1.4,
+    1.5,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -6262,7 +6278,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1,
+    1.1,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -6296,7 +6312,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     1,
     0.5
    ],
@@ -6332,7 +6348,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1,
+    1.1,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -6402,8 +6418,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1,
-    0.8
+    1.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6437,7 +6453,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.9,
+    1,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -6496,7 +6512,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6616,7 +6632,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6732,7 +6748,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6761,7 +6777,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6794,7 +6810,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6939,7 +6955,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7001,7 +7017,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7117,7 +7133,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7150,7 +7166,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7179,7 +7195,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7208,7 +7224,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7266,7 +7282,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7295,7 +7311,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7328,7 +7344,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7357,7 +7373,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7386,7 +7402,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7473,7 +7489,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7506,7 +7522,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7593,7 +7609,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7651,7 +7667,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7765,7 +7781,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7793,7 +7809,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7821,7 +7837,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7849,7 +7865,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7877,7 +7893,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7905,7 +7921,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7933,7 +7949,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7961,7 +7977,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8003,8 +8019,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.8
+    1.5,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8042,8 +8058,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.6
+    1.4,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8081,7 +8097,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1.3,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -8123,8 +8139,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.7
+    1.4,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8170,8 +8186,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.5
+    1.5,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8212,8 +8228,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.6
+    1.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8251,8 +8267,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.4
+    1.5,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8290,8 +8306,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.2
+    1.4,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8332,8 +8348,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.4
+    1.5,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8372,7 +8388,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    1.1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8410,8 +8426,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.1
+    1.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8452,8 +8468,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.7
+    1.4,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8499,8 +8515,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.4
+    1.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8541,8 +8557,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.8
+    1.3,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8580,8 +8596,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.1
+    1.4,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8619,8 +8635,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.1
+    1.4,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8661,8 +8677,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.4
+    1.5,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8700,8 +8716,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.1
+    1.3,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8739,8 +8755,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.5
+    1.4,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8781,8 +8797,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.5
+    1.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8828,8 +8844,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.4
+    1.7,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8871,7 +8887,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8909,8 +8925,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.1
+    1.5,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8948,8 +8964,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.3
+    1.4,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8988,9 +9004,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    0.8,
     0.7,
-    0.7,
-    1.6
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9033,7 +9049,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8,
+    0.9,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -9076,9 +9092,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
-    1.3
+    1,
+    1.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9121,8 +9137,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8,
-    1.2
+    1,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9161,9 +9177,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7,
-    1.7
+    1.6,
+    1.3,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9205,9 +9221,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8,
-    1.2
+    2.7,
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9249,9 +9265,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    0.9,
-    1.4
+    0.7,
+    1.2,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9293,8 +9309,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1,
+    1.2,
+    1.2,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -9334,9 +9350,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    0.6,
     0.7,
-    1.5
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9378,9 +9394,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8,
-    1
+    1.4,
+    0.9,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9422,7 +9438,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    0.7,
     1.1,
     1.5
    ],
@@ -9466,9 +9482,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
-    1.3
+    1.1,
+    1.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9507,9 +9523,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
     0.7,
-    1.6
+    0.8,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9551,9 +9567,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    1.1,
     1,
-    1.2
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9595,9 +9611,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    0.7,
     1.1,
-    1.1,
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9639,9 +9655,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
-    1.2
+    1,
+    1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9680,9 +9696,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.6,
     0.7,
-    1.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9724,9 +9740,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.9,
-    1
+    1.2,
+    1.1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9768,9 +9784,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    0.9,
-    1.3
+    0.7,
+    1.1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9812,9 +9828,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.8,
-    1.2
+    1,
+    1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9853,9 +9869,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    0.6,
     0.7,
-    1.6
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9897,9 +9913,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8,
-    1.2
+    1,
+    0.9,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9941,9 +9957,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1,
-    1.4
+    0.7,
+    1.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9985,8 +10001,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
     0.9,
+    1,
     1.3
    ],
    "recordedLlmMs": 0,
@@ -10033,10 +10049,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.1,
-    0.9,
-    1.3
+    0.6,
+    1,
+    0.8,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10082,10 +10098,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.6,
+    1.1,
     0.8,
-    0.8,
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10131,10 +10147,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
-    0.9,
-    1.3
+    0.6,
+    1,
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10180,10 +10196,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1.3,
-    0.9,
-    1.3
+    0.6,
+    1,
+    0.8,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10229,9 +10245,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    1,
+    1.1,
     0.9,
-    0.8,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -10278,9 +10294,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    0.7,
     1,
-    0.9,
+    1.1,
     1.3
    ],
    "recordedLlmMs": 0,
@@ -10327,10 +10343,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
+    0.6,
+    1,
     0.8,
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10376,10 +10392,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8,
-    0.8,
-    1.3
+    0.9,
+    1,
+    0.9,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10415,8 +10431,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.5
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10452,8 +10468,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.1
+    1.4,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10489,8 +10505,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.1
+    1.1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10526,8 +10542,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.2
+    1.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10563,8 +10579,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.1
+    1.2,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10600,8 +10616,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.5
+    1.1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10637,8 +10653,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.2
+    1.3,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10674,7 +10690,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    1.2,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -10711,8 +10727,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.2
+    1.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10748,8 +10764,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.2
+    1.1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10785,8 +10801,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.4
+    1,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10822,8 +10838,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.8
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10868,9 +10884,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.6,
     1,
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10915,8 +10931,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
+    0.8,
+    1,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -10957,7 +10973,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    0.6,
     1,
     1.1
    ],
@@ -10999,8 +11015,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
     0.9,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -11047,7 +11063,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1.2,
+    0.9,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -11093,9 +11109,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8,
-    1.1
+    1,
+    1.1,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11135,9 +11151,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9,
-    1.6
+    0.6,
+    1,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11177,8 +11193,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.9,
+    1,
+    1,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -11204,7 +11220,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11229,7 +11245,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11279,7 +11295,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11304,7 +11320,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11329,7 +11345,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11354,7 +11370,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11379,7 +11395,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11625,8 +11641,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.3
+    0.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11660,7 +11676,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11732,8 +11748,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.4
+    0.9,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11772,7 +11788,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11806,7 +11822,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1.4
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11844,8 +11860,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1
+    0.7,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11878,8 +11894,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    1.4
+    0.7,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11913,7 +11929,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11947,7 +11963,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11981,7 +11997,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12015,7 +12031,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12049,7 +12065,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12083,7 +12099,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12117,7 +12133,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12151,7 +12167,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12180,7 +12196,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12238,7 +12254,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12267,7 +12283,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12296,7 +12312,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12325,7 +12341,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12354,7 +12370,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12383,7 +12399,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12412,7 +12428,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12441,7 +12457,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12470,7 +12486,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12499,7 +12515,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12528,7 +12544,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12557,7 +12573,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12586,7 +12602,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12615,7 +12631,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12644,7 +12660,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12702,7 +12718,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12731,7 +12747,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12760,7 +12776,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12789,7 +12805,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12818,7 +12834,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12847,7 +12863,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12876,7 +12892,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12905,7 +12921,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12963,7 +12979,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12992,7 +13008,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13021,7 +13037,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13050,7 +13066,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13079,7 +13095,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13108,7 +13124,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13137,7 +13153,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13166,7 +13182,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13195,7 +13211,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13224,7 +13240,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13282,7 +13298,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13311,7 +13327,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13369,7 +13385,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13427,7 +13443,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13456,7 +13472,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13485,7 +13501,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13514,7 +13530,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13543,7 +13559,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13630,7 +13646,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13659,7 +13675,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13688,7 +13704,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13717,7 +13733,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13746,7 +13762,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13862,7 +13878,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13891,7 +13907,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13920,7 +13936,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13978,7 +13994,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14036,7 +14052,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14123,7 +14139,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14181,7 +14197,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14239,7 +14255,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14271,7 +14287,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14302,7 +14318,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.3,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -14399,7 +14415,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14430,7 +14446,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -14463,7 +14479,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.9
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14494,7 +14510,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -14559,7 +14575,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14623,7 +14639,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14654,7 +14670,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -14719,7 +14735,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14750,8 +14766,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.5
+    0.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14783,7 +14799,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14879,7 +14895,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14910,7 +14926,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -14942,8 +14958,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.7
+    0.3,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15070,7 +15086,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.5,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -15134,7 +15150,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.4,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -15233,7 +15249,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.3,
+    0.5,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -15302,7 +15318,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.3,
     0.2,
     0.5
    ],
@@ -15407,7 +15423,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.7,
     0.2,
     0.5
    ],
@@ -15443,8 +15459,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.6,
-    0.6
+    0.2,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15477,7 +15493,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.2,
     0.5
    ],
@@ -15548,7 +15564,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.2,
+    0.5,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -15584,7 +15600,7 @@
    "latencyMs": [
     0.3,
     0.2,
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15618,7 +15634,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.3,
+    0.2,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -15689,7 +15705,7 @@
    "latencyMs": [
     0.3,
     0.2,
-    0.5
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15757,7 +15773,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.3,
     0.2,
     0.5
    ],
@@ -15862,7 +15878,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.6,
     0.2,
     0.5
    ],
@@ -15898,7 +15914,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.4,
+    0.2,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -16003,7 +16019,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.2,
+    0.5,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -16039,7 +16055,7 @@
    "latencyMs": [
     0.3,
     0.2,
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16177,7 +16193,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.5,
     0.2,
     0.5
    ],
@@ -16212,7 +16228,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.3,
     0.2,
     0.5
    ],
@@ -16348,7 +16364,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16377,7 +16393,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16406,7 +16422,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16435,7 +16451,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16464,7 +16480,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16493,7 +16509,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16522,7 +16538,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16609,7 +16625,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16638,7 +16654,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16696,7 +16712,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16725,7 +16741,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16754,7 +16770,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16783,7 +16799,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16841,7 +16857,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16870,7 +16886,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16899,7 +16915,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16928,7 +16944,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16957,7 +16973,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17019,7 +17035,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17048,7 +17064,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17077,7 +17093,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17106,7 +17122,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17139,7 +17155,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17168,7 +17184,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17197,7 +17213,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17259,7 +17275,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17379,7 +17395,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17437,7 +17453,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -17472,7 +17488,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17507,7 +17523,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17542,7 +17558,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17577,7 +17593,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17612,7 +17628,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17647,7 +17663,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17682,7 +17698,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17717,7 +17733,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17752,7 +17768,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17787,7 +17803,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17822,7 +17838,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17857,7 +17873,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17892,7 +17908,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17927,7 +17943,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17962,7 +17978,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17997,7 +18013,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18067,7 +18083,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18102,7 +18118,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18137,7 +18153,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18172,7 +18188,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18207,7 +18223,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18242,7 +18258,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18277,7 +18293,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18312,7 +18328,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18347,7 +18363,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18382,7 +18398,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18417,7 +18433,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18451,7 +18467,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18485,7 +18501,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18519,7 +18535,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18553,7 +18569,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18587,7 +18603,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18621,7 +18637,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18655,7 +18671,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18689,7 +18705,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18727,7 +18743,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18765,7 +18781,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18803,7 +18819,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18841,7 +18857,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18879,7 +18895,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18917,7 +18933,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18955,7 +18971,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18993,7 +19009,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19031,7 +19047,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19069,7 +19085,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19107,7 +19123,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19145,7 +19161,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19174,7 +19190,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19212,7 +19228,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19241,7 +19257,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19270,7 +19286,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19299,7 +19315,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19337,7 +19353,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19366,7 +19382,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19395,7 +19411,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19428,7 +19444,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19457,7 +19473,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19490,7 +19506,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19523,7 +19539,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19556,7 +19572,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19585,7 +19601,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19618,7 +19634,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19651,7 +19667,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19684,7 +19700,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19717,7 +19733,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19750,7 +19766,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19783,7 +19799,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19816,7 +19832,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19849,7 +19865,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19882,7 +19898,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19915,7 +19931,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19940,7 +19956,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19966,7 +19982,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19992,7 +20008,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -20018,7 +20034,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -20052,7 +20068,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20081,7 +20097,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20119,7 +20135,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20157,7 +20173,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20190,7 +20206,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20219,7 +20235,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20257,7 +20273,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20295,7 +20311,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20332,7 +20348,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.7,
     0.3,
     0.5
    ],
@@ -20413,8 +20429,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5,
-    0.4
+    0.3,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -20493,7 +20509,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.2,
+    0.5,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -20574,7 +20590,7 @@
    "latencyMs": [
     0.4,
     0.2,
-    0.7
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -20614,7 +20630,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.5
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -20653,8 +20669,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.2,
-    0.4
+    0.3,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -20733,8 +20749,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.2,
-    0.5
+    0.3,
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -20772,9 +20788,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.4,
     0.3,
-    0.5
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -20850,7 +20866,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -20875,7 +20891,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.2
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -20900,7 +20916,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.2
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -21050,7 +21066,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -21100,7 +21116,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -21175,7 +21191,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -21225,7 +21241,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -21250,7 +21266,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -21306,8 +21322,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1.3
+    0.6,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21338,8 +21354,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.8
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21403,7 +21419,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21434,7 +21450,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    0.6,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -21466,8 +21482,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.7
+    0.9,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21531,7 +21547,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21562,8 +21578,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.9
+    0.6,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21627,7 +21643,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21658,8 +21674,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.9
+    0.8,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21690,8 +21706,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1
+    1.3,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21755,7 +21771,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21786,7 +21802,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.6,
     1
    ],
    "recordedLlmMs": 0,
@@ -21825,8 +21841,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.2
+    1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21864,8 +21880,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9
+    0.6,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21904,7 +21920,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21942,8 +21958,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    1.3
+    0.8,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21982,7 +21998,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.9
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22020,8 +22036,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.9
+    0.7,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22059,8 +22075,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8
+    0.8,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22098,11 +22114,4570 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.6,
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-001",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: promo|Che ne sacc|12"
+    }
+   ],
+   "expected": [
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel kenesac metti la promo a 12 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-002",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|14"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il kenesac costa 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-003",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|9"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 kenesak a 9 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-004",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|16"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 che nesac costa 16"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-005",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|22"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|22"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel piatto kenesac metti il prezzo a 22"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-006",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|7"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 metti il kenesac a 7"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-007",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: promo|Che ne sacc|12"
+    }
+   ],
+   "expected": [
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel kenesac metti la promo a 12 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-008",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|14"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il kenesac costa 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-009",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|9"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 kenesak a 9 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-010",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|16"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 che nesac costa 16"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-011",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|22"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|22"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel piatto kenesac metti il prezzo a 22"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-012",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|7"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 metti il kenesac a 7"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-013",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: promo|Che ne sacc|12"
+    }
+   ],
+   "expected": [
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel kenesac metti la promo a 12 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-014",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|14"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il kenesac costa 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-015",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|9"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 kenesak a 9 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-016",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|16"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 che nesac costa 16"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-017",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|22"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|22"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel piatto kenesac metti il prezzo a 22"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-018",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|7"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 metti il kenesac a 7"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-019",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: promo|Che ne sacc|12"
+    }
+   ],
+   "expected": [
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel kenesac metti la promo a 12 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-020",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|14"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il kenesac costa 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-021",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|9"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 kenesak a 9 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-022",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|16"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 che nesac costa 16"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-023",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|22"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|22"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Che ne sacc*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 nel piatto kenesac metti il prezzo a 22"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-024",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Che ne sacc|7"
+    }
+   ],
+   "expected": [
+    "price|Che ne sacc|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 metti il kenesac a 7"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-025",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Marinara|13"
+   ],
+   "actual": [
+    "price|Marinara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Marinara*: prezzo da 5,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la marinera a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-026",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Bufalina|14"
+   ],
+   "actual": [
+    "price|Bufalina|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bufalina*: prezzo da 9,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 la bufalino costa 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-027",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Babà|5"
+    }
+   ],
+   "expected": [
+    "price|Babà|5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Babà*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il babbà a 5 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-028",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Sfogliatella|5.5"
+   ],
+   "actual": [
+    "price|Sfogliatella|5.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Sfogliatella*: prezzo da 3,00 € a *5,50 €*"
+   ],
+   "turns": [
+    "🎤 la sfogliatela costa 5,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-029",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spritz Aperol|18"
+   ],
+   "actual": [
+    "price|Spritz Aperol|18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spritz Aperol*: prezzo da 6,00 € a *18,00 €*"
+   ],
+   "turns": [
+    "🎤 lo spriz aperol a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-030",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Ginseng|3.5"
+   ],
+   "actual": [
+    "price|Ginseng|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Ginseng*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il ginsen costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-031",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Negroni|21"
+   ],
+   "actual": [
+    "price|Negroni|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Negroni*: prezzo da 8,00 € a *21,00 €*"
+   ],
+   "turns": [
+    "🎤 il negrone a 21"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-032",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|13"
+   ],
+   "actual": [
+    "price|Amatriciana|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la matriciana a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-033",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|14"
+   ],
+   "actual": [
+    "price|Margherita|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: prezzo da 7,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 la margarita a 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-034",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cappuccino|3.5"
+   ],
+   "actual": [
+    "price|Cappuccino|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cappuccino*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il capuccino costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-035",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|17"
+   ],
+   "actual": [
+    "price|Capricciosa|17"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Capricciosa*: prezzo da 9,50 € a *17,00 €*"
+   ],
+   "turns": [
+    "🎤 la capriciosa a 17"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-036",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Puntarelle|18"
+   ],
+   "actual": [
+    "price|Puntarelle|18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Puntarelle*: prezzo da 6,00 € a *18,00 €*"
+   ],
+   "turns": [
+    "🎤 le puntarele costano 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-037",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Marinara|21"
+   ],
+   "actual": [
+    "price|Marinara|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Marinara*: prezzo da 5,00 € a *21,00 €*"
+   ],
+   "turns": [
+    "🎤 la marinera a 21"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-038",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Bufalina|13"
+   ],
+   "actual": [
+    "price|Bufalina|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bufalina*: prezzo da 9,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la bufalino costa 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-039",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Babà|5"
+    }
+   ],
+   "expected": [
+    "price|Babà|5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Babà*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il babbà a 5 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-040",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Sfogliatella|5.5"
+   ],
+   "actual": [
+    "price|Sfogliatella|5.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Sfogliatella*: prezzo da 3,00 € a *5,50 €*"
+   ],
+   "turns": [
+    "🎤 la sfogliatela costa 5,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-041",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spritz Aperol|17"
+   ],
+   "actual": [
+    "price|Spritz Aperol|17"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spritz Aperol*: prezzo da 6,00 € a *17,00 €*"
+   ],
+   "turns": [
+    "🎤 lo spriz aperol a 17"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-042",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Ginseng|3.5"
+   ],
+   "actual": [
+    "price|Ginseng|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Ginseng*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il ginsen costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-043",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Negroni|19"
+   ],
+   "actual": [
+    "price|Negroni|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Negroni*: prezzo da 8,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 il negrone a 19"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-044",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|21"
+   ],
+   "actual": [
+    "price|Amatriciana|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *21,00 €*"
+   ],
+   "turns": [
+    "🎤 la matriciana a 21"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-045",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|13"
+   ],
+   "actual": [
+    "price|Margherita|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: prezzo da 7,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la margarita a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-046",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cappuccino|3.5"
+   ],
+   "actual": [
+    "price|Cappuccino|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cappuccino*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il capuccino costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-047",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|16"
+   ],
+   "actual": [
+    "price|Capricciosa|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Capricciosa*: prezzo da 9,50 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 la capriciosa a 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-048",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Puntarelle|17"
+   ],
+   "actual": [
+    "price|Puntarelle|17"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Puntarelle*: prezzo da 6,00 € a *17,00 €*"
+   ],
+   "turns": [
+    "🎤 le puntarele costano 17"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-049",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Marinara|19"
+   ],
+   "actual": [
+    "price|Marinara|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Marinara*: prezzo da 5,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 la marinera a 19"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-050",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Bufalina|21"
+   ],
+   "actual": [
+    "price|Bufalina|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bufalina*: prezzo da 9,00 € a *21,00 €*"
+   ],
+   "turns": [
+    "🎤 la bufalino costa 21"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-051",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Babà|5"
+    }
+   ],
+   "expected": [
+    "price|Babà|5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Babà*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il babbà a 5 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-052",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Sfogliatella|5.5"
+   ],
+   "actual": [
+    "price|Sfogliatella|5.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Sfogliatella*: prezzo da 3,00 € a *5,50 €*"
+   ],
+   "turns": [
+    "🎤 la sfogliatela costa 5,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-053",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spritz Aperol|16"
+   ],
+   "actual": [
+    "price|Spritz Aperol|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spritz Aperol*: prezzo da 6,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 lo spriz aperol a 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-054",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Ginseng|3.5"
+   ],
+   "actual": [
+    "price|Ginseng|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Ginseng*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il ginsen costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-055",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Negroni|18"
+   ],
+   "actual": [
+    "price|Negroni|18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Negroni*: prezzo da 8,00 € a *18,00 €*"
+   ],
+   "turns": [
+    "🎤 il negrone a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-056",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|19"
+   ],
+   "actual": [
+    "price|Amatriciana|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 la matriciana a 19"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-057",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|21"
+   ],
+   "actual": [
+    "price|Margherita|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: prezzo da 7,00 € a *21,00 €*"
+   ],
+   "turns": [
+    "🎤 la margarita a 21"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-058",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cappuccino|3.5"
+   ],
+   "actual": [
+    "price|Cappuccino|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cappuccino*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il capuccino costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-059",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|14"
+   ],
+   "actual": [
+    "price|Capricciosa|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Capricciosa*: prezzo da 9,50 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 la capriciosa a 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-060",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Puntarelle|16"
+   ],
+   "actual": [
+    "price|Puntarelle|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Puntarelle*: prezzo da 6,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 le puntarele costano 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-061",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Marinara|18"
+   ],
+   "actual": [
+    "price|Marinara|18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Marinara*: prezzo da 5,00 € a *18,00 €*"
+   ],
+   "turns": [
+    "🎤 la marinera a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-062",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Bufalina|19"
+   ],
+   "actual": [
+    "price|Bufalina|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bufalina*: prezzo da 9,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 la bufalino costa 19"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-063",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Babà|5"
+    }
+   ],
+   "expected": [
+    "price|Babà|5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Babà*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il babbà a 5 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-064",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Sfogliatella|5.5"
+   ],
+   "actual": [
+    "price|Sfogliatella|5.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Sfogliatella*: prezzo da 3,00 € a *5,50 €*"
+   ],
+   "turns": [
+    "🎤 la sfogliatela costa 5,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-065",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spritz Aperol|14"
+   ],
+   "actual": [
+    "price|Spritz Aperol|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spritz Aperol*: prezzo da 6,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 lo spriz aperol a 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-066",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Ginseng|3.5"
+   ],
+   "actual": [
+    "price|Ginseng|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Ginseng*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il ginsen costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-067",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Negroni|17"
+   ],
+   "actual": [
+    "price|Negroni|17"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Negroni*: prezzo da 8,00 € a *17,00 €*"
+   ],
+   "turns": [
+    "🎤 il negrone a 17"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-068",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|18"
+   ],
+   "actual": [
+    "price|Amatriciana|18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Amatriciana*: prezzo da 11,00 € a *18,00 €*"
+   ],
+   "turns": [
+    "🎤 la matriciana a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-069",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|19"
+   ],
+   "actual": [
+    "price|Margherita|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: prezzo da 7,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 la margarita a 19"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-070",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cappuccino|3.5"
+   ],
+   "actual": [
+    "price|Cappuccino|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Cappuccino*: prezzo da 1,80 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 il capuccino costa 3,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-071",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|13"
+   ],
+   "actual": [
+    "price|Capricciosa|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Capricciosa*: prezzo da 9,50 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la capriciosa a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-072",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Puntarelle|14"
+   ],
+   "actual": [
+    "price|Puntarelle|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Puntarelle*: prezzo da 6,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 le puntarele costano 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-073",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [
+    "price|boh|40"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *40,00 €*"
+   ],
+   "turns": [
+    "🎤 bò a 40 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-074",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [
+    "price|boh|25"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *25,00 €*"
+   ],
+   "turns": [
+    "🎤 il piatto bo mettilo a 25"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-075",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|30"
+   ],
+   "actual": [
+    "price|boh|30"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *30,00 €*"
+   ],
+   "turns": [
+    "🎤 bo costa 30"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-076",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|15"
+   ],
+   "actual": [
+    "price|boh|15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "🎤 il bò a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-077",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [
+    "price|boh|40"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *40,00 €*"
+   ],
+   "turns": [
+    "🎤 bò a 40 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-078",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [
+    "price|boh|25"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *25,00 €*"
+   ],
+   "turns": [
+    "🎤 il piatto bo mettilo a 25"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-079",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|30"
+   ],
+   "actual": [
+    "price|boh|30"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *30,00 €*"
+   ],
+   "turns": [
+    "🎤 bo costa 30"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-080",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|15"
+   ],
+   "actual": [
+    "price|boh|15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "🎤 il bò a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-081",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|40"
+    }
+   ],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu costa 40 euro",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-082",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|25"
+    }
+   ],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu a 25",
+    "si"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-083",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|30"
+    }
+   ],
+   "expected": [
+    "price|boh|30"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il bu costa 30",
+    "esatto"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-084",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|15"
+    }
+   ],
+   "expected": [
+    "price|boh|15"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Ti riferisci a *Piatto di verifica* o *pasta al ragù*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il piatto bu costa 15",
+    "sì quello"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-085",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|40"
+    }
+   ],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu costa 40 euro",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-086",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|25"
+    }
+   ],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu a 25",
+    "si"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-087",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|30"
+    }
+   ],
+   "expected": [
+    "price|boh|30"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il bu costa 30",
+    "esatto"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
     0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
+  },
+  {
+   "id": "a5-asr-088",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|15"
+    }
+   ],
+   "expected": [
+    "price|boh|15"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Ti riferisci a *Piatto di verifica* o *pasta al ragù*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il piatto bu costa 15",
+    "sì quello"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-089",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|40"
+    }
+   ],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu costa 40 euro",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-090",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|25"
+    }
+   ],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu a 25",
+    "si"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-091",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|30"
+    }
+   ],
+   "expected": [
+    "price|boh|30"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il bu costa 30",
+    "esatto"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-092",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|15"
+    }
+   ],
+   "expected": [
+    "price|boh|15"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Ti riferisci a *Piatto di verifica* o *pasta al ragù*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il piatto bu costa 15",
+    "sì quello"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-093",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|40"
+    }
+   ],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu costa 40 euro",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-094",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|25"
+    }
+   ],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "turns": [
+    "🎤 Bu a 25",
+    "si"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9,
+    0.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-095",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|30"
+    }
+   ],
+   "expected": [
+    "price|boh|30"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il bu costa 30",
+    "esatto"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-096",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|15"
+    }
+   ],
+   "expected": [
+    "price|boh|15"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Ti riferisci a *Piatto di verifica* o *pasta al ragù*? Dimmi il piatto e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il piatto bu costa 15",
+    "sì quello"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-097",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|pasta al ragù|11"
+    }
+   ],
+   "expected": [
+    "price|pasta al ragù|11"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Passa il ragù, metti prezzo a 11 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-098",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|7"
+   ],
+   "actual": [
+    "price|la parmigiana|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "🎤 la parmiggiana a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-099",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|13"
+   ],
+   "actual": [
+    "price|tiramisù|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 il tiramisu a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-100",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|11"
+   ],
+   "actual": [
+    "price|la parmigiana|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 la parmiciana costa 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-101",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|7"
+   ],
+   "actual": [
+    "price|tiramisù|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "🎤 il tiramisú costa 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-102",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|pasta al ragù|13"
+    }
+   ],
+   "expected": [
+    "price|pasta al ragù|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Passa il ragù, metti prezzo a 13 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-103",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|11"
+   ],
+   "actual": [
+    "price|la parmigiana|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 la parmiggiana a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-104",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|7"
+   ],
+   "actual": [
+    "price|tiramisù|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "🎤 il tiramisu a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-105",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|13"
+   ],
+   "actual": [
+    "price|la parmigiana|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la parmiciana costa 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-106",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|11"
+   ],
+   "actual": [
+    "price|tiramisù|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 il tiramisú costa 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-107",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|pasta al ragù|7"
+    }
+   ],
+   "expected": [
+    "price|pasta al ragù|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Passa il ragù, metti prezzo a 7 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-108",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|13"
+   ],
+   "actual": [
+    "price|la parmigiana|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la parmiggiana a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-109",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|11"
+   ],
+   "actual": [
+    "price|tiramisù|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 il tiramisu a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-110",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|7"
+   ],
+   "actual": [
+    "price|la parmigiana|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "🎤 la parmiciana costa 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-111",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|13"
+   ],
+   "actual": [
+    "price|tiramisù|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 il tiramisú costa 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a5-asr-112",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|joe fa schifo, promo|Che ne sacc|12"
+    }
+   ],
+   "expected": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *boh*, *Che ne sacc*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-113",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|piatto della casa, promo|Che ne sacc|18"
+    }
+   ],
+   "expected": [
+    "description|boh|piatto della casa",
+    "promo|Che ne sacc|18"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *pasta al ragù*, *boh*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti piatto della casa, invece nel piatto Kenesac metti la promo a 18 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-114",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|novita di oggi, promo|Che ne sacc|9"
+    }
+   ],
+   "expected": [
+    "description|boh|novita di oggi",
+    "promo|Che ne sacc|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *boh*, *Che ne sacc*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti novità di oggi, invece nel piatto Kenesac metti la promo a 9 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-115",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|solo a pranzo, promo|Che ne sacc|14"
+    }
+   ],
+   "expected": [
+    "description|boh|solo a pranzo",
+    "promo|Che ne sacc|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *boh*, *Che ne sacc*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti solo a pranzo, invece nel piatto Kenesac metti la promo a 14 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-116",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|joe fa schifo, promo|Che ne sacc|12"
+    }
+   ],
+   "expected": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *boh*, *Che ne sacc*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-117",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|piatto della casa, promo|Che ne sacc|18"
+    }
+   ],
+   "expected": [
+    "description|boh|piatto della casa",
+    "promo|Che ne sacc|18"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *pasta al ragù*, *boh*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti piatto della casa, invece nel piatto Kenesac metti la promo a 18 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-118",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|novita di oggi, promo|Che ne sacc|9"
+    }
+   ],
+   "expected": [
+    "description|boh|novita di oggi",
+    "promo|Che ne sacc|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *boh*, *Che ne sacc*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti novità di oggi, invece nel piatto Kenesac metti la promo a 9 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-119",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: description|boh|solo a pranzo, promo|Che ne sacc|14"
+    }
+   ],
+   "expected": [
+    "description|boh|solo a pranzo",
+    "promo|Che ne sacc|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *boh*, *Che ne sacc*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti solo a pranzo, invece nel piatto Kenesac metti la promo a 14 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a5-asr-120",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la lasagna costa 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-121",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 la pasta al pesto costa 9"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-122",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "il caviale è finito"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-123",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 la bistecca a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-124",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la costata è finita"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-125",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Nuovo burger*, *Burger classico*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il burger vegano costa 12"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-126",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la napoletana a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-127",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 le patatine a 3"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-128",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "il mojito a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-129",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Spritz Aperol*, *Spritz Campari*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 lo spritz hugo a 6"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-130",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la amatriciana bianca costa 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-131",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 il cornetto a 2"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-132",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la bruschetta a 5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-133",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 il polpo costa 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-134",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la quattro stagioni a 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-135",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 la calzone a 8"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-136",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la lasagna costa 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-137",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 la pasta al pesto costa 9"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-138",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "il caviale è finito"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-139",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 la bistecca a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-140",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la costata è finita"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-141",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Nuovo burger*, *Burger classico*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 il burger vegano costa 12"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-142",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la napoletana a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-143",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 le patatine a 3"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-144",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "il mojito a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-145",
+   "family": "a5-asr",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi: *Spritz Aperol*, *Spritz Campari*? Dimmi quale e cosa cambiare. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 lo spritz hugo a 6"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-146",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la amatriciana bianca costa 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-147",
+   "family": "a5-asr",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 il cornetto a 2"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-148",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la bruschetta a 5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-149",
+   "family": "a5-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 il polpo costa 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-150",
+   "family": "a5-asr",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "la quattro stagioni a 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
+  },
+  {
+   "id": "a5-asr-151",
+   "family": "a5-asr",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "turns": [
+    "🎤 la calzone a 8"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "nessun piatto con quel suono: domanda o «non trovo», mai una scrittura"
   }
  ]
 }

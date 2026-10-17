@@ -12,6 +12,7 @@ import {looksLikeQuestion,politeCommand,parseIntent,findDishes} from './twilio-m
 import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
+import {phoneticHits} from './twilio-menu-phonetic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
 export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions] as const
@@ -183,13 +184,20 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
  const aliasesUsed=(Array.isArray(data.alias_used)?data.alias_used:[]).flatMap((a:any)=>{const id=map(a?.item);return id&&byId.has(id)&&typeof a.phrase==='string'&&reportedPhrase(a.phrase)?[{phrase:plain(a.phrase).slice(0,60),itemId:id}]:[]}).slice(0,10)
  // Memoria attiva presente nel messaggio → quei piatti contano come «nominati» per il G9.
  const trusted=new Set((input.memory??[]).filter(m=>m.state==='active'&&m.itemId&&byId.has(m.itemId)&&mentionedPhrase(m.phrase)).map(m=>m.itemId!))
+ // A5 (17/10): nomi storpiati dalla trascrizione. Suono forte e unico («kenesac» = Che ne sacc) → il piatto vale come nominato;
+ // suono debole («Bu» ≈ boh) → l'azione diventa una domanda «Intendi *boh*?», mai una scrittura diretta.
+ const sound=phoneticHits(message,refs)
+ for(const id of sound.strong)if(!g9DishMentioned(byId.get(id)!.name,message,refs))trusted.add(id)
+ const weakIds=new Set(sound.weak.filter(id=>!trusted.has(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)))
  const trustedHas=(id:string)=>trusted.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
  const neg=negatedClauses(message,refs),exclude:Excluded[]=[...(neg?.excluded??[]),...(input.exclude??[]).filter(e=>!neg?.excluded.some(x=>x.id===e.id))]
  // Domande → zero scritture, qualunque cosa dica il modello («la carbonara 13 o 14?», «quanto costa la carbonara?»).
  // Messaggio misto (A4.4): la parte di domanda non blocca la modifica detta nell'altra parte.
  const mix=mixedMessage(message)
- const question=!mix&&((looksLikeQuestion(message)&&!politeCommand(message))||!!priceAlternatives(message,refs))
+ // «Che ne sacc costa 16», «che nesac costa 16»: il nome del piatto che inizia con «che» non fa del messaggio una domanda.
+ const dishLead=!/\?/.test(message)&&/^(?:che|come|quando|cosa)\b/.test(msg)&&(refs.some(r=>msg.startsWith(plain(r.name)+' '))||sound.strong.some(id=>msg.startsWith((sound.phrase.get(id)??'\u0000')+' ')))
+ const question=!mix&&!dishLead&&((looksLikeQuestion(message)&&!politeCommand(message))||!!priceAlternatives(message,refs))
  // Misto con azioni: anche se il modello lo legge come domanda/chiacchiera/capacità, la parte di modifica si valida come change.
  const mixAsChange=!!mix&&Array.isArray(data.actions)&&data.actions.length>0&&['read','capability','chat'].includes(intent)
  if(mix?.conditional){const qp=plain(mix.question),m=qp.match(/\bcosta(?:no)? (?:ancora |sempre )?(\w+)/),n=m?g9Prices('a '+m[1]!)[0]:undefined,d=refs.find(r=>g9DishMentioned(r.name,mix.question,refs))
@@ -267,7 +275,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  if(ctxOK&&SWAP.test(msg)){const prev=refs.filter(r=>g9DishMentioned(r.name,owners.at(-1)??'',refs)).map(r=>r.id)
   if(prev.length===1){const w=prev[0]!,acted=[...legacy.map((a:any)=>a.item_id),...derived.map(d=>d.id)];const named=refs.filter(r=>r.id!==w&&g9DishMentioned(r.name,message,refs)).map(r=>r.id)
    if(!acted.includes(w)&&!g9DishMentioned(byId.get(w)!.name,message,refs)&&named.some(id=>acted.includes(id))&&input.restorable?.get(w)?.length){derived.push({id:w,actions:input.restorable.get(w)!});notes.push('ripristino_automatico')}}}
- const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size?trusted:undefined}
+ const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size||weakIds.size?new Set([...trusted,...weakIds]):undefined}
  const withHold=(d:Omit<BrainDecision,'path'|'usage'|'tokens'>):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(!asks.length)return d
   if(d.plan.type!=='change'&&!(d.plan.type==='clarify'&&!d.plan.ids.length))return d
   const clear=d.plan.type==='change'?d.plan.actions:[];if(asks.length<2&&!clear.length)return d
@@ -321,9 +329,10 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  for(const d of derived){if(!mentioned(d.id))return no('piatto_non_nominato',[d.id])
   for(const x of d.actions){if(out.some(a=>'id' in a&&a.id===d.id&&a.kind===x.kind))return no('azione_doppia',[d.id]);out.push(x)}
   notes.push(d.refId?'prezzo_da_riferimento':'ripristino')}
+ for(const a of [...out])if('id' in a&&weakIds.has(a.id)){out.splice(out.indexOf(a),1);asks.push({type:'confirm',word:(sound.phrase.get(a.id)??byId.get(a.id)!.name).slice(0,60),action:a})}
  // A4.3: «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: non è un piatto «nominato senza azione».
  const twinIds=refs.filter(r=>legacy.some((a:any)=>a?.action==='create_item'&&typeof a.name==='string'&&plain(a.name)===plain(r.name)&&!out.some(o=>'id' in o&&o.id===r.id))).map(r=>r.id)
- const covered=new Set([...twinIds,...out.flatMap(a=>'id' in a?[a.id]:[]),...derived.flatMap(d=>d.refId?[d.refId,d.id]:[d.id]),...exclude.map(e=>e.id)]),padded=' '+(mix?plain(mix.command):msg)+' '
+ const covered=new Set([...weakIds,...twinIds,...out.flatMap(a=>'id' in a?[a.id]:[]),...derived.flatMap(d=>d.refId?[d.refId,d.id]:[d.id]),...exclude.map(e=>e.id)]),padded=' '+(mix?plain(mix.command):msg)+' '
  // Misto: se la parte di modifica nomina dei piatti, le azioni stanno solo su quelli (mai sul piatto della domanda).
  if(mix){const inCmd=refs.filter(r=>g9DishMentioned(r.name,mix.command,refs)).map(r=>r.id);if(inCmd.length){const off=out.filter(a=>'id' in a&&!inCmd.includes(a.id)&&!derived.some(d=>d.id===a.id)).map(a=>(a as any).id as string);if(off.length)return no('azione_sul_piatto_della_domanda',off)}}
  // Completezza (come il validatore attuale): un piatto nominato per intero e non toccato rende la richiesta incompleta. Non conta
@@ -331,6 +340,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const touched=refs.filter(r=>covered.has(r.id)&&padded.includes(' '+plain(r.name)+' ')).map(r=>' '+plain(r.name)+' ')
  const missed=input.pendingActions?.length?[]:refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1&&!touched.some(t=>t!==' '+plain(r.name)+' '&&t.includes(' '+plain(r.name)+' ')))
  if(missed.length)return{intent:'clarify',plan:{type:'clarify',ids:missed.map(r=>r.id).slice(0,5),actions:out},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_nominato_senza_azione']}
+ if(!out.length&&asks.length===1&&asks[0]!.type==='confirm')return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:[],asks},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'nome_a_suono']}
  if(!out.length)return asks.length>=2?withHold({intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes}):no('nessuna_azione')
  const res0=withHold(guard({type:'change',actions:out})),res=twinIds.length&&res0.plan.type==='change'&&!mix?{...res0,plan:{...res0.plan,after:{type:'read' as const,read:'items' as const,ids:twinIds.slice(0,6)}},notes:[...res0.notes,'gia_nel_menu']}:res0
  if(mix&&res.plan.type==='change'){const qp=plain(mix.question),ask=/\b(cosa|cos|quali|quale|che)\b/.test(qp)

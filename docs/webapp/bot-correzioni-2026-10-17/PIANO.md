@@ -51,8 +51,8 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 - [x] A4.6 Batteria A4 (≥150 frasi) verde. — *F: a4-validatore 156: oracolo 156/156, Groq giù/avversario 0 GRAVI di sicurezza. Batterie A1–A4 658/658 sull'oracolo. Banco V fase A falliti 10→3 (restano solo A5), banco E 294/318, multi 91,3%, 0 GRAVI di sicurezza.*
 
 ### A5. Nomi storpiati (ASR)
-- [ ] A5.1 Corrispondenza fonetica/sfocata sui nomi del menu (es. «kenesac»→«Che ne sacc», «Bu»→«boh», «Passa il ragù»→«Pasta al ragù»), solo verso piatti esistenti, con soglia; dubbio → domanda con ipotesi.
-- [ ] A5.2 Batteria A5 (≥150 frasi) verde, incluso nessun falso abbinamento.
+- [x] A5.1 Corrispondenza fonetica/sfocata sui nomi del menu (es. «kenesac»→«Che ne sacc», «Bu»→«boh», «Passa il ragù»→«Pasta al ragù»), solo verso piatti esistenti, con soglia; dubbio → domanda con ipotesi. — *F: `twilio-menu-phonetic.ts` (chiave fonetica italiana + distanza); forte (≥0,85, unico) = nominato per il validatore, debole = domanda «per «Bu» intendi boh…? Rispondi sì o no»; nel deterministico solo al posto di «Non trovo».*
+- [x] A5.2 Batteria A5 (≥150 frasi) verde, incluso nessun falso abbinamento. — *F: a5-asr 151 (32 frasi di controllo fuori menu): oracolo 151/151, Groq giù/avversario 0 GRAVI di sicurezza. Banco V fase A falliti 3→0; banco E 296/318 (93,1%), multi 91,3%, 0 GRAVI di sicurezza.*
 
 ### A6. Chiusura fase A
 - [ ] A6.1 143 casi V + batterie A1–A5: 0 GRAVI, MEDI ≤ 2%.

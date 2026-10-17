@@ -7,6 +7,7 @@ import {plainT} from '../judge.js'
 import {spoken as spokenRaw} from './current-oracle.js'
 import {withoutQuantities} from '../../../apps/server/src/lib/twilio-menu-ai.js'
 import {deixisReferents,mixedMessage} from '../../../apps/server/src/lib/owner-brain-plan.js'
+import {phoneticHits} from '../../../apps/server/src/lib/twilio-menu-phonetic.js'
 // Correzioni A (17/10): il modello ideale non legge le quantità come prezzi («quei due», «tutti e tre», «in una categoria»).
 const spoken=(t:string)=>spokenRaw(withoutQuantities(t))
 import type {Change,Conversation} from '../types.js'
@@ -63,7 +64,10 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  const sourceMsg=last.match(/sul messaggio «([^»]+)»/)?.[1]??owners.at(-1)??''
  // Il piatto che spiega più parole vince: «spritz aperol» non nomina lo Spritz Campari, «cornetti integrali» non il Cornetto.
  const covered=(n:string,t:string)=>{const h=hitStems(n,t);return names.some(o=>o!==n&&hitStems(o,t).length>h.length&&h.every(w=>hitStems(o,t).includes(w)))}
- const mentionedIn=(t:string)=>names.filter(n=>hitStems(n,t).length>0&&!rivalsOf(n,t).length&&!covered(n,t)).concat(names.filter(n=>plainT(t).includes(plainT(n))))
+ // Nomi storpiati dalla trascrizione (A5): il modello ideale li riconosce a suono, il server decide se chiedere.
+ const pseudo=names.map(n=>({id:n,name:n,price:cat.price.get(n)??0,available:true,hidden:false,menu:''}))
+ const byEar=(t:string)=>{const h=phoneticHits(t,pseudo as any);return[...h.strong,...h.weak].filter(n=>!names.some(o=>o!==n&&plainT(t).includes(plainT(o))&&plainT(o).includes(plainT(n))))}
+ const mentionedIn=(t:string)=>names.filter(n=>hitStems(n,t).length>0&&!rivalsOf(n,t).length&&!covered(n,t)).concat(names.filter(n=>plainT(t).includes(plainT(n)))).concat(byEar(t))
  const rivalsOf=(n:string,t:string)=>rivals(n,t,names)
  const here=[...new Set(mentionedIn(msg))]
  const lastOwnerDishes=(()=>{for(const o of [...owners].reverse()){const d=[...new Set(mentionedIn(o))];if(d.length)return d}return[] as string[]})()
@@ -71,8 +75,9 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  {const mixed=mixedMessage(msg);if(mixed){const inCmd=[...new Set(mentionedIn(mixed.command))],targets=inCmd.length?inCmd:[...new Set(mentionedIn(mixed.question))],sp=spoken(mixed.command),acts:any[]=[]
   for(const n of targets){const e=expected.find(c=>c.op!=='create'&&c.dish===n);if(!e)continue;const a=act(e,cat,e.op==='price'?(sp.includes((e as any).price)?(e as any).price:null):null,null);if(a)acts.push(a)}
   if(acts.length){const qp=plainT(mixed.question);return out({intent:'change',actions:acts,read:/finit|esaurit/.test(qp)?'unavailable':/nascost/.test(qp)?'hidden':'items',item_refs:[...new Set(mentionedIn(mixed.question))].map(n=>cat.code.get(n)!)})}}}
- // Domanda: mai scrivere.
- if(QUESTION.test(p)||/\?/.test(msg)){const ids=(here.length?here:lastOwnerDishes).map(n=>cat.code.get(n)!);return out({intent:ids.length?'read':'capability',read:ids.length?'items':'none',item_refs:ids,capability_ids:ids.length?[]:['all']})}
+ // Domanda: mai scrivere. «che nesac costa 16» non è una domanda: «che» è l'inizio del nome Che ne sacc.
+ const dishLead=!/\?/.test(msg)&&/^che\b/.test(p)&&names.some(n=>/^che\b/.test(plainT(n)))
+ if((QUESTION.test(p)&&!dishLead)||/\?/.test(msg)){const ids=(here.length?here:lastOwnerDishes).map(n=>cat.code.get(n)!);return out({intent:ids.length?'read':'capability',read:ids.length?'items':'none',item_refs:ids,capability_ids:ids.length?[]:['all']})}
  if(/^(grazie|ok grazie|perfetto|ciao|buongiorno)\b/.test(p))return out({intent:'chat',reply_draft:'Di nulla.'})
  // Scelta tra opzioni mostrate: ordinale, «tutti e due», o il nome di una delle opzioni.
  if(listed.length>1){const all=/\b(tutt[ie]|entramb\w*)\b/.test(p),ord=ORD.find(([re])=>re.test(p)),byName=listed.filter(n=>hitStems(n,msg).length>0),other=/\b(altr[oa])\b/.test(p)

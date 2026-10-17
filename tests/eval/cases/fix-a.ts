@@ -151,3 +151,26 @@ for(let i=0;i<10;i++)c('mario',pick(['aggiungi pasta al pesto a 13','aggiungi la
 for(let i=0;i<16;i++){const a=pick(DQ,i),p=pick([12,14,9,16],i);c('qa',[`${a} costa ${p}`,pick(['cambialo','mettilo','fallo','cambiamelo'],i)],[P(a,p)].filter(x=>x.price!==PRQ[a]),{ask:[2]})}
 // 6. una categoria sola anche per il cervello (aggiunta dopo un'altra modifica)
 for(let i=0;i<8;i++){const a=pick(NEW3,i);c('qa',['nascondi boh',`e aggiungi anche ${a[0]} a ${a[1]}`],[HI('boh'),CR(a[0],a[1],PP)])}
+
+// ===================== A5 · nomi storpiati dalla trascrizione =====================
+fam='a5-asr'
+const PR5=[12,14,9,16,22,7]
+// forte: il suono è chiaramente quello di un piatto → direttamente
+const STRONG_QA:[string,string][]=[['nel kenesac metti la promo a {p} euro','promo'],['il kenesac costa {p}','price'],['kenesak a {p} euro','price'],['che nesac costa {p}','price'],['nel piatto kenesac metti il prezzo a {p}','price'],['metti il kenesac a {p}','price']]
+for(let i=0;i<24;i++){const [t,op]=pick(STRONG_QA,i),p=pick(PR5,i);c('qa',V(t.replace('{p}',String(p))),op==='promo'?PR('Che ne sacc',p):P('Che ne sacc',p))}
+const STRONG_OTHER:[string,string,string][]=[['pizzeria','la marinera a {p}','Marinara'],['pizzeria','la bufalino costa {p}','Bufalina'],['pizzeria','il babbà a {p} euro','Babà'],['pizzeria','la sfogliatela costa {p}','Sfogliatella'],['bar','lo spriz aperol a {p}','Spritz Aperol'],['bar','il ginsen costa {p}','Ginseng'],['bar','il negrone a {p}','Negroni'],['romana','la matriciana a {p}','Amatriciana'],['mario','la margarita a {p}','Margherita'],['mario','il capuccino costa {p}','Cappuccino'],['mario','la capriciosa a {p}','Capricciosa'],['romana','le puntarele costano {p}','Puntarelle']]
+const CHEAP=new Set(['Ginseng','Cappuccino','Babà','Sfogliatella'])
+for(let i=0;i<48;i++){const [m,t,d]=pick(STRONG_OTHER,i),p=CHEAP.has(d)?pick([2.5,3.5,5,5.5],i):pick([13,14,16,17,18,19,21],i+Math.floor(i/12));c(m,V(t.replace('{p}',String(p).replace('.',','))),P(d,p))}
+// debole: si chiede «intendi X?», il «sì» completa
+const WEAK_QA:[string,string][]=[['Bu costa {p} euro','boh'],['Bu a {p}','boh'],['il bu costa {p}','boh'],['il piatto bu costa {p}','boh']]
+// «bò», «il piatto bo»: la stessa parola del nome (accento a parte) vale come nominato, come oggi
+for(let i=0;i<8;i++){const p=pick([40,25,30,15],i);c('qa',V(pick(['bò a {p} euro','il piatto bo mettilo a {p}','bo costa {p}','il bò a {p}'],i).replace('{p}',String(p))),P('boh',p))}
+for(let i=0;i<16;i++){const [t,d]=pick(WEAK_QA,i),p=pick([40,25,30,15],i);c('qa',[V(t.replace('{p}',String(p))),pick(['sì','si','esatto','sì quello'],i)],P(d,p),{ask:[1]})}
+// «Passa il ragù», «parmiggiana», «tiramisu»: già oggi riconosciuti, non devono peggiorare
+const NEAR:[string,string][]=[['Passa il ragù, metti prezzo a {p} euro.','pasta al ragù'],['la parmiggiana a {p}','la parmigiana'],['il tiramisu a {p}','tiramisù'],['la parmiciana costa {p}','la parmigiana'],['il tiramisú costa {p}','tiramisù']]
+for(let i=0;i<15;i++){const [t,d]=pick(NEAR,i),p=pick([11,7,13],i);c('qa',V(t.replace('{p}',String(p))),P(d,p))}
+// due nomi storpiati nello stesso vocale
+for(let i=0;i<8;i++){const p=pick([12,18,9,14],i);c('qa',V(`Allora nel piatto Bo cambia la descrizione e metti ${pick(['Joe fa schifo','piatto della casa','novità di oggi','solo a pranzo'],i)}, invece nel piatto Kenesac metti la promo a ${p} euro.`),[DE('boh',pick(['Joe fa schifo','piatto della casa','novità di oggi','solo a pranzo'],i)),PR('Che ne sacc',p)])}
+// nessun falso abbinamento: parole che non sono piatti del menu → mai una scrittura
+const FALSE:[string,string][]=[['qa','la lasagna costa 12'],['qa','la pasta al pesto costa 9'],['qa','il caviale è finito'],['qa','la bistecca a 18'],['mario','la costata è finita'],['mario','il burger vegano costa 12'],['pizzeria','la napoletana a 7'],['pizzeria','le patatine a 3'],['bar','il mojito a 7'],['bar','lo spritz hugo a 6'],['romana','la amatriciana bianca costa 12'],['romana','il cornetto a 2'],['qa','la bruschetta a 5'],['qa','il polpo costa 16'],['mario','la quattro stagioni a 9'],['pizzeria','la calzone a 8']]
+for(let i=0;i<32;i++){const [m,t]=pick(FALSE,i);c(m,i%2?V(t):t,NONE,{note:'nessun piatto con quel suono: domanda o «non trovo», mai una scrittura'})}

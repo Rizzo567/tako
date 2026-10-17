@@ -152,7 +152,8 @@ function holdQuestionMulti(hold:Hold,refs:MenuRef[],sections:SectionRef[]):strin
    case 'choose':return n+fill(copy.holdAskChoose,{parola:safe(a.word).slice(0,40),opzioni:a.options.map((id,j)=>`${j+1}. *${name(id)}*`).join(' · ')})
    case 'confirm':return n+fill(copy.holdAskConfirm,{parola:safe(a.word).slice(0,40),cosa:describeAction(a.action,refs,sections).replace(/\*/g,'')})
    case 'unknown':return n+fill(copy.holdAskUnknown,{parola:safe(a.word).slice(0,40)})}})
- return head+lines.join('\n')+'\n\n'+copy.holdAskFooter}
+ const footer=asks.length>1?copy.holdAskFooter:hold.actions.length?copy.holdAskFooterOne:asks[0]?.type==='confirm'||asks[0]?.type==='remove'?copy.holdAskFooterOnly:asks[0]?.type==='choose'?copy.holdAskFooterChoose:copy.holdAskFooterOne
+ return head+lines.join('\n')+'\n\n'+footer}
 
 /** Risposta a una richiesta con più parti incerte: ogni pezzo della risposta completa la domanda a cui si adatta.
  * Restano `remaining` le domande senza risposta (il bot le ripete). null = non è una risposta. */
