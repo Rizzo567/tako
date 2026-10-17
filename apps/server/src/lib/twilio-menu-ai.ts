@@ -6,6 +6,7 @@ import {menuSystemPrompt,dishSystemPrompt} from './twilio-menu-prompt.js'
 import {isSalesAction,salesActionKey,salesActionChanged,applySalesAction,describeSalesAction,salesFromLlm,salesLlmActions,type SalesAction} from './twilio-menu-sales.js'
 import {businessDate} from './menu-sales.js'
 import {priceAlternatives,priceAlternativeDish,isExcluded,type Excluded} from './twilio-menu-clarify.js'
+import {removeVerbRe} from './twilio-menu-nlu.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string}
 export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction
@@ -47,6 +48,7 @@ export function g9Prices(message:string):number[]{const out:number[]=[];{const p
  const w=plain(message).split(' ');for(let i=0;i<w.length;i++){let a=g9Words[w[i]!]??g9WordNumber(w[i]!)??undefined;if(a===undefined)continue;if(g9Words[w[i+1]!]!==undefined&&a>=20&&g9Words[w[i+1]!]!<10){a+=g9Words[w[i+1]!]!}out.push(a);const k=w[i+1]==='euro'?i+2:i+1;if(w[k]==='e'){const c=g9Words[w[k+1]!]??(/^\d+$/.test(w[k+1]??'')?Number(w[k+1]):undefined);if(c!==undefined)out.push(a+c/100)}}
  const ints=out.filter(Number.isInteger);for(const x of ints)for(const y of ints)if(y>=10&&y<100)out.push(x+y/100);return out.map(x=>Math.round(x*100)/100)}
 const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;if(current!==undefined&&/\b(aument\w*|alz\w*|sal\w*|abbass\w*|diminu\w*|scont\w*|togli\w*|meno|piu)\b/.test(plain(message)))return said.some(d=>Math.abs(Math.abs(price-current)-d)<0.005);return false}
+const finishWords=/\b(?:finit\w*|esaurit\w*|fernut\w*|finid\w*|finia|terminat\w*|non c e piu|non ce piu|nun ce sta|un c e piu|non abbiamo piu|non ce n e piu)\b/
 const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
 export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[]}={}):MenuPlan{
  const data=parseJson(raw),sections=opts.sections??[],message=opts.message??'';if(!data||typeof data!=='object'||Array.isArray(data))return clarify()
@@ -73,6 +75,13 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
   else if(salesLlmActions.includes(a.action)){const sale=salesFromLlm(a,message);if(!sale||(sale.kind==='promo'&&sale.price!==null&&!g9Said(sale.price,message,byId.get(a.item_id)!.price)))return clarify(valid);actions.push(sale)}
   else if(a.action==='set_description'){const text=cleanText(a.text,4000);if(!text)return clarify(valid);if(!verbatim(text,message))return{type:'verbatim'};actions.push({kind:'description',id:a.item_id,text})}
   else return clarify(valid)}
+ // 17/10 (regola Manuel): «togli/leva/levami/elimina/cancella/rimuovi X» = nascondere, MAI esaurito. Se il modello segna
+ // «finito» un piatto la cui frase ha un verbo di rimozione e nessuna parola di esaurito, diventa «nascosto».
+ // Una frase senza verbo eredita quello della precedente: «togli boh e la lasagna» = togli boh, togli la lasagna.
+ {const all=message.split(/(?<!\d)[,;.!?\n]|[,;.!?\n](?!\d)/).flatMap(c=>c.split(/\s+(?:e|ed|poi|ma|e pure|e anche)\s+/i)).map(c=>plain(c)).filter(Boolean)
+  let verb:'remove'|'finish'|'other'|null=null;const kinds=all.map(c=>{const k=finishWords.test(c)?'finish':removeVerbRe.test(c)?'remove':/\b(?:costa\w*|prezzo|metti\w*|porta\w*|promo\w*|offert\w*|evidenza|tornat\w*|disponibil\w*|rimetti|mostra|nascost\w*|euro|\d+)\b/.test(c)?'other':null;if(k)verb=k;return{c,k:k??verb}})
+  for(const [i,a] of actions.entries()){if(a.kind!=='available'||a.value)continue;const name=byId.get(a.id)?.name;if(!name)continue;const mine=kinds.filter(x=>g9DishMentioned(name,x.c,refs))
+   if(mine.length&&mine.every(x=>x.k==='remove')&&!seen.has(a.id+'set_hidden'))actions[i]={kind:'hidden',id:a.id,value:true}}}
  // Full, unambiguous names explicitly present in a request must never disappear from its plan.
  // An omitted/negated/unsupported clause leads to clarification of the whole request, never partial publication.
  // 17/10: un piatto negato («non cambiare boh», «tranne la lasagna») non si cambia mai e non rende ambiguo il resto.
@@ -235,9 +244,27 @@ export async function downloadTwilioMedia(url:string,accountSid:string,token:str
  for(;;){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>maxBytes){await reader.cancel();throw new Error('Media too large')}chunks.push(value)}
  return{bytes:Buffer.concat(chunks),type:(response.headers.get('content-type')||'audio/ogg').split(';')[0]!.trim()}
 }
-export async function transcribeAudio(bytes:Uint8Array,type:string,key:string,opts:GroqOptions={}){
+// 17/10: parole di servizio sempre presenti nel `prompt` di Whisper (prima era solo questo).
+export const whisperServiceWords='CONFERMA, ANNULLA, prezzo, euro, esaurito, finito, disponibile, togli, nascondi, mostra, promo, ultime porzioni'
+/** `prompt` di Whisper con i nomi del locale (17/10): parole di servizio, categorie, poi i piatti. Whisper usa solo la coda
+ * (circa 224 token): i piatti più importanti (visibili, i più recenti) vanno in fondo. Tetto ~200 token (≈600 caratteri).
+ * Nessun costo LLM: è testo inviato con l'audio. */
+export function whisperPrompt(refs:{name:string,hidden?:boolean}[],sections:{name:string}[]=[],maxChars=600){
+ const clean=(s:string)=>s.replace(/[\s,;]+/g,' ').replace(/[«»"*_~]/g,'').trim().slice(0,40),seen=new Set<string>(),key=(s:string)=>plain(s)
+ const take=(s:string)=>{const c=clean(s),k=key(c);if(!c||!k||seen.has(k))return null;seen.add(k);return c}
+ for(const w of whisperServiceWords.split(', '))seen.add(key(w))
+ // Priorità: visibili prima dei nascosti; i più recenti (in fondo alla loro categoria, dove li aggiunge anche il bot) prima,
+ // a turno per categoria, così ogni categoria ha i suoi piatti nuovi anche nei menu lunghi.
+ const rounds=(list:typeof refs)=>{const groups=new Map<string,typeof refs>();for(const r of list){const k=String((r as any).sectionId??(r as any).section??'');groups.set(k,[...(groups.get(k)??[]),r])}const lanes=[...groups.values()].map(g=>[...g].reverse()),out:typeof refs=[];for(let i=0;lanes.some(l=>i<l.length);i++)for(const l of lanes)if(i<l.length)out.push(l[i]!);return out}
+ const ordered=[...rounds(refs.filter(r=>!r.hidden)),...rounds(refs.filter(r=>r.hidden))]
+ const cats=sections.slice(0,12).map(s=>take(s.name)).filter((x):x is string=>!!x)
+ let budget=maxChars-whisperServiceWords.length-2-cats.reduce((n,c)=>n+c.length+2,0);const dishes:string[]=[]
+ for(const r of ordered){const c=take(r.name);if(!c)continue;if(budget-c.length-2<0)break;budget-=c.length+2;dishes.push(c)}
+ return [whisperServiceWords,...cats,...dishes.reverse()].join(', ')
+}
+export async function transcribeAudio(bytes:Uint8Array,type:string,key:string,opts:GroqOptions={},vocab?:string){
  const ext=/mpeg|mp3/.test(type)?'mp3':/mp4|m4a|aac/.test(type)?'m4a':/wav/.test(type)?'wav':/webm/.test(type)?'webm':'ogg'
- return withRateLimit(['whisper-large-v3-turbo'],model=>{const body=new FormData();body.append('file',new Blob([bytes],{type}),'vocale.'+ext);body.append('model',model);body.append('language','it');body.append('temperature','0');body.append('prompt','CONFERMA, ANNULLA, prezzo, euro, esaurito, disponibile, nascondi, mostra');body.append('response_format','verbose_json');return fetch(groqBase()+'/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+key},body,signal:AbortSignal.timeout(opts.timeoutMs??20000)})},
+ return withRateLimit(['whisper-large-v3-turbo'],model=>{const body=new FormData();body.append('file',new Blob([bytes],{type}),'vocale.'+ext);body.append('model',model);body.append('language','it');body.append('temperature','0');body.append('prompt',vocab&&vocab.trim()?vocab:whisperServiceWords);body.append('response_format','verbose_json');return fetch(groqBase()+'/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+key},body,signal:AbortSignal.timeout(opts.timeoutMs??20000)})},
   async(model,response)=>{const data=await response.json() as any;await opts.meter?.({model,prompt:0,completion:0,limited:false,audioSeconds:Math.max(Number(data?.duration)||0,10)});return String(data?.text??'').trim()},opts)
 }
 export function splitWhatsAppText(text:string,max=1400){const parts:string[]=[];let rest=text;while(rest.length>max){const boundary=rest.lastIndexOf('\n',max),end=boundary>max/2?boundary:max;parts.push(rest.slice(0,end));rest=rest.slice(end).replace(/^\n/,'')}if(rest)parts.push(rest);return parts}

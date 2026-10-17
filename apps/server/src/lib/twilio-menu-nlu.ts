@@ -3,7 +3,7 @@ import type {MenuRef,SectionRef} from './twilio-menu-ai.js'
 import {capabilities,helpWords} from './twilio-menu-copy.js'
 import {parseMenuCommand} from './twilio-menu-command.js'
 export const plainText=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/€/g,' euro ').replace(/[^a-z0-9,.]+/g,' ').replace(/\s+/g,' ').trim()
-const stop=new Set('il lo la i gli le l un uno una di da del dello della dei degli delle al allo alla ai agli alle dal dallo dalla dai dagli dalle nel nello nella nei negli nelle con col coi sul sulla e ed o a in per tra fra che mi ci si ti oggi niente piu non c e sono costa costano euro eur prezzo metti mettila mettilo mettili mettile porta portala portalo cambia imposta finito finita finiti finite esaurito esaurita esauriti esaurite tornato tornata tornati tornate disponibile disponibili nascondi togli rimetti mostra menu evidenza piatto piatti scrivi quanto cosa ancora adesso ora stasera domani grazie ciao per favore perfavore anche pure'.split(' '))
+const stop=new Set('il lo la i gli le l un uno una di da del dello della dei degli delle al allo alla ai agli alle dal dallo dalla dai dagli dalle nel nello nella nei negli nelle con col coi sul sulla e ed o a in per tra fra che mi ci si ti oggi niente piu non c e sono costa costano euro eur prezzo metti mettila mettilo mettili mettile porta portala portalo cambia imposta finito finita finiti finite esaurito esaurita esauriti esaurite tornato tornata tornati tornate disponibile disponibili nascondi togli leva levami toglimi elimina cancella rimuovi rimetti mostra menu evidenza piatto piatti scrivi quanto cosa ancora adesso ora stasera domani grazie ciao per favore perfavore anche pure'.split(' '))
 export const stem=(w:string)=>w.length>4?w.replace(/[aeiou]+$/,''):w
 const lev=(a:string,b:string)=>{if(Math.abs(a.length-b.length)>1)return 2;const d=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let prev=d[0]!;d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j]!;d[j]=Math.min(d[j]!+1,d[j-1]!+1,prev+(a[i-1]===b[j-1]?0:1));prev=t}}return d[b.length]!}
 export const sameWord=(a:string,b:string)=>a===b||stem(a)===stem(b)||(a.length>=5&&b.length>=5&&(lev(a,b)<=1||a.startsWith(b)||b.startsWith(a)))
@@ -27,7 +27,10 @@ export const soundKey=(w:string)=>{const k=w.replace(/gli/g,'li').replace(/li(?=
 const swaps=(a:string,b:string)=>{const d=Array.from({length:a.length+1},(_,i)=>Array.from({length:b.length+1},(_,j)=>i===0?j:j===0?i:0));for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){const c=a[i-1]===b[j-1]?0:1;d[i]![j]=Math.min(d[i-1]![j]!+1,d[i]![j-1]!+1,d[i-1]![j-1]!+c);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i]![j]=Math.min(d[i]![j]!,d[i-2]![j-2]!+1)}return d[a.length]![b.length]!}
 // Parola simile per il ripiego: parole di almeno 5 lettere, stesso inizio fonetico (2 lettere, 1 per chiavi lunghe), lunghezze quasi uguali.
 // Errori ammessi sulla chiave: 0 fino a 4 lettere («pan»: pane ≠ panna ≠ penne; «orar» ≠ «orat»), 1 fino a 6 («rufol»→«rukol»), 2 oltre («margarit»→«margerit»).
-export const nearWord=(a:string,b:string)=>{if(sameWord(a,b))return true;if(a.length<5||b.length<4)return false;const ka=soundKey(a),kb=soundKey(b);if(ka===kb)return ka.length>=4;const n=Math.min(ka.length,kb.length),max=n<=4?0:n<=6?1:2,head=n>=7?1:2;return max>0&&ka.slice(0,head)===kb.slice(0,head)&&Math.abs(ka.length-kb.length)<=1&&swaps(ka,kb)<=max}
+export const nearWord=(a:string,b:string)=>{if(sameWord(a,b))return true;
+ // 17/10: la «h» muta non conta, anche nei nomi corti («bo» = «boh», «bho»); solo uguaglianza, nessun altro errore ammesso.
+ {const ha=a.replace(/h/g,''),hb=b.replace(/h/g,'');if(ha.length>=2&&ha===hb)return true}
+ if(a.length<5||b.length<4)return false;const ka=soundKey(a),kb=soundKey(b);if(ka===kb)return ka.length>=4;const n=Math.min(ka.length,kb.length),max=n<=4?0:n<=6?1:2,head=n>=7?1:2;return max>0&&ka.slice(0,head)===kb.slice(0,head)&&Math.abs(ka.length-kb.length)<=1&&swaps(ka,kb)<=max}
 // Ripiego senza IA quando il match normale non trova niente: stessa regola (tutte le parole, nome coperto per intero vince), parole tolleranti a errori di battitura e dettatura.
 export function fuzzyDishes(query:string,refs:MenuRef[]):MenuRef[]{return matchDishes(query,refs,nearWord)}
 export function findDishes(query:string,refs:MenuRef[]):MenuRef[]{const hits=matchDishes(query,refs);return hits.length?hits:fuzzyDishes(query,refs)}
@@ -51,7 +54,7 @@ export function isHelpRequest(raw:string){
 }
 export function capabilityFromText(raw:string):string[]|null{
  const t=plainText(raw).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim();if(/tutti i (prezzi|piatti)|tutto il menu|in blocco|per ?cento|%/.test(t+raw))return['bulk'];if(helpWords.includes(t)||isHelpRequest(raw))return['all']
- const question=/\?\s*$/.test(raw)||/^(puoi|potresti|sai|posso|riesci|si puo|e possibile|come (faccio|si fa)|si possono)\b/.test(t),imperative=/^(elimina|cancella|rimuovi|rinomina) \w+/.test(t)
+ const question=/\?\s*$/.test(raw)||/^(puoi|potresti|sai|posso|riesci|si puo|e possibile|come (faccio|si fa)|si possono)\b/.test(t),imperative=/^rinomina \w+/.test(t)||/^(elimina|cancella|rimuovi) \w+/.test(t)&&/\b(categori\w*|sezion\w*|tutt[oiea]|menu intero|intero menu)\b/.test(t)
  if(/tutti i (prezzi|piatti)|tutto il menu|in blocco|per ?cento|%/.test(t+raw))return['bulk'];if(!question&&!imperative)return null;const ids=capabilityWords.filter(([r])=>r.test(t)).map(([,id])=>id);return ids.length?[...new Set(ids)].slice(0,2):null
 }
 // Frasi comuni con un solo piatto: niente IA. Le frasi composte («… e …») restano all'IA.
@@ -77,6 +80,11 @@ function nluBelow100(w:string):number|null{if(!w)return 0;if(w in nluUnits)retur
 function nluWordNumber(w:string):number|null{const m=w.match(/^(due|tre|quattro|cinque|sei|sette|otto|nove)?cento?(.*)$/);if(m&&w.includes('cent')){const r=nluBelow100(m[2]!);return r===null?null:(m[1]?nluUnits[m[1]]!:1)*100+r}const v=w?nluBelow100(w):null;return v===0?null:v}
 /** Numero in lettere fino a 999 («tredici», «centoventi»), null se non è un numero. */
 export const wordNumber=(w:string)=>nluWordNumber(w)
+/** Verbi che tolgono un piatto dal menu (nascondere): «togli», «leva», «levami», «elimina», «cancella», «rimuovi» e varianti. */
+export const removeVerb='(?:nascondi|nascondimi|togli|toglie|toglimi|toglici|togliete|togliamo|leva|levami|levaci|levate|leviamo|elimina|eliminami|eliminate|eliminiamo|cancella|cancellami|cancellate|cancelliamo|rimuovi|rimuovimi|rimuovete|rimuoviamo)'
+// Anche le forme con il pronome («toglilo», «levala»): solo per riconoscere il verbo, mai come comando da solo.
+const removeAny='(?:'+removeVerb.slice(3,-1)+'|nascondil[aoie]|toglil[aoie]|leval[aoie]|eliminal[aoie]|cancellal[aoie]|rimuovil[aoie])'
+export const removeVerbRe=new RegExp(`\\b${removeAny}\\b`)
 function parseIntentCore(raw:string):Intent|null{
  const original=raw.trim(),t=plainText(raw).replace(/(?<!\d)[,.]|[,.](?!\d)/g,' ').replace(/\s+/g,' ').trim()
  if(/^(cosa|che cosa|quali piatti|quali|che piatti) (e|sono|ci sono|risultano) (gia )?(finit|esaurit)\w*/.test(t)||/^(cosa|che cosa) (manca|non c e)/.test(t))return{kind:'read',read:'unavailable'}
@@ -100,7 +108,9 @@ function parseIntentCore(raw:string):Intent|null{
  if((m=t.match(/^(.+?) (?:e|sono) (?:tornat[oaie]|di nuovo disponibil[ei]|disponibil[ei]|ritornat[oaie])$/))||(m=t.match(/^(?:e |sono )?(?:tornat[oaie]|ritornat[oaie]) (.+)$/))||(m=t.match(/^(?:disponibile|rendi disponibile|di nuovo disponibile) (.+)$/)))return{kind:'available',target:m[1]!,value:true}
  if((m=t.match(/^(?:togli|leva) (?:dall evidenza|dalla evidenza|dai piatti in evidenza) (.+)$/)))return{kind:'featured',target:m[1]!,value:false}
  if((m=t.match(/^metti in evidenza (.+)$/))||(m=t.match(/^(.+?) in evidenza$/)))return{kind:'featured',target:m[1]!,value:true}
- if((m=t.match(/^(?:nascondi|togli|leva)(?: dal menu)? (.+?)(?: dal menu)?$/)))return{kind:'hidden',target:m[1]!,value:true}
+ // 17/10 (regola Manuel): «togli/leva/levami/elimina/cancella/rimuovi X» = SEMPRE nascondere dal menu, mai «esaurito».
+ // Esaurito solo con «finito/esaurito/non c'è più/nun ce sta». Un «no,»/«scusa,» davanti non cambia il verbo («no, togli boh»).
+ if((m=t.match(new RegExp(`^(?:(?:no|scusa|anzi|allora|ok|si|senti|ah|e|ma|intendevo|volevo dire)\\s+)*${removeVerb}(?: (?:dal|dalla) (?:menu|carta|lista)(?: di oggi)?)? (.+?)(?: (?:dal|dalla) (?:menu|carta|lista)(?: di oggi)?)?$`))))return{kind:'hidden',target:m[1]!,value:true}
  if((m=t.match(/^(?:rimetti|mostra)(?: nel menu)? (.+?)(?: nel menu)?$/)))return{kind:'hidden',target:m[1]!,value:false}
  if((m=t.match(/^(.+?) (?:e|sono) (piccant|vegetarian|vegan|biologic|surgelat)[oaie]$/)))return{kind:'tag',target:m[1]!,tag:{piccant:'piccante',vegetarian:'vegetariano',vegan:'vegano',biologic:'biologico',surgelat:'surgelato'}[m[2]!]!}
  return null

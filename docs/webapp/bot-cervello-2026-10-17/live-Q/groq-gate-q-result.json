@@ -1,0 +1,68 @@
+{
+ "at": "2026-10-17T12:23:56.449Z",
+ "keyFile": "groq-key.txt",
+ "totalTokens": 6369,
+ "out": [
+  {
+   "text": "boh toglilo dal menu",
+   "tokens": 1259,
+   "plan": {
+    "type": "change",
+    "actions": [
+     "hidden:boh:true"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  },
+  {
+   "text": "nun ce sta cchiù boh, e levame pure che ne sacc",
+   "tokens": 1301,
+   "plan": {
+    "type": "change",
+    "actions": [
+     "available:boh:false",
+     "hidden:Che ne sacc:true"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  },
+  {
+   "text": "il piatto di verifica non lo facciamo più, toglilo proprio dal menu",
+   "tokens": 1276,
+   "plan": {
+    "type": "change",
+    "actions": [
+     "hidden:Piatto di verifica:true"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  },
+  {
+   "text": "no aspetta, la pasta al ragù levala dal menu",
+   "tokens": 1249,
+   "plan": {
+    "type": "change",
+    "actions": [
+     "hidden:pasta al ragù:true"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  },
+  {
+   "text": "la pasta al ragù per stasera è finita, non toglierla dal menu",
+   "tokens": 1284,
+   "plan": {
+    "type": "change",
+    "actions": [
+     "available:pasta al ragù:false"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  }
+ ]
+}

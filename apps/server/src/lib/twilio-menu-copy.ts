@@ -96,6 +96,22 @@ Indica anche il menu, per esempio «{esempio}».`,
  usageWarning:'*Uso del servizio AI*: {modello} ha raggiunto il *{percento}%* del limite giornaliero ({uso}).',
  capabilityYes:'Posso *{testo}*.\n{esempio}',
  capabilityNo:'{testo}\n\n{alternativa}',
+ // 17/10 (AI Act art. 50): detto una sola volta per numero, al collegamento o al primo messaggio.
+ aiDisclosure:'Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.',
+ // 17/10 (vocale di Manuel): richiesta multipla con una parte incerta. Le parti chiare restano in sospeso, mai perse.
+ holdHead:'Ho capito:\n{righe}',
+ holdRemove:'«{parola}» non è nel menu. Intendi *togliere {piatto}* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.',
+ holdPrice:'Quanto costa *{piatto}*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.',
+ holdNotTouched:'Non ho toccato *{piatto}*.',
+ holdDropped:'La richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela.',
+ holdRestUnclear:'Non ho capito «{testo}»: rimandamelo da solo.',
+ hiddenNotDeleted:'I piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti {piatto}».',
+ // 17/10: annulla vero, entro 10 minuti da una modifica pubblicata da WhatsApp.
+ undoDone:'*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n{righe}',
+ undoRestored:'*{piatto}*: com’era prima',
+ undoRemoved:'*{piatto}*: tolto (era stato aggiunto)',
+ undoConflict:'*Non annullo*: nel frattempo {piatti} è stato cambiato dalla dashboard. Non ho toccato nulla. Dimmi cosa vuoi cambiare.',
+ undoExpired:'Posso annullare solo le modifiche fatte qui negli *ultimi 10 minuti*. Non ho toccato nulla. Dimmi cosa vuoi cambiare.',
 }
 export const line={
  price:'*{piatto}*: prezzo da {prima} a *{dopo}*',
@@ -118,7 +134,7 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'price',can:true,text:'cambiare un prezzo',example:'«la caprese costa 11 euro»'},
  {id:'unavailable',can:true,text:'segnare un piatto finito',example:'«è finita la carbonara»'},
  {id:'available',can:true,text:'rimettere un piatto disponibile',example:'«la carbonara è tornata»'},
- {id:'hidden',can:true,text:'nascondere o mostrare un piatto',example:'«nascondi il polpo» o «rimetti il polpo»'},
+ {id:'hidden',can:true,text:'nascondere o mostrare un piatto',example:'«togli il polpo» o «rimetti il polpo»'},
  {id:'description',can:true,text:'cambiare una descrizione',example:'«nella carbonara scrivi: guanciale e pecorino»'},
  {id:'tags',can:true,text:'aggiungere o togliere un’etichetta',example:'«la caprese è vegetariana»'},
  {id:'featured',can:true,text:'mettere un piatto in evidenza',example:'«metti in evidenza la tagliata»'},

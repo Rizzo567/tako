@@ -79,7 +79,7 @@ const menu=(w:any,mid:string)=>w.menus.find((m:any)=>m.id===mid)
 const items=(w:any,mid:string)=>menu(w,mid).sections.flatMap((s:any)=>s.items.map((i:any)=>({...i,section:s.name})))
 const byName=(w:any,mid:string,name:string)=>items(w,mid).find((i:any)=>i.name.toLowerCase()===name.toLowerCase())
 let queued:string[][]=[]
-beforeEach(()=>{S.draft=fixture();S.published=fixture();S.revision=5;S.published_revision=5;S.versions=[];S.proposals.clear();S.messages.clear();S.links=new Set([phone]);net.model=null;net.chats=0;net.planner=0;net.whisper=0;net.sent=[];queued=[];setTranslationEnqueue(async(_r,texts)=>{queued.push(texts)})})
+beforeEach(()=>{S.draft=fixture();S.published=fixture();S.revision=5;S.published_revision=5;S.versions=[];S.proposals.clear();S.messages.clear();S.messages.set('ai:'+phone,'1')/* riga AI Act già mostrata (17/10) */;S.links=new Set([phone]);net.model=null;net.chats=0;net.planner=0;net.whisper=0;net.sent=[];queued=[];setTranslationEnqueue(async(_r,texts)=>{queued.push(texts)})})
 
 /** Ideal model: one row per «name price» line, citing the source exactly (as the real model does on text). */
 const ideal=(lines:[string,string,number][])=>(source:string)=>({rows:lines.filter(([,name])=>source.toLowerCase().includes(name.toLowerCase())).map(([s,name,price])=>{const at=source.toLowerCase().indexOf(name.toLowerCase()),ev=source.slice(at).match(/^[^,.;\n]+/)![0];return row(s,source.slice(at,at+name.length),price,ev)}),issues:[]})
