@@ -6,7 +6,7 @@ import {alertCopy,fill} from './twilio-menu-copy.js'
 import {phoneTail} from './whatsapp-phone.js'
 // Guasti del bot WhatsApp: ogni errore va in tako_whatsapp_errors (i log edge non sono leggibili);
 // un avviso WhatsApp a Manuel al massimo una volta all'ora, con claim atomico su tako_whatsapp_alerts.
-/** Numeri in verifica dal vivo sincrona (marcatore TakoSyncTest firmato da Twilio-token): niente avvisi WhatsApp. */
+/** Numeri in verifica dal vivo sincrona (campo TakoSyncTest firmato col token Twilio, solo QA): niente avvisi WhatsApp. */
 export const quietPhones=new Set<string>()
 export const alertPhone=process.env.TAKO_WHATSAPP_ALERT_PHONE||''
 /** Un messaggio di un numero collegato è rimasto senza risposta: avviso subito (se l'ora è libera). */

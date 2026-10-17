@@ -1,7 +1,6 @@
 // Verifica dal vivo del perimetro N (cervello, 17/10): adattata da live-Q/verify-live-q.mjs.
-// DIFFERENZA CHIAVE: il mittente NON è il numero di Manuel ma il numero di prova whatsapp:+390000000099, collegato al QA solo per
-// la durata della prova. Per quel numero (e solo sul QA) l'edge v111 risponde anche ai turni dell'IA SOLO nel TwiML (nessun
-// invio REST) e non manda avvisi. Prima e dopo: controllo su Twilio che nessun messaggio sia partito verso nessun numero.
+// DIFFERENZA CHIAVE: ogni richiesta porta il campo firmato TakoSyncTest=1: sul QA l'edge risponde anche ai turni dell'IA SOLO nel
+// TwiML (nessun invio REST, nessun avviso). Prima e dopo: controllo su Twilio che nessun messaggio sia partito verso il numero.
 // Verifica dal vivo del perimetro Q (17/10): caso vocale di Manuel (testo trascritto) + 10 varianti, «togli» = nascosto, annulla vero
 // (anche con modifica dalla dashboard nel mezzo) e riga «assistente automatico» una sola volta, sul QA «Tako · Verifica web», via webhook firmato.
 // Il QA ha collegato il numero vero di Manuel: si usa quello come mittente (mai stampato) e la risposta torna SOLO nel TwiML
@@ -33,14 +32,13 @@ const digest=async(s,keep)=>({draft:hash(s.w.draft),published:hash(s.w.published
 const before=await dbState();if(before.w.revision!==before.w.published_revision)throw Error('QA con bozza non pubblicata: stop')
 const baseIds=new Set(before.rows.map(r=>r.id)),beforeDigest=await digest(before,baseIds)
 const [qaLink]=await db`SELECT phone,actor_id FROM tako_whatsapp_links WHERE restaurant_id=${QA} ORDER BY created_at DESC LIMIT 1`;if(!qaLink)throw Error('QA senza numero collegato: stop')
-const WA_PHONE='whatsapp:+390000000099';if((await db`SELECT 1 FROM tako_whatsapp_links WHERE phone=${WA_PHONE}`).length)throw Error('il numero di prova è già collegato: stop')
+const WA_PHONE=String(qaLink.phone) // numero collegato al QA (mai stampato): con TakoSyncTest=1 le risposte tornano SOLO nel TwiML
 const [st0]=await db`SELECT settings FROM restaurants WHERE id=${QA}`;if(st0?.settings?.botBrain!==true)throw Error('cervello non acceso sul QA: stop')
-// Twilio: nessun messaggio deve partire durante la prova (controllo prima/dopo sui messaggi in uscita del numero Takomenu).
+// Twilio: nessun messaggio deve partire verso il numero durante la prova (controllo prima/dopo sui messaggi in uscita).
 const twAuth='Basic '+Buffer.from(tw.TWILIO_ACCOUNT_SID+':'+tw.TWILIO_AUTH_TOKEN).toString('base64'),startedAt=new Date(Date.now()-60000)
-async function outbound(){const u=`https://api.twilio.com/2010-04-01/Accounts/${tw.TWILIO_ACCOUNT_SID}/Messages.json?From=${encodeURIComponent(tw.TWILIO_WHATSAPP_NUMBER)}&DateSent%3E=${startedAt.toISOString().slice(0,10)}&PageSize=200`;const j=await (await fetch(u,{headers:{authorization:twAuth}})).json();return (j.messages??[]).filter(m=>new Date(m.date_created)>=startedAt&&(m.to===WA_PHONE||m.to===String(qaLink.phone))).length}
+async function outbound(){const u=`https://api.twilio.com/2010-04-01/Accounts/${tw.TWILIO_ACCOUNT_SID}/Messages.json?To=${encodeURIComponent(WA_PHONE)}&DateSent%3E=${startedAt.toISOString().slice(0,10)}&PageSize=200`;const j=await (await fetch(u,{headers:{authorization:twAuth}})).json();if(!Array.isArray(j.messages))throw Error('Twilio: lettura messaggi fallita: stop');return j.messages.filter(m=>new Date(m.date_created)>=startedAt).length}
 const outBefore=await outbound()
-await db`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${WA_PHONE},${QA},${qaLink.actor_id},now())`
-const linkCleanup=async()=>{await db`DELETE FROM tako_whatsapp_links WHERE phone=${WA_PHONE}`;await db`DELETE FROM tako_whatsapp_proposals WHERE phone=${WA_PHONE}`;await db`DELETE FROM tako_whatsapp_messages WHERE sid IN (${'last:'+WA_PHONE},${'undo:'+WA_PHONE},${'ai:'+WA_PHONE},${'brainundo:'+WA_PHONE})`;await db`DELETE FROM tako_owner_brain_turns WHERE phone=${WA_PHONE}`;await db`DELETE FROM tako_owner_brain_memory WHERE restaurant_id=${QA}`}
+const linkCleanup=async()=>{await db`DELETE FROM tako_owner_brain_turns WHERE phone=${WA_PHONE}`;await db`DELETE FROM tako_owner_brain_memory WHERE restaurant_id=${QA}`}
 const savedProposal=await db`SELECT * FROM tako_whatsapp_proposals WHERE phone=${WA_PHONE}`,saved={};for(const k of KEYS)saved[k]=await db`SELECT response FROM tako_whatsapp_messages WHERE sid=${k+WA_PHONE}`
 async function whatsapp(body){const form={AccountSid:tw.TWILIO_ACCOUNT_SID,From:WA_PHONE,To:tw.TWILIO_WHATSAPP_NUMBER,NumMedia:'0',MessageSid:'SM'+randomBytes(16).toString('hex'),Body:body,TakoSyncTest:'1'};const t0=performance.now();const r=await fetch(tw.TWILIO_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':sign(tw.TWILIO_WEBHOOK_URL,form)},body:new URLSearchParams(form).toString()});const raw=await r.text();const text=raw.replace(/<\/Message><Message>/g,'\n').replace(/<[^>]+>/g,'').replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').trim();return{status:r.status,ms:Math.round(performance.now()-t0),text}}
 async function restoreMenu(){const cur=await dbState();if(hash(cur.w.draft)===hash(before.w.draft)&&hash(cur.w.published)===hash(before.w.published))return false
@@ -66,7 +64,7 @@ const S=[
  ['rimettila',['il piatto di verifica a 14',"rimettila com'era"],[],{1:/Annullato|com.era|tornat/i}],
  ['si-la-seconda',['il piatto a 15','sì la seconda'],null,{0:/\?/}]]
 // Prima di partire: le sequenze devono restare senza IA anche sul menu di adesso (stesso controllo del banco round6-qa).
-{const snap=JSON.parse(await readFile(resolve(here,'qa-workspace-1017.json'),'utf8')).published;if(hash(snap)!==hash(before.w.published))throw Error('il menu del QA non è più quello dell\'istantanea provata in round6-qa: rifai il banco prima, mi fermo')}
+{const snap=JSON.parse(await readFile(resolve(here,'../live-Q/qa-workspace-1017.json'),'utf8')).published;if(hash(snap)!==hash(before.w.published))throw Error('il menu del QA non è più quello dell\'istantanea provata in round6-qa: rifai il banco prima, mi fermo')}
 const results=[];let stopped=null
 try{
  for(const [id,turns,expected,want] of S){if(stopped)break
