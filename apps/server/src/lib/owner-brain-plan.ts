@@ -8,15 +8,16 @@
  * percorso deterministico attuale, invariato. */
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
-import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier} from './twilio-menu-nlu.js'
+import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier,diminutiveRivals} from './twilio-menu-nlu.js'
 import {lostParts} from './twilio-menu-reading.js'
 import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
+import {CONTROL_ACTIONS,politeRequest,isAffirmative,type ControlAction} from './owner-brain-r.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section'] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
@@ -28,7 +29,7 @@ export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'obj
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
-  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section'].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 
@@ -54,8 +55,10 @@ export async function callBrain(ctx:BrainContext,key:string,opts:BrainCallOption
  catch(error){if(error instanceof GroqBusy)throw new BrainUnavailable('busy');throw new BrainUnavailable(timedOut?'timeout':lastStatus===400||lastStatus===-1?'invalid_json':'http',String(lastStatus))}
 }
 
-export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,restorable?:Map<string,MenuAction[]>,exclude?:Excluded[]}
-export type BrainDecision={path:'brain',intent:'change'|'read'|'clarify'|'capability'|'chat',plan:MenuPlan,hold?:Hold,exclude:Excluded[],aliasesUsed:{phrase:string,itemId:string}[],replyDraft:string,notes:string[],usage:BrainUsage,tokens:BrainContext['tokens']}
+export type BrainInput=BrainContextInput&{pendingActions?:MenuAction[]|null,restorable?:Map<string,MenuAction[]>,exclude?:Excluded[],correction?:{previous:string,reason:string}|null}
+export type BrainDecision={path:'brain',intent:'change'|'read'|'clarify'|'capability'|'chat',plan:MenuPlan,hold?:Hold,exclude:Excluded[],aliasesUsed:{phrase:string,itemId:string}[],replyDraft:string,notes:string[],usage:BrainUsage,tokens:BrainContext['tokens'],
+ /** Fase R: strumenti di controllo scelti dal modello (li verifica il route), JSON del modello e bozza originale. */
+ control?:ControlAction[],raw?:any,content?:string,draft?:string}
 export type BrainFallback={path:'fallback',reason:string,usage?:BrainUsage,tokens?:BrainContext['tokens']}
 
 const SAME_PRICE=/\b(puru|stess[oa]|stesso costo|come (?:il|la|lo|l|i|le|gli)\b|ugual\w*|identic[oa]|pari|idem|allineal\w*|allinea\w*|anche|pure)\b/
@@ -96,7 +99,17 @@ export function priceClauseProblem(actions:MenuAction[],message:string,refs:Menu
  if(parts.some(x=>g9Prices(x).length&&!refs.some(r=>g9DishMentioned(r.name,x,refs))))return[]
  for(const a of actions){if(!('id' in a)||!(a.kind==='price'||(a.kind==='promo'&&a.price!==null)))continue;const r=byId.get(a.id);if(!r)continue
   const mine=parts.filter(x=>g9DishMentioned(r.name,x,refs));if(mine.length!==1)continue;const nums=[...g9Prices(mine[0]!),...g9Prices(mine[0]!,false)];if(!nums.length)continue
+  // «carbonara 13 e l'amatriciana un euro in meno»: la differenza detta è rispetto al prezzo detto nell'altra parte.
+  {const rd=relativeDelta(mine[0]!);if(rd)for(const o of parts)if(o!==mine[0])for(const v of g9Prices(o))nums.push(Math.round((v+rd.delta)*100)/100)}
   if(!nums.includes(Math.round((a.price as number)*100)/100))out.push(a.id)}
+  return out}
+/** Fase R (Y, rinomina + prezzo): il piatto della parte «rinomina la gricia in …» (un altro verbo, nessun numero) non prende il
+ * prezzo detto nella parte di un altro piatto («…, la carbonara a 13»). */
+export function priceOfOtherClause(actions:MenuAction[],message:string,refs:MenuRef[]):string[]{
+ const parts=message.split(/(?<!\d)[,;\n]|[,;\n](?!\d)|\s+(?:e|ed|poi|invece)\s+(?=(?:il|la|lo|l|i|gli|le|un|una)\b)/iu).map(x=>x.trim()).filter(Boolean);if(parts.length<2)return[]
+ const out:string[]=[],VERB=/\b(?:rinomin\w*|chiam\w*|spost\w*|elimin\w*|cancell\w*|nascond\w*|finit\w*|esaurit\w*|evidenza)\b/i
+ for(const a of actions){if(a.kind!=='price')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const mine=parts.filter(x=>g9DishMentioned(r.name,x,refs));if(mine.length!==1||g9Prices(mine[0]!).length||!VERB.test(mine[0]!))continue
+  const others=parts.filter(x=>x!==mine[0]&&g9Prices(x).length);if(others.length&&others.every(x=>refs.some(o=>o.id!==r.id&&g9DishMentioned(o.name,x,refs))))out.push(a.id)}
  return out}
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
 export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[]):string[]{const m=' '+msg+' ',out:string[]=[]
@@ -127,7 +140,7 @@ export function mixedMessage(message:string):{command:string,question:string,con
  return{command,question:q.join(' '),conditional:/^(?:e\s+)?se (?:si|e cosi|e vero|costa ancora|e ancora)\b/.test(cp)}}
 const LEAVE=/\b(?:lascia\w* stare|lascia\w* perdere|lascial[oaie]\w*|non (?:lo |la |li |le )?(?:toccare|cambiare)|non toccarl\w*)\b/
 const ORDINAL=/\b(prim[oa]|second[oa]|terz[oa]|quart[oa]|quint[oa]|ultim[oa]|[1-8]|tutt[ie]|entramb\w*|altr[oa])\b/
-const UP=/\b(aument\w*|alz\w*|sal\w*|piu)\b/,DOWN=/\b(abbass\w*|diminu\w*|scont\w*|scal\w*|meno|togli\w*)\b/
+const UP=/\b(aument\w*|alz\w*|sal\w*|piu|rincar\w*)\b/,DOWN=/\b(abbass\w*|diminu\w*|scont\w*|scal\w*|meno|togli\w*|lev[ai]\w*|ridu[cr]\w*|cal[ai]\w*)\b/
 
 // Il modello capisce per primo, ma non può SCEGLIERE lui tra due piatti che il messaggio indica allo stesso modo
 // («la tagliata a 21» con Tagliata di manzo e Tagliata di tonno): se un altro piatto spiega le parole del messaggio
@@ -183,10 +196,16 @@ function legacyAction(a:any,map:(v:unknown)=>string|null):any{
 // Numeri detti in dialetto (siciliano/napoletano/romanesco) → italiano, solo per i controlli del server («a ottu» = 8, «cincu» = 5).
 const DIALECT_NUM:Record<string,string>={unu:'uno',dui:'due',tri:'tre',quattru:'quattro',cincu:'cinque',cinche:'cinque',seie:'sei',setti:'sette',ottu:'otto',novi:'nove',deci:'dieci',unnici:'undici',dudici:'dodici',tririci:'tredici',quattordici:'quattordici',quinnici:'quindici',sidici:'sedici',diciassetti:'diciassette',diciottu:'diciotto',diciannovi:'diciannove',vinti:'venti',trenta:'trenta',euri:'euro',euru:'euro',menzu:'mezzo',menza:'mezza'}
 export const dialectNumbers=(s:string)=>s.replace(/\b[\p{L}]+\b/gu,w=>DIALECT_NUM[w.toLowerCase()]??w)
+/** Fase R: numeri già «letti» dalle azioni che non sono prezzi: «ne restano 3» con le ultime porzioni, «50 centesimi» di una
+ * differenza di prezzo. Tolti solo dal testo che controlla le parti perse. */
+function quantitiesRead(text:string,actions:MenuAction[]){let t=text
+ if(actions.some(a=>a.kind==='scarcity'))t=t.replace(/\b(?:ne\s+)?(?:restano|rimangono|rimasti|rimaste|ho|abbiamo|solo|ancora|ultim[eiao])\s+(?:solo\s+|ancora\s+)?\d+\b|\b\d+\s+(?:porzioni|pezzi)\b/gi,' ')
+ if(relativeDelta(text))t=t.replace(/\b\d+\s*(?:centesimi|cent)\b/gi,' ')
+ return t}
 export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:Parameters<typeof validateBrainPlanCore>[2]):ReturnType<typeof validateBrainPlanCore>{
  const d=validateBrainPlanCore(raw,ctx,input)
  // A8.0 (Y, parti perse): il piano deve usare i numeri detti e avere l'azione di ogni verbo esplicito del messaggio.
- if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)){const mix=mixedMessage(input.message),lost=lostParts(mix?mix.command:input.message,d.plan.actions,input.refs,input.sections)
+ if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)){const mix=mixedMessage(input.message),lost=lostParts(quantitiesRead(mix?mix.command:input.message,d.plan.actions),d.plan.actions,input.refs,input.sections)
   if(lost.length){
    // Le parti capite restano in sospeso (proposta `hold`) e si chiede della parte non letta, citandola: mai pubblicate a metà.
    const text=mix?mix.command:input.message,parts=text.split(/\s*[,;]\s*|\s+(?:e|ed|poi)\s+/).map(x=>x.trim()).filter(Boolean),fold0=(x:string)=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
@@ -211,16 +230,23 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // suono debole («Bu» ≈ boh) → l'azione diventa una domanda «Intendi *boh*?», mai una scrittura diretta.
  const sound=phoneticHits(message,refs)
  for(const id of sound.strong)if(!g9DishMentioned(byId.get(id)!.name,message,refs))trusted.add(id)
+ // Fase R: «sì» a una domanda su UN solo candidato («intendi boh?») → quel piatto vale come nominato.
+ if((input.clarifyIds??[]).length===1&&byId.has(input.clarifyIds![0]!)&&isAffirmative(input.message))trusted.add(input.clarifyIds![0]!)
+ // Fase R: «bò»/«bo» = «boh» (solo accento o h muta): è il nome, non un suono incerto.
+ for(const id of sound.weak){const ph=sound.phrase.get(id);if(ph&&plain(ph).replace(/h/g,'')===plain(byId.get(id)!.name).replace(/h/g,''))trusted.add(id)}
  const weakIds=new Set(sound.weak.filter(id=>!trusted.has(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)))
  const trustedHas=(id:string)=>trusted.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
- const neg=negatedClauses(message,refs),exclude:Excluded[]=[...(neg?.excluded??[]),...(input.exclude??[]).filter(e=>!neg?.excluded.some(x=>x.id===e.id))]
+ // «no, la parmigiana no»: il «no,» in testa non è una clausola (stessa normalizzazione del percorso di prima).
+ const neg=negatedClauses(message.replace(/^\s*no\s*[,;.!]\s*(?=.+\bno\s*[.!]?\s*$)/i,''),refs),exclude:Excluded[]=[...(neg?.excluded??[]),...(input.exclude??[]).filter(e=>!neg?.excluded.some(x=>x.id===e.id))]
  // Domande → zero scritture, qualunque cosa dica il modello («la carbonara 13 o 14?», «quanto costa la carbonara?»).
  // Messaggio misto (A4.4): la parte di domanda non blocca la modifica detta nell'altra parte.
  const mix=mixedMessage(message)
  // «Che ne sacc costa 16», «che nesac costa 16»: il nome del piatto che inizia con «che» non fa del messaggio una domanda.
  const dishLead=!/\?/.test(message)&&/^(?:che|come|quando|cosa)\b/.test(msg)&&(refs.some(r=>msg.startsWith(plain(r.name)+' '))||sound.strong.some(id=>msg.startsWith((sound.phrase.get(id)??'\u0000')+' ')))
- const question=!mix&&!dishLead&&((looksLikeQuestion(message)&&!politeCommand(message))||!!priceAlternatives(message,refs))
+ // «…a 13, ok?», «…, va bene?» in coda a un comando non fanno del messaggio una domanda.
+  const qText=message.trim().split(/\s+/).length>=4?message.replace(/[,\s]+(?:ok|okay|va bene|d['’ ]?accordo|grazie|perfetto|si|sì)\s*[?!.]*\s*$/i,''):message
+  const question=!mix&&!dishLead&&((looksLikeQuestion(qText)&&!politeCommand(qText)&&!politeRequest(qText))||!!priceAlternatives(message,refs))
  // Misto con azioni: anche se il modello lo legge come domanda/chiacchiera/capacità, la parte di modifica si valida come change.
  const mixAsChange=!!mix&&Array.isArray(data.actions)&&data.actions.length>0&&['read','capability','chat'].includes(intent)
  if(mix?.conditional){const qp=plain(mix.question),m=qp.match(/\bcosta(?:no)? (?:ancora |sempre )?(\w+)/),n=m?g9Prices('a '+m[1]!)[0]:undefined,d=refs.find(r=>g9DishMentioned(r.name,mix.question,refs))
@@ -275,7 +301,8 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  const hasCreate=actions.some((a:any)=>a?.action==='create_item'||a?.action==='create_daily_special')
 const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!!lastBotTurn&&BOT_QUESTION.test(lastBotTurn.text)&&(input.now??Date.now())-lastBotTurn.at>PENDING_MS
  // Una domanda del bot vale 10 minuti (come le proposte in sospeso): dopo, la risposta breve non la completa più.
- const ctxOK=!hasCreate&&history.length>0&&!staleQuestion&&(REFERS.test(msg)||msg.split(' ').length<=4)
+ // Fase R: con una domanda aperta del bot (candidati in sospeso) la risposta usa sempre il contesto («la nonna e la media»).
+ const ctxOK=!hasCreate&&history.length>0&&!staleQuestion&&(REFERS.test(msg)||msg.split(' ').length<=4||!!input.clarifyIds?.length)
  const dishText=ctxOK?[message,...owners,lastBotText].join(' \n '):hasCreate&&input.draftText?message+' \n '+input.draftText:message,priceText=ctxOK?[message,...owners].join(' \n '):message
  const botLabels=[...lastBotText.matchAll(/\*([^*\n]{2,80})\*\s*:/g)].map(m=>plain(m[1]!))
  const mentioned=(id:string)=>trusted.has(id)||g9DishMentioned(byId.get(id)!.name,dishText,refs)
@@ -286,7 +313,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  for(const a of actions){if(!a||typeof a!=='object'||!BRAIN_ACTIONS.includes(a.action))return no('azione_sconosciuta',actions.map((x:any)=>map(x?.item)))
   const id=map(a.item)
   if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});continue}
-  if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if(!dir.test(msg))return no('delta_senza_verbo',[id]);legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
+  if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if(!dir.test(msg)&&!(d>0?/\+\s*\d/:/(?:^|[\s(])-\s*\d/).test(message))return no('delta_senza_verbo',[id]);legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref)
    // Il piatto di riferimento è nominato in questo messaggio, oppure è proprio quello dell'ultima risposta del bot («*Carbonara*: …»).
    const labelled=refId?botLabels.includes(plain(byId.get(refId)?.name??'')):false
@@ -307,14 +334,15 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   const ids=[...new Set(plan.actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))],rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
   // Piatti indicati in modo ambiguo o coperti da un altro: le azioni chiare restano, per ognuna ambigua una domanda «quale?»
   // con l'azione già capita (proposta hold o scelta), mai una scelta del modello e mai la richiesta intera persa.
-  const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs)].filter(x=>x!==id);if(r.length)doubt.set(id,[id,...new Set(r)])}
+  const dim=(id:string)=>{const t=byId.get(id)!;return message.split(/[,;]|\s+e\s+/).filter(x=>g9DishMentioned(t.name,x,refs)).flatMap(x=>diminutiveRivals(x,t,refs).map(o=>o.id))}
+   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id);if(r.length)doubt.set(id,[id,...new Set(r)])}
   if(doubt.size){const clear=plan.actions.filter(a=>!('id' in a)||!doubt.has((a as any).id)),amb=plan.actions.filter(a=>'id' in a&&doubt.has((a as any).id))
    const asks2:HoldAsk[]=amb.map(a=>{const {id,...template}=a as any;return{type:'choose' as const,word:refs.find(r=>r.id===id)?.name??'',options:doubt.get(id)!.slice(0,8),template}})
    if(!clear.length&&asks2.length===1)return{intent:'clarify',plan:{type:'clarify',ids:asks2[0]!.type==='choose'?asks2[0]!.options:[],actions:[amb[0]!]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
    return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:clear,asks:[...asks2,...asks]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}}
   // 17/10 (correzioni A): in una richiesta con più piatti e prezzi («carbonara 13, lasagna 12») ogni prezzo deve stare nella parte
   // che nomina quel piatto: un modello che scambia i prezzi tra i piatti non scrive.
-  {const swapped=priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs);if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
+  {const swapped=[...priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs),...priceOfOtherClause(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs)];if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
   {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   {const foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&foreignQualifier(message,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
@@ -338,7 +366,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   return{intent:'change',plan,exclude,aliasesUsed,replyDraft:'',notes}}
  // Con contesto o azioni derivate: le azioni «normali» passano dal validatore attuale sul testo con il contesto; i prezzi devono
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
- const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message}):{type:'change',actions:[]} as MenuPlan
+ const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message,implicitSections:true}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
  if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
   // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio
@@ -370,6 +398,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // Completezza (come il validatore attuale): un piatto nominato per intero e non toccato rende la richiesta incompleta. Non conta
  // il nome contenuto nel nome di un piatto toccato («caffè» dentro «caffè macchiato»). Con un riepilogo in sospeso non si controlla.
  const touched=refs.filter(r=>covered.has(r.id)&&padded.includes(' '+plain(r.name)+' ')).map(r=>' '+plain(r.name)+' ')
+ // Fase R: un piatto esistente il cui nome è dentro il nome di un piatto NUOVO («pasta e fagioli alla napoletana») non manca.
+ const createdNames=out.flatMap(a=>a.kind==='create'||a.kind==='special'?[' '+plain(a.name)+' ']:[]);for(const r of refs)if(createdNames.some(n=>n.includes(' '+plain(r.name)+' ')))covered.add(r.id)
  const missed=input.pendingActions?.length?[]:refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1&&!touched.some(t=>t!==' '+plain(r.name)+' '&&t.includes(' '+plain(r.name)+' ')))
  // A7.12 (vocali): un piatto nominato in una parte che dice di lasciarlo («l'amatriciana lasciala com'è», «la carbonara la
  // tengo a dodici», «no il tiramisù c'è») non manca: è detto che resta com'è. «boh» detto come intercalare («boh fai tu», «e poi…
@@ -400,13 +430,19 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCal
  let ctx:BrainContext
  try{ctx=buildBrainContext(input)}catch(error){return{path:'fallback',reason:'contesto: '+String((error as any)?.message??error)}}
  if(input.refs.length>1500||input.message.length>30000)return{path:'fallback',reason:'troppo_grande',tokens:ctx.tokens}
+ // Fase R (R2.3): auto-correzione. Il piano rifiutato e il motivo tornano al modello una volta sola.
+ if(input.correction)ctx={...ctx,messages:[...ctx.messages,{role:'assistant',content:input.correction.previous.slice(0,4000)},{role:'user',content:CORRECTION_HEAD+input.correction.reason+'. Rifai il JSON: correggi il piano se il messaggio lo permette, altrimenti intent=clarify con la domanda per il titolare in reply_draft.'}]}
  let call:BrainCall
  try{call=await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'RAW '+call.content+'\n')).catch(()=>{})
- const decision=validateBrainPlan(call.content,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source,clarifyIds:input.pending?.clarify?.itemIds,history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,draftText:draftText(input.pending?.draft)})
+ // Strumenti di controllo (confirm_pending, cancel_pending, undo_last): fuori dal validatore delle azioni, li verifica il route.
+ const parsed=parseJson(call.content),control:ControlAction[]=parsed&&Array.isArray(parsed.actions)?[...new Set<ControlAction>(parsed.actions.filter((a:any)=>a&&CONTROL_ACTIONS.includes(a.action)).map((a:any)=>a.action as ControlAction))]:[]
+ const rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
+ const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n ')})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
- return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens}
+ return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
+export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
 
 // Parole d'esito: una bozza del modello che le contiene non arriva mai al titolare (il «fatto» lo scrive solo il server).
 const OUTCOME=/\b(fatto|fatta|aggiornat\w*|modificat\w*|cambiat\w*|nascost\w*|salvat\w*|pubblicat\w*|impostat\w*|messo|messa|tolto|tolta|rimess\w*|segnat\w*|esaurit\w*|ho (?:messo|tolto|cambiato|aggiornato|nascosto|segnato|aggiunto|creato|impostato))\b|€|\b\d+(?:[.,]\d{1,2})?\s*(?:euro|eur)\b/

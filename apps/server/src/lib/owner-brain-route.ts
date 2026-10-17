@@ -46,27 +46,36 @@ export async function memoryTurn(tx:Exec,tenant:string,text:string,refs:MenuRef[
 const lastBot=(h:BrainTurn[])=>[...h].reverse().find(t=>t.role==='bot')
 const ownerBefore=(h:BrainTurn[],at:number)=>[...h].reverse().find(t=>t.role==='owner'&&t.at<at)
 
-export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?:string[]}
+export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?:string[],
+ /** Fase R: testo recente del titolare (numeri ammessi nella bozza del modello). */
+ ownerRecent?:string}
 /** Piano del cervello per un turno. null = riserva (Groq giù, quota, JSON non valido, contesto impossibile). */
-export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null}):Promise<BrainRun|null>{
+export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null,
+ /** Fase R: annulla possibile (ultima pubblicazione ≤10 min) e auto-correzione. */
+ undoInfo?:{minutes:number,names:string[]}|null,correction?:{previous:string,reason:string}|null}):Promise<BrainRun|null>{
  const now=o.now??Date.now(),store=sqlBrainStore(db)
  let memory:Awaited<ReturnType<typeof store.listMemory>>=[],history:BrainTurn[]=[]
  try{await reconcile(store,o.tenant,o.refs);memory=await store.listMemory(o.tenant);history=await store.readHistory(o.tenant,o.phone,now)}catch{/* tabelle assenti → contesto senza memoria né cronologia */}
  const cmd=o.pendingCommand,choice=cmd?.kind==='choose'&&Array.isArray(cmd.options)?cmd.options.filter((id:unknown):id is string=>typeof id==='string'&&o.refs.some(r=>r.id===id)):null
- const bot=lastBot(history),clarify=choice?.length?{question:(bot?.text??'Quale piatto intendi?').slice(0,300),itemIds:choice,source:bot?ownerBefore(history,bot.at)?.text:undefined}:null
+ const ask=cmd?.kind==='brain_ask'?cmd:null
+ const bot=lastBot(history),clarify=ask?{question:String(ask.question??'').slice(0,300),itemIds:(Array.isArray(ask.ids)?ask.ids:[]).filter((id:unknown):id is string=>typeof id==='string'&&o.refs.some(r=>r.id===id)),source:typeof ask.source==='string'?ask.source:undefined}:choice?.length?{question:(bot?.text??'Quale piatto intendi?').slice(0,300),itemIds:choice,source:bot?ownerBefore(history,bot.at)?.text:undefined}:null
  const proposal:MenuAction[]|null=cmd?.kind==='batch'&&Array.isArray(cmd.actions)?cmd.actions:null
+ // Fase R: perché aspetta, parti incerte (hold) e domanda aperta del modello (brain_ask) nel contesto.
+ const proposalWhy=proposal?(cmd.why??(proposal.some(a=>a.kind==='delete')?'delete':proposal.some(a=>a.kind==='create_section')?'section':'recap')):null
+ const hold=cmd?.kind==='hold'&&Array.isArray(cmd.actions)?{actions:cmd.actions as MenuAction[],asks:(Array.isArray(cmd.asks)?cmd.asks:cmd.ask?[cmd.ask]:[]).map((q:any)=>({word:String(q.word??q.name??''),itemIds:(Array.isArray(q.options)?q.options:q.action?.id?[q.action.id]:q.id?[q.id]:[]).filter((id:unknown):id is string=>typeof id==='string'&&o.refs.some(r=>r.id===id))})),source:typeof cmd.source==='string'?cmd.source:undefined}:null
+
  // Bozza di aggiunta non finita (A1.1): nel contesto, e i suoi nomi/prezzi valgono come detti dal titolare per le creazioni.
- const draft=cmd?.kind==='create_draft'?{name:typeof cmd.name==='string'?cmd.name:null,names:Array.isArray(cmd.names)?cmd.names.filter((x:unknown):x is string=>typeof x==='string'):undefined,price:typeof cmd.price==='number'?cmd.price:null,prices:Array.isArray(cmd.prices)?cmd.prices:undefined,section:o.sections.find(s=>s.id===cmd.sectionId)?.name??null,sectionName:typeof cmd.sectionName==='string'?cmd.sectionName:null}:null
+ const draft=ask?.draft?{name:ask.draft.name??null,price:ask.draft.price??null,section:o.sections.find(s=>s.id===ask.draft.sectionId)?.name??null,sectionName:ask.draft.sectionName??null}:cmd?.kind==='create_draft'?{name:typeof cmd.name==='string'?cmd.name:null,names:Array.isArray(cmd.names)?cmd.names.filter((x:unknown):x is string=>typeof x==='string'):undefined,price:typeof cmd.price==='number'?cmd.price:null,prices:Array.isArray(cmd.prices)?cmd.prices:undefined,section:o.sections.find(s=>s.id===cmd.sectionId)?.name??null,sectionName:typeof cmd.sectionName==='string'?cmd.sectionName:null}:null
  // «no, intendevo X» / «rimettila com'era»: si può rimettere solo ciò che l'ultima pubblicazione da WhatsApp (10 minuti) ha cambiato.
  const restorable=new Map<string,MenuAction[]>();if(o.undo&&now-o.undo.at<=RESTORE_WINDOW_MS)for(const it of o.undo.items){const r=o.refs.find(x=>x.id===it.id),b=it.before;if(!r||!b)continue;const back:MenuAction[]=[]
   if(typeof b.price==='number'&&Math.abs(b.price-r.price)>=0.005)back.push({kind:'price',id:r.id,price:b.price});if((b.available!==false)!==r.available)back.push({kind:'available',id:r.id,value:b.available!==false});if(!!b.hidden!==r.hidden)back.push({kind:'hidden',id:r.id,value:!!b.hidden});if(!!b.featured!==!!r.featured)back.push({kind:'featured',id:r.id,value:!!b.featured})
   if(back.length)restorable.set(r.id,back)}
- const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,pending:{proposal,clarify,draft},pendingActions:proposal,message:o.text,now},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
+ const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null},pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
  if(process.env.TAKO_BRAIN_DEBUG)dbg('BRAIN',JSON.stringify({text:o.text,history:history.length,decision:decision.path==='brain'?{intent:decision.intent,plan:decision.plan,notes:decision.notes}:decision}))
  if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',reason:decision.reason}));return null}
  // A4.5: i piatti di cui si stava parlando (ultimi messaggi del titolare e ultima risposta), per una domanda che li cita.
  const recentText=[...history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text),bot?.text??''].join(' \n '),recentIds=history.length?o.refs.filter(r=>g9DishMentioned(r.name,recentText,o.refs)).map(r=>r.id).slice(0,3):[]
- return{decision,clarifyIds:choice?.length?choice:null,recentIds}
+ return{decision,clarifyIds:choice?.length?choice:clarify?.itemIds?.length?clarify.itemIds:null,recentIds,ownerRecent:history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text).join(' \n ')}
 }
 
 /** Cronologia breve: il messaggio del titolare (testo o trascrizione) e la risposta, solo se il cervello è acceso per il locale. */

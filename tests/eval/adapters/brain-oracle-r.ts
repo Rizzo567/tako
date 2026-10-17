@@ -1,0 +1,161 @@
+// Oracolo della FASE R (17/10/2026 notte, «un solo cervello»): col cervello acceso OGNI messaggio arriva al modello, quindi il
+// modello ideale di brain-oracle.ts (che conosce le attese della conversazione) impara gli strumenti nuovi e scrive la bozza:
+//  - proposta IN SOSPESO + conferma pura → confirm_pending; + «no / annulla / lascia stare» → cancel_pending;
+//  - parti incerte IN SOSPESO: «no» → confirm_pending (pubblica le chiare), «annulla» → cancel_pending, risposte →
+//    confirm_pending + le azioni nuove;
+//  - domanda aperta / aggiunta non finita: la risposta completa la richiesta di prima (letta insieme al messaggio d'origine);
+//  - ULTIMA PUBBLICAZIONE annullabile + «annulla», «anzi no», «torna indietro» da soli → undo_last;
+//  - rifiuto del server (auto-correzione) → una domanda: il modello ideale non insiste;
+//  - reply_draft sempre: «Fatto.» per le modifiche, la domanda per i chiarimenti, «Elimino X dal menu? Rispondi sì.».
+// È un TETTO dell'architettura (instradamento + contesto + strumenti + validatore), NON la resa di gpt-oss.
+import {brainOracleBase,catalog,hitStems,spoken,setSectionAnswer} from './brain-oracle.js'
+import {plainT} from '../judge.js'
+import {spokenDecimals,spokenCents} from '../../../apps/server/src/lib/twilio-menu-nlu.js'
+import {g9WordNumber} from '../../../apps/server/src/lib/twilio-menu-ai.js'
+import {DELETE_VERB} from '../../../apps/server/src/lib/twilio-menu-structure.js'
+import {EXPLICIT_SECTION} from '../../../apps/server/src/lib/owner-brain-r.js'
+import type {Change,Conversation} from '../types.js'
+
+const oneSpecial=<T extends {price:number}>(cs:T[],said:number[])=>cs.find(c=>said.includes(c.price))??cs[0]
+const blank={action:'set_price',item:null,section:null,price:null,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:null,until:null}
+const ctl=(action:string)=>({...blank,action})
+const YES=new Set(['si','ok','okay','okey','conferma','confermo','confermato','certo','esatto','vai','procedi','va','bene','pubblica','pubblicalo','pubblicala','elimina','eliminalo','eliminala','eliminali','cancella','cancellalo','cancellala','cancellali','crea','creala','crealo','perfetto','pure','dai','grazie','fallo','tutto','d','accordo'])
+const yes=(p:string)=>!!p&&p.split(' ').every(w=>YES.has(w))&&!/^(?:grazie|pure|dai|tutto)$/.test(p)
+const NO=/^(?:(?:no|ah|allora|aspetta|scusa)\s+)*(?:no|annulla|annulla tutto|lascia stare|lascia perdere|niente|no grazie|non farlo|non pubblicare|no lascia stare|no lascia perdere|non eliminarlo|non eliminarla|non cancellarlo|non cancellarla|tienilo|tienila|no tienilo|no tienila|non crearla|no non crearla)$/
+const UNDO_ALONE=/^(?:(?:no|scusa|aspetta|anzi|ops|ah)\s+)*(?:lascial[aoie](?: stare| com era| cosi)?|annulla(?: tutto| l ultima(?: modifica)?| la modifica| quello che hai fatto)?|annullala|annullalo|torna indietro|tornare indietro|rimetti come prima|torna come prima|rimetti com era|anzi no|no aspetta|ho sbagliato(?: annulla)?|lascia stare ho sbagliato|era giusto prima|il prezzo di prima era giusto|lascia com era|annulla per favore)$/
+
+const out=(o:any)=>JSON.stringify({intent:'change',read:'none',item_refs:[],capability_ids:[],clarify:{question:null,item_refs:[],missing:[]},uncertain:[],alias_used:[],reply_draft:'',...o,actions:(o.actions??[]).map((a:any)=>({...blank,...a}))})
+const nameOf=(cat:ReturnType<typeof catalog>,code:string|null|undefined)=>[...cat.code].find(([,c])=>c===code)?.[0]
+
+/** Bozza del modello ideale sul piano già deciso. */
+function withDraft(d:any,cat:ReturnType<typeof catalog>,p:string,sectionNames:string[]):any{
+ if(typeof d.reply_draft==='string'&&d.reply_draft.trim())return d
+ const acts=(d.actions??[]).filter((a:any)=>!['confirm_pending','cancel_pending','undo_last'].includes(a.action))
+ if(d.intent==='clarify'){const miss:string[]=d.clarify?.missing??[],cr=acts.find((a:any)=>a.action==='create_item'),ids:string[]=d.clarify?.item_refs??[]
+  d.reply_draft=miss.length?(miss.includes('price')?`Quanto costa ${cr?.name??'il piatto nuovo'}?`:'')+(miss.includes('section')?` In quale categoria lo metto?`:'')+(miss.includes('name')?' Come si chiama il piatto?':''):ids.length>1?'Quale intendi?':ids.length===1?`Intendi ${nameOf(cat,ids[0])}? Dimmi cosa cambiare.`:'Non sono sicuro di aver capito: cosa vuoi cambiare?'
+  d.reply_draft=d.reply_draft.trim();return d}
+ if(d.uncertain?.length){d.reply_draft=d.uncertain.map((u:any)=>`Per «${u.phrase}» cosa intendi?`).join(' ');return d}
+ if(d.intent==='read')return d
+ if(d.intent==='capability'){d.reply_draft='Posso cambiare prezzi e disponibilità, nascondere o mettere in evidenza i piatti, aggiungerne di nuovi, eliminarli, spostarli e rinominarli, e gestire le categorie.';return d}
+ if(d.intent==='chat'){d.reply_draft=d.reply_draft||'Dimmi pure cosa vuoi cambiare nel menu.';return d}
+ const dels=acts.filter((a:any)=>a.action==='delete_item').map((a:any)=>'*'+(nameOf(cat,a.item)??'il piatto')+'*')
+ if(dels.length){d.reply_draft=`Elimino ${dels.length>1?dels.slice(0,-1).join(', ')+' e '+dels.at(-1):dels[0]} dal menu? Rispondi sì.`;return d}
+ const newSec=acts.find((a:any)=>a.action==='create_section')
+ if(newSec&&!EXPLICIT_SECTION.test(p)&&!sectionNames.some(n=>plainT(n)===plainT(String(newSec.name??'')))){d.reply_draft=`Nel menu non c'è la categoria ${newSec.name}: la creo? Rispondi sì.`;return d}
+ d.reply_draft=acts.length>3?'Rispondi OK per pubblicare.':'Fatto.';return d}
+
+export function brainOracle(conv:Conversation|null,body:any):string|null{
+ const fmt=body?.response_format?.json_schema?.name
+ if(fmt!=='owner_brain_plan'||!conv)return brainOracleBase(conv,body)
+ const msgs=body.messages as {role:string,content:string}[],last=String(msgs.at(-1)?.content??'')
+ const cat=catalog(msgs[1]!.content),sectionNames=[...cat.sections.keys()]
+ // Rifiuto del server: il modello ideale non insiste, chiede (con i piatti del piano rifiutato come candidati).
+ if(last.startsWith('IL SERVER HA RIFIUTATO IL PIANO: ')){let prev:any={};try{prev=JSON.parse(msgs.at(-2)?.content??'{}')}catch{}
+  const ids=[...new Set([...(prev.actions??[]).map((a:any)=>a?.item).filter((x:unknown)=>typeof x==='string'&&/^p\d+$/.test(x)),...(prev.clarify?.item_refs??[])])] as string[]
+  const listed=(last.match(/piatti possibili: ([^\n]+?)\. Rifai/)?.[1]??'').split(', ').map(n=>cat.code.get(n)).filter((c):c is string=>!!c)
+  if(listed.length>1){ids.splice(0,ids.length,...listed)}
+  // Più parti incerte (la sua «uncertain» + l'ambiguità trovata dal server): una domanda per ciascuna, le parti chiare restano.
+  if(listed.length>1&&(prev.uncertain??[]).length){const orig=(String(msgs.at(-3)?.content??'').split('\nMESSAGGIO\n').pop()??'').replace(/^MESSAGGIO\n/,''),amb0=(prev.actions??[]).filter((a:any)=>listed.includes(a?.item)),clear=(prev.actions??[]).filter((a:any)=>!listed.includes(a?.item))
+   const unc=[...prev.uncertain,...amb0.map((a:any)=>{const n=nameOf(cat,a.item)??'',w=plainT(n).split(' ')[0]!.slice(0,4);return{phrase:orig.split(/,|\s+e\s+/).find(x=>plainT(x).includes(w))?.trim()??n,candidates:listed.filter(c=>plainT(nameOf(cat,c)??'').split(' ').some(x=>x.slice(0,4)===w)),action:a.action,value:a.value??null,price:typeof a.price==='number'?a.price:null}})]
+   return out({intent:'change',actions:clear,uncertain:unc,reply_draft:unc.map((u:any)=>`Per «${u.phrase}» quale intendi?`).join(' ')})}
+  const amb=(/ambiguo|candidati|possibili/.test(last))&&ids.length>1
+  if(/a suono/.test(last)&&ids.length===1){const act=(prev.actions??[]).find((x:any)=>x?.item===ids[0]);return out({intent:'clarify',clarify:{question:null,item_refs:ids,missing:[]},actions:act?[act]:[],reply_draft:`Intendi ${nameOf(cat,ids[0])}? Rispondi sì o no.`})}
+  return out({intent:'clarify',clarify:{question:null,item_refs:amb?ids:[],missing:[]},reply_draft:amb?'Quale intendi?':/conferma|sì|ok/i.test(last)&&/proposta/.test(last)?'Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.':'Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?'})}
+ const [head,tail]=last.includes('\nMESSAGGIO\n')?last.split('\nMESSAGGIO\n') as [string,string]:['',last.replace(/^MESSAGGIO\n/,'')]
+ // Il modello ideale capisce i decimali detti a voce («dodici virgola cinque», «7 euro 90»): li legge come il server
+ // li leggeva prima di R (spokenDecimals/spokenCents). Il validatore resta sul testo vero.
+ const raw0=(tail??'').trim(),msg0=spokenCents(spokenDecimals(raw0)).replace(/\b([a-zà]{3,})\b/gi,w=>{const l=w.toLowerCase();if(['una','uno','zero'].includes(l))return w;if([...cat.code.keys()].some(n=>plainT(n).split(' ').includes(l)))return w;const n=g9WordNumber(l);return n!==null&&n>=2?String(n):w}),msg=msg0.trim().split(/\s+/).length>=4?msg0.replace(/[,\s]+(?:ok|okay|va bene|d['’ ]?accordo|grazie|perfetto|si|sì)\s*[?!.]*\s*$/i,''):msg0,p=plainT(msg)
+ if(msg!==raw0)body={...body,messages:[...msgs.slice(0,-1),{role:'user',content:(head?head+'\nMESSAGGIO\n':'MESSAGGIO\n')+msg}]}
+ const proposal=/IN SOSPESO \(proposta non confermata/.test(head),hold=/IN SOSPESO \(parti chiare non pubblicate/.test(head)
+ const ask=/IN SOSPESO \(tua domanda aperta\)/.test(head)||/IN SOSPESO \(aggiunta di un piatto non finita/.test(head),undo=/ULTIMA PUBBLICAZIONE \(annullabile/.test(head)
+ if(proposal){if(yes(p))return out({actions:[ctl('confirm_pending')],reply_draft:'Fatto.'});if(NO.test(p))return out({actions:[ctl('cancel_pending')],reply_draft:'Va bene, lascio il menu com’è.'})}
+ if(proposal&&/riepilogo|prezzo insolito/.test(head)&&!/\bsolo\b/.test(p)&&/\b(no|lascia\w* stare|lascia\w* perdere|tranne|non (?:lo |la )?(?:toccare|nascondere|cambiare))\b/.test(p)&&[...cat.code.keys()].some(n=>hitStems(n,msg).length>0&&head.includes(cat.code.get(n)+' ')))return out({intent:'change',actions:[],reply_draft:'Va bene, lo tolgo dal riepilogo. Rispondi OK per pubblicare il resto.'})
+ // Risposte alle domande delle parti incerte («la nonna e la piccola», «A sì, B la seconda»): per ogni domanda il candidato
+ // che il messaggio distingue, con l'azione capita (prezzo dalla frase della domanda).
+ if(hold&&!/^(?:no|annulla)\b/.test(p)){const asks=[...head.matchAll(/«([^»]+)» candidati ((?:p\d+,?)+)/g)].map(m=>({word:m[1]!,ids:m[2]!.split(',').filter(Boolean)})),acts:any[]=[],own=(n:string,ns:string[])=>plainT(n).split(' ').filter(w=>w.length>=3&&!['alla','allo','della','dello','con','del'].includes(w)&&!ns.every(o=>plainT(o).split(' ').includes(w)))
+  const ords=[...p.matchAll(/\b(prim[oa]|second[oa]|terz[oa])\b/g)].map(m=>/^prim/.test(m[1]!)?0:/^second/.test(m[1]!)?1:2)
+  asks.forEach((q,qi)=>{const ns=q.ids.map(c=>nameOf(cat,c)).filter((n):n is string=>!!n),hit=ns.filter(n=>own(n,ns).some(w=>p.split(' ').some(x=>x.length>=3&&x.slice(0,5)===w.slice(0,5)))),pick=hit.length===1?hit[0]:ords.length===asks.length?ns[ords[qi]!]:ords.length===1&&asks.length===1?ns[ords[0]!]:undefined
+   if(!pick)return;const e=[...conv.changes,...(conv.interim??[])].find(c=>c.op!=='create'&&(c as any).dish===pick),pr=spoken(q.word)[0]
+   if(e&&e.op==='price')acts.push({action:'set_price',item:cat.code.get(pick),price:(e as any).price});else if(pr!==undefined)acts.push({action:'set_price',item:cat.code.get(pick),price:pr});else if(e&&(e.op==='hidden'||e.op==='available'||e.op==='featured'))acts.push({action:'set_'+e.op,item:cat.code.get(pick),value:(e as any).value})})
+  if(acts.length)return out({actions:[ctl('confirm_pending'),...acts],reply_draft:'Fatto.'})}
+ if(hold){if(/^(?:no|no grazie|no no|no lascia stare|lascia stare|solo quelle|pubblica il resto)$/.test(p))return out({actions:[ctl('confirm_pending')],reply_draft:'Fatto.'});if(/^(?:annulla|annulla tutto|non pubblicare niente|niente)$/.test(p))return out({actions:[ctl('cancel_pending')],reply_draft:'Va bene, non pubblico niente.'})}
+ if(!proposal&&!hold&&undo&&UNDO_ALONE.test(p))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})
+ // Categorie (fase B): rinomina e crea dette in modo esplicito.
+ if(/\b(categori\w*|sezion\w*)\b/.test(p)){const exp:Change[]=[...conv.changes,...(conv.interim??[])],old=sectionNames.filter(n=>(' '+p+' ').includes(' '+plainT(n)+' '))
+  if(/\b(rinomin\w*|chiamal\w*|nome)\b/.test(p)&&old.length){const to=exp.find((c):c is Extract<Change,{op:'move'}>=>c.op==='move'&&!sectionNames.some(n=>plainT(n)===plainT(c.section)))?.section??exp.find((c):c is Extract<Change,{op:'section'}>=>c.op==='section')?.name
+   const fromName=old[0]!,newName=to??(p.match(/\b(?:in|chiamala)\s+(\w+(?: \w+)?)$/)?.[1]??null)
+   if(newName)return JSON.stringify(withDraft(JSON.parse(out({actions:[{action:'rename_section',section:cat.sections.get(fromName),name:newName}]})),cat,p,sectionNames))}
+  const secs=exp.filter((c):c is Extract<Change,{op:'section'}>=>c.op==='section'&&(' '+p+' ').includes(' '+plainT(c.name)+' '))
+  const want=p.match(/\b(?:categori\w*|sezion\w*)\s+(?:che si chiama\s+|nuova\s+|chiamata\s+)?(\w+)/)?.[1]
+  const dup=want&&sectionNames.find(n=>plainT(n)===want||plainT(n).slice(0,5)===want.slice(0,5))
+  if(!secs.length&&dup&&/\b(crea\w*|aggiung\w*|nuov\w*)\b/.test(p)&&!exp.some(c=>c.op==='create'))return out({intent:'chat',reply_draft:`La categoria ${dup} c'è già: uso quella.`})
+  if(secs.length){const acts:any[]=secs.map(c=>({action:'create_section',name:c.name}))
+   for(const c of exp)if(c.op==='create'&&c.section&&secs.some(x=>plainT(x.name)===plainT(c.section!))&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!))acts.push({action:'create_item',name:c.name,price:c.price,section:c.section})
+   return JSON.stringify(withDraft(JSON.parse(out({actions:acts})),cat,p,sectionNames))}}
+ let d:any=JSON.parse(brainOracleBase(conv,body)!)
+ // Risposta a una domanda aperta o a un'aggiunta non finita: il modello ideale legge la richiesta di prima insieme alla risposta.
+ const src=head.match(/sul messaggio «([^»]+)»/)?.[1]??(ask?[...msgs].reverse().find((m,i)=>i>0&&m.role==='user')?.content:undefined)
+ const named=[...cat.code.keys()].some(n=>hitStems(n,msg).length>0)
+ let joinedText=msg
+ const isQ=/\?/.test(msg)||/^(?:che|quali|quanto|quanti|cosa|com e|c e)\b/.test(p)
+ // Risposta alla categoria: «secondi», «nei secondi», «mettilo nei piatti di prova».
+ setSectionAnswer(sectionNames.map(n=>plainT(n)).find(n=>{const t=p.replace(/^(?:va bene|ok|si)\s+/,'').replace(/^(?:mettil[oaie]\s+)?(?:nei|negli|nelle|nella|nel|tra i|tra gli|tra le|in)\s+/,'');return t.length>=3&&(n===t||n.slice(0,5)===t.slice(0,5))})??null)
+ if(!isQ&&(ask||hold)&&src&&(!named||d.intent!=='change'||!(d.actions??[]).length)){const joined={...body,messages:[...msgs.slice(0,-1),{role:'user',content:(head?head+'\nMESSAGGIO\n':'MESSAGGIO\n')+src+' '+msg}]}
+  const d2=JSON.parse(brainOracleBase(conv,joined)!);if(!named||d2.intent==='change'&&(d2.actions??[]).length){d=d2;joinedText=src+' '+msg}}
+ // Elenco con un solo verbo («nascondi boh, la parmigiana, tiramisù e pasta al ragù»): il modello letterale lo applica a TUTTI i
+ // piatti nominati (anche quelli che il titolare poi toglie dal riepilogo), non solo a quelli dello stato finale atteso.
+ if(d.intent==='change'&&(d.actions??[]).length){const kinds=new Set((d.actions as any[]).map(a=>a.action+':'+a.value)),only=kinds.size===1?[...kinds][0]!:null
+  if(only&&/^(set_hidden|set_available|set_featured):(true|false)$/.test(only)&&!/\b(tranne|eccetto|non|no|lascia\w*)\b/.test(p)&&!/\?/.test(msg)&&!/\b(quanto|quanti|quali|cosa)\b/.test(p)){const [action,v]=only.split(':')
+   for(const n of [...cat.code.keys()].filter(n=>(' '+p+' ').includes(' '+plainT(n)+' ')))if(!(d.actions as any[]).some(a=>a.item===cat.code.get(n)))d.actions.push({action,item:cat.code.get(n),value:v==='true'})}}
+ // Regola del titolare: «elimina / levalo proprio / togli del tutto» è un'eliminazione (con conferma), mai un nascondi, anche
+ // quando poi il titolare dice di no (l'attesa finale non ha l'eliminazione: il modello letterale la propone lo stesso).
+ if(DELETE_VERB.test(p)){const names=[...cat.code.keys()],clauses=msg.split(/,|;|\s+e\s+|\s+poi\s+|\s+ed\s+/)
+  // Portata del verbo: dal verbo fino al prossimo verbo d'azione (elenchi «elimina supplì e crocchette»), più il piatto detto
+  // prima del verbo nella stessa frase («Che ne sacc levalo proprio»). «…, anzi no, nascondilo» ritira l'eliminazione.
+  const del=new Set<string>(),m=p.match(DELETE_VERB)
+  if(m&&!/\banzi\b.*\b(no|nascond\w*)\b/.test(p.slice(m.index!))){const after=p.slice(m.index!),stop=after.slice(m[0].length).search(/\b(nascond\w*|mett\w*|aggiung\w*|spost\w*|rinomin\w*|finit\w*|evidenza|aument\w*|abbass\w*|cambia\w*)\b/),scope=(stop>=0?after.slice(0,m[0].length+stop):after),before0=p.slice(0,m.index!).split(/,|;|\s+e\s+|\s+ed\s+/).pop()??'',before=/\b(nascond\w*|togli\w*|mett\w*|a \d|finit\w*)\b/.test(before0)?'':before0
+   const pick=(part:string)=>{const full=names.filter(n=>(' '+part+' ').includes(' '+plainT(n)+' ')).sort((a,b)=>plainT(b).length-plainT(a).length);if(full.length)return full.filter(n=>!full.some(o=>o!==n&&plainT(o).includes(plainT(n))));const h=names.map(n=>[n,hitStems(n,part).length] as const).filter(([,k])=>k>0),best=Math.max(0,...h.map(([,k])=>k)),top=h.filter(([,k])=>k===best).map(([n])=>n);return top.length===1?top:[]}
+   for(const part of [...scope.split(/,|\s+e\s+/),before])for(const n of pick(part))del.add(cat.code.get(n)!)}
+  if(!del.size&&d.intent==='change')for(const a of d.actions??[])if(a.action==='set_hidden'&&a.value===true)del.add(a.item)
+  if(del.size){d={...d,intent:'change',clarify:{question:null,item_refs:[],missing:[]},actions:[...(d.intent==='change'?(d.actions??[]).filter((a:any)=>!del.has(a.item)&&a.action!=='delete_item'):[]),...[...del].map(item=>({action:'delete_item',item}))],reply_draft:''}}}
+ // Senza un verbo di eliminare non si elimina (l'attesa finale può avere l'eliminazione chiesta in un messaggio dopo):
+ // il modello letterale fa quello che dice QUESTO messaggio (es. «boh a 15 e pasta al ragù a 15» = due prezzi).
+ if(!DELETE_VERB.test(p)&&!/\b(e?l+i+m+n\w*|canc\w*l\w*)\b/.test(p)&&d.intent==='change'&&(d.actions??[]).some((a:any)=>a.action==='delete_item')&&!/\b(quei|quelli|entramb\w*|tutti|li|eliminal\w*)\b/.test(p)){d.actions=d.actions.filter((a:any)=>a.action!=='delete_item')
+  if(!d.actions.length)for(const part of msg.split(/,|;|\s+e\s+(?=(?:il|la|lo|l|i|gli|le)?\s*\S)/)){const full=[...cat.code.keys()].filter(n=>(' '+plainT(part)+' ').includes(' '+plainT(n)+' ')),v=spoken(part);if(full.length===1&&v.length===1)d.actions.push({action:'set_price',item:cat.code.get(full[0]!),price:v[0]})}
+  if(!d.actions.length)d={...d,intent:'clarify',clarify:{question:null,item_refs:[],missing:[]}}}
+ // Con una proposta in sospeso non c'è niente da «rimettere com'era»: si corregge la proposta.
+ if(proposal&&d.intent==='change')d.actions=(d.actions??[]).filter((a:any)=>a.action!=='restore')
+ // Un solo piatto e un solo verbo d'azione esplicito: l'azione è quella del verbo.
+ {const names=[...cat.code.keys()],one=names.filter(n=>(' '+p+' ').includes(' '+plainT(n)+' ')),verbs:[RegExp,string,boolean][]=[[/\bnascond\w*\b/,'set_hidden',true],[/\b(rimett\w* nel menu|mostra\w*)\b/,'set_hidden',false],[/\b(finit\w*|esaurit\w*)\b/,'set_available',false],[/\bin evidenza\b/,'set_featured',true]],vs=verbs.filter(([re])=>re.test(p))
+  if(one.length===1&&vs.length===1&&!DELETE_VERB.test(p)&&!/\b(non|anzi|no)\b/.test(p)&&d.intent==='change'&&(d.actions??[]).length===1&&d.actions[0].item===cat.code.get(one[0]!)&&d.actions[0].action!==vs[0]![1])d.actions=[{action:vs[0]![1],item:cat.code.get(one[0]!),value:vs[0]![2]}]}
+ // Rinomina + prezzo nello stesso messaggio («rinomina la gricia in Gricia romana e mettila a 12»).
+ {const ren=(d.actions??[]).find((a:any)=>a.action==='rename_item'),m=p.match(/\b(?:a|prezzo a|costa)\s+(\d+(?:\s\d{2})?)\s*(?:euro)?$/),lastPart=p.split(/,|;/).pop()??'';if(ren&&m&&![...cat.code.keys()].some(n=>n!==nameOf(cat,ren.item)&&(' '+lastPart+' ').includes(' '+plainT(n)+' '))&&!(d.actions as any[]).some(a=>a.action==='set_price'&&a.item===ren.item)){const v=spoken(msg).at(-1);if(v!==undefined)d.actions.push({action:'set_price',item:ren.item,price:v})}}
+ if(hold&&d.intent==='change'&&(d.actions??[]).length)d.actions=[ctl('confirm_pending'),...d.actions]
+ // Piatto nuovo senza nome («aggiungi un piatto a 12»): il modello ideale chiede come si chiama.
+ {const jp=plainT(joinedText),exp:Change[]=[...conv.changes,...(conv.interim??[])],cr=exp.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create')
+  if(/\b(aggiung\w*|inseri\w*|nuov[oa])\b/.test(jp)&&cr.length&&cr.every(c=>!jp.includes(plainT(c.name).split(' ').slice(-1)[0]!))&&!(d.intent==='change'&&(d.actions??[]).some((a:any)=>a.action==='create_item'))){const n=spoken(joinedText)[0]??null;d={...d,intent:'clarify',actions:[{action:'create_item',name:null,price:n,section:null}],clarify:{question:null,item_refs:[],missing:['name']},reply_draft:'Come si chiama il piatto nuovo?'}}}
+ // Aggiunta incompleta: il piano porta i campi già noti del piatto nuovo (il server li tiene in sospeso).
+ if(d.intent==='clarify'&&d.clarify?.missing?.length&&!(d.actions??[]).some((a:any)=>a.action==='create_item')){const exp:Change[]=[...conv.changes,...(conv.interim??[])],jp=plainT(joinedText),creates=exp.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&jp.includes(plainT(c.name).split(' ').slice(-1)[0]!))
+  d.actions=creates.map(c=>({action:'create_item',name:c.name,price:spoken(joinedText).includes(c.price)?c.price:null,section:c.section?cat.sections.get(c.section)??[...cat.sections].find(([k])=>plainT(k)===plainT(c.section!))?.[1]??null:null}))}
+ // Prezzi detti uguali a quelli di oggi («l'acqua 2 e 50 e la birra media 5» con la birra già a 5): il modello letterale li
+ // scrive comunque (il server li riconosce come «nessuna modifica»).
+ if(d.intent==='change'&&(d.actions??[]).length&&(d.actions as any[]).every(a=>a.action==='set_price')){for(const part of msg.split(/,|;|\s+e\s+(?=(?:il|la|lo|l|i|gli|le)\b)/)){const full=[...cat.code.keys()].filter(n=>(' '+plainT(part)+' ').includes(' '+plainT(n)+' ')),ns=full.length?full:[...cat.code.keys()].filter(n=>hitStems(n,part).length>0),v=spoken(part)
+   if(ns.length===1&&v.length===1&&cat.price.get(ns[0]!)===v[0]&&!(d.actions as any[]).some(a=>a.item===cat.code.get(ns[0]!)))d.actions.push({action:'set_price',item:cat.code.get(ns[0]!),price:v[0]})}}
+ // Un'azione su un piatto indicato solo da una parola che hanno più piatti («nascondi la pasta»): il modello ideale chiede.
+ if(d.intent==='change'&&(d.actions??[]).length===1){const a=d.actions[0],n=nameOf(cat,a.item);if(n&&!(' '+p+' ').includes(' '+plainT(n)+' ')){const names=[...cat.code.keys()],hit=hitStems(n,msg),g=p.split(' ').find(w=>w.length>=4&&names.filter(x=>plainT(x).split(' ').includes(w)).length>=2)
+   if(g&&hit.length<=1&&plainT(n).split(' ').includes(g)&&!names.some(x=>x!==n&&hitStems(x,msg).length>hit.length)){const pool=names.filter(x=>plainT(x).split(' ').includes(g)).slice(0,8);d={...d,intent:'clarify',clarify:{question:null,item_refs:pool.map(x=>cat.code.get(x)),missing:[]},reply_draft:'Quale intendi?'}}}}
+ if(d.intent==='read'&&/\bnascost\w*\b/.test(p))d={...d,read:'hidden',item_refs:[]}
+ else if(d.intent==='read'&&/\b(finit\w*|esaurit\w*|terminat\w*)\b/.test(p)&&/^(?:cosa|che|quali|quale|c e)\b/.test(p))d={...d,read:'unavailable',item_refs:[]}
+ else if(d.intent==='capability'&&/\b(finit\w*|esaurit\w*)\b/.test(p)&&/\?/.test(msg))d={...d,intent:'read',read:'unavailable',item_refs:[],capability_ids:[]}
+ // Parola generica che indica più piatti («la pasta a 10», «nascondi la pasta»): il modello ideale chiede quale, con i candidati.
+ if(d.intent==='clarify'&&!(d.clarify?.item_refs??[]).length&&!(d.clarify?.missing??[]).length){const names=[...cat.code.keys()],g=p.split(' ').filter(w=>w.length>=4).find(w=>names.filter(n=>plainT(n).split(' ').includes(w)).length>=2)
+  if(g){const pool=names.filter(n=>plainT(n).split(' ').includes(g)).slice(0,8),num=spoken(msg)[0]??null,a=num!==null?{action:'set_price',item:cat.code.get(pool[0]!),price:num}:/nascond|togli|lev/.test(p)?{action:'set_hidden',item:cat.code.get(pool[0]!),value:true}:/finit|esaurit/.test(p)?{action:'set_available',item:cat.code.get(pool[0]!),value:false}:null
+   d={...d,clarify:{question:null,item_refs:pool.map(n=>cat.code.get(n)),missing:[]},actions:a?[a]:[],reply_draft:'Quale intendi?'}}}
+ // Piatto del giorno: lo strumento giusto è create_daily_special (senza prezzo: lo chiede).
+ {const jt=plainT(joinedText);if(/\b(piatto del giorno|speciale del giorno)\b|\bfuori menu (?:oggi|di oggi)\b|^(?:oggi )?fuori menu\b/.test(jt)){const sp=oneSpecial([...conv.changes,...(conv.interim??[])].filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&jt.includes(plainT(c.name).split(' ').slice(-1)[0]!)),spoken(msg))
+  if(sp&&spoken(msg).includes(sp.price))d={...d,intent:'change',actions:[{action:'create_daily_special',name:sp.name,price:sp.price}],clarify:{question:null,item_refs:[],missing:[]},reply_draft:''}
+  else if(sp&&!spoken(joinedText).length)d={...d,intent:'clarify',actions:[],clarify:{question:null,item_refs:[],missing:['price']},reply_draft:`Quanto costa ${sp.name}?`}}}
+ // Saluto in testa a un comando («ciao, vorrei aggiungere…»): non è chiacchiera.
+ if(d.intent==='chat'&&/^(?:ciao|buongiorno|buonasera|salve|grazie)\b/.test(p)&&p.split(' ').length>3){const rest=msg.replace(/^\s*\S+[\s,!.]*/,'');const d2=JSON.parse(brainOracle(conv,{...body,messages:[...msgs.slice(0,-1),{role:'user',content:(head?head+'\nMESSAGGIO\n':'MESSAGGIO\n')+rest}]})!);if(d2.intent!=='chat')return JSON.stringify(d2)}
+ d.actions=(d.actions??[]).map((a:any)=>({...blank,...a}))
+ return JSON.stringify(withDraft(d,cat,p,sectionNames))}

@@ -43,7 +43,7 @@ const VERBS:[RegExp,Kind[]][]=[
  [/^(?:elimin|cancell)\w*$/,['delete']],
  [/^rimuov\w*$/,['delete','hidden']],
  [/^nascond\w*$/,['hidden']],
- [/^(?:togli|tolg|tolt|lev)\w*$/,['hidden','price','featured','delete','tag','promo']],
+ [/^(?:togli|tolg|tolt|lev)\w*$/,['hidden','price','featured','delete','tag','promo','scarcity']],
  [/^(?:rimett|mostr|riattiv)\w*$/,['hidden','available','featured','price','restore' as Kind]],
  [/^(?:finit|esaurit|fernut|terminat|finid|finia)\w*$/,['available','hidden']],
  [/^(?:tornat|torna|disponibil)\w*$/,['available','price','hidden']],
@@ -56,7 +56,9 @@ const VERBS:[RegExp,Kind[]][]=[
  [/^(?:promo|offert|scont)\w*$/,['promo','price']],
  [/^descrizion\w*$/,['description']],
  // Etichette e scarsità (percorso vendite, grammatica sua): «ultime porzioni», «piccante», «solo oggi», «etichette».
+ [/^porzione$/,['price','tag','scarcity','promo']],
  [/^(?:etichett|porzion|ultim|piccant|vegan|vegetarian|glutin|celiac|consigliat|novita|scarsit|limitat|bollin)\w*$/,['tag','scarcity','promo']],
+
  [/^(?:passa|passano|passare|passal[ao]|sale|salire|salgono|scende|scendere|scendono)$/,['price']],
  // Verbi generici: «metti», «porta», «cambia», «imposta», «segna», «fai», «va»: qualunque azione capita.
  [/^(?:mett\w*|port[aio]\w*|cambi\w*|impost\w*|segn[aio]\w*|fa|fai|fare|fall[aoie]|vanno|va|diventa|diventano|deve|devono|lascia\w*|lasci|tien[ie]\w*|teng[oa]\w*)$/,['any']],

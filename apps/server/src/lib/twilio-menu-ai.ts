@@ -88,7 +88,9 @@ export function g9Prices(message:string,cents=true):number[]{
 const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;const r=relativeDelta(message);if(current!==undefined&&r)return Math.abs(price-(current+r.delta))<0.005;return false}
 const finishWords=/\b(?:finit\w*|esaurit\w*|fernut\w*|finid\w*|finia|terminat\w*|non c e piu|non ce piu|nun ce sta|un c e piu|non abbiamo piu|non ce n e piu)\b/
 const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
-export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[],verbText?:string}={}):MenuPlan{
+export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[],verbText?:string,
+ /** Fase R: categoria nuova anche senza la parola «categoria» (il route chiede sempre il «sì» al titolare). */
+ implicitSections?:boolean}={}):MenuPlan{
  const data=parseJson(raw),sections=opts.sections??[],message=opts.message??'';if(!data||typeof data!=='object'||Array.isArray(data))return clarify()
  const byId=new Map(refs.map(r=>[r.id,r])),sectionIds=new Set(sections.map(s=>s.id)),known=(ids:unknown)=>Array.isArray(ids)?ids.filter((id):id is string=>typeof id==='string'&&byId.has(id)):[]
  if(data.intent==='capability'){const ids=Array.isArray(data.capability_ids)?data.capability_ids.filter((id:unknown):id is string=>typeof id==='string'&&(id==='all'||capabilities.some(c=>c.id===id))):[];const chosen=ids.length?[...new Set(ids)].slice(0,4) as string[]:[];return{type:'capability',ids:chosen.length&&!chosen.every(id=>id==='other')?chosen:capabilityHint(message)}}
@@ -103,7 +105,7 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
  // Verbi e nomi nuovi della struttura solo dal messaggio di ADESSO (mai dalla cronologia: «rinomina» detto prima non vale ora).
  const vt=opts.verbText??message,pm=plain(vt),newSecs=new Map<string,string>()
  for(const a of data.actions){if(!a||typeof a!=='object'||a.action!=='create_section')continue;const name=cleanText(a.name,120)
-  if(!name||!verbatim(name,vt)||!(SECTION_WORD.test(pm)||/\b(?:cre\w*|nuov[ao])\b/.test(pm)))return clarify(valid)
+  if(!name||!verbatim(name,vt)||!(SECTION_WORD.test(pm)||/\b(?:cre\w*|nuov[ao])\b/.test(pm)||opts.implicitSections))return clarify(valid)
   const ex=sections.find(x=>sameSection(x.name,name));if(ex){newSecs.set(plain(name),ex.id);continue};if(newSecs.has(plain(name)))continue
   const id=randomUUID();newSecs.set(plain(name),id);actions.push({kind:'create_section',newSectionId:id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1),menuId:''})}
  const secByName=(v:unknown)=>{const n=cleanText(v,120);if(!n)return null;const ex=sections.find(x=>sameSection(x.name,n));if(ex)return ex.id;for(const [k,id] of newSecs)if(sameSection(k,n))return id;return null}
@@ -121,7 +123,7 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
    // le altre parti della richiesta restano (prima la richiesta intera diventava «c'è già»).
    if(a.action==='create_item'){const twin=refs.find(r=>r.sectionId===a.section_id&&plain(r.name)===plain(name));if(twin){twins++;lastTwin=twin.id;if(Math.abs(twin.price-price)>=0.005&&!seen.has(twin.id+'set_price')){seen.add(twin.id+'set_price');actions.push({kind:'price',id:twin.id,price})}continue};actions.push({kind:'create',sectionId:a.section_id,name,price,description:extra})}else actions.push({kind:'special',name,price,description:extra});continue}
   if(typeof a.item_id!=='string'||!byId.has(a.item_id))return clarify(valid);if(!opts.trustedIds?.has(a.item_id)&&!g9DishMentioned(byId.get(a.item_id)!.name,message,refs))return clarify(valid);const key=a.item_id+a.action+(a.tag??'');if(seen.has(key))return clarify(valid);seen.add(key)
-  if(a.action==='delete_item'){if(!DELETE_VERB.test(pm))return clarify(valid);actions.push({kind:'delete',id:a.item_id});continue}
+  if(a.action==='delete_item'){if(!DELETE_VERB.test(pm)&&!pm.split(' ').some(w=>['elimina','eliminare','eliminalo','eliminala','eliminali','cancella','cancellare','cancellalo','cancellala','cancellali'].some(f=>g9Near(w,f))))return clarify(valid);actions.push({kind:'delete',id:a.item_id});continue}
   if(a.action==='rename_item'){const name=cleanText(a.name,300);if(!name||!verbatim(name,vt)||!RENAME_VERB.test(pm)||plain(name)===plain(byId.get(a.item_id)!.name)||refs.some(r=>r.id!==a.item_id&&plain(r.name)===plain(name)))return clarify(valid);actions.push({kind:'rename',id:a.item_id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)});continue}
   if(a.action==='move_item'){if(!okSection(a.section_id)||!(MOVE_VERB.test(pm)||/\b(?:metti\w*|mettil\w*|mettel\w*|aggiung\w*|mettici)\b/.test(pm)))return clarify(valid);actions.push({kind:'move',id:a.item_id,sectionId:a.section_id});continue}
   if(a.action==='set_price'){const price=priceOf(a.price);if(price===null||!g9Said(price,message,byId.get(a.item_id)!.price))return clarify(valid);actions.push({kind:'price',id:a.item_id,price})}

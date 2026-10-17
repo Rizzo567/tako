@@ -9,19 +9,21 @@ import {withoutQuantities,relativeDelta} from '../../../apps/server/src/lib/twil
 import {deixisReferents,mixedMessage} from '../../../apps/server/src/lib/owner-brain-plan.js'
 import {DELETE_VERB} from '../../../apps/server/src/lib/twilio-menu-structure.js'
 import {phoneticHits} from '../../../apps/server/src/lib/twilio-menu-phonetic.js'
+import {politeCommand} from '../../../apps/server/src/lib/twilio-menu-nlu.js'
+import {politeRequest} from '../../../apps/server/src/lib/owner-brain-r.js'
 // Correzioni A (17/10): il modello ideale non legge le quantità come prezzi («quei due», «tutti e tre», «in una categoria»).
-const spoken=(t:string)=>spokenRaw(withoutQuantities(t))
+export const spoken=(t:string)=>spokenRaw(withoutQuantities(t))
 import type {Change,Conversation} from '../types.js'
 
 const GENERIC=new Set(['alla','allo','alle','della','dello','delle','con','pasta','pizza','piatto','casa'])
 const stems=(name:string)=>plainT(name).split(' ').filter(w=>w.length>3&&!GENERIC.has(w))
 const skel=(w:string)=>w.replace(/[aeiou]/g,'')
 const wordHit=(w:string,msg:string[])=>msg.some(m=>m===w||(m.length>=6&&w.length>=6?m.slice(0,6)===w.slice(0,6):m.length>=4&&w.length>=4&&m.slice(0,5)===w.slice(0,5))||(skel(m).length>=3&&skel(m)===skel(w)))
-const hitStems=(name:string,msg:string)=>{const m=plainT(msg).split(' ');return stems(name).filter(w=>wordHit(w,m))}
+export const hitStems=(name:string,msg:string)=>{const m=plainT(msg).split(' ');return stems(name).filter(w=>wordHit(w,m))}
 const rivals=(dish:string,msg:string,names:string[])=>{const hit=hitStems(dish,msg),all=stems(dish);if(!hit.length||hit.length===all.length)return[];return names.filter(n=>n!==dish&&hit.every(w=>stems(n).some(x=>wordHit(w,[x])))&&hitStems(n,msg).length<=hit.length)}
 
-type Cat={code:Map<string,string>,price:Map<string,number>,sections:Map<string,string>,sectionOf:Map<string,string>}
-function catalog(card:string):Cat{const code=new Map<string,string>(),price=new Map<string,number>(),sections=new Map<string,string>(),sectionOf=new Map<string,string>();let sec=''
+export type Cat={code:Map<string,string>,price:Map<string,number>,sections:Map<string,string>,sectionOf:Map<string,string>}
+export function catalog(card:string):Cat{const code=new Map<string,string>(),price=new Map<string,number>(),sections=new Map<string,string>(),sectionOf=new Map<string,string>();let sec=''
  for(const line of card.split('\n')){const s=line.match(/^# (c\d+) (.+?)(?: \(.+\))?$/);if(s){sections.set(s[2]!,s[1]!);sec=s[2]!;continue}
   const p=line.match(/^(p\d+)\|([^|]+)\|([\d.]+)/);if(p){code.set(p[2]!,p[1]!);price.set(p[2]!,Number(p[3]));sectionOf.set(p[2]!,sec)}}
  return{code,price,sections,sectionOf}}
@@ -37,11 +39,18 @@ const ORD:[RegExp,number][]=[[/\b(prim[oa]|1)\b/,0],[/\b(second[oa]|2)\b/,1],[/\
 
 // Una categoria nuova si usa solo se il messaggio la nomina (il modello letterale non anticipa le richieste dopo).
 let literal=(_n:string)=>true
+// Fase R: la categoria di un piatto nuovo vale solo se detta (o se il menu ne ha una sola): altrimenti il modello ideale chiede.
+let secSaid=(_n:string)=>true
+// Fase R: attese finali + intermedie possono avere lo stesso piatto due volte (11 poi «anzi 12»): uno solo, quello col prezzo detto.
+const oneByName=<T extends {name:string,price:number}>(cs:T[],said:number[])=>{const m=new Map<string,T>();for(const c of cs){const k=plainT(c.name),o=m.get(k);if(!o||(!said.includes(o.price)&&said.includes(c.price)))m.set(k,c)}return[...m.values()]}
+let sectionAnswer:string|null=null
+export const setSectionAnswer=(x:string|null)=>{sectionAnswer=x}
+const otherSection=(p:string,secs:string[])=>[...p.matchAll(/\b(?:nei|negli|nelle|tra i|tra gli|tra le|fra i|fra gli|fra le|categoria|sezione)\s+([a-z]+)/g)].some(m=>m[1]!.length>=3&&!['che','si','nuova','nuovo','piu','di'].includes(m[1]!)&&!secs.some(x=>plainT(x).split(' ')[0]!.slice(0,5)===m[1]!.slice(0,5)))
 // A7.7: con una differenza detta il modello ideale manda price_delta, mai il numero come prezzo.
 let relDelta:number|null=null
 function act(c:Change,cat:Cat,price:number|null,ref:string|null):any{const item=c.op==='create'?null:cat.code.get(c.dish)??null
  const secCode=(n:string)=>cat.sections.get(n)??[...cat.sections].find(([k])=>plainT(k)===plainT(n))?.[1]??null
- switch(c.op){case 'create':return{action:'create_item',section:c.section?secCode(c.section)??(literal(c.section)?c.section:null):null,name:c.name,price:c.price}
+ switch(c.op){case 'create':return{action:'create_item',section:c.section&&secSaid(c.section)?secCode(c.section)??(literal(c.section)?c.section:null):null,name:c.name,price:c.price}
   // Fase B (17/10): struttura del menu; una categoria che non c'è va per nome (il server la crea con create_section).
   case 'delete':return{action:'delete_item',item}
   case 'rename':return{action:'rename_item',item,name:c.name}
@@ -55,7 +64,7 @@ function act(c:Change,cat:Cat,price:number|null,ref:string|null):any{const item=
   case 'description':return{action:'set_description',item,text:c.text}}}
 
 /** Risposta JSON del modello ideale alla richiesta del cervello, o null se la richiesta non è del cervello. */
-export function brainOracle(conv:Conversation|null,body:any):string|null{
+export function brainOracleBase(conv:Conversation|null,body:any):string|null{
  const fmt=body?.response_format?.json_schema?.name
  if(fmt==='memory_judge')return JSON.stringify({useful:true,kind:'alias'})
  if(fmt!=='owner_brain_plan')return null
@@ -65,7 +74,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  const hist=msgs.slice(2,-1),owners=hist.filter(m=>m.role==='user').map(m=>m.content),bot=[...hist].reverse().find(m=>m.role==='assistant')?.content??''
 
  const names=[...cat.code.keys()],expected=[...conv.changes,...(conv.interim??[])]
- literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');relDelta=relativeDelta(msg)?.delta??null
+ literal=(n:string)=>(' '+p+' ').includes(' '+plainT(n)+' ');secSaid=(n:string)=>plainT(n).split(' ').filter(w=>w.length>=4).some(w=>new RegExp(`\\b(?:un|una|uno)\\s+${w.slice(0,4)}`).test(p))||!!sectionAnswer&&plainT(n).slice(0,5)===sectionAnswer.slice(0,5)||cat.sections.size===1&&!otherSection(p,[...cat.sections.keys()])||plainT(n).split(' ').filter(w=>w.length>=4).some(w=>new RegExp(`\\b(?:nei|negli|nelle|nel|nella|tra|fra|in|categoria|sezione|ai|agli|alle)\\s+(?:i\\s+|gli\\s+|le\\s+|la\\s+|il\\s+|l\\s+)?${w.slice(0,5)}`).test(p));relDelta=relativeDelta(msg)?.delta??null
  // Struttura (fase B): categorie, spostamenti, anche dei piatti appena creati che ora vanno altrove.
  // A8 (Y, M3): anche senza «sposta» («metti la carbonara nei secondi a 14») se il messaggio nomina la categoria di arrivo attesa;
  // con lo spostamento il modello ideale fa anche le altre modifiche dette sui piatti del messaggio (prezzo detto, nascondi…).
@@ -101,7 +110,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   if(acts.length){const qp=plainT(mixed.question);return out({intent:'change',actions:acts,read:/finit|esaurit/.test(qp)?'unavailable':/nascost/.test(qp)?'hidden':'items',item_refs:[...new Set(mentionedIn(mixed.question))].map(n=>cat.code.get(n)!)})}}}
  // Domanda: mai scrivere. «che nesac costa 16» non è una domanda: «che» è l'inizio del nome Che ne sacc.
  const dishLead=!/\?/.test(msg)&&/^che\b/.test(p)&&names.some(n=>/^che\b/.test(plainT(n)))
- if((QUESTION.test(p)&&!dishLead)||/\?/.test(msg)){const ids=(here.length?here:lastOwnerDishes).map(n=>cat.code.get(n)!);return out({intent:ids.length?'read':'capability',read:ids.length?'items':'none',item_refs:ids,capability_ids:ids.length?[]:['all']})}
+ if(((QUESTION.test(p)&&!dishLead)||/\?/.test(msg))&&!politeCommand(msg)&&!politeRequest(msg)){const ids=(here.length?here:lastOwnerDishes).map(n=>cat.code.get(n)!);return out({intent:ids.length?'read':'capability',read:ids.length?'items':'none',item_refs:ids,capability_ids:ids.length?[]:['all']})}
  if(/^(grazie|ok grazie|perfetto|ciao|buongiorno)\b/.test(p))return out({intent:'chat',reply_draft:'Di nulla.'})
  // Scelta tra opzioni mostrate: ordinale, «tutti e due», o il nome di una delle opzioni.
  if(listed.length>1){const all=/\b(tutt[ie]|entramb\w*)\b/.test(p),ord=ORD.find(([re])=>re.test(p)),byName=listed.filter(n=>hitStems(n,msg).length>0),other=/\b(altr[oa])\b/.test(p)
@@ -113,11 +122,11 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    if(acts.length)return out({actions:acts})}}
  // Creazioni prima di tutto (correzioni A 17/10): «aggiungi pasta al pesto a 15» non è una parola generica «pasta» da chiarire.
  // Insieme alle creazioni, le altre attese sui piatti nominati con il loro prezzo detto («aggiungi pasta al ragù a 10» = prezzo).
- {const creates=expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!))
-  if(creates.length&&/aggiung|inserisc|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}})
+ {const creates=oneByName(expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!)),said)
+  if(creates.length&&/aggiung|inseri|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section||!secSaid(c.section)?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}})
    const more=here.flatMap(n=>expected.filter(c=>c.op==='price'&&c.dish===n&&said.includes((c as any).price)).map(c=>act(c,cat,(c as any).price,null)))
    // «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: il modello letterale la mette tra le creazioni (il server la riconosce).
-   for(const n of here)if(!expected.some(c=>c.op!=='create'&&c.dish===n)){const m=p.match(new RegExp(plainT(n)+' (?:a )?(\\d+)'));if(m)more.push({action:'create_item',section:[...cat.sections.values()][0]??null,name:n,price:Number(m[1])})}
+   for(const n of here)if(!expected.some(c=>c.op!=='create'&&c.dish===n)&&!creates.some(c=>plainT(c.name)!==plainT(n)&&plainT(c.name).includes(plainT(n)))){const m=p.match(new RegExp(plainT(n)+' (?:a )?(\\d+)'));if(m)more.push({action:'create_item',section:[...cat.sections.values()][0]??null,name:n,price:Number(m[1])})}
    return out({actions:[...creates.map(c=>act(c,cat,null,null)),...more]})}}
  // Piatti ambigui nel messaggio → chiarimento con l'azione capita.
  const amb=names.filter(n=>hitStems(n,msg).length>0&&rivalsOf(n,msg).length>0&&!here.includes(n))
@@ -129,8 +138,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   const price=said[0]??null,promo=/\b(promo\w*|offert\w*)\b/.test(p),a=price!==null?{action:promo?'set_promo':'set_price',item:cat.code.get(pool[0]!),price}:/finit|esaurit|fernut/.test(p)?{action:'set_available',item:cat.code.get(pool[0]!),value:false}:/nascond|togli|lev/.test(p)?{action:'set_hidden',item:cat.code.get(pool[0]!),value:true}:null
   return out({intent:'clarify',clarify:{question:'Quale intendi?',item_refs:pool.slice(0,8).map(n=>cat.code.get(n)!),missing:[]},actions:a?[a]:[]})}
  // Creazioni come currentOracle.
- const creates=expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!))
- if(creates.length&&/aggiung|inserisc|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}});return out({actions:creates.map(c=>act(c,cat,null,null))})}
+ const creates=oneByName(expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!)),said)
+ if(creates.length&&/aggiung|inseri|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section||!secSaid(c.section)?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}});return out({actions:creates.map(c=>act(c,cat,null,null))})}
  const botLabel=[...bot.matchAll(/\*([^*\n]{2,80})\*\s*:/g)].map(m=>m[1]!).find(n=>cat.code.has(n))
  const ctxDish=botLabel&&!/\?/.test(bot)?botLabel:lastOwnerDishes.find(n=>expected.some(c=>c.op!=='create'&&c.dish===n))??lastOwnerDishes[0]
  const actions:any[]=[]
@@ -176,3 +185,6 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // Comando esplicito su un piatto nominato senza attese (correzioni A): il modello ideale fa quello che dice il verbo.
  if(!actions.length&&here.length===1&&!said.length&&!/\b(?:non|nun|un|nu)\s+(?:\w+\s+)?(?:finit|esaurit|fernut|nascond|togli|lev|rimett)/.test(p)){const n=here[0]!,code=cat.code.get(n),a=/\b(rimett\w*|mostra\w*|fallo vedere)\b/.test(p)?{action:'set_hidden',item:code,value:false}:/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)&&!/evidenza|promo/.test(p)?{action:'set_hidden',item:code,value:true}:/\b(finit\w*|esaurit\w*)\b/.test(p)?{action:'set_available',item:code,value:false}:/\b(tornat\w*|di nuovo disponibil\w*)\b/.test(p)?{action:'set_available',item:code,value:true}:null;if(a)actions.push(a)}
  return actions.length?out({actions,uncertain}):out({intent:'clarify'})}
+
+// Fase R: il modello ideale con gli strumenti nuovi (conferma, scarta, annulla) e la bozza della risposta.
+export {brainOracle} from './brain-oracle-r.js'
