@@ -99,7 +99,7 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
    const guess=removalGuess(p,refs);if(guess){uncertain++;ask=guessAsk(p,guess);continue}
    const c=parseCreate(p,sections,false);if(!c||!c.name||/\b(?:euro|costa|costano|aggiung\w*|togli\w*|nascond\w*|finit\w*|esaurit\w*)\b/i.test(c.name)||c.name.length>80){if(unclearPart(p))continue;return null}
    // Il piatto c'è già in quella categoria (QA 17/10: «la parmigiana» aggiunta da un vocale precedente): non si raddoppia, lo si dice.
-   const name=c.name,twin=refs.find(r=>r.sectionId===sectionId&&holdBare(r.name)===holdBare(name));if(twin){exists.push(twin);continue}
+   const name=c.name,twin=refs.find(r=>r.sectionId===sectionId&&holdBare(r.name)===holdBare(name));if(twin){if(c.price!==null&&Math.abs(c.price-twin.price)>=0.005){clear.push({kind:'price',id:twin.id,price:c.price});commands++;continue}exists.push(twin);continue}
    if(c.price===null){uncertain++;ask={type:'price',name,sectionId};asks.push(ask);continue}
    clear.push({kind:'create',sectionId,name,price:c.price,description:null})}
   // Tutto chiaro: con un comando dentro l'aggiunta si applica qui (prima il nome diventava «Parmigiana e togli boh»),

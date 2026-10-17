@@ -427,7 +427,7 @@
     "la carbonara 13 o 14 e la lasagna 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *Spaghetti alla carbonara* hai scritto due prezzi: *13* o *14*. Riscrivimi la richiesta con un solo prezzo. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *Spaghetti alla carbonara* hai scritto due prezzi: *13* o *14*? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -443,7 +443,7 @@
     "metti la lasagna a 12 e la carbonara a 13 o 14"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *Spaghetti alla carbonara* hai scritto due prezzi: *13* o *14*. Riscrivimi la richiesta con un solo prezzo. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *Spaghetti alla carbonara* hai scritto due prezzi: *13* o *14*? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -458,7 +458,7 @@
     "gli spaghetti 13 o 14"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *13* o *14*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *13* o *14*? E per quale piatto? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -474,7 +474,7 @@
     "13 o 14?"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *13* o *14*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *13* o *14*? E per quale piatto? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -561,7 +561,7 @@
     "metti la carbonara a 13, la lasagna a 12 o 13"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *12* o *13*? Riscrivimi la richiesta con il nome del piatto e un solo prezzo. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale prezzo vuoi: *12* o *13*? E per quale piatto? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -779,7 +779,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
-    "Per *Spaghetti alla carbonara* rispondi *13* o *14*, oppure riscrivi la richiesta. Non ho cambiato nulla."
+    "Per *Spaghetti alla carbonara* rispondi *13* o *14*. Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -855,7 +855,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Cosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -913,7 +913,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara* ora costa *12,00 €*. Se vuoi cambiarlo, quale prezzo: *13* o *14*? Non ho cambiato nulla.",
-    "Per *Spaghetti alla carbonara* rispondi *13* o *14*, oppure riscrivi la richiesta. Non ho cambiato nulla."
+    "Per *Spaghetti alla carbonara* rispondi *13* o *14*. Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -1043,7 +1043,7 @@
     "gnocchi 4 formaggi 11"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "price|Gnocchi 4 formaggi|11"
@@ -1337,7 +1337,7 @@
     "non cambiare niente"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -1763,7 +1763,7 @@
     "non cambiare il prezzo del piatto di verifica, mettilo in promo a 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "promo|Piatto di verifica|12"
@@ -1844,7 +1844,7 @@
     "tranne la lasagna"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -2002,7 +2002,7 @@
     "non cambiare la carbonara, mettila a 13"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -2138,7 +2138,7 @@
     "non cambiare boh, mettilo a 25"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -2200,7 +2200,7 @@
     "🎤 non toccare boh e mettilo a venticinque"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -2336,7 +2336,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*Piatto di verifica* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+    "*Piatto di verifica* non è tra i piatti che ti ho proposto, quindi non ho cambiato nulla. Dimmi il piatto e cosa cambiare."
    ],
    "expected": [],
    "actual": [],
@@ -2353,7 +2353,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*Tagliata di manzo* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+    "*Tagliata di manzo* non è tra i piatti che ti ho proposto, quindi non ho cambiato nulla. Dimmi il piatto e cosa cambiare."
    ],
    "expected": [],
    "actual": [],
@@ -2370,7 +2370,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*5* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+    "*5* non è tra i piatti che ti ho proposto, quindi non ho cambiato nulla. Dimmi il piatto e cosa cambiare."
    ],
    "expected": [],
    "actual": [],
@@ -2467,7 +2467,7 @@
     "il tiramisù"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*Tiramisù*: *5,00 €* · disponibile"
    ],
    "expected": [
@@ -2547,8 +2547,8 @@
     "1"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Cosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "price|Tiramisù|6"
@@ -2625,7 +2625,7 @@
     "la panna cotta"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*Panna cotta*: *5,00 €* · disponibile"
    ],
    "expected": [
@@ -2664,7 +2664,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Tiramisù*\n2. *Panna cotta*\n\nRispondi con il *numero* o il *nome*.",
-    "*Tagliata di manzo* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+    "*Tagliata di manzo* non è tra i piatti che ti ho proposto, quindi non ho cambiato nulla. Dimmi il piatto e cosa cambiare."
    ],
    "expected": [],
    "actual": [],
@@ -2697,7 +2697,7 @@
     "la tagliata"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*Tagliata di manzo*: *18,00 €* · disponibile"
    ],
    "expected": [],
@@ -2765,7 +2765,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
    ],
    "expected": [],
@@ -2836,8 +2836,8 @@
     "1"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
-    "Non ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
+    "Cosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -2913,7 +2913,7 @@
     "Piatto di verifica"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*Piatto di verifica*: *14,00 €* · disponibile"
    ],
    "expected": [
@@ -2993,7 +2993,7 @@
     "boh"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*boh*: *20,00 €* · disponibile"
    ],
    "expected": [
@@ -3071,7 +3071,7 @@
     "🎤 piatto di verifica"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*Piatto di verifica*: *14,00 €* · disponibile"
    ],
    "expected": [
@@ -3174,7 +3174,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Tiramisù*\n2. *Panna cotta*\n3. *Dolce del giorno*\n\nRispondi con il *numero* o il *nome*.",
-    "Rispondi con il *numero* o il *nome* del piatto, oppure riscrivi la richiesta completa. Non ho cambiato nulla."
+    "Rispondi con il *numero* o il *nome* del piatto. Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],
@@ -3365,7 +3365,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*il terzo* non è tra i piatti che ti ho proposto. Riscrivimi la richiesta completa con il nome del piatto. Non ho cambiato nulla."
+    "*il terzo* non è tra i piatti che ti ho proposto, quindi non ho cambiato nulla. Dimmi il piatto e cosa cambiare."
    ],
    "expected": [],
    "actual": [],
@@ -4355,7 +4355,7 @@
     "non è finito il piatto di verifica"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [],
    "actual": [],

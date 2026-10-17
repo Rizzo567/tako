@@ -6,7 +6,7 @@
 import {plainT} from '../judge.js'
 import {spoken as spokenRaw} from './current-oracle.js'
 import {withoutQuantities} from '../../../apps/server/src/lib/twilio-menu-ai.js'
-import {deixisReferents} from '../../../apps/server/src/lib/owner-brain-plan.js'
+import {deixisReferents,mixedMessage} from '../../../apps/server/src/lib/owner-brain-plan.js'
 // Correzioni A (17/10): il modello ideale non legge le quantità come prezzi («quei due», «tutti e tre», «in una categoria»).
 const spoken=(t:string)=>spokenRaw(withoutQuantities(t))
 import type {Change,Conversation} from '../types.js'
@@ -67,6 +67,10 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  const rivalsOf=(n:string,t:string)=>rivals(n,t,names)
  const here=[...new Set(mentionedIn(msg))]
  const lastOwnerDishes=(()=>{for(const o of [...owners].reverse()){const d=[...new Set(mentionedIn(o))];if(d.length)return d}return[] as string[]})()
+ // Misto (correzioni A): modifica + domanda → le azioni della parte di modifica e la lettura per la domanda.
+ {const mixed=mixedMessage(msg);if(mixed){const inCmd=[...new Set(mentionedIn(mixed.command))],targets=inCmd.length?inCmd:[...new Set(mentionedIn(mixed.question))],sp=spoken(mixed.command),acts:any[]=[]
+  for(const n of targets){const e=expected.find(c=>c.op!=='create'&&c.dish===n);if(!e)continue;const a=act(e,cat,e.op==='price'?(sp.includes((e as any).price)?(e as any).price:null):null,null);if(a)acts.push(a)}
+  if(acts.length){const qp=plainT(mixed.question);return out({intent:'change',actions:acts,read:/finit|esaurit/.test(qp)?'unavailable':/nascost/.test(qp)?'hidden':'items',item_refs:[...new Set(mentionedIn(mixed.question))].map(n=>cat.code.get(n)!)})}}}
  // Domanda: mai scrivere.
  if(QUESTION.test(p)||/\?/.test(msg)){const ids=(here.length?here:lastOwnerDishes).map(n=>cat.code.get(n)!);return out({intent:ids.length?'read':'capability',read:ids.length?'items':'none',item_refs:ids,capability_ids:ids.length?[]:['all']})}
  if(/^(grazie|ok grazie|perfetto|ciao|buongiorno)\b/.test(p))return out({intent:'chat',reply_draft:'Di nulla.'})
@@ -83,6 +87,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  {const creates=expected.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create'&&p.includes(plainT(c.name).split(' ').slice(-1)[0]!))
   if(creates.length&&/aggiung|inserisc|nuov/.test(p)){const miss=creates.flatMap(c=>[...(!c.section?['section']:[]),...(!said.includes(c.price)?['price']:[])]);if(miss.length)return out({intent:'clarify',clarify:{question:null,item_refs:[],missing:[...new Set(miss)]}})
    const more=here.flatMap(n=>expected.filter(c=>c.op==='price'&&c.dish===n&&said.includes((c as any).price)).map(c=>act(c,cat,(c as any).price,null)))
+   // «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: il modello letterale la mette tra le creazioni (il server la riconosce).
+   for(const n of here)if(!expected.some(c=>c.op!=='create'&&c.dish===n)){const m=p.match(new RegExp(plainT(n)+' (?:a )?(\\d+)'));if(m)more.push({action:'create_item',section:[...cat.sections.values()][0]??null,name:n,price:Number(m[1])})}
    return out({actions:[...creates.map(c=>act(c,cat,null,null)),...more]})}}
  // Piatti ambigui nel messaggio → chiarimento con l'azione capita.
  const amb=names.filter(n=>hitStems(n,msg).length>0&&rivalsOf(n,msg).length>0&&!here.includes(n))
@@ -133,4 +139,6 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    const e=expected.find(c=>c.op!=='create'&&pool.includes(c.dish)),phrase=msg.split(/,|\se\s/).find(x=>hitStems(n,x).length>0)?.trim()??n
    const a=e?act(e,cat,e.op==='price'?(e as any).price:null,null):null
    uncertain.push({phrase,candidates:pool.map(x=>cat.code.get(x)),action:a?.action??'none',value:a&&'value' in a?a.value:null,price:a&&typeof a.price==='number'?a.price:null})}}
+ // Comando esplicito su un piatto nominato senza attese (correzioni A): il modello ideale fa quello che dice il verbo.
+ if(!actions.length&&here.length===1&&!said.length&&!/\b(?:non|nun|un|nu)\s+(?:\w+\s+)?(?:finit|esaurit|fernut|nascond|togli|lev|rimett)/.test(p)){const n=here[0]!,code=cat.code.get(n),a=/\b(rimett\w*|mostra\w*|fallo vedere)\b/.test(p)?{action:'set_hidden',item:code,value:false}:/\b(nascond\w*|togli\w*|lev\w*)\b/.test(p)&&!/evidenza|promo/.test(p)?{action:'set_hidden',item:code,value:true}:/\b(finit\w*|esaurit\w*)\b/.test(p)?{action:'set_available',item:code,value:false}:/\b(tornat\w*|di nuovo disponibil\w*)\b/.test(p)?{action:'set_available',item:code,value:true}:null;if(a)actions.push(a)}
  return actions.length?out({actions,uncertain}):out({intent:'clarify'})}

@@ -9,7 +9,7 @@ import {resolveChoice} from './twilio-menu-nlu.js'
 import {allOptions} from './twilio-menu-clarify.js'
 import {botBrainEnabled} from './owner-brain-switch.js'
 import {planOwnerMessage,REFERS,type BrainDecision} from './owner-brain-plan.js'
-import {plain} from './twilio-menu-ai.js'
+import {plain,g9DishMentioned} from './twilio-menu-ai.js'
 import {sqlBrainStore,consolidate,signalsFromTurn,memoryCommand,forget,memoryListText,reconcile,groqMemoryJudge} from './owner-brain-memory.js'
 import type {BrainTurn} from './owner-brain-context.js'
 
@@ -46,7 +46,7 @@ export async function memoryTurn(tx:Exec,tenant:string,text:string,refs:MenuRef[
 const lastBot=(h:BrainTurn[])=>[...h].reverse().find(t=>t.role==='bot')
 const ownerBefore=(h:BrainTurn[],at:number)=>[...h].reverse().find(t=>t.role==='owner'&&t.at<at)
 
-export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null}
+export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?:string[]}
 /** Piano del cervello per un turno. null = riserva (Groq giù, quota, JSON non valido, contesto impossibile). */
 export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null}):Promise<BrainRun|null>{
  const now=o.now??Date.now(),store=sqlBrainStore(db)
@@ -64,7 +64,9 @@ export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurant
  const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,pending:{proposal,clarify,draft},pendingActions:proposal,message:o.text,now},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
  if(process.env.TAKO_BRAIN_DEBUG)dbg('BRAIN',JSON.stringify({text:o.text,history:history.length,decision:decision.path==='brain'?{intent:decision.intent,plan:decision.plan,notes:decision.notes}:decision}))
  if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',reason:decision.reason}));return null}
- return{decision,clarifyIds:choice?.length?choice:null}
+ // A4.5: i piatti di cui si stava parlando (ultimi messaggi del titolare e ultima risposta), per una domanda che li cita.
+ const recentText=[...history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text),bot?.text??''].join(' \n '),recentIds=history.length?o.refs.filter(r=>g9DishMentioned(r.name,recentText,o.refs)).map(r=>r.id).slice(0,3):[]
+ return{decision,clarifyIds:choice?.length?choice:null,recentIds}
 }
 
 /** Cronologia breve: il messaggio del titolare (testo o trascrizione) e la risposta, solo se il cervello è acceso per il locale. */

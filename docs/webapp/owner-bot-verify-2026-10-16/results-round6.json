@@ -792,7 +792,7 @@
     "🎤 Nun ce sta cchiù la lasagna."
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "available|Lasagna al forno|false"
@@ -862,7 +862,7 @@
     "🎤 La diavola è fernuta."
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "available|Diavola|false"
@@ -956,7 +956,7 @@
     "leva la diavola e pure la margherita"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "hidden|Diavola|true",
@@ -1094,7 +1094,7 @@
     "togli la diavola, la lasagna invece è finita"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "hidden|Diavola|true",
@@ -1211,7 +1211,7 @@
     "leva la diavola, la margherita costa 8"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "hidden|Diavola|true",
@@ -2195,7 +2195,7 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
-    "Il menu è cambiato nel frattempo. *Non ho applicato nulla.* Rimandami la richiesta."
+    "Il menu è cambiato nel frattempo, quindi *non ho applicato nulla*. Dimmi di nuovo cosa vuoi cambiare."
    ],
    "expected": [],
    "actual": [],
@@ -2212,7 +2212,7 @@
     "8 euro"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *8,00 €*"
    ],
    "expected": [
@@ -2237,7 +2237,7 @@
     "8"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *8,00 €*"
    ],
    "expected": [
@@ -2262,7 +2262,7 @@
     "🎤 Otto euro."
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *8,00 €*"
    ],
    "expected": [
@@ -2287,7 +2287,7 @@
     "a 8,50"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *8,50 €*"
    ],
    "expected": [
@@ -2312,7 +2312,7 @@
     "5 euro"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n\nQuanto costa *Sbrisolona*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n\nQuanto costa *Sbrisolona*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\nNuovo piatto *Sbrisolona* in *Dolci*: *5,00 €*"
    ],
    "expected": [
@@ -2335,7 +2335,7 @@
     "no"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nNon ho aggiunto *Frittata*."
    ],
    "expected": [
@@ -2358,7 +2358,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Annullato.* Il menu è rimasto invariato."
    ],
    "expected": [],
@@ -2375,7 +2375,7 @@
     "no, togli bo"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Tobia*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Tobia*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n*boh*: *nascosto* dal menu\n\nNon ho aggiunto *Tobia*."
    ],
    "expected": [
@@ -2751,7 +2751,7 @@
     "togli dall'evidenza la tagliata"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "featured|Tagliata di manzo|false"
@@ -2862,7 +2862,7 @@
     "aggiungi tra i primi i tonnarelli a 11 e i tortelli a 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "create|tonnarelli|11|primi",
@@ -2934,7 +2934,7 @@
     "boh, mettiamo la carbonara a 13"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13"
@@ -3022,7 +3022,7 @@
     "la carbonara costa 13 e la lasagna 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "price|Spaghetti alla carbonara|13",
@@ -3210,7 +3210,7 @@
     "rimetti com'era"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "*Non trovo «com era».* Scrivi il nome come appare nel menu."
    ],
    "expected": [],
@@ -3537,7 +3537,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
    ],
    "expected": [],
@@ -3614,7 +3614,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito».",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare.",
     "Non ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
    ],
@@ -3944,7 +3944,7 @@
     "leva la diavola e la margherita"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito cosa cambiare per *Panna cotta*. Scrivimelo in una frase, per esempio «Panna cotta costa 12» oppure «Panna cotta è finito»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
    ],
    "expected": [
     "hidden|Diavola|true",
@@ -4212,7 +4212,7 @@
     "8 euro grazie"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito, *non ancora pubblicato*:\n1. Nuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\n2. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\nQuanto costa *Frittata*? Poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
     "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *10,00 €*\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *8,00 €*"
    ],
    "expected": [

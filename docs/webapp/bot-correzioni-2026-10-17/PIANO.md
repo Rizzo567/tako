@@ -43,12 +43,12 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 - [x] A3.4 Batteria A3 (≥150 frasi) verde. — *F: a3-nomi 156 conv.: 156/156 in tutti e 3 i modi. Banco V fase A falliti 13→10, banco E 294/318 (91,3% multi), 0 GRAVI di sicurezza.*
 
 ### A4. Validatore e copy (MEDI)
-- [ ] A4.1 Una sola categoria → usata senza chiedere (validatore `twilio-menu-ai.ts:58-65`).
-- [ ] A4.2 Via «Rimandami/Riscrivimi la richiesta completa» e gli esempi con prezzi/piatti non detti dalle 6 copy; le domande citano solo ciò che l'utente ha detto.
-- [ ] A4.3 Aggiunte multiple: nessuna parte persa (ragù/pesto/caviale); le parti chiare vanno, le incerte domandate.
-- [ ] A4.4 Messaggi misti modifica + domanda: fa la modifica e risponde alla domanda (`twilio-menu.ts:189`); vocale con due modifiche su due piatti → entrambe.
-- [ ] A4.5 «Non ho una richiesta recente» solo se la cronologia è davvero vuota.
-- [ ] A4.6 Batteria A4 (≥150 frasi) verde.
+- [x] A4.1 Una sola categoria → usata senza chiedere (validatore `twilio-menu-ai.ts:58-65`). — *F: validatore + scheda del cervello; il caso vero delle 17:30 (gpt-oss: create_item con section null) ora crea.*
+- [x] A4.2 Via «Rimandami/Riscrivimi la richiesta completa» e gli esempi con prezzi/piatti non detti dalle 6 copy; le domande citano solo ciò che l'utente ha detto. — *F: 12 copy riscritte (anche brainWhatFor/brainNoContext/holdPrice/alreadyExists/clarifyText con esempi «a 13», «12 euro»); invarianti `frase-fissa` ed `esempio-inventato` nelle batterie.*
+- [x] A4.3 Aggiunte multiple: nessuna parte persa (ragù/pesto/caviale); le parti chiare vanno, le incerte domandate. — *F: «aggiungi X a P» con X già nel menu = prezzo (uguale = lo dice) senza perdere il resto; `missing` dell'IA → bozza come nel deterministico.*
+- [x] A4.4 Messaggi misti modifica + domanda: fa la modifica e risponde alla domanda (`twilio-menu.ts:189`); vocale con due modifiche su due piatti → entrambe. — *F: `mixedMessage` (anche «costa ancora 6? se sì…» con condizione verificata sul menu) + `after` scritto dal server dopo il salvataggio; «la X no» toglie davvero dal riepilogo.*
+- [x] A4.5 «Non ho una richiesta recente» solo se la cronologia è davvero vuota. — *F: con cronologia la domanda cita i piatti recenti (`recentIds`).*
+- [x] A4.6 Batteria A4 (≥150 frasi) verde. — *F: a4-validatore 156: oracolo 156/156, Groq giù/avversario 0 GRAVI di sicurezza. Batterie A1–A4 658/658 sull'oracolo. Banco V fase A falliti 10→3 (restano solo A5), banco E 294/318, multi 91,3%, 0 GRAVI di sicurezza.*
 
 ### A5. Nomi storpiati (ASR)
 - [ ] A5.1 Corrispondenza fonetica/sfocata sui nomi del menu (es. «kenesac»→«Che ne sacc», «Bu»→«boh», «Passa il ragù»→«Pasta al ragù»), solo verso piatti esistenti, con soglia; dubbio → domanda con ipotesi.

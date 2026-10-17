@@ -122,3 +122,32 @@ const OTHER=['torta della nonna','grigliata di carne','crostini misti','verdure 
 for(let i=0;i<16;i++){const [w,s]=pick(SEC,i),n=OTHER[SEC.findIndex(x=>x[1]===s)]!,p=pick([6,16,8,5],i);c('mario',pick([`Inserisce il piatto ${n} ${w} a ${p} euro`,`mi aggiungi per favore ${w} ${n} a ${p}`,`voglio aggiungere ${n} a ${p} ${w}`,`aggiungere ${w} il piatto ${n} che costa ${p} euro`],i),CR(n,p,s))}
 // nome composto con cortesia
 for(let i=0;i<6;i++){const [n,p]=pick([['pasta e fagioli alla napoletana',10],['spaghetti cacio e pepe',11],['tagliatelle burro e salvia',12]] as [string,number][],i);c('mario',pick([`mi aggiungi per favore ${n} a ${p} nei primi`,`Inserisce il piatto ${n} a ${p} euro nei primi`],i),CR(n,p,'Primi'))}
+
+// ===================== A4 · validatore e copy =====================
+fam='a4-validatore'
+// 1. una sola categoria: mai «in quale categoria?»; più piatti nello stesso messaggio, nessuno perso
+const NEW3:[string,number][]=[['pasta al pesto',15],['caviale',150],['lasagna',20],['polpette',9],['trofie al pesto',13],['frittura mista',18],['crespelle',11],['arrosto di vitello',16]]
+for(let i=0;i<16;i++){const a=pick(NEW3,i),b=pick(NEW3,i+3),t=pick([`aggiungi ${a[0]} a ${a[1]}`,`E aggiungi ${a[0]} a ${a[1]} euro.`,`inserisci ${a[0]} a ${a[1]} euro`,`aggiungi il piatto ${a[0]} che costa ${a[1]} euro`],i);c('qa',i%3===0?V(t):t,CR(a[0],a[1],PP));void b}
+for(let i=0;i<16;i++){const a=pick(NEW3,i),b=pick(NEW3,i+2),d=pick(NEW3,i+5),t=pick([`E aggiungi ${a[0]} a ${a[1]} euro, aggiungi ${b[0]} a ${b[1]} euro, aggiungi ${d[0]} a ${d[1]} euro.`,`aggiungi ${a[0]} a ${a[1]}, ${b[0]} a ${b[1]} e ${d[0]} a ${d[1]}`],i);c('qa',i%2===0?V(t):t,[CR(a[0],a[1],PP),CR(b[0],b[1],PP),CR(d[0],d[1],PP)])}
+// piatto già nel menu dentro un'aggiunta multipla: prezzo diverso = cambio di prezzo, uguale = lo dice; le altre parti restano
+for(let i=0;i<12;i++){const a=pick(NEW3,i+1),b=pick(NEW3,i+4),p=pick([10,14,9,11],i),t=`E aggiungi pasta al ragù a ${p} euro, aggiungi ${a[0]} a ${a[1]} euro, aggiungi ${b[0]} a ${b[1]} euro.`;c('qa',i%2?V(t):t,[P('pasta al ragù',p),CR(a[0],a[1],PP),CR(b[0],b[1],PP)])}
+for(let i=0;i<8;i++){const a=pick(NEW3,i+2),b=pick(NEW3,i+6);c('qa',`aggiungi pasta al ragù a 12, ${a[0]} a ${a[1]} e ${b[0]} a ${b[1]}`,[CR(a[0],a[1],PP),CR(b[0],b[1],PP)])}
+// 2. modifica + domanda nello stesso messaggio: fa la modifica e risponde
+const PRQ:Record<string,number>={'la parmigiana':10,'tiramisù':6,'boh':20,'pasta al ragù':12}
+const DQ=Object.keys(PRQ)
+for(let i=0;i<12;i++){const a=pick(DQ,i),b=pick(DQ,i+1),p=pick([12,14,9,16],i);c('qa',pick([`metti ${a} a ${p} e dimmi quanto costa ${b}`,`metti ${a} a ${p}, quanto costa ${b}?`,`${a} a ${p} e dimmi quanto costa ${b}`],i),P(a,p),{reply:new RegExp(String(PRQ[b]))})}
+for(let i=0;i<8;i++){const a=pick(DQ,i);c('qa',pick([`${a} è finita, cosa altro è finito?`,`${a} è finito, cos'altro è finito?`],i),AV(a),{reply:new RegExp(a.split(' ').at(-1)!,'i')})}
+for(let i=0;i<8;i++){const a=pick(DQ,i);c('qa',pick([`Ciao cosa sai fare? intanto nascondi ${a}`,`cosa sai fare? intanto nascondi ${a}`],i),HI(a))}
+for(let i=0;i<8;i++){const a=pick(DQ,i),p=pick([7,15,25,13],i);c('qa',`${a} costa ancora ${PRQ[a]}? se sì mettilo a ${p}`,P(a,p))}
+for(let i=0;i<4;i++){const a=pick(DQ,i),p=pick([7,15,25,13],i);c('qa',`${a} costa ancora ${PRQ[a]!+1}? se sì mettilo a ${p}`,NONE,{note:'condizione falsa: risponde col prezzo vero, non scrive'})}
+for(let i=0;i<8;i++){const a=pick(DQ,i);c('qa',pick([`nascondi ${a} e dimmi quali piatti sono nascosti`,`nascondi ${a}, quali piatti sono nascosti?`],i),HI(a),{reply:new RegExp(a.split(' ').at(-1)!,'i')})}
+// 3. «la X no» con un riepilogo in attesa: la toglie davvero, l'ok pubblica il resto
+const HIDE4=['boh','la parmigiana','tiramisù','pasta al ragù']
+for(let i=0;i<12;i++){const skip=HIDE4[i%4]!;c('qa',[`nascondi ${HIDE4.join(', ').replace(/, ([^,]+)$/,' e $1')}`,pick([`${skip} no`,`${skip} lascialo stare`,`no, ${skip} no`],i),'ok'],HIDE4.filter(d=>d!==skip).map(d=>HI(d)),{note:'4 modifiche = riepilogo con OK (deterministico)'})}
+// 4. domande del bot senza frasi fisse né esempi inventati
+for(let i=0;i<10;i++)c('qa',pick(['aggiungi lasagna','aggiungi il caviale','aggiungi la frittura mista','aggiungi crespelle','aggiungi un piatto'],i),NONE,{ask:[1]})
+for(let i=0;i<10;i++)c('mario',pick(['aggiungi pasta al pesto a 13','aggiungi la frittura mista a 18','aggiungi le crespelle a 11','aggiungi trofie a 12','aggiungi il tiramisù al pistacchio a 6'],i),NONE,{ask:[1]})
+// 5. rimando vago con una cronologia recente: la domanda cita il piatto, mai «non ho una richiesta recente»
+for(let i=0;i<16;i++){const a=pick(DQ,i),p=pick([12,14,9,16],i);c('qa',[`${a} costa ${p}`,pick(['cambialo','mettilo','fallo','cambiamelo'],i)],[P(a,p)].filter(x=>x.price!==PRQ[a]),{ask:[2]})}
+// 6. una categoria sola anche per il cervello (aggiunta dopo un'altra modifica)
+for(let i=0;i<8;i++){const a=pick(NEW3,i);c('qa',['nascondi boh',`e aggiungi anche ${a[0]} a ${a[1]}`],[HI('boh'),CR(a[0],a[1],PP)])}

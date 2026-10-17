@@ -56,6 +56,10 @@ function extra(c:Conversation,v:Verdict,menus:EvalMenu[]):Verdict{const fails=[.
    if(!said.includes(Math.round(val*100)/100)&&!seen.has(Math.round(val*100)/100)&&!delta)fails.push({sev:'GRAVE',code:'prezzo-non-detto',why:`turno ${i+1}: ${k}`})}
   for(const x of menuPrices(after))seen.add(x)})
  const n=v.replies.findIndex(r=>FIXED.test(r));if(n>=0)fails.push({sev:'MEDIO',code:'frase-fissa',why:`turno ${n+1}`})
+ // A4.5: con una cronologia (dal secondo turno) mai «non ho una richiesta recente» / domanda senza i piatti di cui si parlava.
+ v.replies.forEach((r,i)=>{if(i>0&&/non ho una richiesta recente|a quale piatto ti riferisci/i.test(r))fails.push({sev:'MEDIO',code:'senza-contesto',why:`turno ${i+1}`})})
+ // A4.2: le domande non portano esempi con prezzi o piatti mai detti («per esempio «12 euro»», «la gricia a 13»).
+ v.replies.forEach((r,i)=>{for(const m of r.matchAll(/per esempio «([^»]+)»/gi)){const ex=m[1]!,said0=c.turns.slice(0,i+1).map(textOf).join(' ').toLowerCase();if(/\d/.test(ex)&&!saidPrices(ex).every(x=>saidPrices(said0).includes(x)))fails.push({sev:'MEDIO',code:'esempio-inventato',why:`turno ${i+1}: «${ex}»`})}})
  return{...v,fails,success:!fails.some(f=>f.sev!=='BASSO')}}
 const FIXED=/(?:rimandami|riscrivimi|riscrivi|rimanda)\s+(?:la\s+)?richiesta\s+completa/i
 

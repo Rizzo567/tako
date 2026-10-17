@@ -3,40 +3,40 @@
  "meta": {
   "groq": "oracle",
   "bot": "nuovo",
-  "conversazioni": 502
+  "conversazioni": 658
  },
  "summary": {
   "total": {
    "family": "TOTALE",
-   "n": 502,
-   "ok": 502,
-   "success": 502,
+   "n": 658,
+   "ok": 658,
+   "success": 658,
    "grave": 0,
    "medio": 0,
    "basso": 0,
    "safety": 0,
-   "clarRate": 36.9,
+   "clarRate": 33.6,
    "unexpectedClar": 2,
-   "usedLlm": 112,
+   "usedLlm": 224,
    "llmMissConvs": 0,
-   "detN": 390,
-   "detSuccess": 390
+   "detN": 434,
+   "detSuccess": 434
   },
   "multi": {
    "family": "multi-turno",
-   "n": 316,
-   "ok": 316,
-   "success": 316,
+   "n": 352,
+   "ok": 352,
+   "success": 352,
    "grave": 0,
    "medio": 0,
    "basso": 0,
    "safety": 0,
-   "clarRate": 43.7,
+   "clarRate": 41.3,
    "unexpectedClar": 2,
-   "usedLlm": 90,
+   "usedLlm": 114,
    "llmMissConvs": 0,
-   "detN": 226,
-   "detSuccess": 226
+   "detN": 238,
+   "detSuccess": 238
   },
   "families": [
    {
@@ -86,17 +86,33 @@
     "llmMissConvs": 0,
     "detN": 156,
     "detSuccess": 156
+   },
+   {
+    "family": "a4-validatore",
+    "n": 156,
+    "ok": 156,
+    "success": 156,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 17.6,
+    "unexpectedClar": 0,
+    "usedLlm": 112,
+    "llmMissConvs": 0,
+    "detN": 44,
+    "detSuccess": 44
    }
   ],
   "codes": {},
   "latency": {
    "harnessP50": 0.7,
-   "harnessP95": 1.9,
+   "harnessP95": 2,
    "withRecordedGroqP50": 0.7,
-   "withRecordedGroqP95": 1.9
+   "withRecordedGroqP95": 2
   },
   "llm": {
-   "calls": 190,
+   "calls": 302,
    "misses": 0,
    "tokens": 0
   }
@@ -130,7 +146,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    26.9,
+    26.8,
     6.5
    ],
    "recordedLlmMs": 0,
@@ -165,7 +181,7 @@
    "llmTokens": 0,
    "latencyMs": [
     3.7,
-    2.5
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -233,7 +249,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1,
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -266,7 +282,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
+    3.5,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -300,8 +316,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.9
+    1.4,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -334,7 +350,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.7,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -368,7 +384,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.6,
     0.8
    ],
    "recordedLlmMs": 0,
@@ -607,7 +623,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -640,8 +656,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    1.3
+    0.5,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -675,7 +691,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.7,
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -708,7 +724,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.8
    ],
    "recordedLlmMs": 0,
@@ -742,7 +758,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.5,
     1
    ],
    "recordedLlmMs": 0,
@@ -811,7 +827,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.9,
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -844,8 +860,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.8
+    0.5,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -981,7 +997,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    1.1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1015,7 +1031,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1082,8 +1098,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.9
+    0.8,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1116,8 +1132,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    1
+    0.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1150,8 +1166,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    1
+    0.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1286,8 +1302,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    0.8
+    0.7,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1320,7 +1336,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -1354,7 +1370,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.8,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -1423,7 +1439,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1456,8 +1472,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7
+    0.8,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1490,7 +1506,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.8,
     1
    ],
    "recordedLlmMs": 0,
@@ -1593,7 +1609,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1626,8 +1642,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.6
+    0.9,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1661,7 +1677,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1694,7 +1710,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -1763,7 +1779,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1796,7 +1812,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -1831,7 +1847,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1899,7 +1915,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.2
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -1966,8 +1982,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.8
+    0.6,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2000,7 +2016,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -2137,7 +2153,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2341,7 +2357,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2375,7 +2391,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2408,7 +2424,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -2476,7 +2492,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2510,7 +2526,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     1
    ],
    "recordedLlmMs": 0,
@@ -2544,8 +2560,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7
+    0.8,
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2617,7 +2633,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     0.3,
     0.7
    ],
@@ -2692,7 +2708,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.8,
+    0.7,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -2728,7 +2744,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.3,
     0.7
    ],
@@ -2765,9 +2781,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     0.3,
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2803,7 +2819,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.4,
+    0.3,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2839,8 +2855,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    0.4,
+    0.7,
+    0.3,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -2876,7 +2892,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.3,
     0.7
    ],
@@ -2950,9 +2966,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.3,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -2987,9 +3003,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    0.4,
-    0.8
+    0.7,
+    0.3,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3024,9 +3040,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
     0.4,
-    0.7
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3061,7 +3077,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.3,
     0.6
    ],
@@ -3135,7 +3151,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.7,
     0.4,
     0.8
    ],
@@ -3172,7 +3188,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.3,
     0.6
    ],
@@ -3211,7 +3227,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3283,7 +3299,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.7,
     0.3,
     0.7
    ],
@@ -3571,7 +3587,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.4,
     0.8,
     0.6
    ],
@@ -3608,7 +3624,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3641,7 +3657,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     0.4,
     0.6
    ],
@@ -3677,7 +3693,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    0.3,
+    0.5,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -3713,7 +3729,7 @@
    "latencyMs": [
     0.5,
     0.4,
-    0.9
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3746,9 +3762,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
+    0.6,
     0.3,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3781,8 +3797,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    0.5,
     0.4,
-    0.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -3818,7 +3834,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -3851,8 +3867,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    0.7,
     0.5,
-    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -3888,9 +3904,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
-    1.7,
-    0.7
+    0.9,
+    1.6,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4075,7 +4091,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4112,7 +4128,7 @@
    "latencyMs": [
     0.5,
     0.3,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4204,7 +4220,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.8,
     0.4
    ],
    "recordedLlmMs": 0,
@@ -4232,7 +4248,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.4
    ],
    "recordedLlmMs": 0,
@@ -4345,7 +4361,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.4
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4400,7 +4416,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.7,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -4428,7 +4444,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -4540,7 +4556,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.4
    ],
    "recordedLlmMs": 0,
@@ -4569,7 +4585,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4596,8 +4612,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.4
+    0.7,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4800,7 +4816,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4829,7 +4845,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -4956,7 +4972,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -4988,7 +5004,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.6,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -5118,7 +5134,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
+    2,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -5152,8 +5168,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.5
+    1.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5187,7 +5203,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.8,
-    1.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5220,7 +5236,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.1,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -5288,8 +5304,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.6
+    1.2,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5322,7 +5338,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.8,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -5429,7 +5445,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1.3,
     0.7,
     1.1
    ],
@@ -5467,7 +5483,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.8,
+    0.7,
     1.2
    ],
    "recordedLlmMs": 0,
@@ -5505,7 +5521,7 @@
    "latencyMs": [
     0.6,
     0.8,
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5577,9 +5593,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.6,
-    1.1
+    0.7,
+    1.1,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5614,9 +5630,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.7,
-    1.2
+    1.2,
+    1.3,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5651,9 +5667,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    0.7,
-    1.3
+    0.9,
+    0.9,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5686,8 +5702,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.6,
+    0.5,
+    0.7,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -5722,8 +5738,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.8,
-    0.6
+    1.1,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5756,9 +5772,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
     0.5,
-    0.5
+    0.5,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5792,8 +5808,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.3,
-    0.7
+    0.4,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5828,7 +5844,7 @@
    "latencyMs": [
     0.4,
     0.4,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -5862,7 +5878,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.6,
+    0.7,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -5894,7 +5910,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6049,7 +6065,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6080,7 +6096,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6145,8 +6161,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    4.5,
-    0.6
+    5.1,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6179,9 +6195,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
     0.4,
-    0.8
+    0.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6214,9 +6230,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
-    1.6,
-    0.5
+    0.4,
+    1.8,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6250,7 +6266,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1.3,
+    1.1,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -6285,8 +6301,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1.1,
-    0.6
+    1.2,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6319,7 +6335,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.3,
     0.4,
     0.6
    ],
@@ -6390,8 +6406,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    1,
-    0.6
+    1.1,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6420,7 +6436,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6449,7 +6465,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6594,7 +6610,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6623,7 +6639,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6739,7 +6755,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6913,7 +6929,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6942,7 +6958,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -6971,7 +6987,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7000,7 +7016,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7029,7 +7045,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7058,7 +7074,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7087,7 +7103,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7145,7 +7161,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7203,7 +7219,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7261,7 +7277,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7464,7 +7480,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7493,7 +7509,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7522,7 +7538,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7551,7 +7567,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7667,7 +7683,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -7876,7 +7892,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7906,7 +7922,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7944,7 +7960,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
+    2.2,
     3.2
    ],
    "recordedLlmMs": 0,
@@ -8059,7 +8075,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.8,
-    2.4
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8096,7 +8112,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
+    1.7,
     1.8
    ],
    "recordedLlmMs": 0,
@@ -8134,8 +8150,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.1
+    1.5,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8172,8 +8188,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.7
+    1.4,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8211,7 +8227,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.6,
-    2.2
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8248,7 +8264,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.6,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -8286,8 +8302,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.4
+    1.6,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8324,8 +8340,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.1
+    1.4,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8362,8 +8378,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.2
+    1.7,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8400,8 +8416,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.7
+    1.5,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8439,7 +8455,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.6,
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8476,7 +8492,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.4,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -8666,8 +8682,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.2
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8704,7 +8720,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.5,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -8743,7 +8759,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.5,
-    1.9
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8780,7 +8796,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.6,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -8819,7 +8835,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.6,
-    2.1
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8860,7 +8876,7 @@
    "latencyMs": [
     0.7,
     1.1,
-    1.6
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9063,9 +9079,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.4,
-    1.6
+    1,
+    1.5,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9106,7 +9122,7 @@
    "latencyMs": [
     0.7,
     1.4,
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9147,7 +9163,7 @@
    "latencyMs": [
     0.7,
     1.4,
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9187,7 +9203,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.7,
+    1,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -9228,8 +9244,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.4,
-    1.4
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9268,9 +9284,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    1.2,
     1.4,
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9310,8 +9326,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.3,
-    1.5
+    1.4,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9350,8 +9366,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    1,
+    0.8,
+    0.8,
     1.7
    ],
    "recordedLlmMs": 0,
@@ -9392,8 +9408,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.4,
-    1.5
+    1.5,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9432,7 +9448,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    0.7,
     1.4,
     1.6
    ],
@@ -9474,8 +9490,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.4,
-    1.9
+    1.8,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9555,9 +9571,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.9,
     1.3,
-    1.9
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9598,7 +9614,7 @@
    "latencyMs": [
     0.7,
     1.4,
-    1.7
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9638,8 +9654,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.9,
-    1.7
+    1.4,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9678,9 +9694,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    0.6,
     0.7,
-    0.8,
-    1.7
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9719,9 +9735,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.3,
-    1.5
+    0.8,
+    1.5,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9761,7 +9777,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.4,
+    1.5,
     1.9
    ],
    "recordedLlmMs": 0,
@@ -9849,8 +9865,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.5,
-    1.8,
+    1.7,
+    1.3,
     1.7
    ],
    "recordedLlmMs": 0,
@@ -9898,8 +9914,8 @@
    "latencyMs": [
     0.7,
     1.4,
-    1.3,
-    2
+    1.6,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9947,7 +9963,7 @@
     0.7,
     1.4,
     1.3,
-    1.7
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9992,9 +10008,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.5,
+    0.8,
     1.4,
+    1.3,
     1.7
    ],
    "recordedLlmMs": 0,
@@ -10041,9 +10057,9 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.7,
+    1.4,
     1.3,
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10089,9 +10105,9 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.3,
-    1.5,
-    1.5
+    1.9,
+    1.4,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10137,9 +10153,9 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.3,
-    1.3,
-    1.9
+    1.4,
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10185,9 +10201,9 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
+    1.4,
     1.3,
-    1.3,
-    1.6
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10220,7 +10236,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.1,
     1.7
    ],
    "recordedLlmMs": 0,
@@ -10254,8 +10270,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.6
+    1.1,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10289,7 +10305,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1,
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10323,7 +10339,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    1.7
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10357,7 +10373,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    1.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10424,8 +10440,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
-    1.9
+    1.5,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10458,7 +10474,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.1,
     1.7
    ],
    "recordedLlmMs": 0,
@@ -10492,7 +10508,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1,
+    1.4,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -10526,7 +10542,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -10561,7 +10577,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1,
-    1.6
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10595,7 +10611,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10632,7 +10648,7 @@
    "latencyMs": [
     0.7,
     1.4,
-    1.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10668,7 +10684,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.6,
+    1.4,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -10704,7 +10720,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.9,
     1.3,
     1.6
    ],
@@ -10741,8 +10757,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
-    1.3,
+    0.7,
+    1.4,
     1.9
    ],
    "recordedLlmMs": 0,
@@ -10780,7 +10796,7 @@
    "latencyMs": [
     0.7,
     1.4,
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10816,8 +10832,8 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.4,
-    1.6
+    1.8,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10853,7 +10869,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.6,
+    1.4,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -10889,9 +10905,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1.3,
-    1.6
+    1,
+    1.4,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10916,7 +10932,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -10966,7 +10982,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11016,7 +11032,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11220,7 +11236,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -11272,7 +11288,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3
+    0.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -11332,7 +11348,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.9,
     1.8
    ],
    "recordedLlmMs": 0,
@@ -11366,7 +11382,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     1.7
    ],
    "recordedLlmMs": 0,
@@ -11400,8 +11416,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.5
+    0.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11434,8 +11450,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
-    1.5
+    1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11502,7 +11518,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.7,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -11536,7 +11552,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.9,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -11571,7 +11587,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.7,
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11602,7 +11618,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11633,7 +11649,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11726,7 +11742,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11757,7 +11773,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11848,7 +11864,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11877,7 +11893,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11906,7 +11922,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11935,7 +11951,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -11993,7 +12009,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12022,7 +12038,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12051,7 +12067,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12080,7 +12096,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12109,7 +12125,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12138,7 +12154,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12196,7 +12212,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12225,7 +12241,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12254,7 +12270,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12283,7 +12299,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12312,7 +12328,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12428,7 +12444,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12457,7 +12473,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12486,7 +12502,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12515,7 +12531,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12544,7 +12560,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12573,7 +12589,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12602,7 +12618,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12660,7 +12676,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12689,7 +12705,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12718,7 +12734,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12747,7 +12763,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12776,7 +12792,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12805,7 +12821,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12834,7 +12850,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12921,7 +12937,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12950,7 +12966,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -12979,7 +12995,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13008,7 +13024,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13095,7 +13111,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13124,7 +13140,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13240,7 +13256,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13269,7 +13285,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13298,7 +13314,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13443,7 +13459,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13472,7 +13488,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13530,7 +13546,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13588,7 +13604,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13617,7 +13633,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7
+    0.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13646,7 +13662,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13675,7 +13691,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13704,7 +13720,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13762,7 +13778,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13820,7 +13836,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13907,7 +13923,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13939,7 +13955,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.5,
-    0.6
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -13971,7 +13987,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14099,7 +14115,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14130,7 +14146,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -14162,7 +14178,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
+    0.9,
     0.7
    ],
    "recordedLlmMs": 0,
@@ -14226,7 +14242,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.5,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -14322,7 +14338,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.8,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -14386,7 +14402,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.3,
+    0.4,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -14451,7 +14467,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.3,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14483,7 +14499,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.6,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14515,7 +14531,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14610,8 +14626,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
-    0.5
+    0.5,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14707,7 +14723,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -14802,7 +14818,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.8,
     0.6
    ],
    "recordedLlmMs": 0,
@@ -14936,7 +14952,7 @@
    "llmTokens": 0,
    "latencyMs": [
     0.4,
-    18.4,
+    17.5,
     0.8
    ],
    "recordedLlmMs": 0,
@@ -14970,7 +14986,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    0.8,
     0.3,
     0.6
    ],
@@ -15007,7 +15023,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15040,8 +15056,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    0.4,
     0.3,
-    0.2,
     0.5
    ],
    "recordedLlmMs": 0,
@@ -15077,7 +15093,7 @@
    "latencyMs": [
     0.3,
     0.3,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15110,7 +15126,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.7,
+    0.8,
     0.3,
     0.6
    ],
@@ -15250,7 +15266,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.5,
     0.6
    ],
@@ -15287,7 +15303,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15322,7 +15338,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.6
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15392,7 +15408,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.8
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15425,9 +15441,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
     0.3,
-    0.6
+    0.2,
+    0.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15462,7 +15478,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.5
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15497,7 +15513,7 @@
    "latencyMs": [
     0.4,
     0.3,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15565,7 +15581,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
+    0.7,
     0.3,
     0.6
    ],
@@ -15670,7 +15686,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.4,
+    0.3,
     0.2,
     0.6
    ],
@@ -15707,7 +15723,7 @@
    "latencyMs": [
     0.4,
     0.6,
-    0.7
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15880,9 +15896,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.8,
     0.7,
-    1.1
+    0.3,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15915,9 +15931,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.6,
-    0.5,
-    0.9
+    0.3,
+    0.3,
+    0.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15950,9 +15966,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    0.4,
-    0.9
+    0.3,
+    0.3,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -15985,9 +16001,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.5,
-    2.9,
-    0.8
+    0.3,
+    0.3,
+    0.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16016,7 +16032,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16045,7 +16061,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16074,7 +16090,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16103,7 +16119,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16132,7 +16148,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16161,7 +16177,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16219,7 +16235,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16248,7 +16264,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16277,7 +16293,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16306,7 +16322,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16335,7 +16351,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16364,7 +16380,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16422,7 +16438,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16480,7 +16496,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16509,7 +16525,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16538,7 +16554,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16567,7 +16583,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
@@ -16625,10 +16641,4790 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-001",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "🎤 aggiungi pasta al pesto a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-002",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
+   ],
+   "turns": [
+    "E aggiungi caviale a 150 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-003",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|20|piatti di prova"
+   ],
+   "actual": [
+    "create|lasagna|20|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
+   ],
+   "turns": [
+    "inserisci lasagna a 20 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-004",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Polpette* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "🎤 aggiungi il piatto polpette che costa 9 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-005",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Trofie al pesto* in *Piatti di prova*: *13,00 €*"
+   ],
+   "turns": [
+    "aggiungi trofie al pesto a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-006",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*"
+   ],
+   "turns": [
+    "E aggiungi frittura mista a 18 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-007",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crespelle* in *Piatti di prova*: *11,00 €*"
+   ],
+   "turns": [
+    "🎤 inserisci crespelle a 11 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-008",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Arrosto di vitello* in *Piatti di prova*: *16,00 €*"
+   ],
+   "turns": [
+    "aggiungi il piatto arrosto di vitello che costa 16 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-009",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al pesto* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "aggiungi pasta al pesto a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-010",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi caviale a 150 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-011",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|20|piatti di prova"
+   ],
+   "actual": [
+    "create|lasagna|20|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Lasagna* in *Piatti di prova*: *20,00 €*"
+   ],
+   "turns": [
+    "inserisci lasagna a 20 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-012",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Polpette* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "aggiungi il piatto polpette che costa 9 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-013",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Trofie al pesto* in *Piatti di prova*: *13,00 €*"
+   ],
+   "turns": [
+    "🎤 aggiungi trofie al pesto a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-014",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*"
+   ],
+   "turns": [
+    "E aggiungi frittura mista a 18 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-015",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Crespelle* in *Piatti di prova*: *11,00 €*"
+   ],
+   "turns": [
+    "inserisci crespelle a 11 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-016",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Arrosto di vitello* in *Piatti di prova*: *16,00 €*"
+   ],
+   "turns": [
+    "🎤 aggiungi il piatto arrosto di vitello che costa 16 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-017",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al pesto a 15 euro, aggiungi lasagna a 20 euro, aggiungi frittura mista a 18 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-018",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*"
+   ],
+   "turns": [
+    "aggiungi caviale a 150, polpette a 9 e crespelle a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-019",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi lasagna a 20 euro, aggiungi trofie al pesto a 13 euro, aggiungi arrosto di vitello a 16 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-020",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "aggiungi polpette a 9, frittura mista a 18 e pasta al pesto a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-021",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi trofie al pesto a 13 euro, aggiungi crespelle a 11 euro, aggiungi caviale a 150 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-022",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*"
+   ],
+   "turns": [
+    "aggiungi frittura mista a 18, arrosto di vitello a 16 e lasagna a 20"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-023",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi crespelle a 11 euro, aggiungi pasta al pesto a 15 euro, aggiungi polpette a 9 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-024",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*"
+   ],
+   "turns": [
+    "aggiungi arrosto di vitello a 16, caviale a 150 e trofie al pesto a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-025",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al pesto a 15 euro, aggiungi lasagna a 20 euro, aggiungi frittura mista a 18 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-026",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*"
+   ],
+   "turns": [
+    "aggiungi caviale a 150, polpette a 9 e crespelle a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-027",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi lasagna a 20 euro, aggiungi trofie al pesto a 13 euro, aggiungi arrosto di vitello a 16 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-028",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "aggiungi polpette a 9, frittura mista a 18 e pasta al pesto a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-029",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi trofie al pesto a 13 euro, aggiungi crespelle a 11 euro, aggiungi caviale a 150 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-030",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*"
+   ],
+   "turns": [
+    "aggiungi frittura mista a 18, arrosto di vitello a 16 e lasagna a 20"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-031",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi crespelle a 11 euro, aggiungi pasta al pesto a 15 euro, aggiungi polpette a 9 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-032",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*"
+   ],
+   "turns": [
+    "aggiungi arrosto di vitello a 16, caviale a 150 e trofie al pesto a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-033",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "E aggiungi pasta al ragù a 10 euro, aggiungi caviale a 150 euro, aggiungi trofie al pesto a 13 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-034",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "price|pasta al ragù|14"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "price|pasta al ragù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 14 euro, aggiungi lasagna a 20 euro, aggiungi frittura mista a 18 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-035",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova",
+    "price|pasta al ragù|9"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova",
+    "price|pasta al ragù|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "E aggiungi pasta al ragù a 9 euro, aggiungi polpette a 9 euro, aggiungi crespelle a 11 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-036",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|11"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 11 euro, aggiungi trofie al pesto a 13 euro, aggiungi arrosto di vitello a 16 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-037",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "E aggiungi pasta al ragù a 10 euro, aggiungi frittura mista a 18 euro, aggiungi pasta al pesto a 15 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-038",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "price|pasta al ragù|14"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|crespelle|11|piatti di prova",
+    "price|pasta al ragù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 14 euro, aggiungi crespelle a 11 euro, aggiungi caviale a 150 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-039",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "price|pasta al ragù|9"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "price|pasta al ragù|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "E aggiungi pasta al ragù a 9 euro, aggiungi arrosto di vitello a 16 euro, aggiungi lasagna a 20 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-040",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova",
+    "price|pasta al ragù|11"
+   ],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova",
+    "create|polpette|9|piatti di prova",
+    "price|pasta al ragù|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 11 euro, aggiungi pasta al pesto a 15 euro, aggiungi polpette a 9 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-041",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "E aggiungi pasta al ragù a 10 euro, aggiungi caviale a 150 euro, aggiungi trofie al pesto a 13 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-042",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "price|pasta al ragù|14"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "create|lasagna|20|piatti di prova",
+    "price|pasta al ragù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 14 euro, aggiungi lasagna a 20 euro, aggiungi frittura mista a 18 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-043",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova",
+    "price|pasta al ragù|9"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "create|polpette|9|piatti di prova",
+    "price|pasta al ragù|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "E aggiungi pasta al ragù a 9 euro, aggiungi polpette a 9 euro, aggiungi crespelle a 11 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-044",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|11"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova",
+    "price|pasta al ragù|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 11 euro, aggiungi trofie al pesto a 13 euro, aggiungi arrosto di vitello a 16 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-045",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, lasagna a 20 e crespelle a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-046",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, polpette a 9 e arrosto di vitello a 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-047",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al pesto|15|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, trofie al pesto a 13 e pasta al pesto a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-048",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, frittura mista a 18 e caviale a 150"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-049",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "create|lasagna|20|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, crespelle a 11 e lasagna a 20"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-050",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "create|polpette|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, arrosto di vitello a 16 e polpette a 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-051",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al pesto|15|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova",
+    "create|trofie al pesto|13|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, pasta al pesto a 15 e trofie al pesto a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-052",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "create|frittura mista|18|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "aggiungi pasta al ragù a 12, caviale a 150 e frittura mista a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-053",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n\n*tiramisù*: *6,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti la parmigiana a 12 e dimmi quanto costa tiramisù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-054",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*\n\n*boh*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti tiramisù a 14, quanto costa boh?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-055",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "boh a 9 e dimmi quanto costa pasta al ragù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-056",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*\n\n*la parmigiana*: *10,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti pasta al ragù a 16 e dimmi quanto costa la parmigiana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-057",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n\n*tiramisù*: *6,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti la parmigiana a 12, quanto costa tiramisù?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-058",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*\n\n*boh*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "tiramisù a 14 e dimmi quanto costa boh"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-059",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti boh a 9 e dimmi quanto costa pasta al ragù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-060",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*\n\n*la parmigiana*: *10,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti pasta al ragù a 16, quanto costa la parmigiana?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-061",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*\n\n*tiramisù*: *6,00 €* · disponibile"
+   ],
+   "turns": [
+    "la parmigiana a 12 e dimmi quanto costa tiramisù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-062",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*\n\n*boh*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti tiramisù a 14 e dimmi quanto costa boh"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-063",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "metti boh a 9, quanto costa pasta al ragù?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-064",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*\n\n*la parmigiana*: *10,00 €* · disponibile"
+   ],
+   "turns": [
+    "pasta al ragù a 16 e dimmi quanto costa la parmigiana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-065",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|la parmigiana|false"
+   ],
+   "actual": [
+    "available|la parmigiana|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *finito*\n\n*Piatti finiti (1)*\n- la parmigiana"
+   ],
+   "turns": [
+    "la parmigiana è finita, cosa altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-066",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|tiramisù|false"
+   ],
+   "actual": [
+    "available|tiramisù|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *finito*\n\n*Piatti finiti (1)*\n- tiramisù"
+   ],
+   "turns": [
+    "tiramisù è finito, cos'altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-067",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|boh|false"
+   ],
+   "actual": [
+    "available|boh|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*\n\n*Piatti finiti (1)*\n- boh"
+   ],
+   "turns": [
+    "boh è finita, cosa altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-068",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|pasta al ragù|false"
+   ],
+   "actual": [
+    "available|pasta al ragù|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *finito*\n\n*Piatti finiti (1)*\n- pasta al ragù"
+   ],
+   "turns": [
+    "pasta al ragù è finito, cos'altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-069",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|la parmigiana|false"
+   ],
+   "actual": [
+    "available|la parmigiana|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *finito*\n\n*Piatti finiti (1)*\n- la parmigiana"
+   ],
+   "turns": [
+    "la parmigiana è finita, cosa altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-070",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|tiramisù|false"
+   ],
+   "actual": [
+    "available|tiramisù|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *finito*\n\n*Piatti finiti (1)*\n- tiramisù"
+   ],
+   "turns": [
+    "tiramisù è finito, cos'altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-071",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|boh|false"
+   ],
+   "actual": [
+    "available|boh|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *finito*\n\n*Piatti finiti (1)*\n- boh"
+   ],
+   "turns": [
+    "boh è finita, cosa altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-072",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|pasta al ragù|false"
+   ],
+   "actual": [
+    "available|pasta al ragù|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *finito*\n\n*Piatti finiti (1)*\n- pasta al ragù"
+   ],
+   "turns": [
+    "pasta al ragù è finito, cos'altro è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-073",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "Ciao cosa sai fare? intanto nascondi la parmigiana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-074",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "cosa sai fare? intanto nascondi tiramisù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-075",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "Ciao cosa sai fare? intanto nascondi boh"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-076",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "cosa sai fare? intanto nascondi pasta al ragù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-077",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "Ciao cosa sai fare? intanto nascondi la parmigiana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-078",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "cosa sai fare? intanto nascondi tiramisù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-079",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "Ciao cosa sai fare? intanto nascondi boh"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-080",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+   ],
+   "turns": [
+    "cosa sai fare? intanto nascondi pasta al ragù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-081",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|7"
+   ],
+   "actual": [
+    "price|la parmigiana|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "la parmigiana costa ancora 10? se sì mettilo a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-082",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|15"
+   ],
+   "actual": [
+    "price|tiramisù|15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "tiramisù costa ancora 6? se sì mettilo a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-083",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [
+    "price|boh|25"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *25,00 €*"
+   ],
+   "turns": [
+    "boh costa ancora 20? se sì mettilo a 25"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-084",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|13"
+   ],
+   "actual": [
+    "price|pasta al ragù|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "pasta al ragù costa ancora 12? se sì mettilo a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-085",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|7"
+   ],
+   "actual": [
+    "price|la parmigiana|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "la parmigiana costa ancora 10? se sì mettilo a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-086",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|15"
+   ],
+   "actual": [
+    "price|tiramisù|15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "tiramisù costa ancora 6? se sì mettilo a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-087",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|25"
+   ],
+   "actual": [
+    "price|boh|25"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *25,00 €*"
+   ],
+   "turns": [
+    "boh costa ancora 20? se sì mettilo a 25"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-088",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|13"
+   ],
+   "actual": [
+    "price|pasta al ragù|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "pasta al ragù costa ancora 12? se sì mettilo a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-089",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*la parmigiana*: *10,00 €* · disponibile"
+   ],
+   "turns": [
+    "la parmigiana costa ancora 11? se sì mettilo a 7"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "condizione falsa: risponde col prezzo vero, non scrive"
+  },
+  {
+   "id": "a4-validatore-090",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*tiramisù*: *6,00 €* · disponibile"
+   ],
+   "turns": [
+    "tiramisù costa ancora 7? se sì mettilo a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "condizione falsa: risponde col prezzo vero, non scrive"
+  },
+  {
+   "id": "a4-validatore-091",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*boh*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "boh costa ancora 21? se sì mettilo a 25"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "condizione falsa: risponde col prezzo vero, non scrive"
+  },
+  {
+   "id": "a4-validatore-092",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "pasta al ragù costa ancora 13? se sì mettilo a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "note": "condizione falsa: risponde col prezzo vero, non scrive"
+  },
+  {
+   "id": "a4-validatore-093",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- la parmigiana"
+   ],
+   "turns": [
+    "nascondi la parmigiana e dimmi quali piatti sono nascosti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-094",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- tiramisù"
+   ],
+   "turns": [
+    "nascondi tiramisù, quali piatti sono nascosti?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-095",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- boh"
+   ],
+   "turns": [
+    "nascondi boh e dimmi quali piatti sono nascosti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-096",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- pasta al ragù"
+   ],
+   "turns": [
+    "nascondi pasta al ragù, quali piatti sono nascosti?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-097",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- la parmigiana"
+   ],
+   "turns": [
+    "nascondi la parmigiana e dimmi quali piatti sono nascosti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-098",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- tiramisù"
+   ],
+   "turns": [
+    "nascondi tiramisù, quali piatti sono nascosti?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-099",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- boh"
+   ],
+   "turns": [
+    "nascondi boh e dimmi quali piatti sono nascosti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-100",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: *nascosto* dal menu\n\n*Piatti nascosti (1)*\n- pasta al ragù"
+   ],
+   "turns": [
+    "nascondi pasta al ragù, quali piatti sono nascosti?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-101",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *boh* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *la parmigiana*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "boh no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5,
+    0.8,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-102",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *la parmigiana* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "la parmigiana lascialo stare",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5,
+    1,
+    0.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-103",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *tiramisù* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*la parmigiana*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "no, tiramisù no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5,
+    0.4,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-104",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *pasta al ragù* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "pasta al ragù no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-105",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *boh* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *la parmigiana*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "boh lascialo stare",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-106",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *la parmigiana* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "no, la parmigiana no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-107",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *tiramisù* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*la parmigiana*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "tiramisù no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-108",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *pasta al ragù* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "pasta al ragù lascialo stare",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-109",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *boh* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *la parmigiana*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "no, boh no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-110",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *la parmigiana* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "la parmigiana no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-111",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *tiramisù* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*la parmigiana*: *nascosto* dal menu\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "tiramisù lascialo stare",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.8,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-112",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n4. *pasta al ragù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "Va bene, *pasta al ragù* resta com’è. Non ho cambiato nulla.\n\n*Tako · Verifica web*: ecco le modifiche.\n\n1. *boh*: *nascosto* dal menu\n2. *la parmigiana*: *nascosto* dal menu\n3. *tiramisù*: *nascosto* dal menu\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi boh, la parmigiana, tiramisù e pasta al ragù",
+    "no, pasta al ragù no",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.4,
+    0.3,
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "note": "4 modifiche = riepilogo con OK (deterministico)"
+  },
+  {
+   "id": "a4-validatore-113",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?"
+   ],
+   "turns": [
+    "aggiungi lasagna"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-114",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Caviale*?"
+   ],
+   "turns": [
+    "aggiungi il caviale"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-115",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Frittura mista*?"
+   ],
+   "turns": [
+    "aggiungi la frittura mista"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-116",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Crespelle*?"
+   ],
+   "turns": [
+    "aggiungi crespelle"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-117",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa il piatto?"
+   ],
+   "turns": [
+    "aggiungi un piatto"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-118",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Lasagna*?"
+   ],
+   "turns": [
+    "aggiungi lasagna"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-119",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Caviale*?"
+   ],
+   "turns": [
+    "aggiungi il caviale"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-120",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Frittura mista*?"
+   ],
+   "turns": [
+    "aggiungi la frittura mista"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-121",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa *Crespelle*?"
+   ],
+   "turns": [
+    "aggiungi crespelle"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-122",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa il piatto?"
+   ],
+   "turns": [
+    "aggiungi un piatto"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-123",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Pasta al pesto*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi pasta al pesto a 13"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-124",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Frittura mista*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi la frittura mista a 18"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-125",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Crespelle*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi le crespelle a 11"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-126",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Trofie*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi trofie a 12"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-127",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Tiramisù al pistacchio*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi il tiramisù al pistacchio a 6"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-128",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Pasta al pesto*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi pasta al pesto a 13"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-129",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Frittura mista*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi la frittura mista a 18"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-130",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Crespelle*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi le crespelle a 11"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-131",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Trofie*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi trofie a 12"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-132",
+   "family": "a4-validatore",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale categoria metto *Tiramisù al pistacchio*? Categorie: Antipasti, Primi, Secondi, Piatti di prova, Contorni, Pizze, Dolci, Proposte, Bibite, Caffetteria."
+   ],
+   "turns": [
+    "aggiungi il tiramisù al pistacchio a 6"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false
+  },
+  {
+   "id": "a4-validatore-133",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
+    "Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "la parmigiana costa 12",
+    "cambialo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-134",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*",
+    "Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "tiramisù costa 14",
+    "mettilo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-135",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*",
+    "Cosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "boh costa 9",
+    "fallo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-136",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "pasta al ragù costa 16",
+    "cambiamelo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1,
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-137",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
+    "Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "la parmigiana costa 12",
+    "cambialo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-138",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*",
+    "Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "tiramisù costa 14",
+    "mettilo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-139",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*",
+    "Cosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "boh costa 9",
+    "fallo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-140",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "pasta al ragù costa 16",
+    "cambiamelo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-141",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
+    "Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "la parmigiana costa 12",
+    "cambialo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-142",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*",
+    "Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "tiramisù costa 14",
+    "mettilo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-143",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*",
+    "Cosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "boh costa 9",
+    "fallo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-144",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "pasta al ragù costa 16",
+    "cambiamelo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.2,
+    1.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-145",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12"
+   ],
+   "actual": [
+    "price|la parmigiana|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: prezzo da 10,00 € a *12,00 €*",
+    "Cosa vuoi cambiare per *la parmigiana*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "la parmigiana costa 12",
+    "cambialo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-146",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|14"
+   ],
+   "actual": [
+    "price|tiramisù|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*tiramisù*: prezzo da 6,00 € a *14,00 €*",
+    "Cosa vuoi cambiare per *tiramisù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "tiramisù costa 14",
+    "mettilo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    0.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-147",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|9"
+   ],
+   "actual": [
+    "price|boh|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *9,00 €*",
+    "Cosa vuoi cambiare per *boh*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "boh costa 9",
+    "fallo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-148",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|16"
+   ],
+   "actual": [
+    "price|pasta al ragù|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*pasta al ragù*: prezzo da 12,00 € a *16,00 €*",
+    "Cosa vuoi cambiare per *pasta al ragù*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "turns": [
+    "pasta al ragù costa 16",
+    "cambiamelo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    0.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-149",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al pesto|15|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|pasta al pesto|15|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche pasta al pesto a 15"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-150",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caviale|150|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|caviale|150|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche caviale a 150"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-151",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|20|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|lasagna|20|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche lasagna a 20"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1,
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-152",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|polpette|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|polpette|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche polpette a 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-153",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|trofie al pesto|13|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|trofie al pesto|13|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche trofie al pesto a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-154",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura mista|18|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|frittura mista|18|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche frittura mista a 18"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.1,
+    1.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-155",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|crespelle|11|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|crespelle|11|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche crespelle a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.7,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "a4-validatore-156",
+   "family": "a4-validatore",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|arrosto di vitello|16|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*"
+   ],
+   "turns": [
+    "nascondi boh",
+    "e aggiungi anche arrosto di vitello a 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    0.6,
+    1.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
   }
  ]
 }

@@ -25,7 +25,7 @@ import {negatedClauses,isExcluded,bareDish,looksLikeAnswer,pickPrice,allOptions,
 import {brainGate,hasFreshHistory,brainPlan,memoryTurn,rememberTurn,learnAfter,botBrainEnabled,trackChange,readRestorable} from '../lib/owner-brain-route.js'
 import {composeReply,REFERS} from '../lib/owner-brain-plan.js'
 import {stripLeadBeforeRemoval,clearChanges,holdFromMessage,holdAnswer,holdQuestion,undoRecordFor,isUndoRequest,applyUndo,undoText,undoWindowMs,type Hold,type UndoRecord} from '../lib/twilio-menu-hold.js'
-import {startsWithCreate} from '../lib/twilio-menu-create.js'
+import {startsWithCreate,parseCreate,createCompound} from '../lib/twilio-menu-create.js'
 import {removeVerbRe} from '../lib/twilio-menu-nlu.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
@@ -111,7 +111,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // QA 17/10, caso 2: «non cambiare boh; metti …», «lascia stare X», «X no», «tranne X»: X escluso, il resto si elabora da solo.
  let negPick:MenuAction[]|null=null
  if(!planned&&!opts.plannedFull&&!holdPick){const lead=leadingInterjection(text,refs);if(lead){text=lead;st.text=text}
-  const neg=negatedClauses(text,refs,{keepLeadingLascia:!pending&&!choice&&!proposal});if(neg){st.exclude=[...st.exclude,...neg.excluded]
+  const neg=negatedClauses(text.replace(/^\s*no\s*[,;.!]\s*(?=.+\bno\s*[.!]?\s*$)/i,''),refs,{keepLeadingLascia:!pending&&!choice&&!proposal});if(neg){st.exclude=[...st.exclude,...neg.excluded]
   if(neg.strip){const rest=normalizeMenuText(neg.rest).replace(/[^a-z0-9]+/g,' ').trim()
    // Risposta a «Quale piatto intendi?» per esclusione: «la carbonara no (, l'altro)» con due opzioni → l'altra.
    const left=choice?choice.options.filter(id=>!neg.excluded.some(e=>e.id===id)):[]
@@ -193,11 +193,15 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if(listOf){const items=categoryItems(listOf[1]!,refs);if(items.length)return readText({type:'read',read:'items',ids:items.slice(0,10).map(r=>r.id)},refs)}}
  const bulkSale=parseSalesText(text),bulk=!!bulkSale&&(bulkSale.kind==='multi'||bulkSale.kind==='tagsOff'||('all' in bulkSale&&!!bulkSale.all))
  if(!planned&&!pending&&!choice&&!created&&!bulk&&isCompoundMessage(text,refs))return{llm:true};
- let actions:MenuAction[];if(planned){if(planned.revision!==row.revision||planned.proposalRevision!==undefined&&planned.proposalRevision!==JSON.stringify(proposal?.command??null))return copy.menuChanged;const plan=planned.plan
+ let actions:MenuAction[],planAfter:Extract<MenuPlan,{type:'change'}>['after']=undefined;if(planned){if(planned.revision!==row.revision||planned.proposalRevision!==undefined&&planned.proposalRevision!==JSON.stringify(proposal?.command??null))return copy.menuChanged;const plan=planned.plan
   // QA 17/10, caso 3: chiarimento con un'azione già capita → proposta «choose»: la risposta «X» la applica (10 minuti).
   if(plan.type==='clarify'&&plan.actions?.length===1&&!proposal){const a=plan.actions[0]!,template=choiceTemplate(a),options=[...new Set([...('id' in a?[a.id]:[]),...plan.ids])].filter(id=>refs.some(r=>r.id===id)&&!st.exclude.some(e=>e.id===id)).slice(0,8)
    if(template&&options.length>1){await propose(tx,ctx,row.revision,{kind:'choose',action:template,options});return fill(copy.choose,{opzioni:options.map((id,i)=>`${i+1}. *${itemLabel(refs.find(r=>r.id===id)!,refs)}*`).join('\n')})}}
-  if(plan.type!=='change')return planText(plan,refs,sections);if(!storedActions({kind:'batch',actions:plan.actions},refs,sections))return copy.notUnderstood;actions=batch?mergeMenuActions(batch,plan.actions,plan.remove):plan.actions}
+  // 17/10 (A4.3): piatto nuovo con un pezzo mancante capito dall'IA → bozza come nel percorso deterministico: la risposta
+  // («12», «nei primi») la completa, e la domanda cita solo ciò che il titolare ha detto (prima: «Rimandami la richiesta completa»).
+  if(plan.type==='missing'&&plan.name&&!proposal){const c=parseCreate(text,sections,startsWithCreate(text)),one=c&&c.price!==null&&!createCompound(text)?c.price:null,d:CreateDraft={kind:'create_draft',name:plan.name.charAt(0).toLocaleUpperCase('it')+plan.name.slice(1),price:one,sectionId:sections.length===1?sections[0]!.id:c?.sectionId??null}
+   await propose(tx,ctx,row.revision,d);return createQuestion(d,sections)}
+  if(plan.type!=='change')return planText(plan,refs,sections);if(!storedActions({kind:'batch',actions:plan.actions},refs,sections))return copy.notUnderstood;actions=batch?mergeMenuActions(batch,plan.actions,plan.remove):plan.actions;planAfter=plan.after}
  else{let picked:MenuAction[]|null=created;if(!picked&&choice){const options=choice.options.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r)
    // Una risposta che è già un comando completo («carbonara 10») vale come comando nuovo: mai il valore vecchio in sospeso.
    const t1=normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ').trim(),fresh=parseMenuCommand(text)||(()=>{const i=parseIntent(text);return !!i&&i.kind!=='ask'&&i.kind!=='read'&&i.kind!=='capability'})()||/\d/.test(t1)&&/[a-z]{3}/.test(t1)&&!/^(?:il |la |l )?(?:numero )?\d{1,2}$/.test(t1)
@@ -241,19 +245,21 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  if(st.exclude.length){actions=actions.filter(a=>!isExcluded(a as any,st.exclude));if(!actions.length){if(batch)return copy.pendingEmpty;return fill(copy.negatedOnly,{piatti:[...new Set(st.exclude.map(e=>refs.find(r=>r.id===e.id)?.name).filter((n):n is string=>!!n))].slice(0,4).map(safe).join(', ')})}}
  {const problem=salesActionProblem(actions,workspace);if(problem)return problem}
  actions=effectiveMenuActions(actions,workspace);
- if(!actions.length){if(batch||holdPick)await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return batch?copy.pendingEmpty:copy.noChanges}
+ // A4.4: la risposta alla domanda dello stesso messaggio segue la modifica (letta sul menu dopo il salvataggio).
+ const afterText=(w:Workspace)=>planAfter?'\n\n'+planText(planAfter,catalogOf(w).refs,sections):''
+ if(!actions.length){if(batch||holdPick)await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return batch?copy.pendingEmpty:copy.noChanges+afterText(workspace)}
  // G6: prezzo implausibile (oltre 500 € o almeno 8 volte quello attuale: lo zero in più; round 2: 3× bloccava prezzi veri) → conferma scritta, mai online diretto.
  const implausible=actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})())))
  const needsApproval=!!batch||actions.length>3||implausible;
  // «elimina/cancella/rimuovi X»: nascosto, mai eliminato (17/10); lo si dice una volta nella risposta.
  {const hid=actions.find(a=>a.kind==='hidden'&&a.value);if(hid&&/\b(?:elimin|cancell|rimuov)\w*/i.test(normalizeMenuText(text))&&'id' in hid){const r=refs.find(x=>x.id===hid.id);if(r)tail=[tail,fill(copy.hiddenNotDeleted,{piatto:safe(r.name).toLowerCase()})].filter(Boolean).join('\n\n')}}
  const withTail=(s:string)=>tail?s+'\n\n'+tail:s
- if(needsApproval){await propose(tx,ctx,row.revision,{kind:'batch',actions,requiresTypedOk:true});const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`);return withTail(proposalText(String(restaurant[0]?.name),actions,refs,sections))}
+ if(needsApproval){await propose(tx,ctx,row.revision,{kind:'batch',actions,requiresTypedOk:true});const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`);return withTail(proposalText(String(restaurant[0]?.name),actions,refs,sections)+afterText(workspace))}
  const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);
  if(photos.some(a=>!ready.has(a.id))){await propose(tx,ctx,row.revision,{kind:'batch',actions,autoApply:true});return{upload:photos.filter(a=>!ready.has(a.id))}}
  const waItems=new Map(workspace.menus.flatMap(m=>m.sections.flatMap(sec=>sec.items.map(i=>[i.id,structuredClone(i)] as const)))),memo=actions.slice(preUndoLen),undo=undoFor(memo,id=>waItems.get(id) as any);
  const beforeW=structuredClone(workspace),restaurant=await restaurantSettings();applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace);
- if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeLast(tx,phone,!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections))
+ if(opts.isExpired?.())throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeLast(tx,phone,!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+afterText(next))
 }
 const turnFor=(ctx:Ctx,text:string,opts?:Parameters<typeof menuTurn>[3])=>db.transaction(async tx=>{if(opts?.isExpired?.())throw new Error('WhatsApp turn expired');await lock(tx,ctx.phone);const live=await linkedContext(tx,ctx.phone);const result=live?await menuTurn(tx,live,text,opts):'';if(opts?.isExpired?.())throw new Error('WhatsApp turn expired');return result})
 type Budget={expired:boolean,failed?:boolean}
@@ -307,7 +313,7 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
   // Rimando senza contesto valido («anche la gricia», «no scusa 14» dopo 30 minuti): una domanda, non «non ho capito».
   // Un solo piatto e nessuna azione capita: una domanda («Cosa vuoi cambiare per X?»), non «non ho capito».
   if(!d.hold&&d.plan.type==='clarify'&&d.plan.ids.length===1&&!d.plan.actions?.length){const r=refs.find(x=>x.id===(d.plan as any).ids[0]);if(r)return fill(copy.brainWhatFor,{piatto:safe(r.name)})}
-  if(!d.hold&&d.plan.type==='clarify'&&!d.plan.ids.length&&!d.plan.actions?.length&&REFERS.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ')))return copy.brainNoContext
+  if(!d.hold&&d.plan.type==='clarify'&&!d.plan.ids.length&&!d.plan.actions?.length&&(REFERS.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' '))||(!!run.recentIds?.length&&normalizeMenuText(text).trim().split(/\s+/).length<=4))){const names=(run.recentIds??[]).map(id=>refs.find(r=>r.id===id)?.name).filter((n):n is string=>!!n).map(n=>'*'+safe(n)+'*');return names.length===1?fill(copy.brainWhatFor,{piatto:names[0]!.replace(/^\*|\*$/g,'')}):names.length?fill(copy.brainWhichRecent,{piatti:names.length>1?names.slice(0,-1).join(', ')+' o '+names.at(-1):names[0]!}):copy.brainNoContext}
   // Più parti incerte: parti chiare in sospeso (proposta `hold`, 10 minuti) e una domanda per ciascuna, in un solo messaggio.
   if(d.hold){const hold=d.hold;return db.transaction(async tx=>{await lock(tx,ctx.phone);const live=await readWorkspace(ctx.tenant,tx);if(!live||live.revision!==row.revision)return copy.menuChanged;await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);await propose(tx,ctx,row.revision,hold);return holdQuestion(hold,refs,sections)})}
   const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,planned:{revision:row.revision,plan:d.plan,proposalRevision:JSON.stringify(pend)},exclude:[...exclude,...d.exclude]})
