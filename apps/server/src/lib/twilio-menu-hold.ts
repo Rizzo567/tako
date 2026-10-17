@@ -11,16 +11,18 @@
  * «finito/esaurito/non c'è più/nun ce sta» = esaurito. Vale in testo e vocale, anche dentro richieste multiple e correzioni.
  */
 import type {MenuRef,SectionRef,MenuAction} from './twilio-menu-ai.js'
-import {describeAction,safe} from './twilio-menu-ai.js'
+import {describeAction,safe,euro as euroText} from './twilio-menu-ai.js'
 import {plainText,findDishes,parseIntent,removeVerbRe,wordNumber} from './twilio-menu-nlu.js'
 import {startsWithCreate,createCompound,parseCreate} from './twilio-menu-create.js'
 import {copy,fill} from './twilio-menu-copy.js'
 
 export type HoldAsk={type:'remove',id:string,word:string}|{type:'price',name:string,sectionId:string}
-export type Hold={kind:'hold',actions:MenuAction[],ask:HoldAsk}
+export type Hold={kind:'hold',actions:MenuAction[],ask:HoldAsk,notes?:string[]}
 
 const holdFold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
 const holdFlat=(s:string)=>holdFold(s).replace(/[^a-z0-9]+/g,' ').trim()
+// Nome senza articolo davanti: «la parmigiana» (nome scritto così nel menu) = «Parmigiana».
+const holdBare=(s:string)=>holdFlat(s).replace(/^(?:il|lo|la|i|gli|le|l|un|una|uno) /,'')
 /** Chiave fonetica senza spazi, come la sente Whisper: gli/gl → l, j/y → i, h muta, doppie scempie. «tojibo» → «toibo». */
 export const squash=(s:string)=>holdFold(s).replace(/[^a-z]+/g,'').replace(/gli/g,'li').replace(/gl/g,'l').replace(/[jy]/g,'i').replace(/h/g,'').replace(/k/g,'c').replace(/(.)\1+/g,'$1')
 // Verbi di rimozione come suonano attaccati al nome («togli bo» → «tolibo», «toji bo» → «toibo», «leva bo» → «levabo»).
@@ -55,7 +57,7 @@ function holdCutSection(body:string,sections:SectionRef[]):{rest:string,sectionI
   const f=holdFold(body),m=f.match(re);if(m){const from=m.index!,to=from+m[0].length;return{rest:(body.slice(0,from)+' '+body.slice(to)).replace(/\s+/g,' ').trim(),sectionId:s.id}}}
  return null}
 const holdCreateVerb=/^\s*(?:(?:allora|ok|ciao|senti|mi|ci|puoi|potresti|vorrei|voglio)\s+)*(?:aggiung\w*|aggiun\w*|aggin\w*|agiung\w*|inserisc\w*|inserire|metti\w*\s+nel\s+menu)\s*[:,]?\s*/i
-export type HoldStart={hold:Hold,text:string}|{actions:MenuAction[]}
+export type HoldStart={hold:Hold,text:string}|{actions:MenuAction[],note?:string}
 /** Divide sui separatori senza spezzare i nomi dei piatti che li contengono («Pasta e fagioli»). */
 function splitParts(text:string,refs:MenuRef[]):string[]{
  const names=[...new Set(refs.map(r=>r.name.replace(/\s+/g,' ').trim()).filter(n=>n.length>=3&&HOLD_SEP.test(' '+n+' ')))].sort((a,b)=>b.length-a.length),keep:string[]=[]
@@ -65,7 +67,8 @@ function splitParts(text:string,refs:MenuRef[]):string[]{
  * Aggiunta con un comando chiaro dentro («aggiungi … la parmigiana a 10 e togli boh») → `actions`. null = flusso di sempre. */
 export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]):HoldStart|null{
  if(text.length>600)return null
- const clear:MenuAction[]=[];let ask:HoldAsk|null=null,uncertain=0,commands=0
+ const clear:MenuAction[]=[],exists:MenuRef[]=[];let ask:HoldAsk|null=null,uncertain=0,commands=0
+ let holdNotes:string[]=[]
  const guessAsk=(p:string,g:MenuRef):HoldAsk=>({type:'remove',id:g.id,word:p.replace(/^(?:e|ed|poi)\s+/i,'').replace(/[.!?]+$/,'').trim()})
  if(startsWithCreate(text)){
   // Aggiunta di più piatti: «aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo».
@@ -79,19 +82,22 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
   for(const p of parts){const change=command(p);if(change){clear.push(change);commands++;continue}
    const guess=removalGuess(p,refs);if(guess){uncertain++;ask=guessAsk(p,guess);continue}
    const c=parseCreate(p,sections,false);if(!c||!c.name||/\b(?:euro|costa|costano|aggiung\w*|togli\w*|nascond\w*|finit\w*|esaurit\w*)\b/i.test(c.name)||c.name.length>80)return null
-   const name=c.name;if(refs.some(r=>r.sectionId===sectionId&&holdFlat(r.name)===holdFlat(name)))return null
+   // Il piatto c'è già in quella categoria (QA 17/10: «la parmigiana» aggiunta da un vocale precedente): non si raddoppia, lo si dice.
+   const name=c.name,twin=refs.find(r=>r.sectionId===sectionId&&holdBare(r.name)===holdBare(name));if(twin){exists.push(twin);continue}
    if(c.price===null){uncertain++;ask={type:'price',name,sectionId};continue}
    clear.push({kind:'create',sectionId,name,price:c.price,description:null})}
   // Tutto chiaro: con un comando dentro l'aggiunta si applica qui (prima il nome diventava «Parmigiana e togli boh»),
   // altrimenti resta al flusso di sempre.
-  if(!uncertain)return commands&&clear.length>commands?{actions:clear}:null
-  if(!createCompound(text)&&!clear.some(a=>a.kind==='create'))return null
+  const notes=exists.map(r=>fill(copy.holdExists,{piatto:safe(r.name),categoria:safe(r.section??''),prezzo:euroText(r.price)}))
+  if(!uncertain)return commands&&(clear.length>commands||exists.length)?{actions:clear,...(notes.length?{note:notes.join('\n')}:{})}:null
+  if(!createCompound(text)&&!clear.some(a=>a.kind==='create')&&!exists.length)return null
+  if(notes.length)holdNotes=notes
  }else{
   // Comandi su piatti esistenti: «la carbonara a 12 e tojibo», «boh finito, toglichenesacc», o «tojibo» da solo.
   const parts=splitParts(text,refs)
   for(const p of parts){const change=holdChangeOf(p,refs);if(change){clear.push(change);continue}
    // «Tojibo, e aggiungi nei piatti di prova la caprese a 9 euro»: l'aggiunta completa dopo la parte incerta.
-   if(startsWithCreate(p.replace(/^(?:e|ed|poi|e poi)\s+/i,''))){const c=parseCreate(p.replace(/^(?:e|ed|poi|e poi)\s+/i,''),sections,true);if(c&&c.name&&c.price!==null&&c.sectionId&&!/\b(?:euro|costa|togli\w*|finit\w*)\b/i.test(c.name)&&!refs.some(r=>r.sectionId===c.sectionId&&holdFlat(r.name)===holdFlat(c.name!))){clear.push({kind:'create',sectionId:c.sectionId,name:c.name,price:c.price,description:null});continue}return null}
+   if(startsWithCreate(p.replace(/^(?:e|ed|poi|e poi)\s+/i,''))){const c=parseCreate(p.replace(/^(?:e|ed|poi|e poi)\s+/i,''),sections,true);if(c&&c.name&&c.price!==null&&c.sectionId&&!/\b(?:euro|costa|togli\w*|finit\w*)\b/i.test(c.name)&&!refs.some(r=>r.sectionId===c.sectionId&&holdBare(r.name)===holdBare(c.name!))){clear.push({kind:'create',sectionId:c.sectionId,name:c.name,price:c.price,description:null});continue}return null}
    // «togli boh e che ne sacc»: un nome da solo dopo un «togli» eredita il verbo.
    const prev=clear.at(-1),hits=prev&&prev.kind==='hidden'&&prev.value&&!/\d|\b(?:costa\w*|prezzo|euro|finit\w*|esaurit\w*|promo\w*|evidenza|metti\w*)\b/i.test(holdFlat(p))?findDishes(p,refs):[];if(hits.length===1){clear.push({kind:'hidden',id:hits[0]!.id,value:true});continue}
    const guess=removalGuess(p,refs);if(guess){uncertain++;ask=guessAsk(p,guess);continue}
@@ -103,11 +109,11 @@ export function holdFromMessage(text:string,sections:SectionRef[],refs:MenuRef[]
  if(!clear.length&&ask.type!=='remove')return null
  // Il piatto da togliere non deve essere già toccato da una parte chiara.
  if(ask.type==='remove'&&clear.some(a=>'id' in a&&a.id===(ask as any).id))return null
- const hold:Hold={kind:'hold',actions:clear,ask}
+ const hold:Hold={kind:'hold',actions:clear,ask,...(holdNotes.length?{notes:holdNotes}:{})}
  return{hold,text:holdQuestion(hold,refs,sections)}
 }
 export function holdQuestion(hold:Hold,refs:MenuRef[],sections:SectionRef[]):string{
- const head=hold.actions.length?fill(copy.holdHead,{righe:hold.actions.map(a=>describeAction(a,refs,sections)).join('\n')})+'\n\n':''
+ const head=(hold.actions.length?fill(copy.holdHead,{righe:hold.actions.map(a=>describeAction(a,refs,sections)).join('\n')})+'\n\n':'')+(hold.notes?.length?hold.notes.join('\n')+'\n\n':'')
  if(hold.ask.type==='remove'){const r=refs.find(x=>x.id===(hold.ask as any).id);return head+fill(copy.holdRemove,{parola:safe(hold.ask.word).slice(0,40),piatto:safe(r?.name??'?')})}
  return head+fill(copy.holdPrice,{piatto:safe(hold.ask.name)})}
 

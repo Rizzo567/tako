@@ -104,6 +104,7 @@ Indica anche il menu, per esempio «{esempio}».`,
  holdPrice:'Quanto costa *{piatto}*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.',
  holdNotTouched:'Non ho toccato *{piatto}*.',
  holdDropped:'La richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela.',
+ holdExists:'*{piatto}* è già in *{categoria}* a {prezzo}: non l’ho aggiunto di nuovo.',
  holdRestUnclear:'Non ho capito «{testo}»: rimandamelo da solo.',
  hiddenNotDeleted:'I piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti {piatto}».',
  // 17/10: annulla vero, entro 10 minuti da una modifica pubblicata da WhatsApp.

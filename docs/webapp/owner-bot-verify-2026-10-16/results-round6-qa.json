@@ -1,0 +1,345 @@
+{
+ "cases": 17,
+ "runs": 17,
+ "unknownSql": [],
+ "results": [
+  {
+   "id": "live-01",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo",
+    "no, togli bo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo."
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-02",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo."
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-03",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toibo",
+    "no, togli boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.\n\n«toibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo."
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-04",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e tojibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|cannolo|4|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova",
+    "create|cannolo|4|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-05",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e tojibo",
+    "no"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n\nNon ho toccato *boh*."
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|cannolo|4|piatti di prova"
+   ],
+   "actual": [
+    "create|caprese|9|piatti di prova",
+    "create|cannolo|4|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-06",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e tojibo",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Annullato.* Il menu è rimasto invariato."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-07",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro e togli boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "create|caprese|9|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-08",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "piatto di verifica a 14 e tojibo",
+    "sì"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*\n*boh*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "price|Piatto di verifica|14",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "price|Piatto di verifica|14",
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-09",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "tojibo",
+    "no"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "Non ho toccato *boh*. Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-10",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "togli che ne sacc"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Che ne sacc|true"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-11",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "elimina boh"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\nI piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti boh»."
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-12",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e la frittata",
+    "8 euro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n\nQuanto costa *Frittata*? Scrivimi il prezzo, per esempio «8 euro»: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\nNuovo piatto *Frittata* in *Piatti di prova*: *8,00 €*"
+   ],
+   "expected": [
+    "create|caprese|9|piatti di prova",
+    "create|cannolo|4|piatti di prova",
+    "create|frittata|8|piatti di prova"
+   ],
+   "actual": [
+    "create|caprese|9|piatti di prova",
+    "create|cannolo|4|piatti di prova",
+    "create|frittata|8|piatti di prova"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-13",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "piatto di verifica a 14",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Piatto di verifica*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-14",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e tojibo",
+    "sì",
+    "torna indietro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo capito:\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n\n«tojibo» non è nel menu. Intendi *togliere boh* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.",
+    "*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Caprese* in *Piatti di prova*: *9,00 €*\nNuovo piatto *Cannolo* in *Piatti di prova*: *4,00 €*\n*boh*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*boh*: com’era prima\n*Caprese*: tolto (era stato aggiunto)\n*Cannolo*: tolto (era stato aggiunto)"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-15",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "togli che ne sacc",
+    "rimetti com'era"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Che ne sacc*: *nascosto* dal menu",
+    "*Annullato.* Il menu è tornato com’era prima dell’ultima modifica.\n\n*Che ne sacc*: com’era prima"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-16",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "piatto di verifica a 14",
+    "[dashboard: Piatto di verifica price 15]",
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,00 €*",
+    "*Non annullo*: nel frattempo *Piatto di verifica* è stato cambiato dalla dashboard. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "live-17",
+   "cat": "live",
+   "mode": "ideal",
+   "turns": [
+    "annulla"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ci sono modifiche in attesa. Quelle *già pubblicate* restano nel menu. Dimmi cosa vuoi ripristinare."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  }
+ ]
+}

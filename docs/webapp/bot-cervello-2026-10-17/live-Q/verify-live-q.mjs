@@ -47,26 +47,31 @@ function changes(doc){const a=new Map(items(before.w.published).map(i=>[i.id,i])
  for(const y of a.values())if(!items(doc).some(x=>x.id===y.id))out.push(`delete|${y.name}`);return out.sort()}
 const AI='Sono l’*assistente automatico* di Takomenu'
 const M='aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e tojibo'
-const TWO=['create|Parmigiana|10|Piatti di prova','create|Tiramisù|6|Piatti di prova']
+const NEW='aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e tojibo'
+const TWO=['create|Caprese|9|Piatti di prova','create|Cannolo|4|Piatti di prova']
+// Le stesse 17 sequenze di tests/owner-bot-adversarial-round6-qa.test.ts (menu vero del QA, tutte senza IA).
+// Sul QA di oggi «la parmigiana» e «tiramisù» ci sono già (vocale di Manuel delle 13:26): il bot non li raddoppia e lo dice.
 // [id, turni (stringa o {dash:[piatto,prezzo]}), modifiche attese rispetto all'inizio, risposte attese {turno: regex}]
 const S=[
- ['manuel',[M,'no, togli bo'],[...TWO,'hidden|boh|true'],{0:/Intendi \*togliere boh\*/,1:/Confermato/}],
- ['v01-si',[M,'sì'],[...TWO,'hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
- ['v02-toibo',[M.replace('tojibo','toibo'),'no, togli boh'],[...TWO,'hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
- ['v03-toglibo',[M.replace('tojibo','toglibo')+'.','esatto'],[...TWO,'hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
- ['v04-no',[M,'no'],TWO,{1:/Non ho toccato \*boh\*/}],
- ['v05-annulla',[M,'annulla'],[],{1:/Annullato/}],
- ['v06-togli-chiaro',['aggiungi nei piatti di prova la parmigiana a 10 euro e togli boh'],['create|Parmigiana|10|Piatti di prova','hidden|boh|true'],{}],
- ['v07-esistenti',['pasta al ragù a 13 e tojibo','sì'],['price|pasta al ragù|13','hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
+ ['manuel',[M,'no, togli bo'],['hidden|boh|true'],{0:/Intendi \*togliere boh\*/,1:/Confermato/}],
+ ['v01-si',[M,'sì'],['hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
+ ['v02-toibo',[M.replace('tojibo','toibo'),'no, togli boh'],['hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
+ ['v03-nuovi',[NEW,'sì'],[...TWO,'hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
+ ['v04-no',[NEW,'no'],TWO,{1:/Non ho toccato \*boh\*/}],
+ ['v05-annulla',[NEW,'annulla'],[],{1:/Annullato/}],
+ ['v06-togli-chiaro',['aggiungi nei piatti di prova la caprese a 9 euro e togli boh'],['create|Caprese|9|Piatti di prova','hidden|boh|true'],{}],
+ ['v07-esistenti',['piatto di verifica a 14 e tojibo','sì'],['price|Piatto di verifica|14','hidden|boh|true'],{0:/Intendi \*togliere boh\*/}],
  ['v08-solo',['tojibo','no'],[],{0:/Intendi \*togliere boh\*/}],
  ['v09-togli',['togli che ne sacc'],['hidden|Che ne sacc|true'],{0:/nascosto/}],
  ['v10-elimina',['elimina boh'],['hidden|boh|true'],{0:/non li elimino/}],
- ['v11-prezzo',['aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e la frittata','8 euro'],[...TWO,'create|Frittata|8|Piatti di prova'],{0:/Quanto costa \*Frittata\*/}],
- ['annulla-1',['pasta al ragù a 13','annulla'],[],{1:/\*Annullato\.\*/}],
- ['annulla-2',[M,'sì','torna indietro'],[],{2:/\*Annullato\.\*/}],
- ['annulla-3',['togli boh','rimetti com\'era'],[],{1:/\*Annullato\.\*/}],
- ['annulla-dash',['pasta al ragù a 13',{dash:['pasta al ragù',14]},'annulla'],['price|pasta al ragù|14'],{1:/Non annullo/}],
+ ['v11-prezzo',['aggiungi nei piatti di prova la caprese a 9 euro, il cannolo a 4 euro e la frittata','8 euro'],[...TWO,'create|Frittata|8|Piatti di prova'],{0:/Quanto costa \*Frittata\*/}],
+ ['annulla-1',['piatto di verifica a 14','annulla'],[],{1:/\*Annullato\.\*/}],
+ ['annulla-2',[NEW,'sì','torna indietro'],[],{2:/\*Annullato\.\*/}],
+ ['annulla-3',['togli che ne sacc','rimetti com\'era'],[],{1:/\*Annullato\.\*/}],
+ ['annulla-dash',['piatto di verifica a 14',{dash:['Piatto di verifica',15]},'annulla'],['price|Piatto di verifica|15'],{2:/Non annullo/}],
  ['annulla-niente',['annulla'],[],{0:/Non ci sono modifiche in attesa/}]]
+// Prima di partire: le sequenze devono restare senza IA anche sul menu di adesso (stesso controllo del banco round6-qa).
+{const snap=JSON.parse(await readFile(resolve(here,'qa-workspace-1017.json'),'utf8')).published;if(hash(snap)!==hash(before.w.published))throw Error('il menu del QA non è più quello dell\'istantanea provata in round6-qa: rifai il banco prima, mi fermo')}
 const results=[];let stopped=null
 try{
  for(const [id,turns,expected,want] of S){if(stopped)break
