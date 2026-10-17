@@ -41,5 +41,9 @@ Branch `codex/bot-quick-1017`, base `origin/main` 3bd75b5 (edge v108 online). De
 
 ## Batterie e verificatori
 - `round6` (mia, 177 casi): famiglia completa con invarianti nuove (riga AI una volta, mai «finito» per un verbo di rimozione, prompt Whisper con i nomi del locale nei vocali).
-- `round6b`: verificatore indipendente (vedi REPORT-Q).
+- `round6b` (200): verificatore indipendente. 3 difetti veri corretti («sì e <comando>», parte incerta in testa, «non lo aggiungere»), 1 attesa corretta (4 modifiche → OK).
+- `round6-qa` (17): le sequenze dal vivo sull'istantanea del menu QA (`live-Q/qa-workspace-1017.json`), invariante «nessuna chiamata all'IA».
+
+## Doppioni nelle aggiunte multiple (dal vivo, v109 → v110)
+- Sul QA «la parmigiana» e «tiramisù» c'erano già: v109 ripiegava sull'IA. Ora un piatto già presente nella stessa categoria (nome confrontato senza articolo: «la parmigiana» = «Parmigiana») non si aggiunge di nuovo e la risposta lo dice; la domanda sulla parte incerta resta.
 - Ho dovuto correggere alcune mie attese al primo giro (non il bot): «boh è finito» toglie anche «Ultime porzioni» (regola dell'esaurito operativo già esistente); la carbonara del banco costa già 12; i casi «annulla» che passano dall'IA hanno bisogno della risposta del modello finto.
