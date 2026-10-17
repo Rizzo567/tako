@@ -1,0 +1,437 @@
+{
+ "tag": "v106",
+ "results": [
+  {
+   "type": "auth-me",
+   "meMs": 506
+  },
+  {
+   "type": "price",
+   "i": 0,
+   "tGet": 512,
+   "tPut": 1947,
+   "tDiff": 614,
+   "tPost": 2134,
+   "commitAfterConfirm": 2204,
+   "commitAfterClick": 4765,
+   "stPut": "app;dur=357.4,boot;dur=250.0",
+   "stPost": "app;dur=445.9,boot;dur=283.3"
+  },
+  {
+   "type": "price",
+   "i": 1,
+   "tGet": 569,
+   "tPut": 2251,
+   "tDiff": 468,
+   "tPost": 1459,
+   "commitAfterConfirm": 1429,
+   "commitAfterClick": 4148,
+   "stPut": "app;dur=322.5,boot;dur=278.9",
+   "stPost": "app;dur=356.8,boot;dur=142.9"
+  },
+  {
+   "type": "price",
+   "i": 2,
+   "tGet": 645,
+   "tPut": 1647,
+   "tDiff": 501,
+   "tPost": 1498,
+   "commitAfterConfirm": 1525,
+   "commitAfterClick": 3673,
+   "stPut": "app;dur=296.8,boot;dur=157.7",
+   "stPost": "app;dur=361.2,boot;dur=142.7"
+  },
+  {
+   "type": "price",
+   "i": 3,
+   "tGet": 550,
+   "tPut": 1824,
+   "tDiff": 493,
+   "tPost": 1754,
+   "commitAfterConfirm": 1819,
+   "commitAfterClick": 4136,
+   "stPut": "app;dur=315.2,boot;dur=242.5",
+   "stPost": "app;dur=375.0,boot;dur=240.9"
+  },
+  {
+   "type": "price",
+   "i": 4,
+   "tGet": 461,
+   "tPut": 1438,
+   "tDiff": 421,
+   "tPost": 1476,
+   "commitAfterConfirm": 1537,
+   "commitAfterClick": 3396,
+   "stPut": "app;dur=279.1,boot;dur=165.9",
+   "stPost": "app;dur=348.3,boot;dur=148.7"
+  },
+  {
+   "type": "name",
+   "i": 0,
+   "tGet": 441,
+   "tPut": 1616,
+   "tDiff": 419,
+   "tPost": 1488,
+   "commitAfterConfirm": 1507,
+   "commitAfterClick": 3542,
+   "stPut": "app;dur=302.2,boot;dur=202.8",
+   "stPost": "app;dur=366.0,boot;dur=156.0"
+  },
+  {
+   "type": "name",
+   "i": 1,
+   "tGet": 434,
+   "tPut": 1427,
+   "tDiff": 367,
+   "tPost": 1472,
+   "commitAfterConfirm": 1541,
+   "commitAfterClick": 3335,
+   "stPut": "app;dur=282.4,boot;dur=143.9",
+   "stPost": "app;dur=345.3,boot;dur=146.7"
+  },
+  {
+   "type": "name",
+   "i": 2,
+   "tGet": 444,
+   "tPut": 1646,
+   "tDiff": 506,
+   "tPost": 1451,
+   "commitAfterConfirm": 1487,
+   "commitAfterClick": 3639,
+   "stPut": "app;dur=294.2,boot;dur=155.1",
+   "stPost": "app;dur=331.9,boot;dur=144.0"
+  },
+  {
+   "type": "name",
+   "i": 3,
+   "tGet": 466,
+   "tPut": 1467,
+   "tDiff": 404,
+   "tPost": 1486,
+   "commitAfterConfirm": 1486,
+   "commitAfterClick": 3358,
+   "stPut": "app;dur=317.8,boot;dur=141.6",
+   "stPost": "app;dur=353.0,boot;dur=147.5"
+  },
+  {
+   "type": "name",
+   "i": 4,
+   "tGet": 433,
+   "tPut": 1537,
+   "tDiff": 500,
+   "tPost": 1469,
+   "commitAfterConfirm": 1531,
+   "commitAfterClick": 3568,
+   "stPut": "app;dur=305.1,boot;dur=145.9",
+   "stPost": "app;dur=331.4,boot;dur=158.5"
+  },
+  {
+   "type": "new",
+   "i": 0,
+   "tGet": 436,
+   "tPut": 1843,
+   "tDiff": 474,
+   "tPost": 1822,
+   "commitAfterConfirm": 1924,
+   "commitAfterClick": 4241,
+   "stPut": "app;dur=362.7,boot;dur=237.5",
+   "stPost": "app;dur=395.6,boot;dur=232.8"
+  },
+  {
+   "type": "new",
+   "i": 1,
+   "tGet": 428,
+   "tPut": 1467,
+   "tDiff": 614,
+   "tPost": 1947,
+   "commitAfterConfirm": 1950,
+   "commitAfterClick": 4031,
+   "stPut": "app;dur=302.3,boot;dur=148.0",
+   "stPost": "app;dur=368.1,boot;dur=291.0"
+  },
+  {
+   "type": "new",
+   "i": 2,
+   "tGet": 500,
+   "tPut": 1861,
+   "tDiff": 340,
+   "tPost": 1518,
+   "commitAfterConfirm": 1556,
+   "commitAfterClick": 3757,
+   "stPut": "app;dur=326.4,boot;dur=223.4",
+   "stPost": "app;dur=381.8,boot;dur=147.7"
+  },
+  {
+   "type": "new",
+   "i": 3,
+   "tGet": 705,
+   "tPut": 1510,
+   "tDiff": 446,
+   "tPost": 1475,
+   "commitAfterConfirm": 1482,
+   "commitAfterClick": 3439,
+   "stPut": "app;dur=299.8,boot;dur=153.8",
+   "stPost": "app;dur=327.4,boot;dur=143.2"
+  },
+  {
+   "type": "new",
+   "i": 4,
+   "tGet": 559,
+   "tPut": 1591,
+   "tDiff": 518,
+   "tPost": 1656,
+   "commitAfterConfirm": 1656,
+   "commitAfterClick": 3764,
+   "stPut": "app;dur=278.0,boot;dur=155.9",
+   "stPost": "app;dur=368.9,boot;dur=209.5"
+  },
+  {
+   "type": "delete",
+   "i": 0,
+   "tGet": 456,
+   "tPut": 1536,
+   "tDiff": 409,
+   "tPost": 1452,
+   "commitAfterConfirm": 1435,
+   "commitAfterClick": 3380,
+   "stPut": "app;dur=316.2,boot;dur=143.4",
+   "stPost": "app;dur=332.7,boot;dur=142.6"
+  },
+  {
+   "type": "delete",
+   "i": 1,
+   "tGet": 568,
+   "tPut": 2091,
+   "tDiff": 511,
+   "tPost": 1441,
+   "commitAfterConfirm": 1487,
+   "commitAfterClick": 4089,
+   "stPut": "app;dur=326.2,boot;dur=298.2",
+   "stPost": "app;dur=331.4,boot;dur=149.8"
+  },
+  {
+   "type": "delete",
+   "i": 2,
+   "tGet": 595,
+   "tPut": 1434,
+   "tDiff": 412,
+   "tPost": 1743,
+   "commitAfterConfirm": 1734,
+   "commitAfterClick": 3580,
+   "stPut": "app;dur=271.6,boot;dur=146.8",
+   "stPost": "app;dur=357.5,boot;dur=235.9"
+  },
+  {
+   "type": "delete",
+   "i": 3,
+   "tGet": 457,
+   "tPut": 1442,
+   "tDiff": 686,
+   "tPost": 1654,
+   "commitAfterConfirm": 1714,
+   "commitAfterClick": 3843,
+   "stPut": "app;dur=324.4,boot;dur=154.1",
+   "stPost": "app;dur=351.1,boot;dur=206.6"
+  },
+  {
+   "type": "delete",
+   "i": 4,
+   "tGet": 488,
+   "tPut": 1518,
+   "tDiff": 443,
+   "tPost": 1848,
+   "commitAfterConfirm": 1913,
+   "commitAfterClick": 3874,
+   "stPut": "app;dur=314.7,boot;dur=160.3",
+   "stPost": "app;dur=408.8,boot;dur=281.5"
+  },
+  {
+   "type": "category",
+   "i": 0,
+   "tGet": 468,
+   "tPut": 1687,
+   "tDiff": 546,
+   "tPost": 1481,
+   "commitAfterConfirm": 1558,
+   "commitAfterClick": 3791,
+   "stPut": "app;dur=279.4,boot;dur=146.7",
+   "stPost": "app;dur=347.3,boot;dur=151.2"
+  },
+  {
+   "type": "category",
+   "i": 1,
+   "tGet": 468,
+   "tPut": 1403,
+   "tDiff": 442,
+   "tPost": 1725,
+   "commitAfterConfirm": 1731,
+   "commitAfterClick": 3576,
+   "stPut": "app;dur=274.9,boot;dur=157.4",
+   "stPost": "app;dur=392.8,boot;dur=222.9"
+  },
+  {
+   "type": "category",
+   "i": 2,
+   "tGet": 480,
+   "tPut": 1714,
+   "tDiff": 445,
+   "tPost": 1453,
+   "commitAfterConfirm": 1508,
+   "commitAfterClick": 3668,
+   "stPut": "app;dur=279.3,boot;dur=149.0",
+   "stPost": "app;dur=357.0,boot;dur=148.4"
+  },
+  {
+   "type": "category",
+   "i": 3,
+   "tGet": 466,
+   "tPut": 1433,
+   "tDiff": 426,
+   "tPost": 1696,
+   "commitAfterConfirm": 1676,
+   "commitAfterClick": 3536,
+   "stPut": "app;dur=293.4,boot;dur=150.7",
+   "stPost": "app;dur=352.6,boot;dur=210.4"
+  },
+  {
+   "type": "category",
+   "i": 4,
+   "tGet": 465,
+   "tPut": 1485,
+   "tDiff": 616,
+   "tPost": 1470,
+   "commitAfterConfirm": 1537,
+   "commitAfterClick": 3639,
+   "stPut": "app;dur=309.1,boot;dur=144.7",
+   "stPost": "app;dur=341.5,boot;dur=146.5"
+  },
+  {
+   "type": "soldout",
+   "i": 0,
+   "tGet": 574,
+   "tPut": 1645,
+   "tDiff": 471,
+   "tPost": 2070,
+   "commitAfterConfirm": 2102,
+   "commitAfterClick": 4217,
+   "stPut": "app;dur=298.2,boot;dur=144.8",
+   "stPost": "app;dur=372.7,boot;dur=288.8"
+  },
+  {
+   "type": "soldout",
+   "i": 1,
+   "tGet": 570,
+   "tPut": 1431,
+   "tDiff": 514,
+   "tPost": 1466,
+   "commitAfterConfirm": 1514,
+   "commitAfterClick": 3459,
+   "stPut": "app;dur=313.8,boot;dur=149.4",
+   "stPost": "app;dur=366.9,boot;dur=149.7"
+  },
+  {
+   "type": "soldout",
+   "i": 2,
+   "tGet": 549,
+   "tPut": 1460,
+   "tDiff": 485,
+   "tPost": 2048,
+   "commitAfterConfirm": 2102,
+   "commitAfterClick": 4047,
+   "stPut": "app;dur=310.8,boot;dur=154.6",
+   "stPost": "app;dur=393.0,boot;dur=279.1"
+  },
+  {
+   "type": "soldout",
+   "i": 3,
+   "tGet": 517,
+   "tPut": 1022,
+   "tDiff": 516,
+   "tPost": 2051,
+   "commitAfterConfirm": 2101,
+   "commitAfterClick": 3638,
+   "stPut": "app;dur=262.4,boot;dur=0.0",
+   "stPost": "app;dur=400.2,boot;dur=274.6"
+  },
+  {
+   "type": "soldout",
+   "i": 4,
+   "tGet": 562,
+   "tPut": 1663,
+   "tDiff": 545,
+   "tPost": 2084,
+   "commitAfterConfirm": 2041,
+   "commitAfterClick": 4249,
+   "stPut": "app;dur=290.9,boot;dur=154.8",
+   "stPost": "app;dur=377.2,boot;dur=285.1"
+  }
+ ],
+ "summary": {
+  "price": {
+   "tPut": 1824,
+   "tDiff": 493,
+   "tPost": 1498,
+   "commitAfterConfirm": 1537,
+   "commitAfterClick": 4136
+  },
+  "name": {
+   "tPut": 1537,
+   "tDiff": 419,
+   "tPost": 1472,
+   "commitAfterConfirm": 1507,
+   "commitAfterClick": 3542
+  },
+  "new": {
+   "tPut": 1591,
+   "tDiff": 474,
+   "tPost": 1656,
+   "commitAfterConfirm": 1656,
+   "commitAfterClick": 3764
+  },
+  "delete": {
+   "tPut": 1518,
+   "tDiff": 443,
+   "tPost": 1654,
+   "commitAfterConfirm": 1714,
+   "commitAfterClick": 3843
+  },
+  "category": {
+   "tPut": 1485,
+   "tDiff": 445,
+   "tPost": 1481,
+   "commitAfterConfirm": 1558,
+   "commitAfterClick": 3639
+  },
+  "soldout": {
+   "tPut": 1460,
+   "tDiff": 514,
+   "tPost": 2051,
+   "commitAfterConfirm": 2101,
+   "commitAfterClick": 4047
+  }
+ },
+ "errors": [],
+ "restore": {
+  "before": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "items": "9d16b390473e8f4f",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "variants": "e926c2e2165c7a6a",
+   "public": "77ce229f82e35f60"
+  },
+  "after": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "items": "9d16b390473e8f4f",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "variants": "e926c2e2165c7a6a",
+   "public": "77ce229f82e35f60"
+  },
+  "ok": true
+ }
+}

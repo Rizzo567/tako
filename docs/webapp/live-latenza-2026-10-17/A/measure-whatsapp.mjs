@@ -34,7 +34,7 @@ try{
  for(const type of TYPES)for(let i=0;i<ROUNDS;i++){
   try{let r,undo
    if(type==='price'){r=await whatsapp(`prezzo ${dishP} a ${priceOf(dishP)+1+i}`)}
-   if(type==='soldout'){r=await whatsapp(`${dishS} esaurito`);undo=`${dishS} disponibile`}
+   if(type==='soldout'){r=await whatsapp(`${dishS} esaurito`);undo=`disponibile ${dishS}`}
    if(type==='hide'){r=await whatsapp(`nascondi ${dishH}`);undo=`mostra ${dishH}`}
    results.push({type,i,...r});console.log(type,i,JSON.stringify(r))
    if(undo){await sleep(300);const u=await whatsapp(undo);console.log(' undo',u.tReply,u.tCommit,u.text.slice(0,60))}
