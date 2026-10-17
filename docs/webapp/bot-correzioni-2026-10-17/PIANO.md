@@ -80,8 +80,8 @@ Scritture solo sul QA, poi ripristino verificato per hash. Nessun messaggio al n
 - [x] B3.3 Batteria B3 (≥150 frasi) verde. — *F: b3-sposta-rinomina 152, oracolo 152/152; avversario (elimina al posto di nascondere, rinomina/sposta a caso, categorie inventate): 0 GRAVI di sicurezza.*
 
 ### B4. Chiusura fase B
-- [ ] B4.1 Tutte le batterie A+B: 0 GRAVI, MEDI ≤ 2%; round1–6* 0/0/0; suite = 12 rossi noti.
-- [ ] B4.2 Menu pubblico e dashboard mostrano subito categorie nuove/spostamenti/cancellazioni (tempo reale come oggi).
+- [x] B4.1 Tutte le batterie A+B: 0 GRAVI, MEDI ≤ 2%; round1–6* 0/0/0; suite = 12 rossi noti. — *F: A 809/809 + B 452/452 (oracolo), 0 GRAVI di sicurezza con Groq giù e avversario; round1–6* verdi; suite 3.203 test, gli stessi 12 rossi; banco E 296/318 (multi 91,3%, 0 GRAVI di sicurezza); banco V 12 falliti su 143 (era 70), di cui 11 in attesa del «sì»/«OK» per decisione (implementation-notes 21).*
+- [x] B4.2 Menu pubblico e dashboard mostrano subito categorie nuove/spostamenti/cancellazioni (tempo reale come oggi). — *F: verificato **solo nel codice** (niente live, come richiesto): implementation-notes 25.*
 - [ ] B4.3 Verifica avversariale indipendente su B.
 - [ ] B4.4 Deploy edge v114 (o v113 se A e B escono insieme) come in A6.5; live sul QA solo TwiML; ripristino per hash; 0 messaggi a Manuel.
 - [ ] B4.5 Fast-forward main e release-1016; REPORT-B.md.

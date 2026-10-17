@@ -12,7 +12,7 @@ Generato da tests/eval (groq=adversary, bot=nuovo, conversazioni=809).
 | multi-turno | 363 | 265 (73%) | 265 | 16 | 82 | 0 | 3 | 57.6% | 154 | 130 | 0 |
 | TOTALE | 809 | 584 (72.2%) | 584 | 44 | 181 | 0 | 3 | 49.3% | 267 | 311 | 0 |
 
-Latenza harness (webhook→risposta, senza rete) p50 0.7 ms · p95 2 ms. Con la latenza Groq registrata: p50 0.7 ms · p95 2 ms.
+Latenza harness (webhook→risposta, senza rete) p50 3.5 ms · p95 9.5 ms. Con la latenza Groq registrata: p50 3.5 ms · p95 9.5 ms.
 IA: 397 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
 
 | Codice | GRAVE | MEDIO | BASSO |
