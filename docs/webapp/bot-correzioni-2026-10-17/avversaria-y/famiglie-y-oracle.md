@@ -9,13 +9,13 @@
 | cat-crea | 25 | 23 | 0 | 0 | 2 |
 | cat-piatti | 22 | 18 | 0 | 0 | 4 |
 | cat-rinomina | 19 | 15 | 0 | 0 | 4 |
-| sposta | 37 | 32 | 0 | 0 | 5 |
+| sposta | 37 | 33 | 0 | 0 | 4 |
 | rinomina | 24 | 21 | 0 | 0 | 3 |
 | lunghe | 14 | 14 | 0 | 0 | 0 |
 | cambio | 14 | 14 | 0 | 0 | 0 |
 | ripeti | 12 | 12 | 0 | 0 | 0 |
 | numeri | 31 | 31 | 0 | 0 | 0 |
-| unita | 17 | 15 | 0 | 0 | 2 |
+| unita | 17 | 17 | 0 | 0 | 0 |
 | emoji | 15 | 15 | 0 | 0 | 0 |
 | refusi | 23 | 23 | 0 | 0 | 0 |
 | vuoti | 15 | 15 | 0 | 0 | 0 |
@@ -29,7 +29,7 @@
 | r2-relativi | 16 | 16 | 0 | 0 | 0 |
 | r2-code | 16 | 16 | 0 | 0 | 0 |
 | r3-conferme | 26 | 24 | 0 | 0 | 2 |
-| TOTALE | 558 | 527 | 0 | 0 | 31 |
+| TOTALE | 558 | 530 | 0 | 0 | 28 |
 
 ## Fallimenti
 
@@ -97,10 +97,6 @@
   - turni: ❓ quali sono i fritti? ⏎ spostali tutti negli antipasti
   - atteso: move|Crocchette|Antipasti, move|Olive ascolane|Antipasti, move|Supplì|Antipasti · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Pizza fritta*: *7,00 €* · disponibile» ⏎ «Quale intendi? 1. *Supplì* (3,00 €) 2. *Crocchette* (4,00 €) 3. *Olive ascolane* (5,00 €)»
-- **y-sposta-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Birra|Caffè
-  - turni: sposta la birra nel caffè
-  - atteso: move|Birra|Caffè · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-sposta-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Pollo arrosto|Speciali, move|Tagliata|Speciali
   - turni: la tagliata a 19 ⏎ e il pollo a 15 ⏎ spostali negli speciali
   - atteso: move|Pollo arrosto|Speciali, move|Tagliata|Speciali, price|Pollo arrosto|15, price|Tagliata|19 · ottenuto: price|Pollo arrosto|15, price|Tagliata|19
@@ -124,14 +120,6 @@
 - **y-rinomina-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Supplì|Antipasti, rename|Supplì|Supplì al telefono
   - turni: rinomina il supplì in Supplì al telefono e spostalo negli antipasti
   - atteso: move|Supplì|Antipasti, rename|Supplì|Supplì al telefono · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **y-unita-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|6
-  - turni: la birra da 66 a 6
-  - atteso: price|Birra|6 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **y-unita-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|5.5
-  - turni: la birra 0,4 l a 5,50
-  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-fuoritempo-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|lasagna|14|piatti di prova
   - turni: aggiungi la lasagna ⏎ [+20 min] ⏎ 14

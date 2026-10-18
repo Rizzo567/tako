@@ -202,6 +202,9 @@ export const dialectNumbers=(s:string)=>s.replace(/\b[\p{L}]+\b/gu,w=>DIALECT_NU
 function quantitiesRead(text:string,actions:MenuAction[]){let t=text
  if(actions.some(a=>a.kind==='scarcity'))t=t.replace(/\b(?:ne\s+)?(?:restano|rimangono|rimasti|rimaste|ho|abbiamo|solo|ancora|ultim[eiao])\s+(?:solo\s+|ancora\s+)?\d+\b|\b\d+\s+(?:porzioni|pezzi)\b/gi,' ')
  if(relativeDelta(text))t=t.replace(/\b\d+\s*(?:centesimi|cent)\b/gi,' ')
+ // R5.1: «la birra da 66 a 6» (il prezzo di prima detto per confronto), «0,4 l», «33 cl» (formato), «X, anzi Y» (la parte ritirata).
+ t=t.replace(/\bda\s+\d+(?:[.,]\d+)?\s*(?:euro|eur|€)?\s+(?=a\s+\d)/gi,' ').replace(/\b\d+(?:[.,]\d+)?\s*(?:l|lt|litri?|cl|ml|gr?|kg)\b/gi,' ')
+ t=t.replace(/^[^,;]*?,?\s*\banzi\b(?:\s+no)?\s*,?/i,' ')
  return t}
 export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:Parameters<typeof validateBrainPlanCore>[2]):ReturnType<typeof validateBrainPlanCore>{
  const d=validateBrainPlanCore(raw,ctx,input)
@@ -423,6 +426,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const touched=refs.filter(r=>covered.has(r.id)&&padded.includes(' '+plain(r.name)+' ')).map(r=>' '+plain(r.name)+' ')
  // Fase R: un piatto esistente il cui nome è dentro il nome di un piatto NUOVO («pasta e fagioli alla napoletana») non manca.
  const createdNames=out.flatMap(a=>a.kind==='create'||a.kind==='special'||a.kind==='rename'?[' '+plain(a.name)+' ']:[]);for(const r of refs)if(createdNames.some(n=>n.includes(' '+plain(r.name)+' ')))covered.add(r.id)
+ // R5.1: «sposta la birra nel caffè», «rinomina la categoria caffè»: il piatto che si chiama come la categoria toccata dal piano non manca.
+ {const tgt=new Set(out.flatMap(a=>(a.kind==='move'||a.kind==='create'||a.kind==='rename_section')&&typeof (a as any).sectionId==='string'?[(a as any).sectionId as string]:[])),names=sections.filter(x=>tgt.has(x.id)).map(x=>plain(x.name));for(const r of refs)if(names.some(n=>n===plain(r.name)||n.replace(/i$/,'o')===plain(r.name)||n.replace(/e$/,'a')===plain(r.name)))covered.add(r.id)}
  const missed=input.pendingActions?.length?[]:refs.filter(r=>!covered.has(r.id)&&plain(r.name).length>=3&&padded.includes(' '+plain(r.name)+' ')&&refs.filter(x=>plain(x.name)===plain(r.name)).length===1&&!touched.some(t=>t!==' '+plain(r.name)+' '&&t.includes(' '+plain(r.name)+' ')))
  // A7.12 (vocali): un piatto nominato in una parte che dice di lasciarlo («l'amatriciana lasciala com'è», «la carbonara la
  // tengo a dodici», «no il tiramisù c'è») non manca: è detto che resta com'è. «boh» detto come intercalare («boh fai tu», «e poi…
