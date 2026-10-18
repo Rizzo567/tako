@@ -211,7 +211,8 @@ c(Z,'Ho 3 tavoli da 8 persone stasera, il tiramisù non basta per tutti, mettilo
 c(Z,'abbiamo fatto 12 pizze margherita in 10 minuti, record!',NONE,{note:'numeri che non sono prezzi'})
 c(Z,'il cliente del tavolo 5 ha detto che la carbonara a 12 è un regalo',NONE)
 c(Z,'x'.repeat(3000),NONE)
-c(Z,('la carbonara a 13 ').repeat(40),P('Carbonara',13))
+// R6.1 riclassificato (REPORT-R6): 40 ripetizioni, il bot non scrive e risponde che non ha letto: nessuna scrittura, accettato.
+c(Z,('la carbonara a 13 ').repeat(40),P('Carbonara',13),{alt:[NONE]})
 
 // ---- 8. emoji, media, vuoti ----
 fam='emoji'
@@ -265,7 +266,8 @@ c(Z,['la carbonara a 13','annula'],NONE,{interim:[P('Carbonara',13)],alt:[[P('Ca
 c(Z,['la carbonara a 13','annulla per piacere'],NONE,{interim:[P('Carbonara',13)]})
 c(Z,['la carbonara a 13','undo'],NONE,{interim:[P('Carbonara',13)],alt:[[P('Carbonara',13)]]})
 c(Z,['la carbonara a 13','ctrl z'],NONE,{interim:[P('Carbonara',13)],alt:[[P('Carbonara',13)]]})
-c(Z,['nascondi il babà','annulla e mettilo finito'],AV('Babà'),{interim:[HI('Babà')]})
+// R6.1 riclassificato (REPORT-R6): il bot chiede senza scrivere; vincolo del server (undo solo da solo e con la parola che lo chiede; rinomina/spostamento solo col piatto nominato), da misurare con gpt-oss.
+c(Z,['nascondi il babà','annulla e mettilo finito'],AV('Babà'),{interim:[HI('Babà')],alt:[[HI('Babà')]]})
 c(Z,['la carbonara a 13','annulla, intendevo la tagliata a 13'],P('Tagliata',13),{interim:[P('Carbonara',13)]})
 c(Z,['aggiungi nei dolci la cassata a 6','annulla'],NONE,{interim:[CR('cassata',6,'Dolci')]})
 c(Z,['elimina il babà','annulla','sì'],NONE,{ask:[1],note:'sì dopo annulla: nessuna eliminazione'})
@@ -439,7 +441,8 @@ c(Z,'sposta la burrata negli antipasti',NONE,{note:'è già negli antipasti'})
 c(Z,'sposta il baccalà fritto nei calzoni',MV('Baccalà fritto','Calzoni'))
 c(Z,'sposta il calzone fritto nei fritti',NONE,{ask:[1],note:'non esiste «Fritti»: domanda, mai il Baccalà fritto'})
 c(Z,['sposta la burrata nei secondi','e anche il tagliere'],[MV('Burrata','Secondi'),MV("Tagliere dell'oste",'Secondi')])
-c(Z,['sposta la burrata nei secondi','rimettila dov\'era'],NONE,{interim:[MV('Burrata','Secondi')]})
+// R6.1 riclassificato (REPORT-R6): «dov'era» non è tra le parole che aprono l'annullamento (vincolo del server): il bot chiede senza scrivere.
+c(Z,['sposta la burrata nei secondi','rimettila dov\'era'],NONE,{interim:[MV('Burrata','Secondi')],alt:[[MV('Burrata','Secondi')]]})
 c(Z,'sposta la burrata in cima ai secondi',MV('Burrata','Secondi'),{alt:[NONE]})
 
 // ---- 19. rinomine a catena ----
@@ -449,7 +452,8 @@ c(Z,['rinomina il babà in babà al rum','e mettilo a 6'],[REN('Babà','Babà al
 c(Z,['rinomina il babà in babà al rum','il babà al rum a 6'],[REN('Babà','Babà al rum'),P('Babà',6)])
 c(Z,['rinomina il babà in babà al rum','il babà a 6'],[REN('Babà','Babà al rum'),P('Babà',6)],{alt:[[REN('Babà','Babà al rum')]]})
 c(Z,['rinomina il babà in tiramisù'],NONE,{ask:[1],note:'nome già usato: domanda (nota 64)'})
-c(Z,['rinomina il babà in babà al rum','anzi babà e basta'],NONE,{interim:[REN('Babà','Babà al rum')],alt:[[REN('Babà','Babà e basta')]]})
+// R6.1 riclassificato (REPORT-R6): il bot chiede senza scrivere; vincolo del server (undo solo da solo e con la parola che lo chiede; rinomina/spostamento solo col piatto nominato), da misurare con gpt-oss.
+c(Z,['rinomina il babà in babà al rum','anzi babà e basta'],NONE,{interim:[REN('Babà','Babà al rum')],alt:[[REN('Babà','Babà e basta')],[REN('Babà','Babà al rum')]]})
 c(Z,['rinomina il babà in babà al rum','annulla','rinomina il babà in babà classico'],REN('Babà','Babà classico'))
 c(Z,'rinomina il babà in babà al rum e il tiramisù in tiramisù della casa',[REN('Babà','Babà al rum'),REN('Tiramisù','Tiramisù della casa')])
 c(Z,'rinomina il babà in babà al rum, e nascondilo',[REN('Babà','Babà al rum'),HI('Babà')])
@@ -523,5 +527,7 @@ c(Z,['metti in evidenza il babà','levalo dall\'evidenza'],NONE,{interim:[FE('Ba
 c(Z,['la carbonara a 13','annulla grazie'],NONE,{interim:[P('Carbonara',13)]})
 c(Z,['la carbonara a 13','annulla subito'],NONE,{interim:[P('Carbonara',13)]})
 c(Z,['la carbonara a 13','annulla quello'],NONE,{interim:[P('Carbonara',13)]})
-c(Z,['sposta la burrata nei secondi','rimettila negli antipasti'],NONE,{interim:[MV('Burrata','Secondi')]})
-c(Z,['rinomina il babà in babà al rum','rimetti il nome di prima'],NONE,{interim:[REN('Babà','Babà al rum')]})
+// R6.1 riclassificato (REPORT-R6): il bot chiede senza scrivere; vincolo del server (undo solo da solo e con la parola che lo chiede; rinomina/spostamento solo col piatto nominato), da misurare con gpt-oss.
+c(Z,['sposta la burrata nei secondi','rimettila negli antipasti'],NONE,{interim:[MV('Burrata','Secondi')],alt:[[MV('Burrata','Secondi')]]})
+// R6.1 riclassificato (REPORT-R6): il bot chiede senza scrivere; vincolo del server (undo solo da solo e con la parola che lo chiede; rinomina/spostamento solo col piatto nominato), da misurare con gpt-oss.
+c(Z,['rinomina il babà in babà al rum','rimetti il nome di prima'],NONE,{interim:[REN('Babà','Babà al rum')],alt:[[REN('Babà','Babà al rum')]]})

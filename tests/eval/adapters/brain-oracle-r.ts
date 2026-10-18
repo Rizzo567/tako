@@ -87,6 +87,17 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  if(hold&&/^no\b.*\blascial[oaie] (?:stare|perdere)$/.test(p))return out({actions:[ctl('confirm_pending')],reply_draft:'Fatto.'})
  if(hold){if(/^(?:no|no grazie|no no|no lascia stare|lascia stare|solo quelle|pubblica il resto)$/.test(p))return out({actions:[ctl('confirm_pending')],reply_draft:'Fatto.'});if(/^(?:annulla|annulla tutto|non pubblicare niente|niente)$/.test(p))return out({actions:[ctl('cancel_pending')],reply_draft:'Va bene, non pubblico niente.'})}
  if(!proposal&&!hold&&undo&&UNDO_ALONE.test(p))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})
+ // R6.1 (avversaria Z, «disfa» a parole libere): il modello ideale annulla con undo_last quando il titolare dice «annulla …» da solo
+ // (cortesia in coda), oppure scrive l'azione inversa sul piatto dell'ultima pubblicazione («mostralo», «toglila dall'evidenza»,
+ // «rimettila negli antipasti», «rimetti il nome di prima», «anzi babà e basta»). Tetto dell'architettura, non gpt-oss.
+ if(!proposal&&!hold&&undo){const pub=head.match(/ULTIMA PUBBLICAZIONE \(annullabile[^)]*\): ([^\n]+)/)?.[1]?.trim()??'',prevU=plainT([...msgs.slice(2,-1)].reverse().find(x=>x.role==='user')?.content?.split('MESSAGGIO').pop()??'')
+  if(/^annulla(?:l[oa])?(?: (?:per piacere|per favore|grazie|subito|quello|questo|quella|questa))+$/.test(p))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})
+  const item=cat.code.get(pub)??[...cat.code].find(([n])=>plainT(n)===plainT(pub))?.[1]
+  if(item){const act:any=/^(?:ri)?mostral[oaie]$|^fall[oaie] vedere(?: di nuovo)?$/.test(p)&&/\bnascond/.test(prevU)?{action:'set_hidden',item,value:false}
+    :/^(?:leval|toglil)[oaie] dall evidenza$/.test(p)&&/\bevidenza\b/.test(prevU)?{action:'set_featured',item,value:false}
+    :(()=>{const m=p.match(/^rimettil[oaie] (?:nei|negli|nelle|nella|nel|tra (?:i|le|gli)) (\w+)$/);if(!m||!/\bspost/.test(prevU))return null;const sec=sectionNames.find(n=>plainT(n).slice(0,5)===m[1]!.slice(0,5));return sec?{action:'move_item',item,section:cat.sections.get(sec)}:null})()
+    ??(()=>{const raw=([...msgs.slice(2,-1)].reverse().find(x=>x.role==='user')?.content?.split('MESSAGGIO').pop()??'').trim(),old=raw.match(/^rinomina (?:il |la |lo |l['’ ])?\s*(.+?) in /i)?.[1];if(!old)return null;if(p==='rimetti il nome di prima')return{action:'rename_item',item,name:old.charAt(0).toUpperCase()+old.slice(1)};const m=p.match(/^anzi (.+?) e basta$/);return m&&plainT(m[1]!)===plainT(old)?{action:'rename_item',item,name:old.charAt(0).toUpperCase()+old.slice(1)}:null})()
+   if(act)return out({actions:[act],reply_draft:'Fatto.'})}}
  // «annulla il tiramisù» quando l'ultima pubblicazione è proprio quella del tiramisù: è l'annullamento.
  {const u=head.match(/ULTIMA PUBBLICAZIONE \(annullabile[^)]*\): ([^\n]+)/)?.[1];if(!proposal&&!hold&&u&&/^(?:annulla|annullala|annullalo)\b/.test(p)){const said=[...cat.code.keys()].filter(n=>(' '+p+' ').includes(' '+plainT(n)+' ')),rest=p.replace(/^(?:annulla\w*)\s+(?:(?:il|la|lo|le|li|gli|i|l)\s+)?/,'');if(said.length&&said.every(n=>plainT(u).includes(plainT(n)))||!said.length&&rest.length>=3&&plainT(u).includes(rest))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})}}
  // «la seconda no» dopo «nascondi la diavola e la margherita»: si rimette com'era quel piatto.
