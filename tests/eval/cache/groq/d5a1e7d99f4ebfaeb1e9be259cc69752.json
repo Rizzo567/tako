@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-bb031149-cd82-4893-9fe5-e2f5b09d1500",
+  "object": "chat.completion",
+  "created": 1792285682,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Quale prezzo vuoi impostare per Acqua collaudo?\",\n    \"item_refs\": [\"p5\"],\n    \"missing\": [\"price\"]\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Quale prezzo vuoi impostare per Acqua collaudo?\"\n}",
+     "reasoning": "We need to ask price for Acqua? Already unchanged, but need explicit price? He said leave as is, but server says missing price for something? All prices given except Acqua unchanged but price known (2). Maybe need confirm price for Acqua? He said leave as is, that's fine. But server says missing price not specified. Probably need clarify for Acqua price. So intent clarify. Provide question."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.213556439,
+   "prompt_tokens": 4088,
+   "prompt_time": 0.025293228,
+   "completion_tokens": 203,
+   "completion_time": 0.483518438,
+   "total_tokens": 4291,
+   "total_time": 0.508811666,
+   "prompt_tokens_details": {
+    "cached_tokens": 3584
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 85
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_93703442d9",
+  "x_groq": {
+   "id": "req_01m568ta1pemnajkg5a9kzfpvk",
+   "seed": 1749524980
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4088,
+  "completion_tokens": 203,
+  "total_tokens": 4291
+ },
+ "ms": 909,
+ "recordedAt": "2026-10-18T01:08:02.456Z",
+ "conv": "bv-multiple-003"
+}

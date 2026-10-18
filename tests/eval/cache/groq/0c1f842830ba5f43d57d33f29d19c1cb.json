@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-dbc1c9fe-f6a3-4224-b302-ec1aa86e420d",
+  "object": "chat.completion",
+  "created": 1792285190,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 11,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 6,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"uncertain\": [],\n  \"reply_draft\": \"Prezzi aggiornati: Pasta collaudo a 11 €, Pizza collaudo a 13 €, Tiramisu collaudo a 6 €.\"\n}",
+     "reasoning": "We need change intent, actions set_price for p2, p3, p4. Prices given. No confirmation needed unless >3 modifications? It's 3 modifications, okay but maybe need OK? It says over 3 modifications need OK. Exactly 3 is okay. So reply_draft confirm brief. Provide actions list. No uncertain. alias none. capability ids maybe empty. read none. Clarify none. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.301388332,
+   "prompt_tokens": 3310,
+   "prompt_time": 0.137400338,
+   "completion_tokens": 449,
+   "completion_time": 0.942342293,
+   "total_tokens": 3759,
+   "total_time": 1.079742631,
+   "completion_tokens_details": {
+    "reasoning_tokens": 88
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_c3da0d4bb9",
+  "x_groq": {
+   "id": "req_01m568b966exxamqt3wmkcwtk5",
+   "seed": 2049591116
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3310,
+  "completion_tokens": 449,
+  "total_tokens": 3759
+ },
+ "ms": 1645,
+ "recordedAt": "2026-10-18T00:59:50.735Z",
+ "conv": "bv-multiple-001"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-0a3746d9-580d-4214-9aca-f52c10c22475",
+  "object": "chat.completion",
+  "created": 1792284057,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p7\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Costa 20 €.\"\n}",
+     "reasoning": "User asks price. Intent read. Need item_refs p7. reply_draft ask? For read price, we just answer? According to spec, read question => reply_draft should be answer? Probably reply_draft with price. So intent read, item_refs [p7], read maybe items? Actually read intent, reply_draft \"Costa 20 €.\" Provide. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.214855103,
+   "prompt_tokens": 3460,
+   "prompt_time": 0.039462807,
+   "completion_tokens": 181,
+   "completion_time": 0.386208341,
+   "total_tokens": 3641,
+   "total_time": 0.425671148,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 80
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8655ddce88",
+  "x_groq": {
+   "id": "req_01m5678qnvegvavcw7x0ge5x8d",
+   "seed": 335806920
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3460,
+  "completion_tokens": 181,
+  "total_tokens": 3641
+ },
+ "ms": 786,
+ "recordedAt": "2026-10-18T00:40:57.834Z",
+ "conv": "bv-semplici-026"
+}

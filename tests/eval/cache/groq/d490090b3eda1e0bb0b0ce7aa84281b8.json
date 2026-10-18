@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-ed3c0db8-95a4-44de-9a6f-f22bcef2a694",
+  "object": "chat.completion",
+  "created": 1792285067,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"undo_last\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Annullata l'ultima pubblicazione del Piatto di verifica.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. The user wants undo_last? They said \"ULTIMA PUBBLICAZIONE ... Piatto di verifica\". Likely they want to undo last publication. So intent? It's a command to undo_last. So actions include undo_last. reply_draft confirm? Should ask? Actually undo_last is immediate if within 10 min. So we can set action undo_last with item null. reply_draft maybe confirm? According to spec, undo_last triggered by \"annulla\". So we do action undo_last. reply_draft maybe \"Annullata l'ultima pubblicazione del Piatto di verifica.\" but must be simple. Provide JSON. No other fields."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.09178135,
+   "prompt_tokens": 3342,
+   "prompt_time": 0.036798025,
+   "completion_tokens": 329,
+   "completion_time": 0.830105117,
+   "total_tokens": 3671,
+   "total_time": 0.866903142,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 145
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_267e812a3a",
+  "x_groq": {
+   "id": "req_01m5687hgteg0tcjke4n82zyth",
+   "seed": 870945379
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3342,
+  "completion_tokens": 329,
+  "total_tokens": 3671
+ },
+ "ms": 1132,
+ "recordedAt": "2026-10-18T00:57:47.755Z",
+ "conv": "bv-domande-010"
+}

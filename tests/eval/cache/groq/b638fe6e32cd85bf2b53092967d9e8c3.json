@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-09226282-3bbc-43ae-bca0-d124106a88c9",
+  "object": "chat.completion",
+  "created": 1792284701,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p1\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Il piatto di verifica costa 13 €.\"\n}",
+     "reasoning": "User asks price? It's a read intent. Need reply_draft asking? Actually read: ask price of item. So intent read, item_refs p1, read items? They ask \"13 o 14?\" they want price. So reply_draft: \"Il piatto di verifica costa 13 €.\" No action. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.024715984,
+   "prompt_tokens": 3270,
+   "prompt_time": 0.038034102,
+   "completion_tokens": 176,
+   "completion_time": 0.365118736,
+   "total_tokens": 3446,
+   "total_time": 0.403152838,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 70
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_87b3c396db",
+  "x_groq": {
+   "id": "req_01m567wc38eketky3dw6sht8b0",
+   "seed": 2062861652
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3270,
+  "completion_tokens": 176,
+  "total_tokens": 3446
+ },
+ "ms": 593,
+ "recordedAt": "2026-10-18T00:51:41.141Z",
+ "conv": "bv-domande-007"
+}

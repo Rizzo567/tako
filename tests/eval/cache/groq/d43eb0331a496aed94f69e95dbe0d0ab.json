@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-f6b497fa-496a-497b-832b-87273fafc8da",
+  "object": "chat.completion",
+  "created": 1792283262,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p1\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"Mostro il piatto di verifica.\"\n}",
+     "reasoning": "User wants to read/show the piatto di verifica, which is p1 hidden. Intent read, item_refs p1, read maybe hidden? They want to show it => set_hidden false. So action set_hidden p1 value false. reply_draft confirm? Since change, reply short confirm. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.316145089,
+   "prompt_tokens": 3271,
+   "prompt_time": 0.031586003,
+   "completion_tokens": 246,
+   "completion_time": 0.51439487,
+   "total_tokens": 3517,
+   "total_time": 0.545980873,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 64
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m566gebzegtr16294wxvxv95",
+   "seed": 102340851
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3271,
+  "completion_tokens": 246,
+  "total_tokens": 3517
+ },
+ "ms": 1061,
+ "recordedAt": "2026-10-18T00:27:42.136Z",
+ "conv": "bv-semplici-011"
+}

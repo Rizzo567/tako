@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-53e05223-e2c8-4f11-8354-05cf7a052bd1",
+  "object": "chat.completion",
+  "created": 1792282834,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [\"p1\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Polpo rucola e patate è ora visibile nel menu.\"\n}",
+     "reasoning": "We need to see message: \"IL SERVER HA RIFIUTATO IL PIANO: non c’è nessuna proposta in sospeso da confermare. Rifai il JSON: correggi il piano se il messaggio lo permette, altrimenti intent=clarify con la domanda per il titolare in reply_draft.\"\n\nUser wants to show polpo? Previously they said \"Mostra il polpo.\" That was read intent? We responded incorrectly. Now they attempted to confirm publication but no pending. So we need to clarify: what action? Probably they want to set hidden false (show) for polpo. So we can do change: set_hidden item p1 value false. No pending. So we can create action. No need clarify. So intent=change, action set_hidden. reply_draft confirm? Should be brief confirmation. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.317908034,
+   "prompt_tokens": 3765,
+   "prompt_time": 0.155640206,
+   "completion_tokens": 359,
+   "completion_time": 0.748673006,
+   "total_tokens": 4124,
+   "total_time": 0.904313212,
+   "completion_tokens_details": {
+    "reasoning_tokens": 176
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4a7bb72c24",
+  "x_groq": {
+   "id": "req_01m5663c0zeh3t5x3krw0dy04b",
+   "seed": 394131233
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3765,
+  "completion_tokens": 359,
+  "total_tokens": 4124
+ },
+ "ms": 1323,
+ "recordedAt": "2026-10-18T00:20:34.092Z",
+ "conv": "bv-semplici-004"
+}

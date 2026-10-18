@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-3617fede-5553-4b89-b431-82855d24e25c",
+  "object": "chat.completion",
+  "created": 1792285128,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": \"Vuoi annullare l'ultima pubblicazione del Piatto di verifica?\"\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Vuoi annullare l'ultima pubblicazione del Piatto di verifica?\"\n}",
+     "reasoning": "We need to see if we can undo. The user said \"ULTIMA PUBBLICAZIONE (annullabile con undo_last per altri 10 min): Piatto di verifica\". They want to undo? Implicitly they want to undo? They just provided info, not a request. Need clarify: ask if they want to undo. So intent=clarify. Provide question. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.226050611,
+   "prompt_tokens": 3592,
+   "prompt_time": 0.149001142,
+   "completion_tokens": 210,
+   "completion_time": 0.44261115,
+   "total_tokens": 3802,
+   "total_time": 0.591612292,
+   "completion_tokens_details": {
+    "reasoning_tokens": 83
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_47082602e2",
+  "x_groq": {
+   "id": "req_01m5689ddjex08cmhyxkk1n76k",
+   "seed": 87668042
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3592,
+  "completion_tokens": 210,
+  "total_tokens": 3802
+ },
+ "ms": 928,
+ "recordedAt": "2026-10-18T00:58:48.886Z",
+ "conv": "bv-domande-010"
+}

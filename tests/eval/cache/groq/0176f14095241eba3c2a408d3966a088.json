@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-af4824cd-e073-41b1-a3af-ee51d46873fd",
+  "object": "chat.completion",
+  "created": 1792282772,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"confirm_pending\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Confermo la pubblicazione del Polpo rucola e patate.\"\n}",
+     "reasoning": "Need to confirm pending. intent change? reply_draft confirm. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.214782693,
+   "prompt_tokens": 3525,
+   "prompt_time": 0.144908188,
+   "completion_tokens": 202,
+   "completion_time": 0.419469119,
+   "total_tokens": 3727,
+   "total_time": 0.564377307,
+   "completion_tokens_details": {
+    "reasoning_tokens": 17
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_e5b4e54fbb",
+  "x_groq": {
+   "id": "req_01m5661gc9e21b62e9h5gwajbe",
+   "seed": 1542747753
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3525,
+  "completion_tokens": 202,
+  "total_tokens": 3727
+ },
+ "ms": 1102,
+ "recordedAt": "2026-10-18T00:19:32.564Z",
+ "conv": "bv-semplici-004"
+}

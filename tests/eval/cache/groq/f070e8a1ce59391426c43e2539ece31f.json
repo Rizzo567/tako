@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-c7909268-16f8-4726-aa34-e871b11bf932",
+  "object": "chat.completion",
+  "created": 1792285252,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 14,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 16,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 7,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p5\",\n      \"section\": null,\n      \"price\": 3,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"uncertain\": [],\n  \"reply_draft\": \"Ho impostato i nuovi prezzi: Pasta collaudo 14 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €. Rispondi OK per pubblicare.\"\n}",
+     "reasoning": "We need change intent, actions set_price for each. No confirmation needed unless >3 modifications? That's 4 modifications, >3 so need OK. So we propose pending changes and ask to confirm. reply_draft: ask \"Rispondi OK per pubblicare.\" Also include actions list. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.2153955,
+   "prompt_tokens": 3323,
+   "prompt_time": 0.163836445,
+   "completion_tokens": 516,
+   "completion_time": 1.072329476,
+   "total_tokens": 3839,
+   "total_time": 1.236165921,
+   "completion_tokens_details": {
+    "reasoning_tokens": 63
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_e5b4e54fbb",
+  "x_groq": {
+   "id": "req_01m568d5h5ehr92v825w25xdfg",
+   "seed": 1695735707
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3323,
+  "completion_tokens": 516,
+  "total_tokens": 3839
+ },
+ "ms": 1647,
+ "recordedAt": "2026-10-18T01:00:52.585Z",
+ "conv": "bv-multiple-002"
+}

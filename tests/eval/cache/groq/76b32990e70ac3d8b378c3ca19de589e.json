@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-594e15f7-2e43-4178-a914-c03f76858b61",
+  "object": "chat.completion",
+  "created": 1792283568,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"c1\",\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null,\n      \"name\": \"pasta al sugo\"\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"reply_draft\": \"Aggiunto pasta al sugo a 12 € nella sezione Piatti di prova. Confermi?\",\n  \"uncertain\": []\n}",
+     "reasoning": "We need to create action create_item. Section? Not given, assume default? No section specified, maybe use existing section? There's section c1 Piatti di prova. So create_item in section c1. Name \"pasta al sugo\". Price 12. reply_draft confirm."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.156930184,
+   "prompt_tokens": 3296,
+   "prompt_time": 0.163658432,
+   "completion_tokens": 260,
+   "completion_time": 0.556921619,
+   "total_tokens": 3556,
+   "total_time": 0.720580051,
+   "completion_tokens_details": {
+    "reasoning_tokens": 60
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_1d982b31b2",
+  "x_groq": {
+   "id": "req_01m566ssefekxs9zn5ejpaan4x",
+   "seed": 500681097
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3296,
+  "completion_tokens": 260,
+  "total_tokens": 3556
+ },
+ "ms": 1014,
+ "recordedAt": "2026-10-18T00:32:48.410Z",
+ "conv": "bv-semplici-016"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d4674938-1237-462b-97e1-ad25e355cda2",
+  "object": "chat.completion",
+  "created": 1792282405,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"confirm_pending\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null,\n      \"name\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Confermo la pubblicazione.\"\n}",
+     "reasoning": "We need to produce JSON owner_brain_plan. The user says \"conferma\". Intent is change? Actually they want to confirm pending publication? The last action was price update? It was already applied? Probably pending? We need confirm_pending action. reply_draft should be short confirmation? Actually they say \"conferma\". So we should set confirm_pending. No other actions. intent change? Probably intent change with confirm_pending. reply_draft maybe \"Confermo la pubblicazione.\" Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055417852,
+   "prompt_tokens": 3362,
+   "prompt_time": 0.04262509,
+   "completion_tokens": 280,
+   "completion_time": 0.583278912,
+   "total_tokens": 3642,
+   "total_time": 0.625904002,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 104
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m565p9ycek2b49s8c743jyd5",
+   "seed": 1299382819
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3362,
+  "completion_tokens": 280,
+  "total_tokens": 3642
+ },
+ "ms": 843,
+ "recordedAt": "2026-10-18T00:13:25.440Z",
+ "conv": "bv-semplici-002"
+}

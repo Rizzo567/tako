@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-667b147f-1a65-4070-8116-132002600446",
+  "object": "chat.completion",
+  "created": 1792282257,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"confirm_pending\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Confermo la pubblicazione.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. The user says \"conferma\" to publish last pending? The last publication was \"Piatto di verifica\". Probably there is a pending change? Actually previous action set_price was done? We need confirm_pending. So intent change? reply_draft confirming? Since user says confirm, we should set confirm_pending action. No other actions. So actions list with one action confirm_pending. item null. reply_draft maybe empty? Should be short reply? According to spec reply_draft always present. For confirm we can say \"Pubblicato.\" but simple. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.211429387,
+   "prompt_tokens": 3362,
+   "prompt_time": 0.139470591,
+   "completion_tokens": 304,
+   "completion_time": 0.627883176,
+   "total_tokens": 3666,
+   "total_time": 0.767353767,
+   "completion_tokens_details": {
+    "reasoning_tokens": 128
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_90620edd96",
+  "x_groq": {
+   "id": "req_01m565hrpneyrbtpzkpvex1f6p",
+   "seed": 1619371933
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3362,
+  "completion_tokens": 304,
+  "total_tokens": 3666
+ },
+ "ms": 1106,
+ "recordedAt": "2026-10-18T00:10:57.009Z",
+ "conv": "bv-semplici-001"
+}

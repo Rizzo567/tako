@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-aaf15552-32b1-4670-844d-1ab9aae09c68",
+  "object": "chat.completion",
+  "created": 1792283017,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p1\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo aggiornato a 13 € per il Piatto di verifica.\"\n}",
+     "reasoning": "User says change price. Current price 13.5, wants 13. Need set_price action. No confirmation needed? It's a change, reply_draft confirming. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.22260341,
+   "prompt_tokens": 3271,
+   "prompt_time": 0.13501848,
+   "completion_tokens": 230,
+   "completion_time": 0.480660933,
+   "total_tokens": 3501,
+   "total_time": 0.615679413,
+   "completion_tokens_details": {
+    "reasoning_tokens": 38
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_803c0ba83d",
+  "x_groq": {
+   "id": "req_01m5668zttev4s8qhtettgtp63",
+   "seed": 1030097201
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3271,
+  "completion_tokens": 230,
+  "total_tokens": 3501
+ },
+ "ms": 934,
+ "recordedAt": "2026-10-18T00:23:37.825Z",
+ "conv": "bv-semplici-007"
+}

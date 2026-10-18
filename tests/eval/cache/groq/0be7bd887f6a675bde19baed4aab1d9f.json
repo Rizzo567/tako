@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-75bfce77-8f11-43dd-ba2d-95a5699e7eb2",
+  "object": "chat.completion",
+  "created": 1792282649,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Cosa devo confermare? Specifica l'azione e l'elemento.\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Cosa devo confermare? Specifica l'azione e l'elemento.\"\n}",
+     "reasoning": "We need to handle: there is no pending proposal. The user said \"conferma\". We need to see if there is an action pending. Previously we set hidden but not confirmed? Actually earlier we responded with plain text, not JSON. So no pending. So we must clarify: ask what to confirm? Probably need to ask which action. So intent=clarify, reply_draft question. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.314821227,
+   "prompt_tokens": 3772,
+   "prompt_time": 0.166106282,
+   "completion_tokens": 206,
+   "completion_time": 0.429612621,
+   "total_tokens": 3978,
+   "total_time": 0.595718903,
+   "completion_tokens_details": {
+    "reasoning_tokens": 85
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m565xr5je5m8p74x92hpp35w",
+   "seed": 1366201365
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3772,
+  "completion_tokens": 206,
+  "total_tokens": 3978
+ },
+ "ms": 1066,
+ "recordedAt": "2026-10-18T00:17:29.611Z",
+ "conv": "bv-semplici-003"
+}

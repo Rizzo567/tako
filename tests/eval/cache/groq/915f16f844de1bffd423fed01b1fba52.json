@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-93821a2d-2fbf-4a14-9707-b416bf6548bb",
+  "object": "chat.completion",
+  "created": 1792285988,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 20,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 20,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"Prezzi aggiornati: Che ne sacc a 20 €, boh a 20 €, pasta al ragù a 12 €.\"\n}",
+     "reasoning": "User wants to set prices: Che ne sacc (p2) to 20, boh (p3) to 20, pasta al ragù (p4) to 12. All clear. Need actions set_price for each. No exceed 3 modifications? That's 3 actions, okay. reply_draft confirm brief. No need clarify. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.026225856,
+   "prompt_tokens": 3287,
+   "prompt_time": 0.03900582,
+   "completion_tokens": 432,
+   "completion_time": 0.899790301,
+   "total_tokens": 3719,
+   "total_time": 0.938796121,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 76
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_87b3c396db",
+  "x_groq": {
+   "id": "req_01m5693n3yehhsdjmr1x15e5p0",
+   "seed": 1856761948
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3287,
+  "completion_tokens": 432,
+  "total_tokens": 3719
+ },
+ "ms": 1135,
+ "recordedAt": "2026-10-18T01:13:08.936Z",
+ "conv": "bv-multiple-005"
+}

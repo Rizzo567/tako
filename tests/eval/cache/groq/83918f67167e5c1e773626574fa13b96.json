@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-bbedf8c1-1a25-41d3-a545-ea26ed0b222b",
+  "object": "chat.completion",
+  "created": 1792282895,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Bruschetta Victoria segnata come esaurita.\"\n}",
+     "reasoning": "User says \"A Bruschetta Victoria un c'è cchiù\". Means Bruschetta Victoria is not available (esaurita). So set_available false for p3. Also maybe hide? phrase indicates unavailable. So action set_available p3 false. reply draft confirm."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.216133481,
+   "prompt_tokens": 3458,
+   "prompt_time": 0.141952525,
+   "completion_tokens": 242,
+   "completion_time": 0.501345188,
+   "total_tokens": 3700,
+   "total_time": 0.643297713,
+   "completion_tokens_details": {
+    "reasoning_tokens": 57
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_c868cf1eaa",
+  "x_groq": {
+   "id": "req_01m5665868e16a2h8h6x9hwhcr",
+   "seed": 450337567
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3458,
+  "completion_tokens": 242,
+  "total_tokens": 3700
+ },
+ "ms": 1045,
+ "recordedAt": "2026-10-18T00:21:35.342Z",
+ "conv": "bv-semplici-005"
+}

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-b9feb86b-9edc-4f46-8670-39d8043d303e",
+  "object": "chat.completion",
+  "created": 1792282195,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 9,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p1\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo del Piatto di verifica aggiornato a 9 €.\"\n}",
+     "reasoning": "User wants change price of p1 to 9. That's a change intent. Action set_price item p1 price 9. No need confirm? It's one modification, price given, under 3 modifications. reply_draft confirm brief."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05306846,
+   "prompt_tokens": 3291,
+   "prompt_time": 0.145257803,
+   "completion_tokens": 240,
+   "completion_time": 0.503621276,
+   "total_tokens": 3531,
+   "total_time": 0.648879079,
+   "completion_tokens_details": {
+    "reasoning_tokens": 49
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m565fx2rey0sqk316ejd1xqf",
+   "seed": 705240739
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3291,
+  "completion_tokens": 240,
+  "total_tokens": 3531
+ },
+ "ms": 869,
+ "recordedAt": "2026-10-18T00:09:55.700Z",
+ "conv": "bv-semplici-001"
+}

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-0aeb8f94-91e8-4054-b21e-bb52d5b0c2af",
+  "object": "chat.completion",
+  "created": 1792284641,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"chat\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Il locale è Tako.\"\n}",
+     "reasoning": "We need to respond with JSON owner_brain_plan. Intent likely read? He asks \"che locale ho?\" That's about location, not menu. Probably chat? It's a greeting question. Should be intent chat, reply_draft answer. No actions. Provide empty arrays."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.059143483,
+   "prompt_tokens": 3278,
+   "prompt_time": 0.197471905,
+   "completion_tokens": 153,
+   "completion_time": 0.322341447,
+   "total_tokens": 3431,
+   "total_time": 0.519813352,
+   "completion_tokens_details": {
+    "reasoning_tokens": 55
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8ea50c0161",
+  "x_groq": {
+   "id": "req_01m567th7jejvvdszmhw5azbs3",
+   "seed": 1102544818
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3278,
+  "completion_tokens": 153,
+  "total_tokens": 3431
+ },
+ "ms": 669,
+ "recordedAt": "2026-10-18T00:50:41.024Z",
+ "conv": "bv-domande-006"
+}

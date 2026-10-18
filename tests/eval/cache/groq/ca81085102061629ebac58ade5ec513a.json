@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-21d05d85-571e-47a6-8a89-7b17c3489628",
+  "object": "chat.completion",
+  "created": 1792283200,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Nascondo il piatto di verifica.\"\n}",
+     "reasoning": "We need to produce JSON owner_brain_plan. Intent change, action set_hidden true on item p1. No uncertainties. reply_draft confirm. e.g. \"Nascondo il piatto di verifica.\".\n\nConstruct."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.053917908,
+   "prompt_tokens": 3270,
+   "prompt_time": 0.160901015,
+   "completion_tokens": 227,
+   "completion_time": 0.471711228,
+   "total_tokens": 3497,
+   "total_time": 0.632612243,
+   "completion_tokens_details": {
+    "reasoning_tokens": 47
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_64b2f1c926",
+  "x_groq": {
+   "id": "req_01m566ejqwe46tb4z2wde6yppv",
+   "seed": 1080144868
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3270,
+  "completion_tokens": 227,
+  "total_tokens": 3497
+ },
+ "ms": 775,
+ "recordedAt": "2026-10-18T00:26:40.870Z",
+ "conv": "bv-semplici-010"
+}

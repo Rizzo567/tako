@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-b959565d-ed70-497a-8478-9f5e899e3546",
+  "object": "chat.completion",
+  "created": 1792284640,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"chat\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Ciao! Come posso aiutarti con il menu?\"\n}",
+     "reasoning": "We need to respond with reply_draft etc. Intent chat. No actions. reply_draft simple greeting."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.303292975,
+   "prompt_tokens": 3253,
+   "prompt_time": 0.142912657,
+   "completion_tokens": 127,
+   "completion_time": 0.267022839,
+   "total_tokens": 3380,
+   "total_time": 0.409935496,
+   "completion_tokens_details": {
+    "reasoning_tokens": 23
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_c15aa9c1b7",
+  "x_groq": {
+   "id": "req_01m567tgbnetbszd1crs20qgkn",
+   "seed": 329762500
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3253,
+  "completion_tokens": 127,
+  "total_tokens": 3380
+ },
+ "ms": 932,
+ "recordedAt": "2026-10-18T00:50:40.345Z",
+ "conv": "bv-domande-006"
+}

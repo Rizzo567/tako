@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-e634787a-f916-4955-8d96-a6812e379049",
+  "object": "chat.completion",
+  "created": 1792283813,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo della Bruschetta Victoria aggiornato a 12 €.\"\n}",
+     "reasoning": "We need to change price of p3. Action set_price item p3 price 12. No confirmation needed? It's one change, price given, ok. reply_draft confirm. Intent change. No uncertain. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.06029539,
+   "prompt_tokens": 3462,
+   "prompt_time": 0.185853867,
+   "completion_tokens": 237,
+   "completion_time": 0.505899141,
+   "total_tokens": 3699,
+   "total_time": 0.691753008,
+   "completion_tokens_details": {
+    "reasoning_tokens": 47
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8ea50c0161",
+  "x_groq": {
+   "id": "req_01m56718f6exj8e6900zh7jevm",
+   "seed": 253101955
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3462,
+  "completion_tokens": 237,
+  "total_tokens": 3699
+ },
+ "ms": 935,
+ "recordedAt": "2026-10-18T00:36:53.041Z",
+ "conv": "bv-semplici-020"
+}

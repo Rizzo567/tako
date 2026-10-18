@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-2d209bac-0629-48f6-96c8-21c757056380",
+  "object": "chat.completion",
+  "created": 1792282344,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p1\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo del Piatto di verifica aggiornato a 12 €.\"\n}",
+     "reasoning": "User wants change price of p1 to 12. Simple change. Need reply_draft confirming. No need clarify. Action set_price."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054405319,
+   "prompt_tokens": 3289,
+   "prompt_time": 0.144959944,
+   "completion_tokens": 219,
+   "completion_time": 0.455894422,
+   "total_tokens": 3508,
+   "total_time": 0.600854366,
+   "completion_tokens_details": {
+    "reasoning_tokens": 29
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m565meb5etcrq94dqepswyg3",
+   "seed": 164406909
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3289,
+  "completion_tokens": 219,
+  "total_tokens": 3508
+ },
+ "ms": 821,
+ "recordedAt": "2026-10-18T00:12:24.393Z",
+ "conv": "bv-semplici-002"
+}
