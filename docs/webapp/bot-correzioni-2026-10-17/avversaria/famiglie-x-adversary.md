@@ -6,7 +6,7 @@
 | prezzi | 32 | 14 | 0 | 0 | 18 |
 | centesimi | 25 | 7 | 0 | 0 | 18 |
 | nomi | 31 | 7 | 0 | 0 | 24 |
-| deixis | 35 | 8 | 3 | 0 | 24 |
+| deixis | 35 | 9 | 3 | 0 | 23 |
 | anzino | 30 | 7 | 1 | 0 | 22 |
 | misti | 30 | 21 | 0 | 0 | 9 |
 | asr | 50 | 31 | 0 | 0 | 19 |
@@ -24,7 +24,7 @@
 | lasciastare | 10 | 5 | 0 | 0 | 5 |
 | ipotesi | 8 | 8 | 0 | 0 | 0 |
 | toglieuro | 10 | 9 | 0 | 0 | 1 |
-| TOTALE | 508 | 238 | 6 | 0 | 264 |
+| TOTALE | 508 | 239 | 6 | 0 | 263 |
 
 ## Fallimenti
 
@@ -368,10 +368,6 @@
   - turni: ❓ cosa è finito? ⏎ sono tornati entrambi
   - atteso: available|Carbonara|true, available|Tiramisù|true · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Bruschetta*: *5,00 €* · disponibile» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
-- **adv-deixis-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|true
-  - turni: ❓ cosa è finito? ⏎ la carbonara è tornata, l'altro no
-  - atteso: available|Carbonara|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Bruschetta*: *5,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **adv-deixis-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
   - turni: carbonara 13 ⏎ gricia 12 ⏎ amatriciana 12 ⏎ il primo e l'ultimo mettili in evidenza
   - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica

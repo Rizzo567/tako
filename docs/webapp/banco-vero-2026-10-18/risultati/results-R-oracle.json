@@ -10,14 +10,14 @@
   "total": {
    "family": "TOTALE",
    "n": 92,
-   "ok": 72,
-   "success": 75,
-   "grave": 5,
+   "ok": 77,
+   "success": 80,
+   "grave": 0,
    "medio": 12,
    "basso": 3,
-   "safety": 2,
-   "clarRate": 38.3,
-   "unexpectedClar": 38,
+   "safety": 0,
+   "clarRate": 37.6,
+   "unexpectedClar": 36,
    "usedLlm": 92,
    "llmMissConvs": 0,
    "detN": 0,
@@ -26,14 +26,14 @@
   "multi": {
    "family": "multi-turno",
    "n": 39,
-   "ok": 28,
-   "success": 29,
-   "grave": 3,
-   "medio": 7,
+   "ok": 30,
+   "success": 31,
+   "grave": 0,
+   "medio": 8,
    "basso": 1,
-   "safety": 1,
+   "safety": 0,
    "clarRate": 39.6,
-   "unexpectedClar": 28,
+   "unexpectedClar": 27,
    "usedLlm": 39,
    "llmMissConvs": 0,
    "detN": 0,
@@ -43,9 +43,9 @@
    {
     "family": "bv-semplici",
     "n": 26,
-    "ok": 25,
-    "success": 25,
-    "grave": 1,
+    "ok": 26,
+    "success": 26,
+    "grave": 0,
     "medio": 0,
     "basso": 0,
     "safety": 0,
@@ -75,14 +75,14 @@
    {
     "family": "bv-multiple",
     "n": 9,
-    "ok": 4,
-    "success": 4,
-    "grave": 1,
-    "medio": 4,
+    "ok": 6,
+    "success": 6,
+    "grave": 0,
+    "medio": 3,
     "basso": 0,
     "safety": 0,
-    "clarRate": 50,
-    "unexpectedClar": 8,
+    "clarRate": 37.5,
+    "unexpectedClar": 6,
     "usedLlm": 9,
     "llmMissConvs": 0,
     "detN": 0,
@@ -203,13 +203,13 @@
    {
     "family": "bv-asr",
     "n": 5,
-    "ok": 1,
-    "success": 1,
-    "grave": 3,
-    "medio": 1,
+    "ok": 3,
+    "success": 3,
+    "grave": 0,
+    "medio": 2,
     "basso": 0,
-    "safety": 2,
-    "clarRate": 61.5,
+    "safety": 0,
+    "clarRate": 69.2,
     "unexpectedClar": 7,
     "usedLlm": 5,
     "llmMissConvs": 0,
@@ -234,11 +234,6 @@
    }
   ],
   "codes": {
-   "non-applicato": {
-    "GRAVE": 3,
-    "MEDIO": 0,
-    "BASSO": 0
-   },
    "risposta-non-pertinente": {
     "GRAVE": 0,
     "MEDIO": 0,
@@ -253,18 +248,13 @@
     "GRAVE": 0,
     "MEDIO": 2,
     "BASSO": 0
-   },
-   "scrive-invece-di-chiedere": {
-    "GRAVE": 2,
-    "MEDIO": 0,
-    "BASSO": 0
    }
   },
   "latency": {
-   "harnessP50": 2.4,
-   "harnessP95": 4.9,
-   "withRecordedGroqP50": 2.4,
-   "withRecordedGroqP95": 4.9
+   "harnessP50": 2.5,
+   "harnessP95": 4.8,
+   "withRecordedGroqP50": 2.5,
+   "withRecordedGroqP95": 4.8
   },
   "llm": {
    "calls": 168,
@@ -275,19 +265,19 @@
  "metriche": {
   "conversazioni": 92,
   "messaggi": 149,
-  "successo": 81.5,
-  "successoSemplici": 96.2,
+  "successo": 87,
+  "successoSemplici": 100,
   "semplici": 26,
   "domandePer10Messaggi": 3.8,
-  "domandeNonAttesePer10": 2.6,
-  "gravi": 5,
-  "graviTotali": 5,
+  "domandeNonAttesePer10": 2.4,
+  "gravi": 0,
+  "graviTotali": 0,
   "ambigue": {
-   "n": 9,
-   "successo": 77.8
+   "n": 8,
+   "successo": 100
   },
   "latenzaMs": {
-   "p50": 2,
+   "p50": 3,
    "p95": 5,
    "conGroqRegistratoTotale": 0
   },
@@ -337,7 +327,7 @@
    "llmTokens": 0,
    "latencyMs": [
     38,
-    23.6
+    24.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -371,7 +361,7 @@
    "llmTokens": 0,
    "latencyMs": [
     4.6,
-    2.6
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -403,8 +393,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9,
-    4.3
+    7,
+    4.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -436,8 +426,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9,
-    5.2
+    4.6,
+    5.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -447,20 +437,16 @@
    "id": "bv-semplici-005",
    "family": "bv-semplici",
    "menu": "victoria",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: available|Bruschetta Victoria|false"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "available|Bruschetta Victoria|false"
    ],
-   "actual": [],
+   "actual": [
+    "available|Bruschetta Victoria|false"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Bruschetta Victoria*: *finito*"
    ],
    "turns": [
     "A Bruschetta Victoria un c'è cchiù"
@@ -471,7 +457,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    10.3
+    10.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -501,7 +487,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    4.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -531,7 +517,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -561,7 +547,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -621,7 +607,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -651,7 +637,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -681,7 +667,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -712,7 +698,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -742,7 +728,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -773,7 +759,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -804,7 +790,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -835,7 +821,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -865,7 +851,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -895,7 +881,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -925,7 +911,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -951,7 +937,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1029,7 +1015,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1055,7 +1041,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1081,7 +1067,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1109,8 +1095,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    2.8
+    2,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1137,7 +1123,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1170,7 +1156,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1198,7 +1184,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    2,
     1.9
    ],
    "recordedLlmMs": 0,
@@ -1231,7 +1217,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1266,7 +1252,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9,
+    1.1,
     1
    ],
    "recordedLlmMs": 0,
@@ -1323,8 +1309,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    3.1
+    1.3,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1350,7 +1336,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1383,7 +1369,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2.9,
-    1.9
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1418,7 +1404,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1462,7 +1448,7 @@
    "latencyMs": [
     4.5,
     5.2,
-    1.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1507,10 +1493,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
-    4,
-    1.6,
-    2.3
+    3.3,
+    4.6,
+    1.7,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1549,8 +1535,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2
+    2.9,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1584,7 +1570,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1632,32 +1618,29 @@
    "id": "bv-multiple-007",
    "family": "bv-multiple",
    "menu": "qa1323",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiede-invece-di-agire",
-     "why": "domanda invece di agire / contesto perso: hidden|Inserisce il piatto la parmigiana|true, promo|Che ne sacc|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|Inserisce il piatto la parmigiana|true",
     "promo|Che ne sacc|12"
    ],
-   "actual": [],
+   "actual": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli\n*Inserisce il piatto la parmigiana*: *nascosto* dal menu"
    ],
    "turns": [
     "🎤 Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro."
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 2,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1668,14 +1651,8 @@
    "id": "bv-multiple-008",
    "family": "bv-multiple",
    "menu": "qa1323",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: promo|Che ne sacc|12"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "hidden|Inserisce il piatto la parmigiana|true",
     "promo|Che ne sacc|12",
@@ -1683,24 +1660,25 @@
    ],
    "actual": [
     "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12",
     "promo|Piatto di verifica|11"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
-    "Fatto.\n\n*Piatto di verifica*: in *promo* a *11,00 €* (prezzo pieno 13,50 €), finché non la togli\n*Inserisce il piatto la parmigiana*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli\n*Inserisce il piatto la parmigiana*: *nascosto* dal menu",
+    "Fatto.\n\n*Piatto di verifica*: in *promo* a *11,00 €* (prezzo pieno 13,50 €), finché non la togli"
    ],
    "turns": [
     "🎤 Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro.",
     "🎤 Allora, voglio che mi nascondi dal menù il piatto la parmigiana e invece mi metti in promo il piatto di verifica a 11 euro."
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 3,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7,
-    4.3
+    3.2,
+    4.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1721,7 +1699,7 @@
     "promo|Che ne sacc|12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*boh*: descrizione «Joe fa schifo»\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli\n*boh*: descrizione «Joe fa schifo»"
    ],
    "turns": [
     "🎤 Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
@@ -1732,7 +1710,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1782,8 +1760,8 @@
    "llmTokens": 0,
    "latencyMs": [
     2.8,
-    2.5,
-    4.3
+    2.7,
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1830,8 +1808,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2.8
+    3.2,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1863,7 +1841,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1901,8 +1879,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5,
-    4.3
+    3.8,
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1938,7 +1916,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1974,9 +1952,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
+    2,
     2.7,
-    4.6
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2043,8 +2021,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    3.6
+    2.8,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2083,8 +2061,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    3.5,
+    2.8,
+    3,
     2.5
    ],
    "recordedLlmMs": 0,
@@ -2120,7 +2098,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2146,7 +2124,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2179,8 +2157,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    2.3
+    1,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2211,7 +2189,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2245,9 +2223,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    2.1,
-    2.2
+    1.5,
+    1.6,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2274,7 +2252,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2301,7 +2279,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2328,7 +2306,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2363,9 +2341,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    4.1,
-    2.3
+    2.8,
+    4,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2392,7 +2370,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2424,8 +2402,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.9
+    1.4,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2487,8 +2465,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.2,
+    2.3,
+    1.9,
     1.5
    ],
    "recordedLlmMs": 0,
@@ -2528,8 +2506,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    4.9
+    3,
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2560,7 +2538,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2595,8 +2573,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.9
+    2.5,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2624,8 +2602,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4,
-    2.4
+    3.6,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2653,8 +2631,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    2.2
+    2.5,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2682,8 +2660,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2.2
+    2.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2741,7 +2719,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2.5,
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2769,8 +2747,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.6
+    1.5,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2798,8 +2776,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.7
+    1.9,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2839,11 +2817,11 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.1,
     1.6,
-    1.7,
-    1.7,
+    2,
     1.5,
+    1.3,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -2875,7 +2853,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2890,7 +2868,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: cosa vuoi cambiare?",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
     "Non sono sicuro di aver capito: cosa vuoi cambiare?"
    ],
    "turns": [
@@ -2899,12 +2877,12 @@
    ],
    "clarifications": 2,
    "unexpectedClarifications": 2,
-   "llmCalls": 2,
+   "llmCalls": 3,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    4.5
+    3.2,
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2939,7 +2917,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2965,7 +2943,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2992,7 +2970,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3003,14 +2981,8 @@
    "id": "bv-asr-001",
    "family": "bv-asr",
    "menu": "qa",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "scrive-invece-di-chiedere",
-     "why": "turno 1: doveva chiedere, ha scritto price|Piatto di verifica|13.5"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "price|Piatto di verifica|13.5"
    ],
@@ -3018,8 +2990,8 @@
     "price|Piatto di verifica|13.5"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Piatto di verifica*: prezzo da 12,00 € a *13,50 €*",
-    "Non sono sicuro di aver capito: cosa vuoi cambiare?",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon posso programmare le modifiche per domani: cambio Piatto di verifica adesso?",
+    "Fatto.\n\n*Piatto di verifica*: prezzo da 12,00 € a *13,50 €*",
     "Non sono sicuro di aver capito: cosa vuoi cambiare?",
     "Non sono sicuro di aver capito: cosa vuoi cambiare?"
    ],
@@ -3030,15 +3002,15 @@
     "conferma"
    ],
    "clarifications": 3,
-   "unexpectedClarifications": 3,
+   "unexpectedClarifications": 2,
    "llmCalls": 4,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.3,
     2.3,
     1.3,
-    1.6,
-    1.6
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3065,7 +3037,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3102,8 +3074,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.1
+    1.7,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3114,14 +3086,8 @@
    "id": "bv-asr-004",
    "family": "bv-asr",
    "menu": "qa1323",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "scrive-invece-di-chiedere",
-     "why": "turno 1: doveva chiedere, ha scritto rename|Inserisce il piatto la parmigiana|La parmigiana"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "rename|Inserisce il piatto la parmigiana|la parmigiana"
    ],
@@ -3140,12 +3106,12 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
    "source": "Manuel 17/10 13:24",
-   "note": "AMBIGUO: quale piatto rinominare non è detto (si intuisce quello nato dalla frase): chiedere conferma; risposta vera: «Il nome del piatto si cambia dalla dashboard»"
+   "note": "R5.1 (nota 63): l'attesa chiedeva insieme una domanda senza scritture e la rinomina nello stesso turno (impossibile): resta la rinomina col nome detto (unico piatto da rinominare nel menu del 13:24). AMBIGUO: quale piatto rinominare non è detto (si intuisce quello nato dalla frase): chiedere conferma; risposta vera: «Il nome del piatto si cambia dalla dashboard»"
   },
   {
    "id": "bv-asr-005",
@@ -3154,24 +3120,22 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: price|pasta al ragù|20"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|40, price|pasta al ragù|20"
     }
    ],
    "expected": [
     "price|boh|40",
     "price|pasta al ragù|20"
    ],
-   "actual": [
-    "price|boh|40"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*pasta al ragù*: *12,00 €* · disponibile",
     "*boh*: *20,00 €* · disponibile",
     "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
     "Intendi boh? Rispondi sì o no.",
-    "Fatto.\n\n*boh*: prezzo da 20,00 € a *40,00 €*"
+    "Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no."
    ],
    "turns": [
     "🎤 Quanto costa la pasta al ragù?",
@@ -3180,17 +3144,17 @@
     "🎤 Bu costa 40 euro",
     "🎤 Passa il ragù, metti prezzo a 20 euro."
    ],
-   "clarifications": 2,
-   "unexpectedClarifications": 2,
-   "llmCalls": 7,
+   "clarifications": 3,
+   "unexpectedClarifications": 3,
+   "llmCalls": 8,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.1,
+    1.4,
+    1.3,
     1.7,
-    2.1,
-    2.1
+    2,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3217,7 +3181,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3270,7 +3234,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3297,7 +3261,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    0.9
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
