@@ -26,10 +26,10 @@
 | r2-rinomina | 18 | 6 | 0 | 0 | 12 |
 | r2-cat | 16 | 9 | 0 | 0 | 7 |
 | r2-sposta | 16 | 6 | 0 | 0 | 10 |
-| r2-relativi | 16 | 11 | 0 | 0 | 5 |
+| r2-relativi | 16 | 12 | 0 | 0 | 4 |
 | r2-code | 16 | 0 | 0 | 0 | 16 |
-| r3-conferme | 26 | 11 | 0 | 0 | 15 |
-| TOTALE | 558 | 256 | 8 | 0 | 294 |
+| r3-conferme | 26 | 11 | 1 | 0 | 14 |
+| TOTALE | 558 | 257 | 9 | 0 | 292 |
 
 ## Fallimenti
 
@@ -348,7 +348,7 @@
 - **y-cat-rinomina-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Speciale della casa|Specialità dello chef
   - turni: chiama la categoria speciali 'Specialità dello chef'
   - atteso: move|Speciale della casa|Specialità dello chef · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Nel menu non c'è la categoria Specialità dello chef: la creo? Rispondi sì. Categoria nuova, serve il tuo sì: 1. Nuova categoria *S»
 - **y-cat-rinomina-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Primi piatti, move|Gricia|Primi piatti, move|Pasta al pesto|Primi piatti, move|Primo del giorno|Primi p
   - turni: rinomina la categoria primi in primi piatti
   - atteso: move|Carbonara|Primi piatti, move|Gricia|Primi piatti, move|Pasta al pesto|Primi piatti, move|Primo del giorno|Primi piatti · ottenuto: nessuna modifica
@@ -473,10 +473,10 @@
   - turni: rinomina la gricia in Gricia romana ⏎ nascondi la gricia romana
   - atteso: hidden|Gricia|true, rename|Gricia|Gricia romana · ottenuto: rename|Gricia|Gricia romana
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Gricia*: nuovo nome *Gricia romana*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **y-rinomina-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo
+- **y-rinomina-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
   - turni: chiama la tagliata 'Tagliata di manzo' ⏎ la tagliata di manzo a 20
-  - atteso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - atteso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo · ottenuto: rename|Tagliata|Tagliata di manzo
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Tagliata*: nuovo nome *Tagliata di manzo*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-rinomina-005** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: rename|Gricia|Gricia romana
   - turni: rinomina la gricia in Gricia romana ⏎ annulla ⏎ la gricia romana a 12
   - atteso: nessuna modifica · ottenuto: rename|Gricia|Gricia romana
@@ -848,7 +848,7 @@
 - **y-varianti-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
   - turni: la tagliata 2 euro in meno
   - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-varianti-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine|14|primi
   - turni: aggiungi nei primi le linguine a 14 eh
   - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
@@ -1097,10 +1097,6 @@
   - turni: sposta la carbonara nei secondi ⏎ anzi negli speciali
   - atteso: move|Carbonara|Speciali · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **y-r2-relativi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
-  - turni: la carbonara 1 euro in più
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **y-r2-relativi-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16.5
   - turni: togli un euro e cinquanta alla tagliata
   - atteso: price|Tagliata|16.5 · ottenuto: nessuna modifica
@@ -1217,10 +1213,10 @@
   - turni: rinomina la tagliata in Tagliata di manzo.
   - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **y-r3-conferme-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Tagliata|Tagliata di manzo
+- **y-r3-conferme-018** [GRAVE] GRAVE modifica-sbagliata: valore sbagliato: rename|Tagliata|Di manzo» · GRAVE non-applicato: non applicato: rename|Tagliata|Tagliata di manzo
   - turni: chiama la tagliata «Tagliata di manzo»
-  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: rename|Tagliata|Di manzo»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Tagliata*: nuovo nome *Di manzo»*»
 - **y-r3-conferme-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
   - turni: rinomina la tagliata in Tagliata di manzo ⏎ tagliata di manzo a 20
   - atteso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo · ottenuto: rename|Tagliata|Tagliata di manzo

@@ -114,6 +114,9 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // R5.1: «da domani costa 13,50»: il bot non programma le modifiche → chiede se cambiarlo adesso (azione capita in sospeso).
  if(!proposal&&!hold&&/\bda (?:domani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|la prossima settimana)\b/.test(p)){const n=[...cat.code.keys()].find(x=>(' '+p+' ').includes(' '+plainT(x)+' ')),v=[...new Set(spoken(msg))]
   if(n&&v.length>=1)return out({intent:'clarify',clarify:{question:null,item_refs:[cat.code.get(n)],missing:[]},actions:[{action:'set_price',item:cat.code.get(n),price:v.at(-1)}],reply_draft:`Non posso programmare le modifiche per domani: cambio ${n} adesso?`})}
+ // R5.1: differenza detta («la tagliata 2 euro in meno», «abbassa di 50 cent la birra»): price_delta sul piatto nominato.
+ if(!proposal&&!hold){const rd=relativeDelta(msg),ns=[...cat.code.keys()].filter(x=>(' '+p+' ').includes(' '+plainT(x)+' ')).filter((x,_,a)=>!a.some(y=>y!==x&&plainT(y).includes(plainT(x))))
+  if(rd&&ns.length===1&&!/^(?:e|ed|anche|pure)\b/.test(p)&&!/\b(come|uguale|stesso)\b/.test(p))return out({actions:[{action:'set_price',item:cat.code.get(ns[0]!),price:null,price_delta:rd.delta}],reply_draft:'Fatto.'})}
  // R5.1: dialetto del glossario della scheda («un c'è cchiù» = finito, «nun è fernuta, ce sta ancora» = disponibile).
  {const names=[...cat.code.keys()].filter(n=>(' '+p+' ').includes(' '+plainT(n)+' '));if(names.length===1&&!proposal&&!hold&&!/^(?:no|anzi|scusa)\b/.test(p)){const yes=/\b(?:nun|non|un) e fernut\w*|ce sta ancora|ce sta n ata vota|e tornat\w*/.test(p),no=!yes&&/\b(?:un|nun) c e cchiu|nun ce sta cchiu|nun ce n e|e fernut\w*|s e fernut\w*|l e finid\w*|la xe finia/.test(p)
   if(yes||no)return out({actions:[{action:'set_available',item:cat.code.get(names[0]!),value:yes}],reply_draft:'Fatto.'})}}
@@ -223,7 +226,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // Saluto in testa a un comando («ciao, vorrei aggiungere…»): non è chiacchiera.
  if(d.intent==='chat'&&/^(?:ciao|buongiorno|buonasera|salve|grazie)\b/.test(p)&&p.split(' ').length>3){const rest=msg.replace(/^\s*\S+[\s,!.]*/,'');const d2=JSON.parse(brainOracle(conv,{...body,messages:[...msgs.slice(0,-1),{role:'user',content:(head?head+'\nMESSAGGIO\n':'MESSAGGIO\n')+rest}]})!);if(d2.intent!=='chat')return JSON.stringify(d2)}
  // R5.1 (nota 62): «aggiungi X a 10» con X già nel menu → nessuna azione su X, parte incerta con la domanda breve.
- if(!proposal&&!hold&&!ask){const ex:{n:string,phrase:string}[]=[];for(const cl of msg.split(/,|;|\s+e\s+(?=aggiung|inseris)/i)){const pc=plainT(cl);if(!/\b(aggiung\w*|inserisc\w*)\b/.test(pc)||/\b(categori\w*|nei|negli|nelle|nella|nel)\b/.test(pc))continue
+ if(!proposal&&!hold&&!ask){const ex:{n:string,phrase:string}[]=[];for(const cl of msg.split(/,|;|\s+e\s+(?=aggiung|inseris)/i)){const pc=plainT(cl);if(!/\b(aggiung\w*|inserisc\w*)\b/.test(pc)||/\b(categori\w*|nei|negli|nelle|nella|nel|tra)\b/.test(pc))continue
    const n=[...cat.code.keys()].filter(x=>(' '+pc+' ').includes(' '+plainT(x)+' ')).sort((a,b)=>plainT(b).length-plainT(a).length)[0];if(n&&/\d/.test(pc)&&!spoken(cl).includes(cat.price.get(n)!))ex.push({n,phrase:cl.trim()})}
   if(ex.length){const codes=new Set(ex.map(e=>cat.code.get(e.n)));const keep=(d.intent==='change'?(d.actions??[]):[]).filter((a:any)=>!codes.has(a.item)&&!(a.action==='create_item'&&ex.some(e=>plainT(e.n)===plainT(String(a.name??'')))))
    const q=ex.map(e=>`C'è già ${e.n} a ${String(cat.price.get(e.n)??'').replace('.',',')} €: lo aggiorno o ne creo un altro?`).join(' ')

@@ -322,7 +322,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  for(const a of actions){if(!a||typeof a!=='object'||!BRAIN_ACTIONS.includes(a.action))return no('azione_sconosciuta',actions.map((x:any)=>map(x?.item)))
   const id=map(a.item)
   if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});continue}
-  if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if(!dir.test(msg)&&!(d>0?/\+\s*\d/:/(?:^|[\s(])-\s*\d/).test(message))return no('delta_senza_verbo',[id]);legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
+  if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if((!dir.test(msg)&&!(d>0?/\+\s*\d/:/(?:^|[\s(])-\s*\d/).test(message))||/\b(?:a|costa|prezzo|fallo|mettil\w*)\s*[-–]\s*\d/i.test(message))return no('delta_senza_verbo',[id]) /* «a -1» è un prezzo negativo, non una differenza (R5.1) */;legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref)
    // Il piatto di riferimento è nominato in questo messaggio, oppure è proprio quello dell'ultima risposta del bot («*Carbonara*: …»).
    const labelled=refId?botLabels.includes(plain(byId.get(refId)?.name??'')):false

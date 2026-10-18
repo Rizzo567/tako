@@ -20,7 +20,7 @@ const cap=(x:string)=>x.charAt(0).toLocaleUpperCase('it')+x.slice(1)
 
 // Verbi (sul testo «piano»: minuscole, senza accenti né punteggiatura).
 export const DELETE_VERB=/\b(?:elimin\w*|cancell\w*|rimuov\w* (?:\w+ ){0,4}?(?:completamente|definitivamente|del tutto|per sempre|proprio)|(?:lev|togl)\w* (?:\w+ ){0,4}?(?:proprio|del tutto|definitivamente|per sempre)|(?:completamente|definitivamente) (?:rimuov|lev|togl)\w*)\b/
-export const RENAME_VERB=/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome|chiamal[aoie]\b|chiamamel[aoie]|da oggi si chiama|ora si chiama|adesso si chiama|si chiamera|mettici (?:come nome)?|nuovo nome)\b/
+export const RENAME_VERB=/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome|chiamal[aoie]\b|chiamamel[aoie]|chiama (?:il|la|lo|l)\b|da oggi si chiama|ora si chiama|adesso si chiama|si chiamera|mettici (?:come nome)?|nuovo nome)\b/
 export const MOVE_VERB=/\b(?:spost\w*|trasferisc\w*|porta\w*)\b/
 export const SECTION_WORD=/\b(?:categori[ae]|sezion[ei])\b/
 export const CREATE_SECTION_VERB=/\b(?:cre\w*|aggiung\w*|apri|fai|inserisc\w*|nuov[ao]|un altra)\b/

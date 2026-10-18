@@ -5,7 +5,7 @@
 | coppie | 30 | 30 | 0 | 0 | 0 |
 | prezzi | 32 | 29 | 0 | 0 | 3 |
 | centesimi | 25 | 25 | 0 | 0 | 0 |
-| nomi | 31 | 30 | 0 | 0 | 1 |
+| nomi | 31 | 31 | 0 | 0 | 0 |
 | deixis | 35 | 33 | 0 | 0 | 2 |
 | anzino | 30 | 29 | 0 | 0 | 1 |
 | misti | 30 | 30 | 0 | 0 | 0 |
@@ -24,7 +24,7 @@
 | lasciastare | 10 | 10 | 0 | 0 | 0 |
 | ipotesi | 8 | 8 | 0 | 0 | 0 |
 | toglieuro | 10 | 10 | 0 | 0 | 0 |
-| TOTALE | 508 | 501 | 0 | 0 | 7 |
+| TOTALE | 508 | 502 | 0 | 0 | 6 |
 
 ## Fallimenti
 
@@ -40,10 +40,6 @@
   - turni: la birra media a 5 e la piccola a 3 e 50
   - atteso: price|Birra piccola|3.5 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **adv-nomi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tagliata di pollo|14|secondi
-  - turni: aggiungi tra i secondi la tagliata di pollo a 14 per favore grazie
-  - atteso: create|tagliata di pollo|14|secondi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. C'è già Tagliata a 18 €: lo aggiorno o ne creo un altro? Non ancora pubblicato: 1. Nuovo piatto *tagliata di pollo* in *Secondi*: »
 - **adv-deixis-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
   - turni: la pasta a 10 ⏎ quella al sugo
   - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
