@@ -1,0 +1,29 @@
+{
+ "id": "x-014",
+ "family": "bv-semplici",
+ "menu": "pesce",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Confermi l'eliminazione definitiva di Cassata dal menu? Rispondi sì per cancellarla.",
+  "Ok, non elimino la Cassata. Resta nel menu com'è."
+ ],
+ "turns": [
+  "cancella proprio la cassata",
+  "no lascia stare"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 3106,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

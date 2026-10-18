@@ -1,0 +1,42 @@
+{
+ "id": "bv-correzioni-002",
+ "family": "bv-correzioni",
+ "menu": "qa1323",
+ "success": false,
+ "fails": [
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: create|la parmigiana|10|piatti di prova"
+  }
+ ],
+ "expected": [
+  "create|la parmigiana|10|piatti di prova",
+  "create|tiramisu|6|piatti di prova",
+  "hidden|boh|true"
+ ],
+ "actual": [
+  "create|tiramisu|6|piatti di prova",
+  "hidden|boh|true"
+ ],
+ "replies": [
+  "1) Tiramisù creato a 6 €. 2) C'è già «Inserisce il piatto la parmigiana» a 12 €: lo aggiorno a 10 € o ne creo un altro «Parmigiana» a 10 €? 3) «Toiibo» non l'ho capito: cosa vuoi che faccia?\ncreato p6 «Tiramisù» a 6 € in Piatti di prova",
+  "1) Fatto: «boh» è nascosto dal menu. 2) Per la parmigiana: aggiorno «Inserisce il piatto la parmigiana» a 10 € o ne creo un altro «Parmigiana» a 10 €?\nboh: nascosto"
+ ],
+ "turns": [
+  "🎤 Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+  "🎤 No, ho detto togli boh."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 5,
+ "llmMisses": 0,
+ "llmTokens": 2635,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:26"
+}

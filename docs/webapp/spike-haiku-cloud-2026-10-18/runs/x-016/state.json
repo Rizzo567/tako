@@ -1,0 +1,938 @@
+{
+ "id": "x-016",
+ "menuKey": "romana",
+ "locale": "romana",
+ "note": "- \"coda\" = la coda alla vaccinara (piatto dal menu). Dire che una coda è finita significa segnarla come esaurita (stato: finito), non toglierla dal menu.\n- \"elimina\" = vuole cancellare il piatto dal menu in modo definitivo. Il bot chiede conferma: \"sì\" = conferma l'eliminazione. Se vuole solo nasconderlo dice \"nascondi\".\n- \"sì\" è la sua conferma abituale quando il bot chiede una conferma esplicita.\n- \"il supplì\" senza specificare: non è chiaro quale dei due supplì intende (classico o cacio e pepe). Chiedere quale prima di applicare qualsiasi modifica.\n- Quando chiede informazioni (\"dimmi se...\") vuole una risposta secca sul dato, senza modifiche.",
+ "codes": {
+  "c1": "70000001-7777-4777-8777-000000000001",
+  "p1": "50000001-5555-4555-8555-000000000001",
+  "p2": "50000001-5555-4555-8555-000000000002",
+  "p3": "50000001-5555-4555-8555-000000000003",
+  "p4": "50000001-5555-4555-8555-000000000004",
+  "p5": "50000001-5555-4555-8555-000000000005",
+  "p6": "50000001-5555-4555-8555-000000000006",
+  "c2": "70000001-7777-4777-8777-000000000002",
+  "p7": "50000001-5555-4555-8555-000000000007",
+  "p8": "50000001-5555-4555-8555-000000000008",
+  "p9": "50000001-5555-4555-8555-000000000009",
+  "p10": "50000001-5555-4555-8555-00000000000a",
+  "p11": "50000001-5555-4555-8555-00000000000b",
+  "p12": "50000001-5555-4555-8555-00000000000c",
+  "c3": "70000001-7777-4777-8777-000000000003",
+  "p13": "50000001-5555-4555-8555-00000000000d",
+  "p14": "50000001-5555-4555-8555-00000000000e",
+  "p15": "50000001-5555-4555-8555-00000000000f",
+  "p16": "50000001-5555-4555-8555-000000000010",
+  "p17": "50000001-5555-4555-8555-000000000011",
+  "c4": "70000001-7777-4777-8777-000000000004",
+  "p18": "50000001-5555-4555-8555-000000000012",
+  "p19": "50000001-5555-4555-8555-000000000013",
+  "p20": "50000001-5555-4555-8555-000000000014",
+  "c5": "70000001-7777-4777-8777-000000000005",
+  "p21": "50000001-5555-4555-8555-000000000015",
+  "p22": "50000001-5555-4555-8555-000000000016",
+  "p23": "50000001-5555-4555-8555-000000000017",
+  "p24": "50000001-5555-4555-8555-000000000018",
+  "c6": "70000001-7777-4777-8777-000000000006",
+  "p25": "50000001-5555-4555-8555-000000000019",
+  "p26": "50000001-5555-4555-8555-00000000001a",
+  "p27": "50000001-5555-4555-8555-00000000001b",
+  "p28": "50000001-5555-4555-8555-00000000001c",
+  "p29": "50000001-5555-4555-8555-00000000001d"
+ },
+ "next": {
+  "p": 29,
+  "c": 6
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000001-6666-4666-8666-000000000001",
+    "name": "Pranzo e cena",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000001-7777-4777-8777-000000000001",
+      "name": "Antipasti",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000001",
+        "name": "Supplì classico",
+        "price": 2.5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000002",
+        "name": "Supplì cacio e pepe",
+        "price": 3
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000003",
+        "name": "Fiori di zucca",
+        "price": 3.5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000004",
+        "name": "Bruschetta al pomodoro",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000005",
+        "name": "Carciofo alla giudia",
+        "price": 6
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000006",
+        "name": "Parmigiana di melanzane",
+        "price": 10
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000002",
+      "name": "Primi",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000007",
+        "name": "Carbonara",
+        "price": 12
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000008",
+        "name": "Amatriciana",
+        "price": 11
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000009",
+        "name": "Cacio e pepe",
+        "price": 11
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000a",
+        "name": "Gricia",
+        "price": 11
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000b",
+        "name": "Fettuccine al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000c",
+        "name": "Rigatoni con la pajata",
+        "price": 14
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000003",
+      "name": "Secondi",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-00000000000d",
+        "name": "Saltimbocca alla romana",
+        "price": 15
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000e",
+        "name": "Coda alla vaccinara",
+        "price": 16
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000f",
+        "name": "Abbacchio scottadito",
+        "price": 18
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000010",
+        "name": "Trippa alla romana",
+        "price": 13
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000011",
+        "name": "Polpette al sugo",
+        "price": 12
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000004",
+      "name": "Contorni",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000012",
+        "name": "Cicoria ripassata",
+        "price": 5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000013",
+        "name": "Puntarelle",
+        "price": 6
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000014",
+        "name": "Patate al forno",
+        "price": 4.5
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000005",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000015",
+        "name": "Tiramisù",
+        "price": 6
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000016",
+        "name": "Maritozzo con la panna",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000017",
+        "name": "Crostata di visciole",
+        "price": 5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000018",
+        "name": "Panna cotta",
+        "price": 5
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "60000001-6666-4666-8666-000000000002",
+    "name": "Bevande",
+    "type": "drinks",
+    "sections": [
+     {
+      "id": "70000001-7777-4777-8777-000000000006",
+      "name": "Bevande",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000019",
+        "name": "Acqua naturale",
+        "price": 2
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001a",
+        "name": "Vino della casa rosso 1/4",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001b",
+        "name": "Vino della casa bianco 1/4",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001c",
+        "name": "Birra Peroni",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001d",
+        "name": "Caffè",
+        "price": 1.5
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000001-6666-4666-8666-000000000001",
+    "name": "Pranzo e cena",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000001-7777-4777-8777-000000000001",
+      "name": "Antipasti",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000001",
+        "name": "Supplì classico",
+        "price": 2.5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000002",
+        "name": "Supplì cacio e pepe",
+        "price": 3
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000003",
+        "name": "Fiori di zucca",
+        "price": 3.5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000004",
+        "name": "Bruschetta al pomodoro",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000005",
+        "name": "Carciofo alla giudia",
+        "price": 6
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000006",
+        "name": "Parmigiana di melanzane",
+        "price": 10
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000002",
+      "name": "Primi",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000007",
+        "name": "Carbonara",
+        "price": 12
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000008",
+        "name": "Amatriciana",
+        "price": 11
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000009",
+        "name": "Cacio e pepe",
+        "price": 11
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000a",
+        "name": "Gricia",
+        "price": 11
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000b",
+        "name": "Fettuccine al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000c",
+        "name": "Rigatoni con la pajata",
+        "price": 14
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000003",
+      "name": "Secondi",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-00000000000d",
+        "name": "Saltimbocca alla romana",
+        "price": 15
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000e",
+        "name": "Coda alla vaccinara",
+        "price": 16
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000000f",
+        "name": "Abbacchio scottadito",
+        "price": 18
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000010",
+        "name": "Trippa alla romana",
+        "price": 13
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000011",
+        "name": "Polpette al sugo",
+        "price": 12
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000004",
+      "name": "Contorni",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000012",
+        "name": "Cicoria ripassata",
+        "price": 5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000013",
+        "name": "Puntarelle",
+        "price": 6
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000014",
+        "name": "Patate al forno",
+        "price": 4.5
+       }
+      ]
+     },
+     {
+      "id": "70000001-7777-4777-8777-000000000005",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000015",
+        "name": "Tiramisù",
+        "price": 6
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000016",
+        "name": "Maritozzo con la panna",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000017",
+        "name": "Crostata di visciole",
+        "price": 5
+       },
+       {
+        "id": "50000001-5555-4555-8555-000000000018",
+        "name": "Panna cotta",
+        "price": 5
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "60000001-6666-4666-8666-000000000002",
+    "name": "Bevande",
+    "type": "drinks",
+    "sections": [
+     {
+      "id": "70000001-7777-4777-8777-000000000006",
+      "name": "Bevande",
+      "items": [
+       {
+        "id": "50000001-5555-4555-8555-000000000019",
+        "name": "Acqua naturale",
+        "price": 2
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001a",
+        "name": "Vino della casa rosso 1/4",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001b",
+        "name": "Vino della casa bianco 1/4",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001c",
+        "name": "Birra Peroni",
+        "price": 4
+       },
+       {
+        "id": "50000001-5555-4555-8555-00000000001d",
+        "name": "Caffè",
+        "price": 1.5
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 2,
+ "history": [
+  {
+   "owner": "il maritozzo è finito",
+   "bot": "Fatto: il Maritozzo con la panna è segnato come esaurito.\nMaritozzo con la panna: finito",
+   "tools": [
+    "Maritozzo con la panna: finito"
+   ]
+  },
+  {
+   "owner": "annulla",
+   "bot": "Fatto: ho annullato l'ultima modifica, cioè il Maritozzo con la panna segnato come esaurito. Torna disponibile.\nannullata l'ultima pubblicazione (available|Maritozzo con la panna|false)",
+   "tools": [
+    "annullata l'ultima pubblicazione (available|Maritozzo con la panna|false)"
+   ]
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "il maritozzo è finito",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 6271,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"finito\",\"argomenti\":{\"piatto_id\":\"p22\"}}]}\n",
+     "executed": [
+      "finito({\"piatto_id\":\"p22\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: il Maritozzo con la panna è segnato come esaurito.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: il Maritozzo con la panna è segnato come esaurito.\nMaritozzo con la panna: finito",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000001-6666-4666-8666-000000000001",
+      "name": "Pranzo e cena",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000001-7777-4777-8777-000000000001",
+        "name": "Antipasti",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000001",
+          "name": "Supplì classico",
+          "price": 2.5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000002",
+          "name": "Supplì cacio e pepe",
+          "price": 3
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000003",
+          "name": "Fiori di zucca",
+          "price": 3.5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000004",
+          "name": "Bruschetta al pomodoro",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000005",
+          "name": "Carciofo alla giudia",
+          "price": 6
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000006",
+          "name": "Parmigiana di melanzane",
+          "price": 10
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000002",
+        "name": "Primi",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000007",
+          "name": "Carbonara",
+          "price": 12
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000008",
+          "name": "Amatriciana",
+          "price": 11
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000009",
+          "name": "Cacio e pepe",
+          "price": 11
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000a",
+          "name": "Gricia",
+          "price": 11
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000b",
+          "name": "Fettuccine al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000c",
+          "name": "Rigatoni con la pajata",
+          "price": 14
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000003",
+        "name": "Secondi",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-00000000000d",
+          "name": "Saltimbocca alla romana",
+          "price": 15
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000e",
+          "name": "Coda alla vaccinara",
+          "price": 16
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000f",
+          "name": "Abbacchio scottadito",
+          "price": 18
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000010",
+          "name": "Trippa alla romana",
+          "price": 13
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000011",
+          "name": "Polpette al sugo",
+          "price": 12
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000004",
+        "name": "Contorni",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000012",
+          "name": "Cicoria ripassata",
+          "price": 5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000013",
+          "name": "Puntarelle",
+          "price": 6
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000014",
+          "name": "Patate al forno",
+          "price": 4.5
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000005",
+        "name": "Dolci",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000015",
+          "name": "Tiramisù",
+          "price": 6
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000016",
+          "name": "Maritozzo con la panna",
+          "price": 4,
+          "available": false
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000017",
+          "name": "Crostata di visciole",
+          "price": 5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000018",
+          "name": "Panna cotta",
+          "price": 5
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "60000001-6666-4666-8666-000000000002",
+      "name": "Bevande",
+      "type": "drinks",
+      "sections": [
+       {
+        "id": "70000001-7777-4777-8777-000000000006",
+        "name": "Bevande",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000019",
+          "name": "Acqua naturale",
+          "price": 2
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001a",
+          "name": "Vino della casa rosso 1/4",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001b",
+          "name": "Vino della casa bianco 1/4",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001c",
+          "name": "Birra Peroni",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001d",
+          "name": "Caffè",
+          "price": 1.5
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "finito({\"piatto_id\":\"p22\"})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "annulla",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 6415,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"annulla_ultima\",\"argomenti\":{}}]}\n",
+     "executed": [
+      "annulla_ultima({})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: ho annullato l'ultima modifica, cioè il Maritozzo con la panna segnato come esaurito. Torna disponibile.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: ho annullato l'ultima modifica, cioè il Maritozzo con la panna segnato come esaurito. Torna disponibile.\nannullata l'ultima pubblicazione (available|Maritozzo con la panna|false)",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000001-6666-4666-8666-000000000001",
+      "name": "Pranzo e cena",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000001-7777-4777-8777-000000000001",
+        "name": "Antipasti",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000001",
+          "name": "Supplì classico",
+          "price": 2.5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000002",
+          "name": "Supplì cacio e pepe",
+          "price": 3
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000003",
+          "name": "Fiori di zucca",
+          "price": 3.5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000004",
+          "name": "Bruschetta al pomodoro",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000005",
+          "name": "Carciofo alla giudia",
+          "price": 6
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000006",
+          "name": "Parmigiana di melanzane",
+          "price": 10
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000002",
+        "name": "Primi",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000007",
+          "name": "Carbonara",
+          "price": 12
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000008",
+          "name": "Amatriciana",
+          "price": 11
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000009",
+          "name": "Cacio e pepe",
+          "price": 11
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000a",
+          "name": "Gricia",
+          "price": 11
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000b",
+          "name": "Fettuccine al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000c",
+          "name": "Rigatoni con la pajata",
+          "price": 14
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000003",
+        "name": "Secondi",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-00000000000d",
+          "name": "Saltimbocca alla romana",
+          "price": 15
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000e",
+          "name": "Coda alla vaccinara",
+          "price": 16
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000000f",
+          "name": "Abbacchio scottadito",
+          "price": 18
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000010",
+          "name": "Trippa alla romana",
+          "price": 13
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000011",
+          "name": "Polpette al sugo",
+          "price": 12
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000004",
+        "name": "Contorni",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000012",
+          "name": "Cicoria ripassata",
+          "price": 5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000013",
+          "name": "Puntarelle",
+          "price": 6
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000014",
+          "name": "Patate al forno",
+          "price": 4.5
+         }
+        ]
+       },
+       {
+        "id": "70000001-7777-4777-8777-000000000005",
+        "name": "Dolci",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000015",
+          "name": "Tiramisù",
+          "price": 6
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000016",
+          "name": "Maritozzo con la panna",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000017",
+          "name": "Crostata di visciole",
+          "price": 5
+         },
+         {
+          "id": "50000001-5555-4555-8555-000000000018",
+          "name": "Panna cotta",
+          "price": 5
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "60000001-6666-4666-8666-000000000002",
+      "name": "Bevande",
+      "type": "drinks",
+      "sections": [
+       {
+        "id": "70000001-7777-4777-8777-000000000006",
+        "name": "Bevande",
+        "items": [
+         {
+          "id": "50000001-5555-4555-8555-000000000019",
+          "name": "Acqua naturale",
+          "price": 2
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001a",
+          "name": "Vino della casa rosso 1/4",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001b",
+          "name": "Vino della casa bianco 1/4",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001c",
+          "name": "Birra Peroni",
+          "price": 4
+         },
+         {
+          "id": "50000001-5555-4555-8555-00000000001d",
+          "name": "Caffè",
+          "price": 1.5
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "annulla_ultima({})"
+   ]
+  }
+ ],
+ "done": true
+}

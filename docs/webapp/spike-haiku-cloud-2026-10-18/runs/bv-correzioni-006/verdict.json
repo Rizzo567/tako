@@ -1,0 +1,42 @@
+{
+ "id": "bv-correzioni-006",
+ "family": "bv-correzioni",
+ "menu": "qa",
+ "success": false,
+ "fails": [
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
+  }
+ ],
+ "expected": [
+  "create|lasagna|20|piatti di prova",
+  "create|pasta al pesto|10|piatti di prova"
+ ],
+ "actual": [],
+ "replies": [
+  "Ok, aggiungo pasta al pesto e lasagna. A che prezzo li metto, e in quale categoria? Nel menu c'è solo \"Piatti di prova\".",
+  "Ok, sono due piatti separati: pasta al pesto e lasagna. A che prezzo li metto? Li inserisco in «Piatti di prova», l'unica categoria del menu.",
+  "Quale dei due va a 10 euro: pasta al pesto o lasagna? L'altro va a 20 euro."
+ ],
+ "turns": [
+  "🎤 Allora aggiungi il piatto pasta al pesto e lasagna.",
+  "🎤 No, pasta al pesto e lasagna sono due piatti separati.",
+  "🎤 Uno deve essere a 10 euro e uno deve essere a 20 euro."
+ ],
+ "clarifications": 3,
+ "unexpectedClarifications": 1,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 3931,
+ "latencyMs": [
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:39",
+ "note": "AMBIGUO: turno 1 «pasta al pesto e lasagna» uno o due piatti, senza prezzo; turno 2 due piatti senza prezzo. Risposta vera finale: un piatto a 10,01 €"
+}

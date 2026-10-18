@@ -1,0 +1,31 @@
+{
+ "id": "bv-semplici-012",
+ "family": "bv-semplici",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|piatto test qa|9|piatti di prova"
+ ],
+ "actual": [
+  "create|piatto test qa|9|piatti di prova"
+ ],
+ "replies": [
+  "Fatto: ho aggiunto «Piatto test QA» a 9 € nella categoria Piatti di prova.\ncreato p5 «Piatto test QA» a 9 € in Piatti di prova"
+ ],
+ "turns": [
+  "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1662,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:56",
+ "note": "nome detto «Piatto test QA»: il nome nuovo è quello detto letteralmente (decisione 18/10, nota 62); il bot vero aveva creato «Test QA»"
+}

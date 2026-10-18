@@ -1,0 +1,29 @@
+{
+ "id": "bv-annulla-006",
+ "family": "bv-annulla",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Fatto: il Piatto di verifica è nascosto dal menu. Non l'ho eliminato.\nPiatto di verifica: nascosto",
+  "Fatto: il Piatto di verifica è di nuovo visibile nel menu.\nPiatto di verifica: visibile"
+ ],
+ "turns": [
+  "nascondi il piatto di verifica",
+  "mostra il piatto di verifica"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3346,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:51"
+}

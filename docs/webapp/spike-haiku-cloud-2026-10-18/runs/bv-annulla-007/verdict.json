@@ -1,0 +1,29 @@
+{
+ "id": "bv-annulla-007",
+ "family": "bv-annulla",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Fatto: Piatto di verifica segnato come finito.\nPiatto di verifica: finito",
+  "Fatto: Piatto di verifica è di nuovo disponibile.\nPiatto di verifica: disponibile"
+ ],
+ "turns": [
+  "il piatto di verifica è finito",
+  "il piatto di verifica è tornato disponibile"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2488,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:38"
+}

@@ -1,0 +1,26 @@
+{
+ "id": "bv-fuori-002",
+ "family": "bv-fuori",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Per ora dal WhatsApp non posso modificare gli allergeni dei piatti. Posso cambiare prezzo, descrizione, disponibilità, nome o categoria. Gli allergeni vanno aggiornati dalla dashboard."
+ ],
+ "turns": [
+  "❓ sai cambiare gli allergeni?"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1579,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 00:23"
+}

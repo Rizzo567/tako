@@ -1,0 +1,29 @@
+{
+ "id": "bv-annulla-005",
+ "family": "bv-annulla",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Fatto, quattro modifiche:\n1. Piatto di verifica a 14 €\n2. Che ne sacc a 21 €\n3. boh a 21 €\n4. pasta al ragù a 13 €\n1. Piatto di verifica: 13,5 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €",
+  "Annullata l'ultima pubblicazione: le quattro modifiche dei prezzi sono state ripristinate (Piatto di verifica, Che ne sacc, boh, pasta al ragù).\nannullata l'ultima pubblicazione (price|Che ne sacc|21, price|Piatto di verifica|14, price|boh|21, price|pasta al ragù|13)"
+ ],
+ "turns": [
+  "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+  "annulla"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2567,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 11:18"
+}

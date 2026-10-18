@@ -1,0 +1,31 @@
+{
+ "id": "bv-semplici-016",
+ "family": "bv-semplici",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|pasta al sugo|12|piatti di prova"
+ ],
+ "actual": [
+  "create|pasta al sugo|12|piatti di prova"
+ ],
+ "replies": [
+  "Fatto: ho aggiunto «pasta al sugo» a 12 € nella categoria Piatti di prova.\ncreato p7 «pasta al sugo» a 12 € in Piatti di prova"
+ ],
+ "turns": [
+  "🎤 Aggiungi il piatto pasta al sugo a 12 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1663,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:36",
+ "note": "una sola categoria: va usata"
+}

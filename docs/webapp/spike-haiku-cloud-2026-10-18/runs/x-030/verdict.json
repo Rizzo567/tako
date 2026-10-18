@@ -1,0 +1,30 @@
+{
+ "id": "x-030",
+ "family": "bv-semplici",
+ "menu": "bar",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Cornetto|1.4"
+ ],
+ "actual": [
+  "price|Cornetto|1.4"
+ ],
+ "replies": [
+  "Fatto: Cornetto portato da 1,30 a 1,40 €. Il Cornetto integrale resta com'è.\nCornetto: 1,3 → 1,4 €"
+ ],
+ "turns": [
+  "🎤 Il cornetto mettilo a 1 e 40, quello integrale invece lascialo."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1529,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

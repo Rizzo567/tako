@@ -1,0 +1,27 @@
+{
+ "id": "bv-fuori-003",
+ "family": "bv-fuori",
+ "menu": "collaudo",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico."
+ ],
+ "turns": [
+  "La Pasta collaudo mettila a dodici oppure quattordici euro."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1236,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 15:55",
+ "note": "AMBIGUO: due prezzi alternativi: chiedere quale (risposta vera: «Non sono sicuro di quale piatto»)"
+}

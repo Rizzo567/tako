@@ -1,0 +1,27 @@
+{
+ "id": "bv-domande-007",
+ "family": "bv-domande",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Il piatto di verifica costa 13 €. Non ho modificato nulla."
+ ],
+ "turns": [
+  "❓ piatto di verifica 13 o 14?"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1223,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:43",
+ "note": "domanda sul prezzo: dirlo (13), niente scrittura"
+}

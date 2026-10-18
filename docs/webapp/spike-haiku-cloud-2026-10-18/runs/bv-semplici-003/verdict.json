@@ -1,0 +1,33 @@
+{
+ "id": "bv-semplici-003",
+ "family": "bv-semplici",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|Polpo rucola e patate|true"
+ ],
+ "actual": [
+  "hidden|Polpo rucola e patate|true"
+ ],
+ "replies": [
+  "Fatto: Polpo rucola e patate è nascosto dal menu.\nPolpo rucola e patate: nascosto",
+  "Non c'è nulla in sospeso da confermare. Il polpo è già nascosto dal menu. Dimmi cosa vuoi cambiare."
+ ],
+ "turns": [
+  "🎤 Nascondi il polpo.",
+  "conferma"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 2681,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 22:35"
+}

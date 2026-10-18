@@ -1,0 +1,27 @@
+{
+ "id": "bv-domande-002",
+ "family": "bv-domande",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Posso cambiare prezzi, segnare piatti come esauriti o di nuovo disponibili, nascondere o mostrare piatti, creare piatti e categorie, rinominare, spostare, aggiungere descrizioni, promo, evidenza e piatto del giorno. Annullo l'ultima modifica. Elimino un piatto solo dopo tuo sì. Dimmi cosa vuoi fare."
+ ],
+ "turns": [
+  "🎤 Dimmi un po' tutto quello che sai fare"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1581,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 22:32",
+ "note": "risposta vera: «Non trovo nel menu il piatto»"
+}

@@ -1,0 +1,308 @@
+{
+ "id": "bv-categorie-002",
+ "menuKey": "qa",
+ "locale": "qa",
+ "note": "",
+ "codes": {
+  "c1": "70000006-7777-4777-8777-000000000001",
+  "p1": "50000006-5555-4555-8555-000000000001",
+  "p2": "50000006-5555-4555-8555-000000000002",
+  "p3": "50000006-5555-4555-8555-000000000003",
+  "p4": "50000006-5555-4555-8555-000000000004",
+  "p5": "50000006-5555-4555-8555-000000000005",
+  "p6": "50000006-5555-4555-8555-000000000006",
+  "c2": "newc-bv-categorie-002-2"
+ },
+ "next": {
+  "p": 6,
+  "c": 2
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000006-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000006-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000006-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000005",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000006",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     },
+     {
+      "id": "newc-bv-categorie-002-2",
+      "name": "primi pasti",
+      "items": []
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000006-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000006-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000006-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000005",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000006",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 1,
+ "history": [
+  {
+   "owner": "Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\".",
+   "bot": "Fatto: ho creato la categoria «primi pasti».\ncreata categoria c2 «primi pasti»",
+   "tools": [
+    "creata categoria c2 «primi pasti»"
+   ]
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000006-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000006-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000006-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13.5
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 20,
+         "promo": {
+          "price": 15,
+          "until": null
+         }
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 20,
+         "promo": {
+          "price": 10,
+          "until": null
+         }
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 12
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000005",
+         "name": "la parmigiana",
+         "price": 10
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000006",
+         "name": "tiramisù",
+         "price": 6
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "categoria"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\".",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 4970,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"crea_categoria\",\"argomenti\":{\"nome\":\"primi pasti\"}}]}\n",
+     "executed": [
+      "crea_categoria({\"nome\":\"primi pasti\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: ho creato la categoria «primi pasti».\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: ho creato la categoria «primi pasti».\ncreata categoria c2 «primi pasti»",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         }
+        ]
+       },
+       {
+        "id": "newc-bv-categorie-002-2",
+        "name": "primi pasti",
+        "items": []
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "crea_categoria({\"nome\":\"primi pasti\"})"
+   ]
+  }
+ ],
+ "done": true
+}

@@ -1,0 +1,31 @@
+{
+ "id": "x-002",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Carbonara|13"
+ ],
+ "actual": [
+  "price|Carbonara|13"
+ ],
+ "replies": [
+  "Fatto: Carbonara portata da 12 € a 13 €.\nCarbonara: 12 → 13 €"
+ ],
+ "turns": [
+  "🎤 La carbonare mettila a tre dici euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1572,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "«tre dici» = 13"
+}

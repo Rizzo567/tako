@@ -1,0 +1,30 @@
+{
+ "id": "x-009",
+ "family": "bv-semplici",
+ "menu": "bar",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Cappuccino|2"
+ ],
+ "actual": [
+  "price|Cappuccino|2"
+ ],
+ "replies": [
+  "Fatto: Cappuccino ora costa 2 € (era 1,60 €, +25%).\nCappuccino: 1,6 → 2 €"
+ ],
+ "turns": [
+  "alza il cappuccino del 25%"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1301,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

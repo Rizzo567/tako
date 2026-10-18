@@ -1,0 +1,46 @@
+{
+ "id": "bv-annulla-008",
+ "family": "bv-annulla",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Piatto di verifica|13"
+ ],
+ "actual": [
+  "price|Piatto di verifica|13"
+ ],
+ "replies": [
+  "Il piatto di verifica costa 13,50 €.",
+  "Fatto: il piatto di verifica costa ora 13 €.\nPiatto di verifica: 13,5 → 13 €",
+  "Fatto: Piatto di verifica è segnato come finito.\nPiatto di verifica: finito",
+  "Fatto: Piatto di verifica è di nuovo disponibile.\nPiatto di verifica: disponibile",
+  "Il piatto di verifica costa attualmente 13 €. Non l'ho modificato: dimmi se lo vuoi a 14 €.",
+  "Al momento nessun piatto risulta finito. Il piatto di verifica è di nuovo disponibile."
+ ],
+ "turns": [
+  "❓ quanto costa il piatto di verifica?",
+  "il piatto di verifica costa 13 euro",
+  "il piatto di verifica è finito",
+  "il piatto di verifica è tornato disponibile",
+  "❓ piatto di verifica 13 o 14?",
+  "❓ cosa è finito?"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 11,
+ "llmMisses": 0,
+ "llmTokens": 10431,
+ "latencyMs": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:32",
+ "note": "sessione intera 10:32–10:45"
+}

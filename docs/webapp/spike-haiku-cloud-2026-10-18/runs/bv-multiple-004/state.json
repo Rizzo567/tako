@@ -1,0 +1,336 @@
+{
+ "id": "bv-multiple-004",
+ "menuKey": "qamattina",
+ "locale": "qa",
+ "note": "# Come scrive il titolare (qa)\n\n## Storpiature e soprannomi\n- «Bo», «Bu», «boh»: tutti riferiti al piatto di prova chiamato «boh» (probabile dettatura approssimata).\n- «Che ne sacc» e «kenesac»: stesso piatto, il titolare usa entrambe le forme.\n- «Inserisce il piatto la parmigiana»: dettatura di «la parmigiana», non un piatto diverso. Quando il titolare chiede di inserire o cambiare «la parmigiana», il piatto esiste già: va aggiornato, non duplicato.\n- Quando dice «inserisci» o «aggiungi» un piatto che c'è già, di solito intende modificare quello esistente; il bot deve chiedere prima di creare un doppione.\n\n## Modi di dire e cosa significano\n- «togli» / «nascondi» = nascondi dal menu, NON eliminare. Anche dopo «elimina», il titolare accetta «nascondi» senza chiedere la cancellazione definitiva.\n- «mostra» / «è tornato disponibile» = rendi visibile / disponibile di nuovo.\n- «metti in promo», «in sconto», «promo a X» = prezzo promozionale, con prezzo pieno lasciato invariato.\n- «anzi no» = correzione: vale solo l'ultimo valore detto, scarta quello precedente.\n- «vai» = procedi, dai il via all'azione.\n- «annulla» = annulla l'ultima pubblicazione (non una modifica più vecchia).\n- «OK» dopo un riepilogo = conferma, non chiede altro.\n- Cifre dette in lettere: «e cinquanta» indica i centesimi (es. «tredici euro e cinquanta»).\n- «Piatti di prova» è la categoria usata per le prove: non è un menu reale.\n\n## Abitudini\n- Chiede spesso più modifiche in una sola frase: le elenca tutte e vuole la conferma in blocco.\n- Preferisce risposte brevi con il risultato, senza domande inutili se il piatto è già chiaro.\n- Quando il bot chiede quale piatto intende, di solito risponde con il nome esatto del piatto.",
+ "codes": {
+  "c1": "70000008-7777-4777-8777-000000000001",
+  "p1": "50000008-5555-4555-8555-000000000001",
+  "p2": "50000008-5555-4555-8555-000000000002",
+  "p3": "50000008-5555-4555-8555-000000000003",
+  "p4": "50000008-5555-4555-8555-000000000004"
+ },
+ "next": {
+  "p": 4,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 14
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 21,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 21,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 13
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 2,
+ "history": [
+  {
+   "owner": "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+   "bot": "Fatto, quattro modifiche:\n1. Piatto di verifica: 13 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €\n1. Piatto di verifica: 13 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €",
+   "tools": [
+    "Piatto di verifica: 13 → 14 €",
+    "Che ne sacc: 20 → 21 €",
+    "boh: 20 → 21 €",
+    "pasta al ragù: 12 → 13 €"
+   ]
+  },
+  {
+   "owner": "ok va bene",
+   "bot": "Ok, perfetto. Le quattro modifiche della giornata sono già applicate. Non ci sono operazioni in sospeso.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000008-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000008-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000008-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 20,
+         "promo": {
+          "price": 15,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 20,
+         "promo": {
+          "price": 10,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 12
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "prezzo"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 6671,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p1\",\"prezzo\":14}},{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p2\",\"prezzo\":21}},{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p3\",\"prezzo\":21}},{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p4\",\"prezzo\":13}}]}\n",
+     "executed": [
+      "cambia_prezzo({\"piatto_id\":\"p1\",\"prezzo\":14})",
+      "cambia_prezzo({\"piatto_id\":\"p2\",\"prezzo\":21})",
+      "cambia_prezzo({\"piatto_id\":\"p3\",\"prezzo\":21})",
+      "cambia_prezzo({\"piatto_id\":\"p4\",\"prezzo\":13})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto, quattro modifiche:\\n1. Piatto di verifica: 13 → 14 €\\n2. Che ne sacc: 20 → 21 €\\n3. boh: 20 → 21 €\\n4. pasta al ragù: 12 → 13 €\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto, quattro modifiche:\n1. Piatto di verifica: 13 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €\n1. Piatto di verifica: 13 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 14
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 21,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 21,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 13
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "cambia_prezzo({\"piatto_id\":\"p1\",\"prezzo\":14})",
+    "cambia_prezzo({\"piatto_id\":\"p2\",\"prezzo\":21})",
+    "cambia_prezzo({\"piatto_id\":\"p3\",\"prezzo\":21})",
+    "cambia_prezzo({\"piatto_id\":\"p4\",\"prezzo\":13})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "ok va bene",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 7028,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Ok, perfetto. Le quattro modifiche della giornata sono già applicate. Non ci sono operazioni in sospeso.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Ok, perfetto. Le quattro modifiche della giornata sono già applicate. Non ci sono operazioni in sospeso.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 14
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 21,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 21,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 13
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": []
+  }
+ ],
+ "done": true
+}

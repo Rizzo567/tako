@@ -1,0 +1,26 @@
+{
+ "id": "x-025",
+ "family": "bv-semplici",
+ "menu": "bar",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Al momento hai un solo piatto nascosto: Orzo, 1,40 €, nella categoria Caffetteria. Vuoi che lo rimetta nel menu?"
+ ],
+ "turns": [
+  "❓ fammi vedere cosa ho nascosto"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1303,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

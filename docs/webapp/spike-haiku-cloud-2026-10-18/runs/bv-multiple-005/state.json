@@ -1,0 +1,261 @@
+{
+ "id": "bv-multiple-005",
+ "menuKey": "qamattina",
+ "locale": "qa",
+ "note": "",
+ "codes": {
+  "c1": "70000008-7777-4777-8777-000000000001",
+  "p1": "50000008-5555-4555-8555-000000000001",
+  "p2": "50000008-5555-4555-8555-000000000002",
+  "p3": "50000008-5555-4555-8555-000000000003",
+  "p4": "50000008-5555-4555-8555-000000000004"
+ },
+ "next": {
+  "p": 4,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 21,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 21,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 13
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 1,
+ "history": [
+  {
+   "owner": "metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro",
+   "bot": "Fatto: 1) Che ne sacc 20 €  2) boh 20 €  3) pasta al ragù 12 €. La promo di Che ne sacc (15 €) resta invariata.\n1. Che ne sacc: 21 → 20 €\n2. boh: 21 → 20 €\n3. pasta al ragù: 13 → 12 €",
+   "tools": [
+    "Che ne sacc: 21 → 20 €",
+    "boh: 21 → 20 €",
+    "pasta al ragù: 13 → 12 €"
+   ]
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000008-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000008-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000008-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13.5
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 21,
+         "promo": {
+          "price": 15,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 21,
+         "promo": {
+          "price": 10,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 13
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "prezzo"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 4934,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p2\",\"prezzo\":20}},{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p3\",\"prezzo\":20}},{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p4\",\"prezzo\":12}}]}\n",
+     "executed": [
+      "cambia_prezzo({\"piatto_id\":\"p2\",\"prezzo\":20})",
+      "cambia_prezzo({\"piatto_id\":\"p3\",\"prezzo\":20})",
+      "cambia_prezzo({\"piatto_id\":\"p4\",\"prezzo\":12})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: 1) Che ne sacc 20 €  2) boh 20 €  3) pasta al ragù 12 €. La promo di Che ne sacc (15 €) resta invariata.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: 1) Che ne sacc 20 €  2) boh 20 €  3) pasta al ragù 12 €. La promo di Che ne sacc (15 €) resta invariata.\n1. Che ne sacc: 21 → 20 €\n2. boh: 21 → 20 €\n3. pasta al ragù: 13 → 12 €",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "cambia_prezzo({\"piatto_id\":\"p2\",\"prezzo\":20})",
+    "cambia_prezzo({\"piatto_id\":\"p3\",\"prezzo\":20})",
+    "cambia_prezzo({\"piatto_id\":\"p4\",\"prezzo\":12})"
+   ]
+  }
+ ],
+ "done": true
+}

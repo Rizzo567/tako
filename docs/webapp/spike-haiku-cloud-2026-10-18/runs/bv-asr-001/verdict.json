@@ -1,0 +1,44 @@
+{
+ "id": "bv-asr-001",
+ "family": "bv-asr",
+ "menu": "qa",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "richiesta-persa",
+   "why": "richiesta persa: price|Piatto di verifica|13.5"
+  }
+ ],
+ "expected": [
+  "price|Piatto di verifica|13.5"
+ ],
+ "actual": [],
+ "replies": [
+  "Il piatto di verifica (12 €) lo cambio a 13,50 € da subito, o devo programmarlo per domani? Non programmo orari futuri senza conferma.",
+  "«Confirma» non dice quale delle due opzioni: lo cambio a 13,50 € da subito, oppure lo programmo per domani? Non programmo orari futuri senza una tua conferma esplicita.",
+  "Non ho capito se confermi l'opzione da subito o quella da domani. Il piatto di verifica passa a 13,50 € subito? Rispondi «subito» oppure «domani». Per il domani non programmo nulla senza un tuo orario.",
+  "Non ho capito cosa confermi: il piatto di verifica passa a 13,50 € subito oppure lo programmo per domani? Rispondi «subito» oppure «domani». Per il domani serve anche l'orario, perché non programmo nulla senza."
+ ],
+ "turns": [
+  "🎤 Il piatto di verifica da domani costa 13,50 euro.",
+  "🎤 Confirma.",
+  "🎤 Confirma.",
+  "conferma"
+ ],
+ "clarifications": 2,
+ "unexpectedClarifications": 1,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 7060,
+ "latencyMs": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 19:15",
+ "note": "AMBIGUO: «da domani» → il bot non programma: chiedere se cambiarlo subito; «Confirma» (Whisper) = sì"
+}

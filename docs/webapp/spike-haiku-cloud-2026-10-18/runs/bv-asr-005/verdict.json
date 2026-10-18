@@ -1,0 +1,45 @@
+{
+ "id": "bv-asr-005",
+ "family": "bv-asr",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|boh|40",
+  "price|pasta al ragù|20"
+ ],
+ "actual": [
+  "price|boh|40",
+  "price|pasta al ragù|20"
+ ],
+ "replies": [
+  "La pasta al ragù costa 12 €.",
+  "Il piatto boh costa 20 €, ed è in promo a 10 €.",
+  "Fatto: il piatto boh ora costa 50 €, era 20 €. La promo a 10 € resta invariata.\nboh: 20 → 50 €",
+  "Fatto: il piatto boh ora costa 40 €, era 50 €. La promo a 10 € resta invariata.\nboh: 50 → 40 €",
+  "Fatto: la pasta al ragù ora costa 20 €, era 12 €.\npasta al ragù: 12 → 20 €"
+ ],
+ "turns": [
+  "🎤 Quanto costa la pasta al ragù?",
+  "🎤 Quanto costa il piatto boh?",
+  "🎤 Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+  "🎤 Bu costa 40 euro",
+  "🎤 Passa il ragù, metti prezzo a 20 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 11,
+ "llmMisses": 0,
+ "llmTokens": 8523,
+ "latencyMs": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:16",
+ "note": "sessione 13:16–13:18 intera"
+}

@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-011",
+ "family": "bv-semplici",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|Piatto di verifica|false"
+ ],
+ "actual": [
+  "hidden|Piatto di verifica|false"
+ ],
+ "replies": [
+  "Fatto: il Piatto di verifica è di nuovo visibile nel menu.\nPiatto di verifica: visibile"
+ ],
+ "turns": [
+  "mostra il piatto di verifica"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1224,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:53"
+}

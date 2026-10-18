@@ -1,0 +1,26 @@
+{
+ "id": "bv-elimina-002",
+ "family": "bv-elimina",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Vuoi eliminare completamente «Polpo rucola e patate» (14 €)? Rispondi sì per confermare: il piatto verrà cancellato dal menu. Se preferisci solo toglierlo dal menu senza cancellarlo, dimmi «nascondi»."
+ ],
+ "turns": [
+  "🎤 Puoi cancellare il polpo?"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1578,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 22:34"
+}

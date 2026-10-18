@@ -1,0 +1,27 @@
+{
+ "id": "x-012",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Per 4 persone, di solito una margherita a testa: servono 4 margherite (la Margherita è a 6 €). Se ne prendono di meno, dimmi il numero."
+ ],
+ "turns": [
+  "❓ per 4 persone quante margherite servono?"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1441,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "domanda fuori menu, niente scritture"
+}

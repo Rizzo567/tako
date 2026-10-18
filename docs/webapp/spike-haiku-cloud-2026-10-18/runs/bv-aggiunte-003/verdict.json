@@ -1,0 +1,37 @@
+{
+ "id": "bv-aggiunte-003",
+ "family": "bv-aggiunte",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|parmigiana|12|piatti di prova"
+ ],
+ "actual": [
+  "create|parmigiana|12|piatti di prova"
+ ],
+ "replies": [
+  "La parmigiana non è nel menu. A che prezzo la inserisco, e in quale categoria? Il nome la chiamo «Parmigiana»?",
+  "Preparo «Parmigiana» come nuovo piatto. A che prezzo lo inserisco, e in quale categoria?",
+  "Fatto: ho creato «Parmigiana» a 12 € in Piatti di prova.\ncreato p5 «Parmigiana» a 12 € in Piatti di prova"
+ ],
+ "turns": [
+  "🎤 Inserisce il piatto la parmigiana.",
+  "🎤 Inserisci un nuovo piatto, si chiama parmigiana.",
+  "🎤 12 euro"
+ ],
+ "clarifications": 2,
+ "unexpectedClarifications": 0,
+ "llmCalls": 5,
+ "llmMisses": 0,
+ "llmTokens": 3844,
+ "latencyMs": [
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:20",
+ "note": "prezzo assente fino al turno 3: domande; risposta vera: piatto «Inserisce il piatto la parmigiana»"
+}

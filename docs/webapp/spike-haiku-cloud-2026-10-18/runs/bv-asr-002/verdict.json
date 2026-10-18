@@ -1,0 +1,40 @@
+{
+ "id": "bv-asr-002",
+ "family": "bv-asr",
+ "menu": "qamattina",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "scrive-invece-di-chiedere",
+   "why": "turno 1: doveva chiedere, ha scritto price|boh|40"
+  },
+  {
+   "sev": "GRAVE",
+   "code": "modifica-non-richiesta",
+   "why": "non richiesto: price|boh|40"
+  }
+ ],
+ "expected": [],
+ "actual": [
+  "price|boh|40"
+ ],
+ "replies": [
+  "Fatto: «boh» (Piatti di prova) ora costa 40 €. Il prezzo promo 10 € resta attivo.\nboh: 20 → 40 €"
+ ],
+ "turns": [
+  "🎤 Bu costa 40 euro"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1221,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:17",
+ "note": "AMBIGUO: «Bu» ≈ boh ma non è certo: domanda (risposta vera: «Non trovo «b»»)"
+}

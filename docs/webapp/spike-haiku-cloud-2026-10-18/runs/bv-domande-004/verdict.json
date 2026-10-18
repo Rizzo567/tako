@@ -1,0 +1,29 @@
+{
+ "id": "bv-domande-004",
+ "family": "bv-domande",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Posso leggere e modificare il menu del locale: segnare piatti come finiti o di nuovo disponibili, nascondere o mostrare piatti, cambiare prezzi, creare, rinominare o spostare piatti, aggiungere descrizioni e promo, mettere piatti in evidenza, impostare il piatto del giorno e annullare l'ultima modifica. Dimmi cosa vuoi fare.",
+  "No, al momento non posso cambiare gli allergeni dal menu. Posso modificare prezzi, disponibilità, visibilità, descrizioni, promo ed evidenza dei piatti. Vuoi fare una di queste cose?"
+ ],
+ "turns": [
+  "❓ cosa sai fare?",
+  "❓ sai cambiare gli allergeni?"
+ ],
+ "clarifications": 2,
+ "unexpectedClarifications": 2,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 3237,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 00:23"
+}

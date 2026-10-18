@@ -1,0 +1,37 @@
+{
+ "id": "bv-multiple-008",
+ "family": "bv-multiple",
+ "menu": "qa1323",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|Inserisce il piatto la parmigiana|true",
+  "promo|Che ne sacc|12",
+  "promo|Piatto di verifica|11"
+ ],
+ "actual": [
+  "hidden|Inserisce il piatto la parmigiana|true",
+  "promo|Che ne sacc|12",
+  "promo|Piatto di verifica|11"
+ ],
+ "replies": [
+  "Fatto: 1) «Inserisce il piatto la parmigiana» nascosto dal menu. 2) «Che ne sacc» in promo a 12 €, prezzo pieno 20 € invariato.\n1. Inserisce il piatto la parmigiana: nascosto\n2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)",
+  "1. Inserisce il piatto la parmigiana: era già nascosto, nessuna modifica.\n2. Piatto di verifica: promo a 11 € (prezzo pieno 13,5 € invariato).\nPiatto di verifica: promo a 11 € (prezzo pieno 13,5 €)"
+ ],
+ "turns": [
+  "🎤 Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro.",
+  "🎤 Allora, voglio che mi nascondi dal menù il piatto la parmigiana e invece mi metti in promo il piatto di verifica a 11 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 5,
+ "llmMisses": 0,
+ "llmTokens": 3477,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:23"
+}

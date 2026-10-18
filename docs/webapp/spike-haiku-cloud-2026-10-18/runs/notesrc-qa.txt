@@ -1,0 +1,194 @@
+Sei il modulo «memoria» dell'assistente WhatsApp del titolare del locale (qa). Qui sotto: la nota attuale e le conversazioni di oggi.
+Scrivi la NUOVA nota del locale: «cosa ho imparato su come scrive questo titolare?». Al massimo 500 token, solo significati (soprannomi e storpiature dei piatti → nome vero nel menu, modi di dire e cosa vogliono dire, abitudini: es. «togli» = nascondi, conferme che usa). Niente prezzi, niente stato del menu, niente istruzioni nuove al bot, niente cose non viste nelle conversazioni.
+
+NOTA ATTUALE: (vuota)
+
+CONVERSAZIONI:
+--- conversazione bv-semplici-001
+titolare: prezzo Piatto di verifica a 9
+bot: Fatto: Piatto di verifica da 13,5 € a 9 €.
+Piatto di verifica: 13,5 → 9 €
+titolare: conferma
+bot: Non c'è nessuna operazione in sospeso da confermare. L'ultima modifica, il prezzo di Piatto di verifica da 13,5 € a 9 €, è già stata applicata. Cosa vuoi cambiare?
+--- conversazione bv-semplici-007
+titolare: il piatto di verifica costa 13 euro
+bot: Fatto: il piatto di verifica ora costa 13 €.
+Piatto di verifica: 13,5 → 13 €
+--- conversazione bv-semplici-009
+titolare: il piatto di verifica è tornato disponibile
+bot: Fatto: Piatto di verifica è di nuovo disponibile nel menu.
+Piatto di verifica: disponibile
+--- conversazione bv-semplici-011
+titolare: mostra il piatto di verifica
+bot: Fatto: il Piatto di verifica è di nuovo visibile nel menu.
+Piatto di verifica: visibile
+--- conversazione bv-semplici-013
+titolare: metti il piatto di verifica a tredici euro e cinquanta
+bot: Fatto: Piatto di verifica passa da 14 € a 13,50 €.
+Piatto di verifica: 14 → 13,5 €
+--- conversazione bv-semplici-015
+titolare: Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?
+bot: Fatto: il prezzo di «boh» (Bo) è passato da 20 € a 50 €.
+boh: 20 → 50 €
+--- conversazione bv-semplici-017
+titolare: Vai, nascondi la pasta del ragù.
+bot: Fatto: la pasta al ragù è nascosta dal menu. Puoi rimostrarla quando vuoi.
+pasta al ragù: nascosto
+--- conversazione bv-semplici-021
+titolare: quanto costa il piatto di verifica?
+bot: Il piatto di verifica costa 13,50 €.
+--- conversazione bv-semplici-023
+titolare: Quanto costa la pasta al ragù?
+bot: La pasta al ragù costa 12 €.
+--- conversazione bv-domande-007
+titolare: piatto di verifica 13 o 14?
+bot: Il piatto di verifica costa 13 €. Non ho modificato nulla.
+--- conversazione bv-domande-009
+titolare: Ciao, cosa sai fare?
+bot: Posso cambiare prezzi, nascondere o rimettere piatti, segnare finito o disponibile, creare piatti e categorie, mettere in promo o evidenza, e impostare il piatto del giorno. Dimmi cosa vuoi fare.
+--- conversazione bv-multiple-001
+titolare: La Pasta collaudo mettila a undici euro, la Pizza collaudo a tredici euro e il Tiramisu collaudo a sei euro.
+bot: Fatto, tre modifiche:
+1. Pasta collaudo: 11 €
+2. Pizza collaudo: 13 €
+3. Tiramisu collaudo: 6 €
+1. Pasta collaudo: 10 → 11 €
+2. Pizza collaudo: 12 → 13 €
+3. Tiramisu collaudo: 5 → 6 €
+--- conversazione bv-multiple-003
+titolare: La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.
+bot: Fatto: Pasta collaudo 14 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €.
+1. Pasta collaudo: 11 → 14 €
+2. Pizza collaudo: 13 → 16 €
+3. Tiramisu collaudo: 6 → 7 €
+4. Acqua collaudo: 2 → 3 €
+titolare: Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.
+bot: Fatto: Pasta collaudo 15 €. Acqua collaudo resta a 3 €; Pizza collaudo 16 €, Tiramisu collaudo 7 € invariati.
+Pasta collaudo: 14 → 15 €
+titolare: OK
+bot: Ok. Non ci sono operazioni in sospeso. Le modifiche di prima restano: Pasta collaudo 15 €, Acqua collaudo 3 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €. Serve altro?
+titolare: OK
+bot: Ok. Restano attive: Pasta collaudo 15 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €. Nessuna operazione in sospeso. Serve altro?
+--- conversazione bv-multiple-005
+titolare: metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro
+bot: Fatto: 1) Che ne sacc 20 €  2) boh 20 €  3) pasta al ragù 12 €. La promo di Che ne sacc (15 €) resta invariata.
+1. Che ne sacc: 21 → 20 €
+2. boh: 21 → 20 €
+3. pasta al ragù: 13 → 12 €
+--- conversazione bv-multiple-007
+titolare: Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro.
+bot: Fatto: 1) La parmigiana è nascosta dal menu. 2) Che ne sacc (kenesac) è in promo a 12 € (prezzo pieno 20 €).
+1. Inserisce il piatto la parmigiana: nascosto
+2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)
+--- conversazione bv-multiple-009
+titolare: Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro.
+bot: Fatto: descrizione di boh aggiornata a «Joe fa schifo». Promo di Che ne sacc impostata a 12 € (prezzo pieno 20 €).
+1. boh: descrizione «Joe fa schifo»
+2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)
+--- conversazione bv-correzioni-002
+titolare: Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.
+bot: 3) Non ho trovato «toiibo» nel menu. Intendevi un altro piatto (per esempio il tonno)? Dimmi come si chiama e il prezzo.
+creato p6 «tiramisù» a 6 € in Piatti di prova
+titolare: No, ho detto togli boh.
+bot: Fatto: ho nascosto «boh» dal menu. Non l'ho eliminato, puoi rimetterlo quando vuoi.
+boh: nascosto
+--- conversazione bv-correzioni-004
+titolare: Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro.
+bot: Il tiramisù è in promo a 3 €. Per la parmigiana ho due piatti: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosto). Quale devo mettere a 15 €?
+tiramisù: promo a 3 € (prezzo pieno 6 €)
+titolare: No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro.
+bot: Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?
+--- conversazione bv-correzioni-006
+titolare: Allora aggiungi il piatto pasta al pesto e lasagna.
+bot: Ok, aggiungo pasta al pesto e lasagna. A che prezzo li metto, e in quale categoria? Nel menu c'è solo "Piatti di prova".
+titolare: No, pasta al pesto e lasagna sono due piatti separati.
+bot: Ok, sono due piatti separati: pasta al pesto e lasagna. A che prezzo li metto? Li inserisco in «Piatti di prova», l'unica categoria del menu.
+titolare: Uno deve essere a 10 euro e uno deve essere a 20 euro.
+bot: Quale dei due va a 10 euro: pasta al pesto o lasagna? L'altro va a 20 euro.
+--- conversazione bv-deixis-001
+titolare: Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.
+bot: Ho nascosto il boh. Il tiramisù è già a 6 €, quindi non cambio nulla. La parmigiana è già nel menu a 10 €: la lascio così o ne creo un'altra?
+boh: nascosto
+titolare: Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.
+bot: Fatto:
+1. La parmigiana è ora a 15 €.
+2. Il tiramisù è ora a 15 €.
+1. la parmigiana: 10 → 15 €
+2. tiramisù: 6 → 15 €
+--- conversazione bv-deixis-003
+titolare: Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.
+bot: Ho nascosto «boh». La parmigiana c'è già a 10 €: la aggiorno o ne creo un'altra? Il tiramisù è già a 6 €, nessuna modifica.
+boh: nascosto
+--- conversazione bv-aggiunte-001
+titolare: aggiungiamo un piatto
+bot: Come si chiama il piatto nuovo, quanto costa e in quale categoria va? Per esempio: «Carbonara, 12, Piatti di prova».
+titolare: Aggiungi tra piatti di prova il piatto pasta al ragù che costa 15 euro.
+bot: Fatto: ho aggiunto «Pasta al ragù» a 15 € in Piatti di prova.
+creato p4 «Pasta al ragù» a 15 € in Piatti di prova
+--- conversazione bv-aggiunte-003
+titolare: Inserisce il piatto la parmigiana.
+bot: La parmigiana non è nel menu. A che prezzo la inserisco, e in quale categoria? Il nome la chiamo «Parmigiana»?
+titolare: Inserisci un nuovo piatto, si chiama parmigiana.
+bot: Preparo «Parmigiana» come nuovo piatto. A che prezzo lo inserisco, e in quale categoria?
+titolare: 12 euro
+bot: Fatto: ho creato «Parmigiana» a 12 € in Piatti di prova.
+creato p5 «Parmigiana» a 12 € in Piatti di prova
+--- conversazione bv-aggiunte-005
+titolare: E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.
+bot: «Pasta al ragù» è già nel menu a 12 €: lo aggiorno a 10 € o ne creo un altro a 10 €?
+1. creato p7 «pasta al pesto» a 15 € in Piatti di prova
+2. creato p8 «caviale» a 150 € in Piatti di prova
+--- conversazione bv-elimina-003
+titolare: Elimina il piatto pasta al ragù.
+bot: Vuoi eliminare completamente il piatto «pasta al ragù»? Rispondi sì per confermare. Se preferisci solo nasconderlo dal menu, dimmelo.
+titolare: Vai, nascondi la pasta del ragù.
+bot: Fatto: la pasta al ragù è nascosta dal menu, non eliminata. Se vuoi cancellarla del tutto, dimmelo.
+pasta al ragù: nascosto
+--- conversazione bv-elimina-005
+titolare: aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro
+bot: Fatto: ho aggiunto «Piatto test QA» a 9 € nella categoria Piatti di prova.
+creato p5 «Piatto test QA» a 9 € in Piatti di prova
+titolare: togli il piatto Test QA
+bot: Fatto: ho nascosto «Piatto test QA» dal menu. Non è stato eliminato; per cancellarlo del tutto dimmelo esplicitamente.
+Piatto test QA: nascosto
+titolare: annulla
+bot: Fatto: ho annullato l'ultima modifica. «Piatto test QA» risulta di nuovo nascosto dal menu, non eliminato.
+annullata l'ultima pubblicazione (hidden|Piatto test QA|true)
+--- conversazione bv-categorie-002
+titolare: Ok, adesso devi creare un'altra categoria che si chiama "primi pasti".
+bot: Fatto: ho creato la categoria «primi pasti».
+creata categoria c2 «primi pasti»
+--- conversazione bv-annulla-005
+titolare: metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro
+bot: Fatto, quattro modifiche:
+1. Piatto di verifica a 14 €
+2. Che ne sacc a 21 €
+3. boh a 21 €
+4. pasta al ragù a 13 €
+1. Piatto di verifica: 13,5 → 14 €
+2. Che ne sacc: 20 → 21 €
+3. boh: 20 → 21 €
+4. pasta al ragù: 12 → 13 €
+titolare: annulla
+bot: Annullata l'ultima pubblicazione: le quattro modifiche dei prezzi sono state ripristinate (Piatto di verifica, Che ne sacc, boh, pasta al ragù).
+annullata l'ultima pubblicazione (price|Che ne sacc|21, price|Piatto di verifica|14, price|boh|21, price|pasta al ragù|13)
+--- conversazione bv-annulla-007
+titolare: il piatto di verifica è finito
+bot: Fatto: Piatto di verifica segnato come finito.
+Piatto di verifica: finito
+titolare: il piatto di verifica è tornato disponibile
+bot: Fatto: Piatto di verifica è di nuovo disponibile.
+Piatto di verifica: disponibile
+--- conversazione bv-asr-002
+titolare: Bu costa 40 euro
+bot: Fatto: «boh» (Piatti di prova) ora costa 40 €. Il prezzo promo 10 € resta attivo.
+boh: 20 → 40 €
+--- conversazione bv-asr-004
+titolare: Cambia il nome del piatto, inserisci la parmigiana.
+bot: C'è già la parmigiana a 12 €, col nome «Inserisce il piatto la parmigiana». Quale piatto vuoi rinominare, e in che nome? Se è quello, lo rinomino «Parmigiana» e non ne creo un altro. Dimmi come procedere.
+--- conversazione bv-fuori-001
+titolare: metti una foto al piatto di verifica
+bot: Non posso aggiungere foto ai piatti da qui: non ho uno strumento per le immagini. Puoi caricarla dalla scheda del piatto nella dashboard, oppure mi dici un'altra modifica al menu.
+--- conversazione bv-fuori-003
+titolare: La Pasta collaudo mettila a dodici oppure quattordici euro.
+bot: Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico.

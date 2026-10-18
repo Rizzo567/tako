@@ -1,0 +1,29 @@
+{
+ "id": "bv-domande-008",
+ "family": "bv-domande",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Al momento non risulta nessun piatto esaurito nel menu.",
+  "Al momento hai un solo piatto nascosto: pasta al ragù, 20 €. Vuoi che lo rimetta nel menu?"
+ ],
+ "turns": [
+  "🎤 Ok, adesso dimmi cosa è finito.",
+  "🎤 Ok, allora mi devi dire quali piatti ho nascosto, per favore."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3332,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:19"
+}

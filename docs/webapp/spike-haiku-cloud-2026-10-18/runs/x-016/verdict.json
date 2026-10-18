@@ -1,0 +1,29 @@
+{
+ "id": "x-016",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Fatto: il Maritozzo con la panna è segnato come esaurito.\nMaritozzo con la panna: finito",
+  "Fatto: ho annullato l'ultima modifica, cioè il Maritozzo con la panna segnato come esaurito. Torna disponibile.\nannullata l'ultima pubblicazione (available|Maritozzo con la panna|false)"
+ ],
+ "turns": [
+  "il maritozzo è finito",
+  "annulla"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3172,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

@@ -1,0 +1,27 @@
+{
+ "id": "bv-aggiunte-006",
+ "family": "bv-aggiunte",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Non c'è una lasagna nel menu. La creo come «Lasagna» a 12 €: in quale categoria la metto? Ad esempio Primi piatti o Secondi di carne."
+ ],
+ "turns": [
+  "🎤 La lasagna costa 12"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1577,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 22:37",
+ "note": "lasagna non c'è al Victoria: dirlo, niente piatto nuovo"
+}

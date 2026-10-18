@@ -1,0 +1,31 @@
+{
+ "id": "x-026",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Fettuccine al ragù|13"
+ ],
+ "actual": [
+  "price|Fettuccine al ragù|13"
+ ],
+ "replies": [
+  "Fatto: Fettuccine al ragù ora costa 13 €.\nFettuccine al ragù: 12 → 13 €"
+ ],
+ "turns": [
+  "le fettuccine a 13"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1567,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "una sola fettuccine"
+}

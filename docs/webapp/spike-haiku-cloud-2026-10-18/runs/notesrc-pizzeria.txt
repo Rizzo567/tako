@@ -1,0 +1,23 @@
+Sei il modulo «memoria» dell'assistente WhatsApp del titolare del locale (pizzeria). Qui sotto: la nota attuale e le conversazioni di oggi.
+Scrivi la NUOVA nota del locale: «cosa ho imparato su come scrive questo titolare?». Al massimo 500 token, solo significati (soprannomi e storpiature dei piatti → nome vero nel menu, modi di dire e cosa vogliono dire, abitudini: es. «togli» = nascondi, conferme che usa). Niente prezzi, niente stato del menu, niente istruzioni nuove al bot, niente cose non viste nelle conversazioni.
+
+NOTA ATTUALE: (vuota)
+
+CONVERSAZIONI:
+--- conversazione x-003
+titolare: Il babbà costa cinque euro adesso.
+bot: Fatto: il Babà ora costa 5 €.
+Babà: 4,5 → 5 €
+--- conversazione x-007
+titolare: la diavola mettila a 8
+bot: Fatto: la Diavola è passata da 7,5 € a 8 €.
+Diavola: 7,5 → 8 €
+titolare: no scusa, la capricciosa a 8, la diavola lasciala com'era
+bot: Fatto: la Capricciosa è passata da 8,5 € a 8 €. Per la Diavola: la lascio a 8 € (come è ora) o la riporto a 7,5 €?
+Capricciosa: 8,5 → 8 €
+--- conversazione x-015
+titolare: elimina la montanarina
+bot: Vuoi eliminare completamente la Montanarina dal menu? Rispondi sì per confermare. Se preferisci solo toglierla dalla vista, dimmi «nascondila».
+titolare: la marinara a 6
+bot: Fatto: la Marinara ora costa 6 €, prima era 5 €.
+Marinara: 5 → 6 €

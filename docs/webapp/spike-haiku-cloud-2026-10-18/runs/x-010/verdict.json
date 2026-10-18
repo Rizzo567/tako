@@ -1,0 +1,30 @@
+{
+ "id": "x-010",
+ "family": "bv-semplici",
+ "menu": "bar",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Spritz Aperol|5.5"
+ ],
+ "actual": [
+  "price|Spritz Aperol|5.5"
+ ],
+ "replies": [
+  "Fatto: Spritz Aperol ora a 5,50 €.\nSpritz Aperol: 6 → 5,5 €"
+ ],
+ "turns": [
+  "abbassa di 50 centesimi lo spritz aperol"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1523,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

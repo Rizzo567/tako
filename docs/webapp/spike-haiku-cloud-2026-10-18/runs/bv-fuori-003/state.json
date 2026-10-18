@@ -1,0 +1,185 @@
+{
+ "id": "bv-fuori-003",
+ "menuKey": "collaudo",
+ "locale": "qa",
+ "note": "",
+ "codes": {
+  "c1": "7000000b-7777-4777-8777-000000000001",
+  "p1": "5000000b-5555-4555-8555-000000000001",
+  "p2": "5000000b-5555-4555-8555-000000000002",
+  "p3": "5000000b-5555-4555-8555-000000000003",
+  "p4": "5000000b-5555-4555-8555-000000000004",
+  "p5": "5000000b-5555-4555-8555-000000000005"
+ },
+ "next": {
+  "p": 5,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "6000000b-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "7000000b-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "5000000b-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000002",
+        "name": "Pasta collaudo",
+        "price": 15
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000003",
+        "name": "Pizza collaudo",
+        "price": 12
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000004",
+        "name": "Tiramisu collaudo",
+        "price": 5
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000005",
+        "name": "Acqua collaudo",
+        "price": 2
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "6000000b-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "7000000b-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "5000000b-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000002",
+        "name": "Pasta collaudo",
+        "price": 15
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000003",
+        "name": "Pizza collaudo",
+        "price": 12
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000004",
+        "name": "Tiramisu collaudo",
+        "price": 5
+       },
+       {
+        "id": "5000000b-5555-4555-8555-000000000005",
+        "name": "Acqua collaudo",
+        "price": 2
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 1,
+ "history": [
+  {
+   "owner": "La Pasta collaudo mettila a dodici oppure quattordici euro.",
+   "bot": "Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": "Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico."
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "La Pasta collaudo mettila a dodici oppure quattordici euro.",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 4942,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "6000000b-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "7000000b-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "5000000b-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "5000000b-5555-4555-8555-000000000002",
+          "name": "Pasta collaudo",
+          "price": 15
+         },
+         {
+          "id": "5000000b-5555-4555-8555-000000000003",
+          "name": "Pizza collaudo",
+          "price": 12
+         },
+         {
+          "id": "5000000b-5555-4555-8555-000000000004",
+          "name": "Tiramisu collaudo",
+          "price": 5
+         },
+         {
+          "id": "5000000b-5555-4555-8555-000000000005",
+          "name": "Acqua collaudo",
+          "price": 2
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  }
+ ],
+ "done": true
+}

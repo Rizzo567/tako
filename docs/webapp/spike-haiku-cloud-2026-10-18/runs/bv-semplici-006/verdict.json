@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-006",
+ "family": "bv-semplici",
+ "menu": "qa1016",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|pasta al ragu|12|piatti di prova"
+ ],
+ "actual": [
+  "create|pasta al ragu|12|piatti di prova"
+ ],
+ "replies": [
+  "Fatto: ho aggiunto «pasta al ragù» a 12 € in Piatti di prova.\ncreato p4 «pasta al ragù» a 12 € in Piatti di prova"
+ ],
+ "turns": [
+  "🎤 Aggiungi tra piatti di prova, pasta al ragù, 12 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1652,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 16/10 18:21"
+}

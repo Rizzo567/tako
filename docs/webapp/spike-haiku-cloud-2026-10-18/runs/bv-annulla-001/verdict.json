@@ -1,0 +1,29 @@
+{
+ "id": "bv-annulla-001",
+ "family": "bv-annulla",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Fatto: Bruschetta Victoria è segnata come esaurita.\nBruschetta Victoria: finito",
+  "Fatto: ho annullato l'ultima modifica. Bruschetta Victoria torna disponibile nel menu.\nannullata l'ultima pubblicazione (available|Bruschetta Victoria|false)"
+ ],
+ "turns": [
+  "Uè, a Bruschetta Victoria nun ce sta cchiù",
+  "ANNULLA"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2691,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:20"
+}

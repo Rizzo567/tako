@@ -1,0 +1,32 @@
+{
+ "id": "x-021",
+ "family": "bv-semplici",
+ "menu": "pesce",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "featured|Spaghetti ai ricci|true",
+  "hidden|Panelle|true"
+ ],
+ "actual": [
+  "featured|Spaghetti ai ricci|true",
+  "hidden|Panelle|true"
+ ],
+ "replies": [
+  "Fatto:\n1. Panelle nascoste dal menu.\n2. Spaghetti ai ricci messi in evidenza.\n1. Panelle: nascosto\n2. Spaghetti ai ricci: evidenza sì"
+ ],
+ "turns": [
+  "🎤 Nascondi le panelle e metti in evidenza i ricci."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1358,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

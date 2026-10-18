@@ -1,0 +1,27 @@
+{
+ "id": "bv-fuori-004",
+ "family": "bv-fuori",
+ "menu": "qa1016",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Che piatto vuoi aggiungere? Dimmi nome, prezzo e categoria (per esempio «Piatti di prova»)."
+ ],
+ "turns": [
+  "aggiungiamo un piatto"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1644,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 16/10 18:19",
+ "note": "manca tutto: una domanda (nome e prezzo), niente frase fissa"
+}

@@ -1,0 +1,34 @@
+{
+ "id": "x-015",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Marinara|6"
+ ],
+ "actual": [
+  "price|Marinara|6"
+ ],
+ "replies": [
+  "Vuoi eliminare completamente la Montanarina dal menu? Rispondi sì per confermare. Se preferisci solo toglierla dalla vista, dimmi «nascondila».",
+  "Fatto: la Marinara ora costa 6 €, prima era 5 €.\nMarinara: 5 → 6 €"
+ ],
+ "turns": [
+  "elimina la montanarina",
+  "la marinara a 6"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2728,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "il «sì» non arriva: niente eliminazione"
+}

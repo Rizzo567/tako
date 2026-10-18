@@ -1,0 +1,34 @@
+{
+ "id": "bv-semplici-001",
+ "family": "bv-semplici",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Piatto di verifica|9"
+ ],
+ "actual": [
+  "price|Piatto di verifica|9"
+ ],
+ "replies": [
+  "Fatto: Piatto di verifica da 13,5 € a 9 €.\nPiatto di verifica: 13,5 → 9 €",
+  "Non c'è nessuna operazione in sospeso da confermare. L'ultima modifica, il prezzo di Piatto di verifica da 13,5 € a 9 €, è già stata applicata. Cosa vuoi cambiare?"
+ ],
+ "turns": [
+  "prezzo Piatto di verifica a 9",
+  "conferma"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 2496,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 18:53",
+ "note": "protocollo vecchio con CONFERMA: oggi il bot scrive subito, «conferma» non deve cambiare nulla"
+}

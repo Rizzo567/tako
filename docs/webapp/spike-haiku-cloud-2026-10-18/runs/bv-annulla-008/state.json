@@ -1,0 +1,665 @@
+{
+ "id": "bv-annulla-008",
+ "menuKey": "qamattina",
+ "locale": "qa",
+ "note": "# Come scrive il titolare (qa)\n\n## Storpiature e soprannomi\n- «Bo», «Bu», «boh»: tutti riferiti al piatto di prova chiamato «boh» (probabile dettatura approssimata).\n- «Che ne sacc» e «kenesac»: stesso piatto, il titolare usa entrambe le forme.\n- «Inserisce il piatto la parmigiana»: dettatura di «la parmigiana», non un piatto diverso. Quando il titolare chiede di inserire o cambiare «la parmigiana», il piatto esiste già: va aggiornato, non duplicato.\n- Quando dice «inserisci» o «aggiungi» un piatto che c'è già, di solito intende modificare quello esistente; il bot deve chiedere prima di creare un doppione.\n\n## Modi di dire e cosa significano\n- «togli» / «nascondi» = nascondi dal menu, NON eliminare. Anche dopo «elimina», il titolare accetta «nascondi» senza chiedere la cancellazione definitiva.\n- «mostra» / «è tornato disponibile» = rendi visibile / disponibile di nuovo.\n- «metti in promo», «in sconto», «promo a X» = prezzo promozionale, con prezzo pieno lasciato invariato.\n- «anzi no» = correzione: vale solo l'ultimo valore detto, scarta quello precedente.\n- «vai» = procedi, dai il via all'azione.\n- «annulla» = annulla l'ultima pubblicazione (non una modifica più vecchia).\n- «OK» dopo un riepilogo = conferma, non chiede altro.\n- Cifre dette in lettere: «e cinquanta» indica i centesimi (es. «tredici euro e cinquanta»).\n- «Piatti di prova» è la categoria usata per le prove: non è un menu reale.\n\n## Abitudini\n- Chiede spesso più modifiche in una sola frase: le elenca tutte e vuole la conferma in blocco.\n- Preferisce risposte brevi con il risultato, senza domande inutili se il piatto è già chiaro.\n- Quando il bot chiede quale piatto intende, di solito risponde con il nome esatto del piatto.",
+ "codes": {
+  "c1": "70000008-7777-4777-8777-000000000001",
+  "p1": "50000008-5555-4555-8555-000000000001",
+  "p2": "50000008-5555-4555-8555-000000000002",
+  "p3": "50000008-5555-4555-8555-000000000003",
+  "p4": "50000008-5555-4555-8555-000000000004"
+ },
+ "next": {
+  "p": 4,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13,
+        "available": true
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 6,
+ "history": [
+  {
+   "owner": "quanto costa il piatto di verifica?",
+   "bot": "Il piatto di verifica costa 13,50 €.",
+   "tools": []
+  },
+  {
+   "owner": "il piatto di verifica costa 13 euro",
+   "bot": "Fatto: il piatto di verifica costa ora 13 €.\nPiatto di verifica: 13,5 → 13 €",
+   "tools": [
+    "Piatto di verifica: 13,5 → 13 €"
+   ]
+  },
+  {
+   "owner": "il piatto di verifica è finito",
+   "bot": "Fatto: Piatto di verifica è segnato come finito.\nPiatto di verifica: finito",
+   "tools": [
+    "Piatto di verifica: finito"
+   ]
+  },
+  {
+   "owner": "il piatto di verifica è tornato disponibile",
+   "bot": "Fatto: Piatto di verifica è di nuovo disponibile.\nPiatto di verifica: disponibile",
+   "tools": [
+    "Piatto di verifica: disponibile"
+   ]
+  },
+  {
+   "owner": "piatto di verifica 13 o 14?",
+   "bot": "Il piatto di verifica costa attualmente 13 €. Non l'ho modificato: dimmi se lo vuoi a 14 €.",
+   "tools": []
+  },
+  {
+   "owner": "cosa è finito?",
+   "bot": "Al momento nessun piatto risulta finito. Il piatto di verifica è di nuovo disponibile.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000008-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000008-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000008-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13,
+         "available": false
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 20,
+         "promo": {
+          "price": 15,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 20,
+         "promo": {
+          "price": 10,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 12
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "disponibile"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "quanto costa il piatto di verifica?",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 6610,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cerca_piatti\",\"argomenti\":{\"testo\":\"piatto di verifica\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Il piatto di verifica costa 13,50 €.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Il piatto di verifica costa 13,50 €.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "cerca_piatti({\"testo\":\"piatto di verifica\"})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "il piatto di verifica costa 13 euro",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 6675,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cambia_prezzo\",\"argomenti\":{\"piatto_id\":\"p1\",\"prezzo\":13}}]}\n",
+     "executed": [
+      "cambia_prezzo({\"piatto_id\":\"p1\",\"prezzo\":13})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: il piatto di verifica costa ora 13 €.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: il piatto di verifica costa ora 13 €.\nPiatto di verifica: 13,5 → 13 €",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "cambia_prezzo({\"piatto_id\":\"p1\",\"prezzo\":13})"
+   ]
+  },
+  {
+   "turn": 3,
+   "owner": "il piatto di verifica è finito",
+   "promptFile": "t3.prompt.txt",
+   "promptChars": 6850,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"finito\",\"argomenti\":{\"piatto_id\":\"p1\"}}]}\n",
+     "executed": [
+      "finito({\"piatto_id\":\"p1\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: Piatto di verifica è segnato come finito.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: Piatto di verifica è segnato come finito.\nPiatto di verifica: finito",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13,
+          "available": false
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "finito({\"piatto_id\":\"p1\"})"
+   ]
+  },
+  {
+   "turn": 4,
+   "owner": "il piatto di verifica è tornato disponibile",
+   "promptFile": "t4.prompt.txt",
+   "promptChars": 7036,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"disponibile\",\"argomenti\":{\"piatto_id\":\"p1\"}}]}\n",
+     "executed": [
+      "disponibile({\"piatto_id\":\"p1\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: Piatto di verifica è di nuovo disponibile.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: Piatto di verifica è di nuovo disponibile.\nPiatto di verifica: disponibile",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13,
+          "available": true
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "disponibile({\"piatto_id\":\"p1\"})"
+   ]
+  },
+  {
+   "turn": 5,
+   "owner": "piatto di verifica 13 o 14?",
+   "promptFile": "t5.prompt.txt",
+   "promptChars": 7213,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Il piatto di verifica costa attualmente 13 €. Non l'ho modificato: dimmi se lo vuoi a 14 €.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Il piatto di verifica costa attualmente 13 €. Non l'ho modificato: dimmi se lo vuoi a 14 €.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13,
+          "available": true
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  },
+  {
+   "turn": 6,
+   "owner": "cosa è finito?",
+   "promptFile": "t6.prompt.txt",
+   "promptChars": 7335,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"leggi_menu\",\"argomenti\":{\"filtri\":\"finiti\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Al momento nessun piatto risulta finito. Il piatto di verifica è di nuovo disponibile.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Al momento nessun piatto risulta finito. Il piatto di verifica è di nuovo disponibile.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13,
+          "available": true
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "leggi_menu({\"filtri\":\"finiti\"})"
+   ]
+  }
+ ],
+ "done": true
+}

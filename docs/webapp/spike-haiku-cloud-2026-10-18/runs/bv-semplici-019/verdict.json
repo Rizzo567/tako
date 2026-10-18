@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-019",
+ "family": "bv-semplici",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Bruschetta Victoria|false"
+ ],
+ "actual": [
+  "available|Bruschetta Victoria|false"
+ ],
+ "replies": [
+  "Fatto: Bruschetta Victoria segnata come finita. Quando torna disponibile, dimmelo.\nBruschetta Victoria: finito"
+ ],
+ "turns": [
+  "La Bruschetta Victoria l'è finida"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1327,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:24"
+}

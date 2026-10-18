@@ -1,0 +1,32 @@
+{
+ "id": "x-020",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Bufalina|false",
+  "price|Sfogliatella|3.5"
+ ],
+ "actual": [
+  "available|Bufalina|false",
+  "price|Sfogliatella|3.5"
+ ],
+ "replies": [
+  "Fatto: 1) Bufalina segnata come finita. 2) Sfogliatella prezzo impostato a 3,5 €.\n1. Bufalina: finito\n2. Sfogliatella: 3 → 3,5 €"
+ ],
+ "turns": [
+  "la bufalina è finita e la sfogliatella mettila a 3 e mezzo"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1446,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

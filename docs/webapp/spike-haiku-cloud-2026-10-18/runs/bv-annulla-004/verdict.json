@@ -1,0 +1,29 @@
+{
+ "id": "bv-annulla-004",
+ "family": "bv-annulla",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Fatto: Bruschetta Victoria ora costa 12 €.\nBruschetta Victoria: 8 → 12 €",
+  "Fatto: annullata l'ultima modifica. Bruschetta Victoria torna a 8 €.\nannullata l'ultima pubblicazione (price|Bruschetta Victoria|12)"
+ ],
+ "turns": [
+  "Boia, mettimi la Bruschetta Victoria a dodici euri",
+  "ANNULLA"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3200,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:44"
+}

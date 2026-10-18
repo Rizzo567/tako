@@ -1,0 +1,30 @@
+{
+ "id": "x-004",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Puntarelle|false"
+ ],
+ "actual": [
+  "available|Puntarelle|false"
+ ],
+ "replies": [
+  "Fatto: le Puntarelle sono segnate come esaurite. Restano nel menu.\nPuntarelle: finito"
+ ],
+ "turns": [
+  "🎤 Le pontarelle non ci stanno più."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1571,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

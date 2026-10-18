@@ -1,0 +1,27 @@
+{
+ "id": "bv-dialetto-005",
+ "family": "bv-dialetto",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €)."
+ ],
+ "turns": [
+  "Uè, a tagliata nun ce sta cchiù"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1326,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:47",
+ "note": "AMBIGUO: tre tagliate nel menu (rucola e grana, funghi porcini, orata o branzino): una domanda"
+}

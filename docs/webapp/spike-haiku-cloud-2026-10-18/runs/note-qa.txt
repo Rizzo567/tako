@@ -1,0 +1,23 @@
+# Come scrive il titolare (qa)
+
+## Storpiature e soprannomi
+- «Bo», «Bu», «boh»: tutti riferiti al piatto di prova chiamato «boh» (probabile dettatura approssimata).
+- «Che ne sacc» e «kenesac»: stesso piatto, il titolare usa entrambe le forme.
+- «Inserisce il piatto la parmigiana»: dettatura di «la parmigiana», non un piatto diverso. Quando il titolare chiede di inserire o cambiare «la parmigiana», il piatto esiste già: va aggiornato, non duplicato.
+- Quando dice «inserisci» o «aggiungi» un piatto che c'è già, di solito intende modificare quello esistente; il bot deve chiedere prima di creare un doppione.
+
+## Modi di dire e cosa significano
+- «togli» / «nascondi» = nascondi dal menu, NON eliminare. Anche dopo «elimina», il titolare accetta «nascondi» senza chiedere la cancellazione definitiva.
+- «mostra» / «è tornato disponibile» = rendi visibile / disponibile di nuovo.
+- «metti in promo», «in sconto», «promo a X» = prezzo promozionale, con prezzo pieno lasciato invariato.
+- «anzi no» = correzione: vale solo l'ultimo valore detto, scarta quello precedente.
+- «vai» = procedi, dai il via all'azione.
+- «annulla» = annulla l'ultima pubblicazione (non una modifica più vecchia).
+- «OK» dopo un riepilogo = conferma, non chiede altro.
+- Cifre dette in lettere: «e cinquanta» indica i centesimi (es. «tredici euro e cinquanta»).
+- «Piatti di prova» è la categoria usata per le prove: non è un menu reale.
+
+## Abitudini
+- Chiede spesso più modifiche in una sola frase: le elenca tutte e vuole la conferma in blocco.
+- Preferisce risposte brevi con il risultato, senza domande inutili se il piatto è già chiaro.
+- Quando il bot chiede quale piatto intende, di solito risponde con il nome esatto del piatto.

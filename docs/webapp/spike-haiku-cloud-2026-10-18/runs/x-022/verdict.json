@@ -1,0 +1,34 @@
+{
+ "id": "x-022",
+ "family": "bv-semplici",
+ "menu": "bar",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Tramezzino tonno|false",
+  "price|Toast|4.5",
+  "promo|Ginseng|1.5"
+ ],
+ "actual": [
+  "available|Tramezzino tonno|false",
+  "price|Toast|4.5",
+  "promo|Ginseng|1.5"
+ ],
+ "replies": [
+  "Fatto, tre modifiche:\n1. Tramezzino tonno: esaurito.\n2. Toast: 4,50 €.\n3. Ginseng: promo a 1,50 € (prezzo pieno 1,80 €).\n1. Tramezzino tonno: finito\n2. Toast: 4 → 4,5 €\n3. Ginseng: promo a 1,5 € (prezzo pieno 1,8 €)"
+ ],
+ "turns": [
+  "tramezzino tonno finito, toast a 4 e 50 e il ginseng lo metti in promo a 1 e 50"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1533,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

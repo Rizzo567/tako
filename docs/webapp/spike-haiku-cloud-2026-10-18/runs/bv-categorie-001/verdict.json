@@ -1,0 +1,43 @@
+{
+ "id": "bv-categorie-001",
+ "family": "bv-categorie",
+ "menu": "qa",
+ "success": false,
+ "fails": [
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: move|pasta al ragù|Primi"
+  }
+ ],
+ "expected": [
+  "create|caviale|150|speciali",
+  "create|pasta al pesto|15|primi",
+  "move|pasta al ragù|Primi"
+ ],
+ "actual": [
+  "create|caviale|150|speciali",
+  "create|pasta al pesto|15|primi"
+ ],
+ "replies": [
+  "Ho creato pasta al pesto a 15 € e caviale a 150 €. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creato p7 «pasta al pesto» a 15 € in Piatti di prova\n2. creato p8 «caviale» a 150 € in Piatti di prova",
+  "Ho creato le categorie primi e speciali, e spostato pasta al pesto in primi e caviale in speciali. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creata categoria c2 «primi»\n2. creata categoria c3 «speciali»\n3. pasta al pesto → primi\n4. caviale → speciali"
+ ],
+ "turns": [
+  "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
+  "🎤 No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3547,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:30",
+ "note": "il ragù esistente va nei Primi (nota 62: prezzo 10 accettato, non richiesto perché la domanda sul ragù è rimasta senza risposta); risposta vera: «manca la categoria»"
+}

@@ -1,0 +1,26 @@
+{
+ "id": "x-023",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Sì, la Carbonara costa ancora 12 €. Nessuna modifica fatta."
+ ],
+ "turns": [
+  "❓ dimmi se la carbonara costa ancora 12"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1410,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

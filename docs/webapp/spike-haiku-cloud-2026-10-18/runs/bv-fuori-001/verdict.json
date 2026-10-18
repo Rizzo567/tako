@@ -1,0 +1,27 @@
+{
+ "id": "bv-fuori-001",
+ "family": "bv-fuori",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Non posso aggiungere foto ai piatti da qui: non ho uno strumento per le immagini. Puoi caricarla dalla scheda del piatto nella dashboard, oppure mi dici un'altra modifica al menu."
+ ],
+ "turns": [
+  "metti una foto al piatto di verifica"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1226,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:49",
+ "note": "senza foto allegata: spiegare come mandarla"
+}

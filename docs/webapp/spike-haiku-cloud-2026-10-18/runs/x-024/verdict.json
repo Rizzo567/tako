@@ -1,0 +1,26 @@
+{
+ "id": "x-024",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "No, il Babà (4,50 €) non risulta finito: è presente nel menu dei Dolci e disponibile."
+ ],
+ "turns": [
+  "❓ controlla se il babà è finito"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1438,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

@@ -1,0 +1,30 @@
+{
+ "id": "x-005",
+ "family": "bv-semplici",
+ "menu": "pesce",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Pasta con le sarde|15"
+ ],
+ "actual": [
+  "price|Pasta con le sarde|15"
+ ],
+ "replies": [
+  "Fatto: Pasta con le sarde ora costa 15 €.\nPasta con le sarde: 14 → 15 €"
+ ],
+ "turns": [
+  "🎤 Metti la pasta con le sarte a quindici."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1356,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

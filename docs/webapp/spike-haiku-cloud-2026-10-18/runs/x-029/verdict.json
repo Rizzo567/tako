@@ -1,0 +1,27 @@
+{
+ "id": "x-029",
+ "family": "bv-semplici",
+ "menu": "pesce",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "C'è già il Tiramisù a 6 €: lo aggiorno a 7 € o ne creo un altro?"
+ ],
+ "turns": [
+  "aggiungi il tiramisù a 7"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1352,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "c'è già il tiramisù a 6: chiedere, niente doppione"
+}

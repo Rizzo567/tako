@@ -1,0 +1,48 @@
+{
+ "id": "bv-multiple-002",
+ "family": "bv-multiple",
+ "menu": "collaudo",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "modifica-non-richiesta",
+   "why": "non richiesto: price|Acqua collaudo|3"
+  }
+ ],
+ "expected": [
+  "price|Pasta collaudo|15",
+  "price|Pizza collaudo|16",
+  "price|Tiramisu collaudo|7"
+ ],
+ "actual": [
+  "price|Acqua collaudo|3",
+  "price|Pasta collaudo|15",
+  "price|Pizza collaudo|16",
+  "price|Tiramisu collaudo|7"
+ ],
+ "replies": [
+  "Fatto, quattro prezzi aggiornati:\n1. Pasta collaudo: 14 €\n2. Pizza collaudo: 16 €\n3. Tiramisu collaudo: 7 €\n4. Acqua collaudo: 3 €\n1. Pasta collaudo: 11 → 14 €\n2. Pizza collaudo: 13 → 16 €\n3. Tiramisu collaudo: 6 → 7 €\n4. Acqua collaudo: 2 → 3 €",
+  "Fatto: Pasta collaudo aggiornata da 14 a 15 €. Acqua collaudo resta a 3 €, Pizza collaudo 16 € e Tiramisu collaudo 7 € invariati.\nPasta collaudo: 14 → 15 €",
+  "Ok. Nessuna modifica in sospeso. Le ultime modifiche restano: Pasta collaudo 15 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €."
+ ],
+ "turns": [
+  "La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.",
+  "Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.",
+  "OK"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 5,
+ "llmMisses": 0,
+ "llmTokens": 5356,
+ "latencyMs": [
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 15:44",
+ "note": "risposta vera al turno 2 (prima prova): «Non ho capito bene»"
+}

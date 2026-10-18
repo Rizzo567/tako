@@ -1,0 +1,46 @@
+{
+ "id": "bv-correzioni-004",
+ "family": "bv-correzioni",
+ "menu": "qasporco",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "correzione-non-applicata",
+   "why": "resta la modifica poi corretta/annullata: promo|tiramisù|3"
+  },
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, price|tiramisù|10"
+  }
+ ],
+ "expected": [
+  "price|la parmigiana|15",
+  "price|tiramisù|10"
+ ],
+ "actual": [
+  "promo|tiramisù|3"
+ ],
+ "replies": [
+  "Il tiramisù è in promo a 3 €. Per la parmigiana ho due piatti: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosto). Quale devo mettere a 15 €?\ntiramisù: promo a 3 € (prezzo pieno 6 €)",
+  "Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?"
+ ],
+ "turns": [
+  "🎤 Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro.",
+  "🎤 No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 2668,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:27",
+ "note": "il turno 2 corregge: tiramisù a prezzo pieno 10, niente promo"
+}

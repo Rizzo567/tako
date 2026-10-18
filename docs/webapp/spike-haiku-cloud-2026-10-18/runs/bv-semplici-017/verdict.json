@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-017",
+ "family": "bv-semplici",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|pasta al ragù|true"
+ ],
+ "actual": [
+  "hidden|pasta al ragù|true"
+ ],
+ "replies": [
+  "Fatto: la pasta al ragù è nascosta dal menu. Puoi rimostrarla quando vuoi.\npasta al ragù: nascosto"
+ ],
+ "turns": [
+  "🎤 Vai, nascondi la pasta del ragù."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1225,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:19"
+}

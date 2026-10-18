@@ -1,0 +1,33 @@
+{
+ "id": "bv-multiple-009",
+ "family": "bv-multiple",
+ "menu": "qa1323",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "description|boh|joe fa schifo",
+  "promo|Che ne sacc|12"
+ ],
+ "actual": [
+  "description|boh|joe fa schifo",
+  "promo|Che ne sacc|12"
+ ],
+ "replies": [
+  "Fatto: descrizione di boh aggiornata a «Joe fa schifo». Promo di Che ne sacc impostata a 12 € (prezzo pieno 20 €).\n1. boh: descrizione «Joe fa schifo»\n2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)"
+ ],
+ "turns": [
+  "🎤 Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1256,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:24",
+ "note": "risposta vera: «Non ho capito la richiesta»"
+}

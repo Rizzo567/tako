@@ -1,0 +1,30 @@
+{
+ "id": "bv-domande-006",
+ "family": "bv-domande",
+ "menu": "qa1016",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Ciao. Dimmi cosa vuoi cambiare nel menu.",
+  "Il locale è Tako (scheda di verifica web). Il menu di prova ha la categoria «Piatti di prova» con tre piatti: Piatto di verifica, Che ne sacc e boh."
+ ],
+ "turns": [
+  "❓ ciao",
+  "❓ che locale ho?"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 3292,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 16/10 18:18",
+ "note": "risposta vera fuori tema («Posso dirti prezzi…»)"
+}

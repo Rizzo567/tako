@@ -1,0 +1,38 @@
+{
+ "id": "x-019",
+ "family": "bv-semplici",
+ "menu": "pesce",
+ "success": false,
+ "fails": [
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: create|pesce spada alla griglia|18|piatto del giorno"
+  }
+ ],
+ "expected": [
+  "create|pesce spada alla griglia|18|piatto del giorno"
+ ],
+ "actual": [],
+ "replies": [
+  "C'è già Pesce spada alla ghiotta a 18 €. Lo imposto come piatto del giorno oppure creo un nuovo piatto «Pesce spada alla griglia» a 18 €?",
+  "Non ci sono modifiche recenti da annullare: nessuna pubblicazione precedente in questa giornata. Vuoi che lasci tutto com'è? Dimmi cosa vuoi fare."
+ ],
+ "turns": [
+  "oggi piatto del giorno pesce spada alla griglia a 18",
+  "annulla"
+ ],
+ "clarifications": 2,
+ "unexpectedClarifications": 2,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2794,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "il piatto del giorno non si annulla"
+}

@@ -1,0 +1,31 @@
+{
+ "id": "bv-semplici-015",
+ "family": "bv-semplici",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|boh|50"
+ ],
+ "actual": [
+  "price|boh|50"
+ ],
+ "replies": [
+  "Fatto: il prezzo di «boh» (Bo) è passato da 20 € a 50 €.\nboh: 20 → 50 €"
+ ],
+ "turns": [
+  "🎤 Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1230,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:17",
+ "note": "risposta vera: «Non ho capito cosa cambiare per boh»"
+}

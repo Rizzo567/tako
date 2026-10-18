@@ -1,0 +1,30 @@
+{
+ "id": "bv-dialetto-003",
+ "family": "bv-dialetto",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Bruschetta Victoria|true"
+ ],
+ "actual": [
+  "available|Bruschetta Victoria|true"
+ ],
+ "replies": [
+  "Fatto: Bruschetta Victoria è di nuovo disponibile.\nBruschetta Victoria: disponibile"
+ ],
+ "turns": [
+  "A Bruschetta Victoria nun è fernuta, ce sta ancora"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1332,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:45"
+}

@@ -1,0 +1,40 @@
+{
+ "id": "bv-categorie-003",
+ "family": "bv-categorie",
+ "menu": "qa",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "non-applicato",
+   "why": "non applicato: create|pasta al sugo|12|piatti di prova"
+  }
+ ],
+ "expected": [
+  "create|pasta al sugo|12|piatti di prova",
+  "section|primi pasti"
+ ],
+ "actual": [
+  "section|primi pasti"
+ ],
+ "replies": [
+  "C'è già «pasta al ragù» a 12 €. È lo stesso piatto o ne creo uno nuovo chiamato «pasta al sugo» a 12 €?",
+  "Fatto: ho creato la categoria «primi pasti».\ncreata categoria c2 «primi pasti»"
+ ],
+ "turns": [
+  "🎤 Aggiungi il piatto pasta al sugo a 12 euro.",
+  "🎤 Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\"."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3401,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:36"
+}

@@ -1,0 +1,27 @@
+{
+ "id": "bv-deixis-004",
+ "family": "bv-deixis",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Quali due piatti vuoi eliminare? Non vedo nei messaggi di oggi a cosa si riferisce «quei due». Eliminare è definitivo: se preferisci solo toglierli dal menu, dimmi «nascondi»."
+ ],
+ "turns": [
+  "🎤 Ok, adesso rimuovi completamente quei due piatti."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1665,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:30",
+ "note": "AMBIGUO: senza il contesto della chat «quei due» non si risolve: domanda"
+}

@@ -1,0 +1,34 @@
+{
+ "id": "bv-asr-003",
+ "family": "bv-asr",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|boh|40"
+ ],
+ "actual": [
+  "price|boh|40"
+ ],
+ "replies": [
+  "Fatto: il prezzo di «boh» (piatti di prova) è passato da 20 a 50 €.\nboh: 20 → 50 €",
+  "Fatto: il prezzo di «boh» (piatti di prova) è passato da 50 a 40 €.\nboh: 50 → 40 €"
+ ],
+ "turns": [
+  "🎤 Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+  "🎤 Bu costa 40 euro"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 6,
+ "llmMisses": 0,
+ "llmTokens": 3347,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:17",
+ "note": "dopo «Bo» a 50, «Bu costa 40» corregge lo stesso piatto"
+}

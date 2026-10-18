@@ -1,0 +1,42 @@
+{
+ "id": "bv-correzioni-005",
+ "family": "bv-correzioni",
+ "menu": "qasporco",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "modifica-sbagliata",
+   "why": "valore sbagliato: price|tiramisù|3"
+  },
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, price|tiramisù|10"
+  }
+ ],
+ "expected": [
+  "price|la parmigiana|15",
+  "price|tiramisù|10"
+ ],
+ "actual": [
+  "price|tiramisù|3"
+ ],
+ "replies": [
+  "Tiramisù fatto: ora a 3 €. La parmigiana è già a 10 €. C'è anche una voce nascosta «Inserisce il piatto la parmigiana» a 12 €: la porto a 10 € o la lascio com'è?\ntiramisù: 6 → 3 €"
+ ],
+ "turns": [
+  "🎤 No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1690,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:28"
+}

@@ -1,0 +1,37 @@
+{
+ "id": "bv-multiple-006",
+ "family": "bv-multiple",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Che ne sacc|21",
+  "price|Piatto di verifica|14.5",
+  "price|boh|21",
+  "price|pasta al ragù|13"
+ ],
+ "actual": [
+  "price|Che ne sacc|21",
+  "price|Piatto di verifica|14.5",
+  "price|boh|21",
+  "price|pasta al ragù|13"
+ ],
+ "replies": [
+  "Fatto, ho aumentato di 1 euro i 4 piatti di Piatti di prova:\n1. Piatto di verifica: 13,5 → 14,5 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €\n1. Piatto di verifica: 13,5 → 14,5 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €"
+ ],
+ "turns": [
+  "aumenta tutti i piatti della categoria Piatti di prova di un euro"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1660,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:47",
+ "note": "prezzi detti (ognuno +1 €): un solo comando sul gruppo → si applica subito con riepilogo numerato, niente domanda (decisione 18/10 in attesa di Manuel, nota 62); risposta vera: rifiuto"
+}

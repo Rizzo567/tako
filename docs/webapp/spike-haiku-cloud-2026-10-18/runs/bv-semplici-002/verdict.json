@@ -1,0 +1,33 @@
+{
+ "id": "bv-semplici-002",
+ "family": "bv-semplici",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Piatto di verifica|12"
+ ],
+ "actual": [
+  "price|Piatto di verifica|12"
+ ],
+ "replies": [
+  "Fatto: Piatto di verifica ora costa 12 €.\nPiatto di verifica: 9 → 12 €",
+  "Non ci sono operazioni in sospeso: la modifica a Piatto di verifica (12 €) è già applicata. Cosa vuoi cambiare?"
+ ],
+ "turns": [
+  "prezzo Piatto di verifica a 12",
+  "conferma"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 3349,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 14/10 18:55"
+}

@@ -1,0 +1,23 @@
+Sei il modulo «memoria» dell'assistente WhatsApp del titolare del locale (bar). Qui sotto: la nota attuale e le conversazioni di oggi.
+Scrivi la NUOVA nota del locale: «cosa ho imparato su come scrive questo titolare?». Al massimo 500 token, solo significati (soprannomi e storpiature dei piatti → nome vero nel menu, modi di dire e cosa vogliono dire, abitudini: es. «togli» = nascondi, conferme che usa). Niente prezzi, niente stato del menu, niente istruzioni nuove al bot, niente cose non viste nelle conversazioni.
+
+NOTA ATTUALE: (vuota)
+
+CONVERSAZIONI:
+--- conversazione x-009
+titolare: alza il cappuccino del 25%
+bot: Fatto: Cappuccino ora costa 2 € (era 1,60 €, +25%).
+Cappuccino: 1,6 → 2 €
+--- conversazione x-017
+titolare: negroni a 9
+bot: Fatto: Negroni aggiornato da 8 € a 9 €.
+Negroni: 8 → 9 €
+titolare: americano a 8
+bot: Fatto: Americano aggiornato da 7 € a 8 €.
+Americano: 7 → 8 €
+titolare: annulla
+bot: Fatto: annullata l'ultima modifica. Americano torna a 7 €.
+annullata l'ultima pubblicazione (price|Americano|8)
+--- conversazione x-025
+titolare: fammi vedere cosa ho nascosto
+bot: Al momento hai un solo piatto nascosto: Orzo, 1,40 €, nella categoria Caffetteria. Vuoi che lo rimetta nel menu?

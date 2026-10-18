@@ -1,0 +1,193 @@
+{
+ "id": "bv-fuori-001",
+ "menuKey": "qamattina",
+ "locale": "qa",
+ "note": "",
+ "codes": {
+  "c1": "70000008-7777-4777-8777-000000000001",
+  "p1": "50000008-5555-4555-8555-000000000001",
+  "p2": "50000008-5555-4555-8555-000000000002",
+  "p3": "50000008-5555-4555-8555-000000000003",
+  "p4": "50000008-5555-4555-8555-000000000004"
+ },
+ "next": {
+  "p": 4,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 1,
+ "history": [
+  {
+   "owner": "metti una foto al piatto di verifica",
+   "bot": "Non posso aggiungere foto ai piatti da qui: non ho uno strumento per le immagini. Puoi caricarla dalla scheda del piatto nella dashboard, oppure mi dici un'altra modifica al menu.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "metti una foto al piatto di verifica",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 4902,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Non posso aggiungere foto ai piatti da qui: non ho uno strumento per le immagini. Puoi caricarla dalla scheda del piatto nella dashboard, oppure mi dici un'altra modifica al menu.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Non posso aggiungere foto ai piatti da qui: non ho uno strumento per le immagini. Puoi caricarla dalla scheda del piatto nella dashboard, oppure mi dici un'altra modifica al menu.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": []
+  }
+ ],
+ "done": true
+}

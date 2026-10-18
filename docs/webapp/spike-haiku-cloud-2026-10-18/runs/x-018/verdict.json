@@ -1,0 +1,30 @@
+{
+ "id": "x-018",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|pasta e ceci|10|piatto del giorno"
+ ],
+ "actual": [
+  "create|pasta e ceci|10|piatto del giorno"
+ ],
+ "replies": [
+  "Fatto: piatto del giorno «pasta e ceci» a 10 €. Non esisteva nel menu, l'ho creato.\npiatto del giorno creato: «pasta e ceci» a 10 €"
+ ],
+ "turns": [
+  "piatto del giorno: pasta e ceci a 10 euro"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1573,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

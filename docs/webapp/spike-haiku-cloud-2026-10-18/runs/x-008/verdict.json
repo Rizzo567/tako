@@ -1,0 +1,41 @@
+{
+ "id": "x-008",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Amatriciana|12",
+  "price|Cacio e pepe|12",
+  "price|Carbonara|13",
+  "price|Gricia|12",
+  "price|Saltimbocca alla romana|16"
+ ],
+ "actual": [
+  "price|Amatriciana|12",
+  "price|Cacio e pepe|12",
+  "price|Carbonara|13",
+  "price|Gricia|12",
+  "price|Saltimbocca alla romana|16"
+ ],
+ "replies": [
+  "Fatto, 5 modifiche:\n1. Carbonara 12 → 13 €\n2. Amatriciana 11 → 12 €\n3. Cacio e pepe 11 → 12 €\n4. Gricia 11 → 12 €\n5. Saltimbocca alla romana 15 → 16 €\n1. Carbonara: 12 → 13 €\n2. Amatriciana: 11 → 12 €\n3. Cacio e pepe: 11 → 12 €\n4. Gricia: 11 → 12 €\n5. Saltimbocca alla romana: 15 → 16 €",
+  "Perfetto. Le 5 modifiche di oggi sono già applicate, non ho fatto altro."
+ ],
+ "turns": [
+  "carbonara 13, amatriciana 12, cacio e pepe 12, gricia 12, saltimbocca 16",
+  "va bene così"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 3271,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

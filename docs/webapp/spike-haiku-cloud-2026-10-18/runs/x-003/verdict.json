@@ -1,0 +1,30 @@
+{
+ "id": "x-003",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Babà|5"
+ ],
+ "actual": [
+  "price|Babà|5"
+ ],
+ "replies": [
+  "Fatto: il Babà ora costa 5 €.\nBabà: 4,5 → 5 €"
+ ],
+ "turns": [
+  "🎤 Il babbà costa cinque euro adesso."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1314,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

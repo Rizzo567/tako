@@ -1,0 +1,34 @@
+{
+ "id": "bv-elimina-003",
+ "family": "bv-elimina",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|pasta al ragù|true"
+ ],
+ "actual": [
+  "hidden|pasta al ragù|true"
+ ],
+ "replies": [
+  "Vuoi eliminare completamente il piatto «pasta al ragù»? Rispondi sì per confermare. Se preferisci solo nasconderlo dal menu, dimmelo.",
+  "Fatto: la pasta al ragù è nascosta dal menu, non eliminata. Se vuoi cancellarla del tutto, dimmelo.\npasta al ragù: nascosto"
+ ],
+ "turns": [
+  "🎤 Elimina il piatto pasta al ragù.",
+  "🎤 Vai, nascondi la pasta del ragù."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2555,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:18",
+ "note": "elimina → conferma; poi «nascondi» vince"
+}

@@ -1,0 +1,31 @@
+{
+ "id": "x-011",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Coda alla vaccinara|false"
+ ],
+ "actual": [
+  "available|Coda alla vaccinara|false"
+ ],
+ "replies": [
+  "Fatto: Coda alla vaccinara segnata come finita. Il messaggio sulla coda fredda al tavolo 7 non cambia il menu.\nCoda alla vaccinara: finito"
+ ],
+ "turns": [
+  "al tavolo 7 hanno detto che la coda era fredda, comunque la coda è finita"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1419,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "7 non è un prezzo"
+}

@@ -1,0 +1,67 @@
+Sei il modulo «memoria» dell'assistente WhatsApp del titolare del locale (victoria). Qui sotto: la nota attuale e le conversazioni di oggi.
+Scrivi la NUOVA nota del locale: «cosa ho imparato su come scrive questo titolare?». Al massimo 500 token, solo significati (soprannomi e storpiature dei piatti → nome vero nel menu, modi di dire e cosa vogliono dire, abitudini: es. «togli» = nascondi, conferme che usa). Niente prezzi, niente stato del menu, niente istruzioni nuove al bot, niente cose non viste nelle conversazioni.
+
+NOTA ATTUALE: (vuota)
+
+CONVERSAZIONI:
+--- conversazione bv-semplici-003
+titolare: Nascondi il polpo.
+bot: Fatto: Polpo rucola e patate è nascosto dal menu.
+Polpo rucola e patate: nascosto
+titolare: conferma
+bot: Non c'è nulla in sospeso da confermare. Il polpo è già nascosto dal menu. Dimmi cosa vuoi cambiare.
+--- conversazione bv-semplici-005
+titolare: A Bruschetta Victoria un c'è cchiù
+bot: Bruschetta Victoria segnata come esaurita.
+Bruschetta Victoria: finito
+--- conversazione bv-semplici-019
+titolare: La Bruschetta Victoria l'è finida
+bot: Fatto: Bruschetta Victoria segnata come finita. Quando torna disponibile, dimmelo.
+Bruschetta Victoria: finito
+--- conversazione bv-semplici-025
+titolare: Aò, quanto viene la Bruschetta Victoria?
+bot: La Bruschetta Victoria costa 8 €.
+--- conversazione bv-domande-001
+titolare: Quanto costa la tagliata?
+bot: Ci sono tre tagliate: rucola e grana 20 €, con funghi porcini e panna 24 €, di orata o branzino con rucola e grana 20 €.
+titolare: Tagliata rucola e grana, quanto costa?
+bot: La Tagliata rucola e grana costa 20 €.
+--- conversazione bv-domande-003
+titolare: Quanto costa la tagliata
+bot: Ci sono tre tagliate nel menu: Tagliata rucola e grana 20 euro, Tagliata con funghi porcini e panna 24 euro, Tagliata di orata o branzino con rucola e grana 20 euro.
+--- conversazione bv-domande-005
+titolare: Ciao! A quale locale sono collegato e cosa puoi fare?
+bot: Sei collegato al locale Victoria Bar. Posso modificare il menu: cambiare prezzi, nascondere o mostrare piatti, segnare esauriti o disponibili, creare, rinominare e spostare piatti, gestire promo, evidenza e piatto del giorno. Dimmi cosa vuoi cambiare.
+--- conversazione bv-elimina-001
+titolare: Puoi cancellare il polpo?
+bot: Vuoi eliminare completamente «Polpo rucola e patate» (14 €, Antipasti di mare)? Rispondi sì per confermare. Se volevi solo nasconderlo dal menu, dimmelo.
+titolare: Nascondi il polpo.
+bot: Fatto: «Polpo rucola e patate» è nascosto dal menu. Non l'ho eliminato; se vuoi cancellarlo del tutto, dimmelo.
+Polpo rucola e patate: nascosto
+titolare: conferma
+bot: Non ho nessuna operazione in sospeso da confermare. Il polpo è solo nascosto dal menu e non è stato eliminato. Se vuoi cancellarlo del tutto, scrivi «elimina il polpo» e ti chiederò conferma.
+--- conversazione bv-annulla-001
+titolare: Uè, a Bruschetta Victoria nun ce sta cchiù
+bot: Fatto: Bruschetta Victoria è segnata come esaurita.
+Bruschetta Victoria: finito
+titolare: ANNULLA
+bot: Fatto: ho annullato l'ultima modifica. Bruschetta Victoria torna disponibile nel menu.
+annullata l'ultima pubblicazione (available|Bruschetta Victoria|false)
+--- conversazione bv-annulla-003
+titolare: La Bruschetta Victoria l'è finida
+bot: Fatto: la Bruschetta Victoria risulta esaurita nel menu.
+Bruschetta Victoria: finito
+titolare: ANNULLA
+bot: Fatto: ho annullato l'ultima modifica. La Bruschetta Victoria risulta di nuovo disponibile nel menu.
+annullata l'ultima pubblicazione (available|Bruschetta Victoria|false)
+--- conversazione bv-dialetto-001
+titolare: Uè, a Bruschetta Victoria nun ce sta cchiù
+bot: Fatto: Bruschetta Victoria segnata come esaurita.
+Bruschetta Victoria: finito
+--- conversazione bv-dialetto-003
+titolare: A Bruschetta Victoria nun è fernuta, ce sta ancora
+bot: Fatto: Bruschetta Victoria è di nuovo disponibile.
+Bruschetta Victoria: disponibile
+--- conversazione bv-dialetto-005
+titolare: Uè, a tagliata nun ce sta cchiù
+bot: Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €).

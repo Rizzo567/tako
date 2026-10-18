@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-018",
+ "family": "bv-semplici",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Bruschetta Victoria|false"
+ ],
+ "actual": [
+  "available|Bruschetta Victoria|false"
+ ],
+ "replies": [
+  "Fatto: la Bruschetta Victoria è segnata come esaurita.\nBruschetta Victoria: finito"
+ ],
+ "turns": [
+  "La Bruschetta Victoria la xe finia"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1580,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:22"
+}

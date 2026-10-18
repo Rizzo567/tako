@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-020",
+ "family": "bv-semplici",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Bruschetta Victoria|12"
+ ],
+ "actual": [
+  "price|Bruschetta Victoria|12"
+ ],
+ "replies": [
+  "Fatto: Bruschetta Victoria ora costa 12 €.\nBruschetta Victoria: 8 → 12 €"
+ ],
+ "turns": [
+  "Boia, mettimi la Bruschetta Victoria a dodici euri"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1584,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:44"
+}

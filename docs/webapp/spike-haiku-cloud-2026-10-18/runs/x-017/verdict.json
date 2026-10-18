@@ -1,0 +1,36 @@
+{
+ "id": "x-017",
+ "family": "bv-semplici",
+ "menu": "bar",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Negroni|9"
+ ],
+ "actual": [
+  "price|Negroni|9"
+ ],
+ "replies": [
+  "Fatto: Negroni aggiornato da 8 € a 9 €.\nNegroni: 8 → 9 €",
+  "Fatto: Americano aggiornato da 7 € a 8 €.\nAmericano: 7 → 8 €",
+  "Fatto: annullata l'ultima modifica. Americano torna a 7 €.\nannullata l'ultima pubblicazione (price|Americano|8)"
+ ],
+ "turns": [
+  "negroni a 9",
+  "americano a 8",
+  "annulla"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 6,
+ "llmMisses": 0,
+ "llmTokens": 3975,
+ "latencyMs": [
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

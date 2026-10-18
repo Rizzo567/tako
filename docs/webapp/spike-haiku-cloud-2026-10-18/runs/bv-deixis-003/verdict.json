@@ -1,0 +1,30 @@
+{
+ "id": "bv-deixis-003",
+ "family": "bv-deixis",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|boh|true"
+ ],
+ "actual": [
+  "hidden|boh|true"
+ ],
+ "replies": [
+  "Ho nascosto «boh». La parmigiana c'è già a 10 €: la aggiorno o ne creo un'altra? Il tiramisù è già a 6 €, nessuna modifica.\nboh: nascosto"
+ ],
+ "turns": [
+  "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1242,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:27"
+}

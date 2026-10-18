@@ -1,0 +1,31 @@
+{
+ "id": "bv-semplici-014",
+ "family": "bv-semplici",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|pasta al ragù|20"
+ ],
+ "actual": [
+  "price|pasta al ragù|20"
+ ],
+ "replies": [
+  "Fatto: pasta al ragù ora costa 20 €.\npasta al ragù: 12 → 20 €"
+ ],
+ "turns": [
+  "🎤 Passa il ragù, metti prezzo a 20 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1653,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:18",
+ "note": "«Passa il ragù» = «pasta al ragù» storpiato da Whisper"
+}

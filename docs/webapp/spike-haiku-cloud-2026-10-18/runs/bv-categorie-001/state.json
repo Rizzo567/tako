@@ -1,0 +1,473 @@
+{
+ "id": "bv-categorie-001",
+ "menuKey": "qa",
+ "locale": "qa",
+ "note": "# Come scrive il titolare (qa)\n\n## Storpiature e soprannomi\n- «Bo», «Bu», «boh»: tutti riferiti al piatto di prova chiamato «boh» (probabile dettatura approssimata).\n- «Che ne sacc» e «kenesac»: stesso piatto, il titolare usa entrambe le forme.\n- «Inserisce il piatto la parmigiana»: dettatura di «la parmigiana», non un piatto diverso. Quando il titolare chiede di inserire o cambiare «la parmigiana», il piatto esiste già: va aggiornato, non duplicato.\n- Quando dice «inserisci» o «aggiungi» un piatto che c'è già, di solito intende modificare quello esistente; il bot deve chiedere prima di creare un doppione.\n\n## Modi di dire e cosa significano\n- «togli» / «nascondi» = nascondi dal menu, NON eliminare. Anche dopo «elimina», il titolare accetta «nascondi» senza chiedere la cancellazione definitiva.\n- «mostra» / «è tornato disponibile» = rendi visibile / disponibile di nuovo.\n- «metti in promo», «in sconto», «promo a X» = prezzo promozionale, con prezzo pieno lasciato invariato.\n- «anzi no» = correzione: vale solo l'ultimo valore detto, scarta quello precedente.\n- «vai» = procedi, dai il via all'azione.\n- «annulla» = annulla l'ultima pubblicazione (non una modifica più vecchia).\n- «OK» dopo un riepilogo = conferma, non chiede altro.\n- Cifre dette in lettere: «e cinquanta» indica i centesimi (es. «tredici euro e cinquanta»).\n- «Piatti di prova» è la categoria usata per le prove: non è un menu reale.\n\n## Abitudini\n- Chiede spesso più modifiche in una sola frase: le elenca tutte e vuole la conferma in blocco.\n- Preferisce risposte brevi con il risultato, senza domande inutili se il piatto è già chiaro.\n- Quando il bot chiede quale piatto intende, di solito risponde con il nome esatto del piatto.",
+ "codes": {
+  "c1": "70000006-7777-4777-8777-000000000001",
+  "p1": "50000006-5555-4555-8555-000000000001",
+  "p2": "50000006-5555-4555-8555-000000000002",
+  "p3": "50000006-5555-4555-8555-000000000003",
+  "p4": "50000006-5555-4555-8555-000000000004",
+  "p5": "50000006-5555-4555-8555-000000000005",
+  "p6": "50000006-5555-4555-8555-000000000006",
+  "p7": "new-bv-categorie-001-7",
+  "p8": "new-bv-categorie-001-8",
+  "c2": "newc-bv-categorie-001-2",
+  "c3": "newc-bv-categorie-001-3"
+ },
+ "next": {
+  "p": 8,
+  "c": 3
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000006-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000006-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000006-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000005",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000006",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     },
+     {
+      "id": "newc-bv-categorie-001-2",
+      "name": "primi",
+      "items": [
+       {
+        "id": "new-bv-categorie-001-7",
+        "name": "pasta al pesto",
+        "price": 15
+       }
+      ]
+     },
+     {
+      "id": "newc-bv-categorie-001-3",
+      "name": "speciali",
+      "items": [
+       {
+        "id": "new-bv-categorie-001-8",
+        "name": "caviale",
+        "price": 150
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000006-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000006-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000006-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000005",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000006",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 2,
+ "history": [
+  {
+   "owner": "E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
+   "bot": "Ho creato pasta al pesto a 15 € e caviale a 150 €. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creato p7 «pasta al pesto» a 15 € in Piatti di prova\n2. creato p8 «caviale» a 150 € in Piatti di prova",
+   "tools": [
+    "creato p7 «pasta al pesto» a 15 € in Piatti di prova",
+    "creato p8 «caviale» a 150 € in Piatti di prova"
+   ]
+  },
+  {
+   "owner": "No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali.",
+   "bot": "Ho creato le categorie primi e speciali, e spostato pasta al pesto in primi e caviale in speciali. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creata categoria c2 «primi»\n2. creata categoria c3 «speciali»\n3. pasta al pesto → primi\n4. caviale → speciali",
+   "tools": [
+    "creata categoria c2 «primi»",
+    "creata categoria c3 «speciali»",
+    "pasta al pesto → primi",
+    "caviale → speciali"
+   ]
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": "Ho creato le categorie primi e speciali, e spostato pasta al pesto in primi e caviale in speciali. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?"
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000006-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000006-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000006-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13.5
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 20,
+         "promo": {
+          "price": 15,
+          "until": null
+         }
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 20,
+         "promo": {
+          "price": 10,
+          "until": null
+         }
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 12
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000005",
+         "name": "la parmigiana",
+         "price": 10
+        },
+        {
+         "id": "50000006-5555-4555-8555-000000000006",
+         "name": "tiramisù",
+         "price": 6
+        },
+        {
+         "id": "new-bv-categorie-001-7",
+         "name": "pasta al pesto",
+         "price": 15
+        },
+        {
+         "id": "new-bv-categorie-001-8",
+         "name": "caviale",
+         "price": 150
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "sposta"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 6708,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"crea_piatto\",\"argomenti\":{\"nome\":\"pasta al pesto\",\"prezzo\":15,\"categoria\":\"c1\"}},{\"strumento\":\"crea_piatto\",\"argomenti\":{\"nome\":\"caviale\",\"prezzo\":150,\"categoria\":\"c1\"}}]}\n",
+     "executed": [
+      "crea_piatto({\"nome\":\"pasta al pesto\",\"prezzo\":15,\"categoria\":\"c1\"})",
+      "crea_piatto({\"nome\":\"caviale\",\"prezzo\":150,\"categoria\":\"c1\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Ho creato pasta al pesto a 15 € e caviale a 150 €. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Ho creato pasta al pesto a 15 € e caviale a 150 €. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creato p7 «pasta al pesto» a 15 € in Piatti di prova\n2. creato p8 «caviale» a 150 € in Piatti di prova",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         },
+         {
+          "id": "new-bv-categorie-001-7",
+          "name": "pasta al pesto",
+          "price": 15
+         },
+         {
+          "id": "new-bv-categorie-001-8",
+          "name": "caviale",
+          "price": 150
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "crea_piatto({\"nome\":\"pasta al pesto\",\"prezzo\":15,\"categoria\":\"c1\"})",
+    "crea_piatto({\"nome\":\"caviale\",\"prezzo\":150,\"categoria\":\"c1\"})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali.",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 7478,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"crea_categoria\",\"argomenti\":{\"nome\":\"primi\"}},{\"strumento\":\"crea_categoria\",\"argomenti\":{\"nome\":\"speciali\"}}]}\n",
+     "executed": [
+      "crea_categoria({\"nome\":\"primi\"})",
+      "crea_categoria({\"nome\":\"speciali\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"sposta_piatto\",\"argomenti\":{\"piatto_id\":\"p7\",\"cat_id\":\"c2\"}},{\"strumento\":\"sposta_piatto\",\"argomenti\":{\"piatto_id\":\"p8\",\"cat_id\":\"c3\"}},{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Ho creato le categorie primi e speciali, e spostato pasta al pesto in primi e caviale in speciali. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\"}}]}\n",
+     "executed": [
+      "sposta_piatto({\"piatto_id\":\"p7\",\"cat_id\":\"c2\"})",
+      "sposta_piatto({\"piatto_id\":\"p8\",\"cat_id\":\"c3\"})"
+     ],
+     "rejected": []
+    }
+   ],
+   "reply": "Ho creato le categorie primi e speciali, e spostato pasta al pesto in primi e caviale in speciali. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creata categoria c2 «primi»\n2. creata categoria c3 «speciali»\n3. pasta al pesto → primi\n4. caviale → speciali",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         }
+        ]
+       },
+       {
+        "id": "newc-bv-categorie-001-2",
+        "name": "primi",
+        "items": [
+         {
+          "id": "new-bv-categorie-001-7",
+          "name": "pasta al pesto",
+          "price": 15
+         }
+        ]
+       },
+       {
+        "id": "newc-bv-categorie-001-3",
+        "name": "speciali",
+        "items": [
+         {
+          "id": "new-bv-categorie-001-8",
+          "name": "caviale",
+          "price": 150
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "crea_categoria({\"nome\":\"primi\"})",
+    "crea_categoria({\"nome\":\"speciali\"})",
+    "sposta_piatto({\"piatto_id\":\"p7\",\"cat_id\":\"c2\"})",
+    "sposta_piatto({\"piatto_id\":\"p8\",\"cat_id\":\"c3\"})"
+   ]
+  }
+ ],
+ "done": true
+}

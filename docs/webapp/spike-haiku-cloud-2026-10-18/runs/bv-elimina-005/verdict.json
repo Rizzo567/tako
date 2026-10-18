@@ -1,0 +1,37 @@
+{
+ "id": "bv-elimina-005",
+ "family": "bv-elimina",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|piatto test qa|9|piatti di prova"
+ ],
+ "actual": [
+  "create|piatto test qa|9|piatti di prova"
+ ],
+ "replies": [
+  "Fatto: ho aggiunto «Piatto test QA» a 9 € nella categoria Piatti di prova.\ncreato p5 «Piatto test QA» a 9 € in Piatti di prova",
+  "Fatto: ho nascosto «Piatto test QA» dal menu. Non è stato eliminato; per cancellarlo del tutto dimmelo esplicitamente.\nPiatto test QA: nascosto",
+  "Fatto: ho annullato l'ultima modifica. «Piatto test QA» risulta di nuovo nascosto dal menu, non eliminato.\nannullata l'ultima pubblicazione (hidden|Piatto test QA|true)"
+ ],
+ "turns": [
+  "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro",
+  "togli il piatto Test QA",
+  "annulla"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 6,
+ "llmMisses": 0,
+ "llmTokens": 3877,
+ "latencyMs": [
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 11:01",
+ "note": "nome letterale «Piatto test QA» (nota 62); togli = nascondi; annulla = torna visibile (il giudice vede solo la creazione). Risposta vera: «Non ci sono modifiche in attesa»"
+}

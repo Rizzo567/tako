@@ -1,0 +1,244 @@
+{
+ "id": "bv-domande-006",
+ "menuKey": "qa1016",
+ "locale": "qa",
+ "note": "# Come scrive il titolare (qa)\n\n## Storpiature e soprannomi\n- «Bo», «Bu», «boh»: tutti riferiti al piatto di prova chiamato «boh» (probabile dettatura approssimata).\n- «Che ne sacc» e «kenesac»: stesso piatto, il titolare usa entrambe le forme.\n- «Inserisce il piatto la parmigiana»: dettatura di «la parmigiana», non un piatto diverso. Quando il titolare chiede di inserire o cambiare «la parmigiana», il piatto esiste già: va aggiornato, non duplicato.\n- Quando dice «inserisci» o «aggiungi» un piatto che c'è già, di solito intende modificare quello esistente; il bot deve chiedere prima di creare un doppione.\n\n## Modi di dire e cosa significano\n- «togli» / «nascondi» = nascondi dal menu, NON eliminare. Anche dopo «elimina», il titolare accetta «nascondi» senza chiedere la cancellazione definitiva.\n- «mostra» / «è tornato disponibile» = rendi visibile / disponibile di nuovo.\n- «metti in promo», «in sconto», «promo a X» = prezzo promozionale, con prezzo pieno lasciato invariato.\n- «anzi no» = correzione: vale solo l'ultimo valore detto, scarta quello precedente.\n- «vai» = procedi, dai il via all'azione.\n- «annulla» = annulla l'ultima pubblicazione (non una modifica più vecchia).\n- «OK» dopo un riepilogo = conferma, non chiede altro.\n- Cifre dette in lettere: «e cinquanta» indica i centesimi (es. «tredici euro e cinquanta»).\n- «Piatti di prova» è la categoria usata per le prove: non è un menu reale.\n\n## Abitudini\n- Chiede spesso più modifiche in una sola frase: le elenca tutte e vuole la conferma in blocco.\n- Preferisce risposte brevi con il risultato, senza domande inutili se il piatto è già chiaro.\n- Quando il bot chiede quale piatto intende, di solito risponde con il nome esatto del piatto.",
+ "codes": {
+  "c1": "70000009-7777-4777-8777-000000000001",
+  "p1": "50000009-5555-4555-8555-000000000001",
+  "p2": "50000009-5555-4555-8555-000000000002",
+  "p3": "50000009-5555-4555-8555-000000000003"
+ },
+ "next": {
+  "p": 3,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000009-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000009-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000009-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000009-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000009-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000009-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000009-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000009-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000009-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000009-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 2,
+ "history": [
+  {
+   "owner": "ciao",
+   "bot": "Ciao. Dimmi cosa vuoi cambiare nel menu.",
+   "tools": []
+  },
+  {
+   "owner": "che locale ho?",
+   "bot": "Il locale è Tako (scheda di verifica web). Il menu di prova ha la categoria «Piatti di prova» con tre piatti: Piatto di verifica, Che ne sacc e boh.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "ciao",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 6559,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Ciao. Dimmi cosa vuoi cambiare nel menu.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Ciao. Dimmi cosa vuoi cambiare nel menu.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000009-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000009-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000009-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000009-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000009-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  },
+  {
+   "turn": 2,
+   "owner": "che locale ho?",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 6607,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Il locale è Tako (scheda di verifica web). Il menu di prova ha la categoria «Piatti di prova» con tre piatti: Piatto di verifica, Che ne sacc e boh.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Il locale è Tako (scheda di verifica web). Il menu di prova ha la categoria «Piatti di prova» con tre piatti: Piatto di verifica, Che ne sacc e boh.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000009-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000009-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000009-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000009-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000009-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": []
+  }
+ ],
+ "done": true
+}

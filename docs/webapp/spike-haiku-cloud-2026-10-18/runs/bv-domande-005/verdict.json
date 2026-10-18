@@ -1,0 +1,27 @@
+{
+ "id": "bv-domande-005",
+ "family": "bv-domande",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Sei collegato al locale Victoria Bar. Posso modificare il menu: cambiare prezzi, nascondere o mostrare piatti, segnare esauriti o disponibili, creare, rinominare e spostare piatti, gestire promo, evidenza e piatto del giorno. Dimmi cosa vuoi cambiare."
+ ],
+ "turns": [
+  "❓ Ciao! A quale locale sono collegato e cosa puoi fare?"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1332,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:16",
+ "note": "collegato a Victoria Bar dal 14/10 19:26"
+}

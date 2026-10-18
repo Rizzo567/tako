@@ -1,0 +1,757 @@
+{
+ "id": "x-019",
+ "menuKey": "pesce",
+ "locale": "pesce",
+ "note": "",
+ "codes": {
+  "c1": "70000004-7777-4777-8777-000000000001",
+  "p1": "50000004-5555-4555-8555-000000000001",
+  "p2": "50000004-5555-4555-8555-000000000002",
+  "p3": "50000004-5555-4555-8555-000000000003",
+  "p4": "50000004-5555-4555-8555-000000000004",
+  "p5": "50000004-5555-4555-8555-000000000005",
+  "p6": "50000004-5555-4555-8555-000000000006",
+  "c2": "70000004-7777-4777-8777-000000000002",
+  "p7": "50000004-5555-4555-8555-000000000007",
+  "p8": "50000004-5555-4555-8555-000000000008",
+  "p9": "50000004-5555-4555-8555-000000000009",
+  "p10": "50000004-5555-4555-8555-00000000000a",
+  "p11": "50000004-5555-4555-8555-00000000000b",
+  "c3": "70000004-7777-4777-8777-000000000003",
+  "p12": "50000004-5555-4555-8555-00000000000c",
+  "p13": "50000004-5555-4555-8555-00000000000d",
+  "p14": "50000004-5555-4555-8555-00000000000e",
+  "p15": "50000004-5555-4555-8555-00000000000f",
+  "p16": "50000004-5555-4555-8555-000000000010",
+  "c4": "70000004-7777-4777-8777-000000000004",
+  "p17": "50000004-5555-4555-8555-000000000011",
+  "p18": "50000004-5555-4555-8555-000000000012",
+  "p19": "50000004-5555-4555-8555-000000000013",
+  "p20": "50000004-5555-4555-8555-000000000014",
+  "c5": "70000004-7777-4777-8777-000000000005",
+  "p21": "50000004-5555-4555-8555-000000000015",
+  "p22": "50000004-5555-4555-8555-000000000016"
+ },
+ "next": {
+  "p": 22,
+  "c": 5
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000004-6666-4666-8666-000000000001",
+    "name": "Pranzo e cena",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000004-7777-4777-8777-000000000001",
+      "name": "Antipasti",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000001",
+        "name": "Caponata",
+        "price": 7
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000002",
+        "name": "Arancine al nero",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000003",
+        "name": "Arancine al ragù",
+        "price": 3.5
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000004",
+        "name": "Panelle",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000005",
+        "name": "Insalata di polpo",
+        "price": 12
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000006",
+        "name": "Sarde a beccafico",
+        "price": 10
+       }
+      ]
+     },
+     {
+      "id": "70000004-7777-4777-8777-000000000002",
+      "name": "Primi",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000007",
+        "name": "Pasta con le sarde",
+        "price": 14
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000008",
+        "name": "Spaghetti ai ricci",
+        "price": 22
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000009",
+        "name": "Busiate al pesto trapanese",
+        "price": 13
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000a",
+        "name": "Linguine allo scoglio",
+        "price": 18
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000b",
+        "name": "Cuscus di pesce",
+        "price": 19
+       }
+      ]
+     },
+     {
+      "id": "70000004-7777-4777-8777-000000000003",
+      "name": "Secondi",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-00000000000c",
+        "name": "Pesce spada alla ghiotta",
+        "price": 18
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000d",
+        "name": "Tonno in agrodolce",
+        "price": 17
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000e",
+        "name": "Frittura di paranza",
+        "price": 15
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000f",
+        "name": "Calamari ripieni",
+        "price": 16
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000010",
+        "name": "Grigliata mista",
+        "price": 24
+       }
+      ]
+     },
+     {
+      "id": "70000004-7777-4777-8777-000000000004",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000011",
+        "name": "Cannolo",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000012",
+        "name": "Cassata",
+        "price": 5
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000013",
+        "name": "Granita di mandorla",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000014",
+        "name": "Tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "60000004-6666-4666-8666-000000000002",
+    "name": "Vini",
+    "type": "drinks",
+    "sections": [
+     {
+      "id": "70000004-7777-4777-8777-000000000005",
+      "name": "Vini",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000015",
+        "name": "Grillo calice",
+        "price": 6
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000016",
+        "name": "Nero d'Avola calice",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000004-6666-4666-8666-000000000001",
+    "name": "Pranzo e cena",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000004-7777-4777-8777-000000000001",
+      "name": "Antipasti",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000001",
+        "name": "Caponata",
+        "price": 7
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000002",
+        "name": "Arancine al nero",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000003",
+        "name": "Arancine al ragù",
+        "price": 3.5
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000004",
+        "name": "Panelle",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000005",
+        "name": "Insalata di polpo",
+        "price": 12
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000006",
+        "name": "Sarde a beccafico",
+        "price": 10
+       }
+      ]
+     },
+     {
+      "id": "70000004-7777-4777-8777-000000000002",
+      "name": "Primi",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000007",
+        "name": "Pasta con le sarde",
+        "price": 14
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000008",
+        "name": "Spaghetti ai ricci",
+        "price": 22
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000009",
+        "name": "Busiate al pesto trapanese",
+        "price": 13
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000a",
+        "name": "Linguine allo scoglio",
+        "price": 18
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000b",
+        "name": "Cuscus di pesce",
+        "price": 19
+       }
+      ]
+     },
+     {
+      "id": "70000004-7777-4777-8777-000000000003",
+      "name": "Secondi",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-00000000000c",
+        "name": "Pesce spada alla ghiotta",
+        "price": 18
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000d",
+        "name": "Tonno in agrodolce",
+        "price": 17
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000e",
+        "name": "Frittura di paranza",
+        "price": 15
+       },
+       {
+        "id": "50000004-5555-4555-8555-00000000000f",
+        "name": "Calamari ripieni",
+        "price": 16
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000010",
+        "name": "Grigliata mista",
+        "price": 24
+       }
+      ]
+     },
+     {
+      "id": "70000004-7777-4777-8777-000000000004",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000011",
+        "name": "Cannolo",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000012",
+        "name": "Cassata",
+        "price": 5
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000013",
+        "name": "Granita di mandorla",
+        "price": 4
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000014",
+        "name": "Tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "60000004-6666-4666-8666-000000000002",
+    "name": "Vini",
+    "type": "drinks",
+    "sections": [
+     {
+      "id": "70000004-7777-4777-8777-000000000005",
+      "name": "Vini",
+      "items": [
+       {
+        "id": "50000004-5555-4555-8555-000000000015",
+        "name": "Grillo calice",
+        "price": 6
+       },
+       {
+        "id": "50000004-5555-4555-8555-000000000016",
+        "name": "Nero d'Avola calice",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 2,
+ "history": [
+  {
+   "owner": "oggi piatto del giorno pesce spada alla griglia a 18",
+   "bot": "C'è già Pesce spada alla ghiotta a 18 €. Lo imposto come piatto del giorno oppure creo un nuovo piatto «Pesce spada alla griglia» a 18 €?",
+   "tools": []
+  },
+  {
+   "owner": "annulla",
+   "bot": "Non ci sono modifiche recenti da annullare: nessuna pubblicazione precedente in questa giornata. Vuoi che lasci tutto com'è? Dimmi cosa vuoi fare.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "oggi piatto del giorno pesce spada alla griglia a 18",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 5436,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cerca_piatti\",\"argomenti\":{\"testo\":\"pesce spada\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"C'è già Pesce spada alla ghiotta a 18 €. Lo imposto come piatto del giorno oppure creo un nuovo piatto «Pesce spada alla griglia» a 18 €?\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "C'è già Pesce spada alla ghiotta a 18 €. Lo imposto come piatto del giorno oppure creo un nuovo piatto «Pesce spada alla griglia» a 18 €?",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000004-6666-4666-8666-000000000001",
+      "name": "Pranzo e cena",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000004-7777-4777-8777-000000000001",
+        "name": "Antipasti",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000001",
+          "name": "Caponata",
+          "price": 7
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000002",
+          "name": "Arancine al nero",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000003",
+          "name": "Arancine al ragù",
+          "price": 3.5
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000004",
+          "name": "Panelle",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000005",
+          "name": "Insalata di polpo",
+          "price": 12
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000006",
+          "name": "Sarde a beccafico",
+          "price": 10
+         }
+        ]
+       },
+       {
+        "id": "70000004-7777-4777-8777-000000000002",
+        "name": "Primi",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000007",
+          "name": "Pasta con le sarde",
+          "price": 14
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000008",
+          "name": "Spaghetti ai ricci",
+          "price": 22
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000009",
+          "name": "Busiate al pesto trapanese",
+          "price": 13
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000a",
+          "name": "Linguine allo scoglio",
+          "price": 18
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000b",
+          "name": "Cuscus di pesce",
+          "price": 19
+         }
+        ]
+       },
+       {
+        "id": "70000004-7777-4777-8777-000000000003",
+        "name": "Secondi",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-00000000000c",
+          "name": "Pesce spada alla ghiotta",
+          "price": 18
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000d",
+          "name": "Tonno in agrodolce",
+          "price": 17
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000e",
+          "name": "Frittura di paranza",
+          "price": 15
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000f",
+          "name": "Calamari ripieni",
+          "price": 16
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000010",
+          "name": "Grigliata mista",
+          "price": 24
+         }
+        ]
+       },
+       {
+        "id": "70000004-7777-4777-8777-000000000004",
+        "name": "Dolci",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000011",
+          "name": "Cannolo",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000012",
+          "name": "Cassata",
+          "price": 5
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000013",
+          "name": "Granita di mandorla",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000014",
+          "name": "Tiramisù",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "60000004-6666-4666-8666-000000000002",
+      "name": "Vini",
+      "type": "drinks",
+      "sections": [
+       {
+        "id": "70000004-7777-4777-8777-000000000005",
+        "name": "Vini",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000015",
+          "name": "Grillo calice",
+          "price": 6
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000016",
+          "name": "Nero d'Avola calice",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": [
+    "cerca_piatti({\"testo\":\"pesce spada\"})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "annulla",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 5741,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"annulla_ultima\",\"argomenti\":{}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Non ci sono modifiche recenti da annullare: nessuna pubblicazione precedente in questa giornata. Vuoi che lasci tutto com'è? Dimmi cosa vuoi fare.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Non ci sono modifiche recenti da annullare: nessuna pubblicazione precedente in questa giornata. Vuoi che lasci tutto com'è? Dimmi cosa vuoi fare.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000004-6666-4666-8666-000000000001",
+      "name": "Pranzo e cena",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000004-7777-4777-8777-000000000001",
+        "name": "Antipasti",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000001",
+          "name": "Caponata",
+          "price": 7
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000002",
+          "name": "Arancine al nero",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000003",
+          "name": "Arancine al ragù",
+          "price": 3.5
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000004",
+          "name": "Panelle",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000005",
+          "name": "Insalata di polpo",
+          "price": 12
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000006",
+          "name": "Sarde a beccafico",
+          "price": 10
+         }
+        ]
+       },
+       {
+        "id": "70000004-7777-4777-8777-000000000002",
+        "name": "Primi",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000007",
+          "name": "Pasta con le sarde",
+          "price": 14
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000008",
+          "name": "Spaghetti ai ricci",
+          "price": 22
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000009",
+          "name": "Busiate al pesto trapanese",
+          "price": 13
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000a",
+          "name": "Linguine allo scoglio",
+          "price": 18
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000b",
+          "name": "Cuscus di pesce",
+          "price": 19
+         }
+        ]
+       },
+       {
+        "id": "70000004-7777-4777-8777-000000000003",
+        "name": "Secondi",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-00000000000c",
+          "name": "Pesce spada alla ghiotta",
+          "price": 18
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000d",
+          "name": "Tonno in agrodolce",
+          "price": 17
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000e",
+          "name": "Frittura di paranza",
+          "price": 15
+         },
+         {
+          "id": "50000004-5555-4555-8555-00000000000f",
+          "name": "Calamari ripieni",
+          "price": 16
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000010",
+          "name": "Grigliata mista",
+          "price": 24
+         }
+        ]
+       },
+       {
+        "id": "70000004-7777-4777-8777-000000000004",
+        "name": "Dolci",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000011",
+          "name": "Cannolo",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000012",
+          "name": "Cassata",
+          "price": 5
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000013",
+          "name": "Granita di mandorla",
+          "price": 4
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000014",
+          "name": "Tiramisù",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "60000004-6666-4666-8666-000000000002",
+      "name": "Vini",
+      "type": "drinks",
+      "sections": [
+       {
+        "id": "70000004-7777-4777-8777-000000000005",
+        "name": "Vini",
+        "items": [
+         {
+          "id": "50000004-5555-4555-8555-000000000015",
+          "name": "Grillo calice",
+          "price": 6
+         },
+         {
+          "id": "50000004-5555-4555-8555-000000000016",
+          "name": "Nero d'Avola calice",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": [
+    "annulla_ultima({})"
+   ]
+  }
+ ],
+ "done": true
+}

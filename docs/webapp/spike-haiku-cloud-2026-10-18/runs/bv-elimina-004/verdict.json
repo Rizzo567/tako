@@ -1,0 +1,27 @@
+{
+ "id": "bv-elimina-004",
+ "family": "bv-elimina",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Vuoi eliminare definitivamente il piatto «pasta al ragù»? Rispondi sì per confermare."
+ ],
+ "turns": [
+  "🎤 Elimina il piatto pasta al ragù."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1652,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:18",
+ "note": "risposta vera: «Da questa chat non posso eliminare»"
+}

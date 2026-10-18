@@ -1,0 +1,41 @@
+{
+ "id": "bv-deixis-002",
+ "family": "bv-deixis",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|boh|true",
+  "price|la parmigiana|15",
+  "price|tiramisù|15"
+ ],
+ "actual": [
+  "hidden|boh|true",
+  "price|la parmigiana|15",
+  "price|tiramisù|15"
+ ],
+ "replies": [
+  "Fatto, 3 modifiche:\n1. La parmigiana: prezzo 10 € (era già così, nessun doppione creato).\n2. Il tiramisù: prezzo 6 € (era già così).\n3. Il piatto «boh»: nascosto dal menu.\n1. la parmigiana: 10 → 10 €\n2. tiramisù: 6 → 6 €\n3. boh: nascosto",
+  "Fatto, 2 modifiche:\n1. La parmigiana: prezzo 15 € (era 10 €).\n2. Il tiramisù: prezzo 15 € (era 6 €).\n1. la parmigiana: 10 → 15 €\n2. tiramisù: 6 → 15 €",
+  "Confermi l'eliminazione definitiva di «la parmigiana» e «tiramisù»? Rispondi sì per procedere."
+ ],
+ "turns": [
+  "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+  "🎤 Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.",
+  "🎤 Ok, adesso rimuovi completamente quei due piatti."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 7,
+ "llmMisses": 0,
+ "llmTokens": 5270,
+ "latencyMs": [
+  0,
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:27",
+ "note": "«rimuovi completamente» = eliminare: si cancella solo dopo «sì», quindi al turno 3 domanda di conferma e niente scrittura. Risposta vera: «Quale piatto intendi… Riscrivimi»"
+}

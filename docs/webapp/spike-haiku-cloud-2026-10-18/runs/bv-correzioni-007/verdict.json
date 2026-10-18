@@ -1,0 +1,30 @@
+{
+ "id": "bv-correzioni-007",
+ "family": "bv-correzioni",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Ok, aggiungo pasta al pesto e lasagna. A che prezzo li metto? E in quale categoria?",
+  "Capito, sono due piatti separati: pasta al pesto e lasagna. A che prezzo metto ciascuno e in quale categoria?"
+ ],
+ "turns": [
+  "🎤 Allora aggiungi il piatto pasta al pesto e lasagna.",
+  "🎤 No, pasta al pesto e lasagna sono due piatti separati."
+ ],
+ "clarifications": 2,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 3391,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:39",
+ "note": "AMBIGUO: mancano i prezzi di entrambi: una domanda (mai prezzi inventati)"
+}

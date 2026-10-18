@@ -1,0 +1,27 @@
+{
+ "id": "bv-dialetto-004",
+ "family": "bv-dialetto",
+ "menu": "victoria",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Ok, non tocco il prezzo della Bruschetta Victoria (8 €). Nessuna modifica fatta."
+ ],
+ "turns": [
+  "Nun cambià er prezzo de la Bruschetta Victoria"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 1,
+ "llmMisses": 0,
+ "llmTokens": 1583,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 15/10 12:46",
+ "note": "negazione: niente scrittura; risposta vera «Non ho capito bene»"
+}

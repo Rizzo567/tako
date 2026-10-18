@@ -1,0 +1,33 @@
+{
+ "id": "bv-multiple-007",
+ "family": "bv-multiple",
+ "menu": "qa1323",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "hidden|Inserisce il piatto la parmigiana|true",
+  "promo|Che ne sacc|12"
+ ],
+ "actual": [
+  "hidden|Inserisce il piatto la parmigiana|true",
+  "promo|Che ne sacc|12"
+ ],
+ "replies": [
+  "Fatto: 1) La parmigiana è nascosta dal menu. 2) Che ne sacc (kenesac) è in promo a 12 € (prezzo pieno 20 €).\n1. Inserisce il piatto la parmigiana: nascosto\n2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)"
+ ],
+ "turns": [
+  "🎤 Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1254,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:23",
+ "note": "«la parmigiana» = l'unico piatto con parmigiana; kenesac = Che ne sacc"
+}

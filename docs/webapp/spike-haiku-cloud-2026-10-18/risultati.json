@@ -1,0 +1,4655 @@
+{
+ "generato": "2026-10-18T10:09:44.675Z",
+ "totale": {
+  "conversazioni": 122,
+  "ok": 106,
+  "grav": 9,
+  "medi": 7,
+  "messaggi": 189,
+  "passiMedi": 1.85,
+  "passiMax": 3,
+  "respinti": 0,
+  "autocorrezioni": 0,
+  "domandeForzate": 0,
+  "domandeOgni10": 2.65,
+  "tokenIngressoMedio": 1489,
+  "tokenIngressoMax": 1870
+ },
+ "bancoVero": {
+  "conversazioni": 92,
+  "ok": 78,
+  "grav": 8,
+  "medi": 6,
+  "messaggi": 149,
+  "passiMedi": 1.81,
+  "passiMax": 3,
+  "respinti": 0,
+  "autocorrezioni": 0,
+  "domandeForzate": 0,
+  "domandeOgni10": 2.68,
+  "tokenIngressoMedio": 1500,
+  "tokenIngressoMax": 1870
+ },
+ "nuove": {
+  "conversazioni": 30,
+  "ok": 28,
+  "grav": 1,
+  "medi": 1,
+  "messaggi": 40,
+  "passiMedi": 1.98,
+  "passiMax": 3,
+  "respinti": 0,
+  "autocorrezioni": 0,
+  "domandeForzate": 0,
+  "domandeOgni10": 2.5,
+  "tokenIngressoMedio": 1446,
+  "tokenIngressoMax": 1690
+ },
+ "semplici": {
+  "conversazioni": 74,
+  "ok": 69,
+  "grav": 3,
+  "medi": 2,
+  "messaggi": 74,
+  "passiMedi": 1.95,
+  "passiMax": 3,
+  "respinti": 0,
+  "autocorrezioni": 0,
+  "domandeForzate": 0,
+  "domandeOgni10": 2.16,
+  "tokenIngressoMedio": 1433,
+  "tokenIngressoMax": 1690
+ },
+ "multiTurno": {
+  "conversazioni": 48,
+  "ok": 37,
+  "grav": 6,
+  "medi": 5,
+  "messaggi": 115,
+  "passiMedi": 1.78,
+  "passiMax": 3,
+  "respinti": 0,
+  "autocorrezioni": 0,
+  "domandeForzate": 0,
+  "domandeOgni10": 2.96,
+  "tokenIngressoMedio": 1524,
+  "tokenIngressoMax": 1870
+ },
+ "perOndata": {
+  "A (nota vuota)": {
+   "conversazioni": 61,
+   "ok": 52,
+   "grav": 5,
+   "medi": 4,
+   "messaggi": 90,
+   "passiMedi": 1.83,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 2.78,
+   "tokenIngressoMedio": 1309,
+   "tokenIngressoMax": 1479
+  },
+  "B (con nota)": {
+   "conversazioni": 61,
+   "ok": 54,
+   "grav": 4,
+   "medi": 3,
+   "messaggi": 99,
+   "passiMedi": 1.86,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 2.53,
+   "tokenIngressoMedio": 1652,
+   "tokenIngressoMax": 1870
+  }
+ },
+ "perFamiglia": {
+  "bv-semplici": {
+   "conversazioni": 56,
+   "ok": 54,
+   "grav": 1,
+   "medi": 1,
+   "messaggi": 70,
+   "passiMedi": 1.94,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 2,
+   "tokenIngressoMedio": 1448,
+   "tokenIngressoMax": 1690
+  },
+  "bv-domande": {
+   "conversazioni": 10,
+   "ok": 10,
+   "grav": 0,
+   "medi": 0,
+   "messaggi": 15,
+   "passiMedi": 1.33,
+   "passiMax": 2,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 5.33,
+   "tokenIngressoMedio": 1507,
+   "tokenIngressoMax": 1702
+  },
+  "bv-multiple": {
+   "conversazioni": 9,
+   "ok": 7,
+   "grav": 2,
+   "medi": 0,
+   "messaggi": 16,
+   "passiMedi": 1.88,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 1.25,
+   "tokenIngressoMedio": 1527,
+   "tokenIngressoMax": 1864
+  },
+  "bv-correzioni": {
+   "conversazioni": 7,
+   "ok": 1,
+   "grav": 2,
+   "medi": 4,
+   "messaggi": 14,
+   "passiMedi": 1.57,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 5,
+   "tokenIngressoMedio": 1518,
+   "tokenIngressoMax": 1799
+  },
+  "bv-deixis": {
+   "conversazioni": 4,
+   "ok": 4,
+   "grav": 0,
+   "medi": 0,
+   "messaggi": 7,
+   "passiMedi": 2,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 2.86,
+   "tokenIngressoMedio": 1538,
+   "tokenIngressoMax": 1836
+  },
+  "bv-aggiunte": {
+   "conversazioni": 6,
+   "ok": 5,
+   "grav": 1,
+   "medi": 0,
+   "messaggi": 9,
+   "passiMedi": 1.89,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 5.56,
+   "tokenIngressoMedio": 1388,
+   "tokenIngressoMax": 1657
+  },
+  "bv-elimina": {
+   "conversazioni": 5,
+   "ok": 5,
+   "grav": 0,
+   "medi": 0,
+   "messaggi": 10,
+   "passiMedi": 2,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 4,
+   "tokenIngressoMedio": 1385,
+   "tokenIngressoMax": 1652
+  },
+  "bv-categorie": {
+   "conversazioni": 3,
+   "ok": 1,
+   "grav": 1,
+   "medi": 1,
+   "messaggi": 5,
+   "passiMedi": 2,
+   "passiMax": 2,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 2,
+   "tokenIngressoMedio": 1638,
+   "tokenIngressoMax": 1870
+  },
+  "bv-annulla": {
+   "conversazioni": 8,
+   "ok": 8,
+   "grav": 0,
+   "medi": 0,
+   "messaggi": 20,
+   "passiMedi": 1.95,
+   "passiMax": 2,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 0.5,
+   "tokenIngressoMedio": 1530,
+   "tokenIngressoMax": 1834
+  },
+  "bv-dialetto": {
+   "conversazioni": 5,
+   "ok": 5,
+   "grav": 0,
+   "medi": 0,
+   "messaggi": 6,
+   "passiMedi": 1.83,
+   "passiMax": 2,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 1.67,
+   "tokenIngressoMedio": 1459,
+   "tokenIngressoMax": 1601
+  },
+  "bv-asr": {
+   "conversazioni": 5,
+   "ok": 2,
+   "grav": 2,
+   "medi": 1,
+   "messaggi": 13,
+   "passiMedi": 2,
+   "passiMax": 3,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 2.31,
+   "tokenIngressoMedio": 1645,
+   "tokenIngressoMax": 1861
+  },
+  "bv-fuori": {
+   "conversazioni": 4,
+   "ok": 4,
+   "grav": 0,
+   "medi": 0,
+   "messaggi": 4,
+   "passiMedi": 1,
+   "passiMax": 1,
+   "respinti": 0,
+   "autocorrezioni": 0,
+   "domandeForzate": 0,
+   "domandeOgni10": 5,
+   "tokenIngressoMedio": 1421,
+   "tokenIngressoMax": 1644
+  }
+ },
+ "codici": {
+  "GRAVE modifica-non-richiesta": 3,
+  "MEDIO chiarimento-mancante": 1,
+  "MEDIO chiede-invece-di-agire": 9,
+  "GRAVE correzione-non-applicata": 2,
+  "GRAVE modifica-sbagliata": 1,
+  "GRAVE scrive-invece-di-chiedere": 2,
+  "GRAVE non-applicato": 1,
+  "GRAVE richiesta-persa": 1
+ },
+ "fonetici": [
+  {
+   "id": "bv-semplici-014",
+   "messaggi": [
+    "Passa il ragù, metti prezzo a 20 euro."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "price|pasta al ragù|20"
+   ]
+  },
+  {
+   "id": "bv-semplici-015",
+   "messaggi": [
+    "Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?"
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "price|boh|50"
+   ]
+  },
+  {
+   "id": "bv-multiple-007",
+   "messaggi": [
+    "Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12"
+   ]
+  },
+  {
+   "id": "bv-multiple-008",
+   "messaggi": [
+    "Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro.",
+    "Allora, voglio che mi nascondi dal menù il piatto la parmigiana e invece mi metti in promo il piatto di verifica a 11 euro."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12",
+    "promo|Piatto di verifica|11"
+   ]
+  },
+  {
+   "id": "bv-multiple-009",
+   "messaggi": [
+    "Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
+   ],
+   "cercaPiatti": false,
+   "ok": true,
+   "diff": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ]
+  },
+  {
+   "id": "bv-correzioni-001",
+   "messaggi": [
+    "Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+    "No, ho detto togli boh.",
+    "Sì, ma ti avevo detto che dovevi aggiungere il piatto, la parmigiana a 10 euro e il tiramisù a 6 euro."
+   ],
+   "cercaPiatti": true,
+   "ok": false,
+   "diff": [
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true"
+   ]
+  },
+  {
+   "id": "bv-correzioni-002",
+   "messaggi": [
+    "Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+    "No, ho detto togli boh."
+   ],
+   "cercaPiatti": true,
+   "ok": false,
+   "diff": [
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true"
+   ]
+  },
+  {
+   "id": "bv-deixis-001",
+   "messaggi": [
+    "Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro."
+   ],
+   "cercaPiatti": false,
+   "ok": true,
+   "diff": [
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ]
+  },
+  {
+   "id": "bv-deixis-002",
+   "messaggi": [
+    "Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.",
+    "Ok, adesso rimuovi completamente quei due piatti."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ]
+  },
+  {
+   "id": "bv-deixis-003",
+   "messaggi": [
+    "Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo."
+   ],
+   "cercaPiatti": false,
+   "ok": true,
+   "diff": [
+    "hidden|boh|true"
+   ]
+  },
+  {
+   "id": "bv-aggiunte-003",
+   "messaggi": [
+    "Inserisce il piatto la parmigiana.",
+    "Inserisci un nuovo piatto, si chiama parmigiana.",
+    "12 euro"
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "create|parmigiana|12|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-aggiunte-004",
+   "messaggi": [
+    "Inserisce il piatto la parmigiana."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": []
+  },
+  {
+   "id": "bv-asr-002",
+   "messaggi": [
+    "Bu costa 40 euro"
+   ],
+   "cercaPiatti": true,
+   "ok": false,
+   "diff": [
+    "price|boh|40"
+   ]
+  },
+  {
+   "id": "bv-asr-003",
+   "messaggi": [
+    "Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+    "Bu costa 40 euro"
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "price|boh|40"
+   ]
+  },
+  {
+   "id": "bv-asr-005",
+   "messaggi": [
+    "Quanto costa la pasta al ragù?",
+    "Quanto costa il piatto boh?",
+    "Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+    "Bu costa 40 euro",
+    "Passa il ragù, metti prezzo a 20 euro."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "price|boh|40",
+    "price|pasta al ragù|20"
+   ]
+  },
+  {
+   "id": "x-001",
+   "messaggi": [
+    "U tunnu in agrodolce è finito."
+   ],
+   "cercaPiatti": false,
+   "ok": true,
+   "diff": [
+    "available|Tonno in agrodolce|false"
+   ]
+  },
+  {
+   "id": "x-002",
+   "messaggi": [
+    "La carbonare mettila a tre dici euro."
+   ],
+   "cercaPiatti": false,
+   "ok": true,
+   "diff": [
+    "price|Carbonara|13"
+   ]
+  },
+  {
+   "id": "x-003",
+   "messaggi": [
+    "Il babbà costa cinque euro adesso."
+   ],
+   "cercaPiatti": false,
+   "ok": true,
+   "diff": [
+    "price|Babà|5"
+   ]
+  },
+  {
+   "id": "x-004",
+   "messaggi": [
+    "Le pontarelle non ci stanno più."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "available|Puntarelle|false"
+   ]
+  },
+  {
+   "id": "x-005",
+   "messaggi": [
+    "Metti la pasta con le sarte a quindici."
+   ],
+   "cercaPiatti": true,
+   "ok": true,
+   "diff": [
+    "price|Pasta con le sarde|15"
+   ]
+  }
+ ],
+ "conversazioni": [
+  {
+   "id": "bv-semplici-001",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1232,
+    1264
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Piatto di verifica da 13,5 € a 9 €.\nPiatto di verifica: 13,5 → 9 €",
+    "Non c'è nessuna operazione in sospeso da confermare. L'ultima modifica, il prezzo di Piatto di verifica da 13,5 € a 9 €, è già stata applicata. Cosa vuoi cambiare?"
+   ],
+   "owner": [
+    "prezzo Piatto di verifica a 9",
+    "conferma"
+   ],
+   "diff": [
+    "price|Piatto di verifica|9"
+   ]
+  },
+  {
+   "id": "bv-semplici-002",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1659,
+    1690
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Piatto di verifica ora costa 12 €.\nPiatto di verifica: 9 → 12 €",
+    "Non ci sono operazioni in sospeso: la modifica a Piatto di verifica (12 €) è già applicata. Cosa vuoi cambiare?"
+   ],
+   "owner": [
+    "prezzo Piatto di verifica a 12",
+    "conferma"
+   ],
+   "diff": [
+    "price|Piatto di verifica|12"
+   ]
+  },
+  {
+   "id": "bv-semplici-003",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1323,
+    1358
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Polpo rucola e patate è nascosto dal menu.\nPolpo rucola e patate: nascosto",
+    "Non c'è nulla in sospeso da confermare. Il polpo è già nascosto dal menu. Dimmi cosa vuoi cambiare."
+   ],
+   "owner": [
+    "Nascondi il polpo.",
+    "conferma"
+   ],
+   "diff": [
+    "hidden|Polpo rucola e patate|true"
+   ]
+  },
+  {
+   "id": "bv-semplici-004",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1576,
+    1613
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: il Polpo rucola e patate è di nuovo visibile nel menu.\nPolpo rucola e patate: visibile",
+    "Non c'è nessuna operazione in sospeso da confermare. Cosa vuoi fare?"
+   ],
+   "owner": [
+    "Mostra il polpo.",
+    "Confirma."
+   ],
+   "diff": [
+    "hidden|Polpo rucola e patate|false"
+   ]
+  },
+  {
+   "id": "bv-semplici-005",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1327
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Bruschetta Victoria segnata come esaurita.\nBruschetta Victoria: finito"
+   ],
+   "owner": [
+    "A Bruschetta Victoria un c'è cchiù"
+   ],
+   "diff": [
+    "available|Bruschetta Victoria|false"
+   ]
+  },
+  {
+   "id": "bv-semplici-006",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1652
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: ho aggiunto «pasta al ragù» a 12 € in Piatti di prova.\ncreato p4 «pasta al ragù» a 12 € in Piatti di prova"
+   ],
+   "owner": [
+    "Aggiungi tra piatti di prova, pasta al ragù, 12 euro."
+   ],
+   "diff": [
+    "create|pasta al ragu|12|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-semplici-007",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1225
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: il piatto di verifica ora costa 13 €.\nPiatto di verifica: 13,5 → 13 €"
+   ],
+   "owner": [
+    "il piatto di verifica costa 13 euro"
+   ],
+   "diff": [
+    "price|Piatto di verifica|13"
+   ]
+  },
+  {
+   "id": "bv-semplici-008",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1651
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: «Piatto di verifica» è segnato come finito.\nPiatto di verifica: finito"
+   ],
+   "owner": [
+    "il piatto di verifica è finito"
+   ],
+   "diff": [
+    "available|Piatto di verifica|false"
+   ]
+  },
+  {
+   "id": "bv-semplici-009",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1228
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Piatto di verifica è di nuovo disponibile nel menu.\nPiatto di verifica: disponibile"
+   ],
+   "owner": [
+    "il piatto di verifica è tornato disponibile"
+   ],
+   "diff": [
+    "available|Piatto di verifica|true"
+   ]
+  },
+  {
+   "id": "bv-semplici-010",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1651
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: «Piatto di verifica» è nascosto dal menu.\nPiatto di verifica: nascosto"
+   ],
+   "owner": [
+    "nascondi il piatto di verifica"
+   ],
+   "diff": [
+    "hidden|Piatto di verifica|true"
+   ]
+  },
+  {
+   "id": "bv-semplici-011",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1224
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: il Piatto di verifica è di nuovo visibile nel menu.\nPiatto di verifica: visibile"
+   ],
+   "owner": [
+    "mostra il piatto di verifica"
+   ],
+   "diff": [
+    "hidden|Piatto di verifica|false"
+   ]
+  },
+  {
+   "id": "bv-semplici-012",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1662
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: ho aggiunto «Piatto test QA» a 9 € nella categoria Piatti di prova.\ncreato p5 «Piatto test QA» a 9 € in Piatti di prova"
+   ],
+   "owner": [
+    "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro"
+   ],
+   "diff": [
+    "create|piatto test qa|9|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-semplici-013",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1230
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Piatto di verifica passa da 14 € a 13,50 €.\nPiatto di verifica: 14 → 13,5 €"
+   ],
+   "owner": [
+    "metti il piatto di verifica a tredici euro e cinquanta"
+   ],
+   "diff": [
+    "price|Piatto di verifica|13.5"
+   ]
+  },
+  {
+   "id": "bv-semplici-014",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1653
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: pasta al ragù ora costa 20 €.\npasta al ragù: 12 → 20 €"
+   ],
+   "owner": [
+    "Passa il ragù, metti prezzo a 20 euro."
+   ],
+   "diff": [
+    "price|pasta al ragù|20"
+   ]
+  },
+  {
+   "id": "bv-semplici-015",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1230
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: il prezzo di «boh» (Bo) è passato da 20 € a 50 €.\nboh: 20 → 50 €"
+   ],
+   "owner": [
+    "Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?"
+   ],
+   "diff": [
+    "price|boh|50"
+   ]
+  },
+  {
+   "id": "bv-semplici-016",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1663
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: ho aggiunto «pasta al sugo» a 12 € nella categoria Piatti di prova.\ncreato p7 «pasta al sugo» a 12 € in Piatti di prova"
+   ],
+   "owner": [
+    "Aggiungi il piatto pasta al sugo a 12 euro."
+   ],
+   "diff": [
+    "create|pasta al sugo|12|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-semplici-017",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1225
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: la pasta al ragù è nascosta dal menu. Puoi rimostrarla quando vuoi.\npasta al ragù: nascosto"
+   ],
+   "owner": [
+    "Vai, nascondi la pasta del ragù."
+   ],
+   "diff": [
+    "hidden|pasta al ragù|true"
+   ]
+  },
+  {
+   "id": "bv-semplici-018",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1580
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: la Bruschetta Victoria è segnata come esaurita.\nBruschetta Victoria: finito"
+   ],
+   "owner": [
+    "La Bruschetta Victoria la xe finia"
+   ],
+   "diff": [
+    "available|Bruschetta Victoria|false"
+   ]
+  },
+  {
+   "id": "bv-semplici-019",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1327
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Bruschetta Victoria segnata come finita. Quando torna disponibile, dimmelo.\nBruschetta Victoria: finito"
+   ],
+   "owner": [
+    "La Bruschetta Victoria l'è finida"
+   ],
+   "diff": [
+    "available|Bruschetta Victoria|false"
+   ]
+  },
+  {
+   "id": "bv-semplici-020",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1584
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Bruschetta Victoria ora costa 12 €.\nBruschetta Victoria: 8 → 12 €"
+   ],
+   "owner": [
+    "Boia, mettimi la Bruschetta Victoria a dodici euri"
+   ],
+   "diff": [
+    "price|Bruschetta Victoria|12"
+   ]
+  },
+  {
+   "id": "bv-semplici-021",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1225
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Il piatto di verifica costa 13,50 €."
+   ],
+   "owner": [
+    "quanto costa il piatto di verifica?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-semplici-022",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1647
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Al momento non c'è nessun piatto esaurito nel menu."
+   ],
+   "owner": [
+    "cosa è finito?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-semplici-023",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1224
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "La pasta al ragù costa 12 €."
+   ],
+   "owner": [
+    "Quanto costa la pasta al ragù?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-semplici-024",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1651
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Il piatto boh costa 20 €, attualmente in promo a 10 €."
+   ],
+   "owner": [
+    "Quanto costa il piatto boh?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-semplici-025",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1329
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "La Bruschetta Victoria costa 8 €."
+   ],
+   "owner": [
+    "Aò, quanto viene la Bruschetta Victoria?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-semplici-026",
+   "family": "bv-semplici",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1581
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "La Tagliata rucola e grana costa 20 €. Attenzione: esiste anche la Tagliata di orata o branzino con rucola e grana, sempre a 20 €."
+   ],
+   "owner": [
+    "Tagliata rucola e grana, quanto costa?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-001",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1325,
+    1363
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Ci sono tre tagliate: rucola e grana 20 €, con funghi porcini e panna 24 €, di orata o branzino con rucola e grana 20 €.",
+    "La Tagliata rucola e grana costa 20 €."
+   ],
+   "owner": [
+    "Quanto costa la tagliata?",
+    "Tagliata rucola e grana, quanto costa?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-002",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1581
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Posso cambiare prezzi, segnare piatti come esauriti o di nuovo disponibili, nascondere o mostrare piatti, creare piatti e categorie, rinominare, spostare, aggiungere descrizioni, promo, evidenza e piatto del giorno. Annullo l'ultima modifica. Elimino un piatto solo dopo tuo sì. Dimmi cosa vuoi fare."
+   ],
+   "owner": [
+    "Dimmi un po' tutto quello che sai fare"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-003",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1325
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Ci sono tre tagliate nel menu: Tagliata rucola e grana 20 euro, Tagliata con funghi porcini e panna 24 euro, Tagliata di orata o branzino con rucola e grana 20 euro."
+   ],
+   "owner": [
+    "Quanto costa la tagliata"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-004",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 2,
+   "promptTokens": [
+    1575,
+    1662
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Posso leggere e modificare il menu del locale: segnare piatti come finiti o di nuovo disponibili, nascondere o mostrare piatti, cambiare prezzi, creare, rinominare o spostare piatti, aggiungere descrizioni e promo, mettere piatti in evidenza, impostare il piatto del giorno e annullare l'ultima modifica. Dimmi cosa vuoi fare.",
+    "No, al momento non posso cambiare gli allergeni dal menu. Posso modificare prezzi, disponibilità, visibilità, descrizioni, promo ed evidenza dei piatti. Vuoi fare una di queste cose?"
+   ],
+   "owner": [
+    "cosa sai fare?",
+    "sai cambiare gli allergeni?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-005",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1332
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Sei collegato al locale Victoria Bar. Posso modificare il menu: cambiare prezzi, nascondere o mostrare piatti, segnare esauriti o disponibili, creare, rinominare e spostare piatti, gestire promo, evidenza e piatto del giorno. Dimmi cosa vuoi cambiare."
+   ],
+   "owner": [
+    "Ciao! A quale locale sono collegato e cosa puoi fare?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-006",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1640,
+    1652
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Ciao. Dimmi cosa vuoi cambiare nel menu.",
+    "Il locale è Tako (scheda di verifica web). Il menu di prova ha la categoria «Piatti di prova» con tre piatti: Piatto di verifica, Che ne sacc e boh."
+   ],
+   "owner": [
+    "ciao",
+    "che locale ho?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-007",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1223
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Il piatto di verifica costa 13 €. Non ho modificato nulla."
+   ],
+   "owner": [
+    "piatto di verifica 13 o 14?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-008",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1652,
+    1680
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Al momento non risulta nessun piatto esaurito nel menu.",
+    "Al momento hai un solo piatto nascosto: pasta al ragù, 20 €. Vuoi che lo rimetta nel menu?"
+   ],
+   "owner": [
+    "Ok, adesso dimmi cosa è finito.",
+    "Ok, allora mi devi dire quali piatti ho nascosto, per favore."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-009",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1230
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Posso cambiare prezzi, nascondere o rimettere piatti, segnare finito o disponibile, creare piatti e categorie, mettere in promo o evidenza, e impostare il piatto del giorno. Dimmi cosa vuoi fare."
+   ],
+   "owner": [
+    "Ciao, cosa sai fare?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-domande-010",
+   "family": "bv-domande",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1661,
+    1702
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Piatto di verifica ora a 13,50 €. «boh» non l'ho toccato.\nPiatto di verifica: 14 → 13,5 €",
+    "Hai scritto solo «Piatto di verifica». Cosa vuoi fare? Il piatto è a 13,50 €: vuoi cambiarne il prezzo, nasconderlo, metterlo in promo o altro?"
+   ],
+   "owner": [
+    "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta",
+    "Piatto di verifica"
+   ],
+   "diff": [
+    "price|Piatto di verifica|13.5"
+   ]
+  },
+  {
+   "id": "bv-multiple-001",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1248
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, tre modifiche:\n1. Pasta collaudo: 11 €\n2. Pizza collaudo: 13 €\n3. Tiramisu collaudo: 6 €\n1. Pasta collaudo: 10 → 11 €\n2. Pizza collaudo: 12 → 13 €\n3. Tiramisu collaudo: 5 → 6 €"
+   ],
+   "owner": [
+    "La Pasta collaudo mettila a undici euro, la Pizza collaudo a tredici euro e il Tiramisu collaudo a sei euro."
+   ],
+   "diff": [
+    "price|Pasta collaudo|11",
+    "price|Pizza collaudo|13",
+    "price|Tiramisu collaudo|6"
+   ]
+  },
+  {
+   "id": "bv-multiple-002",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 3,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|Acqua collaudo|3"
+    }
+   ],
+   "steps": [
+    2,
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1684,
+    1808,
+    1864
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, quattro prezzi aggiornati:\n1. Pasta collaudo: 14 €\n2. Pizza collaudo: 16 €\n3. Tiramisu collaudo: 7 €\n4. Acqua collaudo: 3 €\n1. Pasta collaudo: 11 → 14 €\n2. Pizza collaudo: 13 → 16 €\n3. Tiramisu collaudo: 6 → 7 €\n4. Acqua collaudo: 2 → 3 €",
+    "Fatto: Pasta collaudo aggiornata da 14 a 15 €. Acqua collaudo resta a 3 €, Pizza collaudo 16 € e Tiramisu collaudo 7 € invariati.\nPasta collaudo: 14 → 15 €",
+    "Ok. Nessuna modifica in sospeso. Le ultime modifiche restano: Pasta collaudo 15 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €."
+   ],
+   "owner": [
+    "La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.",
+    "Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.",
+    "OK"
+   ],
+   "diff": [
+    "price|Acqua collaudo|3",
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ]
+  },
+  {
+   "id": "bv-multiple-003",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 4,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|Acqua collaudo|3"
+    }
+   ],
+   "steps": [
+    2,
+    2,
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 2,
+   "promptTokens": [
+    1257,
+    1371,
+    1422,
+    1468
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Pasta collaudo 14 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €.\n1. Pasta collaudo: 11 → 14 €\n2. Pizza collaudo: 13 → 16 €\n3. Tiramisu collaudo: 6 → 7 €\n4. Acqua collaudo: 2 → 3 €",
+    "Fatto: Pasta collaudo 15 €. Acqua collaudo resta a 3 €; Pizza collaudo 16 €, Tiramisu collaudo 7 € invariati.\nPasta collaudo: 14 → 15 €",
+    "Ok. Non ci sono operazioni in sospeso. Le modifiche di prima restano: Pasta collaudo 15 €, Acqua collaudo 3 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €. Serve altro?",
+    "Ok. Restano attive: Pasta collaudo 15 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €, Acqua collaudo 3 €. Nessuna operazione in sospeso. Serve altro?"
+   ],
+   "owner": [
+    "La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.",
+    "Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.",
+    "OK",
+    "OK"
+   ],
+   "diff": [
+    "price|Acqua collaudo|3",
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ]
+  },
+  {
+   "id": "bv-multiple-004",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1668,
+    1757
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, quattro modifiche:\n1. Piatto di verifica: 13 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €\n1. Piatto di verifica: 13 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €",
+    "Ok, perfetto. Le quattro modifiche della giornata sono già applicate. Non ci sono operazioni in sospeso."
+   ],
+   "owner": [
+    "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+    "ok va bene"
+   ],
+   "diff": [
+    "price|Che ne sacc|21",
+    "price|Piatto di verifica|14",
+    "price|boh|21",
+    "price|pasta al ragù|13"
+   ]
+  },
+  {
+   "id": "bv-multiple-005",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1234
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: 1) Che ne sacc 20 €  2) boh 20 €  3) pasta al ragù 12 €. La promo di Che ne sacc (15 €) resta invariata.\n1. Che ne sacc: 21 → 20 €\n2. boh: 21 → 20 €\n3. pasta al ragù: 13 → 12 €"
+   ],
+   "owner": [
+    "metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro"
+   ],
+   "diff": [
+    "price|Che ne sacc|20",
+    "price|boh|20",
+    "price|pasta al ragù|12"
+   ]
+  },
+  {
+   "id": "bv-multiple-006",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1660
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, ho aumentato di 1 euro i 4 piatti di Piatti di prova:\n1. Piatto di verifica: 13,5 → 14,5 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €\n1. Piatto di verifica: 13,5 → 14,5 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €"
+   ],
+   "owner": [
+    "aumenta tutti i piatti della categoria Piatti di prova di un euro"
+   ],
+   "diff": [
+    "price|Che ne sacc|21",
+    "price|Piatto di verifica|14.5",
+    "price|boh|21",
+    "price|pasta al ragù|13"
+   ]
+  },
+  {
+   "id": "bv-multiple-007",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1254
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: 1) La parmigiana è nascosta dal menu. 2) Che ne sacc (kenesac) è in promo a 12 € (prezzo pieno 20 €).\n1. Inserisce il piatto la parmigiana: nascosto\n2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)"
+   ],
+   "owner": [
+    "Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro."
+   ],
+   "diff": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12"
+   ]
+  },
+  {
+   "id": "bv-multiple-008",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1682,
+    1795
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: 1) «Inserisce il piatto la parmigiana» nascosto dal menu. 2) «Che ne sacc» in promo a 12 €, prezzo pieno 20 € invariato.\n1. Inserisce il piatto la parmigiana: nascosto\n2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)",
+    "1. Inserisce il piatto la parmigiana: era già nascosto, nessuna modifica.\n2. Piatto di verifica: promo a 11 € (prezzo pieno 13,5 € invariato).\nPiatto di verifica: promo a 11 € (prezzo pieno 13,5 €)"
+   ],
+   "owner": [
+    "Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro.",
+    "Allora, voglio che mi nascondi dal menù il piatto la parmigiana e invece mi metti in promo il piatto di verifica a 11 euro."
+   ],
+   "diff": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12",
+    "promo|Piatto di verifica|11"
+   ]
+  },
+  {
+   "id": "bv-multiple-009",
+   "family": "bv-multiple",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1256
+   ],
+   "cerca": false,
+   "phonetic": true,
+   "replies": [
+    "Fatto: descrizione di boh aggiornata a «Joe fa schifo». Promo di Che ne sacc impostata a 12 € (prezzo pieno 20 €).\n1. boh: descrizione «Joe fa schifo»\n2. Che ne sacc: promo a 12 € (prezzo pieno 20 €)"
+   ],
+   "owner": [
+    "Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
+   ],
+   "diff": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ]
+  },
+  {
+   "id": "bv-correzioni-001",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 3,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Non ho capito cosa vuoi fare con «toiibo». È il piatto «boh» (20 €), oppure un p»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|la parmigiana|10|piatti di prova"
+    }
+   ],
+   "steps": [
+    1,
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1675,
+    1781,
+    1799
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Non ho capito cosa vuoi fare con «toiibo». È il piatto «boh» (20 €), oppure un piatto nuovo? Dimmi anche il prezzo se serve.\ncreato p6 «Tiramisù» a 6 € in Piatti di prova",
+    "Fatto: «boh» è nascosto dal menu. Non l'ho eliminato.\nboh: nascosto",
+    "C'è già «Inserisce il piatto la parmigiana» a 12 €: lo aggiorno a 10 € o ne creo un altro? Il tiramisù a 6 € è già stato creato."
+   ],
+   "owner": [
+    "Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+    "No, ho detto togli boh.",
+    "Sì, ma ti avevo detto che dovevi aggiungere il piatto, la parmigiana a 10 euro e il tiramisù a 6 euro."
+   ],
+   "diff": [
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true"
+   ]
+  },
+  {
+   "id": "bv-correzioni-002",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|la parmigiana|10|piatti di prova"
+    }
+   ],
+   "steps": [
+    3,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1248,
+    1387
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "1) Tiramisù creato a 6 €. 2) C'è già «Inserisce il piatto la parmigiana» a 12 €: lo aggiorno a 10 € o ne creo un altro «Parmigiana» a 10 €? 3) «Toiibo» non l'ho capito: cosa vuoi che faccia?\ncreato p6 «Tiramisù» a 6 € in Piatti di prova",
+    "1) Fatto: «boh» è nascosto dal menu. 2) Per la parmigiana: aggiorno «Inserisce il piatto la parmigiana» a 10 € o ne creo un altro «Parmigiana» a 10 €?\nboh: nascosto"
+   ],
+   "owner": [
+    "Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+    "No, ho detto togli boh."
+   ],
+   "diff": [
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true"
+   ]
+  },
+  {
+   "id": "bv-correzioni-003",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|la parmigiana|15"
+    }
+   ],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1683
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Il tiramisù è in promo a 3 €, con prezzo pieno di 6 € invariato. Per la parmigiana ho trovato due voci: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosta). A quale delle due devo mettere 15 €?\ntiramisù: promo a 3 € (prezzo pieno 6 €)"
+   ],
+   "owner": [
+    "Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro."
+   ],
+   "diff": [
+    "promo|tiramisù|3"
+   ]
+  },
+  {
+   "id": "bv-correzioni-004",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: promo|tiramisù|3"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, price|tiramisù|10"
+    }
+   ],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1256,
+    1412
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Il tiramisù è in promo a 3 €. Per la parmigiana ho due piatti: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosto). Quale devo mettere a 15 €?\ntiramisù: promo a 3 € (prezzo pieno 6 €)",
+    "Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?"
+   ],
+   "owner": [
+    "Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro.",
+    "No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+   ],
+   "diff": [
+    "promo|tiramisù|3"
+   ]
+  },
+  {
+   "id": "bv-correzioni-005",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-sbagliata",
+     "why": "valore sbagliato: price|tiramisù|3"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, price|tiramisù|10"
+    }
+   ],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1690
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Tiramisù fatto: ora a 3 €. La parmigiana è già a 10 €. C'è anche una voce nascosta «Inserisce il piatto la parmigiana» a 12 €: la porto a 10 € o la lascio com'è?\ntiramisù: 6 → 3 €"
+   ],
+   "owner": [
+    "No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+   ],
+   "diff": [
+    "price|tiramisù|3"
+   ]
+  },
+  {
+   "id": "bv-correzioni-006",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 3,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|lasagna|20|piatti di prova, create|pasta al pesto|10|piatti di prova"
+    }
+   ],
+   "steps": [
+    1,
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 3,
+   "promptTokens": [
+    1238,
+    1317,
+    1376
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Ok, aggiungo pasta al pesto e lasagna. A che prezzo li metto, e in quale categoria? Nel menu c'è solo \"Piatti di prova\".",
+    "Ok, sono due piatti separati: pasta al pesto e lasagna. A che prezzo li metto? Li inserisco in «Piatti di prova», l'unica categoria del menu.",
+    "Quale dei due va a 10 euro: pasta al pesto o lasagna? L'altro va a 20 euro."
+   ],
+   "owner": [
+    "Allora aggiungi il piatto pasta al pesto e lasagna.",
+    "No, pasta al pesto e lasagna sono due piatti separati.",
+    "Uno deve essere a 10 euro e uno deve essere a 20 euro."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-correzioni-007",
+   "family": "bv-correzioni",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 2,
+   "promptTokens": [
+    1665,
+    1726
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Ok, aggiungo pasta al pesto e lasagna. A che prezzo li metto? E in quale categoria?",
+    "Capito, sono due piatti separati: pasta al pesto e lasagna. A che prezzo metto ciascuno e in quale categoria?"
+   ],
+   "owner": [
+    "Allora aggiungi il piatto pasta al pesto e lasagna.",
+    "No, pasta al pesto e lasagna sono due piatti separati."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-deixis-001",
+   "family": "bv-deixis",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1242,
+    1349
+   ],
+   "cerca": false,
+   "phonetic": true,
+   "replies": [
+    "Ho nascosto il boh. Il tiramisù è già a 6 €, quindi non cambio nulla. La parmigiana è già nel menu a 10 €: la lascio così o ne creo un'altra?\nboh: nascosto",
+    "Fatto:\n1. La parmigiana è ora a 15 €.\n2. Il tiramisù è ora a 15 €.\n1. la parmigiana: 10 → 15 €\n2. tiramisù: 6 → 15 €"
+   ],
+   "owner": [
+    "Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro."
+   ],
+   "diff": [
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ]
+  },
+  {
+   "id": "bv-deixis-002",
+   "family": "bv-deixis",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 3,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3,
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1669,
+    1765,
+    1836
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto, 3 modifiche:\n1. La parmigiana: prezzo 10 € (era già così, nessun doppione creato).\n2. Il tiramisù: prezzo 6 € (era già così).\n3. Il piatto «boh»: nascosto dal menu.\n1. la parmigiana: 10 → 10 €\n2. tiramisù: 6 → 6 €\n3. boh: nascosto",
+    "Fatto, 2 modifiche:\n1. La parmigiana: prezzo 15 € (era 10 €).\n2. Il tiramisù: prezzo 15 € (era 6 €).\n1. la parmigiana: 10 → 15 €\n2. tiramisù: 6 → 15 €",
+    "Confermi l'eliminazione definitiva di «la parmigiana» e «tiramisù»? Rispondi sì per procedere."
+   ],
+   "owner": [
+    "Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.",
+    "Ok, adesso rimuovi completamente quei due piatti."
+   ],
+   "diff": [
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ]
+  },
+  {
+   "id": "bv-deixis-003",
+   "family": "bv-deixis",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1242
+   ],
+   "cerca": false,
+   "phonetic": true,
+   "replies": [
+    "Ho nascosto «boh». La parmigiana c'è già a 10 €: la aggiorno o ne creo un'altra? Il tiramisù è già a 6 €, nessuna modifica.\nboh: nascosto"
+   ],
+   "owner": [
+    "Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo."
+   ],
+   "diff": [
+    "hidden|boh|true"
+   ]
+  },
+  {
+   "id": "bv-deixis-004",
+   "family": "bv-deixis",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1665
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Quali due piatti vuoi eliminare? Non vedo nei messaggi di oggi a cosa si riferisce «quei due». Eliminare è definitivo: se preferisci solo toglierli dal menu, dimmi «nascondi»."
+   ],
+   "owner": [
+    "Ok, adesso rimuovi completamente quei due piatti."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-aggiunte-001",
+   "family": "bv-aggiunte",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1217,
+    1299
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Come si chiama il piatto nuovo, quanto costa e in quale categoria va? Per esempio: «Carbonara, 12, Piatti di prova».",
+    "Fatto: ho aggiunto «Pasta al ragù» a 15 € in Piatti di prova.\ncreato p4 «Pasta al ragù» a 15 € in Piatti di prova"
+   ],
+   "owner": [
+    "aggiungiamo un piatto",
+    "Aggiungi tra piatti di prova il piatto pasta al ragù che costa 15 euro."
+   ],
+   "diff": [
+    "create|pasta al ragu|15|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-aggiunte-002",
+   "family": "bv-aggiunte",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1657
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: ho aggiunto «Pasta al ragù» a 15 € tra i piatti di prova.\ncreato p4 «Pasta al ragù» a 15 € in Piatti di prova"
+   ],
+   "owner": [
+    "Aggiungi tra piatti di prova il piatto pasta al ragù che costa 15 euro."
+   ],
+   "diff": [
+    "create|pasta al ragu|15|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-aggiunte-003",
+   "family": "bv-aggiunte",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 3,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 2,
+   "promptTokens": [
+    1225,
+    1298,
+    1321
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "La parmigiana non è nel menu. A che prezzo la inserisco, e in quale categoria? Il nome la chiamo «Parmigiana»?",
+    "Preparo «Parmigiana» come nuovo piatto. A che prezzo lo inserisco, e in quale categoria?",
+    "Fatto: ho creato «Parmigiana» a 12 € in Piatti di prova.\ncreato p5 «Parmigiana» a 12 € in Piatti di prova"
+   ],
+   "owner": [
+    "Inserisce il piatto la parmigiana.",
+    "Inserisci un nuovo piatto, si chiama parmigiana.",
+    "12 euro"
+   ],
+   "diff": [
+    "create|parmigiana|12|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-aggiunte-004",
+   "family": "bv-aggiunte",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1652
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "La parmigiana nel menu non c'è. Vuoi che la inserisca? Con che prezzo e in quale categoria?"
+   ],
+   "owner": [
+    "Inserisce il piatto la parmigiana."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-aggiunte-005",
+   "family": "bv-aggiunte",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "scrive-invece-di-chiedere",
+     "why": "turno 1: doveva chiedere, ha scritto create|caviale|150|piatti di prova, create|pasta al pesto|15|piatti di prova"
+    }
+   ],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1250
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "«Pasta al ragù» è già nel menu a 12 €: lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creato p7 «pasta al pesto» a 15 € in Piatti di prova\n2. creato p8 «caviale» a 150 € in Piatti di prova"
+   ],
+   "owner": [
+    "E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro."
+   ],
+   "diff": [
+    "create|caviale|150|piatti di prova",
+    "create|pasta al pesto|15|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-aggiunte-006",
+   "family": "bv-aggiunte",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1577
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Non c'è una lasagna nel menu. La creo come «Lasagna» a 12 €: in quale categoria la metto? Ad esempio Primi piatti o Secondi di carne."
+   ],
+   "owner": [
+    "La lasagna costa 12"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-elimina-001",
+   "family": "bv-elimina",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 3,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3,
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1325,
+    1439,
+    1422
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Vuoi eliminare completamente «Polpo rucola e patate» (14 €, Antipasti di mare)? Rispondi sì per confermare. Se volevi solo nasconderlo dal menu, dimmelo.",
+    "Fatto: «Polpo rucola e patate» è nascosto dal menu. Non l'ho eliminato; se vuoi cancellarlo del tutto, dimmelo.\nPolpo rucola e patate: nascosto",
+    "Non ho nessuna operazione in sospeso da confermare. Il polpo è solo nascosto dal menu e non è stato eliminato. Se vuoi cancellarlo del tutto, scrivi «elimina il polpo» e ti chiederò conferma."
+   ],
+   "owner": [
+    "Puoi cancellare il polpo?",
+    "Nascondi il polpo.",
+    "conferma"
+   ],
+   "diff": [
+    "hidden|Polpo rucola e patate|true"
+   ]
+  },
+  {
+   "id": "bv-elimina-002",
+   "family": "bv-elimina",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1578
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Vuoi eliminare completamente «Polpo rucola e patate» (14 €)? Rispondi sì per confermare: il piatto verrà cancellato dal menu. Se preferisci solo toglierlo dal menu senza cancellarlo, dimmi «nascondi»."
+   ],
+   "owner": [
+    "Puoi cancellare il polpo?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-elimina-003",
+   "family": "bv-elimina",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1225,
+    1330
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Vuoi eliminare completamente il piatto «pasta al ragù»? Rispondi sì per confermare. Se preferisci solo nasconderlo dal menu, dimmelo.",
+    "Fatto: la pasta al ragù è nascosta dal menu, non eliminata. Se vuoi cancellarla del tutto, dimmelo.\npasta al ragù: nascosto"
+   ],
+   "owner": [
+    "Elimina il piatto pasta al ragù.",
+    "Vai, nascondi la pasta del ragù."
+   ],
+   "diff": [
+    "hidden|pasta al ragù|true"
+   ]
+  },
+  {
+   "id": "bv-elimina-004",
+   "family": "bv-elimina",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1652
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Vuoi eliminare definitivamente il piatto «pasta al ragù»? Rispondi sì per confermare."
+   ],
+   "owner": [
+    "Elimina il piatto pasta al ragù."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-elimina-005",
+   "family": "bv-elimina",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 3,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1235,
+    1294,
+    1348
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: ho aggiunto «Piatto test QA» a 9 € nella categoria Piatti di prova.\ncreato p5 «Piatto test QA» a 9 € in Piatti di prova",
+    "Fatto: ho nascosto «Piatto test QA» dal menu. Non è stato eliminato; per cancellarlo del tutto dimmelo esplicitamente.\nPiatto test QA: nascosto",
+    "Fatto: ho annullato l'ultima modifica. «Piatto test QA» risulta di nuovo nascosto dal menu, non eliminato.\nannullata l'ultima pubblicazione (hidden|Piatto test QA|true)"
+   ],
+   "owner": [
+    "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro",
+    "togli il piatto Test QA",
+    "annulla"
+   ],
+   "diff": [
+    "create|piatto test qa|9|piatti di prova"
+   ]
+  },
+  {
+   "id": "bv-categorie-001",
+   "family": "bv-categorie",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|pasta al ragù|Primi"
+    }
+   ],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1677,
+    1870
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Ho creato pasta al pesto a 15 € e caviale a 150 €. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creato p7 «pasta al pesto» a 15 € in Piatti di prova\n2. creato p8 «caviale» a 150 € in Piatti di prova",
+    "Ho creato le categorie primi e speciali, e spostato pasta al pesto in primi e caviale in speciali. Per la pasta al ragù: c'è già pasta al ragù a 12 €. Lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creata categoria c2 «primi»\n2. creata categoria c3 «speciali»\n3. pasta al pesto → primi\n4. caviale → speciali"
+   ],
+   "owner": [
+    "E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
+    "No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali."
+   ],
+   "diff": [
+    "create|caviale|150|speciali",
+    "create|pasta al pesto|15|primi"
+   ]
+  },
+  {
+   "id": "bv-categorie-002",
+   "family": "bv-categorie",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1243
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: ho creato la categoria «primi pasti».\ncreata categoria c2 «primi pasti»"
+   ],
+   "owner": [
+    "Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\"."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-categorie-003",
+   "family": "bv-categorie",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: create|pasta al sugo|12|piatti di prova"
+    }
+   ],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1663,
+    1738
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "C'è già «pasta al ragù» a 12 €. È lo stesso piatto o ne creo uno nuovo chiamato «pasta al sugo» a 12 €?",
+    "Fatto: ho creato la categoria «primi pasti».\ncreata categoria c2 «primi pasti»"
+   ],
+   "owner": [
+    "Aggiungi il piatto pasta al sugo a 12 euro.",
+    "Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\"."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-001",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1329,
+    1362
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Bruschetta Victoria è segnata come esaurita.\nBruschetta Victoria: finito",
+    "Fatto: ho annullato l'ultima modifica. Bruschetta Victoria torna disponibile nel menu.\nannullata l'ultima pubblicazione (available|Bruschetta Victoria|false)"
+   ],
+   "owner": [
+    "Uè, a Bruschetta Victoria nun ce sta cchiù",
+    "ANNULLA"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-002",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1580,
+    1614
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: la Bruschetta Victoria è segnata come esaurita.\nBruschetta Victoria: finito",
+    "Fatto: ho annullato l'ultima modifica, la Bruschetta Victoria torna disponibile.\nannullata l'ultima pubblicazione (available|Bruschetta Victoria|false)"
+   ],
+   "owner": [
+    "La Bruschetta Victoria la xe finia",
+    "ANNULLA"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-003",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1327,
+    1361
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: la Bruschetta Victoria risulta esaurita nel menu.\nBruschetta Victoria: finito",
+    "Fatto: ho annullato l'ultima modifica. La Bruschetta Victoria risulta di nuovo disponibile nel menu.\nannullata l'ultima pubblicazione (available|Bruschetta Victoria|false)"
+   ],
+   "owner": [
+    "La Bruschetta Victoria l'è finida",
+    "ANNULLA"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-004",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1584,
+    1616
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Bruschetta Victoria ora costa 12 €.\nBruschetta Victoria: 8 → 12 €",
+    "Fatto: annullata l'ultima modifica. Bruschetta Victoria torna a 8 €.\nannullata l'ultima pubblicazione (price|Bruschetta Victoria|12)"
+   ],
+   "owner": [
+    "Boia, mettimi la Bruschetta Victoria a dodici euri",
+    "ANNULLA"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-005",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1241,
+    1326
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, quattro modifiche:\n1. Piatto di verifica a 14 €\n2. Che ne sacc a 21 €\n3. boh a 21 €\n4. pasta al ragù a 13 €\n1. Piatto di verifica: 13,5 → 14 €\n2. Che ne sacc: 20 → 21 €\n3. boh: 20 → 21 €\n4. pasta al ragù: 12 → 13 €",
+    "Annullata l'ultima pubblicazione: le quattro modifiche dei prezzi sono state ripristinate (Piatto di verifica, Che ne sacc, boh, pasta al ragù).\nannullata l'ultima pubblicazione (price|Che ne sacc|21, price|Piatto di verifica|14, price|boh|21, price|pasta al ragù|13)"
+   ],
+   "owner": [
+    "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+    "annulla"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-006",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1651,
+    1695
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: il Piatto di verifica è nascosto dal menu. Non l'ho eliminato.\nPiatto di verifica: nascosto",
+    "Fatto: il Piatto di verifica è di nuovo visibile nel menu.\nPiatto di verifica: visibile"
+   ],
+   "owner": [
+    "nascondi il piatto di verifica",
+    "mostra il piatto di verifica"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-007",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1224,
+    1264
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Piatto di verifica segnato come finito.\nPiatto di verifica: finito",
+    "Fatto: Piatto di verifica è di nuovo disponibile.\nPiatto di verifica: disponibile"
+   ],
+   "owner": [
+    "il piatto di verifica è finito",
+    "il piatto di verifica è tornato disponibile"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-annulla-008",
+   "family": "bv-annulla",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 6,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1653,
+    1669,
+    1713,
+    1759,
+    1803,
+    1834
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Il piatto di verifica costa 13,50 €.",
+    "Fatto: il piatto di verifica costa ora 13 €.\nPiatto di verifica: 13,5 → 13 €",
+    "Fatto: Piatto di verifica è segnato come finito.\nPiatto di verifica: finito",
+    "Fatto: Piatto di verifica è di nuovo disponibile.\nPiatto di verifica: disponibile",
+    "Il piatto di verifica costa attualmente 13 €. Non l'ho modificato: dimmi se lo vuoi a 14 €.",
+    "Al momento nessun piatto risulta finito. Il piatto di verifica è di nuovo disponibile."
+   ],
+   "owner": [
+    "quanto costa il piatto di verifica?",
+    "il piatto di verifica costa 13 euro",
+    "il piatto di verifica è finito",
+    "il piatto di verifica è tornato disponibile",
+    "piatto di verifica 13 o 14?",
+    "cosa è finito?"
+   ],
+   "diff": [
+    "price|Piatto di verifica|13"
+   ]
+  },
+  {
+   "id": "bv-dialetto-001",
+   "family": "bv-dialetto",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1329
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Bruschetta Victoria segnata come esaurita.\nBruschetta Victoria: finito"
+   ],
+   "owner": [
+    "Uè, a Bruschetta Victoria nun ce sta cchiù"
+   ],
+   "diff": [
+    "available|Bruschetta Victoria|false"
+   ]
+  },
+  {
+   "id": "bv-dialetto-002",
+   "family": "bv-dialetto",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1584,
+    1601
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Bruschetta Victoria risulta già disponibile: non ho cambiato nulla.",
+    "Non c'è nessuna modifica recente da annullare: nessuna pubblicazione precedente."
+   ],
+   "owner": [
+    "A Bruschetta Victoria nun è fernuta, ce sta ancora",
+    "ANNULLA"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-dialetto-003",
+   "family": "bv-dialetto",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1332
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Bruschetta Victoria è di nuovo disponibile.\nBruschetta Victoria: disponibile"
+   ],
+   "owner": [
+    "A Bruschetta Victoria nun è fernuta, ce sta ancora"
+   ],
+   "diff": [
+    "available|Bruschetta Victoria|true"
+   ]
+  },
+  {
+   "id": "bv-dialetto-004",
+   "family": "bv-dialetto",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1583
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Ok, non tocco il prezzo della Bruschetta Victoria (8 €). Nessuna modifica fatta."
+   ],
+   "owner": [
+    "Nun cambià er prezzo de la Bruschetta Victoria"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-dialetto-005",
+   "family": "bv-dialetto",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1326
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €)."
+   ],
+   "owner": [
+    "Uè, a tagliata nun ce sta cchiù"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-asr-001",
+   "family": "bv-asr",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 4,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "richiesta-persa",
+     "why": "richiesta persa: price|Piatto di verifica|13.5"
+    }
+   ],
+   "steps": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 2,
+   "promptTokens": [
+    1664,
+    1739,
+    1796,
+    1861
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Il piatto di verifica (12 €) lo cambio a 13,50 € da subito, o devo programmarlo per domani? Non programmo orari futuri senza conferma.",
+    "«Confirma» non dice quale delle due opzioni: lo cambio a 13,50 € da subito, oppure lo programmo per domani? Non programmo orari futuri senza una tua conferma esplicita.",
+    "Non ho capito se confermi l'opzione da subito o quella da domani. Il piatto di verifica passa a 13,50 € subito? Rispondi «subito» oppure «domani». Per il domani non programmo nulla senza un tuo orario.",
+    "Non ho capito cosa confermi: il piatto di verifica passa a 13,50 € subito oppure lo programmo per domani? Rispondi «subito» oppure «domani». Per il domani serve anche l'orario, perché non programmo nulla senza."
+   ],
+   "owner": [
+    "Il piatto di verifica da domani costa 13,50 euro.",
+    "Confirma.",
+    "Confirma.",
+    "conferma"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-asr-002",
+   "family": "bv-asr",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "scrive-invece-di-chiedere",
+     "why": "turno 1: doveva chiedere, ha scritto price|boh|40"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|boh|40"
+    }
+   ],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1221
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: «boh» (Piatti di prova) ora costa 40 €. Il prezzo promo 10 € resta attivo.\nboh: 20 → 40 €"
+   ],
+   "owner": [
+    "Bu costa 40 euro"
+   ],
+   "diff": [
+    "price|boh|40"
+   ]
+  },
+  {
+   "id": "bv-asr-003",
+   "family": "bv-asr",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3,
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1657,
+    1690
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: il prezzo di «boh» (piatti di prova) è passato da 20 a 50 €.\nboh: 20 → 50 €",
+    "Fatto: il prezzo di «boh» (piatti di prova) è passato da 50 a 40 €.\nboh: 50 → 40 €"
+   ],
+   "owner": [
+    "Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+    "Bu costa 40 euro"
+   ],
+   "diff": [
+    "price|boh|40"
+   ]
+  },
+  {
+   "id": "bv-asr-004",
+   "family": "bv-asr",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: rename|Inserisce il piatto la parmigiana|la parmigiana"
+    }
+   ],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1240
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "C'è già la parmigiana a 12 €, col nome «Inserisce il piatto la parmigiana». Quale piatto vuoi rinominare, e in che nome? Se è quello, lo rinomino «Parmigiana» e non ne creo un altro. Dimmi come procedere."
+   ],
+   "owner": [
+    "Cambia il nome del piatto, inserisci la parmigiana."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-asr-005",
+   "family": "bv-asr",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 5,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1,
+    3,
+    3,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1651,
+    1664,
+    1693,
+    1734,
+    1781
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "La pasta al ragù costa 12 €.",
+    "Il piatto boh costa 20 €, ed è in promo a 10 €.",
+    "Fatto: il piatto boh ora costa 50 €, era 20 €. La promo a 10 € resta invariata.\nboh: 20 → 50 €",
+    "Fatto: il piatto boh ora costa 40 €, era 50 €. La promo a 10 € resta invariata.\nboh: 50 → 40 €",
+    "Fatto: la pasta al ragù ora costa 20 €, era 12 €.\npasta al ragù: 12 → 20 €"
+   ],
+   "owner": [
+    "Quanto costa la pasta al ragù?",
+    "Quanto costa il piatto boh?",
+    "Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+    "Bu costa 40 euro",
+    "Passa il ragù, metti prezzo a 20 euro."
+   ],
+   "diff": [
+    "price|boh|40",
+    "price|pasta al ragù|20"
+   ]
+  },
+  {
+   "id": "bv-fuori-001",
+   "family": "bv-fuori",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1226
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Non posso aggiungere foto ai piatti da qui: non ho uno strumento per le immagini. Puoi caricarla dalla scheda del piatto nella dashboard, oppure mi dici un'altra modifica al menu."
+   ],
+   "owner": [
+    "metti una foto al piatto di verifica"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-fuori-002",
+   "family": "bv-fuori",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1579
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Per ora dal WhatsApp non posso modificare gli allergeni dei piatti. Posso cambiare prezzo, descrizione, disponibilità, nome o categoria. Gli allergeni vanno aggiornati dalla dashboard."
+   ],
+   "owner": [
+    "sai cambiare gli allergeni?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-fuori-003",
+   "family": "bv-fuori",
+   "source": "banco-vero",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1236
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Per la Pasta collaudo preferisci 12 o 14 euro? Dimmi quale prezzo applico."
+   ],
+   "owner": [
+    "La Pasta collaudo mettila a dodici oppure quattordici euro."
+   ],
+   "diff": []
+  },
+  {
+   "id": "bv-fuori-004",
+   "family": "bv-fuori",
+   "source": "banco-vero",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1644
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Che piatto vuoi aggiungere? Dimmi nome, prezzo e categoria (per esempio «Piatti di prova»)."
+   ],
+   "owner": [
+    "aggiungiamo un piatto"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-001",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1354
+   ],
+   "cerca": false,
+   "phonetic": true,
+   "replies": [
+    "Fatto: Tonno in agrodolce segnato come esaurito.\nTonno in agrodolce: finito"
+   ],
+   "owner": [
+    "U tunnu in agrodolce è finito."
+   ],
+   "diff": [
+    "available|Tonno in agrodolce|false"
+   ]
+  },
+  {
+   "id": "x-002",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1572
+   ],
+   "cerca": false,
+   "phonetic": true,
+   "replies": [
+    "Fatto: Carbonara portata da 12 € a 13 €.\nCarbonara: 12 → 13 €"
+   ],
+   "owner": [
+    "La carbonare mettila a tre dici euro."
+   ],
+   "diff": [
+    "price|Carbonara|13"
+   ]
+  },
+  {
+   "id": "x-003",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1314
+   ],
+   "cerca": false,
+   "phonetic": true,
+   "replies": [
+    "Fatto: il Babà ora costa 5 €.\nBabà: 4,5 → 5 €"
+   ],
+   "owner": [
+    "Il babbà costa cinque euro adesso."
+   ],
+   "diff": [
+    "price|Babà|5"
+   ]
+  },
+  {
+   "id": "x-004",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1571
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: le Puntarelle sono segnate come esaurite. Restano nel menu.\nPuntarelle: finito"
+   ],
+   "owner": [
+    "Le pontarelle non ci stanno più."
+   ],
+   "diff": [
+    "available|Puntarelle|false"
+   ]
+  },
+  {
+   "id": "x-005",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1356
+   ],
+   "cerca": true,
+   "phonetic": true,
+   "replies": [
+    "Fatto: Pasta con le sarde ora costa 15 €.\nPasta con le sarde: 14 → 15 €"
+   ],
+   "owner": [
+    "Metti la pasta con le sarte a quindici."
+   ],
+   "diff": [
+    "price|Pasta con le sarde|15"
+   ]
+  },
+  {
+   "id": "x-006",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1571
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: la Gricia ora costa 11,50 €.\nGricia: 11 → 11,5 €"
+   ],
+   "owner": [
+    "la gricia a 12, anzi no a 11 e 50"
+   ],
+   "diff": [
+    "price|Gricia|11.5"
+   ]
+  },
+  {
+   "id": "x-007",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|Diavola|8"
+    }
+   ],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1311,
+    1349
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: la Diavola è passata da 7,5 € a 8 €.\nDiavola: 7,5 → 8 €",
+    "Fatto: la Capricciosa è passata da 8,5 € a 8 €. Per la Diavola: la lascio a 8 € (come è ora) o la riporto a 7,5 €?\nCapricciosa: 8,5 → 8 €"
+   ],
+   "owner": [
+    "la diavola mettila a 8",
+    "no scusa, la capricciosa a 8, la diavola lasciala com'era"
+   ],
+   "diff": [
+    "price|Capricciosa|8",
+    "price|Diavola|8"
+   ]
+  },
+  {
+   "id": "x-008",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1581,
+    1690
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, 5 modifiche:\n1. Carbonara 12 → 13 €\n2. Amatriciana 11 → 12 €\n3. Cacio e pepe 11 → 12 €\n4. Gricia 11 → 12 €\n5. Saltimbocca alla romana 15 → 16 €\n1. Carbonara: 12 → 13 €\n2. Amatriciana: 11 → 12 €\n3. Cacio e pepe: 11 → 12 €\n4. Gricia: 11 → 12 €\n5. Saltimbocca alla romana: 15 → 16 €",
+    "Perfetto. Le 5 modifiche di oggi sono già applicate, non ho fatto altro."
+   ],
+   "owner": [
+    "carbonara 13, amatriciana 12, cacio e pepe 12, gricia 12, saltimbocca 16",
+    "va bene così"
+   ],
+   "diff": [
+    "price|Amatriciana|12",
+    "price|Cacio e pepe|12",
+    "price|Carbonara|13",
+    "price|Gricia|12",
+    "price|Saltimbocca alla romana|16"
+   ]
+  },
+  {
+   "id": "x-009",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1301
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Cappuccino ora costa 2 € (era 1,60 €, +25%).\nCappuccino: 1,6 → 2 €"
+   ],
+   "owner": [
+    "alza il cappuccino del 25%"
+   ],
+   "diff": [
+    "price|Cappuccino|2"
+   ]
+  },
+  {
+   "id": "x-010",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1523
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Spritz Aperol ora a 5,50 €.\nSpritz Aperol: 6 → 5,5 €"
+   ],
+   "owner": [
+    "abbassa di 50 centesimi lo spritz aperol"
+   ],
+   "diff": [
+    "price|Spritz Aperol|5.5"
+   ]
+  },
+  {
+   "id": "x-011",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1419
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Coda alla vaccinara segnata come finita. Il messaggio sulla coda fredda al tavolo 7 non cambia il menu.\nCoda alla vaccinara: finito"
+   ],
+   "owner": [
+    "al tavolo 7 hanno detto che la coda era fredda, comunque la coda è finita"
+   ],
+   "diff": [
+    "available|Coda alla vaccinara|false"
+   ]
+  },
+  {
+   "id": "x-012",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1441
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Per 4 persone, di solito una margherita a testa: servono 4 margherite (la Margherita è a 6 €). Se ne prendono di meno, dimmi il numero."
+   ],
+   "owner": [
+    "per 4 persone quante margherite servono?"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-013",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1405,
+    1479
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Elimino completamente «Trippa alla romana» dal menu? Rispondi sì per confermare.",
+    "Fatto: «Trippa alla romana» è stata eliminata dal menu.\neliminato «Trippa alla romana»"
+   ],
+   "owner": [
+    "elimina la trippa",
+    "sì"
+   ],
+   "diff": [
+    "delete|Trippa alla romana"
+   ]
+  },
+  {
+   "id": "x-014",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1515,
+    1591
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Confermi l'eliminazione definitiva di Cassata dal menu? Rispondi sì per cancellarla.",
+    "Ok, non elimino la Cassata. Resta nel menu com'è."
+   ],
+   "owner": [
+    "cancella proprio la cassata",
+    "no lascia stare"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-015",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1311,
+    1417
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Vuoi eliminare completamente la Montanarina dal menu? Rispondi sì per confermare. Se preferisci solo toglierla dalla vista, dimmi «nascondila».",
+    "Fatto: la Marinara ora costa 6 €, prima era 5 €.\nMarinara: 5 → 6 €"
+   ],
+   "owner": [
+    "elimina la montanarina",
+    "la marinara a 6"
+   ],
+   "diff": [
+    "price|Marinara|6"
+   ]
+  },
+  {
+   "id": "x-016",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1568,
+    1604
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: il Maritozzo con la panna è segnato come esaurito.\nMaritozzo con la panna: finito",
+    "Fatto: ho annullato l'ultima modifica, cioè il Maritozzo con la panna segnato come esaurito. Torna disponibile.\nannullata l'ultima pubblicazione (available|Maritozzo con la panna|false)"
+   ],
+   "owner": [
+    "il maritozzo è finito",
+    "annulla"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-017",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 3,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2,
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1298,
+    1323,
+    1354
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Negroni aggiornato da 8 € a 9 €.\nNegroni: 8 → 9 €",
+    "Fatto: Americano aggiornato da 7 € a 8 €.\nAmericano: 7 → 8 €",
+    "Fatto: annullata l'ultima modifica. Americano torna a 7 €.\nannullata l'ultima pubblicazione (price|Americano|8)"
+   ],
+   "owner": [
+    "negroni a 9",
+    "americano a 8",
+    "annulla"
+   ],
+   "diff": [
+    "price|Negroni|9"
+   ]
+  },
+  {
+   "id": "x-018",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1573
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: piatto del giorno «pasta e ceci» a 10 €. Non esisteva nel menu, l'ho creato.\npiatto del giorno creato: «pasta e ceci» a 10 €"
+   ],
+   "owner": [
+    "piatto del giorno: pasta e ceci a 10 euro"
+   ],
+   "diff": [
+    "create|pasta e ceci|10|piatto del giorno"
+   ]
+  },
+  {
+   "id": "x-019",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 2,
+   "simple": false,
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|pesce spada alla griglia|18|piatto del giorno"
+    }
+   ],
+   "steps": [
+    2,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 2,
+   "promptTokens": [
+    1359,
+    1435
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "C'è già Pesce spada alla ghiotta a 18 €. Lo imposto come piatto del giorno oppure creo un nuovo piatto «Pesce spada alla griglia» a 18 €?",
+    "Non ci sono modifiche recenti da annullare: nessuna pubblicazione precedente in questa giornata. Vuoi che lasci tutto com'è? Dimmi cosa vuoi fare."
+   ],
+   "owner": [
+    "oggi piatto del giorno pesce spada alla griglia a 18",
+    "annulla"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-020",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1446
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: 1) Bufalina segnata come finita. 2) Sfogliatella prezzo impostato a 3,5 €.\n1. Bufalina: finito\n2. Sfogliatella: 3 → 3,5 €"
+   ],
+   "owner": [
+    "la bufalina è finita e la sfogliatella mettila a 3 e mezzo"
+   ],
+   "diff": [
+    "available|Bufalina|false",
+    "price|Sfogliatella|3.5"
+   ]
+  },
+  {
+   "id": "x-021",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1358
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto:\n1. Panelle nascoste dal menu.\n2. Spaghetti ai ricci messi in evidenza.\n1. Panelle: nascosto\n2. Spaghetti ai ricci: evidenza sì"
+   ],
+   "owner": [
+    "Nascondi le panelle e metti in evidenza i ricci."
+   ],
+   "diff": [
+    "featured|Spaghetti ai ricci|true",
+    "hidden|Panelle|true"
+   ]
+  },
+  {
+   "id": "x-022",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1533
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto, tre modifiche:\n1. Tramezzino tonno: esaurito.\n2. Toast: 4,50 €.\n3. Ginseng: promo a 1,50 € (prezzo pieno 1,80 €).\n1. Tramezzino tonno: finito\n2. Toast: 4 → 4,5 €\n3. Ginseng: promo a 1,5 € (prezzo pieno 1,8 €)"
+   ],
+   "owner": [
+    "tramezzino tonno finito, toast a 4 e 50 e il ginseng lo metti in promo a 1 e 50"
+   ],
+   "diff": [
+    "available|Tramezzino tonno|false",
+    "price|Toast|4.5",
+    "promo|Ginseng|1.5"
+   ]
+  },
+  {
+   "id": "x-023",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1410
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Sì, la Carbonara costa ancora 12 €. Nessuna modifica fatta."
+   ],
+   "owner": [
+    "dimmi se la carbonara costa ancora 12"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-024",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1438
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "No, il Babà (4,50 €) non risulta finito: è presente nel menu dei Dolci e disponibile."
+   ],
+   "owner": [
+    "controlla se il babà è finito"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-025",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1303
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Al momento hai un solo piatto nascosto: Orzo, 1,40 €, nella categoria Caffetteria. Vuoi che lo rimetta nel menu?"
+   ],
+   "owner": [
+    "fammi vedere cosa ho nascosto"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-026",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    3
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1567
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Fettuccine al ragù ora costa 13 €.\nFettuccine al ragù: 12 → 13 €"
+   ],
+   "owner": [
+    "le fettuccine a 13"
+   ],
+   "diff": [
+    "price|Fettuccine al ragù|13"
+   ]
+  },
+  {
+   "id": "x-027",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1404
+   ],
+   "cerca": true,
+   "phonetic": false,
+   "replies": [
+    "Quale supplì vuoi mettere a 3 euro? Ho il Supplì classico (ora 2,50) e il Supplì cacio e pepe (ora 3 euro)."
+   ],
+   "owner": [
+    "il supplì a 3"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-028",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 2,
+   "simple": false,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1,
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1439,
+    1485
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Aggiungo la pizza Tonno e cipolla in categoria Pizze. A che prezzo la metto?",
+    "Fatto: Tonno e cipolla aggiunta in Pizze a 8 €.\ncreato p22 «Tonno e cipolla» a 8 € in Pizze"
+   ],
+   "owner": [
+    "aggiungi la pizza tonno e cipolla",
+    "8 euro"
+   ],
+   "diff": [
+    "create|tonno e cipolla|8|pizze"
+   ]
+  },
+  {
+   "id": "x-029",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "A (nota vuota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    1
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 1,
+   "promptTokens": [
+    1352
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "C'è già il Tiramisù a 6 €: lo aggiorno a 7 € o ne creo un altro?"
+   ],
+   "owner": [
+    "aggiungi il tiramisù a 7"
+   ],
+   "diff": []
+  },
+  {
+   "id": "x-030",
+   "family": "bv-semplici",
+   "source": "nuove",
+   "wave": "B (con nota)",
+   "turns": 1,
+   "simple": true,
+   "success": true,
+   "fails": [],
+   "steps": [
+    2
+   ],
+   "rejects": 0,
+   "selfFixes": 0,
+   "forced": 0,
+   "questions": 0,
+   "promptTokens": [
+    1529
+   ],
+   "cerca": false,
+   "phonetic": false,
+   "replies": [
+    "Fatto: Cornetto portato da 1,30 a 1,40 €. Il Cornetto integrale resta com'è.\nCornetto: 1,3 → 1,4 €"
+   ],
+   "owner": [
+    "Il cornetto mettilo a 1 e 40, quello integrale invece lascialo."
+   ],
+   "diff": [
+    "price|Cornetto|1.4"
+   ]
+  }
+ ]
+}

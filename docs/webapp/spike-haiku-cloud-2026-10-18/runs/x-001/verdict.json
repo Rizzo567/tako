@@ -1,0 +1,31 @@
+{
+ "id": "x-001",
+ "family": "bv-semplici",
+ "menu": "pesce",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "available|Tonno in agrodolce|false"
+ ],
+ "actual": [
+  "available|Tonno in agrodolce|false"
+ ],
+ "replies": [
+  "Fatto: Tonno in agrodolce segnato come esaurito.\nTonno in agrodolce: finito"
+ ],
+ "turns": [
+  "🎤 U tunnu in agrodolce è finito."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1354,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "«u tunnu» = tonno"
+}

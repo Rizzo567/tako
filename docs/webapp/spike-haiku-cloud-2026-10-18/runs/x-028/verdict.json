@@ -1,0 +1,33 @@
+{
+ "id": "x-028",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|pizza tonno e cipolla|8|pizze"
+ ],
+ "actual": [
+  "create|tonno e cipolla|8|pizze"
+ ],
+ "replies": [
+  "Aggiungo la pizza Tonno e cipolla in categoria Pizze. A che prezzo la metto?",
+  "Fatto: Tonno e cipolla aggiunta in Pizze a 8 €.\ncreato p22 «Tonno e cipolla» a 8 € in Pizze"
+ ],
+ "turns": [
+  "aggiungi la pizza tonno e cipolla",
+  "8 euro"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 2924,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

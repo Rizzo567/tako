@@ -1,0 +1,36 @@
+{
+ "id": "bv-aggiunte-005",
+ "family": "bv-aggiunte",
+ "menu": "qa",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "scrive-invece-di-chiedere",
+   "why": "turno 1: doveva chiedere, ha scritto create|caviale|150|piatti di prova, create|pasta al pesto|15|piatti di prova"
+  }
+ ],
+ "expected": [],
+ "actual": [
+  "create|caviale|150|piatti di prova",
+  "create|pasta al pesto|15|piatti di prova"
+ ],
+ "replies": [
+  "«Pasta al ragù» è già nel menu a 12 €: lo aggiorno a 10 € o ne creo un altro a 10 €?\n1. creato p7 «pasta al pesto» a 15 € in Piatti di prova\n2. creato p8 «caviale» a 150 € in Piatti di prova"
+ ],
+ "turns": [
+  "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1250,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:30",
+ "note": "AMBIGUO: pasta al ragù c'è già a 12: domanda breve («c'è già pasta al ragù a 12 €: lo aggiorno o ne creo un altro?»), nessuna scrittura sul ragù (decisione 18/10, nota 62); con una parte incerta le parti chiare (pesto e caviale, una sola categoria) aspettano la risposta; accettato anche pubblicarle. Risposta vera: «manca la categoria … Rimandami»"
+}

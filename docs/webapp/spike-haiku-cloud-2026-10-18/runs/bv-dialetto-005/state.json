@@ -1,0 +1,474 @@
+{
+ "id": "bv-dialetto-005",
+ "menuKey": "victoria",
+ "locale": "victoria",
+ "note": "",
+ "codes": {
+  "c1": "7000000c-7777-4777-8777-000000000001",
+  "p1": "5000000c-5555-4555-8555-000000000001",
+  "p2": "5000000c-5555-4555-8555-000000000002",
+  "c2": "7000000c-7777-4777-8777-000000000002",
+  "p3": "5000000c-5555-4555-8555-000000000003",
+  "p4": "5000000c-5555-4555-8555-000000000004",
+  "c3": "7000000c-7777-4777-8777-000000000003",
+  "p5": "5000000c-5555-4555-8555-000000000005",
+  "p6": "5000000c-5555-4555-8555-000000000006",
+  "c4": "7000000c-7777-4777-8777-000000000004",
+  "p7": "5000000c-5555-4555-8555-000000000007",
+  "p8": "5000000c-5555-4555-8555-000000000008",
+  "c5": "7000000c-7777-4777-8777-000000000005",
+  "p9": "5000000c-5555-4555-8555-000000000009",
+  "c6": "7000000c-7777-4777-8777-000000000006",
+  "p10": "5000000c-5555-4555-8555-00000000000a",
+  "c7": "7000000c-7777-4777-8777-000000000007",
+  "p11": "5000000c-5555-4555-8555-00000000000b",
+  "c8": "7000000c-7777-4777-8777-000000000008",
+  "p12": "5000000c-5555-4555-8555-00000000000c",
+  "c9": "7000000c-7777-4777-8777-000000000009",
+  "p13": "5000000c-5555-4555-8555-00000000000d"
+ },
+ "next": {
+  "p": 13,
+  "c": 9
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "6000000c-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "7000000c-7777-4777-8777-000000000001",
+      "name": "Antipasti di mare",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000001",
+        "name": "Polpo rucola e patate",
+        "price": 14
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000002",
+        "name": "Sautè di cozze",
+        "price": 12
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000002",
+      "name": "Antipasti di terra",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000003",
+        "name": "Bruschetta Victoria",
+        "price": 8
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000004",
+        "name": "Tagliere di salumi",
+        "price": 15
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000003",
+      "name": "Primi piatti",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000005",
+        "name": "Spaghetti alle vongole",
+        "price": 15
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000006",
+        "name": "Paccheri al ragù",
+        "price": 13
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000004",
+      "name": "Secondi di carne",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000007",
+        "name": "Tagliata rucola e grana",
+        "price": 20
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000008",
+        "name": "Tagliata con funghi porcini e panna",
+        "price": 24
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000005",
+      "name": "Secondi di pesce",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000009",
+        "name": "Tagliata di orata o branzino con rucola e grana",
+        "price": 20
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000006",
+      "name": "Contorni",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000a",
+        "name": "Patate al forno",
+        "price": 5
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000007",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000b",
+        "name": "Tiramisù della casa",
+        "price": 6
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000008",
+      "name": "Pizze e calzoni",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000c",
+        "name": "Margherita",
+        "price": 7
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000009",
+      "name": "Bevande",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000d",
+        "name": "Acqua naturale",
+        "price": 2
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "6000000c-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "7000000c-7777-4777-8777-000000000001",
+      "name": "Antipasti di mare",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000001",
+        "name": "Polpo rucola e patate",
+        "price": 14
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000002",
+        "name": "Sautè di cozze",
+        "price": 12
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000002",
+      "name": "Antipasti di terra",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000003",
+        "name": "Bruschetta Victoria",
+        "price": 8
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000004",
+        "name": "Tagliere di salumi",
+        "price": 15
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000003",
+      "name": "Primi piatti",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000005",
+        "name": "Spaghetti alle vongole",
+        "price": 15
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000006",
+        "name": "Paccheri al ragù",
+        "price": 13
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000004",
+      "name": "Secondi di carne",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000007",
+        "name": "Tagliata rucola e grana",
+        "price": 20
+       },
+       {
+        "id": "5000000c-5555-4555-8555-000000000008",
+        "name": "Tagliata con funghi porcini e panna",
+        "price": 24
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000005",
+      "name": "Secondi di pesce",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-000000000009",
+        "name": "Tagliata di orata o branzino con rucola e grana",
+        "price": 20
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000006",
+      "name": "Contorni",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000a",
+        "name": "Patate al forno",
+        "price": 5
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000007",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000b",
+        "name": "Tiramisù della casa",
+        "price": 6
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000008",
+      "name": "Pizze e calzoni",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000c",
+        "name": "Margherita",
+        "price": 7
+       }
+      ]
+     },
+     {
+      "id": "7000000c-7777-4777-8777-000000000009",
+      "name": "Bevande",
+      "items": [
+       {
+        "id": "5000000c-5555-4555-8555-00000000000d",
+        "name": "Acqua naturale",
+        "price": 2
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 1,
+ "history": [
+  {
+   "owner": "Uè, a tagliata nun ce sta cchiù",
+   "bot": "Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €).",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": "Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €)."
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "Uè, a tagliata nun ce sta cchiù",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 5305,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cerca_piatti\",\"argomenti\":{\"testo\":\"tagliata\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €).\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Quale tagliata risulta esaurita? Ne ho tre: 1) Tagliata rucola e grana (20 €), 2) Tagliata con funghi porcini e panna (24 €), 3) Tagliata di orata o branzino con rucola e grana (20 €).",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "6000000c-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "7000000c-7777-4777-8777-000000000001",
+        "name": "Antipasti di mare",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-000000000001",
+          "name": "Polpo rucola e patate",
+          "price": 14
+         },
+         {
+          "id": "5000000c-5555-4555-8555-000000000002",
+          "name": "Sautè di cozze",
+          "price": 12
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000002",
+        "name": "Antipasti di terra",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-000000000003",
+          "name": "Bruschetta Victoria",
+          "price": 8
+         },
+         {
+          "id": "5000000c-5555-4555-8555-000000000004",
+          "name": "Tagliere di salumi",
+          "price": 15
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000003",
+        "name": "Primi piatti",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-000000000005",
+          "name": "Spaghetti alle vongole",
+          "price": 15
+         },
+         {
+          "id": "5000000c-5555-4555-8555-000000000006",
+          "name": "Paccheri al ragù",
+          "price": 13
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000004",
+        "name": "Secondi di carne",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-000000000007",
+          "name": "Tagliata rucola e grana",
+          "price": 20
+         },
+         {
+          "id": "5000000c-5555-4555-8555-000000000008",
+          "name": "Tagliata con funghi porcini e panna",
+          "price": 24
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000005",
+        "name": "Secondi di pesce",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-000000000009",
+          "name": "Tagliata di orata o branzino con rucola e grana",
+          "price": 20
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000006",
+        "name": "Contorni",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-00000000000a",
+          "name": "Patate al forno",
+          "price": 5
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000007",
+        "name": "Dolci",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-00000000000b",
+          "name": "Tiramisù della casa",
+          "price": 6
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000008",
+        "name": "Pizze e calzoni",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-00000000000c",
+          "name": "Margherita",
+          "price": 7
+         }
+        ]
+       },
+       {
+        "id": "7000000c-7777-4777-8777-000000000009",
+        "name": "Bevande",
+        "items": [
+         {
+          "id": "5000000c-5555-4555-8555-00000000000d",
+          "name": "Acqua naturale",
+          "price": 2
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": [
+    "cerca_piatti({\"testo\":\"tagliata\"})"
+   ]
+  }
+ ],
+ "done": true
+}

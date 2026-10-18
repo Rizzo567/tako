@@ -1,0 +1,33 @@
+{
+ "id": "x-013",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "delete|Trippa alla romana"
+ ],
+ "actual": [
+  "delete|Trippa alla romana"
+ ],
+ "replies": [
+  "Elimino completamente «Trippa alla romana» dal menu? Rispondi sì per confermare.",
+  "Fatto: «Trippa alla romana» è stata eliminata dal menu.\neliminato «Trippa alla romana»"
+ ],
+ "turns": [
+  "elimina la trippa",
+  "sì"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2884,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

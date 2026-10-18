@@ -1,0 +1,40 @@
+{
+ "id": "x-007",
+ "family": "bv-semplici",
+ "menu": "pizzeria",
+ "success": false,
+ "fails": [
+  {
+   "sev": "GRAVE",
+   "code": "correzione-non-applicata",
+   "why": "resta la modifica poi corretta/annullata: price|Diavola|8"
+  }
+ ],
+ "expected": [
+  "price|Capricciosa|8"
+ ],
+ "actual": [
+  "price|Capricciosa|8",
+  "price|Diavola|8"
+ ],
+ "replies": [
+  "Fatto: la Diavola è passata da 7,5 € a 8 €.\nDiavola: 7,5 → 8 €",
+  "Fatto: la Capricciosa è passata da 8,5 € a 8 €. Per la Diavola: la lascio a 8 € (come è ora) o la riporto a 7,5 €?\nCapricciosa: 8,5 → 8 €"
+ ],
+ "turns": [
+  "la diavola mettila a 8",
+  "no scusa, la capricciosa a 8, la diavola lasciala com'era"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 2660,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

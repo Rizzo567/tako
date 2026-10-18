@@ -1,0 +1,528 @@
+{
+ "id": "x-024",
+ "menuKey": "pizzeria",
+ "locale": "pizzeria",
+ "note": "Storpiature e nomi:\n- «babbà» (scritto con due b) = Babà, nome del menu.\n\nModi di dire:\n- «no scusa, ...» = il titolare si corregge subito: vale l'ultima indicazione, non la prima.\n- «lasciala com'era» = non toccare quella voce, va lasciata invariata.\n\nAbitudini:\n- Scrive in modo colloquiale e corto, senza punteggiatura curata.\n- Quando chiede di rimuovere una voce, il bot propone di nasconderla; il titolare non ha ancora scelto tra eliminare e nascondere, quindi non dare per scontato né l'uno né l'altro.",
+ "codes": {
+  "c1": "70000002-7777-4777-8777-000000000001",
+  "p1": "50000002-5555-4555-8555-000000000001",
+  "p2": "50000002-5555-4555-8555-000000000002",
+  "p3": "50000002-5555-4555-8555-000000000003",
+  "p4": "50000002-5555-4555-8555-000000000004",
+  "p5": "50000002-5555-4555-8555-000000000005",
+  "p6": "50000002-5555-4555-8555-000000000006",
+  "p7": "50000002-5555-4555-8555-000000000007",
+  "p8": "50000002-5555-4555-8555-000000000008",
+  "p9": "50000002-5555-4555-8555-000000000009",
+  "c2": "70000002-7777-4777-8777-000000000002",
+  "p10": "50000002-5555-4555-8555-00000000000a",
+  "p11": "50000002-5555-4555-8555-00000000000b",
+  "p12": "50000002-5555-4555-8555-00000000000c",
+  "p13": "50000002-5555-4555-8555-00000000000d",
+  "p14": "50000002-5555-4555-8555-00000000000e",
+  "c3": "70000002-7777-4777-8777-000000000003",
+  "p15": "50000002-5555-4555-8555-00000000000f",
+  "p16": "50000002-5555-4555-8555-000000000010",
+  "p17": "50000002-5555-4555-8555-000000000011",
+  "p18": "50000002-5555-4555-8555-000000000012",
+  "c4": "70000002-7777-4777-8777-000000000004",
+  "p19": "50000002-5555-4555-8555-000000000013",
+  "p20": "50000002-5555-4555-8555-000000000014",
+  "p21": "50000002-5555-4555-8555-000000000015"
+ },
+ "next": {
+  "p": 21,
+  "c": 4
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000002-6666-4666-8666-000000000001",
+    "name": "Cena",
+    "type": "dinner",
+    "sections": [
+     {
+      "id": "70000002-7777-4777-8777-000000000001",
+      "name": "Pizze",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-000000000001",
+        "name": "Margherita",
+        "price": 6
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000002",
+        "name": "Marinara",
+        "price": 5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000003",
+        "name": "Diavola",
+        "price": 7.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000004",
+        "name": "Capricciosa",
+        "price": 8.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000005",
+        "name": "Quattro formaggi",
+        "price": 8
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000006",
+        "name": "Bufalina",
+        "price": 9
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000007",
+        "name": "Salsiccia e friarielli",
+        "price": 9
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000008",
+        "name": "Ortolana",
+        "price": 8
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000009",
+        "name": "Ripieno al forno",
+        "price": 9
+       }
+      ]
+     },
+     {
+      "id": "70000002-7777-4777-8777-000000000002",
+      "name": "Fritti",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-00000000000a",
+        "name": "Frittatina di pasta",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000b",
+        "name": "Frittatina di patate",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000c",
+        "name": "Crocchè",
+        "price": 2
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000d",
+        "name": "Montanarina",
+        "price": 2.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000e",
+        "name": "Arancino",
+        "price": 3
+       }
+      ]
+     },
+     {
+      "id": "70000002-7777-4777-8777-000000000003",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-00000000000f",
+        "name": "Babà",
+        "price": 4.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000010",
+        "name": "Sfogliatella",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000011",
+        "name": "Delizia al limone",
+        "price": 5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000012",
+        "name": "Tiramisù",
+        "price": 5
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "60000002-6666-4666-8666-000000000002",
+    "name": "Bevande",
+    "type": "drinks",
+    "sections": [
+     {
+      "id": "70000002-7777-4777-8777-000000000004",
+      "name": "Bibite",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-000000000013",
+        "name": "Coca Cola",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000014",
+        "name": "Birra Nastro Azzurro",
+        "price": 4
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000015",
+        "name": "Acqua",
+        "price": 1.5
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000002-6666-4666-8666-000000000001",
+    "name": "Cena",
+    "type": "dinner",
+    "sections": [
+     {
+      "id": "70000002-7777-4777-8777-000000000001",
+      "name": "Pizze",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-000000000001",
+        "name": "Margherita",
+        "price": 6
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000002",
+        "name": "Marinara",
+        "price": 5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000003",
+        "name": "Diavola",
+        "price": 7.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000004",
+        "name": "Capricciosa",
+        "price": 8.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000005",
+        "name": "Quattro formaggi",
+        "price": 8
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000006",
+        "name": "Bufalina",
+        "price": 9
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000007",
+        "name": "Salsiccia e friarielli",
+        "price": 9
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000008",
+        "name": "Ortolana",
+        "price": 8
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000009",
+        "name": "Ripieno al forno",
+        "price": 9
+       }
+      ]
+     },
+     {
+      "id": "70000002-7777-4777-8777-000000000002",
+      "name": "Fritti",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-00000000000a",
+        "name": "Frittatina di pasta",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000b",
+        "name": "Frittatina di patate",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000c",
+        "name": "Crocchè",
+        "price": 2
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000d",
+        "name": "Montanarina",
+        "price": 2.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-00000000000e",
+        "name": "Arancino",
+        "price": 3
+       }
+      ]
+     },
+     {
+      "id": "70000002-7777-4777-8777-000000000003",
+      "name": "Dolci",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-00000000000f",
+        "name": "Babà",
+        "price": 4.5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000010",
+        "name": "Sfogliatella",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000011",
+        "name": "Delizia al limone",
+        "price": 5
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000012",
+        "name": "Tiramisù",
+        "price": 5
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "60000002-6666-4666-8666-000000000002",
+    "name": "Bevande",
+    "type": "drinks",
+    "sections": [
+     {
+      "id": "70000002-7777-4777-8777-000000000004",
+      "name": "Bibite",
+      "items": [
+       {
+        "id": "50000002-5555-4555-8555-000000000013",
+        "name": "Coca Cola",
+        "price": 3
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000014",
+        "name": "Birra Nastro Azzurro",
+        "price": 4
+       },
+       {
+        "id": "50000002-5555-4555-8555-000000000015",
+        "name": "Acqua",
+        "price": 1.5
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 1,
+ "history": [
+  {
+   "owner": "controlla se il babà è finito",
+   "bot": "No, il Babà (4,50 €) non risulta finito: è presente nel menu dei Dolci e disponibile.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "controlla se il babà è finito",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 5753,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cerca_piatti\",\"argomenti\":{\"testo\":\"babà\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"No, il Babà (4,50 €) non risulta finito: è presente nel menu dei Dolci e disponibile.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "No, il Babà (4,50 €) non risulta finito: è presente nel menu dei Dolci e disponibile.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000002-6666-4666-8666-000000000001",
+      "name": "Cena",
+      "type": "dinner",
+      "sections": [
+       {
+        "id": "70000002-7777-4777-8777-000000000001",
+        "name": "Pizze",
+        "items": [
+         {
+          "id": "50000002-5555-4555-8555-000000000001",
+          "name": "Margherita",
+          "price": 6
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000002",
+          "name": "Marinara",
+          "price": 5
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000003",
+          "name": "Diavola",
+          "price": 7.5
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000004",
+          "name": "Capricciosa",
+          "price": 8.5
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000005",
+          "name": "Quattro formaggi",
+          "price": 8
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000006",
+          "name": "Bufalina",
+          "price": 9
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000007",
+          "name": "Salsiccia e friarielli",
+          "price": 9
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000008",
+          "name": "Ortolana",
+          "price": 8
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000009",
+          "name": "Ripieno al forno",
+          "price": 9
+         }
+        ]
+       },
+       {
+        "id": "70000002-7777-4777-8777-000000000002",
+        "name": "Fritti",
+        "items": [
+         {
+          "id": "50000002-5555-4555-8555-00000000000a",
+          "name": "Frittatina di pasta",
+          "price": 3
+         },
+         {
+          "id": "50000002-5555-4555-8555-00000000000b",
+          "name": "Frittatina di patate",
+          "price": 3
+         },
+         {
+          "id": "50000002-5555-4555-8555-00000000000c",
+          "name": "Crocchè",
+          "price": 2
+         },
+         {
+          "id": "50000002-5555-4555-8555-00000000000d",
+          "name": "Montanarina",
+          "price": 2.5
+         },
+         {
+          "id": "50000002-5555-4555-8555-00000000000e",
+          "name": "Arancino",
+          "price": 3
+         }
+        ]
+       },
+       {
+        "id": "70000002-7777-4777-8777-000000000003",
+        "name": "Dolci",
+        "items": [
+         {
+          "id": "50000002-5555-4555-8555-00000000000f",
+          "name": "Babà",
+          "price": 4.5
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000010",
+          "name": "Sfogliatella",
+          "price": 3
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000011",
+          "name": "Delizia al limone",
+          "price": 5
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000012",
+          "name": "Tiramisù",
+          "price": 5
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "60000002-6666-4666-8666-000000000002",
+      "name": "Bevande",
+      "type": "drinks",
+      "sections": [
+       {
+        "id": "70000002-7777-4777-8777-000000000004",
+        "name": "Bibite",
+        "items": [
+         {
+          "id": "50000002-5555-4555-8555-000000000013",
+          "name": "Coca Cola",
+          "price": 3
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000014",
+          "name": "Birra Nastro Azzurro",
+          "price": 4
+         },
+         {
+          "id": "50000002-5555-4555-8555-000000000015",
+          "name": "Acqua",
+          "price": 1.5
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "cerca_piatti({\"testo\":\"babà\"})"
+   ]
+  }
+ ],
+ "done": true
+}

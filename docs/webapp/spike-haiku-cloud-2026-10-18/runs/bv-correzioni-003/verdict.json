@@ -1,0 +1,38 @@
+{
+ "id": "bv-correzioni-003",
+ "family": "bv-correzioni",
+ "menu": "qasporco",
+ "success": false,
+ "fails": [
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: price|la parmigiana|15"
+  }
+ ],
+ "expected": [
+  "price|la parmigiana|15",
+  "promo|tiramisù|3"
+ ],
+ "actual": [
+  "promo|tiramisù|3"
+ ],
+ "replies": [
+  "Il tiramisù è in promo a 3 €, con prezzo pieno di 6 € invariato. Per la parmigiana ho trovato due voci: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosta). A quale delle due devo mettere 15 €?\ntiramisù: promo a 3 € (prezzo pieno 6 €)"
+ ],
+ "turns": [
+  "🎤 Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1683,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:27",
+ "note": "«la parmigiana» è il nome esatto (l'altro è nascosto); risposta vera: «Quale piatto intendi… Riscrivimi»"
+}

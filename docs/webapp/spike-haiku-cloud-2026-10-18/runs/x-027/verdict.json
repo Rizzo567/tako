@@ -1,0 +1,27 @@
+{
+ "id": "x-027",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "Quale supplì vuoi mettere a 3 euro? Ho il Supplì classico (ora 2,50) e il Supplì cacio e pepe (ora 3 euro)."
+ ],
+ "turns": [
+  "il supplì a 3"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1404,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10",
+ "note": "due supplì: chiedere"
+}

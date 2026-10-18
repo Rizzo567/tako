@@ -1,0 +1,471 @@
+{
+ "id": "bv-asr-001",
+ "menuKey": "qa",
+ "locale": "qa",
+ "note": "# Come scrive il titolare (qa)\n\n## Storpiature e soprannomi\n- «Bo», «Bu», «boh»: tutti riferiti al piatto di prova chiamato «boh» (probabile dettatura approssimata).\n- «Che ne sacc» e «kenesac»: stesso piatto, il titolare usa entrambe le forme.\n- «Inserisce il piatto la parmigiana»: dettatura di «la parmigiana», non un piatto diverso. Quando il titolare chiede di inserire o cambiare «la parmigiana», il piatto esiste già: va aggiornato, non duplicato.\n- Quando dice «inserisci» o «aggiungi» un piatto che c'è già, di solito intende modificare quello esistente; il bot deve chiedere prima di creare un doppione.\n\n## Modi di dire e cosa significano\n- «togli» / «nascondi» = nascondi dal menu, NON eliminare. Anche dopo «elimina», il titolare accetta «nascondi» senza chiedere la cancellazione definitiva.\n- «mostra» / «è tornato disponibile» = rendi visibile / disponibile di nuovo.\n- «metti in promo», «in sconto», «promo a X» = prezzo promozionale, con prezzo pieno lasciato invariato.\n- «anzi no» = correzione: vale solo l'ultimo valore detto, scarta quello precedente.\n- «vai» = procedi, dai il via all'azione.\n- «annulla» = annulla l'ultima pubblicazione (non una modifica più vecchia).\n- «OK» dopo un riepilogo = conferma, non chiede altro.\n- Cifre dette in lettere: «e cinquanta» indica i centesimi (es. «tredici euro e cinquanta»).\n- «Piatti di prova» è la categoria usata per le prove: non è un menu reale.\n\n## Abitudini\n- Chiede spesso più modifiche in una sola frase: le elenca tutte e vuole la conferma in blocco.\n- Preferisce risposte brevi con il risultato, senza domande inutili se il piatto è già chiaro.\n- Quando il bot chiede quale piatto intende, di solito risponde con il nome esatto del piatto.",
+ "codes": {
+  "c1": "70000006-7777-4777-8777-000000000001",
+  "p1": "50000006-5555-4555-8555-000000000001",
+  "p2": "50000006-5555-4555-8555-000000000002",
+  "p3": "50000006-5555-4555-8555-000000000003",
+  "p4": "50000006-5555-4555-8555-000000000004",
+  "p5": "50000006-5555-4555-8555-000000000005",
+  "p6": "50000006-5555-4555-8555-000000000006"
+ },
+ "next": {
+  "p": 6,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000006-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000006-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000006-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000005",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000006",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000006-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000006-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000006-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000005",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000006-5555-4555-8555-000000000006",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 4,
+ "history": [
+  {
+   "owner": "Il piatto di verifica da domani costa 13,50 euro.",
+   "bot": "Il piatto di verifica (12 €) lo cambio a 13,50 € da subito, o devo programmarlo per domani? Non programmo orari futuri senza conferma.",
+   "tools": []
+  },
+  {
+   "owner": "Confirma.",
+   "bot": "«Confirma» non dice quale delle due opzioni: lo cambio a 13,50 € da subito, oppure lo programmo per domani? Non programmo orari futuri senza una tua conferma esplicita.",
+   "tools": []
+  },
+  {
+   "owner": "Confirma.",
+   "bot": "Non ho capito se confermi l'opzione da subito o quella da domani. Il piatto di verifica passa a 13,50 € subito? Rispondi «subito» oppure «domani». Per il domani non programmo nulla senza un tuo orario.",
+   "tools": []
+  },
+  {
+   "owner": "conferma",
+   "bot": "Non ho capito cosa confermi: il piatto di verifica passa a 13,50 € subito oppure lo programmo per domani? Rispondi «subito» oppure «domani». Per il domani serve anche l'orario, perché non programmo nulla senza.",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": "Non ho capito cosa confermi: il piatto di verifica passa a 13,50 € subito oppure lo programmo per domani? Rispondi «subito» oppure «domani». Per il domani serve anche l'orario, perché non programmo nulla senza."
+ },
+ "lastPub": null,
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "Il piatto di verifica da domani costa 13,50 euro.",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 6656,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Il piatto di verifica (12 €) lo cambio a 13,50 € da subito, o devo programmarlo per domani? Non programmo orari futuri senza conferma.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Il piatto di verifica (12 €) lo cambio a 13,50 € da subito, o devo programmarlo per domani? Non programmo orari futuri senza conferma.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  },
+  {
+   "turn": 2,
+   "owner": "Confirma.",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 6957,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"«Confirma» non dice quale delle due opzioni: lo cambio a 13,50 € da subito, oppure lo programmo per domani? Non programmo orari futuri senza una tua conferma esplicita.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "«Confirma» non dice quale delle due opzioni: lo cambio a 13,50 € da subito, oppure lo programmo per domani? Non programmo orari futuri senza una tua conferma esplicita.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  },
+  {
+   "turn": 3,
+   "owner": "Confirma.",
+   "promptFile": "t3.prompt.txt",
+   "promptChars": 7185,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Non ho capito se confermi l'opzione da subito o quella da domani. Il piatto di verifica passa a 13,50 € subito? Rispondi «subito» oppure «domani». Per il domani non programmo nulla senza un tuo orario.\"}}]}",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Non ho capito se confermi l'opzione da subito o quella da domani. Il piatto di verifica passa a 13,50 € subito? Rispondi «subito» oppure «domani». Per il domani non programmo nulla senza un tuo orario.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": []
+  },
+  {
+   "turn": 4,
+   "owner": "conferma",
+   "promptFile": "t4.prompt.txt",
+   "promptChars": 7444,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Non ho capito cosa confermi: il piatto di verifica passa a 13,50 € subito oppure lo programmo per domani? Rispondi «subito» oppure «domani». Per il domani serve anche l'orario, perché non programmo nulla senza.\"}}]}",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Non ho capito cosa confermi: il piatto di verifica passa a 13,50 € subito oppure lo programmo per domani? Rispondi «subito» oppure «domani». Per il domani serve anche l'orario, perché non programmo nulla senza.",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000006-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000006-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000006-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000005",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000006-5555-4555-8555-000000000006",
+          "name": "tiramisù",
+          "price": 6
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": []
+  }
+ ],
+ "done": true
+}

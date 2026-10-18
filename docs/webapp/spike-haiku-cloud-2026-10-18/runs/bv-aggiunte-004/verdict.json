@@ -1,0 +1,27 @@
+{
+ "id": "bv-aggiunte-004",
+ "family": "bv-aggiunte",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [],
+ "actual": [],
+ "replies": [
+  "La parmigiana nel menu non c'è. Vuoi che la inserisca? Con che prezzo e in quale categoria?"
+ ],
+ "turns": [
+  "🎤 Inserisce il piatto la parmigiana."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1652,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:20",
+ "note": "manca il prezzo: domanda"
+}

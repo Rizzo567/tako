@@ -1,0 +1,383 @@
+{
+ "id": "bv-correzioni-004",
+ "menuKey": "qasporco",
+ "locale": "qa",
+ "note": "",
+ "codes": {
+  "c1": "70000007-7777-4777-8777-000000000001",
+  "p1": "50000007-5555-4555-8555-000000000001",
+  "p2": "50000007-5555-4555-8555-000000000002",
+  "p3": "50000007-5555-4555-8555-000000000003",
+  "p4": "50000007-5555-4555-8555-000000000004",
+  "p5": "50000007-5555-4555-8555-000000000005",
+  "p6": "50000007-5555-4555-8555-000000000006",
+  "p7": "50000007-5555-4555-8555-000000000007"
+ },
+ "next": {
+  "p": 7,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000007-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000007-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000007-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000005",
+        "name": "Inserisce il piatto la parmigiana",
+        "price": 12,
+        "hidden": true
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000006",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000007",
+        "name": "tiramisù",
+        "price": 6,
+        "promo": {
+         "price": 3,
+         "until": null
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000007-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000007-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000007-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000005",
+        "name": "Inserisce il piatto la parmigiana",
+        "price": 12,
+        "hidden": true
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000006",
+        "name": "la parmigiana",
+        "price": 10
+       },
+       {
+        "id": "50000007-5555-4555-8555-000000000007",
+        "name": "tiramisù",
+        "price": 6
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 2,
+ "history": [
+  {
+   "owner": "Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro.",
+   "bot": "Il tiramisù è in promo a 3 €. Per la parmigiana ho due piatti: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosto). Quale devo mettere a 15 €?\ntiramisù: promo a 3 € (prezzo pieno 6 €)",
+   "tools": [
+    "tiramisù: promo a 3 € (prezzo pieno 6 €)"
+   ]
+  },
+  {
+   "owner": "No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro.",
+   "bot": "Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?",
+   "tools": []
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": "Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?"
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000007-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000007-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000007-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13.5
+        },
+        {
+         "id": "50000007-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 20
+        },
+        {
+         "id": "50000007-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 20
+        },
+        {
+         "id": "50000007-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 12
+        },
+        {
+         "id": "50000007-5555-4555-8555-000000000005",
+         "name": "Inserisce il piatto la parmigiana",
+         "price": 12,
+         "hidden": true
+        },
+        {
+         "id": "50000007-5555-4555-8555-000000000006",
+         "name": "la parmigiana",
+         "price": 10
+        },
+        {
+         "id": "50000007-5555-4555-8555-000000000007",
+         "name": "tiramisù",
+         "price": 6
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "promo"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro.",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 5023,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"promo\",\"argomenti\":{\"piatto_id\":\"p7\",\"testo\":\"3\"}},{\"strumento\":\"cerca_piatti\",\"argomenti\":{\"testo\":\"parmigiana\"}}]}",
+     "executed": [
+      "promo({\"piatto_id\":\"p7\",\"testo\":\"3\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Il tiramisù è in promo a 3 €. Per la parmigiana ho due piatti: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosto). Quale devo mettere a 15 €?\"}}]}",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Il tiramisù è in promo a 3 €. Per la parmigiana ho due piatti: «la parmigiana» a 10 € (visibile) e «Inserisce il piatto la parmigiana» a 12 € (nascosto). Quale devo mettere a 15 €?\ntiramisù: promo a 3 € (prezzo pieno 6 €)",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000007-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000007-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000007-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000005",
+          "name": "Inserisce il piatto la parmigiana",
+          "price": 12,
+          "hidden": true
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000006",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000007",
+          "name": "tiramisù",
+          "price": 6,
+          "promo": {
+           "price": 3,
+           "until": null
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "promo({\"piatto_id\":\"p7\",\"testo\":\"3\"})",
+    "cerca_piatti({\"testo\":\"parmigiana\"})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro.",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 5649,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Due domande, così non sbaglio: 1) per la parmigiana, quale metto a 15 €? «la parmigiana» (10 €, visibile) oppure «Inserisce il piatto la parmigiana» (12 €, nascosto)? 2) per il tiramisù, vuoi la promo a 3 € (come prima) oppure il prezzo pieno a 10 €?",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000007-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000007-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000007-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000005",
+          "name": "Inserisce il piatto la parmigiana",
+          "price": 12,
+          "hidden": true
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000006",
+          "name": "la parmigiana",
+          "price": 10
+         },
+         {
+          "id": "50000007-5555-4555-8555-000000000007",
+          "name": "tiramisù",
+          "price": 6,
+          "promo": {
+           "price": 3,
+           "until": null
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  }
+ ],
+ "done": true
+}

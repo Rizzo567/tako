@@ -1,0 +1,419 @@
+{
+ "id": "bv-aggiunte-003",
+ "menuKey": "qamattina",
+ "locale": "qa",
+ "note": "",
+ "codes": {
+  "c1": "70000008-7777-4777-8777-000000000001",
+  "p1": "50000008-5555-4555-8555-000000000001",
+  "p2": "50000008-5555-4555-8555-000000000002",
+  "p3": "50000008-5555-4555-8555-000000000003",
+  "p4": "50000008-5555-4555-8555-000000000004",
+  "p5": "new-bv-aggiunte-003-5"
+ },
+ "next": {
+  "p": 5,
+  "c": 1
+ },
+ "menu": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       },
+       {
+        "id": "new-bv-aggiunte-003-5",
+        "name": "Parmigiana",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "initial": {
+  "menus": [
+   {
+    "id": "60000008-6666-4666-8666-000000000001",
+    "name": "Menu",
+    "type": "lunch",
+    "sections": [
+     {
+      "id": "70000008-7777-4777-8777-000000000001",
+      "name": "Piatti di prova",
+      "items": [
+       {
+        "id": "50000008-5555-4555-8555-000000000001",
+        "name": "Piatto di verifica",
+        "price": 13.5
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000002",
+        "name": "Che ne sacc",
+        "price": 20,
+        "promo": {
+         "price": 15,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000003",
+        "name": "boh",
+        "price": 20,
+        "promo": {
+         "price": 10,
+         "until": null
+        }
+       },
+       {
+        "id": "50000008-5555-4555-8555-000000000004",
+        "name": "pasta al ragù",
+        "price": 12
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "design": {}
+ },
+ "turn": 3,
+ "history": [
+  {
+   "owner": "Inserisce il piatto la parmigiana.",
+   "bot": "La parmigiana non è nel menu. A che prezzo la inserisco, e in quale categoria? Il nome la chiamo «Parmigiana»?",
+   "tools": []
+  },
+  {
+   "owner": "Inserisci un nuovo piatto, si chiama parmigiana.",
+   "bot": "Preparo «Parmigiana» come nuovo piatto. A che prezzo lo inserisco, e in quale categoria?",
+   "tools": []
+  },
+  {
+   "owner": "12 euro",
+   "bot": "Fatto: ho creato «Parmigiana» a 12 € in Piatti di prova.\ncreato p5 «Parmigiana» a 12 € in Piatti di prova",
+   "tools": [
+    "creato p5 «Parmigiana» a 12 € in Piatti di prova"
+   ]
+  }
+ ],
+ "pending": {
+  "deletes": [],
+  "question": null
+ },
+ "lastPub": {
+  "before": {
+   "menus": [
+    {
+     "id": "60000008-6666-4666-8666-000000000001",
+     "name": "Menu",
+     "type": "lunch",
+     "sections": [
+      {
+       "id": "70000008-7777-4777-8777-000000000001",
+       "name": "Piatti di prova",
+       "items": [
+        {
+         "id": "50000008-5555-4555-8555-000000000001",
+         "name": "Piatto di verifica",
+         "price": 13.5
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000002",
+         "name": "Che ne sacc",
+         "price": 20,
+         "promo": {
+          "price": 15,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000003",
+         "name": "boh",
+         "price": 20,
+         "promo": {
+          "price": 10,
+          "until": null
+         }
+        },
+        {
+         "id": "50000008-5555-4555-8555-000000000004",
+         "name": "pasta al ragù",
+         "price": 12
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "design": {}
+  },
+  "daily": false,
+  "label": "crea"
+ },
+ "cur": null,
+ "turns": [
+  {
+   "turn": 1,
+   "owner": "Inserisce il piatto la parmigiana.",
+   "promptFile": "t1.prompt.txt",
+   "promptChars": 4900,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"cerca_piatti\",\"argomenti\":{\"testo\":\"parmigiana\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"La parmigiana non è nel menu. A che prezzo la inserisco, e in quale categoria? Il nome la chiamo «Parmigiana»?\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "La parmigiana non è nel menu. A che prezzo la inserisco, e in quale categoria? Il nome la chiamo «Parmigiana»?",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": [
+    "cerca_piatti({\"testo\":\"parmigiana\"})"
+   ]
+  },
+  {
+   "turn": 2,
+   "owner": "Inserisci un nuovo piatto, si chiama parmigiana.",
+   "promptFile": "t2.prompt.txt",
+   "promptChars": 5192,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"chiedi\",\"argomenti\":{\"domanda\":\"Preparo «Parmigiana» come nuovo piatto. A che prezzo lo inserisco, e in quale categoria?\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Preparo «Parmigiana» come nuovo piatto. A che prezzo lo inserisco, e in quale categoria?",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": true,
+   "toolCalls": []
+  },
+  {
+   "turn": 3,
+   "owner": "12 euro",
+   "promptFile": "t3.prompt.txt",
+   "promptChars": 5282,
+   "steps": [
+    {
+     "step": 1,
+     "input": "(prompt)",
+     "output": "{\"chiamate\":[{\"strumento\":\"crea_piatto\",\"argomenti\":{\"nome\":\"Parmigiana\",\"prezzo\":12,\"categoria\":\"c1\"}}]}\n",
+     "executed": [
+      "crea_piatto({\"nome\":\"Parmigiana\",\"prezzo\":12,\"categoria\":\"c1\"})"
+     ],
+     "rejected": []
+    },
+    {
+     "step": 2,
+     "input": "(risultati)",
+     "output": "{\"chiamate\":[{\"strumento\":\"rispondi\",\"argomenti\":{\"testo\":\"Fatto: ho creato «Parmigiana» a 12 € in Piatti di prova.\"}}]}\n",
+     "executed": [],
+     "rejected": []
+    }
+   ],
+   "reply": "Fatto: ho creato «Parmigiana» a 12 € in Piatti di prova.\ncreato p5 «Parmigiana» a 12 € in Piatti di prova",
+   "menuAfter": {
+    "menus": [
+     {
+      "id": "60000008-6666-4666-8666-000000000001",
+      "name": "Menu",
+      "type": "lunch",
+      "sections": [
+       {
+        "id": "70000008-7777-4777-8777-000000000001",
+        "name": "Piatti di prova",
+        "items": [
+         {
+          "id": "50000008-5555-4555-8555-000000000001",
+          "name": "Piatto di verifica",
+          "price": 13.5
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000002",
+          "name": "Che ne sacc",
+          "price": 20,
+          "promo": {
+           "price": 15,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000003",
+          "name": "boh",
+          "price": 20,
+          "promo": {
+           "price": 10,
+           "until": null
+          }
+         },
+         {
+          "id": "50000008-5555-4555-8555-000000000004",
+          "name": "pasta al ragù",
+          "price": 12
+         },
+         {
+          "id": "new-bv-aggiunte-003-5",
+          "name": "Parmigiana",
+          "price": 12
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {}
+   },
+   "rejects": 0,
+   "selfFixes": 0,
+   "forcedQuestion": false,
+   "question": false,
+   "toolCalls": [
+    "crea_piatto({\"nome\":\"Parmigiana\",\"prezzo\":12,\"categoria\":\"c1\"})"
+   ]
+  }
+ ],
+ "done": true
+}

@@ -1,0 +1,30 @@
+{
+ "id": "x-006",
+ "family": "bv-semplici",
+ "menu": "romana",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Gricia|11.5"
+ ],
+ "actual": [
+  "price|Gricia|11.5"
+ ],
+ "replies": [
+  "Fatto: la Gricia ora costa 11,50 €.\nGricia: 11 → 11,5 €"
+ ],
+ "turns": [
+  "la gricia a 12, anzi no a 11 e 50"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1571,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "spike-haiku 18/10"
+}

@@ -1,0 +1,30 @@
+{
+ "id": "bv-semplici-007",
+ "family": "bv-semplici",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Piatto di verifica|13"
+ ],
+ "actual": [
+  "price|Piatto di verifica|13"
+ ],
+ "replies": [
+  "Fatto: il piatto di verifica ora costa 13 €.\nPiatto di verifica: 13,5 → 13 €"
+ ],
+ "turns": [
+  "il piatto di verifica costa 13 euro"
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1225,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 10:36"
+}

@@ -1,0 +1,31 @@
+{
+ "id": "bv-categorie-002",
+ "family": "bv-categorie",
+ "menu": "qa",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "section|primi pasti"
+ ],
+ "actual": [
+  "section|primi pasti"
+ ],
+ "replies": [
+  "Fatto: ho creato la categoria «primi pasti».\ncreata categoria c2 «primi pasti»"
+ ],
+ "turns": [
+  "🎤 Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\"."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1243,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 17:38",
+ "note": "risposta vera: «Le categorie si creano dalla dashboard»"
+}

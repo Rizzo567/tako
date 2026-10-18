@@ -1,0 +1,35 @@
+{
+ "id": "bv-asr-004",
+ "family": "bv-asr",
+ "menu": "qa1323",
+ "success": false,
+ "fails": [
+  {
+   "sev": "MEDIO",
+   "code": "chiede-invece-di-agire",
+   "why": "domanda invece di agire / contesto perso: rename|Inserisce il piatto la parmigiana|la parmigiana"
+  }
+ ],
+ "expected": [
+  "rename|Inserisce il piatto la parmigiana|la parmigiana"
+ ],
+ "actual": [],
+ "replies": [
+  "C'è già la parmigiana a 12 €, col nome «Inserisce il piatto la parmigiana». Quale piatto vuoi rinominare, e in che nome? Se è quello, lo rinomino «Parmigiana» e non ne creo un altro. Dimmi come procedere."
+ ],
+ "turns": [
+  "🎤 Cambia il nome del piatto, inserisci la parmigiana."
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 2,
+ "llmMisses": 0,
+ "llmTokens": 1240,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 13:24",
+ "note": "R5.1 (nota 63): l'attesa chiedeva insieme una domanda senza scritture e la rinomina nello stesso turno (impossibile): resta la rinomina col nome detto (unico piatto da rinominare nel menu del 13:24). AMBIGUO: quale piatto rinominare non è detto (si intuisce quello nato dalla frase): chiedere conferma; risposta vera: «Il nome del piatto si cambia dalla dashboard»"
+}

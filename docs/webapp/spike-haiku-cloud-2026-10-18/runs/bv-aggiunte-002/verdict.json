@@ -1,0 +1,30 @@
+{
+ "id": "bv-aggiunte-002",
+ "family": "bv-aggiunte",
+ "menu": "qa1016",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "create|pasta al ragu|15|piatti di prova"
+ ],
+ "actual": [
+  "create|pasta al ragu|15|piatti di prova"
+ ],
+ "replies": [
+  "Fatto: ho aggiunto «Pasta al ragù» a 15 € tra i piatti di prova.\ncreato p4 «Pasta al ragù» a 15 € in Piatti di prova"
+ ],
+ "turns": [
+  "🎤 Aggiungi tra piatti di prova il piatto pasta al ragù che costa 15 euro."
+ ],
+ "clarifications": 0,
+ "unexpectedClarifications": 0,
+ "llmCalls": 3,
+ "llmMisses": 0,
+ "llmTokens": 1657,
+ "latencyMs": [
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 16/10 18:20"
+}

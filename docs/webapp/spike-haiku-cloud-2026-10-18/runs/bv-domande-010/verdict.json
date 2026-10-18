@@ -1,0 +1,34 @@
+{
+ "id": "bv-domande-010",
+ "family": "bv-domande",
+ "menu": "qamattina",
+ "success": true,
+ "fails": [],
+ "expected": [
+  "price|Piatto di verifica|13.5"
+ ],
+ "actual": [
+  "price|Piatto di verifica|13.5"
+ ],
+ "replies": [
+  "Fatto: Piatto di verifica ora a 13,50 €. «boh» non l'ho toccato.\nPiatto di verifica: 14 → 13,5 €",
+  "Hai scritto solo «Piatto di verifica». Cosa vuoi fare? Il piatto è a 13,50 €: vuoi cambiarne il prezzo, nasconderlo, metterlo in promo o altro?"
+ ],
+ "turns": [
+  "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta",
+  "Piatto di verifica"
+ ],
+ "clarifications": 1,
+ "unexpectedClarifications": 1,
+ "llmCalls": 4,
+ "llmMisses": 0,
+ "llmTokens": 3363,
+ "latencyMs": [
+  0,
+  0
+ ],
+ "recordedLlmMs": 0,
+ "usedLlm": true,
+ "source": "Manuel 17/10 11:11",
+ "note": "«non cambiare boh» è una negazione, non un piatto da scegliere; il turno 2 risponde alla domanda vera del bot"
+}
