@@ -13,7 +13,10 @@ export type ControlAction=typeof CONTROL_ACTIONS[number]
 
 /** Stato in sospeso scritto dal percorso R (una riga per numero in tako_whatsapp_proposals). */
 export type BatchWhy='delete'|'recap'|'section'|'price'
-export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:MenuAction[],source:string,draft?:{name:string,price:number|null,sectionId:string|null,sectionName:string|null}|null}
+/** R9: `twins` = piatti già nel menu con lo STESSO nome di un piatto chiesto come nuovo (domanda «lo aggiorno o ne creo un altro?»),
+ * col prezzo detto nella richiesta; `actions` = le parti chiare della richiesta originale che aspettano la risposta. */
+export type Twin={id:string,name:string,price:number|null,sectionId:string|null}
+export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:MenuAction[],source:string,draft?:{name:string,price:number|null,sectionId:string|null,sectionName:string|null}|null,twins?:Twin[]}
 export type Pend={kind:'batch',actions:MenuAction[],why:BatchWhy}|{kind:'hold',actions:MenuAction[],hold:Hold}|{kind:'ask',ask:BrainAsk}|{kind:'other'}|null
 export function pendOf(cmd:any):Pend{
  if(!cmd||typeof cmd!=='object')return null
@@ -85,6 +88,10 @@ const REASON:Record<string,string>={
  nome_con_coda:'un nome nuovo (piatto, categoria, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
  azione_fuori_portata:'un piatto è nascosto o segnato finito ma nel messaggio è detto in una parte con un\u2019altra azione (prezzo, aggiungi…): l\u2019azione vale solo per i piatti del suo verbo',
  categoria_non_detta:'il titolare ha nominato una categoria che nel menu non c\u2019è: chiedi in quale categoria metterlo o se crearla, non usarne un\u2019altra',
+ conferma_di_domanda:'non c\u2019è una proposta da confermare: c\u2019era una TUA domanda aperta (IN SOSPESO) e questo messaggio è la risposta del titolare. Non usare confirm_pending: scrivi nel piano le azioni della richiesta originale secondo la scelta del titolare (prezzi e nomi detti in quella richiesta), oppure, se la risposta non sceglie, una domanda diversa con le opzioni numerate',
+ gia_risposto:'il titolare ha già risposto alla tua domanda in sospeso: non ripeterla. Se la risposta sceglie un\u2019opzione (anche «sì», «aggiornali», «il primo», «crea nuovi»), scrivi il piano con le azioni della richiesta originale; se davvero non sceglie, fai una domanda DIVERSA da quella di prima, breve, con le opzioni numerate (1. … 2. …)',
+ domanda_ripetuta:'la domanda è di nuovo uguale a quella già fatta: è vietato rimandarla. Esegui la scelta se la risposta la indica; altrimenti scrivi una domanda con parole diverse che elenca le opzioni numerate (1. … 2. …) e chiede di rispondere col numero',
+ doppio_falso:'la domanda dice che c\u2019è già un piatto che nel menu ha un nome diverso (più lungo): un nome contenuto in un altro è un piatto nuovo, si crea; chiedi solo per i piatti con lo stesso nome',
  bozza_non_sicura:'reply_draft non va bene: non dire che qualcosa è fatto/aggiornato se non lo è e non scrivere prezzi non detti'}
 export const reasonText=(notes:string[])=>{const out:string[]=[];for(const n of notes){const k=n.split(':')[0]!;const r=REASON[k];if(r&&!out.includes(r))out.push(r+(k==='parte_persa'&&n.includes(':')?' («'+n.split(':').slice(1).join(':').replace(/,/g,'», «')+'»)':''))}return out.join('; ')||'il piano non supera i controlli del server'}
 
@@ -94,10 +101,10 @@ export type Outcome=
  |{kind:'cancel'}
  |{kind:'undo'}
  |{kind:'change',actions:MenuAction[],after?:any}
- |{kind:'ask',ids:string[],actions:MenuAction[],hold?:Hold,createDraft?:BrainAsk['draft']}
+ |{kind:'ask',ids:string[],actions:MenuAction[],hold?:Hold,createDraft?:BrainAsk['draft'],twins?:Twin[]}
  |{kind:'read',plan:any}
  |{kind:'say'}
- |{kind:'reject',reason:string,ids:string[],actions:MenuAction[],hold?:Hold}
+ |{kind:'reject',reason:string,ids:string[],actions:MenuAction[],hold?:Hold,twins?:Twin[]}
 type Decision={intent:string,plan:any,hold?:Hold,notes:string[],exclude:{id:string}[]}
 const VALIDATOR_HOLD=new Set(['parte_persa','piatto_ambiguo','nome_a_suono'])
 /** Esito del turno dal piano del modello già passato dal validatore. `raw` = JSON del modello (intento e azioni originali). */
@@ -107,6 +114,8 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  const changeActs=d.plan?.type==='change'&&!d.hold?d.plan.actions as MenuAction[]:[]
  if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
+  // R9: con una TUA domanda aperta (brain_ask) non c'è nulla da confermare: la risposta va scritta come piano con le azioni della richiesta originale.
+  if(pend?.kind==='ask')return reject('conferma_di_domanda',pend.ask.twins?.map(t=>t.id)??pend.ask.ids,pend.ask.actions??[])
   if(!pend||(pend.kind!=='batch'&&pend.kind!=='hold'))return reject('conferma_senza_proposta')
   if(pend.kind==='batch'){if(rawActs.length)return reject('conferma_con_altro');if(confirmBlocked(message,o.refs??[]))return reject('conferma_non_esplicita');return{kind:'confirm',extra:[]}}
   if(CANCEL_WORDS.test(plain(message)))return reject('conferma_non_esplicita')
@@ -122,7 +131,12 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!control.length&&d.exclude.some(e=>pend.actions.some(a=>'id' in a&&(a as any).id===e.id)))return{kind:'change',actions:changeActs}
  if(d.intent==='chat'||d.intent==='capability'||(!rawActs.length&&(rawIntent==='chat'||rawIntent==='capability')))return{kind:'say'}
  if(d.plan?.type==='read')return d.notes.includes('domanda_zero_scritture')&&rawIntent==='change'?{kind:'read',plan:d.plan}:{kind:'read',plan:d.plan}
- if(d.plan?.type==='change'&&!d.hold){if(d.plan.actions.some((a:any)=>a.kind==='create'&&negatedName(message,a.name)))return reject('creazione_negata',[],[]);{const dup=d.plan.actions.filter((a:any)=>a.kind==='rename'&&(o.refs??[]).some(r=>r.id!==a.id&&plain(r.name)===plain(a.name)));if(dup.length)return reject('nome_doppio',dup.map((a:any)=>a.id),[])}if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions,o.refs??[])){const tw=duplicateTwins(d.plan.actions,o.refs??[]);return reject('piatto_doppio',tw,d.plan.actions.filter((a:any)=>!(a.kind==='create'&&(o.refs??[]).some(r=>tw.includes(r.id)&&plain(r.name)===plain(a.name)))))}if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'');if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
+ // R9: risposta alla domanda sui piatti con lo stesso nome: un'azione su un piatto dal nome PIÙ LUNGO che contiene un nome della richiesta
+ // («pasta al pesto» → «Pasta al pesto e lasagna») non è la scelta del titolare: quel nome è un piatto nuovo.
+ if(d.plan?.type==='change'&&!d.hold&&pend?.kind==='ask'&&pend.ask.twins?.length){const said=[...pend.ask.twins.map(t=>t.name),...(pend.ask.actions??[]).flatMap(a=>a.kind==='create'?[a.name]:[])],refs=o.refs??[]
+  const bad=d.plan.actions.flatMap((a:any)=>{if(!('id' in a)||pend.ask.twins!.some(t=>t.id===a.id))return[];const r=refs.find(x=>x.id===a.id);return r&&!(' '+plain(message)+' ').includes(' '+plain(r.name)+' ')&&said.some(n=>!sameDishName(n,r.name)&&(' '+dishKey(r.name)+' ').includes(' '+dishKey(n)+' '))?[r.id]:[]})
+  if(bad.length)return reject('doppio_falso',bad,[])}
+ if(d.plan?.type==='change'&&!d.hold){if(d.plan.actions.some((a:any)=>a.kind==='create'&&negatedName(message,a.name)))return reject('creazione_negata',[],[]);{const dup=d.plan.actions.filter((a:any)=>a.kind==='rename'&&(o.refs??[]).some(r=>r.id!==a.id&&plain(r.name)===plain(a.name)));if(dup.length)return reject('nome_doppio',dup.map((a:any)=>a.id),[])}if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions.filter((x:any)=>!(x.kind==='create'&&pend?.kind==='ask'&&(pend.ask.twins??[]).some(t=>sameDishName(t.name,x.name)))),o.refs??[])){const tw=duplicateTwins(d.plan.actions,o.refs??[]),refs=o.refs??[],twins=twinsOf(d.plan.actions,refs);return{kind:'reject',reason:twinReason(twins,d.plan.actions,refs),ids:tw,actions:d.plan.actions.filter((a:any)=>!(a.kind==='create'&&refs.some(r=>tw.includes(r.id)&&sameDishName(r.name,a.name)))),...(twins.length?{twins}:{})}}if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'');if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
  // Domande del modello (intent=clarify) e parti incerte che il modello stesso ha segnato: domanda, stato in sospeso.
  const modelAsk=rawIntent==='clarify'||(d.hold&&d.notes.includes('parti_incerte')&&!d.notes.some(n=>VALIDATOR_HOLD.has(n.split(':')[0]!)))
  if(modelAsk){const cr=rawActs.find((a:any)=>a.action==='create_item'),sec=cr&&typeof cr.section==='string'?o.sections.find(s=>s.id===cr.section||plain(s.name)===plain(cr.section)):undefined
@@ -159,8 +173,23 @@ export function namedSectionMismatch(message:string,actions:MenuAction[],section
 /** Vincolo: mai due piatti con lo stesso nome creati insieme, mai un piatto nuovo col nome di uno che c'è già in un'altra
  * categoria (nella stessa il validatore lo trasforma già in un cambio di prezzo). */
 /** R8: i piatti già nel menu che il piano crea di nuovo (candidati della domanda «lo aggiorno o ne creo un altro?»). */
-export const duplicateTwins=(actions:MenuAction[],refs:MenuRef[])=>{const names=new Set(actions.flatMap(a=>a.kind==='create'?[plain(a.name)]:[]));return refs.filter(r=>names.has(plain(r.name))).map(r=>r.id)}
-export function duplicateCreate(actions:MenuAction[],refs:MenuRef[]){const names=actions.flatMap(a=>a.kind==='create'?[plain(a.name)]:[]);return new Set(names).size<names.length||names.some(n=>refs.some(r=>plain(r.name)===n))}
+// R9 (18/10, QA «pasta al pesto» = «Pasta al pesto e lasagna»?): lo stesso piatto è SOLO a nome uguale normalizzato (accenti,
+// maiuscole, articolo davanti, spazi). Un nome contenuto in un nome più lungo è un altro piatto: si crea.
+const ARTICLE=/^(?:il|lo|la|l|i|gli|le|un|uno|una)\s+/
+export const dishKey=(name:string)=>plain(name).replace(ARTICLE,'').replace(/\s+/g,' ').trim()
+export const sameDishName=(a:string,b:string)=>!!dishKey(a)&&dishKey(a)===dishKey(b)
+export const duplicateTwins=(actions:MenuAction[],refs:MenuRef[])=>{const names=new Set(actions.flatMap(a=>a.kind==='create'?[dishKey(a.name)]:[]));return refs.filter(r=>names.has(dishKey(r.name))).map(r=>r.id)}
+export function duplicateCreate(actions:MenuAction[],refs:MenuRef[]){const names=actions.flatMap(a=>a.kind==='create'?[dishKey(a.name)]:[]);return new Set(names).size<names.length||names.some(n=>refs.some(r=>dishKey(r.name)===n))}
+/** R9: i gemelli con il prezzo detto per il piatto nuovo (va nella domanda in sospeso e torna al modello col messaggio dopo). */
+export const twinsOf=(actions:MenuAction[],refs:MenuRef[]):Twin[]=>actions.flatMap(a=>{if(a.kind!=='create')return[];const r=refs.find(x=>sameDishName(x.name,a.name));return r?[{id:r.id,name:a.name,price:typeof a.price==='number'?a.price:null,sectionId:a.sectionId??null}]:[]})
+const num0=(n:number)=>n.toFixed(2).replace('.',',')+' €'
+function twinReason(twins:Twin[],actions:MenuAction[],refs:MenuRef[]){if(!twins.length)return reasonText(['piatto_doppio'])
+ const names=twins.map(t=>{const r=refs.find(x=>x.id===t.id)!;return`«${r.name}» (${num0(r.price)}${r.hidden?', nascosto':''})`})
+ // Nomi nuovi CONTENUTI in un piatto più lungo del menu: non sono doppioni (il modello li aveva presi per esistenti).
+ const near=actions.flatMap(a=>a.kind==='create'&&!twins.some(t=>sameDishName(t.name,a.name))?refs.filter(r=>!sameDishName(r.name,a.name)&&(' '+dishKey(r.name)+' ').includes(' '+dishKey(a.name)+' ')).map(r=>`«${a.name}» non è «${r.name}»`):[])
+ return reasonText(['piatto_doppio'])+'. Hanno lo STESSO nome solo: '+names.join(', ')+': chiedi solo per questi (le opzioni: aggiornare quello che c\u2019è al prezzo detto, e se è nascosto rimetterlo visibile, oppure crearne un altro)'+(near.length?'. Un nome contenuto in un piatto più lungo è un piatto nuovo da creare, non chiedere: '+[...new Set(near)].join('; '):'')}
+/** R9: la stessa domanda (o quasi: ≥ 80% delle parole) rispetto a quella già fatta. */
+export function sameQuestion(a:string,b:string){const w=(s:string)=>new Set(plain(s.split(/\n\n/)[0]!).split(' ').filter(x=>x.length>2));const x=w(a),y=w(b);if(!x.size||!y.size)return false;let k=0;for(const t of x)if(y.has(t))k++;return k/Math.max(x.size,y.size)>=0.8}
 /** Vincolo (Y1): un'eliminazione vale solo per i piatti nella portata di un verbo «elimina/cancella…». Le parti del messaggio
  * si leggono in ordine: una parte con il verbo di eliminare apre la portata, una parte con un altro verbo d'azione o un prezzo
  * la chiude; una parte senza verbi («e la parmigiana») continua quella di prima. Piatti non nominati (pronomi) non si controllano. */

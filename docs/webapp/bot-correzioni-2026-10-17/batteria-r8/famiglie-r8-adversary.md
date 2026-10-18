@@ -380,7 +380,7 @@ metti le paste a 10 euro e il risotto a 8 euro ⏎ ok
   - turni: sposta il tiramisù in una nuova sezione, crea la nuova sezione "primi" ⏎ ora nella sezione primi aggiungi pasta alla norma, pasta al tonno, pasta e fagioli, risotto ai funghi.
 le paste a 10 e il risotto a 8 ⏎ ok
   - atteso: create|pasta al tonno|10|primi, create|pasta alla norma|10|primi, create|pasta e fagioli|10|primi, create|risotto ai funghi|8|primi, move|tiramisù|Primi, section|primi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **r8-sposta-poi-piatti-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al tonno|10|primi, create|pasta alla norma|10|primi, create|pasta e fagioli|10|primi, create|risotto ai f
   - turni: sposta il tiramisù in una nuova sezione, crea la nuova sezione "primi" ⏎ ora nella sezione primi aggiungi pasta alla norma, pasta al tonno, pasta e fagioli, risotto ai funghi.
 tutti a 10 tranne il risotto a 8 ⏎ ok
@@ -390,7 +390,7 @@ tutti a 10 tranne il risotto a 8 ⏎ ok
   - turni: sposta il tiramisù in una nuova sezione, crea la nuova sezione "primi" ⏎ ora nella sezione primi aggiungi pasta alla norma, pasta al tonno, pasta e fagioli, risotto ai funghi.
 a 10, 10, 10 e 8 ⏎ ok
   - atteso: create|pasta al tonno|10|primi, create|pasta alla norma|10|primi, create|pasta e fagioli|10|primi, create|risotto ai funghi|8|primi, move|tiramisù|Primi, section|primi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
 - **r8-sposta-poi-piatti-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al tonno|10|primi, create|pasta alla norma|10|primi, create|pasta e fagioli|10|primi, create|risotto ai f
   - turni: sposta il tiramisù in una nuova sezione, crea la nuova sezione "primi" ⏎ ora nella sezione primi aggiungi pasta alla norma, pasta al tonno, pasta e fagioli, risotto ai funghi.
 le paste 10 euro, il risotto 8 ⏎ ok

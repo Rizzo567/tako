@@ -43,7 +43,7 @@
 - **adv-deixis-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
   - turni: la pasta a 10 ⏎ quella al sugo
   - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Quale intendi? 1. *Pasta al sugo* (9,00 €) 2. *Polpette al sugo* (11,00 €)»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare? 1. *Pasta al sugo* (9,00 €) 2. *Polpette al sugo* (11,00 €)»
 - **adv-deixis-020** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true
   - turni: nascondi la pasta ⏎ tutte
   - atteso: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true · ottenuto: nessuna modifica

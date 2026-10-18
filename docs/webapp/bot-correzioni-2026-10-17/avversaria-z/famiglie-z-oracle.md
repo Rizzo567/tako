@@ -51,11 +51,11 @@
 - **z-riepilogo-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Carbonara|13, price|Tagliata|19
   - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ togli la birra dalla lista ⏎ ok
   - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Babà* (5,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Babà* (5,00 €)» ⏎ «Quale intendi? 1. *Birra* (5,00 €) 2. *Carbonara* (12,00 €) 3. *Tagliata* (18,00 €) 4. *Babà* (5,00 €)»
 - **z-riepilogo-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Carbonara|13, price|Tagliata|19
   - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ la birra lasciala com'è ⏎ ok
   - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Babà* (5,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Babà* (5,00 €)» ⏎ «Quale intendi? 1. *Birra* (5,00 €) 2. *Carbonara* (12,00 €) 3. *Tagliata* (18,00 €) 4. *Babà* (5,00 €)»
 - **z-nascosti-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Babà|false, hidden|Burrata|false
   - turni: ❓ quali sono nascosti? ⏎ rimettili tutti
   - atteso: hidden|Babà|false, hidden|Burrata|false · ottenuto: nessuna modifica

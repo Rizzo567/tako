@@ -45,3 +45,5 @@ Tetto: 130k token per chiave (quota free ~200k/giorno), mai `groq-key.txt` né `
 R4b: stima prima 10–11 turni × ~3,6k ≈ 38k (tetto 40k). **Consumato 38.216 token** (delta di `tako_whatsapp_ai_usage`, include eventuale traffico clienti nello stesso intervallo) + 2 trascrizioni Whisper.
 | R8 (R5, 18/10) riproduzione gpt-oss-120b sui messaggi di Manuel | groq-key-test / test-2 | 36.537 (12.846 + 18.781 + 4.910; 1 risposta 400 del 20b) |
 | R8 (R5, 18/10) live TwiML su v114 | chiave del bot | 14.326 (2 turni; 3º saltato per non superare il tetto 20k) |
+| R9 (R6, 18/10) riproduzione gpt-oss-120b, 3 vocali di Manuel | chiave del bot | 12.624 (3 chiamate; test esaurite) |
+| R9 (R6, 18/10) live TwiML su v115 | chiave del bot | 8.488 (1 turno; 2º/3º saltati per il tetto 15k) |

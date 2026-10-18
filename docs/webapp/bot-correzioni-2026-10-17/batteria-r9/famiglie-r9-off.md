@@ -1,0 +1,752 @@
+# Batteria R9 · modo off
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| risposta-breve | 90 | 0 | 90 | 0 | 0 |
+| vocale-storpiato | 30 | 0 | 10 | 0 | 20 |
+| testardo | 33 | 0 | 24 | 0 | 9 |
+| doppioni | 32 | 0 | 27 | 0 | 5 |
+| TOTALE | 185 | 0 | 151 | 0 | 34 |
+
+## Fallimenti
+
+- **r9-risposta-breve-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ sì aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ aggiorna pure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-007** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ quelli vecchi
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-009** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 la 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ ok aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-015** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 va bene, aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ usa quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 modifica quello esistente
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-018** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ sì, quello vecchio
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-019** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiorna quello
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-020** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ prima opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-021** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ creane un altro
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-024** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 il secondo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-025** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ la 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-026** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-027** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ fanne uno nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-028** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-029** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ crea
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-030** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 seconda opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-031** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-032** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ sì aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-033** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-034** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ aggiorna
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-035** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Aggiornapure
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-036** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ aggiorna pure
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-037** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornalo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-038** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ quelli vecchi
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-039** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 quello che c’è
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-040** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ il primo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-041** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 la 1
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-042** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 1
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-043** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 sì
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-044** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ ok aggiorna
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-045** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 va bene, aggiornalo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-046** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ usa quello che c’è
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-047** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 modifica quello esistente
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-048** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ sì, quello vecchio
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-049** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiorna quello
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-050** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ prima opzione
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-051** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ crea nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-052** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-053** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ creane un altro
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-054** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 il secondo
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-055** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ la 2
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-056** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 2
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-057** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ fanne uno nuovo
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-058** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 nuovo
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-059** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ crea
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-060** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 seconda opzione
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-061** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-062** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ sì aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-063** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-064** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-065** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-066** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ aggiorna pure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-067** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-068** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ quelli vecchi
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-069** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-070** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-071** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 la 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-072** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-073** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-074** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ ok aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-075** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 va bene, aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-076** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ usa quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-077** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 modifica quello esistente
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-078** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ sì, quello vecchio
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-079** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiorna quello
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-080** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ prima opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-081** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-082** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-083** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ creane un altro
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-084** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 il secondo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-085** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ la 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-086** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-087** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ fanne uno nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-088** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-089** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ crea
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-risposta-breve-090** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 seconda opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 grazie
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 boh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 pronto?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Ciao, sì sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aspetta un attimo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 [vocale senza parole]
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 eh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 mmh vediamo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buonasera
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 grazie
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 boh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 pronto?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Ciao, sì sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aspetta un attimo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 [vocale senza parole]
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 eh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 mmh vediamo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-020** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Buonasera
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-021** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buongiorno a tutti ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 boh ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 grazie ⏎ 🎤 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-024** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 pronto? ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-025** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 eh ⏎ 🎤 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-026** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Buongiorno a tutti ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-027** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 boh ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-028** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 grazie ⏎ 🎤 1
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-029** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 pronto? ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-vocale-storpiato-030** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 eh ⏎ 🎤 2
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-007** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-009** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 il primo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-015** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Aggiornapure
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 sì
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-018** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-019** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-020** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-021** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-024** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-025** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-026** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-027** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-028** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-029** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-030** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-031** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-032** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-testardo-033** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-001** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi
+  - turni: 🎤 nei primi aggiungi pasta al pesto a 10
+  - atteso: create|pasta al pesto|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-002** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi
+  - turni: nei primi aggiungi pasta al pesto a 10
+  - atteso: create|pasta al pesto|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-003** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 in primi aggiungi pasta al pesto a 10 e riso giallo a 8
+  - atteso: create|pasta al pesto|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-004** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto|10|primi, create|riso giallo|8|primi
+  - turni: in primi aggiungi pasta al pesto a 10 e riso giallo a 8
+  - atteso: create|pasta al pesto|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-005** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto|12|primi
+  - turni: 🎤 aggiungi nei primi la pasta al pesto a 12
+  - atteso: create|pasta al pesto|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-006** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto|12|primi
+  - turni: aggiungi nei primi la pasta al pesto a 12
+  - atteso: create|pasta al pesto|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-007** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto e lasagna verde|13|primi
+  - turni: 🎤 nei primi aggiungi pasta al pesto e lasagna verde a 13
+  - atteso: create|pasta al pesto e lasagna verde|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-008** [GRAVE] GRAVE non-applicato: non applicato: create|pasta al pesto e lasagna verde|13|primi
+  - turni: nei primi aggiungi pasta al pesto e lasagna verde a 13
+  - atteso: create|pasta al pesto e lasagna verde|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-009** [GRAVE] GRAVE non-applicato: non applicato: create|lasagna|11|primi
+  - turni: 🎤 nei primi aggiungi lasagna a 11
+  - atteso: create|lasagna|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-010** [GRAVE] GRAVE non-applicato: non applicato: create|lasagna|11|primi
+  - turni: nei primi aggiungi lasagna a 11
+  - atteso: create|lasagna|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-011** [GRAVE] GRAVE non-applicato: non applicato: create|pasta|7|primi
+  - turni: 🎤 nei primi aggiungi pasta a 7
+  - atteso: create|pasta|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-012** [GRAVE] GRAVE non-applicato: non applicato: create|pasta|7|primi
+  - turni: nei primi aggiungi pasta a 7
+  - atteso: create|pasta|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 ⏎ 🎤 aggiornalo
+  - atteso: hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragu a 10 ⏎ 🎤 aggiornalo
+  - atteso: hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragu a 10 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragu a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-019** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi Pasta al Ragù a 10 ⏎ 🎤 aggiornalo
+  - atteso: hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-020** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi
+  - turni: 🎤 nei primi aggiungi Pasta al Ragù a 10 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi Pasta al Ragù a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Pasta al sugo|11
+  - turni: 🎤 nei primi aggiungi pasta al sugo a 11 ⏎ 🎤 aggiornalo
+  - atteso: price|Pasta al sugo|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al sugo|11|primi
+  - turni: 🎤 nei primi aggiungi pasta al sugo a 11 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al sugo|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-024** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi pasta al sugo a 11 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-025** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi il tiramisù a 7 ⏎ 🎤 aggiornalo
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-026** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tiramisu|7|primi
+  - turni: 🎤 nei primi aggiungi il tiramisù a 7 ⏎ 🎤 crea nuovo
+  - atteso: create|tiramisu|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-027** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: 🎤 nei primi aggiungi il tiramisù a 7 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-028** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al sugo|11|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ 🎤 aggiorna il ragù e crea la pasta al sugo
+  - atteso: create|pasta al sugo|11|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-029** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ 🎤 entrambi aggiorna
+  - atteso: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-030** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ aggiornali tutti e due
+  - atteso: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-031** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, create|pasta al sugo|11|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ creali tutti e due nuovi
+  - atteso: create|pasta al ragu|10|primi, create|pasta al sugo|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r9-doppioni-032** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|10|primi, price|Pasta al sugo|11
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ 🎤 il sugo aggiornalo, il ragù fanne uno nuovo
+  - atteso: create|pasta al ragu|10|primi, price|Pasta al sugo|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»

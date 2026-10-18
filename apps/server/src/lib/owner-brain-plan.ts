@@ -15,7 +15,7 @@ import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
-import {CONTROL_ACTIONS,politeRequest,isAffirmative,type ControlAction} from './owner-brain-r.js'
+import {CONTROL_ACTIONS,politeRequest,isAffirmative,sameDishName,type ControlAction} from './owner-brain-r.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
@@ -227,7 +227,7 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
    const bad=[...new Set(lost.map(w=>parts.find(p=>fold0(p).replace(/,/g,'.').includes(w))??w))].slice(0,3)
    return{...d,intent:'clarify',plan:{type:'clarify',ids:[]} as MenuPlan,hold:{kind:'hold',actions:d.plan.actions,asks:bad.map(w=>({type:'unknown' as const,word:w}))},notes:[...d.notes,'parte_persa:'+lost.slice(0,3).join(',')]}}}
  return d}
-function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{freshIds?:Set<string>,refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
+function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{freshIds?:Set<string>,refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string,twinIds?:string[]}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections}=input,message=dialectNumbers(input.message),byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
  const map=(v:unknown)=>typeof v==='string'?ctx.codes.get(v.trim().toLowerCase())??null:null
  const empty={type:'clarify',ids:[]} as MenuPlan
@@ -247,11 +247,14 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  for(const id of sound.strong)if(!g9DishMentioned(byId.get(id)!.name,message,refs))trusted.add(id)
  // Fase R: «sì» a una domanda su UN solo candidato («intendi boh?») → quel piatto vale come nominato.
  if((input.clarifyIds??[]).length===1&&byId.has(input.clarifyIds![0]!)&&isAffirmative(input.message))trusted.add(input.clarifyIds![0]!)
+ // R9: risposta alla domanda «c'è già X: lo aggiorno o ne creo un altro?» → i piatti con lo stesso nome sono nominati (dalla richiesta originale).
+ for(const id of input.twinIds??[])if(byId.has(id))trusted.add(id)
  // Fase R: «bò»/«bo» = «boh» (solo accento o h muta): è il nome, non un suono incerto.
  for(const id of sound.weak){const ph=sound.phrase.get(id);if(ph&&plain(ph).replace(/h/g,'')===plain(byId.get(id)!.name).replace(/h/g,''))trusted.add(id)}
  const weakIds=new Set(sound.weak.filter(id=>!trusted.has(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)))
  // Fase R: «sono tornati tutti i dolci», «nascondi tutte le pizze»: la categoria nominata per intero nomina i suoi piatti.
- for(const m of msg.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)/g)){const secs=sections.filter(s=>sameSection(s.name,m[1]!));if(secs.length===1)for(const r of refs)if(r.sectionId===secs[0]!.id)trusted.add(r.id)}
+ // R9: anche nella richiesta originale legata alla TUA domanda aperta («metti i primi tutti a 11» → «si»).
+ for(const m of (msg+(source?' \n '+source:'')).matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(s=>sameSection(s.name,(m[1]??m[2])!));if(secs.length===1)for(const r of refs)if(r.sectionId===secs[0]!.id)trusted.add(r.id)}
  const trustedHas=(id:string)=>trusted.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
  // «no, la parmigiana no»: il «no,» in testa non è una clausola (stessa normalizzazione del percorso di prima).
@@ -387,7 +390,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    if(/\b(?:gli altri|le altre|l altro|l altra|altri due|altre due|altri tre)\b/.test(msg)){const again=bare.filter(id=>pd.includes(id));if(again.length)bad.push(...again)}
    if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...pd,...bad])].filter(id=>byId.has(id)).slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'rimando_incerto']}}
   // Scelta aperta tra più piatti: «sì», «ok», «vai» non scelgono. Serve il nome, un ordinale o «tutti e due».
-  const open=(input.clarifyIds??[]).filter(id=>byId.has(id))
+  // R9: la domanda sui piatti con lo stesso nome sceglie tra aggiornare e creare, non tra piatti: non serve un nome.
+  const open=(input.twinIds?.length?[]:(input.clarifyIds??[])).filter(id=>byId.has(id))
   if(open.length>1&&ids.some(id=>open.includes(id))&&!ids.every(id=>!open.includes(id)||trustedHas(id)||g9DishMentioned(byId.get(id)!.name,message,refs))&&!ORDINAL.test(msg))return{intent:'clarify',plan:{type:'clarify',ids:open.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'scelta_non_detta']}
   return{intent:'change',plan,exclude,aliasesUsed,replyDraft:'',notes}}
  // Con contesto o azioni derivate: le azioni «normali» passano dal validatore attuale sul testo con il contesto; i prezzi devono
@@ -401,7 +405,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // precedente («e la gricia uguale» = stesso prezzo della carbonara appena cambiata), mai un numero sparso («sei e cinquanta» → 50).
   const ctxPrices=new Set(refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)||g9DishMentioned(r.name,lastBotText,refs)).map(r=>Math.round(r.price*100)/100))
   // Dopo una domanda del bot (≤10 minuti) la risposta completa la richiesta di prima: valgono anche i prezzi di quel messaggio.
-  const afterQuestion=BOT_QUESTION.test(lastBotText)?g9Prices(prevOwner):[]
+  // R9: con una TUA domanda aperta valgono anche i prezzi della richiesta originale legata alla domanda (detti dal titolare).
+  const afterQuestion=[...(BOT_QUESTION.test(lastBotText)?g9Prices(prevOwner):[]),...(input.clarifySource?g9Prices(dialectNumbers(input.clarifySource)):[])]
   // 17/10 (A2.3): un prezzo del contesto vale solo con un rimando esplicito («uguale», «anche», «no, il tiramisù»), mai in un
   // messaggio che dice di lasciare stare («no, il caviale lascialo stare» era diventato il caviale a 10 €).
   const ctxPriceOK=(SAME_PRICE.test(msg)||SWAP.test(msg))&&!LEAVE.test(msg)
@@ -428,7 +433,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    const part=message.split(/[,;]|\s+e\s+/).find(x=>g9DishMentioned(r.name,x,refs))??'';if(/\b(?:lascia\w*\s+stare|lascia\w*\s+perdere|c[’'\s]?è|c e|resta|rimane|va bene com era|com era)\b|\bno\s*$/i.test(part))add(r.id,back)}}
  for(const a of [...out])if('id' in a&&weakIds.has(a.id)){out.splice(out.indexOf(a),1);asks.push({type:'confirm',word:(sound.phrase.get(a.id)??byId.get(a.id)!.name).slice(0,60),action:a})}
  // A4.3: «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: non è un piatto «nominato senza azione».
- const twinIds=refs.filter(r=>legacy.some((a:any)=>a?.action==='create_item'&&typeof a.name==='string'&&plain(a.name)===plain(r.name)&&!out.some(o=>'id' in o&&o.id===r.id))).map(r=>r.id)
+ const twinIds=refs.filter(r=>legacy.some((a:any)=>a?.action==='create_item'&&typeof a.name==='string'&&sameDishName(a.name,r.name)&&!out.some(o=>'id' in o&&o.id===r.id))).map(r=>r.id)
  const covered=new Set([...weakIds,...twinIds,...out.flatMap(a=>'id' in a?[a.id]:[]),...derived.flatMap(d=>d.refId?[d.refId,d.id]:[d.id]),...exclude.map(e=>e.id),...candCovered]),padded=' '+(mix?plain(mix.command):msg)+' '
  // Misto: se la parte di modifica nomina dei piatti, le azioni stanno solo su quelli (mai sul piatto della domanda).
  if(mix){const inCmd=refs.filter(r=>g9DishMentioned(r.name,mix.command,refs)).map(r=>r.id);if(inCmd.length){const off=out.filter(a=>'id' in a&&!inCmd.includes(a.id)&&!derived.some(d=>d.id===a.id)).map(a=>(a as any).id as string);if(off.length)return no('azione_sul_piatto_della_domanda',off)}}
@@ -485,7 +490,7 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCal
  // Strumenti di controllo (confirm_pending, cancel_pending, undo_last): fuori dal validatore delle azioni, li verifica il route.
  const parsed=parseJson(call.content),control:ControlAction[]=parsed&&Array.isArray(parsed.actions)?[...new Set<ControlAction>(parsed.actions.filter((a:any)=>a&&CONTROL_ACTIONS.includes(a.action)).map((a:any)=>a.action as ControlAction))]:[]
  const rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
- const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n ')})
+ const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id)})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }

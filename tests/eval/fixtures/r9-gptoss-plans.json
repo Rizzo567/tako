@@ -1,0 +1,183 @@
+[
+ {
+  "intent": "change",
+  "actions": [
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "Primi",
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "pasta al pesto",
+    "until": null
+   },
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "Primi",
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "pasta al ragù",
+    "until": null
+   },
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "Primi",
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "pasta carbonara",
+    "until": null
+   },
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "Primi",
+    "price": 8,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "riso giallo",
+    "until": null
+   }
+  ],
+  "item_refs": [],
+  "read": "none",
+  "capability_ids": [],
+  "clarify": {
+   "question": null,
+   "item_refs": [],
+   "missing": []
+  },
+  "uncertain": [],
+  "alias_used": [],
+  "reply_draft": "Aggiungo 4 piatti al menu Primi con i prezzi indicati. Rispondi OK per pubblicare."
+ },
+ {
+  "intent": "clarify",
+  "actions": [
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "Primi",
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "pasta carbonara",
+    "until": null
+   },
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "Primi",
+    "price": 8,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "riso giallo",
+    "until": null
+   }
+  ],
+  "item_refs": [],
+  "read": "none",
+  "capability_ids": [],
+  "clarify": {
+   "question": "C’è già \"pasta al pesto\" a 10,01 € e \"pasta al ragù\" a 20 €: lo aggiorno o ne creo un altro?",
+   "item_refs": [
+    "p8",
+    "p4"
+   ],
+   "missing": []
+  },
+  "uncertain": [],
+  "alias_used": [],
+  "reply_draft": "C’è già \"pasta al pesto\" a 10,01 € e \"pasta al ragù\" a 20 €: lo aggiorno o ne creo un altro?"
+ },
+ {
+  "intent": "change",
+  "actions": [
+   {
+    "action": "set_price",
+    "item": "p8",
+    "section": null,
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": null,
+    "until": null
+   },
+   {
+    "action": "set_price",
+    "item": "p4",
+    "section": null,
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": null,
+    "until": null
+   },
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "c2",
+    "price": 10,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "pasta carbonara",
+    "until": null
+   },
+   {
+    "action": "create_item",
+    "item": null,
+    "section": "c2",
+    "price": 8,
+    "price_ref": null,
+    "price_delta": null,
+    "value": null,
+    "tag": null,
+    "text": null,
+    "name": "riso giallo",
+    "until": null
+   }
+  ],
+  "item_refs": [],
+  "read": "none",
+  "clarify": {
+   "question": null,
+   "item_refs": [],
+   "missing": []
+  },
+  "uncertain": [],
+  "alias_used": [],
+  "capability_ids": [],
+  "reply_draft": "Aggiornato."
+ }
+]

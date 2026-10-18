@@ -18,13 +18,13 @@
 | relativi | 20 | 13 | 0 | 0 | 7 |
 | cent2 | 14 | 3 | 0 | 0 | 11 |
 | misti2 | 18 | 6 | 0 | 0 | 12 |
-| ordinali | 8 | 0 | 0 | 0 | 8 |
+| ordinali | 8 | 0 | 1 | 0 | 7 |
 | sospeso2 | 15 | 12 | 2 | 0 | 1 |
 | lev1 | 14 | 12 | 0 | 0 | 2 |
 | lasciastare | 10 | 5 | 0 | 0 | 5 |
 | ipotesi | 8 | 8 | 0 | 0 | 0 |
 | toglieuro | 10 | 9 | 0 | 0 | 1 |
-| TOTALE | 508 | 239 | 6 | 0 | 263 |
+| TOTALE | 508 | 239 | 7 | 0 | 262 |
 
 ## Fallimenti
 
@@ -347,7 +347,7 @@
 - **adv-deixis-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Gricia|true
   - turni: nascondi carbonara, gricia e amatriciana ⏎ rimettili tutti tranne la gricia
   - atteso: hidden|Gricia|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)»
 - **adv-deixis-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13, price|Carbonara|13
   - turni: la carbonara a 13 ⏎ e anche l'amatriciana
   - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
@@ -379,11 +379,11 @@
 - **adv-deixis-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
   - turni: la pasta a 10 ⏎ la seconda
   - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)»
 - **adv-deixis-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true
   - turni: nascondi la pasta ⏎ tutte
   - atteso: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Quale intendi? 1. *Pasta al sugo* (9,00 €) 2. *Pasta al pesto* (10,00 €) 3. *Pasta e ceci* (9,00 €) 4. *Tagliata* (18,00 €)»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare? 1. *Pasta al sugo* (9,00 €) 2. *Pasta al pesto* (10,00 €) 3. *Pasta e ceci* (9,00 €) 4. *Tagliata* (18,00 €)»
 - **adv-deixis-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Torta della nonna|7
   - turni: la torta a 7 ⏎ quella della nonna
   - atteso: price|Torta della nonna|7 · ottenuto: nessuna modifica
@@ -443,7 +443,7 @@
 - **adv-anzino-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: carbonara 13 ⏎ anzi no, 14 ⏎ no scusa avevi ragione 13
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
 - **adv-anzino-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Cacio e pepe|true
   - turni: nascondi la gricia ⏎ anzi no, la cacio e pepe
   - atteso: hidden|Cacio e pepe|true · ottenuto: nessuna modifica
@@ -1047,19 +1047,19 @@
 - **adv-ordinali-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Bufala|false, price|Bufala|10, price|Marinara|7
   - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo è finito
   - atteso: available|Bufala|false, price|Bufala|10, price|Marinara|7 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
-- **adv-ordinali-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Marinara|false, price|Bufala|10, price|Marinara|7
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-ordinali-006** [GRAVE] GRAVE non-applicato: non applicato: price|Bufala|10, price|Marinara|7
   - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ l'ultimo è finito
-  - atteso: available|Marinara|false, price|Bufala|10, price|Marinara|7 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi?»
+  - atteso: available|Marinara|false, price|Bufala|10, price|Marinara|7 · ottenuto: available|Marinara|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Fatto. *Marinara*: *finito*»
 - **adv-ordinali-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Bufala|true, featured|Marinara|true, price|Bufala|10, price|Marinara|7
   - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ tutti e due in evidenza
   - atteso: featured|Bufala|true, featured|Marinara|true, price|Bufala|10, price|Marinara|7 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *Marinara* (6,00 €) 2. *Bufala* (9,00 €)»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **adv-ordinali-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bufala|11, price|Marinara|7
   - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo a 11
   - atteso: price|Bufala|11, price|Marinara|7 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *Marinara* (6,00 €) 2. *Bufala* (9,00 €)»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **adv-sospeso2-009** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
   - turni: nascondi la gricia ⏎ anzi no, lasciala
   - atteso: nessuna modifica · ottenuto: hidden|Gricia|true

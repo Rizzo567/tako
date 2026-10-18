@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-6a1e7105-7406-4cda-afd6-950b0c16542b",
+  "object": "chat.completion",
+  "created": 1792327154,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p8\",\n      \"section\": null,\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"c2\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta carbonara\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"c2\",\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"riso giallo\",\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"Aggiornato.\"\n}",
+     "reasoning": "We need to produce owner_brain_plan JSON. User says \"Aggiornapure\". Means confirm pending updates? We have pending: need to update pasta al pesto price to 10, ragù to 10, add carbonara 10 in Primi, add riso giallo 8 in Primi. Also need to decide on existing items: they asked earlier, we asked if update existing or create new. Now they say \"Aggiornapure\" meaning proceed with update. So we should set_price for p8 to 10 (price_delta -0.01 or set_price directly), set_price for p4 to 10, create_item for carbonara in c2 (Primi) price 10, create_item for riso giallo in c2 price 8. Also need confirm pending? We'll output actions accordingly, intent change, reply_draft maybe empty? Should reply draft confirm? Probably reply \"Aggiornato.\" but spec says reply_draft always. We'll say \"Aggiornato.\".\n\nConstruct JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.211811591,
+   "prompt_tokens": 3598,
+   "prompt_time": 0.182768261,
+   "completion_tokens": 630,
+   "completion_time": 1.312654044,
+   "total_tokens": 4228,
+   "total_time": 1.495422305,
+   "completion_tokens_details": {
+    "reasoning_tokens": 214
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_90620edd96",
+  "x_groq": {
+   "id": "req_01m57gbwpzengb4hj6ev9ac6n7",
+   "seed": 589491075
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3598,
+  "completion_tokens": 630,
+  "total_tokens": 4228
+ },
+ "ms": 1808,
+ "recordedAt": "2026-10-18T12:39:14.044Z",
+ "conv": "r9-repro"
+}

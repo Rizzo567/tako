@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-82599029-a693-48af-ab42-a8fd8208ac61",
+  "object": "chat.completion",
+  "created": 1792327092,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Primi\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta carbonara\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Primi\",\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"riso giallo\",\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"C’è già \\\"pasta al pesto\\\" a 10,01 € e \\\"pasta al ragù\\\" a 20 €: lo aggiorno o ne creo un altro?\",\n    \"item_refs\": [\"p8\", \"p4\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"C’è già \\\"pasta al pesto\\\" a 10,01 € e \\\"pasta al ragù\\\" a 20 €: lo aggiorno o ne creo un altro?\"\n}",
+     "reasoning": "We need to detect duplicates: pasta al ragù exists p4 hidden, pasta al pesto exists part of p8 name \"Pasta al pesto e lasagna\". So duplicates. Also pasta carbonara not exist, riso giallo not exist. So need clarify for those duplicates. Provide actions for new ones and unclear for duplicates with clarify. So intent=clarify, include actions for new items only, and unclear entries for duplicates. uncertain list maybe. Provide clarify.question. Let's craft."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.053746572,
+   "prompt_tokens": 3953,
+   "prompt_time": 0.241256523,
+   "completion_tokens": 434,
+   "completion_time": 0.906837049,
+   "total_tokens": 4387,
+   "total_time": 1.148093572,
+   "completion_tokens_details": {
+    "reasoning_tokens": 101
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m57ga0mfefhvha8qksskd6z4",
+   "seed": 877293773
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3953,
+  "completion_tokens": 434,
+  "total_tokens": 4387
+ },
+ "ms": 1393,
+ "recordedAt": "2026-10-18T12:38:12.032Z",
+ "conv": "r9-repro"
+}

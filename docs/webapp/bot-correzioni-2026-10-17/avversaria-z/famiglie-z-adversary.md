@@ -331,7 +331,7 @@
 - **z-riepilogo-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Carbonara|13, price|Tagliata|19
   - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ togli la birra dalla lista ⏎ ok
   - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Babà* (5,00 €)»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)»
 - **z-riepilogo-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Carbonara|13, price|Tagliata|19
   - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ la birra lasciala com'è ⏎ ok
   - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica

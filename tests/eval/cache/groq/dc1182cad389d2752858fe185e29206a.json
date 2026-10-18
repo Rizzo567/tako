@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d5cd392f-848e-496f-8182-39e3d146a046",
+  "object": "chat.completion",
+  "created": 1792327030,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Primi\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta al pesto\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Primi\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta al ragù\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Primi\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta carbonara\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Primi\",\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"riso giallo\",\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Aggiungo 4 piatti al menu Primi con i prezzi indicati. Rispondi OK per pubblicare.\"\n}",
+     "reasoning": "We need to parse. Add items in first section? \"primi\" is c2, but \"primi\" already has p9. \"primi\" maybe first? He says \"nei primi aggiungi ...\" So create items in section \"Primi\". Items: pasta al pesto, pasta al ragù, pasta carbonara, riso giallo. Set prices: pastas 10, riso 8. Need create_item for each with known name and price, section \"Primi\". No missing info. So actions list with create_item four times. Also need confirm? Since multiple modifications >3, need OK. So reply_draft should ask for confirmation. Intent change. reply_draft: \"Aggiungo 4 piatti al menu Primi con i prezzi indicati. Rispondi OK per pubblicare.\" Also include unclear? All clear. No uncertain. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.217246063,
+   "prompt_tokens": 3378,
+   "prompt_time": 0.153931356,
+   "completion_tokens": 631,
+   "completion_time": 1.3163965420000001,
+   "total_tokens": 4009,
+   "total_time": 1.470327898,
+   "completion_tokens_details": {
+    "reasoning_tokens": 185
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_19b184c447",
+  "x_groq": {
+   "id": "req_01m57g83y3escbwv1nj7012zjg",
+   "seed": 406543998
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3378,
+  "completion_tokens": 631,
+  "total_tokens": 4009
+ },
+ "ms": 1992,
+ "recordedAt": "2026-10-18T12:37:10.430Z",
+ "conv": "r9-repro"
+}

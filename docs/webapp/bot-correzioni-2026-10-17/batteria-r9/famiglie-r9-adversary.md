@@ -1,0 +1,676 @@
+# Batteria R9 · modo adversary
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| risposta-breve | 90 | 0 | 0 | 0 | 90 |
+| vocale-storpiato | 30 | 12 | 0 | 0 | 18 |
+| testardo | 33 | 8 | 0 | 0 | 25 |
+| doppioni | 32 | 0 | 0 | 0 | 32 |
+| TOTALE | 185 | 20 | 0 | 0 | 165 |
+
+## Fallimenti
+
+- **r9-risposta-breve-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ sì aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ aggiorna pure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ quelli vecchi
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 la 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ ok aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 va bene, aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ usa quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 modifica quello esistente
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ sì, quello vecchio
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiorna quello
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ prima opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ creane un altro
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 il secondo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ la 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ fanne uno nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ crea
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 seconda opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-031** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-032** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ sì aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-033** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-034** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ aggiorna
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-035** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Aggiornapure
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-036** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ aggiorna pure
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-037** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornalo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-038** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ quelli vecchi
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-039** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 quello che c’è
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-040** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ il primo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-041** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 la 1
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-042** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 1
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-043** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 sì
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-044** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ ok aggiorna
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-045** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 va bene, aggiornalo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-046** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ usa quello che c’è
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-047** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 modifica quello esistente
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-048** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ sì, quello vecchio
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-049** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiorna quello
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-050** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ prima opzione
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *pasta al ragù* (20,00 €) 2. *la parmigiana* (15,00 €)»
+- **r9-risposta-breve-051** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ crea nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-052** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-053** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ creane un altro
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-054** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 il secondo
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-055** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ la 2
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-056** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 2
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-057** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ fanne uno nuovo
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-058** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 nuovo
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-059** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ crea
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-060** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 seconda opzione
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-061** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-062** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ sì aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-063** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-064** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-065** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-066** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ aggiorna pure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-067** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-068** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ quelli vecchi
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-069** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-070** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-071** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 la 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-072** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-073** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-074** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ ok aggiorna
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-075** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 va bene, aggiornalo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-076** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ usa quello che c’è
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-077** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 modifica quello esistente
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-078** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ sì, quello vecchio
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-079** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiorna quello
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-080** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ prima opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-081** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-082** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-083** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ creane un altro
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-084** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 il secondo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-085** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ la 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-086** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-087** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ fanne uno nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-risposta-breve-088** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 nuovo
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-089** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ crea
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-risposta-breve-090** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 seconda opzione
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-001** [MEDIO] MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-002** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 grazie
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-vocale-storpiato-004** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Pasta al pesto e lasagna*: *10,01 €* · disponibile
+*pasta al ragù*: *20,00 €* ·»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 pronto?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «*Pasta al pesto e lasagna*: *10,01 €* · disponibile *pasta al ragù*: *20,00 €* · disponibile · nascosto»
+- **r9-vocale-storpiato-005** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Ciao, sì sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-vocale-storpiato-011** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-vocale-storpiato-012** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 grazie
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-vocale-storpiato-014** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Pasta al sugo*: *9,00 €* · disponibile
+*pasta al ragù*: *20,00 €* · disponibile»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 pronto?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «*Pasta al sugo*: *9,00 €* · disponibile *pasta al ragù*: *20,00 €* · disponibile · nascosto *Pasta al pesto e lasagna*: *10,01 €* · disponibile»
+- **r9-vocale-storpiato-015** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Ciao, sì sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-vocale-storpiato-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» · MEDIO domanda-ripetuta-generica: turno 3: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buongiorno a tutti ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» · MEDIO domanda-ripetuta-generica: turno 3: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 boh ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-023** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 grazie ⏎ 🎤 1
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-vocale-storpiato-024** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Pasta al pesto e lasagna*: *10,01 €* · disponibile
+*pasta al ragù*: *20,00 €* ·») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 pronto? ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «*Pasta al pesto e lasagna*: *10,01 €* · disponibile *pasta al ragù*: *20,00 €* · disponibile · nascosto» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» · MEDIO domanda-ripetuta-generica: turno 3: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 eh ⏎ 🎤 2
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-026** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Buongiorno a tutti ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 boh ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-vocale-storpiato-028** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 grazie ⏎ 🎤 1
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-029** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («*Pasta al sugo*: *9,00 €* · disponibile
+*pasta al ragù*: *20,00 €* · disponibile») · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 pronto? ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «*Pasta al sugo*: *9,00 €* · disponibile *pasta al ragù*: *20,00 €* · disponibile · nascosto *Pasta al pesto e lasagna*: *10,01 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-vocale-storpiato-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 eh ⏎ 🎤 2
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-testardo-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-testardo-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-testardo-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|p · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|fals · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 il primo
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 aggiornali
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 nuovi
+  - atteso: create|pasta al ragu|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 Aggiornapure
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8 ⏎ 🎤 sì
+  - atteso: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Sì sì, aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 crea nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 il primo
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 aggiornali
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 nuovi
+  - atteso: create|pasta al pesto|10|primi, create|pasta al ragu|10|primi, create|pasta carbonara|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 Aggiornapure
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10 ⏎ 🎤 sì
+  - atteso: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-testardo-026** [MEDIO] MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi
+  - turni: 🎤 nei primi aggiungi pasta al pesto a 10
+  - atteso: create|pasta al pesto|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi
+  - turni: nei primi aggiungi pasta al pesto a 10
+  - atteso: create|pasta al pesto|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|riso giallo|8|primi
+  - turni: 🎤 in primi aggiungi pasta al pesto a 10 e riso giallo a 8
+  - atteso: create|pasta al pesto|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|10|primi, create|riso giallo|8|primi
+  - turni: in primi aggiungi pasta al pesto a 10 e riso giallo a 8
+  - atteso: create|pasta al pesto|10|primi, create|riso giallo|8|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|12|primi
+  - turni: 🎤 aggiungi nei primi la pasta al pesto a 12
+  - atteso: create|pasta al pesto|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto|12|primi
+  - turni: aggiungi nei primi la pasta al pesto a 12
+  - atteso: create|pasta al pesto|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto e lasagna verde|13|primi
+  - turni: 🎤 nei primi aggiungi pasta al pesto e lasagna verde a 13
+  - atteso: create|pasta al pesto e lasagna verde|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al pesto e lasagna verde|13|primi
+  - turni: nei primi aggiungi pasta al pesto e lasagna verde a 13
+  - atteso: create|pasta al pesto e lasagna verde|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|lasagna|11|primi
+  - turni: 🎤 nei primi aggiungi lasagna a 11
+  - atteso: create|lasagna|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|lasagna|11|primi
+  - turni: nei primi aggiungi lasagna a 11
+  - atteso: create|lasagna|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta|7|primi
+  - turni: 🎤 nei primi aggiungi pasta a 7
+  - atteso: create|pasta|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta|7|primi
+  - turni: nei primi aggiungi pasta a 7
+  - atteso: create|pasta|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 ⏎ 🎤 aggiornalo
+  - atteso: hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-015** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-doppioni-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragu a 10 ⏎ 🎤 aggiornalo
+  - atteso: hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-doppioni-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragu a 10 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-doppioni-018** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi pasta al ragu a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-doppioni-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|pasta al ragù|false, price|pasta al ragù|10 · MEDIO domanda-ripetuta-generica: turno 2: «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+  - turni: 🎤 nei primi aggiungi Pasta al Ragù a 10 ⏎ 🎤 aggiornalo
+  - atteso: hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r9-doppioni-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi
+  - turni: 🎤 nei primi aggiungi Pasta al Ragù a 10 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-021** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi Pasta al Ragù a 10 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Di nulla.»
+- **r9-doppioni-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|11 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al sugo a 11 ⏎ 🎤 aggiornalo
+  - atteso: price|Pasta al sugo|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al sugo|11|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al sugo a 11 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al sugo|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-024** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi pasta al sugo a 11 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-doppioni-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|tiramisù|7 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi il tiramisù a 7 ⏎ 🎤 aggiornalo
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tiramisu|7|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi il tiramisù a 7 ⏎ 🎤 crea nuovo
+  - atteso: create|tiramisu|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-027** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Di nulla.»)
+  - turni: 🎤 nei primi aggiungi il tiramisù a 7 ⏎ 🎤 Buongiorno a tutti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Di nulla.»
+- **r9-doppioni-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al sugo|11|primi, hidden|pasta al ragù|false, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ 🎤 aggiorna il ragù e crea la pasta al sugo
+  - atteso: create|pasta al sugo|11|primi, hidden|pasta al ragù|false, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *pasta al ragù* (20,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto e lasagna* (10,01 €)»
+- **r9-doppioni-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ 🎤 entrambi aggiorna
+  - atteso: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *pasta al ragù* (20,00 €) 2. *Pasta al sugo* (9,00 €)»
+- **r9-doppioni-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ aggiornali tutti e due
+  - atteso: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *pasta al ragù* (20,00 €) 2. *Pasta al sugo* (9,00 €)»
+- **r9-doppioni-031** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, create|pasta al sugo|11|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ creali tutti e due nuovi
+  - atteso: create|pasta al ragu|10|primi, create|pasta al sugo|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r9-doppioni-032** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|10|primi, price|Pasta al sugo|11 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11 ⏎ 🎤 il sugo aggiornalo, il ragù fanne uno nuovo
+  - atteso: create|pasta al ragu|10|primi, price|Pasta al sugo|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»

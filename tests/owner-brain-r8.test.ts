@@ -43,7 +43,7 @@ describe('R8: mai «fatto» senza scrittura, mai il solo «Non ho cambiato nulla
   expect(r.reply).toMatch(/da confermare con OK/);expect(r.pending?.kind).toBe('batch')})
  it('12:58 vero: «Aggiunti i nuovi piatti…» due volte rifiutato → mai inviato; i fatti dicono cosa non è salvato',async()=>{
   const r=await turn([PLANS[2],PLANS[2]]);expect(r.wrote).toBe(0)
-  expect(r.reply).not.toMatch(/Aggiunti/);expect(r.reply).toMatch(/Non salvato: /);expect(r.reply).toMatch(/pasta al ragù\* \(20,00 €\)/)})
+  expect(r.reply).not.toMatch(/Aggiunti/);expect(r.reply).toMatch(/Non salvato: |Non ancora pubblicato:\n1\. /);expect(r.reply).toMatch(/pasta al ragù\* \(20,00 €\)/)})
  it('piano senza azioni con bozza «Ho spostato…»: la bozza cade, nessuna scrittura',async()=>{
   const p={...PLANS[0],intent:'chat',actions:[],reply_draft:'Ho spostato la parmigiana nei Primi.'}
   const r=await turn([p,p],'grazie');expect(r.wrote).toBe(0);expect(r.reply).not.toMatch(/spostat/i)})

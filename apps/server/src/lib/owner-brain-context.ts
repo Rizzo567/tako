@@ -12,12 +12,12 @@ import {allowedTags,capabilities} from './twilio-menu-copy.js'
 export type BrainTurn={role:'owner'|'bot',text:string,at:number}
 export type BrainMemoryEntry={phrase:string,kind:'alias'|'asr'|'habit',itemId:string|null,meaning:string,state:'candidate'|'active'|'review',confirmations:number,uses:number,lastUsedAt:number|null}
 export type BrainDraft={name:string|null,names?:string[],price:number|null,prices?:(number|null)[],section:string|null,sectionName?:string|null}
-export type BrainPending={proposal?:MenuAction[]|null,clarify?:{question:string,itemIds:string[],source?:string}|null,draft?:BrainDraft|null,
+export type BrainPending={proposal?:MenuAction[]|null,clarify?:{question:string,itemIds:string[],source?:string,actions?:MenuAction[],twins?:{id:string,name:string,price:number|null,sectionId:string|null}[]}|null,draft?:BrainDraft|null,
  /** Fase R: perché la proposta aspetta (elimina/categoria = «sì», riepilogo/prezzo insolito = «OK»), parti incerte, annulla possibile. */
  proposalWhy?:'delete'|'recap'|'section'|'price'|null,hold?:{actions:MenuAction[],asks:{word:string,itemIds:string[]}[],source?:string}|null,undo?:{minutes:number,names:string[]}|null}
 /** Testo della bozza che vale come «detto dal titolare» per le creazioni (nomi e prezzi già dati nei messaggi prima). */
 export const draftText=(d:BrainDraft|null|undefined)=>d?[...(d.names??(d.name?[d.name]:[])),...(d.price!=null?['a '+d.price]:[]),...((d.prices??[]).filter((x):x is number=>typeof x==='number').map(x=>'a '+x))].join(' \n '):''
-export type BrainContextInput={restaurantName?:string,refs:MenuRef[],sections:SectionRef[],memory?:BrainMemoryEntry[],history?:BrainTurn[],pending?:BrainPending|null,message:string,now?:number}
+export type BrainContextInput={restaurantName?:string,refs:MenuRef[],sections:SectionRef[],memory?:BrainMemoryEntry[],history?:BrainTurn[],pending?:BrainPending|null,message:string,now?:number,voice?:boolean}
 export type BrainMessage={role:'system'|'user'|'assistant',content:string}
 export type BrainTokens={general:number,restaurant:number,history:number,pending:number,message:number,total:number}
 export type BrainContext={messages:BrainMessage[],codes:Map<string,string>,codeOf:Map<string,string>,tokens:BrainTokens,compression:CompressionLevel,historyUsed:number}
@@ -116,13 +116,21 @@ function describePending(a:MenuAction,codeOf:Map<string,string>,refs:MenuRef[]):
   case 'special':return 'del giorno «'+oneLine(a.name,60)+'» '+num(a.price)
   default:return 'id' in a&&typeof (a as any).id==='string'?c((a as any).id)+' '+a.kind:a.kind}
 }
-export function pendingText(pending:BrainPending|null|undefined,codeOf:Map<string,string>,refs:MenuRef[]){
+const sameName=(a:string,b:string)=>a.trim()===b.trim()
+export function pendingText(pending:BrainPending|null|undefined,codeOf:Map<string,string>,refs:MenuRef[],o:{voice?:boolean,message?:string}={}){
  const out:string[]=[]
  const why=pending?.proposalWhy?{delete:'eliminazione: serve un «sì»',section:'categoria nuova: serve un «sì»',recap:'riepilogo: serve «OK»',price:'prezzo insolito: serve «OK»'}[pending.proposalWhy]:null
  if(pending?.proposal?.length)out.push('IN SOSPESO (proposta non confermata'+(why?', '+why:'')+')\n'+pending.proposal.slice(0,30).map((a,i)=>(i+1)+'. '+describePending(a,codeOf,refs)).join('\n'))
  if(pending?.hold)out.push('IN SOSPESO (parti chiare non pubblicate, aspettano le risposte alle tue domande)\n'+(pending.hold.actions.length?pending.hold.actions.slice(0,30).map((a,i)=>(i+1)+'. '+describePending(a,codeOf,refs)).join('\n'):'(nessuna parte chiara)')+'\nDOMANDE APERTE: '+pending.hold.asks.map(q=>'«'+oneLine(q.word,60)+'»'+(q.itemIds.length?' candidati '+q.itemIds.map(id=>codeOf.get(id)).filter(Boolean).join(','):'')).join('; ')+(pending.hold.source?' — sul messaggio «'+oneLine(pending.hold.source,200)+'»':''))
  if(pending?.draft){const d=pending.draft,num=(x:number|null|undefined)=>x==null?'?':String(x);out.push('IN SOSPESO (aggiunta di un piatto non finita, tua domanda aperta): '+(d.names?.length?'«'+d.names.map(n=>oneLine(n,60)).join('» e «')+'» (due piatti o uno solo «'+oneLine(d.name??'',80)+'»?) prezzi '+(d.prices??d.names.map(()=>null)).map(num).join(', '):'«'+oneLine(d.name??'?',80)+'» prezzo '+num(d.price))+' categoria '+(d.section?'«'+oneLine(d.section,60)+'»':d.sectionName?'«'+oneLine(d.sectionName,60)+'» (non esiste nel menu)':'?'))}
  if(pending?.clarify)out.push('IN SOSPESO (tua domanda aperta): '+oneLine(pending.clarify.question,200)+(pending.clarify.source?' — sul messaggio «'+oneLine(pending.clarify.source,200)+'»':'')+(pending.clarify.itemIds.length?' candidati '+pending.clarify.itemIds.map(id=>codeOf.get(id)).filter(Boolean).join(','):''))
+ // R9 (18/10, QA «sì sì, aggiornali» → stessa domanda all'infinito): la domanda «c'è già X: lo aggiorno o ne creo un altro?» porta
+ // con sé la richiesta originale (parti chiare in attesa, piatti con lo stesso nome, prezzi detti) e le opzioni. La scelta la fa il modello.
+ if(pending?.clarify?.twins?.length){const c=pending.clarify,tw=c.twins!
+  out.push('RICHIESTA IN ATTESA DELLA RISPOSTA (stessa richiesta originale)\n'+(c.actions?.length?'parti chiare: '+c.actions.slice(0,30).map(a=>describePending(a,codeOf,refs)).join('; ')+'\n':'')+'già nel menu con lo stesso nome: '+tw.map(t=>{const r=refs.find(x=>x.id===t.id);return(codeOf.get(t.id)??'?')+' «'+oneLine(r?.name??t.name,60)+'» '+num(r?.price??0)+(r?.hidden?' nascosto':'')+(t.price!=null||!sameName(t.name,r?.name??t.name)?' ('+[t.price!=null?'prezzo detto '+num(t.price):'',!sameName(t.name,r?.name??t.name)?'nome detto «'+oneLine(t.name,60)+'»':''].filter(Boolean).join(', ')+')':'')}).join('; ')
+   +'\nOPZIONI per ognuno: 1) aggiornare quello che c\u2019è (set_price al prezzo detto; se è nascosto anche set_hidden value=false) 2) crearne un altro (create_item con lo stesso nome e il prezzo detto). La risposta breve del titolare («aggiornali», «sì», «il primo», «quelli vecchi», «crea nuovi», «nuovi», «aggiorna il X e crea il Y»…) sceglie: scrivi UN piano intent=change con le parti chiare + la scelta. Se non sceglie, una domanda DIVERSA con le opzioni numerate; mai la stessa domanda.')}
+ // R9 (d): vocale breve dopo una domanda in sospeso: la trascrizione può essere sbagliata («Buongiorno a tutti» per «aggiornali»).
+ if(o.voice&&(pending?.clarify||pending?.hold||pending?.proposal?.length)&&(o.message??'').trim().split(/\s+/).length<=6)out.push('NOTA: il MESSAGGIO è un vocale trascritto in automatico e può essere sbagliato. C\u2019è una tua domanda/proposta in sospeso: se la trascrizione è una risposta plausibile, usala; se non c\u2019entra, chiedi di ripeterla o di rispondere col numero dell\u2019opzione. Mai la stessa domanda di prima.')
  if(pending?.undo&&pending.undo.names.length)out.push('ULTIMA PUBBLICAZIONE (annullabile con undo_last per altri '+pending.undo.minutes+' min): '+pending.undo.names.slice(0,8).map(n=>oneLine(n,60)).join(', '))
  return out.join('\n')
 }
@@ -135,7 +143,7 @@ export function buildBrainContext(input:BrainContextInput):BrainContext{
  const restaurant=['LOCALE: '+oneLine(input.restaurantName??'ristorante',80),menu.text,memory].filter(Boolean).join('\n\n')
  const turns=recentHistory(input.history??[],now)
  const historyMessages:BrainMessage[]=turns.map(t=>({role:t.role==='owner'?'user':'assistant',content:oneLine(t.text,t.role==='owner'?400:300)}))
- const pend=pendingText(input.pending,menu.codeOf,refs),message=input.message.slice(0,4000)
+ const pend=pendingText(input.pending,menu.codeOf,refs,{voice:input.voice,message:input.message}),message=input.message.slice(0,4000)
  const last=(pend?pend+'\n\n':'')+'MESSAGGIO\n'+message
  const messages:BrainMessage[]=[{role:'system',content:GENERAL_CARD},{role:'system',content:restaurant},...historyMessages,{role:'user',content:last}]
  const tokens={general:estimateTokens(GENERAL_CARD),restaurant:estimateTokens(restaurant),history:historyMessages.reduce((n,m)=>n+estimateTokens(m.content)+4,0),pending:estimateTokens(pend),message:estimateTokens(message)+4,total:0}
