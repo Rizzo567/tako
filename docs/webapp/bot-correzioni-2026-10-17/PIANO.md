@@ -167,4 +167,5 @@ A7.14 NON superato: Y (codex/bot-adv2-1017 cd777a8, `avversaria-y/REPORT-Y.md`) 
 ### R7 Gate Developer e rilascio
 - [ ] R7.1 Banco completo + tutte le batterie con gpt-oss vero (chiave Developer).
 - [ ] R7.2 Deploy edge sul QA (check-active, diff, rollback), live solo TwiML, ripristino per hash, 0 messaggi a Manuel; rifare la sequenza vocale delle 17:26.
+  - 18/10 R4: **BLOCCATO al pre-deploy** — il diff v112→build tocca anche il percorso a regole dei clienti (copy/nlu/create/hold/structure, fasi A/B); online resta v112, 0 token, nessuna prova live. Vedi REPORT-R7-2.md.
 - [ ] R7.3 Fast-forward main/release-1016; REPORT-R.md; accensione clienti solo col via di Manuel.

@@ -37,3 +37,5 @@ Tetto: 130k token per chiave (quota free ~200k/giorno), mai `groq-key.txt` né `
 | 02:45–03:50 | banco vero, stesso giro (replay del già registrato + nuovo) | test-2 | 33 | 125.957 |
 
 **Totale: 252.773 token (test 126.816, test-2 125.957).** Media 3.632 token per chiamata, 4.843 per conversazione. Entrambe le chiavi al tetto: STOP. Misurate col modello vero 41/92 conversazioni (tutte le semplici e le domande, 5 multiple); le altre 51 risultano «non disponibile» (nessuna risposta in cache) e NON sono misure. Mancano ~110 chiamate ≈ 400k token per finire il banco vero, più ~250k per il campione di banco E (60 conv.) e i casi Y/E: tutto al gate Developer.
+
+| R7.2 (R4, 18/10) | chiave del bot | 0 (stop al pre-deploy, nessuna prova live) |
