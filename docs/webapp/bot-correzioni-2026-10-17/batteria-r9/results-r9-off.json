@@ -95,7 +95,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -103,6 +103,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -120,8 +121,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    1.1
+    2.2,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -141,7 +142,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -149,6 +150,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -166,7 +168,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.7,
     1
    ],
    "recordedLlmMs": 0,
@@ -187,7 +189,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -195,6 +197,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -212,7 +215,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
+    1.8,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -233,7 +236,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -241,6 +244,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -279,7 +283,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -287,6 +291,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -304,8 +309,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.8
+    2,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -325,7 +330,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -333,6 +338,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -350,8 +356,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    2.6,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -371,7 +377,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -379,6 +385,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -396,8 +403,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.9
+    1.7,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -417,7 +424,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -425,6 +432,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -442,8 +450,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1
+    1.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -463,7 +471,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -471,6 +479,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -488,8 +497,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.4
+    1.9,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -509,7 +518,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -517,6 +526,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -555,7 +565,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -563,6 +573,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -580,8 +591,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.5
+    1.9,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -601,7 +612,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -609,6 +620,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -627,7 +639,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -647,7 +659,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -655,6 +667,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -672,8 +685,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.8
+    1.8,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -693,7 +706,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -701,6 +714,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -718,8 +732,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    1.4
+    1.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -739,7 +753,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -747,6 +761,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -764,8 +779,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    5.1,
-    1.6
+    1.4,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -785,7 +800,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -793,6 +808,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -831,7 +847,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -839,6 +855,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -856,8 +873,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.2
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -877,7 +894,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -885,6 +902,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -903,7 +921,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -923,7 +941,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -931,6 +949,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -948,8 +967,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.9
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -969,7 +988,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -977,6 +996,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -994,7 +1014,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.4,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -1040,7 +1060,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1.6
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1084,7 +1104,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.4,
     1
    ],
    "recordedLlmMs": 0,
@@ -1130,7 +1150,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1.3
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1174,7 +1194,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.7,
     1
    ],
    "recordedLlmMs": 0,
@@ -1220,7 +1240,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1.3
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1264,7 +1284,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.8,
     1
    ],
    "recordedLlmMs": 0,
@@ -1310,7 +1330,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1.3
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1354,7 +1374,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.7,
     1
    ],
    "recordedLlmMs": 0,
@@ -1400,7 +1420,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1.2
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1445,7 +1465,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1465,12 +1485,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1509,12 +1530,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1532,8 +1554,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1
+    1.2,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1553,12 +1575,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1576,8 +1599,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.1
+    1.8,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1597,12 +1620,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1620,8 +1644,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.3
+    1.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1641,12 +1665,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1664,8 +1689,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    0.9
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1685,12 +1710,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1729,12 +1755,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1752,7 +1779,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -1773,12 +1800,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1796,8 +1824,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    0.9
+    1.5,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1817,12 +1845,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1840,8 +1869,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.5
+    1.2,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1861,12 +1890,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1884,8 +1914,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.9
+    1.2,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1905,12 +1935,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1929,7 +1960,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1949,12 +1980,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -1972,7 +2004,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
+    1.2,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -1993,12 +2025,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2016,7 +2049,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.5,
     1
    ],
    "recordedLlmMs": 0,
@@ -2037,12 +2070,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2061,7 +2095,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.4
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2081,12 +2115,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2104,8 +2139,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2125,12 +2160,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2169,12 +2205,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2192,7 +2229,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -2213,12 +2250,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2236,7 +2274,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.6,
     1
    ],
    "recordedLlmMs": 0,
@@ -2257,12 +2295,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2281,7 +2320,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.4
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2301,12 +2340,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2325,7 +2365,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    0.9
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2367,7 +2407,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1.3,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -2410,7 +2450,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -2453,7 +2493,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1.6,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -2496,8 +2536,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.4
+    1.2,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2539,8 +2579,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2625,7 +2665,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
+    1.2,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -2668,8 +2708,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1
+    1.5,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2712,7 +2752,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.3
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2754,8 +2794,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1
+    1.2,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2775,13 +2815,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2799,7 +2840,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.3,
     1
    ],
    "recordedLlmMs": 0,
@@ -2820,13 +2861,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2844,8 +2886,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1
+    1.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2865,13 +2907,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2889,8 +2932,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1
+    1.8,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2910,13 +2953,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2934,8 +2978,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.3
+    1.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2955,13 +2999,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -2979,8 +3024,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3000,13 +3045,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3024,7 +3070,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.3,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -3045,13 +3091,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3069,7 +3116,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -3090,13 +3137,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3114,7 +3162,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.6,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -3135,13 +3183,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3160,7 +3209,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.6
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3180,13 +3229,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3204,8 +3254,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.9
+    1.2,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3225,13 +3275,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3270,13 +3321,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3294,7 +3346,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.2,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -3315,13 +3367,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3339,7 +3392,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.5,
     1
    ],
    "recordedLlmMs": 0,
@@ -3360,13 +3413,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3385,7 +3439,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.3
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3405,13 +3459,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3430,7 +3485,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3450,13 +3505,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3495,13 +3551,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3519,7 +3576,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
+    1.2,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -3540,13 +3597,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3564,8 +3622,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    0.9
+    1.6,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3585,13 +3643,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3610,7 +3669,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    1.6
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3630,13 +3689,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -3654,8 +3714,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1
+    1.2,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3698,7 +3758,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.4,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -3742,7 +3802,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
+    1.3,
     1
    ],
    "recordedLlmMs": 0,
@@ -3786,8 +3846,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.9
+    1.7,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3830,8 +3890,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.5
+    1.3,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3874,8 +3934,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    0.9
+    1.3,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3918,7 +3978,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.4,
     1
    ],
    "recordedLlmMs": 0,
@@ -3962,7 +4022,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
+    1.2,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -4006,7 +4066,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.7,
     1
    ],
    "recordedLlmMs": 0,
@@ -4051,7 +4111,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.5
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4094,8 +4154,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.1
+    1.3,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4174,8 +4234,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.1
+    1.4,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4214,7 +4274,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.5,
     1
    ],
    "recordedLlmMs": 0,
@@ -4254,8 +4314,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.1
+    1.4,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4294,7 +4354,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.8,
     1
    ],
    "recordedLlmMs": 0,
@@ -4334,7 +4394,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
+    1.4,
     1
    ],
    "recordedLlmMs": 0,
@@ -4374,7 +4434,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.6,
     1
    ],
    "recordedLlmMs": 0,
@@ -4414,8 +4474,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    1.1
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4454,7 +4514,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.6,
     1
    ],
    "recordedLlmMs": 0,
@@ -4494,7 +4554,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
+    1.4,
     1
    ],
    "recordedLlmMs": 0,
@@ -4534,7 +4594,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.1,
     1
    ],
    "recordedLlmMs": 0,
@@ -4574,8 +4634,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.3
+    1.5,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4614,7 +4674,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.1,
     1
    ],
    "recordedLlmMs": 0,
@@ -4655,7 +4715,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4694,7 +4754,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -4774,8 +4834,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.3
+    1.6,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4814,7 +4874,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -4855,7 +4915,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4894,8 +4954,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    1.2,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4920,7 +4980,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -4928,6 +4988,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -4947,9 +5008,9 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    0.9,
-    1
+    1.4,
+    1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4974,7 +5035,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -4982,6 +5043,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5001,9 +5063,9 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    0.9,
-    0.9
+    1.4,
+    1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5028,7 +5090,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5036,6 +5098,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5056,8 +5119,8 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    1,
-    1.6
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5109,7 +5172,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    0.9,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -5161,9 +5224,9 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.6,
-    1.1
+    1.8,
+    1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5188,12 +5251,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5213,9 +5277,9 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.1,
     1,
-    1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5240,12 +5304,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5265,9 +5330,9 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    0.9,
-    0.9
+    1.2,
+    1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5292,12 +5357,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5318,8 +5384,8 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    0.9,
-    1.3
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5368,9 +5434,9 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    1.5,
-    1.7
+    1.1,
+    0.9,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5419,8 +5485,8 @@
    "llmMisses": 6,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    1.2,
+    1.4,
+    0.9,
     1
    ],
    "recordedLlmMs": 0,
@@ -5441,7 +5507,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5449,6 +5515,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5466,7 +5533,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
+    1.3,
     1
    ],
    "recordedLlmMs": 0,
@@ -5487,7 +5554,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5495,6 +5562,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5578,7 +5646,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5586,6 +5654,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5603,7 +5672,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
+    1.8,
     1.1
    ],
    "recordedLlmMs": 0,
@@ -5624,7 +5693,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5632,6 +5701,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5694,8 +5764,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    0.9
+    1.9,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5715,7 +5785,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5723,6 +5793,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5740,7 +5811,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.4,
     1
    ],
    "recordedLlmMs": 0,
@@ -5761,7 +5832,7 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
@@ -5769,6 +5840,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5786,8 +5858,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5807,12 +5879,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5830,8 +5903,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    0.9
+    1.2,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5851,12 +5924,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5875,7 +5949,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    1.3
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5917,8 +5991,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    0.9
+    1.4,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5938,12 +6012,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -5982,12 +6057,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6005,8 +6081,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    0.9
+    1.1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6069,12 +6145,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6093,7 +6170,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.1,
-    1.4
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6113,12 +6190,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|riso giallo|8|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6136,7 +6214,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.4,
     1
    ],
    "recordedLlmMs": 0,
@@ -6157,13 +6235,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6182,7 +6261,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6202,13 +6281,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6226,8 +6306,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1
+    1.3,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6270,7 +6350,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
+    2.3,
     1
    ],
    "recordedLlmMs": 0,
@@ -6291,13 +6371,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6316,7 +6397,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    1.4
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6336,13 +6417,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6360,7 +6442,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1.6,
     0.9
    ],
    "recordedLlmMs": 0,
@@ -6405,7 +6487,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6425,13 +6507,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6449,8 +6532,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1
+    1.2,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6470,13 +6553,14 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al pesto|10|primi, create|pasta carbonara|10|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -6529,8 +6613,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.5
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6564,8 +6648,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1
+    2,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6599,8 +6683,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.4
+    1.4,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6634,8 +6718,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    0.9
+    1.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6669,8 +6753,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1
+    2.2,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6705,7 +6789,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6740,7 +6824,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.2,
-    0.9
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6774,8 +6858,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.4
+    1.6,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6809,7 +6893,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -6878,7 +6962,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6913,7 +6997,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6948,7 +7032,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6982,7 +7066,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7016,7 +7100,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7050,7 +7134,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7084,7 +7168,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7118,7 +7202,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7152,7 +7236,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7186,7 +7270,7 @@
    "llmMisses": 2,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7240,11 +7324,12 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -7262,7 +7347,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -7304,8 +7389,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.6
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7344,7 +7429,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -7365,11 +7450,12 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -7387,8 +7473,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1
+    1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7429,8 +7515,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.1
+    1.1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7469,7 +7555,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -7490,11 +7576,12 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -7512,8 +7599,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.5
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7554,7 +7641,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -7594,8 +7681,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.1
+    1,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7615,10 +7702,11 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: price|Pasta al sugo|11"
+     "why": "non applicato: move|Pasta al sugo|Primi, price|Pasta al sugo|11"
     }
    ],
    "expected": [
+    "move|Pasta al sugo|Primi",
     "price|Pasta al sugo|11"
    ],
    "actual": [],
@@ -7636,8 +7724,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.1
+    1.1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7678,8 +7766,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1
+    1,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7718,8 +7806,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.4
+    1.3,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7739,10 +7827,11 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: price|tiramisù|7"
+     "why": "non applicato: move|tiramisù|Primi, price|tiramisù|7"
     }
    ],
    "expected": [
+    "move|tiramisù|Primi",
     "price|tiramisù|7"
    ],
    "actual": [],
@@ -7760,7 +7849,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1,
     1
    ],
    "recordedLlmMs": 0,
@@ -7802,8 +7891,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1
+    1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7842,8 +7931,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.1
+    1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7863,12 +7952,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al sugo|11|primi, hidden|pasta al ragù|false, price|pasta al ragù|10"
+     "why": "non applicato: create|pasta al sugo|11|primi, hidden|pasta al ragù|false, move|pasta al ragù|Primi, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "create|pasta al sugo|11|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [],
@@ -7886,7 +7976,7 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
+    1.2,
     1
    ],
    "recordedLlmMs": 0,
@@ -7907,11 +7997,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10"
+     "why": "non applicato: hidden|pasta al ragù|false, move|Pasta al sugo|Primi, move|pasta al ragù|Primi, price|Pasta al sugo|11, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|Pasta al sugo|Primi",
+    "move|pasta al ragù|Primi",
     "price|Pasta al sugo|11",
     "price|pasta al ragù|10"
    ],
@@ -7930,8 +8022,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.4
+    1.6,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7951,11 +8043,13 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: hidden|pasta al ragù|false, price|Pasta al sugo|11, price|pasta al ragù|10"
+     "why": "non applicato: hidden|pasta al ragù|false, move|Pasta al sugo|Primi, move|pasta al ragù|Primi, price|Pasta al sugo|11, price|pasta al ragù|10"
     }
    ],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|Pasta al sugo|Primi",
+    "move|pasta al ragù|Primi",
     "price|Pasta al sugo|11",
     "price|pasta al ragù|10"
    ],
@@ -7974,8 +8068,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1
+    1.2,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8017,8 +8111,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    0.9
+    1.1,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -8038,11 +8132,12 @@
     {
      "sev": "GRAVE",
      "code": "non-applicato",
-     "why": "non applicato: create|pasta al ragu|10|primi, price|Pasta al sugo|11"
+     "why": "non applicato: create|pasta al ragu|10|primi, move|Pasta al sugo|Primi, price|Pasta al sugo|11"
     }
    ],
    "expected": [
     "create|pasta al ragu|10|primi",
+    "move|Pasta al sugo|Primi",
     "price|Pasta al sugo|11"
    ],
    "actual": [],
@@ -8060,8 +8155,8 @@
    "llmMisses": 4,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.1
+    1.1,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,

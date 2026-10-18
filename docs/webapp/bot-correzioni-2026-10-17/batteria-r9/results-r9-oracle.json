@@ -59,9 +59,9 @@
   "codes": {},
   "latency": {
    "harnessP50": 2.9,
-   "harnessP95": 6.9,
+   "harnessP95": 6.7,
    "withRecordedGroqP50": 2.9,
-   "withRecordedGroqP95": 6.9
+   "withRecordedGroqP95": 6.7
   },
   "llm": {
    "calls": 689,
@@ -81,6 +81,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -88,11 +89,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -104,8 +106,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    52.9,
-    10
+    51.5,
+    10.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -122,6 +124,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -129,11 +132,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -145,8 +149,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    12.4,
-    10.1
+    11.2,
+    9.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -163,6 +167,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -170,11 +175,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -186,8 +192,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    10.3,
-    4.4
+    9.5,
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -204,6 +210,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -211,11 +218,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -227,8 +235,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.2,
-    3.4
+    7.6,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -245,6 +253,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -252,11 +261,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -268,8 +278,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    9.1,
-    3.6
+    8.8,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -286,6 +296,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -293,11 +304,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -309,8 +321,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.9,
-    3.3
+    7.4,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -327,6 +339,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -334,11 +347,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -368,6 +382,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -375,11 +390,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -391,8 +407,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7,
-    2.8
+    6.9,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -409,6 +425,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -416,11 +433,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -432,7 +450,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2,
+    6.7,
     11.5
    ],
    "recordedLlmMs": 0,
@@ -450,6 +468,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -457,11 +476,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -473,7 +493,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8,
+    6.7,
     2.6
    ],
    "recordedLlmMs": 0,
@@ -491,6 +511,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -498,11 +519,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -514,7 +536,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9,
+    6.7,
     2.8
    ],
    "recordedLlmMs": 0,
@@ -532,6 +554,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -539,11 +562,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -555,8 +579,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.5,
-    3.1
+    6.4,
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -573,6 +597,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -580,11 +605,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -596,8 +622,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.2,
-    23.4
+    8.6,
+    22.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -614,6 +640,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -621,11 +648,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -637,7 +665,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9,
+    6.7,
     2.7
    ],
    "recordedLlmMs": 0,
@@ -655,6 +683,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -662,11 +691,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -678,8 +708,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9,
-    2.8
+    6.6,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -696,6 +726,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -703,11 +734,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -719,8 +751,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8,
-    3
+    6.6,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -737,6 +769,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -744,11 +777,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -760,7 +794,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.7,
+    6.6,
     3
    ],
    "recordedLlmMs": 0,
@@ -778,6 +812,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -785,11 +820,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -801,8 +837,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.5,
-    3.4
+    6.4,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -819,6 +855,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -826,11 +863,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -843,7 +881,7 @@
    "llmTokens": 0,
    "latencyMs": [
     6.6,
-    2.9
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -860,6 +898,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -867,11 +906,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -883,8 +923,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.4,
-    2.4
+    6.2,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -922,8 +962,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.3,
-    2.6
+    6.1,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -961,7 +1001,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.2,
+    6.5,
     2.4
    ],
    "recordedLlmMs": 0,
@@ -1000,8 +1040,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.7,
-    3.2
+    6.1,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1039,8 +1079,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.5,
-    2.9
+    6.8,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1078,8 +1118,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.3,
-    2.2
+    6.4,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1117,7 +1157,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
+    6.1,
     2.3
    ],
    "recordedLlmMs": 0,
@@ -1156,7 +1196,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.2,
+    6,
     2.4
    ],
    "recordedLlmMs": 0,
@@ -1195,8 +1235,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.6,
-    2.4
+    6.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1273,8 +1313,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.7,
-    3.1
+    5.8,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1289,16 +1329,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1310,8 +1352,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    2.2
+    4.7,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1326,16 +1368,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1348,7 +1392,7 @@
    "llmTokens": 0,
    "latencyMs": [
     3.1,
-    2.6
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1363,427 +1407,22 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
     "🎤 Sì sì, aggiornali"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3.9,
-    2.5
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-034",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "aggiorna"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3,
-    2.5
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-035",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "🎤 Aggiornapure"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    2.9,
-    2.3
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-036",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "aggiorna pure"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3,
-    2.1
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-037",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "🎤 aggiornalo"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3.4,
-    2.1
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-038",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "quelli vecchi"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    2.8,
-    2.3
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-039",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "🎤 quello che c’è"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    2.9,
-    2.3
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-040",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "il primo"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3.1,
-    2
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-041",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "🎤 la 1"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3.4,
-    2.1
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-042",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "1"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    3,
-    2.4
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-043",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "🎤 sì"
-   ],
-   "clarifications": 1,
-   "unexpectedClarifications": 0,
-   "llmCalls": 3,
-   "llmMisses": 0,
-   "llmTokens": 0,
-   "latencyMs": [
-    2.8,
-    2.1
-   ],
-   "recordedLlmMs": 0,
-   "usedLlm": true,
-   "source": "r9:risposta-breve"
-  },
-  {
-   "id": "r9-risposta-breve-044",
-   "family": "b2-categorie",
-   "menu": "qalive2",
-   "success": true,
-   "fails": [],
-   "expected": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|riso giallo|8|primi",
-    "hidden|pasta al ragù|false",
-    "price|pasta al ragù|10"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
-   ],
-   "turns": [
-    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
-    "ok aggiorna"
    ],
    "clarifications": 1,
    "unexpectedClarifications": 0,
@@ -1799,6 +1438,435 @@
    "source": "r9:risposta-breve"
   },
   {
+   "id": "r9-risposta-breve-034",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "aggiorna"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.3,
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-035",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "🎤 Aggiornapure"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9,
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-036",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "aggiorna pure"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.8,
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-037",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.2,
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-038",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "quelli vecchi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.4,
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-039",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "🎤 quello che c’è"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9,
+    2.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-040",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "il primo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9,
+    2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-041",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "🎤 la 1"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3,
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-042",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "1"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.4,
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-043",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "🎤 sì"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3,
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
+   "id": "r9-risposta-breve-044",
+   "family": "b2-categorie",
+   "menu": "qalive2",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "actual": [
+    "create|riso giallo|8|primi",
+    "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
+    "ok aggiorna"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9,
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r9:risposta-breve"
+  },
+  {
    "id": "r9-risposta-breve-045",
    "family": "b2-categorie",
    "menu": "qalive2",
@@ -1807,16 +1875,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1828,8 +1898,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    2.5
+    2.8,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1844,16 +1914,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1865,8 +1937,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.7
+    3.3,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1881,16 +1953,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1902,8 +1976,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.3
+    2.9,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1918,16 +1992,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1939,8 +2015,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5,
-    2.3
+    2.9,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1955,16 +2031,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -1977,7 +2055,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2.9,
-    2.8
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -1992,16 +2070,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -2013,8 +2093,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2
+    3.1,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2048,8 +2128,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2.1
+    2.8,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2083,8 +2163,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    2
+    2.9,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2119,7 +2199,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2.8,
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2153,8 +2233,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2
+    3.2,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2188,7 +2268,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
+    4.3,
     2
    ],
    "recordedLlmMs": 0,
@@ -2258,8 +2338,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.5
+    2.9,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2328,7 +2408,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
+    3.3,
     2
    ],
    "recordedLlmMs": 0,
@@ -2363,8 +2443,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.4
+    2.9,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2380,17 +2460,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2403,7 +2485,7 @@
    "llmTokens": 0,
    "latencyMs": [
     4.4,
-    2.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2419,17 +2501,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2441,8 +2525,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.4
+    4.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2458,17 +2542,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2480,8 +2566,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.6
+    4.6,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2497,17 +2583,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2519,8 +2607,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.3
+    5,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2536,17 +2624,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2558,8 +2648,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.4
+    4.8,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2575,17 +2665,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2597,8 +2689,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.8,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2614,17 +2706,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2636,8 +2730,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.7,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2653,17 +2747,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2675,7 +2771,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
+    4.8,
     2.4
    ],
    "recordedLlmMs": 0,
@@ -2692,17 +2788,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2714,8 +2812,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.7
+    4.8,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2731,17 +2829,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2753,8 +2853,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.7,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2770,17 +2870,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2792,8 +2894,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.4
+    4.8,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2809,17 +2911,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2831,7 +2935,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
+    5,
     2.2
    ],
    "recordedLlmMs": 0,
@@ -2848,17 +2952,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2870,7 +2976,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
+    5.6,
     2.4
    ],
    "recordedLlmMs": 0,
@@ -2887,17 +2993,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2909,7 +3017,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
+    4.9,
     2.3
    ],
    "recordedLlmMs": 0,
@@ -2926,17 +3034,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2948,8 +3058,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
-    2.4
+    5.8,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -2965,17 +3075,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -2987,7 +3099,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
+    5.1,
     2.6
    ],
    "recordedLlmMs": 0,
@@ -3004,17 +3116,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -3026,8 +3140,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.6
+    5.2,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3043,17 +3157,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -3065,8 +3181,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.4
+    4.7,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3082,17 +3198,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -3104,7 +3222,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
+    4.9,
     2.3
    ],
    "recordedLlmMs": 0,
@@ -3121,17 +3239,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -3143,8 +3263,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.7,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3180,8 +3300,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.9,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3217,8 +3337,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.7,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3254,8 +3374,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    4.7,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3291,8 +3411,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
-    2.4
+    4.6,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3328,8 +3448,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.3
+    4.6,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3365,8 +3485,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.4
+    4.7,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3402,8 +3522,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.3
+    5.1,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3439,8 +3559,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.5
+    4.6,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3476,8 +3596,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.4
+    5.1,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3513,7 +3633,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
+    5.1,
     2.3
    ],
    "recordedLlmMs": 0,
@@ -3542,8 +3662,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
-    1.7
+    6.4,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3571,8 +3691,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.1,
-    1.6
+    6.7,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3600,8 +3720,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
-    1.5
+    6.5,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3629,8 +3749,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.7,
-    2.6
+    6.4,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3658,8 +3778,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    1.4
+    6.4,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3687,8 +3807,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    1.6
+    6.4,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3716,8 +3836,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    1.7
+    7.3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3745,8 +3865,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
-    1.4
+    6.3,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3774,8 +3894,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
-    1.5
+    6.2,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3803,8 +3923,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.9,
-    1.6
+    6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3832,8 +3952,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    1.7
+    3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3861,8 +3981,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    1.3
+    3,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3891,7 +4011,7 @@
    "llmTokens": 0,
    "latencyMs": [
     3.1,
-    1.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3919,8 +4039,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.3
+    3.2,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3948,8 +4068,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    1.4
+    3.1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -3977,8 +4097,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    1.4
+    3.2,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4006,7 +4126,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
+    2.8,
     2
    ],
    "recordedLlmMs": 0,
@@ -4035,8 +4155,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    1.4
+    2.9,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4064,8 +4184,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    1.4
+    3.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4093,8 +4213,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    1.8
+    2.9,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4111,6 +4231,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4118,12 +4239,13 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
     "Il vocale non era chiaro: vuoi che aggiorni pasta al ragù a 10 € (rispondi 1) o che ne crei un altro (rispondi 2)?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4136,9 +4258,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.9,
-    1.5,
-    2.5
+    6.6,
+    2,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4155,6 +4277,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4162,12 +4285,13 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
     "Il vocale non era chiaro: vuoi che aggiorni pasta al ragù a 10 € (rispondi 1) o che ne crei un altro (rispondi 2)?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4180,9 +4304,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
-    1.4,
-    2.3
+    6.4,
+    3.1,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4199,6 +4323,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4206,12 +4331,13 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
     "Il vocale non era chiaro: vuoi che aggiorni pasta al ragù a 10 € (rispondi 1) o che ne crei un altro (rispondi 2)?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4224,9 +4350,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.2,
-    1.6,
-    2.6
+    9.7,
+    3.5,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4266,9 +4392,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    1.5,
-    2.3
+    6.5,
+    2.1,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4308,9 +4434,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6,
-    1.5,
-    2.5
+    6.8,
+    1.7,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4325,17 +4451,19 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
     "Il vocale non era chiaro: vuoi che aggiorni pasta al ragù a 10 € (rispondi 1) o che ne crei un altro (rispondi 2)?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -4348,9 +4476,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    1.5,
-    2.2
+    3.5,
+    2.1,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4365,17 +4493,19 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
     "Il vocale non era chiaro: vuoi che aggiorni pasta al ragù a 10 € (rispondi 1) o che ne crei un altro (rispondi 2)?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -4389,8 +4519,8 @@
    "llmTokens": 0,
    "latencyMs": [
     3,
-    1.4,
-    2.1
+    1.6,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4405,17 +4535,19 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
     "Il vocale non era chiaro: vuoi che aggiorni pasta al ragù a 10 € (rispondi 1) o che ne crei un altro (rispondi 2)?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -4428,9 +4560,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
-    1.4,
-    2.1
+    2.9,
+    1.5,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4466,9 +4598,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
-    1.4,
-    2
+    3.1,
+    1.6,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4504,9 +4636,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    1.4,
-    1.9
+    2.9,
+    1.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4523,6 +4655,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4530,11 +4663,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4546,8 +4680,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.2,
-    3
+    6.3,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4564,6 +4698,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4571,11 +4706,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4587,7 +4723,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.5,
+    6.4,
     3.3
    ],
    "recordedLlmMs": 0,
@@ -4626,8 +4762,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    14.3,
-    8
+    6.3,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4644,6 +4780,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4651,11 +4788,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4667,8 +4805,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    12.4,
-    4.6
+    6,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4685,6 +4823,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4692,11 +4831,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4708,8 +4848,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8,
-    3.9
+    5.8,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4747,8 +4887,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8,
-    4.1
+    6.2,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4765,6 +4905,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4772,11 +4913,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4788,8 +4930,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8,
-    3.2
+    6.1,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4806,6 +4948,7 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
@@ -4813,11 +4956,12 @@
     "create|pasta carbonara|10|primi",
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro",
@@ -4829,8 +4973,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.3,
-    3.5
+    5.9,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4845,16 +4989,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -4866,8 +5012,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
-    3.8
+    3,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4882,16 +5028,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -4903,8 +5051,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    3.3
+    3.2,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4954,16 +5102,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -4975,8 +5125,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
-    2.5
+    2.9,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -4991,16 +5141,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -5012,8 +5164,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    2.7
+    2.9,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5047,8 +5199,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    3.2
+    2.8,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5063,16 +5215,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -5085,7 +5239,7 @@
    "llmTokens": 0,
    "latencyMs": [
     3,
-    3.3
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5100,16 +5254,18 @@
    "expected": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|riso giallo|8|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *riso giallo* in *Primi*: *8,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e riso giallo a 8",
@@ -5121,8 +5277,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    2.6
+    3.1,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5138,17 +5294,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -5160,8 +5318,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5,
-    2.6
+    4.8,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5177,17 +5335,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -5199,8 +5359,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6,
-    2.7
+    4.8,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5236,8 +5396,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6,
-    2.8
+    4.8,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5253,17 +5413,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -5275,8 +5437,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5,
-    2.8
+    4.7,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5292,17 +5454,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -5315,7 +5479,7 @@
    "llmTokens": 0,
    "latencyMs": [
     4.8,
-    3.2
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5351,8 +5515,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.9
+    4.8,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5368,17 +5532,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -5390,8 +5556,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    3
+    4.8,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5407,17 +5573,19 @@
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al pesto|10|primi",
     "create|pasta carbonara|10|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\nNuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\nNuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10",
@@ -5429,8 +5597,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4,
-    2.5
+    4.8,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5458,8 +5626,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.4,
-    2.8
+    5.9,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5487,7 +5655,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.6,
+    6,
     2.5
    ],
    "recordedLlmMs": 0,
@@ -5516,8 +5684,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8,
-    2.2
+    6,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5545,8 +5713,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.3
+    3,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5574,8 +5742,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.1
+    3.1,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5603,7 +5771,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
+    2.8,
     2
    ],
    "recordedLlmMs": 0,
@@ -5632,7 +5800,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8,
+    4.3,
     2.2
    ],
    "recordedLlmMs": 0,
@@ -5661,8 +5829,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    2.7
+    4.7,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5690,8 +5858,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9,
-    2.7
+    4.6,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5721,7 +5889,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5751,7 +5919,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5783,7 +5951,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5815,7 +5983,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5845,7 +6013,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5875,7 +6043,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5905,7 +6073,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5965,7 +6133,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -5995,7 +6163,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6025,7 +6193,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6055,7 +6223,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6069,15 +6237,17 @@
    "fails": [],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10",
@@ -6089,8 +6259,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    3.1
+    2.1,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6122,8 +6292,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    3
+    2.2,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6151,8 +6321,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    1.6
+    2.4,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6166,15 +6336,17 @@
    "fails": [],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragu a 10",
@@ -6186,8 +6358,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    2.7
+    2.1,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6219,8 +6391,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    3
+    2.2,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6248,7 +6420,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
+    2.5,
     1.6
    ],
    "recordedLlmMs": 0,
@@ -6263,15 +6435,17 @@
    "fails": [],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
-    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu"
+    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi Pasta al Ragù a 10",
@@ -6283,8 +6457,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    2.5
+    2.1,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6317,7 +6491,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2.2,
-    2.5
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6345,8 +6519,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    1.4
+    2.5,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6359,14 +6533,16 @@
    "success": true,
    "fails": [],
    "expected": [
+    "move|Pasta al sugo|Primi",
     "price|Pasta al sugo|11"
    ],
    "actual": [
+    "move|Pasta al sugo|Primi",
     "price|Pasta al sugo|11"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già Pasta al sugo a 9 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *Pasta al sugo* (9,00 €)",
-    "Fatto.\n\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*"
+    "Fatto.\n\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*\n*Pasta al sugo*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al sugo a 11",
@@ -6378,8 +6554,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.5
+    2.2,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6411,8 +6587,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.7
+    2.6,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6440,8 +6616,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    1.5
+    2.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6454,14 +6630,16 @@
    "success": true,
    "fails": [],
    "expected": [
+    "move|tiramisù|Primi",
     "price|tiramisù|7"
    ],
    "actual": [
+    "move|tiramisù|Primi",
     "price|tiramisù|7"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già tiramisù a 15 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *tiramisù* (15,00 €)",
-    "Fatto.\n\n*tiramisù*: prezzo da 15,00 € a *7,00 €*"
+    "Fatto.\n\n*tiramisù*: prezzo da 15,00 € a *7,00 €*\n*tiramisù*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi il tiramisù a 7",
@@ -6473,8 +6651,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.3
+    2.1,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6506,8 +6684,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.2
+    2.5,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6536,7 +6714,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2,
-    1.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6551,16 +6729,18 @@
    "expected": [
     "create|pasta al sugo|11|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "create|pasta al sugo|11|primi",
     "hidden|pasta al ragù|false",
+    "move|pasta al ragù|Primi",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 € e Pasta al sugo a 9 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)\n2. *Pasta al sugo* (9,00 €)",
-    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\nNuovo piatto *pasta al sugo* in *Primi*: *11,00 €*\n\n*Pasta al sugo (Menu di verifica · web QA)*: *9,00 €* · disponibile"
+    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*\nNuovo piatto *pasta al sugo* in *Primi*: *11,00 €*\n\n*Pasta al sugo (Menu di verifica · web QA)*: *9,00 €* · disponibile"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11",
@@ -6572,8 +6752,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    2.8
+    2.7,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6587,17 +6767,21 @@
    "fails": [],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|Pasta al sugo|Primi",
+    "move|pasta al ragù|Primi",
     "price|Pasta al sugo|11",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "hidden|pasta al ragù|false",
+    "move|Pasta al sugo|Primi",
+    "move|pasta al ragù|Primi",
     "price|Pasta al sugo|11",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 € e Pasta al sugo a 9 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)\n2. *Pasta al sugo* (9,00 €)",
-    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*"
+    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*\n*Pasta al sugo*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11",
@@ -6609,8 +6793,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3,
-    2.9
+    2.6,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6624,17 +6808,21 @@
    "fails": [],
    "expected": [
     "hidden|pasta al ragù|false",
+    "move|Pasta al sugo|Primi",
+    "move|pasta al ragù|Primi",
     "price|Pasta al sugo|11",
     "price|pasta al ragù|10"
    ],
    "actual": [
     "hidden|pasta al ragù|false",
+    "move|Pasta al sugo|Primi",
+    "move|pasta al ragù|Primi",
     "price|Pasta al sugo|11",
     "price|pasta al ragù|10"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 € e Pasta al sugo a 9 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)\n2. *Pasta al sugo* (9,00 €)",
-    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*"
+    "Fatto.\n\n*pasta al ragù*: prezzo da 20,00 € a *10,00 €*\n*pasta al ragù*: di nuovo *visibile* nel menu\n*pasta al ragù*: spostato in *Primi*\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*\n*Pasta al sugo*: spostato in *Primi*"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11",
@@ -6646,8 +6834,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    3.6
+    2.9,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6681,8 +6869,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    2.6
+    2.7,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -6696,15 +6884,17 @@
    "fails": [],
    "expected": [
     "create|pasta al ragu|10|primi",
+    "move|Pasta al sugo|Primi",
     "price|Pasta al sugo|11"
    ],
    "actual": [
     "create|pasta al ragu|10|primi",
+    "move|Pasta al sugo|Primi",
     "price|Pasta al sugo|11"
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già pasta al ragù a 20 € e Pasta al sugo a 9 €: lo aggiorno o ne creo un altro?\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)\n2. *Pasta al sugo* (9,00 €)",
-    "Fatto.\n\nNuovo piatto *pasta al ragù* in *Primi*: *10,00 €*\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*\n\n*pasta al ragù (Menu di verifica · web QA)*: *20,00 €* · disponibile · nascosto"
+    "Fatto.\n\nNuovo piatto *pasta al ragù* in *Primi*: *10,00 €*\n*Pasta al sugo*: prezzo da 9,00 € a *11,00 €*\n*Pasta al sugo*: spostato in *Primi*\n\n*pasta al ragù (Menu di verifica · web QA)*: *20,00 €* · disponibile · nascosto"
    ],
    "turns": [
     "🎤 nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11",
@@ -6717,7 +6907,7 @@
    "llmTokens": 0,
    "latencyMs": [
     2.6,
-    2.8
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,

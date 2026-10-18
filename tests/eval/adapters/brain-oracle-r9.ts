@@ -19,11 +19,11 @@ const calls=new Map<string,number>()
 export const resetR9Oracle=()=>calls.clear()
 
 // Forme della risposta (lette come le leggerebbe un modello che capisce l'italiano parlato).
-const UPDATE=/\b(?:aggiorn\w*|modific\w*|vecch\w*|esistent\w*|quell[oaie] che c e|quell[oaie] che ci sono|usa quell\w*|tieni quell\w*|il primo|la prima|prima opzione|opzione 1|la 1|l 1|cambia(?:l[oaie])? il prezzo)\b|^(?:1|si|sì|si si|ok|okay|va bene|certo|esatto|vai|procedi|sì sì|si grazie)$/
+const UPDATE=/\b(?:aggiorn\w*|modific\w*|vecch\w*|esistent\w*|quell[oaie] che c e|quell[oaie] che ci sono|usa quell\w*|tieni quell\w*|il primo|la prima|prima opzione|opzione 1|la 1|l 1|cambia(?:l[oaie])? il prezzo|conferm\w*)\b|^(?:1|si|sì|si si|ok|okay|va bene|certo|esatto|vai|procedi|sì sì|si grazie)$/
 const CREATE=/\b(?:cre\w*|nuov\w*|un altr[oa]|altri|il secondo|la seconda|seconda opzione|opzione 2|la 2|l 2|fanne|aggiungil\w* (?:comunque|lo stesso))\b|^2$/
 function parsePending(head:string){const blk=head.split('RICHIESTA IN ATTESA DELLA RISPOSTA')[1]??'';if(!blk)return null
  const clear=[...(blk.match(/parti chiare: ([^\n]+)/)?.[1]??'').matchAll(/nuovo «([^»]+)» ([\d.]+) in (c\d+)/g)].map(m=>({name:m[1]!,price:Number(m[2]),section:m[3]!}))
- const twins=[...(blk.match(/già nel menu con lo stesso nome: ([^\n]+)/)?.[1]??'').matchAll(/(p\d+) «([^»]+)» ([\d.]+)( nascosto)?(?: \((?:prezzo detto ([\d.]+))?(?:, )?(?:nome detto «([^»]+)»)?\))?/g)].map(m=>({code:m[1]!,name:m[6]??m[2]!,price:Number(m[3]),hidden:!!m[4],said:m[5]?Number(m[5]):null}))
+ const twins=[...(blk.match(/già nel menu con lo stesso nome: ([^\n]+)/)?.[1]??'').matchAll(/(p\d+) «([^»]+)» ([\d.]+)( nascosto)?(?: \((?:prezzo detto ([\d.]+))?(?:, )?(?:nome detto «([^»]+)»)?\))?(?: in c\d+, sezione detta (c\d+))?/g)].map(m=>({code:m[1]!,name:m[6]??m[2]!,price:Number(m[3]),hidden:!!m[4],said:m[5]?Number(m[5]):null,moveTo:m[7]??null}))
  const q=head.match(/IN SOSPESO \(tua domanda aperta\): (.+?)(?: — sul messaggio|\n|$)/)?.[1]??''
  return{clear,twins,q}}
 function answer(pend:NonNullable<ReturnType<typeof parsePending>>,msg:string,section:string|null){const p=plainT(msg).replace(/[.,!?]/g,' ').replace(/\s+/g,' ').trim()
@@ -32,7 +32,7 @@ function answer(pend:NonNullable<ReturnType<typeof parsePending>>,msg:string,sec
  if(per.some(x=>x.u===x.n))return null
  const acts:any[]=pend.clear.map(c=>({action:'create_item',name:c.name,price:c.price,section:c.section}))
  for(const {t,u} of per){if(t.said==null)return null
-  if(u){acts.push({action:'set_price',item:t.code,price:t.said});if(t.hidden)acts.push({action:'set_hidden',item:t.code,value:false})}
+  if(u){acts.push({action:'set_price',item:t.code,price:t.said});if(t.hidden)acts.push({action:'set_hidden',item:t.code,value:false});if(t.moveTo)acts.push({action:'move_item',item:t.code,section:t.moveTo})} // R10: «sezione detta» → anche lo spostamento
   else acts.push({action:'create_item',name:t.name,price:t.said,section:section??pend.clear[0]?.section??null})}
  return acts}
 export function r9Oracle(conv:any,body:any):string|null{

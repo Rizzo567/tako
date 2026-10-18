@@ -6,6 +6,7 @@
  * G6 prezzi implausibili → conferma scritta). I fatti nella risposta li scrive il server DOPO la rilettura (composeReply).
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
+import {allOfSections} from './owner-brain-sections.js'
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier,diminutiveRivals} from './twilio-menu-nlu.js'
@@ -255,6 +256,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // Fase R: «sono tornati tutti i dolci», «nascondi tutte le pizze»: la categoria nominata per intero nomina i suoi piatti.
  // R9: anche nella richiesta originale legata alla TUA domanda aperta («metti i primi tutti a 11» → «si»).
  for(const m of (msg+(source?' \n '+source:'')).matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(s=>sameSection(s.name,(m[1]??m[2])!));if(secs.length===1)for(const r of refs)if(r.sectionId===secs[0]!.id)trusted.add(r.id)}
+ // R10: «togli tutti i piatti dalla sezione altre proposte»: anche col nome pubblico del menu digitale (tutte le sezioni che vi cadono).
+ const sectionWide=new Set<string>()
+ for(const id of allOfSections(input.message+(input.clarifySource?' \n '+input.clarifySource:''),sections))for(const r of refs)if(r.sectionId===id){trusted.add(r.id);sectionWide.add(r.id)}
  const trustedHas=(id:string)=>trusted.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
  // «no, la parmigiana no»: il «no,» in testa non è una clausola (stessa normalizzazione del percorso di prima).
@@ -370,7 +374,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
   {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   // Il nome nuovo di una rinomina («rinomina il pollo in Pollo alla diavola») non è un qualificatore del piatto.
-  {const fq=plan.actions.reduce((m,a)=>a.kind==='rename'?m.replace(new RegExp(a.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'),' '):m,message),foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&foreignQualifier(fq,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
+  {const fq=plan.actions.reduce((m,a)=>a.kind==='rename'?m.replace(new RegExp(a.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'),' '):m,message),foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&!sectionWide.has(r.id)&&foreignQualifier(fq,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
   // Rimando senza nome («mettila a 13», «no scusa 14»): vale solo per il piatto (unico) del messaggio precedente del titolare
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
@@ -398,7 +402,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
  // Fase R: «no, nei primi» subito dopo uno spostamento corregge lo spostamento (il verbo era nel messaggio di prima).
  const moveFix=/^(?:no|anzi|scusa)\b/.test(msg)&&/\b(?:nei|negli|nelle|nella|nel|tra|fra|in)\s/.test(msg)&&/\b(?:spost\w*|mett\w*)\b/.test(plain(owners.at(-1)??''))
- const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
+ const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix||input.twinIds?.length?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
  if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
   // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio

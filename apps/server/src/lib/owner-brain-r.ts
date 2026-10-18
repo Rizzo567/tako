@@ -7,6 +7,7 @@
 import {plain,g9Prices,describeAction,withNewSections,itemLabel,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import type {Hold} from './twilio-menu-hold.js'
 import {sameSection} from './twilio-menu-structure.js'
+import {allOfSections,namedSections,nameInText,unknownSectionPhrase,sectionListText} from './owner-brain-sections.js'
 
 export const CONTROL_ACTIONS=['confirm_pending','cancel_pending','undo_last'] as const
 export type ControlAction=typeof CONTROL_ACTIONS[number]
@@ -136,7 +137,7 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(d.plan?.type==='change'&&!d.hold&&pend?.kind==='ask'&&pend.ask.twins?.length){const said=[...pend.ask.twins.map(t=>t.name),...(pend.ask.actions??[]).flatMap(a=>a.kind==='create'?[a.name]:[])],refs=o.refs??[]
   const bad=d.plan.actions.flatMap((a:any)=>{if(!('id' in a)||pend.ask.twins!.some(t=>t.id===a.id))return[];const r=refs.find(x=>x.id===a.id);return r&&!(' '+plain(message)+' ').includes(' '+plain(r.name)+' ')&&said.some(n=>!sameDishName(n,r.name)&&(' '+dishKey(r.name)+' ').includes(' '+dishKey(n)+' '))?[r.id]:[]})
   if(bad.length)return reject('doppio_falso',bad,[])}
- if(d.plan?.type==='change'&&!d.hold){if(d.plan.actions.some((a:any)=>a.kind==='create'&&negatedName(message,a.name)))return reject('creazione_negata',[],[]);{const dup=d.plan.actions.filter((a:any)=>a.kind==='rename'&&(o.refs??[]).some(r=>r.id!==a.id&&plain(r.name)===plain(a.name)));if(dup.length)return reject('nome_doppio',dup.map((a:any)=>a.id),[])}if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions.filter((x:any)=>!(x.kind==='create'&&pend?.kind==='ask'&&(pend.ask.twins??[]).some(t=>sameDishName(t.name,x.name)))),o.refs??[])){const tw=duplicateTwins(d.plan.actions,o.refs??[]),refs=o.refs??[],twins=twinsOf(d.plan.actions,refs);return{kind:'reject',reason:twinReason(twins,d.plan.actions,refs),ids:tw,actions:d.plan.actions.filter((a:any)=>!(a.kind==='create'&&refs.some(r=>tw.includes(r.id)&&sameDishName(r.name,a.name)))),...(twins.length?{twins}:{})}}if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'');if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
+ if(d.plan?.type==='change'&&!d.hold){if(d.plan.actions.some((a:any)=>a.kind==='create'&&negatedName(message,a.name)))return reject('creazione_negata',[],[]);{const dup=d.plan.actions.filter((a:any)=>a.kind==='rename'&&(o.refs??[]).some(r=>r.id!==a.id&&plain(r.name)===plain(a.name)));if(dup.length)return reject('nome_doppio',dup.map((a:any)=>a.id),[])}if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions.filter((x:any)=>!(x.kind==='create'&&pend?.kind==='ask'&&(pend.ask.twins??[]).some(t=>sameDishName(t.name,x.name)))),o.refs??[])){const tw=duplicateTwins(d.plan.actions,o.refs??[]),refs=o.refs??[],twins=twinsOf(d.plan.actions,refs);return{kind:'reject',reason:twinReason(twins,d.plan.actions,refs),ids:tw,actions:d.plan.actions.filter((a:any)=>!(a.kind==='create'&&refs.some(r=>tw.includes(r.id)&&sameDishName(r.name,a.name)))),...(twins.length?{twins}:{})}}if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const tw=pend?.kind==='ask'?pend.ask.twins??[]:[],bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'').filter(id=>!d.plan.actions.some((a:any)=>a.kind==='move'&&a.id===id&&tw.some(t=>t.id===id&&t.sectionId===a.sectionId)));if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);{const bad=twinMoveMissing(d.plan.actions,pend,o.refs??[],o.sections);if(bad)return{kind:'reject',reason:bad.reason,ids:bad.ids,actions:d.plan.actions}}{const bad=allSubsetProblem(message+(pend?.kind==='ask'?' \n '+pend.ask.source:''),d.plan.actions,o.refs??[],o.sections);if(bad)return{kind:'reject',reason:bad.reason,ids:[],actions:d.plan.actions}}return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
  // Domande del modello (intent=clarify) e parti incerte che il modello stesso ha segnato: domanda, stato in sospeso.
  const modelAsk=rawIntent==='clarify'||(d.hold&&d.notes.includes('parti_incerte')&&!d.notes.some(n=>VALIDATOR_HOLD.has(n.split(':')[0]!)))
  if(modelAsk){const cr=rawActs.find((a:any)=>a.action==='create_item'),sec=cr&&typeof cr.section==='string'?o.sections.find(s=>s.id===cr.section||plain(s.name)===plain(cr.section)):undefined
@@ -159,6 +160,31 @@ export function verbScopeProblem(message:string,actions:MenuAction[],refs:MenuRe
   for(const r of refs){const n=plain(r.name);if((' '+p+' ').includes(' '+n+' ')||(!n.includes(' ')&&/h/.test(n)&&(' '+p+' ').includes(' '+n.replace(/h/g,'')+' '))){const s=scope.get(r.id)??new Set<string>();s.add((h||f)&&other?'mixed':cur);scope.set(r.id,s)}}}
  // Solo un piatto detto in una parte con un'altra azione esplicita (prezzo, aggiungi…) e mai nella portata del verbo.
  return want.filter(([id,k])=>{const s=scope.get(id);return !!s&&s.has('other')&&!s.has(k)&&!s.has('mixed')}).map(([id])=>id)}
+/** R10 (QA 16:03 «nei primi aggiungi … pasta al ragù» → «confermo»: ragù aggiornato ma rimasto in «Piatti di prova»). Risposta
+ * «aggiornalo» alla domanda sui piatti con lo stesso nome: se il piatto è in un'altra sezione rispetto a quella detta nella
+ * richiesta, il piano lo deve anche spostare lì (move_item). Se è già nella sezione detta, nessuno spostamento. Vincolo. */
+export function twinMoveMissing(actions:MenuAction[],pend:Pend,refs:MenuRef[],sections:SectionRef[]):{reason:string,ids:string[]}|null{
+ if(pend?.kind!=='ask'||!pend.ask.twins?.length)return null
+ const miss=pend.ask.twins.flatMap(t=>{const r=refs.find(x=>x.id===t.id),sec=sections.find(s=>s.id===t.sectionId);if(!r||!sec||r.sectionId===sec.id)return[]
+  const updated=actions.some(a=>'id' in a&&(a as any).id===r.id&&a.kind!=='move'),moved=actions.some(a=>a.kind==='move'&&a.id===r.id&&a.sectionId===sec.id)
+  return updated&&!moved?[{r,sec}]:[]})
+ if(!miss.length)return null
+ return{reason:'il titolare aveva detto in quale sezione aggiungerlo: aggiornando il piatto che c\u2019è va anche spostato lì (move_item) — '+miss.map(m=>'«'+m.r.name+'» in «'+m.sec.name+'»').join(', '),ids:miss.map(m=>m.r.id)}}
+/** R10: «tutti i piatti della sezione X» (anche col nome pubblico «altre proposte»): l'azione va su OGNI piatto a cui si applica
+ * (nascondi = i visibili, finito = i disponibili, rimetti = i nascosti…) delle sezioni nominate. Un sottoinsieme → rifiuto con
+ * l'elenco di quelli mancanti (il modello rifà il piano; oltre 3 modifiche il server chiede l'OK come sempre). */
+export function allSubsetProblem(text:string,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):{reason:string}|null{
+ // «tutte le bibite tranne la coca cola»: con un'esclusione detta il controllo non vale (il validatore legge già le esclusioni).
+ if(/\b(?:tranne|eccetto|escluso|esclusa|esclusi|escluse|salvo|a parte|meno|non (?:la|il|lo|le|i|gli))\b/.test(plain(text)))return null
+ const ids=new Set(allOfSections(text,sections));if(!ids.size)return null
+ const inSec=refs.filter(r=>r.sectionId&&ids.has(r.sectionId)),miss=new Set<string>()
+ const kinds=new Map<string,{kind:string,value?:boolean}>()
+ for(const a of actions)if((a.kind==='hidden'||a.kind==='available'||a.kind==='featured')&&inSec.some(r=>r.id===a.id))kinds.set(a.kind+':'+a.value,{kind:a.kind,value:a.value})
+ for(const k of kinds.values()){const applies=(r:MenuRef)=>k.kind==='hidden'?(k.value?!r.hidden:r.hidden):k.kind==='available'?(k.value?!r.available:r.available&&!r.hidden):(k.value?!r.featured:!!r.featured)
+  for(const r of inSec)if(applies(r)&&!actions.some(a=>a.kind===k.kind&&(a as any).id===r.id))miss.add(r.name)}
+ if(!miss.size)return null
+ const names=sections.filter(s=>ids.has(s.id)).map(s=>s.name)
+ return{reason:'il titolare ha detto «tutti»: l\u2019azione va su ogni piatto delle sezioni '+names.map(n=>'«'+n+'»').join(', ')+' (nome detto: '+namedSections(text,sections).said.map(n=>'«'+n+'»').join(', ')+'); mancano: '+[...miss].slice(0,12).map(n=>'«'+n+'»').join(', ')}}
 /** Vincolo (A3.2): un piatto nuovo va in una categoria esistente diversa da quella che il titolare ha nominato («nei primi»
  * con un menu senza Primi) → rifiuto: si chiede, non si sceglie un'altra categoria. */
 export function namedSectionMismatch(message:string,actions:MenuAction[],sections:SectionRef[]):boolean{
@@ -166,7 +192,7 @@ export function namedSectionMismatch(message:string,actions:MenuAction[],section
  const fresh=new Set(actions.flatMap(a=>a.kind==='create_section'?[plain(a.name)]:[]))
  for(const m of plain(message).matchAll(/\b(?:nei|negli|nelle|tra i|tra gli|tra le|fra i|fra gli|fra le|categoria|sezione)\s+([a-z]+)(?:\s+([a-z]+))?/g)){const w0=m[1]!,w1=m[2]??''
   if(w0.length<3||['che','si','chiama','nuova','nuovo','piu','di'].includes(w0))continue
-  const known=sections.some(s=>{const sw=plain(s.name).split(' ');return sw[0]!.slice(0,5)===w0.slice(0,5)||sameSection(s.name,w0)||(!!w1&&sameSection(s.name,w0+' '+w1))})||[...fresh].some(f=>f.split(' ')[0]!.slice(0,5)===w0.slice(0,5))
+  const known=sections.some(s=>{const sw=plain(s.name).split(' ');return sw[0]!.slice(0,5)===w0.slice(0,5)||sameSection(s.name,w0)||(!!w1&&sameSection(s.name,w0+' '+w1))})||[...fresh].some(f=>f.split(' ')[0]!.slice(0,5)===w0.slice(0,5))||sections.some(s=>!!s.pub&&nameInText(s.pub,w0+' '+w1,true))
   if(!known)return true}
  return false}
 
@@ -188,6 +214,25 @@ function twinReason(twins:Twin[],actions:MenuAction[],refs:MenuRef[]){if(!twins.
  // Nomi nuovi CONTENUTI in un piatto più lungo del menu: non sono doppioni (il modello li aveva presi per esistenti).
  const near=actions.flatMap(a=>a.kind==='create'&&!twins.some(t=>sameDishName(t.name,a.name))?refs.filter(r=>!sameDishName(r.name,a.name)&&(' '+dishKey(r.name)+' ').includes(' '+dishKey(a.name)+' ')).map(r=>`«${a.name}» non è «${r.name}»`):[])
  return reasonText(['piatto_doppio'])+'. Hanno lo STESSO nome solo: '+names.join(', ')+': chiedi solo per questi (le opzioni: aggiornare quello che c\u2019è al prezzo detto, e se è nascosto rimetterlo visibile, oppure crearne un altro)'+(near.length?'. Un nome contenuto in un piatto più lungo è un piatto nuovo da creare, non chiedere: '+[...new Set(near)].join('; '):'')}
+/** R10 (QA 16:05–16:06: «Quale sezione intendi nascondere?» dopo «…dalla sezione altre proposte», «Quali piatti…?» dopo «tutti i
+ * piatti»): una domanda del modello non può ignorare ciò che il titolare ha già detto (sezione o nome pubblico, «tutti», piatto,
+ * prezzo), non può dire che non esiste una sezione che è il nome pubblico di sezioni vere, e su una sezione che davvero non c'è
+ * deve dirlo subito ed elencare le sezioni. Vincolo sul testo della domanda: il motivo torna al modello (auto-correzione).
+ * `text` = messaggio + richiesta in sospeso; `message` = solo il messaggio. null = la domanda va bene. */
+export function ignoredInQuestion(draft:string,o:{message:string,text:string,sections:SectionRef[],refs:MenuRef[],lastQ?:string,recent?:string}):string|null{
+ const raw=draft.split(/\n\n/)[0]!.trim();if(!raw||!(/\?/.test(raw)||/\brispondi\b/i.test(raw)))return null
+ const q=' '+plain(raw)+' ',named=namedSections(o.text,o.sections),all=allOfSections(o.text,o.sections)
+ const secNames=(ids:string[])=>o.sections.filter(s=>ids.includes(s.id)).map(s=>'«'+s.name+'»').join(', ')
+ const told=(what:string)=>'il titolare ha già detto: '+what+'. Non chiederlo di nuovo: usa quello che ha detto (se è tutto chiaro scrivi il piano), oppure chiedi solo ciò che manca davvero, con una domanda diversa'
+ if(/ (?:quale|quali|che|in quale|di quale|da quale|in che) (?:sezione|sezioni|categoria|categorie) /.test(q)&&(named.ids.length===1||(named.ids.length>1&&all.length>0)))return told('la sezione '+named.said.map(n=>'«'+n+'»').join(', ')+' (= '+secNames(named.ids)+')')
+ if(/ (?:quali|quale|che) piatti? /.test(q)&&all.length)return told('«tutti» i piatti di '+named.said.map(n=>'«'+n+'»').join(', ')+' (= ogni piatto delle sezioni '+secNames(all)+')')
+ // «Non esiste una sezione …» su un nome pubblico detto (anche nei messaggi recenti del titolare: è la risposta a quelli).
+ {const nr=named.ids.length?named:namedSections(o.text+' \n '+(o.recent??''),o.sections);if(/ non (?:esiste|esistono|c e|ce|ci sono|trovo|ho trovato|risulta) /.test(q)&&/ (?:sezione|sezioni|categoria|categorie) /.test(q)&&nr.ids.length&&nr.said.some(n=>nameInText(n,raw,true)||nameInText(n,raw)))return told('la sezione '+nr.said.map(n=>'«'+n+'»').join(', ')+', che esiste: è il nome nel menu digitale delle sezioni '+secNames(nr.ids))}
+ const unknown=unknownSectionPhrase(o.message,o.sections)
+ if(unknown&&!namedSections(o.message,o.sections).ids.length){const listed=o.sections.filter(s=>nameInText(s.name,raw)||(!!s.pub&&nameInText(s.pub,raw,true))).length
+  if(!/ non (?:esiste|esistono|c e|ce|ci sono|trovo|ho trovato|risulta|vedo) /.test(q)||listed<Math.min(2,o.sections.length))return 'nel menu non c\u2019è una sezione «'+unknown+'»: dillo subito nella domanda ed elenca le sezioni che ci sono (con il nome del menu digitale): '+sectionListText(o.sections)}
+ if(o.lastQ&&sameQuestion(raw,o.lastQ)&&(all.length||((named.ids.length||unknown)&&/ (?:sezione|sezioni|categoria|categorie|piatti) /.test(q))))return 'la domanda è uguale a quella di prima: è vietato rimandarla. '+(named.ids.length?told('la sezione '+named.said.map(n=>'«'+n+'»').join(', ')):'Fai una domanda diversa, con le opzioni numerate')
+ return null}
 /** R9: la stessa domanda (o quasi: ≥ 80% delle parole) rispetto a quella già fatta. */
 export function sameQuestion(a:string,b:string){const w=(s:string)=>new Set(plain(s.split(/\n\n/)[0]!).split(' ').filter(x=>x.length>2));const x=w(a),y=w(b);if(!x.size||!y.size)return false;let k=0;for(const t of x)if(y.has(t))k++;return k/Math.max(x.size,y.size)>=0.8}
 /** Vincolo (Y1): un'eliminazione vale solo per i piatti nella portata di un verbo «elimina/cancella…». Le parti del messaggio
@@ -227,7 +272,7 @@ export function lostClauses(message:string,actions:MenuAction[],refs:MenuRef[],e
 export function moveTargetProblem(message:string,actions:MenuAction[],sections:SectionRef[],lastBot=''):string[]{
  const p=' '+plain(message)+' ',bot=plain(lastBot),fresh=new Map(actions.flatMap(a=>a.kind==='create_section'?[[a.newSectionId,a.name] as const]:[])),out:string[]=[]
  for(const a of actions){if(a.kind!=='move')continue;const name=fresh.get(a.sectionId)??sections.find(s=>s.id===a.sectionId)?.name;if(!name){out.push(a.id);continue}
-  const ws=plain(name).split(' ').filter(w=>w.length>=3),said=ws.some(w=>p.includes(' '+w.slice(0,Math.min(5,w.length))))||sameSection(name,plain(message))
+  const pubName=sections.find(s=>s.id===a.sectionId)?.pub,ws0=plain(name).split(' ').filter(w=>w.length>=3),gen=ws0.filter(w=>!/^(?:piatt[oi]|menu|sezion[ei]|categori[ae]|dell[aeo]|degli|nostr[aeio])$/.test(w)),ws=gen.length?gen:ws0,said=ws.some(w=>p.includes(' '+w.slice(0,Math.min(5,w.length))))||sameSection(name,plain(message))||(!!pubName&&sections.filter(s=>s.pub===pubName).length===1&&[...p.matchAll(/ (?:nei|negli|nelle|nel|nella|in|verso|sotto|dentro) ((?:\S+ ?){1,3})/g)].some(m=>nameInText(pubName,m[1]!,true)))
   if(!said&&!fresh.has(a.sectionId)&&!bot.includes('spostato in '+plain(name)))out.push(a.id)}
  return out}
 /** Richiesta cortese in forma di domanda («potresti inserire X a 11?», «mi aggiungi la lasagna a 13?»): è un comando, non una

@@ -9,7 +9,7 @@ import {priceAlternatives,priceAlternativeDish,isExcluded,type Excluded} from '.
 import {removeVerbRe,spokenCents,spokenDecimals} from './twilio-menu-nlu.js'
 import {isStructAction,applyStructAction,orderActions,DELETE_VERB,RENAME_VERB,MOVE_VERB,SECTION_WORD,sameSection,menuForSection,type StructAction} from './twilio-menu-structure.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
-export type SectionRef={id:string,name:string,menu:string}
+export type SectionRef={id:string,name:string,menu:string,pub?:string}
 export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction|StructAction
 // `after` (17/10, A4.4): risposta alla domanda dello stesso messaggio, scritta dal server DOPO aver salvato la modifica.
 export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[],after?:{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'capability',ids:string[]}}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'clarify',ids:string[],actions?:MenuAction[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}

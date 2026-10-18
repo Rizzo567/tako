@@ -30,7 +30,8 @@ const A=(o:any)=>({...B,...o})
 const T1='Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro'
 const Q_OK='C’è già pasta al ragù a 20 € (nascosta): la aggiorno a 10 € e la rimetto visibile o ne creo un’altra?'
 const T1_FIX=P({intent:'clarify',clarify:{question:null,item_refs:['p4'],missing:[]},actions:[],reply_draft:Q_OK})
-const ANSWER=P({actions:[A({action:'set_price',item:'p4',price:10}),A({action:'set_hidden',item:'p4',value:false}),A({action:'create_item',name:'pasta al pesto',price:10,section:'c2'}),A({action:'create_item',name:'pasta carbonara',price:10,section:'c2'}),A({action:'create_item',name:'riso giallo',price:8,section:'c2'})],reply_draft:'Fatto.'})
+// R10: il ragù è in «Piatti di prova» e la richiesta dice «nei primi»: aggiornandolo va anche spostato in Primi (move_item).
+const ANSWER=P({actions:[A({action:'set_price',item:'p4',price:10}),A({action:'set_hidden',item:'p4',value:false}),A({action:'move_item',item:'p4',section:'c2'}),A({action:'create_item',name:'pasta al pesto',price:10,section:'c2'}),A({action:'create_item',name:'pasta carbonara',price:10,section:'c2'}),A({action:'create_item',name:'riso giallo',price:8,section:'c2'})],reply_draft:'Fatto.'})
 const strip=(r:string)=>r.replace(/^Sono l.*?persona\.\s*/s,'')
 async function conv(turns:{voice?:string,text?:string}[],plans:any[]){queue=structuredClone(plans);seen.length=0;installNet(fake,realFetch);resetBrainTables()
  const c:Conversation={id:'r9',family:'manuel',menu:'qa',turns:turns.map(t=>t.voice!==undefined?{voice:t.voice}:{text:t.text!}),changes:[]}
@@ -58,8 +59,13 @@ describe('R9: risposta breve a una domanda in sospeso, doppioni solo a nome ugua
   const r=await conv([{voice:T1},{voice:'Aggiornapure'}],[REAL[0],REAL[1],T1_FIX,ANSWER]);const t=r.turns[1]!
   if(process.env.TAKO_R9_SHOW)process.stderr.write("SEEN3 "+seen[3]+"\n");expect(seen[3]).toMatch(/RICHIESTA IN ATTESA DELLA RISPOSTA/);expect(seen[3]).toMatch(/p4 «pasta al ragù» 20 nascosto \(prezzo detto 10\)/);expect(seen[3]).toMatch(/OPZIONI per ognuno/)
   expect(seen[3]).toMatch(/vocale trascritto/)
-  expect(t.changes.sort()).toEqual(['create|pasta al pesto|10|primi','create|pasta carbonara|10|primi','create|riso giallo|8|primi','hidden|pasta al ragù|false','price|pasta al ragù|10'].sort())
+  expect(t.changes.sort()).toEqual(['create|pasta al pesto|10|primi','create|pasta carbonara|10|primi','create|riso giallo|8|primi','hidden|pasta al ragù|false','price|pasta al ragù|10','move|pasta al ragù|Primi'].sort())
   expect(t.reply).toMatch(/pasta al ragù\*: prezzo da 20,00 € a \*10,00 €\*/)})
+ it('R10 (QA 16:05 «confermo»): aggiornare il ragù senza spostarlo nella sezione detta è rifiutato col motivo, poi il piano con move_item',async()=>{
+  const noMove=P({actions:ANSWER.actions.filter((x:any)=>x.action!=='move_item'),reply_draft:'Fatto.'})
+  const r=await conv([{voice:T1},{text:'confermo'}],[REAL[0],REAL[1],T1_FIX,noMove,ANSWER]);const t=r.turns[1]!
+  expect(seen[4]).toMatch(/va anche spostato lì \(move_item\) — «pasta al ragù» in «Primi»/);expect(r.left).toBe(0)
+  expect(t.changes).toContain('move|pasta al ragù|Primi');expect(t.changes).toContain('price|pasta al ragù|10');expect(t.reply).toMatch(/pasta al ragù\*: spostat\w* in \*?Primi/i)})
  it('12:31 vero: il piano su «Pasta al pesto e lasagna» (nome diverso) è rifiutato, il modello corregge',async()=>{
   const r=await conv([{voice:T1},{voice:'Aggiornapure'}],[REAL[0],REAL[1],T1_FIX,REAL[2],ANSWER]);const t=r.turns[1]!
   if(process.env.TAKO_R9_SHOW)process.stderr.write("CH "+JSON.stringify(t.changes)+"\n");expect(r.left).toBe(0);expect(t.changes).not.toContain('price|Pasta al pesto e lasagna|10');expect(t.changes).toContain('price|pasta al ragù|10');expect(t.changes).toContain('create|pasta al pesto|10|primi')})

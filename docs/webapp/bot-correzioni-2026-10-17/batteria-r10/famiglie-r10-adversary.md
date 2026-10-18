@@ -1,0 +1,482 @@
+# Batteria R10 · modo adversary
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| macro | 64 | 20 | 31 | 0 | 13 |
+| testardo | 32 | 3 | 25 | 0 | 4 |
+| manuel | 12 | 3 | 8 | 0 | 1 |
+| inesistente | 30 | 30 | 0 | 0 | 0 |
+| sposta-gemello | 28 | 0 | 0 | 0 | 28 |
+| controlli | 15 | 8 | 7 | 0 | 0 |
+| TOTALE | 181 | 64 | 71 | 0 | 46 |
+
+## Fallimenti
+
+- **r10-macro-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €) 5. *Polpette di prova* (7,00 €)»
+- **r10-macro-002** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden
+  - turni: nascondi tutti i piatti di altre proposte ⏎ 🎤 sì vai
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *nascosto* dal menu 2. *tiramisù*: *nascosto* dal menu 3. *Pasta al sugo*: *nascosto* dal menu 4. *Pasta al pesto e lasagna*: *nascosto* dal menu 5. *Polpe»
+- **r10-macro-003** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden
+  - turni: 🎤 togli tutto quello che c’è in altre propose, tutti i piatti ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *nascosto* dal menu 2. *tiramisù*: *nascosto* dal menu 3. *Pasta al sugo*: *nascosto* dal menu 4. *Pasta al pesto e lasagna*: *nascosto* dal menu 5. *Polpe»
+- **r10-macro-004** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden
+  - turni: 🎤 leva tutti i piatti della sezione le altre proposta ⏎ 🎤 sì vai
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *nascosto* dal menu 2. *tiramisù*: *nascosto* dal menu 3. *Pasta al sugo*: *nascosto* dal menu 4. *Pasta al pesto e lasagna*: *nascosto* dal menu 5. *Polpe»
+- **r10-macro-005** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden
+  - turni: 🎤 tutti i piatti delle altre propose toglili dal menu ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *nascosto* dal menu 2. *tiramisù*: *nascosto* dal menu 3. *Pasta al sugo*: *nascosto* dal menu 4. *Pasta al pesto e lasagna*: *nascosto* dal menu 5. *Polpe»
+- **r10-macro-006** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *Panino porchetta* (8,00 €) 2. *Panino vegetale* (7,00 €) 3. *Tagliata* (18,00 €) 4. *Cot» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *nascosto* dal menu 2. *Panino vegetale*: *nascosto* dal menu 3. *Tagliata*: *nascosto* dal menu 4. *Cotoletta*: *nascosto* dal menu»
+- **r10-macro-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: nascondi tutti i piatti di secondi e panini ⏎ 🎤 sì vai
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *Panino vegetale* (7,00 €) 2. *Tagliata* (18,00 €) 3. *Cotoletta* (14,00 €) 4. *Panna cot» ⏎ «Non ho cambiato nulla. 1. *Panino vegetale* (7,00 €) 2. *Tagliata* (18,00 €) 3. *Cotoletta* (14,00 €) 4. *Panna cotta* (5,00 €)»
+- **r10-macro-009** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 leva tutti i piatti della sezione secondi panini ⏎ 🎤 sì vai
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *Panino porchetta* (8,00 €) 2. *Panino vegetale* (7,00 €) 3. *Tagliata* (18,00 €) 4. *Cot» ⏎ «Non ho cambiato nulla. 1. *Panino porchetta* (8,00 €) 2. *Panino vegetale* (7,00 €) 3. *Tagliata* (18,00 €) 4. *Cotoletta* (14,00 €)»
+- **r10-macro-010** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 tutti i piatti delle secondi e panino toglili dal menu ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *Panino vegetale* (7,00 €) 2. *Tagliata* (18,00 €) 3. *Cotoletta* (14,00 €) 4. *Panna cot» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *nascosto* dal menu 2. *Panino vegetale*: *nascosto* dal menu 3. *Tagliata*: *nascosto* dal menu 4. *Cotoletta*: *nascosto* dal menu»
+- **r10-macro-011** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Cannolo* (4,00 €) 2. *Ananas* (4,00 €) 3. *Coca cola* (3,00 €)»
+- **r10-macro-012** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: nascondi tutti i piatti di dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Cannolo* (4,00 €) 2. *Ananas* (4,00 €) 3. *Coca cola* (3,00 €)»
+- **r10-macro-013** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 togli tutto quello che c’è in dolci frutta, tutti i piatti
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €) 3. *Ananas* (4,00 €)»
+- **r10-macro-015** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 tutti i piatti delle dolci frutta toglili dal menu
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €) 3. *Ananas* (4,00 €)»
+- **r10-macro-017** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: nascondi tutti i piatti di bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Aranciata* (3,00 €) 2. *Caffè* (1,20 €) 3. *Chianti* (18,00 €)»
+- **r10-macro-023** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 rimetti nel menu tutti i piatti delle altre propose
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Piatto di verifica* (13,50 €) 2. *Che ne sacc* (20,00 €) 3. *Frittata di prova* (6,00 €)»
+- **r10-macro-024** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 mostra tutti i piatti di le altre proposta
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Piatto di verifica* (13,50 €) 2. *Che ne sacc* (20,00 €) 3. *Frittata di prova* (6,00 €)»
+- **r10-macro-026** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di pro
+  - turni: segna finiti tutti i piatti della sezione altre proposte ⏎ 🎤 sì vai
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *finito* 2. *tiramisù*: *finito* 3. *Pasta al sugo*: *finito* 4. *Pasta al pesto e lasagna*: *finito* 5. *Polpette di prova*: *finito* 6. *Torta salata di »
+- **r10-macro-027** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di pro
+  - turni: 🎤 tutti i piatti delle altre propose sono esauriti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *finito* 2. *tiramisù*: *finito* 3. *Pasta al sugo*: *finito* 4. *Pasta al pesto e lasagna*: *finito* 5. *Polpette di prova*: *finito* 6. *Torta salata di »
+- **r10-macro-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|
+  - turni: 🎤 oggi è finito tutto in le altre proposta, tutti i piatti ⏎ 🎤 sì vai
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: *finito* 2. *tiramisù*: *fi» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-macro-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: i piatti di secondi e panini sono tutti finiti ⏎ ok
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *finito* 2. *Panino vege» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r10-macro-030** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: segna finiti tutti i piatti della sezione secondi e panini ⏎ 🎤 sì vai
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *Panino porchetta* (8,00 €) 2. *Panino vegetale* (7,00 €) 3. *Tagliata* (18,00 €) 4. *Cot» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *finito* 2. *Panino vegetale*: *finito* 3. *Tagliata*: *finito* 4. *Cotoletta*: *finito*»
+- **r10-macro-031** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: 🎤 tutti i piatti delle secondi e panino sono esauriti ⏎ ok
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *finito* 2. *Panino vegetale*: *finito* 3. *Tagliata*: *finito* 4. *Cotoletta*: *finito*»
+- **r10-macro-033** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Cannolo* (4,00 €) 2. *Ananas* (4,00 €)»
+- **r10-macro-034** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: segna finiti tutti i piatti della sezione dolci e frutta
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €)»
+- **r10-macro-036** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 oggi è finito tutto in dolcie frutta, tutti i piatti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €)»
+- **r10-macro-037** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €) 3. *Caffè* (1,20 €)»
+- **r10-macro-038** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: segna finiti tutti i piatti della sezione bevande e caffetteria
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €) 3. *Caffè* (1,20 €)»
+- **r10-macro-041** [GRAVE] GRAVE non-applicato: non applicato: available|Ananas|true
+  - turni: sono tornati tutti i piatti di dolci e frutta
+  - atteso: available|Ananas|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Ananas* (4,00 €)»
+- **r10-macro-043** [GRAVE] GRAVE non-applicato: non applicato: available|Ananas|true
+  - turni: 🎤 tutti i piatti di dolci frutta sono di nuovo disponibili
+  - atteso: available|Ananas|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Ananas* (4,00 €)»
+- **r10-macro-046** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · MEDIO solo-nulla: turno 1
+  - turni: alza di 1 euro tutti i piatti della sezione secondi e panini
+  - atteso: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-macro-048** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19
+  - turni: 🎤 aumenta tutti i piatti di secondi panini di 1 euro
+  - atteso: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panino vegetale* (7,00 €) 2. *Tagliata* (18,00 €) 3. *Cotoletta* (14,00 €) 4. *Panna cotta* (5,00 €)»
+- **r10-macro-050** [GRAVE] GRAVE non-applicato: non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4
+  - turni: alza di 1 euro tutti i piatti della sezione bevande e caffetteria
+  - atteso: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Aranciata* (3,00 €) 2. *Caffè* (1,20 €) 3. *Chianti* (18,00 €)»
+- **r10-macro-051** [GRAVE] GRAVE non-applicato: non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4
+  - turni: 🎤 tutti i piatti delle bevanda e caffetteria aumentali di un euro
+  - atteso: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Aranciata* (3,00 €) 2. *Caffè* (1,20 €) 3. *Chianti* (18,00 €)»
+- **r10-macro-053** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p · MEDIO solo-nulla: turno 1
+  - turni: aumenta di un euro tutti i piatti di altre proposte
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-macro-054** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p · MEDIO solo-nulla: turno 1
+  - turni: alza di 1 euro tutti i piatti della sezione altre proposte
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-macro-055** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p · MEDIO solo-nulla: turno 1
+  - turni: 🎤 tutti i piatti delle altre propose aumentali di un euro
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-macro-056** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p
+  - turni: 🎤 aumenta tutti i piatti di le altre proposta di 1 euro
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasag»
+- **r10-macro-057** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: sposta tutti i piatti di dolci e frutta in primi
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €) 3. *Ananas* (4,00 €)»
+- **r10-macro-058** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: metti tutti i piatti della sezione dolci e frutta nella sezione primi
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €) 3. *Ananas* (4,00 €)»
+- **r10-macro-059** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: 🎤 tutti i piatti delle dolci frutta spostali in primi
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panna cotta* (5,00 €) 2. *Cannolo* (4,00 €) 3. *Ananas* (4,00 €)»
+- **r10-macro-060** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · MEDIO solo-nulla: turno 1
+  - turni: 🎤 sposta in primi tutti i piatti di dolcie frutta
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-macro-061** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prov
+  - turni: sposta tutti i piatti di altre proposte in primi ⏎ ok
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. Non ancora pubblicato, da confermare con OK: 1. *pasta al ragù*: spostato in *Primi* 2. *tir» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r10-macro-063** [GRAVE] GRAVE non-applicato: non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù
+  - turni: 🎤 tutti i piatti delle altre propose spostali in primi ⏎ ok
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €) 5. *Polpette di prova* (7,00 €)»
+- **r10-macro-064** [GRAVE] GRAVE non-applicato: non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù
+  - turni: 🎤 sposta in primi tutti i piatti di le altre proposta ⏎ 🎤 sì vai
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €) 5. *Polpette di prova* (7,00 €)»
+- **r10-testardo-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-005** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *nascosto* dal menu 2. *Panino vegetale*: *nascosto* dal menu 3. *Tagliata*: *nascosto* dal menu 4. *Cotoletta*: *nascosto* dal menu»
+- **r10-testardo-006** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *nascosto* dal menu 2. *Panino vegetale*: *nascosto* dal menu 3. *Tagliata*: *nascosto* dal menu 4. *Cotoletta*: *nascosto* dal menu»
+- **r10-testardo-007** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *nascosto* dal menu 2. *Panino vegetale*: *nascosto* dal menu 3. *Tagliata*: *nascosto* dal menu 4. *Cotoletta*: *nascosto* dal menu»
+- **r10-testardo-008** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ancora pubblicato, da confermare con OK: 1. *Panino porchetta*: *nascosto* dal menu 2. *Panino vegetale*: *nascosto* dal menu 3. *Tagliata*: *nascosto* dal menu 4. *Cotoletta*: *nascosto* dal menu»
+- **r10-testardo-009** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false · MEDIO solo-nulla: turno 2
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-010** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false · MEDIO solo-nulla: turno 2
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-011** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false · MEDIO solo-nulla: turno 2
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-012** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false · MEDIO solo-nulla: turno 2
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-testardo-014** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false · MEDIO solo-nulla: turno 1
+  - turni: 🎤 i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-015** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false · MEDIO solo-nulla: turno 1
+  - turni: 🎤 i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-017** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-018** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-019** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-020** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-021** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · MEDIO solo-nulla: turno 1
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-023** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · MEDIO solo-nulla: turno 1
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-024** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · MEDIO solo-nulla: turno 1
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-025** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €) 3. *Caffè* (1,20 €)»
+- **r10-testardo-026** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €) 3. *Caffè* (1,20 €)»
+- **r10-testardo-027** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €) 3. *Caffè* (1,20 €)»
+- **r10-testardo-028** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €) 3. *Caffè* (1,20 €)»
+- **r10-testardo-029** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-030** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-031** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-testardo-032** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · MEDIO solo-nulla: turno 1
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla.»
+- **r10-manuel-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)»
+- **r10-manuel-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 sì vai
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)»
+- **r10-manuel-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 tutti i piatti nella sezione altre proposte ⏎ 🎤 tutti i piatti ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)» ⏎ «Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)»
+- **r10-manuel-004** [MEDIO] MEDIO in-attesa-ok: resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 tutti i piatti nella sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta a» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)» ⏎ «Confermi? Rispondi OK per pubblicare. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)»
+- **r10-manuel-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-manuel-006** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-manuel-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · MEDIO solo-nulla: turno 2
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-manuel-008** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · MEDIO solo-nulla: turno 4
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 tutti i piatti nella sezione altre proposte ⏎ 🎤 tutti i piatti ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla. 1. *Inserisce il piatto la parmigiana* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto e lasagna* (10,01 €) 4. *la parmigiana* (15,00 €)» ⏎ «Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla.»
+- **r10-manuel-012** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|pasta al ragù|false, available|tiramisù|false
+  - turni: 🎤 i piatti delle altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Confermi? Rispondi OK per pubblicare.» ⏎ «Non ho cambiato nulla. 1. *pasta al ragù* (10,00 €) 2. *tiramisù* (15,00 €) 3. *Pasta al sugo* (9,00 €) 4. *Pasta al pesto e lasagna* (10,01 €)»
+- **r10-sposta-gemello-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 aggiornalo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ confermo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *tiramisù* (15,00 €) 2. *la parmigiana* (15,00 €)»
+- **r10-sposta-gemello-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 sì aggiornalo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 il primo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tiramisu|7|primi
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 crea nuovo
+  - atteso: create|tiramisu|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tiramisu|7|primi
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 creane un altro
+  - atteso: create|tiramisu|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 aggiornalo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ confermo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 sì aggiornalo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 il primo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tiramisu|6|dessert
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 crea nuovo
+  - atteso: create|tiramisu|6|dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tiramisu|6|dessert
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 creane un altro
+  - atteso: create|tiramisu|6|dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|pasta al pesto|12 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al pesto a 12 ⏎ 🎤 aggiornalo
+  - atteso: price|pasta al pesto|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|pasta al pesto|12 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al pesto a 12 ⏎ 🎤 sì aggiornalo
+  - atteso: price|pasta al pesto|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 aggiornalo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ confermo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r10-sposta-gemello-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 sì aggiornalo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 il primo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|12|primi, create|riso nero|9|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|12|primi, create|riso nero|9|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta al ragu|12|primi, create|riso nero|9|primi · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 creane un altro
+  - atteso: create|pasta al ragu|12|primi, create|riso nero|9|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 aggiornalo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Polpette di prova* (7,00 €) 2. *Pasta al sugo* (9,00 €)»
+- **r10-sposta-gemello-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ confermo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 sì aggiornalo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 il primo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|polpette di prova|8|carne · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 crea nuovo
+  - atteso: create|polpette di prova|8|carne · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|polpette di prova|8|carne · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 creane un altro
+  - atteso: create|polpette di prova|8|carne · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Panino porchetta|9 · MEDIO domanda-ripetuta-generica: turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - turni: 🎤 aggiungi nella sezione panini il Panino porchetta a 9 ⏎ 🎤 aggiornalo
+  - atteso: price|Panino porchetta|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **r10-sposta-gemello-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Panino porchetta|9
+  - turni: 🎤 aggiungi nella sezione panini il Panino porchetta a 9 ⏎ 🎤 sì aggiornalo
+  - atteso: price|Panino porchetta|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **r10-controlli-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Panino porchetta|true, hidden|Panino vegetale|true
+  - turni: nascondi tutti i panini
+  - atteso: hidden|Panino porchetta|true, hidden|Panino vegetale|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Panino porchetta* (8,00 €) 2. *Panino vegetale* (7,00 €)»
+- **r10-controlli-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Coca cola|true
+  - turni: togli tutte le bibite
+  - atteso: hidden|Aranciata|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Coca cola* (3,00 €) 2. *Aranciata* (3,00 €)»
+- **r10-controlli-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Coca cola|true
+  - turni: togli tutti i piatti della sezione bibite
+  - atteso: hidden|Aranciata|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Aranciata* (3,00 €) 2. *Caffè* (1,20 €)»
+- **r10-controlli-012** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Tagliata|true
+  - turni: nascondi tutti i piatti della carne
+  - atteso: hidden|Cotoletta|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Cotoletta* (14,00 €) 2. *Panna cotta* (5,00 €)»
+- **r10-controlli-013** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: sono finiti tutti i piatti della sezione dessert
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Cannolo* (4,00 €) 2. *Ananas* (4,00 €)»
+- **r10-controlli-014** [GRAVE] GRAVE non-applicato: non applicato: hidden|Caffè|true
+  - turni: nascondi tutti i piatti della sezione caffetteria
+  - atteso: hidden|Caffè|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Caffè* (1,20 €)»
+- **r10-controlli-015** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: togli tutti i dessert
+  - atteso: hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non ho cambiato nulla. 1. *Cannolo* (4,00 €) 2. *Ananas* (4,00 €)»

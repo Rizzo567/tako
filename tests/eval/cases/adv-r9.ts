@@ -27,7 +27,9 @@ const REQS:Req[]=[
  {text:'Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo, metti le paste a 10 euro e il riso a 8 euro',req:[{name:'pasta al pesto',price:10},{name:'pasta al ragù',price:10},{name:'pasta carbonara',price:10},{name:'riso giallo',price:8}],twins:['pasta al ragù'],falseTwin:true},
  {text:'nei primi aggiungi pasta al ragù a 10 e riso giallo a 8',req:[{name:'pasta al ragù',price:10},{name:'riso giallo',price:8}],twins:['pasta al ragù']},
  {text:'aggiungi in primi pasta al pesto a 10, pasta al ragù a 10 e pasta carbonara a 10',req:[{name:'pasta al pesto',price:10},{name:'pasta al ragù',price:10},{name:'pasta carbonara',price:10}],twins:['pasta al ragù'],falseTwin:true}]
-const after=(r:Req,mode:'update'|'create')=>[...r.req.filter(x=>!r.twins.includes(x.name)).map(x=>CR(x.name,x.price)),...r.twins.flatMap(t=>{const p=r.req.find(x=>x.name===t)!.price;return mode==='update'?[PR(t,p),VIS(t)]:[CR(t,p)]})]
+// R10 (18/10, QA 16:05): «nei primi aggiungi … pasta al ragù» con il ragù in «Piatti di prova» → aggiornato E spostato in Primi.
+const MV=(dish:string):Change=>({op:'move',dish,section:'Primi'})
+const after=(r:Req,mode:'update'|'create')=>[...r.req.filter(x=>!r.twins.includes(x.name)).map(x=>CR(x.name,x.price)),...r.twins.flatMap(t=>{const p=r.req.find(x=>x.name===t)!.price;return mode==='update'?[PR(t,p),VIS(t),MV(t)]:[CR(t,p)]})]
 
 // ---- 1. risposte brevi: 30 forme (20 «aggiorna», 10 «crea») × 3 richieste, vocali e testo ----
 fam='risposta-breve'
@@ -69,13 +71,13 @@ const TWINS:[string,{name:string,price:number}[],string[]][]=[
  ['nei primi aggiungi pasta al sugo a 11',[{name:'pasta al sugo',price:11}],['Pasta al sugo']],
  ['nei primi aggiungi il tiramisù a 7',[{name:'tiramisù',price:7}],['tiramisù']]]
 for(const [t,req,tw] of TWINS)for(const a of ['aggiornalo','crea nuovo','Buongiorno a tutti']){const twin=tw[0]!,p=req[0]!.price
- c([V(t),V(a)],a==='aggiornalo'?[PR(twin,p),...(twin==='pasta al ragù'?[VIS(twin)]:[])]:a==='crea nuovo'?[CR(req[0]!.name,p)]:[],{req,section:'Primi',twins:tw},{ask:a.startsWith('Buon')?[1,2]:[1]})}
+ c([V(t),V(a)],a==='aggiornalo'?[PR(twin,p),...(twin==='pasta al ragù'?[VIS(twin)]:[]),MV(twin)]:a==='crea nuovo'?[CR(req[0]!.name,p)]:[],{req,section:'Primi',twins:tw},{ask:a.startsWith('Buon')?[1,2]:[1]})}
 // Due gemelli nella stessa richiesta: «aggiorna il ragù e crea la pasta al sugo», «entrambi aggiorna».
 {const req=[{name:'pasta al ragù',price:10},{name:'pasta al sugo',price:11}],tw=['pasta al ragù','Pasta al sugo'],t='nei primi aggiungi pasta al ragù a 10 e pasta al sugo a 11'
- c([V(t),V('aggiorna il ragù e crea la pasta al sugo')],[PR('pasta al ragù',10),VIS('pasta al ragù'),CR('pasta al sugo',11)],{req,section:'Primi',twins:tw},{ask:[1]})
- c([V(t),V('entrambi aggiorna')],[PR('pasta al ragù',10),VIS('pasta al ragù'),PR('Pasta al sugo',11)],{req,section:'Primi',twins:tw},{ask:[1]})
- c([V(t),T('aggiornali tutti e due')],[PR('pasta al ragù',10),VIS('pasta al ragù'),PR('Pasta al sugo',11)],{req,section:'Primi',twins:tw},{ask:[1]})
+ c([V(t),V('aggiorna il ragù e crea la pasta al sugo')],[PR('pasta al ragù',10),VIS('pasta al ragù'),MV('pasta al ragù'),CR('pasta al sugo',11)],{req,section:'Primi',twins:tw},{ask:[1]})
+ c([V(t),V('entrambi aggiorna')],[PR('pasta al ragù',10),VIS('pasta al ragù'),MV('pasta al ragù'),PR('Pasta al sugo',11),MV('Pasta al sugo')],{req,section:'Primi',twins:tw},{ask:[1]})
+ c([V(t),T('aggiornali tutti e due')],[PR('pasta al ragù',10),VIS('pasta al ragù'),MV('pasta al ragù'),PR('Pasta al sugo',11),MV('Pasta al sugo')],{req,section:'Primi',twins:tw},{ask:[1]})
  c([V(t),T('creali tutti e due nuovi')],[CR('pasta al ragù',10),CR('pasta al sugo',11)],{req,section:'Primi',twins:tw},{ask:[1]})
- c([V(t),V('il sugo aggiornalo, il ragù fanne uno nuovo')],[PR('Pasta al sugo',11),CR('pasta al ragù',10)],{req,section:'Primi',twins:tw},{ask:[1]})}
+ c([V(t),V('il sugo aggiornalo, il ragù fanne uno nuovo')],[PR('Pasta al sugo',11),MV('Pasta al sugo'),CR('pasta al ragù',10)],{req,section:'Primi',twins:tw},{ask:[1]})}
 
 if(ADV_R9_CASES.length<150)throw new Error('batteria R9: meno di 150 conversazioni ('+ADV_R9_CASES.length+')')

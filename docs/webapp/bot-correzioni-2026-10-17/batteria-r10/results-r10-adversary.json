@@ -1,0 +1,6683 @@
+{
+ "bot": "r10-adversary",
+ "meta": {
+  "groq": "adversary",
+  "bot": "nuovo",
+  "conversazioni": 181
+ },
+ "summary": {
+  "total": {
+   "family": "TOTALE",
+   "n": 181,
+   "ok": 64,
+   "success": 64,
+   "grave": 71,
+   "medio": 46,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 34.4,
+   "unexpectedClar": 35,
+   "usedLlm": 181,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "multi": {
+   "family": "multi-turno",
+   "n": 73,
+   "ok": 6,
+   "success": 6,
+   "grave": 21,
+   "medio": 46,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 39.1,
+   "unexpectedClar": 35,
+   "usedLlm": 73,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "families": [
+   {
+    "family": "b2-categorie",
+    "n": 181,
+    "ok": 64,
+    "success": 64,
+    "grave": 71,
+    "medio": 46,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 34.4,
+    "unexpectedClar": 35,
+    "usedLlm": 181,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   }
+  ],
+  "codes": {
+   "non-applicato": {
+    "GRAVE": 71,
+    "MEDIO": 0,
+    "BASSO": 0
+   },
+   "in-attesa-ok": {
+    "GRAVE": 0,
+    "MEDIO": 15,
+    "BASSO": 0
+   },
+   "chiede-invece-di-agire": {
+    "GRAVE": 0,
+    "MEDIO": 31,
+    "BASSO": 0
+   },
+   "solo-nulla": {
+    "GRAVE": 0,
+    "MEDIO": 30,
+    "BASSO": 0
+   },
+   "domanda-ripetuta-generica": {
+    "GRAVE": 0,
+    "MEDIO": 13,
+    "BASSO": 0
+   }
+  },
+  "latency": {
+   "harnessP50": 4.5,
+   "harnessP95": 6.8,
+   "withRecordedGroqP50": 4.5,
+   "withRecordedGroqP95": 6.8
+  },
+  "llm": {
+   "calls": 510,
+   "misses": 0,
+   "tokens": 0
+  }
+ },
+ "verdicts": [
+  {
+   "id": "r10-macro-001",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)"
+   ],
+   "turns": [
+    "Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5,
+    4.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-002",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *Pasta al sugo*: *nascosto* dal menu\n4. *Pasta al pesto e lasagna*: *nascosto* dal menu\n5. *Polpette di prova*: *nascosto* dal menu\n6. *Torta salata di prova*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi tutti i piatti di altre proposte",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.1,
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-003",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *Pasta al sugo*: *nascosto* dal menu\n4. *Pasta al pesto e lasagna*: *nascosto* dal menu\n5. *Polpette di prova*: *nascosto* dal menu\n6. *Torta salata di prova*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 togli tutto quello che c’è in altre propose, tutti i piatti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.7,
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-004",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *Pasta al sugo*: *nascosto* dal menu\n4. *Pasta al pesto e lasagna*: *nascosto* dal menu\n5. *Polpette di prova*: *nascosto* dal menu\n6. *Torta salata di prova*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 leva tutti i piatti della sezione le altre proposta",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.1,
+    4.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-005",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *Pasta al sugo*: *nascosto* dal menu\n4. *Pasta al pesto e lasagna*: *nascosto* dal menu\n5. *Polpette di prova*: *nascosto* dal menu\n6. *Torta salata di prova*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle altre propose toglili dal menu",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5,
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-006",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *Panino porchetta* (8,00 €)\n2. *Panino vegetale* (7,00 €)\n3. *Tagliata* (18,00 €)\n4. *Cotoletta* (14,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "Togli tutti i piatti dalla sezione secondi e panini",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3,
+    5.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-007",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *Panino vegetale* (7,00 €)\n2. *Tagliata* (18,00 €)\n3. *Cotoletta* (14,00 €)\n4. *Panna cotta* (5,00 €)",
+    "Non ho cambiato nulla.\n\n1. *Panino vegetale* (7,00 €)\n2. *Tagliata* (18,00 €)\n3. *Cotoletta* (14,00 €)\n4. *Panna cotta* (5,00 €)"
+   ],
+   "turns": [
+    "nascondi tutti i piatti di secondi e panini",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.3,
+    4.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-008",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu",
+    "Fatto.\n\n*Panino porchetta*: *nascosto* dal menu\n*Panino vegetale*: *nascosto* dal menu\n*Tagliata*: *nascosto* dal menu\n*Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 togli tutto quello che c’è in secondi e panino, tutti i piatti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7,
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-009",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *Panino porchetta* (8,00 €)\n2. *Panino vegetale* (7,00 €)\n3. *Tagliata* (18,00 €)\n4. *Cotoletta* (14,00 €)",
+    "Non ho cambiato nulla.\n\n1. *Panino porchetta* (8,00 €)\n2. *Panino vegetale* (7,00 €)\n3. *Tagliata* (18,00 €)\n4. *Cotoletta* (14,00 €)"
+   ],
+   "turns": [
+    "🎤 leva tutti i piatti della sezione secondi panini",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.9,
+    4.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-010",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *Panino vegetale* (7,00 €)\n2. *Tagliata* (18,00 €)\n3. *Cotoletta* (14,00 €)\n4. *Panna cotta* (5,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle secondi e panino toglili dal menu",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.9,
+    4.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-011",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Cannolo* (4,00 €)\n2. *Ananas* (4,00 €)\n3. *Coca cola* (3,00 €)"
+   ],
+   "turns": [
+    "Togli tutti i piatti dalla sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-012",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Cannolo* (4,00 €)\n2. *Ananas* (4,00 €)\n3. *Coca cola* (3,00 €)"
+   ],
+   "turns": [
+    "nascondi tutti i piatti di dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-013",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)\n3. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "🎤 togli tutto quello che c’è in dolci frutta, tutti i piatti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-014",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panna cotta*: *nascosto* dal menu\n*Cannolo*: *nascosto* dal menu\n*Ananas*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 leva tutti i piatti della sezione dolcie frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-015",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)\n3. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle dolci frutta toglili dal menu"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-016",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: *nascosto* dal menu\n*Aranciata*: *nascosto* dal menu\n*Caffè*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "Togli tutti i piatti dalla sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-017",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Aranciata* (3,00 €)\n2. *Caffè* (1,20 €)\n3. *Chianti* (18,00 €)"
+   ],
+   "turns": [
+    "nascondi tutti i piatti di bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-018",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: *nascosto* dal menu\n*Aranciata*: *nascosto* dal menu\n*Caffè*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 togli tutto quello che c’è in bevanda e caffetteria, tutti i piatti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-019",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: *nascosto* dal menu\n*Aranciata*: *nascosto* dal menu\n*Caffè*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 leva tutti i piatti della sezione bevande caffè"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-020",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: *nascosto* dal menu\n*Aranciata*: *nascosto* dal menu\n*Caffè*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle bevanda e caffetteria toglili dal menu"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-021",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Piatto di verifica*: di nuovo *visibile* nel menu\n*Che ne sacc*: di nuovo *visibile* nel menu\n*Frittata di prova*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "rimetti tutti i piatti di altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-022",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Piatto di verifica*: di nuovo *visibile* nel menu\n*Che ne sacc*: di nuovo *visibile* nel menu\n*Frittata di prova*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "fai vedere di nuovo tutti i piatti della sezione altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-023",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false"
+    }
+   ],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Piatto di verifica* (13,50 €)\n2. *Che ne sacc* (20,00 €)\n3. *Frittata di prova* (6,00 €)"
+   ],
+   "turns": [
+    "🎤 rimetti nel menu tutti i piatti delle altre propose"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-024",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false"
+    }
+   ],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Piatto di verifica* (13,50 €)\n2. *Che ne sacc* (20,00 €)\n3. *Frittata di prova* (6,00 €)"
+   ],
+   "turns": [
+    "🎤 mostra tutti i piatti di le altre proposta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-025",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *finito*\n2. *tiramisù*: *finito*\n3. *Pasta al sugo*: *finito*\n4. *Pasta al pesto e lasagna*: *finito*\n5. *Polpette di prova*: *finito*\n6. *Torta salata di prova*: *finito*",
+    "Fatto.\n\n*pasta al ragù*: *finito*\n*tiramisù*: *finito*\n*Pasta al sugo*: *finito*\n*Pasta al pesto e lasagna*: *finito*\n*Polpette di prova*: *finito*\n*Torta salata di prova*: *finito*"
+   ],
+   "turns": [
+    "i piatti di altre proposte sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8,
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-026",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *finito*\n2. *tiramisù*: *finito*\n3. *Pasta al sugo*: *finito*\n4. *Pasta al pesto e lasagna*: *finito*\n5. *Polpette di prova*: *finito*\n6. *Torta salata di prova*: *finito*"
+   ],
+   "turns": [
+    "segna finiti tutti i piatti della sezione altre proposte",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3,
+    6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-027",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *finito*\n2. *tiramisù*: *finito*\n3. *Pasta al sugo*: *finito*\n4. *Pasta al pesto e lasagna*: *finito*\n5. *Polpette di prova*: *finito*\n6. *Torta salata di prova*: *finito*"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle altre propose sono esauriti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3,
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-028",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *finito*\n2. *tiramisù*: *finito*\n3. *Pasta al sugo*: *finito*\n4. *Pasta al pesto e lasagna*: *finito*\n5. *Polpette di prova*: *finito*\n6. *Torta salata di prova*: *finito*",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 oggi è finito tutto in le altre proposta, tutti i piatti",
+    "🎤 sì vai"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.5,
+    3.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-029",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false"
+    }
+   ],
+   "expected": [
+    "available|Cotoletta|false",
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false",
+    "available|Tagliata|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *finito*\n2. *Panino vegetale*: *finito*\n3. *Tagliata*: *finito*\n4. *Cotoletta*: *finito*",
+    "Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no."
+   ],
+   "turns": [
+    "i piatti di secondi e panini sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.2,
+    2.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-030",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false"
+    }
+   ],
+   "expected": [
+    "available|Cotoletta|false",
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false",
+    "available|Tagliata|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *Panino porchetta* (8,00 €)\n2. *Panino vegetale* (7,00 €)\n3. *Tagliata* (18,00 €)\n4. *Cotoletta* (14,00 €)",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *finito*\n2. *Panino vegetale*: *finito*\n3. *Tagliata*: *finito*\n4. *Cotoletta*: *finito*"
+   ],
+   "turns": [
+    "segna finiti tutti i piatti della sezione secondi e panini",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2,
+    4.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-031",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false"
+    }
+   ],
+   "expected": [
+    "available|Cotoletta|false",
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false",
+    "available|Tagliata|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *finito*\n2. *Panino vegetale*: *finito*\n3. *Tagliata*: *finito*\n4. *Cotoletta*: *finito*"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle secondi e panino sono esauriti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.7,
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-032",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Cotoletta|false",
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false",
+    "available|Tagliata|false"
+   ],
+   "actual": [
+    "available|Cotoletta|false",
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false",
+    "available|Tagliata|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *finito*\n2. *Panino vegetale*: *finito*\n3. *Tagliata*: *finito*\n4. *Cotoletta*: *finito*",
+    "Fatto.\n\n*Panino porchetta*: *finito*\n*Panino vegetale*: *finito*\n*Tagliata*: *finito*\n*Cotoletta*: *finito*"
+   ],
+   "turns": [
+    "🎤 oggi è finito tutto in secondi panini, tutti i piatti",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.3,
+    3.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-033",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Cannolo|false, available|Panna cotta|false"
+    }
+   ],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Cannolo* (4,00 €)\n2. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "i piatti di dolci e frutta sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-034",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Cannolo|false, available|Panna cotta|false"
+    }
+   ],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)"
+   ],
+   "turns": [
+    "segna finiti tutti i piatti della sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-035",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panna cotta*: *finito*\n*Cannolo*: *finito*"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle dolci frutta sono esauriti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-036",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Cannolo|false, available|Panna cotta|false"
+    }
+   ],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)"
+   ],
+   "turns": [
+    "🎤 oggi è finito tutto in dolcie frutta, tutti i piatti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-037",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false"
+    }
+   ],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)\n3. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "i piatti di bevande e caffetteria sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-038",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false"
+    }
+   ],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)\n3. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "segna finiti tutti i piatti della sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-039",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: *finito*\n*Aranciata*: *finito*\n*Caffè*: *finito*"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle bevanda e caffetteria sono esauriti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-040",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: *finito*\n*Aranciata*: *finito*\n*Caffè*: *finito*"
+   ],
+   "turns": [
+    "🎤 oggi è finito tutto in bevande caffè, tutti i piatti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-041",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Ananas|true"
+    }
+   ],
+   "expected": [
+    "available|Ananas|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "sono tornati tutti i piatti di dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-042",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Ananas|true"
+   ],
+   "actual": [
+    "available|Ananas|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Ananas*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "rimetti disponibili tutti i piatti della sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-043",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Ananas|true"
+    }
+   ],
+   "expected": [
+    "available|Ananas|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "🎤 tutti i piatti di dolci frutta sono di nuovo disponibili"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-044",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Ananas|true"
+   ],
+   "actual": [
+    "available|Ananas|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Ananas*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "🎤 c’è di nuovo tutto in dolcie frutta, tutti i piatti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-045",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cotoletta|15",
+    "price|Panino porchetta|9",
+    "price|Panino vegetale|8",
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Cotoletta|15",
+    "price|Panino porchetta|9",
+    "price|Panino vegetale|8",
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panino porchetta*: prezzo da 8,00 € a *9,00 €*\n*Panino vegetale*: prezzo da 7,00 € a *8,00 €*\n*Tagliata*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta*: prezzo da 14,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "aumenta di un euro tutti i piatti di secondi e panini"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-046",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "price|Cotoletta|15",
+    "price|Panino porchetta|9",
+    "price|Panino vegetale|8",
+    "price|Tagliata|19"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "alza di 1 euro tutti i piatti della sezione secondi e panini"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-047",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cotoletta|15",
+    "price|Panino porchetta|9",
+    "price|Panino vegetale|8",
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Cotoletta|15",
+    "price|Panino porchetta|9",
+    "price|Panino vegetale|8",
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panino porchetta*: prezzo da 8,00 € a *9,00 €*\n*Panino vegetale*: prezzo da 7,00 € a *8,00 €*\n*Tagliata*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta*: prezzo da 14,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle secondi e panino aumentali di un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-048",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19"
+    }
+   ],
+   "expected": [
+    "price|Cotoletta|15",
+    "price|Panino porchetta|9",
+    "price|Panino vegetale|8",
+    "price|Tagliata|19"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panino vegetale* (7,00 €)\n2. *Tagliata* (18,00 €)\n3. *Cotoletta* (14,00 €)\n4. *Panna cotta* (5,00 €)"
+   ],
+   "turns": [
+    "🎤 aumenta tutti i piatti di secondi panini di 1 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-049",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Aranciata|4",
+    "price|Caffè|2.2",
+    "price|Coca cola|4"
+   ],
+   "actual": [
+    "price|Aranciata|4",
+    "price|Caffè|2.2",
+    "price|Coca cola|4"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: prezzo da 3,00 € a *4,00 €*\n*Aranciata*: prezzo da 3,00 € a *4,00 €*\n*Caffè*: prezzo da 1,20 € a *2,20 €*"
+   ],
+   "turns": [
+    "aumenta di un euro tutti i piatti di bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-050",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4"
+    }
+   ],
+   "expected": [
+    "price|Aranciata|4",
+    "price|Caffè|2.2",
+    "price|Coca cola|4"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Aranciata* (3,00 €)\n2. *Caffè* (1,20 €)\n3. *Chianti* (18,00 €)"
+   ],
+   "turns": [
+    "alza di 1 euro tutti i piatti della sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-051",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4"
+    }
+   ],
+   "expected": [
+    "price|Aranciata|4",
+    "price|Caffè|2.2",
+    "price|Coca cola|4"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Aranciata* (3,00 €)\n2. *Caffè* (1,20 €)\n3. *Chianti* (18,00 €)"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle bevanda e caffetteria aumentali di un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-052",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Aranciata|4",
+    "price|Caffè|2.2",
+    "price|Coca cola|4"
+   ],
+   "actual": [
+    "price|Aranciata|4",
+    "price|Caffè|2.2",
+    "price|Coca cola|4"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Coca cola*: prezzo da 3,00 € a *4,00 €*\n*Aranciata*: prezzo da 3,00 € a *4,00 €*\n*Caffè*: prezzo da 1,20 € a *2,20 €*"
+   ],
+   "turns": [
+    "🎤 aumenta tutti i piatti di bevande caffè di 1 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-053",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "price|Pasta al pesto e lasagna|11.01",
+    "price|Pasta al sugo|10",
+    "price|Polpette di prova|8",
+    "price|Torta salata di prova|6",
+    "price|pasta al ragù|11",
+    "price|tiramisù|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "aumenta di un euro tutti i piatti di altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-054",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "price|Pasta al pesto e lasagna|11.01",
+    "price|Pasta al sugo|10",
+    "price|Polpette di prova|8",
+    "price|Torta salata di prova|6",
+    "price|pasta al ragù|11",
+    "price|tiramisù|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "alza di 1 euro tutti i piatti della sezione altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-055",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "price|Pasta al pesto e lasagna|11.01",
+    "price|Pasta al sugo|10",
+    "price|Polpette di prova|8",
+    "price|Torta salata di prova|6",
+    "price|pasta al ragù|11",
+    "price|tiramisù|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle altre propose aumentali di un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-056",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16"
+    }
+   ],
+   "expected": [
+    "price|Pasta al pesto e lasagna|11.01",
+    "price|Pasta al sugo|10",
+    "price|Polpette di prova|8",
+    "price|Torta salata di prova|6",
+    "price|pasta al ragù|11",
+    "price|tiramisù|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)"
+   ],
+   "turns": [
+    "🎤 aumenta tutti i piatti di le altre proposta di 1 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-057",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi"
+    }
+   ],
+   "expected": [
+    "move|Ananas|Primi",
+    "move|Cannolo|Primi",
+    "move|Panna cotta|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)\n3. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "sposta tutti i piatti di dolci e frutta in primi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-058",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi"
+    }
+   ],
+   "expected": [
+    "move|Ananas|Primi",
+    "move|Cannolo|Primi",
+    "move|Panna cotta|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)\n3. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "metti tutti i piatti della sezione dolci e frutta nella sezione primi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-059",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi"
+    }
+   ],
+   "expected": [
+    "move|Ananas|Primi",
+    "move|Cannolo|Primi",
+    "move|Panna cotta|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panna cotta* (5,00 €)\n2. *Cannolo* (4,00 €)\n3. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle dolci frutta spostali in primi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-060",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "move|Ananas|Primi",
+    "move|Cannolo|Primi",
+    "move|Panna cotta|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 sposta in primi tutti i piatti di dolcie frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-061",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi"
+    }
+   ],
+   "expected": [
+    "move|Pasta al pesto e lasagna|Primi",
+    "move|Pasta al sugo|Primi",
+    "move|Polpette di prova|Primi",
+    "move|Torta salata di prova|Primi",
+    "move|pasta al ragù|Primi",
+    "move|tiramisù|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: spostato in *Primi*\n2. *tiramisù*: spostato in *Primi*\n3. *Pasta al sugo*: spostato in *Primi*\n4. *Pasta al pesto e lasagna*: spostato in *Primi*\n5. *Polpette di prova*: spostato in *Primi*\n6. *Torta salata di prova*: spostato in *Primi*",
+    "Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no."
+   ],
+   "turns": [
+    "sposta tutti i piatti di altre proposte in primi",
+    "ok"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5,
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-062",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Pasta al pesto e lasagna|Primi",
+    "move|Pasta al sugo|Primi",
+    "move|Polpette di prova|Primi",
+    "move|Torta salata di prova|Primi",
+    "move|pasta al ragù|Primi",
+    "move|tiramisù|Primi"
+   ],
+   "actual": [
+    "move|Pasta al pesto e lasagna|Primi",
+    "move|Pasta al sugo|Primi",
+    "move|Polpette di prova|Primi",
+    "move|Torta salata di prova|Primi",
+    "move|pasta al ragù|Primi",
+    "move|tiramisù|Primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: spostato in *Primi*\n2. *tiramisù*: spostato in *Primi*\n3. *Pasta al sugo*: spostato in *Primi*\n4. *Pasta al pesto e lasagna*: spostato in *Primi*\n5. *Polpette di prova*: spostato in *Primi*\n6. *Torta salata di prova*: spostato in *Primi*",
+    "Fatto.\n\n*pasta al ragù*: spostato in *Primi*\n*tiramisù*: spostato in *Primi*\n*Pasta al sugo*: spostato in *Primi*\n*Pasta al pesto e lasagna*: spostato in *Primi*\n*Polpette di prova*: spostato in *Primi*\n*Torta salata di prova*: spostato in *Primi*"
+   ],
+   "turns": [
+    "metti tutti i piatti della sezione altre proposte nella sezione primi",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6,
+    4.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-063",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi"
+    }
+   ],
+   "expected": [
+    "move|Pasta al pesto e lasagna|Primi",
+    "move|Pasta al sugo|Primi",
+    "move|Polpette di prova|Primi",
+    "move|Torta salata di prova|Primi",
+    "move|pasta al ragù|Primi",
+    "move|tiramisù|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)"
+   ],
+   "turns": [
+    "🎤 tutti i piatti delle altre propose spostali in primi",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.3,
+    4.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-macro-064",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi"
+    }
+   ],
+   "expected": [
+    "move|Pasta al pesto e lasagna|Primi",
+    "move|Pasta al sugo|Primi",
+    "move|Polpette di prova|Primi",
+    "move|Torta salata di prova|Primi",
+    "move|pasta al ragù|Primi",
+    "move|tiramisù|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)\n6. *Torta salata di prova* (5,00 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)\n5. *Polpette di prova* (7,00 €)"
+   ],
+   "turns": [
+    "🎤 sposta in primi tutti i piatti di le altre proposta",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.4,
+    5.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:macro"
+  },
+  {
+   "id": "r10-testardo-001",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5,
+    4.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-002",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.6,
+    5.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-003",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6,
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-004",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|Polpette di prova|true",
+    "hidden|Torta salata di prova|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5,
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-005",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione secondi e panini",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6,
+    6.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-006",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione secondi e panini",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.2,
+    6.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-007",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione secondi e panini",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.9,
+    5.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-008",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *Panino porchetta*: *nascosto* dal menu\n2. *Panino vegetale*: *nascosto* dal menu\n3. *Tagliata*: *nascosto* dal menu\n4. *Cotoletta*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione secondi e panini",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.4,
+    6.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-009",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 i piatti di altre proposte sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.8,
+    7.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-010",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 i piatti di altre proposte sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    7.3,
+    8.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-011",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 i piatti di altre proposte sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.5,
+    5.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-012",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|Polpette di prova|false",
+    "available|Torta salata di prova|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 i piatti di altre proposte sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.5,
+    7.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-013",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panna cotta*: *finito*\n*Cannolo*: *finito*"
+   ],
+   "turns": [
+    "🎤 i piatti di dolci e frutta sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-014",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Cannolo|false, available|Panna cotta|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 i piatti di dolci e frutta sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-015",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Cannolo|false, available|Panna cotta|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 i piatti di dolci e frutta sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-016",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panna cotta*: *finito*\n*Cannolo*: *finito*"
+   ],
+   "turns": [
+    "🎤 i piatti di dolci e frutta sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-017",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-018",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-019",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-020",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Caffè|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione bevande e caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-021",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 rimetti tutti i piatti di altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-022",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Piatto di verifica*: di nuovo *visibile* nel menu\n*Che ne sacc*: di nuovo *visibile* nel menu\n*Frittata di prova*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "🎤 rimetti tutti i piatti di altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-023",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 rimetti tutti i piatti di altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-024",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Che ne sacc|false",
+    "hidden|Frittata di prova|false",
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 rimetti tutti i piatti di altre proposte"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-025",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false"
+    }
+   ],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)\n3. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "🎤 i piatti di bevande e caffetteria sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-026",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false"
+    }
+   ],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)\n3. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "🎤 i piatti di bevande e caffetteria sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-027",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false"
+    }
+   ],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)\n3. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "🎤 i piatti di bevande e caffetteria sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-028",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false"
+    }
+   ],
+   "expected": [
+    "available|Aranciata|false",
+    "available|Caffè|false",
+    "available|Coca cola|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)\n3. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "🎤 i piatti di bevande e caffetteria sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-029",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-030",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-031",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-testardo-032",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 1"
+    }
+   ],
+   "expected": [
+    "hidden|Ananas|true",
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione dolci e frutta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:testardo"
+  },
+  {
+   "id": "r10-manuel-001",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.9,
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-002",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)"
+   ],
+   "turns": [
+    "Togli tutti i piatti dalla sezione altre proposte",
+    "🎤 sì vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7,
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-003",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Confermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "🎤 tutti i piatti nella sezione altre proposte",
+    "🎤 tutti i piatti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 10,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9,
+    5.4,
+    2.6,
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-004",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "in-attesa-ok",
+     "why": "resta in attesa di OK: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Confermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "🎤 tutti i piatti nella sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 7,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.5,
+    3.7,
+    2.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-005",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.8,
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-006",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2,
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-007",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 2"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.9,
+    3.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-008",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "solo-nulla",
+     "why": "turno 4"
+    }
+   ],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla.\n\n1. *Inserisce il piatto la parmigiana* (12,00 €)\n2. *Pasta al sugo* (9,00 €)\n3. *Pasta al pesto e lasagna* (10,01 €)\n4. *la parmigiana* (15,00 €)",
+    "Confermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "🎤 tutti i piatti nella sezione altre proposte",
+    "🎤 tutti i piatti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 10,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3,
+    4.1,
+    2.7,
+    2.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-009",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *Pasta al sugo*: *nascosto* dal menu\n4. *Pasta al pesto e lasagna*: *nascosto* dal menu",
+    "Fatto.\n\n*pasta al ragù*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*Pasta al sugo*: *nascosto* dal menu\n*Pasta al pesto e lasagna*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 togli tutti i piatti dalla sezione altre propose",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.1,
+    2.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-010",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare."
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-011",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)"
+   ],
+   "turns": [
+    "🎤 Togli tutti i piatti dalla sezione altre proposte",
+    "no lascia stare"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8,
+    4.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-manuel-012",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|pasta al ragù|false, available|tiramisù|false"
+    }
+   ],
+   "expected": [
+    "available|Pasta al pesto e lasagna|false",
+    "available|Pasta al sugo|false",
+    "available|pasta al ragù|false",
+    "available|tiramisù|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi? Rispondi OK per pubblicare.",
+    "Non ho cambiato nulla.\n\n1. *pasta al ragù* (10,00 €)\n2. *tiramisù* (15,00 €)\n3. *Pasta al sugo* (9,00 €)\n4. *Pasta al pesto e lasagna* (10,01 €)"
+   ],
+   "turns": [
+    "🎤 i piatti delle altre proposte sono tutti finiti",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.4,
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:manuel"
+  },
+  {
+   "id": "r10-inesistente-001",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «antipasti». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "togli tutti i piatti dalla sezione antipasti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-002",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «antipasti». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 togli tutti i piatti dalla sezione antipasti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-003",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «antipasti». Le sezioni sono: Piatti di prova, Primi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 togli tutti i piatti dalla sezione antipasti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-004",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «pizze». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "nascondi la categoria pizze"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-005",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «pizze». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 nascondi la categoria pizze"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-006",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «pizze». Le sezioni sono: Piatti di prova, Primi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 nascondi la categoria pizze"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    1.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-007",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «contorni». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "i piatti della sezione contorni sono finiti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-008",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «contorni». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 i piatti della sezione contorni sono finiti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-009",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «contorni». Le sezioni sono: Piatti di prova, Primi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 i piatti della sezione contorni sono finiti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-010",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «gelati». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "sposta il tiramisù nella sezione gelati"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-011",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «gelati». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 sposta il tiramisù nella sezione gelati"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-012",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «gelati». Le sezioni sono: Piatti di prova, Primi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 sposta il tiramisù nella sezione gelati"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-013",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «aperitivi». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "togli tutti i piatti della categoria aperitivi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-014",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «aperitivi». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 togli tutti i piatti della categoria aperitivi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-015",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «aperitivi». Le sezioni sono: Piatti di prova, Primi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 togli tutti i piatti della categoria aperitivi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-016",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «specialita». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "nascondi tutta la sezione specialità"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-017",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «specialita». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 nascondi tutta la sezione specialità"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-018",
+   "family": "b2-categorie",
+   "menu": "qalive3",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «specialita». Le sezioni sono: Piatti di prova, Primi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 nascondi tutta la sezione specialità"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-019",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «insalate». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "segna finita la sezione insalate"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-020",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «insalate». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 segna finita la sezione insalate"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-021",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «bruschette». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "togli i piatti della sezione bruschette"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-022",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «bruschette». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 togli i piatti della sezione bruschette"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-023",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «taglieri». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "nella categoria taglieri metti tutto a 10"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-024",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «taglieri». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 nella categoria taglieri metti tutto a 10"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-025",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «grigliate». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "rimetti tutti i piatti della sezione grigliate"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-026",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «grigliate». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 rimetti tutti i piatti della sezione grigliate"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-027",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «crudi». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "togli la sezione crudi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-028",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «crudi». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 togli la sezione crudi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-029",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «fritti». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "nascondi tutti i piatti della sezione fritti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-inesistente-030",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel menu non c’è una sezione «fritti». Le sezioni sono: Primi, Piatti di prova, Sezione da spostare, Sezione da eliminare, Panini, Carne, Dessert, Frutta, Bibite, Caffetteria, Vini rossi. Quale intendi?"
+   ],
+   "turns": [
+    "🎤 nascondi tutti i piatti della sezione fritti"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:inesistente"
+  },
+  {
+   "id": "r10-sposta-gemello-001",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Primi",
+    "price|tiramisù|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi tiramisù a 7",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.7,
+    6.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-002",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Primi",
+    "price|tiramisù|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Quale intendi?\n\n1. *tiramisù* (15,00 €)\n2. *la parmigiana* (15,00 €)"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi tiramisù a 7",
+    "confermo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8,
+    5.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-003",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Primi",
+    "price|tiramisù|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi tiramisù a 7",
+    "🎤 sì aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6,
+    5.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-004",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Primi, price|tiramisù|7"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Primi",
+    "price|tiramisù|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi tiramisù a 7",
+    "🎤 il primo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.2,
+    6.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-005",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|tiramisu|7|primi"
+    }
+   ],
+   "expected": [
+    "create|tiramisu|7|primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi tiramisù a 7",
+    "🎤 crea nuovo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.6,
+    7.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-006",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|tiramisu|7|primi"
+    }
+   ],
+   "expected": [
+    "create|tiramisu|7|primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi tiramisù a 7",
+    "🎤 creane un altro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.9,
+    7.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-007",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Dessert",
+    "price|tiramisù|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nel dessert aggiungi tiramisù a 6",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    6.5,
+    5.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-008",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Dessert",
+    "price|tiramisù|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nel dessert aggiungi tiramisù a 6",
+    "confermo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8,
+    7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-009",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Dessert",
+    "price|tiramisù|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nel dessert aggiungi tiramisù a 6",
+    "🎤 sì aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.2,
+    6.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-010",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|tiramisù|Dessert, price|tiramisù|6"
+    }
+   ],
+   "expected": [
+    "move|tiramisù|Dessert",
+    "price|tiramisù|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nel dessert aggiungi tiramisù a 6",
+    "🎤 il primo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.3,
+    6.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-011",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|tiramisu|6|dessert"
+    }
+   ],
+   "expected": [
+    "create|tiramisu|6|dessert"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nel dessert aggiungi tiramisù a 6",
+    "🎤 crea nuovo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5,
+    6.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-012",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|tiramisu|6|dessert"
+    }
+   ],
+   "expected": [
+    "create|tiramisu|6|dessert"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nel dessert aggiungi tiramisù a 6",
+    "🎤 creane un altro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4,
+    6.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-013",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|pasta al pesto|12"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "price|pasta al pesto|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al pesto a 12",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8,
+    7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-014",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|pasta al pesto|12"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "price|pasta al pesto|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al pesto a 12",
+    "🎤 sì aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.4,
+    6.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-015",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|riso nero|9|primi",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.6,
+    5.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-016",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12"
+    }
+   ],
+   "expected": [
+    "create|riso nero|9|primi",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no."
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9",
+    "confermo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5,
+    5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-017",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|riso nero|9|primi",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9",
+    "🎤 sì aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.5,
+    5.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-018",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|riso nero|9|primi",
+    "move|pasta al ragù|Primi",
+    "price|pasta al ragù|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9",
+    "🎤 il primo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.2,
+    6.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-019",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|pasta al ragu|12|primi, create|riso nero|9|primi"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|pasta al ragu|12|primi",
+    "create|riso nero|9|primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9",
+    "🎤 crea nuovo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.8,
+    8.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-020",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|pasta al ragu|12|primi, create|riso nero|9|primi"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|pasta al ragu|12|primi",
+    "create|riso nero|9|primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9",
+    "🎤 creane un altro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    5.7,
+    9.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-021",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8"
+    }
+   ],
+   "expected": [
+    "move|Polpette di prova|Carne",
+    "price|Polpette di prova|8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Quale intendi?\n\n1. *Polpette di prova* (7,00 €)\n2. *Pasta al sugo* (9,00 €)"
+   ],
+   "turns": [
+    "🎤 in carne aggiungi Polpette di prova a 8",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8,
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-022",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "move|Polpette di prova|Carne",
+    "price|Polpette di prova|8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 in carne aggiungi Polpette di prova a 8",
+    "confermo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.1,
+    4.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-023",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "move|Polpette di prova|Carne",
+    "price|Polpette di prova|8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 in carne aggiungi Polpette di prova a 8",
+    "🎤 sì aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8,
+    5.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-024",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: move|Polpette di prova|Carne, price|Polpette di prova|8"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "move|Polpette di prova|Carne",
+    "price|Polpette di prova|8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 in carne aggiungi Polpette di prova a 8",
+    "🎤 il primo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.7,
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-025",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|polpette di prova|8|carne"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|polpette di prova|8|carne"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 in carne aggiungi Polpette di prova a 8",
+    "🎤 crea nuovo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5,
+    7.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-026",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|polpette di prova|8|carne"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "create|polpette di prova|8|carne"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 in carne aggiungi Polpette di prova a 8",
+    "🎤 creane un altro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.4,
+    6.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-027",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Panino porchetta|9"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-ripetuta-generica",
+     "why": "turno 2: «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»"
+    }
+   ],
+   "expected": [
+    "price|Panino porchetta|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 aggiungi nella sezione panini il Panino porchetta a 9",
+    "🎤 aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.5,
+    5.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-sposta-gemello-028",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Panino porchetta|9"
+    }
+   ],
+   "expected": [
+    "price|Panino porchetta|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no."
+   ],
+   "turns": [
+    "🎤 aggiungi nella sezione panini il Panino porchetta a 9",
+    "🎤 sì aggiornalo"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.8,
+    4.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:sposta-gemello"
+  },
+  {
+   "id": "r10-controlli-001",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nEcco i piatti.\n\n*Cotoletta*: *14,00 €* · disponibile\n*Piatto di verifica*: *13,50 €* · disponibile · nascosto\n*Che ne sacc*: *20,00 €* · disponibile · nascosto\n*pasta al ragù*: *10,00 €* · disponibile\n*tiramisù*: *15,00 €* · disponibile\n*Pasta al sugo*: *9,00 €* · disponibile\n*Pasta al pesto e lasagna*: *10,01 €* · disponibile\n*Polpette di prova*: *7,00 €* · disponibile\n*Frittata di prova*: *6,00 €* · disponibile · nascosto\n*Torta salata di prova*: *5,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ quali piatti ci sono nelle altre proposte?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-002",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nEcco i piatti.\n\n*Polpette di prova*: *7,00 €* · disponibile\n*Panino porchetta*: *8,00 €* · disponibile\n*Panino vegetale*: *7,00 €* · disponibile\n*Tagliata*: *18,00 €* · disponibile\n*Cotoletta*: *14,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ cosa c’è nei secondi e panini?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-003",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nEcco i piatti.\n\n*Ananas*: *4,00 €* · finito\n*Panna cotta*: *5,00 €* · disponibile\n*Cannolo*: *4,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ che piatti ho in dolci e frutta?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-004",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nEcco i piatti.\n\n*Panino porchetta*: *8,00 €* · disponibile\n*Coca cola*: *3,00 €* · disponibile\n*Aranciata*: *3,00 €* · disponibile\n*Caffè*: *1,20 €* · disponibile"
+   ],
+   "turns": [
+    "❓ cosa c’è in bevande e caffetteria?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-005",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Panino porchetta|true, hidden|Panino vegetale|true"
+    }
+   ],
+   "expected": [
+    "hidden|Panino porchetta|true",
+    "hidden|Panino vegetale|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Panino porchetta* (8,00 €)\n2. *Panino vegetale* (7,00 €)"
+   ],
+   "turns": [
+    "nascondi tutti i panini"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-006",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Cotoletta|false",
+    "available|Tagliata|false"
+   ],
+   "actual": [
+    "available|Cotoletta|false",
+    "available|Tagliata|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Tagliata*: *finito*\n*Cotoletta*: *finito*"
+   ],
+   "turns": [
+    "segna finiti tutti i piatti della sezione carne"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-007",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Coca cola|true"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Coca cola* (3,00 €)\n2. *Aranciata* (3,00 €)"
+   ],
+   "turns": [
+    "togli tutte le bibite"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-008",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false"
+   ],
+   "actual": [
+    "available|Panino porchetta|false",
+    "available|Panino vegetale|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Panino porchetta*: *finito*\n*Panino vegetale*: *finito*"
+   ],
+   "turns": [
+    "i panini sono tutti finiti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-009",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cotoletta|15",
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Cotoletta|15",
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\n*Tagliata*: prezzo da 18,00 € a *19,00 €*\n*Cotoletta*: prezzo da 14,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "aumenta di un euro tutti i piatti della sezione carne"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-010",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Aranciata|true, hidden|Coca cola|true"
+    }
+   ],
+   "expected": [
+    "hidden|Aranciata|true",
+    "hidden|Coca cola|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Aranciata* (3,00 €)\n2. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "togli tutti i piatti della sezione bibite"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-011",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon c’è niente da cambiare."
+   ],
+   "turns": [
+    "rimetti disponibili tutti i panini"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    2.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-012",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Cotoletta|true, hidden|Tagliata|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cotoletta|true",
+    "hidden|Tagliata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Cotoletta* (14,00 €)\n2. *Panna cotta* (5,00 €)"
+   ],
+   "turns": [
+    "nascondi tutti i piatti della carne"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-013",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: available|Cannolo|false, available|Panna cotta|false"
+    }
+   ],
+   "expected": [
+    "available|Cannolo|false",
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Cannolo* (4,00 €)\n2. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "sono finiti tutti i piatti della sezione dessert"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-014",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Caffè|true"
+    }
+   ],
+   "expected": [
+    "hidden|Caffè|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Caffè* (1,20 €)"
+   ],
+   "turns": [
+    "nascondi tutti i piatti della sezione caffetteria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  },
+  {
+   "id": "r10-controlli-015",
+   "family": "b2-categorie",
+   "menu": "r10macro",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Cannolo|true, hidden|Panna cotta|true"
+    }
+   ],
+   "expected": [
+    "hidden|Cannolo|true",
+    "hidden|Panna cotta|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Cannolo* (4,00 €)\n2. *Ananas* (4,00 €)"
+   ],
+   "turns": [
+    "togli tutti i dessert"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "r10:controlli"
+  }
+ ]
+}

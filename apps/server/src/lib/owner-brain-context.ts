@@ -8,6 +8,8 @@
  * Modulo puro: niente DB, niente rete, niente Buffer (gira anche nell'edge Deno). */
 import type {MenuRef,SectionRef,MenuAction} from './twilio-menu-ai.js'
 import {allowedTags,capabilities} from './twilio-menu-copy.js'
+import {mentionsPublicName} from './owner-brain-sections.js'
+const plainName=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
 
 export type BrainTurn={role:'owner'|'bot',text:string,at:number}
 export type BrainMemoryEntry={phrase:string,kind:'alias'|'asr'|'habit',itemId:string|null,meaning:string,state:'candidate'|'active'|'review',confirmations:number,uses:number,lastUsedAt:number|null}
@@ -70,15 +72,16 @@ const tagShort:Record<string,string>={vegetariano:'veg',vegano:'vgn',piccante:'p
  * che iniziano con la stessa parola (≥3) vanno su una riga «Spaghetti… p1 al pomodoro 8; p2 alle vongole 12x».
  * I NOMI dei piatti non si tagliano mai: al livello 3 nome = parola iniziale + resto. */
 export type CompressionLevel=0|1|2|3
-export function compactMenu(refs:MenuRef[],sections:SectionRef[],level:CompressionLevel=0){
+export function compactMenu(refs:MenuRef[],sections:SectionRef[],level:CompressionLevel=0,showPublic=false){
  const codes=new Map<string,string>(),codeOf=new Map<string,string>()
  sections.forEach((s,i)=>{codes.set(sectionCode(i),s.id);codeOf.set(s.id,sectionCode(i))});refs.forEach((r,i)=>{codes.set(itemCode(i),r.id);codeOf.set(r.id,itemCode(i))})
  const menus=new Set(sections.map(s=>s.menu)),multiMenu=menus.size>1
  const line=(r:MenuRef)=>{const flags=(r.available?'':'x')+(r.hidden?'h':'')+(r.featured?'*':'');const tags=level===0&&r.tags?.length?' ['+r.tags.map(t=>tagShort[t]??t).join(',')+']':'';return codeOf.get(r.id)+'|'+oneLine(r.name,120)+'|'+num(r.price)+(flags?'|'+flags:'')+tags}
  const out:string[]=['MENU (codice|nome|prezzo €|stato: x=esaurito h=nascosto *=evidenza)'],done=new Set<string>()
  const tail=(r:MenuRef,rest:string)=>{const flags=(r.available?'':'x')+(r.hidden?'h':'')+(r.featured?'*':'');return codeOf.get(r.id)+' '+rest+' '+num(r.price)+flags}
+ if(showPublic)out[0]+='\n«(pubblico: X)» = il nome che il titolare vede nel menu digitale (più sezioni possono avere lo stesso): «la sezione X», «tutti i piatti di X» = tutte le sezioni con quel nome pubblico; «tutti» = ogni piatto di quelle sezioni'
  if(level===3)out[0]+='\nRighe «Parola… p1 resto prezzo; p2 resto prezzo»: il nome del piatto è Parola + resto (flag x/h/* attaccati al prezzo)'
- for(const s of sections){const items=refs.filter(r=>r.sectionId===s.id);out.push('# '+codeOf.get(s.id)+' '+oneLine(s.name,60)+(multiMenu&&level<2?' ('+oneLine(s.menu,40)+')':''))
+ for(const s of sections){const items=refs.filter(r=>r.sectionId===s.id);out.push('# '+codeOf.get(s.id)+' '+oneLine(s.name,60)+(multiMenu&&level<2?' ('+oneLine(s.menu,40)+')':'')+(showPublic&&s.pub&&plainName(s.pub)!==plainName(s.name)?' (pubblico: '+oneLine(s.pub,40)+')':''))
   if(level===3){const groups=new Map<string,MenuRef[]>();for(const r of items){const w=oneLine(r.name,120).split(' ')[0]!;groups.set(w,[...(groups.get(w)??[]),r])}
    for(const [w,list] of groups){if(list.length>=3&&list.every(r=>oneLine(r.name,120).includes(' ')))out.push(w+'… '+list.map(r=>tail(r,oneLine(r.name,120).slice(w.length+1))).join('; '));else for(const r of list)out.push(line(r));for(const r of list)done.add(r.id)}
    continue}
@@ -127,8 +130,8 @@ export function pendingText(pending:BrainPending|null|undefined,codeOf:Map<strin
  // R9 (18/10, QA «sì sì, aggiornali» → stessa domanda all'infinito): la domanda «c'è già X: lo aggiorno o ne creo un altro?» porta
  // con sé la richiesta originale (parti chiare in attesa, piatti con lo stesso nome, prezzi detti) e le opzioni. La scelta la fa il modello.
  if(pending?.clarify?.twins?.length){const c=pending.clarify,tw=c.twins!
-  out.push('RICHIESTA IN ATTESA DELLA RISPOSTA (stessa richiesta originale)\n'+(c.actions?.length?'parti chiare: '+c.actions.slice(0,30).map(a=>describePending(a,codeOf,refs)).join('; ')+'\n':'')+'già nel menu con lo stesso nome: '+tw.map(t=>{const r=refs.find(x=>x.id===t.id);return(codeOf.get(t.id)??'?')+' «'+oneLine(r?.name??t.name,60)+'» '+num(r?.price??0)+(r?.hidden?' nascosto':'')+(t.price!=null||!sameName(t.name,r?.name??t.name)?' ('+[t.price!=null?'prezzo detto '+num(t.price):'',!sameName(t.name,r?.name??t.name)?'nome detto «'+oneLine(t.name,60)+'»':''].filter(Boolean).join(', ')+')':'')}).join('; ')
-   +'\nOPZIONI per ognuno: 1) aggiornare quello che c\u2019è (set_price al prezzo detto; se è nascosto anche set_hidden value=false) 2) crearne un altro (create_item con lo stesso nome e il prezzo detto). La risposta breve del titolare («aggiornali», «sì», «il primo», «quelli vecchi», «crea nuovi», «nuovi», «aggiorna il X e crea il Y»…) sceglie: scrivi UN piano intent=change con le parti chiare + la scelta. Se non sceglie, una domanda DIVERSA con le opzioni numerate; mai la stessa domanda.')}
+  out.push('RICHIESTA IN ATTESA DELLA RISPOSTA (stessa richiesta originale)\n'+(c.actions?.length?'parti chiare: '+c.actions.slice(0,30).map(a=>describePending(a,codeOf,refs)).join('; ')+'\n':'')+'già nel menu con lo stesso nome: '+tw.map(t=>{const r=refs.find(x=>x.id===t.id);const moveTo=t.sectionId&&r?.sectionId&&t.sectionId!==r.sectionId&&codeOf.get(t.sectionId)?codeOf.get(t.sectionId):null;return(codeOf.get(t.id)??'?')+' «'+oneLine(r?.name??t.name,60)+'» '+num(r?.price??0)+(r?.hidden?' nascosto':'')+(t.price!=null||!sameName(t.name,r?.name??t.name)?' ('+[t.price!=null?'prezzo detto '+num(t.price):'',!sameName(t.name,r?.name??t.name)?'nome detto «'+oneLine(t.name,60)+'»':''].filter(Boolean).join(', ')+')':'')+(moveTo?' in '+(codeOf.get(r!.sectionId!)??'?')+', sezione detta '+moveTo:'')}).join('; ')
+   +'\nOPZIONI per ognuno: 1) aggiornare quello che c\u2019è (set_price al prezzo detto; se è nascosto anche set_hidden value=false; se è in un\u2019altra sezione rispetto alla «sezione detta» anche move_item in quella sezione) 2) crearne un altro (create_item con lo stesso nome e il prezzo detto). La risposta breve del titolare («aggiornali», «sì», «il primo», «quelli vecchi», «crea nuovi», «nuovi», «aggiorna il X e crea il Y»…) sceglie: scrivi UN piano intent=change con le parti chiare + la scelta. Se non sceglie, una domanda DIVERSA con le opzioni numerate; mai la stessa domanda.')}
  // R9 (d): vocale breve dopo una domanda in sospeso: la trascrizione può essere sbagliata («Buongiorno a tutti» per «aggiornali»).
  if(o.voice&&(pending?.clarify||pending?.hold||pending?.proposal?.length)&&(o.message??'').trim().split(/\s+/).length<=6)out.push('NOTA: il MESSAGGIO è un vocale trascritto in automatico e può essere sbagliato. C\u2019è una tua domanda/proposta in sospeso: se la trascrizione è una risposta plausibile, usala; se non c\u2019entra, chiedi di ripeterla o di rispondere col numero dell\u2019opzione. Mai la stessa domanda di prima.')
  if(pending?.undo&&pending.undo.names.length)out.push('ULTIMA PUBBLICAZIONE (annullabile con undo_last per altri '+pending.undo.minutes+' min): '+pending.undo.names.slice(0,8).map(n=>oneLine(n,60)).join(', '))
@@ -137,8 +140,11 @@ export function pendingText(pending:BrainPending|null|undefined,codeOf:Map<strin
 
 export function buildBrainContext(input:BrainContextInput):BrainContext{
  const now=input.now??Date.now(),sections=input.sections,refs=input.refs
- let level:CompressionLevel=0,menu=compactMenu(refs,sections,0)
- while(level<3&&estimateTokens(menu.text)>MENU_TOKEN_BUDGET){level=(level+1) as CompressionLevel;menu=compactMenu(refs,sections,level)}
+ // R10: il titolare usa i nomi del menu digitale («altre proposte», «secondi e panini»): quando li nomina (anche nella richiesta in
+ // sospeso) ogni sezione porta il suo nome pubblico, «# c1 Piatti di prova (pubblico: Altre proposte)».
+ const showPublic=mentionsPublicName([input.message,input.pending?.clarify?.source??'',input.pending?.hold?.source??''].join(' \n '),sections)
+ let level:CompressionLevel=0,menu=compactMenu(refs,sections,0,showPublic)
+ while(level<3&&estimateTokens(menu.text)>MENU_TOKEN_BUDGET){level=(level+1) as CompressionLevel;menu=compactMenu(refs,sections,level,showPublic)}
  const memory=memoryText(activeMemory(input.memory??[],refs,now),menu.codeOf)
  const restaurant=['LOCALE: '+oneLine(input.restaurantName??'ristorante',80),menu.text,memory].filter(Boolean).join('\n\n')
  const turns=recentHistory(input.history??[],now)

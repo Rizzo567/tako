@@ -33,8 +33,9 @@ import {relativeDelta,relNormText,g9Prices} from '../lib/twilio-menu-ai.js'
 import {parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
 import {sqlBrainStore} from '../lib/owner-brain-memory.js'
 import {readBotBrain} from '../lib/owner-brain-switch.js'
-import {sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
+import {ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
+import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
 async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const rows=await tx.execute(sql`SELECT u.id,u.restaurant_id,u.role,r.active FROM users u JOIN restaurants r ON r.id=${tenant} WHERE u.id=${actor} AND u.active=true`);const u=rows[0];if(!u||!u.active)return false;if(isAgencyUser(actor))return true;if(u.restaurant_id===tenant&&u.role==='owner')return true;const membership=await tx.execute(sql`SELECT role FROM web_location_memberships WHERE user_id=${actor} AND restaurant_id=${tenant}`);return membership[0]?.role==='owner'}
@@ -61,7 +62,7 @@ async function linkedContext(tx:Tx,phone:string):Promise<Ctx|null>{const links=a
 async function welcomeFor(tx:Tx,tenant:string){const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`),current=await readWorkspace(tenant,tx),catalog=current?catalogOf(workspaceSchema.parse(current.draft)):{refs:[],sections:[]};return welcomeText(String(restaurant[0]?.name),catalog.refs,catalog.sections)}
 // Guasto simulato per la verifica dal vivo: SOLO questo numero finto (+39 000…, non assegnabile) collegato al locale QA, con questa frase esatta.
 const testFaultPhone='whatsapp:+390000000099',qaTenant='26050ecd-2e55-4057-a4c5-bff2b449cd47';class TestFault extends Error{}
-const catalogOf=(w:Workspace)=>({refs:w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>({id:i.id,name:i.name,price:i.price,available:i.available,hidden:i.hidden,menu:m.name,section:s.name,sectionId:s.id,hasImage:!!i.imageUrl,featured:i.featured,tags:i.tags} as MenuRef)))),sections:w.menus.flatMap(m=>m.sections.map(s=>({id:s.id,name:s.name,menu:m.name} as SectionRef)))})
+const catalogOf=(w:Workspace)=>({refs:w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>({id:i.id,name:i.name,price:i.price,available:i.available,hidden:i.hidden,menu:m.name,section:s.name,sectionId:s.id,hasImage:!!i.imageUrl,featured:i.featured,tags:i.tags} as MenuRef)))),sections:w.menus.flatMap(m=>{const pub=publicNames(m);return m.sections.map(s=>({id:s.id,name:s.name,menu:m.name,...(pub.get(s.id)?{pub:pub.get(s.id)}:{})} as SectionRef))})})
 const shown=(target:string)=>target.replace(/^(il|lo|la|i|gli|le|l|un|una|uno)\s+/i,'').slice(0,60)
 const bold=(names:string[])=>names.map(n=>'*'+safe(n)+'*').join(', ')
 function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAction[]|null{
@@ -482,15 +483,25 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const fresh=[...(o.actions??[]),...(pend?.kind==='ask'?pend.ask.actions??[]:[])].flatMap(a=>a.kind==='create'&&!tw.some(t=>sameDishName(t.name,a.name))?[a.name]:[])
   return refs.some(x=>!tw.some(t=>t.id===x.id)&&q.includes(' '+plain(x.name)+' ')&&fresh.some(n=>(' '+plain(x.name)+' ').includes(' '+plain(n)+' ')))||fresh.some(n=>refs.some(x=>!sameDishName(x.name,n)&&(' '+plain(x.name)+' ').includes(' '+plain(n)+' '))&&draftQ(r).split(/[?.!\n]/).some(x=>{const y=' '+plain(x)+' ';return y.includes(' '+plain(n)+' ')&&/ (?:c e gia|esiste gia|ce l abbiamo gia|e gia nel menu|ci sono gia|sono gia) /.test(y)}))}
  const repeated=(o:Outcome,r:Run)=>(o.kind==='ask'||o.kind==='say'||o.kind==='read'||o.kind==='cancel')&&!!prevQ&&!!draftQ(r)&&(sameQuestion(draftQ(r),prevQ)||(!!lastQ&&sameQuestion(draftQ(r),lastQ)))
+ // R10: una domanda che ignora ciò che il titolare ha già detto (sezione anche col nome pubblico, «tutti», piatto, prezzo) o che
+ // non dice subito che una sezione nominata non c'è (con l'elenco) non si manda: auto-correzione col motivo, stesso tetto di chiamate.
+ const askText=text+(pend?.kind==='ask'?' \n '+pend.ask.source:pend?.kind==='hold'?' \n '+String((pend.hold as any).source??''):'')
+ const ignored=(o:Outcome,r:Run)=>o.kind==='ask'||o.kind==='say'?ignoredInQuestion(draftQ(r),{message:text,text:askText,sections,refs,lastQ,recent:r.ownerRecent??''}):null
  let noDraft=false
- for(let tries=0;(repeated(out,run)||falseTwin(out,run))&&tries<2&&calls<3;tries++){if(budget.expired)return ''
-  const why=falseTwin(out,run)?reasonText(['doppio_falso']):reasonText([tries===0&&calls<2?'gia_risposto':'domanda_ripetuta'])+': «'+text.slice(0,200)+'» alla domanda «'+prevQ.slice(0,200)+'»'
+ for(let tries=0;(repeated(out,run)||falseTwin(out,run)||!!ignored(out,run))&&tries<2&&calls<3;tries++){if(budget.expired)return ''
+  const ig=!repeated(out,run)&&!falseTwin(out,run)?ignored(out,run):null
+  const why=ig?ig+': messaggio «'+text.slice(0,200)+'»':falseTwin(out,run)?reasonText(['doppio_falso']):reasonText([tries===0&&calls<2?'gia_risposto':'domanda_ripetuta'])+': «'+text.slice(0,200)+'» alla domanda «'+prevQ.slice(0,200)+'»'
   if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-RIPETUTA '+JSON.stringify({text,why})+'\n')).catch(()=>{})
   const before:Outcome=out,r3=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason:why}});calls++;if(budget.expired)return '';if(!r3)return copy.brainDown
   const o3=decide(r3);run=r3
   if(o3.kind==='reject'||(needsText(o3,r3)&&!(o3.kind==='change'&&approvalFor(o3.actions,refs,text,answered))))out=before.kind==='ask'?{...before}:{kind:'ask',ids:[],actions:[]}
   else out=o3.kind==='ask'&&before.kind==='ask'?{...o3,ids:o3.ids.length?o3.ids.filter(id=>!before.twins?.length||before.twins.some((t:Twin)=>t.id===id)):before.ids,actions:o3.actions.length?o3.actions:before.actions,...(before.twins?{twins:before.twins}:{})}:o3}
- if(repeated(out,run)||falseTwin(out,run))noDraft=true
+ // Sezione inesistente non detta dal modello: la sua domanda resta e il server aggiunge il fatto con l'elenco delle sezioni.
+ const igLast=!repeated(out,run)&&!falseTwin(out,run)?ignored(out,run):null,unknownOnly=!!igLast&&igLast.startsWith('nel menu non c\u2019è una sezione')
+ if(repeated(out,run)||falseTwin(out,run)||(!!igLast&&!unknownOnly))noDraft=true
+ const sectionTurn=namedSections(askText,sections).ids.length>0
+ // R10: sezione nominata che non c'è e nessuna domanda utilizzabile: il fatto è l'elenco delle sezioni del menu (riletto).
+ const missingSection=(noDraft||unknownOnly)&&!!unknownSectionPhrase(text,sections)&&!namedSections(text,sections).ids.length?'Sezioni del menu: '+sectionListText(sections):''
  // La domanda che resta aperta sullo stesso sospeso porta con sé la richiesta originale (gemelli e parti chiare).
  if(out.kind==='ask'&&!out.hold&&pendTwins.length&&!out.twins?.length)out={...out,ids:pendTwins.map(t=>t.id),actions:out.actions.length?out.actions:pend!.kind==='ask'?pend!.ask.actions:[],twins:pendTwins}
  const finalRun=run
@@ -500,7 +511,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   if(JSON.stringify(pr2&&Number(pr2.revision)===row.revision?pr2.command:null)!==JSON.stringify(cmd))return copy.menuChanged
   const workspace=workspaceSchema.parse(live.draft),settings=(await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${ctx.tenant}`))[0]?.settings as any
   const drop=()=>tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`)
-  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{const d=noDraft&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
+  // R10: senza scrittura, mai la stessa domanda dell'ultima risposta (riepilogo rimandato uguale): restano i fatti.
+  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=noDraft&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
   const pricesOf=(acts:MenuAction[])=>acts.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[]).concat(acts.flatMap(a=>'id' in a?[refs.find(r=>r.id===(a as any).id)?.price??-1]:[]))
   // Scrive e pubblica, poi rilegge dal DB: i fatti della risposta sono quelli riletti.
   const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number}>=>{
@@ -545,7 +557,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // R8: senza una domanda del modello utilizzabile, mai il solo «Non ho cambiato nulla.» su una richiesta capita: i fatti dicono
     // cosa NON è stato salvato (azioni capite) e i piatti in questione. Nessuna frase del bot oltre ai fatti.
     const unsaved=!question&&!out.hold&&!out.twins?.length&&out.actions.length?'Non salvato: '+out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions))).join('; '):''
-    return [question,question?'':NOTHING,unsaved,facts].filter(Boolean).join('\n\n')}
+    return [question,question||missingSection?'':NOTHING,unsaved,facts,missingSection].filter(Boolean).join('\n\n')}
    case 'read':return say(planText(out.plan,refs,sections),false,pricesOf(out.plan.ids?.map((id:string)=>({kind:'available',id,value:true}) as MenuAction)??[]))
    case 'say':return say('',false)}
    return NOTHING})}
