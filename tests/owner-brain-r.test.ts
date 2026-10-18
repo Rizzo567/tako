@@ -70,3 +70,12 @@ describe('fase R: vincoli del server sugli strumenti e sul piano (R2.2)',()=>{
   for(const t of ['potresti inserire la lasagna a 11 nei primi per favore','mi aggiungi la lasagna a 13?'])expect(politeRequest(t),t).toBe(true)
   for(const t of ['quanto costa la lasagna?','puoi dirmi i prezzi?'])expect(politeRequest(t),t).toBe(false)})
 })
+
+// R5.1 (18/10): la conferma la decide il MODELLO (confirm_pending) in qualunque forma; il server la blocca solo se il messaggio
+// la contraddice (negazione, numeri, altra azione, un piatto nominato). Niente lista chiusa di frasi.
+import {confirmBlocked} from '../apps/server/src/lib/owner-brain-r.js'
+describe('fase R: conferma decisa dal modello (R5.1)',()=>{
+ const refs=[{name:'Tiramisù'},{name:'boh'},{name:'Carbonara'}]
+ it('frasi libere di accordo passano',()=>{for(const t of ['va bene così','ok vai','sì sì','certo','confermo','procedi','sì','OK grazie','sì toglilo','sì, eliminalo pure','perfetto, vai','dai fallo','sì va benissimo così'])expect(confirmBlocked(t,refs),t).toBe(false)})
+ it('negazioni, numeri, altre azioni o piatti nominati non confermano',()=>{for(const t of ['no','no aspetta','anzi no','sì ma la carbonara a 13','togli boh','ok ma tranne il tiramisù','nascondi boh','metti 12','lascia stare','sì però non il tiramisù','annulla'])expect(confirmBlocked(t,refs),t).toBe(true)})
+})

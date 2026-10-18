@@ -408,12 +408,17 @@ async function brainEntry(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,settings:any):
  const normalized=normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ').trim()
  const full=await fullMenuTurn(tx,ctx,text,{revision:row.revision,workspace,refs,reply:null,normalized,voice:opts.voice,timezone:String(settings?.timezone??'Europe/Rome'),isExpired:opts.isExpired});if(full!==null)return full
  return{llm:true,brain:true}}
+function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string){if(!/\btutt[ieao]\b/.test(normalizeMenuText(message)))return false
+ const d=new Set<number>();for(const a of actions){if(a.kind!=='price')return false;const r=refs.find(x=>x.id===a.id);if(!r||!(r.price>0))return false;d.add(Math.round((a.price-r.price)*100))}
+ return d.size===1&&!d.has(0)}
 /** Una proposta ha bisogno del «sì»/«OK» del titolare? (vincoli del server, non interpretazione: elimina, categoria nuova non
  * chiesta esplicitamente, oltre 3 modifiche, prezzo implausibile G6). */
 function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string):BatchWhy|null{
  if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
  if(actions.some(a=>a.kind==='create_section')&&!EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' ')))return 'section'
- if(actions.length>3)return 'recap'
+ // Un solo comando su un gruppo («aumenta tutti i piatti della categoria X di un euro»): stessa differenza su ogni piatto → si
+ // applica subito col riepilogo numerato dei fatti (decisione 18/10, nota 62). Altrimenti oltre 3 modifiche serve l'OK.
+ if(actions.length>3&&!uniformBulk(actions,refs,message))return 'recap'
  if(actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})()))))return 'price'
  return null}
 /** Fase R: il turno del cervello. Il modello decide e scrive; il server valida (una auto-correzione), impone i vincoli, scrive

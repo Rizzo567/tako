@@ -27,6 +27,14 @@ export function pendOf(cmd:any):Pend{
 const YES_CORE=new Set(['si','ok','okay','okey','oki','conferma','confermo','confermato','confermiamo','certo','certamente','esatto','vai','procedi','pubblica','pubblicalo','pubblicala','pubblicali','pubblicale','elimina','eliminalo','eliminala','eliminali','eliminale','cancella','cancellalo','cancellala','cancellali','cancellale','crea','creala','crealo','creale','perfetto','yes','fallo','falla','accordo','giusto','assolutamente','toglilo','toglila','levalo','levala'])
 const YES_FILL=new Set(['va','bene','pure','dai','si','sì','grazie','mille','d','e','allora','tutto','tutti','le','li','lo','la','prego','benissimo','ottimo','procediamo','esatto','proprio','quello','quella','quelli','quelle'])
 export function isAffirmative(message:string){const w=plain(message).split(' ').filter(Boolean);return w.length>0&&w.length<=7&&w.every(x=>YES_CORE.has(x)||YES_FILL.has(x))&&w.some(x=>YES_CORE.has(x)||x==='bene')}
+// Conferma (fase R, R5.1): la decide il MODELLO (confirm_pending) in qualunque forma («va bene così», «ok vai», «procedi»…).
+// Il server la rifiuta solo se il messaggio la contraddice: negazione/correzione, numeri, richiesta lunga. È un vincolo, non una lista di frasi.
+const CONFIRM_STOP=/\b(no|non|anzi|aspetta|tranne|pero|però|ma|invece|cambia|lascia|stop|annull\w*|niente|sbagliat\w*|meglio|prima)\b|\d/
+const CONFIRM_OTHER=/\b(mett\w*|togli\w*|nascond\w*|aggiung\w*|spost\w*|rinomin\w*|alz\w*|abbass\w*|aument\w*|diminu\w*|scont\w*|promo|evidenz\w*|finit\w*|esaurit\w*|disponibil\w*|prezz\w*|mostr\w*|rimett\w*|lev\w*|chiam\w*|categori\w*|piatt\w*|euro)\b/
+/** true = il messaggio non può confermare (contraddice, chiede altro o nomina un piatto). refs = piatti del menu. */
+export function confirmBlocked(message:string,refs:{name:string}[]=[]){const p=plain(message).replace(/\b(?:toglil|leval|levatel)[oaie]\b/g,' ').replace(/\s+/g,' ').trim(),w=p.split(' ').filter(Boolean)
+ if(!w.length||w.length>10||CONFIRM_STOP.test(p)||CONFIRM_OTHER.test(p))return true
+ const words=new Set(w.filter(x=>x.length>=3));return refs.some(r=>plain(r.name).split(' ').some(x=>x.length>=3&&words.has(x)))}
 // Richiesta di annullamento: deve esserci nel messaggio (il modello non annulla di sua iniziativa).
 const UNDO_CUE=/\b(annull\w*|torna\w* (?:indietro|come prima|com era)|tornare indietro|indietro|com era|come prima|com eri|anzi no|anzi|ho sbagliato|sbagliato|sbagliata|errore|rimett\w* (?:tutto )?(?:a )?(?:posto|come)|disfa\w*|lascia\w* (?:stare|perdere)|non (?:lo |la |li |le )?volevo|ripristin\w*|no no|era giusto|andava bene)\b|^(?:no|scusa|aspetta|ops)(?: (?:no|scusa|aspetta|ops))*$/
 export const undoRequested=(message:string)=>UNDO_CUE.test(plain(message))
@@ -90,7 +98,7 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
   if(!pend||(pend.kind!=='batch'&&pend.kind!=='hold'))return reject('conferma_senza_proposta')
-  if(pend.kind==='batch'){if(rawActs.length)return reject('conferma_con_altro');if(!isAffirmative(message))return reject('conferma_non_esplicita');return{kind:'confirm',extra:[]}}
+  if(pend.kind==='batch'){if(rawActs.length)return reject('conferma_con_altro');if(confirmBlocked(message,o.refs??[]))return reject('conferma_non_esplicita');return{kind:'confirm',extra:[]}}
   if(CANCEL_WORDS.test(plain(message)))return reject('conferma_non_esplicita')
   if(rawActs.length&&!changeActs.length)return{kind:'reject',reason:reasonText(d.notes),ids:d.plan?.ids??[],actions:d.plan?.actions??[]}
   return{kind:'confirm',extra:changeActs}}
