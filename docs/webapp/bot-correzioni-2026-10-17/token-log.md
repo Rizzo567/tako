@@ -25,3 +25,15 @@ Stima: 66 conversazioni V passano dal cervello, 84 chiamate × ~3,6k token ≈ 3
 | 17/10 23:20 | R5.2 campione gpt-oss: **non eseguito**. Registro: `groq-key-test` 166.114, `groq-key-test-2` 164.728 token oggi, oltre il tetto di 150k/giorno per chiave. Rimandato al gate Developer | — | 0 |
 
 **Totale fase R: 0 token** (tetto 40.000).
+
+## Fase R5.2 (agente R2, 18/10 02:09–03:50) — gpt-oss-120b vero sul banco vero
+
+Tetto: 130k token per chiave (quota free ~200k/giorno), mai `groq-key.txt` né `groq-key-traduzioni.txt`. Stima prima: scheda+menu+cronologia ≈ 3,5k token per chiamata → 168 chiamate (oracolo) ≈ 600k: il banco intero NON entra in 260k; ordine di registrazione = ordine delle famiglie (semplici, domande, multiple…). Limite al minuto rispettato prima della chiamata (finestra 60 s, 7k/min ⇒ ~1 chiamata al minuto). Nessun 429.
+
+| Quando | Cosa | Chiave | Chiamate | Token (usage) |
+|---|---|---|---|---|
+| 02:08 | sonda bv-semplici-001 | test | 3 | 11.039 |
+| 02:09–02:43 | banco vero, record dall'inizio | test | 32 | 115.777 |
+| 02:45–03:50 | banco vero, stesso giro (replay del già registrato + nuovo) | test-2 | 33 | 125.957 |
+
+**Totale: 252.773 token (test 126.816, test-2 125.957).** Media 3.632 token per chiamata, 4.843 per conversazione. Entrambe le chiavi al tetto: STOP. Misurate col modello vero 41/92 conversazioni (tutte le semplici e le domande, 5 multiple); le altre 51 risultano «non disponibile» (nessuna risposta in cache) e NON sono misure. Mancano ~110 chiamate ≈ 400k token per finire il banco vero, più ~250k per il campione di banco E (60 conv.) e i casi Y/E: tutto al gate Developer.
