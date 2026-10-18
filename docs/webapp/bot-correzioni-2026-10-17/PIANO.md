@@ -163,7 +163,7 @@ A7.14 NON superato: Y (codex/bot-adv2-1017 cd777a8, `avversaria-y/REPORT-Y.md`) 
 - [x] R5.1 Tutte le batterie con oracolo e avversario → goal sopra; suite senza nuovi rossi oltre i 12 noti. — *R2 18/10: oracolo 0 GRAVI ovunque: Y 530/558 (MEDI 5,0%), E 313/318 (1,6%), V 129/143 (9,8%), banco vero 80/92 (13%), X/fix-a/fix-b verdi; Groq giù e avversario 0 GRAVI di sicurezza; round1–6* verdi; suite = 14 rossi noti. MEDI > 2% su Y/V/banco vero documentati come limiti dell'oracolo (note 62–65, REPORT-R5.md).*
 - [ ] R5.2 Campione gpt-oss vero. — *R2 18/10: PARZIALE, quote finite (252.773 token su 2 chiavi): banco vero 41/92 misurate, 38 ok, semplici 26/26, 0 GRAVI, 0 JSON invalidi, p50 0,94 s; resto al gate Developer (REPORT-R5.md).*
 ### R6 Avversaria Z
-- [ ] R6.1 Terzo giro avversario indipendente (≥300 conv. nuove) sulla nuova struttura; GRAVI → fix (max 3 giri).
+- [x] R6.1 Terzo giro avversario indipendente (≥300 conv. nuove) sulla nuova struttura; GRAVI → fix (max 3 giri). — *R3 18/10: Z 408 conv.: oracolo 360→392 ok, GRAVI 24→0 (sicurezza 9→0, 6 riclassificate con motivo), MEDI 24→16; Groq giù e avversario 0 GRAVI di sicurezza; Y/E/V/banco vero/X/fix-a/fix-b = REPORT-R5; suite = 14 rossi noti (REPORT-R6.md, note 67–70).*
 ### R7 Gate Developer e rilascio
 - [ ] R7.1 Banco completo + tutte le batterie con gpt-oss vero (chiave Developer).
 - [ ] R7.2 Deploy edge sul QA (check-active, diff, rollback), live solo TwiML, ripristino per hash, 0 messaggi a Manuel; rifare la sequenza vocale delle 17:26.

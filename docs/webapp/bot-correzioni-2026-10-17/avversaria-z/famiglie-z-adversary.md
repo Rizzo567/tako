@@ -8,7 +8,7 @@
 | tempo | 20 | 11 | 0 | 0 | 9 |
 | omonimi | 24 | 12 | 0 | 0 | 12 |
 | riepilogo | 20 | 10 | 0 | 0 | 10 |
-| lunghi | 10 | 7 | 1 | 0 | 2 |
+| lunghi | 10 | 8 | 0 | 0 | 2 |
 | emoji | 15 | 12 | 0 | 0 | 3 |
 | contraddizioni | 15 | 14 | 0 | 0 | 1 |
 | annulla | 20 | 15 | 0 | 0 | 5 |
@@ -26,9 +26,9 @@
 | r2-spezzati | 6 | 6 | 0 | 0 | 0 |
 | r2-opposti | 5 | 4 | 0 | 0 | 1 |
 | r2-ritiri | 5 | 1 | 0 | 0 | 4 |
-| r2-nonprezzi | 7 | 2 | 0 | 0 | 5 |
+| r2-nonprezzi | 7 | 3 | 0 | 0 | 4 |
 | r2-disfa | 8 | 8 | 0 | 0 | 0 |
-| TOTALE | 408 | 228 | 2 | 0 | 178 |
+| TOTALE | 408 | 230 | 1 | 0 | 177 |
 
 ## Fallimenti
 
@@ -368,10 +368,6 @@
   - turni: Ciao! Oggi è una giornata pienissima, abbiamo 40 coperti a pranzo, quindi per favore: il babà è finito, la burrata pure, e metti in evidenza la tagliata che ne abbiamo tanta. Grazie!
   - atteso: available|Babà|false, available|Burrata|false, featured|Tagliata|true · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Tagliere dell'oste* (14,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)»
-- **z-lunghi-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
-  - turni: la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 
-  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono riuscito a leggere *piatti e prezzi* nel menu. *Non ho cambiato nulla.* Rimandalo scritto, una riga per piatto: «carbonar»
 - **z-emoji-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
   - turni: carbonara ➡️ 13
   - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
@@ -739,10 +735,6 @@
 - **z-r2-nonprezzi-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
   - turni: siamo in 3 stasera, il babà è finito
   - atteso: available|Babà|false · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **z-r2-nonprezzi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Burrata|false
-  - turni: il tavolo 7 ha preso l'ultima burrata, segnala finita
-  - atteso: available|Burrata|false · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **z-r2-nonprezzi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Burrata|false
   - turni: alle 13 la burrata era finita, ora mettila finita

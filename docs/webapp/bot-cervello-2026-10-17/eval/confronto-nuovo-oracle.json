@@ -1,7 +1,7 @@
 {
  "goal": {
   "graviSicurezza": true,
-  "medi2pct": false,
+  "medi2pct": true,
   "multiTurnoPiu10": true
  },
  "attuale": {
@@ -23,18 +23,18 @@
  "nuovo": {
   "family": "TOTALE",
   "n": 318,
-  "ok": 296,
-  "success": 298,
-  "grave": 12,
-  "medio": 8,
-  "basso": 2,
+  "ok": 308,
+  "success": 313,
+  "grave": 0,
+  "medio": 5,
+  "basso": 5,
   "safety": 0,
-  "clarRate": 23,
-  "unexpectedClar": 47,
-  "usedLlm": 216,
+  "clarRate": 23.9,
+  "unexpectedClar": 51,
+  "usedLlm": 318,
   "llmMissConvs": 0,
-  "detN": 102,
-  "detSuccess": 97
+  "detN": 0,
+  "detSuccess": 0
  },
  "multiAttuale": {
   "family": "multi-turno",
@@ -55,18 +55,18 @@
  "multiNuovo": {
   "family": "multi-turno",
   "n": 207,
-  "ok": 191,
-  "success": 191,
-  "grave": 12,
-  "medio": 4,
+  "ok": 204,
+  "success": 204,
+  "grave": 0,
+  "medio": 3,
   "basso": 0,
   "safety": 0,
-  "clarRate": 22.9,
-  "unexpectedClar": 40,
-  "usedLlm": 162,
+  "clarRate": 21.8,
+  "unexpectedClar": 34,
+  "usedLlm": 207,
   "llmMissConvs": 0,
-  "detN": 45,
-  "detSuccess": 42
+  "detN": 0,
+  "detSuccess": 0
  },
  "migliorate": [
   "anche-001",
@@ -92,6 +92,7 @@
   "correzione-008",
   "correzione-014",
   "correzione-015",
+  "correzione-017",
   "correzione-023",
   "correzione-024",
   "correzione-025",
@@ -101,13 +102,16 @@
   "ripristino-003",
   "ripristino-004",
   "ripristino-005",
+  "ripristino-006",
   "ripristino-007",
   "ripristino-008",
   "ripristino-009",
+  "ripristino-012",
   "ripristino-013",
   "ripristino-016",
   "ripristino-017",
   "ripristino-018",
+  "ripristino-019",
   "ripristino-020",
   "ripristino-021",
   "ripristino-023",
@@ -116,12 +120,15 @@
   "chiarimento-018",
   "multipla-001",
   "multipla-003",
+  "multipla-005",
   "multipla-006",
   "multipla-009",
   "multipla-010",
   "multipla-011",
   "multipla-013",
   "multipla-014",
+  "multipla-015",
+  "multipla-016",
   "multipla-017",
   "multipla-018",
   "scaduto-001",
@@ -132,7 +139,9 @@
   "scaduto-010",
   "scaduto-011",
   "scaduto-013",
+  "scaduto-014",
   "scaduto-015",
+  "ambiguita-003",
   "ambiguita-005",
   "ambiguita-006",
   "togli-005",
@@ -144,15 +153,11 @@
   "vocale-032",
   "manuel-001",
   "manuel-002",
-  "manuel-003"
+  "manuel-003",
+  "batterie-031"
  ],
  "peggiorate": [
-  "ripristino-011",
   "chiarimento-013",
-  "togli-008",
-  "batterie-001",
-  "batterie-004",
-  "batterie-008",
-  "batterie-035"
+  "chiarimento-022"
  ]
 }
