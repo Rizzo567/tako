@@ -56,7 +56,7 @@ c('qa',['la parmigiana a 15 e il tiramisù a 15','eliminali tutti e due'],[P('la
 
 // ===================== v-aggiunte: aggiunte multiple con/senza prezzi/categoria =====================
 fam='v-aggiunte'
-c('qa',M3,[P('pasta al ragù',10),CR('pasta al pesto',15,PP),CR('caviale',150,PP)],{source:'Manuel 17:30 (risposta vera: «manca la categoria … Rimandami la richiesta completa»)',note:'una sola categoria: va usata; pasta al ragù c\'è già → prezzo 10',alt:[[P('pasta al ragù',10),CR('pasta al pesto',15,PP),CR('caviale',150,PP)]]})
+c('qa',M3,NONE,{ask:[1],source:'Manuel 17:30 (risposta vera: «manca la categoria … Rimandami la richiesta completa»)',note:'decisione 18/10 (nota 62): pasta al ragù c\'è già → domanda breve «c\'è già pasta al ragù a 12 €: lo aggiorno o ne creo un altro?», nessuna scrittura sul ragù; con una parte incerta le parti chiare aspettano la risposta (regola del titolare)',alt:[[CR('pasta al pesto',15,PP),CR('caviale',150,PP)]]})
 c('qa','aggiungi pasta al pesto a 15 e caviale a 150',[CR('pasta al pesto',15,PP),CR('caviale',150,PP)])
 c('qa',V('Aggiungi il piatto pasta al sugo a 12 euro.'),CR('pasta al sugo',12,PP),{source:'Manuel 17:36 (ok dal vivo)'})
 c('qa','aggiungi pasta al pesto a 15, lasagna a 20 e polpette a 9',[CR('pasta al pesto',15,PP),CR('lasagna',20,PP),CR('polpette',9,PP)])
@@ -70,7 +70,7 @@ c('qa','aggiungi pasta al ragù a 12',NONE,{note:'c\'è già a 12: dirlo, niente
 
 // ===================== v-categorie: creare categorie, piatti in categorie nuove, spostare =====================
 fam='v-categorie'
-c('qa',[M3,V("No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali.")],[P('pasta al ragù',10),MV('pasta al ragù','Primi'),CR('pasta al pesto',15,'Primi'),CR('caviale',150,'Speciali')],{source:'Manuel 17:30–17:31',note:'capacità mancante: creare categorie dalla chat'})
+c('qa',[M3,V("No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali.")],[MV('pasta al ragù','Primi'),CR('pasta al pesto',15,'Primi'),CR('caviale',150,'Speciali')],{alt:[[P('pasta al ragù',10),MV('pasta al ragù','Primi'),CR('pasta al pesto',15,'Primi'),CR('caviale',150,'Speciali')]],source:'Manuel 17:30–17:31',note:'capacità mancante: creare categorie dalla chat; ragù già nel menu (nota 62): spostato nei Primi, prezzo 10 accettato ma non richiesto'})
 c('qa',[V('Ok, adesso devi creare un\'altra categoria che si chiama "primi pasti".'),'aggiungi pasta al sugo a 12 nei primi pasti'],CR('pasta al sugo',12,'primi pasti'),{source:'Manuel 17:38 («Le categorie si creano dalla dashboard»)'})
 c('qa','aggiungi una categoria speciali con il caviale a 150',CR('caviale',150,'Speciali'))
 c('mario','sposta la lasagna nei secondi',MV('Lasagna al forno','Secondi'))
@@ -105,7 +105,7 @@ c('qa',['aggiungi caviale a 150','no, mettilo in una categoria nuova, speciali']
 c('qa',['nascondi boh','no scusa, il tiramisù'],HI('tiramisù'),{interim:[HI('boh')]})
 c('qa',[V('Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.'),V('No, ho detto togli boh.')],HI('boh'),{source:'Manuel 13:25–13:26 (risposta vera: boh «finito»)'})
 c('qa',['la parmigiana costa 12','anzi lascia stare'],NONE,{interim:[P('la parmigiana',12)]})
-c('qa',[M3,'no, il caviale lascialo stare'],[P('pasta al ragù',10),CR('pasta al pesto',15,PP)],{interim:[CR('caviale',150,PP)]})
+c('qa',[M3,'no, il caviale lascialo stare'],[CR('pasta al pesto',15,PP)],{interim:[CR('caviale',150,PP)],note:'nota 62: il ragù c\'è già (domanda), il «no» pubblica la parte chiara rimasta (pesto)'})
 
 // ===================== v-risposte: risposte brevi a una domanda del bot =====================
 fam='v-risposte'
@@ -166,7 +166,7 @@ c('qa',[Q('quanto costa il piatto boh?')],NONE,{reply:/20/})
 c('qa',['aggiungi pasta al pesto a 15',Q('che piatti ho nei piatti di prova?')],CR('pasta al pesto',15,PP),{reply:/pesto/i})
 c('qa',['metti il tiramisù in promo a 4',Q('quali promo ho attive?')],PR('tiramisù',4),{reply:/tiramis/i})
 c('qa',[V('Ciao, cosa sai fare?')],NONE,{source:'Manuel 17:26 (ok dal vivo)'})
-c('qa',['elimina boh',Q("boh c'è ancora nel menu?")],DEL('boh'),{alt:[[HI('boh')]],reply:/boh/i})
+c('qa',['elimina boh',Q("boh c'è ancora nel menu?")],NONE,{reply:/boh/i,note:'R5.1 (nota 63): elimina solo dopo «sì» (regola del titolare): la domanda non è un sì, boh resta e la risposta lo dice; l\'attesa di prima (eliminato) contraddiceva la regola'})
 
 // ===================== v-annulla: annulla dopo modifiche singole e multiple =====================
 fam='v-annulla'
@@ -177,7 +177,7 @@ c('qa',[M1,'annulla'],NONE,{interim:[HI('boh')]})
 c('qa',['la parmigiana a 12 e il tiramisù a 7',"rimetti il tiramisù com'era"],P('la parmigiana',12),{interim:[P('tiramisù',7)]})
 c('qa',['la parmigiana a 12',W(40),'annulla'],P('la parmigiana',12),{note:'oltre la finestra: dirlo, non annullare'})
 c('qa',['la parmigiana a 12, il tiramisù a 7, boh a 25 e che ne sacc a 22','ok','annulla'],NONE,{interim:[P('la parmigiana',12),P('tiramisù',7),P('boh',25),P('Che ne sacc',22)]})
-c('qa',[M3,'annulla'],NONE,{interim:[P('pasta al ragù',10),CR('pasta al pesto',15,PP),CR('caviale',150,PP)]})
+c('qa',[M3,'annulla'],NONE,{interim:[CR('pasta al pesto',15,PP),CR('caviale',150,PP)],note:'nota 62: niente prezzo sul ragù (c\'è già)'})
 
 // ===================== v-misti: domanda + modifica nello stesso messaggio =====================
 fam='v-misti'
@@ -192,7 +192,7 @@ c('qa','nascondi boh e dimmi quali piatti sono nascosti',HI('boh'),{reply:/boh/i
 // ===================== v-frasefissa: «Rimandami/Riscrivimi la richiesta completa» quando il contesto basta =====================
 fam='v-frasefissa'
 c('qa','aggiungi pasta al pesto a 15 e caviale a 150',[CR('pasta al pesto',15,PP),CR('caviale',150,PP)])
-c('qa',[M3,V("No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali.")],[P('pasta al ragù',10),MV('pasta al ragù','Primi'),CR('pasta al pesto',15,'Primi'),CR('caviale',150,'Speciali')],{source:'Manuel 17:31'})
+c('qa',[M3,V("No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali.")],[MV('pasta al ragù','Primi'),CR('pasta al pesto',15,'Primi'),CR('caviale',150,'Speciali')],{alt:[[P('pasta al ragù',10),MV('pasta al ragù','Primi'),CR('pasta al pesto',15,'Primi'),CR('caviale',150,'Speciali')]],source:'Manuel 17:31',note:'ragù già nel menu (nota 62)'})
 c('qa',['la parmigiana e il tiramisù a 15','rimuovi completamente quei due piatti'],[P('la parmigiana',15),P('tiramisù',15),DEL('la parmigiana'),DEL('tiramisù')])
 c('qa','aggiungi lasagna',NONE,{ask:[1]})
 c('mario','aggiungi pasta al pesto a 13',NONE,{ask:[1]})

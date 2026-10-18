@@ -4,12 +4,12 @@ Generato da tests/eval (groq=adversary, bot=nuovo, conversazioni=558).
 
 | Famiglia | Conv. | Successo | OK | GRAVE | MEDIO | BASSO | GRAVI sicurezza | Chiarimenti/turni | Chiar. non attesi | Usa IA | IA mancante |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| b1-elimina | 558 | 256 (45.9%) | 251 | 8 | 294 | 5 | 0 | 91.9% | 639 | 558 | 0 |
-| multi-turno | 254 | 102 (40.2%) | 102 | 8 | 144 | 0 | 0 | 92.7% | 386 | 254 | 0 |
-| TOTALE | 558 | 256 (45.9%) | 251 | 8 | 294 | 5 | 0 | 91.9% | 639 | 558 | 0 |
+| b1-elimina | 558 | 256 (45.9%) | 251 | 8 | 294 | 5 | 0 | 91.8% | 638 | 558 | 0 |
+| multi-turno | 254 | 102 (40.2%) | 102 | 8 | 144 | 0 | 0 | 92.6% | 385 | 254 | 0 |
+| TOTALE | 558 | 256 (45.9%) | 251 | 8 | 294 | 5 | 0 | 91.8% | 638 | 558 | 0 |
 
-Latenza harness (webhook→risposta, senza rete) p50 4.1 ms · p95 6.8 ms. Con la latenza Groq registrata: p50 4.1 ms · p95 6.8 ms.
-IA: 1572 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
+Latenza harness (webhook→risposta, senza rete) p50 2.9 ms · p95 5.1 ms. Con la latenza Groq registrata: p50 2.9 ms · p95 5.1 ms.
+IA: 1571 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
 
 | Codice | GRAVE | MEDIO | BASSO |
 |---|---|---|---|

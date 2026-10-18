@@ -186,7 +186,7 @@ c('bar',['lo spritz aperol a 7',W(33),'e il campari uguale'],P('Spritz Aperol',7
 c('bar',['il cappuccino a 1,70',W(18),'no 1,80'],P('Cappuccino',1.8))
 c('bar',['i tramezzini al tonno sono finiti',W(60),'pure quelli al prosciutto'],[AV('Tramezzino tonno'),AV('Tramezzino prosciutto')],{note:'«quelli al prosciutto» è univoco anche senza contesto'})
 c('pesce',['la cassata a 6',W(40),"rimettila com'era"],P('Cassata',6),{ask:[2]})
-c('pesce',['le busiate a 14',W(22),'e la pasta con le sarde uguale'],[P('Busiate al pesto trapanese',14),P('Pasta con le sarde',14)])
+c('pesce',['le busiate a 14',W(22),'e la pasta con le sarde uguale'],[P('Busiate al pesto trapanese',14)],{note:'R5.1 (nota 63): la pasta con le sarde è già a 14 nel menu pesce, quindi «uguale» non cambia niente («Nessuna modifica: il menu è già così»); l\'attesa di prima chiedeva una modifica impossibile da vedere'})
 c('pesce',['il cannolo a 4,50',W(90),'anzi 5'],P('Cannolo',4.5),{ask:[2]})
 c('mario',['gli spaghetti costano 13',W(15),'carbonara'],NONE,{source:'round5b chiar-22',note:'la domanda in sospeso vale 10 minuti'})
 c('mario',['gli spaghetti costano 9',W(5),'carbonara'],P('Spaghetti alla carbonara',9),{ask:[1],source:'round5b chiar-20'})

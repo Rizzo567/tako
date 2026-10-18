@@ -44,7 +44,7 @@
 - **y-el-conferma-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|tiramisù
   - turni: il tiramisù non lo facciamo più, eliminalo ⏎ confermo
   - atteso: delete|tiramisù · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Elimino *tiramisù* dal menu? Rispondi sì. Da eliminare, serve il tuo sì: 1. *tiramisù*: da eliminare» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
 - **y-el-conferma-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|la parmigiana
   - turni: elimina la parmigiana ⏎ si dai
   - atteso: delete|la parmigiana · ottenuto: nessuna modifica
@@ -437,10 +437,10 @@
   - turni: la tagliata a 19 ⏎ e il pollo a 15 ⏎ spostalo negli speciali
   - atteso: move|Pollo arrosto|Speciali, price|Pollo arrosto|15, price|Tagliata|19 · ottenuto: nessuna modifica
   - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
-- **y-sposta-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Panna cotta|Speciali, move|Tiramisù|Speciali
+- **y-sposta-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Panna cotta|Speciali
   - turni: sposta il tiramisù negli speciali ⏎ anche la panna cotta
-  - atteso: move|Panna cotta|Speciali, move|Tiramisù|Speciali · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Tiramisù* (6,00 €) 2. *Panna cotta* (5,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - atteso: move|Panna cotta|Speciali, move|Tiramisù|Speciali · ottenuto: move|Tiramisù|Speciali
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Tiramisù*: spostato in *Speciali*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-sposta-030** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: move|Tiramisù|Speciali
   - turni: sposta il tiramisù negli speciali ⏎ annulla
   - atteso: nessuna modifica · ottenuto: move|Tiramisù|Speciali
@@ -1076,15 +1076,15 @@
 - **y-r2-sposta-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Secondi, move|Gricia|Secondi
   - turni: sposta la carbonara nei secondi ⏎ e anche la gricia
   - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Gricia* (11,00 €) 2. *Pasta al pesto* (10,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-r2-sposta-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Secondi, move|Gricia|Secondi
   - turni: sposta la carbonara nei secondi ⏎ pure la gricia
   - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Gricia* (11,00 €) 2. *Pasta al pesto* (10,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
 - **y-r2-sposta-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Carbonara|Secondi, move|Gricia|Secondi
   - turni: sposta la carbonara nei secondi ⏎ la gricia uguale
   - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
-  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Gricia* (11,00 €) 2. *Pasta al pesto* (10,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
 - **y-r2-sposta-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Carbonara|true, hidden|Gricia|true, move|Carbonara|Secondi, move|Gricia|Secondi
   - turni: nascondi la carbonara e la gricia ⏎ spostale nei secondi
   - atteso: hidden|Carbonara|true, hidden|Gricia|true, move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica

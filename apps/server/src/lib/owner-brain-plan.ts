@@ -329,11 +329,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    if(!id||!refId||!byId.has(id)||!byId.has(refId)||refId===id||!SAME_PRICE.test(msg)||!(g9DishMentioned(byId.get(refId)!.name,message,refs)||trusted.has(refId)||(ctxOK&&labelled)))return no('riferimento_prezzo_non_valido',[id,refId])
    derived.push({id,actions:[{kind:'price',id,price:explicit.get(refId)??byId.get(refId)!.price}],refId});continue}
   legacy.push(legacyAction(a,map))}
- // «no, intendevo l'amatriciana» dopo «la carbonara costa 13»: se il modello sposta l'azione sul piatto giusto ma dimentica di
- // rimettere quello sbagliato, il server lo rimette com'era (solo se è l'unico piatto del messaggio precedente e si può ripristinare).
- if(ctxOK&&SWAP.test(msg)){const prev=refs.filter(r=>g9DishMentioned(r.name,owners.at(-1)??'',refs)).map(r=>r.id)
-  if(prev.length===1){const w=prev[0]!,acted=[...legacy.map((a:any)=>a.item_id),...derived.map(d=>d.id)];const named=refs.filter(r=>r.id!==w&&g9DishMentioned(r.name,message,refs)).map(r=>r.id)
-   if(!acted.includes(w)&&!g9DishMentioned(byId.get(w)!.name,message,refs)&&named.some(id=>acted.includes(id))&&input.restorable?.get(w)?.length){derived.push({id:w,actions:input.restorable.get(w)!.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});notes.push('ripristino_automatico')}}}
+ // R5.1 (nota 64): niente più ripristino automatico deciso dal server su «scusa/intendevo X»: col cervello unico il «rimetti com'era»
+ // lo decide il modello (restore); il server non indovina («scusa, la lasagna è finita» NON è una correzione della carbonara).
  const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size||weakIds.size?new Set([...trusted,...weakIds]):undefined}
  const withHold=(d:Omit<BrainDecision,'path'|'usage'|'tokens'>):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(!asks.length)return d
   if(d.plan.type!=='change'&&!(d.plan.type==='clarify'&&!d.plan.ids.length))return d
@@ -418,7 +415,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  for(const a of [...out])if('id' in a&&weakIds.has(a.id)){out.splice(out.indexOf(a),1);asks.push({type:'confirm',word:(sound.phrase.get(a.id)??byId.get(a.id)!.name).slice(0,60),action:a})}
  // A4.3: «aggiungi pasta al ragù a 12» con la pasta al ragù già a 12: non è un piatto «nominato senza azione».
  const twinIds=refs.filter(r=>legacy.some((a:any)=>a?.action==='create_item'&&typeof a.name==='string'&&plain(a.name)===plain(r.name)&&!out.some(o=>'id' in o&&o.id===r.id))).map(r=>r.id)
- const covered=new Set([...weakIds,...twinIds,...out.flatMap(a=>'id' in a?[a.id]:[]),...derived.flatMap(d=>d.refId?[d.refId,d.id]:[d.id]),...exclude.map(e=>e.id)]),padded=' '+(mix?plain(mix.command):msg)+' '
+ const covered=new Set([...weakIds,...twinIds,...out.flatMap(a=>'id' in a?[a.id]:[]),...derived.flatMap(d=>d.refId?[d.refId,d.id]:[d.id]),...exclude.map(e=>e.id),...candCovered]),padded=' '+(mix?plain(mix.command):msg)+' '
  // Misto: se la parte di modifica nomina dei piatti, le azioni stanno solo su quelli (mai sul piatto della domanda).
  if(mix){const inCmd=refs.filter(r=>g9DishMentioned(r.name,mix.command,refs)).map(r=>r.id);if(inCmd.length){const off=out.filter(a=>'id' in a&&!inCmd.includes(a.id)&&!derived.some(d=>d.id===a.id)).map(a=>(a as any).id as string);if(off.length)return no('azione_sul_piatto_della_domanda',off)}}
  // Completezza (come il validatore attuale): un piatto nominato per intero e non toccato rende la richiesta incompleta. Non conta

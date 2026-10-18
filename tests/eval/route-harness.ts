@@ -83,7 +83,7 @@ export function createRouteBot(o:{name:string,settings?:Record<string,unknown>,e
    if('dash' in t){const w=structuredClone(S.published);for(const m of w.menus)for(const s of m.sections)for(const i of s.items)if(i.name===t.dash.dish)(i as any)[t.dash.field]=t.dash.value;S.draft=w;S.published=structuredClone(w);S.revision++;S.published_revision=S.revision;continue}
    const before=net.sent.length,llm0={...net.llm},t0=performance.now();let reply=''
    try{if('text' in t){const res=await post({MessageSid:sid(),Body:t.text});reply=unxml(res.body).trim()}
-    else{net.transcript=t.voice;const s=sid('MM');const res=await post({MessageSid:s,Body:'',NumMedia:'1',MediaContentType0:'audio/ogg',MediaUrl0:`https://api.twilio.com/2010-04-01/Accounts/${account}/Messages/${s}/Media/ME1`});reply=unxml(res.body).trim()}}catch{reply=''}
+    else{net.transcript=t.voice;const s=sid('MM');const res=await post({MessageSid:s,Body:'',NumMedia:'1',MediaContentType0:'audio/ogg',MediaUrl0:`https://api.twilio.com/2010-04-01/Accounts/${account}/Messages/${s}/Media/ME1`});reply=unxml(res.body).trim()}}catch(e){reply='';if(process.env.TAKO_BRAIN_DEBUG)(await import('node:fs')).appendFileSync(process.env.TAKO_BRAIN_DEBUG,'HARNESS-ERR '+String((e as any)?.stack??e).slice(0,600)+'\n')}
    reply=(reply+'\n'+net.sent.slice(before).join('\n')).trim()
    turns.push({reply,menuAfter:structuredClone(S.published),latencyMs:Math.round((performance.now()-t0)*10)/10,llm:{calls:net.llm.calls-llm0.calls,tokens:net.llm.tokens-llm0.tokens,misses:net.llm.misses-llm0.misses,recordedMs:net.llm.ms-llm0.ms}})
    // Il bot lavora a tempo «fermo»: ogni messaggio arriva qualche secondo dopo il precedente.

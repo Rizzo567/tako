@@ -15,7 +15,7 @@
    "medio": 0,
    "basso": 0,
    "safety": 0,
-   "clarRate": 31.3,
+   "clarRate": 32.2,
    "unexpectedClar": 32,
    "usedLlm": 809,
    "llmMissConvs": 0,
@@ -96,7 +96,7 @@
     "medio": 0,
     "basso": 0,
     "safety": 0,
-    "clarRate": 17.6,
+    "clarRate": 23.5,
     "unexpectedClar": 0,
     "usedLlm": 156,
     "llmMissConvs": 0,
@@ -122,13 +122,13 @@
   ],
   "codes": {},
   "latency": {
-   "harnessP50": 2.4,
-   "harnessP95": 7.4,
-   "withRecordedGroqP50": 2.4,
-   "withRecordedGroqP95": 7.4
+   "harnessP50": 1.9,
+   "harnessP95": 6.2,
+   "withRecordedGroqP50": 1.9,
+   "withRecordedGroqP95": 6.2
   },
   "llm": {
-   "calls": 1346,
+   "calls": 1360,
    "misses": 0,
    "tokens": 0
   }
@@ -162,8 +162,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    36,
-    18.8
+    33.3,
+    17.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -196,8 +196,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7,
-    10.9
+    4.2,
+    9.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -230,8 +230,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6,
-    9.6
+    3.1,
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -264,8 +264,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
-    4.6
+    3,
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -298,8 +298,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.6,
-    7.5
+    4,
+    5.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -332,8 +332,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    4.7
+    1.9,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -366,8 +366,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    3.4
+    2.3,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -400,8 +400,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    4.4
+    2,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -434,8 +434,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    6.3
+    2,
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -468,8 +468,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.4
+    1.7,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -502,8 +502,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    5.2
+    1.8,
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -536,8 +536,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3
+    1.6,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -570,8 +570,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    4.2
+    2,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -604,8 +604,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    3.3
+    2.9,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -638,8 +638,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    4.4
+    1.9,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -672,8 +672,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.9
+    1.6,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -706,8 +706,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9,
-    4.7
+    2.4,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -740,8 +740,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.8
+    1.5,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -774,8 +774,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.9
+    1.6,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -808,8 +808,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    4
+    2.1,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -842,8 +842,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    4.4
+    2,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -876,8 +876,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    3.2
+    1.5,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -910,8 +910,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    4
+    2,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -944,8 +944,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    4
+    1.4,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -978,8 +978,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
-    4.1
+    1.6,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1012,8 +1012,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    5
+    1.9,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1046,8 +1046,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    4.8
+    2.1,
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1080,8 +1080,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.5
+    1.5,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1114,8 +1114,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    4.3
+    1.8,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1148,8 +1148,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    4
+    1.7,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1182,8 +1182,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.7
+    1.4,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1216,8 +1216,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    3.9
+    1.6,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1250,8 +1250,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    5.1
+    1.8,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1285,7 +1285,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.9,
-    4.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1318,8 +1318,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    4.2
+    1.6,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1352,8 +1352,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    2.9
+    1.4,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1386,8 +1386,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    4
+    1.5,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1420,8 +1420,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    3
+    1.7,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1454,8 +1454,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    5
+    1.8,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1488,8 +1488,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    3.9
+    1.5,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1522,8 +1522,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    3.4
+    1.6,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1556,8 +1556,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    3.5
+    1.4,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1590,8 +1590,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.7
+    1.6,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1624,8 +1624,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    3.1
+    1.6,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1658,8 +1658,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    3.6
+    1.8,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1692,8 +1692,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    4.3
+    1.7,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1726,8 +1726,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    4.3
+    1.6,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1760,8 +1760,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.5
+    1.4,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1794,8 +1794,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    4
+    1.4,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1828,8 +1828,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.9
+    1.6,
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1862,8 +1862,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    3.3
+    1.7,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1896,8 +1896,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.7
+    1.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1930,8 +1930,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    4.1
+    1.6,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1964,8 +1964,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.7
+    1.4,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -1998,8 +1998,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    3.3
+    1.4,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2032,8 +2032,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    4
+    1.6,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2066,8 +2066,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    4.9
+    1.7,
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2100,8 +2100,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.4
+    1.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2134,8 +2134,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.2
+    1.8,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2168,8 +2168,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    3.9
+    1.3,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2202,8 +2202,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.5
+    1.4,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2236,8 +2236,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    3.5
+    1.8,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2270,8 +2270,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    5.2
+    1.6,
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2304,8 +2304,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    3.3
+    1.5,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2338,8 +2338,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.6
+    1.6,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2372,8 +2372,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.6
+    1.6,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2406,8 +2406,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    3.3
+    1.3,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2440,8 +2440,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    2.9
+    1.6,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2474,8 +2474,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    4.6
+    1.7,
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2508,8 +2508,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.7
+    1.5,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2542,8 +2542,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    4
+    1.7,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2576,8 +2576,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.7
+    1.8,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2612,9 +2612,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    3.6,
-    3.8
+    1.8,
+    2.6,
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2649,9 +2649,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.7,
-    4.2
+    1.4,
+    2,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2686,9 +2686,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    3.2,
-    3.3
+    1.5,
+    2.6,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2723,9 +2723,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.6,
-    3.7
+    1.3,
+    2.1,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2760,9 +2760,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.9,
-    4.4
+    1.6,
+    1.8,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2797,9 +2797,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.7,
-    5.2
+    1.5,
+    1.9,
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2834,9 +2834,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    3.4,
-    3.6
+    1.8,
+    2.6,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2871,9 +2871,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.4,
-    3
+    1.4,
+    2,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2908,9 +2908,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.5,
-    4.9
+    1.6,
+    2.2,
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2945,9 +2945,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    5.3,
-    4.3
+    1.3,
+    2.6,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -2982,9 +2982,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    3.6,
-    3.4
+    1.5,
+    2.1,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3019,9 +3019,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.1,
-    4.3
+    1.5,
+    1.8,
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3056,9 +3056,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.2,
-    3.5
+    1.7,
+    2.4,
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3093,9 +3093,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.5,
-    3.7
+    1.5,
+    1.8,
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3130,9 +3130,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.6,
     2,
-    2.5,
-    4.4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3167,9 +3167,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.5,
-    4.8
+    1.3,
+    2.1,
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3204,9 +3204,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.8,
-    3.1
+    1.5,
+    2.2,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3241,9 +3241,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2,
-    3.8
+    1.5,
+    1.7,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3278,9 +3278,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.7,
     2.1,
-    2.5,
-    4.3
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3315,9 +3315,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.4,
-    4.1
+    1.4,
+    1.7,
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3352,9 +3352,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.5,
     1.9,
-    2.4,
-    3.6
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3389,9 +3389,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.8,
-    4.7
+    1.2,
+    2.1,
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3426,9 +3426,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.2,
-    3.8
+    1.5,
+    1.7,
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3463,9 +3463,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.1,
-    3.3
+    1.8,
+    1.7,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3498,9 +3498,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.9,
-    3.4
+    1.4,
+    1.5,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3533,9 +3533,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    3.4,
-    3.3
+    1.6,
+    2.3,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3568,9 +3568,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    2.4,
-    3
+    1.9,
+    1.9,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3603,9 +3603,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2.4,
-    2.8
+    1.9,
+    1.9,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3638,9 +3638,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    1.9,
-    2.5
+    1.7,
+    1.6,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3673,9 +3673,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.4,
-    3.8
+    1.3,
+    2,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3708,9 +3708,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.2,
-    3.1
+    1.4,
+    1.6,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3743,9 +3743,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.6,
     1.9,
-    2.6,
-    3.4
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3778,9 +3778,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.7,
-    3.7
+    1.6,
+    1.8,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3813,9 +3813,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.4,
-    3.4
+    1.6,
+    1.9,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3848,9 +3848,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.4,
     1.7,
-    2,
-    3.4
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3883,9 +3883,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.8,
-    2.6
+    1.3,
+    1.5,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3920,9 +3920,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2,
-    2.6
+    1.5,
+    1.6,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3957,9 +3957,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.3,
-    3
+    2,
+    1.9,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -3994,9 +3994,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2,
-    2.7
+    1.7,
+    1.6,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4031,9 +4031,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    2.5,
-    3
+    1.9,
+    1.8,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4068,9 +4068,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.3,
-    2.5
+    1.3,
+    1.8,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4105,9 +4105,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.3,
-    3.8
+    1.5,
+    1.7,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4142,9 +4142,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2,
-    3.5
+    1.5,
+    1.7,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4179,9 +4179,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.2,
-    3.4
+    1.7,
+    1.8,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4208,8 +4208,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.6
+    1.1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4236,8 +4236,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    2.3
+    1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4264,8 +4264,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.2
+    1.1,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4292,8 +4292,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    3.1
+    1,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4320,8 +4320,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.5
+    1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4348,8 +4348,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    2.4
+    1,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4376,8 +4376,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    2.7
+    1.1,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4404,8 +4404,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.5
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4432,8 +4432,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    2
+    1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4460,8 +4460,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    3.8
+    1,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4488,8 +4488,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2
+    1.2,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4516,8 +4516,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    2.5
+    1.1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4544,8 +4544,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.6
+    1,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4572,8 +4572,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.2
+    1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4600,8 +4600,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.7
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4628,8 +4628,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.5
+    1,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4658,7 +4658,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4687,7 +4687,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4716,7 +4716,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4745,7 +4745,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4774,7 +4774,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4803,7 +4803,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4832,7 +4832,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4861,7 +4861,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4892,8 +4892,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.6
+    1.1,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4924,8 +4924,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.2
+    1.3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4956,8 +4956,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.3
+    1.1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -4988,8 +4988,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.1
+    1.5,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5020,8 +5020,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.9
+    1.1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5052,8 +5052,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.2
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5084,8 +5084,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.4
+    1.1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5116,8 +5116,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.5
+    1.6,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5150,8 +5150,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.1,
-    9.4
+    7.3,
+    8.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5184,8 +5184,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.1,
-    11.5
+    5.6,
+    9.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5218,8 +5218,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3,
-    7.9
+    3.9,
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5252,8 +5252,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.4,
-    11.4
+    5.3,
+    9.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5286,8 +5286,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.1,
-    15
+    5,
+    12.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5320,8 +5320,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7,
-    16.7
+    5.5,
+    14.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5354,8 +5354,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6,
-    12.2
+    3.7,
+    10.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5388,8 +5388,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.3,
-    11.3
+    4.8,
+    9.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5424,9 +5424,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.9,
-    8.3,
-    9.8
+    4.9,
+    6.7,
+    8.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5461,9 +5461,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
-    5.2,
-    6.9
+    3.2,
+    4.3,
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5498,9 +5498,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7,
-    12.8,
-    13
+    4.1,
+    11,
+    11
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5535,9 +5535,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8,
-    12.4,
-    14.3
+    4.1,
+    10.4,
+    12.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5572,9 +5572,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.1,
-    13,
-    14.2
+    4.6,
+    11,
+    11.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5609,9 +5609,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2,
-    5.6,
-    7.2
+    3.2,
+    4.6,
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5646,9 +5646,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7,
-    10.6,
-    10.1
+    4.1,
+    9.4,
+    8.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5683,9 +5683,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.1,
-    7.6,
-    10.6
+    4.5,
+    6.7,
+    9.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5718,9 +5718,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    2.2,
-    2.5
+    1.5,
+    1.7,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5753,9 +5753,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    3.2,
-    2.8
+    1.1,
+    2.3,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5788,9 +5788,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.8,
-    2.9
+    2,
+    2.9,
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5823,9 +5823,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.9,
-    3
+    1.2,
+    1.7,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5858,8 +5858,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.1,
+    1,
+    1.5,
     2.4
    ],
    "recordedLlmMs": 0,
@@ -5893,9 +5893,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    2.6,
-    2.6
+    1.5,
+    2.7,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5926,7 +5926,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5957,7 +5957,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -5988,7 +5988,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6019,7 +6019,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6050,7 +6050,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6081,7 +6081,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6112,7 +6112,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6143,7 +6143,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6176,8 +6176,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    3.6,
+    1,
+    3,
     2.2
    ],
    "recordedLlmMs": 0,
@@ -6211,9 +6211,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.2,
-    2
+    1,
+    1.7,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6246,9 +6246,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.5,
-    3.1
+    1.1,
+    1.2,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6281,9 +6281,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.4,
-    2.1
+    1.1,
+    1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6316,9 +6316,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
     1.5,
-    1.9
+    1.3,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6351,9 +6351,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.5,
-    3
+    1,
+    1.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6386,9 +6386,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    1.3,
-    2
+    1.1,
+    1.1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6421,9 +6421,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.4,
-    1.8
+    1.2,
+    1,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6452,7 +6452,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6481,7 +6481,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6510,7 +6510,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6539,7 +6539,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6568,7 +6568,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6597,7 +6597,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6626,7 +6626,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6655,7 +6655,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6684,7 +6684,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6713,7 +6713,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6742,7 +6742,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6771,7 +6771,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6800,7 +6800,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6829,7 +6829,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6887,7 +6887,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6916,7 +6916,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -6974,7 +6974,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7003,7 +7003,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7032,7 +7032,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7061,7 +7061,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7090,7 +7090,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7119,7 +7119,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7148,7 +7148,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7177,7 +7177,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7206,7 +7206,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7235,7 +7235,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7264,7 +7264,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7293,7 +7293,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7322,7 +7322,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7351,7 +7351,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7380,7 +7380,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7409,7 +7409,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7438,7 +7438,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7467,7 +7467,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7496,7 +7496,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7525,7 +7525,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7554,7 +7554,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7583,7 +7583,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7612,7 +7612,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7641,7 +7641,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7670,7 +7670,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7699,7 +7699,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -7728,7 +7728,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7758,7 +7758,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7788,7 +7788,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7848,7 +7848,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7878,7 +7878,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7908,7 +7908,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7938,7 +7938,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -7976,8 +7976,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6,
-    3.9
+    2.6,
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8014,8 +8014,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    4.1
+    2,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8052,8 +8052,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2
+    2,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8090,8 +8090,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1,
-    3
+    2.2,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8128,8 +8128,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5,
-    3.9
+    1.9,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8166,8 +8166,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    2.4
+    2.4,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8204,8 +8204,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    3.3
+    1.9,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8242,8 +8242,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.9
+    2.2,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8280,8 +8280,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2.2
+    2.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8318,8 +8318,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    2.9
+    1.8,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8356,8 +8356,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.4
+    1.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8394,8 +8394,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3,
-    2.6
+    2.4,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8432,8 +8432,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    3.1
+    1.9,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8470,8 +8470,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.4
+    1.9,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8508,8 +8508,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    3.2
+    1.7,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8546,8 +8546,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    2.7
+    2,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8584,8 +8584,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.2
+    2.3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8622,8 +8622,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    3.1
+    1.9,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8660,8 +8660,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.1
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8698,8 +8698,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2,
-    2.7
+    2.6,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8736,8 +8736,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    3
+    2.1,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8774,8 +8774,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    2.4
+    1.8,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8812,8 +8812,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.8
+    1.7,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8850,8 +8850,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.5
+    2.2,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8890,9 +8890,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2,
-    3.2
+    1.8,
+    1.7,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8931,9 +8931,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2,
-    2.3
+    1.8,
+    1.6,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -8972,9 +8972,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.6,
-    2.3
+    1.6,
+    2.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9013,9 +9013,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    3.9,
-    5.2
+    1.5,
+    1.7,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9054,9 +9054,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5,
-    2.5,
-    2.9
+    1.5,
+    1.8,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9095,9 +9095,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.8,
-    2.1
+    1.8,
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9136,9 +9136,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.8,
-    2.2
+    1.6,
+    2,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9177,9 +9177,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
+    1.5,
     2,
-    3.5
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9218,9 +9218,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.2,
-    2.6
+    1.4,
+    1.7,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9259,9 +9259,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    1.9,
-    2.2
+    1.5,
+    1.6,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9300,9 +9300,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    2,
     1.8,
-    3.1,
-    2.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9341,9 +9341,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.7,
     1.8,
-    2.4,
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9382,9 +9382,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.3,
     1.9,
-    2.4,
-    3.3
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9423,8 +9423,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.9,
+    1.5,
+    1.6,
     2.1
    ],
    "recordedLlmMs": 0,
@@ -9464,9 +9464,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    2.1,
-    2.5
+    1.6,
+    1.8,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9505,9 +9505,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.7,
-    2
+    1.7,
+    1.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9546,9 +9546,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.4,
     2.3,
-    2.2,
-    3.2
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9587,9 +9587,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.2,
-    2.8
+    1.5,
+    2,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9628,9 +9628,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.2,
-    2.7
+    1.7,
+    2.3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9669,9 +9669,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.1,
-    2.1
+    1.6,
+    1.7,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9710,9 +9710,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.4,
-    2.3
+    1.5,
+    3,
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9751,9 +9751,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.6,
-    2.1
+    3.2,
+    1.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9792,9 +9792,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.6,
-    3
+    1.6,
+    2.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9833,9 +9833,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.5,
     2.1,
-    2.2,
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9880,9 +9880,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.1,
-    1.9,
+    1.5,
+    1.7,
+    2,
     2
    ],
    "recordedLlmMs": 0,
@@ -9928,10 +9928,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    2.2,
-    1.9,
-    2.3
+    1.5,
+    1.7,
+    2,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -9976,10 +9976,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.1,
-    2.4,
-    3.3
+    1.6,
+    1.8,
+    2,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10024,10 +10024,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.2,
+    1.5,
     2,
-    3.1
+    1.6,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10072,10 +10072,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.6,
-    2,
-    2.6
+    1.5,
+    1.9,
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10120,10 +10120,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.1,
-    1.8,
-    2.8
+    1.7,
+    1.7,
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10168,10 +10168,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2,
-    2.4,
-    2.8
+    1.8,
+    1.9,
+    1.6,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10216,10 +10216,10 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.1,
-    2.8,
-    2.4
+    1.7,
+    1.7,
+    1.5,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10252,8 +10252,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.8
+    1.2,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10286,8 +10286,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.2
+    1.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10320,8 +10320,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.2
+    1.3,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10354,8 +10354,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.5
+    1.3,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10388,8 +10388,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4,
-    2.2
+    1.5,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10422,8 +10422,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.2
+    1.2,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10456,8 +10456,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    2.3
+    1.4,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10490,8 +10490,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.5
+    1.3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10525,7 +10525,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10558,8 +10558,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.4
+    1.1,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10593,7 +10593,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.4,
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10626,8 +10626,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.3
+    1.3,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10663,8 +10663,8 @@
    "llmTokens": 0,
    "latencyMs": [
     1.8,
-    2.1,
-    2.5
+    1.8,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10699,9 +10699,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    2.1,
-    2.7
+    1.5,
+    2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10736,9 +10736,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.2,
-    2.2
+    1.4,
+    2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10773,9 +10773,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    2.2,
-    2.1
+    1.5,
+    1.7,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10810,9 +10810,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1.6,
     1.8,
-    2.7,
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10847,9 +10847,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.9,
-    2.3
+    1.7,
+    1.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10884,9 +10884,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.3,
-    2.8
+    1.5,
+    2,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10921,9 +10921,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.2,
-    2
+    1.5,
+    2.1,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10948,7 +10948,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10973,7 +10973,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -10998,7 +10998,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11048,7 +11048,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11073,7 +11073,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11098,7 +11098,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11123,7 +11123,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11148,7 +11148,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11174,7 +11174,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11200,7 +11200,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11226,7 +11226,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11252,7 +11252,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11278,7 +11278,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11304,7 +11304,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11330,7 +11330,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -11364,8 +11364,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.5
+    1.9,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11398,8 +11398,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    2.4
+    1.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11432,8 +11432,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2
+    1.7,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11466,8 +11466,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.2
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11500,8 +11500,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2
+    1.5,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11534,8 +11534,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.3
+    1.3,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11568,8 +11568,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.9
+    2.1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11602,8 +11602,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.1
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11634,7 +11634,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11665,7 +11665,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11696,7 +11696,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11727,7 +11727,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11758,7 +11758,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11789,7 +11789,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11820,7 +11820,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11851,7 +11851,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11880,7 +11880,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    9.2
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11909,7 +11909,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    9.4
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11938,7 +11938,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    9.5
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11967,7 +11967,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    9.4
+    6.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -11996,7 +11996,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12025,7 +12025,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.6
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12054,7 +12054,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.8
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12083,7 +12083,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12112,7 +12112,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.1
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12141,7 +12141,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.5
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12170,7 +12170,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.2
+    6.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12199,7 +12199,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    9.2
+    6.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12228,7 +12228,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.7
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12257,7 +12257,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    13.8
+    6.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12286,7 +12286,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    11
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12315,7 +12315,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.3
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12344,7 +12344,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12373,7 +12373,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.5
+    6.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12402,7 +12402,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.8
+    6.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12431,7 +12431,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8
+    6.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12460,7 +12460,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12489,7 +12489,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12518,7 +12518,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8
+    6.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12547,7 +12547,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12576,7 +12576,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    5.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12605,7 +12605,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12634,7 +12634,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.8
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12663,7 +12663,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.5
+    6.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12692,7 +12692,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12721,7 +12721,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.7
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12750,7 +12750,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.9
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12779,7 +12779,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.3
+    5.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12808,7 +12808,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12837,7 +12837,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12866,7 +12866,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12895,7 +12895,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12924,7 +12924,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12953,7 +12953,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.9
+    6.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -12982,7 +12982,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.2
+    6.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13011,7 +13011,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.1
+    5.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13040,7 +13040,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13069,7 +13069,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13098,7 +13098,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13127,7 +13127,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13185,7 +13185,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13214,7 +13214,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13243,7 +13243,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13272,7 +13272,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13301,7 +13301,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13330,7 +13330,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13359,7 +13359,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13388,7 +13388,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13417,7 +13417,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13446,7 +13446,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13475,7 +13475,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13504,7 +13504,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13533,7 +13533,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13562,7 +13562,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13591,7 +13591,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13620,7 +13620,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13649,7 +13649,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13678,7 +13678,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13707,7 +13707,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13736,7 +13736,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13765,7 +13765,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13794,7 +13794,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13823,7 +13823,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13852,7 +13852,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13881,7 +13881,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13910,7 +13910,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13939,7 +13939,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -13970,8 +13970,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.8
+    2.1,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14002,8 +14002,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9,
-    3
+    2,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14034,8 +14034,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    2.9
+    2.1,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14064,7 +14064,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14095,8 +14095,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    3.1
+    1.8,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14127,8 +14127,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5,
-    4.3
+    2.5,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14159,8 +14159,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    3.3
+    1.9,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14191,8 +14191,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.6
+    1.8,
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14223,8 +14223,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4,
-    2.9
+    2.3,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14253,7 +14253,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14284,8 +14284,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    2.1
+    2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14316,8 +14316,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    3.4
+    2,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14348,8 +14348,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    3
+    2,
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14380,8 +14380,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.3
+    1.8,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14412,8 +14412,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    3.5
+    2,
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14442,7 +14442,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14473,8 +14473,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.9
+    1.6,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14505,8 +14505,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.7
+    2.1,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14537,8 +14537,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.7
+    2.2,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14569,8 +14569,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.8
+    1.8,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14601,8 +14601,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.5
+    2,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14631,7 +14631,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14662,8 +14662,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14694,8 +14694,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    2.8
+    2.3,
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14726,8 +14726,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    3.2
+    2,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14758,8 +14758,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.5
+    1.7,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14790,8 +14790,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.7
+    2.3,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14820,7 +14820,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14851,8 +14851,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2.2
+    1.9,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14883,8 +14883,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    3.1
+    2,
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14915,8 +14915,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2
+    1.8,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14947,8 +14947,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    23.2
+    1.9,
+    19.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -14979,7 +14979,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
+    1.9,
     1.9
    ],
    "recordedLlmMs": 0,
@@ -15011,8 +15011,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    1.9
+    1.7,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15043,8 +15043,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.1
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15075,8 +15075,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.8
+    1.8,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15107,8 +15107,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.1
+    1.7,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15139,8 +15139,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.6
+    1.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15171,8 +15171,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.6
+    1.7,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15203,8 +15203,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.6
+    1.7,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15235,8 +15235,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.5
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15267,8 +15267,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    1.8
+    1.6,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15299,8 +15299,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.9
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15331,8 +15331,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.6
+    1.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15363,8 +15363,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.6
+    1.6,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15395,8 +15395,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7,
-    1.8
+    1.6,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15427,8 +15427,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.7
+    1.6,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15459,8 +15459,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8,
-    2
+    1.9,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15491,8 +15491,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.7
+    1.7,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15523,8 +15523,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    1.8
+    2,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15555,8 +15555,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.7
+    1.6,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15587,8 +15587,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    1.5
+    1.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15619,8 +15619,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.6
+    1.6,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15651,8 +15651,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    1.9
+    2.1,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15685,9 +15685,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.3,
-    2.8
+    1,
+    1,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15721,8 +15721,8 @@
    "llmTokens": 0,
    "latencyMs": [
     1.3,
-    1.3,
-    2
+    1.2,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15755,9 +15755,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2,
-    1.6,
-    2
+    1,
+    1.4,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15790,9 +15790,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
+    1,
     1.1,
-    1.4,
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15825,9 +15825,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.3,
-    2.1
+    1,
+    1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15860,9 +15860,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1,
-    1.2,
-    2.9
+    1,
+    1,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15895,9 +15895,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3,
-    1.5,
-    2.1
+    1,
+    1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15930,9 +15930,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
     1.3,
-    2
+    1,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15961,7 +15961,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.6
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -15990,7 +15990,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8
+    6.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16019,7 +16019,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.2
+    7.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16048,7 +16048,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9
+    6.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16077,7 +16077,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.6
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16106,7 +16106,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.7
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16135,7 +16135,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.5
+    6.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16164,7 +16164,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.9
+    5.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16193,7 +16193,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.6
+    6.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16222,7 +16222,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.9
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16251,7 +16251,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.4
+    6.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16280,7 +16280,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.8
+    6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16309,7 +16309,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.7
+    6.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16338,7 +16338,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.5
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16367,7 +16367,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.5
+    6.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16396,7 +16396,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.7
+    5.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16425,7 +16425,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.8
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16454,7 +16454,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.2
+    6.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16483,7 +16483,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.1
+    6.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16512,7 +16512,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.5
+    6.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16541,7 +16541,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    7.7
+    11.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16570,7 +16570,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    8.1
+    8.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16599,7 +16599,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16628,7 +16628,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16657,7 +16657,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16686,7 +16686,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16715,7 +16715,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16744,7 +16744,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16773,7 +16773,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16802,7 +16802,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16831,7 +16831,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16860,7 +16860,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16889,7 +16889,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16918,7 +16918,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16947,7 +16947,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -16976,7 +16976,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17005,7 +17005,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17034,7 +17034,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17067,7 +17067,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    6.6
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17100,7 +17100,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.6
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17133,7 +17133,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17166,7 +17166,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17199,7 +17199,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17232,7 +17232,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17265,7 +17265,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17298,7 +17298,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17331,7 +17331,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17364,7 +17364,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17397,7 +17397,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17430,7 +17430,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17463,7 +17463,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17496,7 +17496,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17529,7 +17529,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17562,7 +17562,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -17573,32 +17573,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|caviale|150|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|caviale|150|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|10"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "E aggiungi pasta al ragù a 10 euro, aggiungi caviale a 150 euro, aggiungi trofie al pesto a 13 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.9
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-034",
@@ -17606,32 +17599,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|frittura mista|18|piatti di prova",
-    "create|lasagna|20|piatti di prova",
-    "price|pasta al ragù|14"
-   ],
-   "actual": [
-    "create|frittura mista|18|piatti di prova",
-    "create|lasagna|20|piatti di prova",
-    "price|pasta al ragù|14"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 14 euro, aggiungi lasagna a 20 euro, aggiungi frittura mista a 18 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-035",
@@ -17639,32 +17625,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|crespelle|11|piatti di prova",
-    "create|polpette|9|piatti di prova",
-    "price|pasta al ragù|9"
-   ],
-   "actual": [
-    "create|crespelle|11|piatti di prova",
-    "create|polpette|9|piatti di prova",
-    "price|pasta al ragù|9"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "E aggiungi pasta al ragù a 9 euro, aggiungi polpette a 9 euro, aggiungi crespelle a 11 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.3
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-036",
@@ -17672,32 +17651,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|arrosto di vitello|16|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|11"
-   ],
-   "actual": [
-    "create|arrosto di vitello|16|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|11"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *11,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 11 euro, aggiungi trofie al pesto a 13 euro, aggiungi arrosto di vitello a 16 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.9
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-037",
@@ -17705,32 +17677,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|frittura mista|18|piatti di prova",
-    "create|pasta al pesto|15|piatti di prova",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|frittura mista|18|piatti di prova",
-    "create|pasta al pesto|15|piatti di prova",
-    "price|pasta al ragù|10"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "E aggiungi pasta al ragù a 10 euro, aggiungi frittura mista a 18 euro, aggiungi pasta al pesto a 15 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    2.6
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-038",
@@ -17738,32 +17703,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|caviale|150|piatti di prova",
-    "create|crespelle|11|piatti di prova",
-    "price|pasta al ragù|14"
-   ],
-   "actual": [
-    "create|caviale|150|piatti di prova",
-    "create|crespelle|11|piatti di prova",
-    "price|pasta al ragù|14"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 14 euro, aggiungi crespelle a 11 euro, aggiungi caviale a 150 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    2.2
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-039",
@@ -17771,32 +17729,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|arrosto di vitello|16|piatti di prova",
-    "create|lasagna|20|piatti di prova",
-    "price|pasta al ragù|9"
-   ],
-   "actual": [
-    "create|arrosto di vitello|16|piatti di prova",
-    "create|lasagna|20|piatti di prova",
-    "price|pasta al ragù|9"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "E aggiungi pasta al ragù a 9 euro, aggiungi arrosto di vitello a 16 euro, aggiungi lasagna a 20 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    2.7
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-040",
@@ -17804,32 +17755,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|pasta al pesto|15|piatti di prova",
-    "create|polpette|9|piatti di prova",
-    "price|pasta al ragù|11"
-   ],
-   "actual": [
-    "create|pasta al pesto|15|piatti di prova",
-    "create|polpette|9|piatti di prova",
-    "price|pasta al ragù|11"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *11,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 11 euro, aggiungi pasta al pesto a 15 euro, aggiungi polpette a 9 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    2.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-041",
@@ -17837,32 +17781,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|caviale|150|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|10"
-   ],
-   "actual": [
-    "create|caviale|150|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|10"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *10,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "E aggiungi pasta al ragù a 10 euro, aggiungi caviale a 150 euro, aggiungi trofie al pesto a 13 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    2.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-042",
@@ -17870,32 +17807,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|frittura mista|18|piatti di prova",
-    "create|lasagna|20|piatti di prova",
-    "price|pasta al ragù|14"
-   ],
-   "actual": [
-    "create|frittura mista|18|piatti di prova",
-    "create|lasagna|20|piatti di prova",
-    "price|pasta al ragù|14"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*\nNuovo piatto *frittura mista* in *Piatti di prova*: *18,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 14 euro, aggiungi lasagna a 20 euro, aggiungi frittura mista a 18 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.4
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-043",
@@ -17903,32 +17833,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|crespelle|11|piatti di prova",
-    "create|polpette|9|piatti di prova",
-    "price|pasta al ragù|9"
-   ],
-   "actual": [
-    "create|crespelle|11|piatti di prova",
-    "create|polpette|9|piatti di prova",
-    "price|pasta al ragù|9"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *polpette* in *Piatti di prova*: *9,00 €*\nNuovo piatto *crespelle* in *Piatti di prova*: *11,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "E aggiungi pasta al ragù a 9 euro, aggiungi polpette a 9 euro, aggiungi crespelle a 11 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.3
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-044",
@@ -17936,32 +17859,25 @@
    "menu": "qa",
    "success": true,
    "fails": [],
-   "expected": [
-    "create|arrosto di vitello|16|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|11"
-   ],
-   "actual": [
-    "create|arrosto di vitello|16|piatti di prova",
-    "create|trofie al pesto|13|piatti di prova",
-    "price|pasta al ragù|11"
-   ],
+   "expected": [],
+   "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto.\n\nNuovo piatto *trofie al pesto* in *Piatti di prova*: *13,00 €*\nNuovo piatto *arrosto di vitello* in *Piatti di prova*: *16,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *11,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "🎤 E aggiungi pasta al ragù a 11 euro, aggiungi trofie al pesto a 13 euro, aggiungi arrosto di vitello a 16 euro."
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    2.8
    ],
    "recordedLlmMs": 0,
-   "usedLlm": true
+   "usedLlm": true,
+   "note": "R5.1 (nota 62): il ragù c'è già → domanda breve, nessuna scrittura sul ragù; le parti chiare aspettano la risposta (accettato anche pubblicarle)"
   },
   {
    "id": "a4-validatore-045",
@@ -17989,7 +17905,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18020,7 +17936,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18051,7 +17967,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18082,7 +17998,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18113,7 +18029,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18144,7 +18060,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18175,7 +18091,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18206,7 +18122,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18235,7 +18151,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18264,7 +18180,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18293,7 +18209,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18322,7 +18238,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18351,7 +18267,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18380,7 +18296,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18409,7 +18325,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18438,7 +18354,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18467,7 +18383,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18496,7 +18412,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18525,7 +18441,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18554,7 +18470,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18583,7 +18499,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18612,7 +18528,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18641,7 +18557,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18670,7 +18586,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18699,7 +18615,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18728,7 +18644,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18757,7 +18673,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18786,7 +18702,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18815,7 +18731,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18844,7 +18760,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18873,7 +18789,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18902,7 +18818,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18931,7 +18847,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18960,7 +18876,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -18989,7 +18905,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19018,7 +18934,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19047,7 +18963,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19076,7 +18992,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19105,7 +19021,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19134,7 +19050,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19163,7 +19079,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19192,7 +19108,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19221,7 +19137,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19250,7 +19166,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19275,7 +19191,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19301,7 +19217,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19327,7 +19243,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19353,7 +19269,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19383,7 +19299,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19412,7 +19328,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19441,7 +19357,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19470,7 +19386,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19499,7 +19415,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19528,7 +19444,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19557,7 +19473,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19586,7 +19502,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -19623,9 +19539,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    2.8,
-    1.7
+    1.9,
+    2.3,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19663,9 +19579,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    2.2,
-    2.1
+    1.8,
+    1.8,
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19703,9 +19619,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    1.4,
-    1.5
+    1.8,
+    1.2,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19743,9 +19659,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    1.4,
-    1.6
+    2.1,
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19783,9 +19699,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    2.1,
-    1.7
+    1.7,
+    1.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19823,9 +19739,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.5,
-    2
+    1.7,
+    1.2,
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19863,9 +19779,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.2,
-    1.5
+    1.7,
+    1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19903,9 +19819,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    1.4,
-    1.5
+    2,
+    1.2,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19943,9 +19859,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    2.1,
-    1.7
+    1.7,
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -19983,9 +19899,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    1.3,
-    2
+    1.7,
+    1.1,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -20023,9 +19939,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.6,
-    1.6
+    1.7,
+    1.1,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -20063,9 +19979,9 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    1.4,
-    1.5
+    1.9,
+    1.2,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -20091,7 +20007,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20116,7 +20032,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20141,7 +20057,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20166,7 +20082,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20191,7 +20107,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20216,7 +20132,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20241,7 +20157,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20266,7 +20182,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20291,7 +20207,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20316,7 +20232,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20341,7 +20257,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20366,7 +20282,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20391,7 +20307,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20416,7 +20332,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20430,18 +20346,18 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: cosa vuoi cambiare?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "aggiungi il tiramisù al pistacchio a 6"
    ],
    "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    4.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20466,7 +20382,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20491,7 +20407,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20516,7 +20432,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20541,7 +20457,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20555,18 +20471,18 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: cosa vuoi cambiare?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
    ],
    "turns": [
     "aggiungi il tiramisù al pistacchio a 6"
    ],
    "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    4.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20597,8 +20513,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.2
+    1.5,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20629,8 +20545,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.8
+    1.5,
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20661,8 +20577,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.2
+    1.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20693,8 +20609,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    1.3
+    1.6,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20725,8 +20641,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6,
-    1.3
+    1.8,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20757,8 +20673,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.2
+    1.4,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20789,8 +20705,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.3
+    1.7,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20821,8 +20737,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9,
-    1.3
+    1.6,
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20853,8 +20769,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.6
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20885,8 +20801,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.1
+    1.4,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20917,8 +20833,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1
+    1.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20949,8 +20865,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    1.4
+    1.8,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -20981,8 +20897,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.2
+    1.4,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21013,8 +20929,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    1.1
+    1.8,
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21045,8 +20961,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1
+    1.3,
+    0.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21078,7 +20994,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.9,
-    2
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21111,8 +21027,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2.2
+    1.4,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21145,8 +21061,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.9
+    1.3,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21179,8 +21095,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.9
+    1.3,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21213,8 +21129,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.3
+    1.3,
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21247,8 +21163,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2
+    1.3,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21281,8 +21197,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    2.8
+    1.3,
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21315,8 +21231,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    2
+    1.3,
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21349,8 +21265,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    2.8
+    1.3,
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21379,7 +21295,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21408,7 +21324,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21437,7 +21353,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21466,7 +21382,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21495,7 +21411,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21524,7 +21440,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21553,7 +21469,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21582,7 +21498,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21611,7 +21527,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21640,7 +21556,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21669,7 +21585,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21698,7 +21614,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21727,7 +21643,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21756,7 +21672,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21785,7 +21701,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21814,7 +21730,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21843,7 +21759,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21872,7 +21788,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21901,7 +21817,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21930,7 +21846,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21959,7 +21875,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -21988,7 +21904,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22017,7 +21933,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22046,7 +21962,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22075,7 +21991,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22104,7 +22020,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22133,7 +22049,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22162,7 +22078,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22191,7 +22107,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22220,7 +22136,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22249,7 +22165,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22278,7 +22194,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22307,7 +22223,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22336,7 +22252,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.3
+    4.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22365,7 +22281,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22394,7 +22310,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22423,7 +22339,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22452,7 +22368,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22481,7 +22397,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22510,7 +22426,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22539,7 +22455,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.8
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22568,7 +22484,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22597,7 +22513,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.3
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22626,7 +22542,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.8
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22655,7 +22571,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22684,7 +22600,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.9
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22713,7 +22629,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    3.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22742,7 +22658,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.2
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22771,7 +22687,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22800,7 +22716,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22829,7 +22745,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.9
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22858,7 +22774,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22887,7 +22803,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.1
+    3.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22916,7 +22832,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    3.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22945,7 +22861,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -22974,7 +22890,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.6
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23003,7 +22919,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.4
+    4.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23032,7 +22948,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23061,7 +22977,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23090,7 +23006,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.7
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23119,7 +23035,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23148,7 +23064,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23177,7 +23093,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.6
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23206,7 +23122,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23235,7 +23151,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23264,7 +23180,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23293,7 +23209,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23322,7 +23238,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23351,7 +23267,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.5
+    3.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23380,7 +23296,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.4
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23409,7 +23325,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.8
+    4.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23438,7 +23354,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    5.2
+    4.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23467,7 +23383,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23496,7 +23412,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23525,7 +23441,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23554,7 +23470,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23583,7 +23499,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23612,7 +23528,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23641,7 +23557,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23670,7 +23586,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23701,8 +23617,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    1.9
+    1.6,
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23733,8 +23649,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.6
+    1.7,
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23765,8 +23681,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2,
-    1.7
+    1.5,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23797,8 +23713,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.6
+    1.9,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23829,8 +23745,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.5,
-    1.7
+    1.4,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23862,7 +23778,7 @@
    "llmTokens": 0,
    "latencyMs": [
     1.5,
-    1.5
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23893,8 +23809,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4,
-    1.6
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23925,8 +23841,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8,
-    1.6
+    1.7,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23957,8 +23873,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.6
+    1.4,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -23989,8 +23905,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
-    1.5
+    1.8,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24021,8 +23937,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3,
-    1.7
+    1.5,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24053,8 +23969,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7,
-    1.6
+    1.9,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24085,8 +24001,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1,
-    1.6
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24117,7 +24033,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.5,
+    1.7,
     1.4
    ],
    "recordedLlmMs": 0,
@@ -24149,8 +24065,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2,
-    1.5
+    1.4,
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24181,8 +24097,8 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6,
-    1.6
+    1.8,
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24211,7 +24127,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24240,7 +24156,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24269,7 +24185,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24298,7 +24214,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24327,7 +24243,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24385,7 +24301,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24414,7 +24330,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.3
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24443,7 +24359,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24472,7 +24388,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24501,7 +24417,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24530,7 +24446,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24559,7 +24475,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24588,7 +24504,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.7
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24617,7 +24533,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.2
+    1.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24648,7 +24564,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24710,7 +24626,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.5
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24741,7 +24657,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3
+    2.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24803,7 +24719,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24834,7 +24750,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24865,7 +24781,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    2.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true
@@ -24890,7 +24806,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -24942,7 +24858,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -24968,7 +24884,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -24994,7 +24910,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.1
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25020,7 +24936,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25046,7 +24962,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.1
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25072,7 +24988,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.4
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25098,7 +25014,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.7
+    1.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25124,7 +25040,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25150,7 +25066,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25176,7 +25092,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.5
+    2.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25202,7 +25118,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.4
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25228,7 +25144,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25254,7 +25170,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.2
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25280,7 +25196,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25306,7 +25222,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25332,7 +25248,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.6
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25358,7 +25274,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25384,7 +25300,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.3
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25410,7 +25326,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.6
+    2.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25436,7 +25352,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    4.3
+    3.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25462,7 +25378,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25488,7 +25404,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2
+    1.9
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25514,7 +25430,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.8
+    2.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25540,7 +25456,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.9
+    2.2
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25566,7 +25482,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.4
+    3.6
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25592,7 +25508,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    2.8
+    2.7
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25644,7 +25560,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.2
+    1.1
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25670,7 +25586,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    3.7
+    3.4
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,
@@ -25696,7 +25612,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.8
    ],
    "recordedLlmMs": 0,
    "usedLlm": true,

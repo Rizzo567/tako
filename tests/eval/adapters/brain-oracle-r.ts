@@ -8,6 +8,7 @@
 //  - rifiuto del server (auto-correzione) → una domanda: il modello ideale non insiste;
 //  - reply_draft sempre: «Fatto.» per le modifiche, la domanda per i chiarimenti, «Elimino X dal menu? Rispondi sì.».
 // È un TETTO dell'architettura (instradamento + contesto + strumenti + validatore), NON la resa di gpt-oss.
+import {appendFileSync} from 'node:fs'
 import {brainOracleBase,catalog,hitStems,spoken,setSectionAnswer} from './brain-oracle.js'
 import {plainT} from '../judge.js'
 import {spokenDecimals,spokenCents} from '../../../apps/server/src/lib/twilio-menu-nlu.js'
@@ -24,7 +25,7 @@ const yes=(p:string)=>!!p&&p.split(' ').every(w=>YES.has(w))&&!/^(?:grazie|pure|
 const NO=/^(?:(?:no|ah|allora|aspetta|scusa)\s+)*(?:no|annulla|annulla tutto|lascia stare|lascia perdere|niente|no grazie|non farlo|non pubblicare|no lascia stare|no lascia perdere|non eliminarlo|non eliminarla|non cancellarlo|non cancellarla|tienilo|tienila|no tienilo|no tienila|non crearla|no non crearla)$/
 const UNDO_ALONE=/^(?:(?:no|scusa|aspetta|anzi|ops|ah)\s+)*(?:lascia stare|lascia perdere|rimettil[oaie] com era|rimettil[oaie] come prima|lascial[aoie](?: stare| com era| cosi)?|annulla(?: tutto| l ultima(?: modifica)?| la modifica| quello che hai fatto)?|annullala|annullalo|torna indietro|tornare indietro|rimetti come prima|torna come prima|rimetti com era|anzi no|no aspetta|ho sbagliato(?: annulla)?|lascia stare ho sbagliato|era giusto prima|il prezzo di prima era giusto|lascia com era|annulla per favore)$/
 
-const out=(o:any)=>JSON.stringify({intent:'change',read:'none',item_refs:[],capability_ids:[],clarify:{question:null,item_refs:[],missing:[]},uncertain:[],alias_used:[],reply_draft:'',...o,actions:(o.actions??[]).map((a:any)=>({...blank,...a}))})
+const out=(o:any)=>{if(process.env.TAKO_ORACLE_DUMP)appendFileSync(process.env.TAKO_ORACLE_DUMP!,'OUT@'+(new Error().stack??'').split('\n')[2]+'\n');return out0(o)},out0=(o:any)=>JSON.stringify({intent:'change',read:'none',item_refs:[],capability_ids:[],clarify:{question:null,item_refs:[],missing:[]},uncertain:[],alias_used:[],reply_draft:'',...o,actions:(o.actions??[]).map((a:any)=>({...blank,...a}))})
 const nameOf=(cat:ReturnType<typeof catalog>,code:string|null|undefined)=>[...cat.code].find(([,c])=>c===code)?.[0]
 
 /** Bozza del modello ideale sul piano già deciso. */
@@ -61,6 +62,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   const amb=(/ambiguo|candidati|possibili/.test(last))&&ids.length>1
   if(/a suono/.test(last)&&ids.length===1){const act=(prev.actions??[]).find((x:any)=>x?.item===ids[0]);return out({intent:'clarify',clarify:{question:null,item_refs:ids,missing:[]},actions:act?[act]:[],reply_draft:`Intendi ${nameOf(cat,ids[0])}? Rispondi sì o no.`})}
   return out({intent:'clarify',clarify:{question:null,item_refs:amb?ids:[],missing:[]},reply_draft:amb?'Quale intendi?':/conferma|sì|ok/i.test(last)&&/proposta/.test(last)?'Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.':'Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?'})}
+ if(process.env.TAKO_ORACLE_DUMP)(globalThis as any).require?.('fs');if(process.env.TAKO_ORACLE_DUMP)import('node:fs').then(fs=>fs.appendFileSync(process.env.TAKO_ORACLE_DUMP!,'---\n'+last.slice(-900)+'\n'))
  const [head,tail]=last.includes('\nMESSAGGIO\n')?last.split('\nMESSAGGIO\n') as [string,string]:['',last.replace(/^MESSAGGIO\n/,'')]
  // Il modello ideale capisce i decimali detti a voce («dodici virgola cinque», «7 euro 90»): li legge come il server
  // li leggeva prima di R (spokenDecimals/spokenCents). Il validatore resta sul testo vero.
@@ -79,10 +81,12 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    const pk=pick??(ns.length===1?ns[0]:undefined);if(!pk)return;const e=[...conv.changes,...(conv.interim??[])].find(c=>c.op!=='create'&&(c as any).dish===pk),pr=spoken(q.word)[0]
    if(e&&e.op==='price')acts.push({action:'set_price',item:cat.code.get(pk),price:(e as any).price});else if(pr!==undefined)acts.push({action:'set_price',item:cat.code.get(pk),price:pr});else if(e&&(e.op==='hidden'||e.op==='available'||e.op==='featured'))acts.push({action:'set_'+e.op,item:cat.code.get(pk),value:(e as any).value})})
   if(acts.length)return out({actions:[ctl('confirm_pending'),...acts],reply_draft:'Fatto.'})}
+ // «no, il caviale lascialo stare»: pubblica le parti chiare (il server toglie il caviale negato).
+ if(hold&&/^no\b.*\blascial[oaie] (?:stare|perdere)$/.test(p))return out({actions:[ctl('confirm_pending')],reply_draft:'Fatto.'})
  if(hold){if(/^(?:no|no grazie|no no|no lascia stare|lascia stare|solo quelle|pubblica il resto)$/.test(p))return out({actions:[ctl('confirm_pending')],reply_draft:'Fatto.'});if(/^(?:annulla|annulla tutto|non pubblicare niente|niente)$/.test(p))return out({actions:[ctl('cancel_pending')],reply_draft:'Va bene, non pubblico niente.'})}
  if(!proposal&&!hold&&undo&&UNDO_ALONE.test(p))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})
  // «annulla il tiramisù» quando l'ultima pubblicazione è proprio quella del tiramisù: è l'annullamento.
- {const u=head.match(/ULTIMA PUBBLICAZIONE \(annullabile[^)]*\): ([^\n]+)/)?.[1];if(!proposal&&!hold&&u&&/^(?:annulla|annullala|annullalo)\b/.test(p)){const said=[...cat.code.keys()].filter(n=>(' '+p+' ').includes(' '+plainT(n)+' ')),rest=p.replace(/^(?:annulla\w*)\s+(?:il|la|lo|l|i|le|gli)?\s*/,'');if(said.length&&said.every(n=>plainT(u).includes(plainT(n)))||!said.length&&rest.length>=3&&plainT(u).includes(rest))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})}}
+ {const u=head.match(/ULTIMA PUBBLICAZIONE \(annullabile[^)]*\): ([^\n]+)/)?.[1];if(!proposal&&!hold&&u&&/^(?:annulla|annullala|annullalo)\b/.test(p)){const said=[...cat.code.keys()].filter(n=>(' '+p+' ').includes(' '+plainT(n)+' ')),rest=p.replace(/^(?:annulla\w*)\s+(?:(?:il|la|lo|le|li|gli|i|l)\s+)?/,'');if(said.length&&said.every(n=>plainT(u).includes(plainT(n)))||!said.length&&rest.length>=3&&plainT(u).includes(rest))return out({actions:[ctl('undo_last')],reply_draft:'Ho annullato l’ultima modifica.'})}}
  // «la seconda no» dopo «nascondi la diavola e la margherita»: si rimette com'era quel piatto.
  {const m=p.match(/^(?:no\s+)?(?:la|il|l)\s+(prim|second|terz)\w*\s+no$/),prev=[...msgs.slice(2,-1)].reverse().find(x=>x.role==='user')?.content??''
   if(m){const pp=plainT(prev),list=[...cat.code.keys()].filter(n=>pp.includes(plainT(n))).sort((a,b)=>pp.indexOf(plainT(a))-pp.indexOf(plainT(b))),k=m[1]==='prim'?0:m[1]==='second'?1:2;if(list[k])return out({actions:[{action:'restore',item:cat.code.get(list[k]!)}],reply_draft:'Fatto.'})}}
@@ -92,7 +96,7 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
    if(items.length&&verb)return JSON.stringify(withDraft(JSON.parse(out({actions:items.map(n=>({...verb,item:cat.code.get(n)}))})),cat,p,sectionNames))}}
  // «quei due mettili negli antipasti», «spostali negli speciali»: i piatti dei messaggi di prima nella categoria detta.
  {const m=p.match(/\b(?:quei|quelli|entramb\w*|tutti|mettil[ie]|spostal[ie]|portal[ie])\b.*\b(?:nei|negli|nelle|nella|nel|tra i|tra le|in)\s+(\w+)/),sec=m?sectionNames.find(n=>plainT(n).slice(0,5)===m[1]!.slice(0,5)):undefined
-  if(sec&&!/\b(categori\w*)\b/.test(p)){const owners=msgs.slice(2,-1).filter(x=>x.role==='user').map(x=>plainT(x.content.split('\nMESSAGGIO\n').pop()!)).slice(-3),items=[...new Set(owners.flatMap(o=>[...cat.code.keys()].filter(n=>(' '+o+' ').includes(' '+plainT(n)+' '))))].filter(n=>cat.sectionOf.get(n)!==sec)
+  if(sec&&!/\b(categori\w*)\b/.test(p)&&!/\b(?:sposta|metti|porta)\s*l['’]/i.test(msg)){const owners=msgs.slice(2,-1).filter(x=>x.role==='user').map(x=>plainT(x.content.split('\nMESSAGGIO\n').pop()!)).slice(-3),items=[...new Set(owners.flatMap(o=>[...cat.code.keys()].filter(n=>(' '+o+' ').includes(' '+plainT(n)+' '))))].filter(n=>cat.sectionOf.get(n)!==sec)
    if(items.length>=2)return JSON.stringify(withDraft(JSON.parse(out({actions:items.map(n=>({action:'move_item',item:cat.code.get(n),section:cat.sections.get(sec)}))})),cat,p,sectionNames))}}
  // Due prezzi alternativi («metti la coda a 17 o 18»): il modello ideale chiede quale, le altre parti restano chiare.
  {const alt=msg.match(/(\d+(?:[.,]\d+)?)\s*(?:euro\s*)?(?:o|oppure|\/)\s*(\d+(?:[.,]\d+)?)/)??msg.match(/\btra\s+(\d+(?:[.,]\d+)?)\s+e\s+(\d+(?:[.,]\d+)?)/)
@@ -105,6 +109,12 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
  // «e la gricia a uno in meno» dopo «metti la carbonara a 13»: il modello ideale scrive il prezzo (12), non la differenza.
  {const lastBot=[...msgs.slice(2,-1)].reverse().find(x=>x.role==='assistant')?.content??'',m=lastBot.replace(/\*/g,'').match(/prezzo da [\d.,]+\s*€ a ([\d.,]+)\s*€/),rd=/^(?:e|ed|anche|pure)\b/.test(p)?relativeDelta(msg):null
   if(m&&rd){const v=Number(m[1]!.replace(/\./g,'').replace(',','.'))+rd.delta,n=[...cat.code.keys()].find(x=>hitStems(x,msg).length>0||(' '+p+' ').includes(' '+plainT(x)+' '));if(n&&v>0)return out({actions:[{action:'set_price',item:cat.code.get(n),price:Math.round(v*100)/100}],reply_draft:'Fatto.'})}}
+ // R5.1: pronome sul piatto dell'ultimo scambio («mettila in evidenza», «mettila uguale alla carbonara»).
+ {const m=p.match(/^(?:e\s+|ora\s+|poi\s+)?(?:mettil[aoie]|mettimel[aoie]|fall[aoie]|portal[aoie])\s+(in evidenza|(?:uguale|come|allo stesso prezzo)\s+(?:a|al|alla|allo|ai|alle|della|del|di)?\s*(.+))$/)
+  if(m){const hist=[...msgs.slice(2,-1)].reverse(),said=(t:string)=>[...cat.code.keys()].filter(x=>t.includes('*'+x+'*')||(' '+plainT(t)+' ').includes(' '+plainT(x)+' ')),ref=m[2]?[...cat.code.keys()].find(x=>(' '+plainT(m[2]!)+' ').includes(' '+plainT(x)+' ')||hitStems(x,m[2]!).length>0):undefined
+   let target:string|undefined;for(const h of hist){const c=said(h.content.split('\nMESSAGGIO\n').pop()!).filter(x=>x!==ref);if(c.length===1){target=c[0];break}if(c.length>1)break}
+   if(target&&m[1]==='in evidenza')return out({actions:[{action:'set_featured',item:cat.code.get(target),value:true}],reply_draft:'Fatto.'})
+   if(target&&ref)return out({actions:[{action:'set_price',item:cat.code.get(target),price:null,price_ref:cat.code.get(ref)}],reply_draft:'Fatto.'})}}
  // «no, mettilo in una categoria nuova, speciali», «spostalo nei dolci»: il piatto dell'ultima risposta / dell'ultimo messaggio.
  {const m=p.match(/^(?:no\s+)?(?:mettil[oa]|spostal[oa]|portal[oa])\s+(?:in|nei|negli|nelle|nella|nel|tra i|tra le)\s+(?:una\s+)?(?:categoria\s+)?(?:nuova\s+)?(?:che si chiama\s+)?(\w+(?: \w+)?)$/),lb=[...msgs.slice(2,-1)].reverse().find(x=>x.role==='assistant')?.content??''
   if(m){const n=[...cat.code.keys()].find(x=>lb.includes('*'+x+'*'));if(n){const ex=sectionNames.find(s=>plainT(s).slice(0,5)===m[1]!.slice(0,5)),nm=ex??(m[1]!.charAt(0).toUpperCase()+m[1]!.slice(1));return JSON.stringify(withDraft(JSON.parse(out({actions:[...(ex?[]:[{action:'create_section',name:nm}]),{action:'move_item',item:cat.code.get(n),section:ex?cat.sections.get(ex):nm}]})),cat,p,sectionNames))}}}
@@ -176,7 +186,8 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   if(one.length===1&&vs.length===1&&!DELETE_VERB.test(p)&&!/\b(non|anzi|no)\b/.test(p)&&d.intent==='change'&&(d.actions??[]).length===1&&d.actions[0].item===cat.code.get(one[0]!)&&d.actions[0].action!==vs[0]![1])d.actions=[{action:vs[0]![1],item:cat.code.get(one[0]!),value:vs[0]![2]}]}
  // Rinomina + prezzo nello stesso messaggio («rinomina la gricia in Gricia romana e mettila a 12»).
  {const ren=(d.actions??[]).find((a:any)=>a.action==='rename_item'),m=p.match(/\b(?:a|prezzo a|costa)\s+(\d+(?:\s\d{2})?)\s*(?:euro)?$/),lastPart=p.split(/,|;/).pop()??'';if(ren&&m&&![...cat.code.keys()].some(n=>n!==nameOf(cat,ren.item)&&(' '+lastPart+' ').includes(' '+plainT(n)+' '))&&!(d.actions as any[]).some(a=>a.action==='set_price'&&a.item===ren.item)){const v=spoken(msg).at(-1);if(v!==undefined)d.actions.push({action:'set_price',item:ren.item,price:v})}}
- if(hold&&d.intent==='change'&&(d.actions??[]).length)d.actions=[ctl('confirm_pending'),...d.actions]
+ // Correzione delle parti in sospeso («no, fai una cosa: …»): niente confirm_pending, il piano nuovo sostituisce (R5.1).
+ if(hold&&d.intent==='change'&&(d.actions??[]).length&&!/^(?:no|anzi)\b/.test(p))d.actions=[ctl('confirm_pending'),...d.actions]
  // Piatto nuovo senza nome («aggiungi un piatto a 12»): il modello ideale chiede come si chiama.
  {const jp=plainT(joinedText),exp:Change[]=[...conv.changes,...(conv.interim??[])],cr=exp.filter((c):c is Extract<Change,{op:'create'}>=>c.op==='create')
   if(/\b(aggiung\w*|inseri\w*|nuov[oa])\b/.test(jp)&&cr.length&&cr.every(c=>!jp.includes(plainT(c.name).split(' ').slice(-1)[0]!))&&!(d.intent==='change'&&(d.actions??[]).some((a:any)=>a.action==='create_item'))){const n=spoken(joinedText)[0]??null;d={...d,intent:'clarify',actions:[{action:'create_item',name:null,price:n,section:null}],clarify:{question:null,item_refs:[],missing:['name']},reply_draft:'Come si chiama il piatto nuovo?'}}}
@@ -203,6 +214,30 @@ export function brainOracle(conv:Conversation|null,body:any):string|null{
   else if(sp&&!spoken(joinedText).length)d={...d,intent:'clarify',actions:[],clarify:{question:null,item_refs:[],missing:['price']},reply_draft:`Quanto costa ${sp.name}?`}}}
  // Saluto in testa a un comando («ciao, vorrei aggiungere…»): non è chiacchiera.
  if(d.intent==='chat'&&/^(?:ciao|buongiorno|buonasera|salve|grazie)\b/.test(p)&&p.split(' ').length>3){const rest=msg.replace(/^\s*\S+[\s,!.]*/,'');const d2=JSON.parse(brainOracle(conv,{...body,messages:[...msgs.slice(0,-1),{role:'user',content:(head?head+'\nMESSAGGIO\n':'MESSAGGIO\n')+rest}]})!);if(d2.intent!=='chat')return JSON.stringify(d2)}
+ // R5.1 (nota 62): «aggiungi X a 10» con X già nel menu → nessuna azione su X, parte incerta con la domanda breve.
+ if(!proposal&&!hold&&!ask){const ex:{n:string,phrase:string}[]=[];for(const cl of msg.split(/,|;|\s+e\s+(?=aggiung|inseris)/i)){const pc=plainT(cl);if(!/\b(aggiung\w*|inserisc\w*)\b/.test(pc)||/\b(categori\w*|nei|negli|nelle|nella|nel)\b/.test(pc))continue
+   const n=[...cat.code.keys()].filter(x=>(' '+pc+' ').includes(' '+plainT(x)+' ')).sort((a,b)=>plainT(b).length-plainT(a).length)[0];if(n&&/\d/.test(pc)&&!spoken(cl).includes(cat.price.get(n)!))ex.push({n,phrase:cl.trim()})}
+  if(ex.length){const codes=new Set(ex.map(e=>cat.code.get(e.n)));const keep=(d.intent==='change'?(d.actions??[]):[]).filter((a:any)=>!codes.has(a.item)&&!(a.action==='create_item'&&ex.some(e=>plainT(e.n)===plainT(String(a.name??'')))))
+   const q=ex.map(e=>`C'è già ${e.n} a ${String(cat.price.get(e.n)??'').replace('.',',')} €: lo aggiorno o ne creo un altro?`).join(' ')
+   return out({intent:'change',actions:keep,uncertain:ex.map(e=>({phrase:e.phrase,candidates:[cat.code.get(e.n)],action:'none',value:null,price:null})),reply_draft:q})}}
+ // R5.1: ogni prezzo al piatto della sua parte («la parmigiana a 10 euro, il tiramisù a 6 euro»).
+ if(d.intent==='change'){const parts=msg.split(/(?<!\d),|,(?!\d)|;|\s+e\s+(?=(?:il|la|lo|l|i|gli|le|togli|metti|nascondi)\b)/);for(const a of d.actions??[]){if(a.action!=='set_price'||typeof a.price!=='number')continue;const n=nameOf(cat,a.item);if(!n)continue
+  const own=parts.filter(x=>(' '+plainT(x)+' ').includes(' '+plainT(n)+' '));if(own.length!==1)continue;const v=[...new Set(spoken(own[0]!))];if(v.length===1&&v[0]!==a.price&&!/\b(meno|piu|più|aument|abbass\w*|anzi|no|promo|sconto|offerta)\b/.test(p))a.price=v[0]}}
+ // R5.1: azioni su piatti che il messaggio non nomina (né per intero né per radice) quando ne nomina altri: il modello letterale
+ // fa solo quello che dice QUESTO messaggio («la pasta con le sarde a 15» non tocca le busiate).
+ if(d.intent==='change'&&(d.actions??[]).length>1&&!/\b(quei|quelli|quelle|entramb\w*|tutt\w*|anche|pure|uguale|stesso|gli altri)\b/.test(p)){const full=(a:any)=>{const n=nameOf(cat,a.item);return !!n&&(' '+p+' ').includes(' '+plainT(n)+' ')},some=(a:any)=>{const n=nameOf(cat,a.item);return !n||full(a)||hitStems(n,msg).length>0}
+  const acts=d.actions as any[],nf=acts.filter(a=>a.item&&full(a)).length;if(nf&&acts.some(a=>a.item&&!full(a)))d.actions=acts.filter(a=>!a.item||a.action!=='set_price'||full(a)||(some(a)&&(' '+p+' ').includes(' '+(plainT(nameOf(cat,a.item)!).split(' ').find(w=>w.length>=3&&!['il','lo','la','gli','le','del','della'].includes(w))??'')+' ')))}
+ // R5.1: «no scusa, quelli normali» dopo un'azione su «Cornetto integrale»: rimetti com'era quello e la stessa azione sul «Cornetto».
+ {const m=p.match(/\b(?:quell[oaie]|quella)\s+(?:normal[ie]|classic[oaie]|semplic[ie])\b/),prev=[...msgs.slice(2,-1)].reverse().find(x=>x.role==='user')?.content??'',pp=plainT(prev.split('\nMESSAGGIO\n').pop()!)
+  if(m){const names=[...cat.code.keys()],done=names.filter(n=>pp.includes(plainT(n))||hitStems(n,prev).length>=2),base=done.length===1?names.find(n=>n!==done[0]&&plainT(done[0]!).startsWith(plainT(n)+' ')):undefined
+   if(done.length===1&&base){const v=/finit|esaurit/.test(pp)?{action:'set_available',value:false}:/nascond|togli/.test(pp)?{action:'set_hidden',value:true}:null;if(v)return out({actions:[{action:'restore',item:cat.code.get(done[0]!)},{...v,item:cat.code.get(base)}],reply_draft:'Fatto.'})}}}
+ // R5.1: «aggiungi nei crudi la tartare», «sposta X nei crudi»: la categoria detta che c'è già nel menu (anche se l'attesa finale
+ // la chiama col nome che avrà dopo una rinomina).
+ {const w=p.match(/\b(?:nei|negli|nelle|nella|nel|tra i|tra le|in)\s+(\w{3,})/)?.[1],sec=w?sectionNames.find(n=>plainT(n).slice(0,5)===w.slice(0,5)):undefined
+  if(sec&&d.intent==='change')for(const a of d.actions??[])if((a.action==='create_item'||a.action==='move_item')&&(a.section==null||(!/^c\d+$/.test(String(a.section))&&!sectionNames.includes(String(a.section)))))a.section=cat.sections.get(sec)
+  {const mv=(d.actions??[]).filter((a:any)=>a.action==='move_item'),hit=mv.filter((a:any)=>{const n=nameOf(cat,a.item);return !!n&&((' '+p+' ').includes(' '+plainT(n)+' ')||hitStems(n,msg).length>0)})
+   if(sec&&d.intent==='change'&&hit.length&&hit.length<mv.length&&!/\b(quei|quelli|entramb\w*|tutt\w*|li|le)\b/.test(p))d.actions=(d.actions??[]).filter((a:any)=>a.action!=='move_item'||hit.includes(a))}
+  if(sec&&d.intent==='change')d.actions=(d.actions??[]).filter((a:any)=>!(a.action==='create_section'&&!(' '+p+' ').includes(' '+plainT(String(a.name??''))+' ')))}
  d.actions=(d.actions??[]).map((a:any)=>({...blank,...a}))
  return JSON.stringify(withDraft(d,cat,p,sectionNames))}
 

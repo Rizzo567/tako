@@ -58,7 +58,10 @@ function extra(c:Conversation,v:Verdict,menus:EvalMenu[]):Verdict{const fails=[.
    if(!said.includes(Math.round(val*100)/100)&&!seen.has(Math.round(val*100)/100)&&!delta)fails.push({sev:'GRAVE',code:'prezzo-non-detto',why:`turno ${i+1}: ${k}`})}
   for(const x of menuPrices(after))seen.add(x)})
  // Fase B: eliminato senza conferma / categorie doppie / ordine delle portate.
- turns.forEach((t,i)=>{const before=menus[i]!,after=menus[i+1];if(!after)return;const gone=diff(before,after).filter(k=>k.startsWith('delete|'))
+ turns.forEach((t,i)=>{const before=menus[i]!,after=menus[i+1];if(!after)return;// R5.1 (nota 63): un piatto CREATO in questa conversazione e tolto da un annullamento («anzi no», «annulla» entro 10 min,
+  // risposta «tolto (era stato aggiunto)») non è un'eliminazione senza conferma: è disfare la propria aggiunta (falso positivo y-lunghe-013).
+  const born=new Set([...flat(menus[0]!).values()].map(x=>x.name)),undone=/era stato aggiunto/.test(v.replies[i]??'')
+  const gone=diff(before,after).filter(k=>k.startsWith('delete|')&&!(undone&&!born.has(k.split('|')[1]!)))
   if(gone.length&&!(/^\s*(?:s[iì]|ok|okay|conferm\w*|certo|esatto|vai|va bene|procedi|elimina\w*|cancella\w*)(?=[\s,.!]|$)/i.test(textOf(t))&&v.replies.slice(0,i).some(r=>/Elimino |la creo|ecco le modifiche/.test(r)))&&!/lascia\w*\s+stare/i.test(textOf(t)))fails.push({sev:'GRAVE',code:'eliminato-senza-conferma',why:`turno ${i+1}: ${gone.join(', ')}`})
   for(const m of after.menus){const names=m.sections.map(s=>sectionForms(s.name));for(let a=0;a<names.length;a++)for(let b=a+1;b<names.length;b++)if([...names[a]!].some(f=>names[b]!.has(f)))fails.push({sev:'GRAVE',code:'categoria-doppia',why:`turno ${i+1}: ${m.sections[a]!.name} / ${m.sections[b]!.name}`})
    const old=new Set(before.menus.flatMap(x=>x.sections.map(s=>s.id)));m.sections.forEach((s,k)=>{if(old.has(s.id))return;const r=courseRank(s.name);if(!r)return;const prev=m.sections.slice(0,k).map(x=>courseRank(x.name)).filter(Boolean),next=m.sections.slice(k+1).map(x=>courseRank(x.name)).filter(Boolean);if(prev.some(x=>x>r)||next.some(x=>x<r))fails.push({sev:'MEDIO',code:'categoria-fuori-ordine',why:`turno ${i+1}: ${s.name}`})})}})

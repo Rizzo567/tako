@@ -12,7 +12,8 @@ const num=(n:number)=>String(Math.round(n*100)/100)
 export function diff(before:EvalMenu,after:EvalMenu):string[]{
  const a=flat(before),b=flat(after),out:string[]=[]
  for(const [id,x] of b){const y=a.get(id)
-  if(!y){out.push(`create|${plainT(x.name)}|${num(x.price)}|${plainT(x.section)}`);continue}
+  // R5.1 (nota 63): un piatto nuovo messo anche in evidenza nella stessa conversazione («aggiungi X… mettila in evidenza»)
+  if(!y){out.push(`create|${plainT(x.name)}|${num(x.price)}|${plainT(x.section)}`);if(x.featured)out.push(`featured|${plainT(x.name)}|true`);continue}
   if(x.name!==y.name)out.push(`rename|${y.name}|${x.name}`)
   if(x.section!==y.section)out.push(`move|${y.name}|${x.section}`)
   if(x.price!==y.price)out.push(`price|${y.name}|${num(x.price)}`)
