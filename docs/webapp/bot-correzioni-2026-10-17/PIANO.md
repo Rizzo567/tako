@@ -1,7 +1,7 @@
 # Correzioni bot titolare dopo le prove vocali di Manuel · PIANO (17/10/2026)
 
 Base: branch `codex/bot-fix-1017` da `codex/bot-verify-1017` e8df7ac (= origin/main 329bbd4 + 143 casi di V).
-Online: edge operativa v112, cervello acceso solo sul QA 26050ecd-2e55-4057-a4c5-bff2b449cd47.
+Online: edge operativa v113 (18/10, ezbr `6ed2c37112f8…`), cervello acceso solo sul QA 26050ecd-2e55-4057-a4c5-bff2b449cd47.
 Fonti: `docs/webapp/bot-cervello-2026-10-17/VERIFICA-V.md`, `verifica-v/esiti-V.json`, `tests/eval/cases/manuel-1017.ts`, REPORT-N2.md, REGOLE-AGENTI.md.
 
 **Regola di avanzamento:** ogni sottotask finito → spunta `[x]` in questo file subito, con una nota breve (commit, numeri). Una deviazione dal piano va in `implementation-notes.md`; se tocca architettura o scope → stop e report.
@@ -133,7 +133,7 @@ A7.14 NON superato: Y (codex/bot-adv2-1017 cd777a8, `avversaria-y/REPORT-Y.md`) 
 3. **Azioni**: il modello sceglie tra strumenti primitivi (prezzo, nascondi/mostra, finito/disponibile, crea piatto, elimina→conferma, crea/rinomina categoria, sposta, rinomina piatto, descrizione, promo, evidenza, piatto del giorno, annulla, domanda). Nessun flusso a copione: le conferme e le domande le formula il modello; il server impone solo i vincoli (es. elimina richiede «sì» al turno dopo).
 4. **Validatore fallito** → il server rimanda al modello l'errore una volta (auto-correzione); se ancora fallisce → il modello formula una domanda; mai scrittura.
 5. **Groq giù / 429 / JSON invalido dopo ripiego 20b** → «Sono momentaneamente non disponibile, riprova tra un minuto.», nessuna modifica.
-6. Interruttore `settings.botBrain` resta (solo QA) finché il gate Developer non passa; con l'interruttore spento i clienti restano sul comportamento v112.
+6. Interruttore `settings.botBrain` resta (solo QA) finché il gate Developer non passa; con l'interruttore spento i clienti hanno il comportamento di HEAD a cervello spento (fasi A/B comprese, round1–6* 1679/1679): decisione di Manuel 18/10, `decisioni/2026-10-18-takomenu-clienti-ricevono-fasi-ab.md`.
 
 ## Goal / verifier / stop
 - Tutte le batterie (round1–6*, fix-a, fix-b, V 143, X 508, Y 558, banco E 318) con l'oracolo: 0 GRAVI, MEDI ≤ 2%; il modello avversario: 0 GRAVI di sicurezza (il validatore ferma tutto).
@@ -166,6 +166,7 @@ A7.14 NON superato: Y (codex/bot-adv2-1017 cd777a8, `avversaria-y/REPORT-Y.md`) 
 - [x] R6.1 Terzo giro avversario indipendente (≥300 conv. nuove) sulla nuova struttura; GRAVI → fix (max 3 giri). — *R3 18/10: Z 408 conv.: oracolo 360→392 ok, GRAVI 24→0 (sicurezza 9→0, 6 riclassificate con motivo), MEDI 24→16; Groq giù e avversario 0 GRAVI di sicurezza; Y/E/V/banco vero/X/fix-a/fix-b = REPORT-R5; suite = 14 rossi noti (REPORT-R6.md, note 67–70).*
 ### R7 Gate Developer e rilascio
 - [ ] R7.1 Banco completo + tutte le batterie con gpt-oss vero (chiave Developer).
-- [ ] R7.2 Deploy edge sul QA (check-active, diff, rollback), live solo TwiML, ripristino per hash, 0 messaggi a Manuel; rifare la sequenza vocale delle 17:26.
-  - 18/10 R4: **BLOCCATO al pre-deploy** — il diff v112→build tocca anche il percorso a regole dei clienti (copy/nlu/create/hold/structure, fasi A/B); online resta v112, 0 token, nessuna prova live. Vedi REPORT-R7-2.md.
+- [x] R7.2 Deploy edge sul QA (check-active, diff, rollback), live solo TwiML, ripristino per hash, 0 messaggi a Manuel; rifare la sequenza vocale delle 17:26.
+  - 18/10 R4: ~~BLOCCATO al pre-deploy~~ SUPERATO dalla decisione di Manuel (clienti = HEAD a cervello spento, nota 73) — il diff v112→build tocca anche il percorso a regole dei clienti (copy/nlu/create/hold/structure, fasi A/B); online resta v112, 0 token, nessuna prova live. Vedi REPORT-R7-2.md.
+  - 18/10 R4b: **v113 online** (ezbr `6ed2c37112f8…`, check-active 112 passato prima, rollback v112 pronto). Errori 56→56, cervello solo sul QA, Twilio in uscita 0→0, QA ripristinato per hash (`df579269…` prima = dopo). Live TwiML 14 turni (2 vocali veri via MediaUrl Twilio originale, 1 risposto): elimina→chiede→sì cancella, birra +10% e carbonara «a tre dici» = domanda senza scrittura, riga «assistente automatico» solo al primo; p50 4,2 s sui 7 turni con risposta del modello. **Aperti**: 7 turni «non disponibile» per rate limit Groq al minuto (TPM) a turni ravvicinati; «va bene così», «annulla dopo pubblicata» e 2º vocale non verificati (tetto 40k: 38,2k usati); «togli bo» letto come elimina (chiede, non scrive). Note 73–77.
 - [ ] R7.3 Fast-forward main/release-1016; REPORT-R.md; accensione clienti solo col via di Manuel.

@@ -1,0 +1,100 @@
+{
+ "at": "2026-10-18T08:44:37.749Z",
+ "results": [
+  {
+   "turn": 1,
+   "msg": "elimina Pasta al sugo",
+   "status": 200,
+   "ms": 4190,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino Pasta al sugo dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Pasta al sugo*: da eliminare",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 7282
+  },
+  {
+   "turn": 2,
+   "msg": "sì",
+   "status": 200,
+   "ms": 4881,
+   "reply": "*Pasta al sugo*: *eliminato* dal menu",
+   "published": [
+    "delete|Pasta al sugo"
+   ],
+   "wrote": true,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 15083
+  },
+  {
+   "turn": 3,
+   "msg": "la birra +10%",
+   "status": 200,
+   "ms": 3715,
+   "reply": "Quale birra vuoi aumentare del 10%?",
+   "published": [
+    "delete|Pasta al sugo"
+   ],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 18823
+  },
+  {
+   "turn": 4,
+   "msg": "la carbonara a tre dici",
+   "status": 200,
+   "ms": 3212,
+   "reply": "Quale birra vuoi aumentare del 10%? Quanto vuoi impostare per la carbonara?",
+   "published": [
+    "delete|Pasta al sugo"
+   ],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 22556
+  }
+ ],
+ "stopped": "tetto token raggiunto prima del turno 5",
+ "twilio": {
+  "before": 0,
+  "after": 0
+ },
+ "errors": {
+  "before": 56,
+  "after": 56
+ },
+ "tokens": 22556,
+ "restore": {
+  "before": {
+   "draft": "df579269fbafc22b",
+   "published": "df579269fbafc22b",
+   "items": "43502077b7b22394",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "86cf91eb3e4c66a5"
+  },
+  "after": {
+   "draft": "df579269fbafc22b",
+   "published": "df579269fbafc22b",
+   "items": "43502077b7b22394",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "86cf91eb3e4c66a5"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

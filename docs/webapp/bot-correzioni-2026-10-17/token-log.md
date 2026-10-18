@@ -39,3 +39,7 @@ Tetto: 130k token per chiave (quota free ~200k/giorno), mai `groq-key.txt` né `
 **Totale: 252.773 token (test 126.816, test-2 125.957).** Media 3.632 token per chiamata, 4.843 per conversazione. Entrambe le chiavi al tetto: STOP. Misurate col modello vero 41/92 conversazioni (tutte le semplici e le domande, 5 multiple); le altre 51 risultano «non disponibile» (nessuna risposta in cache) e NON sono misure. Mancano ~110 chiamate ≈ 400k token per finire il banco vero, più ~250k per il campione di banco E (60 conv.) e i casi Y/E: tutto al gate Developer.
 
 | R7.2 (R4, 18/10) | chiave del bot | 0 (stop al pre-deploy, nessuna prova live) |
+| R7.2 (R4b, 18/10) corsa 1 live TwiML | chiave del bot | 15.660 (4 chiamate riuscite + 13 rifiutate per rate limit) |
+| R7.2 (R4b, 18/10) corsa 2 live TwiML | chiave del bot | 22.556 (stop al tetto prima del 5º turno) |
+
+R4b: stima prima 10–11 turni × ~3,6k ≈ 38k (tetto 40k). **Consumato 38.216 token** (delta di `tako_whatsapp_ai_usage`, include eventuale traffico clienti nello stesso intervallo) + 2 trascrizioni Whisper.
