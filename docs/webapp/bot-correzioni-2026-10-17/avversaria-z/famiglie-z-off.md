@@ -1,0 +1,1094 @@
+# Avversaria Z · modo off
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| dialetto | 25 | 6 | 14 | 0 | 5 |
+| asr | 25 | 7 | 18 | 0 | 0 |
+| numeri | 25 | 3 | 22 | 0 | 0 |
+| tempo | 20 | 7 | 9 | 0 | 4 |
+| omonimi | 24 | 5 | 15 | 0 | 4 |
+| riepilogo | 20 | 9 | 10 | 0 | 1 |
+| lunghi | 10 | 7 | 3 | 0 | 0 |
+| emoji | 15 | 11 | 3 | 0 | 1 |
+| contraddizioni | 15 | 6 | 1 | 0 | 8 |
+| annulla | 20 | 12 | 5 | 0 | 3 |
+| nascosti | 20 | 10 | 8 | 0 | 2 |
+| assurdi | 15 | 3 | 0 | 0 | 12 |
+| apostrofi | 20 | 0 | 20 | 0 | 0 |
+| ripeti | 10 | 0 | 10 | 0 | 0 |
+| interruzioni | 20 | 1 | 9 | 0 | 10 |
+| travestite | 25 | 19 | 4 | 0 | 2 |
+| promo | 20 | 5 | 12 | 0 | 3 |
+| sposta | 15 | 5 | 7 | 0 | 3 |
+| rinomine | 15 | 1 | 12 | 0 | 2 |
+| locali | 10 | 5 | 3 | 0 | 2 |
+| r2-percento | 8 | 6 | 0 | 0 | 2 |
+| r2-spezzati | 6 | 4 | 0 | 0 | 2 |
+| r2-opposti | 5 | 0 | 1 | 0 | 4 |
+| r2-ritiri | 5 | 1 | 4 | 0 | 0 |
+| r2-nonprezzi | 7 | 2 | 5 | 0 | 0 |
+| r2-disfa | 8 | 8 | 0 | 0 | 0 |
+| TOTALE | 408 | 143 | 195 | 0 | 70 |
+
+## Fallimenti
+
+- **z-dialetto-002** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false
+  - turni: o babà è fernuto
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-003** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false
+  - turni: 'o babà nun ce sta cchiù
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-004** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|false
+  - turni: la tagliata oggi nun ce sta
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-005** [GRAVE] GRAVE non-applicato: non applicato: price|Burrata|10
+  - turni: mettece la burrata a diece euro
+  - atteso: price|Burrata|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-006** [GRAVE] GRAVE non-applicato: non applicato: price|Burrata|10
+  - turni: la burrata falla a dieci, va bbuono
+  - atteso: price|Burrata|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-007** [GRAVE] GRAVE non-applicato: non applicato: price|Margherita|8
+  - turni: ué, 'a margherita a otto
+  - atteso: price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-008** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|6
+  - turni: la birra a sei, ja
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-009** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: daje, la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara mettimela a 13 nè
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-011** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|false
+  - turni: la tagliata è finita, abbiamo finito tutto stasera
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-012** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|true
+  - turni: il babà levalo che non è venuto bene
+  - atteso: hidden|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: il babà scancellalo proprio
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: il babà scancellalo proprio ⏎ sine
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ seh
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ manco pe gnente
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ nun lo fa
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-022** [GRAVE] GRAVE non-applicato: non applicato: price|Spaghetti all'astice|26
+  - turni: lo spaghetto all'astice fallo a ventisei
+  - atteso: price|Spaghetti all'astice|26 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-023** [GRAVE] GRAVE non-applicato: non applicato: price|Coca Cola|3.5
+  - turni: aò la coca a tre e cinquanta
+  - atteso: price|Coca Cola|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-dialetto-024** [GRAVE] GRAVE non-applicato: non applicato: price|Vino della casa|5
+  - turni: mette o vino da casa a cinque
+  - atteso: price|Vino della casa|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: 🎤 la carbo nara a tredici euro
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-003** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false
+  - turni: 🎤 il tira mi su è finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-004** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false
+  - turni: 🎤 il tiramisu e finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-005** [GRAVE] GRAVE non-applicato: non applicato: price|Pizza 'nduja|10
+  - turni: 🎤 la pizza en duja a dieci
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-007** [GRAVE] GRAVE non-applicato: non applicato: price|Greco di Tufo|28
+  - turni: 🎤 il greco di tufo a ventotto
+  - atteso: price|Greco di Tufo|28 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-009** [GRAVE] GRAVE non-applicato: non applicato: price|Baccalà fritto|16
+  - turni: 🎤 il bacalà fritto a sedici
+  - atteso: price|Baccalà fritto|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-010** [GRAVE] GRAVE non-applicato: non applicato: price|Gnocchi alla sorrentina|12
+  - turni: 🎤 i gnocchi alla sorrentina a dodici
+  - atteso: price|Gnocchi alla sorrentina|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-012** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: 🎤 la tagliata a diciotto anzi diciannove
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-013** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: 🎤 la tagliata a diciannove. Punto.
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-014** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|6
+  - turni: 🎤 eeeh allora... la birra... sei euro
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-015** [GRAVE] GRAVE non-applicato: non applicato: price|Burrata|9.5
+  - turni: 🎤 la burata a nove e cinquanta
+  - atteso: price|Burrata|9.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-016** [GRAVE] GRAVE non-applicato: non applicato: price|Delizia al limone|6
+  - turni: 🎤 la delizia al limone a sei
+  - atteso: price|Delizia al limone|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-017** [GRAVE] GRAVE non-applicato: non applicato: available|Delizia al limone|false
+  - turni: 🎤 la delizia a limone e finita
+  - atteso: available|Delizia al limone|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-018** [GRAVE] GRAVE non-applicato: non applicato: price|Calzone fritto|10, price|Calzone|9
+  - turni: 🎤 il calzone fritto a dieci e il calzone a nove
+  - atteso: price|Calzone fritto|10, price|Calzone|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-019** [GRAVE] GRAVE non-applicato: non applicato: price|Calzone fritto|10, price|Calzone|9
+  - turni: 🎤 il calzone a nove e il calzone fritto a dieci
+  - atteso: price|Calzone fritto|10, price|Calzone|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-020** [GRAVE] GRAVE non-applicato: non applicato: price|Quattro stagioni|9
+  - turni: 🎤 quattro stagioni a nove
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-021** [GRAVE] GRAVE non-applicato: non applicato: price|Quattro stagioni|9
+  - turni: 🎤 la 4 stagioni a 9
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-asr-022** [GRAVE] GRAVE non-applicato: non applicato: price|Quattro stagioni|9
+  - turni: 🎤 la quattro stagione a nove euro
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-001** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|20
+  - turni: la tagliata a venti
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-002** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|21
+  - turni: la tagliata a ventuno
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-003** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|22.5
+  - turni: la tagliata a ventidue e cinquanta
+  - atteso: price|Tagliata|22.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-004** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19.9
+  - turni: la tagliata a diciannove e novanta
+  - atteso: price|Tagliata|19.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-005** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19.5
+  - turni: la tagliata a diciannove virgola cinque
+  - atteso: price|Tagliata|19.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-006** [GRAVE] GRAVE non-applicato: non applicato: price|Greco di Tufo|32
+  - turni: il greco di tufo a trentadue
+  - atteso: price|Greco di Tufo|32 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-007** [GRAVE] GRAVE non-applicato: non applicato: price|Greco di Tufo|38
+  - turni: il greco di tufo a trentotto
+  - atteso: price|Greco di Tufo|38 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-008** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra a cinque e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-009** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra a cinque euro e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-010** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra a 5 e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-011** [GRAVE] GRAVE non-applicato: non applicato: price|Acqua|1.5
+  - turni: l'acqua a un euro e cinquanta
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-012** [GRAVE] GRAVE non-applicato: non applicato: price|Acqua|1.5
+  - turni: l'acqua a uno e cinquanta
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-013** [GRAVE] GRAVE non-applicato: non applicato: price|Acqua|1.5
+  - turni: l'acqua a 1 e 50
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-014** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|12.5
+  - turni: la carbonara a dodici e mezzo
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-015** [GRAVE] GRAVE non-applicato: non applicato: price|Quattro stagioni|9
+  - turni: la quattro stagioni a nove
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-017** [GRAVE] GRAVE non-applicato: non applicato: price|Quattro stagioni|9
+  - turni: quattro stagioni 9
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-018** [GRAVE] GRAVE non-applicato: non applicato: price|Quattro stagioni|9.5
+  - turni: aumenta la quattro stagioni di un euro
+  - atteso: price|Quattro stagioni|9.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-019** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|20
+  - turni: aumenta la tagliata di due euro
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-020** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|15
+  - turni: abbassa la tagliata di tre
+  - atteso: price|Tagliata|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-021** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la tagliata un euro in più
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-022** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16
+  - turni: la tagliata due euro in meno
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-numeri-025** [GRAVE] GRAVE non-applicato: non applicato: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata a sei
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: da domani la carbonara a 13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: dalla settimana prossima la tagliata a 20
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-003** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|false
+  - turni: solo stasera la tagliata è finita
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-004** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false
+  - turni: per oggi niente babà
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-005** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false
+  - turni: stasera il babà non c'è
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: domani il babà non c'è
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-009** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 da adesso
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: da ora la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-013** [GRAVE] GRAVE non-applicato: non applicato: available|Tagliata|true
+  - turni: la tagliata è tornata
+  - atteso: available|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: domani torna la tagliata
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-016** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|21
+  - turni: la tagliata a 20 ⏎ [+15 min] ⏎ anzi 21
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-017** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|21
+  - turni: la tagliata a 20 ⏎ [+45 min] ⏎ anzi 21
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-tempo-018** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|20
+  - turni: la tagliata a 20 ⏎ [+12 min] ⏎ annulla
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-001** [GRAVE] GRAVE non-applicato: non applicato: price|Calzone|9
+  - turni: il calzone a 9
+  - atteso: price|Calzone|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: i calzoni a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Calzone fritto|true, hidden|Calzone|true
+  - turni: nascondi i calzoni
+  - atteso: hidden|Calzone fritto|true, hidden|Calzone|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|Calzone|true
+  - turni: nascondi il calzone
+  - atteso: hidden|Calzone|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-005** [GRAVE] GRAVE non-applicato: non applicato: available|Calzone|false
+  - turni: il calzone è finito
+  - atteso: available|Calzone|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-006** [GRAVE] GRAVE non-applicato: non applicato: move|Calzone|Pizze
+  - turni: sposta il calzone nelle pizze
+  - atteso: move|Calzone|Pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-007** [GRAVE] GRAVE non-applicato: non applicato: move|Calzone fritto|Antipasti
+  - turni: sposta il calzone fritto negli antipasti
+  - atteso: move|Calzone fritto|Antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-008** [GRAVE] GRAVE non-applicato: non applicato: create|calzone con ricotta|9|calzoni
+  - turni: aggiungi nei calzoni il calzone con ricotta a 9
+  - atteso: create|calzone con ricotta|9|calzoni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-010** [GRAVE] GRAVE non-applicato: non applicato: move|Calzone fritto|Ripieni, move|Calzone|Ripieni
+  - turni: rinomina la categoria calzoni in ripieni
+  - atteso: move|Calzone fritto|Ripieni, move|Calzone|Ripieni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-011** [GRAVE] GRAVE non-applicato: non applicato: rename|Calzone|calzone classico
+  - turni: rinomina il calzone in calzone classico
+  - atteso: rename|Calzone|calzone classico · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la pizza a 8
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-016** [GRAVE] GRAVE non-applicato: non applicato: move|Vino della casa|Bibite
+  - turni: sposta il vino della casa nelle bibite
+  - atteso: move|Vino della casa|Bibite · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-017** [GRAVE] GRAVE non-applicato: non applicato: move|Birra|Vini
+  - turni: sposta la birra nei vini
+  - atteso: move|Birra|Vini · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-018** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta e patate|11
+  - turni: la pasta e patate a 11
+  - atteso: price|Pasta e patate|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-019** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, price|Pasta e patate|11
+  - turni: la pasta e patate a 11 e la carbonara a 13
+  - atteso: price|Carbonara|13, price|Pasta e patate|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-020** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta e patate|true
+  - turni: nascondi pasta e patate
+  - atteso: hidden|Pasta e patate|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la pasta a 11
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-022** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: i dolci a 6
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-omonimi-023** [GRAVE] GRAVE non-applicato: non applicato: hidden|Speciale della casa|true
+  - turni: nascondi lo speciale
+  - atteso: hidden|Speciale della casa|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-001** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-002** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|5.5, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ la birra però a 5,50 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|5.5, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-003** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ togli la birra dalla lista ⏎ ok
+  - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-004** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ la birra lasciala com'è ⏎ ok
+  - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-008** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|6, price|Burrata|10, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ aggiungi anche la burrata a 10 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Burrata|10, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-009** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4.5, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ il babà a 4,50 non 4 ⏎ ok
+  - atteso: price|Babà|4.5, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-012** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ ❓ quanto costava la birra prima? ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-013** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ ok ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-014** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ OK!
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-018** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ elimina il tiramisù
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-riepilogo-019** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19, price|Tiramisù|7
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6, il babà a 4 e il tiramisù a 7 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-lunghi-001** [GRAVE] GRAVE non-applicato: non applicato: price|Polpo all'insalata|16, price|Spaghetti all'astice|26
+  - turni: Buongiorno, allora, scusa se ti scrivo così presto ma stamattina sono andato al mercato e il pesce costava tantissimo, quindi ho deciso: il polpo all'insalata lo metti a 16, gli spaghetti all'astice a 26, e poi niente, per il resto lascia tutto com'è, grazie mille e buona giornata
+  - atteso: price|Polpo all'insalata|16, price|Spaghetti all'astice|26 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-lunghi-005** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false, available|Burrata|false, featured|Tagliata|true
+  - turni: Ciao! Oggi è una giornata pienissima, abbiamo 40 coperti a pranzo, quindi per favore: il babà è finito, la burrata pure, e metti in evidenza la tagliata che ne abbiamo tanta. Grazie!
+  - atteso: available|Babà|false, available|Burrata|false, featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-lunghi-010** [GRAVE] GRAVE errore-generico: turno 1: errore generico · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono riuscito a leggere il menu. *Non ho cambiato nulla.* Riprova tra poco o mandalo scritto.»
+- **z-emoji-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🍝 13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-emoji-002** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: carbonara ➡️ 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-emoji-003** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: carbonara 13€ ✅
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-emoji-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ 👍
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 13 e la carbonara a 14
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nascondi il babà e mettilo in evidenza
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: alza la tagliata e abbassala di 2
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aumenta la tagliata a 15
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: abbassa la carbonara a 14
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina e nascondi il babà
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-013** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13, anzi no, a 14, anzi lascia 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-contraddizioni-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: tutto a 10 tranne niente
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: annulla la carbonara a 13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-005** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la carbonara a 13, annulla, la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-006** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la tagliata a 19 ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-008** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|14
+  - turni: la carbonara a 13 ⏎ annulla ⏎ la carbonara a 14
+  - atteso: price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-015** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false
+  - turni: nascondi il babà ⏎ annulla e mettilo finito
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-016** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|13
+  - turni: la carbonara a 13 ⏎ annulla, intendevo la tagliata a 13
+  - atteso: price|Tagliata|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ annulla ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-annulla-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ sì, annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-001** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|6
+  - turni: il babà a 6
+  - atteso: price|Babà|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|false
+  - turni: rimetti il babà
+  - atteso: hidden|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|false
+  - turni: mostra di nuovo il babà
+  - atteso: hidden|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-004** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|true
+  - turni: il babà è tornato
+  - atteso: available|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|false, hidden|Burrata|false
+  - turni: ❓ quali sono nascosti? ⏎ rimettili tutti
+  - atteso: hidden|Babà|false, hidden|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la cassata a 6
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: il caviale a 80
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-018** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false, hidden|Burrata|false
+  - turni: il babà finito e rimetti la burrata
+  - atteso: available|Babà|false, hidden|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-019** [GRAVE] GRAVE non-applicato: non applicato: price|Burrata|10
+  - turni: la burrata a 10
+  - atteso: price|Burrata|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-nascosti-020** [GRAVE] GRAVE non-applicato: non applicato: featured|Babà|true
+  - turni: metti in evidenza il babà
+  - atteso: featured|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 1300
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 0
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara gratis
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a -5
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 0,01
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 12,345
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 1.200
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 13.000
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a un milione
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 12 dollari
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 1e3
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-assurdi-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 120
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-001** [GRAVE] GRAVE non-applicato: non applicato: price|Pizza 'nduja|10
+  - turni: la pizza 'nduja a 10
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-002** [GRAVE] GRAVE non-applicato: non applicato: price|Pizza 'nduja|10
+  - turni: la pizza ’nduja a 10
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-003** [GRAVE] GRAVE non-applicato: non applicato: price|Pizza 'nduja|10
+  - turni: la pizza nduja a 10
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-004** [GRAVE] GRAVE non-applicato: non applicato: price|Frittatina 'e pasta|3.5
+  - turni: la frittatina 'e pasta a 3,50
+  - atteso: price|Frittatina 'e pasta|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-005** [GRAVE] GRAVE non-applicato: non applicato: price|Frittatina 'e pasta|3.5
+  - turni: la frittatina e pasta a 3,50
+  - atteso: price|Frittatina 'e pasta|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-006** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliere dell'oste|16
+  - turni: il tagliere dell'oste a 16
+  - atteso: price|Tagliere dell'oste|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-007** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliere dell'oste|16
+  - turni: il tagliere dell’oste a 16
+  - atteso: price|Tagliere dell'oste|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-008** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliere dell'oste|16
+  - turni: il tagliere dell oste a 16
+  - atteso: price|Tagliere dell'oste|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-009** [GRAVE] GRAVE non-applicato: non applicato: available|Spaghetti all'astice|false
+  - turni: lo spaghetto all'astice finito
+  - atteso: available|Spaghetti all'astice|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pizza all'ortolana|true
+  - turni: nascondi "pizza all'ortolana"
+  - atteso: hidden|Pizza all'ortolana|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-011** [GRAVE] GRAVE non-applicato: non applicato: price|Pizza all'ortolana|9
+  - turni: «Pizza all’ortolana» a 9
+  - atteso: price|Pizza all'ortolana|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-012** [GRAVE] GRAVE non-applicato: non applicato: create|pasta e fagioli|10|primi
+  - turni: aggiungi nei primi "pasta e fagioli" a 10
+  - atteso: create|pasta e fagioli|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-013** [GRAVE] GRAVE non-applicato: non applicato: create|pizza a scarola|9|pizze
+  - turni: aggiungi nelle pizze la pizza 'a scarola a 9
+  - atteso: create|pizza a scarola|9|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-014** [GRAVE] GRAVE non-applicato: non applicato: create|spaghetti all aglio|9|primi
+  - turni: aggiungi nei primi gli spaghetti all'aglio a 9
+  - atteso: create|spaghetti all aglio|9|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-015** [GRAVE] GRAVE non-applicato: non applicato: rename|Pizza 'nduja|Pizza calabrese
+  - turni: rinomina la pizza 'nduja in Pizza calabrese
+  - atteso: rename|Pizza 'nduja|Pizza calabrese · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-016** [GRAVE] GRAVE non-applicato: non applicato: rename|Babà|Babà al rum
+  - turni: rinomina il babà in "Babà al rum"
+  - atteso: rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-017** [GRAVE] GRAVE non-applicato: non applicato: rename|Tagliere dell'oste|Tagliere misto
+  - turni: rinomina il tagliere dell'oste in 'Tagliere misto'
+  - atteso: rename|Tagliere dell'oste|Tagliere misto · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-018** [GRAVE] GRAVE non-applicato: non applicato: price|Pizza all'ortolana|9, price|Polpo all'insalata|15
+  - turni: il polpo all'insalata e la pizza all'ortolana a 15 e 9
+  - atteso: price|Pizza all'ortolana|9, price|Polpo all'insalata|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-019** [GRAVE] GRAVE non-applicato: non applicato: price|Spaghetti all'astice|26
+  - turni: l'astice a 26
+  - atteso: price|Spaghetti all'astice|26 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-apostrofi-020** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: po' di più sulla carbonara, mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-002** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 13 ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-003** [GRAVE] GRAVE non-applicato: non applicato: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata a 6 ⏎ aggiungi nei dolci la cassata a 6
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-004** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|14
+  - turni: aumenta la carbonara di 1 ⏎ aumenta la carbonara di 1
+  - atteso: price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|true
+  - turni: nascondi il babà ⏎ nascondi il babà
+  - atteso: hidden|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-006** [GRAVE] GRAVE non-applicato: non applicato: rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ rinomina il babà in babà al rum
+  - atteso: rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-007** [GRAVE] GRAVE non-applicato: non applicato: section|contorni
+  - turni: crea la categoria contorni ⏎ crea la categoria contorni
+  - atteso: section|contorni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-008** [GRAVE] GRAVE non-applicato: non applicato: move|Burrata|Secondi
+  - turni: sposta la burrata nei secondi ⏎ sposta la burrata nei secondi
+  - atteso: move|Burrata|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-009** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-ripeti-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Babà
+  - turni: elimina il babà ⏎ sì ⏎ elimina il babà ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: elimina il babà ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: elimina il babà ⏎ la carbonara a 13 ⏎ sì
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ ❓ quanto costa il babà? ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ aspetta ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ un attimo che chiedo al cuoco ⏎ [+5 min] ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ un attimo che chiedo al cuoco ⏎ [+5 min] ⏎ no tienilo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ sì il tiramisù
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: delete|Babà
+  - turni: elimina il babà ⏎ sì e anche il tiramisù
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà ⏎ e il tiramisù?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina il babà e il tiramisù ⏎ solo il babà
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Babà
+  - turni: elimina il babà e il tiramisù ⏎ solo il babà ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il babà e il tiramisù ⏎ sì solo il babà
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|Tiramisù|true
+  - turni: elimina il babà ⏎ nascondi il tiramisù ⏎ sì
+  - atteso: hidden|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-015** [GRAVE] GRAVE non-applicato: non applicato: hidden|Tiramisù|true, price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ nascondi il tiramisù ⏎ ok
+  - atteso: hidden|Tiramisù|true, price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: aggiungi nei dolci la cassata ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata ⏎ 6
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-018** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata ⏎ sei euro
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi nei dolci la cassata ⏎ lascia stare
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-interruzioni-020** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi nei dolci la cassata ⏎ ❓ quanto costa il tiramisù? ⏎ 6
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-travestite-013** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: puoi mettere la carbonara a 13?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-travestite-014** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: mi metti la carbonara a 13?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-travestite-015** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|true
+  - turni: riesci a nascondere il babà?
+  - atteso: hidden|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-travestite-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: potresti eliminare il babà?
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-travestite-018** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: perché la carbonara è a 12? mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-travestite-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 13 o 14 secondo te?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-001** [GRAVE] GRAVE non-applicato: non applicato: promo|Burrata|7
+  - turni: la burrata in promo a 7
+  - atteso: promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-002** [GRAVE] GRAVE non-applicato: non applicato: promo|Burrata|7
+  - turni: la burrata in offerta a 7
+  - atteso: promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-003** [GRAVE] GRAVE non-applicato: non applicato: promo|Burrata|7
+  - turni: sconto sulla burrata: 7 invece di 9
+  - atteso: promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-004** [GRAVE] GRAVE non-applicato: non applicato: promo|Burrata|null
+  - turni: togli la promo dalla burrata
+  - atteso: promo|Burrata|null · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-005** [GRAVE] GRAVE non-applicato: non applicato: promo|Burrata|null
+  - turni: togli lo sconto alla burrata
+  - atteso: promo|Burrata|null · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la burrata in promo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la burrata in promo a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-008** [GRAVE] GRAVE non-applicato: non applicato: featured|Tagliata|true, promo|Burrata|7
+  - turni: la burrata in promo a 7 e la tagliata in evidenza
+  - atteso: featured|Tagliata|true, promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-009** [GRAVE] GRAVE non-applicato: non applicato: featured|Tagliata|true
+  - turni: metti in evidenza la tagliata
+  - atteso: featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-010** [GRAVE] GRAVE non-applicato: non applicato: featured|Tagliata|false
+  - turni: la tagliata non più in evidenza
+  - atteso: featured|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-011** [GRAVE] GRAVE non-applicato: non applicato: featured|Tagliata|false
+  - turni: togli la tagliata dall'evidenza
+  - atteso: featured|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-014** [GRAVE] GRAVE non-applicato: non applicato: featured|Babà|true, featured|Carbonara|false, featured|Tagliata|true
+  - turni: in evidenza la tagliata e il babà, il resto no
+  - atteso: featured|Babà|true, featured|Carbonara|false, featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-015** [GRAVE] GRAVE non-applicato: non applicato: featured|Babà|true, featured|Delizia al limone|true, featured|Tiramisù|true
+  - turni: metti tutti i dolci in evidenza
+  - atteso: featured|Babà|true, featured|Delizia al limone|true, featured|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: promo 2x1 sulla birra
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-promo-020** [GRAVE] GRAVE non-applicato: non applicato: promo|Burrata|6
+  - turni: la burrata in promo a 7 ⏎ anzi a 6
+  - atteso: promo|Burrata|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-001** [GRAVE] GRAVE non-applicato: non applicato: move|Burrata|Primi
+  - turni: sposta la burrata nei primi
+  - atteso: move|Burrata|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-002** [GRAVE] GRAVE non-applicato: non applicato: move|Burrata|Secondi
+  - turni: la burrata mettila nei secondi
+  - atteso: move|Burrata|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-004** [GRAVE] GRAVE non-applicato: non applicato: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi
+  - turni: sposta la burrata e il tagliere nei secondi
+  - atteso: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-005** [GRAVE] GRAVE non-applicato: non applicato: move|Babà|Antipasti, move|Burrata|Secondi
+  - turni: sposta la burrata nei secondi e il babà negli antipasti
+  - atteso: move|Babà|Antipasti, move|Burrata|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta la burrata nei contorni
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|Burrata|Contorni, section|contorni
+  - turni: sposta la burrata nei contorni ⏎ sì
+  - atteso: move|Burrata|Contorni, section|contorni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta la burrata nei contorni ⏎ no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-011** [GRAVE] GRAVE non-applicato: non applicato: move|Baccalà fritto|Calzoni
+  - turni: sposta il baccalà fritto nei calzoni
+  - atteso: move|Baccalà fritto|Calzoni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta il calzone fritto nei fritti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-sposta-013** [GRAVE] GRAVE non-applicato: non applicato: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi
+  - turni: sposta la burrata nei secondi ⏎ e anche il tagliere
+  - atteso: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-001** [GRAVE] GRAVE non-applicato: non applicato: rename|Babà|Babà napoletano
+  - turni: rinomina il babà in babà al rum ⏎ rinomina il babà al rum in babà napoletano
+  - atteso: rename|Babà|Babà napoletano · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-002** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|6, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ e mettilo a 6
+  - atteso: price|Babà|6, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-003** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|6, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ il babà al rum a 6
+  - atteso: price|Babà|6, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-004** [GRAVE] GRAVE non-applicato: non applicato: price|Babà|6, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ il babà a 6
+  - atteso: price|Babà|6, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: rinomina il babà in tiramisù
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-007** [GRAVE] GRAVE non-applicato: non applicato: rename|Babà|Babà classico
+  - turni: rinomina il babà in babà al rum ⏎ annulla ⏎ rinomina il babà in babà classico
+  - atteso: rename|Babà|Babà classico · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-008** [GRAVE] GRAVE non-applicato: non applicato: rename|Babà|Babà al rum, rename|Tiramisù|Tiramisù della casa
+  - turni: rinomina il babà in babà al rum e il tiramisù in tiramisù della casa
+  - atteso: rename|Babà|Babà al rum, rename|Tiramisù|Tiramisù della casa · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-009** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|true, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum, e nascondilo
+  - atteso: hidden|Babà|true, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-010** [GRAVE] GRAVE non-applicato: non applicato: move|Babà|Dolci della casa, move|Delizia al limone|Dolci della casa, move|Tiramisù|Dolci della casa
+  - turni: rinomina la categoria dolci in dessert ⏎ rinomina la categoria dessert in dolci della casa
+  - atteso: move|Babà|Dolci della casa, move|Delizia al limone|Dolci della casa, move|Tiramisù|Dolci della casa · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-011** [GRAVE] GRAVE non-applicato: non applicato: create|cassata|6|dessert, move|Babà|Dessert, move|Delizia al limone|Dessert, move|Tiramisù|Dessert
+  - turni: rinomina la categoria dolci in dessert ⏎ aggiungi nei dessert la cassata a 6
+  - atteso: create|cassata|6|dessert, move|Babà|Dessert, move|Delizia al limone|Dessert, move|Tiramisù|Dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: rinomina il babà in babà a 6 euro
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-013** [GRAVE] GRAVE non-applicato: non applicato: rename|Burrata|burrata pugliese
+  - turni: chiama la burrata burrata pugliese
+  - atteso: rename|Burrata|burrata pugliese · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-014** [GRAVE] GRAVE non-applicato: non applicato: rename|Burrata|burrata di andria
+  - turni: la burrata da ora si chiama burrata di andria
+  - atteso: rename|Burrata|burrata di andria · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-rinomine-015** [GRAVE] GRAVE non-applicato: non applicato: rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ sì
+  - atteso: rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-locali-001** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|6
+  - turni: nel menu bevande la birra a 6
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-locali-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nell'altro locale la carbonara a 13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-locali-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: solo a cena la carbonara a 14
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-locali-007** [GRAVE] GRAVE non-applicato: non applicato: create|fanta|3|bibite
+  - turni: aggiungi nelle bibite la fanta a 3
+  - atteso: create|fanta|3|bibite · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-locali-008** [GRAVE] GRAVE non-applicato: non applicato: create|fiano|22|vini
+  - turni: aggiungi nei vini il fiano a 22
+  - atteso: create|fiano|22|vini · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-percento-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara al 50%
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-percento-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la tagliata il doppio
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-spezzati-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 la birra a sei e cinque
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-spezzati-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 la carbonara a tre e dici
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-opposti-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aumenta e abbassa la carbonara di 1
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-opposti-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sali la tagliata poi scendila di 3
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-opposti-003** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|4
+  - turni: alza la birra, anzi abbassala di 1
+  - atteso: price|Birra|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-opposti-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: mostra e nascondi il babà
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-opposti-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: metti e togli la tagliata dall'evidenza
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-ritiri-001** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la carbonara a 13, no lascia, la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-ritiri-002** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la carbonara a 13 (no, lasciala) e la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-ritiri-004** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|6
+  - turni: la birra a 6 e il babà... no il babà niente
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-ritiri-005** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la tagliata a 19 e la carbonara a 13, la carbonara no
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-nonprezzi-001** [GRAVE] GRAVE non-applicato: non applicato: price|Margherita|8, price|Quattro stagioni|9
+  - turni: la quattro stagioni a 9 e la margherita a 8
+  - atteso: price|Margherita|8, price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-nonprezzi-003** [GRAVE] GRAVE non-applicato: non applicato: available|Babà|false
+  - turni: siamo in 3 stasera, il babà è finito
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-nonprezzi-005** [GRAVE] GRAVE non-applicato: non applicato: available|Burrata|false
+  - turni: il tavolo 7 ha preso l'ultima burrata, segnala finita
+  - atteso: available|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-nonprezzi-006** [GRAVE] GRAVE non-applicato: non applicato: available|Burrata|false
+  - turni: alle 13 la burrata era finita, ora mettila finita
+  - atteso: available|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **z-r2-nonprezzi-007** [GRAVE] GRAVE non-applicato: non applicato: create|pizza 5 formaggi|9|pizze
+  - turni: aggiungi nelle pizze la pizza 5 formaggi a 9
+  - atteso: create|pizza 5 formaggi|9|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
