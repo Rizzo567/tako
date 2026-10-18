@@ -10,6 +10,7 @@ import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,de
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier,diminutiveRivals} from './twilio-menu-nlu.js'
 import {lostParts} from './twilio-menu-reading.js'
+import {priceSanity} from './owner-brain-price-checks.js'
 import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
@@ -199,17 +200,27 @@ const DIALECT_NUM:Record<string,string>={unu:'uno',dui:'due',tri:'tre',quattru:'
 export const dialectNumbers=(s:string)=>s.replace(/\b[\p{L}]+\b/gu,w=>DIALECT_NUM[w.toLowerCase()]??w)
 /** Fase R: numeri già «letti» dalle azioni che non sono prezzi: «ne restano 3» con le ultime porzioni, «50 centesimi» di una
  * differenza di prezzo. Tolti solo dal testo che controlla le parti perse. */
-function quantitiesRead(text:string,actions:MenuAction[]){let t=text
+const UNIT_DIGIT:Record<string,string>={due:'2',tre:'3',quattro:'4',cinque:'5',sei:'6',sette:'7',otto:'8',nove:'9',dieci:'10'}
+function quantitiesRead(text:string,actions:MenuAction[],refs?:MenuRef[]){let t=text
  if(actions.some(a=>a.kind==='scarcity'))t=t.replace(/\b(?:ne\s+)?(?:restano|rimangono|rimasti|rimaste|ho|abbiamo|solo|ancora|ultim[eiao])\s+(?:solo\s+|ancora\s+)?\d+\b|\b\d+\s+(?:porzioni|pezzi)\b/gi,' ')
  if(relativeDelta(text))t=t.replace(/\b\d+\s*(?:centesimi|cent)\b/gi,' ')
  // R5.1: «la birra da 66 a 6» (il prezzo di prima detto per confronto), «0,4 l», «33 cl» (formato), «X, anzi Y» (la parte ritirata).
  t=t.replace(/\bda\s+\d+(?:[.,]\d+)?\s*(?:euro|eur|€)?\s+(?=a\s+\d)/gi,' ').replace(/\b\d+(?:[.,]\d+)?\s*(?:l|lt|litri?|cl|ml|gr?|kg)\b/gi,' ')
  t=t.replace(/^[^,;]*?,?\s*\banzi\b(?:\s+no)?\s*,?/i,' ')
+ // R6.1 (M1): numeri che non sono prezzi: «siamo in 3», «tavolo 7», «40 coperti», «alle 13»; il numero in cifre dentro il nome di
+ // un piatto («4 stagioni» = Quattro stagioni). (M2): parte ritirata senza «anzi» («…a 13, no lascia / annulla / cancella questa, …»),
+ // piatto ritirato in fondo («…, la carbonara no»).
+ t=t.replace(/\b(?:siamo|eravamo|saremo|sono)\s+(?:in\s+)?\d+\b/gi,' ').replace(/\b(?:tavol[oi]|camera)\s+(?:n\.?\s*|numero\s+)?\d+\b/gi,' ').replace(/\b\d+\s+(?:coperti|persone|ospiti|tavoli|clienti|prenotazioni|bambini|adulti)\b/gi,' ').replace(/\b(?:alle|dalle|verso le|ore)\s+\d{1,2}(?:[:.]\d{2})?\b/gi,' ')
+ for(const r of refs??[]){const w=plain(r.name).split(' '),d=UNIT_DIGIT[w[0]!];if(d&&w.length>1)t=t.replace(new RegExp('\\b'+d+'\\s+'+w.slice(1).join('\\s+')+'\\b','gi'),r.name)}
+ t=t.replace(/[^,;()]*\d[^,;()]*[,(]\s*(?:no\b[\s,]*)?(?:lascia\w*|annulla\w*|cancella\w*(?:\s+questa)?)\s*\)?\s*,?/gi,' ')
+ for(const m of [...t.matchAll(/[,;.…]\s*(?:e\s+)?(?:no\s+)?(?:il|la|lo|l'|i|le|gli)?\s*([\p{L}' ]{3,40}?)\s+(?:no|niente)\s*$/giu)]){const name=plain(m[1]!);if(name.length<3)continue;t=t.split(/(?=[,;.…])/).filter(x=>!(' '+plain(x)+' ').includes(' '+name+' ')||x===m[0]).join('')}
  return t}
 export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:Parameters<typeof validateBrainPlanCore>[2]):ReturnType<typeof validateBrainPlanCore>{
  const d=validateBrainPlanCore(raw,ctx,input)
+ // R6.1 (avversaria Z): prezzi compatibili col testo e col prezzo attuale (numeri spezzati, percentuali, verso del verbo).
+ if(d.intent==='change'&&d.plan.type==='change'){const bad=priceSanity(dialectNumbers(input.message),d.plan.actions,input.refs);if(bad)return{...d,intent:'clarify',plan:{type:'clarify',ids:bad.ids.slice(0,5)} as MenuPlan,notes:[...d.notes,bad.note]}}
  // A8.0 (Y, parti perse): il piano deve usare i numeri detti e avere l'azione di ogni verbo esplicito del messaggio.
- if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)&&!(input.clarifyIds?.length&&plain(input.message).split(' ').length<=3)){const mix=mixedMessage(input.message),lost=lostParts(quantitiesRead(mix?mix.command:input.message,d.plan.actions),d.plan.actions,input.refs,input.sections)
+ if(d.intent==='change'&&d.plan.type==='change'&&!input.pendingActions?.length&&!d.plan.actions.some(a=>(a as any).fromRestore)&&!(input.clarifyIds?.length&&plain(input.message).split(' ').length<=3)){const mix=mixedMessage(input.message),lost=lostParts(quantitiesRead(mix?mix.command:input.message,d.plan.actions,input.refs),d.plan.actions,input.refs,input.sections)
   if(lost.length){
    // Le parti capite restano in sospeso (proposta `hold`) e si chiede della parte non letta, citandola: mai pubblicate a metà.
    const text=mix?mix.command:input.message,parts=text.split(/\s*[,;]\s*|\s+(?:e|ed|poi)\s+/).map(x=>x.trim()).filter(Boolean),fold0=(x:string)=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
@@ -442,6 +453,10 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const idx=clauses.map((x,i)=>(' '+plain(x)+' ').includes(' '+plain(r.name)+' ')?i:-1).filter(i=>i>=0),parts=idx.map(i=>clauses[i]!);if(!parts.length)return true
   // «la bomba... no aspetta, le bombette»: il piatto detto e subito ritirato non manca.
   if(idx.every(i=>!ACTV.test(clauses[i]!)&&/^\s*(?:no\s+aspetta|no\s+scusa|anzi|cioe|cioè|no\s+no|aspetta)\b/i.test(clauses[i+1]??'')))return false
+  // R6.1 (M2): «la carbonara a 13, no lascia / annulla / cancella questa, …», «(no, lasciala)»: la parte ritirata subito dopo non manca.
+  if(idx.every(i=>/^\s*\(?\s*(?:no\b[\s(]*)?(?:lascia\w*|annulla\w*|cancella\w*|niente)\b/i.test(clauses[i+1]??'')||/^\s*\(?\s*no\s*$/i.test(clauses[i+1]??'')&&/^\s*(?:lascia\w*|annulla\w*)/i.test(clauses[i+2]??'')))return false
+  // «…, la carbonara no», «il babà... no il babà niente»: l'ultima parte che nomina il piatto lo ritira.
+  if(/(?:\bno|\bniente)\s*$/i.test(plain(parts.at(-1)!))&&!/\d/.test(parts.at(-1)!))return false
   // «la tagliata, quella di tonno non quella normale»: il nome è dentro quello di un piatto toccato e la sua parte non ha azioni.
   if(parts.every(x=>!ACTV.test(x))&&refs.some(o=>covered.has(o.id)&&o.id!==r.id&&(' '+plain(o.name)+' ').includes(' '+plain(r.name)+' ')))return false
   if([parts.at(-1)!].every(x=>(KEEP.test(x)||KEEP.test(plain(x)))&&!/\d/.test(x.replace(KEEP,''))&&!/\b(?:finit\w*|esaurit\w*|nascond\w*|evidenza|mett\w*\s+a)\b/i.test(x)))return false
