@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-21f621c6-a986-49c8-9f22-6e3419115afd",
+  "object": "chat.completion",
+  "created": 1792321609,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null,\n      \"name\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"primi\",\n      \"name\": \"pasta al pesto\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"primi\",\n      \"name\": \"pasta carbonara\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"primi\",\n      \"name\": \"riso giallo\",\n      \"price\": 8,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"Ho aggiornato il prezzo della pasta al ragù a 10 € e aggiunto pasta al pesto, pasta carbonara e riso giallo nella sezione \\\"primi\\\" con i prezzi indicati.\"\n}",
+     "reasoning": "We need to adjust: pasta al pesto exists? In menu p8 is \"Pasta al pesto e lasagna\". Not same. pasta al ragu exists p4 hidden. pasta carbonara not exist. riso giallo not exist. So only pasta al ragu exists, should set_price not create. Also need not duplicate create_section since already exists \"primi\". So actions: set_price for p4 to 10, create_item for others, maybe also create_section not needed. Provide intent change. reply_draft brief."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.026883637,
+   "prompt_tokens": 4354,
+   "prompt_time": 0.098361554,
+   "completion_tokens": 564,
+   "completion_time": 1.7506090890000001,
+   "total_tokens": 4918,
+   "total_time": 1.848970643,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 111
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_854fa9be4c",
+  "x_groq": {
+   "id": "req_01m57b2nvqe119v3mjgqenzbyf",
+   "seed": 153997965
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4354,
+  "completion_tokens": 564,
+  "total_tokens": 4918
+ },
+ "ms": 2019,
+ "recordedAt": "2026-10-18T11:06:49.444Z",
+ "conv": "r8-repro"
+}

@@ -7,7 +7,7 @@ import {isAgencyUser} from '../lib/agency-access.js'
 import {readWorkspace,mutateWorkspace,WorkspaceTrialLocked} from '../lib/menu-workspace-store.js'
 import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
-import {describeAction,priceChoice,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,whisperPrompt,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
+import {withNewSections,describeAction,priceChoice,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,whisperPrompt,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
 import {copy,helpWords,fill} from '../lib/twilio-menu-copy.js'
 import {createStep,createQuestion,followUp,undoFor,categoryWordItems,revertTarget,groupCommand,type CreateDraft,type LastApplied} from '../lib/twilio-menu-create.js'
 import {words,exactPick,politeCommand,spokenDecimals,spokenCents,parseIntent,findDishes,diminutiveRivals,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,isCompoundMessage,type Intent} from '../lib/twilio-menu-nlu.js'
@@ -454,7 +454,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const first=out,run2=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason}});if(budget.expired)return '';if(!run2)return copy.brainDown
   const out2=decide(run2);run=run2
   // Ancora rifiutato: il modello formula una domanda (la sua bozza), mai una scrittura; i candidati restano in sospeso.
-  if(out2.kind==='reject'||needsText(out2,run2)){const f=out2.kind==='reject'?out2:first.kind==='reject'?first:{kind:'reject' as const,reason,ids:[],actions:[]};out={kind:'ask',ids:f.ids.length?f.ids:first.kind==='reject'?first.ids:[],actions:f.actions,...(f.hold?{hold:f.hold}:{})}}
+  // R8: una proposta da confermare (riepilogo/eliminazione) senza domanda nella bozza dopo l'auto-correzione non è un fallimento:
+  // la domanda la portano i fatti della proposta («Non ancora pubblicato, da confermare con OK:»), la bozza che dice «fatto» cade.
+  if(out2.kind==='change'&&needsText(out2,run2)&&approvalFor(out2.actions,refs,text))out=out2
+  else if(out2.kind==='reject'||needsText(out2,run2)){const f=out2.kind==='reject'?out2:first.kind==='reject'?first:{kind:'reject' as const,reason,ids:[],actions:[]};out={kind:'ask',ids:f.ids.length?f.ids:first.kind==='reject'?first.ids:[],actions:f.actions,...(f.hold?{hold:f.hold}:{})}}
   // La domanda del modello dopo il rifiuto: se non indica i piatti, valgono i candidati del validatore.
   else out=out2.kind==='ask'&&!out2.ids.length&&!out2.hold&&first.kind==='reject'&&first.ids.length>1?{...out2,ids:first.ids,actions:out2.actions.length?out2.actions:first.actions}:out2}
  const finalRun=run
@@ -504,8 +507,11 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    case 'ask':{const keepRecap=pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')
     const question=cleanDraft(finalRun.decision.draft,{wrote:false,numbers:numbersOK(finalRun,out.ids.map(id=>refs.find(r=>r.id===id)?.price??-1))})??''
     if(!keepRecap){await drop();if(out.hold)await propose(tx,ctx,row.revision,{...out.hold,source:text});else await propose(tx,ctx,row.revision,{kind:'brain_ask',question,ids:out.ids.filter(id=>refs.some(r=>r.id===id)).slice(0,8),actions:out.actions,source:(pend?.kind==='ask'?pend.ask.source+' \n ':'')+text.slice(0,600),draft:out.createDraft??(pend?.kind==='ask'?pend.ask.draft??null:null)} satisfies BrainAsk)}
-    const facts=out.hold?holdFacts(out.hold,refs,sections):out.ids.length>=2?candidateFacts(out.ids.slice(0,8),refs):''
-    return [question,facts].filter(Boolean).join('\n\n')||NOTHING}
+    const facts=out.hold?holdFacts(out.hold,refs,sections):out.ids.length>=2||(!question&&out.ids.length)?candidateFacts(out.ids.slice(0,8),refs):''
+    // R8: senza una domanda del modello utilizzabile, mai il solo «Non ho cambiato nulla.» su una richiesta capita: i fatti dicono
+    // cosa NON è stato salvato (azioni capite) e i piatti in questione. Nessuna frase del bot oltre ai fatti.
+    const unsaved=!question&&!out.hold&&out.actions.length?'Non salvato: '+out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions))).join('; '):''
+    return [question,question?'':NOTHING,unsaved,facts].filter(Boolean).join('\n\n')}
    case 'read':return say(planText(out.plan,refs,sections),false,pricesOf(out.plan.ids?.map((id:string)=>({kind:'available',id,value:true}) as MenuAction)??[]))
    case 'say':return say('',false)}
    return NOTHING})}

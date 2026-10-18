@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-24533094-962e-44db-aabe-984e396258d8",
+  "object": "chat.completion",
+  "created": 1792321397,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [\"p5\", \"p6\"],\n    \"missing\": [],\n    \"question\": \"Quale parmigiana vuoi spostare, quella di p5 o p6?\"\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"parmigiana\",\n      \"candidates\": [\"p5\", \"p6\"],\n      \"action\": \"none\",\n      \"value\": null,\n      \"price\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"reply_draft\": \"Quale parmigiana vuoi spostare, quella di p5 o p6?\"\n}",
+     "reasoning": "We need to output owner_brain_plan JSON. Intent change. Actions: create_section name \"primi\", then move_item item? parmigiana refers to which code? There are two: p5 name \"Inserisce il piatto la parmigiana\" and p6 name \"la parmigiana\". Likely the parmigiana is p6 (actual dish). Could be ambiguous. Need clarify? Two candidates. So uncertain: phrase \"parmigiana\", candidates [\"p5\",\"p6\"], action none? We need ask which. So intent clarify? Actually request includes move and create. Since ambiguous, we ask clarification for item_refs. So intent clarify, clarify.item_refs candidates, question. No actions yet. reply_draft ask which parmigiana? Provide question. So JSON with intent clarify, actions empty array, item_refs empty, read none, capability_ids empty, clarify with item_refs candidates, missing maybe none, question \"Quale parmigiana vuoi spostare, quella di p5 o p6?\" uncertain list maybe include phrase. Include uncertain entry. alias_used empty. reply_draft accordingly."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.21396443,
+   "prompt_tokens": 3353,
+   "prompt_time": 0.178324757,
+   "completion_tokens": 413,
+   "completion_time": 0.856166865,
+   "total_tokens": 3766,
+   "total_time": 1.034491622,
+   "completion_tokens_details": {
+    "reasoning_tokens": 230
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_ca5edfaab2",
+  "x_groq": {
+   "id": "req_01m57aw719ecq8pjf5bs36xtze",
+   "seed": 1697790113
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3353,
+  "completion_tokens": 413,
+  "total_tokens": 3766
+ },
+ "ms": 1538,
+ "recordedAt": "2026-10-18T11:03:17.017Z",
+ "conv": "r8-repro"
+}
