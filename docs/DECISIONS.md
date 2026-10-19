@@ -11,3 +11,7 @@
 
 - Mittente Takomenu noreply@takoitalia.com, assistenza/Reply-To manuelrizzo474@gmail.com. Layout comune e soli eventi essenziali approvati da Manuel.
 - Nessuna campagna o recupero retroattivo di eventi. Abbonamenti/fatture separati: Stripe invia le ricevute.
+
+## 19 ottobre 2026 — rettifica email
+
+Manuel gestisce internamente i pagamenti: eliminare dal catalogo attivo email di abbonamento/pagamento e scadenze prova con CTA di attivazione. Il riferimento precedente alle ricevute Stripe non fa più parte di questa attività. Restano sei varianti: benvenuto, reset, password cambiata, conferma nuova email, avviso vecchia email, servizio approvato.

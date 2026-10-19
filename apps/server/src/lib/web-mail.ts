@@ -1,6 +1,6 @@
 import { db } from '@tako/db'
 import { sql } from 'drizzle-orm'
-export type WebMail = { to: string; subject: string; html: string; text?: string }
+export type WebMail = { to: string; subject: string; html: string; text?: string; from?: string; reply_to?: string }
 export type MailDelivery = (mail: WebMail, idempotencyKey: string) => Promise<{ id: string }>
 export const escapeMail = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]!))
 export const deliverWebMail: MailDelivery = async (mail, idempotencyKey) => {

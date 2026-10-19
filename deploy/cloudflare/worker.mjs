@@ -55,6 +55,15 @@ export async function proxy(request, env, fetcher = fetch) {
   try {
     const upstream = await fetcher(new Request(target, {method:request.method,headers,body:['GET','HEAD'].includes(request.method)?undefined:request.body,redirect:'manual',duplex:'half',signal:request.signal}));
     const responseHeaders = new Headers(upstream.headers);
+    // Supabase replaces HTML Content-Type and CSP. Only the two server-generated account pages opt in.
+    const emailNonce=responseHeaders.get('X-Takomenu-Email-Nonce');
+    if (['GET','HEAD'].includes(request.method) && ['/api/web-accounts/email/settings','/api/web-accounts/email/confirm'].includes(incoming.pathname) && upstream.ok && /^[A-Za-z0-9+/]{24}$/.test(emailNonce||'')) {
+      responseHeaders.set('Content-Type','text/html; charset=utf-8');
+      responseHeaders.set('Content-Security-Policy',`default-src 'none'; script-src 'nonce-${emailNonce}'; style-src 'nonce-${emailNonce}'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'`);
+      responseHeaders.set('X-Content-Type-Options','nosniff');
+      responseHeaders.set('Cache-Control','no-store');
+      responseHeaders.delete('X-Takomenu-Email-Nonce');
+    }
     const image=/^\/uploads\/[a-f0-9-]{36}\/[A-Za-z0-9_-]{16}\.(?:jpg|png|webp|gif)$/.test(incoming.pathname)&&['GET','HEAD'].includes(request.method)&&upstream.ok&&/^image\/(?:jpeg|png|webp|gif)(?:;|$)/.test(upstream.headers.get('Content-Type')||'');
     if(!image)responseHeaders.set('Cache-Control','no-store');
     const cookies = upstream.headers.getSetCookie?.() ?? [];
