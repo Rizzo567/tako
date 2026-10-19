@@ -4,7 +4,8 @@ import {db} from '@tako/db'
 import {sql} from 'drizzle-orm'
 import {isAgencyUser} from './agency-access.js'
 import type {OnboardingSession} from './onboarding-store.js'
-import {twilioBase} from './twilio-menu-ai.js'
+import {twilioBase,welcomeFromWorkspace} from './twilio-menu-ai.js'
+import {readWorkspace} from './menu-workspace-store.js'
 const hash=(s:string)=>createHash('sha256').update(s).digest('hex')
 const origin='https://takoitalia.com'
 const clean=(s:string)=>s.replace(/[*_~`<>]/g,'').slice(0,150)
@@ -42,7 +43,9 @@ export async function activateOwnerInvite(phone:string,text:string,connection:Pi
   if(links.some(l=>l.restaurant_id!==i.restaurant_id||l.actor_id!==actor))throw Error('LINK_CONFLICT')
   await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${phone},${i.restaurant_id},${actor},now()) ON CONFLICT(phone) DO UPDATE SET activated_at=now() WHERE tako_whatsapp_links.restaurant_id=EXCLUDED.restaurant_id AND tako_whatsapp_links.actor_id=EXCLUDED.actor_id`)
   await tx.execute(sql`UPDATE tako_onboarding_owner_invites SET used_at=now(),owner_actor_id=${actor} WHERE session_id=${i.session_id} AND used_at IS NULL`)
-  return [`Benvenuto *${clean(String(i.owner_name))}* nel Takomenu di *${clean(String(data.name))}*.`,'Scrivimi o manda un vocale per cambiare *piatti, prezzi e disponibilità*. Fino a *3 modifiche* le applico subito. Per più modifiche ti chiedo un *OK scritto*.']
+  // 19/10: stesso benvenuto del pre-collegamento, con piatti veri del locale; una volta sola (used_at).
+  let menu:unknown=null;try{menu=(await readWorkspace(String(i.restaurant_id),tx))?.draft??null}catch{}
+  return [welcomeFromWorkspace(clean(String(data.name)),menu)]
  })}catch{return ['Non riesco a collegare il *numero*. Contatta l’agenzia.']}
 }
 export async function sendOwnerInviteQr(to:string,mediaUrl:string){

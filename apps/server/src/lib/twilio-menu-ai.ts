@@ -262,9 +262,19 @@ export function planText(plan:Exclude<MenuPlan,{type:'change'}>,refs:MenuRef[],s
  const wanted=plan.missing.map(m=>m==='section'?'la categoria':m==='price'?'il prezzo':'il nome'),listed=sections.slice(0,15)
  return fill(copy.createMissing,{piatto:plan.name?'*'+safe(plan.name)+'*':'il piatto',mancante:wanted.length>1?wanted.slice(0,-1).join(', ')+' e '+wanted.at(-1):wanted[0]!,categorie:plan.missing.includes('section')&&listed.length?fill(copy.createCategories,{categorie:listed.map(s=>s.name).join(', ')}):'',})
 }
-export function welcomeText(restaurant:string,refs:MenuRef[],sections:SectionRef[]){
- const good=refs.filter(r=>r.available&&!r.hidden&&r.price>0&&r.name.length<=30&&!/[«»"*]/.test(r.name)),first=good[0],second=good.find(r=>r!==first&&plain(r.name)!==plain(first?.name??'')),primi=sections.find(s=>plain(s.name).startsWith('primi')),section=sections.find(s=>s.name.length<=25&&plain(s.name)!==plain(dailySectionName))
- return fill(copy.welcome,{locale:restaurant,esempioPrezzo:first?`«${first.name} costa ${Math.round(first.price)+1}»`:copy.welcomeExamples.price,esempioFinito:second?`«esaurito ${second.name}»`:copy.welcomeExamples.finished,esempioNuovo:primi||!section?copy.welcomeExamples.create:`«aggiungi in ${section.name}: pasta al ragù, 12 €»`})
+// Benvenuto del titolare: esempi con piatti veri del locale («carbonara 12 euro», «tiramisù finito»).
+const finished=(name:string)=>{const w=plain(name).split(' ')[0]??'';return /a$/.test(w)?'finita':/i$/.test(w)?'finiti':'finito'}
+export function welcomeText(restaurant:string,refs:MenuRef[],_sections:SectionRef[]=[]){
+ const good=refs.filter(r=>r.available!==false&&!r.hidden&&r.price>0&&r.name.trim().length>0&&r.name.length<=30&&!/[«»"*_~]/.test(r.name)),first=good[0],second=good.find(r=>r!==first&&plain(r.name)!==plain(first?.name??''))
+ const low=(n:string)=>n.trim().toLocaleLowerCase('it-IT'),euro=(p:number)=>Math.round(p)+1
+ return fill(copy.welcome,{locale:restaurant,esempioPrezzo:first?`«${low(first.name)} ${euro(first.price)} euro»`:copy.welcomeExamples.price,esempioFinito:second?`«${low(second.name)} ${finished(second.name)}»`:copy.welcomeExamples.finished})
+}
+// Stesso benvenuto partendo dal workspace (flusso invito agenzia, senza le route Twilio).
+// Lettura difensiva della bozza: un dato inatteso dà gli esempi generici, mai un errore.
+export function welcomeFromWorkspace(restaurant:string,w:unknown){
+ const list=(v:unknown):any[]=>Array.isArray(v)?v:[]
+ const refs=list((w as any)?.menus).filter(m=>m?.active!==false).flatMap(m=>list(m?.sections).filter(s=>s?.active!==false).flatMap(s=>list(s?.items).filter(i=>typeof i?.name==='string'&&typeof i?.price==='number').map(i=>({id:String(i.id),name:i.name,price:i.price,available:i.available,hidden:i.hidden,menu:String(m.name??''),section:String(s.name??'')} as MenuRef))))
+ return welcomeText(restaurant,refs)
 }
 export function localDate(timezone:string,now=new Date()){let zone='Europe/Rome';try{new Intl.DateTimeFormat('en',{timeZone:timezone});zone=timezone}catch{}const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now).map(v=>[v.type,v.value]));return{zone,date:`${p.year}-${p.month}-${p.day}`}}
 // Applica azioni già validate a un workspace (da ri-validare con workspaceSchema prima di salvare). Restituisce i nomi toccati.

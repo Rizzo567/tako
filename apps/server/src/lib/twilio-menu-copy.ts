@@ -1,14 +1,18 @@
-// Copy WhatsApp: italiano semplice, messaggi brevi, nessuna emoji.
+// Copy WhatsApp: italiano semplice, messaggi brevi, nessuna emoji (eccezione: il benvenuto del titolare).
 // I segnaposto sono compilati dal server con dati verificati del menu.
 export const copy={
- welcome:`Benvenuto nel *Takomenu di {locale}*.
+ // 19/10: benvenuto del titolare (unica eccezione emoji, decisa da Manuel). Esempi presi dal menu vero del locale.
+ welcome:`Ciao! Sono Takomenu, il menu digitale di *{locale}*.
 
-Mandami un messaggio o un vocale per aggiornare il menu. Puoi mandarmi anche il *menu di oggi*, anche a voce, o «menu di lunedì: …».
+I clienti inquadrano il QR sul tavolo e vedono il menu sul telefono.
 
-Fino a *3 modifiche* le pubblico subito. Per più modifiche o un menu intero ti mostro il riepilogo e aspetto il tuo *OK*.
+Tu lo aggiorni scrivendomi qui, come a un collega:
+🍝 {esempioPrezzo}
+❌ {esempioFinito}
+📷 manda la foto di un piatto
 
-Scrivi *cosa sai fare* per vedere le funzioni.`,
- welcomeExamples:{price:'«la caprese costa 11»',finished:'«è finita la carbonara»',create:'«aggiungi tra i primi: pasta al ragù, 12 euro»'},
+Prima di cambiare qualcosa ti chiedo conferma. Scrivi *cosa sai fare* quando vuoi.`,
+ welcomeExamples:{price:'«carbonara 12 euro»',finished:'«tiramisù finito»'},
  help:`Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.
 
 Scrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.

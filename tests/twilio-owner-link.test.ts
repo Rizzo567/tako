@@ -76,16 +76,17 @@ describe('numero del titolare: normalizzazione',()=>{
   for(const bad of['','abc','333','12345','+39 123 4567','33317709271234','+39333abc0927','1234567890',null,undefined,42,'+0 333'])expect(normalizeOwnerPhone(bad as any)).toBeNull()})
 })
 describe('collegamento del titolare dalla dashboard',()=>{
- it('pre-collegamento → primo messaggio → benvenuto + «cosa sai fare» e stato Collegato; nessun messaggio in uscita al salvataggio',async()=>{const a=await app()
+ it('pre-collegamento → primo messaggio → solo benvenuto (19/10) e stato Collegato; nessun messaggio in uscita al salvataggio',async()=>{const a=await app()
   expect((await get(a,OWNER_QA,QA)).json().data).toMatchObject({phone:null,status:null})
   const saved=await save(a,OWNER_QA,QA,'+39 000 000 0041');expect(saved.statusCode).toBe(200);expect(saved.json().data).toMatchObject({phone:'+390000000041',status:'pending'});expect(db.links.get('whatsapp:+390000000041')).toMatchObject({restaurant_id:QA,actor_id:OWNER_QA,activated_at:null});expect(sent).toHaveLength(0)
-  const first=await post(a,'whatsapp:+390000000041','ciao');const out=messages(first.body);expect(out).toHaveLength(2);expect(out[0]).toContain('Benvenuto nel *Takomenu di Tako · Verifica web*');expect(out[1]).toBe(copy.help);expect(db.forwarded).toBe(0)
+  const first=await post(a,'whatsapp:+390000000041','ciao');const out=messages(first.body);expect(out).toHaveLength(1);expect(out[0]).toContain('il menu digitale di *Tako · Verifica web*');expect(out[0]).toContain('🍝 «');
+  const again=messages((await post(a,'whatsapp:+390000000041','ciao')).body).join('\n');expect(again).not.toContain('menu digitale di');expect(db.forwarded).toBe(0)
   expect((await get(a,OWNER_QA,QA)).json().data).toMatchObject({phone:'+390000000041',status:'linked'})
   expect(messages((await post(a,'whatsapp:+390000000041','cosa sai fare')).body)).toEqual([copy.help]);expect(db.forwarded).toBe(0);expect(sent).toHaveLength(0);await a.close()})
  it('qualsiasi primo messaggio attiva (non solo «ciao») e un messaggio ripetuto da Twilio non rimanda il benvenuto due volte',async()=>{const a=await app();await save(a,AGENCY,QA,'3330000041')
   const form={AccountSid:account,From:'whatsapp:+393330000041',To:sender,NumMedia:'0',MessageSid:sid(),Body:'la caprese costa 11'},headers={'content-type':'application/x-www-form-urlencoded','x-twilio-signature':twilioSignature(token,self,form)}
   const r1=await a.inject({method:'POST',url:'/api/whatsapp/twilio',headers,payload:new URLSearchParams(form).toString()}),r2=await a.inject({method:'POST',url:'/api/whatsapp/twilio',headers,payload:new URLSearchParams(form).toString()})
-  expect(messages(r1.body)[0]).toContain('Benvenuto nel');expect(r2.body).toBe(r1.body);expect(db.links.get('whatsapp:+393330000041')!.activated_at).toBeInstanceOf(Date);expect(db.proposals.size).toBe(0);await a.close()})
+  expect(messages(r1.body)[0]).toContain('menu digitale di');expect(r2.body).toBe(r1.body);expect(db.links.get('whatsapp:+393330000041')!.activated_at).toBeInstanceOf(Date);expect(db.proposals.size).toBe(0);await a.close()})
  it('il router tratta il numero pre-collegato come Takomenu e inoltra a MenuSmart solo i numeri non collegati',async()=>{const a=await app();await save(a,OWNER_QA,QA,'3330000042')
   await post(a,'whatsapp:+393330000042','buongiorno');expect(db.forwarded).toBe(0)
   const other=await post(a,'whatsapp:+393499999999','ciao');expect(other.body).toBe('<Response><Message>MenuSmart</Message></Response>');expect(db.forwarded).toBe(1)
@@ -120,7 +121,7 @@ describe('collegamento del titolare dalla dashboard',()=>{
   expect((await save(a,OWNER_QA,QA,'123')).statusCode).toBe(400);expect((await save(a,OWNER_QA,QA,'+1 838 262 2788')).statusCode).toBe(400);expect(linksOf(QA)).toHaveLength(0)
   expect(db.links.get(MANUEL)).toMatchObject({restaurant_id:VIC,actor_id:AGENCY});expect((await get(a,AGENCY,VIC)).json().data).toMatchObject({phone:'+390000000098',status:'linked'});await a.close()})
  it('il collegamento con codice «collega tako …» resta funzionante e rispetta un telefono per locale',async()=>{const a=await app();const{createHash}=await import('node:crypto');const code='d'.repeat(24);db.codes.set(createHash('sha256').update(code).digest('hex'),{restaurant_id:QA,actor_id:OWNER_QA})
-  await save(a,OWNER_QA,QA,'3330000049');const w=await post(a,'whatsapp:+393330000050','collega tako '+code);expect(messages(w.body)[0]).toContain('Benvenuto nel *Takomenu di Tako · Verifica web*')
+  await save(a,OWNER_QA,QA,'3330000049');const w=await post(a,'whatsapp:+393330000050','collega tako '+code);expect(messages(w.body)[0]).toContain('il menu digitale di *Tako · Verifica web*')
   expect(linksOf(QA).map(([k,l])=>[k,!!l.activated_at])).toEqual([['whatsapp:+393330000050',true]]);await a.close()})
 })
 describe('avvisi di guasto a Manuel',()=>{

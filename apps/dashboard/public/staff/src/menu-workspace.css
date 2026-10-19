@@ -868,3 +868,11 @@ button.mw-catalog-photo.is-loading img{opacity:.45}
 .mw-trial-note~.mw-share-qr:empty{display:none}
 .mw-owner-whatsapp-pill{display:inline-flex}
 .mw-owner-whatsapp-time{color:var(--ink-2);font-size:13px}
+/* 19/10: QR per scrivere al bot dal telefono del titolare */
+.mw-owner-whatsapp-qr{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin:0 0 14px}
+.mw-owner-whatsapp-qr-img{display:grid;place-items:center;width:144px;height:144px;flex:none;color:var(--ink-2);font-size:13px}
+.mw-owner-whatsapp-qr-img img{display:block;width:144px;height:144px;border-radius:8px}
+.mw-owner-whatsapp-qr-side{flex:1 1 220px;min-width:0;max-width:420px}
+.mw-owner-whatsapp-qr-side>p{margin:0 0 10px;color:var(--ink-2);font-size:14px;line-height:1.45}
+.mw-owner-whatsapp-link{box-sizing:border-box;width:100%;min-height:40px;padding:0 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--sunken);color:var(--ink);font:inherit;font-size:13px;text-overflow:ellipsis}
+.mw-owner-whatsapp-qr-side .mw-actions{margin-top:10px}
