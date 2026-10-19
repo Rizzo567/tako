@@ -34,6 +34,25 @@ Il ristoratore scrive o parla come a un cameriere di fiducia; il menu cambia com
 Totale stimato: 16–18 h di agenti, 2 giorni di calendario con i gate.
 
 ## Task
+> Sostituita il 19/10/2026 18:20 UTC con la checklist della run unica (prompt «Motore Anthropic del bot titolare», max 4 h). Fonte di avanzamento: questa sezione + `STATO.md` + `git log`. Una casella = un commit.
+> Run partita 17:59 UTC. Passaggio forzato a test/report alle 21:29 UTC. Fine massima 21:59 UTC.
+
+- [x] A0 Prova chiavi a costo quasi zero — Anthropic: `ANTHROPIC_API_KEY` assente → 401, tutto offline col client registrato; Groq ok su `GROQ_API_KEY` e `GROQ_API_KEY2` (CHIAVI-OK.md).
+- [x] A1 PIANO.md con questa checklist, STATO.md, `@anthropic-ai/sdk` ^0.135 in apps/server, typecheck server pulito.
+- [ ] A2 Schema strumenti + runner del ciclo (SDK, Haiku, max 6 passi, timeout, cache) + client registrato per i test.
+- [ ] A3 Esecutori degli strumenti sul simulatore di menu dello spike e, dietro la stessa interfaccia, sul DB (Drizzle).
+- [ ] A4 Validatore dei fatti riusato + regole dure del server (elimina dopo «sì», annulla 10 min, piatto del giorno, >3 → OK, «sì» a due opzioni).
+- [ ] A5 `sostituisci_menu` + aggancio import testo/foto esistente.
+- [ ] A6 Contesto a ordine fisso, scheda compatta, cronologia di giornata compressa, alias confermati (SQL non applicata, repository, endpoint), prompt Whisper.
+- [ ] A7 Riserva Groq, `settings.botEngine`, kill switch, `runOwnerTurn` esposto + README.
+- [ ] A8 Risposte: generate dal modello + fatti dal DB; nessun testo fisso oltre i 2 ammessi.
+- [ ] B1 Test: i 10 casi di Victoria (un tentativo di fix ciascuno, poi si segna).
+- [ ] B2 Test: le 122 conversazioni dello spike rigiocate sul nuovo ciclo; batterie anti-regressione della fase R sul nuovo motore; suite completa senza nuovi rossi oltre i ~14 noti (elencarli).
+- [ ] C1 Confronto Haiku vs Groq sullo stesso banco (122 dello spike + 10 di Victoria), stesso giudice sullo stato finale del menu. Con le chiavi: modelli veri; senza: offline e dichiarato.
+- [ ] C2 REPORT.md con pagella, problemi, costi, cosa resta. STATO.md = «run conclusa, in attesa del via di Manuel». Commit+push. STOP.
+
+<details><summary>Task del piano 17/10 (sostituiti dalla checklist sopra)</summary>
+
 ### 0. Scoperta (UNKNOWNS.md)
 - [ ] 0.1 Chiave Anthropic: account, limiti di velocità, cache 1 h, prezzi ufficiali Haiku 5.5/Sonnet 5.5 (confermare 0,10/0,50 e soglia 100k).
 - [ ] 0.2 Spike 1 h: 10 vocali di Manuel col ciclo a strumenti su Haiku 5.5, misurare passi per messaggio, token, latenza, errori di strumenti. Kill criterion: p50 > 5 s o > 4 passi medi → rivedere decisione 1.
@@ -67,6 +86,8 @@ Totale stimato: 16–18 h di agenti, 2 giorni di calendario con i gate.
 - [ ] 7.1 Deploy edge sul QA (check-active, diff, rollback), `botEngine=anthropic` solo sul QA, live solo TwiML, 0 messaggi a Manuel, ripristino per hash; rifare la sequenza vocale delle 17:26.
 - [ ] 7.2 Prova di Manuel dal telefono (una giornata).
 - [ ] 7.3 Se banco vero ≥ 90% e prova ok: default `anthropic` per i nuovi locali; i 21 clienti passano solo col via di Manuel. REPORT finale con costi reali.
+
+</details>
 
 ## Rischi
 - Latenza del ciclo (2–3 chiamate): mitigata con cache, strumenti che restituiscono poco, «sta scrivendo» immediato.
