@@ -21,16 +21,25 @@ const never=[
  'il menu del giorno','fai vedere la carbonara nel menu','nascondi dal menu digitale la diavola','aggiorna la dashboard','il pannello è bloccato',
  'menu nuovo per stasera','il menu completo','quanto costa la tagliata?','tiramisù finito','metti la password sul menu',
  'il link del menu non funziona','rimetti nel menu la gricia','la dashboard non mi fa entrare, è bloccata','menu di oggi','carica il menu nuovo',
+ // 19/10 sera (revisione): cose DENTRO il menu, wifi, pannello solare
+ 'dove trovo nel menu la carbonara?','la carbonara dove la vedo nel menu','nel menu dove vedo il prosecco','dove vedo nel menu le foto','la password del wifi','qual è la password del wifi','password wi-fi','pannello solare',
 ]
 describe('link dashboard / menu digitale: batteria avversaria (19/10)',()=>{
  it('scatta sulle richieste di link (anche «ho perso la password»)',()=>{const wrong=should.filter(([t,want])=>linkIntent(t)!==want).map(([t,want])=>`${t} → ${linkIntent(t)} (atteso ${want})`);expect(wrong).toEqual([])})
  it('non scatta su lamentele, modifiche al menu e menu del giorno',()=>{const wrong=never.filter(t=>linkIntent(t)!==null).map(t=>`${t} → ${linkIntent(t)}`);expect(wrong).toEqual([])})
  it('la batteria ha almeno 40 frasi',()=>{expect(should.length+never.length).toBeGreaterThanOrEqual(40)})
 })
+describe('(10) piatti del catalogo del locale: niente link (19/10 sera)',()=>{
+ const catalog=['Spaghetti alla carbonara','Prosecco Valdobbiadene','Tiramisù della casa','Menu degustazione']
+ it('se la frase nomina un piatto del catalogo è una domanda per il bot, non un link',()=>{
+  for(const t of['come vedo il menu della carbonara','dove vedo il menu col prosecco','fammi vedere il tiramisù sul menu digitale'])expect(linkIntent(t,catalog)).toBeNull()
+  expect(linkIntent('come vedo il menu della carbonara')).toBe('menu')})
+ it('le richieste di link vere restano link anche col catalogo',()=>{for(const[t,want]of should)expect(linkIntent(t,catalog)).toBe(want)})
+})
 describe('account titolare: email, password e link',()=>{
  it('email del titolare: formato valido, minuscola',()=>{
   expect(ownerEmailSchema(' Mario.Rossi@Gmail.com ')).toBe('mario.rossi@gmail.com')
-  for(const bad of['','mario','mario@','@gmail.com','mario@gmail','ma rio@gmail.com',null,42,'a@b.c'])expect(ownerEmailSchema(bad as any)).toBeNull()})
+  for(const bad of['','mario','mario@','@gmail.com','mario@gmail','ma rio@gmail.com',null,42,'a@b.c','mario..rossi@gmail.com','.mario@gmail.com'])expect(ownerEmailSchema(bad as any)).toBeNull()})
  it('password: tre parole diverse, minuscole, separate da punto, dalla lista',()=>{
   expect(passwordWords.length).toBeGreaterThanOrEqual(190);expect(new Set(passwordWords).size).toBe(passwordWords.length)
   for(let i=0;i<200;i++){const p=simplePassword(),parts=p.split('.');expect(parts).toHaveLength(3);expect(new Set(parts).size).toBe(3);for(const w of parts){expect(passwordWords).toContain(w);expect(w).toMatch(/^[a-z]+$/)}}

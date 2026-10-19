@@ -24,6 +24,8 @@ Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando
  // Richiesta «dashboard» / «link del menu» in qualunque momento.
  // Niente gestione password in chat (19/10): si recupera dalla pagina di accesso o si cambia dalla dashboard.
  dashboardLink:'La tua dashboard: {link}\nUtente: {utente}\n\nPassword dimenticata? Usa il tasto nella pagina di accesso.',
+ // 19/10 sera: finché le email sono spente (capabilities.email false) il recupero passa dall'agenzia.
+ dashboardLinkAgency:'La tua dashboard: {link}\nUtente: {utente}\n\nSe perdi la password chiedi alla tua agenzia.',
  dashboardNoAccount:'La tua dashboard: {link}\nPer i dati di accesso chiedi alla tua agenzia.',
  menuLink:'Il tuo menu digitale: {link}',
  help:`Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.
@@ -206,7 +208,7 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'bulk',can:false,text:'Non applico modifiche generiche a *tutto il menu*.',alternative:'Indica i piatti e i cambiamenti, anche nello stesso vocale. Oppure mandami il *menu completo* del giorno: lo sostituisco dopo il tuo *OK*.'},
  {id:'graphics',can:false,text:'La *grafica* si cambia dalla dashboard.',alternative:'Lì puoi modificare colori, font e impaginazione.'},
  {id:'categories',can:true,text:'creare categorie e spostare piatti',example:'«crea la categoria speciali» o «sposta il polpo nei secondi»'},
- {id:'dashboard',can:true,text:'mandarti il link della *dashboard* con il tuo utente',example:'«link dashboard». Password dimenticata? Usa il tasto nella pagina di accesso.'},
+ {id:'dashboard',can:true,text:'mandarti il link della *dashboard* con il tuo utente',example:'«link dashboard»'},
  {id:'menulink',can:true,text:'mandarti il link del *menu digitale* che vedono i clienti',example:'«link del menu»'},
  {id:'translations',can:false,text:'Le *traduzioni* si gestiscono dalla dashboard.',alternative:'Apri la sezione dedicata alle lingue.'},
  {id:'other',can:false,text:'Questa funzione *non è disponibile* nella chat.',alternative:'Scrivi *cosa sai fare* per vedere le funzioni.'},

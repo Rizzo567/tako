@@ -7,6 +7,7 @@ import { eq, sql } from 'drizzle-orm'
 import { deliverWebMail, escapeMail, type MailDelivery } from '../lib/web-mail.js'
 import { requireAuth } from '../middleware/auth.js'
 import { SESSION_COOKIE } from '../lib/cookies.js'
+import { webEmailEnabled } from '../lib/web-email-enabled.js'
 
 const hash = (token: string) => createHash('sha256').update(token).digest('hex')
 const generic = { data: { message: 'Se l’indirizzo è registrato, riceverai le istruzioni.' } }
@@ -84,7 +85,7 @@ export function webAccountRoutesWithDelivery(deliver: MailDelivery = deliverWebM
       })
       return { data: { changed: true } }
     })
-    app.get('/capabilities', async () => ({ data: { email: process.env.WEB_EMAIL_ENABLED === '1' && !!process.env.RESEND_API_KEY && !!process.env.EMAIL_FROM, cardGuarantee: false } }))
+    app.get('/capabilities', async () => ({ data: { email: webEmailEnabled(), cardGuarantee: false } }))
   }
 }
 export const webAccountRoutes = webAccountRoutesWithDelivery()

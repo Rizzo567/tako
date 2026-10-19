@@ -241,19 +241,27 @@ export function botQuestion(raw:string):boolean{
 // 19/10: link della dashboard / del menu digitale (anche «ho perso la password» → link + utente; niente password in chat), letti dal server (con o senza cervello). Solo richieste
 // brevi e senza cifre; mai se la frase cambia il menu («metti sul menu la carbonara») o si lamenta («il menu digitale è lento»).
 export type LinkIntent='dashboard'|'menu'
-export function linkIntent(raw:string):LinkIntent|null{
+// 19/10 sera (revisione): niente link se la frase nomina un piatto del catalogo del locale («dove trovo nel menu la carbonara»),
+// cerca qualcosa DENTRO il menu («nel menu …», «sul menu …») o parla del wifi («password del wifi» → bot normale).
+const dishStop=new Set('menu digitale online link piatto piatti giorno oggi clienti prezzo prezzi della delle dello degli alla alle allo agli nella nelle nello negli sulla sulle con senza nostro nostra nostri nostre casa speciale speciali dashboard pannello vedere mostra cliente tavolo foto'.split(' '))
+const dishWords=(names:readonly string[])=>{const out=new Set<string>();for(const n of names)for(const w of plainText(String(n||'')).replace(/[,.]/g,' ').split(' '))if(w.length>=4&&!/\d/.test(w)&&!dishStop.has(w))out.add(w);return out}
+export function linkIntent(raw:string,dishNames:readonly string[]=[]):LinkIntent|null{
  const t=plainText(raw).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim(),w=t.split(' ').filter(Boolean)
  if(!t||w.length>12||/\d/.test(t))return null
+ if(/\bwi ?fi\b/.test(t))return null
+ if(dishNames.length){const dishes=dishWords(dishNames);if(w.some(x=>dishes.has(x)))return null}
  const change=/\b(mett\w*|aggiung\w*|togli\w*|tolg\w*|cambi\w*|elimin\w*|spost\w*|nascond\w*|rimett\w*|cancell\w*|inserisc\w*|lev\w*|modific\w*|aggiorn[aio]|aggiornare|pubblic\w*|rinomin\w*|scriv[ie] nel|carica\w*)\b/
  const complaint=/\b(lent\w*|non (?:si )?(?:apre|funziona|va|carica|vede|parte|entra)|blocc\w*|error\w*|rott\w*|sbagliat\w*|problem\w*)\b/
  const ask=/\b(link|indirizz\w*|url|dov\w*|mand\w*|invi\w*|dammi|dammelo|passami|girami|qual|quale|vedo|vedere|vedono|veder\w*|apr\w*|trov\w*|access\w*|entr\w*|login|credenzial\w*|utente|ricord\w*)\b/
  const password=/\bpassword\b/.test(t)
  if(password&&/\b(nuov[ao]|cambi\w*|reimpost\w*|resett?\w*|rigener\w*|recuper\w*|pers[ao]|dimenticat[ao]|scordat[ao]|smarrit[ao]|non (?:ricordo|la ricordo|me la ricordo|funziona))\b/.test(t)&&!/\b(menu|piatt\w*)\b/.test(t))return 'dashboard'
- const dashboard=/\b(dashboard|dashbord|pannello|gestionale|area riservata)\b/.test(t)
+ const dashboard=/\b(dashboard|dashbord|pannello(?! (?:solar\w*|fotovoltaic\w*|elettric\w*))|gestionale|area riservata)\b/.test(t)
  if(dashboard&&!change.test(t)&&!complaint.test(t)&&(w.length<=3||ask.test(t)||password))return 'dashboard'
  if(password&&w.length<=6&&!change.test(t)&&/\b(qual|quale|dammi|mandami|ricordami|password)\b/.test(t)&&!/\b(menu|piatt\w*)\b/.test(t))return 'dashboard'
  const menu=/\bmenu\b/.test(t)
  if(!menu||change.test(t)||complaint.test(t))return null
+ const linkAsked=/\b(link|indirizz\w*|url|sito)\b/.test(t)
+ if(/\b(?:nel|sul|dal) menu\b/.test(t)&&!linkAsked)return null
  if(/\bmenu (?:di oggi|del giorno|completo|intero|nuovo)\b/.test(t)&&!/\b(link|indirizz\w*|url)\b/.test(t))return null
  const digital=/\bmenu (?:digitale|online|on line|pubblico|dei clienti|sul telefono)\b/.test(t),linkWord=/\b(link|indirizz\w*|url|sito)\b/.test(t)
  if(linkWord)return 'menu'
