@@ -4,7 +4,9 @@ import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import { db, users, sessions } from '@tako/db'
 import { eq, sql } from 'drizzle-orm'
-import { deliverWebMail, escapeMail, type MailDelivery } from '../lib/web-mail.js'
+import { deliverWebMail, type MailDelivery } from '../lib/web-mail.js'
+
+import { renderTransactionalEmail } from '../lib/transactional-email/render.js'
 
 const hash = (token: string) => createHash('sha256').update(token).digest('hex')
 const generic = { data: { message: 'Se l’indirizzo è registrato, riceverai le istruzioni.' } }
@@ -23,7 +25,10 @@ export function webAccountRoutesWithDelivery(deliver: MailDelivery = deliverWebM
         if (!origin || !origin.startsWith('https://')) return generic
         const tokenHash = hash(token)
         await db.execute(sql`insert into web_password_resets(user_id,token_hash,expires_at) values(${user.id},${tokenHash},now()+interval '30 minutes')`)
-        try { await deliver({ to: user.email, subject: 'Reimposta la password Tako', html: `<p>Reimposta la password entro 30 minuti:</p><a href="${escapeMail(origin.replace(/\/$/, '') + '/staff/?reset=' + token)}">Reimposta password</a>` }, `reset-${tokenHash}`) }
+        try { await deliver({ to: user.email, ...renderTransactionalEmail('reset-password', {
+          nome_titolare: user.name || 'ristoratore', minuti_validita: '30',
+          link_reset: origin.replace(/\/$/, '') + '/staff/?reset=' + token,
+        }, process.env.EMAIL_LOGO_URL) }, `reset-${tokenHash}`) }
         catch { await db.execute(sql`delete from web_password_resets where token_hash=${tokenHash}`) }
       }
       return generic
