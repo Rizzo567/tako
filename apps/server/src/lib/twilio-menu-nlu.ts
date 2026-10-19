@@ -229,6 +229,15 @@ export function isCompoundMessage(raw:string,refs:MenuRef[]){
  const parts=masked.split(new RegExp(compoundSeparator.source,'gi')).map(x=>x.trim()).filter(Boolean)
  return parts.length>1&&parts.every(completePart)
 }
+// 19/10 (richiesta Manuel): la riga «assistente automatico» non apre più il benvenuto; resta la risposta fissa a chi chiede se parla con
+// un bot o con una persona. Solo domande brevi, senza cifre e senza verbi che cambiano il menu.
+export function botQuestion(raw:string):boolean{
+ const t=plainText(raw).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim(),w=t.split(' ').filter(Boolean)
+ if(!t||w.length>10||/\d/.test(t))return false
+ if(/\b(mett\w*|aggiung\w*|togli\w*|cambi\w*|elimin\w*|nascond\w*|prezz\w*|finit\w*|esaurit\w*|piatt\w*|menu)\b/.test(t))return false
+ const what='(?:(?:un |una |il |la |l )?(?:bot|chatbot|robot|macchina|persona|umano|umana|essere umano|intelligenza artificiale|computer|programma|automatico|automatica|vero|vera)|(?:un |una |l )(?:ai|ia))'
+ return new RegExp(`\\b(?:sei|siete)\\s+(?:tu\\s+)?(?:davvero\\s+)?${what}\\b`).test(t)||new RegExp(`\\b(?:parlo|sto parlando|scrivo|sto scrivendo|chatto)\\s+con\\s+${what}\\b`).test(t)||/^(?:ma )?chi sei(?: tu)?$/.test(t)||/\bc e (?:una persona|qualcuno)\b/.test(t)
+}
 // 19/10: link della dashboard / del menu digitale (anche «ho perso la password» → link + utente; niente password in chat), letti dal server (con o senza cervello). Solo richieste
 // brevi e senza cifre; mai se la frase cambia il menu («metti sul menu la carbonara») o si lamenta («il menu digitale è lento»).
 export type LinkIntent='dashboard'|'menu'

@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest'
 import {capabilityText,linkMarkers} from '../apps/server/src/lib/twilio-menu-ai.js'
 import {capabilities} from '../apps/server/src/lib/twilio-menu-copy.js'
-import {linkIntent} from '../apps/server/src/lib/twilio-menu-nlu.js'
+import {linkIntent,botQuestion} from '../apps/server/src/lib/twilio-menu-nlu.js'
 import {simplePassword,passwordWords,publicMenuUrl,dashboardUrl,ownerEmailSchema} from '../apps/server/src/lib/whatsapp-owner-account.js'
 // 19/10: batteria avversaria su link dashboard / menu digitale («ho perso la password» → link + utente: niente password in chat). Le frasi simili che NON devono scattare
 // (lamentele, modifiche al menu, menu del giorno) restano al bot normale.
@@ -45,4 +45,11 @@ describe('catalogo «cosa sai fare»',()=>{
  it('il catalogo ha le voci dashboard e menulink; il server le trasforma nel link vero',()=>{
   expect(capabilities.map(c=>c.id)).toEqual(expect.arrayContaining(['dashboard','menulink']))
   expect(capabilityText(['dashboard'])).toBe(linkMarkers.dashboard);expect(capabilityText(['menulink'])).toBe(linkMarkers.menulink);expect(capabilityText(['photo'])).not.toContain('\u0003')})
+})
+// 19/10 (richiesta Manuel): la riga «assistente automatico» esce dal benvenuto e resta come risposta fissa a «sei un bot?» / «sei una persona?».
+describe('«sei un bot?»: risposta assistente automatico (19/10)',()=>{
+ const yes=['sei un bot?','Sei un bot','sei una persona?','sei una persona vera?','sei umano?','ma sei un robot?','sei tu un bot?','sei davvero una persona?','sto parlando con un bot?','parlo con una persona?','parlo con un umano?','sei un’intelligenza artificiale?','sei una AI?','sei un programma?','chi sei?','ma chi sei','sei vero?','scrivo con un bot?','c’è una persona?','sei automatico?']
+ const no=['la carbonara è ai funghi?','sei aperto domani?','il risotto è vero parmigiano?','carbonara 12 euro','tiramisù finito','cosa sai fare','sei ai fornelli?','metti la carbonara, sei un genio','sei bravo','persona allergica al glutine?','menu per una persona','chi sei tu per dirmi il prezzo della carbonara 12','grazie','è vero che la carbonara è finita?','dashboard']
+ it('scatta sulle domande esplicite',()=>{expect(yes.filter(t=>!botQuestion(t))).toEqual([])})
+ it('non scatta su frasi di menu simili',()=>{expect(no.filter(t=>botQuestion(t))).toEqual([])})
 })

@@ -2,13 +2,17 @@
 // I segnaposto sono compilati dal server con dati verificati del menu.
 export const copy={
  // 19/10: benvenuto del titolare (unica eccezione emoji, decisa da Manuel). Esempi presi dal menu vero del locale.
+ // 19/10 (richiesta Manuel): una riga vuota tra i tre esempi; il benvenuto parte da «Ciao!», senza la riga «assistente automatico».
  welcome:`Ciao! Sono Takomenu, il menu digitale di *{locale}*.
 
 I clienti inquadrano il QR sul tavolo e vedono il menu sul telefono.
 
 Tu lo aggiorni scrivendomi qui, come a un collega:
+
 🍝 {esempioPrezzo}
+
 ❌ {esempioFinito}
+
 📷 manda la foto di un piatto
 
 Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando vuoi.`,
@@ -116,7 +120,8 @@ Indica anche il menu, per esempio «{esempio}».`,
  usageWarning:'*Uso del servizio AI*: {modello} ha raggiunto il *{percento}%* del limite giornaliero ({uso}).',
  capabilityYes:'Posso *{testo}*.\n{esempio}',
  capabilityNo:'{testo}\n\n{alternativa}',
- // 17/10 (AI Act art. 50): detto una sola volta per numero, al collegamento o al primo messaggio.
+ // 17/10 (AI Act art. 50): detto una sola volta per numero al primo messaggio di un numero già collegato, e sempre come risposta a
+ // «sei un bot?» / «sei una persona?» (botQuestion). 19/10 (richiesta Manuel): non più in testa al benvenuto.
  aiDisclosure:'Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.',
  // Fase R (17/10 notte, decisione di Manuel): l'UNICO altro testo fisso col cervello acceso. Groq giù / 429 / timeout / JSON non
  // valido dopo il ripiego: nessuna modifica, nessuna riserva a regole.
