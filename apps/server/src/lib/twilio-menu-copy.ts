@@ -11,7 +11,7 @@ Tu lo aggiorni scrivendomi qui, come a un collega:
 ❌ {esempioFinito}
 📷 manda la foto di un piatto
 
-Prima di cambiare qualcosa ti chiedo conferma. Scrivi *cosa sai fare* quando vuoi.`,
+Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando vuoi.`,
  welcomeExamples:{price:'«carbonara 12 euro»',finished:'«tiramisù finito»'},
  help:`Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.
 
