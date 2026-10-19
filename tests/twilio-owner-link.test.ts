@@ -1,27 +1,37 @@
-import{createRequire}from'node:module';import{createServer,type Server}from'node:http';import type{AddressInfo}from'node:net';import{afterAll,beforeAll,beforeEach,describe,expect,it,vi}from'vitest';import{twilioSignature,twiml}from'../apps/server/src/lib/twilio-menu-command.js';import{copy,alertCopy}from'../apps/server/src/lib/twilio-menu-copy.js';import{normalizeOwnerPhone}from'../apps/server/src/lib/whatsapp-phone.js'
+import{createRequire}from'node:module';import{createServer,type Server}from'node:http';import type{AddressInfo}from'node:net';import{afterAll,beforeAll,beforeEach,describe,expect,it,vi}from'vitest';import{twilioSignature,twiml}from'../apps/server/src/lib/twilio-menu-command.js';import{copy,alertCopy}from'../apps/server/src/lib/twilio-menu-copy.js';import{normalizeOwnerPhone}from'../apps/server/src/lib/whatsapp-phone.js';import{fill}from'../apps/server/src/lib/twilio-menu-copy.js';import bcrypt from'bcryptjs'
 // Collegamento del titolare dalla dashboard + avvisi di guasto. DB in memoria che interpreta le sole query del modulo.
 const QA='26050ecd-2e55-4057-a4c5-bff2b449cd47',VIC='528e263c-634e-4695-9632-6c5cc6a3302f',OTHER='11111111-1111-4111-8111-111111111111'
 const AGENCY='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',OWNER_QA='3af33a5e-8eb8-4f2e-a94d-acaf18b9dd9f',OWNER_OTHER='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',EDITOR='cccccccc-cccc-4ccc-8ccc-cccccccccccc'
 const MANUEL='whatsapp:+390000000098',ITEM='55555555-5555-4555-8555-555555555555'
-type Link={restaurant_id:string,actor_id:string,activated_at:Date|null,created_at:Date}
+type Link={restaurant_id:string,actor_id:string,activated_at:Date|null,created_at:Date,owner_email?:string|null}
 const names:Record<string,string>={[QA]:'Tako · Verifica web',[VIC]:'Victoria Bar',[OTHER]:'Altro locale'}
-const users:Record<string,{restaurant_id:string,role:string}>={[AGENCY]:{restaurant_id:VIC,role:'owner'},[OWNER_QA]:{restaurant_id:QA,role:'owner'},[OWNER_OTHER]:{restaurant_id:OTHER,role:'owner'},[EDITOR]:{restaurant_id:QA,role:'menu_editor'}}
-const db={links:new Map<string,Link>(),proposals:new Map<string,{restaurant_id:string,actor_id:string,revision:number,command:any}>(),codes:new Map<string,{restaurant_id:string,actor_id:string}>(),messages:new Map<string,string>(),errors:[] as any[],alertAt:null as Date|null,forwarded:0}
+const users:Record<string,{restaurant_id:string,role:string,email?:string,phone?:string,active?:boolean,password_hash?:string}>={[AGENCY]:{restaurant_id:VIC,role:'owner',email:'agenzia@test.invalid'},[OWNER_QA]:{restaurant_id:QA,role:'owner',email:'owner-qa@test.invalid'},[OWNER_OTHER]:{restaurant_id:OTHER,role:'owner'},[EDITOR]:{restaurant_id:QA,role:'menu_editor'}}
+const originalUsers=new Set(Object.keys(users));const db={sessionsDeleted:[] as string[],links:new Map<string,Link>(),proposals:new Map<string,{restaurant_id:string,actor_id:string,revision:number,command:any}>(),codes:new Map<string,{restaurant_id:string,actor_id:string}>(),messages:new Map<string,string>(),errors:[] as any[],alertAt:null as Date|null,forwarded:0}
 const parse=(q:any)=>{let text='';const params:unknown[]=[];for(const c of q.queryChunks)if(c&&typeof c==='object'&&Array.isArray(c.value))text+=c.value.join('');else{text+='$';params.push(c)}return{text:text.replace(/\s+/g,' ').trim(),params}}
 const linksOf=(r:string)=>[...db.links].filter(([,l])=>l.restaurant_id===r)
 const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);const p=params as any[]
  if(text.includes('pg_advisory_xact_lock'))return[]
  if(text.startsWith('SELECT u.id,u.restaurant_id,u.role,r.active FROM users u')){const u=users[p[1]];return u&&names[p[0]]?[{id:p[1],restaurant_id:u.restaurant_id,role:u.role,active:true}]:[]}
+ // 19/10: account titolare (whatsapp-owner-account.ts)
+ if(text==='SELECT id,restaurant_id,role,active FROM users WHERE lower(email)=$')return Object.entries(users).filter(([,u])=>u.email===p[0]).map(([id,u])=>({id,restaurant_id:u.restaurant_id,role:u.role,active:u.active??true}))
+ if(text==='SELECT id,restaurant_id,role,active,email FROM users WHERE id=$'){const u=users[p[0]];return u?[{id:p[0],restaurant_id:u.restaurant_id,role:u.role,active:u.active??true,email:u.email??p[0]+'@test.invalid'}]:[]}
+ if(text.startsWith("SELECT id,restaurant_id,role,active,email FROM users WHERE restaurant_id=$ AND role='owner' AND active=true AND phone IN ($,$)"))return Object.entries(users).filter(([,u])=>u.restaurant_id===p[0]&&u.role==='owner'&&(u.active??true)&&!!u.phone&&[p[1],p[2]].includes(u.phone)).map(([id,u])=>({id,restaurant_id:u.restaurant_id,role:u.role,active:true,email:u.email}))
+ if(text.startsWith('INSERT INTO users(id,restaurant_id,name,email,password_hash,role,phone,active,email_verified)')){if(Object.values(users).some(u=>u.email===p[3]))throw new Error('unique violation');users[p[0]]={restaurant_id:p[1],role:'owner',email:p[3],password_hash:p[4],phone:p[5],active:true};return[]}
+ if(text.startsWith('UPDATE users SET password_hash=$')){const u=users[p[1]];if(!u||u.restaurant_id!==p[2]||u.role!=='owner')return[];u.password_hash=p[0];return[{id:p[1]}]}
+ if(text==='DELETE FROM sessions WHERE user_id=$'){db.sessionsDeleted.push(p[0]);return[]}
+ if(text==='DELETE FROM tako_whatsapp_messages WHERE sid=$'){db.messages.delete(p[0]);return[]}
  if(text.startsWith('SELECT role FROM web_location_memberships'))return[]
  if(text.startsWith('SELECT 1 FROM tako_whatsapp_links'))return db.links.has(p[0])?[{}]:[]
  if(text.startsWith('SELECT restaurant_id,actor_id,activated_at FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{...l}]:[]}
- if(text.startsWith('SELECT phone,activated_at FROM tako_whatsapp_links')){const rows=linksOf(p[0]).sort((a,b)=>b[1].created_at.getTime()-a[1].created_at.getTime());return rows.slice(0,1).map(([phone,l])=>({phone,activated_at:l.activated_at}))}
+ if(text.startsWith('SELECT phone,activated_at,owner_email FROM tako_whatsapp_links')){const rows=linksOf(p[0]).sort((a,b)=>b[1].created_at.getTime()-a[1].created_at.getTime());return rows.slice(0,1).map(([phone,l])=>({phone,owner_email:l.owner_email??null,activated_at:l.activated_at}))}
  if(text.startsWith('SELECT l.restaurant_id,l.activated_at,r.name FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{restaurant_id:l.restaurant_id,activated_at:l.activated_at,name:names[l.restaurant_id]}]:[]}
  if(text.startsWith('UPDATE tako_whatsapp_links SET activated_at=now()')){const l=db.links.get(p[0]);if(l&&!l.activated_at)l.activated_at=new Date();return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE phone=$ OR restaurant_id=$'){db.links.delete(p[0]);for(const[k]of linksOf(p[1]))db.links.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE restaurant_id=$ AND phone<>$'){for(const[k]of linksOf(p[0]))if(k!==p[1])db.links.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE restaurant_id=$'){for(const[k]of linksOf(p[0]))db.links.delete(k);return[]}
- if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES($,$,$,NULL)')){if(db.links.has(p[0])||linksOf(p[1]).length)throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:null,created_at:new Date()});return[]}
+ if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email) VALUES($,$,$,NULL,$)')){if(db.links.has(p[0])||linksOf(p[1]).length)throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:null,created_at:new Date(),owner_email:p[3]});return[]}
+ if(text==='UPDATE tako_whatsapp_links SET owner_email=$ WHERE phone=$'){const l=db.links.get(p[1]);if(l)l.owner_email=p[0];return[]}
+ if(text==='SELECT owner_email FROM tako_whatsapp_links WHERE phone=$ AND restaurant_id=$'){const l=db.links.get(p[0]);return l&&l.restaurant_id===p[1]?[{owner_email:l.owner_email??null}]:[]}
  if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES($,$,$,now())')){if(linksOf(p[1]).some(([k])=>k!==p[0]))throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:new Date(),created_at:new Date()});return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone=$ OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$)'){db.proposals.delete(p[0]);for(const[k]of linksOf(p[1]))db.proposals.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$)'){for(const[k]of linksOf(p[0]))db.proposals.delete(k);return[]}
@@ -32,7 +42,7 @@ const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);cons
  if(text.startsWith('SELECT command,revision FROM tako_whatsapp_proposals')){const x=db.proposals.get(p[0]);return x?[x]:[]}
  if(text.startsWith('INSERT INTO tako_whatsapp_proposals')){db.proposals.set(p[0],{restaurant_id:p[1],actor_id:p[2],revision:p[3],command:JSON.parse(p[4])});return[]}
  if(text.startsWith('SELECT response FROM tako_whatsapp_messages'))return db.messages.has(p[0])?[{response:db.messages.get(p[0])}]:[]
- if(text.startsWith('INSERT INTO tako_whatsapp_messages')){if(!db.messages.has(p[0]))db.messages.set(p[0],p[1]);return[]}
+ if(text.startsWith('INSERT INTO tako_whatsapp_messages')){if(!db.messages.has(p[0])||text.includes('DO UPDATE'))db.messages.set(p[0],p[1]);return[]}
  if(text.startsWith('UPDATE tako_whatsapp_messages')){db.messages.set(p[1],p[0]);return[]}
  if(text.startsWith('SELECT name FROM restaurants'))return[{name:names[p[0]]}]
  if(text.startsWith('SELECT settings FROM restaurants'))return[{settings:{timezone:'Europe/Rome'}}]
@@ -49,22 +59,23 @@ import{twilioMenuRoutes}from'../apps/server/src/routes/twilio-menu.js'
 import{reportFailure}from'../apps/server/src/lib/twilio-menu-alerts.js'
 const Fastify=createRequire(new URL('../apps/server/package.json',import.meta.url))('fastify')
 const token='owner-link-token',self='https://takoitalia.com/api/whatsapp/twilio',account='AC'+'2'.repeat(32),sender='whatsapp:+18382622788'
-let servers:Server[]=[],sent:Record<string,string>[]=[],twilioMode:'ok'|'fail'|'window'='ok',polls=0,groqHang=false
+let groqContent='{"intent":"clarify","item_ids":[]}';let servers:Server[]=[],sent:Record<string,string>[]=[],twilioMode:'ok'|'fail'|'window'='ok',polls=0,groqHang=false
 const listen=async(h:Parameters<typeof createServer>[1])=>{const s=createServer(h);servers.push(s);await new Promise<void>(r=>s.listen(0,'127.0.0.1',()=>r()));return`http://127.0.0.1:${(s.address() as AddressInfo).port}`}
 const read=(req:any)=>new Promise<Buffer>(r=>{const c:Buffer[]=[];req.on('data',(d:Buffer)=>c.push(d));req.on('end',()=>r(Buffer.concat(c)))})
 beforeAll(async()=>{const twilio=await listen(async(req,res)=>{const body=await read(req);if(req.method==='POST'&&req.url!.endsWith('/Messages.json')){const form=Object.fromEntries(new URLSearchParams(body.toString()));if(twilioMode==='fail'&&form.To!==MANUEL){res.writeHead(500,{'Content-Type':'application/json'});return res.end('{"code":20500}')}sent.push(form);res.writeHead(201,{'Content-Type':'application/json'});return res.end(JSON.stringify({sid:'SM'+'f'.repeat(32),status:'queued'}))}
   if(req.method==='GET'&&/\/Messages\/SM[f]{32}\.json$/.test(req.url!)){polls++;res.writeHead(200,{'Content-Type':'application/json'});return res.end(JSON.stringify(twilioMode==='window'?{status:'failed',error_code:63016}:{status:'sent',error_code:null}))}
   res.writeHead(404);res.end()})
- const groq=await listen(async(_req,res)=>{if(groqHang)return;res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({choices:[{message:{content:'{"intent":"clarify","item_ids":[]}'}}],usage:{prompt_tokens:1,completion_tokens:1}}))})
+ const groq=await listen(async(_req,res)=>{if(groqHang)return;res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({choices:[{message:{content:groqContent}}],usage:{prompt_tokens:1,completion_tokens:1}}))})
  const menusmart=await listen((_q,res)=>{db.forwarded++;res.writeHead(200,{'Content-Type':'text/xml'});res.end('<Response><Message>MenuSmart</Message></Response>')})
  Object.assign(process.env,{TWILIO_AUTH_TOKEN:token,TWILIO_WEBHOOK_URL:self,TWILIO_ACCOUNT_SID:account,TWILIO_WHATSAPP_NUMBER:sender,TWILIO_API_BASE:twilio,GROQ_API_KEY:'k',GROQ_API_BASE:groq,MENUSMART_WHATSAPP_WEBHOOK_URL:menusmart,TAKOMENU_AGENCY_USER_IDS:AGENCY})})
 afterAll(()=>{for(const s of servers){s.closeAllConnections();s.close()}})
-beforeEach(()=>{db.links=new Map([[MANUEL,{restaurant_id:VIC,actor_id:AGENCY,activated_at:new Date('2026-10-14T17:26:14Z'),created_at:new Date('2026-10-14T17:26:14Z')}]]);db.proposals.clear();db.codes.clear();db.messages.clear();db.errors=[];db.alertAt=null;db.forwarded=0;sent=[];twilioMode='ok';polls=0;groqHang=false;delete process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS})
+beforeEach(()=>{db.links=new Map([[MANUEL,{restaurant_id:VIC,actor_id:AGENCY,activated_at:new Date('2026-10-14T17:26:14Z'),created_at:new Date('2026-10-14T17:26:14Z')}]]);db.proposals.clear();db.codes.clear();db.messages.clear();db.errors=[];db.alertAt=null;db.forwarded=0;db.sessionsDeleted=[];for(const id of Object.keys(users))if(!originalUsers.has(id))delete users[id];sent=[];groqContent='{"intent":"clarify","item_ids":[]}';process.env.TAKO_WHATSAPP_FOLLOWUP_DELAY_MS='0';twilioMode='ok';polls=0;groqHang=false;delete process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS})
 let n=0;const sid=()=>'SM'+(++n).toString(16).padStart(32,'0')
 const app=async()=>{const a=Fastify();await a.register(twilioMenuRoutes,{prefix:'/api'});return a}
 const as=(user:string,tenant:string)=>({'x-test-user':user+'|'+tenant})
 const get=(a:any,user:string,tenant:string)=>a.inject({method:'GET',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant)})
-const save=(a:any,user:string,tenant:string,phone:string,move?:boolean)=>a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant),payload:{phone,...(move===undefined?{}:{move})}})
+const defaultEmail=(phone:string)=>'t'+phone.replace(/\D/g,'')+'@test.invalid'
+const save=(a:any,user:string,tenant:string,phone:string,move?:boolean,email:string|null=defaultEmail(phone))=>a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant),payload:{phone,...(email===null?{}:{email}),...(move===undefined?{}:{move})}})
 const unlink=(a:any,user:string,tenant:string)=>a.inject({method:'DELETE',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant)})
 const post=(a:any,from:string,body:string,signed=true)=>{const form={AccountSid:account,From:from,To:sender,NumMedia:'0',MessageSid:sid(),Body:body};return a.inject({method:'POST',url:'/api/whatsapp/twilio',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':signed?twilioSignature(token,self,form):'nope'},payload:new URLSearchParams(form).toString()})}
 const messages=(xml:string)=>[...xml.matchAll(/<Message>([\s\S]*?)<\/Message>/g)].map(m=>m[1]!.replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'))
@@ -80,6 +91,8 @@ describe('collegamento del titolare dalla dashboard',()=>{
   expect((await get(a,OWNER_QA,QA)).json().data).toMatchObject({phone:null,status:null})
   const saved=await save(a,OWNER_QA,QA,'+39 000 000 0041');expect(saved.statusCode).toBe(200);expect(saved.json().data).toMatchObject({phone:'+390000000041',status:'pending'});expect(db.links.get('whatsapp:+390000000041')).toMatchObject({restaurant_id:QA,actor_id:OWNER_QA,activated_at:null});expect(sent).toHaveLength(0)
   const first=await post(a,'whatsapp:+390000000041','ciao');const out=messages(first.body);expect(out).toHaveLength(1);expect(out[0]).toContain('il menu digitale di *Tako · Verifica web*');expect(out[0]).toContain('🍝 «');
+  // 19/10: dopo il benvenuto, due messaggi via REST: account creato con l'email del pannello (utente = email, password a tre parole)
+  expect(sent.map(m=>m.To)).toEqual(['whatsapp:+390000000041','whatsapp:+390000000041']);expect(sent[0]!.Body).toContain('Utente: t390000000041@test.invalid');expect(sent[0]!.Body).toMatch(/Password: [a-z]+\.[a-z]+\.[a-z]+$/);expect(sent[1]!.Body).toContain('/r/'+QA+'/menu');sent=[]
   const again=messages((await post(a,'whatsapp:+390000000041','ciao')).body).join('\n');expect(again).not.toContain('menu digitale di');expect(db.forwarded).toBe(0)
   expect((await get(a,OWNER_QA,QA)).json().data).toMatchObject({phone:'+390000000041',status:'linked'})
   expect(messages((await post(a,'whatsapp:+390000000041','cosa sai fare')).body)).toEqual([copy.help]);expect(db.forwarded).toBe(0);expect(sent).toHaveLength(0);await a.close()})
@@ -116,8 +129,8 @@ describe('collegamento del titolare dalla dashboard',()=>{
   expect((await save(a,EDITOR,QA,'3330000048')).statusCode).toBe(403);expect((await get(a,EDITOR,QA)).statusCode).toBe(403);expect((await unlink(a,EDITOR,QA)).statusCode).toBe(403)
   expect((await save(a,OWNER_OTHER,QA,'3330000048')).statusCode).toBe(403)
   // sessione con ruolo owner sul QA ma senza titolarità reale (né agenzia né owner del locale): lo nega il controllo server
-  const spoof=await a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:{...as(OWNER_OTHER,QA),'x-test-role':'owner'},payload:{phone:'3330000048'}});expect(spoof.statusCode).toBe(403);expect((await a.inject({method:'DELETE',url:'/api/menu-workspace/whatsapp/owner',headers:{...as(OWNER_OTHER,QA),'x-test-role':'owner'}})).statusCode).toBe(403)
-  expect((await a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',payload:{phone:'3330000048'}})).statusCode).toBe(401)
+  const spoof=await a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:{...as(OWNER_OTHER,QA),'x-test-role':'owner'},payload:{phone:'3330000048',email:'t3330000048@test.invalid'}});expect(spoof.statusCode).toBe(403);expect((await a.inject({method:'DELETE',url:'/api/menu-workspace/whatsapp/owner',headers:{...as(OWNER_OTHER,QA),'x-test-role':'owner'}})).statusCode).toBe(403)
+  expect((await a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',payload:{phone:'3330000048',email:'t3330000048@test.invalid'}})).statusCode).toBe(401)
   expect((await save(a,OWNER_QA,QA,'123')).statusCode).toBe(400);expect((await save(a,OWNER_QA,QA,'+1 838 262 2788')).statusCode).toBe(400);expect(linksOf(QA)).toHaveLength(0)
   expect(db.links.get(MANUEL)).toMatchObject({restaurant_id:VIC,actor_id:AGENCY});expect((await get(a,AGENCY,VIC)).json().data).toMatchObject({phone:'+390000000098',status:'linked'});await a.close()})
  it('il collegamento con codice «collega tako …» resta funzionante e rispetta un telefono per locale',async()=>{const a=await app();const{createHash}=await import('node:crypto');const code='d'.repeat(24);db.codes.set(createHash('sha256').update(code).digest('hex'),{restaurant_id:QA,actor_id:OWNER_QA})
@@ -146,8 +159,50 @@ describe('avvisi di guasto a Manuel',()=>{
   // la stessa frase da un altro numero collegato non rompe nulla
   await save(a,OWNER_QA,QA,'3330000051');await post(a,'whatsapp:+393330000051','ciao');expect(messages((await post(a,'whatsapp:+393330000051','guasto di prova')).body)[0]).not.toBe(copy.failed);await a.close()})
  it('flusso: job in timeout → risposta di cortesia all\'utente e avviso; invio Twilio fallito dopo il retry → avviso send_failed',async()=>{const a=await app();process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS='150';groqHang=true
-  await save(a,OWNER_QA,QA,'3330000052');await post(a,'whatsapp:+393330000052','ciao')
+  await save(a,OWNER_QA,QA,'3330000052');await post(a,'whatsapp:+393330000052','ciao');sent=[]
   await post(a,'whatsapp:+393330000052','boh vediamo un po domani');expect(sent.find(s=>s.To==='whatsapp:+393330000052')!.Body).toBe(copy.jobTimeout);expect(db.errors.map(e=>e.kind)).toContain('job_timeout');expect(sent.filter(s=>s.To===MANUEL)).toHaveLength(1)
   groqHang=false;twilioMode='fail';db.alertAt=null;await post(a,'whatsapp:+393330000052','boh vediamo un po domani sera');expect(db.errors.map(e=>e.kind)).toContain('send_failed');expect(sent.filter(s=>s.To===MANUEL)).toHaveLength(2);expect(sent.at(-1)!.Body).toContain('risposta non inviata dopo due tentativi');await a.close()},20000)
  it('TwiML: più messaggi nella stessa risposta',()=>{expect(twiml('a\u0002b')).toBe('<?xml version="1.0" encoding="UTF-8"?><Response><Message>a</Message><Message>b</Message></Response>')})
+})
+
+// 19/10 (decisione Manuel): email del titolare nel pannello; dopo il benvenuto, dashboard con credenziali (utente = email) e menu
+// digitale; link su richiesta; nessuna gestione password in chat (si recupera dalla pagina di accesso).
+describe('dashboard e menu digitale del titolare su WhatsApp',()=>{
+ const dash='https://takoitalia.com/staff/',menuQA='https://takoitalia.com/r/'+QA+'/menu'
+ const account=(email:string)=>Object.entries(users).find(([,u])=>u.email===email)
+ const activate=async(a:any,local:string,email:string)=>{expect((await save(a,AGENCY,QA,local,undefined,email)).statusCode).toBe(200);const phone='whatsapp:'+normalizeOwnerPhone(local)!;const first=await post(a,phone,'ciao');return{phone,first}}
+ it('pannello: email obbligatoria e valida, salvata col numero e restituita; un’email di un altro account è rifiutata',async()=>{const a=await app()
+  expect((await save(a,OWNER_QA,QA,'3330000060',undefined,null)).statusCode).toBe(400);expect((await save(a,OWNER_QA,QA,'3330000060',undefined,'mario@')).statusCode).toBe(400);expect(linksOf(QA)).toHaveLength(0)
+  const r=await save(a,OWNER_QA,QA,'3330000060',undefined,' Mario.Rossi@Example.com ');expect(r.statusCode).toBe(200);expect(r.json().data).toMatchObject({phone:'+393330000060',email:'mario.rossi@example.com',status:'pending'})
+  for(const taken of['agenzia@test.invalid','altro@test.invalid']){users[OWNER_OTHER]!.email='altro@test.invalid';const x=await save(a,OWNER_QA,QA,'3330000060',undefined,taken);expect(x.statusCode).toBe(409);expect(x.json().error.code).toBe('EMAIL_IN_USE')}
+  // stesso numero, email cambiata: aggiornata senza toccare lo stato
+  expect((await save(a,OWNER_QA,QA,'3330000060',undefined,'nuova@example.com')).json().data).toMatchObject({email:'nuova@example.com',status:'pending'});delete users[OWNER_OTHER]!.email;await a.close()})
+ it('primo messaggio: benvenuto, poi due messaggi separati e in ordine (credenziali con utente = email, menu); una sola volta; nel DB solo l’hash',async()=>{const a=await app()
+  const{phone,first}=await activate(a,'3330000061','mario.rossi@example.com');const out=messages(first.body);expect(out).toHaveLength(1);expect(out[0]).toContain('menu digitale di *Tako · Verifica web*');expect(out[0]).not.toContain('Password')
+  expect(sent.map(m=>m.To)).toEqual([phone,phone])
+  const m=sent[0]!.Body!.match(/^La tua dashboard: https:\/\/takoitalia\.com\/staff\/\nUtente: mario\.rossi@example\.com\nPassword: ([a-z]+\.[a-z]+\.[a-z]+)$/);expect(m).not.toBeNull()
+  expect(sent[1]!.Body).toBe(fill(copy.ownerMenu,{link:menuQA}))
+  const[id,u]=account('mario.rossi@example.com')!;expect(id).not.toBe(AGENCY);expect(u).toMatchObject({restaurant_id:QA,role:'owner',phone:'+393330000061',active:true});expect(u.password_hash).not.toContain(m![1]);expect(await bcrypt.compare(m![1]!,u.password_hash!)).toBe(true)
+  for(const v of db.messages.values())expect(v).not.toContain(m![1])
+  await post(a,phone,'ciao');expect(sent).toHaveLength(2);expect(Object.values(users).filter(x=>x.email===u.email)).toHaveLength(1);await a.close()})
+ it('email di un account titolare già esistente di questo locale: riusato, nessuna password nuova in chat',async()=>{const a=await app()
+  const{phone}=await activate(a,'3330000062','owner-qa@test.invalid');expect(sent[0]!.Body).toBe(fill(copy.dashboardLink,{link:dash,utente:'owner-qa@test.invalid'}));expect(users[OWNER_QA]!.password_hash).toBeUndefined()
+  expect(Object.values(users).filter(x=>x.email==='owner-qa@test.invalid')).toHaveLength(1);expect(phone).toBe('whatsapp:+393330000062');await a.close()})
+ it('«dashboard», «ho perso la password» e «link del menu» in qualunque momento; niente password in chat; le frasi simili restano al bot',async()=>{const a=await app();const{phone}=await activate(a,'3330000063','anna@example.com');const hash0=account('anna@example.com')![1].password_hash;sent=[]
+  const dashReply=fill(copy.dashboardLink,{link:dash,utente:'anna@example.com'});expect(dashReply).toContain('Password dimenticata? Usa il tasto nella pagina di accesso.')
+  expect(messages((await post(a,phone,'mi mandi il link della dashboard?')).body)).toEqual([dashReply])
+  expect(messages((await post(a,phone,'ho perso la password')).body)).toEqual([dashReply]);expect(messages((await post(a,phone,'conferma')).body).join()).not.toContain('Password:')
+  expect(messages((await post(a,phone,'dove vedo il menu?')).body)).toEqual([fill(copy.menuLink,{link:menuQA})])
+  expect(messages((await post(a,phone,'menu digitale')).body)).toEqual([fill(copy.menuLink,{link:menuQA})])
+  for(const t of['il menu digitale è lento','metti sul menu la carbonara']){const r=messages((await post(a,phone,t)).body).join('\n');expect(r).not.toContain(menuQA);expect(r).not.toContain(dash)}
+  expect(sent.every(m=>!/Password:/.test(m.Body!))).toBe(true);expect(account('anna@example.com')![1].password_hash).toBe(hash0);expect(db.sessionsDeleted).toEqual([]);await a.close()})
+ it('voce del catalogo scelta dall’IA: il server mette il link vero del locale',async()=>{const a=await app();const{phone}=await activate(a,'3330000064','luca@example.com');sent=[]
+  groqContent='{"intent":"capability","capability_ids":["menulink"]}';await post(a,phone,'e i clienti cosa guardano di preciso quando sono al tavolo');expect(sent.at(-1)!.Body).toBe(fill(copy.menuLink,{link:menuQA}))
+  groqContent='{"intent":"capability","capability_ids":["dashboard"]}';await post(a,phone,'e per le cose che non fai tu dove le sistemo io di preciso');expect(sent.at(-1)!.Body).toBe(fill(copy.dashboardLink,{link:dash,utente:'luca@example.com'}));await a.close()})
+ it('isolamento: l’account vede solo il suo locale; mai l’account agenzia; email presa da un altro locale dopo il salvataggio → niente credenziali',async()=>{const a=await app();await activate(a,'3330000066','sara@example.com');const[id]=account('sara@example.com')!
+  expect((await get(a,id,QA)).statusCode).toBe(200);expect((await get(a,id,OTHER)).statusCode).toBe(403);expect((await get(a,id,VIC)).statusCode).toBe(403)
+  expect(users[AGENCY]!.password_hash).toBeUndefined()
+  await save(a,AGENCY,QA,'3330000067',undefined,'conteso@example.com');const ALIEN='dddddddd-dddd-4ddd-8ddd-dddddddddddd';users[ALIEN]={restaurant_id:OTHER,role:'owner',email:'conteso@example.com',password_hash:'h0',active:true};sent=[]
+  await post(a,'whatsapp:+393330000067','ciao');expect(sent[0]!.Body).toBe(fill(copy.dashboardNoAccount,{link:dash}));expect(sent.some(m=>/Password:/.test(m.Body!))).toBe(false)
+  expect(messages((await post(a,'whatsapp:+393330000067','dashboard')).body)).toEqual([fill(copy.dashboardNoAccount,{link:dash})]);expect(users[ALIEN]!.password_hash).toBe('h0');expect(users[ALIEN]!.restaurant_id).toBe(OTHER);await a.close()})
 })

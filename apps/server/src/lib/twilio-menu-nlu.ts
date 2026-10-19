@@ -229,3 +229,27 @@ export function isCompoundMessage(raw:string,refs:MenuRef[]){
  const parts=masked.split(new RegExp(compoundSeparator.source,'gi')).map(x=>x.trim()).filter(Boolean)
  return parts.length>1&&parts.every(completePart)
 }
+// 19/10: link della dashboard / del menu digitale (anche «ho perso la password» → link + utente; niente password in chat), letti dal server (con o senza cervello). Solo richieste
+// brevi e senza cifre; mai se la frase cambia il menu («metti sul menu la carbonara») o si lamenta («il menu digitale è lento»).
+export type LinkIntent='dashboard'|'menu'
+export function linkIntent(raw:string):LinkIntent|null{
+ const t=plainText(raw).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim(),w=t.split(' ').filter(Boolean)
+ if(!t||w.length>12||/\d/.test(t))return null
+ const change=/\b(mett\w*|aggiung\w*|togli\w*|tolg\w*|cambi\w*|elimin\w*|spost\w*|nascond\w*|rimett\w*|cancell\w*|inserisc\w*|lev\w*|modific\w*|aggiorn[aio]|aggiornare|pubblic\w*|rinomin\w*|scriv[ie] nel|carica\w*)\b/
+ const complaint=/\b(lent\w*|non (?:si )?(?:apre|funziona|va|carica|vede|parte|entra)|blocc\w*|error\w*|rott\w*|sbagliat\w*|problem\w*)\b/
+ const ask=/\b(link|indirizz\w*|url|dov\w*|mand\w*|invi\w*|dammi|dammelo|passami|girami|qual|quale|vedo|vedere|vedono|veder\w*|apr\w*|trov\w*|access\w*|entr\w*|login|credenzial\w*|utente|ricord\w*)\b/
+ const password=/\bpassword\b/.test(t)
+ if(password&&/\b(nuov[ao]|cambi\w*|reimpost\w*|resett?\w*|rigener\w*|recuper\w*|pers[ao]|dimenticat[ao]|scordat[ao]|smarrit[ao]|non (?:ricordo|la ricordo|me la ricordo|funziona))\b/.test(t)&&!/\b(menu|piatt\w*)\b/.test(t))return 'dashboard'
+ const dashboard=/\b(dashboard|dashbord|pannello|gestionale|area riservata)\b/.test(t)
+ if(dashboard&&!change.test(t)&&!complaint.test(t)&&(w.length<=3||ask.test(t)||password))return 'dashboard'
+ if(password&&w.length<=6&&!change.test(t)&&/\b(qual|quale|dammi|mandami|ricordami|password)\b/.test(t)&&!/\b(menu|piatt\w*)\b/.test(t))return 'dashboard'
+ const menu=/\bmenu\b/.test(t)
+ if(!menu||change.test(t)||complaint.test(t))return null
+ if(/\bmenu (?:di oggi|del giorno|completo|intero|nuovo)\b/.test(t)&&!/\b(link|indirizz\w*|url)\b/.test(t))return null
+ const digital=/\bmenu (?:digitale|online|on line|pubblico|dei clienti|sul telefono)\b/.test(t),linkWord=/\b(link|indirizz\w*|url|sito)\b/.test(t)
+ if(linkWord)return 'menu'
+ if(digital&&(w.length<=3||ask.test(t)))return 'menu'
+ if(/\b(dove|come)\b.*\b(vedo|vedere|vedono|apro|aprire|trovo|trovare)\b|\b(vedo|vedere|vedono|apro|aprire|trovo|trovare)\b.*\bdove\b/.test(t)&&!/\b(piatt\w*|prezz\w*|finit\w*|esaurit\w*|nascost\w*)\b/.test(t))return 'menu'
+ if(/^(?:fammi vedere|fammelo vedere|voglio vedere|posso vedere|mostrami|mandami|dammi|passami) (?:il )?(?:mio )?menu$/.test(t))return 'menu'
+ return null
+}

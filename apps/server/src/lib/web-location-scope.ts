@@ -12,5 +12,5 @@ export async function resolveWebLocation(token: string, user: {id:string;restaur
 }
 export function menuEditorAllowed(url: string, method: string) {
  const path=url.split('?')[0]!.replace(/\/$/,'')
- return (path==='/api/menu-workspace'||path.startsWith('/api/menu-workspace/')) || (method==='GET' && ['/api/auth/me','/api/auth/bootstrap','/api/web-locations','/api/web-locations/'].includes(path)) || (method==='POST' && ['/api/web-locations/switch','/api/auth/logout'].includes(path))
+ return (path==='/api/menu-workspace'||path.startsWith('/api/menu-workspace/')) || (method==='GET' && ['/api/auth/me','/api/auth/bootstrap','/api/web-locations','/api/web-locations/'].includes(path)) || (method==='POST' && ['/api/web-locations/switch','/api/auth/logout','/api/web-accounts/change-password'].includes(path))
 }

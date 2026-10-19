@@ -13,6 +13,15 @@ Tu lo aggiorni scrivendomi qui, come a un collega:
 
 Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando vuoi.`,
  welcomeExamples:{price:'«carbonara 12 euro»',finished:'«tiramisù finito»'},
+ // 19/10 (decisione Manuel): dopo il benvenuto, due messaggi separati: 1) dashboard + credenziali, 2) menu digitale pubblico.
+ // La password in chiaro esiste solo in questi messaggi (mai salvata né ripetuta nella cache delle risposte).
+ ownerDashboard:'La tua dashboard: {link}\nUtente: {utente}\nPassword: {password}',
+ ownerMenu:'Il tuo menu digitale, quello che vedono i clienti dal QR: {link}',
+ // Richiesta «dashboard» / «link del menu» in qualunque momento.
+ // Niente gestione password in chat (19/10): si recupera dalla pagina di accesso o si cambia dalla dashboard.
+ dashboardLink:'La tua dashboard: {link}\nUtente: {utente}\n\nPassword dimenticata? Usa il tasto nella pagina di accesso.',
+ dashboardNoAccount:'La tua dashboard: {link}\nPer i dati di accesso chiedi alla tua agenzia.',
+ menuLink:'Il tuo menu digitale: {link}',
  help:`Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.
 
 Scrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.
@@ -22,7 +31,7 @@ Esempio: «carbonara finita, diavola a 10 euro».
 Puoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.
 *Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».
 
-*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard.`,
+*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link.`,
  proposal:`*{locale}*: ecco le modifiche.
 
 {righe}
@@ -192,6 +201,8 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'bulk',can:false,text:'Non applico modifiche generiche a *tutto il menu*.',alternative:'Indica i piatti e i cambiamenti, anche nello stesso vocale. Oppure mandami il *menu completo* del giorno: lo sostituisco dopo il tuo *OK*.'},
  {id:'graphics',can:false,text:'La *grafica* si cambia dalla dashboard.',alternative:'Lì puoi modificare colori, font e impaginazione.'},
  {id:'categories',can:true,text:'creare categorie e spostare piatti',example:'«crea la categoria speciali» o «sposta il polpo nei secondi»'},
+ {id:'dashboard',can:true,text:'mandarti il link della *dashboard* con il tuo utente',example:'«link dashboard». Password dimenticata? Usa il tasto nella pagina di accesso.'},
+ {id:'menulink',can:true,text:'mandarti il link del *menu digitale* che vedono i clienti',example:'«link del menu»'},
  {id:'translations',can:false,text:'Le *traduzioni* si gestiscono dalla dashboard.',alternative:'Apri la sezione dedicata alle lingue.'},
  {id:'other',can:false,text:'Questa funzione *non è disponibile* nella chat.',alternative:'Scrivi *cosa sai fare* per vedere le funzioni.'},
 ]

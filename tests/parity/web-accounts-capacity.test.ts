@@ -135,21 +135,58 @@ describe('hosted Tako: real credentials and tenant isolation', () => {
   }, 30_000)
 
 
-  it('forgot response hides existence; token stored hashed; two concurrent consumes one winner', async () => {
-    const known = await app.inject({ method: 'POST', url: '/api/web-accounts/forgot-password', payload: { email: a.email } })
-    const unknown = await app.inject({ method: 'POST', url: '/api/web-accounts/forgot-password', payload: { email: 'missing@isolated.test' } })
-    expect(known.body).toBe(unknown.body)
-    expect(deliveries).toHaveLength(1)
-    const token = /reset=([^"&]+)/.exec(deliveries[0].html)![1]
-    const rows = await sql`select token_hash from web_password_resets`
-    expect(rows[0].token_hash).not.toBe(token)
-    expect(rows[0].token_hash).toHaveLength(64)
-    const responses = await Promise.all([1,2].map(() => app.inject({ method: 'POST', url: '/api/web-accounts/reset-password', payload: { token, password: 'Changed-password-2026' } })))
-    expect(responses.map(r => r.statusCode).sort()).toEqual([200,400])
+  // 19/10: «Password dimenticata» → email con pulsante «Reimposta la password» (link monouso, 30 minuti) e cambio password da loggato.
+  const forgot = (email: string) => app.inject({ method: 'POST', url: '/api/web-accounts/forgot-password', payload: { email } })
+  const reset = (token: string, password: string) => app.inject({ method: 'POST', url: '/api/web-accounts/reset-password', payload: { token, password } })
+  const check = async (token: string) => (await app.inject({ method: 'POST', url: '/api/web-accounts/reset-check', payload: { token } })).json().data.valid
+  const lastToken = () => /reset=([^"&]+)/.exec(deliveries.filter(d => d.subject === 'Reimposta la password Takomenu').at(-1).html)![1]
+  it('forgot: risposta identica se l’email non esiste; token solo come hash; nuova richiesta annulla il link precedente; due consumi concorrenti → uno vince; email di conferma', async () => {
+    deliveries.length = 0; await sql`delete from web_password_resets`
+    const known = await forgot(a.email), unknown = await forgot('missing@isolated.test')
+    expect(known.statusCode).toBe(200); expect(known.body).toBe(unknown.body); expect(deliveries).toHaveLength(1)
+    expect(deliveries[0].to).toBe(a.email); expect(deliveries[0].html).toContain('Reimposta la password'); expect(deliveries[0].html).toContain('30 minuti')
+    const first = lastToken(), rows = await sql`select token_hash from web_password_resets`
+    expect(rows[0].token_hash).not.toBe(first); expect(rows[0].token_hash).toHaveLength(64)
+    expect(await check(first)).toBe(true)
+    await forgot(a.email); const second = lastToken()
+    expect(await check(first)).toBe(false); expect((await reset(first, 'Changed-password-2026')).json().error.code).toBe('INVALID_RESET')
+    expect(await check(second)).toBe(true); expect(await check('x'.repeat(43))).toBe(false)
+    const responses = await Promise.all([1, 2].map(() => reset(second, 'Changed-password-2026')))
+    expect(responses.map(r => r.statusCode).sort()).toEqual([200, 400])
+    expect(responses.find(r => r.statusCode === 200)!.json().data.email).toBe(a.email)
+    expect(await check(second)).toBe(false)
+    expect(deliveries.filter(d => d.subject === 'La tua password è stata cambiata').map(d => d.to)).toEqual([a.email])
     expect((await request('GET', '/api/auth/me', cookieA)).statusCode).toBe(401)
     expect((await request('GET', '/api/auth/me', cookieB)).statusCode).toBe(200)
     expect((await login(a.email, a.password)).statusCode).toBe(401)
     expect((await login(a.email, 'Changed-password-2026')).statusCode).toBe(200)
+    a.password = 'Changed-password-2026'; cookieA = sessionCookie(await login(a.email, a.password))
+  })
+  it('link scaduto o già usato → «Link scaduto»; password corta rifiutata; massimo 3 link l’ora', async () => {
+    deliveries.length = 0; await sql`delete from web_password_resets`
+    await forgot(b.email); const token = lastToken()
+    expect((await reset(token, 'corta')).statusCode).toBe(400); expect(await check(token)).toBe(true)
+    await sql`update web_password_resets set expires_at=now()-interval '1 minute' where consumed_at is null`
+    expect(await check(token)).toBe(false)
+    const expired = await reset(token, 'Nuova-password-b-1'); expect(expired.statusCode).toBe(400); expect(expired.json().error.message).toBe('Link scaduto, richiedine uno nuovo.')
+    expect((await login(b.email, b.password)).statusCode).toBe(200)
+    await forgot(b.email); await forgot(b.email); expect(deliveries).toHaveLength(3)
+    expect((await forgot(b.email)).statusCode).toBe(200); expect(deliveries).toHaveLength(3)
+  })
+  it('cambio password da loggato: serve quella attuale; chiude le altre sessioni, non questa; isolamento tra locali', async () => {
+    const change = (session: string, payload: any) => request('POST', '/api/web-accounts/change-password', session, payload)
+    expect((await app.inject({ method: 'POST', url: '/api/web-accounts/change-password', payload: { current: b.password, password: 'Altra-password-2026' } })).statusCode).toBe(401)
+    const other = sessionCookie(await login(b.email, b.password))
+    expect((await change(cookieB, { current: 'sbagliata', password: 'Altra-password-2026' })).json().error.code).toBe('WRONG_PASSWORD')
+    expect((await change(cookieB, { current: b.password, password: 'corta' })).statusCode).toBe(400)
+    // la sessione di A non può cambiare la password di B (agisce solo sul proprio utente)
+    expect((await change(cookieA, { current: b.password, password: 'Altra-password-2026' })).json().error.code).toBe('WRONG_PASSWORD')
+    expect((await change(cookieB, { current: b.password, password: 'Altra-password-2026' })).statusCode).toBe(200)
+    expect((await request('GET', '/api/auth/me', cookieB)).statusCode).toBe(200)
+    expect((await request('GET', '/api/auth/me', other)).statusCode).toBe(401)
+    expect((await login(b.email, b.password)).statusCode).toBe(401)
+    expect((await login(b.email, 'Altra-password-2026')).statusCode).toBe(200)
+    expect((await login(a.email, a.password)).statusCode).toBe(200)
   })
   it('capacity serializes last slots across real concurrent transactions', async () => {
     const { db } = await import('../../packages/db/src/index.js')

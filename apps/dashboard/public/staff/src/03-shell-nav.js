@@ -159,6 +159,8 @@ function SidebarUser({ role, go }) {
   const items = [
     ...(canNavigate(role, "impostazioni") ? [{ label: "Impostazioni", icon: "settings", onClick: () => { go("impostazioni"); setOpen(false); } }] : []),
     { label: "Notifiche", icon: "bell", onClick: () => { setNotifOpen(true); setOpen(false); } },
+    /* 19/10: voce minima per cambiare la password (schermata Account: attuale, nuova, ripeti). */
+    ...(canNavigate(role, "account") ? [{ label: "Cambia password", icon: "settings", onClick: () => { go("account"); setOpen(false); } }] : []),
   ];
   return (
     <div ref={ref} style={{ position: "relative", paddingTop: 10, marginTop: 8, borderTop: "1px solid var(--side-line)" }}>
