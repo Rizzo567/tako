@@ -30,3 +30,13 @@ Non toccare clienti reali per QA. Bozze private WhatsApp scadono dopo 10 minuti.
 ## Campagna iniziale
 
 Circa 50 ristoranti esclusivamente fuori Lombardia, priorità menu quotidiani o ogni 2–3 giorni con evidenza. Demo prima della chiamata; prova 30 giorni gratis; condizioni successive da definire. Niente contatti avviati nella ricerca. Non citare agency.
+
+## Email transazionali — 19 ottobre 2026
+
+Preparazione sul branch `codex/manuel-email-activation`; stato e limiti in `docs/sessions/2026-10-19-manuel-email-activation.md`. Resend consegna prove a Manuel, ma capability pubblica email:false. Nessun deploy o migrazione. Catalogo e renderer testati, recupero password aggiornato nel branch; altre automazioni ancora da collegare. Non inviare benvenuti retroattivi.
+
+Aggiornamento email: dopo consenso esplicito Manuel, delta dal bundle v119 online rilasciato come v121. Recupero password e conferma dopo reset verificati end-to-end sul QA, capability email:true. 152 moduli preservati, nessun deploy frontend/read-edge. Le altre automazioni restano da integrare; vedere il resoconto aggiornato.
+
+## Email essenziali — completamento 19 ottobre
+
+Edge v125 ACTIVE: benvenuto solo nuove attivazioni, reset/cambio password, doppio messaggio cambio email, coda cifrata e cron al minuto. Pagamenti e abbonamenti esclusi per nuova decisione Manuel. Servizio via endpoint agenzia con approvazione, senza console grafica. Pagina cambio email `/api/web-accounts/email/settings` verificata nel browser; nessun link nel menu profilo aggiunto in questa fase. Worker takomenu-web aggiornato dal bundle online solo per Content-Type/CSP delle due pagine account, asset/binding conservati. Test e invii reali sul solo QA; credenziali QA ripristinate, nessun cliente contattato. Vedere EMAIL-ACTIVATION.md e resoconto di sessione; non usare il vecchio rapporto preparatorio come stato corrente.
