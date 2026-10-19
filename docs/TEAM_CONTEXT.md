@@ -34,3 +34,5 @@ Circa 50 ristoranti esclusivamente fuori Lombardia, priorità menu quotidiani o 
 ## Email transazionali — 19 ottobre 2026
 
 Preparazione sul branch `codex/manuel-email-activation`; stato e limiti in `docs/sessions/2026-10-19-manuel-email-activation.md`. Resend consegna prove a Manuel, ma capability pubblica email:false. Nessun deploy o migrazione. Catalogo e renderer testati, recupero password aggiornato nel branch; altre automazioni ancora da collegare. Non inviare benvenuti retroattivi.
+
+Aggiornamento email: dopo consenso esplicito Manuel, delta dal bundle v119 online rilasciato come v121. Recupero password e conferma dopo reset verificati end-to-end sul QA, capability email:true. 152 moduli preservati, nessun deploy frontend/read-edge. Le altre automazioni restano da integrare; vedere il resoconto aggiornato.

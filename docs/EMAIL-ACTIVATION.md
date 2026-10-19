@@ -22,3 +22,6 @@ Stop: nessun invio reale a clienti, nessuna finta attivazione di eventi non impl
 
 ## Note implementazione
 Il codice locale non dimostra invio automatico online. I template non lanciano job o invii. La comunicazione di servizio richiede approvazione esplicita e lista destinatari.
+
+## Aggiornamento rilascio
+Il 19 ottobre Manuel ha sbloccato il solo delta email. v121 online, recupero e conferma dopo reset verificati; dettagli nel resoconto di sessione. Il vincolo di confronto col bundle online resta valido. Tutte le altre integrazioni elencate sopra sono ancora mancanti.
