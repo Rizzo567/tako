@@ -1,0 +1,3 @@
+- **Ultimo fatto:** A0 — chiavi provate: Anthropic assente (401), Groq ok su `GROQ_API_KEY` e `GROQ_API_KEY2`.
+- **Prossimo:** A1 — PIANO.md con checklist, `@anthropic-ai/sdk`, typecheck.
+- **Blocchi:** nessuna `ANTHROPIC_API_KEY` → tutto il lato Haiku offline (client registrato).
