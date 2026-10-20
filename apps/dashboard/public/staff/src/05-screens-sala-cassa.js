@@ -657,7 +657,7 @@ function shapeFromSeats(p) {
   return "square"; // 3-4
 }
 
-function TableFormModal({ open, onClose, table, rooms }) {
+function TableFormModal({ open, onClose, table, rooms, onSaved, defaultRoomId }) {
   // table = null → nuovo; altrimenti modifica
   const [numero, setNumero] = useState("");
   const [posti, setPosti] = useState(4);
@@ -678,7 +678,7 @@ function TableFormModal({ open, onClose, table, rooms }) {
       setNumero("");
       setPosti(4);
       setForma("square");
-      setRoomId(rooms[0] ? rooms[0].id : "");
+      setRoomId(defaultRoomId || (rooms[0] ? rooms[0].id : ""));
     }
   }, [open, table]);
 
@@ -696,7 +696,7 @@ function TableFormModal({ open, onClose, table, rooms }) {
         toast("Tavolo aggiunto", { type: "success" });
       }
       onClose();
-      await window.takoReload();
+      if(onSaved)await onSaved();else await window.takoReload();
     } catch (e) {
       toast(e.message, { type: "error" });
     } finally {
@@ -748,7 +748,7 @@ function TableFormModal({ open, onClose, table, rooms }) {
   );
 }
 
-function RoomFormModal({ open, onClose }) {
+function RoomFormModal({ open, onClose, onSaved }) {
   const [nome, setNome] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -759,10 +759,10 @@ function RoomFormModal({ open, onClose }) {
     if (!String(nome).trim()) { toast("Inserisci un nome sala", { type: "error" }); return; }
     setSaving(true);
     try {
-      await window.TakoActions.roomCreate(String(nome).trim());
+      const created=await window.TakoActions.roomCreate(String(nome).trim());
       toast("Sala creata", { type: "success" });
       onClose();
-      await window.takoReload();
+      if(onSaved)await onSaved(created);else await window.takoReload();
     } catch (e) {
       toast(e.message, { type: "error" });
     } finally {
@@ -780,7 +780,7 @@ function RoomFormModal({ open, onClose }) {
         </div>
         <div style={{ marginBottom: 22 }}>
           <label style={FIELD_LABEL}>Nome</label>
-          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} style={INPUT_STYLE} placeholder="Es. Sala interna" />
+          <input type="text" maxLength={80} autoFocus aria-label="Nome sala" value={nome} onChange={(e) => setNome(e.target.value)} style={INPUT_STYLE} placeholder="Es. Sala interna" />
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <Btn kind="soft" full onClick={onClose}>Annulla</Btn>

@@ -2,6 +2,7 @@
 
 const NAV = [
   { group: "Gestione", items: [
+    { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
     { id: "menu", label: "Menu", icon: "menu" },
     { id: "statistiche", label: "Report", icon: "stats" },
   ]},
@@ -10,7 +11,6 @@ const NAV = [
     { id: "sala", label: "Sala", icon: "map" },
     { id: "ordini", label: "Ordini", icon: "orders", badge: true },
     { id: "kds", label: "Cucina", icon: "kitchen" },
-    { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
   ]},
 ];
 
@@ -46,7 +46,7 @@ const MOBILE_PRIMARY = {
 };
 /* 19/10 sera: il titolare (owner non agenzia) usa Takomenu solo per il menu, come già su telefono: niente voci Servizio
    (Panoramica incassi, Sala, Ordini, Cucina, Prenotazioni, comanda, chiamate) e la home è il Menu anche su desktop. */
-const SERVICE_ROUTES = new Set(["dashboard", "sala", "ordini", "kds", "prenotazioni", "comanda", "chiamate"]);
+const SERVICE_ROUTES = new Set(["dashboard", "sala", "ordini", "kds", "comanda", "chiamate"]);
 function menuOnlyOwner(role) { return role === "owner" && typeof window !== "undefined" && window.__takomenuAgency !== true; }
 function homeRoute(role) { return menuOnlyOwner(role) ? "menu" : (typeof window !== "undefined" && window.innerWidth < 900 && role === "owner" ? (window.__takomenuAgency ? "agency" : "menu") : ROLE_HOME[role] || "dashboard"); }
 /* Saluto: «Titolare di Victoria Bar» (account creato dal bot) → «Victoria Bar»; altrimenti il nome proprio. */
@@ -122,8 +122,10 @@ function Sidebar({ route, go, role, badges, live }) {
       <div style={{ padding: "16px 8px 4px", display: "flex", alignItems: "center", gap: 9 }}>
 
         <div>
-          <span role="img" aria-label="Takomenu" style={{ display: "block", width: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
-          <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
+          <span role="img" aria-label="Takomenu" style={{ display: "flex", alignItems: "center", gap: 8, width: 210, maxWidth: "100%", height: 42 }}>
+            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain", borderRadius: "50%" }} />
+            <span aria-hidden="true" style={{ display: "block", flex: "0 1 154px", width: 154, minWidth: 0, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          </span>
         </div>
       </div>
       {window.TakoLocationSwitcher && <window.TakoLocationSwitcher role={role} />}
@@ -340,7 +342,10 @@ function MobileHeader({ syncDelayed=false, route, openDrawer, live, role, badges
       {/* contenuto header — sfuma ed esce verso l'alto */}
       <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 11, transform: headerHidden ? "translateY(-30px) scale(.92)" : "none", filter: headerHidden ? "blur(4px)" : "none", opacity: headerHidden ? 0 : 1, transition: "transform .4s var(--out), opacity .3s ease, filter .3s ease", transformOrigin: "left center", pointerEvents: headerHidden ? "none" : "auto" }}>
         <div className={"mobile-header-brand"+(toolsOpen?" is-tools-open":"")} style={{ flex: 1, minWidth: 0 }}>
-          <span role="img" aria-label="Takomenu" style={{ display: "block", width: "min(148px, 100%)", height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          <span role="img" aria-label="Takomenu" style={{ display: "flex", alignItems: "center", gap: 8, width: 210, maxWidth: "100%", height: 42 }}>
+            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain", borderRadius: "50%" }} />
+            <span aria-hidden="true" style={{ display: "block", flex: "0 1 154px", width: 154, minWidth: 0, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          </span>
 
         </div>
         {route === "cassa" && (

@@ -1,3 +1,4 @@
+import { publicReservationRooms, selectedReservationTableError } from '../lib/reservation-tables.js'
 import {COMMON_MENU_LANGUAGES} from '../lib/menu-workspace-languages.js'
 import {foodCatalogs} from '../lib/menu-workspace-catalogs.js'
 import {recordMenuEvent,recordMenuEvents} from '../lib/menu-workspace-events.js'
@@ -199,12 +200,42 @@ export async function customerRoutes(fastify: FastifyInstance) {
   })
 
   // Get public menu for restaurant
+  // Public projection deliberately excludes QR tokens, staff and customer data.
+  fastify.get('/restaurant/:restaurantId/reservation-availability', { config: { rateLimit: { max: 30, timeWindow: 60000 } } }, async (req, reply) => {
+    const params = z.object({ restaurantId: z.string().uuid() }).safeParse(req.params)
+    const query = z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), time: z.string().regex(/^\d{2}:\d{2}$/), partySize: z.coerce.number().int().min(1).max(60) }).safeParse(req.query)
+    if (!params.success || !query.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Data, ora o coperti non validi.' } })
+    const { restaurantId } = params.data
+    const [restaurant] = await db.select({ settings: restaurants.settings, active: restaurants.active }).from(restaurants).where(eq(restaurants.id, restaurantId)).limit(1)
+    if (!restaurant?.active || (restaurant.settings as any)?.reservationsEnabled !== true) return reply.code(404).send({ error: { code: 'NOT_AVAILABLE', message: 'Le prenotazioni online non sono attive.' } })
+    const { date, time, partySize } = query.data
+    let startsAt: Date
+    try { startsAt = reservationLocalInstant(date, time, await restaurantTimezone(restaurantId)) } catch { return reply.code(400).send({ error: { code: 'BAD_TIME', message: 'Data o ora non valida nel fuso del ristorante.' } }) }
+    if (startsAt.getTime() < Date.now() - 60000) return reply.code(400).send({ error: { code: 'PAST', message: 'La data e ora sono nel passato.' } })
+    reply.header('Cache-Control', 'no-store')
+    const roomMap = await publicReservationRooms(restaurantId, startsAt, partySize)
+    const capacityError = await checkReservationCapacity(db, { restaurantId, startsAt, partySize, durationMin: 90 })
+    if (capacityError) for (const room of roomMap) for (const table of room.tables) table.available = false
+    return { data: { date, time, partySize, durationMin: 90, rooms: roomMap } }
+  })
+
+  fastify.get('/restaurant/:restaurantId/reservation-info', { config: { rateLimit: { max: 30, timeWindow: 60000 } } }, async (req, reply) => {
+    const parsed = z.object({ restaurantId: z.string().uuid() }).safeParse(req.params)
+    if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Ristorante non valido.' } })
+    const [restaurant] = await db.select({ name: restaurants.name, settings: restaurants.settings, active: restaurants.active }).from(restaurants).where(eq(restaurants.id, parsed.data.restaurantId)).limit(1)
+    if (!restaurant?.active) return reply.code(404).send({ error: { code: 'NOT_AVAILABLE', message: 'Ristorante non disponibile.' } })
+    reply.header('Cache-Control', 'no-store')
+    return { data: { restaurantName: restaurant.name, reservationsEnabled: (restaurant.settings as any)?.reservationsEnabled === true } }
+  })
+
   // PRENOTAZIONE self-service (pubblica, gated da settings.reservationsEnabled). Crea una
   // prenotazione in stato 'requested' (senza tavolo) → l'owner la vede live in dashboard
   // (emit reservation:changed) e la conferma/assegna. Rate-limit stretto (anti-spam).
   fastify.post('/restaurant/:restaurantId/reservation', { config: { rateLimit: { max: 6, timeWindow: 60000 } } }, async (req, reply) => {
     const { restaurantId } = req.params as { restaurantId: string }
+    if (!z.string().uuid().safeParse(restaurantId).success) return reply.code(400).send({ error: { code: 'VALIDATION', message: 'Ristorante non valido.' } })
     const schema = z.object({
+      tableId: z.string().uuid().optional(),
       customerName: z.string().min(1).max(120),
       customerPhone: z.string().min(3).max(40),
       customerEmail: z.string().email().max(254).optional(),
@@ -221,7 +252,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     if (!restaurant || !restaurant.active || ((restaurant.settings as any)?.reservationsEnabled ?? false) !== true) {
       return reply.code(404).send({ error: { code: 'NOT_AVAILABLE', message: 'Le prenotazioni online non sono attive per questo ristorante.' } })
     }
-    const { customerName, customerPhone, customerEmail, reminderConsent, partySize, date, time, notes } = parsed.data
+    const { tableId, customerName, customerPhone, customerEmail, reminderConsent, partySize, date, time, notes } = parsed.data
     const tz = await restaurantTimezone(restaurantId)
     let startsAt: Date
     try { startsAt = reservationLocalInstant(date, time.padStart(5, '0'), tz) }
@@ -229,10 +260,14 @@ export async function customerRoutes(fastify: FastifyInstance) {
     if (startsAt.getTime() < Date.now() - 60_000) return reply.code(400).send({ error: { code: 'PAST', message: 'La data e ora sono nel passato.' } })
     const outcome = await db.transaction(async tx => {
       await lockReservationCapacity(tx, restaurantId)
-      const error = await checkReservationCapacity(tx, {restaurantId, startsAt, partySize, durationMin: 90})
+      if (tableId) {
+        const tableError = await selectedReservationTableError(tx, restaurantId, tableId, startsAt, partySize)
+        if (tableError) return { error: tableError }
+      }
+      const error = await checkReservationCapacity(tx, {restaurantId, tableId, startsAt, partySize, durationMin: 90})
       if (error) return {error}
       const [row] = await tx.insert(reservations).values({
-        restaurantId, tableId: null, customerName: customerName.trim(), customerPhone: customerPhone.trim(),
+        restaurantId, tableId: tableId ?? null, customerName: customerName.trim(), customerPhone: customerPhone.trim(),
         customerEmail: customerEmail??null,reminderConsent,
         partySize, startsAt, durationMin: 90, status: 'requested', notes: notes ?? null,
       }).returning()

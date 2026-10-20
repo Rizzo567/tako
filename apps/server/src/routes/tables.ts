@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { nanoid } from 'nanoid'
 import { db, tables, rooms, bills, orders, waiterCalls } from '@tako/db'
 import { eq, and, inArray, isNull, sql } from 'drizzle-orm'
-import { requireAuth } from '../middleware/auth.js'
+import { requireAuth, requireRole } from '../middleware/auth.js'
 import { io } from '../index.js'
 import { deliverPersistedEvent } from '../lib/event-delivery.js'
 import { webOrigin } from '../lib/web-runtime.js'
@@ -24,8 +24,8 @@ export async function tableRoutes(fastify: FastifyInstance) {
   })
 
   // Create room
-  fastify.post('/rooms', { preHandler: requireAuth }, async (req, reply) => {
-    const schema = z.object({ name: z.string().min(1) })
+  fastify.post('/rooms', { preHandler: requireRole('owner') }, async (req, reply) => {
+    const schema = z.object({ name: z.string().trim().min(1).max(80) })
     const body = schema.safeParse(req.body)
     if (!body.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: body.error.message } })
     const [room] = await db.insert(rooms).values({ restaurantId: req.user!.restaurantId, name: body.data.name }).returning()
@@ -33,7 +33,7 @@ export async function tableRoutes(fastify: FastifyInstance) {
   })
 
   // Create table
-  fastify.post('/', { preHandler: requireAuth }, async (req, reply) => {
+  fastify.post('/', { preHandler: requireRole('owner') }, async (req, reply) => {
     const schema = z.object({
       number: z.string().min(1),
       seats: z.number().int().min(1).max(50).default(4),
@@ -65,15 +65,15 @@ export async function tableRoutes(fastify: FastifyInstance) {
   })
 
   // Update table (number, seats, roomId, shape)
-  fastify.patch('/:tableId', { preHandler: requireAuth }, async (req, reply) => {
+  fastify.patch('/:tableId', { preHandler: requireRole('owner') }, async (req, reply) => {
     const { tableId } = req.params as { tableId: string }
     const schema = z.object({
       number: z.string().min(1).optional(),
-      seats: z.number().int().min(1).optional(),
+      seats: z.number().int().min(1).max(50).optional(),
       roomId: z.string().uuid().nullable().optional(),
       shape: z.enum(['round', 'square', 'rectangle']).optional(),
-      posX: z.number().min(0).max(100).nullable().optional(),   // posizione mappa sala (%); null = tolto dalla pianta (vassoio)
-      posY: z.number().min(0).max(100).nullable().optional(),
+      posX: z.number().int().min(0).max(100).nullable().optional(),   // posizione mappa sala (%); null = tolto dalla pianta (vassoio)
+      posY: z.number().int().min(0).max(100).nullable().optional(),
     })
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) return reply.code(400).send({ error: { code: 'VALIDATION', message: parsed.error.message } })

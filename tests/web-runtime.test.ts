@@ -78,9 +78,10 @@ describe('real Fastify web boundary (no database/network)', () => {
     server.post('/api/tables/t1/waiter-resolve', async () => ({ok:true}))
     server.post('/api/tables', async () => ({ok:true}))
     server.get('/api/tables/t1/qr', async () => ({ok:true}))
-    for (const url of ['/api/bills','/api/inventory','/api/shifts','/api/devices','/api/insights/menu','/api/ai/owner/chat/stream','/api/customer/takeaway/r1/session','/api/tables','/api/%74ables']) {
+    for (const url of ['/api/bills','/api/inventory','/api/shifts','/api/devices','/api/insights/menu','/api/ai/owner/chat/stream','/api/customer/takeaway/r1/session']) {
       expect((await server.inject({method:'POST',url,headers:{origin}})).statusCode).toBe(404)
     }
+    expect((await server.inject({method:'POST',url:'/api/tables',headers:{origin}})).statusCode).toBe(200)
     expect((await server.inject({method:'GET',url:'/api/tables/t1/qr'})).statusCode).toBe(404)
     expect((await server.inject({method:'GET',url:'/api/tables/rooms'})).statusCode).toBe(200)
     expect((await server.inject({method:'PATCH',url:'/api/tables/t1/status',headers:{origin}})).statusCode).toBe(200)
