@@ -2,6 +2,7 @@
 
 const NAV = [
   { group: "Gestione", items: [
+    { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
     { id: "menu", label: "Menu", icon: "menu" },
     { id: "statistiche", label: "Report", icon: "stats" },
   ]},
@@ -10,7 +11,6 @@ const NAV = [
     { id: "sala", label: "Sala", icon: "map" },
     { id: "ordini", label: "Ordini", icon: "orders", badge: true },
     { id: "kds", label: "Cucina", icon: "kitchen" },
-    { id: "prenotazioni", label: "Prenotazioni", icon: "clock" },
   ]},
 ];
 
@@ -44,6 +44,13 @@ const MOBILE_PRIMARY = {
   chef: ["kds", "ordini", "menu"],
   cassiere: ["ordini", "sala", "dashboard"],
 };
+/* 19/10 sera: il titolare (owner non agenzia) usa Takomenu solo per il menu, come già su telefono: niente voci Servizio
+   (Panoramica incassi, Sala, Ordini, Cucina, Prenotazioni, comanda, chiamate) e la home è il Menu anche su desktop. */
+const SERVICE_ROUTES = new Set(["dashboard", "sala", "ordini", "kds", "comanda", "chiamate"]);
+function menuOnlyOwner(role) { return role === "owner" && typeof window !== "undefined" && window.__takomenuAgency !== true; }
+function homeRoute(role) { return menuOnlyOwner(role) ? "menu" : (typeof window !== "undefined" && window.innerWidth < 900 && role === "owner" ? (window.__takomenuAgency ? "agency" : "menu") : ROLE_HOME[role] || "dashboard"); }
+/* Saluto: «Titolare di Victoria Bar» (account creato dal bot) → «Victoria Bar»; altrimenti il nome proprio. */
+function greetName(name) { const n = String(name || "").trim(); if (!n || n === "—") return ""; const m = n.match(/^Titolare di\s+(.+)$/i); return m ? m[1] : n.split(" ")[0]; }
 function mobilePrimary(role) {
   return role === "owner" && typeof window !== "undefined" && window.__takomenuAgency === true
     ? ["agency", "agency_leads", "account"] : (MOBILE_PRIMARY[role] || []);
@@ -51,10 +58,11 @@ function mobilePrimary(role) {
 function canNavigate(role, id) {
   if(id === "account") return ["owner","menu_editor"].includes(role);
   if (id === "agency" || id === "agency_tasks" || id === "agency_leads") return typeof window !== "undefined" && window.__takomenuAgency === true;
+  if (menuOnlyOwner(role) && SERVICE_ROUTES.has(id)) return false;
   const known = NAV.some(g => g.items.some(it => it.id === id)) || Object.hasOwn(EXTRA_NAV, id);
   return known && Object.hasOwn(ROLE_ACCESS, role) && (ROLE_ACCESS[role] === null || ROLE_ACCESS[role].includes(id));
 }
-function safeRoute(role, id) { if(typeof id==="string"&&id.startsWith('"')){try{id=JSON.parse(id)}catch{}} if(typeof window!=="undefined"&&window.innerWidth<900&&role==="owner"&&id==="dashboard")return window.__takomenuAgency?"agency":"menu"; return canNavigate(role, id) ? id : (typeof window!=="undefined"&&window.innerWidth<900&&role==="owner"?(window.__takomenuAgency?"agency":"menu"):ROLE_HOME[role] || "dashboard"); }
+function safeRoute(role, id) { if(typeof id==="string"&&id.startsWith('"')){try{id=JSON.parse(id)}catch{}} if(typeof window!=="undefined"&&window.innerWidth<900&&role==="owner"&&id==="dashboard")return window.__takomenuAgency?"agency":"menu"; return canNavigate(role, id) ? id : (typeof window!=="undefined"&&role==="owner"&&window.__takomenuAgency!==true?"menu":typeof window!=="undefined"&&window.innerWidth<900&&role==="owner"?(window.__takomenuAgency?"agency":"menu"):ROLE_HOME[role] || "dashboard"); }
 function navParent(id) { return NAV_PARENT[id] || id; }
 function navBadge(it, badges) { return (badges || {})[it.id] || 0; }
 function navAllowed(role) {
@@ -115,7 +123,7 @@ function Sidebar({ route, go, role, badges, live }) {
 
         <div>
           <span role="img" aria-label="Takomenu" style={{ display: "flex", alignItems: "center", gap: 8, width: "min(210px, 100%)", height: 42 }}>
-            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain" }} />
+            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain", borderRadius: "50%" }} />
             <span aria-hidden="true" style={{ display: "block", flex: "1 1 0", minWidth: 0, maxWidth: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
           </span>
           <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
@@ -162,6 +170,8 @@ function SidebarUser({ role, go }) {
   const items = [
     ...(canNavigate(role, "impostazioni") ? [{ label: "Impostazioni", icon: "settings", onClick: () => { go("impostazioni"); setOpen(false); } }] : []),
     { label: "Notifiche", icon: "bell", onClick: () => { setNotifOpen(true); setOpen(false); } },
+    /* 19/10: voce minima per cambiare la password (schermata Account: attuale, nuova, ripeti). */
+    ...(canNavigate(role, "account") ? [{ label: "Cambia password", icon: "settings", onClick: () => { go("account"); setOpen(false); } }] : []),
   ];
   return (
     <div ref={ref} style={{ position: "relative", paddingTop: 10, marginTop: 8, borderTop: "1px solid var(--side-line)" }}>
@@ -265,7 +275,7 @@ function routeIntro(route, role = "owner") {
   const _hour = new Date().getHours();
   const _greet = _hour < 12 ? "Buongiorno" : _hour < 18 ? "Buon pomeriggio" : "Buonasera";
   const _r = ROLES[role] || ROLES.owner;
-  const _first = (_r.name && _r.name !== "—") ? _r.name.split(" ")[0] : "";
+  const _first = greetName(_r.name);
   const m = {
     cowork: { pose: "hello", title: "Assistente" },
     agency:{pose:"neutral",title:"Locali"},
@@ -334,7 +344,7 @@ function MobileHeader({ syncDelayed=false, route, openDrawer, live, role, badges
       <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 11, transform: headerHidden ? "translateY(-30px) scale(.92)" : "none", filter: headerHidden ? "blur(4px)" : "none", opacity: headerHidden ? 0 : 1, transition: "transform .4s var(--out), opacity .3s ease, filter .3s ease", transformOrigin: "left center", pointerEvents: headerHidden ? "none" : "auto" }}>
         <div className={"mobile-header-brand"+(toolsOpen?" is-tools-open":"")} style={{ flex: 1, minWidth: 0 }}>
           <span role="img" aria-label="Takomenu" style={{ display: "flex", alignItems: "center", gap: 8, width: "min(210px, 100%)", height: 42 }}>
-            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain" }} />
+            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain", borderRadius: "50%" }} />
             <span aria-hidden="true" style={{ display: "block", flex: "1 1 0", minWidth: 0, maxWidth: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
           </span>
 
@@ -463,7 +473,7 @@ function MobileDrawer({ open, onClose, route, go, role, badges }) {
   );
 }
 
-Object.assign(window, { NAV, ROLE_ACCESS, ROLE_HOME, MOBILE_PRIMARY, navAllowed, findItem, canNavigate, safeRoute, navParent, navBadge, Sidebar, MobileHeader, BottomBar, MobileDrawer, IOSStatusBar, HomeIndicator });
+Object.assign(window, { NAV, ROLE_ACCESS, ROLE_HOME, menuOnlyOwner, homeRoute, greetName, MOBILE_PRIMARY, navAllowed, findItem, canNavigate, safeRoute, navParent, navBadge, Sidebar, MobileHeader, BottomBar, MobileDrawer, IOSStatusBar, HomeIndicator });
 
 function MobileAgencyTools({onModeChange}){
  const [mode,setMode]=useState(''),[query,setQuery]=useState(window.__agencyFilters?.search||''),[filter,setFilter]=useState(window.__agencyFilters?.filter||'all');const field=useRef(null),surface=useRef(null),lastMode=useRef('');

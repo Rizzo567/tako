@@ -34,3 +34,6 @@ Circa 50 ristoranti esclusivamente fuori Lombardia, priorità menu quotidiani o 
 ## 2026-10-20 — Logo header dashboard
 
 Branch `codex/dashboard-header-logo`: mascotte originale del sito locale (`tako-peek-avatar-v1.webp`) accanto al wordmark canonico in sidebar desktop e header mobile. Asset copiato senza rigenerazione, proporzioni preservate e nome accessibile unico. Build staff e diff check passati; nessun deploy e nessuna modifica backend.
+
+## 2026-10-20 — Piantina prenotazioni online
+Rilasciata schermata Prenotazioni in Gestione con piantina sale/tavoli e scelta pubblica su `/prenota/:restaurantId`. Worker frontend 3b2efc60, operativa v126 da patch chirurgica della v125 (156 moduli invariati), read-edge/pubblico invariati. Preservata base frontend effettivamente online feat/qr-titolare-benvenuto. Dettagli, verifiche e limiti in docs/reservations/RELEASE-2026-10-20.md. Nessun locale reale modificato per QA; attivazione prenotazioni resta per locale nelle impostazioni.

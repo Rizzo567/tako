@@ -58,7 +58,7 @@ function ResField({ label, children }) {
 }
 
 /* ═══════════════════ MODALE CREA / MODIFICA ═══════════════════ */
-function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) {
+function ReservationModal({ open, onClose, reservation, defaultDate, defaultTable, onSaved }) {
   const isEdit = !!reservation;
   const [nome, setNome] = useState("");
   const [tel, setTel] = useState("");
@@ -87,9 +87,9 @@ function ReservationModal({ open, onClose, reservation, defaultDate, onSaved }) 
       setNome(""); setTel(""); setEmail("");setConsent(false);setCoperti(2);
       // default: giorno visualizzato alle 20:00
       setQuando(`${defaultDate || resToday()}T20:00`);
-      setDurata(90); setTableId(""); setNote("");
+      setDurata(90); setTableId(defaultTable?._id || ""); setCoperti(defaultTable?.posti || 2); setNote("");
     }
-  }, [open, reservation, defaultDate]);
+  }, [open, reservation, defaultDate, defaultTable]);
 
   const save = async () => {
     if (saving) return;
@@ -201,7 +201,98 @@ function ReservationRow({ r, mobile, onEdit, onStatus, onDelete }) {
 }
 
 /* ═══════════════════ SCHERMATA PRENOTAZIONI ═══════════════════ */
-function ScreenPrenotazioni({ mobile }) {
+/* A single room/table model is shared with Sala Live. Positions persist via the existing API. */
+function ReservationRoomMap({ rooms: initialRooms, mobile, reservations, onReserve }) {
+  const [rooms,setRooms]=useState(initialRooms);
+  const [roomsError,setRoomsError]=useState("");
+  const [roomsLoading,setRoomsLoading]=useState(false);
+  const roomLoadSeq=useRef(0);
+  const loadRooms=async()=>{
+    if(!window.TakoAPI?.get)return;
+    const seq=++roomLoadSeq.current,scope=window.__takoRestaurantId;
+    setRoomsLoading(true);setRoomsError("");
+    try{const rows=await window.TakoAPI.get('/tables/rooms');if(seq!==roomLoadSeq.current||scope!==window.__takoRestaurantId)return;const mapped=rows.map(mapRoom);setRooms(mapped);ROOMS=mapped;window.ROOMS=mapped;}
+    catch(e){if(seq===roomLoadSeq.current)setRoomsError(e.message||"Impossibile caricare le sale");}
+    finally{if(seq===roomLoadSeq.current)setRoomsLoading(false);}
+  };
+  useEffect(()=>{loadRooms();return()=>{roomLoadSeq.current++;};},[initialRooms]);
+  const [roomId, setRoomId] = useState(rooms[0]?.id || "");
+  const [editing, setEditing] = useState(false);
+  const [roomModal, setRoomModal] = useState(false);
+  const [tableModal, setTableModal] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [positions, setPositions] = useState({});
+  const canvas = useRef(null), drag = useRef(null);
+  const room = rooms.find(r => r.id === roomId) || rooms[0];
+  const tables = room?.tables || [];
+  const point = t => positions[t._id] || (t._hasPos ? {x:t.x,y:t.y} : null);
+  const updatePosition = async (t, x, y) => {
+    if(saving) return;
+    const next = {x:Math.round(Math.max(8,Math.min(92,x))),y:Math.round(Math.max(12,Math.min(88,y)))};
+    setSaving(true);
+    try { await window.TakoActions.tableUpdate(t._id,{posX:next.x,posY:next.y}); setPositions(p=>({...p,[t._id]:next})); toast("Posizione salvata",{type:"success"}); }
+    catch(e) { toast(e.message,{type:"error"}); }
+    finally {setSaving(false);}
+  };
+  const pointerDown = (e,t) => {
+    if(!editing || saving) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const p=point(t); drag.current={t,startX:e.clientX,startY:e.clientY,x:p.x,y:p.y,moved:false,el:e.currentTarget};
+  };
+  const pointerMove = e => {
+    const d=drag.current;if(!d||!canvas.current)return;
+    if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)<5&&!d.moved)return;
+    d.moved=true;const rect=canvas.current.getBoundingClientRect();
+    d.x=Math.max(8,Math.min(92,(e.clientX-rect.left)/rect.width*100));d.y=Math.max(12,Math.min(88,(e.clientY-rect.top)/rect.height*100));
+    d.el.style.left=d.x+"%";d.el.style.top=d.y+"%";
+  };
+  const pointerEnd = async (e,cancelled=false) => {
+    const d=drag.current;if(!d)return;drag.current=null;e.currentTarget.releasePointerCapture?.(e.pointerId);
+    const original=point(d.t);d.el.style.left=original.x+"%";d.el.style.top=original.y+"%";
+    if(d.moved&&!cancelled) await updatePosition(d.t,d.x,d.y);
+  };
+  const tableButton = (t, placed) => {
+    const p=point(t), count=reservations.filter(r=>r.tableId===t._id&&r.status!=="cancelled"&&r.status!=="no_show").length;
+    const active=selected?._id===t._id;
+    return <button key={t._id} type="button" aria-label={`Tavolo ${t.n}, ${t.posti} posti, ${count} prenotazioni nel giorno`} aria-pressed={active}
+      disabled={saving} onClick={()=>setSelected(t)} onPointerDown={placed?e=>pointerDown(e,t):undefined} onPointerMove={placed?pointerMove:undefined}
+      onPointerUp={placed?pointerEnd:undefined} onPointerCancel={placed?e=>pointerEnd(e,true):undefined}
+      onKeyDown={e=>{if(editing&&placed&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();updatePosition(t,p.x+(e.key==='ArrowRight'?2:e.key==='ArrowLeft'?-2:0),p.y+(e.key==='ArrowDown'?2:e.key==='ArrowUp'?-2:0));}}}
+      style={{position:placed?"absolute":"relative",left:placed?p.x+"%":undefined,top:placed?p.y+"%":undefined,transform:placed?"translate(-50%,-50%)":undefined,width:mobile?82:104,padding:4,border:active?"2px solid var(--brand)":"2px solid transparent",borderRadius:14,background:active?"var(--brand-tint)":"transparent",color:"var(--ink)",cursor:editing&&placed?"grab":"pointer",touchAction:editing?"none":"auto",fontFamily:"var(--f-ui)"}}>
+      <img src={tableAsset(t)==="round-4"?"/staff/assets/tables/booking-round-4.png":`/staff/assets/tables/${tableAsset(t)}.png`} alt="" draggable="false" style={{display:"block",width:"100%",height:mobile?64:82,objectFit:"contain",pointerEvents:"none"}}/>
+      <span style={{display:"block",fontSize:12,fontWeight:800,background:"var(--surface)",borderRadius:6,padding:"2px 4px"}}>T{t.n} · {t.posti} posti</span>
+      {count>0&&<span style={{fontSize:11,color:"var(--ink-2)"}}>{count} prenotazioni</span>}
+    </button>;
+  };
+  return <Card pad={mobile?14:20} style={{marginBottom:20}}>
+    {roomsError&&<p role="alert" style={{color:"var(--danger)",marginBottom:12}}>{roomsError}</p>}
+    {roomsLoading&&<p role="status" style={{marginBottom:12}}>Caricamento sale…</p>}
+    <div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:10,marginBottom:14}}>
+      <div style={{flex:1,minWidth:140}}><h3 style={{fontSize:19}}>La piantina del locale</h3><p style={{fontSize:13,color:"var(--ink-2)",marginTop:4}}>Sale e tavoli condivisi con Sala Live.</p></div>
+      <Btn kind="soft" size="sm" onClick={loadRooms}>Aggiorna sale</Btn>
+      <Btn kind="soft" size="sm" onClick={()=>setRoomModal(true)}>Nuova sala</Btn>
+      <Btn kind="soft" size="sm" onClick={()=>setTableModal({table:null})} disabled={!room}>Aggiungi tavolo</Btn>
+      <Btn kind={editing?"brand":"soft"} size="sm" onClick={()=>{setEditing(!editing);setSelected(null);}}>{editing?"Fine disposizione":"Disponi tavoli"}</Btn>
+    </div>
+    {rooms.length>0?<>
+      <div role="group" aria-label="Sale" style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>{rooms.map(r=><button key={r.id} type="button" aria-pressed={r.id===room?.id} onClick={()=>{setRoomId(r.id);setSelected(null);}} style={{padding:"9px 16px",borderRadius:12,border:"1px solid var(--hairline)",background:r.id===room?.id?"var(--ink)":"var(--surface)",color:r.id===room?.id?"var(--surface)":"var(--ink)",fontWeight:700}}>{r.nome} · {r.tables.length}</button>)}</div>
+      <p style={{fontSize:12,color:"var(--ink-2)",marginBottom:12}}>{editing?"Trascina i tavoli. Con la tastiera usa le frecce: ogni posizione viene salvata.":"Seleziona un tavolo per gestirlo o creare una prenotazione. I contatori si riferiscono all’intera giornata."}</p>
+      <div ref={canvas} aria-label={`Piantina ${room.nome}`} style={{position:"relative",height:mobile?420:490,border:"5px solid var(--hairline)",borderRadius:18,background:"var(--sunken)",overflow:"hidden",boxShadow:"inset 0 0 0 8px var(--surface)"}}>
+        <span style={{position:"absolute",left:18,top:14,fontSize:11,fontWeight:800,color:"var(--ink-3)",letterSpacing:2}}>{room.nome.toUpperCase()}</span>
+        {tables.filter(t=>point(t)).map(t=>tableButton(t,true))}
+        {!tables.some(t=>point(t))&&<div style={{position:"absolute",inset:60,display:"grid",placeItems:"center",textAlign:"center",color:"var(--ink-2)",fontSize:14}}>Aggiungi i tavoli e posizionali nella sala.</div>}
+      </div>
+      {tables.some(t=>!point(t))&&<div style={{marginTop:14}}><p style={{fontSize:13,fontWeight:700}}>Da posizionare</p><div style={{display:"flex",flexWrap:"wrap",gap:10}}>{tables.filter(t=>!point(t)).map(t=><div key={t._id}>{tableButton(t,false)}<Btn size="sm" kind="soft" disabled={saving} onClick={()=>updatePosition(t,25+(tables.indexOf(t)%3)*25,25+Math.floor(tables.indexOf(t)/3)%3*25)}>Posiziona</Btn></div>)}</div></div>}
+      {selected&&<div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:16,paddingTop:14,borderTop:"1px solid var(--hairline)"}}><strong style={{flex:1}}>Tavolo {selected.n} · {selected.posti} posti</strong><Btn kind="soft" size="sm" onClick={()=>setTableModal({table:{...selected,roomId:room.id}})}>Modifica tavolo</Btn><Btn kind="brand" size="sm" onClick={()=>onReserve(selected)}>Prenota questo tavolo</Btn></div>}
+    </>:<p style={{padding:"30px 0",color:"var(--ink-2)"}}>Crea la prima sala, poi aggiungi e disponi i tavoli. Nessun tavolo viene creato automaticamente.</p>}
+    {window.__takoRestaurantId&&<p style={{marginTop:16,fontSize:13,color:"var(--ink-2)"}}>Pagina da collegare al sito: <a href={`/prenota/${window.__takoRestaurantId}`} target="_blank" rel="noopener noreferrer" style={{color:"var(--ink)",textDecoration:"underline"}}>Apri prenotazioni online</a>. Disponibile solo quando le prenotazioni sono attive nelle impostazioni del locale.</p>}
+    <RoomFormModal open={roomModal} onClose={()=>setRoomModal(false)}/>
+    <TableFormModal open={!!tableModal} table={tableModal?.table||null} rooms={rooms} onClose={()=>setTableModal(null)}/>
+  </Card>;
+}
+
+function ScreenPrenotazioni({ mobile, rooms = [] }) {
   const [date, setDate] = useState(resToday());
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -245,6 +336,8 @@ function ScreenPrenotazioni({ mobile }) {
       <PageHead mobile={mobile} tako="serve" title="Prenotazioni" sub={`${attive.length} prenotazioni · ${coperti} coperti`}
         actions={<Btn kind="brand" icon="plus" onClick={() => setModal({ reservation: null })}>Nuova prenotazione</Btn>} />
 
+      <ReservationRoomMap rooms={rooms} mobile={mobile} reservations={list} onReserve={t=>setModal({reservation:null,table:t})}/>
+
       {/* navigazione giorno */}
       <Card pad={mobile ? 12 : 14} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
         <IconBtn name="chevL" tone="soft" onClick={() => setDate((d) => resAddDays(d, -1))} label="Giorno precedente" />
@@ -272,7 +365,7 @@ function ScreenPrenotazioni({ mobile }) {
         </Card>
       )}
 
-      <ReservationModal open={!!modal} reservation={modal ? modal.reservation : null} defaultDate={date}
+      <ReservationModal open={!!modal} reservation={modal ? modal.reservation : null} defaultDate={date} defaultTable={modal?.table}
         onClose={() => setModal(null)} onSaved={() => load(date)} />
       <Confirm open={!!delTarget} onClose={() => setDelTarget(null)} onConfirm={() => delTarget && onDelete(delTarget)} danger
         title="Eliminare la prenotazione?" body="La prenotazione verrà rimossa definitivamente." confirmLabel="Elimina" />
