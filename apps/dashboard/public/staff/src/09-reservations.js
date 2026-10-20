@@ -202,7 +202,20 @@ function ReservationRow({ r, mobile, onEdit, onStatus, onDelete }) {
 
 /* ═══════════════════ SCHERMATA PRENOTAZIONI ═══════════════════ */
 /* A single room/table model is shared with Sala Live. Positions persist via the existing API. */
-function ReservationRoomMap({ rooms: initialRooms, mobile, reservations, onReserve }) {
+function ReservationTool({ label, icon, onClick, disabled, active, href }) {
+  const tipId=React.useId();
+  const [dismissed,setDismissed]=useState(false);
+  const Tag=href?"a":"button";
+  return <span className="res-tool" data-dismissed={dismissed||undefined} onMouseEnter={()=>setDismissed(false)} onMouseLeave={()=>setDismissed(false)}>
+    <Tag className={"res-tool-button"+(active?" is-active":"")} type={href?undefined:"button"} href={href} target={href?"_blank":undefined} rel={href?"noopener noreferrer":undefined}
+      aria-label={label} aria-describedby={tipId} aria-pressed={href?undefined:active} disabled={disabled} onClick={onClick} onFocus={()=>setDismissed(false)} onKeyDown={e=>{if(e.key==="Escape")setDismissed(true);}}>
+      <Icon name={icon} size={19}/>
+    </Tag>
+    <span id={tipId} role="tooltip" className="res-tool-tip">{label}</span>
+  </span>;
+}
+
+function ReservationRoomMap({ rooms: initialRooms, mobile, reservations, onReserve, onNewReservation }) {
   const [rooms,setRooms]=useState(initialRooms);
   const [roomsError,setRoomsError]=useState("");
   const [roomsLoading,setRoomsLoading]=useState(false);
@@ -265,28 +278,49 @@ function ReservationRoomMap({ rooms: initialRooms, mobile, reservations, onReser
       {count>0&&<span style={{fontSize:11,color:"var(--ink-2)"}}>{count} prenotazioni</span>}
     </button>;
   };
-  return <Card pad={mobile?14:20} style={{marginBottom:20}}>
-    {roomsError&&<p role="alert" style={{color:"var(--danger)",marginBottom:12}}>{roomsError}</p>}
-    {roomsLoading&&<p role="status" style={{marginBottom:12}}>Caricamento sale…</p>}
-    <div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:10,marginBottom:14}}>
-      <div style={{flex:1,minWidth:140}}><h3 style={{fontSize:19}}>La piantina del locale</h3><p style={{fontSize:13,color:"var(--ink-2)",marginTop:4}}>Sale e tavoli condivisi con Sala Live.</p></div>
-      <Btn kind="soft" size="sm" onClick={loadRooms}>Aggiorna sale</Btn>
-      <Btn kind="soft" size="sm" onClick={()=>setRoomModal(true)}>Nuova sala</Btn>
-      <Btn kind="soft" size="sm" onClick={()=>setTableModal({table:null})} disabled={!room}>Aggiungi tavolo</Btn>
-      <Btn kind={editing?"brand":"soft"} size="sm" onClick={()=>{setEditing(!editing);setSelected(null);}}>{editing?"Fine disposizione":"Disponi tavoli"}</Btn>
+  return <Card pad={mobile?14:20} style={{marginBottom:20}} className="res-floor-card">
+    <style>{`
+      .res-toolbar{display:flex;align-items:center;gap:14px;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap}
+      .res-toolbar-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+      .res-toolbar-divider{width:1px;height:22px;background:var(--hairline);margin:0 5px}
+      .res-tool{position:relative;display:inline-flex;flex:none}
+      .res-tool-button{display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:var(--ink-2);cursor:pointer;text-decoration:none}
+      .res-tool-button:hover{background:var(--sunken);color:var(--ink)}
+      .res-tool-button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+      .res-tool-button.is-active{background:var(--ink);color:var(--surface)}
+      .res-tool-button:disabled{opacity:.35;cursor:default}
+      .res-tool-tip{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);padding:7px 10px;border-radius:7px;background:#202020;color:#fff;white-space:nowrap;font-size:12px;font-weight:500;line-height:1.3;opacity:0;visibility:hidden;pointer-events:none;z-index:30}
+      .res-tool:hover .res-tool-tip,.res-tool:focus-within .res-tool-tip{opacity:1;visibility:visible}
+      .res-tool[data-dismissed] .res-tool-tip{opacity:0;visibility:hidden}
+      .res-toolbar-actions>.res-tool:last-child .res-tool-tip{left:auto;right:0;transform:none}
+      .res-floor-empty{min-height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--ink-3)}
+      @media(max-width:600px){.res-toolbar{gap:12px}.res-toolbar h3{width:100%}.res-toolbar-actions{width:100%;gap:4px}.res-toolbar-actions>.press:last-child{margin-left:auto}.res-toolbar-divider{margin:0 2px}.res-tool-button{width:38px;height:40px}}
+    `}</style>
+    <div className="res-toolbar">
+      <h3 style={{fontSize:19,fontWeight:750,margin:0}}>Sale</h3>
+      <div className="res-toolbar-actions" role="group" aria-label="Azioni prenotazioni">
+        <ReservationTool label="Aggiorna sale" icon="refresh" onClick={loadRooms} disabled={roomsLoading}/>
+        <ReservationTool label="Nuova sala" icon="map" onClick={()=>setRoomModal(true)}/>
+        <ReservationTool label={editing?"Termina disposizione":"Disponi tavoli"} icon={editing?"check":"move"} active={editing} disabled={!room} onClick={()=>{setEditing(!editing);setSelected(null);}}/>
+        {window.__takoRestaurantId&&<ReservationTool label="Pagina pubblica" icon="globe" href={`/prenota/${window.__takoRestaurantId}`}/>}
+        <span className="res-toolbar-divider" aria-hidden="true"/>
+        {room&&<Btn kind="soft" size="sm" icon="plus" onClick={()=>setTableModal({table:null})}>Tavolo</Btn>}
+        <Btn kind="brand" size="sm" icon="plus" onClick={onNewReservation}>Nuova prenotazione</Btn>
+      </div>
     </div>
+    {roomsError&&<p role="alert" style={{color:"var(--danger)",marginBottom:12}}>{roomsError}</p>}
+    {roomsLoading&&<div role="status" style={{padding:12}}><TakoLoading label="Caricamento sale…" variant="compact"/></div>}
     {rooms.length>0?<>
       <div role="group" aria-label="Sale" style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>{rooms.map(r=><button key={r.id} type="button" aria-pressed={r.id===room?.id} onClick={()=>{setRoomId(r.id);setSelected(null);}} style={{padding:"9px 16px",borderRadius:12,border:"1px solid var(--hairline)",background:r.id===room?.id?"var(--ink)":"var(--surface)",color:r.id===room?.id?"var(--surface)":"var(--ink)",fontWeight:700}}>{r.nome} · {r.tables.length}</button>)}</div>
-      <p style={{fontSize:12,color:"var(--ink-2)",marginBottom:12}}>{editing?"Trascina i tavoli. Con la tastiera usa le frecce: ogni posizione viene salvata.":"Seleziona un tavolo per gestirlo o creare una prenotazione. I contatori si riferiscono all’intera giornata."}</p>
+      {editing&&<p role="status" style={{fontSize:12,color:"var(--ink-2)",marginBottom:12}}>Trascina per disporre</p>}
       <div ref={canvas} aria-label={`Piantina ${room.nome}`} style={{position:"relative",height:mobile?420:490,border:"5px solid var(--hairline)",borderRadius:18,background:"var(--sunken)",overflow:"hidden",boxShadow:"inset 0 0 0 8px var(--surface)"}}>
         <span style={{position:"absolute",left:18,top:14,fontSize:11,fontWeight:800,color:"var(--ink-3)",letterSpacing:2}}>{room.nome.toUpperCase()}</span>
         {tables.filter(t=>point(t)).map(t=>tableButton(t,true))}
-        {!tables.some(t=>point(t))&&<div style={{position:"absolute",inset:60,display:"grid",placeItems:"center",textAlign:"center",color:"var(--ink-2)",fontSize:14}}>Aggiungi i tavoli e posizionali nella sala.</div>}
+        {!tables.some(t=>point(t))&&<div style={{position:"absolute",inset:60,display:"grid",placeItems:"center",textAlign:"center",color:"var(--ink-2)",fontSize:14}}><span>Nessun tavolo</span></div>}
       </div>
       {tables.some(t=>!point(t))&&<div style={{marginTop:14}}><p style={{fontSize:13,fontWeight:700}}>Da posizionare</p><div style={{display:"flex",flexWrap:"wrap",gap:10}}>{tables.filter(t=>!point(t)).map(t=><div key={t._id}>{tableButton(t,false)}<Btn size="sm" kind="soft" disabled={saving} onClick={()=>updatePosition(t,25+(tables.indexOf(t)%3)*25,25+Math.floor(tables.indexOf(t)/3)%3*25)}>Posiziona</Btn></div>)}</div></div>}
       {selected&&<div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:16,paddingTop:14,borderTop:"1px solid var(--hairline)"}}><strong style={{flex:1}}>Tavolo {selected.n} · {selected.posti} posti</strong><Btn kind="soft" size="sm" onClick={()=>setTableModal({table:{...selected,roomId:room.id}})}>Modifica tavolo</Btn><Btn kind="brand" size="sm" onClick={()=>onReserve(selected)}>Prenota questo tavolo</Btn></div>}
-    </>:<p style={{padding:"30px 0",color:"var(--ink-2)"}}>Crea la prima sala, poi aggiungi e disponi i tavoli. Nessun tavolo viene creato automaticamente.</p>}
-    {window.__takoRestaurantId&&<p style={{marginTop:16,fontSize:13,color:"var(--ink-2)"}}>Pagina da collegare al sito: <a href={`/prenota/${window.__takoRestaurantId}`} target="_blank" rel="noopener noreferrer" style={{color:"var(--ink)",textDecoration:"underline"}}>Apri prenotazioni online</a>. Disponibile solo quando le prenotazioni sono attive nelle impostazioni del locale.</p>}
+    </>:!roomsLoading&&!roomsError&&<div className="res-floor-empty"><Icon name="map" size={28}/><Btn kind="soft" size="sm" icon="plus" onClick={()=>setRoomModal(true)}>Crea sala</Btn></div>}
     <RoomFormModal open={roomModal} onClose={()=>setRoomModal(false)}/>
     <TableFormModal open={!!tableModal} table={tableModal?.table||null} rooms={rooms} onClose={()=>setTableModal(null)}/>
   </Card>;
@@ -333,10 +367,7 @@ function ScreenPrenotazioni({ mobile, rooms = [] }) {
 
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="serve" title="Prenotazioni" sub={`${attive.length} prenotazioni · ${coperti} coperti`}
-        actions={<Btn kind="brand" icon="plus" onClick={() => setModal({ reservation: null })}>Nuova prenotazione</Btn>} />
-
-      <ReservationRoomMap rooms={rooms} mobile={mobile} reservations={list} onReserve={t=>setModal({reservation:null,table:t})}/>
+      <PageHead mobile={mobile} title="Prenotazioni" sub={`${attive.length} prenotazioni · ${coperti} coperti`} />
 
       {/* navigazione giorno */}
       <Card pad={mobile ? 12 : 14} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
@@ -349,11 +380,12 @@ function ScreenPrenotazioni({ mobile, rooms = [] }) {
         {!isToday && <Btn size="sm" kind="soft" onClick={() => setDate(resToday())}>Oggi</Btn>}
       </Card>
 
+      <ReservationRoomMap rooms={rooms} mobile={mobile} reservations={list} onNewReservation={()=>setModal({reservation:null})} onReserve={t=>setModal({reservation:null,table:t})}/>
+
       {loading ? (
         <Card pad={40}><TakoLoading label="Caricamento prenotazioni…" variant="screen"/></Card>
       ) : list.length === 0 ? (
-        <Empty tako="serve" title="Nessuna prenotazione" sub="Non ci sono prenotazioni per questo giorno."
-          action={<Btn kind="brand" icon="plus" onClick={() => setModal({ reservation: null })}>Aggiungi prenotazione</Btn>} />
+        <div style={{padding:"20px 4px",fontSize:14,color:"var(--ink-3)"}}>Nessuna prenotazione</div>
       ) : (
         <Card pad={0} style={{ overflow: "hidden" }}>
           {list.map((r) => (
