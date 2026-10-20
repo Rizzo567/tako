@@ -80,3 +80,6 @@ tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) cinque tocchi 
 tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) la chiamata di un altro ristorante non è MAI visibile (anti cross-tenant)
 tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) risolta: sparisce dall'elenco e l'evento waiter:resolved viene emesso
 tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) una chiamata fatta ADESSO è ancora lì quando l'app si apre dopo
+tests/parity/web-accounts-capacity.test.ts > hosted Tako: real credentials and tenant isolation forgot: risposta identica se l’email non esiste; token solo come hash; nuova richiesta annulla il link precedente; due consumi concorrenti → uno vince; email di conferma   [rosso anche su base v127 0fa42a6 da sola]
+tests/parity/web-accounts-capacity.test.ts > hosted Tako: real credentials and tenant isolation link scaduto o già usato → «Link scaduto»; password corta rifiutata; massimo 3 link l’ora   [rosso anche su base v127 0fa42a6 da sola]
+tests/parity/web-accounts-capacity.test.ts > hosted Tako: real credentials and tenant isolation cambio password da loggato: serve quella attuale; chiude le altre sessioni, non questa; isolamento tra locali   [rosso anche su base v127 0fa42a6 da sola]
