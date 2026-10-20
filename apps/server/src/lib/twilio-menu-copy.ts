@@ -2,13 +2,17 @@
 // I segnaposto sono compilati dal server con dati verificati del menu.
 export const copy={
  // 19/10: benvenuto del titolare (unica eccezione emoji, decisa da Manuel). Esempi presi dal menu vero del locale.
+ // 19/10 (richiesta Manuel): una riga vuota tra i tre esempi; il benvenuto parte da «Ciao!», senza la riga «assistente automatico».
  welcome:`Ciao! Sono Takomenu, il menu digitale di *{locale}*.
 
 I clienti inquadrano il QR sul tavolo e vedono il menu sul telefono.
 
 Tu lo aggiorni scrivendomi qui, come a un collega:
+
 🍝 {esempioPrezzo}
+
 ❌ {esempioFinito}
+
 📷 manda la foto di un piatto
 
 Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando vuoi.`,
@@ -20,6 +24,8 @@ Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando
  // Richiesta «dashboard» / «link del menu» in qualunque momento.
  // Niente gestione password in chat (19/10): si recupera dalla pagina di accesso o si cambia dalla dashboard.
  dashboardLink:'La tua dashboard: {link}\nUtente: {utente}\n\nPassword dimenticata? Usa il tasto nella pagina di accesso.',
+ // 19/10 sera: finché le email sono spente (capabilities.email false) il recupero passa dall'agenzia.
+ dashboardLinkAgency:'La tua dashboard: {link}\nUtente: {utente}\n\nSe perdi la password chiedi alla tua agenzia.',
  dashboardNoAccount:'La tua dashboard: {link}\nPer i dati di accesso chiedi alla tua agenzia.',
  menuLink:'Il tuo menu digitale: {link}',
  help:`Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.
@@ -116,7 +122,8 @@ Indica anche il menu, per esempio «{esempio}».`,
  usageWarning:'*Uso del servizio AI*: {modello} ha raggiunto il *{percento}%* del limite giornaliero ({uso}).',
  capabilityYes:'Posso *{testo}*.\n{esempio}',
  capabilityNo:'{testo}\n\n{alternativa}',
- // 17/10 (AI Act art. 50): detto una sola volta per numero, al collegamento o al primo messaggio.
+ // 17/10 (AI Act art. 50): detto una sola volta per numero al primo messaggio di un numero già collegato, e sempre come risposta a
+ // «sei un bot?» / «sei una persona?» (botQuestion). 19/10 (richiesta Manuel): non più in testa al benvenuto.
  aiDisclosure:'Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.',
  // Fase R (17/10 notte, decisione di Manuel): l'UNICO altro testo fisso col cervello acceso. Groq giù / 429 / timeout / JSON non
  // valido dopo il ripiego: nessuna modifica, nessuna riserva a regole.
@@ -201,7 +208,7 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'bulk',can:false,text:'Non applico modifiche generiche a *tutto il menu*.',alternative:'Indica i piatti e i cambiamenti, anche nello stesso vocale. Oppure mandami il *menu completo* del giorno: lo sostituisco dopo il tuo *OK*.'},
  {id:'graphics',can:false,text:'La *grafica* si cambia dalla dashboard.',alternative:'Lì puoi modificare colori, font e impaginazione.'},
  {id:'categories',can:true,text:'creare categorie e spostare piatti',example:'«crea la categoria speciali» o «sposta il polpo nei secondi»'},
- {id:'dashboard',can:true,text:'mandarti il link della *dashboard* con il tuo utente',example:'«link dashboard». Password dimenticata? Usa il tasto nella pagina di accesso.'},
+ {id:'dashboard',can:true,text:'mandarti il link della *dashboard* con il tuo utente',example:'«link dashboard»'},
  {id:'menulink',can:true,text:'mandarti il link del *menu digitale* che vedono i clienti',example:'«link del menu»'},
  {id:'translations',can:false,text:'Le *traduzioni* si gestiscono dalla dashboard.',alternative:'Apri la sezione dedicata alle lingue.'},
  {id:'other',can:false,text:'Questa funzione *non è disponibile* nella chat.',alternative:'Scrivi *cosa sai fare* per vedere le funzioni.'},

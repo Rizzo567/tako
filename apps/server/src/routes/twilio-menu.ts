@@ -33,9 +33,10 @@ import {relativeDelta,relNormText,g9Prices} from '../lib/twilio-menu-ai.js'
 import {parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
 import {sqlBrainStore} from '../lib/owner-brain-memory.js'
 import {readBotBrain} from '../lib/owner-brain-switch.js'
-import {linkIntent} from '../lib/twilio-menu-nlu.js'
+import {linkIntent,botQuestion} from '../lib/twilio-menu-nlu.js'
 import {linkMarkers} from '../lib/twilio-menu-ai.js'
-import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl} from '../lib/whatsapp-owner-account.js'
+import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
+import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
@@ -65,31 +66,42 @@ async function linkedContext(tx:Tx,phone:string):Promise<Ctx|null>{const links=a
 async function welcomeFor(tx:Tx,tenant:string){const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`),current=await readWorkspace(tenant,tx),catalog=current?catalogOf(workspaceSchema.parse(current.draft)):{refs:[],sections:[]};return welcomeText(String(restaurant[0]?.name),catalog.refs,catalog.sections)}
 // 19/10 (decisione Manuel): link della dashboard con le credenziali del titolare e link del menu digitale pubblico.
 // La password in chiaro va solo nei messaggi «riservati», mandati via REST e mai salvati (né in tako_whatsapp_messages né in memoria).
-type Secret={kind:'secret',say:string,secret:string[],ctx:Ctx}|{kind:'activated',say:string,ctx:Ctx}
+type MediaJob={job:'audio'|'image',key:string}
+// deliver = utente a cui appartiene la password del primo messaggio riservato: segnata consegnata solo a invio riuscito (19/10 sera).
+type Secret={kind:'secret',say:string,secret:string[],ctx:Ctx,deliver?:string}|{kind:'activated',say:string,ctx:Ctx,media?:MediaJob}
+type FollowUps={messages:string[],deliver?:string}
 const followUpDelayMs=()=>{const v=Number(process.env.TAKO_WHATSAPP_FOLLOWUP_DELAY_MS);return Number.isFinite(v)&&v>=0?v:2000}
 const menuLinkText=(tenant:string)=>fill(copy.menuLink,{link:publicMenuUrl(tenant)})
+// 19/10 sera: con le email spente (capabilities.email false) il recupero password passa dall'agenzia.
+const dashboardLinkText=(link:string,utente:string)=>fill(webEmailEnabled()?copy.dashboardLink:copy.dashboardLinkAgency,{link,utente})
 /** «dashboard»: link + utente; se l'account non c'è ancora lo crea e manda anche la password (messaggio riservato). */
-async function dashboardTurn(tx:Tx,ctx:Ctx):Promise<{say:string,secret?:string}>{const account=await ownerAccount(tx,ctx,true),link=dashboardUrl()
+async function dashboardTurn(tx:Tx,ctx:Ctx):Promise<{say:string,secret?:string,deliver?:string}>{const account=await ownerAccount(tx,ctx,true),link=dashboardUrl()
  if(!account||'blocked' in account)return{say:fill(copy.dashboardNoAccount,{link})}
- if(account.password)return{say:'',secret:fill(copy.ownerDashboard,{link,utente:account.username,password:account.password})}
- return{say:fill(copy.dashboardLink,{link,utente:account.username})}}
+ if(account.password)return{say:'',secret:fill(copy.ownerDashboard,{link,utente:account.username,password:account.password}),deliver:account.id}
+ return{say:dashboardLinkText(link,account.username)}}
 /** Dopo il benvenuto: 1) dashboard con credenziali (o solo utente se l'account c'era già), 2) menu digitale pubblico. */
-async function ownerFollowUps(tx:Tx,ctx:Ctx):Promise<string[]>{const d=await dashboardTurn(tx,ctx);return[d.secret??d.say,fill(copy.ownerMenu,{link:publicMenuUrl(ctx.tenant)})]}
+async function ownerFollowUps(tx:Tx,ctx:Ctx):Promise<FollowUps>{const d=await dashboardTurn(tx,ctx);return{messages:[d.secret??d.say,fill(copy.ownerMenu,{link:publicMenuUrl(ctx.tenant)})],...(d.secret&&d.deliver?{deliver:d.deliver}:{})}}
 /** Voci «dashboard»/«menulink» del catalogo scelte dal modello o dalle regole: il link vero del locale (mai creazione account qui). */
 async function resolveLinks(tx:Tx,ctx:Ctx,text:string):Promise<string>{if(!text||!text.includes('\u0003'))return text
  if(text.includes(linkMarkers.menulink))text=text.split(linkMarkers.menulink).join(menuLinkText(ctx.tenant))
- if(text.includes(linkMarkers.dashboard)){const account=await ownerAccount(tx,ctx,false),link=dashboardUrl();text=text.split(linkMarkers.dashboard).join(!account||'blocked' in account?fill(copy.dashboardNoAccount,{link}):fill(copy.dashboardLink,{link,utente:account.username}))}
+ if(text.includes(linkMarkers.dashboard)){const account=await ownerAccount(tx,ctx,false),link=dashboardUrl();text=text.split(linkMarkers.dashboard).join(!account||'blocked' in account?fill(copy.dashboardNoAccount,{link}):dashboardLinkText(link,account.username))}
  return text}
 /** Richieste di link (con o senza cervello). null = il messaggio va al bot normale. Niente password in chat (19/10). */
-async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:string}|null>{
+async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:string,deliver?:string}|null>{
  const intent=linkIntent(body);if(!intent)return null
+ // 19/10 sera: se la frase nomina un piatto del catalogo del locale non è una richiesta di link.
+ const current=await readWorkspace(ctx.tenant,tx),names=current?catalogOf(workspaceSchema.parse(current.draft)).refs.map(r=>r.name):[]
+ if(names.length&&!linkIntent(body,names))return null
  return intent==='menu'?{say:menuLinkText(ctx.tenant)}:dashboardTurn(tx,ctx)}
-async function sendSecrets(ctx:Ctx,messages:string[],afterReply:boolean){const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
- for(const[i,m]of messages.entries()){if(!m)continue;if(i>0||afterReply)await new Promise(r=>setTimeout(r,followUpDelayMs()))
-  try{await sendWhatsApp(accountSid,token,from,ctx.phone,m)}catch{await new Promise(r=>setTimeout(r,1500));try{await sendWhatsApp(accountSid,token,from,ctx.phone,m)}catch(error){await reportFailure({kind:'send_failed',tenant:ctx.tenant,phone:ctx.phone,detail:error instanceof Error?error.message:'Error'});return}}}}
+// 19/10 sera: un invio fallito non ferma i messaggi successivi (il link del menu parte comunque); la password del primo messaggio
+// si segna consegnata solo se Twilio l'ha accettata, altrimenti al prossimo «dashboard» il bot la rigenera e la rimanda.
+async function sendSecrets(ctx:Ctx,out:FollowUps,afterReply:boolean){const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
+ for(const[i,m]of out.messages.entries()){if(!m)continue;if(i>0||afterReply)await new Promise(r=>setTimeout(r,followUpDelayMs()))
+  let ok=true;try{await sendWhatsApp(accountSid,token,from,ctx.phone,m)}catch{await new Promise(r=>setTimeout(r,1500));try{await sendWhatsApp(accountSid,token,from,ctx.phone,m)}catch(error){ok=false;await reportFailure({kind:'send_failed',tenant:ctx.tenant,phone:ctx.phone,detail:error instanceof Error?error.message:'Error'})}}
+  if(ok&&i===0&&out.deliver)await markPasswordDelivered(db,ctx,out.deliver).catch(error=>reportFailure({kind:'webhook_error',tenant:ctx.tenant,phone:ctx.phone,detail:'password delivered: '+(error instanceof Error?error.message:'Error')}))}}
 /** Messaggi dopo l'attivazione: account e link calcolati in una transazione propria (un guasto qui non toglie il benvenuto). */
-async function activationFollowUps(ctx:Ctx):Promise<string[]>{try{return await db.transaction(async tx=>{await lock(tx,ctx.phone);return ownerFollowUps(tx,ctx)})}
- catch(error){await reportFailure({kind:'webhook_error',tenant:ctx.tenant,phone:ctx.phone,detail:'owner account: '+(error instanceof Error?error.message:'Error')});return[fill(copy.dashboardNoAccount,{link:dashboardUrl()}),fill(copy.ownerMenu,{link:publicMenuUrl(ctx.tenant)})]}}
+async function activationFollowUps(ctx:Ctx):Promise<FollowUps>{try{return await db.transaction(async tx=>{await lock(tx,ctx.phone);return ownerFollowUps(tx,ctx)})}
+ catch(error){await reportFailure({kind:'webhook_error',tenant:ctx.tenant,phone:ctx.phone,detail:'owner account: '+(error instanceof Error?error.message:'Error')});return{messages:[fill(copy.dashboardNoAccount,{link:dashboardUrl()}),fill(copy.ownerMenu,{link:publicMenuUrl(ctx.tenant)})]}}}
 // Guasto simulato per la verifica dal vivo: SOLO questo numero finto (+39 000…, non assegnabile) collegato al locale QA, con questa frase esatta.
 const testFaultPhone='whatsapp:+390000000099',qaTenant='26050ecd-2e55-4057-a4c5-bff2b449cd47';class TestFault extends Error{}
 const catalogOf=(w:Workspace)=>({refs:w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>({id:i.id,name:i.name,price:i.price,available:i.available,hidden:i.hidden,menu:m.name,section:s.name,sectionId:s.id,hasImage:!!i.imageUrl,featured:i.featured,tags:i.tags} as MenuRef)))),sections:w.menus.flatMap(m=>{const pub=publicNames(m);return m.sections.map(s=>({id:s.id,name:s.name,menu:m.name,...(pub.get(s.id)?{pub:pub.get(s.id)}:{})} as SectionRef))})})
@@ -707,14 +719,24 @@ export async function twilioMenuRoutes(app:FastifyInstance){
    // L'email non può essere di un altro account (altro locale, agenzia, altro ruolo): l'account del titolare è solo di questo locale.
    const holders=await tx.execute(sql`SELECT id,restaurant_id,role,active FROM users WHERE lower(email)=${email}`)
    if(holders.length&&!(holders.length===1&&holders[0]!.restaurant_id===tenant&&holders[0]!.role==='owner'&&holders[0]!.active===true&&!isAgencyUser(String(holders[0]!.id))))return{emailInUse:true as const}
-   const rows=await tx.execute(sql`SELECT l.restaurant_id,l.activated_at,r.name FROM tako_whatsapp_links l JOIN restaurants r ON r.id=l.restaurant_id WHERE l.phone=${phone}`),existing=rows[0]
-   if(existing&&String(existing.restaurant_id)===tenant){await tx.execute(sql`UPDATE tako_whatsapp_links SET owner_email=${email} WHERE phone=${phone}`);return{state:await ownerState(tx,tenant)}}
+   const rows=await tx.execute(sql`SELECT l.restaurant_id,l.activated_at,l.owner_email,r.name FROM tako_whatsapp_links l JOIN restaurants r ON r.id=l.restaurant_id WHERE l.phone=${phone}`),existing=rows[0]
+   if(existing&&String(existing.restaurant_id)===tenant){
+    // 19/10 sera: a collegamento attivo l'email è l'utente con cui il titolare entra già: non si cambia da qui (scollega e ricollega).
+    const current=existing.owner_email?String(existing.owner_email):null
+    if(existing.activated_at!=null&&current&&current!==email)return{emailLocked:current}
+    await tx.execute(sql`UPDATE tako_whatsapp_links SET owner_email=${email} WHERE phone=${phone}`);return{state:await ownerState(tx,tenant)}}
    if(existing){const other=String(existing.restaurant_id),canMove=await permitted(tx,actor,other);if(input.move!==true||!canMove)return{conflict:{name:canMove?String(existing.name):null,canMove}}}
+   // 19/10 sera: un locale ha un solo numero; quelli sostituiti tornano nella risposta e il pannello lo dice.
+   const replaced=(await tx.execute(sql`SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${tenant} AND phone<>${phone}`)).map(r=>String(r.phone).replace('whatsapp:',''))
+   // Ricollegamento con l'email di un titolare a cui il bot aveva già consegnato l'accesso: sessioni chiuse ora, password nuova al primo messaggio.
+   let reissue=false;if(holders.length===1){const holder=String(holders[0]!.id),prior=await tx.execute(sql`SELECT password_delivered_at FROM users WHERE id=${holder}`)
+    if(prior[0]?.password_delivered_at!=null){reissue=true;await tx.execute(sql`DELETE FROM sessions WHERE user_id=${holder}`)}}
    await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone} OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${tenant})`)
    await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE phone=${phone} OR restaurant_id=${tenant}`)
-   await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email) VALUES(${phone},${tenant},${actor},NULL,${email})`)
-   return{state:await ownerState(tx,tenant)}})
+   await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email,password_reissue) VALUES(${phone},${tenant},${actor},NULL,${email},${reissue})`)
+   return{state:{...await ownerState(tx,tenant),replacedPhones:replaced}}})
   if('forbidden' in result)return ownerDenied(reply)
+  if('emailLocked' in result)return reply.code(409).send({error:{code:'EMAIL_LOCKED',message:`Il titolare ha già l’accesso con ${result.emailLocked}. Per cambiarla scollega e ricollega.`}})
   if('emailInUse' in result)return reply.code(409).send({error:{code:'EMAIL_IN_USE',message:'Questa email è già usata da un altro account. Scrivi un’altra email del titolare.'}})
   if('conflict' in result&&result.conflict){const c=result.conflict;return reply.code(409).send({error:{code:c.canMove?'PHONE_IN_USE_MOVABLE':'PHONE_IN_USE',message:c.canMove?`Questo numero è già collegato a ${c.name}. Vuoi spostarlo su questo locale?`:'Questo numero è già collegato a un altro locale. Per spostarlo contatta Tako.',canMove:c.canMove}})}
   return{data:result.state}})
@@ -757,17 +779,25 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  const phone=form.From||'',sid=form.MessageSid||'',body=(form.Body||'').trim(),media=Number(form.NumMedia||0);if(form.TakoSyncTest==='1'){quietPhones.add(phone);setTimeout(()=>quietPhones.delete(phone),120000)}if(!/^whatsapp:\+\d{8,15}$/.test(phone)||!(/^SM[a-f0-9]{32}$/i.test(sid)||linked.length>0&&/^MM[a-f0-9]{32}$/i.test(sid))||body.length>2000)return reply.code(400).send('Invalid message');
  const scope:{tenant?:string,cached?:boolean}={};const result=await db.transaction(async tx=>{await lock(tx,phone);const cached=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${sid}`);if(cached.length){scope.cached=true;const text=String(cached[0]!.response);return text.startsWith(sent)?'':text}
  const answer=async(text:string)=>{await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${text}) ON CONFLICT DO NOTHING`);return text};
- const pair=body.match(/^collega tako ([a-f0-9]{24})$/i);if(pair){const codes=await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE code_hash=${digest(pair[1]!.toLowerCase())} AND expires_at>now() RETURNING restaurant_id,actor_id`);const code=codes[0];if(!code||!await permitted(tx,String(code.actor_id),String(code.restaurant_id)))return answer(copy.codeInvalid);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone} OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id})`);await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id} AND phone<>${phone}`);await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${phone},${code.restaurant_id},${code.actor_id},now()) ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,created_at=now(),activated_at=now()`);await discloseOnce(tx,phone);return answer(copy.aiDisclosure+'\n\n'+await welcomeFor(tx,String(code.restaurant_id)))}
+ const pair=body.match(/^collega tako ([a-f0-9]{24})$/i);if(pair){const codes=await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE code_hash=${digest(pair[1]!.toLowerCase())} AND expires_at>now() RETURNING restaurant_id,actor_id`);const code=codes[0];if(!code||!await permitted(tx,String(code.actor_id),String(code.restaurant_id)))return answer(copy.codeInvalid);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone} OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id})`);await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id} AND phone<>${phone}`);await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${phone},${code.restaurant_id},${code.actor_id},now()) ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,created_at=now(),activated_at=now()`);await discloseOnce(tx,phone);return answer(await welcomeFor(tx,String(code.restaurant_id)))}
  const ctx=await linkedContext(tx,phone);if(!ctx)return answer('');scope.tenant=ctx.tenant
  // Primo messaggio di un numero pre-collegato dalla dashboard: qualunque cosa scriva, si attiva e riceve il benvenuto (una volta: activated_at).
  // 19/10: niente «cosa sai fare» automatico, il benvenuto invita a chiederlo.
+ // 19/10 (richiesta Manuel): il benvenuto parte da «Ciao! Sono Takomenu…», senza la riga «assistente automatico» (vale anche per «collega tako»).
+ // Il numero resta segnato in `ai:` così la riga non compare in testa alla risposta successiva; resta la risposta a «sei un bot?» (botQuestion).
  // 19/10: dopo il benvenuto, in background e una volta sola (activated_at), dashboard con credenziali e menu digitale (activationFollowUps).
- if(ctx.pending){await tx.execute(sql`UPDATE tako_whatsapp_links SET activated_at=now() WHERE phone=${phone} AND activated_at IS NULL`);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await discloseOnce(tx,phone);return{kind:'activated' as const,say:await answer(copy.aiDisclosure+'\n\n'+await welcomeFor(tx,ctx.tenant)),ctx}}
+ // 19/10 sera: se il primo messaggio è un vocale o una foto, dopo benvenuto e messaggi di accesso si lavora anche quello (job con chiave propria).
+ if(ctx.pending){await tx.execute(sql`UPDATE tako_whatsapp_links SET activated_at=now() WHERE phone=${phone} AND activated_at IS NULL`);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await discloseOnce(tx,phone)
+  const welcome=await answer(await welcomeFor(tx,ctx.tenant)),type=form.MediaContentType0||'',mediaJob=media>0?(whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null):null
+  if(mediaJob){const key=sid+':media';await reserve(tx,key);return{kind:'activated' as const,say:welcome,ctx,media:{job:mediaJob,key}}}
+  return{kind:'activated' as const,say:welcome,ctx}}
  if(phone===testFaultPhone&&ctx.tenant===qaTenant&&normalizeMenuText(body)==='guasto di prova')throw new TestFault('Guasto simulato')
  // AI Act (17/10): al primo messaggio di un numero già collegato, una riga «assistente automatico», una volta sola.
  const disclose=await discloseOnce(tx,phone),say=async(t:string)=>{t=await resolveLinks(tx,ctx,t);return answer(disclose&&t?copy.aiDisclosure+'\n\n'+t:t)},prefix=disclose?copy.aiDisclosure+'\n\n':''
+ // 19/10 (richiesta Manuel): «sei un bot?» / «sei una persona?» → la riga «assistente automatico», una volta sola anche al primo messaggio.
+ if(media===0&&botQuestion(body))return answer(copy.aiDisclosure)
  // 19/10: link della dashboard / del menu digitale. Le credenziali (account creato ora) partono a parte (REST), mai nel TwiML in cache.
- if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx};return say(link.say)}}
+ if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx,...(link.deliver?{deliver:link.deliver}:{})};return say(link.say)}}
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);return{job,ctx,ack:'',prefix}}
  if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!process.env.GROQ_API_KEY)return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
  if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result))}
@@ -775,9 +805,9 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // Verifica dal vivo sincrona sul QA (TakoSyncTest): tutto nello stesso TwiML, niente REST.
  if('kind' in result){const r=result as Secret,sync=r.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'
   if(r.say&&body)await rememberTurn(db,r.ctx.tenant,phone,body,r.say)
-  const extra=()=>r.kind==='activated'?activationFollowUps(r.ctx):Promise.resolve(r.secret)
-  if(sync)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml([r.say,...await extra()].filter(Boolean).join(nextMessage)))
-  const job=extra().then(m=>sendSecrets(r.ctx,m,!!r.say)).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp follow-up failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
+  const extra=():Promise<FollowUps>=>r.kind==='activated'?activationFollowUps(r.ctx):Promise.resolve({messages:r.secret,...(r.deliver?{deliver:r.deliver}:{})}),mediaJob=r.kind==='activated'?r.media:undefined
+  if(sync){const out=await extra();if(out.deliver)await markPasswordDelivered(db,r.ctx,out.deliver);const m=mediaJob?await jobMessage(mediaJob.job,r.ctx,body,form,{expired:false}).catch(()=>copy.failed):'';if(mediaJob)await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${mediaJob.key}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml([r.say,...out.messages,m].filter(Boolean).join(nextMessage)))}
+  const job=extra().then(m=>sendSecrets(r.ctx,m,!!r.say)).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp follow-up failed')).then(()=>mediaJob&&runJob(mediaJob.job,r.ctx,mediaJob.key,body,form,'')).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
   return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(r.say))}
  // Verifica dal vivo sincrona: solo sul QA e solo con il campo firmato TakoSyncTest=1 (la firma Twilio copre tutti i campi: serve il
  // token). Anche le risposte dell'IA tornano SOLO nel TwiML di questa richiesta, mai via REST, e senza avvisi. Altrimenti nulla cambia.

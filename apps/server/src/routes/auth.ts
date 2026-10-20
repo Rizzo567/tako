@@ -217,6 +217,8 @@ export async function authRoutes(fastify: FastifyInstance) {
     // Sessione DB allineata alla maxAge del cookie (7g), vedi /register.
     const expiresAt = new Date(Date.now() + STAFF_SESSION_MAX_AGE * 1000)
     await db.insert(sessions).values({ userId: user.id, token, expiresAt })
+    // 19/10 sera: «mai entrato» per il bot WhatsApp (rigenera la password solo a chi non ha mai fatto login). Mai bloccante.
+    try { await db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id)) } catch { /* solo informativo */ }
 
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, user.restaurantId!)).limit(1)
 

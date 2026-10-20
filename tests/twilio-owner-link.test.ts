@@ -3,10 +3,10 @@ import{createRequire}from'node:module';import{createServer,type Server}from'node
 const QA='26050ecd-2e55-4057-a4c5-bff2b449cd47',VIC='528e263c-634e-4695-9632-6c5cc6a3302f',OTHER='11111111-1111-4111-8111-111111111111'
 const AGENCY='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',OWNER_QA='3af33a5e-8eb8-4f2e-a94d-acaf18b9dd9f',OWNER_OTHER='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',EDITOR='cccccccc-cccc-4ccc-8ccc-cccccccccccc'
 const MANUEL='whatsapp:+390000000098',ITEM='55555555-5555-4555-8555-555555555555'
-type Link={restaurant_id:string,actor_id:string,activated_at:Date|null,created_at:Date,owner_email?:string|null}
+type Link={restaurant_id:string,actor_id:string,activated_at:Date|null,created_at:Date,owner_email?:string|null,password_reissue?:boolean}
 const names:Record<string,string>={[QA]:'Tako · Verifica web',[VIC]:'Victoria Bar',[OTHER]:'Altro locale'}
-const users:Record<string,{restaurant_id:string,role:string,email?:string,phone?:string,active?:boolean,password_hash?:string}>={[AGENCY]:{restaurant_id:VIC,role:'owner',email:'agenzia@test.invalid'},[OWNER_QA]:{restaurant_id:QA,role:'owner',email:'owner-qa@test.invalid'},[OWNER_OTHER]:{restaurant_id:OTHER,role:'owner'},[EDITOR]:{restaurant_id:QA,role:'menu_editor'}}
-const originalUsers=new Set(Object.keys(users));const db={sessionsDeleted:[] as string[],links:new Map<string,Link>(),proposals:new Map<string,{restaurant_id:string,actor_id:string,revision:number,command:any}>(),codes:new Map<string,{restaurant_id:string,actor_id:string}>(),messages:new Map<string,string>(),errors:[] as any[],alertAt:null as Date|null,forwarded:0}
+const users:Record<string,{restaurant_id:string,role:string,email?:string,phone?:string,active?:boolean,password_hash?:string,name?:string,delivered?:Date|null,last_login?:Date|null,sessions?:number}>={[AGENCY]:{restaurant_id:VIC,role:'owner',email:'agenzia@test.invalid'},[OWNER_QA]:{restaurant_id:QA,role:'owner',email:'owner-qa@test.invalid'},[OWNER_OTHER]:{restaurant_id:OTHER,role:'owner'},[EDITOR]:{restaurant_id:QA,role:'menu_editor'}}
+const originalUsers=new Set(Object.keys(users)),usersInit=JSON.stringify(users);const db={sessionsDeleted:[] as string[],links:new Map<string,Link>(),proposals:new Map<string,{restaurant_id:string,actor_id:string,revision:number,command:any}>(),codes:new Map<string,{restaurant_id:string,actor_id:string}>(),messages:new Map<string,string>(),errors:[] as any[],alertAt:null as Date|null,forwarded:0}
 const parse=(q:any)=>{let text='';const params:unknown[]=[];for(const c of q.queryChunks)if(c&&typeof c==='object'&&Array.isArray(c.value))text+=c.value.join('');else{text+='$';params.push(c)}return{text:text.replace(/\s+/g,' ').trim(),params}}
 const linksOf=(r:string)=>[...db.links].filter(([,l])=>l.restaurant_id===r)
 const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);const p=params as any[]
@@ -16,22 +16,29 @@ const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);cons
  if(text==='SELECT id,restaurant_id,role,active FROM users WHERE lower(email)=$')return Object.entries(users).filter(([,u])=>u.email===p[0]).map(([id,u])=>({id,restaurant_id:u.restaurant_id,role:u.role,active:u.active??true}))
  if(text==='SELECT id,restaurant_id,role,active,email FROM users WHERE id=$'){const u=users[p[0]];return u?[{id:p[0],restaurant_id:u.restaurant_id,role:u.role,active:u.active??true,email:u.email??p[0]+'@test.invalid'}]:[]}
  if(text.startsWith("SELECT id,restaurant_id,role,active,email FROM users WHERE restaurant_id=$ AND role='owner' AND active=true AND phone IN ($,$)"))return Object.entries(users).filter(([,u])=>u.restaurant_id===p[0]&&u.role==='owner'&&(u.active??true)&&!!u.phone&&[p[1],p[2]].includes(u.phone)).map(([id,u])=>({id,restaurant_id:u.restaurant_id,role:u.role,active:true,email:u.email}))
- if(text.startsWith('INSERT INTO users(id,restaurant_id,name,email,password_hash,role,phone,active,email_verified)')){if(Object.values(users).some(u=>u.email===p[3]))throw new Error('unique violation');users[p[0]]={restaurant_id:p[1],role:'owner',email:p[3],password_hash:p[4],phone:p[5],active:true};return[]}
+ if(text.startsWith('INSERT INTO users(id,restaurant_id,name,email,password_hash,role,phone,active,email_verified)')){if(Object.values(users).some(u=>u.email===p[3]))throw new Error('unique violation');users[p[0]]={restaurant_id:p[1],name:p[2],role:'owner',email:p[3],password_hash:p[4],phone:p[5],active:true};return[]}
+ // 19/10 sera: consegna password, ricollegamento, collegamento al titolare
+ if(text==='SELECT u.id,u.restaurant_id,u.role,u.active,u.password_delivered_at,u.last_login_at,EXISTS(SELECT 1 FROM sessions s WHERE s.user_id=u.id) AS has_session FROM users u WHERE lower(u.email)=$')return Object.entries(users).filter(([,u])=>u.email===p[0]).map(([id,u])=>({id,restaurant_id:u.restaurant_id,role:u.role,active:u.active??true,password_delivered_at:u.delivered??null,last_login_at:u.last_login??null,has_session:(u.sessions??0)>0}))
+ if(text==='SELECT password_delivered_at FROM users WHERE id=$'){const u=users[p[0]];return u?[{password_delivered_at:u.delivered??null}]:[]}
+ if(text==='UPDATE users SET password_delivered_at=now() WHERE id=$'){const u=users[p[0]];if(u)u.delivered=new Date();return[]}
+ if(text==='UPDATE tako_whatsapp_links SET actor_id=$ WHERE phone=$ AND restaurant_id=$'){const l=db.links.get(p[1]);if(l&&l.restaurant_id===p[2])l.actor_id=p[0];return[]}
+ if(text==='UPDATE tako_whatsapp_links SET password_reissue=false WHERE phone=$ AND restaurant_id=$'){const l=db.links.get(p[0]);if(l&&l.restaurant_id===p[1])l.password_reissue=false;return[]}
+ if(text==='SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$ AND phone<>$')return linksOf(p[0]).filter(([k])=>k!==p[1]).map(([phone])=>({phone}))
  if(text.startsWith('UPDATE users SET password_hash=$')){const u=users[p[1]];if(!u||u.restaurant_id!==p[2]||u.role!=='owner')return[];u.password_hash=p[0];return[{id:p[1]}]}
- if(text==='DELETE FROM sessions WHERE user_id=$'){db.sessionsDeleted.push(p[0]);return[]}
+ if(text==='DELETE FROM sessions WHERE user_id=$'){db.sessionsDeleted.push(p[0]);if(users[p[0]])users[p[0]]!.sessions=0;return[]}
  if(text==='DELETE FROM tako_whatsapp_messages WHERE sid=$'){db.messages.delete(p[0]);return[]}
  if(text.startsWith('SELECT role FROM web_location_memberships'))return[]
  if(text.startsWith('SELECT 1 FROM tako_whatsapp_links'))return db.links.has(p[0])?[{}]:[]
  if(text.startsWith('SELECT restaurant_id,actor_id,activated_at FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{...l}]:[]}
  if(text.startsWith('SELECT phone,activated_at,owner_email FROM tako_whatsapp_links')){const rows=linksOf(p[0]).sort((a,b)=>b[1].created_at.getTime()-a[1].created_at.getTime());return rows.slice(0,1).map(([phone,l])=>({phone,owner_email:l.owner_email??null,activated_at:l.activated_at}))}
- if(text.startsWith('SELECT l.restaurant_id,l.activated_at,r.name FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{restaurant_id:l.restaurant_id,activated_at:l.activated_at,name:names[l.restaurant_id]}]:[]}
+ if(text.startsWith('SELECT l.restaurant_id,l.activated_at,l.owner_email,r.name FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{restaurant_id:l.restaurant_id,activated_at:l.activated_at,owner_email:l.owner_email??null,name:names[l.restaurant_id]}]:[]}
  if(text.startsWith('UPDATE tako_whatsapp_links SET activated_at=now()')){const l=db.links.get(p[0]);if(l&&!l.activated_at)l.activated_at=new Date();return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE phone=$ OR restaurant_id=$'){db.links.delete(p[0]);for(const[k]of linksOf(p[1]))db.links.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE restaurant_id=$ AND phone<>$'){for(const[k]of linksOf(p[0]))if(k!==p[1])db.links.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE restaurant_id=$'){for(const[k]of linksOf(p[0]))db.links.delete(k);return[]}
- if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email) VALUES($,$,$,NULL,$)')){if(db.links.has(p[0])||linksOf(p[1]).length)throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:null,created_at:new Date(),owner_email:p[3]});return[]}
+ if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email,password_reissue) VALUES($,$,$,NULL,$,$)')){if(db.links.has(p[0])||linksOf(p[1]).length)throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:null,created_at:new Date(),owner_email:p[3],password_reissue:p[4]});return[]}
  if(text==='UPDATE tako_whatsapp_links SET owner_email=$ WHERE phone=$'){const l=db.links.get(p[1]);if(l)l.owner_email=p[0];return[]}
- if(text==='SELECT owner_email FROM tako_whatsapp_links WHERE phone=$ AND restaurant_id=$'){const l=db.links.get(p[0]);return l&&l.restaurant_id===p[1]?[{owner_email:l.owner_email??null}]:[]}
+ if(text==='SELECT owner_email,password_reissue FROM tako_whatsapp_links WHERE phone=$ AND restaurant_id=$'){const l=db.links.get(p[0]);return l&&l.restaurant_id===p[1]?[{owner_email:l.owner_email??null,password_reissue:l.password_reissue??false}]:[]}
  if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES($,$,$,now())')){if(linksOf(p[1]).some(([k])=>k!==p[0]))throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:new Date(),created_at:new Date()});return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone=$ OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$)'){db.proposals.delete(p[0]);for(const[k]of linksOf(p[1]))db.proposals.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$)'){for(const[k]of linksOf(p[0]))db.proposals.delete(k);return[]}
@@ -59,17 +66,17 @@ import{twilioMenuRoutes}from'../apps/server/src/routes/twilio-menu.js'
 import{reportFailure}from'../apps/server/src/lib/twilio-menu-alerts.js'
 const Fastify=createRequire(new URL('../apps/server/package.json',import.meta.url))('fastify')
 const token='owner-link-token',self='https://takoitalia.com/api/whatsapp/twilio',account='AC'+'2'.repeat(32),sender='whatsapp:+18382622788'
-let groqContent='{"intent":"clarify","item_ids":[]}';let servers:Server[]=[],sent:Record<string,string>[]=[],twilioMode:'ok'|'fail'|'window'='ok',polls=0,groqHang=false
+let groqContent='{"intent":"clarify","item_ids":[]}';let servers:Server[]=[],sent:Record<string,string>[]=[],twilioMode:'ok'|'fail'|'window'|'failpw'='ok',polls=0,groqHang=false
 const listen=async(h:Parameters<typeof createServer>[1])=>{const s=createServer(h);servers.push(s);await new Promise<void>(r=>s.listen(0,'127.0.0.1',()=>r()));return`http://127.0.0.1:${(s.address() as AddressInfo).port}`}
 const read=(req:any)=>new Promise<Buffer>(r=>{const c:Buffer[]=[];req.on('data',(d:Buffer)=>c.push(d));req.on('end',()=>r(Buffer.concat(c)))})
-beforeAll(async()=>{const twilio=await listen(async(req,res)=>{const body=await read(req);if(req.method==='POST'&&req.url!.endsWith('/Messages.json')){const form=Object.fromEntries(new URLSearchParams(body.toString()));if(twilioMode==='fail'&&form.To!==MANUEL){res.writeHead(500,{'Content-Type':'application/json'});return res.end('{"code":20500}')}sent.push(form);res.writeHead(201,{'Content-Type':'application/json'});return res.end(JSON.stringify({sid:'SM'+'f'.repeat(32),status:'queued'}))}
+beforeAll(async()=>{const twilio=await listen(async(req,res)=>{const body=await read(req);if(req.method==='POST'&&req.url!.endsWith('/Messages.json')){const form=Object.fromEntries(new URLSearchParams(body.toString()));if((twilioMode==='fail'&&form.To!==MANUEL)||(twilioMode==='failpw'&&/Password: /.test(form.Body||''))){res.writeHead(500,{'Content-Type':'application/json'});return res.end('{"code":20500}')}sent.push(form);res.writeHead(201,{'Content-Type':'application/json'});return res.end(JSON.stringify({sid:'SM'+'f'.repeat(32),status:'queued'}))}
   if(req.method==='GET'&&/\/Messages\/SM[f]{32}\.json$/.test(req.url!)){polls++;res.writeHead(200,{'Content-Type':'application/json'});return res.end(JSON.stringify(twilioMode==='window'?{status:'failed',error_code:63016}:{status:'sent',error_code:null}))}
   res.writeHead(404);res.end()})
  const groq=await listen(async(_req,res)=>{if(groqHang)return;res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({choices:[{message:{content:groqContent}}],usage:{prompt_tokens:1,completion_tokens:1}}))})
  const menusmart=await listen((_q,res)=>{db.forwarded++;res.writeHead(200,{'Content-Type':'text/xml'});res.end('<Response><Message>MenuSmart</Message></Response>')})
  Object.assign(process.env,{TWILIO_AUTH_TOKEN:token,TWILIO_WEBHOOK_URL:self,TWILIO_ACCOUNT_SID:account,TWILIO_WHATSAPP_NUMBER:sender,TWILIO_API_BASE:twilio,GROQ_API_KEY:'k',GROQ_API_BASE:groq,MENUSMART_WHATSAPP_WEBHOOK_URL:menusmart,TAKOMENU_AGENCY_USER_IDS:AGENCY})})
 afterAll(()=>{for(const s of servers){s.closeAllConnections();s.close()}})
-beforeEach(()=>{db.links=new Map([[MANUEL,{restaurant_id:VIC,actor_id:AGENCY,activated_at:new Date('2026-10-14T17:26:14Z'),created_at:new Date('2026-10-14T17:26:14Z')}]]);db.proposals.clear();db.codes.clear();db.messages.clear();db.errors=[];db.alertAt=null;db.forwarded=0;db.sessionsDeleted=[];for(const id of Object.keys(users))if(!originalUsers.has(id))delete users[id];sent=[];groqContent='{"intent":"clarify","item_ids":[]}';process.env.TAKO_WHATSAPP_FOLLOWUP_DELAY_MS='0';twilioMode='ok';polls=0;groqHang=false;delete process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS})
+beforeEach(()=>{db.links=new Map([[MANUEL,{restaurant_id:VIC,actor_id:AGENCY,activated_at:new Date('2026-10-14T17:26:14Z'),created_at:new Date('2026-10-14T17:26:14Z')}]]);db.proposals.clear();db.codes.clear();db.messages.clear();db.errors=[];db.alertAt=null;db.forwarded=0;db.sessionsDeleted=[];for(const id of Object.keys(users))if(!originalUsers.has(id))delete users[id];Object.assign(users,JSON.parse(usersInit));delete process.env.WEB_EMAIL_ENABLED;sent=[];groqContent='{"intent":"clarify","item_ids":[]}';process.env.TAKO_WHATSAPP_FOLLOWUP_DELAY_MS='0';twilioMode='ok';polls=0;groqHang=false;delete process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS})
 let n=0;const sid=()=>'SM'+(++n).toString(16).padStart(32,'0')
 const app=async()=>{const a=Fastify();await a.register(twilioMenuRoutes,{prefix:'/api'});return a}
 const as=(user:string,tenant:string)=>({'x-test-user':user+'|'+tenant})
@@ -111,7 +118,7 @@ describe('collegamento del titolare dalla dashboard',()=>{
   // il numero sostituito torna a MenuSmart
   await post(a,'whatsapp:+393330000043','ciao');expect(db.forwarded).toBe(1)
   // risalvare lo stesso numero già collegato non lo rimette in attesa
-  await post(a,'whatsapp:+393330000045','ciao');expect((await save(a,OWNER_QA,QA,'+39 333 000 0045')).json().data.status).toBe('linked');await a.close()})
+  await post(a,'whatsapp:+393330000045','ciao');expect((await save(a,OWNER_QA,QA,'+39 333 000 0045',undefined,defaultEmail('3330000045'))).json().data.status).toBe('linked');await a.close()})
  it('un telefono ha un solo locale: se è collegato altrove chiede conferma e sposta solo con move=true e permesso su entrambi',async()=>{const a=await app()
   const conflict=await save(a,AGENCY,QA,'+390000000098');expect(conflict.statusCode).toBe(409);expect(conflict.json().error).toMatchObject({code:'PHONE_IN_USE_MOVABLE'});expect(conflict.json().error.message).toContain('Victoria Bar');expect(db.links.get(MANUEL)!.restaurant_id).toBe(VIC)
   // il titolare di un altro locale non vede il nome e non può spostarlo nemmeno con move=true
@@ -186,10 +193,13 @@ describe('dashboard e menu digitale del titolare su WhatsApp',()=>{
   for(const v of db.messages.values())expect(v).not.toContain(m![1])
   await post(a,phone,'ciao');expect(sent).toHaveLength(2);expect(Object.values(users).filter(x=>x.email===u.email)).toHaveLength(1);await a.close()})
  it('email di un account titolare già esistente di questo locale: riusato, nessuna password nuova in chat',async()=>{const a=await app()
-  const{phone}=await activate(a,'3330000062','owner-qa@test.invalid');expect(sent[0]!.Body).toBe(fill(copy.dashboardLink,{link:dash,utente:'owner-qa@test.invalid'}));expect(users[OWNER_QA]!.password_hash).toBeUndefined()
+  users[OWNER_QA]!.last_login=new Date('2026-10-18T10:00:00Z')
+  const{phone}=await activate(a,'3330000062','owner-qa@test.invalid');expect(sent[0]!.Body).toBe(fill(copy.dashboardLinkAgency,{link:dash,utente:'owner-qa@test.invalid'}));expect(users[OWNER_QA]!.password_hash).toBeUndefined()
+  expect(users[OWNER_QA]!.delivered).toBeInstanceOf(Date);expect(db.links.get(phone)!.actor_id).toBe(OWNER_QA)
   expect(Object.values(users).filter(x=>x.email==='owner-qa@test.invalid')).toHaveLength(1);expect(phone).toBe('whatsapp:+393330000062');await a.close()})
  it('«dashboard», «ho perso la password» e «link del menu» in qualunque momento; niente password in chat; le frasi simili restano al bot',async()=>{const a=await app();const{phone}=await activate(a,'3330000063','anna@example.com');const hash0=account('anna@example.com')![1].password_hash;sent=[]
-  const dashReply=fill(copy.dashboardLink,{link:dash,utente:'anna@example.com'});expect(dashReply).toContain('Password dimenticata? Usa il tasto nella pagina di accesso.')
+  // email spente (default in produzione oggi): il bot rimanda all'agenzia, mai al tasto «Password dimenticata»
+  const dashReply=fill(copy.dashboardLinkAgency,{link:dash,utente:'anna@example.com'});expect(dashReply).toContain('Se perdi la password chiedi alla tua agenzia.');expect(dashReply).not.toContain('Password dimenticata')
   expect(messages((await post(a,phone,'mi mandi il link della dashboard?')).body)).toEqual([dashReply])
   expect(messages((await post(a,phone,'ho perso la password')).body)).toEqual([dashReply]);expect(messages((await post(a,phone,'conferma')).body).join()).not.toContain('Password:')
   expect(messages((await post(a,phone,'dove vedo il menu?')).body)).toEqual([fill(copy.menuLink,{link:menuQA})])
@@ -198,11 +208,46 @@ describe('dashboard e menu digitale del titolare su WhatsApp',()=>{
   expect(sent.every(m=>!/Password:/.test(m.Body!))).toBe(true);expect(account('anna@example.com')![1].password_hash).toBe(hash0);expect(db.sessionsDeleted).toEqual([]);await a.close()})
  it('voce del catalogo scelta dall’IA: il server mette il link vero del locale',async()=>{const a=await app();const{phone}=await activate(a,'3330000064','luca@example.com');sent=[]
   groqContent='{"intent":"capability","capability_ids":["menulink"]}';await post(a,phone,'e i clienti cosa guardano di preciso quando sono al tavolo');expect(sent.at(-1)!.Body).toBe(fill(copy.menuLink,{link:menuQA}))
-  groqContent='{"intent":"capability","capability_ids":["dashboard"]}';await post(a,phone,'e per le cose che non fai tu dove le sistemo io di preciso');expect(sent.at(-1)!.Body).toBe(fill(copy.dashboardLink,{link:dash,utente:'luca@example.com'}));await a.close()})
+  groqContent='{"intent":"capability","capability_ids":["dashboard"]}';await post(a,phone,'e per le cose che non fai tu dove le sistemo io di preciso');expect(sent.at(-1)!.Body).toBe(fill(copy.dashboardLinkAgency,{link:dash,utente:'luca@example.com'}))
+  // email attive: torna il tasto «Password dimenticata»
+  Object.assign(process.env,{WEB_EMAIL_ENABLED:'1',RESEND_API_KEY:'re_x',EMAIL_FROM:'a@b.it'});expect(messages((await post(a,phone,'dashboard')).body)).toEqual([fill(copy.dashboardLink,{link:dash,utente:'luca@example.com'})]);delete process.env.RESEND_API_KEY;delete process.env.EMAIL_FROM;await a.close()})
  it('isolamento: l’account vede solo il suo locale; mai l’account agenzia; email presa da un altro locale dopo il salvataggio → niente credenziali',async()=>{const a=await app();await activate(a,'3330000066','sara@example.com');const[id]=account('sara@example.com')!
   expect((await get(a,id,QA)).statusCode).toBe(200);expect((await get(a,id,OTHER)).statusCode).toBe(403);expect((await get(a,id,VIC)).statusCode).toBe(403)
   expect(users[AGENCY]!.password_hash).toBeUndefined()
   await save(a,AGENCY,QA,'3330000067',undefined,'conteso@example.com');const ALIEN='dddddddd-dddd-4ddd-8ddd-dddddddddddd';users[ALIEN]={restaurant_id:OTHER,role:'owner',email:'conteso@example.com',password_hash:'h0',active:true};sent=[]
   await post(a,'whatsapp:+393330000067','ciao');expect(sent[0]!.Body).toBe(fill(copy.dashboardNoAccount,{link:dash}));expect(sent.some(m=>/Password:/.test(m.Body!))).toBe(false)
   expect(messages((await post(a,'whatsapp:+393330000067','dashboard')).body)).toEqual([fill(copy.dashboardNoAccount,{link:dash})]);expect(users[ALIEN]!.password_hash).toBe('h0');expect(users[ALIEN]!.restaurant_id).toBe(OTHER);await a.close()})
+
+ // 19/10 sera: revisioni v119
+ const regen=(b:string)=>b.match(/Password: ([a-z]+\.[a-z]+\.[a-z]+)$/)?.[1]
+ it('(1) account già esistente mai entrato: password rigenerata e mandata; sessioni chiuse; nome «Titolare di <locale>» per gli account nuovi',async()=>{const a=await app()
+  const{phone}=await activate(a,'3330000070','owner-qa@test.invalid');const pw=regen(sent[0]!.Body!);expect(pw).toBeTruthy();expect(await bcrypt.compare(pw!,users[OWNER_QA]!.password_hash!)).toBe(true);expect(db.sessionsDeleted).toContain(OWNER_QA)
+  expect(users[OWNER_QA]!.delivered).toBeInstanceOf(Date);sent=[]
+  expect(messages((await post(a,phone,'dashboard')).body)).toEqual([fill(copy.dashboardLinkAgency,{link:dash,utente:'owner-qa@test.invalid'})]);expect(sent).toHaveLength(0)
+  await activate(a,'3330000071','nuovo@example.com');expect(account('nuovo@example.com')![1].name).toBe('Titolare di Tako · Verifica web');await a.close()})
+ it('(2) Twilio fallisce sulla password: il link del menu parte lo stesso; al prossimo «dashboard» password nuova; poi più nulla',async()=>{const a=await app();twilioMode='failpw'
+  const{phone}=await activate(a,'3330000072','pia@example.com');expect(sent.map(m=>m.Body)).toEqual([fill(copy.ownerMenu,{link:menuQA})]);const[id,u]=account('pia@example.com')!;expect(u.delivered??null).toBeNull();expect(db.errors.map(e=>e.kind)).toContain('send_failed')
+  const h1=u.password_hash;twilioMode='ok';sent=[]
+  const r=await post(a,phone,'dashboard');expect(messages(r.body).join('')).not.toContain('Password:');expect(sent).toHaveLength(1);const pw=regen(sent[0]!.Body!)!;expect(pw).toBeTruthy();expect(users[id]!.password_hash).not.toBe(h1);expect(await bcrypt.compare(pw,users[id]!.password_hash!)).toBe(true);expect(users[id]!.delivered).toBeInstanceOf(Date)
+  sent=[];expect(messages((await post(a,phone,'dashboard')).body)).toEqual([fill(copy.dashboardLinkAgency,{link:dash,utente:'pia@example.com'})]);expect(sent).toHaveLength(0);await a.close()})
+ it('(5) scollega e ricollega con la stessa email: sessioni chiuse subito, password nuova al primo messaggio',async()=>{const a=await app()
+  const{phone}=await activate(a,'3330000073','rino@example.com');const[id]=account('rino@example.com')!;const first=regen(sent[0]!.Body!)!;users[id]!.last_login=new Date();users[id]!.sessions=2;sent=[];db.sessionsDeleted=[]
+  await unlink(a,AGENCY,QA);const again=await save(a,AGENCY,QA,'3330000073',undefined,'rino@example.com');expect(again.statusCode).toBe(200);expect(db.sessionsDeleted).toEqual([id]);expect(db.links.get(phone)!.password_reissue).toBe(true)
+  await post(a,phone,'ciao');const second=regen(sent[0]!.Body!)!;expect(second).toBeTruthy();expect(second).not.toBe(first);expect(await bcrypt.compare(second,users[id]!.password_hash!)).toBe(true);expect(db.links.get(phone)!.password_reissue).toBe(false)
+  sent=[];await post(a,phone,'dashboard');expect(sent).toHaveLength(0);await a.close()})
+ it('(7) primo messaggio vocale/foto da numero in attesa: benvenuto, messaggi di accesso e poi il lavoro sul media',async()=>{const a=await app();await save(a,AGENCY,QA,'3330000074',undefined,'foto@example.com')
+  const msid='MM'+'a'.repeat(32),form={AccountSid:'AC'+'2'.repeat(32),From:'whatsapp:+393330000074',To:sender,NumMedia:'1',MediaContentType0:'image/jpeg',MediaUrl0:process.env.TWILIO_API_BASE+'/media/x.jpg',MessageSid:msid,Body:'carbonara'}
+  const r=await a.inject({method:'POST',url:'/api/whatsapp/twilio',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':twilioSignature(token,self,form)},payload:new URLSearchParams(form).toString()})
+expect(messages(r.body)[0]).toContain('menu digitale di');await new Promise(r=>setTimeout(r,100))
+  expect(sent.length).toBeGreaterThanOrEqual(3);expect(sent[0]!.Body).toMatch(/Password: /);expect(sent[1]!.Body).toContain('/r/'+QA+'/menu');expect(db.messages.has(msid+':media')).toBe(true);expect(db.messages.get(msid)).toContain('menu digitale di');await a.close()},20000)
+ it('(8) pannello: email che il login rifiuta è rifiutata anche qui',async()=>{const a=await app()
+  for(const bad of['mario..rossi@gmail.com','.mario@gmail.com','mario@gmail.c'])expect((await save(a,AGENCY,QA,'3330000075',undefined,bad)).statusCode).toBe(400);expect(linksOf(QA)).toHaveLength(0);await a.close()})
+ it('(13) dopo la creazione dell’account il collegamento passa al titolare (actor_id), le azioni successive sono sue',async()=>{const a=await app()
+  const{phone}=await activate(a,'3330000076','gino@example.com');const[id]=account('gino@example.com')!;expect(db.links.get(phone)!.actor_id).toBe(id)
+  groqContent='{"intent":"clarify","item_ids":[]}';expect((await post(a,phone,'cosa sai fare')).statusCode).toBe(200);expect(db.links.get(phone)!.actor_id).toBe(id);await a.close()})
+ it('(3)(21) numero sostituito nella risposta; email bloccata a collegamento attivo',async()=>{const a=await app()
+  const{phone}=await activate(a,'3330000077','eva@example.com')
+  const locked=await save(a,AGENCY,QA,'3330000077',undefined,'altra@example.com');expect(locked.statusCode).toBe(409);expect(locked.json().error).toMatchObject({code:'EMAIL_LOCKED',message:'Il titolare ha già l’accesso con eva@example.com. Per cambiarla scollega e ricollega.'});expect(db.links.get(phone)!.owner_email).toBe('eva@example.com')
+  const moved=await save(a,AGENCY,QA,'3330000078',undefined,'eva@example.com');expect(moved.json().data).toMatchObject({phone:'+393330000078',replacedPhones:['+393330000077']})
+  expect((await save(a,AGENCY,QA,'3330000079',undefined,'eva2@example.com')).json().data.replacedPhones).toEqual(['+393330000078']);await a.close()})
 })
