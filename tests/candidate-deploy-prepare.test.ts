@@ -10,3 +10,16 @@ it('accepts only complete scoped candidate configuration',()=>{
  values.TAKO_CANDIDATE_TAKO_IMAGE_SEEDS_JSON='[]'
  expect(()=>validateCandidateSecrets(values)).toThrow('seed')
 })
+it('includes the bot engine env names in both closed lists (Haiku 21/10)',async()=>{
+ const {candidateEntry}=await import('../scripts/serverless/candidate-entry.mjs')
+ const entry=candidateEntry({appEntry:'/a.ts',initializerEntry:'/i.ts',fontInitializerEntry:'/f.ts',bridgeEntry:'/b.ts'})
+ for(const key of ['ANTHROPIC_API_KEY','TAKO_BOT_ENGINE_DEFAULT','GROQ_API_KEY']){
+  expect(entry).toContain(`'${key}'`)
+ }
+ for(const key of ['ANTHROPIC_API_KEY','TAKO_BOT_ENGINE_DEFAULT'])expect(candidateSecretNames).toContain('TAKO_CANDIDATE_'+key)
+ // Optional: a missing Anthropic key must not block validation of the required set.
+ const values=Object.fromEntries(candidateSecretNames.filter(n=>!/ANTHROPIC|BOT_ENGINE/.test(n)).map(name=>[name,'x'.repeat(40)]))
+ values.TAKO_CANDIDATE_WEB_ORIGIN='https://staging.example.test'
+ values.TAKO_CANDIDATE_TAKO_IMAGE_SEEDS_JSON='[{"tenantId":"fixture","checkpoint":"checkpoint"}]'
+ expect(validateCandidateSecrets(values)).not.toContain('TAKO_CANDIDATE_ANTHROPIC_API_KEY')
+})
