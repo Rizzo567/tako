@@ -224,7 +224,7 @@ function ReservationRoomMap({ rooms: initialRooms, mobile, reservations, onReser
     if(!window.TakoAPI?.get)return;
     const seq=++roomLoadSeq.current,scope=window.__takoRestaurantId;
     setRoomsLoading(true);setRoomsError("");
-    try{const rows=await window.TakoAPI.get('/tables/rooms');if(seq!==roomLoadSeq.current||scope!==window.__takoRestaurantId)return;const mapped=rows.map(mapRoom);setRooms(mapped);ROOMS=mapped;window.ROOMS=mapped;}
+    try{const rows=await window.TakoAPI.get('/tables/rooms');if(seq!==roomLoadSeq.current||scope!==window.__takoRestaurantId)return;const mapped=rows.map(mapRoom);setRooms(mapped);ROOMS=mapped;window.ROOMS=mapped;return mapped;}
     catch(e){if(seq===roomLoadSeq.current)setRoomsError(e.message||"Impossibile caricare le sale");}
     finally{if(seq===roomLoadSeq.current)setRoomsLoading(false);}
   };
@@ -321,8 +321,8 @@ function ReservationRoomMap({ rooms: initialRooms, mobile, reservations, onReser
       {tables.some(t=>!point(t))&&<div style={{marginTop:14}}><p style={{fontSize:13,fontWeight:700}}>Da posizionare</p><div style={{display:"flex",flexWrap:"wrap",gap:10}}>{tables.filter(t=>!point(t)).map(t=><div key={t._id}>{tableButton(t,false)}<Btn size="sm" kind="soft" disabled={saving} onClick={()=>updatePosition(t,25+(tables.indexOf(t)%3)*25,25+Math.floor(tables.indexOf(t)/3)%3*25)}>Posiziona</Btn></div>)}</div></div>}
       {selected&&<div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:16,paddingTop:14,borderTop:"1px solid var(--hairline)"}}><strong style={{flex:1}}>Tavolo {selected.n} · {selected.posti} posti</strong><Btn kind="soft" size="sm" onClick={()=>setTableModal({table:{...selected,roomId:room.id}})}>Modifica tavolo</Btn><Btn kind="brand" size="sm" onClick={()=>onReserve(selected)}>Prenota questo tavolo</Btn></div>}
     </>:!roomsLoading&&!roomsError&&<div className="res-floor-empty"><Icon name="map" size={28}/><Btn kind="soft" size="sm" icon="plus" onClick={()=>setRoomModal(true)}>Crea sala</Btn></div>}
-    <RoomFormModal open={roomModal} onClose={()=>setRoomModal(false)}/>
-    <TableFormModal open={!!tableModal} table={tableModal?.table||null} rooms={rooms} onClose={()=>setTableModal(null)}/>
+    <RoomFormModal open={roomModal} onClose={()=>setRoomModal(false)} onSaved={async created=>{await loadRooms();if(created?.id)setRoomId(created.id);setSelected(null);}}/>
+    <TableFormModal open={!!tableModal} table={tableModal?.table||null} rooms={rooms} defaultRoomId={room?.id} onClose={()=>setTableModal(null)} onSaved={async()=>{await loadRooms();setSelected(null);}}/>
   </Card>;
 }
 

@@ -41,3 +41,5 @@ Rilasciata schermata Prenotazioni in Gestione con piantina sale/tavoli e scelta 
 Revisione UX prenotazioni: data sopra Sale, toolbar unica con tooltip neri brevi e CTA principali testuali; nessuna spiegazione permanente superflua. Frontend finale 3e3b3572, backend v126 invariato.
 
 Header dashboard: ripristinata larghezza esplicita del wordmark accanto alla mascotte per impedirne il collasso flex; rimosso sottotitolo Dashboard. Modifica solo frontend.
+
+Sale/tavoli corretti dopo prova live: operativa v127, boundary consente solo creazione sala/tavolo e modifica tavolo al titolare; aggiunti INSERT mancanti al ruolo tecnico su rooms/tables. 53 test +15 verifiche live su nuovo locale QA isolato PASS; prenotazione annullata, prenotazioni QA disattivate, logout. Modali senza reload globale. Dettagli docs/reservations/ROOMS-FIX-2026-10-20.md.
