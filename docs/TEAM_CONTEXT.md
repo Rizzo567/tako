@@ -39,3 +39,5 @@ Branch `codex/dashboard-header-logo`: mascotte originale del sito locale (`tako-
 Rilasciata schermata Prenotazioni in Gestione con piantina sale/tavoli e scelta pubblica su `/prenota/:restaurantId`. Worker frontend 3b2efc60, operativa v126 da patch chirurgica della v125 (156 moduli invariati), read-edge/pubblico invariati. Preservata base frontend effettivamente online feat/qr-titolare-benvenuto. Dettagli, verifiche e limiti in docs/reservations/RELEASE-2026-10-20.md. Nessun locale reale modificato per QA; attivazione prenotazioni resta per locale nelle impostazioni.
 
 Revisione UX prenotazioni: data sopra Sale, toolbar unica con tooltip neri brevi e CTA principali testuali; nessuna spiegazione permanente superflua. Frontend finale 3e3b3572, backend v126 invariato.
+
+Header dashboard: ripristinata larghezza esplicita del wordmark accanto alla mascotte per impedirne il collasso flex; rimosso sottotitolo Dashboard. Modifica solo frontend.
