@@ -30,3 +30,7 @@ Non toccare clienti reali per QA. Bozze private WhatsApp scadono dopo 10 minuti.
 ## Campagna iniziale
 
 Circa 50 ristoranti esclusivamente fuori Lombardia, priorità menu quotidiani o ogni 2–3 giorni con evidenza. Demo prima della chiamata; prova 30 giorni gratis; condizioni successive da definire. Niente contatti avviati nella ricerca. Non citare agency.
+
+## 2026-10-20 — Logo header dashboard
+
+Branch `codex/dashboard-header-logo`: mascotte originale del sito locale (`tako-peek-avatar-v1.webp`) accanto al wordmark canonico in sidebar desktop e header mobile. Asset copiato senza rigenerazione, proporzioni preservate e nome accessibile unico. Build staff e diff check passati; nessun deploy e nessuna modifica backend.

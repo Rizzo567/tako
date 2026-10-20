@@ -114,7 +114,10 @@ function Sidebar({ route, go, role, badges, live }) {
       <div style={{ padding: "16px 8px 4px", display: "flex", alignItems: "center", gap: 9 }}>
 
         <div>
-          <span role="img" aria-label="Takomenu" style={{ display: "block", width: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          <span role="img" aria-label="Takomenu" style={{ display: "flex", alignItems: "center", gap: 8, width: "min(210px, 100%)", height: 42 }}>
+            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain" }} />
+            <span aria-hidden="true" style={{ display: "block", flex: "1 1 0", minWidth: 0, maxWidth: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          </span>
           <div style={{ fontSize: 10.5, color: "var(--side-ink-2)", marginTop: 2 }}>Dashboard</div>
         </div>
       </div>
@@ -330,7 +333,10 @@ function MobileHeader({ syncDelayed=false, route, openDrawer, live, role, badges
       {/* contenuto header — sfuma ed esce verso l'alto */}
       <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 11, transform: headerHidden ? "translateY(-30px) scale(.92)" : "none", filter: headerHidden ? "blur(4px)" : "none", opacity: headerHidden ? 0 : 1, transition: "transform .4s var(--out), opacity .3s ease, filter .3s ease", transformOrigin: "left center", pointerEvents: headerHidden ? "none" : "auto" }}>
         <div className={"mobile-header-brand"+(toolsOpen?" is-tools-open":"")} style={{ flex: 1, minWidth: 0 }}>
-          <span role="img" aria-label="Takomenu" style={{ display: "block", width: "min(148px, 100%)", height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          <span role="img" aria-label="Takomenu" style={{ display: "flex", alignItems: "center", gap: 8, width: "min(210px, 100%)", height: 42 }}>
+            <img src="/staff/assets/branding/tako-peek-avatar-v1.webp" alt="" width="42" height="42" style={{ display: "block", flex: "none", objectFit: "contain" }} />
+            <span aria-hidden="true" style={{ display: "block", flex: "1 1 0", minWidth: 0, maxWidth: 154, height: 30, background: "currentColor", mask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat", WebkitMask: "url(/staff/assets/branding/takomenu-wordmark-v2.svg) center / contain no-repeat" }} />
+          </span>
 
         </div>
         {route === "cassa" && (
