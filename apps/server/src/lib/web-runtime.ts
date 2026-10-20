@@ -56,7 +56,8 @@ export function webBoundary(publicOrigin: string) {
     if (WEB_UNAVAILABLE_PREFIXES.some(prefix => path === prefix || path.startsWith(prefix + '/'))) {
       return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Funzione non disponibile nel servizio web.' } })
     }
-    const tableConfiguration = /^\/api\/tables\/[^/]+\/qr(?:\/|$)/.test(path) || (/^\/api\/tables(?:\/|$)/.test(path) && !['GET', 'HEAD', 'OPTIONS'].includes(request.method) && !/^\/api\/tables\/[^/]+\/(status|waiter-resolve)$/.test(path))
+    const reservationConfiguration = (request.method === 'POST' && /^\/api\/tables(?:\/rooms)?\/?$/.test(path)) || (request.method === 'PATCH' && /^\/api\/tables\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(path))
+    const tableConfiguration = /^\/api\/tables\/[^/]+\/qr(?:\/|$)/.test(path) || (/^\/api\/tables(?:\/|$)/.test(path) && !['GET', 'HEAD', 'OPTIONS'].includes(request.method) && !reservationConfiguration && !/^\/api\/tables\/[^/]+\/(status|waiter-resolve)$/.test(path))
     if (tableConfiguration) {
       return reply.code(404).send({ error: { code: 'NOT_AVAILABLE_WEB', message: 'Configurazione tavoli non disponibile.' } })
     }

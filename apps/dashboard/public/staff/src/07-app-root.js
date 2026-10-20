@@ -351,7 +351,7 @@ function App({ session }) {
     case "comanda": Screen = <ScreenComanda key={"comanda" + dataVersion} mobile={mobile} />; break;
     case "sala": Screen = <ScreenSala mobile={mobile} rooms={rooms} calls={calls} onSetTableState={onSetTableState} />; break;
     case "chiamate": Screen = <ScreenChiamate mobile={mobile} calls={calls} onResolve={async (call) => { await TakoAPI.post(`/tables/${call._id}/waiter-resolve`); setCalls(c => c.filter(x => x._id !== call._id)); }} />; break;
-    case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} />; break;
+    case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} rooms={rooms} />; break;
     case "menu": Screen = ["owner", "menu_editor"].includes(role) && window.ScreenMenuWorkspace ? <window.ScreenMenuWorkspace key={"menu" + dataVersion} mobile={mobile} /> : <ScreenMenu key={"menu" + dataVersion} mobile={mobile} />; break;
     case "statistiche": Screen = role === "owner" && window.ScreenReportsWorkspace ? <window.ScreenReportsWorkspace mobile={mobile}/> : <ScreenStatistiche key={"stats" + dataVersion} mobile={mobile} />; break;
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
