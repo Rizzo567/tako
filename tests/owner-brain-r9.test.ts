@@ -35,7 +35,7 @@ const ANSWER=P({actions:[A({action:'set_price',item:'p4',price:10}),A({action:'s
 const strip=(r:string)=>r.replace(/^Sono l.*?persona\.\s*/s,'')
 async function conv(turns:{voice?:string,text?:string}[],plans:any[]){queue=structuredClone(plans);seen.length=0;installNet(fake,realFetch);resetBrainTables()
  const c:Conversation={id:'r9',family:'manuel',menu:'qa',turns:turns.map(t=>t.voice!==undefined?{voice:t.voice}:{text:t.text!}),changes:[]}
- const run=await createRouteBot({name:'nuovo',settings:{botBrain:true},extraSql:brainSql}).run(c,structuredClone(after),{restaurant:'Tako · Verifica web'})
+ const run=await createRouteBot({name:'nuovo',settings:{botBrain:true,botEngine:'groq'/* storico Groq: dal 21/10 il default è haiku (PIANO bot-haiku §1.5) */},extraSql:brainSql}).run(c,structuredClone(after),{restaurant:'Tako · Verifica web'})
  if(process.env.TAKO_R9_SHOW)for(const t of run.turns)process.stderr.write('REPLY '+JSON.stringify(t.reply)+'\n')
  return{turns:run.turns.map(t=>({reply:strip(t.reply),changes:diff(after,t.menuAfter)})),left:queue.length,pending:run.pending as any}}
 

@@ -18,6 +18,7 @@ import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
 import {CONTROL_ACTIONS,politeRequest,isAffirmative,sameDishName,type ControlAction} from './owner-brain-r.js'
 import {sameSection} from './twilio-menu-structure.js'
+import {callHaiku} from './owner-brain-anthropic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
 export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS] as const
@@ -40,7 +41,8 @@ export type BrainUsage={model:string,prompt:number,completion:number,cached:numb
 export type BrainCall={model:string,content:string,usage:BrainUsage}
 export type BrainFetch=(url:string,init:RequestInit)=>Promise<Response>
 export type BrainCallOptions=GroqOptions&{fetch?:BrainFetch,models?:string[]}
-export class BrainUnavailable extends Error{constructor(readonly reason:'busy'|'invalid_json'|'http'|'timeout'|'no_key',detail=''){super('BRAIN_'+reason.toUpperCase()+(detail?': '+detail:''))}}
+export type BrainDownReason='busy'|'invalid_json'|'http'|'timeout'|'no_key'|'refusal'|'max_tokens'
+export class BrainUnavailable extends Error{constructor(readonly reason:BrainDownReason,readonly detail=''){super('BRAIN_'+reason.toUpperCase()+(detail?': '+detail:''))}}
 
 /** Client Groq del cervello: stesso `withRateLimit` del bot (twilio-menu-ai.ts) — 429 → modello di riserva o attesa entro il
  * budget, errore o JSON non valido → modello successivo. Budget stretto (default 8 s): oltre si va in riserva deterministica. */
@@ -482,14 +484,17 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
 }
 
 /** Pianifica un messaggio del titolare: contesto → una chiamata → validatore. Mai eccezioni verso il route: o una decisione, o la riserva. */
-export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCallOptions={}):Promise<BrainDecision|BrainFallback>{
+/** Motore del cervello (PIANO bot-haiku §1.5): `haiku` → Claude Haiku 5.5, `groq` → Groq. Default qui `groq` (test storici invariati);
+ * il route passa SEMPRE il motore letto da `readBotEngine`. Con haiku nessuna chiamata Groq, nessuna riserva. */
+export type PlanOptions=BrainCallOptions&{engine?:'haiku'|'groq',effort?:'low'|'medium',retryDelayMs?:number,thinking?:'disabled'}
+export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOptions={}):Promise<BrainDecision|BrainFallback>{
  let ctx:BrainContext
- try{ctx=buildBrainContext(input)}catch(error){return{path:'fallback',reason:'contesto: '+String((error as any)?.message??error)}}
+ try{ctx=buildBrainContext(opts.engine==='haiku'?{...input,engine:'haiku'}:input)}catch(error){return{path:'fallback',reason:'contesto: '+String((error as any)?.message??error)}}
  if(input.refs.length>1500||input.message.length>30000)return{path:'fallback',reason:'troppo_grande',tokens:ctx.tokens}
  // Fase R (R2.3): auto-correzione. Il piano rifiutato e il motivo tornano al modello una volta sola.
  if(input.correction)ctx={...ctx,messages:[...ctx.messages,{role:'assistant',content:input.correction.previous.slice(0,4000)},{role:'user',content:CORRECTION_HEAD+input.correction.reason+'. Rifai il JSON: correggi il piano se il messaggio lo permette, altrimenti intent=clarify con la domanda per il titolare in reply_draft.'}]}
  let call:BrainCall
- try{call=await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
+ try{call=opts.engine==='haiku'?await callHaiku(ctx,key,opts):await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'RAW '+call.content+'\n')).catch(()=>{})
  // Strumenti di controllo (confirm_pending, cancel_pending, undo_last): fuori dal validatore delle azioni, li verifica il route.
  const parsed=parseJson(call.content),control:ControlAction[]=parsed&&Array.isArray(parsed.actions)?[...new Set<ControlAction>(parsed.actions.filter((a:any)=>a&&CONTROL_ACTIONS.includes(a.action)).map((a:any)=>a.action as ControlAction))]:[]

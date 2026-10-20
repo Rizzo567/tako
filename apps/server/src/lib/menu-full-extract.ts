@@ -6,6 +6,7 @@ import {extractOnboardingMenu,verifyOnboardingMenuRow,type OnboardingFetcher,typ
 import {onboardingDishKey,sameOnboardingDish} from './onboarding-dish-name.js'
 import {normalizeSpokenPrices} from './menu-spoken-prices.js'
 import {onboardingAmounts} from './onboarding-clauses.js'
+import {HAIKU_MODEL,ANTHROPIC_URL,ANTHROPIC_VERSION} from './owner-brain-anthropic.js'
 
 export type FullMenuRow={section:string,name:string,price:number,description:string,evidence:string}
 /** A dish the owner named without a usable price: never published at 0 €. */
@@ -122,4 +123,28 @@ export async function extractFullMenu(text:string,key:string,fetcher:OnboardingF
  // Retries (JSON malformed) push more than one content per chunk: keep only the last valid one per call order is not
  // recoverable here, so duplicates are removed by verifyFullMenu (same dish once).
  return verifyFullMenu(text,contents)
+}
+/** PIANO bot-haiku T3 (21/10/2026): con il cervello su Haiku il menu intero si estrae con Claude Haiku 5.5, con lo STESSO
+ * estrattore (stesso prompt, stessi controlli, stessa verifica riga per riga). Il fetcher traduce la richiesta chat/completions
+ * dell'estrattore in /v1/messages e la risposta nella forma che l'estrattore legge (choices[0].message.content). Nessuna chiamata
+ * Groq: la chiave passata a `extractFullMenu` è ANTHROPIC_API_KEY. 429/529 → 429 (OnboardingBusy), rifiuto/troncamento → errore.
+ * `base` si risolve a ogni chiamata (globalThis.fetch), così test e banco possono sostituirlo. */
+export function haikuFullMenuFetcher(base:()=>OnboardingFetcher=()=>globalThis.fetch):OnboardingFetcher{
+ return (async(url:any,init?:RequestInit)=>{
+  if(!String(url).includes('/chat/completions'))throw new Error('haikuFullMenuFetcher: richiesta inattesa')
+  const req=JSON.parse(String(init?.body??'{}')),auth=String((init?.headers as any)?.Authorization??(init?.headers as any)?.authorization??''),key=auth.replace(/^Bearer\s+/i,'')
+  const all:{role:string,content:string}[]=Array.isArray(req.messages)?req.messages:[],system=all.filter(m=>m.role==='system').map(m=>String(m.content)).join('\n\n')
+  const messages:{role:'user'|'assistant',content:string}[]=[];for(const m of all){if(m.role==='system')continue;const role=m.role==='assistant'?'assistant':'user',last=messages[messages.length-1];if(last&&last.role===role)last.content+='\n\n'+String(m.content);else messages.push({role,content:String(m.content)})}
+  if(messages[0]?.role!=='user')messages.unshift({role:'user',content:'(testo)'});if(messages[messages.length-1]!.role!=='user')messages.push({role:'user',content:'Rispondi col JSON.'})
+  const schema=req.response_format?.type==='json_schema'?req.response_format.json_schema?.schema:null
+  const body={model:HAIKU_MODEL,max_tokens:Math.min(Number(req.max_completion_tokens)||8000,16000),output_config:{effort:'low',...(schema?{format:{type:'json_schema',schema}}:{})},
+   system:[{type:'text',text:system+'\n\nRispondi solo con un oggetto JSON valido, senza testo prima o dopo e senza blocchi di codice.',cache_control:{type:'ephemeral'}}],messages}
+  const r=await base()(ANTHROPIC_URL,{method:'POST',headers:{'x-api-key':key,'anthropic-version':ANTHROPIC_VERSION,'content-type':'application/json'},body:JSON.stringify(body),signal:init?.signal})
+  if(!r.ok){const t=await r.text().catch(()=>'');return new Response(t,{status:r.status===529?429:r.status,headers:r.headers.get('retry-after')?{'retry-after':r.headers.get('retry-after')!}:{}})}
+  const data=await r.json() as any
+  if(data?.stop_reason==='refusal'||data?.stop_reason==='max_tokens')return new Response(JSON.stringify({error:{message:'haiku '+data.stop_reason}}),{status:502})
+  const text=(Array.isArray(data?.content)?data.content:[]).filter((b:any)=>b?.type==='text').map((b:any)=>String(b.text)).join('').trim().replace(/^```(?:json)?\s*|\s*```$/g,'')
+  const u=data?.usage??{}
+  return new Response(JSON.stringify({choices:[{message:{content:text}}],usage:{prompt_tokens:(Number(u.input_tokens)||0)+(Number(u.cache_read_input_tokens)||0)+(Number(u.cache_creation_input_tokens)||0),completion_tokens:Number(u.output_tokens)||0}}),{status:200,headers:{'content-type':'application/json'}})
+ }) as OnboardingFetcher
 }

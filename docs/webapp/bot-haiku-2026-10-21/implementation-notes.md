@@ -10,3 +10,10 @@
 8. V5: `copy.welcome` (benvenuto 19/10 approvato, v119) escluso SOLO dal controllo emoji; «categori» vietato ovunque.
 9. E: verificatore lazy boot aggiornato (cercava `before_app_import`, ora accetta `app_module_ready`; rapporto in release/serverless/). check-active.mjs ritrovato in ~/.config/tako-webapp/rollback-edge-20261016/.
 10. BLOCCO deploy scoperto da E: online c'è **v127** (email v121/v125 da codex/manuel-email-activation 5c136e1; sale/tavoli v126/v127 da 24ad33f), non v119. Deploy del ramo così com'è toglierebbe email e sale a tutti i clienti → sottoagente dedicato ricostruisce base v127 in worktree separata (Tako-base-v127); deploy solo se bundle-sections-diff = solo moduli bot (gate 0).
+11. T: più di 3 modifiche con haiku = sempre OK prima di scrivere, anche «aumenta tutti di un euro» (bulk uniforme): opzione conservativa che allinea il banco al playground 17; contraddice la risposta #6 del §11 per quel caso (attesa del banco da riallineare). Groq invariato.
+12. T: menu/sottomenu interi senza azione nuova nello schema: il server riconosce le azioni piatto-per-piatto che coprono un gruppo intero (≥3 piatti) e chiede sempre il sì con riepilogo.
+13. T: scheda prompt separata `HAIKU_CARD` (lessico nuovo); la scheda Groq resta, con «categoria»→«sottomenu».
+14. T: foto di un piatto con haiku senza IA (un solo candidato o nome identico, altrimenti domanda) al posto di `groqDishPick` (zero Groq chat).
+15. T: segnaposto copy `{sottomenu}`; `fill` accetta ancora le chiavi vecchie. T6 (rigioco su conflitto) solo con haiku. T3 menu intero su Haiku tramite adattatore dell'estrattore onboarding (non lo schema del cervello).
+16. Coordinatore: `twilio-menu-ai.ts` «mi manca la categoria»→«il sottomenu» (testo verso il titolare); attese di `twilio-menu-ai.test.ts` e regex round6b allineate al lessico.
+17. Base v127 ricostruita (worktree Tako-base-v127, branch codex/bot-haiku-base-v127 0fa42a6 = a037bb2 + merge 5c136e1 email + merge 24ad33f sale): comportamento = online v127; il diff per sezioni resta «rosso» per costruzione (online = patch a mano sul bundle) → gate 0 valutato col confronto normalizzato (scratchpad diff2.mjs/cmpn.py).

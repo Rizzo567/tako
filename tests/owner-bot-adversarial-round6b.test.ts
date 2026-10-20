@@ -262,7 +262,7 @@ add('fp','hai tolto boh?',NONE)
 add('fp','perché hai tolto la lasagna?',NONE)
 add('fp','non levare la lasagna',NONE)
 add('fp','boh, togli la lasagna',HI(LAS,true),{note:'«boh,» intercalare in testa'})
-add('fp','cancella la sezione contorni',NONE,{reply:/categori|sezion|dashboard/i})
+add('fp','cancella la sezione contorni',NONE,{reply:/categori|sottomenu|sezion|dashboard/i})
 // Correzione attesa (17/10): il modello finto «ideal» non sa rispondere «capacità» qui (risponde clarify); conta solo che non nasconda la tagliata.
 add('fp','rimuovi la foto della tagliata',NONE)
 add('fp','rimetti la lasagna',HI(LAS,false),{mods:{hidden:[LAS]}})

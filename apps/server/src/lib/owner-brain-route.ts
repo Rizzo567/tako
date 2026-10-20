@@ -7,7 +7,7 @@ import {sql} from 'drizzle-orm'
 import type {MenuRef,SectionRef,MenuAction,GroqOptions} from './twilio-menu-ai.js'
 import {resolveChoice} from './twilio-menu-nlu.js'
 import {allOptions} from './twilio-menu-clarify.js'
-import {botBrainEnabled} from './owner-brain-switch.js'
+import {botBrainEnabled,type BotEngine} from './owner-brain-switch.js'
 import {planOwnerMessage,REFERS,type BrainDecision} from './owner-brain-plan.js'
 import {plain,g9DishMentioned} from './twilio-menu-ai.js'
 import {sqlBrainStore,consolidate,signalsFromTurn,memoryCommand,forget,memoryListText,reconcile,groqMemoryJudge} from './owner-brain-memory.js'
@@ -54,7 +54,13 @@ export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurant
  /** Fase R: annulla possibile (ultima pubblicazione ≤10 min) e auto-correzione. */
  undoInfo?:{minutes:number,names:string[]}|null,correction?:{previous:string,reason:string}|null,
  /** Fase R: «rimetti com'era X» fino a 60 minuti a menu invariato (stessa memoria `last:` del percorso di prima). */
- extraRestore?:{id:string,actions:MenuAction[]}[],freshIds?:Set<string>,voice?:boolean}):Promise<BrainRun|null>{
+ extraRestore?:{id:string,actions:MenuAction[]}[],freshIds?:Set<string>,voice?:boolean,
+ /** PIANO bot-haiku: motore letto dal route (`readBotEngine`); assente = groq (comportamento storico). */
+ engine?:BotEngine,
+ /** Scadenza del turno (ms epoch): con haiku la chiamata non va oltre (auto-correzione inclusa ≤ 25 s). */
+ deadline?:number,
+ /** Cervello non disponibile (motivo): il route avvisa Manuel (`reportFailure`). */
+ onDown?:(reason:string)=>void}):Promise<BrainRun|null>{
  const now=o.now??Date.now(),store=sqlBrainStore(db)
  let memory:Awaited<ReturnType<typeof store.listMemory>>=[],history:BrainTurn[]=[]
  try{await reconcile(store,o.tenant,o.refs);memory=await store.listMemory(o.tenant);history=await store.readHistory(o.tenant,o.phone,now)}catch{/* tabelle assenti → contesto senza memoria né cronologia */}
@@ -72,9 +78,9 @@ export async function brainPlan(db:Exec,o:{tenant:string,phone:string,restaurant
  const restorable=new Map<string,MenuAction[]>();for(const e of o.extraRestore??[])if(e.actions.length)restorable.set(e.id,e.actions);if(o.undo&&now-o.undo.at<=RESTORE_WINDOW_MS)for(const it of o.undo.items){const r=o.refs.find(x=>x.id===it.id),b=it.before;if(!r||!b)continue;const back:MenuAction[]=[]
   if(typeof b.price==='number'&&Math.abs(b.price-r.price)>=0.005)back.push({kind:'price',id:r.id,price:b.price});if((b.available!==false)!==r.available)back.push({kind:'available',id:r.id,value:b.available!==false});if(!!b.hidden!==r.hidden)back.push({kind:'hidden',id:r.id,value:!!b.hidden});if(!!b.featured!==!!r.featured)back.push({kind:'featured',id:r.id,value:!!b.featured})
   if(back.length)restorable.set(r.id,back)}
- const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,freshIds:o.freshIds,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null},voice:o.voice,pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,{...o.ai,budgetMs:8000,timeoutMs:8000})
+ const decision=await planOwnerMessage({restorable,exclude:o.exclude,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,freshIds:o.freshIds,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null},voice:o.voice,pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,o.engine==='haiku'?{...o.ai,engine:'haiku',timeoutMs:10_000,budgetMs:Math.max(0,Math.min(21_000,(o.deadline??Infinity)-Date.now()))}:{...o.ai,budgetMs:8000,timeoutMs:8000})
  if(process.env.TAKO_BRAIN_DEBUG)dbg('BRAIN',JSON.stringify({text:o.text,history:history.length,decision:decision.path==='brain'?{intent:decision.intent,plan:decision.plan,notes:decision.notes}:decision}))
- if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',reason:decision.reason}));return null}
+ if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',engine:o.engine??'groq',reason:decision.reason}));try{o.onDown?.(decision.reason)}catch{};return null}
  // A4.5: i piatti di cui si stava parlando (ultimi messaggi del titolare e ultima risposta), per una domanda che li cita.
  const recentText=[...history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text),bot?.text??''].join(' \n '),recentIds=history.length?o.refs.filter(r=>g9DishMentioned(r.name,recentText,o.refs)).map(r=>r.id).slice(0,3):[]
  return{decision,clarifyIds:choice?.length?choice:clarify?.itemIds?.length?clarify.itemIds:null,recentIds,ownerRecent:history.filter(t=>t.role==='owner').slice(-3).map(t=>t.text).join(' \n '),lastBot:bot?.text??''}
@@ -104,10 +110,10 @@ export async function readRestorable(db:Exec,phone:string,now=Date.now()):Promis
 }
 
 /** Memoria appresa dopo una scrittura riuscita del cervello (in background). */
-export async function learnAfter(db:Exec,o:{tenant:string,refs:MenuRef[],sections:SectionRef[],run:BrainRun,applied:boolean,key:string,meter?:GroqOptions['meter']}){
+export async function learnAfter(db:Exec,o:{tenant:string,refs:MenuRef[],sections:SectionRef[],run:BrainRun,applied:boolean,key:string,meter?:GroqOptions['meter'],engine?:BotEngine}){
  try{const plan=o.run.decision.plan;if(!o.applied||plan.type!=='change'||!o.run.decision.aliasesUsed.length)return
   const applied=plan.actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[{id:(a as any).id as string}]:[])
   const chosen=o.run.clarifyIds?.find(id=>applied.some(a=>a.id===id))??null
   const signals=signalsFromTurn({message:'',clarifyIds:o.run.clarifyIds,chosenId:chosen,applied,aliasesUsed:o.run.decision.aliasesUsed})
-  if(signals.length)await consolidate(sqlBrainStore(db),o.tenant,signals,{refs:o.refs,sections:o.sections,judge:o.key?groqMemoryJudge(o.key,{meter:o.meter?e=>o.meter!({...e,limited:false}):undefined}):undefined})}catch{/* mai errori verso il titolare */}
+  if(signals.length)await consolidate(sqlBrainStore(db),o.tenant,signals,{refs:o.refs,sections:o.sections,judge:o.key&&o.engine!=='haiku'?groqMemoryJudge(o.key,{meter:o.meter?e=>o.meter!({...e,limited:false}):undefined}):undefined})}catch{/* mai errori verso il titolare */}
 }

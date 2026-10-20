@@ -37,7 +37,7 @@ Esempio: «carbonara finita, diavola a 10 euro».
 Puoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.
 *Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».
 
-*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link.`,
+*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link.`,
  proposal:`*{locale}*: ecco le modifiche.
 
 {righe}
@@ -79,9 +79,9 @@ Scrivi *CONFERMA* per pubblicarla o *ANNULLA* per lasciare il menu invariato. Ha
  sameName:`Ci sono più piatti con questo nome: {opzioni}.
 
 Indica anche il menu, per esempio «{esempio}».`,
- createMissing:'Per aggiungere {piatto} mi manca *{mancante}*.{categorie} Dimmelo e lo aggiungo. Non ho ancora aggiunto nulla.',
- createCategories:'\nCategorie disponibili: {categorie}.',
- alreadyExists:'*{piatto}* è già in *{categoria}*: non l’ho aggiunto di nuovo. Se vuoi cambiarlo, dimmi cosa.',
+ createMissing:'Per aggiungere {piatto} mi manca *{mancante}*.{sottomenuElenco} Dimmelo e lo aggiungo. Non ho ancora aggiunto nulla.',
+ createCategories:'\nSottomenu disponibili: {sottomenuElenco}.',
+ alreadyExists:'*{piatto}* è già in *{sottomenu}*: non l’ho aggiunto di nuovo. Se vuoi cambiarlo, dimmi cosa.',
  notVerbatim:'*Non invento nomi o descrizioni.* Scrivi il testo esatto dopo i due punti, per esempio «nella carbonara scrivi: guanciale e pecorino».',
  readNone:{unavailable:'Nessun piatto è *finito*: sono tutti disponibili.',hidden:'Non ci sono piatti *nascosti*.'},
  readList:{unavailable:'*Piatti finiti ({n})*\n{elenco}',hidden:'*Piatti nascosti ({n})*\n{elenco}'},
@@ -144,15 +144,15 @@ Indica anche il menu, per esempio «{esempio}».`,
  holdAskFooterOnly:'Rispondi *sì* o *no*. Non ho ancora cambiato nulla.',
  holdAskFooterChoose:'Rispondi con il *numero* o il *nome*. Non ho ancora cambiato nulla.',
  holdDropped:'La richiesta di prima non l’ho pubblicata: se ti serve ancora, rimandamela.',
- holdExists:'*{piatto}* è già in *{categoria}* a {prezzo}: non l’ho aggiunto di nuovo.',
+ holdExists:'*{piatto}* è già in *{sottomenu}* a {prezzo}: non l’ho aggiunto di nuovo.',
  holdRestUnclear:'Non ho capito «{testo}»: rimandamelo da solo.',
  deleteAsk:'Elimino {piatti} dal menu? Rispondi *sì* per eliminare (per 10 minuti potrai ancora scrivere «annulla»), *no* per lasciarlo com’è. Non ho ancora cambiato nulla.',
  draftDropped:'Va bene, non aggiungo {piatto}. Non ho cambiato nulla.',
  batchStill:'Le modifiche del riepilogo di prima non sono ancora pubblicate: rispondi *ok* per pubblicarle, *no* per lasciarle perdere.',
  pendingStill:'La richiesta di prima aspetta ancora la tua risposta: *sì* per procedere, *no* per lasciar perdere.',
  deleteUndoHint:'Per 10 minuti puoi scrivere «annulla» per rimetterlo.',
- sectionAsk:'Nel menu non c’è la categoria *{categoria}*: la creo e ci metto {piatti}? Rispondi *sì*, oppure dimmi in quale categoria metterlo. Categorie: {categorie}. Non ho ancora cambiato nulla.',
- sectionExists:'La categoria *{categoria}* c’è già: uso quella.',
+ sectionAsk:'Nel menu non c’è il sottomenu *{sottomenu}*: lo creo e ci metto {piatti}? Rispondi *sì*, oppure dimmi in quale sottomenu metterlo. Sottomenu: {sottomenuElenco}. Non ho ancora cambiato nulla.',
+ sectionExists:'Il sottomenu *{sottomenu}* c’è già: uso quello.',
  hiddenNotDeletedPlain:'L’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina {piatto}».',
  hiddenNotDeleted:'I piatti non li elimino: li *nascondo*. Per rimetterli scrivi «rimetti {piatto}».',
  // 17/10: annulla vero, entro 10 minuti da una modifica pubblicata da WhatsApp.
@@ -174,16 +174,16 @@ export const line={
  tagRemove:'*{piatto}*: tolgo l’etichetta *{etichetta}*',
  featured:'*{piatto}*: *in evidenza*',
  unfeatured:'*{piatto}*: non più in evidenza',
- create:'Nuovo piatto *{piatto}* in *{categoria}*: *{prezzo}*{descrizione}',
+ create:'Nuovo piatto *{piatto}* in *{sottomenu}*: *{prezzo}*{descrizione}',
  special:'Piatto del giorno *{piatto}*: *{prezzo}*{descrizione}. Si nasconde a fine giornata',
  newDescription:' («{testo}»)',
  // Fase B (17/10): struttura del menu.
  deleted:'*{piatto}*: *eliminato* dal menu',
  deletedNew:'*{piatto}*: tolto (l’avevo appena aggiunto)',
  renamed:'*{piatto}*: nuovo nome *{nome}*',
- moved:'*{piatto}*: spostato in *{categoria}*',
- newSection:'Nuova categoria *{categoria}*',
- renameSection:'Categoria *{prima}*: nuovo nome *{nome}*',
+ moved:'*{piatto}*: spostato in *{sottomenu}*',
+ newSection:'Nuovo sottomenu *{sottomenu}*',
+ renameSection:'Sottomenu *{prima}*: nuovo nome *{nome}*',
  read:'*{piatto}*: *{prezzo}* · {stato}{extra}',
 }
 export const capabilities:{id:string,can:boolean,text:string,example?:string,alternative?:string}[]=[
@@ -194,7 +194,7 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'description',can:true,text:'cambiare una descrizione',example:'«nella carbonara scrivi: guanciale e pecorino»'},
  {id:'tags',can:true,text:'aggiungere o togliere un’etichetta',example:'«la caprese è vegetariana»'},
  {id:'featured',can:true,text:'mettere un piatto in evidenza',example:'«metti in evidenza la tagliata»'},
- {id:'create',can:true,text:'aggiungere un piatto in una categoria esistente',example:'«aggiungi tra i primi: pasta al ragù, 12 euro»'},
+ {id:'create',can:true,text:'aggiungere un piatto in un sottomenu esistente',example:'«aggiungi tra i primi: pasta al ragù, 12 euro»'},
  {id:'special',can:true,text:'aggiungere un piatto del giorno',example:'«oggi piatto del giorno: risotto, 16 euro». Si nasconde a fine giornata.'},
  {id:'photo',can:true,text:'aggiungere una foto',example:'Manda la foto con il nome del piatto.'},
  {id:'promo',can:true,text:'mettere o togliere un prezzo promo',example:'«carbonara in promo a 9 fino a domenica» o «togli la promo dalla carbonara». Il prezzo pieno resta barrato accanto.'},
@@ -204,10 +204,10 @@ export const capabilities:{id:string,can:boolean,text:string,example?:string,alt
  {id:'voice',can:true,text:'ricevere più richieste in un vocale',example:'Fino a *3 modifiche* pubblico subito. Per più modifiche aspetto il tuo *OK*.'},
  {id:'allergens',can:false,text:'Gli *allergeni* non si cambiano da questa chat.',alternative:'Usa la scheda del piatto nella *dashboard*.'},
  {id:'delete',can:true,text:'eliminare un piatto (ti chiedo conferma, poi per 10 minuti puoi annullare)',example:'«elimina il polpo»; «togli il polpo» invece lo nasconde'},
- {id:'rename',can:true,text:'cambiare il nome di un piatto o di una categoria',example:'«rinomina il polpo in Polpo alla griglia»'},
+ {id:'rename',can:true,text:'cambiare il nome di un piatto o di un sottomenu',example:'«rinomina il polpo in Polpo alla griglia»'},
  {id:'bulk',can:false,text:'Non applico modifiche generiche a *tutto il menu*.',alternative:'Indica i piatti e i cambiamenti, anche nello stesso vocale. Oppure mandami il *menu completo* del giorno: lo sostituisco dopo il tuo *OK*.'},
  {id:'graphics',can:false,text:'La *grafica* si cambia dalla dashboard.',alternative:'Lì puoi modificare colori, font e impaginazione.'},
- {id:'categories',can:true,text:'creare categorie e spostare piatti',example:'«crea la categoria speciali» o «sposta il polpo nei secondi»'},
+ {id:'categories',can:true,text:'creare sottomenu e spostare piatti',example:'«crea il sottomenu speciali» o «sposta il polpo nei secondi»'},
  {id:'dashboard',can:true,text:'mandarti il link della *dashboard* con il tuo utente',example:'«link dashboard»'},
  {id:'menulink',can:true,text:'mandarti il link del *menu digitale* che vedono i clienti',example:'«link del menu»'},
  {id:'translations',can:false,text:'Le *traduzioni* si gestiscono dalla dashboard.',alternative:'Apri la sezione dedicata alle lingue.'},
@@ -228,7 +228,7 @@ export const fullMenuCopy={
  head:'*{locale}*, {destinazione}.\n{origine}',
  fromVoice:'Ecco il menu che ho capito dal *vocale*: controlla nomi e prezzi.',
  fromText:'Ecco il menu che ho letto.',
- noSection:'Senza categoria',
+ noSection:'Senza sottomenu',
  missing:'*Senza prezzo*, non li metto online: {piatti}. Scrivimi il prezzo, per esempio «{esempio} 12».',
  twoPrices:' (ho letto più prezzi)',
  check:'*Da controllare*:',
@@ -262,7 +262,11 @@ export const alertCopy={
 }
 export const helpWords=['cosa sai fare','cosa puoi fare','aiuto','help','come funziona','comandi','ciao']
 export const dailySectionName='Piatto del giorno'
-export const fill=(template:string,values:Record<string,string|number>)=>template.replace(/\{(\w+)\}/g,(m,k:string)=>k in values?String(values[k]):m)
+// PIANO bot-haiku (21/10): i testi usano {sottomenu}/{sottomenuElenco}; i chiamanti storici passano ancora le chiavi del vecchio
+// lessico (stesso valore, alias ricavato con la regex: nessun testo del vecchio lessico qui dentro).
+const lexKey=(k:string)=>k.replace(/^categoria$/,'sottomenu').replace(/^categorie$/,'sottomenuElenco')
+export const fill=(template:string,values:Record<string,string|number>)=>{const v:Record<string,string|number>={};for(const [k,x] of Object.entries(values)){v[k]=x;const a=lexKey(k);if(!(a in values))v[a]=x}
+ return template.replace(/\{(\w+)\}/g,(m,k:string)=>k in v?String(v[k]):m)}
 // F3+F4 (16/10): prezzo promo e scarsità. Chiavi nuove e separate, per non toccare i testi esistenti.
 export const salesLine={
  promo:'*{piatto}*: in *promo* a *{promo}* (prezzo pieno {pieno}){fino}',

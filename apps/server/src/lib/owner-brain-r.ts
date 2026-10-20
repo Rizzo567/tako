@@ -86,9 +86,9 @@ const REASON:Record<string,string>={
  piatto_doppio:'il piano crea un piatto che c\u2019è già nel menu (o due volte lo stesso): non cambiare quello esistente, chiedi al titolare (intent=clarify, domanda in reply_draft) se aggiornare quello che c\u2019è o crearne un altro, per esempio «C\u2019è già X a N €: lo aggiorno o ne creo un altro?»; nelle azioni lascia le altre parti chiare',
  elimina_fuori_portata:'un piatto da eliminare è detto in una parte del messaggio con un\u2019altra azione (nascondi, prezzo, finito…): elimina solo i piatti del verbo «elimina/cancella»',
  riferimento_come_bersaglio:'il prezzo è stato cambiato al piatto di riferimento («uguale alla X»): va cambiato all\u2019altro piatto, X resta com\u2019è',
- nome_con_coda:'un nome nuovo (piatto, categoria, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
+ nome_con_coda:'un nome nuovo (piatto, sottomenu, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
  azione_fuori_portata:'un piatto è nascosto o segnato finito ma nel messaggio è detto in una parte con un\u2019altra azione (prezzo, aggiungi…): l\u2019azione vale solo per i piatti del suo verbo',
- categoria_non_detta:'il titolare ha nominato una categoria che nel menu non c\u2019è: chiedi in quale categoria metterlo o se crearla, non usarne un\u2019altra',
+ categoria_non_detta:'il titolare ha nominato un sottomenu che nel menu non c\u2019è: chiedi in quale sottomenu metterlo o se crearlo, non usarne un altro',
  conferma_di_domanda:'non c\u2019è una proposta da confermare: c\u2019era una TUA domanda aperta (IN SOSPESO) e questo messaggio è la risposta del titolare. Non usare confirm_pending: scrivi nel piano le azioni della richiesta originale secondo la scelta del titolare (prezzi e nomi detti in quella richiesta), oppure, se la risposta non sceglie, una domanda diversa con le opzioni numerate',
  gia_risposto:'il titolare ha già risposto alla tua domanda in sospeso: non ripeterla. Se la risposta sceglie un\u2019opzione (anche «sì», «aggiornali», «il primo», «crea nuovi»), scrivi il piano con le azioni della richiesta originale; se davvero non sceglie, fai una domanda DIVERSA da quella di prima, breve, con le opzioni numerate (1. … 2. …)',
  domanda_ripetuta:'la domanda è di nuovo uguale a quella già fatta: è vietato rimandarla. Esegui la scelta se la risposta la indica; altrimenti scrivi una domanda con parole diverse che elenca le opzioni numerate (1. … 2. …) e chiede di rispondere col numero',
@@ -307,7 +307,7 @@ const num=(n:number)=>n.toFixed(2).replace('.',',')+' €'
 export const changeFacts=(actions:MenuAction[],before:MenuRef[],sections:SectionRef[])=>{const all=withNewSections(sections,actions);return actions.map(a=>describeAction(a,before,all)).join('\n')}
 /** Proposta in attesa: righe numerate (il numero tiene le righe fuori dalle frasi «X: nascosto» lette come fatti già avvenuti). */
 export function pendingFacts(why:BatchWhy,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]){const all=withNewSections(sections,actions)
- const head=why==='delete'?'Da eliminare, serve il tuo sì:':why==='section'?'Categoria nuova, serve il tuo sì:':'Non ancora pubblicato, da confermare con OK:'
+ const head=why==='delete'?'Da eliminare, serve il tuo sì:':why==='section'?'Sottomenu nuovo, serve il tuo sì:':'Non ancora pubblicato, da confermare con OK:'
  return head+'\n'+actions.map((a,i)=>(i+1)+'. '+(a.kind==='delete'?'*'+(refs.find(r=>r.id===a.id)?itemLabel(refs.find(r=>r.id===a.id)!,refs):'?')+'*: da eliminare':describeAction(a,refs,all))).join('\n')}
 export const candidateFacts=(ids:string[],refs:MenuRef[])=>ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).map((r,i)=>`${i+1}. *${itemLabel(r,refs)}* (${num(r.price)})`).join('\n')
 export function holdFacts(h:Hold,refs:MenuRef[],sections:SectionRef[]){const all=withNewSections(sections,h.actions),out:string[]=[]
@@ -315,3 +315,31 @@ export function holdFacts(h:Hold,refs:MenuRef[],sections:SectionRef[]){const all
  for(const a of (h.asks??(h.ask?[h.ask]:[])) as any[])if(a.type==='choose'&&Array.isArray(a.options))out.push('«'+String(a.word).slice(0,60)+'»:\n'+candidateFacts(a.options,refs))
  return out.join('\n\n')}
 export const NOTHING='Non ho cambiato nulla.'
+
+// ── PIANO bot-haiku T4b (21/10/2026): correzioni dalla prova playground del 20/10 ──────────────────────────────────────────
+const euroShort=(n:number)=>(Number.isInteger(n)?String(n):n.toFixed(2).replace('.',','))+' €'
+/** (1) Azioni che non cambiano niente (prezzo uguale all'attuale, esaurito già esaurito…): il server non scrive e dice com'è già,
+ * coi fatti del menu. `effective` = le azioni che cambiano davvero (effectiveMenuActions). */
+export function noopFacts(actions:MenuAction[],effective:MenuAction[],refs:MenuRef[]):string{
+ const out:string[]=[],seen=new Set<string>()
+ for(const a of actions){if(effective.includes(a)||!('id' in a)||typeof (a as any).id!=='string')continue;const r=refs.find(x=>x.id===(a as any).id);if(!r)continue
+  const k=a.kind+':'+r.id;if(seen.has(k)||effective.some(e=>e.kind===a.kind&&'id' in e&&(e as any).id===r.id))continue;seen.add(k)
+  const n='*'+r.name+'*'
+  if(a.kind==='price')out.push(n+' è già a *'+euroShort(r.price)+'*.')
+  else if(a.kind==='available')out.push(n+(a.value?' è già disponibile.':' è già segnato come finito.'))
+  else if(a.kind==='hidden')out.push(n+(a.value?' è già nascosto dal menu.':' è già visibile nel menu.'))
+  else if(a.kind==='featured')out.push(n+(a.value?' è già in evidenza.':' non è in evidenza.'))}
+ return out.join('\n')
+}
+/** (3) Un intero menu o sottomenu nascosto/eliminato piatto per piatto («nascondi tutta la cena»): il server lo riconosce e chiede
+ * SEMPRE conferma col riepilogo. Coperto = ogni piatto del gruppo è nelle azioni o è già nello stato chiesto. Gruppi da ≥3 piatti. */
+export function wholeGroup(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):{kind:'hidden'|'delete',label:string,count:number}|null{
+ if(actions.length<3)return null
+ const kind=actions.every(a=>a.kind==='hidden'&&a.value)?'hidden' as const:actions.every(a=>a.kind==='delete'&&!a.undoCreate)?'delete' as const:null;if(!kind)return null
+ const ids=new Set(actions.map(a=>(a as any).id as string)),covered=(r:MenuRef)=>ids.has(r.id)||(kind==='hidden'&&r.hidden)
+ const menus=[...new Set(refs.map(r=>r.menu))]
+ for(const m of menus){const items=refs.filter(r=>r.menu===m);if(items.length>=3&&items.every(covered)&&items.some(r=>ids.has(r.id)))return{kind,label:'tutto il '+(/^men[uù]\b/i.test(m.trim())?m.trim():'Menu '+m.trim()),count:items.filter(r=>ids.has(r.id)).length}}
+ for(const s of sections){const items=refs.filter(r=>r.sectionId===s.id);if(items.length>=3&&items.every(covered)&&items.some(r=>ids.has(r.id)))return{kind,label:'tutto il sottomenu '+s.name.trim()+(menus.length>1?' ('+s.menu.trim()+')':''),count:items.filter(r=>ids.has(r.id)).length}}
+ return null
+}
+export const wholeGroupText=(w:{kind:'hidden'|'delete',label:string,count:number})=>(w.kind==='hidden'?'Nascondo':'Elimino')+' *'+w.label+'* ('+w.count+(w.count===1?' piatto':' piatti')+')? Rispondi *sì*. Non ho ancora cambiato nulla.'

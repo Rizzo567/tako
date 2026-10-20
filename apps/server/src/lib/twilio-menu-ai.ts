@@ -261,7 +261,7 @@ export function capabilityText(ids:string[]){if(!ids.length||ids.includes('all')
 export function planText(plan:Exclude<MenuPlan,{type:'change'}>,refs:MenuRef[],sections:SectionRef[]=[]){
  if(plan.type==='read')return readText(plan,refs);if(plan.type==='clarify')return clarifyText(plan.ids,refs);if(plan.type==='capability')return capabilityText(plan.ids);if(plan.type==='verbatim')return copy.notVerbatim
  if(plan.type==='exists'){const r=refs.find(x=>x.id===plan.id)!;return fill(copy.alreadyExists,{piatto:safe(r.name),categoria:safe(r.section??r.menu)})}
- const wanted=plan.missing.map(m=>m==='section'?'la categoria':m==='price'?'il prezzo':'il nome'),listed=sections.slice(0,15)
+ const wanted=plan.missing.map(m=>m==='section'?'il sottomenu':m==='price'?'il prezzo':'il nome'),listed=sections.slice(0,15)
  return fill(copy.createMissing,{piatto:plan.name?'*'+safe(plan.name)+'*':'il piatto',mancante:wanted.length>1?wanted.slice(0,-1).join(', ')+' e '+wanted.at(-1):wanted[0]!,categorie:plan.missing.includes('section')&&listed.length?fill(copy.createCategories,{categorie:listed.map(s=>s.name).join(', ')}):'',})
 }
 // Benvenuto del titolare: esempi con piatti veri del locale («carbonara 12 euro», «tiramisù finito»).

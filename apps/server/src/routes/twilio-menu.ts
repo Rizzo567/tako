@@ -15,7 +15,7 @@ import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook
 import {reportFailure,inBackground,quietPhones,type FailureKind} from '../lib/twilio-menu-alerts.js'
 import {normalizeOwnerPhone,whatsappAddress} from '../lib/whatsapp-phone.js'
 import {fullMenuTurn,type FullMenuJob} from '../lib/twilio-menu-fullmenu.js'
-import {extractFullMenu,fullMenuFetcher,type FullMenuExtraction} from '../lib/menu-full-extract.js'
+import {extractFullMenu,fullMenuFetcher,haikuFullMenuFetcher,type FullMenuExtraction} from '../lib/menu-full-extract.js'
 import {OnboardingBusy} from '../lib/onboarding-planner.js'
 import {presetChatCommand} from '../lib/menu-preset-target.js'
 import {fullMenuCopy} from '../lib/twilio-menu-copy.js'
@@ -32,12 +32,13 @@ import {phoneticCandidates} from '../lib/twilio-menu-phonetic.js'
 import {relativeDelta,relNormText,g9Prices} from '../lib/twilio-menu-ai.js'
 import {parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
 import {sqlBrainStore} from '../lib/owner-brain-memory.js'
-import {readBotBrain} from '../lib/owner-brain-switch.js'
+import {readBotBrain,readBotSettings,engineKey,type BotEngine} from '../lib/owner-brain-switch.js'
+import {HAIKU_MODEL} from '../lib/owner-brain-anthropic.js'
 import {linkIntent,botQuestion} from '../lib/twilio-menu-nlu.js'
 import {linkMarkers} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
-import {ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
+import {ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
@@ -456,7 +457,10 @@ function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string){if(!/\b
  return d.size===1&&!d.has(0)}
 /** Una proposta ha bisogno del «sì»/«OK» del titolare? (vincoli del server, non interpretazione: elimina, categoria nuova non
  * chiesta esplicitamente, oltre 3 modifiche, prezzo implausibile G6). */
-function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false):BatchWhy|null{
+/** `strict` (motore haiku, PIANO bot-haiku T4b): oltre 3 modifiche serve SEMPRE l'OK, anche per l'aumento uniforme di un gruppo
+ * (opzione conservativa: il playground 17 «aumenta tutte le pizze di un euro» attende riepilogo + OK); un intero menu o sottomenu
+ * nascosto piatto per piatto chiede sempre conferma. */
+function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false,strict=false,sections:SectionRef[]=[]):BatchWhy|null{
  if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
  if(actions.some(a=>a.kind==='create_section')&&!EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' ')))return 'section'
  // Un solo comando su un gruppo («aumenta tutti i piatti della categoria X di un euro»): stessa differenza su ogni piatto → si
@@ -464,12 +468,13 @@ function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered
  // Richiesta esplicita di categorie nuove con i loro piatti («aggiungi un'altra categoria, primi, e lì aggiungi…»): è un solo comando di
  // struttura detto per intero, si applica subito (nota 64).
  // R9: la risposta alla domanda «lo aggiorno o ne creo un altro?» (che mostrava le parti in attesa, numerate) conferma la richiesta intera.
- if(actions.length>3&&!answered&&!uniformBulk(actions,refs,message)&&!(EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' '))&&actions.some(a=>a.kind==='create_section')&&actions.every(a=>a.kind==='create_section'||a.kind==='move'||a.kind==='create')))return 'recap'
+ if(strict&&wholeGroup(actions,refs,sections))return 'recap'
+ if(actions.length>3&&!answered&&(strict||!uniformBulk(actions,refs,message))&&!(EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' '))&&actions.some(a=>a.kind==='create_section')&&actions.every(a=>a.kind==='create_section'||a.kind==='move'||a.kind==='create')))return 'recap'
  if(actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})()))))return 'price'
  return null}
 /** Fase R: il turno del cervello. Il modello decide e scrive; il server valida (una auto-correzione), impone i vincoli, scrive
  * e aggiunge i fatti riletti dal DB. Groq giù → copy.brainDown, nessuna modifica, nessuna riserva a regole. */
-async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:Budget,voice=false):Promise<string>{
+async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:Budget,voice=false,replay=false):Promise<string>{
  budget.brain=true;const text=text0.trim()||'[messaggio vuoto]'
  const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');if(!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
  const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
@@ -483,13 +488,17 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  const restorable=await (async()=>{const a=await readRestorable(db,ctx.phone),b=undoRec,items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before});return items.length?{at:Date.now(),items}:null})()
  const last=await readLast(db,ctx.phone,row.revision),extraRestore=last?last.undo.flatMap(a=>'id' in a?[{id:(a as any).id as string,actions:last.undo.filter(b=>'id' in b&&(b as any).id===(a as any).id)}]:[]):[]
  const freshIds=new Set(undoOK&&!undoRec!.full?undoRec!.items.filter(i=>i.before===null).map(i=>i.id):[])
- const base={voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (categorie)']}:null}
+ // PIANO bot-haiku: con haiku il turno intero (auto-correzioni comprese) sta in 25 s; cervello giù → brainDown + avviso a Manuel.
+ const engine=budget.engine,deadline=Date.now()+25_000
+ const onDown=engine==='haiku'?(reason:string)=>{inBackground(reportFailure({kind:'job_failed',tenant:ctx.tenant,phone:ctx.phone,detail:'haiku: '+reason}))}:undefined
+ const base={voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,engine,deadline,onDown,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (sottomenu)']}:null}
+ const approval=(actions:MenuAction[],refs0:MenuRef[],message:string,ans=false)=>approvalFor(actions,refs0,message,ans,engine==='haiku',sections)
  const decide=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>decideTurn({decision:run.decision as any,control:run.decision.control??[],raw:run.decision.raw,message:text,pend,undoOK,sections,refs,lastBot:run.lastBot})
  // R5.1: anche i prezzi attuali dei piatti nominati nel messaggio («C'è già pasta al ragù a 12 €: lo aggiorno o ne creo un altro?»): sono fatti del menu.
  const namedPrices=(()=>{const t=' '+normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ')+' ';return refs.filter(r=>{const n=normalizeMenuText(r.name).replace(/[^a-z0-9]+/g,' ').trim();return n.length>=3&&t.includes(' '+n+' ')}).map(r=>r.price)})()
  const numbersOK=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>,extra:number[]=[])=>[...numbersIn(text),...numbersIn(run.ownerRecent??''),...namedPrices,...extra]
  // Una domanda (o una risposta senza scrittura) senza testo del modello utilizzabile vale come piano da rifare.
- const needsText=(o:Outcome,run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>(o.kind==='change'&&!!approvalFor(o.actions,refs,text,answered)&&!/\?|rispondi|scrivi/i.test(cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run,o.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price]:[]))})??''))||(o.kind==='ask'||o.kind==='say')&&!cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run,[...o.kind==='ask'?o.ids.map(id=>refs.find(r=>r.id===id)?.price??-1):[]])})
+ const needsText=(o:Outcome,run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>(o.kind==='change'&&!!approval(o.actions,refs,text,answered)&&!/\?|rispondi|scrivi/i.test(cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run,o.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price]:[]))})??''))||(o.kind==='ask'||o.kind==='say')&&!cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run,[...o.kind==='ask'?o.ids.map(id=>refs.find(r=>r.id===id)?.price??-1):[]])})
  let run=await brainPlan(db,base);if(budget.expired)return '';if(!run)return copy.brainDown
  let calls=1
  let out=decide(run)
@@ -502,7 +511,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // Ancora rifiutato: il modello formula una domanda (la sua bozza), mai una scrittura; i candidati restano in sospeso.
   // R8: una proposta da confermare (riepilogo/eliminazione) senza domanda nella bozza dopo l'auto-correzione non è un fallimento:
   // la domanda la portano i fatti della proposta («Non ancora pubblicato, da confermare con OK:»), la bozza che dice «fatto» cade.
-  if(out2.kind==='change'&&needsText(out2,run2)&&approvalFor(out2.actions,refs,text,answered))out=out2
+  if(out2.kind==='change'&&needsText(out2,run2)&&approval(out2.actions,refs,text,answered))out=out2
   else if(out2.kind==='reject'||needsText(out2,run2)){const f=out2.kind==='reject'?out2:first.kind==='reject'?first:{kind:'reject' as const,reason,ids:[],actions:[]};out={kind:'ask',ids:f.ids.length?f.ids:first.kind==='reject'?first.ids:[],actions:f.actions,...(f.hold?{hold:f.hold}:{})}}
   // La domanda del modello dopo il rifiuto: se non indica i piatti, valgono i candidati del validatore.
   else out=out2.kind==='ask'&&!out2.ids.length&&!out2.hold&&first.kind==='reject'&&first.ids.length>1?{...out2,ids:first.ids,actions:out2.actions.length?out2.actions:first.actions}:out2
@@ -536,7 +545,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-RIPETUTA '+JSON.stringify({text,why})+'\n')).catch(()=>{})
   const before:Outcome=out,r3=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason:why}});calls++;if(budget.expired)return '';if(!r3)return copy.brainDown
   const o3=decide(r3);run=r3
-  if(o3.kind==='reject'||(needsText(o3,r3)&&!(o3.kind==='change'&&approvalFor(o3.actions,refs,text,answered))))out=before.kind==='ask'?{...before}:{kind:'ask',ids:[],actions:[]}
+  if(o3.kind==='reject'||(needsText(o3,r3)&&!(o3.kind==='change'&&approval(o3.actions,refs,text,answered))))out=before.kind==='ask'?{...before}:{kind:'ask',ids:[],actions:[]}
   else out=o3.kind==='ask'&&before.kind==='ask'?{...o3,ids:o3.ids.length?o3.ids.filter(id=>!before.twins?.length||before.twins.some((t:Twin)=>t.id===id)):before.ids,actions:o3.actions.length?o3.actions:before.actions,...(before.twins?{twins:before.twins}:{})}:o3}
  // Sezione inesistente non detta dal modello: la sua domanda resta e il server aggiunge il fatto con l'elenco delle sezioni.
  const igLast=!repeated(out,run)&&!falseTwin(out,run)?ignored(out,run):null,unknownOnly=!!igLast&&igLast.startsWith('nel menu non c\u2019è una sezione')
@@ -547,10 +556,13 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // La domanda che resta aperta sullo stesso sospeso porta con sé la richiesta originale (gemelli e parti chiare).
  if(out.kind==='ask'&&!out.hold&&pendTwins.length&&!out.twins?.length)out={...out,ids:pendTwins.map(t=>t.id),actions:out.actions.length?out.actions:pend!.kind==='ask'?pend!.ask.actions:[],twins:pendTwins}
  const finalRun=run
- return db.transaction(async tx=>{await lock(tx,ctx.phone)
-  const live=await readWorkspace(ctx.tenant,tx);if(!live||!live.published||live.revision!==row.revision||live.revision!==live.published_revision)return copy.menuChanged
+ // T6 (PIANO bot-haiku): menu o proposta cambiati mentre il modello pensava (dashboard, altro telefono) → con haiku si rilegge e si
+ // rigioca il turno UNA volta; al secondo conflitto copy.menuChanged.
+ let conflict=false
+ const result=await db.transaction(async tx=>{await lock(tx,ctx.phone)
+  const live=await readWorkspace(ctx.tenant,tx);if(!live||!live.published||live.revision!==row.revision||live.revision!==live.published_revision){conflict=!!live?.published&&live.revision===live.published_revision;return copy.menuChanged}
   const pr2=(await tx.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now() FOR UPDATE`))[0]
-  if(JSON.stringify(pr2&&Number(pr2.revision)===row.revision?pr2.command:null)!==JSON.stringify(cmd))return copy.menuChanged
+  if(JSON.stringify(pr2&&Number(pr2.revision)===row.revision?pr2.command:null)!==JSON.stringify(cmd)){conflict=true;return copy.menuChanged}
   const workspace=workspaceSchema.parse(live.draft),settings=(await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${ctx.tenant}`))[0]?.settings as any
   const drop=()=>tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`)
   // R10: senza scrittura, mai la stessa domanda dell'ultima risposta (riepilogo rimandato uguale): restano i fatti.
@@ -563,18 +575,20 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    const waItems=new Map(beforeW.menus.flatMap((m:any)=>m.sections.flatMap((sec:any)=>sec.items.map((i:any)=>[i.id,structuredClone(i)] as const)))),back=undoFor(effective,id=>waItems.get(id) as any)
    await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,back?{kind:'last',actions:effective,undo:back,revision:saved.revision+1,at:Date.now()}:null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
    const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
-   inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter}))
+   inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter,engine}))
    const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
    return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1}}
   const publish=async(actions:MenuAction[]):Promise<string>=>{const effective=effectiveMenuActions(actions,workspace)
-   if(!effective.length){await drop();return say(copy.noChanges,false)}
+   // T4b (1): niente da cambiare → nessuna scrittura, si dice com'è già (fatti del menu).
+   const already=engine==='haiku'?noopFacts(actions,effective,refs):''
+   if(!effective.length){await drop();return say(already||copy.noChanges,false)}
    {const problem=salesActionProblem(effective,workspace);if(problem){await drop();return problem}}
-   const why=approvalFor(effective,refs,text,answered)
+   const why=approval(effective,refs,text,answered)
    // Eliminazioni insieme ad altre modifiche (Y1): le parti chiare si pubblicano subito, le eliminazioni aspettano il «sì».
    if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
-    if(rest.length&&!approvalFor(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
-   if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});return say(pendingFacts(why,effective,refs,sections),false,pricesOf(effective))}
-   const r=await applyNow(effective);return say(r.facts,r.allOk,pricesOf(effective))}
+    if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
+   if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});const whole=engine==='haiku'?wholeGroup(effective,refs,sections):null;return say([whole?wholeGroupText(whole):pendingFacts(why,effective,refs,sections),already].filter(Boolean).join('\n\n'),false,pricesOf(effective))}
+   const r=await applyNow(effective);return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   switch(out.kind){
    case 'undo':{const res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
@@ -589,7 +603,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    case 'change':{
     // Riepilogo in attesa dell'OK: le correzioni lo aggiornano (e i piatti esclusi escono), resta in attesa.
     if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')){const ex=new Set((finalRun.decision.exclude??[]).map(e=>e.id)),merged=mergeMenuActions(pend.actions,out.actions).filter(a=>!('id' in a)||!ex.has((a as any).id)||out.actions.includes(a))
-     const effective=effectiveMenuActions(merged,workspace);await drop();if(!effective.length)return say(copy.noChanges,false);await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why:approvalFor(effective,refs,text,answered)??pend.why});return say(pendingFacts(approvalFor(effective,refs,text,answered)??pend.why,effective,refs,sections),false,pricesOf(effective))}
+     const effective=effectiveMenuActions(merged,workspace);await drop();if(!effective.length)return say(copy.noChanges,false);await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why:approval(effective,refs,text,answered)??pend.why});return say(pendingFacts(approval(effective,refs,text,answered)??pend.why,effective,refs,sections),false,pricesOf(effective))}
     return publish(out.actions)}
    case 'ask':{const keepRecap=pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')
     const question=noDraft?'':cleanDraft(finalRun.decision.draft,{wrote:false,numbers:numbersOK(finalRun,[...out.ids.map(id=>refs.find(r=>r.id===id)?.price??-1),...(out.twins??[]).flatMap(t=>t.price!=null?[t.price]:[]),...out.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[])])})??''
@@ -602,9 +616,15 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     return [question,question||missingSection?'':NOTHING,unsaved,facts,missingSection].filter(Boolean).join('\n\n')}
    case 'read':return say(planText(out.plan,refs,sections),false,pricesOf(out.plan.ids?.map((id:string)=>({kind:'available',id,value:true}) as MenuAction)??[]))
    case 'say':{const p=finalRun.decision.plan as any,ids=p?.type==='capability'&&Array.isArray(p.ids)?(p.ids as string[]).filter(i=>i==='dashboard'||i==='menulink'):[];if(ids.length)return capabilityText(ids);return say('',false)}}
-   return NOTHING})}
+   return NOTHING})
+ if(conflict&&engine==='haiku'&&!replay&&!budget.expired)return brainTurnR(ctx,text0,key,ai,budget,voice,true)
+ return result}
 const turnFor=(ctx:Ctx,text:string,opts?:Parameters<typeof menuTurn>[3])=>db.transaction(async tx=>{if(opts?.isExpired?.())throw new Error('WhatsApp turn expired');await lock(tx,ctx.phone);const live=await linkedContext(tx,ctx.phone);const result=live?await menuTurn(tx,live,text,opts):'';if(opts?.isExpired?.())throw new Error('WhatsApp turn expired');return result})
-type Budget={expired:boolean,failed?:boolean,brain?:boolean,voice?:boolean}
+/** `engine`: motore del cervello del locale, valorizzato SOLO se il cervello è acceso (PIANO bot-haiku). */
+type Budget={expired:boolean,failed?:boolean,brain?:boolean,voice?:boolean,engine?:BotEngine}
+/** Chiave per un turno che va all'IA: cervello acceso su haiku → ANTHROPIC_API_KEY (foto del piatto escluse: restano su Groq);
+ * altrimenti GROQ_API_KEY come prima. Whisper usa sempre GROQ_API_KEY (jobMessage). */
+const aiKeyFor=(turn:{photo?:unknown},bs:{brain:boolean,engine:BotEngine}|null)=>bs?.brain&&bs.engine==='haiku'&&!turn.photo?engineKey('haiku'):process.env.GROQ_API_KEY||''
 // Watchdog: ogni job in background risponde sempre, anche se un passo si blocca (codec, rete, DB).
 const jobTimeoutMs=()=>Number(process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS)||90_000,photoTimeoutMs=()=>Number(process.env.TAKO_WHATSAPP_PHOTO_TIMEOUT_MS)||40_000
 function withTimeout<T>(work:Promise<T>,ms:number,fallback:T):Promise<T>{let timer:ReturnType<typeof setTimeout>|undefined;return Promise.race([work,new Promise<T>(resolve=>{timer=setTimeout(()=>resolve(fallback),ms)})]).finally(()=>clearTimeout(timer))}
@@ -638,21 +658,29 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
    if('error' in saved)return fill(copy.photoUploadFailed,{motivo:saved.error.replace(/\.$/,'').toLowerCase()});uploads.set(a.id,saved.url)}
   if(budget.expired)return ''
   try{const done=await turnFor(ctx,'conferma',{uploads,isExpired:()=>budget.expired});return typeof done==='string'?done:copy.failed}catch{return copy.photoPublishFailed}}
- if(!key)return 'brain' in turn&&turn.brain?copy.brainDown:copy.noAi;const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
- if(turn.photo){const candidates=candidatesFor(text,refs);if(!candidates.length)return fill(copy.photoNotFound,{nome:text.slice(0,80)});const pick=validateDishPick((await groqDishPick(text,candidates,key,[],ai)).content,refs);if(pick.type==='clarify')return pick.ids.length?fill(copy.photoWhich,{opzioni:bold(pick.ids.map(id=>itemLabel(refs.find(r=>r.id===id)!,refs)))}):fill(copy.photoNotFound,{nome:text.slice(0,80)})
+ // PIANO bot-haiku: cervello acceso su haiku → ogni turno di testo all'IA va al cervello Haiku (mai groqMenuPlan, mai Groq).
+ const haiku=budget.engine==='haiku'
+ if(haiku&&!turn.brain&&!turn.photo&&!turn.fullmenu)turn={...turn,brain:true}
+ const brainKey=haiku?engineKey('haiku'):key
+ if(!(turn.brain||(haiku&&turn.fullmenu)?brainKey:key))return 'brain' in turn&&turn.brain?copy.brainDown:copy.noAi;const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
+ if(turn.photo){const candidates=candidatesFor(text,refs);if(!candidates.length)return fill(copy.photoNotFound,{nome:text.slice(0,80)});// PIANO bot-haiku: cervello su Haiku → nessuna chiamata Groq neanche per la foto di un piatto: un solo candidato (o un solo nome
+  // identico) = quel piatto, altrimenti si chiede quale (mai una scelta a caso).
+  const exact=candidates.filter(r=>plain(r.name)===plain(text)),pick:{type:'dish',id:string}|{type:'clarify',ids:string[]}=haiku?(candidates.length===1||exact.length===1?{type:'dish',id:(exact.length===1?exact[0]!:candidates[0]!).id}:{type:'clarify',ids:candidates.slice(0,5).map(r=>r.id)}):validateDishPick((await groqDishPick(text,candidates,key,[],ai)).content,refs);if(pick.type==='clarify')return pick.ids.length?fill(copy.photoWhich,{opzioni:bold(pick.ids.map(id=>itemLabel(refs.find(r=>r.id===id)!,refs)))}):fill(copy.photoNotFound,{nome:text.slice(0,80)})
   if(budget.expired)return '';const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,planned:{revision:row.revision,plan:{type:'change',actions:[{kind:'image',id:pick.id,...turn.photo}]}}});return typeof done==='string'?done:'upload' in done?await resolveTurn(ctx,text,done,key,ai,budget):copy.failed}
- if(turn.fullmenu){let extraction:FullMenuExtraction;try{extraction=await extractFullMenu(turn.fullmenu.text,key,fullMenuFetcher())}catch(error){if(error instanceof OnboardingBusy)return copy.busy;return fullMenuCopy.failed}
+ if(turn.fullmenu){let extraction:FullMenuExtraction;try{extraction=haiku?await extractFullMenu(turn.fullmenu.text,brainKey,haikuFullMenuFetcher()):await extractFullMenu(turn.fullmenu.text,key,fullMenuFetcher())}catch(error){if(error instanceof OnboardingBusy)return copy.busy;return fullMenuCopy.failed}
   if(budget.expired)return '';const done=await turnFor(ctx,turn.fullmenu.text,{voice:turn.fullmenu.voice,isExpired:()=>budget.expired,plannedFull:{revision:row.revision,job:turn.fullmenu,extraction}});return typeof done==='string'?done:copy.failed}
  if(turn.text)text=turn.text;const exclude=turn.exclude??[]
  // Fase R: col cervello acceso il turno è tutto del modello (nessuna riserva a regole).
- if(turn.brain)return brainTurnR(ctx,text,key,ai,budget,!!budget.voice).then(r=>{if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-OUT '+JSON.stringify({expired:budget.expired,r:r.slice(0,200)})+'\n'));return r},e=>{if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-ERR '+String(e?.stack??e).slice(0,500)+'\n'));throw e})
+ if(turn.brain)return brainTurnR(ctx,text,brainKey,ai,budget,!!budget.voice).then(r=>{if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-OUT '+JSON.stringify({expired:budget.expired,r:r.slice(0,200)})+'\n'));return r},e=>{if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-ERR '+String(e?.stack??e).slice(0,500)+'\n'));throw e})
  const pendingRows=await db.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`),pendingCommand=pendingRows[0]?.command,pending=storedActions(pendingCommand,refs,sections);
  // Reject oversize requests explicitly rather than applying a truncated transcript/catalog.
  if(text.length>30000||refs.length>1500)return 'La richiesta è *troppo lunga*. Non ho cambiato nulla. Dividila in più messaggi.';
  const candidates=refs,raw=pending?validatePendingMenuPlan((await groqPendingMenuPlan(text,refs,key,sections,pending,ai)).content,refs,sections,text,pending):validateMenuPlan((await groqMenuPlan(text,candidates,key,wantsCreateText(text)?sections:[],ai)).content,refs,{sections,message:text,exclude}),plan:MenuPlan=!candidates.length&&raw.type==='capability'&&!raw.ids.includes('all')&&!looksLikeQuestion(text)?{type:'clarify',ids:[]}:raw;if(budget.expired)return '';const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,planned:{revision:row.revision,plan,proposalRevision:JSON.stringify(pendingCommand??null)},exclude});return typeof done==='string'?done:'upload' in done?await resolveTurn(ctx,text,done,key,ai,budget):copy.notUnderstood
 }
 // Contatore Groq per giorno (Europe/Rome) e modello; avviso una volta al giorno oltre l'80% di richieste o token/audio.
-export const groqLimits:Record<string,{rpd:number,tpd?:number,asd?:number}>={'openai/gpt-oss-120b':{rpd:1000,tpd:200000},'openai/gpt-oss-20b':{rpd:1000,tpd:200000},'whisper-large-v3-turbo':{rpd:2000,asd:28800}}
+export const groqLimits:Record<string,{rpd:number,tpd?:number,asd?:number}>={'openai/gpt-oss-120b':{rpd:1000,tpd:200000},'openai/gpt-oss-20b':{rpd:1000,tpd:200000},'whisper-large-v3-turbo':{rpd:2000,asd:28800},
+ /** Haiku 5.5 (cervello): nessun limite giornaliero vero, si conta e basta (soglia alta: l'avviso 80% non scatta nell'uso normale). */
+ [HAIKU_MODEL]:{rpd:100000}}
 const owner=process.env.TAKO_WHATSAPP_USAGE_PHONE||process.env.TAKO_WHATSAPP_ALERT_PHONE||''
 export async function recordUsage(e:UsageEvent){try{
  const day=localDate('Europe/Rome').date,rows=await db.execute(sql`INSERT INTO tako_whatsapp_ai_usage(day,model,requests,prompt_tokens,completion_tokens,rate_limited,audio_seconds) VALUES(${day},${e.model},${e.limited?0:1},${e.prompt},${e.completion},${e.limited?1:0},${e.audioSeconds??0}) ON CONFLICT(day,model) DO UPDATE SET requests=tako_whatsapp_ai_usage.requests+EXCLUDED.requests,prompt_tokens=tako_whatsapp_ai_usage.prompt_tokens+EXCLUDED.prompt_tokens,completion_tokens=tako_whatsapp_ai_usage.completion_tokens+EXCLUDED.completion_tokens,rate_limited=tako_whatsapp_ai_usage.rate_limited+EXCLUDED.rate_limited,audio_seconds=tako_whatsapp_ai_usage.audio_seconds+EXCLUDED.audio_seconds RETURNING requests,prompt_tokens,completion_tokens,audio_seconds,warned_at`)
@@ -680,7 +708,8 @@ async function whisperVocab(tenant:string):Promise<string>{try{const row=await r
 async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget):Promise<string>{
  const key=process.env.GROQ_API_KEY||'',accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'';let text=body,prefix='',response:string
  // Fase R: col cervello acceso nessun testo fisso d'attesa né d'errore: solo «non disponibile» (copy.brainDown).
- const brainOn=kind!=='image'&&await readBotBrain(db,ctx.tenant)
+ // Una sola lettura di settings per turno: cervello acceso e motore (haiku|groq).
+ const bs=await readBotSettings(db,ctx.tenant),brainOn=kind!=='image'&&bs.brain;if(bs.brain)budget.engine=bs.engine
  const ai:GroqOptions={meter:recordUsage,onWait:()=>quietPhones.has(ctx.phone)||brainOn?undefined:sendWhatsApp(accountSid,token,process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.wait).catch(()=>{})}
  try{if(kind==='image'){if(Number(form.NumMedia)>1)prefix=copy.photoFirstOnly;const media=await downloadTwilioMedia(form.MediaUrl0||'',accountSid,token),problem=photoProblem(media.bytes,media.type||form.MediaContentType0||'');const photo={mediaUrl:form.MediaUrl0||'',mediaType:media.type}
    if(problem)response=problem;else{const turn=await db.transaction(async tx=>{await lock(tx,ctx.phone);const live=await linkedContext(tx,ctx.phone);if(!live)return '';await propose(tx,live,0,{kind:'photo',...photo});return text?menuTurn(tx,live,text,{isExpired:()=>budget.expired}):copy.photoAsk});response=typeof turn==='string'?turn:await resolveTurn(ctx,text,turn,key,ai,budget);if(response&&!budget.expired)response=await attachPhoto(ctx,{...photo,bytes:media.bytes,type:media.type},budget).catch(()=>null)??response}}
@@ -799,7 +828,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // 19/10: link della dashboard / del menu digitale. Le credenziali (account creato ora) partono a parte (REST), mai nel TwiML in cache.
  if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx,...(link.deliver?{deliver:link.deliver}:{})};return say(link.say)}}
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);return{job,ctx,ack:'',prefix}}
- if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!process.env.GROQ_API_KEY)return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
+ if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!aiKeyFor(turn,await readBotSettings(tx,ctx.tenant)))return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
  if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result))}
  // 19/10: messaggi riservati (credenziali) e messaggi dopo l'attivazione: via REST, in ordine, con una breve pausa dopo la risposta.
  // Verifica dal vivo sincrona sul QA (TakoSyncTest): tutto nello stesso TwiML, niente REST.
