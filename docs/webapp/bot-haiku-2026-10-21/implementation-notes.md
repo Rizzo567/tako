@@ -6,3 +6,4 @@
 4. Stack dev: Docker spento → Postgres Homebrew 17 avviato da me, db `takodb` (ruolo tako) creato e migrazioni drizzle applicate via psql (drizzle-kit non installato). Server :3001 NON avviato (nessuno script dev nel server): i test che lo richiedono sono rossi anche nella baseline.
 5. `brainPlan` vive in `owner-brain-route.ts` (non nella lista file di T del piano): aggiunto al perimetro T.
 6. A0: schema accettato così com'è → nessuna conversione delle union.
+7. Root node_modules senza hoisting di bcryptjs/fastify/drizzle-orm (4 file di test non si caricavano): symlink locali non tracciati `node_modules/{bcryptjs,fastify,drizzle-orm}` → `apps/server/node_modules/…`. Con questo la baseline coincide coi 14 rossi noti.
