@@ -1,0 +1,25 @@
+// Explicit QA only: fake provider, never delivers an email. Requires no other pending rows.
+import fs from 'node:fs';import {parseEnv} from 'node:util';
+const base=process.env.HOME+'/.config/tako-webapp/';const candidate=parseEnv(fs.readFileSync(base+'candidate.env','utf8'));
+for(const[name,value]of Object.entries(candidate))if(name.startsWith('TAKO_CANDIDATE_'))process.env[name.slice(15)]=value;
+Object.assign(process.env,parseEnv(fs.readFileSync(base+'email-automation-20261019/runtime.env','utf8')),parseEnv(fs.readFileSync(base+'resend.env','utf8')),{TAKO_MODE:'web'});
+const {db}=await import('../../packages/db/src/index.ts'),{sql}=await import('../../apps/server/node_modules/drizzle-orm/index.js');
+const {enqueueEmail,processEmailOutbox}=await import('../../apps/server/src/lib/transactional-email/outbox.ts');
+const prefix='qa-email-db-'+Date.now();
+const [owner]=await db.execute(sql`select u.id from users u join restaurants r on r.id=u.restaurant_id where r.slug='qa-web-verifica' and r.name='Tako · Verifica web' and u.role='owner' and u.active=true`);
+if(!owner)throw Error('QA account missing');
+if((await db.execute(sql`select id from tako_email_outbox where status in ('pending','sending') limit 1`)).length)throw Error('Other mail queued; abort QA fake-provider test');
+let calls=[];const send=async(mail,key)=>{calls.push({mail,key});await new Promise(r=>setTimeout(r,25));return{id:'qa-fake-'+calls.length}};
+const input={key:prefix+':one',userId:String(owner.id),recipient:'qa@example.invalid',template:'password-cambiata',values:{nome_titolare:'QA',data_ora:'test'}};
+const first=await enqueueEmail(db,input),duplicate=await enqueueEmail(db,input);if(first!==duplicate)throw Error('Duplicate queue row');
+await Promise.all([processEmailOutbox(send,1),processEmailOutbox(send,1)]);if(calls.length!==1)throw Error('Concurrent duplicate delivery');
+let [row]=await db.execute(sql`select * from tako_email_outbox where id=${first}`);if(row.status!=='sent'||row.encrypted_payload!==null||row.attempts!==1)throw Error('Terminal state invalid');
+await enqueueEmail(db,{...input,key:prefix+':retry'});await processEmailOutbox(async()=>{throw Error('simulated network loss')},1);
+const [retry]=await db.execute(sql`select * from tako_email_outbox where dedupe_key=${prefix+':retry'}`);if(retry.status!=='pending'||retry.attempts!==1||!retry.encrypted_payload)throw Error('Retry state missing');
+process.env.EMAIL_FROM='QA changed sender <changed@example.invalid>';
+await db.execute(sql`update tako_email_outbox set next_attempt_at=now() where id=${retry.id}`);await processEmailOutbox(send,1);
+if(calls[1].mail.from!==calls[0].mail.from)throw Error('Provider snapshot changed across retry');
+await enqueueEmail(db,{...input,key:prefix+':invalid-reset',guard:{kind:'reset',id:'0'.repeat(64)}});await processEmailOutbox(send,1);
+const [cancelled]=await db.execute(sql`select * from tako_email_outbox where dedupe_key=${prefix+':invalid-reset'}`);if(cancelled.status!=='cancelled'||cancelled.encrypted_payload!==null||calls.length!==2)throw Error('Invalid reset was sent');
+console.log(JSON.stringify({qaOnly:true,realProviderCalls:0,dedupe:'PASS',concurrentWorkers:'PASS',retry:'PASS',immutableSender:'PASS',guardCancellation:'PASS',terminalScrub:'PASS'}));
+process.exit(0);
