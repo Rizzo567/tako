@@ -1,0 +1,596 @@
+{
+ "set": "victoria",
+ "metriche": {
+  "set": "victoria",
+  "modo": "mock",
+  "conversazioni": 10,
+  "misurate": 10,
+  "nonMisurate": [],
+  "messaggi": 11,
+  "corrette": 0,
+  "percentuale": 0,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 10,
+  "domandePer10Messaggi": 10,
+  "domandeNonAttesePer10": 8.2,
+  "latenzaAnthropicMs": {
+   "p50": 0,
+   "p95": 0,
+   "chiamate": 11
+  },
+  "latenzaTurnoMs": {
+   "p50": 28,
+   "p95": 99,
+   "nota": "harness + latenza Haiku registrata"
+  },
+  "chiamatePerMessaggio": 1,
+  "tokenMediPerMessaggio": {
+   "input": 32,
+   "output": 120,
+   "cacheRead": 2342,
+   "cacheWrite": 0
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 11,
+   "su": 11,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.000953,
+   "perMessaggioUsd": 0.000087,
+   "tetto": 0.5
+  },
+  "anthropic": {
+   "hit": 0,
+   "vere": 0,
+   "mock": 11,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 1.6
+ },
+ "codici": {
+  "chiede-invece-di-agire": {
+   "GRAVE": 0,
+   "MEDIO": 6,
+   "BASSO": 0
+  },
+  "risposta-senza-contenuto": {
+   "GRAVE": 0,
+   "MEDIO": 3,
+   "BASSO": 0
+  },
+  "riepilogo-mancante": {
+   "GRAVE": 0,
+   "MEDIO": 2,
+   "BASSO": 0
+  },
+  "domanda-superflua": {
+   "GRAVE": 0,
+   "MEDIO": 1,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "vic-01",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Carbonara|14"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "la carbonara mettila a 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2458,
+   "latencyMs": [
+    74.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "prezzo",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-02",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: available|Branzino al forno|false"
+    }
+   ],
+   "expected": [
+    "available|Branzino al forno|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "è finito il branzino"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2457,
+   "latencyMs": [
+    28.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "esaurito",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-03",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: hidden|Caprese|true"
+    }
+   ],
+   "expected": [
+    "hidden|Caprese|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "togli la caprese"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2456,
+   "latencyMs": [
+    20.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "«togli» = nascondi, mai elimina",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-04",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "turno 1: manca /\\bs[iì](?![a-z])/i («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "elimina la panna cotta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2457,
+   "latencyMs": [
+    22
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "«elimina» = chiede «sì», nessuna scrittura senza conferma",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-05",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|frittura di calamari|16|secondi"
+    }
+   ],
+   "expected": [
+    "create|frittura di calamari|16|secondi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "aggiungi nei secondi del pranzo la frittura di calamari che costa 16"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2584,
+   "latencyMs": [
+    27.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "piatto nuovo: nome senza «che costa»",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-06",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "turno 1: manca /pranzo|cena/i («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "aumenta i primi di un euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2458,
+   "latencyMs": [
+    23.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "«i primi» ambiguo: Primi del Menu pranzo e del Menu cena → domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-07",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "turno 1: manca /dolci/i («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "nascondi tutti i dolci"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2572,
+   "latencyMs": [
+    16.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "nascondere un intero sottomenu = conferma",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-08",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "riepilogo-mancante",
+     "why": "turno 1: manca il riepilogo con «Rispondi OK» («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "la margherita a 8, la diavola a 9, la capricciosa a 10 e la coca a 4"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2469,
+   "latencyMs": [
+    27.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "4 modifiche → riepilogo + OK, nessuna scrittura al primo turno",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-09",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Capricciosa|10, price|Coca Cola|4, price|Diavola|9, price|Margherita|8"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "riepilogo-mancante",
+     "why": "turno 1: manca il riepilogo con «Rispondi OK» («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »)"
+    }
+   ],
+   "expected": [
+    "price|Capricciosa|10",
+    "price|Coca Cola|4",
+    "price|Diavola|9",
+    "price|Margherita|8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?",
+    "Quale piatto intendi?"
+   ],
+   "turns": [
+    "la margherita a 8, la diavola a 9, la capricciosa a 10 e la coca a 4",
+    "🎤 va bene"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 5068,
+   "latencyMs": [
+    33.7,
+    98.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "OK a voce («va bene» in un vocale) dopo il riepilogo",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-10",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: available|Pizza Sorrentina|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-superflua",
+     "why": "turno 1: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »"
+    }
+   ],
+   "expected": [
+    "available|Pizza Sorrentina|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la sorrentina finita"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2457,
+   "latencyMs": [
+    17.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "alias attivo «la sorrentina» = Pizza Sorrentina → nessuna domanda",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "vic-01",
+   "hash": "73c92b3511e490f1",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-02",
+   "hash": "0632a0828b62f044",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 16,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-03",
+   "hash": "5256da50a59b94ae",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 15,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-04",
+   "hash": "37d5eda057fa2a4e",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 16,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-05",
+   "hash": "a072731ae1045243",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 28,
+    "output": 120,
+    "cacheRead": 2436,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-06",
+   "hash": "1a2c463709c2cb75",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-07",
+   "hash": "243acacedf829cd6",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 16,
+    "output": 120,
+    "cacheRead": 2436,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-08",
+   "hash": "ddfb1468ccb9602c",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 28,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-09",
+   "hash": "ddfb1468ccb9602c",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 28,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-09",
+   "hash": "c5c6fa9320fc800a",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 158,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-10",
+   "hash": "ba06c64670707bfc",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 16,
+    "output": 120,
+    "cacheRead": 2321,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

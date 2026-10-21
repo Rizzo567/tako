@@ -87,7 +87,43 @@ export const victoria=build('victoria',12,{restaurant:'Victoria Bar',menus:[['Me
  ['Secondi di pesce',[['Tagliata di orata o branzino con rucola e grana',20]]],
  ['Contorni',[['Patate al forno',5]]],['Dolci',[['Tiramisù della casa',6]]],['Pizze e calzoni',[['Margherita',7]]],['Bevande',[['Acqua naturale',2]]]]]]})
 
-export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco,qamattina,qa1016,qa1323,collaudo,victoria}
+// ---------------- Motore Haiku 5.5 (run 21/10/2026, perimetro B) ----------------
+// victoria4: locale «tipo Victoria» a 4 menu (Menu pranzo, Menu cena, Bevande, Alla carta) con DATI INVENTATI di comodo (mai letti
+// dal DB di Victoria). Due sottomenu omonimi «Primi» (pranzo e cena) e due «Secondi»; una Sezione (gruppo pubblico di livello 3,
+// `parentSectionId` = sottomenu «Pizze») «Pizze bianche». «Pizza Sorrentina» + «Gnocchi alla sorrentina»: l'alias attivo
+// «la sorrentina» = Pizza Sorrentina (seminato da eval-haiku.test.ts) toglie l'ambiguità. La chiave «victoria» resta quella del banco vero.
+export const victoria4=build('victoria4',13,{restaurant:'Victoria Bar (prova)',menus:[
+ ['Menu pranzo','lunch',[
+  ['Antipasti',[['Bruschetta classica',6],['Caprese',9]]],
+  ['Primi',[['Spaghetti alle vongole',15],['Gnocchi alla sorrentina',11],['Paccheri al ragù',12]]],
+  ['Secondi',[['Cotoletta alla milanese',14],['Tagliata rucola e grana',20]]]]],
+ ['Menu cena','dinner',[
+  ['Primi',[['Risotto ai frutti di mare',18],['Tagliatelle ai porcini',16],['Carbonara',13]]],
+  ['Secondi',[['Filetto al pepe verde',24],['Branzino al forno',22]]],
+  ['Dolci',[['Tiramisù della casa',6],['Panna cotta ai frutti di bosco',6],['Cheesecake',6.5]]]]],
+ ['Bevande','drinks',[
+  ['Bibite',[['Acqua naturale',2],['Acqua frizzante',2],['Coca Cola',3.5]]],
+  ['Birre',[['Birra media',5],['Birra piccola',3.5]]],
+  ['Vini',[['Calice di rosso',6],['Calice di bianco',6]]]]],
+ ['Alla carta','main',[
+  ['Pizze',[['Margherita',7],['Pizza Sorrentina',9],['Diavola',8.5],['Capricciosa',9.5]]],
+  ['Pizze bianche',[['Pizza bianca al rosmarino',6],['Focaccia crudo e burrata',12]]]]]]})
+{const carta=victoria4.menu.menus[3]!,pizze=carta.sections[0]!;(carta.sections[1] as any).parentSectionId=pizze.id}
+
+// mariopg: il menu «Trattoria Da Mario» del playground del 20/10 (PLAYGROUND-1-SYSTEM: p1…p30 = stessi piatti, stessi prezzi e
+// stesso ordine della fixture mario). Chiave separata perché il set playground semina gli alias «la carbo», «la coca», «la tagliata».
+export const mariopg:MenuFixture={key:'mariopg',restaurant:'Trattoria Da Mario',menu:structuredClone(mario.menu)}
+
+// anziano: trattoria romana per il set «parlato sporco» (vocali di un ristoratore anziano trascritti male).
+export const anziano=build('anziano',14,{restaurant:'Trattoria Er Sor Gigi',menus:[['Pranzo e cena','lunch',[
+ ['Primi',[['Carbonara',12],['Amatriciana',11],['Gricia',11],['Cacio e pepe',10],['Lasagna',11]]],
+ ['Secondi',[['Saltimbocca alla romana',15],['Abbacchio scottadito',18],['Coda alla vaccinara',16],['Polpette al sugo',12]]],
+ ['Contorni',[['Cicoria ripassata',5],['Patate al forno',4.5]]],
+ ['Pizze',[['Margherita',7],['Sorrentina',9],['Diavola',8]]],
+ ['Dolci',[['Tiramisù',6],['Panna cotta',5],['Crostata',5]]]]],
+ ['Bevande','drinks',[['Bevande',[['Coca Cola',3],['Acqua naturale',2],['Birra',5],['Vino della casa 1/4',5],['Caffè',1.5]]]]]]})
+
+export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco,qamattina,qa1016,qa1323,collaudo,victoria,victoria4,mariopg,anziano}
 
 /** Menu iniziale di una conversazione: fixture + variazioni `mods` (copia profonda). */
 export function initialMenu(key:string,mods:Mods={}):EvalMenu{

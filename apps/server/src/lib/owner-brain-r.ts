@@ -293,7 +293,7 @@ const CLAIM_PART=/\b(?:aggiunt[oaie]|creat[oaie]|inserit[oaie]|spostat[oaie]|rin
 // domanda vale come «fatto», a meno che la bozza chieda una conferma (rispondi/confermi/ok per…).
 const CLAIM_NOW=/^(?:ok|va bene|perfetto|d accordo|bene)?\s*(?:allora\s+)?(?:ti\s+)?(?:rimetto|tolgo|levo|metto|segno|nascondo|cambio|aggiorno|aggiungo|creo|sposto|rinomino|imposto|porto|abbasso|alzo|aumento|elimino|cancello|pubblico|tolgo)\b/
 const ASKS_OK=/\b(?:rispondi|confermi|conferma|scrivi ok|ok per|dimmi (?:si|ok)|vuoi che|procedo)\b/
-const claimsNow=(s:string)=>!ASKS_OK.test(plain(s))&&s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_NOW.test(plain(x).trim()))
+const claimsNow=(s:string)=>!/\?/.test(s)&&!ASKS_OK.test(plain(s))&&s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_NOW.test(plain(x).trim()))
 export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||claimsNow(s)||s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_PART.test(plain(x)))
 /** Bozza utilizzabile o null. `wrote` = il server ha scritto e riletto tutte le azioni; `numbers` = numeri ammessi
  * (detti dal titolare, prezzi scritti, prezzi dei piatti citati). */

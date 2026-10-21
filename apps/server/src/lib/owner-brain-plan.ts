@@ -261,7 +261,11 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // R10: «togli tutti i piatti dalla sezione altre proposte»: anche col nome pubblico del menu digitale (tutte le sezioni che vi cadono).
  const sectionWide=new Set<string>()
  for(const id of allOfSections(input.message+(input.clarifySource?' \n '+input.clarifySource:''),sections))for(const r of refs)if(r.sectionId===id){trusted.add(r.id);sectionWide.add(r.id)}
- const trustedHas=(id:string)=>trusted.has(id)
+ // run Haiku 21/10: i piatti della proposta in attesa (riepilogo da confermare) sono già stati scelti dal titolare: una correzione
+ // («la pasta fai 15, mantieni le altre») che li riprende non li rende ambigui, e i loro prezzi in attesa valgono come detti.
+ const pendIds=new Set((input.pendingActions??[]).flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))
+ const pendPrice=(id:string,v:number)=>(input.pendingActions??[]).some(p=>(p.kind==='price'||p.kind==='promo')&&(p as any).id===id&&typeof (p as any).price==='number'&&Math.abs((p as any).price-v)<0.005)
+ const trustedHas=(id:string)=>trusted.has(id)||pendIds.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
  // «no, la parmigiana no»: il «no,» in testa non è una clausola (stessa normalizzazione del percorso di prima).
  // «la gricia no, lasciala a 11»: un valore detto per il piatto «negato» è una correzione, non un'esclusione.
@@ -419,7 +423,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   const refPlusOK=(v:number)=>{const rd=relativeDelta(message);return !!rd&&refs.some(r=>new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg)&&Math.abs(r.price+rd.delta-v)<0.005)}
   // «metti la carbonara a 13» → «e la gricia a uno in meno» = 12: la differenza è rispetto al prezzo appena scritto (riga del bot).
   const rdc=relativeDelta(message),botNew=[...lastBotText.replace(/\*/g,'').matchAll(/prezzo da [\d.,]+\s*€ a ([\d.,]+)\s*€/g)].map(m=>Number(m[1]!.replace(/\./g,'').replace(',','.'))),compar=!!rdc&&/^(?:e|ed|anche|pure)\b/.test(msg)
-  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v))&&!(compar&&botNew.some(b=>Math.abs(b+rdc!.delta-v)<0.005))&&!refPlusOK(v))return no('prezzo_non_detto',[a.id])}
+  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!pendPrice(a.id,v)&&!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v))&&!(compar&&botNew.some(b=>Math.abs(b+rdc!.delta-v)<0.005))&&!refPlusOK(v))return no('prezzo_non_detto',[a.id])}
   // Comparativo con una differenza applicata al prezzo attuale dell'altro piatto: ambiguo, si chiede (o si scrive il prezzo esplicito).
   if(compar&&botNew.length&&deltaIds.size)return no('differenza_come_prezzo',[...deltaIds])}
   // «la gricia come la carbonara più 1»: la differenza è rispetto al piatto di riferimento, non al prezzo attuale.

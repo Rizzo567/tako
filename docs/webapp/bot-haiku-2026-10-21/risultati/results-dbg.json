@@ -1,0 +1,220 @@
+{
+ "set": "banco",
+ "metriche": {
+  "set": "banco",
+  "modo": "replay",
+  "conversazioni": 1,
+  "misurate": 1,
+  "nonMisurate": [],
+  "messaggi": 4,
+  "corrette": 0,
+  "percentuale": 0,
+  "gravi": 1,
+  "graviSicurezza": 1,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 2.5,
+  "domandeNonAttesePer10": 2.5,
+  "latenzaAnthropicMs": {
+   "p50": 2277,
+   "p95": 4279,
+   "chiamate": 6
+  },
+  "latenzaTurnoMs": {
+   "p50": 5823,
+   "p95": 6211,
+   "nota": "harness + latenza Haiku registrata"
+  },
+  "chiamatePerMessaggio": 1.5,
+  "tokenMediPerMessaggio": {
+   "input": 987,
+   "output": 633,
+   "cacheRead": 10864,
+   "cacheWrite": 35
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 6,
+   "su": 6,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.002113,
+   "perMessaggioUsd": 0.000528,
+   "tetto": 0.5
+  },
+  "anthropic": {
+   "hit": 6,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 1.5
+ },
+ "codici": {
+  "modifica-non-richiesta": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "modifica-sbagliata": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "non-applicato": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "bv-multiple-003",
+   "family": "bv-multiple",
+   "menu": "collaudo",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|Acqua collaudo|3"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-sbagliata",
+     "why": "valore sbagliato: price|Pasta collaudo|14"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pasta collaudo|15"
+    }
+   ],
+   "expected": [
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ],
+   "actual": [
+    "price|Acqua collaudo|3",
+    "price|Pasta collaudo|14",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno i prezzi di *Pasta collaudo*, *Pizza collaudo*, *Tiramisu collaudo* e *Acqua collaudo*. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta collaudo*: prezzo da 11,00 € a *14,00 €*\n2. *Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n3. *Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*\n4. *Acqua collaudo*: prezzo da 2,00 € a *3,00 €*",
+    "Ok, aggiorno la *Pasta collaudo* a 15 €, la *Pizza collaudo* a 16 € e il *Tiramisu collaudo* a 7 €. Lascio com'è l'*Acqua collaudo*. Rispondi OK per pubblicare.\n\nNon ancora pubblicato:\n1. *Pasta collaudo*: prezzo da 11,00 € a *15,00 €*\n\n«Pizza collaudo»:\n1. *Pizza collaudo* (13,00 €)\n2. *Pasta collaudo* (11,00 €)\n3. *Tiramisu collaudo* (6,00 €)\n4. *Acqua collaudo* (2,00 €)\n\n«Tiramisu collaudo»:\n1. *Tiramisu collaudo* (6,00 €)\n2. *Pasta collaudo* (11,00 €)\n3. *Pizza collaudo* (13,00 €)\n4. *Acqua collaudo* (2,00 €)",
+    "Prima di pubblicare, mi confermi i prezzi della *Pasta collaudo*, della *Pizza collaudo* e del *Tiramisu collaudo*?",
+    "Ok, pubblico i prezzi in sospeso.\n\n*Pasta collaudo*: prezzo da 11,00 € a *14,00 €*\n*Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n*Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*\n*Acqua collaudo*: prezzo da 2,00 € a *3,00 €*"
+   ],
+   "turns": [
+    "La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.",
+    "Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.",
+    "OK",
+    "OK"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 6,
+   "llmMisses": 0,
+   "llmTokens": 50075,
+   "latencyMs": [
+    215.7,
+    51.1,
+    97.8,
+    21.1
+   ],
+   "recordedLlmMs": 15881,
+   "usedLlm": true,
+   "source": "Manuel 15/10 15:54",
+   "note": "il secondo OK non ha niente da confermare",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "bv-multiple-003",
+   "hash": "557c35de8ddf2e2e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2277,
+   "usage": {
+    "input": 105,
+    "output": 427,
+    "cacheRead": 7126,
+    "cacheWrite": 140
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "fb97dc9245bbc8d9",
+   "source": "hit",
+   "status": 200,
+   "ms": 3635,
+   "usage": {
+    "input": 435,
+    "output": 373,
+    "cacheRead": 7266,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "d76f57d0b57c2004",
+   "source": "hit",
+   "status": 200,
+   "ms": 2137,
+   "usage": {
+    "input": 964,
+    "output": 391,
+    "cacheRead": 7266,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "030fc37030d81c4e",
+   "source": "hit",
+   "status": 200,
+   "ms": 4279,
+   "usage": {
+    "input": 623,
+    "output": 910,
+    "cacheRead": 7266,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "83ed9afa2f67d9b9",
+   "source": "hit",
+   "status": 200,
+   "ms": 1834,
+   "usage": {
+    "input": 1132,
+    "output": 245,
+    "cacheRead": 7266,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "0ba488c1eac4d4e7",
+   "source": "hit",
+   "status": 200,
+   "ms": 1719,
+   "usage": {
+    "input": 687,
+    "output": 187,
+    "cacheRead": 7266,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}
