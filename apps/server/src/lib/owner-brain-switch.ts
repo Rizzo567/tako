@@ -8,7 +8,15 @@ export type BotEngine='haiku'|'groq'
 const ENGINES:readonly BotEngine[]=['haiku','groq']
 const isEngine=(v:unknown):v is BotEngine=>typeof v==='string'&&(ENGINES as readonly string[]).includes(v)
 
-export const botBrainEnabled=(settings:unknown,env:Record<string,string|undefined>=process.env)=>env.TAKO_BOT_BRAIN_OFF!=='1'&&!!settings&&typeof settings==='object'&&(settings as any).botBrain===true
+/** Cervello acceso? (decisione Manuel 21/10: Haiku per tutti, bot vecchio spento per i titolari)
+ * `TAKO_BOT_BRAIN_OFF=1` → spento ovunque · `settings.botBrain` true/false → vale quello del locale ·
+ * altrimenti acceso SOLO se l'env `TAKO_BOT_ENGINE_DEFAULT` dice esplicitamente `haiku` e il locale non ha `botEngine='groq'`
+ * (senza env, come nei test e negli strumenti locali, resta spento come prima). */
+export const botBrainEnabled=(settings:unknown,env:Record<string,string|undefined>=process.env)=>{
+ if(env.TAKO_BOT_BRAIN_OFF==='1')return false
+ const own=settings&&typeof settings==='object'?(settings as any).botBrain:undefined
+ if(own===true||own===false)return own
+ return String(env.TAKO_BOT_ENGINE_DEFAULT??'').trim().toLowerCase()==='haiku'&&botEngineOf(settings,env)==='haiku'}
 export function botEngineOf(settings:unknown,env:Record<string,string|undefined>=process.env):BotEngine{
  const own=settings&&typeof settings==='object'?(settings as any).botEngine:undefined
  if(isEngine(own))return own

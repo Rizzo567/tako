@@ -594,6 +594,9 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
  const itemsIn=(sectionId:string)=>(input.refs??[]).filter(r=>r.sectionId===sectionId).length
  const secOfMenu=(menuName:string)=>input.sections.filter(x=>x.menu===menuName)
  // Correzioni di una struttura appena creata: si toglie solo ciò che è vuoto (Menu senza piatti, Sottomenu senza piatti).
+ // «no, anche Cocktail» aggiunge: con «anche/pure/in più» nessuna rimozione; senza un segnale di correzione nessuna rimozione.
+ const pm=plain(input.message),allowDel=!/\b(?:anche|pure|inoltre|in piu|e poi|aggiungi)\b/.test(pm)&&/\b(?:no|non|invece|chiamal\w*|rinomin\w*|sbagliat\w*|intendevo|togli\w*|lev\w*|elimin\w*|cancell\w*|rimuov\w*)\b/.test(pm)
+ if(!allowDel&&raw.some((a:any)=>a&&(a.action==='delete_menu'||a.action==='delete_section'))){notes.push('rimozione_scartata');raw=raw.filter((a:any)=>!a||(a.action!=='delete_menu'&&a.action!=='delete_section'))}
  for(const a of raw){if(!a||a.action!=='delete_menu')continue;const k=menuKey(String(a.name??a.menu??''));const m=menus.find(x=>!x.fresh&&menuKey(x.name)===k);if(!m)return{actions:[],notes:[],ask:'menu_da_togliere'}
   if(secOfMenu(m.name).some(x=>itemsIn(x.id)))return{actions:[],notes:[],ask:'menu_non_vuoto'}
   actions.push({kind:'delete_menu',menuId:m.id,name:m.name} as MenuAction);menus.splice(menus.indexOf(m),1)}

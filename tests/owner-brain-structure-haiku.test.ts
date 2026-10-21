@@ -44,6 +44,11 @@ describe('Sezioni e correzioni della struttura',()=>{
   expect(r.actions[0]).toMatchObject({kind:'create_section',parentSectionId:'22222222-2222-4222-8222-222222222222',menuId:QA})
   const w=ws();applyActions(w,r.actions);const p=workspaceSchema.parse(w);expect(p.menus[0]!.sections.map(x=>[x.name,x.parentSectionId])).toEqual([['Primi',null],['Rossi','22222222-2222-4222-8222-222222222222']])
  })
+ it('«no, anche Cocktail» aggiunge senza togliere',()=>{
+  const two=[...menus,{id:'66666666-6666-4666-8666-666666666666',name:'Aperitivo',sections:1}],secs=[...sections,{id:'77777777-7777-4777-8777-777777777777',name:'Spritz',menu:'Aperitivo'}]
+  const r=structureActions([A('delete_section',{name:'Spritz',menu:'Aperitivo'}),A('create_section',{name:'Cocktail',menu:'Aperitivo'})],{message:'no, anche Cocktail',sections:secs,menus:two,refs:[]})
+  expect(r.actions.map(a=>a.kind)).toEqual(['create_section']);expect(r.notes).toContain('rimozione_scartata')
+ })
  it('«chiamalo Colazione»: si toglie il Menu vuoto appena creato e si crea quello giusto; un Menu con piatti non si toglie',()=>{
   const two=[...menus,{id:'55555555-5555-4555-8555-555555555555',name:'Brunch',sections:0}]
   const r=structureActions([A('delete_menu',{name:'Brunch'}),A('create_menu',{name:'Colazione'})],{message:'no, chiamalo colazione',sections,menus:two,refs:[]})
@@ -67,5 +72,18 @@ describe('invariante: nessuna conferma a vuoto, niente gergo',()=>{
   const d={intent:'change' as const,plan:{type:'change' as const,actions:[{kind:'price',id:'x',price:15}]},exclude:[],aliasesUsed:[],replyDraft:'',notes:[] as string[]}
   expect(haikuChecks(d as any,'tutti i secondi aumentali di 3 euro',secs as any)!.notes).toContain('sottomenu_in_piu_menu')
   expect(haikuChecks(d as any,'tutti i secondi della cena aumentali di 3 euro',secs as any)).toBeNull()
+ })
+})
+
+import {botBrainEnabled} from '../apps/server/src/lib/owner-brain-switch.js'
+describe('cervello acceso di default con TAKO_BOT_ENGINE_DEFAULT=haiku (Haiku per tutti, 21/10)',()=>{
+ it('env haiku → acceso per i locali senza impostazioni; override per locale e kill switch',()=>{
+  const H={TAKO_BOT_ENGINE_DEFAULT:'haiku'}
+  expect(botBrainEnabled({},H)).toBe(true);expect(botBrainEnabled(null,H)).toBe(true)
+  expect(botBrainEnabled({botBrain:false},H)).toBe(false);expect(botBrainEnabled({botEngine:'groq'},H)).toBe(false)
+  expect(botBrainEnabled({botBrain:true},{...H,TAKO_BOT_BRAIN_OFF:'1'})).toBe(false)
+ })
+ it('senza env o con env groq resta com\'era: acceso solo con botBrain=true',()=>{
+  expect(botBrainEnabled({},{})).toBe(false);expect(botBrainEnabled({},{TAKO_BOT_ENGINE_DEFAULT:'groq'})).toBe(false);expect(botBrainEnabled({botBrain:true},{TAKO_BOT_ENGINE_DEFAULT:'groq'})).toBe(true)
  })
 })

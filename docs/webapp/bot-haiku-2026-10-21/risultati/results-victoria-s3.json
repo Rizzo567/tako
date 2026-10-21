@@ -1,0 +1,579 @@
+{
+ "set": "victoria",
+ "metriche": {
+  "set": "victoria",
+  "modo": "record",
+  "conversazioni": 10,
+  "misurate": 10,
+  "nonMisurate": [],
+  "messaggi": 11,
+  "corrette": 9,
+  "percentuale": 90,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 1,
+  "domandePer10Messaggi": 3.6,
+  "domandeNonAttesePer10": 1.8,
+  "latenzaAnthropicMs": {
+   "p50": 2222,
+   "p95": 4847,
+   "chiamate": 14
+  },
+  "latenzaTurnoMs": {
+   "p50": 2837,
+   "p95": 7201,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1.27,
+  "tokenMediPerMessaggio": {
+   "input": 233,
+   "output": 500,
+   "cacheRead": 11158,
+   "cacheWrite": 153
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 14,
+   "su": 14,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0.003491,
+   "equivalenteLiveUsd": 0.004444,
+   "perMessaggioUsd": 0.000404,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 2,
+   "vere": 12,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 32.6
+ },
+ "codici": {
+  "chiede-invece-di-agire": {
+   "GRAVE": 0,
+   "MEDIO": 1,
+   "BASSO": 0
+  },
+  "domanda-superflua": {
+   "GRAVE": 0,
+   "MEDIO": 1,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "vic-01",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|14"
+   ],
+   "actual": [
+    "price|Carbonara|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto, ti metto la *Carbonara* a 14 €.\n\n*Carbonara*: prezzo da 13,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "la carbonara mettila a 14"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9088,
+   "latencyMs": [
+    2324
+   ],
+   "recordedLlmMs": 2140,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "prezzo",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-02",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Branzino al forno|false"
+   ],
+   "actual": [
+    "available|Branzino al forno|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno il *Branzino al forno* come esaurito.\n\n*Branzino al forno*: *finito*"
+   ],
+   "turns": [
+    "è finito il branzino"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9080,
+   "latencyMs": [
+    1871.5
+   ],
+   "recordedLlmMs": 1774,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "esaurito",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-03",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Caprese|true"
+   ],
+   "actual": [
+    "hidden|Caprese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, tolgo *Caprese* dal menu.\n\n*Caprese*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "togli la caprese"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9081,
+   "latencyMs": [
+    1574.2
+   ],
+   "recordedLlmMs": 1538,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "«togli» = nascondi, mai elimina",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-04",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino la *Panna cotta ai frutti di bosco* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Panna cotta ai frutti di bosco*: da eliminare"
+   ],
+   "turns": [
+    "elimina la panna cotta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9099,
+   "latencyMs": [
+    2249.4
+   ],
+   "recordedLlmMs": 2207,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "«elimina» = chiede «sì», nessuna scrittura senza conferma",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-05",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura di calamari|16|secondi"
+   ],
+   "actual": [
+    "create|frittura di calamari|16|secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Frittura di calamari* a 16 € nei Secondi del Menu pranzo.\n\nNuovo piatto *Frittura di calamari* in *Secondi*: *16,00 €*"
+   ],
+   "turns": [
+    "aggiungi nei secondi del pranzo la frittura di calamari che costa 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9528,
+   "latencyMs": [
+    3288.3
+   ],
+   "recordedLlmMs": 3224,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "piatto nuovo: nome senza «che costa»",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-06",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nI *Primi* ci sono sia nel Menu pranzo sia nel Menu cena. Di quale Menu parli?"
+   ],
+   "turns": [
+    "aumenta i primi di un euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9353,
+   "latencyMs": [
+    2982.6
+   ],
+   "recordedLlmMs": 2945,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "«i primi» ambiguo: Primi del Menu pranzo e del Menu cena → domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-07",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutti i *Dolci*? Rispondi sì.\n\nNascondo *tutto il sottomenu Dolci (Menu cena)* (3 piatti)? Rispondi *sì*. Non ho ancora cambiato nulla."
+   ],
+   "turns": [
+    "nascondi tutti i dolci"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9660,
+   "latencyMs": [
+    3425
+   ],
+   "recordedLlmMs": 3395,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "nascondere un intero sottomenu = conferma",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-08",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi di cambiare *Margherita* a 8, *Diavola* a 9, *Capricciosa* a 10 e *Coca Cola* a 4? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Margherita*: prezzo da 7,00 € a *8,00 €*\n2. *Diavola*: prezzo da 8,50 € a *9,00 €*\n3. *Capricciosa*: prezzo da 9,50 € a *10,00 €*\n4. *Coca Cola*: prezzo da 3,50 € a *4,00 €*"
+   ],
+   "turns": [
+    "la margherita a 8, la diavola a 9, la capricciosa a 10 e la coca a 4"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19793,
+   "latencyMs": [
+    7200.5
+   ],
+   "recordedLlmMs": 7069,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "4 modifiche → riepilogo + OK, nessuna scrittura al primo turno",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-09",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|10",
+    "price|Coca Cola|4",
+    "price|Diavola|9",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "price|Capricciosa|10",
+    "price|Coca Cola|4",
+    "price|Diavola|9",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nConfermi di cambiare *Margherita* a 8, *Diavola* a 9, *Capricciosa* a 10 e *Coca Cola* a 4? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Margherita*: prezzo da 7,00 € a *8,00 €*\n2. *Diavola*: prezzo da 8,50 € a *9,00 €*\n3. *Capricciosa*: prezzo da 9,50 € a *10,00 €*\n4. *Coca Cola*: prezzo da 3,50 € a *4,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Diavola*: prezzo da 8,50 € a *9,00 €*\n*Capricciosa*: prezzo da 9,50 € a *10,00 €*\n*Coca Cola*: prezzo da 3,50 € a *4,00 €*"
+   ],
+   "turns": [
+    "la margherita a 8, la diavola a 9, la capricciosa a 10 e la coca a 4",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 29297,
+   "latencyMs": [
+    102.2,
+    3567.6
+   ],
+   "recordedLlmMs": 10487,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "OK a voce («va bene» in un vocale) dopo il riepilogo",
+   "nonMisurato": false
+  },
+  {
+   "id": "vic-10",
+   "family": "bv-categorie",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: available|Pizza Sorrentina|false"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-superflua",
+     "why": "turno 1: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »"
+    }
+   ],
+   "expected": [
+    "available|Pizza Sorrentina|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi *Gnocchi alla sorrentina* o *Pizza Sorrentina*?\n\n1. *Gnocchi alla sorrentina* (11,00 €)\n2. *Pizza Sorrentina* (9,00 €)"
+   ],
+   "turns": [
+    "🎤 la sorrentina finita"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18509,
+   "latencyMs": [
+    2837.1
+   ],
+   "recordedLlmMs": 2804,
+   "usedLlm": true,
+   "source": "Victoria 19/10 (fixture inventata)",
+   "note": "alias attivo «la sorrentina» = Pizza Sorrentina → nessuna domanda",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "vic-01",
+   "hash": "ca8e23482bb34341",
+   "source": "real",
+   "status": 200,
+   "ms": 2140,
+   "usage": {
+    "input": 47,
+    "output": 186,
+    "cacheRead": 8124,
+    "cacheWrite": 731
+   }
+  },
+  {
+   "conv": "vic-02",
+   "hash": "6121b4a725afd042",
+   "source": "real",
+   "status": 200,
+   "ms": 1774,
+   "usage": {
+    "input": 43,
+    "output": 182,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-03",
+   "hash": "6e64c044b8434b15",
+   "source": "real",
+   "status": 200,
+   "ms": 1538,
+   "usage": {
+    "input": 42,
+    "output": 184,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-04",
+   "hash": "13ad3971ff455637",
+   "source": "real",
+   "status": 200,
+   "ms": 2207,
+   "usage": {
+    "input": 45,
+    "output": 199,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-05",
+   "hash": "8e7d9b6cf074b99d",
+   "source": "real",
+   "status": 200,
+   "ms": 3224,
+   "usage": {
+    "input": 64,
+    "output": 383,
+    "cacheRead": 8124,
+    "cacheWrite": 957
+   }
+  },
+  {
+   "conv": "vic-06",
+   "hash": "bc8b711e98e0c0ec",
+   "source": "real",
+   "status": 200,
+   "ms": 2945,
+   "usage": {
+    "input": 47,
+    "output": 451,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-07",
+   "hash": "0b6fc1b0f7537982",
+   "source": "real",
+   "status": 200,
+   "ms": 3395,
+   "usage": {
+    "input": 47,
+    "output": 532,
+    "cacheRead": 9081,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-08",
+   "hash": "2929ae55a0231e58",
+   "source": "real",
+   "status": 200,
+   "ms": 2222,
+   "usage": {
+    "input": 69,
+    "output": 417,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-08",
+   "hash": "093938f94b3f1041",
+   "source": "real",
+   "status": 200,
+   "ms": 4847,
+   "usage": {
+    "input": 595,
+    "output": 1002,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-09",
+   "hash": "2929ae55a0231e58",
+   "source": "hit",
+   "status": 200,
+   "ms": 2222,
+   "usage": {
+    "input": 69,
+    "output": 417,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-09",
+   "hash": "093938f94b3f1041",
+   "source": "hit",
+   "status": 200,
+   "ms": 4847,
+   "usage": {
+    "input": 595,
+    "output": 1002,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-09",
+   "hash": "2c87f5cc53a6a1a2",
+   "source": "real",
+   "status": 200,
+   "ms": 3418,
+   "usage": {
+    "input": 471,
+    "output": 178,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-10",
+   "hash": "efdc4c0b69453e9d",
+   "source": "real",
+   "status": 200,
+   "ms": 1498,
+   "usage": {
+    "input": 44,
+    "output": 203,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "vic-10",
+   "hash": "63bda5b891e36b90",
+   "source": "real",
+   "status": 200,
+   "ms": 1306,
+   "usage": {
+    "input": 390,
+    "output": 162,
+    "cacheRead": 8855,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}
