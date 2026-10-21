@@ -109,6 +109,11 @@ export function sectionGroupWord(p:string,sections:SectionRef[],refs:MenuRef[]):
  if(!sections.some(s=>sameSection(s.name,w)&&refs.some(r=>r.sectionId===s.id)))return null
  if(refs.some(r=>(' '+p+' ').includes(' '+plain(r.name)+' ')))return null
  return w}
+/** Percentuale unica con il verso detto («alza del 10%», «sconto del 20 per cento») → fattore (1,10 / 0,80). null = nessuna, più di una o verso incerto. */
+export function groupPercent(message:string):{factor:number,pct:number}|null{const t=message.toLowerCase(),all=[...t.matchAll(/(\d+(?:[.,]\d+)?)\s*(?:%|per\s*cento|percento)/g)];if(all.length!==1)return null
+ const n=Number(all[0]![1]!.replace(',','.'));if(!(n>0&&n<100))return null
+ const up=/\b(?:aument\w*|alz\w*|rincar\w*)\b|\+\s*\d/.test(t),down=/\b(?:scont\w*|abbass\w*|diminu\w*|ribass\w*|ridu[cr]\w*|cal[ai]\w*)\b|(?:^|\s)-\s*\d/.test(t);if(up===down)return null
+ return{factor:up?1+n/100:1-n/100,pct:up?n:-n}}
 export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[],fixedSecIds:Set<string>,o:{visible?:boolean,menus?:{name:string}[]}={}):GroupResult{
  const p=plain(message);let m=p.match(/\btutt[ieoa] (?:quant[ieoa] )?(?:i |le |gli |l )?([a-z]{3,})/)??p.match(/\b(?:i|le|gli) ([a-z]{3,}) tutt[ieoa]\b/),onlySec=false
  // «i dolci, solo quelli, alzali di 50 centesimi»: il gruppo detto col pronome; vale solo per un sottomenu vero.
@@ -116,22 +121,29 @@ export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[]
  // notte 22/10 (n-menu-cena-pizze-aumento): «nel menu cena alza le pizze di 50 centesimi» = il sottomenu intero detto col plurale.
  if(!m){const w=sectionGroupWord(p,sections,refs);if(w){m=['',w] as unknown as RegExpMatchArray;onlySec=true}}
  if(!m)return null
- const word=m[1]!;if(['piatti','prezzi','menu','sottomenu','quanti','cose'].includes(word))return null
+ const word=m[1]!;if(['menu','sottomenu','quanti','cose'].includes(word))return null
+ // notte 22/10 (cc-vietato-15): «alza tutti i prezzi del 50%» — una percentuale UNICA con il verso detto è un comando di gruppo letto
+ // dal server (prima il modello scriveva 30 azioni e finiva i token → «momentaneamente non disponibile»). «tutti i piatti/prezzi» =
+ // tutto il menu, ma solo con percentuale o differenza (mai un prezzo assoluto uguale per tutto il menu).
+ const pct=groupPercent(message),whole=word==='piatti'||word==='prezzi'
  // Mai su un messaggio con più richieste o con percentuali/migliaia (giro finale lunghi/adv150 21/10): lì decide il modello.
- if(/%|\bpercent\w*|\bper cento\b|\d{1,3}\.\d{3}/.test(message.toLowerCase())||new Set([...message.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>x[0])).size>1)return null
- const rd=relativeDelta(message),abs=[...new Set(g9Prices(message,false))]
- const sp=singlePrice(message),delta=rd?rd.delta:null,price=!rd?(sp??(abs.length===1?abs[0]!:null)):null;if(delta===null&&price===null)return null
+ if(!pct&&/%|\bpercent\w*|\bper cento\b/.test(message.toLowerCase()))return null
+ if(/\d{1,3}\.\d{3}/.test(message)||new Set([...message.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>x[0])).size>1)return null
+ const rd=pct?null:relativeDelta(message),abs=pct?[]:[...new Set(g9Prices(message,false))]
+ const sp=pct?null:singlePrice(message),delta=rd?rd.delta:null,price=!rd&&!pct?(sp??(abs.length===1?abs[0]!:null)):null;if(delta===null&&price===null&&!pct)return null
+ if(whole&&price!==null)return null
  const visible=o.visible??visibleOnly(message),said0=namedMenus(message,o.menus??[...new Map(sections.map(s=>[s.menu,{name:s.menu}])).values()]).map(x=>x.name)
  // notte 22/10: «nel menu cena alza le pizze» nomina il Menu Cena; «pizze» è il gruppo, non il Menu «Pizze» (vale il nome dopo «menu»).
  const exp=(n:string)=>(' '+p+' ').includes(' menu '+menuKey(n)+' '),said1=said0.filter(n=>menuKey(n)!==word||exp(n)),saidEx=said1.length>1?said1.filter(exp):[],said=saidEx.length?saidEx:said1
  const priced=(r:MenuRef)=>r.price>0&&!fixedSecIds.has(r.sectionId??'')&&(!visible||!r.hidden)&&(!said.length||said.includes(r.menu))
  const secs=sections.filter(s=>sameSection(s.name,word)&&refs.some(r=>r.sectionId===s.id&&priced(r)))
  let items:MenuRef[]=[],label=word
- if(secs.length){const menus=[...new Set(secs.map(s=>s.menu))];if(menus.length>1)return{ask:'menu',menus,label:secs[0]!.name};items=refs.filter(r=>secs.some(s=>s.id===r.sectionId)&&priced(r));label=secs[0]!.name}
+ if(whole){items=refs.filter(priced);label='tutti i piatti'}
+ else if(secs.length){const menus=[...new Set(secs.map(s=>s.menu))];if(menus.length>1)return{ask:'menu',menus,label:secs[0]!.name};items=refs.filter(r=>secs.some(s=>s.id===r.sectionId)&&priced(r));label=secs[0]!.name}
  else if(onlySec)return null
  else{const stem=word.length>4?word.replace(/[aeio]$/,''):word;if(stem.length<4)return null;items=refs.filter(r=>priced(r)&&plain(r.name).split(' ').some(x=>x.startsWith(stem)&&x.length<=stem.length+2))}
  if(items.length<(secs.length?1:2))return null
- const actions=items.flatMap(r=>{const v=price!==null?price:Math.round((r.price+delta!)*100)/100;return v>0&&Math.abs(v-r.price)>=0.005?[{kind:'price',id:r.id,price:v} as MenuAction]:[]})
+ const actions=items.flatMap(r=>{const v=pct?Math.round(r.price*pct.factor*100)/100:price!==null?price:Math.round((r.price+delta!)*100)/100;return v>0&&Math.abs(v-r.price)>=0.005?[{kind:'price',id:r.id,price:v} as MenuAction]:[]})
  return actions.length?{actions,label}:null}
 /** Stesso prezzo assoluto (≥2 piatti, «tutte a 9»): si applica subito come l'aumento uniforme. */
 export function uniformTarget(actions:MenuAction[]):number|null{if(actions.length<2||!actions.every(a=>a.kind==='price'))return null;const v=new Set(actions.map(a=>Math.round((a as any).price*100)));return v.size===1?[...v][0]!/100:null}
@@ -296,3 +308,18 @@ export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:
   actions.push({kind:'create',sectionId:secId,name:n,price:fixed?0:pr!,description:null,fromReplace:true} as any)}
  for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
  return{actions,noPrice}}
+
+// ---------- listino incollato ----------
+/** notte 22/10 (cc-foglio-01/02): listino incollato da un foglio («Nome<tab>12,50 €» una riga per piatto). Se almeno 3 righe con prezzo e
+ * l'80% di esse sono piatti GIÀ nel menu (nome uguale), è un aggiornamento prezzi: azioni solo per i prezzi diversi; le righe che non
+ * sono nel menu tornano in `unmatched` (mai create a caso). null = non è un listino di prezzi del menu (decide il resto del flusso). */
+export function priceSheet(text:string,refs:MenuRef[]):{actions:MenuAction[],unmatched:string[],same:number}|null{
+ const rows=text.split(/\r?\n/).map(l=>l.trim()).flatMap(l=>{const m=l.match(/^(.+?)(?:\t+|\s{2,}|\s*[:=–-]\s*|\s+)(?:€\s*)?(\d{1,3}(?:[.,]\d{1,2})?)\s*(?:€|euro|eur)?$/i);return m&&/\p{L}/u.test(m[1]!)?[{name:m[1]!.trim(),price:Number(m[2]!.replace(',','.'))}]:[]})
+ if(rows.length<3)return null
+ const key=(s:string)=>plain(s).replace(/^(?:il|lo|la|i|gli|le|l)\s+/,'').trim()
+ const hit=rows.map(r=>({...r,ref:refs.filter(x=>key(x.name)===key(r.name))}))
+ const matched=hit.filter(h=>h.ref.length===1)
+ if(matched.length<3||matched.length/rows.length<0.8)return null
+ const actions:MenuAction[]=[];let same=0
+ for(const h of matched){const r=h.ref[0]!;if(!(h.price>0))continue;if(Math.abs(r.price-h.price)<0.005){same++;continue}if(!actions.some(a=>(a as any).id===r.id))actions.push({kind:'price',id:r.id,price:h.price} as MenuAction)}
+ return{actions,unmatched:hit.filter(h=>h.ref.length!==1).map(h=>h.name),same}}

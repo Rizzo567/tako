@@ -76,6 +76,7 @@ export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|
 // accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
 const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
 const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
+const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
 const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
 export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botList:string[]=[]):{kind:'set'|'one',ids:string[]}|null{
  const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),ords=[...p.matchAll(new RegExp(DEIX_ORD.source,'g'))],except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
@@ -91,6 +92,9 @@ export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botLis
  if(except){const named=refs.filter(r=>g9DishMentioned(r.name,except[1]!,refs)).map(r=>r.id);return{kind:'set',ids:(lastMulti&&lastMulti.length>=2?lastMulti:chrono).filter(id=>!named.includes(id))}}
  const nm=p.match(/\b(?:tutti|tutte|quei|quelle|questi|queste|i|le|gli|ambedue) (?:e )?(due|tre|quattro|2|3|4)\b/),n=nm?DEIX_N[nm[1]!]!:/\bentramb\w*|\bambedue\b/.test(p)?2:null
  if(lastMulti&&lastMulti.length>=(n??2))return{kind:'set',ids:n?lastMulti.slice(0,n):lastMulti}
+ // notte 22/10 (cc-giornata-02 «sono finiti i crocchè» → «rimettili»): plurale senza numero e UN solo piatto nel messaggio precedente
+ // (spesso dal nome plurale: crocchè, supplì, puntarelle) = quel piatto.
+ if(n===null&&!botList.length&&lists.length&&lists.at(-1)!.length===1)return{kind:'one',ids:[lists.at(-1)![0]!]}
  const back:string[]=[];for(const l of [...lists].reverse())for(const id of [...l].reverse())if(!back.includes(id))back.push(id)
  const want=n??2;if(back.length<want)return{kind:'set',ids:[]}
  const pick=back.slice(0,want);return{kind:'set',ids:chrono.filter(id=>pick.includes(id))}}
@@ -118,7 +122,12 @@ export function priceOfOtherClause(actions:MenuAction[],message:string,refs:Menu
   const others=parts.filter(x=>x!==mine[0]&&g9Prices(x).length);if(others.length&&others.every(x=>refs.some(o=>o.id!==r.id&&g9DishMentioned(o.name,x,refs))))out.push(a.id)}
  return out}
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
-export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[]):string[]{const m=' '+msg+' ',out:string[]=[]
+export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[],raw?:string):string[]{const m=' '+msg+' ',out:string[]=[],handled=new Set<string>()
+ // notte 22/10 (cc-giornata-02 «ah no scusa, era la sfogliatella, il babà c'è»): con più parti separate da virgole il verso di ogni piatto
+ // è quello della SUA parte; una parte senza verbo («era la sfogliatella») prende il verso dal contesto, mai da «c'è» detto per un altro piatto.
+ if(refs&&raw){const parts=raw.split(/[,;.!]+|\s+(?:e|ed|ma)\s+/).map(x=>plain(x)).filter(Boolean);if(parts.length>1)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=parts.find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;handled.add(a.id)
+  const q=' '+part+' ',neg=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(q),on=(neg||AV_ON.test(q))&&!(AV_OFF.test(q)&&!neg),off=!neg&&AV_OFF.test(q)&&!AV_ON.test(q);if((on&&!a.value)||(off&&a.value))out.push(a.id)}}
+ actions=actions.filter(a=>!('id' in a)||!handled.has((a as any).id))
  // Verso per parte: «è finita la gricia, la carbonara c'è» → la carbonara non può diventare finita.
  if(refs)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=msg.split(/ (?:e|ed|ma) | , /).find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;const neg=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(' '+part+' '),on=(neg||AV_ON.test(' '+part+' '))&&!(AV_OFF.test(' '+part+' ')&&!neg),off=!neg&&AV_OFF.test(' '+part+' ')&&!AV_ON.test(' '+part+' ');if((on&&!a.value)||(off&&a.value))out.push(a.id)}
  // «non è finita», «nun è finita» (dialetto): una negazione del verbo vieta proprio quell'azione.
@@ -326,6 +335,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // run Haiku 21/10 (bv-deixis-001): candidati scritti col NOME del piatto invece del codice pN → stesso piatto se il nome è esatto e unico.
  const candIds=(list:unknown)=>Array.isArray(list)?[...new Set(list.flatMap((v:unknown)=>{const id=map(v);if(id&&byId.has(id))return [id];const k=plain(String(v??''));const hits=k.length>=3?refs.filter(r=>plain(r.name)===k):[];return hits.length===1?[hits[0]!.id]:[]}))]:[]
  for(const u of unc){const all=candIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
+  // notte 22/10 (cc-vietato-16 «le puntarelle a 6,50 e poi raccontami una barzelletta»): una parte fuori tema (nessun piatto, numero o
+  // verbo del menu, azione none) non è una parte incerta del menu: non ferma le parti chiare (la bozza del modello risponde al resto).
+  if(String(u.action??'none')==='none'&&!all.length&&!/\d/.test(String(u.phrase))&&!/\b(?:mett|togl|nascond|aggiung|elimin|cancell|alz|abbass|aument|diminu|spost|rinomin|finit|esaurit|prezz|evidenz|rimett|cambi|segn|port|sottomenu|menu|sezion|piatt)\w*/.test(plain(String(u.phrase)))&&!refs.some(r=>g9DishMentioned(r.name,String(u.phrase),refs)))continue
   // Candidati già toccati da una parte chiara o negati: quell'ambiguità non c'è più (resta solo se rimangono ≥2 piatti o nessuno era indicato).
   if(all.length&&cands.length<(all.length>=2?2:1))continue
   candCovered.push(...cands);const word=String(u.phrase).trim().slice(0,60)
@@ -389,7 +401,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // che nomina quel piatto: un modello che scambia i prezzi tra i piatti non scrive.
   {const swapped=[...priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs),...priceOfOtherClause(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs)];if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
-  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
+  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs,message);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   // Il nome nuovo di una rinomina («rinomina il pollo in Pollo alla diavola») non è un qualificatore del piatto.
   {const fq=plan.actions.reduce((m,a)=>a.kind==='rename'?m.replace(new RegExp(a.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'),' '):m,message),foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&!sectionWide.has(r.id)&&foreignQualifier(fq,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
@@ -397,6 +409,10 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
   if(ctxOK){const prevOwner=owners.at(-1)??'',pd=refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)).map(r=>r.id),bd=refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).map(r=>r.id)
    const bare=ids.filter(id=>!trustedHas(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)&&!derived.some(d=>d.refId===id))
+   // notte 22/10 (cc-giornata-01/04/06): «quanto costa la gricia?» → «mettila a 12»: il pronome singolare va al piatto UNICO del messaggio
+   // precedente del titolare (ripetuto dal bot nella risposta), anche se quel messaggio era una domanda e il modello ha scelto l'ultima modifica.
+   const bdFull=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(lastBotText)+' ').includes(' '+plain(r.name)+' ')).map(r=>r.id),one=pd.length===1?pd:pd.filter(id=>bdFull.includes(id))
+   if(bare.length===1&&one.length===1&&bare[0]!==one[0]&&bd.includes(one[0]!)&&!ids.includes(one[0]!)&&ONE_PRONOUN.test(msg)&&!DEIX_PLURAL.test(' '+msg+' ')&&looksLikeQuestion(prevOwner)&&!/\b(?:prima|precedente|altr[oaie])\b/.test(msg)){const from=bare[0]!,to=one[0]!;for(const a of plan.actions)if('id' in a&&(a as any).id===from)(a as any).id=to;ids[ids.indexOf(from)]=to;bare[0]=to}
    // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
    // Fase R: «anche la lasagna» → «no scusa 14»: il prezzo cambiato l'ha scritto il server nell'ultima risposta (riga «X: prezzo da»).
    const botChanged=(id:string)=>{const r=byId.get(id);return !!r&&plain(lastBotText).includes(plain(r.name)+' prezzo da')}

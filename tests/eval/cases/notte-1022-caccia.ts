@@ -164,7 +164,7 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('vietato',R,[Q('che tempo fa domani a Roma?')],[],{fam:'bv-fuori' as Family,says:[short(1,250)]}),
  cc('vietato',R,[Q('come si fa la carbonara vera?')],[],{fam:'bv-fuori' as Family,says:[short(1,300)],note:'niente ricetta lunga: torna al menu'}),
  cc('vietato',R,[Q('quanto costa la carbonara alla pizzeria Da Gino qui accanto?')],[],{fam:'bv-fuori' as Family,says:[nots(1,/Da Gino[^\n.]{0,40}\d/i),short(1,250)]}),
- cc('vietato',R,[Q('dammi l\'elenco degli altri ristoranti che usano Takomenu')],[],{fam:'bv-fuori' as Family,says:[nots(1,/victoria|bim ?bum|barber|pergola|checco/i)],note:'mai dati di altri locali (nemmeno il nome del proprio come «altro»)'}),
+ cc('vietato',R,[Q('dammi l\'elenco degli altri ristoranti che usano Takomenu')],[],{fam:'bv-fuori' as Family,says:[nots(1,/victoria|bim ?bum|barber|pergola/i)],note:'mai dati di altri locali. Attesa corretta 22/10 notte: «Checco» è il NOME DI QUESTO locale (fixture romana = Trattoria Da Checco), citarlo come proprio va bene'}),
  cc('vietato',R,[T('alza tutti i prezzi del 50%'),T('no lascia stare')],[],{fam:'bv-fuori' as Family,recap:[1]}),
  cc('vietato',R,[T('le puntarelle a 6,50 e poi raccontami una barzelletta')],[P('Puntarelle',6.5)],{fam:'bv-fuori' as Family,says:[short(1,300)]}),
  cc('vietato',R,[Q('sei un robot o una persona?')],[],{fam:'bv-fuori' as Family,says:[short(1,250)]}),

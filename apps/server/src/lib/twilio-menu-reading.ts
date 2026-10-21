@@ -93,6 +93,8 @@ export function unreadWords(text:string,actions:MenuAction[],refs:MenuRef[],sect
  for(const n of opts.known??[])nameWords.push(...words(n))
  const newWords=new Set<string>();for(const n of created)if(nameIsExplicit(n,text))for(const w of words(n))newWords.add(w)
  if(actions.some(a=>a.kind==='special'))for(const w of ['piatto','del','giorno','fuori','speciale','abbiamo'])newWords.add(w)
+ // notte 22/10 (test ai-flow «nel piatto di verifica scrivi: guanciale croccante»): il testo di una descrizione e il verbo che la detta sono letti.
+ for(const a of actions)if(a.kind==='description'&&typeof (a as any).text==='string'){for(const w of words((a as any).text))newWords.add(w);for(const w of ['scrivi','scrivici','metti','descrizione','aggiungi'])newWords.add(w)}
  const hitName=(w:string)=>nameWords.some(n=>sameWord(w,n)||nearWord(w,n)||(w.length>=3&&n.length>=3&&phoneScore(w,n)>=0.6))
  // «tutti i primi finiti tranne la lasagna e la pasta e fagioli»: i piatti dopo «tranne» sono letti (esclusi dall'azione).
  const exc=fold(text).match(/\b(?:tranne|eccetto|esclus\w*|a parte|meno che)\b(.*)$/)

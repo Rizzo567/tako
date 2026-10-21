@@ -447,5 +447,8 @@ const EXCLUDED_SAY=/\b(?:lascio fuori|lasciamo fuori|lascio (?:stare|com e|come 
 export function pruneWroteDraft(draft:string,actions:MenuAction[],refs:MenuRef[]):string|null{
  const touched=new Set(actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))
  const names=refs.filter(r=>touched.has(r.id)&&plain(r.name).length>=3).map(r=>' '+plain(r.name)+' ')
- const keep=draft.split(/(?<=[.!?])\s+/).filter(x=>{const p=' '+plain(x)+' ';if(PROMISE_RECAP.test(p))return false;if(EXCLUDED_SAY.test(p)&&names.some(n=>p.includes(n)))return false;return true})
+ // notte 22/10 (cc-giornata-01): una frase della bozza che nomina per intero un piatto NON toccato (e che non è parte del nome di uno
+ // toccato) racconta una modifica che non c'è: cade, restano i fatti riletti.
+ const others=refs.filter(r=>!touched.has(r.id)&&plain(r.name).length>=4).map(r=>' '+plain(r.name)+' ').filter(o=>!names.some(n=>n.includes(o)||o.includes(n)))
+ const keep=draft.split(/(?<=[.!?])\s+/).filter(x=>{const p=' '+plain(x)+' ';if(PROMISE_RECAP.test(p))return false;if(EXCLUDED_SAY.test(p)&&names.some(n=>p.includes(n)))return false;if(!EXCLUDED_SAY.test(p)&&names.length&&others.some(o=>p.includes(o))&&!names.some(n=>p.includes(n)))return false;return true})
  return keep.join(' ').trim()||null}
