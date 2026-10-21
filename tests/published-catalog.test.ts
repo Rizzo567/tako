@@ -28,3 +28,10 @@ it('exposes the menu note to customers, translated when available and marked whe
  expect(publicMenuProjection(w.menus[1]!,'en','it')).toMatchObject({description:'Asporto +0,50 €',descriptionLang:'it'})
  expect(publicMenuProjection(w.menus[2]!,'it','it')).not.toHaveProperty('description')
 })
+
+it('readPublishedCatalog keeps an empty active menu with the public empty flag and drops an all-sold-out one',async()=>{
+ const sold=randomUUID();const w=workspaceSchema.parse({menus:[{id:randomUUID(),name:'Pranzo',sections:[{id:randomUUID(),name:'Primi',items:[]}]},{id:randomUUID(),name:'Cena',sections:[{id:randomUUID(),name:'Secondi',items:[{id:sold,name:'Tagliata',price:20}]}]},{id:randomUUID(),name:'Brunch',active:false,sections:[]}]})
+ state.rows=[{name:'Venue',settings:{},published:w,available:[]}];const result=await readPublishedCatalog('tenant',{catalogOnly:true})
+ expect(result!.workspace.menus.map(m=>m.name)).toEqual(['Pranzo']);const p=publicMenuProjection(result!.workspace.menus[0]!,'en','it');expect(p.empty).toBe(true);expect(p.sections[0]!.empty).toBe(true)
+ const populated=publicMenuProjection(w.menus[1]!,'it','it');expect(populated).not.toHaveProperty('empty');expect(populated.sections[0]).not.toHaveProperty('empty')
+})

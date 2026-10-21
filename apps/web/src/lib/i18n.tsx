@@ -1,6 +1,7 @@
 'use client'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { api } from '@/lib/api'
+import { MENU_COMING_SOON } from '@/lib/menu-coming-soon'
 
 // i18n lato client per la PWA cliente. SOLO il display è tradotto: i nomi canonici
 // italiani dei piatti restano nel carrello/ordine inviato al backend (la traduzione
@@ -31,6 +32,7 @@ export const UI = {
   table:            { it: 'Tavolo', en: 'Table', es: 'Mesa', de: 'Tisch', fr: 'Table', pt: 'Mesa', nl: 'Tafel', pl: 'Stolik', ru: 'Столик', tr: 'Masa', ar: 'طاولة', zh: '餐桌', ja: 'テーブル', ko: '테이블' },
   viewCart:         { it: 'Vedi carrello', en: 'View cart', es: 'Ver carrito', de: 'Warenkorb ansehen', fr: 'Voir le panier', pt: 'Ver carrinho', nl: 'Winkelmand bekijken', pl: 'Zobacz koszyk', ru: 'Посмотреть корзину', tr: 'Sepeti gör', ar: 'عرض السلة', zh: '查看购物车', ja: 'カートを見る', ko: '장바구니 보기' },
   soldOut:          { it: 'Esaurito', en: 'Sold out', es: 'Agotado', de: 'Ausverkauft', fr: 'Épuisé', pt: 'Esgotado', nl: 'Uitverkocht', pl: 'Wyprzedane', ru: 'Распродано', tr: 'Tükendi', ar: 'نفد', zh: '已售罄', ja: '売り切れ', ko: '품절' },
+  menuComingSoon:   MENU_COMING_SOON,
   add:              { it: 'Aggiungi', en: 'Add', es: 'Añadir', de: 'Hinzufügen', fr: 'Ajouter', pt: 'Adicionar', nl: 'Toevoegen', pl: 'Dodaj', ru: 'Добавить', tr: 'Ekle', ar: 'أضف', zh: '添加', ja: '追加', ko: '담기' },
   added:            { it: 'aggiunto', en: 'added', es: 'añadido', de: 'hinzugefügt', fr: 'ajouté', pt: 'adicionado', nl: 'toegevoegd', pl: 'dodano', ru: 'добавлено', tr: 'eklendi', ar: 'أُضيف', zh: '已添加', ja: '追加しました', ko: '담았어요' },
   orderingOff:      { it: 'Ordini dal telefono non disponibili: chiama il cameriere.', en: 'Phone ordering is off: please call the waiter.', es: 'Los pedidos desde el móvil no están disponibles: llama al camarero.', de: 'Bestellen per Handy ist deaktiviert: Bitte rufe den Kellner.', fr: 'Commande depuis le téléphone indisponible : appelez le serveur.', pt: 'Pedidos pelo telemóvel indisponíveis: chame o empregado.', nl: 'Bestellen via je telefoon is uit: roep de ober.', pl: 'Zamawianie przez telefon jest wyłączone: zawołaj kelnera.', ru: 'Заказ с телефона недоступен: позовите официанта.', tr: 'Telefondan sipariş kapalı: lütfen garsonu çağırın.', ar: 'الطلب من الهاتف غير متاح: يرجى مناداة النادل.', zh: '暂不支持手机点单：请呼叫服务员。', ja: 'スマホからの注文はできません。店員をお呼びください。', ko: '휴대폰 주문이 비활성화되었습니다. 직원을 불러 주세요.' },

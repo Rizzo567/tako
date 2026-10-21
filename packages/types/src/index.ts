@@ -100,6 +100,8 @@ export interface PublicMenu {
   description?: string
   /** Lingua di origine quando la nota non è tradotta nella lingua richiesta. */
   descriptionLang?: string
+  /** Menu attivo ma senza piatti nel documento pubblicato: la pagina mostra «Menu in arrivo». */
+  empty?: boolean
   sections: PublicSection[]
 }
 
@@ -112,6 +114,8 @@ export interface PublicSection {
   /** Lingua di origine quando nome/descrizione non sono tradotti nella lingua richiesta. */
   nameLang?: string
   descriptionLang?: string
+  /** Sottomenu attivo ma senza piatti nel documento pubblicato: la pagina mostra «Menu in arrivo». */
+  empty?: boolean
   items: PublicItem[]
 }
 

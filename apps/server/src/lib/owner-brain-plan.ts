@@ -22,7 +22,7 @@ import {sameSection} from './twilio-menu-structure.js'
 import {callHaiku} from './owner-brain-anthropic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','delete_menu','delete_section',...CONTROL_ACTIONS] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible',...CONTROL_ACTIONS] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
@@ -34,7 +34,7 @@ export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'obj
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
-  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section','create_menu',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 

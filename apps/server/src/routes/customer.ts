@@ -2,7 +2,7 @@ import { publicReservationRooms, selectedReservationTableError } from '../lib/re
 import {COMMON_MENU_LANGUAGES} from '../lib/menu-workspace-languages.js'
 import {foodCatalogs} from '../lib/menu-workspace-catalogs.js'
 import {recordMenuEvent,recordMenuEvents} from '../lib/menu-workspace-events.js'
-import { publishedMenu,readPublishedCatalog, publicMenuProjection } from '../lib/published-menu.js'
+import { publishedMenu,readPublishedCatalog, publicMenuProjection, defaultPublicMenu } from '../lib/published-menu.js'
 import { checkReservationCapacity, lockReservationCapacity, reservationLocalInstant } from '../lib/reservation-capacity.js'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
@@ -285,7 +285,7 @@ export async function customerRoutes(fastify: FastifyInstance) {
     const query = req.query as {menuId?: string; lang?: string;catalogOnly?:string;prefetch?:string}
     const catalogStarted=performance.now();const catalog=await readPublishedCatalog(restaurantId,{catalogOnly:query.catalogOnly==='1'}),published=catalog?.workspace;const catalogMs=performance.now()-catalogStarted
     if (published) {
-      const selected = query.menuId ? published.menus.find(menu => menu.id === query.menuId) : published.menus[0]
+      const selected = query.menuId ? published.menus.find(menu => menu.id === query.menuId) : defaultPublicMenu(published.menus)
       const rest=catalog!.restaurant
       if (!selected || !rest) return reply.code(404).send({error:{code:'NOT_FOUND',message:'Nessun menu attivo'}})
       const rs = rest.settings as any ?? {}
