@@ -76,7 +76,9 @@ const REASON:Record<string,string>={
  azione_sul_piatto_della_domanda:'nel messaggio misto l’azione è finita sul piatto della domanda invece che su quello del comando',
  nome_a_suono:'il piatto è riconosciuto solo a suono e non con certezza: chiedi conferma',
  parte_persa:'una parte del messaggio non è usata dal piano',
- conferma_senza_proposta:'non c’è nessuna proposta in sospeso da confermare',
+ conferma_senza_proposta:'non c’è nessuna proposta in sospeso da confermare: NON chiedere di nuovo conferma. Se nella CRONOLOGIA c’è una richiesta chiara del titolare non ancora fatta, scrivila ora come piano con le sue azioni (intent=change); se non è possibile, dillo in UNA frase semplice (mai «il sistema»)',
+ sottomenu_in_piu_menu:'il sottomenu nominato con «tutti» esiste in più Menu e il titolare non ha detto quale: chiedi in UNA domanda breve in quale Menu (intent=clarify), nessuna azione',
+ struttura_incompleta:'per creare un Menu o un Sottomenu serve il nome detto dal titolare e, se ci sono più Menu, in quale Menu: fai UNA domanda breve (intent=clarify), nessuna azione; mai chiedere se crearli vuoti o con i piatti',
  conferma_non_esplicita:'per pubblicare questa proposta serve un messaggio di sola conferma del titolare («sì», «ok»): questo messaggio non lo è',
  conferma_con_altro:'confirm_pending su una proposta da confermare va da solo, senza altre azioni',
  annulla_senza_richiesta:'undo_last solo se il titolare chiede di annullare / tornare indietro in questo messaggio',
@@ -297,7 +299,7 @@ const CLAIM=/\b(confermato|fatto|fatta|aggiornat\w*|modificat\w*|salvat\w*|pubbl
 const CLAIM_PART=/\b(?:aggiunt[oaie]|creat[oaie]|inserit[oaie]|spostat[oaie]|rinominat[oaie]|eliminat[oaie]|cancellat[oaie]|nascost[oaie]|rimoss[oaie]|tolt[oaie]|mess[oaie]|cambiat[oaie]|segnat[oaie]|rimess[oaie]|annullat[oaie]|ho (?:inserito|rimosso|reso|fatto|messo|tolto|aggiunto|creato|spostato))\b/
 // run Haiku 21/10: Haiku scrive al presente («Ok, rimetto *X* disponibile.», «Tolgo il tiramisù.»): in una frase che non è una
 // domanda vale come «fatto», a meno che la bozza chieda una conferma (rispondi/confermi/ok per…).
-const CLAIM_NOW=/^(?:ok|va bene|perfetto|d accordo|bene)?\s*(?:allora\s+)?(?:ti\s+)?(?:rimetto|tolgo|levo|metto|segno|nascondo|cambio|aggiorno|aggiungo|creo|sposto|rinomino|imposto|porto|abbasso|alzo|aumento|elimino|cancello|pubblico|tolgo)\b/
+const CLAIM_NOW=/^(?:ok|va bene|perfetto|d accordo|bene)?\s*(?:allora\s+)?(?:ti\s+)?(?:rimetto|tolgo|levo|metto|segno|nascondo|cambio|aggiorno|aggiungo|creo|sposto|rinomino|imposto|porto|abbasso|alzo|aumento|elimino|cancello|pubblico|preparo|faccio|inserisco|apro)\b/
 const ASKS_OK=/\b(?:rispondi|confermi|conferma|scrivi ok|ok per|dimmi (?:si|ok)|vuoi che|procedo)\b/
 const claimsNow=(s:string)=>!/\?/.test(s)&&!ASKS_OK.test(plain(s))&&s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_NOW.test(plain(x).trim()))
 export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||claimsNow(s)||s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_PART.test(plain(x)))
@@ -305,6 +307,8 @@ export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||claimsNow(s)||s.split
  * (detti dal titolare, prezzi scritti, prezzi dei piatti citati). */
 export function cleanDraft(draft:unknown,o:{wrote:boolean,numbers:number[]}):string|null{
  if(typeof draft!=='string')return null;let s=draft.replace(/[`~]/g,'').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();if(!s||s.length>600)return null
+ // run Haiku 21/10 (prova di Manuel sul QA): mai gergo tecnico né scelte numerate inventate («il sistema non può…», «rispondi 1 per sì»).
+ if(/\bil sistema\b/i.test(s)||/\b[12]\*?\s+per\s+(?:dire\s+)?(?:s[iì]|no)\b/i.test(s))return null
  if(!o.wrote&&claimsWrite(s))return null
  // Codici interni del contesto («p5», «c2») mai al titolare.
  if(/\b[pc]\d{1,3}\b/i.test(s))return null

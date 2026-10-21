@@ -9,9 +9,11 @@ export type StructAction=
  |{kind:'delete',id:string,undoCreate?:boolean} // undoCreate: «no, X lascialo stare» subito dopo averlo aggiunto (senza conferma)
  |{kind:'rename',id:string,name:string}
  |{kind:'move',id:string,sectionId:string}
- |{kind:'create_section',newSectionId:string,name:string,menuId:string}
+ |{kind:'create_section',newSectionId:string,name:string,menuId:string,menuName?:string}
+ // run Haiku 21/10: Menu nuovo (livello menus[]), vuoto; i Sottomenu dello stesso piano lo indicano con menuId=newMenuId.
+ |{kind:'create_menu',newMenuId:string,name:string,type:'main'|'lunch'|'dinner'|'drinks'}
  |{kind:'rename_section',sectionId:string,name:string}
-export const STRUCT_KINDS=new Set(['delete','rename','move','create_section','rename_section'])
+export const STRUCT_KINDS=new Set(['delete','rename','move','create_section','rename_section','create_menu'])
 export const isStructAction=(a:{kind:string}):a is StructAction=>STRUCT_KINDS.has(a.kind)
 
 const fold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
@@ -45,6 +47,8 @@ export function menuForSection(name:string,w:any):string|null{
 /** Applica un'azione di struttura al documento. Restituisce il nome toccato (per la risposta). */
 export function applyStructAction(w:any,a:StructAction):string{
  const sections=w.menus.flatMap((m:any)=>m.sections),find=(id:string)=>{for(const s of sections){const k=s.items.findIndex((i:any)=>i.id===id);if(k>=0)return{s,k,item:s.items[k]}}return null}
+ if(a.kind==='create_menu'){if(w.menus.some((m:any)=>m.id===a.newMenuId||fold(m.name)===fold(a.name)))return a.name
+  w.menus.push({id:a.newMenuId,name:a.name,description:null,type:a.type,active:true,translations:{},sections:[]});return a.name}
  if(a.kind==='create_section'){const menu=w.menus.find((m:any)=>m.id===a.menuId)??w.menus.find((m:any)=>m.id===menuForSection(a.name,w));if(!menu)throw new Error('Menu missing');if(w.menus.some((m:any)=>m.sections.some((s:any)=>s.id===a.newSectionId)))return a.name
   const rank=courseRank(a.name),section={id:a.newSectionId,name:a.name,items:[]}
   const at=rank?menu.sections.findIndex((s:any)=>!s.parentSectionId&&courseRank(s.name)>rank):-1
@@ -57,7 +61,7 @@ export function applyStructAction(w:any,a:StructAction):string{
  const target=sections.find((x:any)=>x.id===a.sectionId);if(!target)throw new Error('Section missing');if(target===hit.s)return hit.item.name
  hit.s.items.splice(hit.k,1);target.items.push(hit.item);return hit.item.name}
 /** Le categorie nuove prima dei piatti che le usano; le eliminazioni per ultime. */
-export const orderActions=<T extends {kind:string}>(xs:T[])=>[...xs.filter(a=>a.kind==='create_section'),...xs.filter(a=>a.kind!=='create_section'&&a.kind!=='delete'),...xs.filter(a=>a.kind==='delete')]
+export const orderActions=<T extends {kind:string}>(xs:T[])=>[...xs.filter(a=>a.kind==='create_menu'),...xs.filter(a=>a.kind==='create_section'),...xs.filter(a=>a.kind!=='create_menu'&&a.kind!=='create_section'&&a.kind!=='delete'),...xs.filter(a=>a.kind==='delete')]
 
 // ---------------------------------------------------------------------------------------------------------------------------
 // Lettura deterministica (senza IA) dei comandi più comuni. null = non è un comando di struttura chiaro.

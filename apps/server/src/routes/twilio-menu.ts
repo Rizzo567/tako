@@ -462,7 +462,9 @@ function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string){if(!/\b
  * nascosto piatto per piatto chiede sempre conferma. */
 function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false,strict=false,sections:SectionRef[]=[]):BatchWhy|null{
  if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
- if(actions.some(a=>a.kind==='create_section')&&!EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' ')))return 'section'
+ const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section')
+ if(structOnly)return null
+ if(!strict&&actions.some(a=>a.kind==='create_section')&&!EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' ')))return 'section'
  // Un solo comando su un gruppo («aumenta tutti i piatti della categoria X di un euro»): stessa differenza su ogni piatto → si
  // applica subito col riepilogo numerato dei fatti (decisione 18/10, nota 62). Altrimenti oltre 3 modifiche serve l'OK.
  // Richiesta esplicita di categorie nuove con i loro piatti («aggiungi un'altra categoria, primi, e lì aggiungi…»): è un solo comando di
@@ -491,7 +493,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // PIANO bot-haiku: con haiku il turno intero (auto-correzioni comprese) sta in 25 s; cervello giù → brainDown + avviso a Manuel.
  const engine=budget.engine,deadline=Date.now()+25_000
  const onDown=engine==='haiku'?(reason:string)=>{inBackground(reportFailure({kind:'job_failed',tenant:ctx.tenant,phone:ctx.phone,detail:'haiku: '+reason}))}:undefined
- const base={voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,engine,deadline,onDown,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (sottomenu)']}:null}
+ const base={menus:(workspaceSchema.parse(row.draft).menus as any[]).filter((m:any)=>m.active!==false).map((m:any)=>({id:m.id as string,name:m.name as string,sections:(m.sections??[]).length as number})),voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,engine,deadline,onDown,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (sottomenu)']}:null}
  const approval=(actions:MenuAction[],refs0:MenuRef[],message:string,ans=false)=>approvalFor(actions,refs0,message,ans,engine==='haiku',sections)
  const decide=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>decideTurn({decision:run.decision as any,control:run.decision.control??[],raw:run.decision.raw,message:text,pend,undoOK,sections,refs,lastBot:run.lastBot})
  // R5.1: anche i prezzi attuali dei piatti nominati nel messaggio («C'è già pasta al ragù a 12 €: lo aggiorno o ne creo un altro?»): sono fatti del menu.
@@ -591,7 +593,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
     if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
    if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});const whole=engine==='haiku'?wholeGroup(effective,refs,sections):null;return say([whole?wholeGroupText(whole):pendingFacts(why,effective,refs,sections),already].filter(Boolean).join('\n\n'),false,pricesOf(effective))}
-   const r=await applyNow(effective);return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
+   const r=await applyNow(effective),emptyNote=engine==='haiku'&&effective.some(a=>a.kind==='create_menu'||a.kind==='create_section')?'Menu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.':'';return say([r.facts,already,emptyNote].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   switch(out.kind){
    case 'undo':{const res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()

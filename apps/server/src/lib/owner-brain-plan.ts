@@ -6,6 +6,7 @@
  * G6 prezzi implausibili → conferma scritta). I fatti nella risposta li scrive il server DOPO la rilettura (composeReply).
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
+import {randomUUID} from 'node:crypto'
 import {allOfSections} from './owner-brain-sections.js'
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
@@ -21,19 +22,19 @@ import {sameSection} from './twilio-menu-structure.js'
 import {callHaiku} from './owner-brain-anthropic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu',...CONTROL_ACTIONS] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
  properties:{
   intent:{type:'string',enum:['change','read','clarify','capability','chat']},
-  actions:{type:'array',items:{type:'object',additionalProperties:false,required:['action','item','section','price','price_ref','price_delta','value','tag','text','name','until'],properties:{
-   action:{type:'string',enum:[...BRAIN_ACTIONS]},item:nullable('string'),section:nullable('string'),price:nullable('number'),price_ref:nullable('string'),price_delta:nullable('number'),value:nullable('boolean'),tag:nullable('string'),text:nullable('string'),name:nullable('string'),until:nullable('string')}}},
+  actions:{type:'array',items:{type:'object',additionalProperties:false,required:['action','item','section','menu','price','price_ref','price_delta','value','tag','text','name','until'],properties:{
+   action:{type:'string',enum:[...BRAIN_ACTIONS]},item:nullable('string'),section:nullable('string'),menu:nullable('string'),price:nullable('number'),price_ref:nullable('string'),price_delta:nullable('number'),value:nullable('boolean'),tag:nullable('string'),text:nullable('string'),name:nullable('string'),until:nullable('string')}}},
   read:{type:'string',enum:['items','unavailable','hidden','none']},
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
-  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section','create_menu',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 
@@ -502,11 +503,23 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'RAW '+call.content+'\n')).catch(()=>{})
  // Strumenti di controllo (confirm_pending, cancel_pending, undo_last): fuori dal validatore delle azioni, li verifica il route.
  const parsed=parseJson(call.content),control:ControlAction[]=parsed&&Array.isArray(parsed.actions)?[...new Set<ControlAction>(parsed.actions.filter((a:any)=>a&&CONTROL_ACTIONS.includes(a.action)).map((a:any)=>a.action as ControlAction))]:[]
- const rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
+ let rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
+ // run Haiku 21/10: struttura (Menu nuovi e Sottomenu in un Menu preciso, anche vuoti) letta e controllata qui, fuori dal validatore
+ // dei piatti: nomi detti dal titolare (adesso o nei suoi ultimi messaggi), Menu indicato o unico, niente doppioni. Si applica subito.
+ let struct:{actions:MenuAction[],notes:string[],ask:string|null}={actions:[],notes:[],ask:null}
+ if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&parsed.actions.some((a:any)=>a&&(a.action==='create_menu'||a.action==='create_section'))){
+  struct=structureActions(parsed.actions,input)
+  const others=parsed.actions.filter((a:any)=>!a||(a.action!=='create_menu'&&a.action!=='create_section'))
+  rest=JSON.stringify({...parsed,actions:others.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action)),intent:others.length||parsed.intent!=='change'?parsed.intent:'change'})
+  if(struct.ask)return{path:'brain',intent:'clarify',plan:{type:'clarify',ids:[]},exclude:[],aliasesUsed:[],replyDraft:'',notes:['struttura_incompleta:'+struct.ask],usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
+  if(!others.length){const decision={intent:'change' as const,plan:{type:'change',actions:struct.actions} as MenuPlan,exclude:[],aliasesUsed:[],replyDraft:'',notes:struct.notes}
+   return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}}
  const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id)})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
 
- if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
+ if(struct.actions.length){if(decision.plan.type!=='change')return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
+  decision.plan={...decision.plan,actions:[...struct.actions,...decision.plan.actions]};decision.notes=[...decision.notes,...struct.notes]}
+ if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
@@ -544,10 +557,13 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
 // (4) numero col separatore delle migliaia («13.000», «1.500») → nessun prezzo: si chiede;
 // (6) azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, nascondi+mostra, due prezzi diversi) → si chiede.
 const SALE_WORDS=/\b(?:scont\w*|promo\w*|offert\w*|in saldo)\b/,SALE_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|via|niente|senza|fine)\b\s+(?:\w+\s+){0,2}(?:scont\w*|promo\w*|offert\w*)/
-export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
+export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string,sections:SectionRef[]=[]):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
  if(d.plan.type!=='change')return null
  const m=plain(message),acts=d.plan.actions
  const ask=(note:string,ids:string[])=>({...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(ids)].slice(0,5)},notes:[...d.notes,note]})
+ // «tutti i secondi» con un Sottomenu Secondi in più Menu e nessun Menu nominato → una sola domanda (quale Menu).
+ for(const g of m.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(x=>sameSection(x.name,(g[1]??g[2])!)),menusOf=[...new Set(secs.map(x=>x.menu))]
+  if(menusOf.length>=2&&!menusOf.some(n=>{const k=plain(n).replace(/^menu /,'');return k.length>=3&&(' '+m+' ').includes(' '+k+' ')})&&acts.some(a=>'id' in a))return ask('sottomenu_in_piu_menu',[])}
  const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
  if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
  // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
@@ -559,3 +575,25 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
   if((hid.includes(true)&&hid.includes(false))||(av.includes(true)&&av.includes(false))||(fe.includes(true)&&fe.includes(false))||(hid.includes(true)&&fe.includes(true))||pr.size>1)return ask('azioni_contraddittorie',[id])}
  if(SALE_WORDS.test(m)&&!SALE_OFF.test(m)&&acts.some(a=>a.kind==='price')){const conv=acts.map(a=>a.kind==='price'?{kind:'promo',id:a.id,price:a.price,until:null} as MenuAction:a);return{...d,plan:{...d.plan,actions:conv},notes:[...d.notes,'sconto_come_promo']}}
  return null}
+
+const STRUCT_VERB=/\b(?:ho detto|devi|dovevi|crea\w*|aggiung\w*|mett\w*|voglio|vorrei|fai|fammi|inizia|nuov[oa]|chiama\w*)\b/
+const menuKey=(n:string)=>plain(n).replace(/^(?:il |un |nuovo )?menu /,'').replace(/^(?:del |della |di )/,'').trim()
+/** Menu nuovi e Sottomenu dal piano del modello (solo motore haiku). `ask` = cosa manca per farlo (si chiede, non si scrive). */
+export function structureActions(raw:any[],input:{message:string,history?:BrainTurn[],sections:SectionRef[],menus?:{id:string,name:string,sections:number}[]}):{actions:MenuAction[],notes:string[],ask:string|null}{
+ const said=plain([input.message,...(input.history??[]).filter(t=>t.role==='owner').slice(-4).map(t=>t.text)].join(' \n '))
+ const okName=(n:unknown)=>{if(typeof n!=='string')return null;const t=n.replace(/[*_~`]/g,'').replace(/\s+/g,' ').trim().slice(0,60);const k=plain(t);if(!k||k.split(' ').length>5||STRUCT_VERB.test(k)||/\p{Extended_Pictographic}/u.test(t))return null
+  return (' '+said+' ').includes(' '+k+' ')||(' '+said+' ').includes(' '+k.replace(/i$/,'o')+' ')||(' '+said+' ').includes(' '+k.replace(/o$/,'i')+' ')?t.charAt(0).toLocaleUpperCase('it')+t.slice(1):null}
+ const menus=[...(input.menus??[...new Map(input.sections.map(s=>[s.menu,{id:s.menu,name:s.menu,sections:1}])).values()])].map(m=>({...m,fresh:false}))
+ const actions:MenuAction[]=[],notes:string[]=[]
+ const typeOf=(n:string):'main'|'lunch'|'dinner'|'drinks'=>{const k=plain(n);return /\bpranz/.test(k)?'lunch':/\bcen[ae]\b/.test(k)?'dinner':/\b(?:bevand|bibit|vin[io]|drink|cocktail|bar)\b/.test(k)?'drinks':'main'}
+ for(const a of raw){if(!a||a.action!=='create_menu')continue;const name=okName(a.name??a.menu);if(!name)return{actions:[],notes:[],ask:'nome_menu'}
+  if(menus.some(m=>menuKey(m.name)===menuKey(name))){notes.push('menu_esistente:'+name);continue}
+  const id=randomUUID();menus.push({id,name,sections:0,fresh:true});actions.push({kind:'create_menu',newMenuId:id,name,type:typeOf(name)} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='create_section')continue;const name=okName(a.name??a.section);if(!name)return{actions:[],notes:[],ask:'nome_sottomenu'}
+  const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
+  const menu=want?menus.find(m=>menuKey(m.name)===want)??menus.find(m=>menuKey(m.name).includes(want)||want.includes(menuKey(m.name))):menus.length===1?menus[0]:null
+  if(!menu)return{actions:[],notes:[],ask:'menu_del_sottomenu'}
+  const dup=input.sections.some(s=>s.menu===menu.name&&sameSection(s.name,name))||actions.some(x=>x.kind==='create_section'&&x.menuId===menu.id&&sameSection(x.name,name))
+  if(dup){notes.push('sottomenu_esistente:'+name);continue}
+  actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:menu.id,menuName:menu.name} as MenuAction)}
+ return{actions,notes,ask:null}}
