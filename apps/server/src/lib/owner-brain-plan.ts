@@ -526,7 +526,7 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
   const filled=new Set(decision.plan.actions.flatMap((a:any)=>a.kind==='create'||a.kind==='move'?[a.sectionId as string]:[]))
   const structActs=struct.actions.map(a=>a.kind==='create_section'&&a.hidden&&filled.has(a.newSectionId)?{...a,hidden:false}:a)
   decision.plan={...decision.plan,actions:[...structActs,...decision.plan.actions]};decision.notes=[...decision.notes,...struct.notes]}
- if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
+ if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections,input.refs);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
@@ -564,7 +564,7 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
 // (4) numero col separatore delle migliaia («13.000», «1.500») → nessun prezzo: si chiede;
 // (6) azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, nascondi+mostra, due prezzi diversi) → si chiede.
 const SALE_WORDS=/\b(?:scont\w*|promo\w*|offert\w*|in saldo)\b/,SALE_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|via|niente|senza|fine)\b\s+(?:\w+\s+){0,2}(?:scont\w*|promo\w*|offert\w*)/
-export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string,sections:SectionRef[]=[]):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
+export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string,sections:SectionRef[]=[],refs:MenuRef[]=[]):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
  if(d.plan.type!=='change')return null
  const m=plain(message),acts=d.plan.actions
  const ask=(note:string,ids:string[])=>({...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(ids)].slice(0,5)},notes:[...d.notes,note]})
@@ -573,8 +573,11 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
   if(menusOf.length>=2&&!menusOf.some(n=>{const k=plain(n).replace(/^menu /,'');return k.length>=3&&(' '+m+' ').includes(' '+k+' ')})&&acts.some(a=>'id' in a))return ask('sottomenu_in_piu_menu',[])}
  const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
  if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
- // «aggiungi la carbonara a 13» con la carbonara già nel menu e nessuna creazione → domanda (mai un prezzo cambiato da «aggiungi»).
- if(/\b(?:aggiung\w*|inserisc\w*|nuov[oa])\b/.test(m)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(m)&&!/\b(?:mett\w*|port\w*|cambi\w*|alz\w*|abbass\w*|aument\w*|diminu\w*|costa\w*|pass\w*|aggiorn\w*)\b/.test(m)){const pr=acts.filter(a=>a.kind==='price');if(pr.length)return ask('piatto_gia_presente',pr.map(a=>(a as any).id))}
+ // «aggiungi la carbonara a 13» con la carbonara già nel menu → domanda, ma SOLO per i piatti nominati nella stessa frase dell'«aggiungi»
+ // (in un messaggio lungo «…aggiungi la bufalina a 10, la margherita a 8» la margherita resta un cambio di prezzo).
+ {const parts=message.split(/\s*[,;]\s*|\s+(?:e|ed|poi|e poi)\s+/i),ADD=/\b(?:aggiung\w*|inserisc\w*|nuov[oa])\b/,PRICEV=/\b(?:mett\w*|port\w*|cambi\w*|alz\w*|abbass\w*|aument\w*|diminu\w*|costa\w*|pass\w*|aggiorn\w*)\b/
+  const flagged=acts.filter(a=>a.kind==='price'&&parts.some(p=>{const pp=plain(p);const r=refs.find((x:MenuRef)=>x.id===(a as any).id);return !!r&&ADD.test(pp)&&!PRICEV.test(pp)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(pp)&&g9DishMentioned(r.name,p,refs)}))
+  if(flagged.length)return ask('piatto_gia_presente',flagged.map(a=>(a as any).id))}
  // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
  if(/\b(?:da|dal|dalla|a partire da|per|solo)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|stanotte|settimana prossima|prossima settimana)\b|\bdomani\b/.test(m)&&acts.some(a=>a.kind!=='special'))
   return{...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(acts.flatMap(a=>'id' in a?[(a as any).id as string]:[]))].slice(0,5),actions:acts},notes:[...d.notes,'data_futura']}

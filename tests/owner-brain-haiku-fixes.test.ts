@@ -18,7 +18,9 @@ describe('haikuChecks (motore haiku)',()=>{
   expect(haikuChecks(dec([{kind:'hidden',id:'a',value:true},{kind:'featured',id:'b',value:true}]) as any,'nascondi a, evidenzia b')).toBeNull()
  })
  it('«aggiungi X a 13» con X già nel menu → domanda, non cambio di prezzo',()=>{
-  expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi la carbonara a 13')!.notes).toContain('piatto_gia_presente')
+  const carb=[{id:'c',name:'Carbonara',price:12,sectionId:'s'} as any],mar=[...carb,{id:'m',name:'Margherita',price:7,sectionId:'s'} as any]
+  expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi la carbonara a 13',[],carb)!.notes).toContain('piatto_gia_presente')
+  expect(haikuChecks(dec([{kind:'price',id:'m',price:8}]) as any,'aggiungi tra le pizze la bufalina a 10, la margherita a 8',[],mar)).toBeNull()
   expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi un euro alla carbonara')).toBeNull()
  })
  it('data futura («da domani») → domanda con l\'azione in attesa, nessuna scrittura',()=>{

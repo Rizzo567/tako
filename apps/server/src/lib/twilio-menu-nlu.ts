@@ -54,7 +54,8 @@ export function foreignQualifier(message:string,dish:MenuRef,refs:MenuRef[]):boo
  // Il nome intero del piatto detto nel messaggio («aggiungi pasta al pesto… pasta al ragù a 10») vale: niente dubbio.
  if((' '+t.join(' ')+' ').includes(' '+plainText(dish.name).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim()+' '))return false
  for(let i=0;i+2<t.length;i++){if(!mine.some(n=>sameWord(t[i]!,n)))continue;if(!/^(?:al|alla|allo|ai|agli|alle|con|di|del|della|dei|delle|in)$/.test(t[i+1]!))continue
-  const x=t[i+2]!;if(x.length<4||stop.has(x)||/^\d/.test(x))continue;if(mine.some(n=>sameWord(x,n)||nearWord(x,n)||(n[0]===x[0]&&Math.abs(n.length-x.length)<=2)))continue
+  const x=t[i+2]!;if(x.length<4||stop.has(x)||/^\d/.test(x)||/^(?:due|tre|quattro|cinque|sei|sette|otto|nove|dieci)$/.test(x))continue; // 21/10: «ai quattro formaggi» = «4 formaggi»
+  if(mine.some(n=>sameWord(x,n)||nearWord(x,n)||(n[0]===x[0]&&Math.abs(n.length-x.length)<=2)))continue
   if(refs.some(r=>nameWords(r.name).some(n=>sameWord(t[i]!,n))&&nameWords(r.name).some(n=>sameWord(x,n))))continue;return true}
  return false}
 export function findDishes(query:string,refs:MenuRef[]):MenuRef[]{const hits=matchDishes(query,refs);return hits.length?hits:fuzzyDishes(query,refs)}
