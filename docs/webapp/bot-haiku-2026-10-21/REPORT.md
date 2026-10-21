@@ -3,6 +3,37 @@
 Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINALE 20/10), deviazioni: `implementation-notes.md`, risultati per set: `risultati/summary-*-{r1..r4,finale}.md`.
 
 
+
+## 0bis. AGGIORNAMENTO 21/10 10:00–11:20 — Menu/Sottomenu da chat, niente conferme a vuoto, Haiku per TUTTI, due numeri: edge v131 + dashboard
+
+**Esito.** Gate verde (V1–V9, banco 88%, 0 GRAVI di sicurezza su banco, avversario 150 e struttura). Deploy in ordine: migrazione due-numeri → **edge v130** (codice) → secret `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=haiku` → **edge v131** (stesso codice, ezbr `8f086c00…`) → **dashboard worker `takomenu-web` versione `d21ca4b8…`** (prima: `d0c898a4…`). **Haiku acceso per tutti i titolari** (Victoria compresa) senza scritture sui ristoranti.
+
+Cosa è cambiato (motore haiku):
+- **Struttura da chat**: `create_menu(name)`, `create_section(name, menu)` anche vuoti e anche in un Menu creato nello stesso messaggio; Sezione dentro un Sottomenu (`section=cN`); correzione di una struttura appena creata con `delete_menu`/`delete_section` **solo se vuoti** e solo con un segnale di correzione (mai con «anche»). Tutto subito, con riepilogo e annulla 10 minuti; nel riepilogo: «Menu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti» (la pagina pubblica toglie già i Menu senza piatti). Nomi solo se detti dal titolare (anche nei suoi ultimi messaggi), mai frasi intere. Menu del locale (anche vuoti) nel contesto del modello.
+- **Nessuna conferma a vuoto**: bozze con «il sistema» o «1 per sì / 2 per no» non partono mai; «ti preparo/creo/faccio…» senza scrittura = dichiarazione falsa (bloccata); «sì/vai» senza niente in sospeso → il modello esegue l'ultima richiesta chiara o dice in una frase cosa non può fare; «Elimino X? Rispondi sì» scritto come domanda diventa una proposta vera (il «sì» la conferma); «sì solo il babà» elimina subito solo quello.
+- «aggiungi la carbonara a 13» con la carbonara già presente → domanda (mai un prezzo cambiato da «aggiungi»); «tutti i secondi» con Secondi in più Menu → una domanda.
+- **Interruttore**: con `TAKO_BOT_ENGINE_DEFAULT=haiku` il cervello è acceso di default per ogni locale; `settings.botBrain=false` o `settings.botEngine='groq'` = override per locale; `TAKO_BOT_BRAIN_OFF=1` kill switch. Senza env (test, strumenti) resta come prima.
+- **Merge `feat/due-numeri-whatsapp` 731b4ae** (due numeri per locale + pannello rifatto; note in `docs/webapp/due-numeri-2026-10-21/NOTE.md`). Migrazione `whatsapp-owner-two-numbers.sql` applicata (tolto `tako_whatsapp_links_one_per_restaurant`, creato `tako_whatsapp_links_restaurant`, nessun dato toccato).
+
+| Set (stato pushato) | Valore |
+|---|---|
+| **Struttura 74** (conversazione vera di Manuel + 2 varianti, 4 frasi Bim Bum Bar, avversaria 67) | **74/74**, 0 GRAVI |
+| Banco vero 92 | **81/92 = 88%**, GRAVI 6, **0 di sicurezza** |
+| Avversario 150 | 137/150 = 91,3%, GRAVI 3, **0 di sicurezza** |
+| Victoria 10 · parlato 30 · playground 20 | 9/10 (1 MEDIO: chiede sulla sorrentina) · 29/30 · 20/20, 0 GRAVI |
+| Suite | 0 rossi nuovi (3461 test) · tsc pulito · build PASS · lazy boot PASS |
+| Spesa Anthropic totale (dal 20/10) | **~0,58 $** su 3 $ |
+
+Giri (max 3): s1 (prompt nuovo) → s2 (+ banco struttura: 70/74, 2 GRAVI sicurezza) → s3 (Sezioni + correzioni: 71/74, 1 GRAVE sicurezza: «no, anche Cocktail» toglieva Spritz) → **fix deterministico verificato solo sul set struttura (74/74)**, prompt invariato quindi gli altri set restano quelli di s3. Deviazione dal tetto dei 3 giri dichiarata in implementation-notes 31.
+
+Verifiche dopo il deploy (sola lettura): `/staff` 200, `/api/auth/me` 401, webhook senza firma 403 (nessun invio), **0 errori** in `tako_whatsapp_errors` nelle ultime 2 ore; Victoria `botBrain=true`, nessun `botEngine` → motore risolto **haiku**; Panuzza's (nessuna impostazione) → cervello acceso, haiku. Prova sincrona non eseguita: lo script usa il numero di Manuel e scriverebbe nella sua cronologia e nel menu QA che sta usando → la prova la fa lui.
+
+**Rollback** (in quest'ordine, tutto pronto in `~/.config/tako-webapp/rollback-edge-20261021/`):
+1. motore: secret `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=groq` (clienti come prima) oppure `TAKO_BOT_BRAIN_OFF=1`;
+2. dashboard: `npx wrangler rollback d0c898a4-b6e5-4df0-babf-2f75b8e38cce --config deploy/cloudflare/wrangler.jsonc`;
+3. edge: `candidate-index-haiku.ts` (v129) con `deploy-projection.mjs` (il pannello vecchio torna a un numero; non togliere l'indice semplice).
+
+---
 ## 0. AGGIORNAMENTO 21/10 mattina (08:35–09:15, via di Manuel) — gate VERDE, deploy QA FATTO (v129)
 
 **Esito.** Corretti i punti 3–8. Gate §8 verde al giro di misura 2 (V1–V9). **Deploy fatto: edge `tako-operational-candidate` v129** (ezbr `3a2f5c16…`, bundle sha `85edf119…`), secret nuovi `TAKO_CANDIDATE_ANTHROPIC_API_KEY` e `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=groq` (clienti invariati su Groq), `botEngine='haiku'` **solo** su QA 26050ecd.

@@ -1,0 +1,3434 @@
+{
+ "set": "struttura",
+ "metriche": {
+  "set": "struttura",
+  "modo": "replay",
+  "conversazioni": 74,
+  "misurate": 74,
+  "nonMisurate": [],
+  "messaggi": 96,
+  "corrette": 74,
+  "percentuale": 100,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 1.8,
+  "domandeNonAttesePer10": 0.7,
+  "latenzaAnthropicMs": {
+   "p50": 2021,
+   "p95": 5050,
+   "chiamate": 99
+  },
+  "latenzaTurnoMs": {
+   "p50": 2244,
+   "p95": 5058,
+   "nota": "harness + latenza Haiku registrata"
+  },
+  "chiamatePerMessaggio": 1.03,
+  "tokenMediPerMessaggio": {
+   "input": 126,
+   "output": 325,
+   "cacheRead": 8478,
+   "cacheWrite": 343
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 96,
+   "su": 99,
+   "percentuale": 97
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.029066,
+   "perMessaggioUsd": 0.000303,
+   "tetto": 0.5
+  },
+  "anthropic": {
+   "hit": 99,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 2.8
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "str-m1",
+   "family": "bv-categorie",
+   "menu": "qastruttura",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo i menu *Pranzo* e *Cena*.\n\nNuovo Menu *Pranzo*\nNuovo Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, creo i Sottomenu *Completo* nel Menu *Pranzo* e *Completo*, *Primo* e *Secondo* nel Menu *Cena*.\n\nNuovo Sottomenu *Completo* nel Menu *Pranzo*\nNuovo Sottomenu *Completo* nel Menu *Cena*\nNuovo Sottomenu *Primo* nel Menu *Cena*\nNuovo Sottomenu *Secondo* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, scusa, parto subito: creo i Menu *Pranzo* e *Cena* con i Sottomenu *Completo* nel Pranzo e *Completo*, *Primo* e *Secondo* nella Cena.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
+    "Intendi confermare la creazione dei Menu *Pranzo* e *Cena* con i Sottomenu *Completo*, *Primo* e *Secondo*?"
+   ],
+   "turns": [
+    "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
+    "in pranzo metti completo come sottomenu, invece in cena metti completo, primo e secondo",
+    "No, tu inizi a crearli",
+    "Tu inizi a crearli",
+    "vai si",
+    "si",
+    "1"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 7,
+   "llmMisses": 0,
+   "llmTokens": 65118,
+   "latencyMs": [
+    147.5,
+    32.8,
+    25.7,
+    17.2,
+    13.8,
+    79.2,
+    24.8
+   ],
+   "recordedLlmMs": 22273,
+   "usedLlm": true,
+   "source": "QA Manuel 21/10",
+   "note": "conversazione vera: al più tardi dopo il turno 2 Pranzo {Completo} e Cena {Completo, Primo, Secondo}; poi niente doppioni né conferme a vuoto",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-m2",
+   "family": "bv-categorie",
+   "menu": "qastruttura",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo i menu *Pranzo* e *Cena*.\n\nNuovo Menu *Pranzo*\nNuovo Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, creo i Sottomenu *Completo* nel Menu *Pranzo* e *Completo*, *Primo* e *Secondo* nel Menu *Cena*.\n\nNuovo Sottomenu *Completo* nel Menu *Pranzo*\nNuovo Sottomenu *Completo* nel Menu *Cena*\nNuovo Sottomenu *Primo* nel Menu *Cena*\nNuovo Sottomenu *Secondo* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
+    "in pranzo metti completo come sottomenu, invece in cena metti completo, primo e secondo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17663,
+   "latencyMs": [
+    13.4,
+    19.6
+   ],
+   "recordedLlmMs": 8503,
+   "usedLlm": true,
+   "source": "QA Manuel 21/10 (variante)",
+   "note": "variante: il turno 1 basta da solo (Menu vuoti subito), il turno 2 aggiunge i sottomenu",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-m3",
+   "family": "bv-categorie",
+   "menu": "qastruttura",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo i menu *Pranzo* e *Cena*.\n\nNuovo Menu *Pranzo*\nNuovo Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8639,
+   "latencyMs": [
+    15.8
+   ],
+   "recordedLlmMs": 5990,
+   "usedLlm": true,
+   "source": "QA Manuel 21/10 (variante)",
+   "note": "solo il turno 1: due Menu vuoti creati subito (una domanda di seguito sui sottomenu è ammessa)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-b1",
+   "family": "bv-categorie",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cotoletta alla milanese|17",
+    "price|Hamburger di manzo|16",
+    "price|Pollo alla piastra|14",
+    "price|Salsiccia ai ferri|13"
+   ],
+   "actual": [
+    "price|Cotoletta alla milanese|17",
+    "price|Hamburger di manzo|16",
+    "price|Pollo alla piastra|14",
+    "price|Salsiccia ai ferri|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumento *Cotoletta alla milanese*, *Hamburger di manzo*, *Salsiccia ai ferri* e *Pollo alla piastra* di 3 euro.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "Tutti i secondi aumentali di 3 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9174,
+   "latencyMs": [
+    36.1
+   ],
+   "recordedLlmMs": 4483,
+   "usedLlm": true,
+   "source": "Bim Bum Bar 21/10",
+   "note": "+3 € a tutti i Secondi applicato subito con riepilogo, niente OK (4 piatti: se il server vuole l'OK oltre 3 modifiche esce «in-attesa-ok» MEDIO)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-b2",
+   "family": "bv-categorie",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?"
+   ],
+   "turns": [
+    "Aggiungi un nuovo menù"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8555,
+   "latencyMs": [
+    12.5
+   ],
+   "recordedLlmMs": 1684,
+   "usedLlm": true,
+   "source": "Bim Bum Bar 21/10",
+   "note": "manca il nome: una domanda breve, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-b3",
+   "family": "bv-categorie",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?",
+    "Certo, come lo chiamo il nuovo *Menu*?"
+   ],
+   "turns": [
+    "Aggiungi un nuovo menù",
+    "No, ho detto che devi proprio creare un nuovo menù"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17433,
+   "latencyMs": [
+    11.3,
+    14.7
+   ],
+   "recordedLlmMs": 3953,
+   "usedLlm": true,
+   "source": "Bim Bum Bar 21/10",
+   "note": "insiste senza nome: di nuovo una domanda sul nome, mai un Menu/piatto che si chiama con la frase",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-b4",
+   "family": "bv-categorie",
+   "menu": "bimbum2",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi i *Secondi* del Menu Pranzo, quelli del Menu cena o tutti e due?"
+   ],
+   "turns": [
+    "Tutti i secondi aumentali di 3 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9062,
+   "latencyMs": [
+    10.9
+   ],
+   "recordedLlmMs": 2944,
+   "usedLlm": true,
+   "source": "Bim Bum Bar 21/10",
+   "note": "«Secondi» in due Menu: una sola domanda (quale menu), nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Aperitivo*.\n\nNuovo Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Aperitivo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8791,
+   "latencyMs": [
+    11.9
+   ],
+   "recordedLlmMs": 1566,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Brunch*.\n\nNuovo Menu *Brunch*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi un nuovo menù che si chiama Brunch"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8797,
+   "latencyMs": [
+    14.4
+   ],
+   "recordedLlmMs": 2709,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Colazione*.\n\nNuovo Menu *Colazione*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "fammi un menu Colazione"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8786,
+   "latencyMs": [
+    15.5
+   ],
+   "recordedLlmMs": 1296,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Degustazione*.\n\nNuovo Menu *Degustazione*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nuovo menu: Degustazione"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8790,
+   "latencyMs": [
+    12.4
+   ],
+   "recordedLlmMs": 1257,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Asporto*.\n\nNuovo Menu *Asporto*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "voglio un menù nuovo, chiamalo Asporto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8796,
+   "latencyMs": [
+    13.3
+   ],
+   "recordedLlmMs": 1411,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-06",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Dopocena* adesso.\n\nNuovo Menu *Dopocena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "mi crei il menu Dopocena?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8794,
+   "latencyMs": [
+    13.7
+   ],
+   "recordedLlmMs": 1939,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-menu-nuovo-07",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Pranzo di lavoro*. Poi puoi aggiungerci i Sottomenu.\n\nNuovo Menu *Pranzo di lavoro*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi il menu Pranzo di lavoro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8826,
+   "latencyMs": [
+    15.5
+   ],
+   "recordedLlmMs": 1596,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-piu-menu-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato i Menu *Aperitivo* e *Brunch*.\n\nNuovo Menu *Aperitivo*\nNuovo Menu *Brunch*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea i menu Aperitivo e Brunch"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8900,
+   "latencyMs": [
+    14.9
+   ],
+   "recordedLlmMs": 1834,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-piu-menu-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo i menu *Colazione*, *Aperitivo* e *Dopocena*.\n\nNuovo Menu *Colazione*\nNuovo Menu *Aperitivo*\nNuovo Menu *Dopocena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi tre menu: Colazione, Aperitivo e Dopocena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8975,
+   "latencyMs": [
+    15
+   ],
+   "recordedLlmMs": 2227,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-piu-menu-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo i Menu *Asporto* e *Delivery*. Ora sono vuoti: poi puoi aggiungere i Sottomenu.\n\nNuovo Menu *Asporto*\nNuovo Menu *Delivery*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "voglio due menu nuovi, Asporto e Delivery"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8906,
+   "latencyMs": [
+    12.5
+   ],
+   "recordedLlmMs": 1618,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-piu-menu-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il menu *Brunch* con i sottomenu *Dolci* e *Salati*.\n\nNuovo Menu *Brunch*\nNuovo Sottomenu *Dolci* nel Menu *Brunch*\nNuovo Sottomenu *Salati* nel Menu *Brunch*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea un menu Brunch con i sottomenu Dolci e Salati"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8974,
+   "latencyMs": [
+    18.9
+   ],
+   "recordedLlmMs": 2428,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-piu-menu-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Aperitivo* con i Sottomenu *Spritz* e *Taglieri*, e il Menu *Dopocena* con il Sottomenu *Amari*.\n\nNuovo Menu *Aperitivo*\nNuovo Menu *Dopocena*\nNuovo Sottomenu *Spritz* nel Menu *Aperitivo*\nNuovo Sottomenu *Taglieri* nel Menu *Aperitivo*\nNuovo Sottomenu *Amari* nel Menu *Dopocena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "fai il menu Aperitivo con dentro Spritz e Taglieri, e il menu Dopocena con Amari"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9426,
+   "latencyMs": [
+    16.1
+   ],
+   "recordedLlmMs": 3613,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sottomenu-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il Sottomenu *Dolci* nel Menu *Cena*.\n\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nel Menu cena aggiungi il sottomenu Dolci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8815,
+   "latencyMs": [
+    13.4
+   ],
+   "recordedLlmMs": 1578,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sottomenu-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il Sottomenu *Contorni* nel Menu Pranzo.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "in pranzo metti il sottomenu Contorni"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8812,
+   "latencyMs": [
+    13.9
+   ],
+   "recordedLlmMs": 1609,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sottomenu-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Insalate* nel Menu Pranzo.\n\nNuovo Sottomenu *Insalate* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi nel pranzo un sottomenu Insalate"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8813,
+   "latencyMs": [
+    13.7
+   ],
+   "recordedLlmMs": 1782,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sottomenu-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Amari* nel Menu *Bevande*.\n\nNuovo Sottomenu *Amari* nel Menu *Bevande*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il sottomenu Amari nelle Bevande"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9019,
+   "latencyMs": [
+    15.3
+   ],
+   "recordedLlmMs": 1496,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sottomenu-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Antipasti* nel Menu Cena.\n\nNuovo Sottomenu *Antipasti* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nel menu cena crea Antipasti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9014,
+   "latencyMs": [
+    14.8
+   ],
+   "recordedLlmMs": 1416,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sottomenu-06",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiungo i Sottomenu *Contorni* e *Dolci* al Menu *Cena*.\n\nNuovo Sottomenu *Contorni* nel Menu *Cena*\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "alla cena aggiungi i sottomenu Contorni e Dolci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8902,
+   "latencyMs": [
+    15
+   ],
+   "recordedLlmMs": 1722,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-due-menu-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Dolci* nel Menu Pranzo e nel Menu cena.\n\nNuovo Sottomenu *Dolci* nel Menu *Pranzo*\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi il sottomenu Dolci sia a pranzo che a cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9049,
+   "latencyMs": [
+    12.9
+   ],
+   "recordedLlmMs": 2231,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-due-menu-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il Sottomenu *Contorni* nel Menu Pranzo e nel Menu Cena.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\nNuovo Sottomenu *Contorni* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "metti Contorni in pranzo e in cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9031,
+   "latencyMs": [
+    14.2
+   ],
+   "recordedLlmMs": 2289,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-due-menu-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto, creo il Sottomenu *Insalate* nel Menu Pranzo e nel Menu Cena.\n\nNuovo Sottomenu *Insalate* nel Menu *Pranzo*\nNuovo Sottomenu *Insalate* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "in pranzo e cena aggiungi il sottomenu Insalate"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9004,
+   "latencyMs": [
+    15.7
+   ],
+   "recordedLlmMs": 2022,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-due-menu-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Dolci* nel Menu Pranzo e nel Menu Cena.\n\nNuovo Sottomenu *Dolci* nel Menu *Pranzo*\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea Dolci nel pranzo e anche nella cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9045,
+   "latencyMs": [
+    12.8
+   ],
+   "recordedLlmMs": 3256,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sezione-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo la Sezione *Pizze rosse* dentro il Sottomenu *Pizze* del Menu cena.\n\nNuova Sezione *Pizze rosse* in *Pizze*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "dentro Pizze della cena aggiungi la sezione Pizze rosse"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9426,
+   "latencyMs": [
+    17.2
+   ],
+   "recordedLlmMs": 3362,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sezione-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo la *Pasta fresca* nei *Primi* del Menu pranzo.\n\nNuova Sezione *Pasta fresca* in *Primi*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nei Primi del pranzo crea una sezione Pasta fresca"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9094,
+   "latencyMs": [
+    13.7
+   ],
+   "recordedLlmMs": 7829,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sezione-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo la Sezione *Rossi* nel Sottomenu *Vini*.\n\nNuova Sezione *Rossi* in *Vini*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nel sottomenu Vini metti una sezione Rossi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9375,
+   "latencyMs": [
+    13.8
+   ],
+   "recordedLlmMs": 2749,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-sezione-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo la Sezione *Pesce* nei Secondi della Cena.\n\nNuova Sezione *Pesce* in *Secondi*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nei Secondi della cena crea la sezione Pesce"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9406,
+   "latencyMs": [
+    14.4
+   ],
+   "recordedLlmMs": 3351,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Fuori menù*.\n\nNuovo Menu *Fuori menù*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Fuori menù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8791,
+   "latencyMs": [
+    11.5
+   ],
+   "recordedLlmMs": 1345,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Pizze & Calzoni* nel Menu Cena.\n\nNuovo Sottomenu *Pizze & Calzoni* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nel menu cena aggiungi il sottomenu Pizze & Calzoni"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9215,
+   "latencyMs": [
+    15.5
+   ],
+   "recordedLlmMs": 2403,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *L'angolo dello chef* nel Menu Pranzo.\n\nNuovo Sottomenu *L'angolo dello chef* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il sottomenu L'angolo dello chef nel pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8825,
+   "latencyMs": [
+    14.7
+   ],
+   "recordedLlmMs": 1581,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Aperitivo*.\n\nNuovo Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Aperitivo 🍹🍸"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8798,
+   "latencyMs": [
+    14.8
+   ],
+   "recordedLlmMs": 3359,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "note": "emoji vietate nei nomi: il Menu si chiama Aperitivo",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Cuoppi* nel Menu Cena.\n\nNuovo Sottomenu *Cuoppi* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nel menu cena metti il sottomenu Cuoppi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9069,
+   "latencyMs": [
+    12.9
+   ],
+   "recordedLlmMs": 3153,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-06",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Sfizi 'e casa* nel Menu Pranzo.\n\nNuovo Sottomenu *Sfizi 'e casa* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi in pranzo il sottomenu Sfizi 'e casa"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8830,
+   "latencyMs": [
+    13.1
+   ],
+   "recordedLlmMs": 1414,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-nomi-strani-07",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Mangiari d'a nonna*. Poi gli puoi aggiungere i Sottomenu.\n\nNuovo Menu *Mangiari d'a nonna*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Mangiari d'a nonna"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8827,
+   "latencyMs": [
+    15.1
+   ],
+   "recordedLlmMs": 1635,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Aperitivo*.\n\nNuovo Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, ripeto la creazione del Menu *Aperitivo*. Se esiste già, te lo segnalo.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "crea il menu Aperitivo",
+    "vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18120,
+   "latencyMs": [
+    11.6,
+    10.1
+   ],
+   "recordedLlmMs": 5458,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Aperitivo*.\n\nNuovo Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Il Menu *Aperitivo* c'è già ed è vuoto. Vuoi aggiungerci un Sottomenu, ad esempio *Bevande aperitivo*?\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "crea il menu Aperitivo",
+    "fallo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18120,
+   "latencyMs": [
+    14.1,
+    10.6
+   ],
+   "recordedLlmMs": 4795,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiungo il Sottomenu *Dolci* al Menu *Cena*.\n\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "nel menu cena aggiungi il sottomenu Dolci",
+    "fallo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17796,
+   "latencyMs": [
+    14.4,
+    10.3
+   ],
+   "recordedLlmMs": 3001,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiungo il Sottomenu *Dolci* al Menu *Cena*.\n\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "nel menu cena aggiungi il sottomenu Dolci",
+    "sì dai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17797,
+   "latencyMs": [
+    10.3,
+    8
+   ],
+   "recordedLlmMs": 3109,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo i menu *Brunch* e *Asporto*.\n\nNuovo Menu *Brunch*\nNuovo Menu *Asporto*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "aggiungi i menu Brunch e Asporto",
+    "sì dai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17941,
+   "latencyMs": [
+    11.9,
+    6.8
+   ],
+   "recordedLlmMs": 3545,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-06",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo i menu *Brunch* e *Asporto*.\n\nNuovo Menu *Brunch*\nNuovo Menu *Asporto*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "aggiungi i menu Brunch e Asporto",
+    "ok procedi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27292,
+   "latencyMs": [
+    9.9,
+    14.7
+   ],
+   "recordedLlmMs": 4908,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-07",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il Sottomenu *Contorni* nel Menu Pranzo.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "in pranzo metti il sottomenu Contorni",
+    "ok procedi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27213,
+   "latencyMs": [
+    13.2,
+    15.1
+   ],
+   "recordedLlmMs": 5564,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-conferme-vaghe-08",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il Sottomenu *Contorni* nel Menu Pranzo.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "in pranzo metti il sottomenu Contorni",
+    "vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17798,
+   "latencyMs": [
+    12,
+    9.6
+   ],
+   "recordedLlmMs": 3366,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-correzioni-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Dolci* nel Menu Pranzo.\n\nNuovo Sottomenu *Dolci* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, tolgo *Dolci* da *Pranzo* e lo metto in *Cena*.\n\nTolto il Sottomenu vuoto *Dolci* dal Menu *Pranzo*\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "in pranzo aggiungi il sottomenu Dolci",
+    "no, in cena non in pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18056,
+   "latencyMs": [
+    14.1,
+    13.7
+   ],
+   "recordedLlmMs": 5865,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-correzioni-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, creo il Menu *Aperitivo* con il Sottomenu *Spritz*.\n\nNuovo Menu *Aperitivo*\nNuovo Sottomenu *Spritz* nel Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, tolgo il Sottomenu *Spritz* e creo il Sottomenu *Cocktail* nel Menu *Aperitivo*.\n\nNuovo Sottomenu *Cocktail* nel Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Aperitivo con il sottomenu Spritz",
+    "no, anche Cocktail"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18244,
+   "latencyMs": [
+    13,
+    14.8
+   ],
+   "recordedLlmMs": 3638,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-correzioni-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Brunch*.\n\nNuovo Menu *Brunch*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, tolgo il Menu *Brunch* e creo il Menu *Colazione*.\n\nNuovo Menu *Colazione*\nTolto il Menu vuoto *Brunch*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Brunch",
+    "no, chiamalo Colazione"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17804,
+   "latencyMs": [
+    12.2,
+    13.6
+   ],
+   "recordedLlmMs": 3123,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-correzioni-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Contorni* nel Menu Pranzo.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Tolgo il Sottomenu *Contorni* dal Menu *Pranzo* e creo *Insalate* al suo posto.\n\nNuovo Sottomenu *Insalate* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "in pranzo metti Contorni",
+    "no, anche Insalate"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17951,
+   "latencyMs": [
+    11.7,
+    14.6
+   ],
+   "recordedLlmMs": 4161,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-correzioni-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Antipasti* nel Menu Cena.\n\nNuovo Sottomenu *Antipasti* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, tolgo *Antipasti* dal Menu *Cena* e creo *Stuzzichini*.\n\nTolto il Sottomenu vuoto *Antipasti* dal Menu *Cena*\nNuovo Sottomenu *Stuzzichini* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea in cena il sottomenu Antipasti",
+    "anzi no, chiamalo Stuzzichini"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18091,
+   "latencyMs": [
+    13.3,
+    14.5
+   ],
+   "recordedLlmMs": 3971,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-correzioni-06",
+   "family": "bv-categorie",
+   "menu": "qastruttura",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Pranzo* con il Sottomenu *Completo*.\n\nNuovo Menu *Pranzo*\nNuovo Sottomenu *Completo* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.",
+    "Ok, creo il Menu *Cena* con il Sottomenu *Completo* e tolgo *Completo* dal Menu *Pranzo*.\n\nNuovo Menu *Cena*\nNuovo Sottomenu *Completo* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea il menu Pranzo con il sottomenu Completo",
+    "no, anche completo nella cena, crea pure il menu Cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17569,
+   "latencyMs": [
+    8.4,
+    10.1
+   ],
+   "recordedLlmMs": 3966,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-categoria-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Dolci* nel Menu *Cena*.\n\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "aggiungi la categoria Dolci nel menu cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8809,
+   "latencyMs": [
+    15.1
+   ],
+   "recordedLlmMs": 1293,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-categoria-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Contorni* nel Menu Pranzo.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea una categoria Contorni nel pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8808,
+   "latencyMs": [
+    14.7
+   ],
+   "recordedLlmMs": 1534,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-categoria-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Amari* nel Menu Bevande.\n\nNuovo Sottomenu *Amari* nel Menu *Bevande*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "nel menu bevande metti la categoria Amari"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9116,
+   "latencyMs": [
+    10.1
+   ],
+   "recordedLlmMs": 1890,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-categoria-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Insalate* nel Menu Pranzo.\n\nNuovo Sottomenu *Insalate* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "crea la categoria Insalate in pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8807,
+   "latencyMs": [
+    12.7
+   ],
+   "recordedLlmMs": 2250,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-esistente-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu Bevande* c'è già. Vuoi aggiungere un *Sottomenu* dentro di lui?\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "crea il menu Bevande"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9305,
+   "latencyMs": [
+    8.3
+   ],
+   "recordedLlmMs": 5050,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-esistente-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu Pranzo* c'è già. Vuoi creare un altro Menu con un nome diverso?"
+   ],
+   "turns": [
+    "aggiungi un menu Pranzo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9041,
+   "latencyMs": [
+    10.2
+   ],
+   "recordedLlmMs": 2700,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-esistente-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl Menu *Cena* c'è già: vuoi aggiungere un Sottomenu dentro?"
+   ],
+   "turns": [
+    "crea il menu cena"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9051,
+   "latencyMs": [
+    12.4
+   ],
+   "recordedLlmMs": 3574,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-esistente-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+   ],
+   "turns": [
+    "nel menu cena aggiungi il sottomenu Pizze"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9588,
+   "latencyMs": [
+    9.5
+   ],
+   "recordedLlmMs": 4065,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-esistente-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn *Pranzo* c'è già il Sottomenu *Primi*. Ne creo un altro?"
+   ],
+   "turns": [
+    "crea in pranzo il sottomenu Primi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9175,
+   "latencyMs": [
+    14.1
+   ],
+   "recordedLlmMs": 3689,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-incompleta-01",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il nuovo *Sottomenu* e in quale Menu lo metto: Pranzo, Cena o Bevande?"
+   ],
+   "turns": [
+    "crea un sottomenu"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8785,
+   "latencyMs": [
+    10.7
+   ],
+   "recordedLlmMs": 2337,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-incompleta-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Menu vuoi creare il Sottomenu *Dolci*? Ho *Pranzo*, *Cena* e *Bevande*."
+   ],
+   "turns": [
+    "aggiungi il sottomenu Dolci"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17948,
+   "latencyMs": [
+    17.2
+   ],
+   "recordedLlmMs": 2881,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "note": "tre Menu: quale?",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-incompleta-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?"
+   ],
+   "turns": [
+    "crea un nuovo menu"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8740,
+   "latencyMs": [
+    11.5
+   ],
+   "recordedLlmMs": 1825,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-incompleta-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Menu?"
+   ],
+   "turns": [
+    "aggiungi un menu"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8737,
+   "latencyMs": [
+    11.6
+   ],
+   "recordedLlmMs": 1213,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-incompleta-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il *Sottomenu* da aggiungere nel *Menu cena*?"
+   ],
+   "turns": [
+    "nel menu cena aggiungi un sottomenu"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8926,
+   "latencyMs": [
+    11.8
+   ],
+   "recordedLlmMs": 2410,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-incompleta-06",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Sottomenu?"
+   ],
+   "turns": [
+    "aggiungi una categoria"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8999,
+   "latencyMs": [
+    10.6
+   ],
+   "recordedLlmMs": 2419,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-vocali-01",
+   "family": "bv-categorie",
+   "menu": "qastruttura",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLo chiamo *Pranzo*? Dimmi il nome esatto del Menu che vuoi creare."
+   ],
+   "turns": [
+    "🎤 eh crea… il menu… pranz"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8681,
+   "latencyMs": [
+    16.2
+   ],
+   "recordedLlmMs": 2439,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-vocali-02",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Dolci* nel Menu cena.\n\nNuovo Sottomenu *Dolci* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "🎤 allora senti eh mettimi nel… nella cena il sottomenu… dolci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9111,
+   "latencyMs": [
+    14.1
+   ],
+   "recordedLlmMs": 2636,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-vocali-03",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Menu *Aperitivo*.\n\nNuovo Menu *Aperitivo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "🎤 eh nuovo menu aperitiv… aperitivo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9043,
+   "latencyMs": [
+    11.8
+   ],
+   "recordedLlmMs": 2460,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-vocali-04",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Contorni* nel Menu *Pranzo*.\n\nNuovo Sottomenu *Contorni* nel Menu *Pranzo*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "🎤 crea… crea il sottomenu contorni nel pranz"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9011,
+   "latencyMs": [
+    15
+   ],
+   "recordedLlmMs": 2934,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  },
+  {
+   "id": "str-a-vocali-05",
+   "family": "bv-categorie",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCreo il Sottomenu *Insalate* nel Menu cena.\n\nNuovo Sottomenu *Insalate* nel Menu *Cena*\n\nMenu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti."
+   ],
+   "turns": [
+    "🎤 nel menu cena… eh… aggiungi anche… la categoria insalate"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8973,
+   "latencyMs": [
+    14.3
+   ],
+   "recordedLlmMs": 2639,
+   "usedLlm": true,
+   "source": "batteria struttura 21/10 (template)",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "str-m1",
+   "hash": "baf468b31f1d42fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 5990,
+   "usage": {
+    "input": 76,
+    "output": 261,
+    "cacheRead": 0,
+    "cacheWrite": 8302
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "262240c11b621eb8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2513,
+   "usage": {
+    "input": 249,
+    "output": 451,
+    "cacheRead": 8124,
+    "cacheWrite": 200
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "fd6c255077c1236f",
+   "source": "hit",
+   "status": 200,
+   "ms": 3614,
+   "usage": {
+    "input": 447,
+    "output": 618,
+    "cacheRead": 8124,
+    "cacheWrite": 258
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "0e805218a85c6480",
+   "source": "hit",
+   "status": 200,
+   "ms": 3185,
+   "usage": {
+    "input": 568,
+    "output": 602,
+    "cacheRead": 8382,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "b8e991dab6905797",
+   "source": "hit",
+   "status": 200,
+   "ms": 2664,
+   "usage": {
+    "input": 605,
+    "output": 593,
+    "cacheRead": 8382,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "dc3aaaab751532d5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2636,
+   "usage": {
+    "input": 640,
+    "output": 593,
+    "cacheRead": 8382,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "7af69bca8abe58b3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1671,
+   "usage": {
+    "input": 675,
+    "output": 204,
+    "cacheRead": 8382,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-m2",
+   "hash": "baf468b31f1d42fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 5990,
+   "usage": {
+    "input": 76,
+    "output": 261,
+    "cacheRead": 0,
+    "cacheWrite": 8302
+   }
+  },
+  {
+   "conv": "str-m2",
+   "hash": "262240c11b621eb8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2513,
+   "usage": {
+    "input": 249,
+    "output": 451,
+    "cacheRead": 8124,
+    "cacheWrite": 200
+   }
+  },
+  {
+   "conv": "str-m3",
+   "hash": "baf468b31f1d42fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 5990,
+   "usage": {
+    "input": 76,
+    "output": 261,
+    "cacheRead": 0,
+    "cacheWrite": 8302
+   }
+  },
+  {
+   "conv": "str-b1",
+   "hash": "100cad9993e3eca4",
+   "source": "hit",
+   "status": 200,
+   "ms": 4483,
+   "usage": {
+    "input": 54,
+    "output": 598,
+    "cacheRead": 8124,
+    "cacheWrite": 398
+   }
+  },
+  {
+   "conv": "str-b2",
+   "hash": "5cabc240fee3d9f8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1684,
+   "usage": {
+    "input": 49,
+    "output": 134,
+    "cacheRead": 8124,
+    "cacheWrite": 248
+   }
+  },
+  {
+   "conv": "str-b3",
+   "hash": "5cabc240fee3d9f8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1684,
+   "usage": {
+    "input": 49,
+    "output": 134,
+    "cacheRead": 8124,
+    "cacheWrite": 248
+   }
+  },
+  {
+   "conv": "str-b3",
+   "hash": "eb6be8475cbf355d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2269,
+   "usage": {
+    "input": 157,
+    "output": 349,
+    "cacheRead": 8372,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-b4",
+   "hash": "2452a6ee5a50dc86",
+   "source": "hit",
+   "status": 200,
+   "ms": 2944,
+   "usage": {
+    "input": 54,
+    "output": 508,
+    "cacheRead": 8124,
+    "cacheWrite": 376
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-01",
+   "hash": "a7924bcb5d2a983e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1566,
+   "usage": {
+    "input": 47,
+    "output": 181,
+    "cacheRead": 8124,
+    "cacheWrite": 439
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-02",
+   "hash": "bd27c7250cbeefcb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2709,
+   "usage": {
+    "input": 57,
+    "output": 177,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-03",
+   "hash": "a42ab47816bcbd3d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1296,
+   "usage": {
+    "input": 46,
+    "output": 177,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-04",
+   "hash": "798015829ceada9f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1257,
+   "usage": {
+    "input": 48,
+    "output": 179,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-05",
+   "hash": "635290d2ea74bd21",
+   "source": "hit",
+   "status": 200,
+   "ms": 1411,
+   "usage": {
+    "input": 56,
+    "output": 177,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-06",
+   "hash": "301fe33995efe056",
+   "source": "hit",
+   "status": 200,
+   "ms": 1939,
+   "usage": {
+    "input": 49,
+    "output": 182,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-menu-nuovo-07",
+   "hash": "525fa345e2c82fe1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1596,
+   "usage": {
+    "input": 54,
+    "output": 209,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-piu-menu-01",
+   "hash": "7f2db39f8134bac3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1834,
+   "usage": {
+    "input": 52,
+    "output": 285,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-piu-menu-02",
+   "hash": "9753231c9967f164",
+   "source": "hit",
+   "status": 200,
+   "ms": 2227,
+   "usage": {
+    "input": 63,
+    "output": 349,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-piu-menu-03",
+   "hash": "53f773e3f86a7fba",
+   "source": "hit",
+   "status": 200,
+   "ms": 1618,
+   "usage": {
+    "input": 56,
+    "output": 287,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-piu-menu-04",
+   "hash": "886fcbaefd455afe",
+   "source": "hit",
+   "status": 200,
+   "ms": 2428,
+   "usage": {
+    "input": 60,
+    "output": 351,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-piu-menu-05",
+   "hash": "d86da4beb76a4867",
+   "source": "hit",
+   "status": 200,
+   "ms": 3613,
+   "usage": {
+    "input": 75,
+    "output": 788,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sottomenu-01",
+   "hash": "359ae85883630deb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1578,
+   "usage": {
+    "input": 58,
+    "output": 194,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sottomenu-02",
+   "hash": "31a3652fe4a7ee1d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1609,
+   "usage": {
+    "input": 53,
+    "output": 196,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sottomenu-03",
+   "hash": "2ad3010723c7a7e8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1782,
+   "usage": {
+    "input": 57,
+    "output": 193,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sottomenu-04",
+   "hash": "dd0273eb3c8997e1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1496,
+   "usage": {
+    "input": 54,
+    "output": 191,
+    "cacheRead": 8124,
+    "cacheWrite": 650
+   }
+  },
+  {
+   "conv": "str-a-sottomenu-05",
+   "hash": "48925eb3e482e169",
+   "source": "hit",
+   "status": 200,
+   "ms": 1416,
+   "usage": {
+    "input": 49,
+    "output": 191,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sottomenu-06",
+   "hash": "8ad8166094c567f8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1722,
+   "usage": {
+    "input": 60,
+    "output": 279,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-due-menu-01",
+   "hash": "0ae04b9be60a99cc",
+   "source": "hit",
+   "status": 200,
+   "ms": 2231,
+   "usage": {
+    "input": 62,
+    "output": 424,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-due-menu-02",
+   "hash": "9b2a77d6aa0eb8b2",
+   "source": "hit",
+   "status": 200,
+   "ms": 2289,
+   "usage": {
+    "input": 51,
+    "output": 417,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-due-menu-03",
+   "hash": "997f2b62291be37c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2022,
+   "usage": {
+    "input": 59,
+    "output": 382,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-due-menu-04",
+   "hash": "74eabc9d8b8d2417",
+   "source": "hit",
+   "status": 200,
+   "ms": 3256,
+   "usage": {
+    "input": 55,
+    "output": 427,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sezione-01",
+   "hash": "6df10a97a48b9e8e",
+   "source": "hit",
+   "status": 200,
+   "ms": 3362,
+   "usage": {
+    "input": 62,
+    "output": 590,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sezione-02",
+   "hash": "75f4ff506c4113d9",
+   "source": "hit",
+   "status": 200,
+   "ms": 7829,
+   "usage": {
+    "input": 59,
+    "output": 472,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sezione-03",
+   "hash": "137f90042329fa42",
+   "source": "hit",
+   "status": 200,
+   "ms": 2749,
+   "usage": {
+    "input": 56,
+    "output": 545,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-sezione-04",
+   "hash": "7fe340133dfa9acd",
+   "source": "hit",
+   "status": 200,
+   "ms": 3351,
+   "usage": {
+    "input": 55,
+    "output": 577,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-01",
+   "hash": "b9f0d72d62145e2d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1345,
+   "usage": {
+    "input": 47,
+    "output": 181,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-02",
+   "hash": "1d285c2345711f22",
+   "source": "hit",
+   "status": 200,
+   "ms": 2403,
+   "usage": {
+    "input": 63,
+    "output": 378,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-03",
+   "hash": "502f52c1ac308b57",
+   "source": "hit",
+   "status": 200,
+   "ms": 1581,
+   "usage": {
+    "input": 59,
+    "output": 203,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-04",
+   "hash": "fc838868ff1a1989",
+   "source": "hit",
+   "status": 200,
+   "ms": 3359,
+   "usage": {
+    "input": 54,
+    "output": 181,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-05",
+   "hash": "5c5daafc3686db6f",
+   "source": "hit",
+   "status": 200,
+   "ms": 3153,
+   "usage": {
+    "input": 56,
+    "output": 450,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-06",
+   "hash": "fdcbb581a07293d3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1414,
+   "usage": {
+    "input": 62,
+    "output": 205,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-nomi-strani-07",
+   "hash": "2e279818245fc521",
+   "source": "hit",
+   "status": 200,
+   "ms": 1635,
+   "usage": {
+    "input": 52,
+    "output": 212,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-01",
+   "hash": "a7924bcb5d2a983e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1566,
+   "usage": {
+    "input": 47,
+    "output": 181,
+    "cacheRead": 8124,
+    "cacheWrite": 439
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-01",
+   "hash": "ed273574e5b62ec9",
+   "source": "hit",
+   "status": 200,
+   "ms": 3892,
+   "usage": {
+    "input": 171,
+    "output": 582,
+    "cacheRead": 8124,
+    "cacheWrite": 452
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-02",
+   "hash": "a7924bcb5d2a983e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1566,
+   "usage": {
+    "input": 47,
+    "output": 181,
+    "cacheRead": 8124,
+    "cacheWrite": 439
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-02",
+   "hash": "8b16f5acdacbbaa2",
+   "source": "hit",
+   "status": 200,
+   "ms": 3229,
+   "usage": {
+    "input": 172,
+    "output": 581,
+    "cacheRead": 8576,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-03",
+   "hash": "be1197cbdd422929",
+   "source": "hit",
+   "status": 200,
+   "ms": 1415,
+   "usage": {
+    "input": 57,
+    "output": 196,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-03",
+   "hash": "b55e31796ac6f4ab",
+   "source": "hit",
+   "status": 200,
+   "ms": 1586,
+   "usage": {
+    "input": 209,
+    "output": 194,
+    "cacheRead": 8124,
+    "cacheWrite": 453
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-04",
+   "hash": "be1197cbdd422929",
+   "source": "hit",
+   "status": 200,
+   "ms": 1415,
+   "usage": {
+    "input": 57,
+    "output": 196,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-04",
+   "hash": "24977d2f06bc3bca",
+   "source": "hit",
+   "status": 200,
+   "ms": 1694,
+   "usage": {
+    "input": 210,
+    "output": 194,
+    "cacheRead": 8577,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-05",
+   "hash": "57716fe2ecfe88bd",
+   "source": "hit",
+   "status": 200,
+   "ms": 1980,
+   "usage": {
+    "input": 53,
+    "output": 261,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-05",
+   "hash": "000ae472f32b99c1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1565,
+   "usage": {
+    "input": 198,
+    "output": 281,
+    "cacheRead": 8124,
+    "cacheWrite": 461
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-06",
+   "hash": "57716fe2ecfe88bd",
+   "source": "hit",
+   "status": 200,
+   "ms": 1980,
+   "usage": {
+    "input": 53,
+    "output": 261,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-06",
+   "hash": "3065c5a43e2b9fe8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1313,
+   "usage": {
+    "input": 199,
+    "output": 181,
+    "cacheRead": 8585,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-06",
+   "hash": "bb597b0ff2bca1ec",
+   "source": "hit",
+   "status": 200,
+   "ms": 1615,
+   "usage": {
+    "input": 582,
+    "output": 283,
+    "cacheRead": 8585,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-07",
+   "hash": "31a3652fe4a7ee1d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1609,
+   "usage": {
+    "input": 53,
+    "output": 196,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-07",
+   "hash": "1ca0bf1990b6215a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1595,
+   "usage": {
+    "input": 207,
+    "output": 198,
+    "cacheRead": 8124,
+    "cacheWrite": 455
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-07",
+   "hash": "7d78acf6638b4a7d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2360,
+   "usage": {
+    "input": 607,
+    "output": 231,
+    "cacheRead": 8579,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-08",
+   "hash": "31a3652fe4a7ee1d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1609,
+   "usage": {
+    "input": 53,
+    "output": 196,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-08",
+   "hash": "3b7791a2377b2084",
+   "source": "hit",
+   "status": 200,
+   "ms": 1757,
+   "usage": {
+    "input": 204,
+    "output": 203,
+    "cacheRead": 8579,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-01",
+   "hash": "118ff25539d44fd7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2710,
+   "usage": {
+    "input": 56,
+    "output": 368,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-01",
+   "hash": "c5501fad214aef4f",
+   "source": "hit",
+   "status": 200,
+   "ms": 3155,
+   "usage": {
+    "input": 213,
+    "output": 277,
+    "cacheRead": 8124,
+    "cacheWrite": 455
+   }
+  },
+  {
+   "conv": "str-a-correzioni-02",
+   "hash": "be31d2f21efd8860",
+   "source": "hit",
+   "status": 200,
+   "ms": 1617,
+   "usage": {
+    "input": 58,
+    "output": 277,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-02",
+   "hash": "fd3b7e5ad7f935fe",
+   "source": "hit",
+   "status": 200,
+   "ms": 2021,
+   "usage": {
+    "input": 236,
+    "output": 300,
+    "cacheRead": 8124,
+    "cacheWrite": 686
+   }
+  },
+  {
+   "conv": "str-a-correzioni-03",
+   "hash": "2044dbf108372332",
+   "source": "hit",
+   "status": 200,
+   "ms": 1351,
+   "usage": {
+    "input": 45,
+    "output": 177,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-03",
+   "hash": "eaa774f18c20a308",
+   "source": "hit",
+   "status": 200,
+   "ms": 1772,
+   "usage": {
+    "input": 174,
+    "output": 271,
+    "cacheRead": 8124,
+    "cacheWrite": 450
+   }
+  },
+  {
+   "conv": "str-a-correzioni-04",
+   "hash": "ba5cb75722fc3d12",
+   "source": "hit",
+   "status": 200,
+   "ms": 1517,
+   "usage": {
+    "input": 47,
+    "output": 193,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-04",
+   "hash": "cc44589905dc220a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2644,
+   "usage": {
+    "input": 201,
+    "output": 368,
+    "cacheRead": 8579,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-05",
+   "hash": "867800108164239f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1468,
+   "usage": {
+    "input": 52,
+    "output": 191,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-05",
+   "hash": "542cdb59da33cf4d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2503,
+   "usage": {
+    "input": 213,
+    "output": 283,
+    "cacheRead": 8124,
+    "cacheWrite": 454
+   }
+  },
+  {
+   "conv": "str-a-correzioni-06",
+   "hash": "13607f3666b0c625",
+   "source": "hit",
+   "status": 200,
+   "ms": 1823,
+   "usage": {
+    "input": 56,
+    "output": 269,
+    "cacheRead": 8302,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-06",
+   "hash": "2650789f70b5aea2",
+   "source": "hit",
+   "status": 200,
+   "ms": 2143,
+   "usage": {
+    "input": 238,
+    "output": 366,
+    "cacheRead": 8124,
+    "cacheWrite": 214
+   }
+  },
+  {
+   "conv": "str-a-categoria-01",
+   "hash": "54983f308c32453c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1293,
+   "usage": {
+    "input": 55,
+    "output": 191,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-categoria-02",
+   "hash": "63edfbb20f814fd0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1534,
+   "usage": {
+    "input": 52,
+    "output": 193,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-categoria-03",
+   "hash": "558e465dbcccafec",
+   "source": "hit",
+   "status": 200,
+   "ms": 1890,
+   "usage": {
+    "input": 52,
+    "output": 290,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-categoria-04",
+   "hash": "a7ae1f7e92a96415",
+   "source": "hit",
+   "status": 200,
+   "ms": 2250,
+   "usage": {
+    "input": 51,
+    "output": 193,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-esistente-01",
+   "hash": "096e0c8bafee5d3c",
+   "source": "hit",
+   "status": 200,
+   "ms": 5050,
+   "usage": {
+    "input": 45,
+    "output": 486,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-esistente-02",
+   "hash": "76a97348f32708c3",
+   "source": "hit",
+   "status": 200,
+   "ms": 2700,
+   "usage": {
+    "input": 49,
+    "output": 429,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-esistente-03",
+   "hash": "68fd56c89221490b",
+   "source": "hit",
+   "status": 200,
+   "ms": 3574,
+   "usage": {
+    "input": 43,
+    "output": 445,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-esistente-04",
+   "hash": "5b40a7f5a5db924a",
+   "source": "hit",
+   "status": 200,
+   "ms": 4065,
+   "usage": {
+    "input": 57,
+    "output": 757,
+    "cacheRead": 8774,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-esistente-05",
+   "hash": "3377633fe542e1c7",
+   "source": "hit",
+   "status": 200,
+   "ms": 3689,
+   "usage": {
+    "input": 52,
+    "output": 560,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-01",
+   "hash": "99692a20ffb06ff5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2337,
+   "usage": {
+    "input": 44,
+    "output": 178,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-02",
+   "hash": "2bd428637b03805d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1451,
+   "usage": {
+    "input": 51,
+    "output": 179,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-02",
+   "hash": "37280a46c5da809d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1430,
+   "usage": {
+    "input": 401,
+    "output": 191,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-03",
+   "hash": "e39d1ccb9d7b3471",
+   "source": "hit",
+   "status": 200,
+   "ms": 1825,
+   "usage": {
+    "input": 45,
+    "output": 132,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-04",
+   "hash": "3b99cf79034ca623",
+   "source": "hit",
+   "status": 200,
+   "ms": 1213,
+   "usage": {
+    "input": 44,
+    "output": 130,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-05",
+   "hash": "a7a00fb193e6f6ed",
+   "source": "hit",
+   "status": 200,
+   "ms": 2410,
+   "usage": {
+    "input": 53,
+    "output": 310,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-incompleta-06",
+   "hash": "5c1dc33b49827989",
+   "source": "hit",
+   "status": 200,
+   "ms": 2419,
+   "usage": {
+    "input": 45,
+    "output": 391,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-vocali-01",
+   "hash": "1ce5955d3506e06f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2439,
+   "usage": {
+    "input": 48,
+    "output": 331,
+    "cacheRead": 8302,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-vocali-02",
+   "hash": "438bbc17d720adcb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2636,
+   "usage": {
+    "input": 63,
+    "output": 485,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-vocali-03",
+   "hash": "4061ae4046680d45",
+   "source": "hit",
+   "status": 200,
+   "ms": 2460,
+   "usage": {
+    "input": 55,
+    "output": 425,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-vocali-04",
+   "hash": "fca7b4570e40d23e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2934,
+   "usage": {
+    "input": 55,
+    "output": 393,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-vocali-05",
+   "hash": "bc358378418937de",
+   "source": "hit",
+   "status": 200,
+   "ms": 2639,
+   "usage": {
+    "input": 61,
+    "output": 349,
+    "cacheRead": 8563,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}
