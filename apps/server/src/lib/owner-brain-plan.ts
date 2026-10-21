@@ -645,7 +645,7 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   if(sameSection(menuKey(menu.name),plain(name))&&!/\b(?:sottomenu|categori\w*|sezion\w*)\b/.test(plain(input.message))){notes.push('sottomenu_come_menu:'+name);continue}
   const dup=input.sections.some(s=>s.menu===menu.name&&sameSection(s.name,name))||actions.some(x=>x.kind==='create_section'&&x.menuId===menu.id&&sameSection(x.name,name))
   if(dup){notes.push('sottomenu_esistente:'+name);continue}
-  actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:menu.id,menuName:menu.name,hidden:!menu.fresh} as MenuAction)}
+  actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:menu.id,menuName:menu.name,hidden:!menu.fresh&&(menu as {active?:boolean}).active!==false} as MenuAction)}
  // Menu a prezzo fisso (21/10): opzioni di prezzo, tipo di prezzo, sostituzione giornaliera dei piatti di un sottomenu.
  // Banco prezzofisso 21/10 (pf-ambigua-04/05): «il completo a 17» → «pranzo o cena?» → «a cena»: il prezzo detto nella richiesta a cui
  // il titolare sta rispondendo vale (domanda aperta del bot, entro 10 minuti). Mai numeri presi dalle risposte del bot.

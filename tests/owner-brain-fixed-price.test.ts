@@ -161,6 +161,15 @@ describe('banco finale — frase detta vs nome scelto dal modello nella sostituz
  })
 })
 
+describe('live QA — sottomenu in un Menu nascosto',()=>{
+ it('il sottomenu creato in un Menu nascosto non è nascosto (lo governa il Menu); in un Menu visibile resta nascosto',()=>{
+  const base=SI({message:'nel menu del giorno crea il sottomenu Dolci'}) as any
+  const mk=(active:boolean)=>({...base,menus:[...(base.menus??[]),{id:'99999999-9999-4999-8999-999999999999',name:'Menu del giorno',sections:0,active,secs:[]}]})
+  const r1=structureActions([A('create_section',{menu:'Menu del giorno',name:'Dolci'})],mk(false));expect(r1.ask).toBeNull();expect(r1.actions[0]).toMatchObject({kind:'create_section',hidden:false})
+  const r2=structureActions([A('create_section',{menu:'Menu del giorno',name:'Dolci'})],mk(true));expect(r2.actions[0]).toMatchObject({kind:'create_section',hidden:true})
+ })
+})
+
 describe('difetto 3 — piatto nuovo in un menu fisso: creato a 0 €, senza domande',()=>{
  it('validateMenuPlan: senza prezzo nel sottomenu di un Menu fisso → 0 € (alla carta il prezzo resta obbligatorio)',()=>{
   const p=validateMenuPlan({intent:'change',actions:[{action:'create_item',section_id:SEC.prPrimi,name:'Lasagna',price:null}]},vRefs,{sections:vSections,message:'aggiungi la lasagna ai primi del pranzo',fixedSectionIds:fixedIds})
