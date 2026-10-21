@@ -21,7 +21,8 @@ function mwSalesState(item, today = mwSalesToday()) {
   return { promo, lastPortions: !!item.scarcity?.lastPortions && item.available !== false, onlyToday: !!item.scarcity?.onlyToday && item.scarcity.onlyToday === today };
 }
 
-function MenuWorkspaceSales({ item, onChange, disabled }) {
+// 21/10: nei Menu a prezzo fisso i piatti non hanno prezzo → il prezzo promo resta nascosto come il prezzo normale (il dato salvato resta).
+function MenuWorkspaceSales({ item, onChange, disabled, fixed = false }) {
   const today = mwSalesToday(), full = Number(item.price);
   const shown = v => v == null ? '' : String(v).replace('.', ',');
   const [text, setText] = useState(shown(item.promo?.price));
@@ -49,20 +50,21 @@ function MenuWorkspaceSales({ item, onChange, disabled }) {
   const message = invalid ? (full > 0 ? `Il prezzo promo deve essere più basso del prezzo pieno (${mwSalesEuro(full)}) e maggiore di zero: così non viene salvato.` : 'Imposta prima il prezzo pieno.')
     : value !== null && String(item.priceDisplay || '').trim() ? 'Con un «Prezzo mostrato» a testo la promo non si vede ai clienti.'
     : until && until < today ? `Promo scaduta il ${mwSalesDate(until)}: non è più visibile.` : '';
-  return <section className="mw-sales" aria-label="Promo ed etichette">
-    <div className="mw-fields">
+  return <section className="mw-sales" aria-label={fixed ? "Etichette" : "Promo ed etichette"}>
+    {!fixed && <><div className="mw-fields">
       <label className="mw-field"><span>Prezzo promo</span><input inputMode="decimal" placeholder="Nessuna promo" value={text} disabled={disabled} aria-invalid={invalid || undefined} aria-describedby={message ? 'mw-sales-note-' + item.id : undefined} onChange={e => typePromo(e.target.value)} /></label>
       <label className="mw-field"><span>Fine promo <small>(facoltativa)</small></span><input type="date" min={today} value={until} disabled={disabled || !item.promo} onChange={e => item.promo && writePromo(Number(item.promo.price), e.target.value)} /></label>
     </div>
-    <p id={'mw-sales-note-' + item.id} className={'mw-sales-note' + (message ? ' is-visible' : '')} role={message ? 'status' : undefined} aria-live="polite">{message || (item.promo ? (until ? `Visibile fino a ${mwSalesDate(until)} compreso (scade alle 6:00 del giorno dopo).` : 'Resta finché non la togli.') : '')}</p>
+    <p id={'mw-sales-note-' + item.id} className={'mw-sales-note' + (message ? ' is-visible' : '')} role={message ? 'status' : undefined} aria-live="polite">{message || (item.promo ? (until ? `Visibile fino a ${mwSalesDate(until)} compreso (scade alle 6:00 del giorno dopo).` : 'Resta finché non la togli.') : '')}</p></>}
     <label className="mw-check"><input type="checkbox" disabled={disabled || item.available === false} checked={state.lastPortions} onChange={e => setScarcity({ lastPortions: e.target.checked })} />Ultime porzioni{item.available === false && <small className="mw-sales-hint">piatto esaurito</small>}</label>
     <label className="mw-check"><input type="checkbox" disabled={disabled} checked={state.onlyToday} onChange={e => setScarcity({ onlyToday: e.target.checked ? today : null })} />Solo oggi{state.onlyToday && <small className="mw-sales-hint">sparisce domani alle 6:00</small>}</label>
   </section>;
 }
 
 /** Segni discreti sulla riga del piatto: solo ciò che il cliente vede adesso. */
-function MenuWorkspaceSalesMarks({ item }) {
+function MenuWorkspaceSalesMarks({ item, fixed = false }) {
   const s = mwSalesState(item);
+  if (fixed) s.promo = null;
   if (!s.promo && !s.lastPortions && !s.onlyToday) return null;
   return <span className="mw-sales-marks">{s.promo && <span className="mw-sales-mark" title={`Prezzo pieno ${mwSalesEuro(Number(item.price))}`}>Promo {mwSalesEuro(Number(s.promo.price))}</span>}{s.lastPortions && <span className="mw-sales-mark">Ultime porzioni</span>}{s.onlyToday && <span className="mw-sales-mark">Solo oggi</span>}</span>;
 }
