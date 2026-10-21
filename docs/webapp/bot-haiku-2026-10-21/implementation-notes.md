@@ -36,3 +36,4 @@
 34. Giro visibilità: più di 3 giri (v1–v10). v1 inutile per un errore mio (set_menu_visible/set_section_visible fuori dall'enum dello schema), v2 interrotto dalla rete; poi il banco oscillava 81–90% (varianza dopo il cambio di prompt): chiuso con regole deterministiche del server. Gate verde al v10.
 35. Rollback della funzione di lettura: il pacchetto online è eszip (non ridistribuibile tale e quale) → copia di rollback = build della lettura dal commit 800016a.
 36. Dashboard: crea i Menu col suo codice client (visibili subito); la regola «nascono nascosti» vale per il bot.
+37. 21/10 13:20: Manuel sospende «menu a prezzo fisso» e «PDF multipli». Contratto dati già committato (242a2da, additivo, non usato); il lavoro a metà su wip/menu-prezzo-fisso (2d1112a); sottoagenti fermati (dashboard e banco non avevano scritto codice).

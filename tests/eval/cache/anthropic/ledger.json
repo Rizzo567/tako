@@ -3170,6 +3170,153 @@
    "usd": 0,
    "usdEquivalent": 0.006849,
    "finished": true
+  },
+  {
+   "id": "2026-10-21T11:08:49.699Z-victoria-replay",
+   "at": "2026-10-21T11:08:51.340Z",
+   "set": "victoria",
+   "mode": "replay",
+   "calls": 11,
+   "real": 0,
+   "hits": 11,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 949,
+    "output": 3827,
+    "cacheRead": 99080,
+    "cacheWrite": 2473
+   },
+   "usd": 0,
+   "usdEquivalent": 0.003308,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T11:08:52.546Z-banco-replay",
+   "at": "2026-10-21T11:08:54.727Z",
+   "set": "banco",
+   "mode": "replay",
+   "calls": 149,
+   "real": 0,
+   "hits": 0,
+   "misses": 149,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T11:08:55.818Z-parlato-replay",
+   "at": "2026-10-21T11:08:57.200Z",
+   "set": "parlato",
+   "mode": "replay",
+   "calls": 30,
+   "real": 0,
+   "hits": 0,
+   "misses": 30,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T11:08:58.518Z-playground-replay",
+   "at": "2026-10-21T11:09:00.700Z",
+   "set": "playground",
+   "mode": "replay",
+   "calls": 20,
+   "real": 0,
+   "hits": 0,
+   "misses": 20,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T11:09:02.148Z-struttura-replay",
+   "at": "2026-10-21T11:09:04.841Z",
+   "set": "struttura",
+   "mode": "replay",
+   "calls": 119,
+   "real": 0,
+   "hits": 0,
+   "misses": 119,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T11:09:06.087Z-visibilita-replay",
+   "at": "2026-10-21T11:09:07.806Z",
+   "set": "visibilita",
+   "mode": "replay",
+   "calls": 23,
+   "real": 0,
+   "hits": 0,
+   "misses": 23,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T11:09:09.105Z-adv150-replay",
+   "at": "2026-10-21T11:09:12.665Z",
+   "set": "adv150",
+   "mode": "replay",
+   "calls": 195,
+   "real": 0,
+   "hits": 1,
+   "misses": 194,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 372,
+    "output": 365,
+    "cacheRead": 0,
+    "cacheWrite": 858
+   },
+   "usd": 0,
+   "usdEquivalent": 0.000327,
+   "finished": true
   }
  ],
  "totalUsd": 0.95656
