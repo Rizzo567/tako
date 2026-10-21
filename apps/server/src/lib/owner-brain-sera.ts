@@ -185,7 +185,13 @@ export function specificQuestion(text:string,candidates:MenuRef[]):string{
  const said=text.replace(/[🎤]/gu,'').replace(/\s+/g,' ').trim().slice(0,90)
  if(candidates.length>=2)return 'Per «'+said+'» a quale piatto ti riferisci? Rispondi col numero.'
  if(candidates.length===1)return 'Per «'+said+'» intendi *'+candidates[0]!.name+'*? Rispondi sì oppure dimmi il nome giusto.'
- return 'Per «'+said+'» mi manca un dettaglio: qual è il nome esatto del piatto (o del sottomenu) e cosa devo cambiare? Per esempio «la carbonara a 12».'}
+ // notte 22/10 (cieco b1, punto 10): il messaggio generico suonava robotico e ripeteva la frase del titolare. Domanda breve sull'appiglio che c'è.
+ const sp=singlePrice(text),p=plain(text)
+ if(sp!==null&&sp>0)return 'A quale piatto metto *'+sp.toFixed(2).replace('.',',')+' €*? Scrivimi il nome, per esempio «la carbonara a '+String(sp).replace('.',',')+'».'
+ if(/\b(?:alz\w*|aument\w*|abbass\w*|diminu\w*|scont\w*)\b/.test(p)&&!/\d/.test(p))return 'Di quanto? Scrivimi la cifra, per esempio «'+said.replace(/[.!?]+$/,'')+' di 1 euro».'
+ if(/\b(?:finit\w*|esaurit\w*)\b/.test(p))return 'Quale piatto è finito? Scrivimi il nome, per esempio «la carbonara è finita».'
+ if(/\b(?:nascond\w*|togli\w*|lev[ai]\w*)\b/.test(p))return 'Quale piatto tolgo dal menu? Scrivimi il nome, per esempio «togli la carbonara».'
+ return 'Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».'}
 
 // ---------- prezzi detti ----------
 /** Un solo prezzo detto nel messaggio (cifre: «a 10», «12,50»; altrimenti a parole). null = nessuno o più di uno. */

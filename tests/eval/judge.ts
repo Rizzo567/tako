@@ -5,7 +5,7 @@ import type {BotRun,Change,Conversation,EvalItem,EvalMenu,Fail,Turn,Verdict} fro
 
 export const plainT=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
 type Flat=EvalItem&{section:string}
-export const flat=(w:EvalMenu):Map<string,Flat>=>new Map(w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>[i.id,{...i,section:s.name}] as [string,Flat]))))
+export const flat=(w:EvalMenu):Map<string,Flat>=>new Map(w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>[i.id,{...i,section:s.name,secId:s.id}] as unknown as [string,Flat]))))
 const num=(n:number)=>String(Math.round(n*100)/100)
 
 /** Ogni differenza tra due menu diventa una chiave confrontabile con le attese. */
@@ -15,7 +15,8 @@ export function diff(before:EvalMenu,after:EvalMenu):string[]{
   // R5.1 (nota 63): un piatto nuovo messo anche in evidenza nella stessa conversazione («aggiungi X… mettila in evidenza»)
   if(!y){out.push(`create|${plainT(x.name)}|${num(x.price)}|${plainT(x.section)}`);if(x.featured)out.push(`featured|${plainT(x.name)}|true`);continue}
   if(x.name!==y.name)out.push(`rename|${y.name}|${x.name}`)
-  if(x.section!==y.section)out.push(`move|${y.name}|${x.section}`)
+  // notte 22/10: un sottomenu RINOMINATO (stesso id) non sposta i suoi piatti (cieco b1: «rinomina Bibite in Analcolici» letto come move).
+  if(x.section!==y.section&&(x as any).secId!==(y as any).secId)out.push(`move|${y.name}|${x.section}`)
   if(x.price!==y.price)out.push(`price|${y.name}|${num(x.price)}`)
   if((x.available!==false)!==(y.available!==false))out.push(`available|${y.name}|${x.available!==false}`)
   if(!!x.hidden!==!!y.hidden)out.push(`hidden|${y.name}|${!!x.hidden}`)

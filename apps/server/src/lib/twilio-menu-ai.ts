@@ -21,7 +21,8 @@ export const plain=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLower
 const verbatim=(text:string,message:string)=>{const t=plain(text);return !!t&&(' '+plain(message)+' ').includes(' '+t+' ')}
 // Creazioni solo con richiesta esplicita nel messaggio: «la lasagna costa 12» non crea mai un piatto.
 // 21/10 notte (adv-sera): «metti la bufalina tra le pizze a 10» = aggiunta (un nome già nel menu lo ferma il controllo dei doppioni).
-export const wantsCreate=(m:string)=>/\b(aggiung\w*|inserisc\w*|inserire|nuov[oa]|crea\w*)\b/.test(plain(m))||/\bmett\w*\b.*\b(?:tra|fra|nei|nelle|negli|nel|nella|in)\s+(?:i|le|gli|il|la)?\s*\w+/.test(plain(m))||wantsSpecial(m)
+// notte 22/10 (cieco b1 «mettici tiramisù a 6»): «mettici / aggiungici / mettili lì» = mettere nel sottomenu appena detto (piatti nuovi).
+export const wantsCreate=(m:string)=>/\b(aggiung\w*|inserisc\w*|inserire|nuov[oa]|crea\w*|mettici|mettiamoci|metteteci|mettilo li|mettili li|mettile li|mettila li)\b/.test(plain(m))||/\bmett\w*\b.*\b(?:tra|fra|nei|nelle|negli|nel|nella|in)\s+(?:i|le|gli|il|la)?\s*\w+/.test(plain(m))||wantsSpecial(m)
 export const wantsSpecial=(m:string)=>/\b(del giorno|di oggi)\b/.test(plain(m))
 // Se il modello non indica una capacità valida, parole chiave fisse lato server scelgono l'alternativa giusta.
 const hints:[RegExp,string][]=[[/allergen/,'allergens'],[/elimin|cancell|rimuov|toglier\w* per sempre/,'delete'],[/rinomin|cambi\w* (il )?nome/,'rename'],[/tutti i (prezzi|piatti)|tutto il menu|in blocco|percent/,'bulk'],[/grafic|color|font|impagin|logo|sfondo/,'graphics'],[/categori|sezion/,'categories'],[/tradu|ingles|lingu/,'translations'],[/\bfoto|immagin/,'photo'],[/vocal|audio/,'voice']]
@@ -78,7 +79,8 @@ const RW=RW0
 // «un euro e mezzo», «1 euro e 50», «un euro e cinquanta», «1,50» → «1.50»: una differenza coi centesimi resta intera.
 const RWD:Record<string,number>={mezzo:50,dieci:10,venti:20,trenta:30,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90}
 export const relNormText=(t:string)=>relNorm(t)
-const relNorm=(t:string)=>t.replace(/\b(un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\b(?=\s+(?:euro\s+e\s+(?:mezzo|\d{1,2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b|e\s+mezzo\b))/g,w=>String(RW[w]))
+// notte 22/10 (cieco b1 «alzalo de un euro»): «de» dialettale = «di» davanti a una quantità.
+const relNorm=(t:string)=>t.replace(/\bde (?=(?:un|uno|una|due|tre|quattro|cinque|mezzo|\d))/g,'di ').replace(/\b(un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\b(?=\s+(?:euro\s+e\s+(?:mezzo|\d{1,2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b|e\s+mezzo\b))/g,w=>String(RW[w]))
  .replace(/\b(\d+)\s+(?:euro\s+)?e\s+(mezzo|\d{2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b(?!\s*(?:euro\s+)?(?:alla|al|ai|a\s)?\s*(?:il|la|lo|l|i|gli|le)?\s*\w+\s+a\s+\d)/g,(_m,a:string,b:string)=>`${a}.${String(/^\d/.test(b)?Number(b):RWD[b]).padStart(2,'0')} euro`)
  .replace(/(\d),(\d)/g,'$1.$2')
 export function relativeDelta(message:string):{delta:number,text:string}|null{const m0=relNorm(message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''))

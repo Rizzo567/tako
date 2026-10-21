@@ -177,6 +177,19 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('fix',R,[T('elimina il tiramisù'),T('sì e anche la panna cotta'),T('sì')],[DEL('Tiramisù'),DEL('Panna cotta')],{fam:'bv-elimina' as Family,note:'sì in testa conferma; la parte nuova chiede il suo sì'}),
  cc('fix',QS,[Q('quante paste ho nei primi?')],[],{says:[nots(1,/pasta al rag|pasta al sugo|lasagna e|gnocchi|menu cena/i)],note:'QA v143: lettura dei Primi = solo i piatti VERI dei Primi (la parmigiana, pasta al pesto, pasta carbonara, riso giallo; 2 nascoste), mai piatti di altri sottomenu o Menu'}),
  cc('fix',QS,[T('la carbonara a dieci e mezzo')],[P('pasta carbonara',10.5)],{says:[nots(1,/prezzo fisso|menu del giorno/i)],note:'QA v143: omonimo nel Menu del giorno (nascosto, prezzo fisso) e «pasta carbonara» alla carta visibile → quella alla carta (o domanda), mai solo quella nascosta'}),
+ // ---- casi permanenti dai bug del set cieco b1 (scritti dall'agente codice dalla descrizione astratta, 22/10 notte) ----
+ cc('b1','victoria4',[T('aumenta i secondi di un euro'),T('tutti e due'),T('ok')],[P('Cotoletta alla milanese',15),P('Tagliata rucola e grana',21),P('Filetto al pepe verde',25),P('Branzino al forno',23)],{note:'Secondi in due Menu → «tutti e due» → (riepilogo) → ok: applicato, mai OK ignorato'}),
+ cc('b1','strutt',[T('nella cena dentro le pizze crea la sezione Pizze rosse')],[],{struct:[{after:1,menus:[{name:'Cena',sub:[{parent:'Pizze',name:'Pizze rosse'}]}]}],note:'«sezione» + «dentro le pizze» = Sezione dentro il sottomenu Pizze, mai un sottomenu nuovo'} as any),
+ cc('b1',R,[T('aggiungi il vitello tonnato'),T('14')],[],{alt:[[C('vitello tonnato',14,'antipasti')],[C('vitello tonnato',14,'secondi')]],says:[nots(2,/in quale sottomenu lo metto e a che prezzo/i)],note:'risposta parziale (solo prezzo): si tiene, si chiede solo il sottomenu (mai la stessa domanda)'}),
+ cc('b1',R,[Q("quanto sta l'abbacchio?"),T('alzalo de un euro')],[P('Abbacchio scottadito',19)],{note:'pronome attaccato a un verbo qualsiasi dopo una domanda sul piatto'}),
+ cc('b1','strutt',[T('nel menu cena aggiungi il sottomenu Dolci'),T('mettici tiramisù a 6 e panna cotta a 5')],[C('tiramisù',6,'dolci'),C('panna cotta',5,'dolci')],{note:'«mettici» = nel sottomenu appena creato'}),
+ cc('b1',PZ,[T('le frittatine so finite tutte e due')],[AV('Frittatina di pasta'),AV('Frittatina di patate')],{noQuestion:true,note:'«tutte e due» con esattamente 2 candidati = entrambi'}),
+ cc('b1',B,[T('spritz 6,5 tutti e due')],[P('Spritz Aperol',6.5)],{noQuestion:true,note:'«tutti e due»: Campari è già 6,50 → cambia solo Aperol, niente domanda'}),
+ cc('b1',R,[T('aggiungi patatine fritte a 4'),T('sì')],[],{alt:[[C('patatine fritte',4,'contorni')]],says:[nots(2,/carbonara a 12/i)],note:'«sì» a una domanda a scelta: mai il messaggio generico con l\'esempio della carbonara'}),
+ cc('b1',R,[T('la carbonara a 12,50'),D('Carbonara','price',13),T('mettila a 13 e 50')],[P('Carbonara',13.5)],{note:'dopo la dashboard: «13 e 50» = 13,50'}),
+ cc('b1',R,[T('alza i contorni di un euro')],[P('Cicoria ripassata',6),P('Puntarelle',7),P('Patate al forno',5.5)],{noQuestion:true,note:'sottomenu intero chiaro, ≤3 piatti, stesso aumento: applicato subito'}),
+ cc('b1','victoria4',[T('rinomina il sottomenu Bibite in Analcolici')],[],{struct:[{after:1,menus:[{name:'Bevande',sections:['Analcolici','Birre','Vini']}]}],note:'rinomina di un sottomenu: i piatti NON si spostano (il giudice ora confronta l\'id del sottomenu)'}),
+ cc('b1',R,[T('nascondi tutti i dolci'),T('sì')],[HI('Tiramisù'),HI('Maritozzo con la panna'),HI('Crostata di visciole'),HI('Panna cotta')],{note:'decisione 22/10 notte: «tutti i dolci» = i piatti uno per uno (riepilogo col sì), come i set precedenti'}),
  cc('vietato',QS,[T('cancella il menu del giorno')],[],{fam:'bv-fuori' as Family,note:'Menu nascosto con 7 piatti: mai cancellarlo senza un sì'}),
 
  // ================= 9. MENU / SOTTOMENU / PIATTI NASCOSTI citati =================

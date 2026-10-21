@@ -795,6 +795,12 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    sessOut=s2
    if(!sessionMissing(s2,sections).length)out={kind:'change',actions:s2.acts}
    else{const dq=cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run)})??'';out={kind:'ask',ids:[],actions:[]};serverQ=/\?/.test(dq)&&!/\b(?:fatto|ho (?:messo|aggiornato|sostituito))\b/i.test(dq)?dq:sessionAsk(s2,sections)}}}
+ // notte 22/10 (cieco b1 «le frittatine so finite tutte e due», «spritz 6,5 tutti e due»): «tutti e due / entrambi» con ESATTAMENTE due
+ // candidati = l'azione su entrambi (prima una domanda inutile). L'azione la legge il server (finito / nascondi / un prezzo detto).
+ if(engine==='haiku'&&!pre&&!sessNow&&out.kind==='ask'&&!out.hold&&!out.twins?.length&&/\b(?:tutt[ie] e (?:due|2)|entramb[ie]|ambedue)\b/.test(plain(text))){const ids2=[...new Set(out.ids)].filter(id=>refs.some(r=>r.id===id))
+  if(ids2.length===2){const p2=plain(text),sp=singlePrice(text),fin=/\b(?:finit\w*|esaurit\w*|terminat\w*|fernut\w*)\b/.test(p2)&&!/\b(?:non|nun)\s+(?:e|sono|so)?\s*finit/.test(p2),hide=/\b(?:nascond\w*|togli\w*|lev[ai]\w*)\b/.test(p2)
+   const acts=fin?ids2.map(id=>({kind:'available',id,value:false}) as MenuAction):hide?ids2.map(id=>({kind:'hidden',id,value:true}) as MenuAction):sp!==null&&sp>0?ids2.map(id=>({kind:'price',id,price:sp}) as MenuAction):[]
+   if(acts.length){out={kind:'change',actions:acts};noDraft=true}}}
  if(engine==='haiku'&&!pre&&!sessNow){
   const p0=plain(text),wantAdd=/\b(?:aggiung\w*|inserisc\w*|nuov[oa]|metti(?:mi|ci)?)\b/.test(p0)
   const named=namedMenus(text,base.menus).filter(m=>m.pricing!=='fisso'),M=named.length===1?named[0]!:null
@@ -825,7 +831,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // notte 22/10 (n-gruppo-pizze-due-menu): risposta alla domanda del server «Le Pizze ci sono in più Menu: in quale?» → il comando di
   // gruppo di prima si applica nel Menu detto (prima il modello rifaceva un riepilogo da confermare con OK).
   {const src=pend?.kind==='ask'&&/ci sono in più Menu: in quale\?/.test(pend.ask.question??'')&&typeof pend.ask.source==='string'?pend.ask.source:'',nm=src?namedMenus(text,base.menus):[]
-   if(src&&nm.length===1&&!CMD_RE_NEW.test(p0)){const g=seraGroup(src+' nel menu '+nm[0]!.name,refs,sections,fixedSecIds,{menus:base.menus});if(g&&'actions' in g){out={kind:'change',actions:g.actions};answered=true}}}
+   if(src&&nm.length===1&&!CMD_RE_NEW.test(p0)){const g=seraGroup(src+' nel menu '+nm[0]!.name,refs,sections,fixedSecIds,{menus:base.menus});if(g&&'actions' in g){out={kind:'change',actions:g.actions};answered=true}}
+   // notte 22/10 (cieco b1 «tutti e due» → riepilogo → «ok» ignorato): «tutti e due / entrambi / tutti / in tutti» = il gruppo in ogni Menu della domanda.
+   else if(src&&!CMD_RE_NEW.test(p0)&&/^(?:in |a |nei |su )?(?:tutti e due|tutte e due|entramb\w*|tutti|tutte|ambedue|in tutti e due|tutti e 2|tutti i menu|in entrambi)(?: i menu)?$/.test(p0)){const g0=seraGroup(src,refs,sections,fixedSecIds,{menus:base.menus})
+    if(g0&&'ask' in g0){const acts=g0.menus.flatMap(mn=>{const g=seraGroup(src+' nel menu '+mn,refs,sections,fixedSecIds,{menus:base.menus});return g&&'actions' in g?g.actions:[]});if(acts.length){out={kind:'change',actions:acts};noDraft=true}}}}
   const secWord=engine==='haiku'&&out.kind!=='cancel'&&out.kind!=='undo'&&!pend?sectionGroupWord(p0,sections,refs):null
    if((out.kind!=='change'||!!secWord)&&(/\btutt[ieoa]\b/.test(p0)||/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p0)||!!sectionGroupWord(p0,sections,refs))&&(clearCommand(text)||/\d|\bzero\b/.test(p0))){const g=seraGroup(text,refs,sections,fixedSecIds,{menus:base.menus})
    // notte 22/10 (QA v141 «metti tutti i primi a zero»: «Quali Primi, del Menu di verifica o del Menu cena?» con i Primi della cena VUOTI):
@@ -947,7 +956,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     let question=serverQ??(noDraft||actedDraft(finalRun)?'':cleanDraft(finalRun.decision.draft,{wrote:false,numbers:numbersOK(finalRun,[...out.ids.map(id=>refs.find(r=>r.id===id)?.price??-1),...(out.twins??[]).flatMap(t=>t.price!=null?[t.price]:[]),...out.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[])])})??'')
     // 22/10 (v139): una domanda di conferma («…? Rispondi sì», «Vuoi che…», «Aggiungo…?») parte SOLO con azioni salvate da eseguire al «sì»;
     // senza, diventa una domanda specifica (mai un «sì» che poi gira a vuoto).
-    if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.createDraft&&/\brispondi\s+\*?s[iì](?![a-z])|\bvuoi che\b|\bconfermi\b|\blo faccio\?|^(?:ok,?\s*)?(?:aggiungo|creo|metto|tolgo|nascondo|sposto|cambio|elimino|rinomino|porto|inserisco)\b[^?\n]*\?/i.test(question))question=specificQuestion(text,out.ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r))
+    if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.createDraft&&/\brispondi\s+\*?s[iì](?![a-z])|\brispondi\s+\*?ok\b|\bvuoi che\b|\bconfermi\b|\blo faccio\?|^(?:ok,?\s*)?(?:aggiungo|creo|metto|tolgo|nascondo|sposto|cambio|elimino|rinomino|porto|inserisco)\b[^?\n]*\?/i.test(question))question=specificQuestion(text,out.ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r))
     if(engine==='haiku'&&question&&!serverQ){const q3=dropInventedGroups(question,groupNames,askText);question=q3&&/\?/.test(q3)?q3:q3&&q3===question?q3:''}
     // notte 22/10 (lng-mig-3/4): una domanda su parti incerte non chiede anche «Rispondi OK per pubblicare» (due richieste insieme: il
     // titolare non sa a cosa rispondere). Resta la domanda; le parti chiare in attesa le mostrano i fatti.

@@ -85,7 +85,7 @@ describe('funzioni pure della rete di sicurezza',()=>{
  it('comando chiaro e domanda specifica al posto di «Non ho cambiato nulla»',()=>{
   for(const t of ['aumenta tutti i primi di 1 euro','aggiungi gnocchi al ragu in menu pranzo a 10','la parmigiana passa a 12.50'])expect(clearCommand(t),t).toBe(true)
   for(const t of ['si','no','grazie','annulla','ok','no lascia stare'])expect(clearCommand(t),t).toBe(false)
-  expect(specificQuestion('aumenta i primi',[])).toMatch(/«aumenta i primi»/);expect(specificQuestion('la pasta a 10',[R('pasta al pesto'),R('pasta carbonara')])).toMatch(/numero/)
+  expect(specificQuestion('aumenta i primi',[])).toMatch(/^Di quanto\?.*«aumenta i primi di 1 euro»/);expect(specificQuestion('fai tu',[])).toMatch(/^Cosa vuoi cambiare\?/);expect(specificQuestion('la pasta a 10',[R('pasta al pesto'),R('pasta carbonara')])).toMatch(/numero/)
   expect(visibleOnly('diminuisci il prezzo solamente a quelle là che sono visibili')).toBe(true)})
 })
 

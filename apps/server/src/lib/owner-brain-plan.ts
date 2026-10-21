@@ -76,7 +76,7 @@ export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|
 // accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
 const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
 const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
-const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
+const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi|diminu|scont|spost|elimin|cancell|rinomin|aggiorn|ritocc)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
 const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
 export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botList:string[]=[]):{kind:'set'|'one',ids:string[]}|null{
  const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),ords=[...p.matchAll(new RegExp(DEIX_ORD.source,'g'))],except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
@@ -709,7 +709,14 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   if(itemsIn(cands[0]!.id))return{actions:[],notes:[],ask:'sottomenu_non_vuoto'}
   actions.push({kind:'delete_section',sectionId:cands[0]!.id,name:cands[0]!.name,menuName:cands[0]!.menu} as MenuAction)}
  for(const a of raw){if(!a||a.action!=='create_section')continue;const name=okName(a.name??a.section);if(!name)return{actions:[],notes:[],ask:'nome_sottomenu'}
-  const parentId=typeof a.section==='string'?input.codes?.get(a.section.trim().toLowerCase()):undefined,parent=parentId?input.sections.find(x=>x.id===parentId):undefined
+  const parentId=typeof a.section==='string'?input.codes?.get(a.section.trim().toLowerCase()):undefined
+  let parent=parentId?input.sections.find(x=>x.id===parentId):undefined
+  // notte 22/10 (cieco b1 «nella cena dentro le pizze crea la sezione Pizze rosse»): «sezione» + «dentro/nelle/tra le X» con X un sottomenu
+  // (di primo livello) del Menu detto = Sezione dentro X (prima diventava un sottomenu nuovo).
+  if(!parent&&/\bsezion\w*/.test(plain(input.message))){const want0=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null,pm0=plain(input.message)
+   const said=[...pm0.matchAll(/\b(?:dentro|dentro a|dentro al|dentro alla|dentro le|dentro i|nel|nei|nelle|nella|negli|tra|fra|sotto)\s+(?:(?:il|i|le|la|lo|gli|l)\s+)?([a-z]+)/g)].map(m=>m[1]!)
+   const cands=input.sections.filter(x=>!(x as any).parent&&(!want0||menuKey(x.menu)===want0)&&plain(x.name)!==plain(name)&&said.some(w=>sameSection(x.name,w)||sameSection(x.name,w.split(' ')[0]!)))
+   if(cands.length===1)parent=cands[0]}
   if(parent){const pm=menus.find(m=>m.name===parent.menu);if(!pm)return{actions:[],notes:[],ask:'menu_del_sottomenu'}
    if(input.sections.some(x=>x.menu===parent.menu&&sameSection(x.name,name))){notes.push('sottomenu_esistente:'+name);continue}
    actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:pm.id,menuName:pm.name,parentSectionId:parent.id,parentName:parent.name} as MenuAction);continue}

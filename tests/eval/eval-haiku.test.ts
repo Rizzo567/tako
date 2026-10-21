@@ -33,6 +33,7 @@ import {ADV_SERA_CASES} from './cases/adv-sera.js'
 import {NOTTE_CASES} from './cases/notte-1022.js'
 import {CACCIA_CASES} from './cases/notte-1022-caccia.js'
 import {CIECO_CASES} from './cases/notte-1022-cieco.js'
+import {FINALE_CASES} from './cases/notte-1022-finale.js'
 import {SERA_SECURITY,seraChecks} from './sera-checks.js'
 import {PARLATO_CASES} from './cases/parlato-sporco.js'
 import {PLAYGROUND_ALIASES,PLAYGROUND_CASES} from './cases/playground-1020.js'
@@ -47,6 +48,7 @@ SETS.multiturno=MULTITURNO_CASES;SETS['adv-sera']=ADV_SERA_CASES
 SETS['notte-1022']=NOTTE_CASES // run notturna 22/10: fase 1
 SETS['notte-caccia']=CACCIA_CASES // run notturna 22/10: fase 2 caccia ai bug
 SETS['notte-cieco']=CIECO_CASES // run notturna 22/10: verifica finale a occhi chiusi (NON usare per correggere)
+SETS['notte-finale']=FINALE_CASES // run notturna 22/10: verifica finale a occhi chiusi n.2 (NON usare per correggere)
 if(process.env.TAKO_HAIKU&&!SETS[SET])throw new Error('TAKO_HAIKU_SET sconosciuto: '+SET+' '+Object.keys(SETS).join('|'))
 const only=process.env.TAKO_HAIKU_ONLY?.split(',')
 const convs=(SETS[SET]??[]).filter(c=>!only||only.includes(c.id))
