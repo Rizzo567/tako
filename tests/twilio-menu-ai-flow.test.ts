@@ -27,6 +27,8 @@ const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);cons
  if(text.startsWith('UPDATE tako_whatsapp_messages')){state.messages.set(p[1],p[0]);return[]}
  if(text.startsWith('DELETE FROM tako_whatsapp_codes'))return[{restaurant_id:tenant,actor_id:actor}]
  if(text.startsWith('INSERT INTO tako_whatsapp_links')){state.links.set(p[0],1);return[]}
+ // 21/10: «collega tako» conta gli altri numeri del locale (massimo due)
+ if(text==='SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$ AND phone<>$')return[...state.links.keys()].filter(k=>k!==p[1]).map(phone=>({phone}))
  if(text.startsWith('SELECT settings FROM restaurants'))return[{settings:{timezone:'Europe/Rome'}}]
  if(text.startsWith('SELECT name FROM restaurants'))return[{name:'Tako · Verifica web'}]
  if(text.startsWith('DELETE FROM tako_whatsapp_proposals')){state.proposals.delete(p[0]);return[]}
