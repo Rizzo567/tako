@@ -169,4 +169,44 @@ describe('invarianti sulla domanda in sospeso (route vero, finto Haiku)',()=>{
   const pl:Planner=c=>P('change',[A('set_price',{item:code(c,'Gnocchi al ragù'),price:10})],'Ok.')
   const r=await play([T('aggiungi gnocchi al ragu in menu pranzo a 10')],pl,menu)
   expect(r.d(1)).toEqual(['create|gnocchi al ragu|10|primi'])})
+ it('Menu col solo «Completo»: il piatto non finisce nel sottomenu-formula, si propone Primi; «no, chiamalo X» e il prezzo dopo la domanda completano',async()=>{
+  const pl:Planner=c=>/lasagne/.test(plainT(c.message))?P('change',[A('create_item',{name:'Lasagne',price:/12/.test(c.message)?12:null,section:secCode(c,'Completo')})],'Aggiungo le Lasagne nel Completo.'):Q('Quanto costano?')
+  const a=await play([T('aggiungi nel menu pranzo le lasagne a 12'),T('no, chiamalo Paste fresche')],pl)
+  expect(a.d(1)).toEqual([]);expect(a.replies[0]).toMatch(/creo il sottomenu \*Primi\*/);expect(secOf(a.final,'Menu pranzo','Paste fresche')!.items.map(i=>[i.name.slice(0,6),i.price])).toEqual([['Lasagn',12]])
+  const b=await play([T('aggiungi nel menu pranzo le lasagne'),T('si'),T('12')],pl)
+  expect(secOf(b.final,'Menu pranzo','Primi')!.items.map(i=>[i.name.slice(0,6),i.price])).toEqual([['Lasagn',12]]);expect(secOf(b.final,'Menu pranzo','Completo')!.items).toEqual([])})
+})
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Sessione di modifica dei piatti di oggi («modifichiamo menu pranzo»), fixture prezzofisso (Menu pranzo fisso: Primi, Secondi, Contorni).
+const SECS=['primi','secondi','contorni']
+const REPL:Planner=c=>{const m=plainT(c.message),acts:any[]=[]
+ if(/tiramisu a 7/.test(m))return P('change',[A('set_price',{item:code(c,'Tiramisù'),price:7})],'Ok.')
+ for(const s of SECS){const r=new RegExp('\\b'+s+'\\s+(.+?)(?=\\s+(?:'+SECS.join('|')+')\\b|$)').exec(m);if(!r)continue
+  const names=r[1]!.split(/\s*,\s*|\s+e\s+/).map(x=>x.trim()).filter(Boolean)
+  // correzione «no la carbonara toglila»: il modello rifà la lista del sottomenu senza quel piatto (dal blocco IN SOSPESO)
+  acts.push(A('replace_section_items',{section:secCode(c,s.charAt(0).toUpperCase()+s.slice(1),'Menu pranzo'),menu:'Menu pranzo',text:names.join('; ')}))}
+ const corr=/toglil[ao]/.test(m)?c.pending.match(/c\d+ Primi = «([^»]*)»/):null
+ if(corr){const keep=corr[1]!.split('; ').filter(n=>!m.includes(plainT(n)));acts.push(A('replace_section_items',{section:secCode(c,'Primi','Menu pranzo'),menu:'Menu pranzo',text:keep.join('; ')}))}
+ return acts.length?P('change',acts,'Ok.'):Q('Cosa metto?')}
+const vis=(w:EvalMenu,sec:string)=>w.menus.find(m=>m.name==='Menu pranzo')!.sections.find(s=>s.name===sec)!.items.filter(i=>!i.hidden).map(i=>i.name).sort()
+describe('sessione di modifica dei piatti di oggi',()=>{
+ const pf=()=>initialMenu('prezzofisso')
+ it('a pezzi: apertura, i primi, poi secondi e contorni → applica tutto insieme con «annulla»',async()=>{
+  const r=await play([T('modifichiamo menu pranzo'),T('primi lasagna e carbonara'),T('secondi cotoletta contorni patate al forno')],REPL,pf())
+  expect(r.replies[0]).toMatch(/modifichiamo i piatti di oggi/);expect(r.d(1)).toEqual([]);expect(r.d(2)).toEqual([]);expect(r.replies[1]).toMatch(/Secondi|Contorni/)
+  expect(vis(r.final,'Primi')).toEqual(['Carbonara','Lasagna']);expect(vis(r.final,'Secondi')).toEqual(['Cotoletta alla milanese']);expect(vis(r.final,'Contorni')).toEqual(['Patate al forno']);expect(r.replies[2]).toMatch(/annulla/)})
+ it('tutto in un messaggio: applica subito, nessuna domanda',async()=>{
+  const r=await play([T('modifichiamo menu pranzo: primi lasagna secondi polpette contorni insalata mista')],REPL,pf())
+  expect(vis(r.final,'Primi')).toEqual(['Lasagna']);expect(vis(r.final,'Secondi')).toEqual(['Polpette al sugo']);expect(r.replies[0]).not.toMatch(/\?/)})
+ it('«i secondi e i contorni restano uguali», «sì» alla domanda su ciò che manca, correzione «no, la carbonara toglila»',async()=>{
+  const a=await play([T('modifichiamo menu pranzo'),T('primi pasta al pomodoro'),T('i secondi e i contorni restano uguali')],REPL,pf())
+  expect(vis(a.final,'Primi')).toEqual(['Pasta al pomodoro']);expect(vis(a.final,'Secondi')).toEqual(vis(pf(),'Secondi'))
+  const b=await play([T('modifichiamo menu pranzo'),T('primi lasagna e carbonara'),T('no, la carbonara toglila'),T('sì')],REPL,pf())
+  if(process.env.TAKO_SERA_SHOW)b.replies.forEach((x,i)=>process.stderr.write('B'+i+' '+JSON.stringify(x)+' | '+b.d(i+1).join(',')+'\n'))
+  expect(vis(b.final,'Primi')).toEqual(['Lasagna']);for(let i=1;i<b.replies.length;i++)expect(plainT(b.replies[i]!)).not.toBe(plainT(b.replies[i-1]!))})
+ it('uscita: «annulla» non scrive nulla; un comando nuovo chiude la sessione ed è eseguito da solo',async()=>{
+  const a=await play([T('modifichiamo menu pranzo'),T('primi lasagna'),T('annulla')],REPL,pf());expect(diff(pf(),a.final)).toEqual([]);expect(a.pending).toBeFalsy()
+  const b=await play([T('modifichiamo menu pranzo'),T('primi lasagna'),T('aumenta il tiramisù di un euro')],c=>/aumenta/.test(plainT(c.message))?P('change',[A('set_price',{item:code(c,'Tiramisù'),price_delta:1})],'Ok.'):REPL(c),pf())
+  expect(b.d(3)).toEqual(['price|Tiramisù|7']);expect(b.calls.at(-1)!.ctx.pending).not.toMatch(/sessione/)})
 })

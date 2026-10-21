@@ -714,9 +714,11 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   const menu=(input.menus??[]).find(m=>m.name===sec!.menu),fixed=menu?.pricing==='fisso'
   const names=String(a.text??'').split(/\s*[;\n]\s*/).map(x=>x.replace(/[*_~`]/g,'').trim()).filter(Boolean).slice(0,40)
   if(!names.length)return{actions:[],notes:[],ask:'piatti_mancanti'}
-  if(!fixed)return{actions:[],notes:[],ask:'sostituzione_alla_carta'}
+  // 21/10 sera: dentro una sessione di modifica dei piatti di oggi vale anche per un Menu alla carta (i nuovi vogliono il prezzo).
+  const inSession=(input.pending as any)?.session?.menu===sec!.menu
+  if(!fixed&&!inSession)return{actions:[],notes:[],ask:'sostituzione_alla_carta'}
   const inSec=(input.refs??[]).filter(r=>r.sectionId===sec!.id),used=new Set<string>()
-  for(const raw0 of names){const nm=raw0.charAt(0).toLocaleUpperCase('it')+raw0.slice(1);if(STRUCT_VERB.test(plain(nm))||plain(nm).split(' ').length>8)return{actions:[],notes:[],ask:'nome_piatto'}
+  for(const raw1 of names){const pm=fixed?null:raw1.match(/^(.*?)\s+(?:a\s+)?(\d+(?:[.,]\d{1,2})?)\s*(?:€|euro)?$/i),raw0=pm?pm[1]!.trim():raw1,cartaPrice=pm?Number(pm[2]!.replace(',','.')):null,nm=raw0.charAt(0).toLocaleUpperCase('it')+raw0.slice(1);if(STRUCT_VERB.test(plain(nm))||plain(nm).split(' ').length>8)return{actions:[],notes:[],ask:'nome_piatto'}
    if(!(' '+said+' ').includes(' '+plain(nm).split(' ')[0]!.slice(0,5)))return{actions:[],notes:[],ask:'nome_non_detto'}
    // Banco prezzofisso 21/10 (pf-sostituzione-01: «secondi cotoletta» creava «Cotoletta» e nascondeva «Cotoletta alla milanese»):
    // il nome detto che indica senza ambiguità un piatto di QUESTO sottomenu (contenuto, prefisso, plurali, accenti) è quel piatto;
@@ -734,12 +736,12 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
     // «pasta e fagioli» resta Pasta e fagioli; «gnocchi al ragù e risotto» non è mai Gnocchi al pomodoro.
     if(phs.length&&!phs.some(p=>fits(p.cut)||fits(p.full))){const ph=head(phs[0]!.cut),c2=replaceCandidates(ph,free)
      if(c2.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
-     if(c2.length===1)hit=c2[0];else{actions.push({kind:'create',sectionId:sec!.id,name:ph.charAt(0).toLocaleUpperCase('it')+ph.slice(1),price:0,description:null,fromReplace:true} as any);continue}}}
+     if(c2.length===1)hit=c2[0];else{if(!fixed&&!(cartaPrice&&cartaPrice>0))return{actions:[],notes:[],ask:'prezzo_nuovo_alla_carta'};actions.push({kind:'create',sectionId:sec!.id,name:ph.charAt(0).toLocaleUpperCase('it')+ph.slice(1),price:fixed?0:cartaPrice!,description:null,fromReplace:true} as any);continue}}}
    if(!hit&&c.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
-   if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any)}
-   else{if(!replaceWordsSaid(nm,said))return{actions:[],notes:[],ask:'nome_non_detto'};actions.push({kind:'create',sectionId:sec!.id,name:nm,price:0,description:null,fromReplace:true} as any)}}
+   if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);if(!fixed&&cartaPrice&&cartaPrice>0&&Math.abs(cartaPrice-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:cartaPrice,fromReplace:true} as any)}
+   else{if(!replaceWordsSaid(nm,said))return{actions:[],notes:[],ask:'nome_non_detto'};if(!fixed&&!(cartaPrice&&cartaPrice>0))return{actions:[],notes:[],ask:'prezzo_nuovo_alla_carta'};actions.push({kind:'create',sectionId:sec!.id,name:nm,price:fixed?0:cartaPrice!,description:null,fromReplace:true} as any)}}
   for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
-  notes.push('sostituzione:'+sec!.id)}
+  notes.push('sostituzione:'+sec!.id+':'+names.map(x=>x.replace(/[:;]/g,' ')).join(';'))}
  // Mostrare/nascondere un intero Menu o Sottomenu (decisione Manuel 21/10). Già così → niente azione, nota per la risposta.
  for(const a of raw){if(!a||a.action!=='set_menu_visible')continue;const k=menuKey(String(a.menu??a.name??''));const m=(input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))
   if(!m)return{actions:[],notes:[],ask:'menu_da_mostrare'};const value=a.value!==false;if((m.active!==false)===value){notes.push('menu_gia:'+m.name);continue}

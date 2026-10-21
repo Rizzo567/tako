@@ -25,7 +25,7 @@ function parse(body:any,call:number):FakeCtx{
   const i=l.match(/^(p\d+)\|([^|]+)\|([\d.,]+)(?:\|([xh*]+))?/);if(i)items.push({code:i[1]!,name:i[2]!,price:Number(i[3]!.replace(',','.')),hidden:(i[4]??'').includes('h'),section:cur})}
  const all=users.join('\n\n'),k=all.lastIndexOf('MESSAGGIO\n'),message=k>=0?all.slice(k+10).split('\n\n')[0]!.trim():''
  const last=users.at(-1)??'',correction=last.startsWith('IL SERVER HA RIFIUTATO')?last:null
- const pk=all.lastIndexOf('IN SOSPESO'),pending=pk>=0&&pk<k?all.slice(pk,k):''
+ const seg=k>=0?all.slice(0,k):'',lastU=seg.lastIndexOf('ORA: '),from=lastU>=0?lastU:Math.max(0,seg.lastIndexOf('\n\n\n')),pk=seg.indexOf('IN SOSPESO',from),pending=pk>=0?seg.slice(pk):''
  return{message,items,sections,pending,correction,call,user:last}}
 
 export type FakeCall={ctx:FakeCtx,proposal:any}

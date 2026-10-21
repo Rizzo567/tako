@@ -39,10 +39,13 @@ const CMDS:Cmd[]=[
  {say:'aggiungi gnocchi al ragu in menu pranzo a 10',ok:c=>P('change',[A('set_price',{item:code(c,'Gnocchi al ragù'),price:10})],'Ok.')},
  {say:'la pasta a 10',ok:c=>Q('Quale pasta intendi?',pasta(c,true).map(i=>i.code))},
  {say:'rinomina il menu cena in Cena della casa',ok:()=>P('chat',[],'Non ho un comando per rinominare un Menu.')},
+ // sessione dei piatti di oggi (Menu pranzo alla carta col solo «Completo»): apertura, piatti a pezzi, uscita
+ {say:'modifichiamo menu pranzo',ok:()=>Q('Cosa metto?')},
+ {say:'nel completo lasagna 12 e cotoletta 14',ok:c=>!secCode(c,'Completo')?Q('In quale sottomenu?'):/sessione/.test(c.pending)?P('change',[A('replace_section_items',{section:secCode(c,'Completo'),menu:'Menu pranzo',text:'Lasagna 12; Cotoletta 14'})],'Ok.'):P('change',[A('create_item',{section:secCode(c,'Completo'),name:'Lasagna',price:12}),A('create_item',{section:secCode(c,'Completo'),name:'Cotoletta',price:14})],'Ok.'),wrong:()=>Q('A che prezzo?')},
  {say:'cambia il nome del sottomenu Completo in Primi piatti',ok:c=>P('change',[A('rename_section',{section:secCode(c,'Completo'),name:'Primi piatti'})],'Ok.')},
 ]
 const YES=['si','sì','ok','esatto','va bene','sì voglio chiamarlo primi','si si'],NO=['no','no lascia stare','niente','annulla']
-const OTHER=['grazie','quanto costa il tiramisù?','la prima','solo quelle visibili','tutte']
+const OTHER=['grazie','quanto costa il tiramisù?','la prima','solo quelle visibili','tutte','restano uguali','basta','fatto']
 // Finto Haiku: per ogni chiamata un comportamento plausibile, a volte sbagliato (seed della conversazione).
 function planner(r:()=>number){return(c:FakeCtx)=>{const m=plainT(c.message),cmd=CMDS.find(x=>plainT(x.say)===m)
  if(cmd){if(c.correction)return r()<0.5?cmd.ok(c):Q('Puoi ripetere?');return cmd.wrong&&r()<0.4?cmd.wrong(c):cmd.ok(c)}

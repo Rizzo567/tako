@@ -46,6 +46,11 @@ export async function memoryTurn(tx:Exec,tenant:string,text:string,refs:MenuRef[
 const lastBot=(h:BrainTurn[])=>[...h].reverse().find(t=>t.role==='bot')
 const ownerBefore=(h:BrainTurn[],at:number)=>[...h].reverse().find(t=>t.role==='owner'&&t.at<at)
 
+/** 21/10 sera: sessione del menu del giorno nel contesto del modello (sottomenu del Menu: detti, restano com'erano, da dire). */
+function sessionOf(ask:any,o:{sections:SectionRef[],menus?:{id:string,name:string,pricing?:'carta'|'fisso'}[]}):import('./owner-brain-context.js').BrainSession|null{
+ const ss=ask?.session;if(!ss||typeof ss.menuName!=='string')return null
+ const secs=o.sections.filter(x=>x.menu===ss.menuName),m=(o.menus??[]).find(x=>x.id===ss.menuId)
+ return{menu:ss.menuName,carta:m?.pricing!=='fisso',sections:secs.map(x=>{const d=ss.done?.[x.id];return{id:x.id,name:x.name,state:Array.isArray(d)?'detto' as const:(ss.kept??[]).includes(x.id)?'uguale' as const:'manca' as const,names:Array.isArray(d)?d.map(String):[]}})}}
 export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?:string[],
  /** Fase R: testo recente del titolare (numeri ammessi nella bozza del modello). */
  ownerRecent?:string,lastBot?:string}
@@ -78,7 +83,7 @@ export async function brainPlan(db:Exec,o:{menus?:{id:string,name:string,section
  const restorable=new Map<string,MenuAction[]>();for(const e of o.extraRestore??[])if(e.actions.length)restorable.set(e.id,e.actions);if(o.undo&&now-o.undo.at<=RESTORE_WINDOW_MS)for(const it of o.undo.items){const r=o.refs.find(x=>x.id===it.id),b=it.before;if(!r||!b)continue;const back:MenuAction[]=[]
   if(typeof b.price==='number'&&Math.abs(b.price-r.price)>=0.005)back.push({kind:'price',id:r.id,price:b.price});if((b.available!==false)!==r.available)back.push({kind:'available',id:r.id,value:b.available!==false});if(!!b.hidden!==r.hidden)back.push({kind:'hidden',id:r.id,value:!!b.hidden});if(!!b.featured!==!!r.featured)back.push({kind:'featured',id:r.id,value:!!b.featured})
   if(back.length)restorable.set(r.id,back)}
- const decision=await planOwnerMessage({restorable,exclude:o.exclude,menus:o.menus,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,freshIds:o.freshIds,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null},voice:o.voice,pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,o.engine==='haiku'?{...o.ai,engine:'haiku',budgetMs:Math.max(0,Math.min(29_000,(o.deadline??Infinity)-Date.now()-300))}:{...o.ai,budgetMs:8000,timeoutMs:8000})
+ const decision=await planOwnerMessage({restorable,exclude:o.exclude,menus:o.menus,restaurantName:o.restaurantName,refs:o.refs,sections:o.sections,memory,history,freshIds:o.freshIds,pending:{proposal,clarify,draft,proposalWhy,hold,undo:o.undoInfo??null,session:sessionOf(ask,o)},voice:o.voice,pendingActions:proposalWhy==='recap'||proposalWhy==='price'?proposal:null,message:o.text,now,correction:o.correction??null},o.key,o.engine==='haiku'?{...o.ai,engine:'haiku',budgetMs:Math.max(0,Math.min(29_000,(o.deadline??Infinity)-Date.now()-300))}:{...o.ai,budgetMs:8000,timeoutMs:8000})
  if(process.env.TAKO_BRAIN_DEBUG)dbg('BRAIN',JSON.stringify({text:o.text,history:history.length,decision:decision.path==='brain'?{intent:decision.intent,plan:decision.plan,notes:decision.notes}:decision}))
  if(decision.path==='fallback'){console.warn(JSON.stringify({event:'owner_brain_fallback',engine:o.engine??'groq',reason:decision.reason}));try{o.onDown?.(decision.reason)}catch{};return null}
  // A4.5: i piatti di cui si stava parlando (ultimi messaggi del titolare e ultima risposta), per una domanda che li cita.

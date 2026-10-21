@@ -14,9 +14,9 @@ import {isAffirmative,type BrainAsk} from './owner-brain-r.js'
 export type SeraMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}
 
 // ---------- risposte alla domanda in sospeso ----------
-const YES_LEAD=/^(?:s[iì]|ok|okay|okey|oki|esatto|certo|certamente|va bene|perfetto|d accordo|giusto|vai|procedi|fallo|confermo|conferma|crealo|creala|creali|assolutamente|proprio cosi|si si|yes)\b/
+const YES_LEAD=/^(?:s[iì]|ok|okay|okey|oki|esatto|certo|certamente|va bene|va benissimo|benissimo|ottimo|perfetto|d accordo|giusto|vai|procedi|fallo|confermo|conferma|crealo|creala|creali|assolutamente|proprio cosi|si si|yes)\b/
 // Parole che possono stare accanto a un sì senza cambiare la proposta («sì voglio chiamarlo primi», «ok crealo pure grazie»).
-const YES_FILL=new Set(['si','ok','va','bene','pure','dai','grazie','mille','allora','tutto','tutti','tutte','prego','benissimo','ottimo','procediamo','esatto','proprio','quello','quella','quelli','quelle','voglio','vorrei','chiamarlo','chiamarla','chiamarli','chiamalo','chiamala','chiamali','chiamiamolo','chiamato','crealo','creala','creali','crea','fallo','falla','cosi','come','hai','detto','dici','suggerisci','consigli','proposto','perfetto','certo','giusto','vai','e','il','lo','la','le','i','gli','un','una','sottomenu','nome','menu','con','pure','anche','metti','mettilo','mettila','mettili','aggiungi','aggiungilo','aggiungila','aggiungili','benone','yes','okay','d','accordo','confermo','conferma','procedi','assolutamente','esattamente','quel'])
+const YES_FILL=new Set(['si','ok','va','bene','pure','dai','grazie','mille','allora','tutto','tutti','tutte','prego','benissimo','ottimo','procediamo','esatto','proprio','quello','quella','quelli','quelle','voglio','vorrei','chiamarlo','chiamarla','chiamarli','chiamalo','chiamala','chiamali','chiamiamolo','chiamato','crealo','creala','creali','crea','fallo','falla','cosi','come','hai','detto','dici','suggerisci','consigli','proposto','perfetto','certo','giusto','vai','e','il','lo','la','le','i','gli','un','una','sottomenu','nome','menu','con','pure','anche','metti','mettilo','mettila','mettili','aggiungi','aggiungilo','aggiungila','aggiungili','benone','yes','okay','d','accordo','confermo','conferma','procedi','assolutamente','esattamente','quel','benissimo','ottimo'])
 const NEG=/\b(?:no|non|anzi|ma|pero|invece|tranne|aspetta|niente|annull\w*|lascia|stop|meglio|piuttosto|diverso|altro|altra)\b/
 /** Parole del nome delle azioni in sospeso (create_section «Primi», create «Lasagne», rinomine…): un «sì voglio chiamarlo primi» le ripete. */
 const actionWords=(ask:Pick<BrainAsk,'actions'|'draft'|'question'>)=>new Set([...(ask.actions??[]).flatMap(a=>'name' in a&&typeof (a as any).name==='string'?plain((a as any).name).split(' '):[]),...(ask.draft?.name?plain(ask.draft.name).split(' '):[]),...(ask.draft?.sectionName?plain(ask.draft.sectionName).split(' '):[])].filter(w=>w.length>=3))
@@ -33,7 +33,7 @@ export const visibleOnly=(text:string)=>/\b(?:visibil\w*|che si vedono|non nasco
 export const allChosen=(text:string)=>{const p=plain(text);return /\btutt[ieoa]\b/.test(p)&&p.split(' ').length<=8&&!NEG.test(p)}
 
 // ---------- comando nuovo mentre c'è una domanda in sospeso ----------
-const CMD_VERB=/\b(?:aggiung\w*|inserisc\w*|aument\w*|alz\w*|abbass\w*|diminu\w*|ribass\w*|scont\w*|togli\w*|nascond\w*|elimin\w*|cancell\w*|rinomin\w*|cambi\w* (?:il |anche il )?nome|sposta|spostare|segna\w*|rimett\w*|mostra|metti|mettere|porta|portare|crea|creare|cambia|modifica)\b/
+const CMD_VERB=/\b(?:modifich\w*|aggiung\w*|inserisc\w*|aument\w*|alz\w*|abbass\w*|diminu\w*|ribass\w*|scont\w*|togli\w*|nascond\w*|elimin\w*|cancell\w*|rinomin\w*|cambi\w* (?:il |anche il )?nome|sposta|spostare|segna\w*|rimett\w*|mostra|metti|mettere|porta|portare|crea|creare|cambia|modifica)\b/
 // Verbi con il pronome attaccato («mettilo», «crealo», «chiamalo», «spostala»): rispondono alla domanda, non sono un comando nuovo.
 const CLITIC=/\b(?:mett|cre|chiam|spost|aggiung|port|fa|lasci|aggiorn|tien|rimett|nascond|togl|elimin|cancell)\w*?(?:lo|la|li|le|ne|celo|cela|melo|mela)\b/
 const ANSWER_LEAD=/^(?:s[iì]|no|ok|okay|anzi|invece|solo|solamente|soltanto|ho detto|intendevo|esatto|quell[aoie]|il primo|la prima|il secondo|la seconda|tutt[ieoa]|entramb\w*|nessun\w*|giusto|certo|va bene|perfetto|si ma|no ma)\b/
@@ -101,7 +101,7 @@ export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[]
  const p=plain(message),m=p.match(/\btutt[ieoa] (?:quant[ieoa] )?(?:i |le |gli |l )?([a-z]{3,})/)??p.match(/\b(?:i|le|gli) ([a-z]{3,}) tutt[ieoa]\b/);if(!m)return null
  const word=m[1]!;if(['piatti','prezzi','menu','sottomenu','quanti','cose'].includes(word))return null
  const rd=relativeDelta(message),abs=[...new Set(g9Prices(message,false))]
- const delta=rd?rd.delta:null,price=!rd&&abs.length===1?abs[0]!:null;if(delta===null&&price===null)return null
+ const sp=singlePrice(message),delta=rd?rd.delta:null,price=!rd?(sp??(abs.length===1?abs[0]!:null)):null;if(delta===null&&price===null)return null
  const visible=o.visible??visibleOnly(message),said=namedMenus(message,o.menus??[...new Map(sections.map(s=>[s.menu,{name:s.menu}])).values()]).map(x=>x.name)
  const priced=(r:MenuRef)=>r.price>0&&!fixedSecIds.has(r.sectionId??'')&&(!visible||!r.hidden)&&(!said.length||said.includes(r.menu))
  const secs=sections.filter(s=>sameSection(s.name,word)&&refs.some(r=>r.sectionId===s.id&&priced(r)))
@@ -128,9 +128,9 @@ export function parseStructRename(text:string,menus:{id:string,name:string}[],se
  const isSec=/\b(?:sottomenu|sezione|categoria)\b/.test(p),isMenu=/\bmenu\b/.test(p.replace(/\bsottomenu\b/g,''))
  if(!isSec&&!isMenu)return null
  // «… da X a Y», «… X in Y», «… X con Y», «… X: Y», «X chiamalo Y», «X ora si chiama Y»
- const pats=[/\bda\s+(.+?)\s+(?:a|in)\s+(.+)$/i,/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome (?:a|al|del|della|dello|di))\s+(?:il |la |lo |l')?(?:sottomenu |menu |sezione )?(.+?)\s+(?:in|come|con|a)\s+(.+)$/i,/(?:sottomenu|menu|sezione)\s+(.+?)\s+(?:chiamal[oa]|ora si chiama|adesso si chiama|da oggi si chiama|si chiamera)\s+(.+)$/i]
+ const pats=[/(?:sottomenu|menu|sezione|categoria)\s+([^:]+?)\s*:\s*(.+)$/i,/\bda\s+(.+?)\s+(?:a|in)\s+(.+)$/i,/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome (?:a|al|del|della|dello|di))\s+(?:il |la |lo |l')?(?:sottomenu |menu |sezione |categoria )?(.+?)\s+(?:in|come|con|a)\s+(.+)$/i,/(?:sottomenu|menu|sezione)\s+(.+?)\s+(?:chiamal[oa]|ora si chiama|adesso si chiama|da oggi si chiama|si chiamera)\s+(.+)$/i]
  for(const re of pats){const m=raw.match(re);if(!m)continue
-  const oldSaid=plain(m[1]!.replace(/^(?:il |la |lo |l')?(?:sottomenu|menu|sezione)\s+/i,'')),name=cleanNew(m[2]!.replace(/^(?:il |la |lo |l')?(?:sottomenu|sezione)\s+/i,'')); if(!name)return{ask:'nome'}
+  const oldSaid=plain(m[1]!.replace(/^(?:al |del |il |la |lo |l')?(?:sottomenu|menu|sezione|categoria)\s+/i,'')),name=cleanNew(m[2]!.replace(/^(?:il |la |lo |l')?(?:sottomenu|sezione|categoria)\s+/i,'')); if(!name)return{ask:'nome'}
   const oldK=oldSaid.replace(/^(?:del |della |di )/,'').trim()
   if(isSec){const secSaid=oldSaid.replace(/ (?:del|nel|dal|in) (?:menu )?.*$/,'').trim(),c=sections.filter(s=>sameSection(s.name,secSaid)||plain(s.name)===secSaid);const inMenu=namedMenus(raw,menus.map(x=>({...x}))).map(x=>x.name),c2=inMenu.length?c.filter(s=>inMenu.includes(s.menu)):c
    if(c2.length===1){if(sections.some(s=>s.menu===c2[0]!.menu&&s.id!==c2[0]!.id&&sameSection(s.name,name)))return{ask:'nome_doppio'};return{kind:'rename_section',sectionId:c2[0]!.id,before:c2[0]!.name,name}}
@@ -159,3 +159,37 @@ const PRICE_FILL=new Set(['a','e','euro','eur','costa','costano','costi','prezzo
 /** Il messaggio è solo un prezzo («12», «a 12 euro», «dodici e cinquanta», «mettile a 12»): il prezzo, altrimenti null. */
 export function onlyPrice(text:string):number|null{const p=plain(text);if(!p||/\b(?:no|non|anzi)\b/.test(p))return null
  const rest=p.split(' ').filter(w=>w&&!/^\d+$/.test(w)&&g9WordNumber(w)===null&&!PRICE_FILL.has(w));return rest.length?null:singlePrice(text)}
+/** Nome del sottomenu detto come risposta alla proposta («no, chiamalo Paste fresche», «chiamiamolo Primi piatti», «il nome è X»). */
+export function answerSectionName(text:string):string|null{const m=text.replace(/[🎤]/gu,' ').match(/\b(?:chiamal[oaie]|chiamiamol[oaie]|chiamarl[oaie]|il nome (?:e|è)|nome)\s+(.+)$/i);if(!m)return null;const n=cleanNew(m[1]!);return n&&!/\b(?:non|no)\b/i.test(n)?n:null}
+
+// ---------- sessione di modifica dei piatti di oggi («modifichiamo menu pranzo») ----------
+/** Stato nel pending (brain_ask.session): piatti detti per sottomenu (nomi e azioni della sostituzione), sottomenu che restano com'erano. */
+export type SessState={menuId:string,menuName:string,done:Record<string,string[]>,kept:string[],acts:MenuAction[],rounds?:number}
+export const SESSION_MAX_ROUNDS=10
+const START=/\b(?:modifich\w*|cambi\w*|aggiorn\w*|rifacciamo|rifare|rifai|facciamo|sistem\w*|impost\w*|prepar\w*|inserisc\w*|inseriamo|mettiamo|scriviamo|cambiamo|aggiorniamo)\b/
+const NOT_SESSION=/\b(?:nome|rinomin\w*|visibil\w*|mostra\w*|nascond\w*|elimin\w*|cancell\w*|aument\w*|abbass\w*|alz\w*|diminu\w*|prezz\w*|euro|formul\w*|fisso|carta|opzion\w*)\b|\d/
+/** «modifichiamo menu pranzo», «aggiorniamo il menu del giorno», «facciamo il menu di oggi del pranzo»: il Menu della sessione (uno solo). */
+export function sessionStart<T extends {name:string}>(text:string,menus:T[]):T|null{const p=plain(text);if(!/\bmenu\b/.test(p.replace(/\bsottomenu\b/g,''))||!START.test(p)||NOT_SESSION.test(p))return null;const m=namedMenus(text,menus);return m.length===1?m[0]!:null}
+/** Parole del messaggio oltre all'avvio («modifichiamo menu pranzo» → 0): con piatti dentro il messaggio va anche al modello. */
+export function sessionRest(text:string,menuName:string):number{const k=new Set(menuKey(menuName).split(' '));return plain(text).split(' ').filter(w=>w&&!START.test(w)&&!k.has(w)&&!['menu','il','lo','la','del','di','dei','oggi','giorno','ok','allora','dai','adesso','ora','i','piatti','che','per','a','e','un','po','facciamo','vorrei','voglio','possiamo','ciao'].includes(w)).length}
+export const sessionExit=(text:string)=>/^(?:(?:no|ok|allora|aspetta|scusa)\s+)*(?:annulla(?: tutto)?|basta|stop|lascia (?:stare|perdere)|lasciamo (?:stare|perdere)|niente|esci|non importa|fa niente|lascia stare tutto|non fare niente)(?:\s+(?:grazie|dai))?$/.test(plain(text))
+export const sessionDone=(text:string)=>/\b(?:fatto|finito|ho finito|basta cosi|e tutto|tutto qui|ok cosi|va bene cosi|applica|pubblica|il resto (?:uguale|resta\w*|com e|come prima)|gli altri (?:restano|rimangono|uguali|come prima|com erano)|tutto il resto|nient altro|basta)\b/.test(plain(text))
+const KEEP=/\b(?:restan\w*|resta|rimang\w*|uguali|uguale|come prima|com erano|com era|non (?:li |le )?cambi\w*|salta|saltali|saltiamo|lascial[ie]|lascia(?:li|le)? cosi|invariat\w*|stessi|stesse|non tocc\w*)\b/
+/** Sottomenu che il titolare dice di lasciare come sono («i secondi restano uguali», «salta i contorni», «salta» = quello che si aspettava). */
+export function keptSections(text:string,secs:SectionRef[],missing:SectionRef[]):string[]{const p=plain(text);if(!KEEP.test(p))return[]
+ const named=secs.filter(s=>p.split(' ').some(w=>w.length>=4&&sameSection(s.name,w))||(' '+p+' ').includes(' '+plain(s.name)+' '))
+ return named.length?named.map(s=>s.id):/^(?:salta\w*|saltiamo|no salta|resta(?:no)? (?:uguali|cosi)|uguali?)$/.test(p)&&missing[0]?[missing[0].id]:[]}
+/** Comando nuovo dentro la sessione: cambi di prezzo, rinomine, eliminazioni, visibilità, o un altro Menu nominato. */
+export function newCommandInSession(text:string,menuName:string,menus:{name:string}[]):boolean{const p=plain(text)
+ if(/\b(?:aument\w*|alz\w*|abbass\w*|diminu\w*|ribass\w*|rinomin\w*|cambi\w* (?:il )?nome|elimin\w*|cancell\w*|visibil\w*|mostra\w*|scont\w*|evidenza|annulla l ultima)\b/.test(p))return true
+ // «aggiungi X a 10»: un'aggiunta col prezzo è un comando a sé (il Menu nominato e il sottomenu li cura il server).
+ if(/\b(?:aggiung\w*|inserisc\w*)\b/.test(p)&&/\d/.test(p))return true
+ return namedMenus(text,menus).some(m=>m.name!==menuName)}
+/** Sottomenu del Menu ancora da dire. */
+export const sessionMissing=(s:SessState,secs:SectionRef[])=>secs.filter(x=>x.menu===s.menuName&&!s.done[x.id]&&!s.kept.includes(x.id))
+const mLabelOf=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
+export const sessionOpening=(s:SessState,secs:SectionRef[])=>{const ms=secs.filter(x=>x.menu===s.menuName);return 'Ok, modifichiamo i piatti di oggi del '+mLabelOf(s.menuName)+': cosa metto'+(ms.length?' in '+ms.map(x=>'*'+x.name+'*').join(', ')+'':'')+'? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.'}
+/** Domanda su ciò che manca (diversa ogni volta: riassume cosa è già segnato). */
+export function sessionAsk(s:SessState,secs:SectionRef[]):string{const miss=sessionMissing(s,secs),done=secs.filter(x=>s.done[x.id])
+ const head=done.length?'Segnato: '+done.map(x=>'*'+x.name+'* ('+s.done[x.id]!.join(', ')+')').join(' · ')+'. ':''
+ return head+(miss.length===1?'E nei *'+miss[0]!.name+'* cosa metto? Se restano come sono scrivi «restano uguali».':'E per '+miss.map(x=>'*'+x.name+'*').join(' e ')+' cosa metto? Se qualcuno resta com’è dimmelo.')}
