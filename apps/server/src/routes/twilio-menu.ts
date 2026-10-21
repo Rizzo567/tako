@@ -46,6 +46,8 @@ const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
 async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const rows=await tx.execute(sql`SELECT u.id,u.restaurant_id,u.role,r.active FROM users u JOIN restaurants r ON r.id=${tenant} WHERE u.id=${actor} AND u.active=true`);const u=rows[0];if(!u||!u.active)return false;if(isAgencyUser(actor))return true;if(u.restaurant_id===tenant&&u.role==='owner')return true;const membership=await tx.execute(sql`SELECT role FROM web_location_memberships WHERE user_id=${actor} AND restaurant_id=${tenant}`);return membership[0]?.role==='owner'}
 const sent='\u0001'
 type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean}|SalesTemplate;type Choice={kind:'choose',action:ChoiceAction,options:string[]};type ChoicePrice={kind:'choose_price',id:string,prices:[number,number],labels:[string,string]};type Turn=string|{llm:true,brain?:true,photo?:Photo,text?:string,fullmenu?:FullMenuJob,exclude?:Excluded[],note?:string}|{upload:Extract<MenuAction,{kind:'image'}>[]}
+/** 21/10 (richiesta Manuel): numeri WhatsApp del titolare per locale. */
+export const OWNER_PHONES_MAX=2
 const lock=(tx:Tx,phone:string)=>tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${phone},0))`)
 const reserve=(tx:Tx,sid:string)=>tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${sent}) ON CONFLICT DO NOTHING`)
 const propose=(tx:Tx,ctx:Ctx,revision:number,command:unknown)=>tx.execute(sql`INSERT INTO tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) VALUES(${ctx.phone},${ctx.tenant},${ctx.actor},${revision},${JSON.stringify(command)}::jsonb,now()+interval '10 minutes') ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,revision=EXCLUDED.revision,command=EXCLUDED.command,expires_at=EXCLUDED.expires_at`)
@@ -748,50 +750,83 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  app.get('/menu-workspace/whatsapp',{preHandler:requireRole('owner')},async req=>{const rows=await db.execute(sql`SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${req.user.restaurantId} AND actor_id=${req.user.id}`);return{data:{configured:!!process.env.TWILIO_AUTH_TOKEN,sender:process.env.TWILIO_WHATSAPP_NUMBER?.replace('whatsapp:','')||null,numbers:rows.map(r=>String(r.phone).replace('whatsapp:',''))}}})
  app.post('/menu-workspace/whatsapp/code',{preHandler:requireRole('owner')},async(req,reply)=>{if(!process.env.TWILIO_AUTH_TOKEN)return reply.code(503).send({error:{message:'Canale Twilio non configurato'}});const code=randomBytes(12).toString('hex');await db.transaction(async tx=>{await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE actor_id=${req.user.id} AND restaurant_id=${req.user.restaurantId}`);await tx.execute(sql`INSERT INTO tako_whatsapp_codes(code_hash,restaurant_id,actor_id,expires_at) VALUES(${digest(code)},${req.user.restaurantId},${req.user.id},now()+interval '15 minutes')`)});return{data:{code,sender:process.env.TWILIO_WHATSAPP_NUMBER?.replace('whatsapp:',''),message:'collega tako '+code,expiresInMinutes:15}}})
  app.post('/menu-workspace/whatsapp/disconnect',{preHandler:requireRole('owner')},async req=>{await db.transaction(async tx=>{await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE restaurant_id=${req.user.restaurantId} AND actor_id=${req.user.id}`);await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE restaurant_id=${req.user.restaurantId} AND actor_id=${req.user.id}`);await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE restaurant_id=${req.user.restaurantId} AND actor_id=${req.user.id}`)});return{data:{disconnected:true}}})
- // WhatsApp del titolare (agenzia o titolare del locale, verificato qui): un locale = un telefono, un telefono = un locale.
+ // WhatsApp del titolare (agenzia o titolare del locale, verificato qui). 21/10 (richiesta Manuel): fino a DUE numeri per locale,
+ // ognuno con la sua email e il suo account; un telefono = un locale (il telefono è la chiave primaria). Il limite lo verifica il server.
  // Salvare crea un pre-collegamento (activated_at NULL), senza codici né messaggi in uscita; il primo messaggio di quel numero lo attiva.
+ // Proposte in sospeso, «ok»/«annulla» e cronologia sono già per telefono (tako_whatsapp_proposals.phone, undo:/last:<telefono>).
  const ownerDenied=(reply:any)=>reply.code(403).send({error:{code:'FORBIDDEN',message:'Solo l\'agenzia o il titolare del locale possono gestire il WhatsApp del titolare.'}})
- const ownerState=async(tx:Tx,tenant:string)=>{const rows=await tx.execute(sql`SELECT phone,activated_at,owner_email FROM tako_whatsapp_links WHERE restaurant_id=${tenant} ORDER BY created_at DESC LIMIT 1`),row=rows[0];return{email:row?.owner_email?String(row.owner_email):null,configured:!!process.env.TWILIO_AUTH_TOKEN,sender:process.env.TWILIO_WHATSAPP_NUMBER?.replace('whatsapp:','')||null,phone:row?String(row.phone).replace('whatsapp:',''):null,status:row?(row.activated_at==null?'pending':'linked'):null,activatedAt:row?.activated_at?new Date(row.activated_at as string|Date).toISOString():null}}
+ const ownerState=async(tx:Tx,tenant:string)=>{const rows=await tx.execute(sql`SELECT phone,activated_at,owner_email FROM tako_whatsapp_links WHERE restaurant_id=${tenant} ORDER BY created_at ASC`)
+  const numbers=rows.slice(-OWNER_PHONES_MAX).map(row=>({phone:String(row.phone).replace('whatsapp:',''),email:row.owner_email?String(row.owner_email):null,status:row.activated_at==null?'pending' as const:'linked' as const,activatedAt:row.activated_at?new Date(row.activated_at as string|Date).toISOString():null}))
+  // Campi singoli (numero più recente) per i pannelli di prima del 21/10 ancora aperti in qualche browser.
+  const last=numbers.at(-1)??null
+  return{configured:!!process.env.TWILIO_AUTH_TOKEN,sender:process.env.TWILIO_WHATSAPP_NUMBER?.replace('whatsapp:','')||null,max:OWNER_PHONES_MAX,numbers,email:last?.email??null,phone:last?.phone??null,status:last?.status??null,activatedAt:last?.activatedAt??null}}
  app.get('/menu-workspace/whatsapp/owner',{preHandler:requireRole('owner')},async(req,reply)=>{if(!await permitted(db,req.user.id,req.user.restaurantId))return ownerDenied(reply);return{data:await ownerState(db,req.user.restaurantId)}})
  app.post('/menu-workspace/whatsapp/owner',{preHandler:requireRole('owner')},async(req,reply)=>{
-  const input=(req.body??{}) as {phone?:unknown,email?:unknown,move?:unknown},e164=normalizeOwnerPhone(input.phone),email=ownerEmailSchema(input.email),tenant=req.user.restaurantId,actor=req.user.id
-  if(!e164)return reply.code(400).send({error:{code:'VALIDATION',message:'Numero non valido: scrivi un cellulare italiano, ad esempio 333 123 4567.'}})
+  const input=(req.body??{}) as {phone?:unknown,email?:unknown,move?:unknown,replace?:unknown},e164=normalizeOwnerPhone(input.phone),email=ownerEmailSchema(input.email),tenant=req.user.restaurantId,actor=req.user.id
+  if(!e164)return reply.code(400).send({error:{code:'VALIDATION',field:'phone',message:'Numero non valido: scrivi un cellulare italiano, ad esempio 333 123 4567.'}})
   // 19/10: email del titolare obbligatoria: diventa l'utente della sua dashboard (account creato al primo messaggio WhatsApp).
-  if(!email)return reply.code(400).send({error:{code:'VALIDATION',message:'Email non valida: scrivi l’email del titolare, ad esempio nome@gmail.com.'}})
-  const phone=whatsappAddress(e164);if(phone===process.env.TWILIO_WHATSAPP_NUMBER)return reply.code(400).send({error:{code:'VALIDATION',message:'Questo è il numero di Tako: inserisci quello del titolare.'}})
-  const result=await db.transaction(async tx=>{
+  if(!email)return reply.code(400).send({error:{code:'VALIDATION',field:'email',message:'Email non valida: scrivi l’email del titolare, ad esempio nome@gmail.com.'}})
+  const phone=whatsappAddress(e164);if(phone===process.env.TWILIO_WHATSAPP_NUMBER)return reply.code(400).send({error:{code:'VALIDATION',field:'phone',message:'Questo è il numero di Tako: inserisci quello del titolare.'}})
+  // 21/10: «Modifica» di una riga con un numero diverso = sostituisce QUEL numero (gli altri restano).
+  const replaceE164=input.replace==null||input.replace===''?null:normalizeOwnerPhone(input.replace),replacePhone=replaceE164?whatsappAddress(replaceE164):null
+  if(input.replace!=null&&input.replace!==''&&!replaceE164)return reply.code(400).send({error:{code:'VALIDATION',field:'phone',message:'Numero da modificare non valido: ricarica la pagina.'}})
+  let result:any
+  try{result=await db.transaction(async tx=>{
    if(!await permitted(tx,actor,tenant))return{forbidden:true as const}
    await lock(tx,phone);await lock(tx,'tako-owner-link:'+tenant)
    // L'email non può essere di un altro account (altro locale, agenzia, altro ruolo): l'account del titolare è solo di questo locale.
    const holders=await tx.execute(sql`SELECT id,restaurant_id,role,active FROM users WHERE lower(email)=${email}`)
    if(holders.length&&!(holders.length===1&&holders[0]!.restaurant_id===tenant&&holders[0]!.role==='owner'&&holders[0]!.active===true&&!isAgencyUser(String(holders[0]!.id))))return{emailInUse:true as const}
+   const mine=await tx.execute(sql`SELECT phone,owner_email,actor_id FROM tako_whatsapp_links WHERE restaurant_id=${tenant}`)
+   const replacing=!!replacePhone&&replacePhone!==phone&&mine.some(l=>String(l.phone)===replacePhone)
+   const others=mine.filter(l=>String(l.phone)!==phone&&!(replacing&&String(l.phone)===replacePhone))
+   // 21/10: ogni numero ha la SUA email e il suo account: l'email (o l'account) dell'altro numero non si riusa.
+   const holder=holders.length===1?String(holders[0]!.id):null
+   if(others.some(l=>(l.owner_email&&String(l.owner_email).toLowerCase()===email)||(holder&&String(l.actor_id)===holder&&!isAgencyUser(holder))))return{emailOtherNumber:true as const}
    const rows=await tx.execute(sql`SELECT l.restaurant_id,l.activated_at,l.owner_email,r.name FROM tako_whatsapp_links l JOIN restaurants r ON r.id=l.restaurant_id WHERE l.phone=${phone}`),existing=rows[0]
    if(existing&&String(existing.restaurant_id)===tenant){
+    if(replacePhone&&replacePhone!==phone)return{alreadyListed:true as const}
     // 19/10 sera: a collegamento attivo l'email è l'utente con cui il titolare entra già: non si cambia da qui (scollega e ricollega).
     const current=existing.owner_email?String(existing.owner_email):null
     if(existing.activated_at!=null&&current&&current!==email)return{emailLocked:current}
     await tx.execute(sql`UPDATE tako_whatsapp_links SET owner_email=${email} WHERE phone=${phone}`);return{state:await ownerState(tx,tenant)}}
+   // 21/10: massimo due numeri per locale (anche se il pannello nasconde «Aggiungi numero» a 2 su 2).
+   if(others.length>=OWNER_PHONES_MAX)return{limit:true as const}
    if(existing){const other=String(existing.restaurant_id),canMove=await permitted(tx,actor,other);if(input.move!==true||!canMove)return{conflict:{name:canMove?String(existing.name):null,canMove}}}
-   // 19/10 sera: un locale ha un solo numero; quelli sostituiti tornano nella risposta e il pannello lo dice.
-   const replaced=(await tx.execute(sql`SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${tenant} AND phone<>${phone}`)).map(r=>String(r.phone).replace('whatsapp:',''))
    // Ricollegamento con l'email di un titolare a cui il bot aveva già consegnato l'accesso: sessioni chiuse ora, password nuova al primo messaggio.
-   let reissue=false;if(holders.length===1){const holder=String(holders[0]!.id),prior=await tx.execute(sql`SELECT password_delivered_at FROM users WHERE id=${holder}`)
+   let reissue=false;if(holder){const prior=await tx.execute(sql`SELECT password_delivered_at FROM users WHERE id=${holder}`)
     if(prior[0]?.password_delivered_at!=null){reissue=true;await tx.execute(sql`DELETE FROM sessions WHERE user_id=${holder}`)}}
-   await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone} OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${tenant})`)
-   await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE phone=${phone} OR restaurant_id=${tenant}`)
+   await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`)
+   await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE phone=${phone}`)
+   if(replacing){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${replacePhone}`);await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE phone=${replacePhone} AND restaurant_id=${tenant}`)}
    await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email,password_reissue) VALUES(${phone},${tenant},${actor},NULL,${email},${reissue})`)
-   return{state:{...await ownerState(tx,tenant),replacedPhones:replaced}}})
+   return{state:{...await ownerState(tx,tenant),replacedPhones:replacing?[replaceE164]:[]}}})
+  }catch(e){
+   // Server nuovo su un DB senza la migrazione del 21/10 (indice «un locale = un telefono» ancora presente): errore chiaro, nessun dato toccato.
+   const err=e as {constraint_name?:string,message?:string};if(String(err?.constraint_name??err?.message??'').includes('tako_whatsapp_links_one_per_restaurant'))return reply.code(409).send({error:{code:'SECOND_NUMBER_UNAVAILABLE',message:'Il secondo numero non è ancora attivo su questo server. Riprova più tardi o contatta Tako.'}})
+   throw e}
   if('forbidden' in result)return ownerDenied(reply)
-  if('emailLocked' in result)return reply.code(409).send({error:{code:'EMAIL_LOCKED',message:`Il titolare ha già l’accesso con ${result.emailLocked}. Per cambiarla scollega e ricollega.`}})
-  if('emailInUse' in result)return reply.code(409).send({error:{code:'EMAIL_IN_USE',message:'Questa email è già usata da un altro account. Scrivi un’altra email del titolare.'}})
-  if('conflict' in result&&result.conflict){const c=result.conflict;return reply.code(409).send({error:{code:c.canMove?'PHONE_IN_USE_MOVABLE':'PHONE_IN_USE',message:c.canMove?`Questo numero è già collegato a ${c.name}. Vuoi spostarlo su questo locale?`:'Questo numero è già collegato a un altro locale. Per spostarlo contatta Tako.',canMove:c.canMove}})}
+  if('emailLocked' in result)return reply.code(409).send({error:{code:'EMAIL_LOCKED',field:'email',message:`Il titolare ha già l’accesso con ${result.emailLocked}. Per cambiarla scollega e ricollega.`}})
+  if('emailInUse' in result)return reply.code(409).send({error:{code:'EMAIL_IN_USE',field:'email',message:'Questa email è già usata da un altro account. Scrivi un’altra email del titolare.'}})
+  if('emailOtherNumber' in result)return reply.code(409).send({error:{code:'EMAIL_OTHER_NUMBER',field:'email',message:'Questa email è già dell’altro numero: ogni numero ha la sua email.'}})
+  if('alreadyListed' in result)return reply.code(409).send({error:{code:'PHONE_ALREADY_LISTED',field:'phone',message:'Questo numero è già in elenco.'}})
+  if('limit' in result)return reply.code(409).send({error:{code:'OWNER_PHONES_LIMIT',field:'phone',message:'Al massimo due numeri per locale. Scollegane uno per aggiungerne un altro.'}})
+  if('conflict' in result&&result.conflict){const c=result.conflict;return reply.code(409).send({error:{code:c.canMove?'PHONE_IN_USE_MOVABLE':'PHONE_IN_USE',field:'phone',message:c.canMove?`Questo numero è già collegato a ${c.name}. Vuoi spostarlo su questo locale?`:'Questo numero è già collegato a un altro locale. Per spostarlo contatta Tako.',canMove:c.canMove}})}
   return{data:result.state}})
- app.delete('/menu-workspace/whatsapp/owner',{preHandler:requireRole('owner')},async(req,reply)=>{const tenant=req.user.restaurantId
-  const done=await db.transaction(async tx=>{if(!await permitted(tx,req.user.id,tenant))return false;await lock(tx,'tako-owner-link:'+tenant)
-   await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${tenant})`)
-   await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE restaurant_id=${tenant}`)
-   await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE restaurant_id=${tenant}`);return true})
-  if(!done)return ownerDenied(reply);return{data:await ownerState(db,tenant)}})
+ // 21/10: scollega UN numero (?phone=…); l'altro resta collegato con proposte e cronologia sue. Senza ?phone vale solo se il locale ne ha uno.
+ app.delete('/menu-workspace/whatsapp/owner',{preHandler:requireRole('owner')},async(req,reply)=>{const tenant=req.user.restaurantId,raw=(req.query as {phone?:unknown}|undefined)?.phone
+  const e164=raw==null||raw===''?null:normalizeOwnerPhone(raw);if(raw!=null&&raw!==''&&!e164)return reply.code(400).send({error:{code:'VALIDATION',message:'Numero non valido.'}})
+  const done=await db.transaction(async tx=>{if(!await permitted(tx,req.user.id,tenant))return'forbidden' as const;await lock(tx,'tako-owner-link:'+tenant)
+   const mine=(await tx.execute(sql`SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${tenant}`)).map(r=>String(r.phone))
+   const target=e164?whatsappAddress(e164):mine.length===1?mine[0]!:null
+   if(!target){if(mine.length>1)return'which' as const;return'ok' as const}
+   if(!mine.includes(target))return'ok' as const
+   await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${target}`)
+   await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE phone=${target} AND restaurant_id=${tenant}`)
+   if(mine.length===1)await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE restaurant_id=${tenant}`);return'ok' as const})
+  if(done==='forbidden')return ownerDenied(reply)
+  if(done==='which')return reply.code(400).send({error:{code:'VALIDATION',message:'Indica quale numero scollegare.'}})
+  return{data:await ownerState(db,tenant)}})
  app.addContentTypeParser('application/x-www-form-urlencoded',{parseAs:'string'},(_req,body,done)=>{const values=new URLSearchParams(String(body)),form:Record<string,string>={};for(const[k,v]of values){if(k in form)return done(Error('Duplicate form key'));form[k]=v}done(null,form)})
  app.post('/whatsapp/twilio',{bodyLimit:32768},async(req,reply)=>{
  const form=req.body as Record<string,string>,signature=String(req.headers['x-twilio-signature']||''),endpoint=process.env.TWILIO_WEBHOOK_URL||'';
@@ -825,7 +860,10 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  const phone=form.From||'',sid=form.MessageSid||'',body=(form.Body||'').trim(),media=Number(form.NumMedia||0);if(form.TakoSyncTest==='1'){quietPhones.add(phone);setTimeout(()=>quietPhones.delete(phone),120000)}if(!/^whatsapp:\+\d{8,15}$/.test(phone)||!(/^SM[a-f0-9]{32}$/i.test(sid)||linked.length>0&&/^MM[a-f0-9]{32}$/i.test(sid))||body.length>2000)return reply.code(400).send('Invalid message');
  const scope:{tenant?:string,cached?:boolean}={};const result=await db.transaction(async tx=>{await lock(tx,phone);const cached=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${sid}`);if(cached.length){scope.cached=true;const text=String(cached[0]!.response);return text.startsWith(sent)?'':text}
  const answer=async(text:string)=>{await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${text}) ON CONFLICT DO NOTHING`);return text};
- const pair=body.match(/^collega tako ([a-f0-9]{24})$/i);if(pair){const codes=await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE code_hash=${digest(pair[1]!.toLowerCase())} AND expires_at>now() RETURNING restaurant_id,actor_id`);const code=codes[0];if(!code||!await permitted(tx,String(code.actor_id),String(code.restaurant_id)))return answer(copy.codeInvalid);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone} OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id})`);await tx.execute(sql`DELETE FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id} AND phone<>${phone}`);await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${phone},${code.restaurant_id},${code.actor_id},now()) ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,created_at=now(),activated_at=now()`);await discloseOnce(tx,phone);return answer(await welcomeFor(tx,String(code.restaurant_id)))}
+ const pair=body.match(/^collega tako ([a-f0-9]{24})$/i);if(pair){const codes=await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE code_hash=${digest(pair[1]!.toLowerCase())} AND expires_at>now() RETURNING restaurant_id,actor_id`);const code=codes[0];if(!code||!await permitted(tx,String(code.actor_id),String(code.restaurant_id)))return answer(copy.codeInvalid);await lock(tx,'tako-owner-link:'+String(code.restaurant_id))
+  // 21/10: il codice aggiunge il numero accanto a quelli già collegati, fino a due per locale (prima sostituiva tutti).
+  const otherLinks=await tx.execute(sql`SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=${code.restaurant_id} AND phone<>${phone}`);if(otherLinks.length>=OWNER_PHONES_MAX)return answer(copy.pairLimit)
+  await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await tx.execute(sql`INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES(${phone},${code.restaurant_id},${code.actor_id},now()) ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,created_at=now(),activated_at=now()`);await discloseOnce(tx,phone);return answer(await welcomeFor(tx,String(code.restaurant_id)))}
  const ctx=await linkedContext(tx,phone);if(!ctx)return answer('');scope.tenant=ctx.tenant
  // Primo messaggio di un numero pre-collegato dalla dashboard: qualunque cosa scriva, si attiva e riceve il benvenuto (una volta: activated_at).
  // 19/10: niente «cosa sai fare» automatico, il benvenuto invita a chiederlo.
