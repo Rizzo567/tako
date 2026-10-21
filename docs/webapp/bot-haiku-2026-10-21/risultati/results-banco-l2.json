@@ -1,0 +1,5362 @@
+{
+ "set": "banco",
+ "metriche": {
+  "set": "banco",
+  "modo": "record",
+  "conversazioni": 92,
+  "misurate": 92,
+  "nonMisurate": [],
+  "messaggi": 149,
+  "corrette": 80,
+  "percentuale": 87,
+  "gravi": 6,
+  "graviSicurezza": 1,
+  "graviAltri": 5,
+  "medi": 6,
+  "domandePer10Messaggi": 3,
+  "domandeNonAttesePer10": 1.5,
+  "latenzaAnthropicMs": {
+   "p50": 1895,
+   "p95": 4820,
+   "chiamate": 170
+  },
+  "latenzaTurnoMs": {
+   "p50": 1813,
+   "p95": 4794,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1.14,
+  "tokenMediPerMessaggio": {
+   "input": 228,
+   "output": 360,
+   "cacheRead": 9958,
+   "cacheWrite": 45
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 170,
+   "su": 170,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0.036867,
+   "equivalenteLiveUsd": 0.045863,
+   "perMessaggioUsd": 0.000308,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 29,
+   "vere": 141,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 309.1
+ },
+ "codici": {
+  "risposta-non-pertinente": {
+   "GRAVE": 0,
+   "MEDIO": 0,
+   "BASSO": 1
+  },
+  "modifica-non-richiesta": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "non-applicato": {
+   "GRAVE": 5,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "chiede-invece-di-agire": {
+   "GRAVE": 0,
+   "MEDIO": 7,
+   "BASSO": 0
+  },
+  "correzione-non-applicata": {
+   "GRAVE": 2,
+   "MEDIO": 0,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "bv-semplici-001",
+   "family": "bv-semplici",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|9"
+   ],
+   "actual": [
+    "price|Piatto di verifica|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo di *Piatto di verifica* a 9 €.\n\n*Piatto di verifica*: prezzo da 13,50 € a *9,00 €*",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "prezzo Piatto di verifica a 9",
+    "conferma"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27474,
+   "latencyMs": [
+    2852.1,
+    4272.1
+   ],
+   "recordedLlmMs": 6845,
+   "usedLlm": true,
+   "source": "Manuel 14/10 18:53",
+   "note": "protocollo vecchio con CONFERMA: oggi il bot scrive subito, «conferma» non deve cambiare nulla",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-002",
+   "family": "bv-semplici",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|12"
+   ],
+   "actual": [
+    "price|Piatto di verifica|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *Piatto di verifica* a 12 €.\n\n*Piatto di verifica*: prezzo da 9,00 € a *12,00 €*",
+    "Non ho cambiato nulla.\n\n1. *Piatto di verifica* (12,00 €)"
+   ],
+   "turns": [
+    "prezzo Piatto di verifica a 12",
+    "conferma"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27466,
+   "latencyMs": [
+    2187.9,
+    2925.3
+   ],
+   "recordedLlmMs": 5013,
+   "usedLlm": true,
+   "source": "Manuel 14/10 18:55",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-003",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Polpo rucola e patate|true"
+   ],
+   "actual": [
+    "hidden|Polpo rucola e patate|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo il *Polpo rucola e patate* ai clienti.\n\n*Polpo rucola e patate*: *nascosto* dal menu",
+    "*Polpo rucola e patate* è già nascosto dal menu."
+   ],
+   "turns": [
+    "🎤 Nascondi il polpo.",
+    "conferma"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28097,
+   "latencyMs": [
+    1812.6,
+    3274.4
+   ],
+   "recordedLlmMs": 4992,
+   "usedLlm": true,
+   "source": "Manuel 14/10 22:35",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-004",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Polpo rucola e patate|false"
+   ],
+   "actual": [
+    "hidden|Polpo rucola e patate|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rimetto in menu il *Polpo rucola e patate*.\n\n*Polpo rucola e patate*: di nuovo *visibile* nel menu",
+    "Non c'è nessuna modifica in attesa da confermare. Dimmi cosa vuoi cambiare nel menu."
+   ],
+   "turns": [
+    "🎤 Mostra il polpo.",
+    "🎤 Confirma."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28054,
+   "latencyMs": [
+    1874.7,
+    3180.1
+   ],
+   "recordedLlmMs": 5004,
+   "usedLlm": true,
+   "source": "Manuel 15/10 00:22",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-005",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "actual": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*"
+   ],
+   "turns": [
+    "A Bruschetta Victoria un c'è cchiù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9183,
+   "latencyMs": [
+    1534.9
+   ],
+   "recordedLlmMs": 1478,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:29",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-006",
+   "family": "bv-semplici",
+   "menu": "qa1016",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al ragu|12|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al ragu|12|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Pasta al ragù* a 12 € in *Piatti di prova*.\n\nNuovo piatto *Pasta al ragù* in *Piatti di prova*: *12,00 €*"
+   ],
+   "turns": [
+    "🎤 Aggiungi tra piatti di prova, pasta al ragù, 12 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8950,
+   "latencyMs": [
+    1476.6
+   ],
+   "recordedLlmMs": 1451,
+   "usedLlm": true,
+   "source": "Manuel 16/10 18:21",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-007",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|13"
+   ],
+   "actual": [
+    "price|Piatto di verifica|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo di *Piatto di verifica* a 13 €.\n\n*Piatto di verifica*: prezzo da 13,50 € a *13,00 €*"
+   ],
+   "turns": [
+    "il piatto di verifica costa 13 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8941,
+   "latencyMs": [
+    1335.6
+   ],
+   "recordedLlmMs": 1315,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:36",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-008",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Piatto di verifica|false"
+   ],
+   "actual": [
+    "available|Piatto di verifica|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Piatto di verifica* come esaurito.\n\n*Piatto di verifica*: *finito*"
+   ],
+   "turns": [
+    "il piatto di verifica è finito"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8928,
+   "latencyMs": [
+    1397.2
+   ],
+   "recordedLlmMs": 1377,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:38",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-009",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Piatto di verifica|true"
+   ],
+   "actual": [
+    "available|Piatto di verifica|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Piatto di verifica* è di nuovo disponibile.\n\n*Piatto di verifica*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "il piatto di verifica è tornato disponibile"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8938,
+   "latencyMs": [
+    1459.6
+   ],
+   "recordedLlmMs": 1439,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:41",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-010",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Piatto di verifica|true"
+   ],
+   "actual": [
+    "hidden|Piatto di verifica|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, nascondo *Piatto di verifica* ai clienti.\n\n*Piatto di verifica*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi il piatto di verifica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8936,
+   "latencyMs": [
+    2217.3
+   ],
+   "recordedLlmMs": 2200,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:51",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-011",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Piatto di verifica|false"
+   ],
+   "actual": [
+    "hidden|Piatto di verifica|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rimetto *Piatto di verifica* nel menu.\n\n*Piatto di verifica*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "mostra il piatto di verifica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8933,
+   "latencyMs": [
+    2413
+   ],
+   "recordedLlmMs": 2396,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:53",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-012",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|piatto test qa|9|piatti di prova"
+   ],
+   "actual": [
+    "create|piatto test qa|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Piatto test QA* a 9 € nel Sottomenu *Piatti di prova*.\n\nNuovo piatto *Piatto test QA* in *Piatti di prova*: *9,00 €*"
+   ],
+   "turns": [
+    "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8973,
+   "latencyMs": [
+    1554.1
+   ],
+   "recordedLlmMs": 1535,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:56",
+   "note": "nome detto «Piatto test QA»: il nome nuovo è quello detto letteralmente (decisione 18/10, nota 62); il bot vero aveva creato «Test QA»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-013",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "actual": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto, aggiorno il *Piatto di verifica* a 13,50 €.\n\n*Piatto di verifica*: prezzo da 14,00 € a *13,50 €*"
+   ],
+   "turns": [
+    "metti il piatto di verifica a tredici euro e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8949,
+   "latencyMs": [
+    1925.5
+   ],
+   "recordedLlmMs": 1905,
+   "usedLlm": true,
+   "source": "Manuel 17/10 11:13",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-014",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|pasta al ragù|20"
+   ],
+   "actual": [
+    "price|pasta al ragù|20"
+   ],
+   "replies": [
+    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto *pasta al ragù* a 20 €.\n\n*pasta al ragù*: prezzo da 12,00 € a *20,00 €*"
+   ],
+   "turns": [
+    "🎤 Passa il ragù, metti prezzo a 20 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9660,
+   "latencyMs": [
+    5125.5
+   ],
+   "recordedLlmMs": 5103,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:18",
+   "note": "«Passa il ragù» = «pasta al ragù» storpiato da Whisper",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-015",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|boh|50"
+   ],
+   "actual": [
+    "price|boh|50"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCambio il prezzo di *boh*.\n\n*boh*: prezzo da 20,00 € a *50,00 €*"
+   ],
+   "turns": [
+    "🎤 Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9333,
+   "latencyMs": [
+    2833.2
+   ],
+   "recordedLlmMs": 2806,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:17",
+   "note": "risposta vera: «Non ho capito cosa cambiare per boh»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-016",
+   "family": "bv-semplici",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al sugo|12|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al sugo|12|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *pasta al sugo* a 12 € nel Sottomenu Piatti di prova.\n\nNuovo piatto *pasta al sugo* in *Piatti di prova*: *12,00 €*"
+   ],
+   "turns": [
+    "🎤 Aggiungi il piatto pasta al sugo a 12 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9201,
+   "latencyMs": [
+    2418.6
+   ],
+   "recordedLlmMs": 2397,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:36",
+   "note": "una sola categoria: va usata",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-017",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo la *pasta al ragù* dal menu.\n\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Vai, nascondi la pasta del ragù."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8934,
+   "latencyMs": [
+    2181.5
+   ],
+   "recordedLlmMs": 2166,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:19",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-018",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "actual": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno la *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*"
+   ],
+   "turns": [
+    "La Bruschetta Victoria la xe finia"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9181,
+   "latencyMs": [
+    1449.2
+   ],
+   "recordedLlmMs": 1426,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:22",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-019",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "actual": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*"
+   ],
+   "turns": [
+    "La Bruschetta Victoria l'è finida"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9183,
+   "latencyMs": [
+    1672.3
+   ],
+   "recordedLlmMs": 1651,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:24",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-020",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Bruschetta Victoria|12"
+   ],
+   "actual": [
+    "price|Bruschetta Victoria|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto, *Bruschetta Victoria* ora costa 12 €.\n\n*Bruschetta Victoria*: prezzo da 8,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "Boia, mettimi la Bruschetta Victoria a dodici euri"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9191,
+   "latencyMs": [
+    1509.2
+   ],
+   "recordedLlmMs": 1480,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:44",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-021",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Piatto di verifica* costa 13,50 €.\n\n*Piatto di verifica*: *13,50 €* · disponibile"
+   ],
+   "turns": [
+    "❓ quanto costa il piatto di verifica?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8861,
+   "latencyMs": [
+    1168.1
+   ],
+   "recordedLlmMs": 1149,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:32",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-022",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAl momento non risulta esaurito nessun piatto.\n\nNessun piatto è *finito*: sono tutti disponibili."
+   ],
+   "turns": [
+    "❓ cosa è finito?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8852,
+   "latencyMs": [
+    1306.6
+   ],
+   "recordedLlmMs": 1292,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:45",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-023",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLa *pasta al ragù* costa 12 €.\n\n*pasta al ragù*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "🎤 Quanto costa la pasta al ragù?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8858,
+   "latencyMs": [
+    1042.2
+   ],
+   "recordedLlmMs": 1026,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:16",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-024",
+   "family": "bv-semplici",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl piatto *boh* costa 20 €.\n\n*boh*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "🎤 Quanto costa il piatto boh?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8855,
+   "latencyMs": [
+    1470.6
+   ],
+   "recordedLlmMs": 1456,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:16",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-025",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLa *Bruschetta Victoria* costa 8 €.\n\n*Bruschetta Victoria*: *8,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ Aò, quanto viene la Bruschetta Victoria?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9112,
+   "latencyMs": [
+    1204.1
+   ],
+   "recordedLlmMs": 1182,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:19",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-semplici-026",
+   "family": "bv-semplici",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLa *Tagliata rucola e grana* costa 20 €.\n\n*Tagliata rucola e grana*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "🎤 Tagliata rucola e grana, quanto costa?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9110,
+   "latencyMs": [
+    1035.7
+   ],
+   "recordedLlmMs": 1015,
+   "usedLlm": true,
+   "source": "Manuel 14/10 19:28",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-001",
+   "family": "bv-domande",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCi sono tre tagliate: *Tagliata rucola e grana*, *Tagliata con funghi porcini e panna* e *Tagliata di orata o branzino con rucola e grana*.\n\n*Tagliata rucola e grana*: *20,00 €* · disponibile\n*Tagliata con funghi porcini e panna*: *24,00 €* · disponibile\n*Tagliata di orata o branzino con rucola e grana*: *20,00 €* · disponibile",
+    "La *Tagliata rucola e grana* costa *20,00 €* ed è disponibile.\n\n*Tagliata rucola e grana*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "🎤 Quanto costa la tagliata?",
+    "🎤 Tagliata rucola e grana, quanto costa?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18433,
+   "latencyMs": [
+    1321.4,
+    1790.6
+   ],
+   "recordedLlmMs": 3073,
+   "usedLlm": true,
+   "source": "Manuel 14/10 19:28",
+   "note": "tre tagliate: elencarle con i prezzi va bene quanto chiedere",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-002",
+   "family": "bv-domande",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nTi aiuto a gestire il menu: cambiare prezzi, segnare i piatti esauriti o di nuovo disponibili, nascondere o mostrare piatti, metterli in evidenza, aggiungere o eliminare piatti, creare Menu e Sottomenu, sezioni, promozioni, piatto del giorno e tag come vegetariano o piccante. Scrivimi cosa vuoi fare."
+   ],
+   "turns": [
+    "🎤 Dimmi un po' tutto quello che sai fare"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9231,
+   "latencyMs": [
+    1705.8
+   ],
+   "recordedLlmMs": 1689,
+   "usedLlm": true,
+   "source": "Manuel 14/10 22:32",
+   "note": "risposta vera: «Non trovo nel menu il piatto»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-003",
+   "family": "bv-domande",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCi sono tre tagliate nel menu: *Tagliata rucola e grana*, *Tagliata con funghi porcini e panna* e *Tagliata di orata o branzino con rucola e grana*. Quale ti interessa?\n\n*Tagliata rucola e grana*: *20,00 €* · disponibile\n*Tagliata con funghi porcini e panna*: *24,00 €* · disponibile\n*Tagliata di orata o branzino con rucola e grana*: *20,00 €* · disponibile"
+   ],
+   "turns": [
+    "🎤 Quanto costa la tagliata"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9501,
+   "latencyMs": [
+    3321
+   ],
+   "recordedLlmMs": 3306,
+   "usedLlm": true,
+   "source": "Manuel 14/10 22:36",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-004",
+   "family": "bv-domande",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPosso aggiornare il tuo menu: prezzi, piatti esauriti o di nuovo disponibili, nascondere o mostrare piatti, descrizioni, tag, evidenza, menu del giorno, promo e aggiungere o eliminare Menu, Sottomenu e Piatti. Dimmi cosa vuoi cambiare.",
+    "Gli allergeni non posso cambiarli da qui. Posso aggiornare prezzi, disponibilità, descrizioni, tag ed evidenza dei Piatti."
+   ],
+   "turns": [
+    "❓ cosa sai fare?",
+    "❓ sai cambiare gli allergeni?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18472,
+   "latencyMs": [
+    1782.9,
+    1354.4
+   ],
+   "recordedLlmMs": 3101,
+   "usedLlm": true,
+   "source": "Manuel 15/10 00:23",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-005",
+   "family": "bv-domande",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCiao! Sei collegato al locale *Victoria Bar*. Posso modificare prezzi, disponibilità, piatti, menu e sottomenu, oppure rispondere a domande sul menu."
+   ],
+   "turns": [
+    "❓ Ciao! A quale locale sono collegato e cosa puoi fare?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9165,
+   "latencyMs": [
+    1533.8
+   ],
+   "recordedLlmMs": 1513,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:16",
+   "note": "collegato a Victoria Bar dal 14/10 19:26",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-006",
+   "family": "bv-domande",
+   "menu": "qa1016",
+   "success": true,
+   "fails": [
+    {
+     "sev": "BASSO",
+     "code": "risposta-non-pertinente",
+     "why": "risposta finale senza /verifica web/i"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCiao! Dimmi pure cosa vuoi aggiornare nel menu.",
+    "Il tuo locale si chiama *Tako*. Vuoi sapere altro sul menu?"
+   ],
+   "turns": [
+    "❓ ciao",
+    "❓ che locale ho?"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 26834,
+   "latencyMs": [
+    1142.4,
+    2670.8
+   ],
+   "recordedLlmMs": 3779,
+   "usedLlm": true,
+   "source": "Manuel 16/10 18:18",
+   "note": "risposta vera fuori tema («Posso dirti prezzi…»)",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-007",
+   "family": "bv-domande",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Piatto di verifica* costa ora 13 €. Vuoi che lo porti a 14 €?\n\n*Piatto di verifica*: *13,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ piatto di verifica 13 o 14?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8876,
+   "latencyMs": [
+    1420.8
+   ],
+   "recordedLlmMs": 1403,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:43",
+   "note": "domanda sul prezzo: dirlo (13), niente scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-008",
+   "family": "bv-domande",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAl momento non risulta esaurito nessun piatto del menu. Vuoi che ti mostri quelli nascosti?",
+    "*Piatti nascosti (1)*\n- pasta al ragù"
+   ],
+   "turns": [
+    "🎤 Ok, adesso dimmi cosa è finito.",
+    "🎤 Ok, allora mi devi dire quali piatti ho nascosto, per favore."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27157,
+   "latencyMs": [
+    4225.7,
+    1916.8
+   ],
+   "recordedLlmMs": 6100,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:19",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-009",
+   "family": "bv-domande",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCiao! Posso aggiornare il tuo menu: cambiare prezzi, segnare piatti esauriti o di nuovo disponibili, nasconderli o mostrarli, creare Menu, Sottomenu e Piatti, e molto altro. Dimmi cosa vuoi fare."
+   ],
+   "turns": [
+    "🎤 Ciao, cosa sai fare?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8963,
+   "latencyMs": [
+    1860.6
+   ],
+   "recordedLlmMs": 1844,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:26",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-domande-010",
+   "family": "bv-domande",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "actual": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo di *Piatto di verifica*. *boh* resta com'è.\n\n*Piatto di verifica*: prezzo da 14,00 € a *13,50 €*",
+    "*Piatto di verifica* è a *13,50 €* e risulta disponibile. Vuoi modificarlo?\n\n*Piatto di verifica*: *13,50 €* · disponibile"
+   ],
+   "turns": [
+    "non cambiare boh; metti il piatto di verifica a tredici euro e cinquanta",
+    "Piatto di verifica"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18538,
+   "latencyMs": [
+    2561.5,
+    3008.5
+   ],
+   "recordedLlmMs": 5542,
+   "usedLlm": true,
+   "source": "Manuel 17/10 11:11",
+   "note": "«non cambiare boh» è una negazione, non un piatto da scegliere; il turno 2 risponde alla domanda vera del bot",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-001",
+   "family": "bv-multiple",
+   "menu": "collaudo",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta collaudo|11",
+    "price|Pizza collaudo|13",
+    "price|Tiramisu collaudo|6"
+   ],
+   "actual": [
+    "price|Pasta collaudo|11",
+    "price|Pizza collaudo|13",
+    "price|Tiramisu collaudo|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, cambio i prezzi di *Pasta collaudo*, *Pizza collaudo* e *Tiramisu collaudo*.\n\n*Pasta collaudo*: prezzo da 10,00 € a *11,00 €*\n*Pizza collaudo*: prezzo da 12,00 € a *13,00 €*\n*Tiramisu collaudo*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "La Pasta collaudo mettila a undici euro, la Pizza collaudo a tredici euro e il Tiramisu collaudo a sei euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9162,
+   "latencyMs": [
+    1788.8
+   ],
+   "recordedLlmMs": 1762,
+   "usedLlm": true,
+   "source": "Manuel 15/10 15:42",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-002",
+   "family": "bv-multiple",
+   "menu": "collaudo",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ],
+   "actual": [
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta collaudo*: prezzo da 11,00 € a *14,00 €*\n2. *Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n3. *Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*\n4. *Acqua collaudo*: prezzo da 2,00 € a *3,00 €*",
+    "Ok, sistemo la *Pasta collaudo* a quindici euro e lascio l'acqua com'è. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta collaudo*: prezzo da 11,00 € a *15,00 €*\n2. *Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n3. *Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*",
+    "Ok, pubblico le modifiche in sospeso.\n\n*Pasta collaudo*: prezzo da 11,00 € a *15,00 €*\n*Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n*Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.",
+    "Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.",
+    "OK"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28236,
+   "latencyMs": [
+    2420.6,
+    2288.7,
+    1369.1
+   ],
+   "recordedLlmMs": 5987,
+   "usedLlm": true,
+   "source": "Manuel 15/10 15:44",
+   "note": "risposta vera al turno 2 (prima prova): «Non ho capito bene»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-003",
+   "family": "bv-multiple",
+   "menu": "collaudo",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ],
+   "actual": [
+    "price|Pasta collaudo|15",
+    "price|Pizza collaudo|16",
+    "price|Tiramisu collaudo|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta collaudo*: prezzo da 11,00 € a *14,00 €*\n2. *Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n3. *Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*\n4. *Acqua collaudo*: prezzo da 2,00 € a *3,00 €*",
+    "Ok, sistemo la *Pasta collaudo* a quindici euro e lascio l'acqua com'è. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta collaudo*: prezzo da 11,00 € a *15,00 €*\n2. *Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n3. *Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*",
+    "Ok, pubblico le modifiche in sospeso.\n\n*Pasta collaudo*: prezzo da 11,00 € a *15,00 €*\n*Pizza collaudo*: prezzo da 13,00 € a *16,00 €*\n*Tiramisu collaudo*: prezzo da 6,00 € a *7,00 €*",
+    "Non ho cambiato nulla."
+   ],
+   "turns": [
+    "La Pasta collaudo mettila a quattordici euro, la Pizza collaudo a sedici euro, il Tiramisu collaudo a sette euro e l’Acqua collaudo a tre euro.",
+    "Per la Pasta collaudo fai quindici euro, non quattordici. Lascia il prezzo dell’Acqua collaudo com’è. Mantieni le altre modifiche.",
+    "OK",
+    "OK"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 47749,
+   "latencyMs": [
+    19.9,
+    19.1,
+    11.6,
+    2813.1
+   ],
+   "recordedLlmMs": 8778,
+   "usedLlm": true,
+   "source": "Manuel 15/10 15:54",
+   "note": "il secondo OK non ha niente da confermare",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-004",
+   "family": "bv-multiple",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Che ne sacc|21",
+    "price|Piatto di verifica|14",
+    "price|boh|21",
+    "price|pasta al ragù|13"
+   ],
+   "actual": [
+    "price|Che ne sacc|21",
+    "price|Piatto di verifica|14",
+    "price|boh|21",
+    "price|pasta al ragù|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Piatto di verifica*: prezzo da 13,00 € a *14,00 €*\n2. *Che ne sacc*: prezzo da 20,00 € a *21,00 €*\n3. *boh*: prezzo da 20,00 € a *21,00 €*\n4. *pasta al ragù*: prezzo da 12,00 € a *13,00 €*",
+    "Perfetto, pubblico le modifiche ai prezzi.\n\n*Piatto di verifica*: prezzo da 13,00 € a *14,00 €*\n*Che ne sacc*: prezzo da 20,00 € a *21,00 €*\n*boh*: prezzo da 20,00 € a *21,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+    "ok va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18422,
+   "latencyMs": [
+    2109.5,
+    1534.6
+   ],
+   "recordedLlmMs": 3606,
+   "usedLlm": true,
+   "source": "Manuel 17/10 11:05",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-005",
+   "family": "bv-multiple",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Che ne sacc|20",
+    "price|boh|20",
+    "price|pasta al ragù|12"
+   ],
+   "actual": [
+    "price|Che ne sacc|20",
+    "price|boh|20",
+    "price|pasta al ragù|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto *Che ne sacc* a 20 €, *boh* a 20 € e *pasta al ragù* a 12 €.\n\n*Che ne sacc*: prezzo da 21,00 € a *20,00 €*\n*boh*: prezzo da 21,00 € a *20,00 €*\n*pasta al ragù*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "metti Che ne sacc a 20 euro, boh a 20 euro e pasta al ragù a 12 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9123,
+   "latencyMs": [
+    2458.1
+   ],
+   "recordedLlmMs": 2437,
+   "usedLlm": true,
+   "source": "Manuel 17/10 11:15",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-006",
+   "family": "bv-multiple",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Che ne sacc|21",
+    "price|Piatto di verifica|14.5",
+    "price|boh|21",
+    "price|pasta al ragù|13"
+   ],
+   "actual": [
+    "price|Che ne sacc|21",
+    "price|Piatto di verifica|14.5",
+    "price|boh|21",
+    "price|pasta al ragù|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumento di un euro sui piatti del Sottomenu *Piatti di prova*.\n\n*Piatto di verifica*: prezzo da 13,50 € a *14,50 €*\n*Che ne sacc*: prezzo da 20,00 € a *21,00 €*\n*boh*: prezzo da 20,00 € a *21,00 €*\n*pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "aumenta tutti i piatti della categoria Piatti di prova di un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9179,
+   "latencyMs": [
+    2048.9
+   ],
+   "recordedLlmMs": 2028,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:47",
+   "note": "prezzi detti (ognuno +1 €): un solo comando sul gruppo → si applica subito con riepilogo numerato, niente domanda (decisione 18/10 in attesa di Manuel, nota 62); risposta vera: rifiuto",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-007",
+   "family": "bv-multiple",
+   "menu": "qa1323",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo la *Parmigiana* e metto in promo il *Che ne sacc* a 12 €.\n\n*Inserisce il piatto la parmigiana*: *nascosto* dal menu\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli"
+   ],
+   "turns": [
+    "🎤 Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9435,
+   "latencyMs": [
+    3380.6
+   ],
+   "recordedLlmMs": 3354,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:23",
+   "note": "«la parmigiana» = l'unico piatto con parmigiana; kenesac = Che ne sacc",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-008",
+   "family": "bv-multiple",
+   "menu": "qa1323",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12",
+    "promo|Piatto di verifica|11"
+   ],
+   "actual": [
+    "hidden|Inserisce il piatto la parmigiana|true",
+    "promo|Che ne sacc|12",
+    "promo|Piatto di verifica|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo la *Parmigiana* e metto in promo il *Che ne sacc* a 12 €.\n\n*Inserisce il piatto la parmigiana*: *nascosto* dal menu\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli",
+    "Nascondo *Inserisce il piatto la parmigiana* e metto in promo *Piatto di verifica* a 11 €.\n\n*Piatto di verifica*: in *promo* a *11,00 €* (prezzo pieno 13,50 €), finché non la togli\n\n*Inserisce il piatto la parmigiana* è già nascosto dal menu."
+   ],
+   "turns": [
+    "🎤 Allora, voglio che mi nascondi la parmigiana tra i piatti del menù e mi metti in sconto il kenesac a 12 euro.",
+    "🎤 Allora, voglio che mi nascondi dal menù il piatto la parmigiana e invece mi metti in promo il piatto di verifica a 11 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18778,
+   "latencyMs": [
+    19,
+    2341
+   ],
+   "recordedLlmMs": 5665,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:23",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-multiple-009",
+   "family": "bv-multiple",
+   "menu": "qa1323",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ],
+   "actual": [
+    "description|boh|joe fa schifo",
+    "promo|Che ne sacc|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, cambio la descrizione di *boh* e metto la promo a 12 € su *Che ne sacc*.\n\n*boh*: descrizione «Joe fa schifo»\n*Che ne sacc*: in *promo* a *12,00 €* (prezzo pieno 20,00 €), finché non la togli"
+   ],
+   "turns": [
+    "🎤 Allora nel piatto Bo cambia la descrizione e metti Joe fa schifo, invece nel piatto Kenesac metti la promo a 12 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9600,
+   "latencyMs": [
+    4172.3
+   ],
+   "recordedLlmMs": 4149,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:24",
+   "note": "risposta vera: «Non ho capito la richiesta»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-001",
+   "family": "bv-correzioni",
+   "menu": "qa1323",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: price|Inserisce il piatto la parmigiana|10"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: create|la parmigiana|10|piatti di prova"
+    }
+   ],
+   "expected": [
+    "create|la parmigiana|10|piatti di prova",
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true",
+    "price|Inserisce il piatto la parmigiana|10"
+   ],
+   "replies": [
+    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Tiramisù* a 6 € in Piatti di prova. C'è già *Inserisce il piatto la parmigiana* a 12 €: lo aggiorno a 10 € o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\n«la parmigiana»:\n1. *Inserisce il piatto la parmigiana* (12,00 €)",
+    "Nascondo *boh* dal menu.\n\n*boh*: *nascosto* dal menu",
+    "Hai ragione, scusa. Aggiungo *Tiramisù* a 6 € e aggiorno *Inserisce il piatto la parmigiana* a 10 €.\n\nNuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n*Inserisce il piatto la parmigiana*: prezzo da 12,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+    "🎤 No, ho detto togli boh.",
+    "🎤 Sì, ma ti avevo detto che dovevi aggiungere il piatto, la parmigiana a 10 euro e il tiramisù a 6 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28878,
+   "latencyMs": [
+    5747.5,
+    2059.8,
+    1938.9
+   ],
+   "recordedLlmMs": 9675,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:25",
+   "note": "«toiibo» incerto al turno 1 (domanda), le parti chiare si pubblicano; risposta vera al turno 2: boh «finito» invece di nascosto",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-002",
+   "family": "bv-correzioni",
+   "menu": "qa1323",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: create|la parmigiana|10|piatti di prova, create|tiramisu|6|piatti di prova"
+    }
+   ],
+   "expected": [
+    "create|la parmigiana|10|piatti di prova",
+    "create|tiramisu|6|piatti di prova",
+    "hidden|boh|true"
+   ],
+   "actual": [
+    "hidden|boh|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Tiramisù* a 6 € in Piatti di prova. C'è già *Inserisce il piatto la parmigiana* a 12 €: lo aggiorno a 10 € o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*\n\n«la parmigiana»:\n1. *Inserisce il piatto la parmigiana* (12,00 €)",
+    "Nascondo *boh* dal menu.\n\n*boh*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e toiibo.",
+    "🎤 No, ho detto togli boh."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19477,
+   "latencyMs": [
+    17.4,
+    11.2
+   ],
+   "recordedLlmMs": 7764,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:26",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-003",
+   "family": "bv-correzioni",
+   "menu": "qasporco",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, promo|tiramisù|3"
+    }
+   ],
+   "expected": [
+    "price|la parmigiana|15",
+    "promo|tiramisù|3"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale parmigiana intendi: *la parmigiana* o *Inserisce il piatto la parmigiana*? Il tiramisù in promo lo metto subito.\n\nNon ancora pubblicato:\n1. *tiramisù*: in *promo* a *3,00 €* (prezzo pieno 6,00 €), finché non la togli\n\n«la parmigiana»:\n1. *Inserisce il piatto la parmigiana* (12,00 €)\n2. *la parmigiana* (10,00 €)"
+   ],
+   "turns": [
+    "🎤 Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9674,
+   "latencyMs": [
+    4162.6
+   ],
+   "recordedLlmMs": 4142,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:27",
+   "note": "«la parmigiana» è il nome esatto (l'altro è nascosto); risposta vera: «Quale piatto intendi… Riscrivimi»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-004",
+   "family": "bv-correzioni",
+   "menu": "qasporco",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, price|tiramisù|10"
+    }
+   ],
+   "expected": [
+    "price|la parmigiana|15",
+    "price|tiramisù|10"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale parmigiana intendi: *la parmigiana* o *Inserisce il piatto la parmigiana*? Il tiramisù in promo lo metto subito.\n\nNon ancora pubblicato:\n1. *tiramisù*: in *promo* a *3,00 €* (prezzo pieno 6,00 €), finché non la togli\n\n«la parmigiana»:\n1. *Inserisce il piatto la parmigiana* (12,00 €)\n2. *la parmigiana* (10,00 €)",
+    "Quale parmigiana intendi: *la parmigiana* o *Inserisce il piatto la parmigiana*? Intanto metto il *tiramisù* a 10 €.\n\n1. *la parmigiana* (10,00 €)\n2. *Inserisce il piatto la parmigiana* (12,00 €)"
+   ],
+   "turns": [
+    "🎤 Ok, metti la parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo in promo a 3 euro.",
+    "🎤 No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 29108,
+   "latencyMs": [
+    15.8,
+    4793.5
+   ],
+   "recordedLlmMs": 8901,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:27",
+   "note": "il turno 2 corregge: tiramisù a prezzo pieno 10, niente promo",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-005",
+   "family": "bv-correzioni",
+   "menu": "qasporco",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|la parmigiana|15, price|tiramisù|10"
+    }
+   ],
+   "expected": [
+    "price|la parmigiana|15",
+    "price|tiramisù|10"
+   ],
+   "actual": [],
+   "replies": [
+    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\nNon ancora pubblicato:\n1. *tiramisù*: prezzo da 6,00 € a *3,00 €*"
+   ],
+   "turns": [
+    "🎤 No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20305,
+   "latencyMs": [
+    10871.1
+   ],
+   "recordedLlmMs": 10838,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:28",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-006",
+   "family": "bv-correzioni",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
+   ],
+   "actual": [
+    "create|lasagna|20|piatti di prova",
+    "create|pasta al pesto|10|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costano *pasta al pesto* e *lasagna*?",
+    "Ok, sono due piatti separati. Quanto costano *pasta al pesto* e *lasagna*?",
+    "Aggiungo *pasta al pesto* e *lasagna* nel Sottomenu *Piatti di prova*.\n\nNuovo piatto *pasta al pesto* in *Piatti di prova*: *10,00 €*\nNuovo piatto *lasagna* in *Piatti di prova*: *20,00 €*"
+   ],
+   "turns": [
+    "🎤 Allora aggiungi il piatto pasta al pesto e lasagna.",
+    "🎤 No, pasta al pesto e lasagna sono due piatti separati.",
+    "🎤 Uno deve essere a 10 euro e uno deve essere a 20 euro."
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28694,
+   "latencyMs": [
+    4594.8,
+    1222.5,
+    4306.2
+   ],
+   "recordedLlmMs": 10055,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:39",
+   "note": "AMBIGUO: turno 1 «pasta al pesto e lasagna» uno o due piatti, senza prezzo; turno 2 due piatti senza prezzo. Risposta vera finale: un piatto a 10,01 €",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-correzioni-007",
+   "family": "bv-correzioni",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costano *pasta al pesto* e *lasagna*?",
+    "Ok, sono due piatti separati. Quanto costano *pasta al pesto* e *lasagna*?"
+   ],
+   "turns": [
+    "🎤 Allora aggiungi il piatto pasta al pesto e lasagna.",
+    "🎤 No, pasta al pesto e lasagna sono due piatti separati."
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18782,
+   "latencyMs": [
+    12.6,
+    11.3
+   ],
+   "recordedLlmMs": 5773,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:39",
+   "note": "AMBIGUO: mancano i prezzi di entrambi: una domanda (mai prezzi inventati)",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-deixis-001",
+   "family": "bv-deixis",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|boh|true"
+    }
+   ],
+   "expected": [
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
+   "actual": [
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
+   "replies": [
+    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC'è già *la parmigiana* a 10 €: lo aggiorno o ne creo un altro?",
+    "Ok, metto *la parmigiana* e *il tiramisù* a 15 €.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "🎤 Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28576,
+   "latencyMs": [
+    7343.5,
+    2059.1
+   ],
+   "recordedLlmMs": 9350,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:27",
+   "note": "parmigiana e tiramisù ci sono già a 10 e 6: non duplicarli",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-deixis-002",
+   "family": "bv-deixis",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: hidden|boh|true"
+    }
+   ],
+   "expected": [
+    "hidden|boh|true",
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
+   "actual": [
+    "price|la parmigiana|15",
+    "price|tiramisù|15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC'è già *la parmigiana* a 10 €: lo aggiorno o ne creo un altro?",
+    "Ok, metto *la parmigiana* e *il tiramisù* a 15 €.\n\n*la parmigiana*: prezzo da 10,00 € a *15,00 €*\n*tiramisù*: prezzo da 6,00 € a *15,00 €*",
+    "Elimino *la parmigiana* e *il tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *la parmigiana*: da eliminare\n2. *tiramisù*: da eliminare"
+   ],
+   "turns": [
+    "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "🎤 Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.",
+    "🎤 Ok, adesso rimuovi completamente quei due piatti."
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 37876,
+   "latencyMs": [
+    21.3,
+    20,
+    1788
+   ],
+   "recordedLlmMs": 11115,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:27",
+   "note": "«rimuovi completamente» = eliminare: si cancella solo dopo «sì», quindi al turno 3 domanda di conferma e niente scrittura. Risposta vera: «Quale piatto intendi… Riscrivimi»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-deixis-003",
+   "family": "bv-deixis",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: hidden|boh|true"
+    }
+   ],
+   "expected": [
+    "hidden|boh|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC'è già *la parmigiana* a 10 €: lo aggiorno o ne creo un altro?"
+   ],
+   "turns": [
+    "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19292,
+   "latencyMs": [
+    17.8
+   ],
+   "recordedLlmMs": 7318,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:27",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-deixis-004",
+   "family": "bv-deixis",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuali due piatti vuoi eliminare? Dimmi i nomi così ti chiedo la conferma."
+   ],
+   "turns": [
+    "🎤 Ok, adesso rimuovi completamente quei due piatti."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9140,
+   "latencyMs": [
+    3047.8
+   ],
+   "recordedLlmMs": 3032,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:30",
+   "note": "AMBIGUO: senza il contesto della chat «quei due» non si risolve: domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-aggiunte-001",
+   "family": "bv-aggiunte",
+   "menu": "qa1016",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al ragu|15|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al ragu|15|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il piatto nuovo e a che prezzo lo metto? In che Sottomenu va?",
+    "Aggiungo *Pasta al ragù* a 15 € in Piatti di prova.\n\nNuovo piatto *Pasta al ragù* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "aggiungiamo un piatto",
+    "🎤 Aggiungi tra piatti di prova il piatto pasta al ragù che costa 15 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17966,
+   "latencyMs": [
+    1578.3,
+    2015.7
+   ],
+   "recordedLlmMs": 3562,
+   "usedLlm": true,
+   "source": "Manuel 16/10 18:19",
+   "note": "risposta vera al turno 2: «Non trovo «aggiungi tra piatti di prova il piatto pasta al ragu che»»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-aggiunte-002",
+   "family": "bv-aggiunte",
+   "menu": "qa1016",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al ragu|15|piatti di prova"
+   ],
+   "actual": [
+    "create|pasta al ragu|15|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *pasta al ragù* a 15 € in *Piatti di prova*.\n\nNuovo piatto *pasta al ragù* in *Piatti di prova*: *15,00 €*"
+   ],
+   "turns": [
+    "🎤 Aggiungi tra piatti di prova il piatto pasta al ragù che costa 15 euro."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8953,
+   "latencyMs": [
+    1523.2
+   ],
+   "recordedLlmMs": 1508,
+   "usedLlm": true,
+   "source": "Manuel 16/10 18:20",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-aggiunte-003",
+   "family": "bv-aggiunte",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|parmigiana|12|piatti di prova"
+   ],
+   "actual": [
+    "create|parmigiana|12|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA che prezzo la metto, *Parmigiana*?",
+    "A che prezzo la metto, *Parmigiana*?",
+    "Aggiungo *Parmigiana* a 12 € nel Sottomenu Piatti di prova.\n\nNuovo piatto *Parmigiana* in *Piatti di prova*: *12,00 €*"
+   ],
+   "turns": [
+    "🎤 Inserisce il piatto la parmigiana.",
+    "🎤 Inserisci un nuovo piatto, si chiama parmigiana.",
+    "🎤 12 euro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28084,
+   "latencyMs": [
+    2967.6,
+    2300.6,
+    2515.1
+   ],
+   "recordedLlmMs": 7741,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:20",
+   "note": "prezzo assente fino al turno 3: domande; risposta vera: piatto «Inserisce il piatto la parmigiana»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-aggiunte-004",
+   "family": "bv-aggiunte",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA che prezzo la metto, *Parmigiana*?"
+   ],
+   "turns": [
+    "🎤 Inserisce il piatto la parmigiana."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9270,
+   "latencyMs": [
+    17.1
+   ],
+   "recordedLlmMs": 2955,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:20",
+   "note": "manca il prezzo: domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-aggiunte-005",
+   "family": "bv-aggiunte",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *pasta al pesto* a 15 € e *caviale* a 150 €. C'è già *pasta al ragù*: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\n2. Nuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n\n«pasta al ragù»:\n1. *pasta al ragù* (12,00 €)"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9757,
+   "latencyMs": [
+    5038.9
+   ],
+   "recordedLlmMs": 5014,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:30",
+   "note": "AMBIGUO: pasta al ragù c'è già a 12: domanda breve («c'è già pasta al ragù a 12 €: lo aggiorno o ne creo un altro?»), nessuna scrittura sul ragù (decisione 18/10, nota 62); con una parte incerta le parti chiare (pesto e caviale, una sola categoria) aspettano la risposta; accettato anche pubblicarle. Risposta vera: «manca la categoria … Rimandami»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-aggiunte-006",
+   "family": "bv-aggiunte",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo la *lasagna* nel menu. Intendi i *Paccheri al ragù* a 13 €?"
+   ],
+   "turns": [
+    "🎤 La lasagna costa 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9151,
+   "latencyMs": [
+    2548.7
+   ],
+   "recordedLlmMs": 2533,
+   "usedLlm": true,
+   "source": "Manuel 14/10 22:37",
+   "note": "lasagna non c'è al Victoria: dirlo, niente piatto nuovo",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-elimina-001",
+   "family": "bv-elimina",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Polpo rucola e patate|true"
+   ],
+   "actual": [
+    "hidden|Polpo rucola e patate|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Polpo rucola e patate* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Polpo rucola e patate*: da eliminare",
+    "Ok, annullo l'eliminazione e nascondo *Polpo rucola e patate*.\n\n*Polpo rucola e patate*: *nascosto* dal menu",
+    "*Polpo rucola e patate* è già nascosto dal menu."
+   ],
+   "turns": [
+    "🎤 Puoi cancellare il polpo?",
+    "🎤 Nascondi il polpo.",
+    "conferma"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 37828,
+   "latencyMs": [
+    1919.2,
+    1842.2,
+    3888.4
+   ],
+   "recordedLlmMs": 7549,
+   "usedLlm": true,
+   "source": "Manuel 14/10 22:34",
+   "note": "«cancellare» → chiedere conferma dell'eliminazione; Manuel poi sceglie di nascondere",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-elimina-002",
+   "family": "bv-elimina",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Polpo rucola e patate* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Polpo rucola e patate*: da eliminare"
+   ],
+   "turns": [
+    "🎤 Puoi cancellare il polpo?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9186,
+   "latencyMs": [
+    16.1
+   ],
+   "recordedLlmMs": 1895,
+   "usedLlm": true,
+   "source": "Manuel 14/10 22:34",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-elimina-003",
+   "family": "bv-elimina",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|pasta al ragù|true"
+   ],
+   "actual": [
+    "hidden|pasta al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *pasta al ragù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *pasta al ragù*: da eliminare",
+    "Ok, tolgo *pasta al ragù* dal menu invece di eliminarla.\n\n*pasta al ragù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Elimina il piatto pasta al ragù.",
+    "🎤 Vai, nascondi la pasta del ragù."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18203,
+   "latencyMs": [
+    1300.5,
+    1643.9
+   ],
+   "recordedLlmMs": 2911,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:18",
+   "note": "elimina → conferma; poi «nascondi» vince",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-elimina-004",
+   "family": "bv-elimina",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *pasta al ragù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *pasta al ragù*: da eliminare"
+   ],
+   "turns": [
+    "🎤 Elimina il piatto pasta al ragù."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8938,
+   "latencyMs": [
+    1301.1
+   ],
+   "recordedLlmMs": 1286,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:18",
+   "note": "risposta vera: «Da questa chat non posso eliminare»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-elimina-005",
+   "family": "bv-elimina",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|piatto test qa|9|piatti di prova"
+   ],
+   "actual": [
+    "create|piatto test qa|9|piatti di prova"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Piatto test QA* a 9 € nel Sottomenu *Piatti di prova*.\n\nNuovo piatto *Piatto test QA* in *Piatti di prova*: *9,00 €*",
+    "Nascondo *Piatto test QA* dal menu.\n\n*Piatto test QA*: *nascosto* dal menu",
+    "Annullo l'ultima modifica su *Piatto test QA*.\n\n*Piatto test QA*: com’era prima"
+   ],
+   "turns": [
+    "aggiungi nella categoria Piatti di prova il piatto Piatto test QA a 9 euro",
+    "togli il piatto Test QA",
+    "annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27209,
+   "latencyMs": [
+    15.4,
+    1544,
+    1560.6
+   ],
+   "recordedLlmMs": 4609,
+   "usedLlm": true,
+   "source": "Manuel 17/10 11:01",
+   "note": "nome letterale «Piatto test QA» (nota 62); togli = nascondi; annulla = torna visibile (il giudice vede solo la creazione). Risposta vera: «Non ci sono modifiche in attesa»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-categorie-001",
+   "family": "bv-categorie",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|caviale|150|speciali, create|pasta al pesto|15|primi, move|pasta al ragù|Primi"
+    }
+   ],
+   "expected": [
+    "create|caviale|150|speciali",
+    "create|pasta al pesto|15|primi",
+    "move|pasta al ragù|Primi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *pasta al pesto* a 15 € e *caviale* a 150 €. C'è già *pasta al ragù*: lo aggiorno o ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Piatti di prova*: *15,00 €*\n2. Nuovo piatto *caviale* in *Piatti di prova*: *150,00 €*\n\n«pasta al ragù»:\n1. *pasta al ragù* (12,00 €)",
+    "Ci sto lavorando…\nPrima devo creare i Sottomenu *Primi* e *Speciali* nel Menu, perché ancora non ci sono. Vuoi che li crei e ci metta i piatti?"
+   ],
+   "turns": [
+    "🎤 E aggiungi pasta al ragù a 10 euro, aggiungi pasta al pesto a 15 euro, aggiungi caviale a 150 euro.",
+    "🎤 No, fai una cosa, aggiungi un'altra categoria, ovvero primi, e lì aggiungi quei due piatti che ti ho detto, invece il caviale aggiungere un'altra categoria ancora, chiamandola speciali."
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 31908,
+   "latencyMs": [
+    18.6,
+    16296.3
+   ],
+   "recordedLlmMs": 21262,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:30",
+   "note": "il ragù esistente va nei Primi (nota 62: prezzo 10 accettato, non richiesto perché la domanda sul ragù è rimasta senza risposta); risposta vera: «manca la categoria»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-categorie-002",
+   "family": "bv-categorie",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "section|primi pasti"
+   ],
+   "actual": [
+    "section|primi pasti"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Primi pasti* nel Menu *Menu*. Per ora è nascosto: scrivi *rendi visibile Primi pasti* quando vuoi che i clienti lo vedano."
+   ],
+   "turns": [
+    "🎤 Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\"."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9263,
+   "latencyMs": [
+    2922.7
+   ],
+   "recordedLlmMs": 2900,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:38",
+   "note": "risposta vera: «Le categorie si creano dalla dashboard»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-categorie-003",
+   "family": "bv-categorie",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta al sugo|12|piatti di prova",
+    "section|primi pasti"
+   ],
+   "actual": [
+    "create|pasta al sugo|12|piatti di prova",
+    "section|primi pasti"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *pasta al sugo* a 12 € nel Sottomenu Piatti di prova.\n\nNuovo piatto *pasta al sugo* in *Piatti di prova*: *12,00 €*",
+    "Ho creato il sottomenu *Primi pasti* nel Menu *Menu*. Per ora è nascosto: scrivi *rendi visibile Primi pasti* quando vuoi che i clienti lo vedano."
+   ],
+   "turns": [
+    "🎤 Aggiungi il piatto pasta al sugo a 12 euro.",
+    "🎤 Ok, adesso devi creare un'altra categoria che si chiama \"primi pasti\"."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18340,
+   "latencyMs": [
+    16.8,
+    1896.1
+   ],
+   "recordedLlmMs": 4275,
+   "usedLlm": true,
+   "source": "Manuel 17/10 17:36",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-001",
+   "family": "bv-annulla",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*",
+    "Ok, annullo l'ultima modifica su *Bruschetta Victoria*.\n\n*Bruschetta Victoria*: com’era prima"
+   ],
+   "turns": [
+    "Uè, a Bruschetta Victoria nun ce sta cchiù",
+    "ANNULLA"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18482,
+   "latencyMs": [
+    1378.8,
+    2355.3
+   ],
+   "recordedLlmMs": 3656,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:20",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-002",
+   "family": "bv-annulla",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno la *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*",
+    "Ok, annullo l'ultima modifica sulla *Bruschetta Victoria*.\n\n*Bruschetta Victoria*: com’era prima"
+   ],
+   "turns": [
+    "La Bruschetta Victoria la xe finia",
+    "ANNULLA"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18468,
+   "latencyMs": [
+    17.1,
+    1321.9
+   ],
+   "recordedLlmMs": 2730,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:22",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-003",
+   "family": "bv-annulla",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*",
+    "Ok, annullo l'ultima modifica: *Bruschetta Victoria* torna disponibile.\n\n*Bruschetta Victoria*: com’era prima"
+   ],
+   "turns": [
+    "La Bruschetta Victoria l'è finida",
+    "ANNULLA"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18473,
+   "latencyMs": [
+    18.8,
+    1882.6
+   ],
+   "recordedLlmMs": 3519,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:24",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-004",
+   "family": "bv-annulla",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto, *Bruschetta Victoria* ora costa 12 €.\n\n*Bruschetta Victoria*: prezzo da 8,00 € a *12,00 €*",
+    "Ok, annullo l'ultima modifica sulla *Bruschetta Victoria*.\n\n*Bruschetta Victoria*: com’era prima"
+   ],
+   "turns": [
+    "Boia, mettimi la Bruschetta Victoria a dodici euri",
+    "ANNULLA"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18501,
+   "latencyMs": [
+    19.5,
+    1519.1
+   ],
+   "recordedLlmMs": 2977,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:44",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-005",
+   "family": "bv-annulla",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Piatto di verifica*: prezzo da 13,50 € a *14,00 €*\n2. *Che ne sacc*: prezzo da 20,00 € a *21,00 €*\n3. *boh*: prezzo da 20,00 € a *21,00 €*\n4. *pasta al ragù*: prezzo da 12,00 € a *13,00 €*",
+    "Ok, scarto la proposta: non cambio nessun prezzo."
+   ],
+   "turns": [
+    "metti Piatto di verifica a 14 euro, Che ne sacc a 21 euro, boh a 21 euro e pasta al ragù a 13 euro",
+    "annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18428,
+   "latencyMs": [
+    1991.2,
+    1826.5
+   ],
+   "recordedLlmMs": 3780,
+   "usedLlm": true,
+   "source": "Manuel 17/10 11:18",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-006",
+   "family": "bv-annulla",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, nascondo *Piatto di verifica* ai clienti.\n\n*Piatto di verifica*: *nascosto* dal menu",
+    "Ok, rimetto *Piatto di verifica* nel menu, visibile ai clienti.\n\n*Piatto di verifica*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "nascondi il piatto di verifica",
+    "mostra il piatto di verifica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17983,
+   "latencyMs": [
+    12.9,
+    1420
+   ],
+   "recordedLlmMs": 3607,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:51",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-007",
+   "family": "bv-annulla",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Piatto di verifica* come esaurito.\n\n*Piatto di verifica*: *finito*",
+    "Ok, rimetto *Piatto di verifica* disponibile.\n\n*Piatto di verifica*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "il piatto di verifica è finito",
+    "il piatto di verifica è tornato disponibile"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 17960,
+   "latencyMs": [
+    11.5,
+    2314.5
+   ],
+   "recordedLlmMs": 3676,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:38",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-annulla-008",
+   "family": "bv-annulla",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|13"
+   ],
+   "actual": [
+    "price|Piatto di verifica|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Piatto di verifica* costa 13,50 €.\n\n*Piatto di verifica*: *13,50 €* · disponibile",
+    "Ok, aggiorno il prezzo del *Piatto di verifica* a 13 €.\n\n*Piatto di verifica*: prezzo da 13,50 € a *13,00 €*",
+    "Ok, segno il *Piatto di verifica* come esaurito.\n\n*Piatto di verifica*: *finito*",
+    "Ok, rimetto il *Piatto di verifica* disponibile.\n\n*Piatto di verifica*: di nuovo *disponibile*",
+    "Il *Piatto di verifica* è a *13 €* adesso. Vuoi cambiarlo a *14 €*?\n\n*Piatto di verifica*: *13,00 €* · disponibile",
+    "Al momento non c'è niente di esaurito nel menu.\n\nNessun piatto è *finito*: sono tutti disponibili."
+   ],
+   "turns": [
+    "❓ quanto costa il piatto di verifica?",
+    "il piatto di verifica costa 13 euro",
+    "il piatto di verifica è finito",
+    "il piatto di verifica è tornato disponibile",
+    "❓ piatto di verifica 13 o 14?",
+    "❓ cosa è finito?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 6,
+   "llmMisses": 0,
+   "llmTokens": 54574,
+   "latencyMs": [
+    9.1,
+    2081.5,
+    1396.1,
+    2033.3,
+    1757.3,
+    1326.4
+   ],
+   "recordedLlmMs": 9678,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:32",
+   "note": "sessione intera 10:32–10:45",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-dialetto-001",
+   "family": "bv-dialetto",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "actual": [
+    "available|Bruschetta Victoria|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Bruschetta Victoria* come esaurita.\n\n*Bruschetta Victoria*: *finito*"
+   ],
+   "turns": [
+    "Uè, a Bruschetta Victoria nun ce sta cchiù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9189,
+   "latencyMs": [
+    19.8
+   ],
+   "recordedLlmMs": 1320,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:20",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-dialetto-002",
+   "family": "bv-dialetto",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Bruschetta Victoria* risulta disponibile nel menu.\n\n*Bruschetta Victoria* è già disponibile.",
+    "Annullo l'ultima pubblicazione? Rispondi sì o no."
+   ],
+   "turns": [
+    "A Bruschetta Victoria nun è fernuta, ce sta ancora",
+    "ANNULLA"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28094,
+   "latencyMs": [
+    2427.4,
+    4259.2
+   ],
+   "recordedLlmMs": 6644,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:45",
+   "note": "è già disponibile: dirlo, niente da annullare",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-dialetto-003",
+   "family": "bv-dialetto",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Bruschetta Victoria|true"
+   ],
+   "actual": [
+    "available|Bruschetta Victoria|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Bruschetta Victoria* è di nuovo disponibile.\n\n*Bruschetta Victoria*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "A Bruschetta Victoria nun è fernuta, ce sta ancora"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9332,
+   "latencyMs": [
+    2033
+   ],
+   "recordedLlmMs": 2005,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:45",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-dialetto-004",
+   "family": "bv-dialetto",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVa bene, non cambio il prezzo della *Bruschetta Victoria*."
+   ],
+   "turns": [
+    "Nun cambià er prezzo de la Bruschetta Victoria"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9120,
+   "latencyMs": [
+    1077.5
+   ],
+   "recordedLlmMs": 1056,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:46",
+   "note": "negazione: niente scrittura; risposta vera «Non ho capito bene»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-dialetto-005",
+   "family": "bv-dialetto",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale tagliata è finita: *Tagliata rucola e grana*, *Tagliata con funghi porcini e panna* o *Tagliata di orata o branzino con rucola e grana*?\n\n1. *Tagliata rucola e grana* (20,00 €)\n2. *Tagliata con funghi porcini e panna* (24,00 €)\n3. *Tagliata di orata o branzino con rucola e grana* (20,00 €)"
+   ],
+   "turns": [
+    "Uè, a tagliata nun ce sta cchiù"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9465,
+   "latencyMs": [
+    2542.3
+   ],
+   "recordedLlmMs": 2521,
+   "usedLlm": true,
+   "source": "Manuel 15/10 12:47",
+   "note": "AMBIGUO: tre tagliate nel menu (rucola e grana, funghi porcini, orata o branzino): una domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-asr-001",
+   "family": "bv-asr",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "actual": [
+    "price|Piatto di verifica|13.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLo cambio subito?",
+    "Ok, metto *Piatto di verifica* a 13,50 €.\n\n*Piatto di verifica*: prezzo da 12,00 € a *13,50 €*",
+    "Ok, *Piatto di verifica* lo metto a *13,50 €*.",
+    "Ok, *Piatto di verifica* lo metto a *13,50 €*."
+   ],
+   "turns": [
+    "🎤 Il piatto di verifica da domani costa 13,50 euro.",
+    "🎤 Confirma.",
+    "🎤 Confirma.",
+    "conferma"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 8,
+   "llmMisses": 0,
+   "llmTokens": 74324,
+   "latencyMs": [
+    2707.1,
+    4845.5,
+    2998,
+    3790.4
+   ],
+   "recordedLlmMs": 14253,
+   "usedLlm": true,
+   "source": "Manuel 14/10 19:15",
+   "note": "AMBIGUO: «da domani» → il bot non programma: chiedere se cambiarlo subito; «Confirma» (Whisper) = sì",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-asr-002",
+   "family": "bv-asr",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi *boh* o *Che ne sacc*? Dimmi quale e lo aggiorno a 40 €."
+   ],
+   "turns": [
+    "🎤 Bu costa 40 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8941,
+   "latencyMs": [
+    1745.4
+   ],
+   "recordedLlmMs": 1731,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:17",
+   "note": "AMBIGUO: «Bu» ≈ boh ma non è certo: domanda (risposta vera: «Non trovo «b»»)",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-asr-003",
+   "family": "bv-asr",
+   "menu": "qamattina",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|boh|50"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|boh|40"
+    }
+   ],
+   "expected": [
+    "price|boh|40"
+   ],
+   "actual": [
+    "price|boh|50"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCambio il prezzo di *boh*.\n\n*boh*: prezzo da 20,00 € a *50,00 €*",
+    "Intendi *boh* per portarlo a *40 €*?"
+   ],
+   "turns": [
+    "🎤 Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+    "🎤 Bu costa 40 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27681,
+   "latencyMs": [
+    14.2,
+    4153.1
+   ],
+   "recordedLlmMs": 6938,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:17",
+   "note": "dopo «Bo» a 50, «Bu costa 40» corregge lo stesso piatto",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-asr-004",
+   "family": "bv-asr",
+   "menu": "qa1323",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: rename|Inserisce il piatto la parmigiana|la parmigiana"
+    }
+   ],
+   "expected": [
+    "rename|Inserisce il piatto la parmigiana|la parmigiana"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi rinominare *Inserisce il piatto la parmigiana* in *Parmigiana*?"
+   ],
+   "turns": [
+    "🎤 Cambia il nome del piatto, inserisci la parmigiana."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9528,
+   "latencyMs": [
+    3710.5
+   ],
+   "recordedLlmMs": 3696,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:24",
+   "note": "R5.1 (nota 63): l'attesa chiedeva insieme una domanda senza scritture e la rinomina nello stesso turno (impossibile): resta la rinomina col nome detto (unico piatto da rinominare nel menu del 13:24). AMBIGUO: quale piatto rinominare non è detto (si intuisce quello nato dalla frase): chiedere conferma; risposta vera: «Il nome del piatto si cambia dalla dashboard»",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-asr-005",
+   "family": "bv-asr",
+   "menu": "qamattina",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "correzione-non-applicata",
+     "why": "resta la modifica poi corretta/annullata: price|boh|50"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|boh|40"
+    }
+   ],
+   "expected": [
+    "price|boh|40",
+    "price|pasta al ragù|20"
+   ],
+   "actual": [
+    "price|boh|50",
+    "price|pasta al ragù|20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLa *pasta al ragù* costa 12 €.\n\n*pasta al ragù*: *12,00 €* · disponibile",
+    "Il piatto *boh* costa 20 €.\n\n*boh*: *20,00 €* · disponibile",
+    "Cambio il prezzo di *boh* da 20 a 50 €.\n\n*boh*: prezzo da 20,00 € a *50,00 €*",
+    "Intendi il piatto *boh* per portarlo a 40 €?",
+    "Cambio il prezzo di *pasta al ragù* a 20 €.\n\n*pasta al ragù*: prezzo da 12,00 € a *20,00 €*"
+   ],
+   "turns": [
+    "🎤 Quanto costa la pasta al ragù?",
+    "🎤 Quanto costa il piatto boh?",
+    "🎤 Puoi cambiare il prezzo del piatto Bo da 20 euro a 50?",
+    "🎤 Bu costa 40 euro",
+    "🎤 Passa il ragù, metti prezzo a 20 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 6,
+   "llmMisses": 0,
+   "llmTokens": 54750,
+   "latencyMs": [
+    10.7,
+    1980.6,
+    2198.2,
+    3168.7,
+    1612.1
+   ],
+   "recordedLlmMs": 9914,
+   "usedLlm": true,
+   "source": "Manuel 17/10 13:16",
+   "note": "sessione 13:16–13:18 intera",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-fuori-001",
+   "family": "bv-fuori",
+   "menu": "qamattina",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer la foto del piatto usa il menu digitale: non posso caricarla io da qui. Intanto il *Piatto di verifica* resta com'è."
+   ],
+   "turns": [
+    "metti una foto al piatto di verifica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8891,
+   "latencyMs": [
+    1433.1
+   ],
+   "recordedLlmMs": 1425,
+   "usedLlm": true,
+   "source": "Manuel 17/10 10:49",
+   "note": "senza foto allegata: spiegare come mandarla",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-fuori-002",
+   "family": "bv-fuori",
+   "menu": "victoria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSì, posso aiutarti con gli allergeni dei piatti. Dimmi quale piatto e cosa vuoi cambiare."
+   ],
+   "turns": [
+    "❓ sai cambiare gli allergeni?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9133,
+   "latencyMs": [
+    1983.8
+   ],
+   "recordedLlmMs": 1974,
+   "usedLlm": true,
+   "source": "Manuel 15/10 00:23",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-fuori-003",
+   "family": "bv-fuori",
+   "menu": "collaudo",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer la *Pasta collaudo* intendi a *12 €* o a *14 €*?"
+   ],
+   "turns": [
+    "La Pasta collaudo mettila a dodici oppure quattordici euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8922,
+   "latencyMs": [
+    1300
+   ],
+   "recordedLlmMs": 1289,
+   "usedLlm": true,
+   "source": "Manuel 15/10 15:55",
+   "note": "AMBIGUO: due prezzi alternativi: chiedere quale (risposta vera: «Non sono sicuro di quale piatto»)",
+   "nonMisurato": false
+  },
+  {
+   "id": "bv-fuori-004",
+   "family": "bv-fuori",
+   "menu": "qa1016",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il piatto nuovo e a che prezzo lo metto? In che Sottomenu va?"
+   ],
+   "turns": [
+    "aggiungiamo un piatto"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 8887,
+   "latencyMs": [
+    5.5
+   ],
+   "recordedLlmMs": 1565,
+   "usedLlm": true,
+   "source": "Manuel 16/10 18:19",
+   "note": "manca tutto: una domanda (nome e prezzo), niente frase fissa",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "bv-semplici-001",
+   "hash": "5e2c2823f87e9937",
+   "source": "real",
+   "status": 200,
+   "ms": 2697,
+   "usage": {
+    "input": 51,
+    "output": 191,
+    "cacheRead": 8543,
+    "cacheWrite": 179
+   }
+  },
+  {
+   "conv": "bv-semplici-001",
+   "hash": "a4b0e30aeb1d8314",
+   "source": "real",
+   "status": 200,
+   "ms": 2097,
+   "usage": {
+    "input": 163,
+    "output": 186,
+    "cacheRead": 8543,
+    "cacheWrite": 177
+   }
+  },
+  {
+   "conv": "bv-semplici-001",
+   "hash": "1af88feffd8c6ac3",
+   "source": "real",
+   "status": 200,
+   "ms": 2051,
+   "usage": {
+    "input": 551,
+    "output": 170,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-002",
+   "hash": "2afab7d289431a75",
+   "source": "real",
+   "status": 200,
+   "ms": 2145,
+   "usage": {
+    "input": 51,
+    "output": 185,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-002",
+   "hash": "c962f917fa63d98f",
+   "source": "real",
+   "status": 200,
+   "ms": 1482,
+   "usage": {
+    "input": 157,
+    "output": 186,
+    "cacheRead": 8543,
+    "cacheWrite": 177
+   }
+  },
+  {
+   "conv": "bv-semplici-002",
+   "hash": "c25565542171c108",
+   "source": "real",
+   "status": 200,
+   "ms": 1386,
+   "usage": {
+    "input": 545,
+    "output": 182,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-003",
+   "hash": "8636b77d52728ba5",
+   "source": "real",
+   "status": 200,
+   "ms": 1766,
+   "usage": {
+    "input": 46,
+    "output": 186,
+    "cacheRead": 8543,
+    "cacheWrite": 401
+   }
+  },
+  {
+   "conv": "bv-semplici-003",
+   "hash": "d4a4c20250f88bdb",
+   "source": "real",
+   "status": 200,
+   "ms": 1606,
+   "usage": {
+    "input": 146,
+    "output": 172,
+    "cacheRead": 8543,
+    "cacheWrite": 403
+   }
+  },
+  {
+   "conv": "bv-semplici-003",
+   "hash": "de9ffeebc717a08e",
+   "source": "real",
+   "status": 200,
+   "ms": 1620,
+   "usage": {
+    "input": 520,
+    "output": 191,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-004",
+   "hash": "43d4ec9e6b335c8b",
+   "source": "real",
+   "status": 200,
+   "ms": 1853,
+   "usage": {
+    "input": 45,
+    "output": 190,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-004",
+   "hash": "6f326d875c128af9",
+   "source": "real",
+   "status": 200,
+   "ms": 1766,
+   "usage": {
+    "input": 152,
+    "output": 174,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-004",
+   "hash": "6cf0a3f7cd4b6139",
+   "source": "real",
+   "status": 200,
+   "ms": 1385,
+   "usage": {
+    "input": 528,
+    "output": 131,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-005",
+   "hash": "ac272444bbf3e183",
+   "source": "real",
+   "status": 200,
+   "ms": 1478,
+   "usage": {
+    "input": 55,
+    "output": 184,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-006",
+   "hash": "46efe49f84da6bd5",
+   "source": "real",
+   "status": 200,
+   "ms": 1451,
+   "usage": {
+    "input": 65,
+    "output": 199,
+    "cacheRead": 8543,
+    "cacheWrite": 143
+   }
+  },
+  {
+   "conv": "bv-semplici-007",
+   "hash": "e648b1be1ca8bcf2",
+   "source": "real",
+   "status": 200,
+   "ms": 1315,
+   "usage": {
+    "input": 51,
+    "output": 191,
+    "cacheRead": 8543,
+    "cacheWrite": 156
+   }
+  },
+  {
+   "conv": "bv-semplici-008",
+   "hash": "1a2ca389f3f69871",
+   "source": "real",
+   "status": 200,
+   "ms": 1377,
+   "usage": {
+    "input": 47,
+    "output": 182,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-009",
+   "hash": "ac13b5249bdf3bc6",
+   "source": "real",
+   "status": 200,
+   "ms": 1439,
+   "usage": {
+    "input": 52,
+    "output": 185,
+    "cacheRead": 8543,
+    "cacheWrite": 158
+   }
+  },
+  {
+   "conv": "bv-semplici-010",
+   "hash": "fb07d19f657c1ed8",
+   "source": "real",
+   "status": 200,
+   "ms": 2200,
+   "usage": {
+    "input": 48,
+    "output": 189,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-011",
+   "hash": "014b2c87c42a12fe",
+   "source": "real",
+   "status": 200,
+   "ms": 2396,
+   "usage": {
+    "input": 47,
+    "output": 185,
+    "cacheRead": 8543,
+    "cacheWrite": 158
+   }
+  },
+  {
+   "conv": "bv-semplici-012",
+   "hash": "696579484d41aaa1",
+   "source": "real",
+   "status": 200,
+   "ms": 1535,
+   "usage": {
+    "input": 70,
+    "output": 204,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-013",
+   "hash": "f90c28956579e72b",
+   "source": "real",
+   "status": 200,
+   "ms": 1905,
+   "usage": {
+    "input": 58,
+    "output": 194,
+    "cacheRead": 8543,
+    "cacheWrite": 154
+   }
+  },
+  {
+   "conv": "bv-semplici-014",
+   "hash": "8641e859e2c043e7",
+   "source": "real",
+   "status": 200,
+   "ms": 5103,
+   "usage": {
+    "input": 57,
+    "output": 904,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-015",
+   "hash": "4e4740425d90704c",
+   "source": "real",
+   "status": 200,
+   "ms": 2806,
+   "usage": {
+    "input": 66,
+    "output": 568,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-016",
+   "hash": "03bafd0e7e3e44fe",
+   "source": "real",
+   "status": 200,
+   "ms": 2397,
+   "usage": {
+    "input": 60,
+    "output": 419,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-017",
+   "hash": "018a85c3b37d03f3",
+   "source": "real",
+   "status": 200,
+   "ms": 2166,
+   "usage": {
+    "input": 53,
+    "output": 182,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-018",
+   "hash": "8e4db89ded3adab4",
+   "source": "real",
+   "status": 200,
+   "ms": 1426,
+   "usage": {
+    "input": 52,
+    "output": 185,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-019",
+   "hash": "42a8fabca65a41f4",
+   "source": "real",
+   "status": 200,
+   "ms": 1651,
+   "usage": {
+    "input": 52,
+    "output": 187,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-020",
+   "hash": "04f6168306bbf31a",
+   "source": "real",
+   "status": 200,
+   "ms": 1480,
+   "usage": {
+    "input": 61,
+    "output": 186,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-021",
+   "hash": "9d8f37de71328fc0",
+   "source": "real",
+   "status": 200,
+   "ms": 1149,
+   "usage": {
+    "input": 50,
+    "output": 112,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-022",
+   "hash": "327b8dadc497f93d",
+   "source": "real",
+   "status": 200,
+   "ms": 1292,
+   "usage": {
+    "input": 43,
+    "output": 110,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-023",
+   "hash": "3c683a3bbefae6de",
+   "source": "real",
+   "status": 200,
+   "ms": 1026,
+   "usage": {
+    "input": 51,
+    "output": 108,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-024",
+   "hash": "f0407503487f087c",
+   "source": "real",
+   "status": 200,
+   "ms": 1456,
+   "usage": {
+    "input": 49,
+    "output": 107,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-025",
+   "hash": "29364d00975e16db",
+   "source": "real",
+   "status": 200,
+   "ms": 1182,
+   "usage": {
+    "input": 57,
+    "output": 111,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-semplici-026",
+   "hash": "27d4c1e39856da9d",
+   "source": "real",
+   "status": 200,
+   "ms": 1015,
+   "usage": {
+    "input": 54,
+    "output": 112,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-001",
+   "hash": "0c20b9f044adb718",
+   "source": "real",
+   "status": 200,
+   "ms": 1303,
+   "usage": {
+    "input": 48,
+    "output": 163,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-001",
+   "hash": "2ef281949c3fc46e",
+   "source": "real",
+   "status": 200,
+   "ms": 1770,
+   "usage": {
+    "input": 212,
+    "output": 122,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-002",
+   "hash": "2a45a32e5f3afb60",
+   "source": "real",
+   "status": 200,
+   "ms": 1689,
+   "usage": {
+    "input": 54,
+    "output": 233,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-003",
+   "hash": "8173f4d9ad79c067",
+   "source": "real",
+   "status": 200,
+   "ms": 3306,
+   "usage": {
+    "input": 47,
+    "output": 510,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-004",
+   "hash": "a83a916e7d68d051",
+   "source": "real",
+   "status": 200,
+   "ms": 1767,
+   "usage": {
+    "input": 44,
+    "output": 209,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-004",
+   "hash": "726bf077305faeeb",
+   "source": "real",
+   "status": 200,
+   "ms": 1334,
+   "usage": {
+    "input": 179,
+    "output": 152,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-005",
+   "hash": "c64ae1fe55b76a0e",
+   "source": "real",
+   "status": 200,
+   "ms": 1513,
+   "usage": {
+    "input": 61,
+    "output": 160,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-006",
+   "hash": "546caaca3f5b9eee",
+   "source": "real",
+   "status": 200,
+   "ms": 1131,
+   "usage": {
+    "input": 39,
+    "output": 118,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-006",
+   "hash": "782c7d83deec3342",
+   "source": "real",
+   "status": 200,
+   "ms": 1416,
+   "usage": {
+    "input": 78,
+    "output": 125,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-006",
+   "hash": "fad7204ce0a88f14",
+   "source": "real",
+   "status": 200,
+   "ms": 1232,
+   "usage": {
+    "input": 295,
+    "output": 121,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-007",
+   "hash": "100e14972cc6773a",
+   "source": "real",
+   "status": 200,
+   "ms": 1403,
+   "usage": {
+    "input": 50,
+    "output": 129,
+    "cacheRead": 8543,
+    "cacheWrite": 154
+   }
+  },
+  {
+   "conv": "bv-domande-008",
+   "hash": "1c3a0d1e41c81584",
+   "source": "real",
+   "status": 200,
+   "ms": 2650,
+   "usage": {
+    "input": 54,
+    "output": 280,
+    "cacheRead": 8543,
+    "cacheWrite": 158
+   }
+  },
+  {
+   "conv": "bv-domande-008",
+   "hash": "97c7e4771224b626",
+   "source": "real",
+   "status": 200,
+   "ms": 1548,
+   "usage": {
+    "input": 259,
+    "output": 133,
+    "cacheRead": 8701,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-008",
+   "hash": "9343b2451ebb136b",
+   "source": "real",
+   "status": 200,
+   "ms": 1902,
+   "usage": {
+    "input": 214,
+    "output": 114,
+    "cacheRead": 8701,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-009",
+   "hash": "0f5108998fa7c948",
+   "source": "real",
+   "status": 200,
+   "ms": 1844,
+   "usage": {
+    "input": 49,
+    "output": 192,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-domande-010",
+   "hash": "a2641ed28481f981",
+   "source": "real",
+   "status": 200,
+   "ms": 2546,
+   "usage": {
+    "input": 66,
+    "output": 448,
+    "cacheRead": 8543,
+    "cacheWrite": 154
+   }
+  },
+  {
+   "conv": "bv-domande-010",
+   "hash": "e2fb62c3f5cb4831",
+   "source": "real",
+   "status": 200,
+   "ms": 2996,
+   "usage": {
+    "input": 188,
+    "output": 440,
+    "cacheRead": 8543,
+    "cacheWrite": 156
+   }
+  },
+  {
+   "conv": "bv-multiple-001",
+   "hash": "2d706aca041faa3b",
+   "source": "real",
+   "status": 200,
+   "ms": 1762,
+   "usage": {
+    "input": 87,
+    "output": 352,
+    "cacheRead": 8543,
+    "cacheWrite": 180
+   }
+  },
+  {
+   "conv": "bv-multiple-002",
+   "hash": "be845b6ab78e4009",
+   "source": "real",
+   "status": 200,
+   "ms": 2375,
+   "usage": {
+    "input": 105,
+    "output": 439,
+    "cacheRead": 8543,
+    "cacheWrite": 180
+   }
+  },
+  {
+   "conv": "bv-multiple-002",
+   "hash": "5f4d3d1b90624e49",
+   "source": "real",
+   "status": 200,
+   "ms": 2261,
+   "usage": {
+    "input": 411,
+    "output": 356,
+    "cacheRead": 8723,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-002",
+   "hash": "4a95f4b3f3413dcc",
+   "source": "real",
+   "status": 200,
+   "ms": 1351,
+   "usage": {
+    "input": 575,
+    "output": 181,
+    "cacheRead": 8723,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "be845b6ab78e4009",
+   "source": "hit",
+   "status": 200,
+   "ms": 2375,
+   "usage": {
+    "input": 105,
+    "output": 439,
+    "cacheRead": 8543,
+    "cacheWrite": 180
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "5f4d3d1b90624e49",
+   "source": "hit",
+   "status": 200,
+   "ms": 2261,
+   "usage": {
+    "input": 411,
+    "output": 356,
+    "cacheRead": 8723,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "4a95f4b3f3413dcc",
+   "source": "hit",
+   "status": 200,
+   "ms": 1351,
+   "usage": {
+    "input": 575,
+    "output": 181,
+    "cacheRead": 8723,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "8cca3291546138dc",
+   "source": "real",
+   "status": 200,
+   "ms": 1355,
+   "usage": {
+    "input": 683,
+    "output": 181,
+    "cacheRead": 8543,
+    "cacheWrite": 180
+   }
+  },
+  {
+   "conv": "bv-multiple-003",
+   "hash": "cdfec031f2fb5a13",
+   "source": "real",
+   "status": 200,
+   "ms": 1436,
+   "usage": {
+    "input": 1066,
+    "output": 137,
+    "cacheRead": 8723,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-004",
+   "hash": "151a7218a84ab9f2",
+   "source": "real",
+   "status": 200,
+   "ms": 2087,
+   "usage": {
+    "input": 89,
+    "output": 427,
+    "cacheRead": 8697,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-004",
+   "hash": "d4bee2483a47cb9b",
+   "source": "real",
+   "status": 200,
+   "ms": 1519,
+   "usage": {
+    "input": 328,
+    "output": 184,
+    "cacheRead": 8697,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-005",
+   "hash": "e7959e1528dabdb8",
+   "source": "real",
+   "status": 200,
+   "ms": 2437,
+   "usage": {
+    "input": 74,
+    "output": 350,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-006",
+   "hash": "7a97e5be80250d0c",
+   "source": "real",
+   "status": 200,
+   "ms": 2028,
+   "usage": {
+    "input": 62,
+    "output": 418,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-multiple-007",
+   "hash": "9f90e1fdec898af8",
+   "source": "real",
+   "status": 200,
+   "ms": 3354,
+   "usage": {
+    "input": 86,
+    "output": 627,
+    "cacheRead": 8543,
+    "cacheWrite": 179
+   }
+  },
+  {
+   "conv": "bv-multiple-008",
+   "hash": "9f90e1fdec898af8",
+   "source": "hit",
+   "status": 200,
+   "ms": 3354,
+   "usage": {
+    "input": 86,
+    "output": 627,
+    "cacheRead": 8543,
+    "cacheWrite": 179
+   }
+  },
+  {
+   "conv": "bv-multiple-008",
+   "hash": "573c6c55b43dcdb5",
+   "source": "real",
+   "status": 200,
+   "ms": 2311,
+   "usage": {
+    "input": 310,
+    "output": 309,
+    "cacheRead": 8543,
+    "cacheWrite": 181
+   }
+  },
+  {
+   "conv": "bv-multiple-009",
+   "hash": "4ab340a5f8a4fc34",
+   "source": "real",
+   "status": 200,
+   "ms": 4149,
+   "usage": {
+    "input": 91,
+    "output": 787,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-001",
+   "hash": "6452a4806769a0c0",
+   "source": "real",
+   "status": 200,
+   "ms": 5726,
+   "usage": {
+    "input": 81,
+    "output": 1123,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-001",
+   "hash": "7bf1ef994e7d8168",
+   "source": "real",
+   "status": 200,
+   "ms": 2038,
+   "usage": {
+    "input": 524,
+    "output": 305,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-001",
+   "hash": "9f997747edce40a6",
+   "source": "real",
+   "status": 200,
+   "ms": 1911,
+   "usage": {
+    "input": 381,
+    "output": 296,
+    "cacheRead": 8543,
+    "cacheWrite": 181
+   }
+  },
+  {
+   "conv": "bv-correzioni-002",
+   "hash": "6452a4806769a0c0",
+   "source": "hit",
+   "status": 200,
+   "ms": 5726,
+   "usage": {
+    "input": 81,
+    "output": 1123,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-002",
+   "hash": "7bf1ef994e7d8168",
+   "source": "hit",
+   "status": 200,
+   "ms": 2038,
+   "usage": {
+    "input": 524,
+    "output": 305,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-003",
+   "hash": "47fd361eb871b4bb",
+   "source": "real",
+   "status": 200,
+   "ms": 4142,
+   "usage": {
+    "input": 90,
+    "output": 839,
+    "cacheRead": 8543,
+    "cacheWrite": 202
+   }
+  },
+  {
+   "conv": "bv-correzioni-004",
+   "hash": "47fd361eb871b4bb",
+   "source": "hit",
+   "status": 200,
+   "ms": 4142,
+   "usage": {
+    "input": 90,
+    "output": 839,
+    "cacheRead": 8543,
+    "cacheWrite": 202
+   }
+  },
+  {
+   "conv": "bv-correzioni-004",
+   "hash": "d699a7939a94e676",
+   "source": "real",
+   "status": 200,
+   "ms": 2318,
+   "usage": {
+    "input": 456,
+    "output": 287,
+    "cacheRead": 8745,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-004",
+   "hash": "df40d0fca5937bd2",
+   "source": "real",
+   "status": 200,
+   "ms": 2441,
+   "usage": {
+    "input": 884,
+    "output": 317,
+    "cacheRead": 8745,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-005",
+   "hash": "3bbc8e0ddaefd90e",
+   "source": "real",
+   "status": 200,
+   "ms": 6018,
+   "usage": {
+    "input": 105,
+    "output": 1253,
+    "cacheRead": 8745,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-005",
+   "hash": "da4df76ccd2c3d61",
+   "source": "real",
+   "status": 200,
+   "ms": 4820,
+   "usage": {
+    "input": 481,
+    "output": 976,
+    "cacheRead": 8745,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-006",
+   "hash": "d8b7f03062fb4399",
+   "source": "real",
+   "status": 200,
+   "ms": 4573,
+   "usage": {
+    "input": 61,
+    "output": 884,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-006",
+   "hash": "7f41070b2fd5ba1e",
+   "source": "real",
+   "status": 200,
+   "ms": 1200,
+   "usage": {
+    "input": 242,
+    "output": 151,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-006",
+   "hash": "0ad75a518ff7c51f",
+   "source": "real",
+   "status": 200,
+   "ms": 4282,
+   "usage": {
+    "input": 345,
+    "output": 845,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-007",
+   "hash": "d8b7f03062fb4399",
+   "source": "hit",
+   "status": 200,
+   "ms": 4573,
+   "usage": {
+    "input": 61,
+    "output": 884,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-correzioni-007",
+   "hash": "7f41070b2fd5ba1e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1200,
+   "usage": {
+    "input": 242,
+    "output": 151,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-001",
+   "hash": "70165ba852945a0e",
+   "source": "real",
+   "status": 200,
+   "ms": 4558,
+   "usage": {
+    "input": 73,
+    "output": 910,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-001",
+   "hash": "67476bf96c9554ba",
+   "source": "real",
+   "status": 200,
+   "ms": 2760,
+   "usage": {
+    "input": 604,
+    "output": 261,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-001",
+   "hash": "37e82a1687189df8",
+   "source": "real",
+   "status": 200,
+   "ms": 2032,
+   "usage": {
+    "input": 295,
+    "output": 267,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-002",
+   "hash": "70165ba852945a0e",
+   "source": "hit",
+   "status": 200,
+   "ms": 4558,
+   "usage": {
+    "input": 73,
+    "output": 910,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-002",
+   "hash": "67476bf96c9554ba",
+   "source": "hit",
+   "status": 200,
+   "ms": 2760,
+   "usage": {
+    "input": 604,
+    "output": 261,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-002",
+   "hash": "37e82a1687189df8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2032,
+   "usage": {
+    "input": 295,
+    "output": 267,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-002",
+   "hash": "af170c3762de0724",
+   "source": "real",
+   "status": 200,
+   "ms": 1765,
+   "usage": {
+    "input": 304,
+    "output": 274,
+    "cacheRead": 8543,
+    "cacheWrite": 179
+   }
+  },
+  {
+   "conv": "bv-deixis-003",
+   "hash": "70165ba852945a0e",
+   "source": "hit",
+   "status": 200,
+   "ms": 4558,
+   "usage": {
+    "input": 73,
+    "output": 910,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-003",
+   "hash": "67476bf96c9554ba",
+   "source": "hit",
+   "status": 200,
+   "ms": 2760,
+   "usage": {
+    "input": 604,
+    "output": 261,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-deixis-004",
+   "hash": "630efc99f4863ba9",
+   "source": "real",
+   "status": 200,
+   "ms": 3032,
+   "usage": {
+    "input": 58,
+    "output": 360,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-001",
+   "hash": "7aa3a5606895d97a",
+   "source": "real",
+   "status": 200,
+   "ms": 1565,
+   "usage": {
+    "input": 47,
+    "output": 154,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-001",
+   "hash": "95867bbe2bd3598e",
+   "source": "real",
+   "status": 200,
+   "ms": 1997,
+   "usage": {
+    "input": 196,
+    "output": 197,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-002",
+   "hash": "b8ed2f11a8e0aab9",
+   "source": "real",
+   "status": 200,
+   "ms": 1508,
+   "usage": {
+    "input": 70,
+    "output": 197,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-003",
+   "hash": "1695ed22b996bf46",
+   "source": "real",
+   "status": 200,
+   "ms": 2955,
+   "usage": {
+    "input": 52,
+    "output": 519,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-003",
+   "hash": "9d44966885ce6652",
+   "source": "real",
+   "status": 200,
+   "ms": 2288,
+   "usage": {
+    "input": 216,
+    "output": 407,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-003",
+   "hash": "da7b7201ca4404fb",
+   "source": "real",
+   "status": 200,
+   "ms": 2498,
+   "usage": {
+    "input": 391,
+    "output": 402,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-004",
+   "hash": "1695ed22b996bf46",
+   "source": "hit",
+   "status": 200,
+   "ms": 2955,
+   "usage": {
+    "input": 52,
+    "output": 519,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-005",
+   "hash": "477cbfa38a4c482a",
+   "source": "real",
+   "status": 200,
+   "ms": 5014,
+   "usage": {
+    "input": 90,
+    "output": 945,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-aggiunte-006",
+   "hash": "357c69a37e515a43",
+   "source": "real",
+   "status": 200,
+   "ms": 2533,
+   "usage": {
+    "input": 45,
+    "output": 162,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-001",
+   "hash": "0565540eab8ed800",
+   "source": "real",
+   "status": 200,
+   "ms": 1895,
+   "usage": {
+    "input": 49,
+    "output": 193,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-001",
+   "hash": "0aa73cd67e19399b",
+   "source": "real",
+   "status": 200,
+   "ms": 1804,
+   "usage": {
+    "input": 293,
+    "output": 271,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-001",
+   "hash": "6fa7745cd7184441",
+   "source": "real",
+   "status": 200,
+   "ms": 1540,
+   "usage": {
+    "input": 237,
+    "output": 188,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-001",
+   "hash": "5994bab6709e59bc",
+   "source": "real",
+   "status": 200,
+   "ms": 2310,
+   "usage": {
+    "input": 627,
+    "output": 190,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-002",
+   "hash": "0565540eab8ed800",
+   "source": "hit",
+   "status": 200,
+   "ms": 1895,
+   "usage": {
+    "input": 49,
+    "output": 193,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-003",
+   "hash": "e0853e94818b287b",
+   "source": "real",
+   "status": 200,
+   "ms": 1286,
+   "usage": {
+    "input": 52,
+    "output": 187,
+    "cacheRead": 8543,
+    "cacheWrite": 156
+   }
+  },
+  {
+   "conv": "bv-elimina-003",
+   "hash": "97b353afabbd7dde",
+   "source": "real",
+   "status": 200,
+   "ms": 1625,
+   "usage": {
+    "input": 297,
+    "output": 269,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-004",
+   "hash": "2a98b00fcdfafb0d",
+   "source": "real",
+   "status": 200,
+   "ms": 1286,
+   "usage": {
+    "input": 52,
+    "output": 187,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-005",
+   "hash": "696579484d41aaa1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1535,
+   "usage": {
+    "input": 70,
+    "output": 204,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-elimina-005",
+   "hash": "cc5bba6b79022648",
+   "source": "real",
+   "status": 200,
+   "ms": 1531,
+   "usage": {
+    "input": 200,
+    "output": 181,
+    "cacheRead": 8543,
+    "cacheWrite": 169
+   }
+  },
+  {
+   "conv": "bv-elimina-005",
+   "hash": "6e2120bf419eab8a",
+   "source": "real",
+   "status": 200,
+   "ms": 1543,
+   "usage": {
+    "input": 246,
+    "output": 183,
+    "cacheRead": 8543,
+    "cacheWrite": 171
+   }
+  },
+  {
+   "conv": "bv-categorie-001",
+   "hash": "477cbfa38a4c482a",
+   "source": "hit",
+   "status": 200,
+   "ms": 5014,
+   "usage": {
+    "input": 90,
+    "output": 945,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-categorie-001",
+   "hash": "73c411ec625cd40a",
+   "source": "real",
+   "status": 200,
+   "ms": 8932,
+   "usage": {
+    "input": 514,
+    "output": 1678,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-categorie-001",
+   "hash": "d0a6060e1830b3d4",
+   "source": "real",
+   "status": 200,
+   "ms": 7316,
+   "usage": {
+    "input": 1216,
+    "output": 1299,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-categorie-002",
+   "hash": "ceece5d130728109",
+   "source": "real",
+   "status": 200,
+   "ms": 2900,
+   "usage": {
+    "input": 66,
+    "output": 475,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-categorie-003",
+   "hash": "03bafd0e7e3e44fe",
+   "source": "hit",
+   "status": 200,
+   "ms": 2397,
+   "usage": {
+    "input": 60,
+    "output": 419,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-categorie-003",
+   "hash": "af873a9e48f4daf1",
+   "source": "real",
+   "status": 200,
+   "ms": 1878,
+   "usage": {
+    "input": 208,
+    "output": 196,
+    "cacheRead": 8543,
+    "cacheWrite": 192
+   }
+  },
+  {
+   "conv": "bv-annulla-001",
+   "hash": "d2f23048fb44ee08",
+   "source": "real",
+   "status": 200,
+   "ms": 1320,
+   "usage": {
+    "input": 61,
+    "output": 184,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-001",
+   "hash": "b0790e4872024925",
+   "source": "real",
+   "status": 200,
+   "ms": 2336,
+   "usage": {
+    "input": 158,
+    "output": 189,
+    "cacheRead": 8543,
+    "cacheWrite": 403
+   }
+  },
+  {
+   "conv": "bv-annulla-002",
+   "hash": "8e4db89ded3adab4",
+   "source": "hit",
+   "status": 200,
+   "ms": 1426,
+   "usage": {
+    "input": 52,
+    "output": 185,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-002",
+   "hash": "d3215c7adb3f9578",
+   "source": "real",
+   "status": 200,
+   "ms": 1304,
+   "usage": {
+    "input": 150,
+    "output": 191,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-003",
+   "hash": "42a8fabca65a41f4",
+   "source": "hit",
+   "status": 200,
+   "ms": 1651,
+   "usage": {
+    "input": 52,
+    "output": 187,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-003",
+   "hash": "cc23084b678a78c6",
+   "source": "real",
+   "status": 200,
+   "ms": 1868,
+   "usage": {
+    "input": 149,
+    "output": 195,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-004",
+   "hash": "04f6168306bbf31a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1480,
+   "usage": {
+    "input": 61,
+    "output": 186,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-004",
+   "hash": "9ef93e72d32bd4dd",
+   "source": "real",
+   "status": 200,
+   "ms": 1497,
+   "usage": {
+    "input": 175,
+    "output": 191,
+    "cacheRead": 8543,
+    "cacheWrite": 401
+   }
+  },
+  {
+   "conv": "bv-annulla-005",
+   "hash": "01423f4f0d8db697",
+   "source": "real",
+   "status": 200,
+   "ms": 1968,
+   "usage": {
+    "input": 89,
+    "output": 427,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-005",
+   "hash": "8ed2640684308634",
+   "source": "real",
+   "status": 200,
+   "ms": 1812,
+   "usage": {
+    "input": 328,
+    "output": 186,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-006",
+   "hash": "fb07d19f657c1ed8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2200,
+   "usage": {
+    "input": 48,
+    "output": 189,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-006",
+   "hash": "ae7c3e8a9f738282",
+   "source": "real",
+   "status": 200,
+   "ms": 1407,
+   "usage": {
+    "input": 152,
+    "output": 194,
+    "cacheRead": 8701,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-007",
+   "hash": "1a2ca389f3f69871",
+   "source": "hit",
+   "status": 200,
+   "ms": 1377,
+   "usage": {
+    "input": 47,
+    "output": 182,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-007",
+   "hash": "aea1bd80c4a53f43",
+   "source": "real",
+   "status": 200,
+   "ms": 2299,
+   "usage": {
+    "input": 148,
+    "output": 183,
+    "cacheRead": 8701,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-008",
+   "hash": "9d8f37de71328fc0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1149,
+   "usage": {
+    "input": 50,
+    "output": 112,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-008",
+   "hash": "8dbf8dd11917e473",
+   "source": "real",
+   "status": 200,
+   "ms": 2072,
+   "usage": {
+    "input": 113,
+    "output": 191,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-008",
+   "hash": "fa6320f96bbdab69",
+   "source": "real",
+   "status": 200,
+   "ms": 1383,
+   "usage": {
+    "input": 233,
+    "output": 183,
+    "cacheRead": 8697,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-008",
+   "hash": "10295a0382f5e26b",
+   "source": "real",
+   "status": 200,
+   "ms": 2018,
+   "usage": {
+    "input": 291,
+    "output": 184,
+    "cacheRead": 8543,
+    "cacheWrite": 156
+   }
+  },
+  {
+   "conv": "bv-annulla-008",
+   "hash": "38ce301f92adc757",
+   "source": "real",
+   "status": 200,
+   "ms": 1742,
+   "usage": {
+    "input": 355,
+    "output": 133,
+    "cacheRead": 8697,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-annulla-008",
+   "hash": "8f8f5a8c2b70e670",
+   "source": "real",
+   "status": 200,
+   "ms": 1314,
+   "usage": {
+    "input": 430,
+    "output": 111,
+    "cacheRead": 8697,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-001",
+   "hash": "d2f23048fb44ee08",
+   "source": "hit",
+   "status": 200,
+   "ms": 1320,
+   "usage": {
+    "input": 61,
+    "output": 184,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-002",
+   "hash": "bd3db8dc4ee060d8",
+   "source": "real",
+   "status": 200,
+   "ms": 2409,
+   "usage": {
+    "input": 62,
+    "output": 393,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-002",
+   "hash": "ed37b4bbd4cfe205",
+   "source": "real",
+   "status": 200,
+   "ms": 2027,
+   "usage": {
+    "input": 115,
+    "output": 141,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-002",
+   "hash": "cc623e14fe79159f",
+   "source": "real",
+   "status": 200,
+   "ms": 2208,
+   "usage": {
+    "input": 365,
+    "output": 186,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-003",
+   "hash": "4dc164af9739dc0c",
+   "source": "real",
+   "status": 200,
+   "ms": 2005,
+   "usage": {
+    "input": 62,
+    "output": 324,
+    "cacheRead": 8946,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-004",
+   "hash": "9147b0fb7caf25de",
+   "source": "real",
+   "status": 200,
+   "ms": 1056,
+   "usage": {
+    "input": 59,
+    "output": 117,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-dialetto-005",
+   "hash": "d0200ffd1b8040cb",
+   "source": "real",
+   "status": 200,
+   "ms": 2521,
+   "usage": {
+    "input": 55,
+    "output": 466,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "f72b4cdea044f12c",
+   "source": "real",
+   "status": 200,
+   "ms": 1638,
+   "usage": {
+    "input": 58,
+    "output": 189,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "273d8447da564296",
+   "source": "real",
+   "status": 200,
+   "ms": 1048,
+   "usage": {
+    "input": 407,
+    "output": 103,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "769f6d6905bc907d",
+   "source": "real",
+   "status": 200,
+   "ms": 2506,
+   "usage": {
+    "input": 264,
+    "output": 189,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "282a8c91204371c8",
+   "source": "real",
+   "status": 200,
+   "ms": 2313,
+   "usage": {
+    "input": 677,
+    "output": 189,
+    "cacheRead": 8720,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "e04079033d3faaa0",
+   "source": "real",
+   "status": 200,
+   "ms": 1512,
+   "usage": {
+    "input": 183,
+    "output": 175,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "a0870e1822836374",
+   "source": "real",
+   "status": 200,
+   "ms": 1465,
+   "usage": {
+    "input": 560,
+    "output": 192,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "e1668d52e139577c",
+   "source": "real",
+   "status": 200,
+   "ms": 1894,
+   "usage": {
+    "input": 282,
+    "output": 195,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-001",
+   "hash": "d324fea550963fb2",
+   "source": "real",
+   "status": 200,
+   "ms": 1877,
+   "usage": {
+    "input": 701,
+    "output": 192,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-002",
+   "hash": "13c4e875a0d21948",
+   "source": "real",
+   "status": 200,
+   "ms": 1731,
+   "usage": {
+    "input": 46,
+    "output": 196,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-003",
+   "hash": "4e4740425d90704c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2806,
+   "usage": {
+    "input": 66,
+    "output": 568,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-003",
+   "hash": "f1c26401ea512109",
+   "source": "real",
+   "status": 200,
+   "ms": 2147,
+   "usage": {
+    "input": 157,
+    "output": 202,
+    "cacheRead": 8543,
+    "cacheWrite": 156
+   }
+  },
+  {
+   "conv": "bv-asr-003",
+   "hash": "0795991bfe627696",
+   "source": "real",
+   "status": 200,
+   "ms": 1985,
+   "usage": {
+    "input": 469,
+    "output": 122,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-004",
+   "hash": "c3145c4e5a86dce3",
+   "source": "real",
+   "status": 200,
+   "ms": 3696,
+   "usage": {
+    "input": 59,
+    "output": 747,
+    "cacheRead": 8722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-005",
+   "hash": "3c683a3bbefae6de",
+   "source": "hit",
+   "status": 200,
+   "ms": 1026,
+   "usage": {
+    "input": 51,
+    "output": 108,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-005",
+   "hash": "e9fe1f3c023501b6",
+   "source": "real",
+   "status": 200,
+   "ms": 1968,
+   "usage": {
+    "input": 107,
+    "output": 107,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-005",
+   "hash": "8b68a60b916cd1b2",
+   "source": "real",
+   "status": 200,
+   "ms": 2180,
+   "usage": {
+    "input": 174,
+    "output": 208,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-005",
+   "hash": "822cf17e7a0a8fc5",
+   "source": "real",
+   "status": 200,
+   "ms": 1592,
+   "usage": {
+    "input": 274,
+    "output": 202,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-005",
+   "hash": "f59ffdcdcf8961ed",
+   "source": "real",
+   "status": 200,
+   "ms": 1554,
+   "usage": {
+    "input": 586,
+    "output": 166,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-asr-005",
+   "hash": "55cb3817ad6649c8",
+   "source": "real",
+   "status": 200,
+   "ms": 1594,
+   "usage": {
+    "input": 388,
+    "output": 185,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-fuori-001",
+   "hash": "6807eefdea7e1fc8",
+   "source": "real",
+   "status": 200,
+   "ms": 1425,
+   "usage": {
+    "input": 49,
+    "output": 143,
+    "cacheRead": 8699,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-fuori-002",
+   "hash": "2a8063a1497ab350",
+   "source": "real",
+   "status": 200,
+   "ms": 1974,
+   "usage": {
+    "input": 49,
+    "output": 140,
+    "cacheRead": 8944,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "bv-fuori-003",
+   "hash": "8f8d5b35dd7aea5b",
+   "source": "real",
+   "status": 200,
+   "ms": 1289,
+   "usage": {
+    "input": 62,
+    "output": 137,
+    "cacheRead": 8543,
+    "cacheWrite": 180
+   }
+  },
+  {
+   "conv": "bv-fuori-004",
+   "hash": "7aa3a5606895d97a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1565,
+   "usage": {
+    "input": 47,
+    "output": 154,
+    "cacheRead": 8686,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

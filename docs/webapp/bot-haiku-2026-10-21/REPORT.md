@@ -5,6 +5,27 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+
+## 0quater. AGGIORNAMENTO 21/10 14:00–15:10 — messaggi lunghi senza timeout, «sposta» non più perso: edge v133
+
+**Esito.** Deploy `tako-operational-candidate` **v133** (ezbr cbf863d3…); lettura (v27) e worker (3e44eedc) invariati.
+- **Timeout (errore id 59 «haiku: timeout», vocale con 5 richieste):** budget del turno 30 s (era 25); ogni tentativo usa il budget rimasto (niente più tetto fisso di 10 s); la lentezza non si ritenta (solo rete/5xx/429). Se il budget finisce: «Il messaggio è lungo e non sono riuscito a finirlo in tempo: *non ho cambiato nulla*. Mandamelo diviso…» — mai «momentaneamente non disponibile» per un messaggio lungo (non si è mai scritto nulla a metà: la scrittura è una sola, alla fine). Turno oltre 5 s → UN «Ci sto lavorando…», poi il risultato (niente sui turni veloci).
+- Causa vera dei rifiuti sui messaggi lunghi (oltre alla lentezza): «gnocchi ai quattro formaggi» non riconosciuto come «Gnocchi 4 formaggi» (numeri in lettere nel controllo «piatto diverso») e la regola «aggiungi su piatto esistente» che in un messaggio lungo bloccava anche i prezzi degli altri piatti → corretti.
+- **«Sposta X» persa:** la risposta che completa la domanda («nei panini, crealo») ora crea il Sottomenu E sposta il piatto (verbo «sposta» preso dalla richiesta in sospeso; «crealo» non è più «parte persa»); un Sottomenu creato insieme ai piatti che ci finiscono dentro nasce visibile.
+- **Set nuovo «lunghi» (42):** 35 messaggi da 5–8 richieste (vocali, «anziché», «anzi», misti prezzo/finito/nuovo/nascondi/sposta), 5 con «13.000», il vocale vero di Manuel, il caso «sposta → crealo».
+
+| Set (giro l3; latenze dal vivo dal giro l2) | Valore |
+|---|---|
+| **Lunghi 42** | **41/42**, 0 GRAVI · **0 timeout** · turno dal vivo **p50 4,6 s / p95 9,5 s** (chiamata Haiku p50 4,5 s / p95 6,9 s; 1,05 chiamate/messaggio) |
+| Banco vero 92 | 80/92 = 87%, 0 GRAVI di sicurezza |
+| Avversario 150 | 139/150 = 92,7%, 0 di sicurezza |
+| Struttura 94 · visibilità 20 | 92/94 (1 GRAVE non di sicurezza: «sezione Pizze rosse» creata come sottomenu nascosto) · 19/20 |
+| Victoria · parlato · playground | 10/10 · 29/30 · 20/20 |
+| Suite | 0 rossi nuovi (4 test che vogliono il server :3001 cambiano solo messaggio d'errore) |
+
+Rollback: `candidate-index-vis.ts` (= v132) con `deploy-projection.mjs`. Il bundle v133 include anche il contratto dati facoltativo del prezzo fisso (242a2da), non usato.
+
+---
 ## 0ter. AGGIORNAMENTO 21/10 11:00–13:10 — Menu nuovi nascosti, «rendi visibile», «Menu in arrivo»: edge v132 + lettura v27 + worker 3e44eedc
 
 **Esito.** Gate verde e deploy fatto: `tako-operational-candidate` **v132** (ezbr a4015bb8…), `tako-read-candidate` **v27** (ezbr 4ec90e1d…), worker `takomenu-web` **3e44eedc…** (prima d21ca4b8…). Secret invariati (Haiku per tutti).

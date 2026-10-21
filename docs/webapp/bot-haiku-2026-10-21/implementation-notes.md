@@ -37,3 +37,4 @@
 35. Rollback della funzione di lettura: il pacchetto online è eszip (non ridistribuibile tale e quale) → copia di rollback = build della lettura dal commit 800016a.
 36. Dashboard: crea i Menu col suo codice client (visibili subito); la regola «nascono nascosti» vale per il bot.
 37. 21/10 13:20: Manuel sospende «menu a prezzo fisso» e «PDF multipli». Contratto dati già committato (242a2da, additivo, non usato); il lavoro a metà su wip/menu-prezzo-fisso (2d1112a); sottoagenti fermati (dashboard e banco non avevano scritto codice).
+38. Giro timeout/messaggi lunghi (14:00–15:10): budget 30 s, lentezza mai ritentata, ack dopo 5 s, risposta onesta a budget finito; fix numeri in lettere nel controllo «piatto diverso», regola «aggiungi su esistente» per frase; «sposta→crealo». 1 GRAVE non di sicurezza in struttura per varianza (sezione creata come sottomenu).
