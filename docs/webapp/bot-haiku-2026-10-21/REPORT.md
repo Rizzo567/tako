@@ -6,7 +6,7 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
-## 0quinquies. AGGIORNAMENTO 21/10 15:10–18:00 — Menu a prezzo fisso + PDF multipli: COSTRUITO E VERIFICATO, NON ONLINE
+## 0quinquies. AGGIORNAMENTO 21/10 15:10–17:40 — Menu a prezzo fisso + PDF multipli: COSTRUITO E VERIFICATO, NON ONLINE
 
 **Niente deploy, niente migrazione dei dati veri di Victoria** (istruzione di Manuel). Online resta tutto come §0quater (edge v133, lettura v27, worker 3e44eedc). Procedura pronta: `docs/webapp/menu-prezzo-fisso-2026-10-21/GO-LIVE.md`.
 
