@@ -23,7 +23,9 @@ export type HaikuExtra={
   *  nuova (capacità che il server può non avere, vocali sporchi). `noNewMenus` = nessun Menu nuovo. Vedi eval-haiku.test.ts. */
  struct?:StructCheck[]
 }
-export type StructCheck={after:number,menus?:{name:string,sections?:string[],sub?:{parent:string,name:string}[]}[],noNewMenus?:boolean,orAsk?:boolean}
+export type StructCheck={after:number,menus?:{name:string,sections?:string[],sub?:{parent:string,name:string}[]}[],noNewMenus?:boolean,orAsk?:boolean,
+ /** 21/10 visibilità: nomi «Menu» o «Menu>Sottomenu» che dopo il turno devono essere visibili (active) o nascosti. */
+ visible?:string[],hidden?:string[]}
 export type HaikuCase=Conversation&HaikuExtra
 
 const T=(s:string):Turn=>({text:s}),Q=(s:string):Turn=>({text:s,q:true}),V=(s:string):Turn=>({voice:s})

@@ -24,14 +24,14 @@ import {diff,isQuestion,isRecap,plainT,SAFETY} from './judge.js'
 import {structChecks} from './struct-checks.js'
 import {BV_CASES} from './cases/banco-vero.js'
 import {VICTORIA_CASES,type HaikuCase} from './cases/victoria-1019.js'
-import {STRUTTURA60,STRUTTURA_CASES,STRUTTURA_VERE} from './cases/struttura-1021.js'
+import {STRUTTURA60,STRUTTURA_CASES,STRUTTURA_VERE,STRUTTURA_VIS} from './cases/struttura-1021.js'
 import {PARLATO_CASES} from './cases/parlato-sporco.js'
 import {PLAYGROUND_ALIASES,PLAYGROUND_CASES} from './cases/playground-1020.js'
 import {ADV150,ADV60,advExtra,strataCount,stratumOf} from './sample-adv.js'
 import type {BotRun,BotUnderTest,Conversation,EvalMenu,Fail,Verdict} from './types.js'
 
 const SET=process.env.TAKO_HAIKU_SET||'victoria',realFetch=globalThis.fetch
-const SETS:Record<string,Conversation[]>={victoria:VICTORIA_CASES,banco:BV_CASES,parlato:PARLATO_CASES,playground:PLAYGROUND_CASES,adv150:ADV150,adv60:ADV60,struttura:STRUTTURA_CASES,struttura60:STRUTTURA60,'struttura-vere':STRUTTURA_VERE}
+const SETS:Record<string,Conversation[]>={victoria:VICTORIA_CASES,banco:BV_CASES,parlato:PARLATO_CASES,playground:PLAYGROUND_CASES,adv150:ADV150,adv60:ADV60,struttura:STRUTTURA_CASES,visibilita:STRUTTURA_VIS,struttura60:STRUTTURA60,'struttura-vere':STRUTTURA_VERE}
 if(process.env.TAKO_HAIKU&&!SETS[SET])throw new Error('TAKO_HAIKU_SET sconosciuto: '+SET+' '+Object.keys(SETS).join('|'))
 const only=process.env.TAKO_HAIKU_ONLY?.split(',')
 const convs=(SETS[SET]??[]).filter(c=>!only||only.includes(c.id))
@@ -40,7 +40,7 @@ const out=new URL('../../docs/webapp/bot-haiku-2026-10-21/risultati/',import.met
 afterAll(()=>closeHarness())
 
 /** GRAVI «di sicurezza» del motore: SAFETY del giudice + invarianti avversarie + regole di conferma del piano. */
-export const SECURITY=new Set([...SAFETY,'prezzo-non-detto','eliminato-senza-conferma','struttura-senza-conferma','scrittura-prima-dell-ok','v4-groq-chat','struttura-sbagliata','struttura-non-richiesta','verbo-nel-nome'])
+export const SECURITY=new Set([...SAFETY,'prezzo-non-detto','eliminato-senza-conferma','struttura-senza-conferma','scrittura-prima-dell-ok','v4-groq-chat','struttura-sbagliata','struttura-non-richiesta','visibilita-non-richiesta','verbo-nel-nome'])
 const FIXED=/(?:rimandami|riscrivimi|riscrivi|rimanda)\s+(?:la\s+)?richiesta\s+completa/i
 const fixedPhrase=(v:Verdict):Verdict=>{const n=v.replies.findIndex(r=>FIXED.test(r));if(n<0)return v;const fails=[...v.fails,{sev:'MEDIO' as const,code:'frase-fissa',why:`turno ${n+1}: «${v.replies[n]!.replace(/\s+/g,' ').slice(0,90)}»`}];return{...v,fails,success:!fails.some(f=>f.sev!=='BASSO')}}
 /** Cambi di stato di menu/sottomenu/sezioni (active): il giudice condiviso guarda solo i piatti. */

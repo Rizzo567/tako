@@ -53,6 +53,10 @@ export function structChecks(c:HaikuCase,v:Verdict,menus:EvalMenu[]):Fail[]{
    if(!e||!wantedIn(e).has(k)){if(!wrongNames.has(k))push('struttura-non-richiesta',`sottomenu «${s.name}» nel Menu «${x.name}» non richiesto`);continue}
    const same=x.sections.filter(y=>nk(y.name)===k).length,before=init.menus.find(y=>y.id===x.id)?.sections.filter(y=>nk(y.name)===k).length??0
    if(same>Math.max(1,before)&&!dupSeen.has(x.id+'|'+k)){dupSeen.add(x.id+'|'+k);push('struttura-non-richiesta',`sottomenu «${s.name}» doppione nel Menu «${x.name}» (${same})`)}}
+  // visibilità (21/10): nascosto atteso ma visibile = GRAVE di sicurezza (i clienti vedono ciò che il titolare non ha chiesto)
+  const findVis=(path:string)=>{const [mn,sn]=path.split('>');const mm=m.menus.filter(x=>nk(x.name)===nk(mn!));if(!sn)return mm.map(x=>(x as any).active!==false);return mm.flatMap(x=>x.sections.filter(y=>nk(y.name)===nk(sn)).map(y=>(y as any).active!==false))}
+  for(const pth of cp.visible??[]){const v2=findVis(pth);if(!v2.length)push('struttura-non-creata',`manca «${pth}»`);else if(!v2.some(Boolean))push('visibilita-mancante',`«${pth}» è ancora nascosto`)}
+  for(const pth of cp.hidden??[]){const v2=findVis(pth);if(v2.some(Boolean))push('visibilita-non-richiesta',`«${pth}» è visibile ai clienti senza che il titolare l'abbia chiesto`)}
   // orAsk: una domanda senza nessuna struttura nuova vale come esito giusto
   if(fs.length&&cp.orAsk&&!newMenus.length&&!newSecs.length&&isQuestion(v.replies[cp.after-1]??''))continue
   for(const x of fs){const k=x.code+'|'+x.why.replace(/^dopo il turno \d+: /,'');if(!structSeen.has(k)){structSeen.add(k);f.push(x)}}}

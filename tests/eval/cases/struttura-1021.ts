@@ -152,6 +152,31 @@ function pick60(cs:HaikuCase[],size=60):HaikuCase[]{
  for(const xs of by.values())xs.sort((a,b)=>h(a.id).localeCompare(h(b.id)))
  const ids=new Set<string>();for(let i=0;ids.size<Math.min(size,cs.length);i++)for(const xs of by.values()){if(ids.size>=size)break;if(xs[i])ids.add(xs[i]!.id)}
  return cs.filter(c=>ids.has(c.id))}
+// ---------- (iv) Visibilità (21/10, decisione Manuel): Menu/Sottomenu nuovi nascosti, «rendi visibile», sinonimi, omonimi ----------
+const VS=(after:number,visible:string[]=[],hidden:string[]=[],x:Partial<StructCheck>={}):StructCheck=>({after,menus:x.menus??[],visible,hidden,...x})
+const vis=(id:string,turns:(string|Turn)[],struct:StructCheck[],x:Partial<HaikuCase>={})=>mk('str-v-'+id,'struttvis',turns,NONE,{source:'visibilità 21/10',struct,...x})
+export const STRUTTURA_VIS:HaikuCase[]=[
+ vis('01',['rendi visibile Brunch'],[VS(1,['Brunch'])]),
+ vis('02',['mostra il menu aperitivo'],[VS(1,['Aperitivo'],['Brunch'])]),
+ vis('03',['fai vedere il brunch ai clienti'],[VS(1,['Brunch'])]),
+ vis('04',['pubblica il menu brunch'],[VS(1,['Brunch'])]),
+ vis('05',['attiva il menu aperitivo'],[VS(1,['Aperitivo'])]),
+ vis('06',['rendi visibili i vini'],[VS(1,['Bevande>Vini'])]),
+ vis('07',['fai vedere i dolci'],[VS(1,[],['Pranzo>Dolci','Cena>Dolci'])],{ask:[1],note:'«Dolci» in due Menu: una domanda, niente reso visibile'}),
+ vis('08',['fai vedere i dolci della cena'],[VS(1,['Cena>Dolci'],['Pranzo>Dolci'])]),
+ vis('09',['nascondi il menu brunch'],[VS(1,[],['Brunch'])],{note:'già nascosto: nessun cambio'}),
+ vis('10',['nascondi tutto il menu cena','sì'],[VS(1,['Cena']),VS(2,[],['Cena'])],{structAsk:[1],note:'Menu con piatti: prima la conferma, poi nascosto'}),
+ vis('11',['crea il menu Merende'],[VS(1,[],['Merende'],{menus:[{name:'Merende'}]})],{note:'nasce nascosto'}),
+ vis('12',['crea il menu Merende','rendi visibile Merende'],[VS(1,[],['Merende'],{menus:[{name:'Merende'}]}),VS(2,['Merende'],[],{menus:[{name:'Merende'}]})]),
+ vis('13',['nel menu pranzo crea il sottomenu Contorni'],[VS(1,[],['Pranzo>Contorni'],{menus:[{name:'Pranzo',sections:['Contorni']}]})]),
+ vis('14',['nel menu pranzo crea il sottomenu Contorni','mostra i contorni'],[VS(1,[],['Pranzo>Contorni'],{menus:[{name:'Pranzo',sections:['Contorni']}]}),VS(2,['Pranzo>Contorni'],[],{menus:[{name:'Pranzo',sections:['Contorni']}]})]),
+ vis('15',[V('eh… rendi visibbile il… brunch')],[VS(1,['Brunch'],[],{orAsk:true})]),
+ vis('16',['mostra il menu della colazione'],[VS(1,[],['Brunch','Aperitivo'])],{ask:[1],note:'non esiste: una domanda'}),
+ vis('17',['attiva il pranzo'],[VS(1,['Pranzo'])],{note:'già visibile: nessun cambio'}),
+ vis('18',['nascondi i secondi della cena'],[VS(1,['Cena>Secondi'])],{structAsk:[1],note:'sottomenu con piatti: conferma prima di nascondere'}),
+ vis('19',['rendi visibili brunch e aperitivo'],[VS(1,['Brunch','Aperitivo'])]),
+ vis('20',['fai vedere il menu aperitivo e lascia nascosto il brunch'],[VS(1,['Aperitivo'],['Brunch'])]),
+]
 export const STRUTTURA60=pick60(STRUTTURA_ADV)
 export const STRUTTURA_VERE=[...STRUTTURA_MANUEL,...STRUTTURA_BIMBUM]
-export const STRUTTURA_CASES:HaikuCase[]=[...STRUTTURA_VERE,...STRUTTURA_ADV]
+export const STRUTTURA_CASES:HaikuCase[]=[...STRUTTURA_VERE,...STRUTTURA_ADV,...STRUTTURA_VIS]

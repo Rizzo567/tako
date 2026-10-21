@@ -87,3 +87,31 @@ describe('cervello acceso di default con TAKO_BOT_ENGINE_DEFAULT=haiku (Haiku pe
   expect(botBrainEnabled({},{})).toBe(false);expect(botBrainEnabled({},{TAKO_BOT_ENGINE_DEFAULT:'groq'})).toBe(false);expect(botBrainEnabled({botBrain:true},{TAKO_BOT_ENGINE_DEFAULT:'groq'})).toBe(true)
  })
 })
+
+describe('Menu nuovi nascosti e «rendi visibile» (decisione Manuel 21/10)',()=>{
+ const mk=()=>[{id:QA,name:'Menu',sections:1,active:true,secs:[{id:'22222222-2222-4222-8222-222222222222',name:'Primi',active:true,parent:null,items:1}]}]
+ it('il Menu nuovo nasce nascosto; i suoi sottomenu lo seguono; un sottomenu in un Menu esistente nasce nascosto',()=>{
+  const r=structureActions([A('create_menu',{name:'Cena'}),A('create_section',{name:'Primo',menu:'Cena'}),A('create_section',{name:'Dolci',menu:'Menu'})],{message:'crea il menu cena con primo e nel menu metti dolci',sections,menus:mk()})
+  const w=ws();applyActions(w,r.actions);const p=workspaceSchema.parse(w)
+  const cena=p.menus.find(m=>m.name==='Cena')!;expect(cena.active).toBe(false);expect(cena.sections[0]!.active).toBe(true)
+  expect(p.menus[0]!.sections.find(x=>x.name==='Dolci')!.active).toBe(false)
+ })
+ it('«rendi visibile Cena» mostra il Menu (subito); già visibile → nessuna azione',()=>{
+  const menus=[...mk(),{id:'88888888-8888-4888-8888-888888888888',name:'Cena',sections:0,active:false,secs:[]}]
+  const r=structureActions([A('set_menu_visible',{menu:'Cena',value:true})],{message:'rendi visibile cena',sections,menus})
+  expect(r.actions).toEqual([{kind:'set_menu_active',menuId:'88888888-8888-4888-8888-888888888888',name:'Cena',value:true,items:0}])
+  const w=ws();w.menus.push({id:'88888888-8888-4888-8888-888888888888',name:'Cena',type:'dinner',active:false,translations:{},sections:[]});applyActions(w,r.actions);expect(workspaceSchema.parse(w).menus[1]!.active).toBe(true)
+  expect(structureActions([A('set_menu_visible',{menu:'Menu',value:true})],{message:'mostra il menu',sections,menus}).actions).toEqual([])
+ })
+ it('nascondere un Menu con piatti porta il conteggio (il server chiede il sì); sottomenu omonimi senza Menu → domanda',()=>{
+  const r=structureActions([A('set_menu_visible',{menu:'Menu',value:false})],{message:'nascondi tutto il menu',sections,menus:mk()});expect(r.actions[0]).toMatchObject({kind:'set_menu_active',value:false,items:1})
+  const two=[...mk(),{id:'99999999-9999-4999-8999-999999999999',name:'Cena',sections:1,active:true,secs:[{id:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',name:'Primi',active:false,parent:null,items:0}]}]
+  expect(structureActions([A('set_section_visible',{name:'Primi',value:true})],{message:'fai vedere i primi',sections,menus:two}).ask).toBe('sottomenu_ambiguo')
+  expect(structureActions([A('set_section_visible',{name:'Primi',menu:'Cena',value:true})],{message:'fai vedere i primi della cena',sections,menus:two}).actions[0]).toMatchObject({kind:'set_section_active',value:true,items:0})
+ })
+ it('«annulla» rimette anche la visibilità di un Menu (record strutturale)',async()=>{
+  const {undoRecordFor,applyUndo}=await import('../apps/server/src/lib/twilio-menu-hold.js')
+  const before=ws(),after=structuredClone(before);after.menus[0]!.active=false
+  const rec=undoRecordFor(before,after)!;expect(rec.full).toBeTruthy();const w=structuredClone(after);expect(applyUndo(w,rec).ok).toBe(true);expect(w.menus[0]!.active).toBe(true)
+ })
+})

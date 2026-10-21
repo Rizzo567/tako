@@ -30,7 +30,7 @@ import {removeVerbRe} from '../lib/twilio-menu-nlu.js'
 import {unreadWords,nameIsExplicit} from '../lib/twilio-menu-reading.js'
 import {phoneticCandidates} from '../lib/twilio-menu-phonetic.js'
 import {relativeDelta,relNormText,g9Prices} from '../lib/twilio-menu-ai.js'
-import {parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
+import {isStructAction,parseStructure,DELETE_VERB,plainName,sameSection} from '../lib/twilio-menu-structure.js'
 import {sqlBrainStore} from '../lib/owner-brain-memory.js'
 import {readBotBrain,readBotSettings,engineKey,type BotEngine} from '../lib/owner-brain-switch.js'
 import {HAIKU_MODEL} from '../lib/owner-brain-anthropic.js'
@@ -464,8 +464,8 @@ function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string){if(!/\b
  * nascosto piatto per piatto chiede sempre conferma. */
 function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false,strict=false,sections:SectionRef[]=[]):BatchWhy|null{
  if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
- const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='delete_menu'||a.kind==='delete_section')
- if(structOnly)return null
+ const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_menu_active'||a.kind==='set_section_active')
+ if(structOnly)return actions.some(a=>(a.kind==='set_menu_active'||a.kind==='set_section_active')&&!a.value&&a.items>0)?'recap':null
  if(!strict&&actions.some(a=>a.kind==='create_section')&&!EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' ')))return 'section'
  // Un solo comando su un gruppo («aumenta tutti i piatti della categoria X di un euro»): stessa differenza su ogni piatto → si
  // applica subito col riepilogo numerato dei fatti (decisione 18/10, nota 62). Altrimenti oltre 3 modifiche serve l'OK.
@@ -495,7 +495,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // PIANO bot-haiku: con haiku il turno intero (auto-correzioni comprese) sta in 25 s; cervello giù → brainDown + avviso a Manuel.
  const engine=budget.engine,deadline=Date.now()+25_000
  const onDown=engine==='haiku'?(reason:string)=>{inBackground(reportFailure({kind:'job_failed',tenant:ctx.tenant,phone:ctx.phone,detail:'haiku: '+reason}))}:undefined
- const base={menus:(workspaceSchema.parse(row.draft).menus as any[]).filter((m:any)=>m.active!==false).map((m:any)=>({id:m.id as string,name:m.name as string,sections:(m.sections??[]).length as number})),voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,engine,deadline,onDown,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (sottomenu)']}:null}
+ const base={menus:(workspaceSchema.parse(row.draft).menus as any[]).map((m:any)=>({id:m.id as string,name:m.name as string,sections:(m.sections??[]).length as number,active:m.active!==false,secs:(m.sections??[]).map((x:any)=>({id:x.id as string,name:x.name as string,active:x.active!==false,parent:(x.parentSectionId??null) as string|null,items:(x.items??[]).length as number}))})),voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,engine,deadline,onDown,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (sottomenu)']}:null}
  const approval=(actions:MenuAction[],refs0:MenuRef[],message:string,ans=false)=>approvalFor(actions,refs0,message,ans,engine==='haiku',sections)
  const decide=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>decideTurn({decision:run.decision as any,control:run.decision.control??[],raw:run.decision.raw,message:text,pend,undoOK,sections,refs,lastBot:run.lastBot})
  // R5.1: anche i prezzi attuali dei piatti nominati nel messaggio («C'è già pasta al ragù a 12 €: lo aggiorno o ne creo un altro?»): sono fatti del menu.
@@ -599,7 +599,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
     if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
    if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});const whole=engine==='haiku'?wholeGroup(effective,refs,sections):null;return say([whole?wholeGroupText(whole):pendingFacts(why,effective,refs,sections),already].filter(Boolean).join('\n\n'),false,pricesOf(effective))}
-   const r=await applyNow(effective),emptyNote=engine==='haiku'&&effective.some(a=>a.kind==='create_menu'||a.kind==='create_section')?'Menu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti.':'';return say([r.facts,already,emptyNote].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
+   const r=await applyNow(effective)
+   // run Haiku 21/10 (decisione Manuel): solo struttura → testo del server, chiaro su cosa vedono i clienti (niente bozza del modello).
+   if(engine==='haiku'&&r.allOk&&effective.every(isStructAction)&&effective.some(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='set_menu_active'||a.kind==='set_section_active'))return structureReply(effective,refs,sections)
+   return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   switch(out.kind){
    case 'undo':{const res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
@@ -899,4 +902,20 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  const job=runJob(result.job,result.ctx,sid,body,form,result.prefix).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result.ack))
  })
+}
+
+/** Riepilogo della struttura (motore haiku, decisione Manuel 21/10): Menu e Sottomenu nuovi nascono nascosti; «rendi visibile X» li mostra. */
+function structureReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string{
+ const out:string[]=[],list=(xs:string[])=>xs.map(x=>'*'+safe(x)+'*').join(', ')
+ const newMenus=actions.filter(a=>a.kind==='create_menu') as Extract<MenuAction,{kind:'create_menu'}>[]
+ const secs=actions.filter(a=>a.kind==='create_section') as Extract<MenuAction,{kind:'create_section'}>[]
+ for(const m of newMenus){const inside=secs.filter(x=>x.menuId===m.newMenuId&&!x.parentSectionId).map(x=>x.name)
+  out.push('Ho creato il Menu *'+safe(m.name)+'*'+(inside.length?(inside.length===1?' con il sottomenu ':' con i sottomenu ')+list(inside):'')+'. Per ora è nascosto: scrivi *rendi visibile '+safe(m.name)+'* quando vuoi che i clienti lo vedano.')}
+ const byMenu=new Map<string,string[]>();for(const x of secs)if(!x.parentSectionId&&!newMenus.some(m=>m.newMenuId===x.menuId))byMenu.set(x.menuName??'',[...(byMenu.get(x.menuName??'')??[]),x.name])
+ for(const [menu,names] of byMenu)out.push((names.length===1?'Ho creato il sottomenu ':'Ho creato i sottomenu ')+list(names)+(menu?' nel Menu *'+safe(menu)+'*':'')+'. Per ora '+(names.length===1?'è nascosto':'sono nascosti')+': scrivi *rendi visibile '+safe(names[0]!)+'* quando vuoi che i clienti '+(names.length===1?'lo vedano':'li vedano')+'.')
+ for(const x of secs)if(x.parentSectionId)out.push('Ho creato la Sezione *'+safe(x.name)+'* in *'+safe(x.parentName??'')+'*.')
+ for(const a of actions){if(a.kind==='set_menu_active'||a.kind==='set_section_active'){const what=(a.kind==='set_menu_active'?'il Menu *':'il sottomenu *')+safe(a.name)+'*'
+   out.push(a.value?'Fatto: '+what+' ora è visibile ai clienti.'+(a.items?'':' I clienti vedono «Menu in arrivo» finché non aggiungi i piatti.'):'Fatto: '+what+' ora è nascosto ai clienti.')}
+  if(a.kind==='delete_menu'||a.kind==='delete_section')out.push(describeAction(a,refs,sections)+'.')}
+ return out.join('\n')
 }

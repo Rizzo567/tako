@@ -9,13 +9,16 @@ export type StructAction=
  |{kind:'delete',id:string,undoCreate?:boolean} // undoCreate: «no, X lascialo stare» subito dopo averlo aggiunto (senza conferma)
  |{kind:'rename',id:string,name:string}
  |{kind:'move',id:string,sectionId:string}
- |{kind:'create_section',newSectionId:string,name:string,menuId:string,menuName?:string,parentSectionId?:string,parentName?:string}
+ |{kind:'create_section',newSectionId:string,name:string,menuId:string,menuName?:string,parentSectionId?:string,parentName?:string,hidden?:boolean}
+ // run Haiku 21/10 (decisione Manuel): mostrare/nascondere un intero Menu o Sottomenu (campo `active`); `items` = piatti dentro.
+ |{kind:'set_menu_active',menuId:string,name:string,value:boolean,items:number}
+ |{kind:'set_section_active',sectionId:string,name:string,menuName?:string,value:boolean,items:number}
  |{kind:'delete_menu',menuId:string,name:string}
  |{kind:'delete_section',sectionId:string,name:string,menuName?:string}
  // run Haiku 21/10: Menu nuovo (livello menus[]), vuoto; i Sottomenu dello stesso piano lo indicano con menuId=newMenuId.
  |{kind:'create_menu',newMenuId:string,name:string,type:'main'|'lunch'|'dinner'|'drinks'}
  |{kind:'rename_section',sectionId:string,name:string}
-export const STRUCT_KINDS=new Set(['delete','rename','move','create_section','rename_section','create_menu','delete_menu','delete_section'])
+export const STRUCT_KINDS=new Set(['delete','rename','move','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_active','set_section_active'])
 export const isStructAction=(a:{kind:string}):a is StructAction=>STRUCT_KINDS.has(a.kind)
 
 const fold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
@@ -53,10 +56,12 @@ export function applyStructAction(w:any,a:StructAction):string{
  if(a.kind==='delete_menu'){const i=w.menus.findIndex((m:any)=>m.id===a.menuId);if(i<0)return a.name;if(w.menus[i].sections.some((s:any)=>s.items.length))throw new Error('Menu not empty');w.menus.splice(i,1);return a.name}
  if(a.kind==='delete_section'){for(const m of w.menus){const i=m.sections.findIndex((s:any)=>s.id===a.sectionId);if(i<0)continue;if(m.sections[i].items.length||m.sections.some((s:any)=>s.parentSectionId===a.sectionId))throw new Error('Section not empty');m.sections.splice(i,1);return a.name}return a.name}
  if(a.kind==='create_menu'){if(w.menus.some((m:any)=>m.id===a.newMenuId||fold(m.name)===fold(a.name)))return a.name
-  w.menus.push({id:a.newMenuId,name:a.name,description:null,type:a.type,active:true,translations:{},sections:[]});return a.name}
+  w.menus.push({id:a.newMenuId,name:a.name,description:null,type:a.type,active:false,translations:{},sections:[]});return a.name}
+ if(a.kind==='set_menu_active'){const m=w.menus.find((x:any)=>x.id===a.menuId);if(!m)throw new Error('Menu missing');m.active=a.value;return a.name}
+ if(a.kind==='set_section_active'){for(const m of w.menus){const sec=m.sections.find((x:any)=>x.id===a.sectionId);if(sec){sec.active=a.value;return a.name}}throw new Error('Section missing')}
  if(a.kind==='create_section'){const menu=w.menus.find((m:any)=>m.id===a.menuId)??w.menus.find((m:any)=>m.id===menuForSection(a.name,w));if(!menu)throw new Error('Menu missing');if(w.menus.some((m:any)=>m.sections.some((s:any)=>s.id===a.newSectionId)))return a.name
-  if(a.parentSectionId){const pi=menu.sections.findIndex((s:any)=>s.id===a.parentSectionId);if(pi<0)throw new Error('Section missing');let at=pi+1;while(at<menu.sections.length&&menu.sections[at].parentSectionId===a.parentSectionId)at++;menu.sections.splice(at,0,{id:a.newSectionId,name:a.name,parentSectionId:a.parentSectionId,items:[]});return a.name}
-  const rank=courseRank(a.name),section={id:a.newSectionId,name:a.name,items:[]}
+  if(a.parentSectionId){const pi=menu.sections.findIndex((s:any)=>s.id===a.parentSectionId);if(pi<0)throw new Error('Section missing');let at=pi+1;while(at<menu.sections.length&&menu.sections[at].parentSectionId===a.parentSectionId)at++;menu.sections.splice(at,0,{id:a.newSectionId,name:a.name,parentSectionId:a.parentSectionId,active:true,items:[]});return a.name}
+  const rank=courseRank(a.name),section={id:a.newSectionId,name:a.name,active:a.hidden!==true,items:[]}
   const at=rank?menu.sections.findIndex((s:any)=>!s.parentSectionId&&courseRank(s.name)>rank):-1
   if(at>=0)menu.sections.splice(at,0,section);else{const drinks=rank===8?-1:menu.sections.findIndex((s:any)=>!s.parentSectionId&&courseRank(s.name)===8);if(drinks>=0)menu.sections.splice(drinks,0,section);else menu.sections.push(section)}
   return a.name}

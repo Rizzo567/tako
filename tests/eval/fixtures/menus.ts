@@ -162,3 +162,14 @@ export const bimbum2=build('bimbum2',18,{restaurant:'Bim Bum Bar (prova)',menus:
  ['Pranzo','lunch',[['Primi',[['Carbonara',11]]],['Secondi',[['Cotoletta alla milanese',14],['Salsiccia ai ferri',10]]]]],
  ['Cena','dinner',[['Secondi',[['Filetto al pepe verde',22],['Grigliata mista',18]]],['Dolci',[['Tiramisù',5]]]]]]})
 Object.assign(FIXTURES,{qastruttura,strutt,bimbum,bimbum2})
+
+// struttvis (21/10, Menu nascosti / «rendi visibile»): strutt + Menu nascosti «Brunch» (vuoto) e «Aperitivo» (con Spritz), sottomenu
+// «Dolci» vuoto e nascosto in Pranzo e in Cena (omonimi), «Vini» nascosto con piatti.
+export const struttvis:MenuFixture=(()=>{const f:MenuFixture={key:'struttvis',restaurant:'Osteria della Prova',menu:structuredClone(strutt.menu)}
+ const id=(n:number)=>'5000aa00-5555-4555-8555-'+String(n).padStart(12,'0'),W=f.menu as any
+ W.menus.push({id:id(1),name:'Brunch',description:null,type:'main',active:false,translations:{},sections:[]})
+ W.menus.push({id:id(2),name:'Aperitivo',description:null,type:'drinks',active:false,translations:{},sections:[{id:id(3),parentSectionId:null,name:'Spritz',description:null,active:true,translations:{},items:[{...structuredClone(W.menus[2].sections[0].items[0]),id:id(4),name:'Aperol spritz',price:6}]}]})
+ for(const [mi,n] of [[0,5],[1,6]] as const)W.menus[mi].sections.push({id:id(n),parentSectionId:null,name:'Dolci',description:null,active:false,translations:{},items:[]})
+ W.menus[2].sections[1].active=false
+ return f})()
+Object.assign(FIXTURES,{struttvis})
