@@ -1,4 +1,4 @@
-# GO-LIVE — Menu a prezzo fisso + PDF multipli (PRONTO, NON ESEGUITO: decide Manuel)
+# GO-LIVE — Menu a prezzo fisso + PDF multipli (passi 0–4 ESEGUITI il 21/10 sera per il bot: edge v136, lettura v28, worker 8c5992d3; PDF spenti con TAKO_MENU_PDF_DOCUMENTS; passo 5 Victoria NON eseguito)
 
 Ordine: (1) edge operativo + (2) funzione di lettura + (3) dashboard/pagina statica → controlli in sola lettura → (4) SOLO dopo, migrazione di Victoria.
 Tutti i comandi da `cd /Users/manuel/Projects/Tako/Tako-bot-anthropic` (symlink `.env.web` presente). Rollback in `~/.config/tako-webapp/rollback-edge-20261021/`.

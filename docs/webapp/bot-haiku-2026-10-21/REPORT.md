@@ -6,6 +6,37 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+## 0sexies. AGGIORNAMENTO 21/10 sera — BOT + menu a prezzo fisso ONLINE (PDF multipli spenti, Victoria non migrata)
+
+**Online:** edge `tako-operational-candidate` **v136** (ezbr d7d4d5aa…), lettura `tako-read-candidate` **v28** (ezbr d2af569b…), worker `takomenu-web` **8c5992d3-226b-456b-ad3e-4c0a87780e49**.
+- PDF multipli spenti con `TAKO_MENU_PDF_DOCUMENTS` (non impostato): le route rispondono 404 e la dashboard nasconde «I tuoi PDF»; il PDF classico e il PDF fisso di Victoria non cambiano.
+- Correzioni del bot prima del deploy:
+  - la sostituzione usa la frase detta quando il modello sceglie un piatto simile sbagliato («gnocchi al ragù» ≠ Gnocchi al pomodoro), restando prudente su «pasta e fagioli» e sui vocali senza punteggiatura;
+  - nelle letture, «senza prezzo» invece di «0,00 €».
+- Corrette dopo la prova dal vivo (v135, v136): un sottomenu creato in un Menu nascosto non si nasconde a sua volta (prima un menu reso visibile restava vuoto per i clienti), e il testo «per ora è nascosto» compare solo se è vero.
+- Banco mirato: prezzofisso 74/75 (resta il falso positivo pf-piatto-nuovo-08), banco 84/92, adv150 136/150, lunghi 40/42, struttura 93/94, visibilita 19/20, victoria 10/10. 0 GRAVI di sicurezza.
+- Prova dal vivo sul QA (webhook firmato `TakoSyncTest`, nessun WhatsApp inviato), con ogni passo verificato sul DB pubblicato. Tutto riuscito:
+  - crea il Menu, crea i sottomenu, prezzo fisso;
+  - opzioni Completo 15 / Solo primo 9;
+  - piatti del giorno su 2 sottomenu (creati a 0 €);
+  - «il completo passa a 17»;
+  - rendi visibile;
+  - aumento uniforme di 1 € sui Primi (applicato subito);
+  - sposta un piatto;
+  - vocale multi-richiesta: una domanda di conferma superflua, poi «sì» applica tutte e 3 le richieste.
+  La proiezione pubblica (`/api/customer/restaurant/QA/menu?menuId=…`) mostra pricing fisso, le opzioni e i piatti visibili. Turni 4–10 s.
+- Victoria dal vivo dopo il deploy, confrontata con le foto «prima»: struttura identica e 0 pixel cambiati (Pranzo e Cena, desktop e mobile).
+- Difetti visti dal vivo, non corretti:
+  - il testo dell'aumento uniforme dice «ti mostro il riepilogo prima di pubblicare» ma applica subito, e nomina in modo confuso due piatti «lasciati fuori»;
+  - «rimetti il tiramisù nei Piatti di prova» viene preso come annulla del prezzo, non come spostamento;
+  - «elimina il menu» con piatti dentro propone di nasconderlo (prudente, voluto);
+  - il QA non ha una pagina pubblica per slug, quindi lo scatto della pagina vera del QA non è stato fatto.
+- Rollback (copie in `~/.config/tako-webapp/rollback-edge-20261021/`):
+  - edge: `cp $RB/rollback-v133.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs` (oppure `rollback-v135.ts`);
+  - lettura: `cp $RB/rollback-read-v27.ts release/serverless/read-candidate/index.ts && node scripts/translations/deploy-projection.mjs --read`;
+  - worker: `CI=true npx wrangler rollback 3e44eedc-c6ea-424a-9c0c-5cc2d07512b0 --config deploy/cloudflare/wrangler.jsonc`.
+- Sul QA resta un «Menu del giorno» nascosto (fisso, 5 piatti); il resto del QA è com'era.
+
 ## 0quinquies. AGGIORNAMENTO 21/10 15:10–17:40 — Menu a prezzo fisso + PDF multipli: COSTRUITO E VERIFICATO, NON ONLINE
 
 **Niente deploy, niente migrazione dei dati veri di Victoria** (istruzione di Manuel). Online resta tutto come §0quater (edge v133, lettura v27, worker 3e44eedc). Procedura pronta: `docs/webapp/menu-prezzo-fisso-2026-10-21/GO-LIVE.md`.
