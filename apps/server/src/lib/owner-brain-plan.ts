@@ -320,7 +320,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  const unc=(Array.isArray(data.uncertain)?data.uncertain:[]).filter((u:any)=>u&&typeof u.phrase==='string'&&u.phrase.trim()&&inText(plain(u.phrase),msg)).slice(0,6)
  const asks:HoldAsk[]=[],candCovered:string[]=[]
  const clearIds=new Set(actions.map((a:any)=>map(a?.item)).filter(Boolean) as string[]),negIds=new Set(exclude.map(e=>e.id))
- for(const u of unc){const all=refIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
+ // run Haiku 21/10 (bv-deixis-001): candidati scritti col NOME del piatto invece del codice pN → stesso piatto se il nome è esatto e unico.
+ const candIds=(list:unknown)=>Array.isArray(list)?[...new Set(list.flatMap((v:unknown)=>{const id=map(v);if(id&&byId.has(id))return [id];const k=plain(String(v??''));const hits=k.length>=3?refs.filter(r=>plain(r.name)===k):[];return hits.length===1?[hits[0]!.id]:[]}))]:[]
+ for(const u of unc){const all=candIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
   // Candidati già toccati da una parte chiara o negati: quell'ambiguità non c'è più (resta solo se rimangono ≥2 piatti o nessuno era indicato).
   if(all.length&&cands.length<(all.length>=2?2:1))continue
   candCovered.push(...cands);const word=String(u.phrase).trim().slice(0,60)
