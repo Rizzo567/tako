@@ -5,6 +5,7 @@
 // doppioni, nessun piatto distinto perso), le opzioni diventano formule con i Sottomenu compresi.
 // Uso:  tsx scripts/victoria/fixed-price-migration.ts --plan  --out <cartella>
 //       tsx scripts/victoria/fixed-price-migration.ts --execute --out <cartella> --expected-revision N --expected-host H
+//       tsx scripts/victoria/fixed-price-migration.ts --restore --out <cartella> --expected-host H   (rollback: ripubblica backup.json)
 // --plan legge e basta (backup + migrato + rapporto). --execute pubblica con mutateWorkspace SOLO se la revisione è quella del piano.
 import {readFile,writeFile,mkdir} from 'node:fs/promises'
 import {resolve,dirname} from 'node:path'
@@ -53,12 +54,18 @@ export function lostDishes(before:Workspace,after:Workspace){const key=(m:string
  return before.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>({m:m.name,s:s.name,i:i.name})))).filter(x=>!have.has(key(x.m,x.s,x.i)))}
 
 async function main(args=process.argv.slice(2)){
- const get=(n:string)=>{const i=args.indexOf(n);return i<0?undefined:args[i+1]},execute=args.includes('--execute'),out=get('--out')
- if(execute===args.includes('--plan')||!out)throw Error('Uso: --plan|--execute --out <cartella>')
+ const get=(n:string)=>{const i=args.indexOf(n);return i<0?undefined:args[i+1]},execute=args.includes('--execute'),restore=args.includes('--restore'),out=get('--out')
+ if([execute,restore,args.includes('--plan')].filter(Boolean).length!==1||!out)throw Error('Uso: --plan|--execute|--restore --out <cartella>')
  const root=resolve(dirname(fileURLToPath(import.meta.url)),'../..');const {loadLocalEnvironment}=await import('../start-webapp.mjs');Object.assign(process.env,await loadLocalEnvironment(root))
  const require=createRequire(resolve(root,'apps/server/package.json')),{sql}=require('drizzle-orm');const {db}=await import('../../packages/db/src/index.js')
  await mkdir(out,{recursive:true,mode:0o700})
  const rows=await db.execute(sql`SELECT draft,published,revision,published_revision FROM menu_workspaces WHERE restaurant_id=${VICTORIA}`);const row=rows[0] as any
+ if(restore){const backup=JSON.parse(await readFile(resolve(out,'backup.json'),'utf8')),target=new URL(process.env.DATABASE_URL!)
+  if(get('--expected-host')!==target.hostname)throw Error('Host di destinazione non confermato')
+  const back=workspaceSchema.parse(backup.published),owner=(await db.execute(sql`SELECT user_id FROM web_location_memberships WHERE restaurant_id=${VICTORIA} ORDER BY created_at LIMIT 1`))[0] as any
+  const {mutateWorkspace}=await import('../../apps/server/src/lib/menu-workspace-store.js')
+  const saved=await mutateWorkspace(VICTORIA,owner?.user_id,Number(row.revision),back,false,'Ripristino da backup (prezzo fisso)');await mutateWorkspace(VICTORIA,owner?.user_id,saved.revision,back,true,'Ripristino pubblicato')
+  console.log(JSON.stringify({mode:'restore',from:Number(row.revision),saved:saved.revision}));process.exit(0)}
  if(!row?.published)throw Error('Victoria senza menu pubblicato')
  if(Number(row.revision)!==Number(row.published_revision))throw Error('Bozza diversa dal pubblicato: qualcuno sta modificando dalla dashboard, stop')
  const before=workspaceSchema.parse(row.published),{workspace:after,report}=migrateWorkspace(before),lost=lostDishes(before,after)
