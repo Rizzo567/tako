@@ -189,3 +189,20 @@ export const prezzofisso:MenuFixture=(()=>{const f=build('prezzofisso',19,{resta
  for(const n of ['Pasta e fagioli','Arrosto di vitello','Risotto ai funghi'])for(const m of W.menus)for(const s of m.sections)for(const i of s.items)if(i.name===n)i.hidden=true
  return f})()
 Object.assign(FIXTURES,{prezzofisso})
+
+// ---------------- Set MULTITURNO / ADV-SERA (21/10/2026 sera, prova dal vivo di Manuel sul QA 26050ecd) ----------------
+// qasera: stessa FORMA del QA di quella sera (riletto in sola lettura): «Menu di verifica · web QA» con Piatti di prova (alcuni nascosti)
+// e Primi (paste, due nascoste in più rispetto al QA per provare «solo i visibili»), «Menu pranzo» col solo sottomenu «Completo» (vuoto),
+// «Menu cena» con «Primi» nascosto e vuoto, «Menu del giorno» a PREZZO FISSO (nascosto) con Gnocchi al ragù. Nomi inventati dove servono.
+export const qasera:MenuFixture=(()=>{const f=build('qasera',20,{restaurant:'Tako · Verifica web',menus:[
+ ['Menu di verifica · web QA','lunch',[['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',10],['Inserisce il piatto la parmigiana',12],['Pasta al sugo',9],['Pasta al pesto e lasagna',10.01],['tiramisù',15]]],
+  ['Primi',[['la parmigiana',15],['pasta al pesto',11],['pasta carbonara',10],['riso giallo',8],["pasta all'amatriciana",11],['pasta alla norma',10]]]]],
+ ['Menu pranzo','lunch',[['Completo',[]]]],
+ ['Menu cena','dinner',[['Primi',[]]]],
+ ['Menu del giorno','lunch',[['Primi',[['Lasagna',0],['Carbonara',0],['Gnocchi al ragù',0]]],['Secondi',[['Cotoletta',0],['Polpette',0],['Frittata di zucchine',0],['Frittata di patate',0]]]]]]})
+ const W=f.menu as any,hide=['Piatto di verifica','Che ne sacc','boh','Inserisce il piatto la parmigiana',"pasta all'amatriciana",'pasta alla norma','Carbonara','Polpette','Frittata di zucchine','Frittata di patate']
+ for(const m of W.menus)for(const s of m.sections)for(const i of s.items){if(hide.includes(i.name))i.hidden=true;if(i.name==='boh')i.available=false}
+ W.menus[2].sections[0].active=false
+ W.menus[3].pricing='fisso';W.menus[3].active=false;W.menus[3].formulas=[{id:'5000cc00-5555-4555-8555-000000000001',name:'Completo',price:18,note:null,sectionIds:W.menus[3].sections.map((s:any)=>s.id),translations:{}},{id:'5000cc00-5555-4555-8555-000000000002',name:'Solo primo',price:11,note:null,sectionIds:[W.menus[3].sections[0].id],translations:{}}]
+ return f})()
+Object.assign(FIXTURES,{qasera})

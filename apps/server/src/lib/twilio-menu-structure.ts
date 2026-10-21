@@ -21,8 +21,10 @@ export type StructAction=
  |{kind:'delete_section',sectionId:string,name:string,menuName?:string}
  // run Haiku 21/10: Menu nuovo (livello menus[]), vuoto; i Sottomenu dello stesso piano lo indicano con menuId=newMenuId.
  |{kind:'create_menu',newMenuId:string,name:string,type:'main'|'lunch'|'dinner'|'drinks'}
- |{kind:'rename_section',sectionId:string,name:string}
-export const STRUCT_KINDS=new Set(['delete','rename','move','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_active','set_section_active','set_formula','delete_formula','set_menu_pricing'])
+ |{kind:'rename_section',sectionId:string,name:string,before?:string}
+ // Prova dal vivo 21/10 sera («cambia il nome del menù da menù di verifica a menù di prova»): rinomina di un Menu (livello menus[]).
+ |{kind:'rename_menu',menuId:string,name:string,before:string}
+export const STRUCT_KINDS=new Set(['delete','rename','move','create_section','rename_section','rename_menu','create_menu','delete_menu','delete_section','set_menu_active','set_section_active','set_formula','delete_formula','set_menu_pricing'])
 export const isStructAction=(a:{kind:string}):a is StructAction=>STRUCT_KINDS.has(a.kind)
 
 const fold=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
@@ -74,6 +76,7 @@ export function applyStructAction(w:any,a:StructAction):string{
   if(at>=0)menu.sections.splice(at,0,section);else{const drinks=rank===8?-1:menu.sections.findIndex((s:any)=>!s.parentSectionId&&courseRank(s.name)===8);if(drinks>=0)menu.sections.splice(drinks,0,section);else menu.sections.push(section)}
   return a.name}
  if(a.kind==='rename_section'){const s=sections.find((x:any)=>x.id===a.sectionId);if(!s)throw new Error('Section missing');s.name=a.name;return a.name}
+ if(a.kind==='rename_menu'){const m=w.menus.find((x:any)=>x.id===a.menuId);if(!m)throw new Error('Menu missing');m.name=a.name;return a.name}
  const hit=find(a.id);if(!hit)throw new Error('Item missing')
  if(a.kind==='delete'){hit.s.items.splice(hit.k,1);return hit.item.name}
  if(a.kind==='rename'){const old=hit.item.name;hit.item.name=a.name;return old}

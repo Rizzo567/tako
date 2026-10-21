@@ -17,7 +17,9 @@ export type BatchWhy='delete'|'recap'|'section'|'price'
 /** R9: `twins` = piatti già nel menu con lo STESSO nome di un piatto chiesto come nuovo (domanda «lo aggiorno o ne creo un altro?»),
  * col prezzo detto nella richiesta; `actions` = le parti chiare della richiesta originale che aspettano la risposta. */
 export type Twin={id:string,name:string,price:number|null,sectionId:string|null}
-export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:MenuAction[],source:string,draft?:{name:string,price:number|null,sectionId:string|null,sectionName:string|null}|null,twins?:Twin[]}
+export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:MenuAction[],source:string,
+ /** 21/10 sera: richiesta che ha aperto la domanda e giri fatti (tetto 2, owner-brain-sera.ts). */
+ origin?:string,rounds?:number,draft?:{name:string,price:number|null,sectionId:string|null,sectionName:string|null}|null,twins?:Twin[]}
 export type Pend={kind:'batch',actions:MenuAction[],why:BatchWhy}|{kind:'hold',actions:MenuAction[],hold:Hold}|{kind:'ask',ask:BrainAsk}|{kind:'other'}|null
 export function pendOf(cmd:any):Pend{
  if(!cmd||typeof cmd!=='object')return null

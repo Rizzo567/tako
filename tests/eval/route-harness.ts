@@ -79,7 +79,8 @@ export async function closeHarness(){await app?.close();app=null;vi.unstubAllGlo
 async function post(fields:Record<string,string>){const form={AccountSid:account,From:phone,To:sender,NumMedia:'0',...fields};return app.inject({method:'POST',url:'/api/whatsapp/twilio',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':sign(token,self,form)},payload:new URLSearchParams(form).toString()})}
 
 /** Bot attuale (o un bot dietro l'interruttore settings.botBrain) attraverso il route vero. */
-export function createRouteBot(o:{name:string,settings?:Record<string,unknown>,extraSql?:(text:string,params:unknown[])=>any[]|undefined}):BotUnderTest{
+/** `afterTurn` (21/10 sera, test di proprietà): chiamato dopo ogni turno col comando in sospeso nel DB finto. */
+export function createRouteBot(o:{name:string,settings?:Record<string,unknown>,extraSql?:(text:string,params:unknown[])=>any[]|undefined,afterTurn?:(i:number,pending:any)=>void}):BotUnderTest{
  return{name:o.name,ready:true,async run(conv:Conversation,menu:EvalMenu,ctx:{restaurant:string}):Promise<BotRun>{
   const a=await boot(),{workspaceSchema}=await import('../../apps/server/src/lib/menu-workspace-contract.js')
   const doc=workspaceSchema.parse(structuredClone(menu))
@@ -95,6 +96,7 @@ export function createRouteBot(o:{name:string,settings?:Record<string,unknown>,e
     else{net.transcript=t.voice;const s=sid('MM');const res=await post({MessageSid:s,Body:'',NumMedia:'1',MediaContentType0:'audio/ogg',MediaUrl0:`https://api.twilio.com/2010-04-01/Accounts/${account}/Messages/${s}/Media/ME1`});reply=unxml(res.body).trim()}}catch(e){reply='';if(process.env.TAKO_BRAIN_DEBUG)(await import('node:fs')).appendFileSync(process.env.TAKO_BRAIN_DEBUG,'HARNESS-ERR '+String((e as any)?.stack??e).slice(0,600)+'\n')}
    reply=(reply+'\n'+net.sent.slice(before).join('\n')).trim()
    turns.push({reply,menuAfter:structuredClone(S.published),latencyMs:Math.round((performance.now()-t0)*10)/10,llm:{calls:net.llm.calls-llm0.calls,tokens:net.llm.tokens-llm0.tokens,misses:net.llm.misses-llm0.misses,recordedMs:net.llm.ms-llm0.ms},...({groqChat:net.groqChat-g0} as {})})
+   o.afterTurn?.(turns.length-1,structuredClone(S.proposals.get(phone)?.command??null))
    // Il bot lavora a tempo «fermo»: ogni messaggio arriva qualche secondo dopo il precedente.
    vi.setSystemTime(new Date(Date.now()+20000))}
   return{turns,finalMenu:structuredClone(S.published),pending:S.proposals.get(phone)?.command}}}}

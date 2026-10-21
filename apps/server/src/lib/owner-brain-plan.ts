@@ -612,7 +612,10 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
  // Menu a prezzo fisso: i piatti non hanno prezzo → nessun set_price/promo su di loro.
  {const bad=acts.filter(a=>(a.kind==='price'||a.kind==='promo')&&fixedSecIds.has(refs.find(r=>r.id===(a as any).id)?.sectionId??''));if(bad.length)return ask('prezzo_piatto_menu_fisso',bad.map(a=>(a as any).id))}
  // «tutti i secondi» con un Sottomenu Secondi in più Menu e nessun Menu nominato → una sola domanda (quale Menu).
- for(const g of m.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(x=>sameSection(x.name,(g[1]??g[2])!)),menusOf=[...new Set(secs.map(x=>x.menu))]
+ // 21/10 sera («aumenta tutti i primi di 1 euro»): per un cambio di prezzo contano solo i sottomenu con piatti che hanno un prezzo
+ // (fuori dai Menu fissi e dai sottomenu vuoti): un solo sottomenu così = nessuna domanda.
+ const priceOnly=acts.length>0&&acts.every(a=>a.kind==='price')
+ for(const g of m.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(x=>sameSection(x.name,(g[1]??g[2])!)&&(!priceOnly||!refs.length||refs.some(r=>r.sectionId===x.id&&r.price>0&&!fixedSecIds.has(x.id)))),menusOf=[...new Set(secs.map(x=>x.menu))]
   if(menusOf.length>=2&&!menusOf.some(n=>{const k=plain(n).replace(/^menu /,'');return k.length>=3&&(' '+m+' ').includes(' '+k+' ')})&&acts.some(a=>'id' in a))return ask('sottomenu_in_piu_menu',[])}
  const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
  if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
