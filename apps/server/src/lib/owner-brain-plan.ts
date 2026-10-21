@@ -411,7 +411,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
  // Fase R: «no, nei primi» subito dopo uno spostamento corregge lo spostamento (il verbo era nel messaggio di prima).
  const moveFix=/^(?:no|anzi|scusa)\b/.test(msg)&&/\b(?:nei|negli|nelle|nella|nel|tra|fra|in)\s/.test(msg)&&/\b(?:spost\w*|mett\w*)\b/.test(plain(owners.at(-1)??''))
- const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix||input.twinIds?.length?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
+ const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix||input.twinIds?.length?' (sposta)':'')+(input.clarifySource&&MOVE_VERB_RE.test(plain(input.clarifySource))?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
  if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
   // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio
@@ -518,7 +518,9 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
    return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}}
  // Sottomenu creati in questo stesso piano: i piatti che li nominano ci vanno (mai nell'unico sottomenu esistente per ripiego).
  const planSections:SectionRef[]=[...input.sections,...struct.actions.flatMap(a=>a.kind==='create_section'?[{id:a.newSectionId,name:a.name,menu:a.menuName??''} as SectionRef]:[])]
- const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:planSections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id)})
+ // La creazione di struttura l'ha già letta il pre-passo: «crealo/crea» non è una parte persa per il validatore dei piatti.
+ const vMessage=struct.actions.some(a=>a.kind==='create_section'||a.kind==='create_menu')?input.message.replace(/\bcre(?:a|al[oaie]|ami|are|ato|ati)\b/gi,' ').replace(/\s+/g,' ').trim():input.message
+ const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:planSections,message:vMessage,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id)})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
 
  if(struct.actions.length){if(decision.plan.type!=='change')return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
@@ -529,6 +531,8 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections,input.refs);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
+// 21/10: risposta a una TUA domanda nata da «sposta X…» («nei panini, crealo»): il verbo vale dalla richiesta in sospeso.
+const MOVE_VERB_RE=/\b(?:spost\w*|trasferisc\w*|porta\w*)\b/
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
 
 // Parole d'esito: una bozza del modello che le contiene non arriva mai al titolare (il «fatto» lo scrive solo il server).
