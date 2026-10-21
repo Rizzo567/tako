@@ -6,9 +6,9 @@ const MANUEL='whatsapp:+390000000098',ITEM='55555555-5555-4555-8555-555555555555
 type Link={restaurant_id:string,actor_id:string,activated_at:Date|null,created_at:Date,owner_email?:string|null,password_reissue?:boolean}
 const names:Record<string,string>={[QA]:'Tako · Verifica web',[VIC]:'Victoria Bar',[OTHER]:'Altro locale'}
 const users:Record<string,{restaurant_id:string,role:string,email?:string,phone?:string,active?:boolean,password_hash?:string,name?:string,delivered?:Date|null,last_login?:Date|null,sessions?:number}>={[AGENCY]:{restaurant_id:VIC,role:'owner',email:'agenzia@test.invalid'},[OWNER_QA]:{restaurant_id:QA,role:'owner',email:'owner-qa@test.invalid'},[OWNER_OTHER]:{restaurant_id:OTHER,role:'owner'},[EDITOR]:{restaurant_id:QA,role:'menu_editor'}}
-const originalUsers=new Set(Object.keys(users)),usersInit=JSON.stringify(users);const db={sessionsDeleted:[] as string[],links:new Map<string,Link>(),proposals:new Map<string,{restaurant_id:string,actor_id:string,revision:number,command:any}>(),codes:new Map<string,{restaurant_id:string,actor_id:string}>(),messages:new Map<string,string>(),errors:[] as any[],alertAt:null as Date|null,forwarded:0}
+const originalUsers=new Set(Object.keys(users)),usersInit=JSON.stringify(users);const db={sessionsDeleted:[] as string[],links:new Map<string,Link>(),proposals:new Map<string,{restaurant_id:string,actor_id:string,revision:number,command:any}>(),codes:new Map<string,{restaurant_id:string,actor_id:string}>(),messages:new Map<string,string>(),errors:[] as any[],alertAt:null as Date|null,forwarded:0,oneIndex:false}
 const parse=(q:any)=>{let text='';const params:unknown[]=[];for(const c of q.queryChunks)if(c&&typeof c==='object'&&Array.isArray(c.value))text+=c.value.join('');else{text+='$';params.push(c)}return{text:text.replace(/\s+/g,' ').trim(),params}}
-const linksOf=(r:string)=>[...db.links].filter(([,l])=>l.restaurant_id===r)
+let tick=0;const linksOf=(r:string)=>[...db.links].filter(([,l])=>l.restaurant_id===r)
 const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);const p=params as any[]
  if(text.includes('pg_advisory_xact_lock'))return[]
  if(text.startsWith('SELECT u.id,u.restaurant_id,u.role,r.active FROM users u')){const u=users[p[1]];return u&&names[p[0]]?[{id:p[1],restaurant_id:u.restaurant_id,role:u.role,active:true}]:[]}
@@ -30,16 +30,21 @@ const execute=async(q:unknown):Promise<any[]>=>{const{text,params}=parse(q);cons
  if(text.startsWith('SELECT role FROM web_location_memberships'))return[]
  if(text.startsWith('SELECT 1 FROM tako_whatsapp_links'))return db.links.has(p[0])?[{}]:[]
  if(text.startsWith('SELECT restaurant_id,actor_id,activated_at FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{...l}]:[]}
- if(text.startsWith('SELECT phone,activated_at,owner_email FROM tako_whatsapp_links')){const rows=linksOf(p[0]).sort((a,b)=>b[1].created_at.getTime()-a[1].created_at.getTime());return rows.slice(0,1).map(([phone,l])=>({phone,owner_email:l.owner_email??null,activated_at:l.activated_at}))}
+ if(text==='SELECT phone,activated_at,owner_email FROM tako_whatsapp_links WHERE restaurant_id=$ ORDER BY created_at ASC'){const rows=linksOf(p[0]).sort((a,b)=>a[1].created_at.getTime()-b[1].created_at.getTime());return rows.map(([phone,l])=>({phone,owner_email:l.owner_email??null,activated_at:l.activated_at}))}
+ // 21/10: due numeri per locale
+ if(text==='SELECT phone,owner_email,actor_id FROM tako_whatsapp_links WHERE restaurant_id=$')return linksOf(p[0]).map(([phone,l])=>({phone,owner_email:l.owner_email??null,actor_id:l.actor_id}))
+ if(text==='SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$')return linksOf(p[0]).map(([phone])=>({phone}))
+ if(text==='DELETE FROM tako_whatsapp_links WHERE phone=$'){db.links.delete(p[0]);return[]}
+ if(text==='DELETE FROM tako_whatsapp_links WHERE phone=$ AND restaurant_id=$'){if(db.links.get(p[0])?.restaurant_id===p[1])db.links.delete(p[0]);return[]}
  if(text.startsWith('SELECT l.restaurant_id,l.activated_at,l.owner_email,r.name FROM tako_whatsapp_links')){const l=db.links.get(p[0]);return l?[{restaurant_id:l.restaurant_id,activated_at:l.activated_at,owner_email:l.owner_email??null,name:names[l.restaurant_id]}]:[]}
  if(text.startsWith('UPDATE tako_whatsapp_links SET activated_at=now()')){const l=db.links.get(p[0]);if(l&&!l.activated_at)l.activated_at=new Date();return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE phone=$ OR restaurant_id=$'){db.links.delete(p[0]);for(const[k]of linksOf(p[1]))db.links.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE restaurant_id=$ AND phone<>$'){for(const[k]of linksOf(p[0]))if(k!==p[1])db.links.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_links WHERE restaurant_id=$'){for(const[k]of linksOf(p[0]))db.links.delete(k);return[]}
- if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email,password_reissue) VALUES($,$,$,NULL,$,$)')){if(db.links.has(p[0])||linksOf(p[1]).length)throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:null,created_at:new Date(),owner_email:p[3],password_reissue:p[4]});return[]}
+ if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at,owner_email,password_reissue) VALUES($,$,$,NULL,$,$)')){if(db.links.has(p[0]))throw new Error('unique violation');if(db.oneIndex&&linksOf(p[1]).length)throw Object.assign(new Error('duplicate key value violates unique constraint "tako_whatsapp_links_one_per_restaurant"'),{constraint_name:'tako_whatsapp_links_one_per_restaurant'});db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:null,created_at:new Date(Date.now()+(++tick)),owner_email:p[3],password_reissue:p[4]});return[]}
  if(text==='UPDATE tako_whatsapp_links SET owner_email=$ WHERE phone=$'){const l=db.links.get(p[1]);if(l)l.owner_email=p[0];return[]}
  if(text==='SELECT owner_email,password_reissue FROM tako_whatsapp_links WHERE phone=$ AND restaurant_id=$'){const l=db.links.get(p[0]);return l&&l.restaurant_id===p[1]?[{owner_email:l.owner_email??null,password_reissue:l.password_reissue??false}]:[]}
- if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES($,$,$,now())')){if(linksOf(p[1]).some(([k])=>k!==p[0]))throw new Error('unique violation');db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:new Date(),created_at:new Date()});return[]}
+ if(text.startsWith('INSERT INTO tako_whatsapp_links(phone,restaurant_id,actor_id,activated_at) VALUES($,$,$,now())')){db.links.set(p[0],{restaurant_id:p[1],actor_id:p[2],activated_at:new Date(),created_at:new Date(Date.now()+(++tick))});return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone=$ OR phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$)'){db.proposals.delete(p[0]);for(const[k]of linksOf(p[1]))db.proposals.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone IN (SELECT phone FROM tako_whatsapp_links WHERE restaurant_id=$)'){for(const[k]of linksOf(p[0]))db.proposals.delete(k);return[]}
  if(text==='DELETE FROM tako_whatsapp_proposals WHERE phone=$'){db.proposals.delete(p[0]);return[]}
@@ -76,14 +81,14 @@ beforeAll(async()=>{const twilio=await listen(async(req,res)=>{const body=await 
  const menusmart=await listen((_q,res)=>{db.forwarded++;res.writeHead(200,{'Content-Type':'text/xml'});res.end('<Response><Message>MenuSmart</Message></Response>')})
  Object.assign(process.env,{TWILIO_AUTH_TOKEN:token,TWILIO_WEBHOOK_URL:self,TWILIO_ACCOUNT_SID:account,TWILIO_WHATSAPP_NUMBER:sender,TWILIO_API_BASE:twilio,GROQ_API_KEY:'k',GROQ_API_BASE:groq,MENUSMART_WHATSAPP_WEBHOOK_URL:menusmart,TAKOMENU_AGENCY_USER_IDS:AGENCY})})
 afterAll(()=>{for(const s of servers){s.closeAllConnections();s.close()}})
-beforeEach(()=>{db.links=new Map([[MANUEL,{restaurant_id:VIC,actor_id:AGENCY,activated_at:new Date('2026-10-14T17:26:14Z'),created_at:new Date('2026-10-14T17:26:14Z')}]]);db.proposals.clear();db.codes.clear();db.messages.clear();db.errors=[];db.alertAt=null;db.forwarded=0;db.sessionsDeleted=[];for(const id of Object.keys(users))if(!originalUsers.has(id))delete users[id];Object.assign(users,JSON.parse(usersInit));delete process.env.WEB_EMAIL_ENABLED;sent=[];groqContent='{"intent":"clarify","item_ids":[]}';process.env.TAKO_WHATSAPP_FOLLOWUP_DELAY_MS='0';twilioMode='ok';polls=0;groqHang=false;delete process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS})
+beforeEach(()=>{db.links=new Map([[MANUEL,{restaurant_id:VIC,actor_id:AGENCY,activated_at:new Date('2026-10-14T17:26:14Z'),created_at:new Date('2026-10-14T17:26:14Z')}]]);db.proposals.clear();db.codes.clear();db.messages.clear();db.errors=[];db.alertAt=null;db.forwarded=0;db.oneIndex=false;db.sessionsDeleted=[];for(const id of Object.keys(users))if(!originalUsers.has(id))delete users[id];Object.assign(users,JSON.parse(usersInit));delete process.env.WEB_EMAIL_ENABLED;sent=[];groqContent='{"intent":"clarify","item_ids":[]}';process.env.TAKO_WHATSAPP_FOLLOWUP_DELAY_MS='0';twilioMode='ok';polls=0;groqHang=false;delete process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS})
 let n=0;const sid=()=>'SM'+(++n).toString(16).padStart(32,'0')
 const app=async()=>{const a=Fastify();await a.register(twilioMenuRoutes,{prefix:'/api'});return a}
 const as=(user:string,tenant:string)=>({'x-test-user':user+'|'+tenant})
 const get=(a:any,user:string,tenant:string)=>a.inject({method:'GET',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant)})
 const defaultEmail=(phone:string)=>'t'+phone.replace(/\D/g,'')+'@test.invalid'
 const save=(a:any,user:string,tenant:string,phone:string,move?:boolean,email:string|null=defaultEmail(phone))=>a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant),payload:{phone,...(email===null?{}:{email}),...(move===undefined?{}:{move})}})
-const unlink=(a:any,user:string,tenant:string)=>a.inject({method:'DELETE',url:'/api/menu-workspace/whatsapp/owner',headers:as(user,tenant)})
+const unlink=(a:any,user:string,tenant:string,phone?:string)=>a.inject({method:'DELETE',url:'/api/menu-workspace/whatsapp/owner'+(phone?'?phone='+encodeURIComponent(phone):''),headers:as(user,tenant)})
 const post=(a:any,from:string,body:string,signed=true)=>{const form={AccountSid:account,From:from,To:sender,NumMedia:'0',MessageSid:sid(),Body:body};return a.inject({method:'POST',url:'/api/whatsapp/twilio',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':signed?twilioSignature(token,self,form):'nope'},payload:new URLSearchParams(form).toString()})}
 const messages=(xml:string)=>[...xml.matchAll(/<Message>([\s\S]*?)<\/Message>/g)].map(m=>m[1]!.replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'))
 
@@ -111,14 +116,17 @@ describe('collegamento del titolare dalla dashboard',()=>{
   await post(a,'whatsapp:+393330000042','buongiorno');expect(db.forwarded).toBe(0)
   const other=await post(a,'whatsapp:+393499999999','ciao');expect(other.body).toBe('<Response><Message>MenuSmart</Message></Response>');expect(db.forwarded).toBe(1)
   expect((await post(a,'whatsapp:+393330000042','ciao',false)).statusCode).toBe(403);expect(db.forwarded).toBe(1);await a.close()})
- it('un locale ha un solo telefono: un numero nuovo sostituisce il precedente (collegato o in attesa) e ne cancella le proposte',async()=>{const a=await app()
+ it('21/10: un locale ha al massimo due telefoni: il secondo si aggiunge, il terzo è rifiutato dal server; i rifiutati restano a MenuSmart',async()=>{const a=await app()
   await save(a,OWNER_QA,QA,'3330000043');await post(a,'whatsapp:+393330000043','ciao');db.proposals.set('whatsapp:+393330000043',{restaurant_id:QA,actor_id:OWNER_QA,revision:7,command:{kind:'batch',actions:[]}})
-  expect((await save(a,OWNER_QA,QA,'3330000044')).json().data).toMatchObject({phone:'+393330000044',status:'pending'});expect(db.links.has('whatsapp:+393330000043')).toBe(false);expect(db.proposals.has('whatsapp:+393330000043')).toBe(false)
-  expect((await save(a,OWNER_QA,QA,'3330000045')).json().data).toMatchObject({phone:'+393330000045',status:'pending'});expect(linksOf(QA).map(([k])=>k)).toEqual(['whatsapp:+393330000045'])
-  // il numero sostituito torna a MenuSmart
-  await post(a,'whatsapp:+393330000043','ciao');expect(db.forwarded).toBe(1)
-  // risalvare lo stesso numero già collegato non lo rimette in attesa
-  await post(a,'whatsapp:+393330000045','ciao');expect((await save(a,OWNER_QA,QA,'+39 333 000 0045',undefined,defaultEmail('3330000045'))).json().data.status).toBe('linked');await a.close()})
+  const two=await save(a,OWNER_QA,QA,'3330000044');expect(two.statusCode).toBe(200);expect(two.json().data.numbers.map((n:any)=>[n.phone,n.status])).toEqual([['+393330000043','linked'],['+393330000044','pending']]);expect(two.json().data.max).toBe(2)
+  expect(db.proposals.has('whatsapp:+393330000043')).toBe(true)
+  const third=await save(a,OWNER_QA,QA,'3330000045');expect(third.statusCode).toBe(409);expect(third.json().error).toMatchObject({code:'OWNER_PHONES_LIMIT',field:'phone'});expect(third.json().error.message).toContain('due numeri')
+  // anche un numero collegato altrove con move=true: prima il limite, niente spostamento
+  const moving=await save(a,AGENCY,QA,'+390000000098',true);expect(moving.statusCode).toBe(409);expect(moving.json().error.code).toBe('OWNER_PHONES_LIMIT');expect(db.links.get(MANUEL)!.restaurant_id).toBe(VIC)
+  expect(linksOf(QA).map(([k])=>k).sort()).toEqual(['whatsapp:+393330000043','whatsapp:+393330000044'])
+  await post(a,'whatsapp:+393330000045','ciao');expect(db.forwarded).toBe(1)
+  // risalvare lo stesso numero già collegato non lo rimette in attesa e non conta come terzo
+  const again=await save(a,OWNER_QA,QA,'+39 333 000 0043',undefined,defaultEmail('3330000043'));expect(again.statusCode).toBe(200);expect(again.json().data.numbers[0].status).toBe('linked');await a.close()})
  it('un telefono ha un solo locale: se è collegato altrove chiede conferma e sposta solo con move=true e permesso su entrambi',async()=>{const a=await app()
   const conflict=await save(a,AGENCY,QA,'+390000000098');expect(conflict.statusCode).toBe(409);expect(conflict.json().error).toMatchObject({code:'PHONE_IN_USE_MOVABLE'});expect(conflict.json().error.message).toContain('Victoria Bar');expect(db.links.get(MANUEL)!.restaurant_id).toBe(VIC)
   // il titolare di un altro locale non vede il nome e non può spostarlo nemmeno con move=true
@@ -140,9 +148,11 @@ describe('collegamento del titolare dalla dashboard',()=>{
   expect((await a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',payload:{phone:'3330000048',email:'t3330000048@test.invalid'}})).statusCode).toBe(401)
   expect((await save(a,OWNER_QA,QA,'123')).statusCode).toBe(400);expect((await save(a,OWNER_QA,QA,'+1 838 262 2788')).statusCode).toBe(400);expect(linksOf(QA)).toHaveLength(0)
   expect(db.links.get(MANUEL)).toMatchObject({restaurant_id:VIC,actor_id:AGENCY});expect((await get(a,AGENCY,VIC)).json().data).toMatchObject({phone:'+390000000098',status:'linked'});await a.close()})
- it('il collegamento con codice «collega tako …» resta funzionante e rispetta un telefono per locale',async()=>{const a=await app();const{createHash}=await import('node:crypto');const code='d'.repeat(24);db.codes.set(createHash('sha256').update(code).digest('hex'),{restaurant_id:QA,actor_id:OWNER_QA})
+ it('il collegamento con codice «collega tako …» resta funzionante e rispetta due telefoni per locale',async()=>{const a=await app();const{createHash}=await import('node:crypto');const code='d'.repeat(24);db.codes.set(createHash('sha256').update(code).digest('hex'),{restaurant_id:QA,actor_id:OWNER_QA})
   await save(a,OWNER_QA,QA,'3330000049');const w=await post(a,'whatsapp:+393330000050','collega tako '+code);expect(messages(w.body)[0]).toContain('il menu digitale di *Tako · Verifica web*')
-  expect(linksOf(QA).map(([k,l])=>[k,!!l.activated_at])).toEqual([['whatsapp:+393330000050',true]]);await a.close()})
+  expect(linksOf(QA).map(([k,l])=>[k,!!l.activated_at]).sort()).toEqual([['whatsapp:+393330000049',false],['whatsapp:+393330000050',true]])
+  // a 2 su 2 un altro codice non aggiunge un terzo numero
+  const code2='e'.repeat(24);db.codes.set(createHash('sha256').update(code2).digest('hex'),{restaurant_id:QA,actor_id:OWNER_QA});const w2=await post(a,'whatsapp:+393330000053','collega tako '+code2);expect(messages(w2.body)).toEqual([copy.pairLimit]);expect(linksOf(QA)).toHaveLength(2);await a.close()})
 })
 describe('avvisi di guasto a Manuel',()=>{
  it('registra ogni errore e avvisa al massimo una volta all\'ora (claim atomico)',async()=>{
@@ -248,6 +258,53 @@ expect(messages(r.body)[0]).toContain('menu digitale di');await new Promise(r=>s
  it('(3)(21) numero sostituito nella risposta; email bloccata a collegamento attivo',async()=>{const a=await app()
   const{phone}=await activate(a,'3330000077','eva@example.com')
   const locked=await save(a,AGENCY,QA,'3330000077',undefined,'altra@example.com');expect(locked.statusCode).toBe(409);expect(locked.json().error).toMatchObject({code:'EMAIL_LOCKED',message:'Il titolare ha già l’accesso con eva@example.com. Per cambiarla scollega e ricollega.'});expect(db.links.get(phone)!.owner_email).toBe('eva@example.com')
-  const moved=await save(a,AGENCY,QA,'3330000078',undefined,'eva@example.com');expect(moved.json().data).toMatchObject({phone:'+393330000078',replacedPhones:['+393330000077']})
-  expect((await save(a,AGENCY,QA,'3330000079',undefined,'eva2@example.com')).json().data.replacedPhones).toEqual(['+393330000078']);await a.close()})
+  // 21/10: «Modifica» con un numero nuovo sostituisce solo quella riga
+  const moved=await a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:as(AGENCY,QA),payload:{phone:'3330000078',email:'eva@example.com',replace:'+393330000077'}});expect(moved.json().data).toMatchObject({phone:'+393330000078',replacedPhones:['+393330000077']})
+  const added=await save(a,AGENCY,QA,'3330000079',undefined,'eva2@example.com');expect(added.json().data.replacedPhones).toEqual([]);expect(added.json().data.numbers.map((n:any)=>n.phone)).toEqual(['+393330000078','+393330000079']);await a.close()})
+})
+
+// 21/10 (richiesta Manuel): fino a due numeri per locale, ognuno con la sua email e il suo account; sospesi, annulla e cronologia per numero.
+describe('due numeri del titolare per locale',()=>{
+ const A='whatsapp:+393330000081',B='whatsapp:+393330000082'
+ const account=(email:string)=>Object.entries(users).find(([,u])=>u.email===email)
+ const pending=(phone:string)=>db.proposals.set(phone,{restaurant_id:QA,actor_id:OWNER_QA,revision:7,command:{kind:'batch',actions:[]}})
+ it('benvenuto e credenziali anche al secondo numero, con la SUA email e un account separato',async()=>{const a=await app()
+  await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com');await post(a,A,'ciao');sent=[]
+  expect((await save(a,AGENCY,QA,'3330000082',undefined,'secondo@example.com')).statusCode).toBe(200);expect(sent).toHaveLength(0)
+  const first=await post(a,B,'ciao');expect(messages(first.body)[0]).toContain('menu digitale di *Tako · Verifica web*')
+  expect(sent.map(m=>m.To)).toEqual([B,B]);expect(sent[0]!.Body).toContain('Utente: secondo@example.com');expect(sent[0]!.Body).toMatch(/Password: [a-z]+\.[a-z]+\.[a-z]+$/)
+  const[idA]=account('primo@example.com')!,[idB]=account('secondo@example.com')!;expect(idA).not.toBe(idB);expect(db.links.get(A)!.actor_id).toBe(idA);expect(db.links.get(B)!.actor_id).toBe(idB)
+  expect((await get(a,AGENCY,QA)).json().data.numbers).toMatchObject([{phone:'+393330000081',email:'primo@example.com',status:'linked'},{phone:'+393330000082',email:'secondo@example.com',status:'linked'}]);await a.close()})
+ it('ogni numero ha la sua email: quella (o l’account) dell’altro numero è rifiutata',async()=>{const a=await app()
+  await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com')
+  const same=await save(a,AGENCY,QA,'3330000082',undefined,'PRIMO@example.com');expect(same.statusCode).toBe(409);expect(same.json().error).toMatchObject({code:'EMAIL_OTHER_NUMBER',field:'email'});expect(linksOf(QA)).toHaveLength(1)
+  // account già agganciato al primo numero (collegamento di prima del 19/10 senza email): la sua email non va sul secondo
+  db.links.set(A,{...db.links.get(A)!,actor_id:OWNER_QA,owner_email:null});const reused=await save(a,AGENCY,QA,'3330000082',undefined,'owner-qa@test.invalid');expect(reused.json().error.code).toBe('EMAIL_OTHER_NUMBER');await a.close()})
+ it('proposte in sospeso e «annulla» valgono per il numero che le ha fatte',async()=>{const a=await app()
+  await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com');await save(a,AGENCY,QA,'3330000082',undefined,'secondo@example.com');await post(a,A,'ciao');await post(a,B,'ciao');pending(A)
+  // «ok» e «annulla» del secondo numero non toccano la proposta del primo
+  await post(a,B,'ok');expect(db.proposals.has(A)).toBe(true)
+  expect(messages((await post(a,B,'annulla')).body)).toEqual([copy.nothingToCancel]);expect(db.proposals.has(A)).toBe(true)
+  // l'annullamento dell'ultima modifica è per telefono: il record di A non è visibile a B
+  db.messages.set('undo:'+A,JSON.stringify({kind:'undo',at:Date.now(),items:[]}));await post(a,B,'torna come prima');expect(db.messages.has('undo:'+A)).toBe(true)
+  const own=messages((await post(a,A,'annulla')).body).join('\n');expect(own).not.toBe(copy.nothingToCancel);expect(db.proposals.has(A)).toBe(false);await a.close()})
+ it('scollega un numero: l’altro resta collegato con la sua proposta; senza indicare quale (due numeri) è rifiutato',async()=>{const a=await app()
+  await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com');await save(a,AGENCY,QA,'3330000082',undefined,'secondo@example.com');await post(a,A,'ciao');await post(a,B,'ciao');pending(A);pending(B);db.codes.set('h',{restaurant_id:QA,actor_id:OWNER_QA})
+  expect((await unlink(a,AGENCY,QA)).statusCode).toBe(400);expect(linksOf(QA)).toHaveLength(2)
+  const r=await unlink(a,AGENCY,QA,'+39 333 000 0081');expect(r.statusCode).toBe(200);expect(r.json().data.numbers).toMatchObject([{phone:'+393330000082',status:'linked'}])
+  expect(db.links.has(A)).toBe(false);expect(db.proposals.has(A)).toBe(false);expect(db.proposals.has(B)).toBe(true);expect(db.codes.size).toBe(1)
+  await post(a,A,'ciao');expect(db.forwarded).toBe(1);expect(messages((await post(a,B,'cosa sai fare')).body)).toEqual([copy.help])
+  // un numero di un altro locale non si scollega da qui
+  await unlink(a,AGENCY,QA,'+390000000098');expect(db.links.get(MANUEL)!.restaurant_id).toBe(VIC)
+  // a un solo numero il vecchio DELETE senza parametro funziona ancora
+  expect((await unlink(a,AGENCY,QA)).json().data.numbers).toEqual([]);expect(db.codes.size).toBe(0);await a.close()})
+ it('Modifica: il numero nuovo sostituisce solo quella riga; un numero già in elenco è rifiutato',async()=>{const a=await app()
+  await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com');await save(a,AGENCY,QA,'3330000082',undefined,'secondo@example.com')
+  const edit=(phone:string,replace:string,email:string)=>a.inject({method:'POST',url:'/api/menu-workspace/whatsapp/owner',headers:as(AGENCY,QA),payload:{phone,email,replace}})
+  const dup=await edit('3330000082','+393330000081','primo@example.com');expect(dup.statusCode).toBe(409);expect(dup.json().error.code).toBe('PHONE_ALREADY_LISTED')
+  const ok=await edit('3330000083','+393330000081','primo@example.com');expect(ok.statusCode).toBe(200);expect(ok.json().data.replacedPhones).toEqual(['+393330000081']);expect(ok.json().data.numbers.map((n:any)=>n.phone).sort()).toEqual(['+393330000082','+393330000083'])
+  // a 2 su 2 la modifica non è un terzo numero
+  expect((await edit('3330000084','+393330000083','primo@example.com')).statusCode).toBe(200);expect(linksOf(QA)).toHaveLength(2);await a.close()})
+ it('DB senza la migrazione del 21/10: il secondo numero dà un errore chiaro e non tocca il primo',async()=>{const a=await app();db.oneIndex=true
+  await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com');const r=await save(a,AGENCY,QA,'3330000082',undefined,'secondo@example.com');expect(r.statusCode).toBe(409);expect(r.json().error.code).toBe('SECOND_NUMBER_UNAVAILABLE');expect(linksOf(QA).map(([k])=>k)).toEqual([A]);await a.close()})
 })
