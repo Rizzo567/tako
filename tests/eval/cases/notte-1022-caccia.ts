@@ -189,7 +189,21 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('b1',R,[T('la carbonara a 12,50'),D('Carbonara','price',13),T('mettila a 13 e 50')],[P('Carbonara',13.5)],{note:'dopo la dashboard: «13 e 50» = 13,50'}),
  cc('b1',R,[T('alza i contorni di un euro')],[P('Cicoria ripassata',6),P('Puntarelle',7),P('Patate al forno',5.5)],{noQuestion:true,note:'sottomenu intero chiaro, ≤3 piatti, stesso aumento: applicato subito'}),
  cc('b1','victoria4',[T('rinomina il sottomenu Bibite in Analcolici')],[],{struct:[{after:1,menus:[{name:'Bevande',sections:['Analcolici','Birre','Vini']}]}],note:'rinomina di un sottomenu: i piatti NON si spostano (il giudice ora confronta l\'id del sottomenu)'}),
- cc('b1',R,[T('nascondi tutti i dolci'),T('sì')],[HI('Tiramisù'),HI('Maritozzo con la panna'),HI('Crostata di visciole'),HI('Panna cotta')],{note:'decisione 22/10 notte: «tutti i dolci» = i piatti uno per uno (riepilogo col sì), come i set precedenti'}),
+ cc('b1',R,[T('nascondi tutti i dolci'),T('sì')],[],{struct:[{after:2,hidden:['Pranzo e cena>Dolci']}],note:'v145: «tutti i <sottomenu>» = il sottomenu nascosto (una domanda, poi sì), non i piatti uno per uno'}),
+ // ---- v145 dal vivo + cieco b2: varianti (3–4 per bug) ----
+ cc('v145',QS,[Q('quanto costa il riso giallo?'),T('alzalo di un euro')],[P('riso giallo',9)],{note:'pronome dopo una lettura: alza'}),
+ cc('v145',R,[Q('quanto viene la gricia?'),T('abbassala di 50 centesimi')],[P('Gricia',10.5)],{note:'pronome femminile, ribasso in centesimi'}),
+ cc('v145',PZ,[Q('la diavola quanto la faccio pagare?'),T('portala a 8')],[P('Diavola',8)],{note:'pronome, prezzo assoluto'}),
+ cc('v145',B,[Q('quanto costa il negroni?'),T('segnalo finito')],[AV('Negroni')],{note:'pronome, finito'}),
+ cc('v145',QS,[T('aggiungi le patatine fritte'),T('4'),T('nei piatti di prova')],[C('patatine fritte',4,'piatti di prova')],{says:[nots(2,/che prezzo|a che prezzo/i)],note:'«4» = prezzo tenuto, poi solo il sottomenu'}),
+ cc('v145',R,[T('aggiungi il vitello tonnato'),T('14'),T('negli antipasti')],[C('vitello tonnato',14,'antipasti')],{says:[nots(2,/a che prezzo/i)],note:'prezzo tenuto, domanda solo sul sottomenu, poi creato'}),
+ cc('v145',R,[T('aggiungi il vitello tonnato'),T('negli antipasti'),T('14 euro')],[C('vitello tonnato',14,'antipasti')],{note:'ordine inverso: prima il sottomenu, poi il prezzo'}),
+ cc('v145',PZ,[T('aggiungi la pizza tartufata'),T('11 euro'),T('sì')],[C('pizza tartufata',11,'pizze')],{note:'prezzo tenuto, sottomenu adatto proposto (Pizze), sì = creata'}),
+ cc('v145','victoria4',[T('aumenta di un euro i secondi della cena')],[P('Filetto al pepe verde',25),P('Branzino al forno',23)],{noQuestion:true,note:'differenza prima del gruppo + Menu detto: applicato subito'}),
+ cc('v145',R,[T('abbassa di 50 centesimi i contorni')],[P('Cicoria ripassata',4.5),P('Puntarelle',5.5),P('Patate al forno',4)],{noQuestion:true}),
+ cc('v145',PZ,[T('alza di un euro le pizze')],[P('Margherita',7),P('Marinara',6),P('Diavola',8.5),P('Capricciosa',9.5),P('Quattro formaggi',9),P('Bufalina',10),P('Salsiccia e friarielli',10),P('Ortolana',9),P('Ripieno al forno',10)],{noQuestion:true,note:'sottomenu intero, stesso aumento: subito'}),
+ cc('v145','victoria4',[T('nascondi tutti i dolci della cena'),T('sì')],[],{struct:[{after:2,hidden:['Menu cena>Dolci']}]}),
+ cc('v145',PZ,[T('nascondi tutti i fritti'),T('sì')],[],{struct:[{after:2,hidden:['Cena>Fritti']}]}),
  cc('vietato',QS,[T('cancella il menu del giorno')],[],{fam:'bv-fuori' as Family,note:'Menu nascosto con 7 piatti: mai cancellarlo senza un sì'}),
 
  // ================= 9. MENU / SOTTOMENU / PIATTI NASCOSTI citati =================

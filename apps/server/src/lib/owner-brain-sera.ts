@@ -104,7 +104,8 @@ export type GroupResult={actions:MenuAction[],label:string}|{ask:'menu',menus:st
  * la parola del sottomenu (gruppo), altrimenti null. Vale solo per un sottomenu vero con piatti. */
 export function sectionGroupWord(p:string,sections:SectionRef[],refs:MenuRef[]):string|null{
  // Il gruppo è l'oggetto diretto del verbo («alza le pizze», «abbassa i fritti»): «metti la bufalina tra le pizze» è un piatto nuovo.
- const m=p.match(/\b(?:alz|abbass|aument|diminu|port|mett|scal|rincar)\w* (?:i|le|gli) ([a-z]{3,})\b/);if(!m)return null
+ // notte 22/10 (cieco b2 «aumenta di un euro i secondi della cena»): anche con la differenza detta prima del gruppo.
+ const m=p.match(/\b(?:alz|abbass|aument|diminu|port|mett|scal|rincar)\w*(?: di (?:un|uno|una|mezzo|\d+(?: \d+)?|[a-z]+)(?: euro| centesimi| cent)?(?: e mezzo)?)? (?:i|le|gli) ([a-z]{3,})\b/);if(!m)return null
  const w=m[1]!;if(['piatti','prezzi','menu','sottomenu','cose'].includes(w))return null
  if(!sections.some(s=>sameSection(s.name,w)&&refs.some(r=>r.sectionId===s.id)))return null
  if(refs.some(r=>(' '+p+' ').includes(' '+plain(r.name)+' ')))return null

@@ -1,0 +1,3595 @@
+{
+ "set": "prezzofisso",
+ "metriche": {
+  "set": "prezzofisso",
+  "modo": "record",
+  "conversazioni": 75,
+  "misurate": 75,
+  "nonMisurate": [],
+  "messaggi": 87,
+  "corrette": 75,
+  "percentuale": 100,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 1.8,
+  "domandeNonAttesePer10": 0.8,
+  "latenzaAnthropicMs": {
+   "p50": 2736,
+   "p95": 5297,
+   "chiamate": 91
+  },
+  "latenzaTurnoMs": {
+   "p50": 21,
+   "p95": 41,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1.05,
+  "tokenMediPerMessaggio": {
+   "input": 101,
+   "output": 455,
+   "cacheRead": 10249,
+   "cacheWrite": 424
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 88,
+   "su": 91,
+   "percentuale": 96.7
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.034206,
+   "perMessaggioUsd": 0.000393,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 91,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 3.6
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "pf-formula-prezzo-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu cena*: da 16,90 € a *17,00 €*."
+   ],
+   "turns": [
+    "il completo a cena passa a 17"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10379,
+   "latencyMs": [
+    147.7
+   ],
+   "recordedLlmMs": 3197,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu pranzo*: da 12,00 € a *12,50 €*."
+   ],
+   "turns": [
+    "il completo del pranzo a 12,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10396,
+   "latencyMs": [
+    35.1
+   ],
+   "recordedLlmMs": 6731,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Solo primo* del *Menu cena*: da 9,00 € a *9,50 €*."
+   ],
+   "turns": [
+    "solo primo 9,50 a cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10532,
+   "latencyMs": [
+    23.7
+   ],
+   "recordedLlmMs": 3021,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Solo secondo* del *Menu cena*: da 10,00 € a *11,00 €*."
+   ],
+   "turns": [
+    "a cena il solo secondo lo metti a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10799,
+   "latencyMs": [
+    22.1
+   ],
+   "recordedLlmMs": 2301,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu pranzo*: da 12,00 € a *13,00 €*."
+   ],
+   "turns": [
+    "menu pranzo: completo 13 euro da oggi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10393,
+   "latencyMs": [
+    24.8
+   ],
+   "recordedLlmMs": 1960,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-06",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu cena*: da 16,90 € a *17,90 €*.\n*Solo primo* del *Menu cena*: da 9,00 € a *9,50 €*."
+   ],
+   "turns": [
+    "cena: completo 17,90 e solo primo 9,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10791,
+   "latencyMs": [
+    28.4
+   ],
+   "recordedLlmMs": 3846,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-07",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu cena*: da 16,90 € a *17,90 €*."
+   ],
+   "turns": [
+    "alza il completo della cena di un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10384,
+   "latencyMs": [
+    29.9
+   ],
+   "recordedLlmMs": 2076,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-08",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu pranzo*: da 12,00 € a *12,50 €*."
+   ],
+   "turns": [
+    "il pranzo completo da domani costa 12 e 50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10576,
+   "latencyMs": [
+    24.6
+   ],
+   "recordedLlmMs": 4157,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-09",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu cena*: da 16,90 € a *17,00 €*."
+   ],
+   "turns": [
+    "🎤 eh il complet… a cena… diciassett"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10571,
+   "latencyMs": [
+    49.9
+   ],
+   "recordedLlmMs": 3068,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "vocale sporco: il Completo della cena a 17, oppure una domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-10",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu pranzo*: da 12,00 € a *12,50 €*."
+   ],
+   "turns": [
+    "🎤 allora il completo del pranzo… da domani dodici e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10557,
+   "latencyMs": [
+    22.2
+   ],
+   "recordedLlmMs": 2375,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-11",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Solo primo* del *Menu cena*: da 9,00 € a *9,50 €*."
+   ],
+   "turns": [
+    "🎤 il solo primo della sera… nove e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10653,
+   "latencyMs": [
+    21
+   ],
+   "recordedLlmMs": 2856,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-prezzo-12",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Solo secondo* del *Menu cena*: da 10,00 € a *10,50 €*."
+   ],
+   "turns": [
+    "🎤 eh senti il solo secondo la sera mettilo a dieci e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10813,
+   "latencyMs": [
+    20.9
+   ],
+   "recordedLlmMs": 2360,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-ambigua-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Menu vuoi cambiare il *Completo*: pranzo o cena?"
+   ],
+   "turns": [
+    "il completo a 17"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21082,
+   "latencyMs": [
+    37.8
+   ],
+   "recordedLlmMs": 5227,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "Completo a pranzo e a cena: una domanda, nessuna formula cambiata",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-ambigua-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi il *Completo* del *Menu pranzo* o quello del *Menu cena*?"
+   ],
+   "turns": [
+    "metti il completo a 13 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10551,
+   "latencyMs": [
+    26.7
+   ],
+   "recordedLlmMs": 2649,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-ambigua-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi il Completo del *Menu pranzo* o quello del *Menu cena*?"
+   ],
+   "turns": [
+    "🎤 eh il completo… diciassette"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10713,
+   "latencyMs": [
+    25.6
+   ],
+   "recordedLlmMs": 3181,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-ambigua-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Menu vuoi cambiare il *Completo*: pranzo o cena?",
+    "*Completo* del *Menu cena*: da 16,90 € a *17,00 €*."
+   ],
+   "turns": [
+    "il completo a 17",
+    "a cena"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 31555,
+   "latencyMs": [
+    20.5,
+    25.3
+   ],
+   "recordedLlmMs": 6817,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "la risposta completa la richiesta",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-ambigua-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Completo* di quale Menu: *Menu pranzo* o *Menu cena*?",
+    "*Completo* del *Menu pranzo*: da 12,00 € a *13,00 €*."
+   ],
+   "turns": [
+    "il completo a 13",
+    "quello del pranzo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21088,
+   "latencyMs": [
+    17.3,
+    20.5
+   ],
+   "recordedLlmMs": 5403,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|0|primi"
+   ],
+   "actual": [
+    "create|lasagna|0|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Lasagna* ai Primi del Menu pranzo.\n\nNuovo piatto *Lasagna* in *Primi*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "aggiungi la lasagna ai primi del pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10659,
+   "latencyMs": [
+    40.5
+   ],
+   "recordedLlmMs": 2900,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "creato a prezzo 0 senza domande; GRAVE se chiede o inventa il prezzo",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittura di calamari|0|secondi"
+   ],
+   "actual": [
+    "create|frittura di calamari|0|secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo la *Frittura di calamari* ai Secondi del Menu cena.\n\nNuovo piatto *Frittura di calamari* in *Secondi*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "nei secondi della cena aggiungi la frittura di calamari"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10620,
+   "latencyMs": [
+    31.8
+   ],
+   "recordedLlmMs": 2561,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|zucchine trifolate|0|contorni"
+   ],
+   "actual": [
+    "create|zucchine trifolate|0|contorni"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Zucchine trifolate* ai Contorni del Menu pranzo. Il prezzo resta quello del menu fisso.\n\nNuovo piatto *Zucchine trifolate* in *Contorni*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "aggiungi tra i contorni del pranzo le zucchine trifolate"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10867,
+   "latencyMs": [
+    27.7
+   ],
+   "recordedLlmMs": 2807,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|linguine al pesto|0|primi"
+   ],
+   "actual": [
+    "create|linguine al pesto|0|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Linguine al pesto* ai Primi del Menu cena.\n\nNuovo piatto *Linguine al pesto* in *Primi*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "🎤 eh metti… nei primi di stasera… le linguine al pesto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10653,
+   "latencyMs": [
+    61.6
+   ],
+   "recordedLlmMs": 2507,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|caprese|0|secondi"
+   ],
+   "actual": [
+    "create|caprese|0|secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Caprese* ai Secondi del Menu pranzo.\n\nNuovo piatto *Caprese* in *Secondi*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "aggiungi la caprese nei secondi del pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10898,
+   "latencyMs": [
+    28
+   ],
+   "recordedLlmMs": 2887,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-06",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|patate al forno|0|contorni"
+   ],
+   "actual": [
+    "create|patate al forno|0|contorni"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Patate al forno* ai Contorni della cena. Il menu cena è a prezzo fisso, quindi il piatto non avrà prezzo.\n\nNuovo piatto *Patate al forno* in *Contorni*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "nei contorni della cena aggiungi le patate al forno"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11021,
+   "latencyMs": [
+    26.5
+   ],
+   "recordedLlmMs": 4228,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "omonimo del pranzo: nuovo piatto nella cena, il pranzo invariato",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-07",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|ravioli di ricotta e spinaci|0|primi"
+   ],
+   "actual": [
+    "create|ravioli di ricotta e spinaci|0|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Ravioli di ricotta e spinaci* ai Primi del Menu cena.\n\nNuovo piatto *Ravioli di ricotta e spinaci* in *Primi*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "aggiungi ai primi della cena i ravioli di ricotta e spinaci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10551,
+   "latencyMs": [
+    29.4
+   ],
+   "recordedLlmMs": 2083,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-piatto-nuovo-08",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|0|primi"
+   ],
+   "actual": [
+    "create|lasagna|0|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Lasagna* ai Primi del Menu pranzo.\n\nNuovo piatto *Lasagna* in *Primi*: senza prezzo (Menu a prezzo fisso)",
+    "La *Lasagna* è nel Menu pranzo, che ha prezzo fisso: i piatti non hanno prezzo, il prezzo è delle opzioni. Vuoi cambiare il prezzo di un'opzione, tipo il *Completo* a pranzo?"
+   ],
+   "turns": [
+    "aggiungi la lasagna ai primi del pranzo",
+    "la lasagna a 8"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 32068,
+   "latencyMs": [
+    26.3,
+    38.6
+   ],
+   "recordedLlmMs": 6684,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "creata a 0; «a 8» su un piatto di menu fisso: domanda o spiegazione, mai il prezzo scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*. Nascosti: *Petto di pollo ai ferri*, *Polpette al sugo* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "oggi a pranzo primi lasagna e carbonara, secondi cotoletta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11291,
+   "latencyMs": [
+    21.5
+   ],
+   "recordedLlmMs": 4269,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "Primi = Lasagna, Carbonara (nuovi); Secondi = solo Cotoletta alla milanese (stesso id); gli altri nascosti; Contorni e cena invariati",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|gnocchi al ragu|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "actual": [
+    "create|gnocchi al ragu|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Gnocchi al ragù*, *Risotto ai funghi*. Nascosti: *Tagliatelle al ragù*, *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "stasera i primi sono gnocchi al ragù e risotto ai funghi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10912,
+   "latencyMs": [
+    20.8
+   ],
+   "recordedLlmMs": 3853,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "Risotto ai funghi (nascosto) torna con lo stesso id; Gnocchi al ragù nuovo; il pranzo invariato",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Pasta e fagioli*, *Pasta al pomodoro*. Nascosti: *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "oggi a pranzo i primi sono pasta al pomodoro e pasta e fagioli"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10730,
+   "latencyMs": [
+    19.1
+   ],
+   "recordedLlmMs": 2559,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|trofie al pesto|0|primi",
+    "hidden|Arrosto di vitello|false",
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Petto di pollo ai ferri|true"
+   ],
+   "actual": [
+    "create|trofie al pesto|0|primi",
+    "hidden|Arrosto di vitello|false",
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Petto di pollo ai ferri|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Trofie al pesto*, *Penne all'arrabbiata*, *Risotto alla milanese*. Nascosti: *Pasta al pomodoro* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Arrosto di vitello*, *Polpette al sugo*. Nascosti: *Cotoletta alla milanese*, *Petto di pollo ai ferri* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "pranzo di oggi: primi risotto alla milanese, penne all'arrabbiata e trofie al pesto. secondi polpette al sugo e arrosto di vitello"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11347,
+   "latencyMs": [
+    20.6
+   ],
+   "recordedLlmMs": 4158,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|branzino al forno|0|secondi",
+    "hidden|Salmone alla griglia|true",
+    "hidden|Scaloppine al limone|true"
+   ],
+   "actual": [
+    "create|branzino al forno|0|secondi",
+    "hidden|Salmone alla griglia|true",
+    "hidden|Scaloppine al limone|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Secondi* del *Menu cena*: *Branzino al forno*, *Tagliata di manzo*. Nascosti: *Salmone alla griglia*, *Scaloppine al limone* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "stasera secondi tagliata di manzo e branzino al forno"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11048,
+   "latencyMs": [
+    18.2
+   ],
+   "recordedLlmMs": 3242,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-06",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|insalata verde|0|contorni",
+    "create|paccheri al sugo di pesce|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Scaloppine al limone|true",
+    "hidden|Tagliata di manzo|true",
+    "hidden|Tagliatelle al ragù|true",
+    "hidden|Verdure grigliate|true"
+   ],
+   "actual": [
+    "create|insalata verde|0|contorni",
+    "create|paccheri al sugo di pesce|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Scaloppine al limone|true",
+    "hidden|Tagliata di manzo|true",
+    "hidden|Tagliatelle al ragù|true",
+    "hidden|Verdure grigliate|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Paccheri al sugo di pesce*, *Spaghetti alle vongole*. Nascosti: *Tagliatelle al ragù*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu cena*: *Salmone alla griglia*. Nascosti: *Tagliata di manzo*, *Scaloppine al limone* (tornano quando li rimetti).\nOggi nei *Contorni* del *Menu cena*: *Insalata verde*, *Patatine fritte*. Nascosti: *Verdure grigliate* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "per stasera primi spaghetti alle vongole e paccheri al sugo di pesce, secondi salmone alla griglia, contorni patatine fritte e insalata verde"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11339,
+   "latencyMs": [
+    20.3
+   ],
+   "recordedLlmMs": 4109,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-07",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*, *Petto di pollo ai ferri*. Nascosti: *Polpette al sugo* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 allora oggi a pranzo… eh… primi lasagna e… carbonara, secondi… cotoletta e… petto di pollo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11218,
+   "latencyMs": [
+    20.1
+   ],
+   "recordedLlmMs": 3889,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-08",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|gnocchi al ragu|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "actual": [
+    "create|gnocchi al ragu|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Gnocchi al ragù*, *Risotto ai funghi*. Nascosti: *Tagliatelle al ragù*, *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 stasera i primi sono gnocchi al ragù e risotto ai funghi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10912,
+   "latencyMs": [
+    18
+   ],
+   "recordedLlmMs": 3853,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-09",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|fagiolini|0|contorni",
+    "hidden|Insalata mista|true",
+    "hidden|Spinaci al burro|true"
+   ],
+   "actual": [
+    "create|fagiolini|0|contorni",
+    "hidden|Insalata mista|true",
+    "hidden|Spinaci al burro|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Contorni* del *Menu pranzo*: *Fagiolini*, *Patate al forno*. Nascosti: *Insalata mista*, *Spinaci al burro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 eh per oggi pranzo i contorni sono patate al forno e… fagiolini"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11065,
+   "latencyMs": [
+    17.3
+   ],
+   "recordedLlmMs": 4315,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-10",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Salmone alla griglia|true",
+    "hidden|Spaghetti alle vongole|true"
+   ],
+   "actual": [
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Salmone alla griglia|true",
+    "hidden|Spaghetti alle vongole|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Tagliatelle al ragù*. Nascosti: *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu cena*: *Tagliata di manzo*, *Scaloppine al limone*. Nascosti: *Salmone alla griglia* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 ok senti stasera… primi tagliatelle al ragù… e basta, secondi scaloppine al limone e tagliata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11123,
+   "latencyMs": [
+    17.8
+   ],
+   "recordedLlmMs": 3320,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-11",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi i Primi del *Menu pranzo* o del *Menu cena*?"
+   ],
+   "turns": [
+    "oggi primi: lasagna, carbonara"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10710,
+   "latencyMs": [
+    17.2
+   ],
+   "recordedLlmMs": 3756,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "senza «pranzo/stasera»: «oggi» detto di giorno vale pranzo, oppure una domanda (pranzo o cena?)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-12",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|minestra di verdure|0|primi",
+    "create|pasta al forno|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|minestra di verdure|0|primi",
+    "create|pasta al forno|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Pasta al forno*, *Minestra di verdure*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "a pranzo oggi abbiamo come primi la pasta al forno e la minestra di verdure"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10761,
+   "latencyMs": [
+    18.9
+   ],
+   "recordedLlmMs": 5389,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-13",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|frittata di zucchine|0|secondi",
+    "hidden|Petto di pollo ai ferri|true"
+   ],
+   "actual": [
+    "create|frittata di zucchine|0|secondi",
+    "hidden|Petto di pollo ai ferri|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Secondi* del *Menu pranzo*: *Frittata di zucchine*, *Cotoletta alla milanese*, *Polpette al sugo*. Nascosti: *Petto di pollo ai ferri* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "menu del pranzo di oggi, secondi: cotoletta alla milanese, polpette al sugo, frittata di zucchine"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11152,
+   "latencyMs": [
+    19.2
+   ],
+   "recordedLlmMs": 4366,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-14",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|patate al forno|0|contorni",
+    "hidden|Patatine fritte|true"
+   ],
+   "actual": [
+    "create|patate al forno|0|contorni",
+    "hidden|Patatine fritte|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Contorni* del *Menu cena*: *Patate al forno*, *Verdure grigliate*. Nascosti: *Patatine fritte* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "stasera contorni verdure grigliate e patate al forno"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11242,
+   "latencyMs": [
+    18.1
+   ],
+   "recordedLlmMs": 11840,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-15",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Risotto ai funghi|false",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "actual": [
+    "hidden|Risotto ai funghi|false",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Risotto ai funghi*, *Spaghetti alle vongole*, *Gnocchi al pomodoro*. Nascosti: *Tagliatelle al ragù* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "primi di stasera: spaghetti alle vongole, risotto ai funghi e gnocchi al pomodoro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10899,
+   "latencyMs": [
+    16.7
+   ],
+   "recordedLlmMs": 3665,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "solo Tagliatelle al ragù nascoste, Risotto torna",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-16",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|gnocchi al ragu|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Risotto alla milanese|true",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "actual": [
+    "create|carbonara|0|primi",
+    "create|gnocchi al ragu|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Risotto alla milanese|true",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*. Nascosti: *Petto di pollo ai ferri*, *Polpette al sugo* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Oggi nei *Primi* del *Menu cena*: *Gnocchi al ragù*, *Risotto ai funghi*. Nascosti: *Tagliatelle al ragù*, *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "oggi a pranzo primi lasagna e carbonara, secondi cotoletta",
+    "stasera i primi sono gnocchi al ragù e risotto ai funghi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22890,
+   "latencyMs": [
+    17.6,
+    21.8
+   ],
+   "recordedLlmMs": 9566,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "pranzo e poi cena nello stesso giro",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-17",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Oggi nei *Primi* del *Menu pranzo*: *Pasta e fagioli*, *Lasagna*, *Carbonara*.\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "oggi a pranzo primi lasagna e carbonara",
+    "aggiungi anche la pasta e fagioli ai primi del pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21506,
+   "latencyMs": [
+    18,
+    20.6
+   ],
+   "recordedLlmMs": 4783,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "il giorno dopo / ritocco: Pasta e fagioli (nascosta) torna con lo stesso id, non un doppione",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-18",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Patate al forno|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Patate al forno|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Pasta al pomodoro*, *Risotto alla milanese*. Nascosti: *Penne all'arrabbiata* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Polpette al sugo*. Nascosti: *Cotoletta alla milanese*, *Petto di pollo ai ferri* (tornano quando li rimetti).\nOggi nei *Contorni* del *Menu pranzo*: *Insalata mista*, *Spinaci al burro*. Nascosti: *Patate al forno* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 pranzo oggi primi pasta al pomodoro risotto alla milanese secondi polpette contorni insalata mista e spinaci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11541,
+   "latencyMs": [
+    17.9
+   ],
+   "recordedLlmMs": 4604,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-19",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|amatriciana|0|primi",
+    "create|carbonara|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "actual": [
+    "create|amatriciana|0|primi",
+    "create|carbonara|0|primi",
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Spaghetti alle vongole|true",
+    "hidden|Tagliatelle al ragù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Carbonara*, *Amatriciana*. Nascosti: *Tagliatelle al ragù*, *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "stasera solo due primi: carbonara e amatriciana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10796,
+   "latencyMs": [
+    16.7
+   ],
+   "recordedLlmMs": 3968,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "omonimi dell'Alla carta: nuovi nella cena a prezzo 0, l'Alla carta invariata",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-sostituzione-20",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|orecchiette alle cime di rapa|0|primi",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|orecchiette alle cime di rapa|0|primi",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Orecchiette alle cime di rapa*, *Pasta al pomodoro*. Nascosti: *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "i primi del pranzo di oggi sono orecchiette alle cime di rapa e pasta al pomodoro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10791,
+   "latencyMs": [
+    18.7
+   ],
+   "recordedLlmMs": 2951,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-nuova-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNuova opzione *Solo primo* nel *Menu pranzo*: *9,00 €*."
+   ],
+   "turns": [
+    "aggiungi l'opzione solo primo a 9 al pranzo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10408,
+   "latencyMs": [
+    18.2
+   ],
+   "recordedLlmMs": 1713,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-nuova-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNuova opzione *Solo secondo* nel *Menu pranzo*: *10,00 €*."
+   ],
+   "turns": [
+    "al pranzo metti anche il solo secondo a 10 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10721,
+   "latencyMs": [
+    17.8
+   ],
+   "recordedLlmMs": 2279,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-nuova-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNuova opzione *Bambini* nel *Menu cena*: *8,00 €*."
+   ],
+   "turns": [
+    "crea a cena l'opzione bambini a 8 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10477,
+   "latencyMs": [
+    17.4
+   ],
+   "recordedLlmMs": 2519,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-nuova-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa l'opzione *Solo secondo* al Menu pranzo?"
+   ],
+   "turns": [
+    "aggiungi l'opzione solo secondo al pranzo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21594,
+   "latencyMs": [
+    18.9
+   ],
+   "recordedLlmMs": 3493,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "prezzo non detto: una domanda, nessuna formula",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-nuova-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi creare il Sottomenu *Piatto unico* nel Menu cena, oppure aggiungere il piatto in un Sottomenu che c'è già?"
+   ],
+   "turns": [
+    "a cena aggiungi anche il piatto unico"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10754,
+   "latencyMs": [
+    16.2
+   ],
+   "recordedLlmMs": 3467,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "prezzo non detto: una domanda (prezzo o piatto?), nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-nuova-06",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA quanto costa l'opzione *Solo primo* al Menu pranzo?",
+    "Nuova opzione *Solo primo* nel *Menu pranzo*: *9,00 €*."
+   ],
+   "turns": [
+    "aggiungi l'opzione solo primo al pranzo",
+    "9 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21007,
+   "latencyMs": [
+    16.5,
+    18.8
+   ],
+   "recordedLlmMs": 3825,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-prezzo-piatto-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi il prezzo del *Completo* del Menu pranzo a 8 €?"
+   ],
+   "turns": [
+    "la cotoletta del pranzo a 8"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10696,
+   "latencyMs": [
+    20.4
+   ],
+   "recordedLlmMs": 3092,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-prezzo-piatto-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* i piatti non hanno prezzo: vuoi cambiare il prezzo dell'opzione *Completo* da 12 € a 9 €?"
+   ],
+   "turns": [
+    "il risotto alla milanese a 9 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10826,
+   "latencyMs": [
+    16.7
+   ],
+   "recordedLlmMs": 3698,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-prezzo-piatto-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe *Tagliatelle al ragù* nel Menu cena non hanno un prezzo: il prezzo è quello delle opzioni. Intendi cambiare il prezzo del *Completo* a 10 €?"
+   ],
+   "turns": [
+    "metti le tagliatelle al ragù a 10"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10822,
+   "latencyMs": [
+    18.3
+   ],
+   "recordedLlmMs": 3380,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-prezzo-piatto-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «la tagliata… quindici euro» intendi *Tagliata di manzo*? Rispondi sì oppure dimmi il nome giusto."
+   ],
+   "turns": [
+    "🎤 la tagliata… quindici euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11000,
+   "latencyMs": [
+    18.1
+   ],
+   "recordedLlmMs": 4733,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-prezzo-piatto-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel Menu cena il prezzo è delle opzioni, non dei piatti: quale cambio a *14 €*, il *Completo* o il *Solo primo* o il *Solo secondo*?"
+   ],
+   "turns": [
+    "le vongole a cena a 14"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10985,
+   "latencyMs": [
+    17.7
+   ],
+   "recordedLlmMs": 4108,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-carta-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "la carbonara alla carta a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10379,
+   "latencyMs": [
+    25.7
+   ],
+   "recordedLlmMs": 2819,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-carta-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|7.5"
+   ],
+   "actual": [
+    "price|Margherita|7.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Margherita* a 7,50 €.\n\n*Margherita*: prezzo da 7,00 € a *7,50 €*"
+   ],
+   "turns": [
+    "la margherita a 7,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10395,
+   "latencyMs": [
+    27.4
+   ],
+   "recordedLlmMs": 2069,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-carta-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufala|10|pizze"
+   ],
+   "actual": [
+    "create|bufala|10|pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Bufala* tra le Pizze.\n\nNuovo piatto *Bufala* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "aggiungi tra le pizze la bufala a 10"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10873,
+   "latencyMs": [
+    24.5
+   ],
+   "recordedLlmMs": 2562,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-carta-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tiramisù|6.5"
+   ],
+   "actual": [
+    "price|Tiramisù|6.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo del *Tiramisù* a 6,50 €.\n\n*Tiramisù*: prezzo da 6,00 € a *6,50 €*"
+   ],
+   "turns": [
+    "il tiramisù a 6,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10386,
+   "latencyMs": [
+    24.2
+   ],
+   "recordedLlmMs": 1991,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-carta-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA quanto lo metto, *Bucatini all'amatriciana*? Mi dici il prezzo."
+   ],
+   "turns": [
+    "aggiungi nei primi alla carta i bucatini all'amatriciana"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10813,
+   "latencyMs": [
+    20.8
+   ],
+   "recordedLlmMs": 3688,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "alla carta il prezzo serve: una domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-annulla-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*. Nascosti: *Petto di pollo ai ferri*, *Polpette al sugo* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima pubblicazione: torna tutto com'era prima di *Lasagna* e *Carbonara* a pranzo.\n\n*Pasta al pomodoro*: com’era prima\n*Penne all'arrabbiata*: com’era prima\n*Risotto alla milanese*: com’era prima\n*Petto di pollo ai ferri*: com’era prima\n*Polpette al sugo*: com’era prima\n*Lasagna*: tolto (era stato aggiunto)\n*Carbonara*: tolto (era stato aggiunto)"
+   ],
+   "turns": [
+    "oggi a pranzo primi lasagna e carbonara, secondi cotoletta",
+    "annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22015,
+   "latencyMs": [
+    18.5,
+    23
+   ],
+   "recordedLlmMs": 7005,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-annulla-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu cena*: *Gnocchi al ragù*, *Risotto ai funghi*. Nascosti: *Tagliatelle al ragù*, *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima modifica: torno com'era prima dei *Primi* del *Menu cena*.\n\n*Tagliatelle al ragù*: com’era prima\n*Spaghetti alle vongole*: com’era prima\n*Gnocchi al pomodoro*: com’era prima\n*Risotto ai funghi*: com’era prima\n*Gnocchi al ragù*: tolto (era stato aggiunto)"
+   ],
+   "turns": [
+    "stasera i primi sono gnocchi al ragù e risotto ai funghi",
+    "no aspetta, annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21570,
+   "latencyMs": [
+    18.5,
+    22.9
+   ],
+   "recordedLlmMs": 5605,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-annulla-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Contorni* del *Menu cena*: *Patate al forno*, *Verdure grigliate*. Nascosti: *Patatine fritte* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima modifica: *Patatine fritte* e *Patate al forno* tornano com'erano.\n\n*Patatine fritte*: com’era prima\n*Patate al forno*: tolto (era stato aggiunto)"
+   ],
+   "turns": [
+    "stasera contorni verdure grigliate e patate al forno",
+    "🎤 annulla annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21807,
+   "latencyMs": [
+    17,
+    23.5
+   ],
+   "recordedLlmMs": 13316,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-annulla-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Pasta e fagioli*, *Pasta al pomodoro*. Nascosti: *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima modifica al menu.\n\n*Penne all'arrabbiata*: com’era prima\n*Risotto alla milanese*: com’era prima\n*Pasta e fagioli*: com’era prima"
+   ],
+   "turns": [
+    "oggi a pranzo i primi sono pasta al pomodoro e pasta e fagioli",
+    "annulla l'ultima modifica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21316,
+   "latencyMs": [
+    19.8,
+    22.7
+   ],
+   "recordedLlmMs": 4619,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-lettura-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 9,00 € · *Solo secondo* 10,00 €. Compreso: ¼ di vino oppure ½ l d'acqua + caffè."
+   ],
+   "turns": [
+    "❓ quanto costa il completo a cena?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10300,
+   "latencyMs": [
+    20.6
+   ],
+   "recordedLlmMs": 1130,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-lettura-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 9,00 € · *Solo secondo* 10,00 €. Compreso: ¼ di vino oppure ½ l d'acqua + caffè."
+   ],
+   "turns": [
+    "❓ quanto viene il solo primo la sera?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10432,
+   "latencyMs": [
+    16.6
+   ],
+   "recordedLlmMs": 2629,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-lettura-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu pranzo* è a prezzo fisso. Opzioni: *Completo* 12,00 €. Compreso: ¼ di vino oppure ½ l d'acqua + caffè."
+   ],
+   "turns": [
+    "❓ quanto costa il pranzo?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10333,
+   "latencyMs": [
+    13.8
+   ],
+   "recordedLlmMs": 1401,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-lettura-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel Menu pranzo i Primi di oggi sono *Pasta al pomodoro*, *Penne all'arrabbiata* e *Risotto alla milanese*.\n\n*Pasta al pomodoro*: *senza prezzo* · disponibile\n*Penne all'arrabbiata*: *senza prezzo* · disponibile\n*Risotto alla milanese*: *senza prezzo* · disponibile"
+   ],
+   "turns": [
+    "❓ cosa c'è oggi nei primi del pranzo?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10354,
+   "latencyMs": [
+    20.4
+   ],
+   "recordedLlmMs": 1783,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "i visibili, non la Pasta e fagioli nascosta",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-pricing-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Menu pranzo*: *alla carta*."
+   ],
+   "turns": [
+    "rimetti il menu pranzo alla carta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10582,
+   "latencyMs": [
+    16.9
+   ],
+   "recordedLlmMs": 2165,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "pricing carta, formule conservate, prezzi dei piatti invariati",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-pricing-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMenu *Alla carta*: *a prezzo fisso* (i prezzi dei piatti restano salvati)."
+   ],
+   "turns": [
+    "il menu alla carta fallo a prezzo fisso"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10590,
+   "latencyMs": [
+    17.7
+   ],
+   "recordedLlmMs": 2103,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-pricing-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSì, il *Menu cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 9,00 € · *Solo secondo* 10,00 €. Compreso: ¼ di vino oppure ½ l d'acqua + caffè."
+   ],
+   "turns": [
+    "❓ il menu cena è a prezzo fisso?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10355,
+   "latencyMs": [
+    15.4
+   ],
+   "recordedLlmMs": 1707,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-tolta-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nTolgo l'opzione *Solo primo* dal *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Tolta l'opzione *Solo primo* dal *Menu cena*"
+   ],
+   "turns": [
+    "togli l'opzione solo primo dalla cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10399,
+   "latencyMs": [
+    13.4
+   ],
+   "recordedLlmMs": 1253,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "note": "nessuna formula tolta senza conferma",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-tolta-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nTolgo l'opzione *Solo primo* dal *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Tolta l'opzione *Solo primo* dal *Menu cena*",
+    "Fatto, ho tolto l'opzione *Solo primo* dal *Menu cena*.\n\nTolta l'opzione *Solo primo* dal *Menu cena*"
+   ],
+   "turns": [
+    "togli l'opzione solo primo dalla cena",
+    "sì"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20915,
+   "latencyMs": [
+    11.3,
+    96.9
+   ],
+   "recordedLlmMs": 2768,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "pf-formula-tolta-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino l'opzione *Solo secondo* dal *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Tolta l'opzione *Solo secondo* dal *Menu cena*",
+    "Fatto, ho tolto l'opzione *Solo secondo* dal *Menu cena*.\n\nTolta l'opzione *Solo secondo* dal *Menu cena*"
+   ],
+   "turns": [
+    "a cena elimina il solo secondo",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21387,
+   "latencyMs": [
+    14.4,
+    23.3
+   ],
+   "recordedLlmMs": 4511,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "pf-formula-prezzo-01",
+   "hash": "726db5bfc2876c55",
+   "source": "hit",
+   "status": 200,
+   "ms": 3197,
+   "usage": {
+    "input": 47,
+    "output": 189,
+    "cacheRead": 0,
+    "cacheWrite": 10143
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-02",
+   "hash": "83d6fcfc6a784e3d",
+   "source": "hit",
+   "status": 200,
+   "ms": 6731,
+   "usage": {
+    "input": 49,
+    "output": 204,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-03",
+   "hash": "e82231f5c53dbf0d",
+   "source": "hit",
+   "status": 200,
+   "ms": 3021,
+   "usage": {
+    "input": 48,
+    "output": 341,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-04",
+   "hash": "b18bb370a1247764",
+   "source": "hit",
+   "status": 200,
+   "ms": 2301,
+   "usage": {
+    "input": 52,
+    "output": 381,
+    "cacheRead": 9267,
+    "cacheWrite": 1099
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-05",
+   "hash": "0510ba48dca80efd",
+   "source": "hit",
+   "status": 200,
+   "ms": 1960,
+   "usage": {
+    "input": 54,
+    "output": 196,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-06",
+   "hash": "e748fb4bbf00f910",
+   "source": "hit",
+   "status": 200,
+   "ms": 3846,
+   "usage": {
+    "input": 55,
+    "output": 593,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-07",
+   "hash": "fcea7820419d59ea",
+   "source": "hit",
+   "status": 200,
+   "ms": 2076,
+   "usage": {
+    "input": 48,
+    "output": 193,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-08",
+   "hash": "1b868bbd684810a8",
+   "source": "hit",
+   "status": 200,
+   "ms": 4157,
+   "usage": {
+    "input": 54,
+    "output": 379,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-09",
+   "hash": "4cea3512c564ddba",
+   "source": "hit",
+   "status": 200,
+   "ms": 3068,
+   "usage": {
+    "input": 50,
+    "output": 378,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-10",
+   "hash": "898faeff6be0972f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2375,
+   "usage": {
+    "input": 59,
+    "output": 355,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-11",
+   "hash": "10d692cb916ef87f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2856,
+   "usage": {
+    "input": 53,
+    "output": 457,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-prezzo-12",
+   "hash": "7ed6c0835b4fe17a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2360,
+   "usage": {
+    "input": 63,
+    "output": 384,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-01",
+   "hash": "ed650985e1db014c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2556,
+   "usage": {
+    "input": 42,
+    "output": 208,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-01",
+   "hash": "c07ef8f2deec87e7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2671,
+   "usage": {
+    "input": 398,
+    "output": 148,
+    "cacheRead": 0,
+    "cacheWrite": 10143
+   }
+  },
+  {
+   "conv": "pf-ambigua-02",
+   "hash": "31cf04d11c9357bc",
+   "source": "hit",
+   "status": 200,
+   "ms": 2649,
+   "usage": {
+    "input": 47,
+    "output": 361,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-03",
+   "hash": "c11439082377f950",
+   "source": "hit",
+   "status": 200,
+   "ms": 3181,
+   "usage": {
+    "input": 46,
+    "output": 524,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-04",
+   "hash": "ed650985e1db014c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2556,
+   "usage": {
+    "input": 42,
+    "output": 208,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-04",
+   "hash": "c07ef8f2deec87e7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2671,
+   "usage": {
+    "input": 398,
+    "output": 148,
+    "cacheRead": 0,
+    "cacheWrite": 10143
+   }
+  },
+  {
+   "conv": "pf-ambigua-04",
+   "hash": "91b7a83b50407b17",
+   "source": "hit",
+   "status": 200,
+   "ms": 1590,
+   "usage": {
+    "input": 141,
+    "output": 189,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-05",
+   "hash": "243e68cbb67ad644",
+   "source": "hit",
+   "status": 200,
+   "ms": 2970,
+   "usage": {
+    "input": 42,
+    "output": 404,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-ambigua-05",
+   "hash": "dcca1253fa93f560",
+   "source": "hit",
+   "status": 200,
+   "ms": 2433,
+   "usage": {
+    "input": 151,
+    "output": 205,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-01",
+   "hash": "949e63cdea6e8580",
+   "source": "hit",
+   "status": 200,
+   "ms": 2900,
+   "usage": {
+    "input": 55,
+    "output": 461,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-02",
+   "hash": "bef253f0c2041c4b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2561,
+   "usage": {
+    "input": 57,
+    "output": 197,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-03",
+   "hash": "5b6c7f053fe2f76d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2807,
+   "usage": {
+    "input": 61,
+    "output": 440,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-04",
+   "hash": "f8dd84730bea3692",
+   "source": "hit",
+   "status": 200,
+   "ms": 2507,
+   "usage": {
+    "input": 58,
+    "output": 452,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-05",
+   "hash": "174e3bb74ca52866",
+   "source": "hit",
+   "status": 200,
+   "ms": 2887,
+   "usage": {
+    "input": 55,
+    "output": 477,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-06",
+   "hash": "d5c8810b503b78b2",
+   "source": "hit",
+   "status": 200,
+   "ms": 4228,
+   "usage": {
+    "input": 55,
+    "output": 600,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-07",
+   "hash": "26d2bd029af325f1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2083,
+   "usage": {
+    "input": 63,
+    "output": 345,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-08",
+   "hash": "949e63cdea6e8580",
+   "source": "hit",
+   "status": 200,
+   "ms": 2900,
+   "usage": {
+    "input": 55,
+    "output": 461,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-08",
+   "hash": "bcd64f43e5387d44",
+   "source": "hit",
+   "status": 200,
+   "ms": 1455,
+   "usage": {
+    "input": 176,
+    "output": 184,
+    "cacheRead": 9267,
+    "cacheWrite": 887
+   }
+  },
+  {
+   "conv": "pf-piatto-nuovo-08",
+   "hash": "1168e6280387596f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2329,
+   "usage": {
+    "input": 552,
+    "output": 189,
+    "cacheRead": 10154,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-01",
+   "hash": "b696ecd0b316a876",
+   "source": "hit",
+   "status": 200,
+   "ms": 4269,
+   "usage": {
+    "input": 64,
+    "output": 861,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-02",
+   "hash": "cc1886d5636827fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 3853,
+   "usage": {
+    "input": 62,
+    "output": 707,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-03",
+   "hash": "d218041dbcd556e0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2559,
+   "usage": {
+    "input": 67,
+    "output": 520,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-04",
+   "hash": "ea6796e0854e28fc",
+   "source": "hit",
+   "status": 200,
+   "ms": 4158,
+   "usage": {
+    "input": 94,
+    "output": 887,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-05",
+   "hash": "a411ff9e8bb00738",
+   "source": "hit",
+   "status": 200,
+   "ms": 3242,
+   "usage": {
+    "input": 57,
+    "output": 625,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-06",
+   "hash": "404c4f96840b07d9",
+   "source": "hit",
+   "status": 200,
+   "ms": 4109,
+   "usage": {
+    "input": 93,
+    "output": 880,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-07",
+   "hash": "19b2a821bd55f708",
+   "source": "hit",
+   "status": 200,
+   "ms": 3889,
+   "usage": {
+    "input": 80,
+    "output": 772,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-08",
+   "hash": "cc1886d5636827fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 3853,
+   "usage": {
+    "input": 62,
+    "output": 707,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-09",
+   "hash": "e807bf779b40e693",
+   "source": "hit",
+   "status": 200,
+   "ms": 4315,
+   "usage": {
+    "input": 64,
+    "output": 635,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-10",
+   "hash": "a31fd9149fbee7f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 3320,
+   "usage": {
+    "input": 77,
+    "output": 680,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-11",
+   "hash": "1c03f0622b622738",
+   "source": "hit",
+   "status": 200,
+   "ms": 3756,
+   "usage": {
+    "input": 51,
+    "output": 516,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-12",
+   "hash": "629325277b96c9ff",
+   "source": "hit",
+   "status": 200,
+   "ms": 5389,
+   "usage": {
+    "input": 68,
+    "output": 550,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-13",
+   "hash": "9af27dcadefe05ab",
+   "source": "hit",
+   "status": 200,
+   "ms": 4366,
+   "usage": {
+    "input": 79,
+    "output": 707,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-14",
+   "hash": "4a3b5a37a04b5efe",
+   "source": "hit",
+   "status": 200,
+   "ms": 11840,
+   "usage": {
+    "input": 55,
+    "output": 821,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-15",
+   "hash": "8906d7b8be8a694f",
+   "source": "hit",
+   "status": 200,
+   "ms": 3665,
+   "usage": {
+    "input": 74,
+    "output": 682,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-16",
+   "hash": "b696ecd0b316a876",
+   "source": "hit",
+   "status": 200,
+   "ms": 4269,
+   "usage": {
+    "input": 64,
+    "output": 861,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-16",
+   "hash": "2c41459be783d50f",
+   "source": "hit",
+   "status": 200,
+   "ms": 5297,
+   "usage": {
+    "input": 364,
+    "output": 1060,
+    "cacheRead": 9267,
+    "cacheWrite": 908
+   }
+  },
+  {
+   "conv": "pf-sostituzione-17",
+   "hash": "f6191e2bbcbe0b64",
+   "source": "hit",
+   "status": 200,
+   "ms": 3220,
+   "usage": {
+    "input": 55,
+    "output": 604,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-17",
+   "hash": "6bbdadf7efa3dd68",
+   "source": "hit",
+   "status": 200,
+   "ms": 1563,
+   "usage": {
+    "input": 284,
+    "output": 249,
+    "cacheRead": 9267,
+    "cacheWrite": 904
+   }
+  },
+  {
+   "conv": "pf-sostituzione-18",
+   "hash": "66079907a8aa5993",
+   "source": "hit",
+   "status": 200,
+   "ms": 4604,
+   "usage": {
+    "input": 81,
+    "output": 1094,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-19",
+   "hash": "5927955298a30bd8",
+   "source": "hit",
+   "status": 200,
+   "ms": 3968,
+   "usage": {
+    "input": 55,
+    "output": 598,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-sostituzione-20",
+   "hash": "c1a27558a8c19457",
+   "source": "hit",
+   "status": 200,
+   "ms": 2951,
+   "usage": {
+    "input": 73,
+    "output": 575,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-01",
+   "hash": "b664996bb68e9185",
+   "source": "hit",
+   "status": 200,
+   "ms": 1713,
+   "usage": {
+    "input": 59,
+    "output": 206,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-02",
+   "hash": "f0df93c21b000cc3",
+   "source": "hit",
+   "status": 200,
+   "ms": 2279,
+   "usage": {
+    "input": 57,
+    "output": 298,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-03",
+   "hash": "2cbfdfefeac617dc",
+   "source": "hit",
+   "status": 200,
+   "ms": 2519,
+   "usage": {
+    "input": 55,
+    "output": 279,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-04",
+   "hash": "a6c0ee9040b90df7",
+   "source": "hit",
+   "status": 200,
+   "ms": 1471,
+   "usage": {
+    "input": 56,
+    "output": 202,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-04",
+   "hash": "e1fd3dd3d63d95cb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2022,
+   "usage": {
+    "input": 456,
+    "output": 148,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-05",
+   "hash": "df037bd3d8b1ab77",
+   "source": "hit",
+   "status": 200,
+   "ms": 3467,
+   "usage": {
+    "input": 52,
+    "output": 559,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-06",
+   "hash": "055b8ffd1ebe3d02",
+   "source": "hit",
+   "status": 200,
+   "ms": 2244,
+   "usage": {
+    "input": 55,
+    "output": 300,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-nuova-06",
+   "hash": "26164858affdf904",
+   "source": "hit",
+   "status": 200,
+   "ms": 1581,
+   "usage": {
+    "input": 164,
+    "output": 202,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-prezzo-piatto-01",
+   "hash": "2d0fdbf7fe41fa85",
+   "source": "hit",
+   "status": 200,
+   "ms": 3092,
+   "usage": {
+    "input": 50,
+    "output": 503,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-prezzo-piatto-02",
+   "hash": "52b9c4dcdb5c857e",
+   "source": "hit",
+   "status": 200,
+   "ms": 3698,
+   "usage": {
+    "input": 51,
+    "output": 632,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-prezzo-piatto-03",
+   "hash": "a8aca453aacffcc3",
+   "source": "hit",
+   "status": 200,
+   "ms": 3380,
+   "usage": {
+    "input": 52,
+    "output": 627,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-prezzo-piatto-04",
+   "hash": "2f9d2071d6059099",
+   "source": "hit",
+   "status": 200,
+   "ms": 4733,
+   "usage": {
+    "input": 47,
+    "output": 810,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-prezzo-piatto-05",
+   "hash": "cfc2f237dd84494d",
+   "source": "hit",
+   "status": 200,
+   "ms": 4108,
+   "usage": {
+    "input": 46,
+    "output": 796,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-carta-01",
+   "hash": "306934363f9e0e99",
+   "source": "hit",
+   "status": 200,
+   "ms": 2819,
+   "usage": {
+    "input": 48,
+    "output": 188,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-carta-02",
+   "hash": "33730e3110b4918b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2069,
+   "usage": {
+    "input": 45,
+    "output": 207,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-carta-03",
+   "hash": "139dfcbb7cfdd7e0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2562,
+   "usage": {
+    "input": 54,
+    "output": 453,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-carta-04",
+   "hash": "78347512a5beb64c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1991,
+   "usage": {
+    "input": 47,
+    "output": 196,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-carta-05",
+   "hash": "054a0eb4e58cac1e",
+   "source": "hit",
+   "status": 200,
+   "ms": 3688,
+   "usage": {
+    "input": 61,
+    "output": 609,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-annulla-01",
+   "hash": "b696ecd0b316a876",
+   "source": "hit",
+   "status": 200,
+   "ms": 4269,
+   "usage": {
+    "input": 64,
+    "output": 861,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-annulla-01",
+   "hash": "bfeb6808077e758f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2736,
+   "usage": {
+    "input": 341,
+    "output": 208,
+    "cacheRead": 10175,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-annulla-02",
+   "hash": "cc1886d5636827fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 3853,
+   "usage": {
+    "input": 62,
+    "output": 707,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-annulla-02",
+   "hash": "5cc2a75ef36d201f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1752,
+   "usage": {
+    "input": 299,
+    "output": 196,
+    "cacheRead": 9267,
+    "cacheWrite": 896
+   }
+  },
+  {
+   "conv": "pf-annulla-03",
+   "hash": "4a3b5a37a04b5efe",
+   "source": "hit",
+   "status": 200,
+   "ms": 11840,
+   "usage": {
+    "input": 55,
+    "output": 821,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-annulla-03",
+   "hash": "fc141a1774b94a6d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1476,
+   "usage": {
+    "input": 209,
+    "output": 199,
+    "cacheRead": 9267,
+    "cacheWrite": 890
+   }
+  },
+  {
+   "conv": "pf-annulla-04",
+   "hash": "d218041dbcd556e0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2559,
+   "usage": {
+    "input": 67,
+    "output": 520,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-annulla-04",
+   "hash": "c1a8969f248e27d5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2060,
+   "usage": {
+    "input": 265,
+    "output": 176,
+    "cacheRead": 9267,
+    "cacheWrite": 878
+   }
+  },
+  {
+   "conv": "pf-lettura-01",
+   "hash": "f3bd8373b6814547",
+   "source": "hit",
+   "status": 200,
+   "ms": 1130,
+   "usage": {
+    "input": 48,
+    "output": 109,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-lettura-02",
+   "hash": "e1d31c45bf6a415c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2629,
+   "usage": {
+    "input": 50,
+    "output": 239,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-lettura-03",
+   "hash": "e3bdecc77f2dd8b6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1401,
+   "usage": {
+    "input": 47,
+    "output": 143,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-lettura-04",
+   "hash": "d370e66870b6eef8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1783,
+   "usage": {
+    "input": 55,
+    "output": 156,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-pricing-01",
+   "hash": "e4b2e25f248430f7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2165,
+   "usage": {
+    "input": 51,
+    "output": 388,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-pricing-02",
+   "hash": "9fdd5b0b18db9942",
+   "source": "hit",
+   "status": 200,
+   "ms": 2103,
+   "usage": {
+    "input": 54,
+    "output": 393,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-pricing-03",
+   "hash": "5448bdeb8658949f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1707,
+   "usage": {
+    "input": 51,
+    "output": 161,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-tolta-01",
+   "hash": "7e4649d52a45c5ee",
+   "source": "hit",
+   "status": 200,
+   "ms": 1253,
+   "usage": {
+    "input": 52,
+    "output": 204,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-tolta-02",
+   "hash": "7e4649d52a45c5ee",
+   "source": "hit",
+   "status": 200,
+   "ms": 1253,
+   "usage": {
+    "input": 52,
+    "output": 204,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-tolta-02",
+   "hash": "88ec65a7108bf759",
+   "source": "hit",
+   "status": 200,
+   "ms": 1515,
+   "usage": {
+    "input": 179,
+    "output": 194,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-tolta-03",
+   "hash": "0fa50f5630e0578f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2406,
+   "usage": {
+    "input": 48,
+    "output": 459,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "pf-formula-tolta-03",
+   "hash": "7f6be2c57a8d1976",
+   "source": "hit",
+   "status": 200,
+   "ms": 2105,
+   "usage": {
+    "input": 176,
+    "output": 195,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

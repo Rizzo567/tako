@@ -2,50 +2,50 @@
  "set": "notte-caccia",
  "metriche": {
   "set": "notte-caccia",
-  "modo": "record",
-  "conversazioni": 4,
-  "misurate": 4,
+  "modo": "replay",
+  "conversazioni": 6,
+  "misurate": 6,
   "nonMisurate": [],
-  "messaggi": 7,
-  "corrette": 4,
+  "messaggi": 16,
+  "corrette": 6,
   "percentuale": 100,
   "gravi": 0,
   "graviSicurezza": 0,
   "graviAltri": 0,
   "medi": 0,
-  "domandePer10Messaggi": 4.3,
-  "domandeNonAttesePer10": 4.3,
+  "domandePer10Messaggi": 6.3,
+  "domandeNonAttesePer10": 6.3,
   "latenzaAnthropicMs": {
-   "p50": 2320,
-   "p95": 3713,
-   "chiamate": 7
+   "p50": 3355,
+   "p95": 5224,
+   "chiamate": 12
   },
   "latenzaTurnoMs": {
-   "p50": 122,
-   "p95": 2720,
-   "nota": "misurata dal vivo"
+   "p50": 3031,
+   "p95": 5871,
+   "nota": "harness + latenza Haiku registrata"
   },
-  "chiamatePerMessaggio": 1,
+  "chiamatePerMessaggio": 0.75,
   "tokenMediPerMessaggio": {
-   "input": 166,
-   "output": 340,
-   "cacheRead": 8311,
-   "cacheWrite": 1626
+   "input": 122,
+   "output": 330,
+   "cacheRead": 7319,
+   "cacheWrite": 69
   },
   "cacheHit": {
-   "chiamateConCacheRead": 6,
-   "su": 7,
-   "percentuale": 85.7
+   "chiamateConCacheRead": 12,
+   "su": 12,
+   "percentuale": 100
   },
   "costo": {
-   "spesoGiroUsd": 0.001759,
-   "equivalenteLiveUsd": 0.003311,
-   "perMessaggioUsd": 0.000473,
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.004141,
+   "perMessaggioUsd": 0.000259,
    "tetto": 0.1
   },
   "anthropic": {
-   "hit": 5,
-   "vere": 2,
+   "hit": 12,
+   "vere": 0,
    "mock": 0,
    "assenti": 0,
    "rifiutateTetto": 0,
@@ -53,7 +53,7 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 6.7
+  "durataGiroS": 1.9
  },
  "codici": {},
  "unknownSql": [],
@@ -68,7 +68,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiungo *Vitello tonnato*. In quale Sottomenu lo metto e a quale prezzo?",
-    "Mi manca ancora il *Sottomenu* e il *prezzo* di *Vitello tonnato*. Me li dici?"
+    "Ok, *14,00 €*. In quale sottomenu metto *Vitello tonnato*? Rispondi col numero o col nome.\n\n1. *Antipasti* (Pranzo e cena)\n2. *Primi* (Pranzo e cena)\n3. *Secondi* (Pranzo e cena)\n4. *Contorni* (Pranzo e cena)\n5. *Dolci* (Pranzo e cena)\n6. *Bevande* (Bevande)"
    ],
    "turns": [
     "aggiungi il vitello tonnato",
@@ -76,14 +76,14 @@
    ],
    "clarifications": 2,
    "unexpectedClarifications": 2,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 20834,
+   "llmTokens": 10528,
    "latencyMs": [
-    155.5,
-    37.1
+    156.9,
+    18.7
    ],
-   "recordedLlmMs": 4806,
+   "recordedLlmMs": 3355,
    "usedLlm": true,
    "source": "caccia notte 22/10 (fixture esistenti)",
    "note": "risposta parziale (solo prezzo): si tiene, si chiede solo il sottomenu (mai la stessa domanda)",
@@ -113,8 +113,8 @@
    "llmMisses": 0,
    "llmTokens": 31414,
    "latencyMs": [
-    57.8,
-    121.7
+    63.1,
+    123.7
    ],
    "recordedLlmMs": 8067,
    "usedLlm": true,
@@ -123,72 +123,155 @@
    "nonMisurato": false
   },
   {
-   "id": "cc-b1-11",
+   "id": "cc-v145-05",
    "family": "bv-multiple",
-   "menu": "victoria4",
+   "menu": "qasera",
    "success": true,
    "fails": [],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "create|patatine fritte|4|piatti di prova"
+   ],
+   "actual": [
+    "create|patatine fritte|4|piatti di prova"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSottomenu *Bibite*: nuovo nome *Analcolici*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale *Sottomenu* la metto e a che *prezzo*?",
+    "Ok, *Patatine fritte* a *4 €*: in quale *Sottomenu* la metto, *Piatti di prova*, *Primi* o *Secondi*?",
+    "Aggiungo *Patatine fritte* a *4 €* nei *Piatti di prova*.\n\nNuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*"
    ],
    "turns": [
-    "rinomina il sottomenu Bibite in Analcolici"
+    "aggiungi le patatine fritte",
+    "4",
+    "nei piatti di prova"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 0,
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 0,
+   "llmTokens": 31704,
    "latencyMs": [
-    26.7
+    23.7,
+    19.8,
+    28.9
    ],
-   "recordedLlmMs": 0,
-   "usedLlm": false,
+   "recordedLlmMs": 10807,
+   "usedLlm": true,
    "source": "caccia notte 22/10 (fixture esistenti)",
-   "note": "rinomina di un sottomenu: i piatti NON si spostano (il giudice ora confronta l'id del sottomenu)",
+   "note": "«4» = prezzo tenuto, poi solo il sottomenu",
    "nonMisurato": false
   },
   {
-   "id": "cc-b1-12",
+   "id": "cc-v145-06",
    "family": "bv-multiple",
    "menu": "romana",
    "success": true,
    "fails": [],
    "expected": [
-    "hidden|Crostata di visciole|true",
-    "hidden|Maritozzo con la panna|true",
-    "hidden|Panna cotta|true",
-    "hidden|Tiramisù|true"
+    "create|vitello tonnato|14|antipasti"
    ],
    "actual": [
-    "hidden|Crostata di visciole|true",
-    "hidden|Maritozzo con la panna|true",
-    "hidden|Panna cotta|true",
-    "hidden|Tiramisù|true"
+    "create|vitello tonnato|14|antipasti"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutti i *Dolci* dal menu? Rispondi sì.\n\nNascondo *tutto il sottomenu Dolci (Pranzo e cena)* (4 piatti)? Rispondi *sì*. Non ho ancora cambiato nulla.",
-    "Ok, pubblico: nascondo i Dolci dal menu.\n\n*Tiramisù*: *nascosto* dal menu\n*Maritozzo con la panna*: *nascosto* dal menu\n*Crostata di visciole*: *nascosto* dal menu\n*Panna cotta*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiungo *Vitello tonnato*. In quale Sottomenu lo metto e a quale prezzo?",
+    "Ok, *14,00 €*. In quale sottomenu metto *Vitello tonnato*? Rispondi col numero o col nome.\n\n1. *Antipasti* (Pranzo e cena)\n2. *Primi* (Pranzo e cena)\n3. *Secondi* (Pranzo e cena)\n4. *Contorni* (Pranzo e cena)\n5. *Dolci* (Pranzo e cena)\n6. *Bevande* (Bevande)",
+    "Nuovo piatto *Vitello tonnato* in *Antipasti*: *14,00 €*"
    ],
    "turns": [
-    "nascondi tutti i dolci",
-    "sì"
+    "aggiungi il vitello tonnato",
+    "14",
+    "negli antipasti"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 2,
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 20857,
+   "llmTokens": 10528,
    "latencyMs": [
-    2720.4,
-    2337.6
+    18.5,
+    16.9,
+    18.7
    ],
-   "recordedLlmMs": 4980,
+   "recordedLlmMs": 3355,
    "usedLlm": true,
    "source": "caccia notte 22/10 (fixture esistenti)",
-   "note": "decisione 22/10 notte: «tutti i dolci» = i piatti uno per uno (riepilogo col sì), come i set precedenti",
+   "note": "prezzo tenuto, domanda solo sul sottomenu, poi creato",
+   "nonMisurato": false
+  },
+  {
+   "id": "cc-v145-07",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|vitello tonnato|14|antipasti"
+   ],
+   "actual": [
+    "create|vitello tonnato|14|antipasti"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiungo *Vitello tonnato*. In quale Sottomenu lo metto e a quale prezzo?",
+    "A che prezzo metto *Vitello tonnato* in *Antipasti*? Scrivimi per esempio «vitello tonnato 12».",
+    "Nuovo piatto *Vitello tonnato* in *Antipasti*: *14,00 €*"
+   ],
+   "turns": [
+    "aggiungi il vitello tonnato",
+    "negli antipasti",
+    "14 euro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10528,
+   "latencyMs": [
+    17.3,
+    9.9,
+    14.4
+   ],
+   "recordedLlmMs": 3355,
+   "usedLlm": true,
+   "source": "caccia notte 22/10 (fixture esistenti)",
+   "note": "ordine inverso: prima il sottomenu, poi il prezzo",
+   "nonMisurato": false
+  },
+  {
+   "id": "cc-v145-08",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pizza tartufata|11|pizze"
+   ],
+   "actual": [
+    "create|pizza tartufata|11|pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA quanto la metto, *Pizza tartufata*?",
+    "Nuovo piatto *Pizza tartufata* in *Pizze*: *11,00 €*",
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
+   ],
+   "turns": [
+    "aggiungi la pizza tartufata",
+    "11 euro",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 30732,
+   "latencyMs": [
+    14.6,
+    12.6,
+    24
+   ],
+   "recordedLlmMs": 7267,
+   "usedLlm": true,
+   "source": "caccia notte 22/10 (fixture esistenti)",
+   "note": "prezzo tenuto, sottomenu adatto proposto (Pizze), sì = creata",
    "nonMisurato": false
   }
  ],
@@ -202,19 +285,6 @@
    "usage": {
     "input": 49,
     "output": 571,
-    "cacheRead": 9908,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "cc-b1-03",
-   "hash": "7e06002433e3576a",
-   "source": "hit",
-   "status": 200,
-   "ms": 1451,
-   "usage": {
-    "input": 235,
-    "output": 163,
     "cacheRead": 9908,
     "cacheWrite": 0
    }
@@ -259,29 +329,107 @@
    }
   },
   {
-   "conv": "cc-b1-12",
-   "hash": "56385171019a4a70",
-   "source": "real",
+   "conv": "cc-v145-05",
+   "hash": "6dd8a432ce62154c",
+   "source": "hit",
    "status": 200,
-   "ms": 2678,
+   "ms": 5224,
    "usage": {
-    "input": 47,
-    "output": 412,
-    "cacheRead": 0,
-    "cacheWrite": 10090
+    "input": 48,
+    "output": 782,
+    "cacheRead": 9872,
+    "cacheWrite": 0
    }
   },
   {
-   "conv": "cc-b1-12",
-   "hash": "3acdf6f86eff7908",
-   "source": "real",
+   "conv": "cc-v145-05",
+   "hash": "9ce704b62a632509",
+   "source": "hit",
    "status": 200,
-   "ms": 2302,
+   "ms": 3991,
    "usage": {
-    "input": 215,
-    "output": 185,
+    "input": 141,
+    "output": 671,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-v145-05",
+   "hash": "a21fbf21d5b9e9d5",
+   "source": "hit",
+   "status": 200,
+   "ms": 1592,
+   "usage": {
+    "input": 247,
+    "output": 199,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-v145-06",
+   "hash": "a116052e9348d15a",
+   "source": "hit",
+   "status": 200,
+   "ms": 3355,
+   "usage": {
+    "input": 49,
+    "output": 571,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-v145-07",
+   "hash": "a116052e9348d15a",
+   "source": "hit",
+   "status": 200,
+   "ms": 3355,
+   "usage": {
+    "input": 49,
+    "output": 571,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-v145-08",
+   "hash": "d8855fb6d1dd0aa1",
+   "source": "hit",
+   "status": 200,
+   "ms": 3016,
+   "usage": {
+    "input": 49,
+    "output": 550,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-v145-08",
+   "hash": "facf7393a6882c6c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2404,
+   "usage": {
+    "input": 159,
+    "output": 184,
     "cacheRead": 9267,
-    "cacheWrite": 641
+    "cacheWrite": 443
+   }
+  },
+  {
+   "conv": "cc-v145-08",
+   "hash": "f2cbe6fc352d8de2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1847,
+   "usage": {
+    "input": 545,
+    "output": 129,
+    "cacheRead": 9710,
+    "cacheWrite": 0
    }
   }
  ]

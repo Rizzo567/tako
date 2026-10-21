@@ -76,7 +76,7 @@ export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|
 // accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
 const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
 const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
-const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi|diminu|scont|spost|elimin|cancell|rinomin|aggiorn|ritocc)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
+export const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi|diminu|scont|spost|elimin|cancell|rinomin|aggiorn|ritocc)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
 const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
 export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botList:string[]=[]):{kind:'set'|'one',ids:string[]}|null{
  const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),ords=[...p.matchAll(new RegExp(DEIX_ORD.source,'g'))],except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
