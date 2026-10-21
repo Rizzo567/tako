@@ -21,7 +21,9 @@ const section = z.object({ id: z.string().uuid(), parentSectionId: z.string().uu
 // 21/10 (Menu «a prezzo fisso», decisione Manuel): campi additivi e FACOLTATIVI, nessun default → un documento senza resta identico
 // (assente = alla carta). Con pricing:'fisso' i prezzi dei piatti restano salvati ma non si mostrano né si chiedono; le opzioni
 // di prezzo (formule) e il testo «Compreso» stanno sul Menu. Helper unici in lib/menu-fixed-price.ts.
-const formula = z.object({ id: z.string().uuid(), name: z.string().min(1).max(120), price: z.number().finite().min(0).max(100000), note: z.string().max(300).nullable().default(null), translations })
+// `sectionIds` (facoltativo): i Sottomenu che quell'opzione comprende (Victoria Cena: Completo = Primi+Secondi+Contorni, Solo primo = Primi,
+// Solo secondo = Secondi+Contorni). La pagina pubblica e il PDF li mostrano sotto l'opzione, come oggi; i piatti restano scritti una volta.
+const formula = z.object({ id: z.string().uuid(), name: z.string().min(1).max(120), price: z.number().finite().min(0).max(100000), note: z.string().max(300).nullable().default(null), sectionIds: z.array(z.string().uuid()).max(50).optional(), translations })
 const menu = z.object({ id: z.string().uuid(), name: z.string().min(1).max(300), description: text.nullable().default(null), type: z.enum(['main','lunch','dinner','seasonal','event','drinks']).default('main'), active: z.boolean().default(true), translations, schedule: optionalSchedule, pricing: z.enum(['carta','fisso']).optional(), formulas: z.array(formula).max(12).optional(), included: z.string().max(300).nullable().optional(), sections: z.array(section).max(500).default([]) })
 const color = z.string().regex(/^#[0-9a-fA-F]{6}$/)
 const textStyle=z.object({fontSize:z.number().min(8).max(48).default(16),color:color.default('#242628'),bold:z.boolean().default(false),italic:z.boolean().default(false),align:z.enum(['left','center','right']).default('left'),font:z.enum(['sans','serif','mono','poppins','staatliches','amaranth','italiana']).optional(),underline:z.boolean().default(false)})
