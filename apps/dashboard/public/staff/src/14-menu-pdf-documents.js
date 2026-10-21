@@ -75,7 +75,7 @@ function MenuPdfDocuments({adapter,document,onEditDefault,api=window.TakoPdfDocu
  const opener=useRef(null),host=useRef(null),mounted=useRef(true);
  useEffect(()=>()=>{mounted.current=false;},[]);
  const menus=document?.menus||[];
- const load=async()=>{try{const r=await api.list();if(mounted.current)setState({loading:false,error:'',documents:r.documents,fallback:r.default});return r;}catch(e){if(mounted.current)setState(s=>({...s,loading:false,error:e.message||'PDF non disponibili'}));return null;}};
+ const load=async()=>{try{const r=await api.list();if(mounted.current)setState({loading:false,error:'',documents:r.documents,fallback:r.default});return r;}catch(e){if(mounted.current)setState(s=>({...s,loading:false,off:e.status===404,error:e.status===404?'':(e.message||'PDF non disponibili')}));return null;}};
  useEffect(()=>{load();},[]);
  const remember=()=>{opener.current=window.document.activeElement;};
  const restore=()=>setTimeout(()=>{const el=opener.current;opener.current=null;if(el?.isConnected)el.focus();else host.current?.querySelector('[data-pdfdoc-new]')?.focus();},0);
@@ -91,6 +91,8 @@ function MenuPdfDocuments({adapter,document,onEditDefault,api=window.TakoPdfDocu
  const key=e=>{if(e.key!=='Escape')return;if(editing){e.preventDefault();close();}else if(open){e.preventDefault();const id=open;setOpen('');setTimeout(()=>host.current?.querySelector(`[data-pdfdoc-link="${id}"]`)?.focus(),0);}};
  const docs=state.documents,editorFor=id=>editing&&(editing.isNew?id==='new':editing.draft.id===id);
  const editor=editing&&<MenuPdfDocumentEditor draft={editing.draft} setDraft={fn=>setEditing(e=>({...e,draft:typeof fn==='function'?fn(e.draft):fn}))} menus={menus} adapter={adapter} basePdf={document?.pdf} busy={busy==='save'} error={editError} isNew={editing.isNew} onSave={save} onCancel={close} onDelete={remove}/>;
+ // Funzione spenta sul server (TAKO_MENU_PDF_DOCUMENTS non attivo → 404): il riquadro non compare, resta il PDF classico.
+ if(state.off)return null;
  return <Card className="mw-pdfdoc"><section ref={host} aria-labelledby="mw-pdfdoc-title" onKeyDown={key}>
   <div className="mw-pdfdoc-head"><div><h3 id="mw-pdfdoc-title">I tuoi PDF</h3><p className="mw-pdfdoc-hint">Ogni PDF ha i suoi menu e un link fisso sempre aggiornato.</p></div>{!state.loading&&!state.error&&!editorFor('new')&&<button type="button" data-pdfdoc-new className="mw-pill" disabled={docs.length>=MW_PDFDOC_MAX||!menus.length} onClick={()=>startNew(null)}>Nuovo PDF</button>}</div>
   {saved&&!editing&&<p className="mw-pdfdoc-status mw-pdfdoc-saved" role="status">{saved}</p>}

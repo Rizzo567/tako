@@ -28,6 +28,7 @@ import {victoriaFixedWorkspace,VICTORIA_IDS as I} from './fixtures/victoria-fixe
 const Fastify=createRequire(new URL('../apps/server/package.json',import.meta.url))('fastify')
 const origin='https://takoitalia.example',tenant='11111111-1111-4111-8111-111111111111'
 process.env.WEB_ORIGIN=origin
+process.env.TAKO_MENU_PDF_DOCUMENTS='1'
 const unpdf=await import(new URL('../apps/server/node_modules/unpdf/dist/index.mjs',import.meta.url).href)
 async function pdfText(bytes:Uint8Array){const pdf=await unpdf.getDocumentProxy(new Uint8Array(bytes));const {text}=await unpdf.extractText(pdf,{mergePages:false});return (text as string[]).map(t=>t.replace(/\s+/g,' '))}
 const published=()=>workspaceSchema.parse(victoriaFixedWorkspace())
@@ -91,6 +92,11 @@ describe('documenti PDF: regole pure',()=>{
 })
 
 describe('documenti PDF: route',()=>{
+ it('flag spento (default in produzione) → tutte le route dei PDF multipli 404; il download classico /pdf non è toccato',async()=>{
+  process.env.TAKO_MENU_PDF_DOCUMENTS='0';try{const a=await app()
+   for(const [method,url] of [['GET','/api/menu-workspace/pdf-documents'],['PUT','/api/menu-workspace/pdf-documents'],['GET','/api/public/menu-pdf/abc']] as const){const r=await a.inject({method,url,headers:auth,payload:method==='PUT'?{documents:[]}:undefined});expect(r.statusCode,url).toBe(404)}
+  }finally{process.env.TAKO_MENU_PDF_DOCUMENTS='1'}
+ })
  it('nessun documento → predefinito; PUT salva, GET genera dal PUBBLICATO nell\'ordine e con la grafica del documento',async()=>{
   const a=await app()
   let r=await a.inject({method:'GET',url:'/api/menu-workspace/pdf-documents',headers:auth});expect(r.statusCode).toBe(200);expect(r.json().documents).toEqual([]);expect(r.json().default.menuIds).toEqual([I.carta,I.drinks,I.pranzo,I.cena]);expect(r.json().data.default.name).toBeTruthy()

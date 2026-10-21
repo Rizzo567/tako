@@ -30,7 +30,12 @@ const edit=requireRole('owner','manager','menu_editor')
 const publishedFromDraft={} as import('../lib/menu-workspace-contract.js').Workspace
 const revision=z.object({expectedRevision:z.number().int().positive()})
 const fail=(reply:import('fastify').FastifyReply,code:number,message:string)=>reply.code(code).send({error:{code:code===409?'CONFLICT':code===404?'NOT_FOUND':'VALIDATION',message}})
+/** PDF multipli spenti per default (via di Manuel 21/10 sera: online solo il bot). Si accendono con TAKO_MENU_PDF_DOCUMENTS=1. */
+export const pdfDocumentsEnabled=()=>process.env.TAKO_MENU_PDF_DOCUMENTS==='1'
+const PDF_DOCS_PATH=/\/(?:pdf-documents|menu-pdf)(?:\/|\?|$)/
+const pdfDocsGate=async(req:{url:string},reply:any)=>{if(!pdfDocumentsEnabled()&&PDF_DOCS_PATH.test(req.url))return reply.code(404).header('Cache-Control','no-store').send({error:{code:'NOT_FOUND',message:'Non disponibile'}})}
 export async function menuWorkspaceRoutes(fastify:FastifyInstance){
+ fastify.addHook('onRequest',pdfDocsGate)
  fastify.get('/',{preHandler:edit},async req=>{const tenant=req.user!.restaurantId;const row=await ensureWorkspace(tenant);const [restaurant]=await db.select({name:restaurants.name}).from(restaurants).where(eq(restaurants.id,tenant));return {data:commonMenuLanguages(row.draft),revision:row.revision,publishedRevision:row.published_revision,presentation:{restaurantName:restaurant?.name??'Menu',foodCatalogs}}})
  fastify.get('/presentation',{preHandler:edit},async req=>{const [restaurant]=await db.select({name:restaurants.name}).from(restaurants).where(eq(restaurants.id,req.user!.restaurantId));return {data:{restaurantName:restaurant?.name??'Menu',foodCatalogs}}})
  fastify.put('/',{preHandler:edit},async(req,reply)=>{const body=revision.extend({workspace:workspaceSchema}).safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);const workspace=commonMenuLanguages(body.data.workspace);try{return await withWorkspace(req.user!.restaurantId,()=>mutateWorkspace(req.user!.restaurantId,req.user!.id,body.data.expectedRevision,workspace))}catch(e){if(e instanceof WorkspaceConflict)return fail(reply,409,'Il menu è cambiato: ricarica prima di salvare');if(e instanceof WorkspaceOwnership)return fail(reply,404,'Risorsa non trovata');throw e}})
@@ -90,6 +95,7 @@ export async function renderPdfDocument(tenant:string,row:{published:Workspace|n
 /** Pubblico: GET /api/public/menu-pdf/:token (servizio operativo, registrato in index.ts). Token sconosciuto o revocato → 404.
  * ETag = revisione pubblicata + hash della config: If-None-Match uguale → 304 senza generare. */
 export async function publicMenuPdfRoutes(fastify:FastifyInstance){
+ fastify.addHook('onRequest',pdfDocsGate)
  fastify.get('/menu-pdf/:token',{config:{rateLimit:{max:30,timeWindow:60000}}},async(req,reply)=>{const token=String((req.params as {token?:string}).token??'');const notFound=()=>reply.code(404).header('Cache-Control','no-store').send({error:{code:'NOT_FOUND',message:'PDF non trovato'}});if(!SHARE_TOKEN.test(token))return notFound()
   const rows=await db.execute(sql`SELECT id,name,active,settings FROM restaurants WHERE settings->'pdfDocuments' @> ${JSON.stringify([{shareToken:token}])}::jsonb LIMIT 2`)
   const matches=rows.flatMap(r=>readPdfDocuments(r.settings).filter(d=>!!d.shareToken&&d.shareToken.length===token.length&&timingSafeEqual(Buffer.from(d.shareToken),Buffer.from(token))).map(doc=>({restaurant:r as unknown as PdfRestaurant&{id:string},doc})))

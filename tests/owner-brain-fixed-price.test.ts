@@ -1,6 +1,6 @@
 // Menu a prezzo fisso (21/10): formule, sostituzione giornaliera dei piatti, niente prezzi sui piatti dei menu fissi.
 import {describe,expect,it} from 'vitest'
-import {structureActions,haikuChecks} from '../apps/server/src/lib/owner-brain-plan.js'
+import {structureActions,haikuChecks,replaceSaidPhrase,replaceSaidPhrases} from '../apps/server/src/lib/owner-brain-plan.js'
 import {applyActions} from '../apps/server/src/lib/twilio-menu-ai.js'
 import {workspaceSchema} from '../apps/server/src/lib/menu-workspace-contract.js'
 
@@ -126,6 +126,38 @@ describe('banco finale — opzione omonima in più Menu fissi',()=>{
   expect(structureActions([A('set_formula_price',{menu:'Menu cena',name:'Completo',price:17})],SI({message:'il completo della cena a 17'})).ask).toBeNull()
   expect(structureActions([A('set_formula_price',{menu:'Menu cena',name:'Completo',price:17})],SI({message:'stasera il completo a 17'})).ask).toBeNull()
   expect(structureActions([A('set_formula_price',{menu:'Menu pranzo',name:'Completo',price:13})],SI({message:'a pranzo il completo a 13'})).ask).toBeNull()
+ })
+})
+
+describe('banco finale — frase detta vs nome scelto dal modello nella sostituzione',()=>{
+ it('replaceSaidPhrase prende la frase del titolare',()=>{
+  expect(replaceSaidPhrase('Gnocchi al pomodoro',['stasera i primi sono gnocchi al ragù e risotto ai funghi'])).toBe('gnocchi al ragù')
+  expect(replaceSaidPhrase('Cotoletta alla milanese',['oggi a pranzo primi lasagna e carbonara, secondi cotoletta'])).toBe('cotoletta')
+  expect(replaceSaidPhrase('Carbonara',['primi carbonara secondi cotoletta'])).toBe('carbonara')
+  expect(replaceSaidPhrase('Gnocchi al pomodoro',['stasera gnocchi al ragù stasera'])).toBe('gnocchi al ragù')
+  // «pasta e fagioli»: la lettura intera è compatibile → il nome del modello resta
+  const ph=replaceSaidPhrases('Pasta e fagioli',['oggi a pranzo i primi sono pasta al pomodoro e pasta e fagioli'])
+  expect(ph.some(p=>p.full.startsWith('pasta e fagioli'))).toBe(true)
+ })
+ it('vocale senza punteggiatura: «primi pasta al pomodoro risotto alla milanese» = i due piatti esistenti, niente nomi incollati',()=>{
+  const msg='pranzo oggi primi pasta al pomodoro risotto alla milanese secondi polpette'
+  const r=structureActions([A('replace_section_items',{section:'Primi',menu:'Menu pranzo',text:'Pasta al pomodoro; Risotto alla milanese'})],SI({message:msg}))
+  expect(r.actions.filter((a:any)=>a.kind==='create')).toEqual([])
+  expect(r.actions.some((a:any)=>a.kind==='hidden'&&a.value===true&&(a.id===byName('Pasta al pomodoro').id||a.id===byName('Risotto alla milanese').id))).toBe(false)
+ })
+ it('«pasta al pomodoro e pasta e fagioli»: entrambi esistenti, nessun piatto nuovo, gli altri nascosti',()=>{
+  const msg='oggi a pranzo i primi sono pasta al pomodoro e pasta e fagioli'
+  const r=structureActions([A('replace_section_items',{section:'Primi',menu:'Menu pranzo',text:'Pasta al pomodoro; Pasta e fagioli'})],SI({message:msg}))
+  expect(r.actions.filter((a:any)=>a.kind==='create').map((a:any)=>a.name)).not.toContain('Pasta al pomodoro')
+  expect(r.actions.some((a:any)=>a.kind==='hidden'&&a.id===byName('Pasta al pomodoro').id&&a.value===true)).toBe(false)
+ })
+ it('detto «gnocchi al ragù», il modello passa «Gnocchi al pomodoro» → nuovo «Gnocchi al ragù», il pomodoro nascosto; «cotoletta»→milanese resta',()=>{
+  const msg='stasera i primi sono gnocchi al ragù e risotto ai funghi'
+  const r=structureActions([A('replace_section_items',{section:'Primi',menu:'Menu cena',text:'Gnocchi al pomodoro; Risotto ai funghi'})],SI({message:msg}))
+  expect(r.ask).toBeNull()
+  const creates=r.actions.filter((a:any)=>a.kind==='create').map((a:any)=>a.name)
+  expect(creates).toContain('Gnocchi al ragù')
+  const g=byName('Gnocchi al pomodoro');expect(r.actions.some((a:any)=>a.kind==='hidden'&&a.id===g.id&&a.value===true)).toBe(true)
  })
 })
 

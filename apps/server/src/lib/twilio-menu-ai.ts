@@ -255,7 +255,7 @@ export function proposalText(restaurant:string,actions:MenuAction[],refs:MenuRef
 export function readText(plan:Extract<MenuPlan,{type:'read'}>,refs:MenuRef[]){
  // Menu a prezzo fisso (21/10): le opzioni di prezzo le scrive il server dal menu riletto (il testo è già composto dal pianificatore).
  if(plan.read==='formulas')return plan.text
- if(plan.read==='items')return plan.ids.map(id=>{const r=refs.find(x=>x.id===id)!;return fill(line.read,{piatto:itemLabel(r,refs),prezzo:euro(r.price),stato:r.available?'disponibile':'finito',extra:(r.hidden?' · nascosto':'')+(r.featured?' · in evidenza':'')})}).join('\n')
+ if(plan.read==='items')return plan.ids.map(id=>{const r=refs.find(x=>x.id===id)!;return fill(line.read,{piatto:itemLabel(r,refs),prezzo:r.price>0?euro(r.price):'senza prezzo',stato:r.available?'disponibile':'finito',extra:(r.hidden?' · nascosto':'')+(r.featured?' · in evidenza':'')})}).join('\n')
  const list=refs.filter(r=>plan.read==='hidden'?r.hidden:!r.available).map(r=>'- '+itemLabel(r,refs));if(!list.length)return copy.readNone[plan.read]
  return fill(copy.readList[plan.read],{n:list.length,elenco:list.slice(0,40).join('\n')+(list.length>40?'\n…':'')})
 }

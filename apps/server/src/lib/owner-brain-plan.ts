@@ -692,7 +692,20 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
    // Banco prezzofisso 21/10 (pf-sostituzione-01: «secondi cotoletta» creava «Cotoletta» e nascondeva «Cotoletta alla milanese»):
    // il nome detto che indica senza ambiguità un piatto di QUESTO sottomenu (contenuto, prefisso, plurali, accenti) è quel piatto;
    // nuovo solo senza candidati; più candidati veri → domanda. Mai un piatto di un altro Menu.
-   const free=inSec.filter(r=>!used.has(r.id)),c=replaceCandidates(nm,free),hit=free.find(r=>plain(r.name)===plain(nm))??free.find(r=>sameDishName(r.name,nm))??(c.length===1?c[0]:undefined)
+   let free=inSec.filter(r=>!used.has(r.id)),c=replaceCandidates(nm,free),hit=free.find(r=>plain(r.name)===plain(nm))??free.find(r=>sameDishName(r.name,nm))??(c.length===1?c[0]:undefined)
+   // Banco prezzofisso finale 21/10 (pf-sostituzione-16): detto «gnocchi al ragù», il modello passa «Gnocchi al pomodoro» (piatto
+   // esistente simile) → rimostrava quello sbagliato. Se il titolare ha detto per quel piatto una frase con parole che il nome
+   // scelto NON ha, vale la frase detta: un solo piatto che la contiene tutta → quello; nessuno → nuovo; più di uno → domanda.
+   if(hit){const h0=hit,hw=replWords(h0.name)
+    // Prefisso della frase con tante parole significative quante il nome scelto (i vocali non hanno punteggiatura).
+    const head=(x:string)=>{const ws=x.split(/\s+/),o:string[]=[];let n=0;for(const w of ws){if(n>=hw.length)break;o.push(w);if(!REPL_STOP.has(plain(w)))n++}return o.join(' ')}
+    const fits=(x:string)=>replWords(head(x)).every(w=>replWordIn(w,hw))
+    const phs=replaceSaidPhrases(nm,[input.message,...(input.history??[]).filter(t=>t.role==='owner').slice(-2).map(t=>t.text)],input.sections.map(x=>plain(x.name)))
+    // Si cambia il nome scelto dal modello SOLO se nessuna lettura della frase detta (tagliata a «e» o intera) è compatibile:
+    // «pasta e fagioli» resta Pasta e fagioli; «gnocchi al ragù e risotto» non è mai Gnocchi al pomodoro.
+    if(phs.length&&!phs.some(p=>fits(p.cut)||fits(p.full))){const ph=head(phs[0]!.cut),c2=replaceCandidates(ph,free)
+     if(c2.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
+     if(c2.length===1)hit=c2[0];else{actions.push({kind:'create',sectionId:sec!.id,name:ph.charAt(0).toLocaleUpperCase('it')+ph.slice(1),price:0,description:null,fromReplace:true} as any);continue}}}
    if(!hit&&c.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
    if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any)}
    else{if(!replaceWordsSaid(nm,said))return{actions:[],notes:[],ask:'nome_non_detto'};actions.push({kind:'create',sectionId:sec!.id,name:nm,price:0,description:null,fromReplace:true} as any)}}
@@ -721,6 +734,20 @@ export function replaceCandidates(said:string,inSec:MenuRef[]):MenuRef[]{
  const all=inSec.filter(r=>{const rs=replWords(r.name);return ws.every(w=>replWordIn(w,rs))})
  // Fra più candidati vale quello col nome uguale (a meno di plurali/articoli) a quello detto.
  const same=all.filter(r=>{const rs=replWords(r.name);return rs.length===ws.length&&rs.every(w=>replWordIn(w,ws))});return same.length===1?same:all}
+/** Frase detta dal titolare per un piatto della sostituzione: dal primo termine del nome (stessa radice) fino al prossimo
+ * separatore («,», «;», «.», « e », a capo). null se non trovata. «stasera i primi sono gnocchi al ragù e risotto» + «Gnocchi…» → «gnocchi al ragù». */
+const PHRASE_STOP=/^(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto|pizze|panini|stasera|oggi|domani|pranzo|cena|sono|c|ce|poi|invece|anche|mentre)$/
+export function replaceSaidPhrases(name:string,texts:string[],stops?:string[]):{cut:string,full:string}[]{const first=replWords(name)[0];if(!first)return[]
+ const out:{cut:string,full:string}[]=[]
+ for(const t of texts){for(const seg of String(t??'').replace(/[*_~`🎤…]/g,' ').split(/[,;.:\n]/)){const ws=seg.trim().split(/\s+/).filter(Boolean)
+  ws.forEach((w,i)=>{if(!replWordIn(first,[plain(w)]))return
+   const stop=(k:number)=>PHRASE_STOP.test(plain(ws[k]!))||(stops??[]).some(x=>sameSection(x,plain(ws[k]!)))
+   let j=i+1;while(j<ws.length&&j<i+6&&!stop(j))j++;const full=ws.slice(i,j).join(' ')
+   let k=i+1;while(k<j&&!/^(?:e|ed|poi)$/i.test(ws[k]!))k++;const cut=ws.slice(i,k).join(' ')
+   if(full)out.push({cut,full})})}}
+ return out}
+/** Frase detta per il piatto (la prima, tagliata a «e»): solo per i test e i messaggi. */
+export function replaceSaidPhrase(name:string,texts:string[],stops?:string[]):string|null{return replaceSaidPhrases(name,texts,stops)[0]?.cut??null}
 /** Un piatto NUOVO della sostituzione ha un nome detto per intero dal titolare (ogni parola significativa nel testo detto). */
 export function replaceWordsSaid(name:string,said:string):boolean{const pool=plain(said).split(' ');return replWords(name).every(w=>replWordIn(w,pool))}
 
