@@ -222,3 +222,14 @@ describe('casi duri della batteria adv-sera (giro 5)',()=>{
   expect(g.actions.map((a:any)=>[rs.find((r:any)=>r.id===a.id).name,a.price])).toEqual([['Tiramisù',6.5],['Panna cotta',5.5]])
   expect(groupCommand('la panna cotta alzala di 50 centesimi',rs,secs,new Set(),{menus:P.menus})).toBeNull()})
 })
+
+describe('regressioni del giro finale (struttura, lunghi, adv150)',()=>{
+ it('«aggiungi un nuovo menù che si chiama Brunch» non è una rinomina; percentuali, migliaia e messaggi con più numeri non passano dal gruppo',()=>{
+  expect(parseStructRename('aggiungi un nuovo menù che si chiama Brunch',menus,sections)).toBeNull()
+  expect(parseStructRename('voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena',menus,sections)).toBeNull()
+  expect(parseStructRename('il menu pranzo da oggi si chiama Pranzo veloce',menus,sections)).toMatchObject({kind:'rename_menu',name:'Pranzo veloce'})
+  expect(groupCommand('tutti i primi più 10%',refs,sections,fixed,{menus})).toBeNull()
+  expect(groupCommand('metti la carbonara a 12,50, la pasta del giorno a 9 euro, poi aumenta tutti i primi di un euro',refs,sections,fixed,{menus})).toBeNull()
+  expect(groupCommand('la carbonara a 13.000 e tutti i primi a 9',refs,sections,fixed,{menus})).toBeNull()
+  expect(groupCommand('metti tutte le paste a 8,50',refs,sections,fixed,{menus})).not.toBeNull()})
+})

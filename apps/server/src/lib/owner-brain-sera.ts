@@ -103,6 +103,8 @@ export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[]
  if(!m&&/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p)){m=p.match(/\b(?:i|le|gli) ([a-z]{3,})\b/);onlySec=true}
  if(!m)return null
  const word=m[1]!;if(['piatti','prezzi','menu','sottomenu','quanti','cose'].includes(word))return null
+ // Mai su un messaggio con più richieste o con percentuali/migliaia (giro finale lunghi/adv150 21/10): lì decide il modello.
+ if(/%|\bpercent\w*|\bper cento\b|\d{1,3}\.\d{3}/.test(message.toLowerCase())||new Set([...message.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>x[0])).size>1)return null
  const rd=relativeDelta(message),abs=[...new Set(g9Prices(message,false))]
  const sp=singlePrice(message),delta=rd?rd.delta:null,price=!rd?(sp??(abs.length===1?abs[0]!:null)):null;if(delta===null&&price===null)return null
  const visible=o.visible??visibleOnly(message),said=namedMenus(message,o.menus??[...new Map(sections.map(s=>[s.menu,{name:s.menu}])).values()]).map(x=>x.name)
@@ -128,7 +130,9 @@ const cleanNew=(s:string)=>{let t=s.replace(/[«»"“”'’*_.!?]+/g,' ').repl
  * chiamalo Primi», «il menu cena ora si chiama Sera». null = non è una rinomina di Menu/Sottomenu. */
 export function parseStructRename(text:string,menus:{id:string,name:string}[],sections:SectionRef[]):RenameHit|null{
  const raw=text.replace(/[🎤]/gu,' ').replace(/\bmen[uù](?![a-z])/gi,'menu').replace(/\s+/g,' ').trim(),p=plain(raw)
- if(!/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome|chiamal[oa]|chiama (?:il|la)|si chiam\w*|nome nuovo|nuovo nome)\b/.test(p))return null
+ if(!/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome|chiamal[oa]|chiama (?:il|la)|(?:ora|adesso|da oggi) si chiam\w*|nome nuovo|nuovo nome)\b/.test(p))return null
+ // «aggiungi un nuovo menu che si chiama Brunch» è una creazione, non una rinomina (giro finale struttura 21/10).
+ if(/\b(?:aggiung\w*|crea\w*|nuov[oa]|inserisc\w*|apri)\b/.test(p)&&!/\b(?:rinomin\w*|cambi\w* (?:il |anche il )?nome)\b/.test(p))return null
  const isSec=/\b(?:sottomenu|sezione|categoria)\b/.test(p),isMenu=/\bmenu\b/.test(p.replace(/\bsottomenu\b/g,''))
  if(!isSec&&!isMenu)return null
  // «… da X a Y», «… X in Y», «… X con Y», «… X: Y», «X chiamalo Y», «X ora si chiama Y»
