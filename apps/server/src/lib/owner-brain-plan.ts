@@ -580,7 +580,9 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
  // «aggiungi la carbonara a 13» con la carbonara già nel menu → domanda, ma SOLO per i piatti nominati nella stessa frase dell'«aggiungi»
  // (in un messaggio lungo «…aggiungi la bufalina a 10, la margherita a 8» la margherita resta un cambio di prezzo).
  {const parts=message.split(/\s*[,;]\s*|\s+(?:e|ed|poi|e poi)\s+/i),ADD=/\b(?:aggiung\w*|inserisc\w*|nuov[oa])\b/,PRICEV=/\b(?:mett\w*|port\w*|cambi\w*|alz\w*|abbass\w*|aument\w*|diminu\w*|costa\w*|pass\w*|aggiorn\w*)\b/
-  const flagged=acts.filter(a=>a.kind==='price'&&parts.some(p=>{const pp=plain(p);const r=refs.find((x:MenuRef)=>x.id===(a as any).id);return !!r&&ADD.test(pp)&&!PRICEV.test(pp)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(pp)&&g9DishMentioned(r.name,p,refs)}))
+  // «…dovevi aggiungere il piatto, la parmigiana a 10»: un «aggiungi» senza piatto vale per i piatti delle frasi dopo (fino a un verbo di prezzo).
+  const inherit=new Set<number>();{let carry=false;parts.forEach((p,i)=>{const pp=plain(p),named=refs.some(r=>g9DishMentioned(r.name,p,refs));if(PRICEV.test(pp))carry=false;if(carry&&named)inherit.add(i);if(ADD.test(pp)&&!named&&!/\d/.test(pp))carry=true})}
+  const flagged=acts.filter(a=>a.kind==='price'&&parts.some((p,i)=>{const pp=plain(p);const r=refs.find((x:MenuRef)=>x.id===(a as any).id);return !!r&&(ADD.test(pp)||inherit.has(i))&&!PRICEV.test(pp)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(pp)&&g9DishMentioned(r.name,p,refs)}))
   if(flagged.length)return ask('piatto_gia_presente',flagged.map(a=>(a as any).id))}
  // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
  if(/\b(?:da|dal|dalla|a partire da|per|solo)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|stanotte|settimana prossima|prossima settimana)\b|\bdomani\b/.test(m)&&acts.some(a=>a.kind!=='special'))

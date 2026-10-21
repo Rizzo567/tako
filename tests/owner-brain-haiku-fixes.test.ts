@@ -21,6 +21,7 @@ describe('haikuChecks (motore haiku)',()=>{
   const carb=[{id:'c',name:'Carbonara',price:12,sectionId:'s'} as any],mar=[...carb,{id:'m',name:'Margherita',price:7,sectionId:'s'} as any]
   expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi la carbonara a 13',[],carb)!.notes).toContain('piatto_gia_presente')
   expect(haikuChecks(dec([{kind:'price',id:'m',price:8}]) as any,'aggiungi tra le pizze la bufalina a 10, la margherita a 8',[],mar)).toBeNull()
+  expect(haikuChecks(dec([{kind:'price',id:'c',price:10}]) as any,'Sì, ma ti avevo detto che dovevi aggiungere il piatto, la carbonara a 10 euro',[],carb)!.notes).toContain('piatto_gia_presente')
   expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi un euro alla carbonara')).toBeNull()
  })
  it('data futura («da domani») → domanda con l\'azione in attesa, nessuna scrittura',()=>{
