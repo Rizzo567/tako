@@ -469,7 +469,7 @@ function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered
  // struttura detto per intero, si applica subito (nota 64).
  // R9: la risposta alla domanda «lo aggiorno o ne creo un altro?» (che mostrava le parti in attesa, numerate) conferma la richiesta intera.
  if(strict&&wholeGroup(actions,refs,sections))return 'recap'
- if(actions.length>3&&!answered&&(strict||!uniformBulk(actions,refs,message))&&!(EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' '))&&actions.some(a=>a.kind==='create_section')&&actions.every(a=>a.kind==='create_section'||a.kind==='move'||a.kind==='create')))return 'recap'
+ if(actions.length>3&&!answered&&!uniformBulk(actions,refs,message)&&!(EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' '))&&actions.some(a=>a.kind==='create_section')&&actions.every(a=>a.kind==='create_section'||a.kind==='move'||a.kind==='create')))return 'recap'
  if(actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})()))))return 'price'
  return null}
 /** Fase R: il turno del cervello. Il modello decide e scrive; il server valida (una auto-correzione), impone i vincoli, scrive
@@ -608,7 +608,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')){const ex=new Set((finalRun.decision.exclude??[]).map(e=>e.id)),outIds=new Set(out.actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])),namedOff=engine==='haiku'?new Set(pend.actions.flatMap(a=>'id' in a&&!outIds.has((a as any).id)&&g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs)?[(a as any).id as string]:[])):new Set<string>(),merged=mergeMenuActions(pend.actions.filter(a=>!('id' in a)||!namedOff.has((a as any).id)),out.actions).filter(a=>!('id' in a)||!ex.has((a as any).id)||out.actions.includes(a))
      const effective=effectiveMenuActions(merged,workspace);await drop();if(!effective.length)return say(copy.noChanges,false);await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why:approval(effective,refs,text,answered)??pend.why});return say(pendingFacts(approval(effective,refs,text,answered)??pend.why,effective,refs,sections),false,pricesOf(effective))}
     return publish(out.actions)}
-   case 'ask':{const keepRecap=pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!(engine==='haiku'&&pend.actions.some(a=>'id' in a&&g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs)))
+   case 'ask':{
+    // run Haiku 21/10: le righe che non cambiano niente («da 6 € a 6 €») non entrano nelle parti in attesa (confondevano «quei due»).
+    if(engine==='haiku'){const keep=(l:MenuAction[])=>effectiveMenuActions(l,structuredClone(workspace));out.actions=keep(out.actions);if(out.hold)out.hold={...out.hold,actions:keep(out.hold.actions)}}
+    const keepRecap=pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!(engine==='haiku'&&pend.actions.some(a=>'id' in a&&g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs)))
     const question=noDraft?'':cleanDraft(finalRun.decision.draft,{wrote:false,numbers:numbersOK(finalRun,[...out.ids.map(id=>refs.find(r=>r.id===id)?.price??-1),...(out.twins??[]).flatMap(t=>t.price!=null?[t.price]:[]),...out.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[])])})??''
     if(!keepRecap){await drop();if(out.hold)await propose(tx,ctx,row.revision,{...out.hold,source:text});else await propose(tx,ctx,row.revision,{kind:'brain_ask',question,ids:out.ids.filter(id=>refs.some(r=>r.id===id)).slice(0,8),actions:out.actions,source:(pend?.kind==='ask'?pend.ask.source+' \n ':'')+text.slice(0,600),draft:out.createDraft??(pend?.kind==='ask'?pend.ask.draft??null:null),...(out.twins?.length?{twins:out.twins}:{})} satisfies BrainAsk)}
     // R9: domanda sui piatti con lo stesso nome: i fatti mostrano le parti in attesa (numerate) e i piatti già nel menu.

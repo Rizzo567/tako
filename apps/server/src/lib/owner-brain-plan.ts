@@ -505,6 +505,8 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  const rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
  const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id)})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
+
+ if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
@@ -536,3 +538,21 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
  return planText(plan,before,sections)
 }
 
+
+// run Haiku 21/10 — vincoli deterministici in più sul piano (solo motore haiku; il percorso Groq resta com'era):
+// (7) «sconto/promo/offerta» → mai un cambio del prezzo pieno: le azioni di prezzo diventano promo allo stesso prezzo;
+// (4) numero col separatore delle migliaia («13.000», «1.500») → nessun prezzo: si chiede;
+// (6) azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, nascondi+mostra, due prezzi diversi) → si chiede.
+const SALE_WORDS=/\b(?:scont\w*|promo\w*|offert\w*|in saldo)\b/,SALE_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|via|niente|senza|fine)\b\s+(?:\w+\s+){0,2}(?:scont\w*|promo\w*|offert\w*)/
+export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
+ if(d.plan.type!=='change')return null
+ const m=plain(message),acts=d.plan.actions
+ const ask=(note:string,ids:string[])=>({...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(ids)].slice(0,5)},notes:[...d.notes,note]})
+ const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
+ if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
+ const by=new Map<string,MenuAction[]>();for(const a of acts)if('id' in a&&typeof (a as any).id==='string')by.set((a as any).id,[...(by.get((a as any).id)??[]),a])
+ for(const [id,list] of by){const v=(k:string)=>list.filter(a=>a.kind===k).map(a=>(a as any).value)
+  const hid=v('hidden'),av=v('available'),fe=v('featured'),pr=new Set(list.filter(a=>a.kind==='price').map(a=>Math.round((a as any).price*100)))
+  if((hid.includes(true)&&hid.includes(false))||(av.includes(true)&&av.includes(false))||(fe.includes(true)&&fe.includes(false))||(hid.includes(true)&&fe.includes(true))||pr.size>1)return ask('azioni_contraddittorie',[id])}
+ if(SALE_WORDS.test(m)&&!SALE_OFF.test(m)&&acts.some(a=>a.kind==='price')){const conv=acts.map(a=>a.kind==='price'?{kind:'promo',id:a.id,price:a.price,until:null} as MenuAction:a);return{...d,plan:{...d.plan,actions:conv},notes:[...d.notes,'sconto_come_promo']}}
+ return null}

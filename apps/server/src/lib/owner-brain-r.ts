@@ -50,6 +50,8 @@ const CANCEL_WORDS=/\b(annull\w*|lascia\w* (?:stare|perdere)|niente|non pubblica
 
 // ---------- motivi di rifiuto (auto-correzione: il server rimanda al modello il perché, una volta) ----------
 const REASON:Record<string,string>={
+ prezzo_migliaia:'il titolare ha scritto un numero col separatore delle migliaia («13.000»): non è un prezzo da menu, chiedi il prezzo esatto (intent=clarify), nessuna azione',
+ azioni_contraddittorie:'il piano ha azioni opposte sullo stesso piatto (es. nascondi e metti in evidenza, finito e disponibile, due prezzi diversi): chiedi al titolare cosa vuole (intent=clarify), nessuna azione',
  prezzo_non_detto:'un prezzo del piano non è stato detto dal titolare (né in questo messaggio né, con un rimando esplicito, prima)',
  riferimento_prezzo_non_valido:'il riferimento «stesso prezzo di» non è valido: il piatto di riferimento deve essere nominato',
  delta_senza_verbo:'una differenza di prezzo senza un verbo che la dica (aumenta/abbassa/togli N euro…)',
@@ -113,6 +115,9 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  const {decision:d,control,raw,message,pend}=o,rawIntent=String(raw?.intent??''),rawActs=(Array.isArray(raw?.actions)?raw.actions:[]).filter((a:any)=>a&&!CONTROL_ACTIONS.includes(a.action))
  const reject=(note:string,ids:string[]=[],actions:MenuAction[]=[],hold?:Hold):Outcome=>({kind:'reject',reason:reasonText([note]),ids,actions,...(hold?{hold}:{})})
  const changeActs=d.plan?.type==='change'&&!d.hold?d.plan.actions as MenuAction[]:[]
+ // run Haiku 21/10 (z-annulla-018): con un'eliminazione in attesa del «sì», «annulla», «lascia stare», «no», «niente» scartano la
+ // proposta (mai «annulla l'ultima pubblicazione», mai una nuova domanda che tenga l'eliminazione confermabile).
+ if(pend?.kind==='batch'&&pend.why==='delete'&&!changeActs.length&&(ONLY_CANCEL.test(plain(message))||CANCEL_WORDS.test(plain(message))))return{kind:'cancel'}
  if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
   // R9: con una TUA domanda aperta (brain_ask) non c'è nulla da confermare: la risposta va scritta come piano con le azioni della richiesta originale.

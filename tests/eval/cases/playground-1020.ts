@@ -37,7 +37,7 @@ export const PLAYGROUND_CASES:HaikuCase[]=[
  // Trappole
  c('metti la pasta a 10',NONE,{ask:[1],note:'più paste: Pasta e fagioli / Pasta del giorno / pasta al ragù…'}),
  c('la coca a 3',NONE,{says:[{turn:1,re:/\bgi[aà](?![a-z])/i},{turn:1,re:/\b3\b/}],note:'già a 3 €: nessuna scrittura, lo dice'}),
- c('aumenta tutte le pizze di un euro',NONE,{recap:[1],note:'4 pizze → oltre 3 modifiche: riepilogo + OK'}),
+ c('aumenta tutte le pizze di un euro',[P('Margherita',8),P('Pizza 4 formaggi',10),P('Diavola',9.5),P('Capricciosa',10.5)],{note:'decisione Manuel 21/10: modifica uniforme su un gruppo → si applica subito con riepilogo (undo 10 min), niente «Rispondi OK»'}),
  c('aggiungi la carbonara a 14',NONE,{ask:[1],note:'esiste già: chiede se aggiornare o crearne un altro'}),
  c('nascondi tutta la cena',NONE,{structAsk:[1],says:[{turn:1,re:/cena/i}],note:'intero Menu cena: una conferma, nessuna scrittura al primo turno'}),
  c(Q('cosa sai fare?'),NONE,{says:[{turn:1,re:/prezz/i,sev:'BASSO'}]}),
