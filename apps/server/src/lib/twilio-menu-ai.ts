@@ -168,6 +168,9 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
  if(isStructAction(a)){const sec=(id:string)=>sections.find(s=>s.id===id)?.name??'?'
   if(a.kind==='create_menu')return 'Nuovo Menu *'+safe(a.name)+'*'
   if(a.kind==='delete_menu')return 'Tolto il Menu vuoto *'+safe(a.name)+'*'
+  if(a.kind==='set_formula')return a.isNew?'Nuova opzione *'+safe(a.name)+'* nel Menu *'+safe(a.menuName)+'*: *'+euro(a.price)+'*':'*'+safe(a.name)+'* del Menu *'+safe(a.menuName)+'*: '+(typeof a.before==='number'?'da '+euro(a.before)+' a ':'')+'*'+euro(a.price)+'*'
+  if(a.kind==='delete_formula')return 'Tolta l\'opzione *'+safe(a.name)+'* dal Menu *'+safe(a.menuName)+'*'
+  if(a.kind==='set_menu_pricing')return 'Menu *'+safe(a.name)+'*: '+(a.value==='fisso'?'*a prezzo fisso* (i prezzi dei piatti restano salvati)':'*alla carta*')
   if(a.kind==='set_menu_active')return 'Menu *'+safe(a.name)+'*: '+(a.value?'*visibile* ai clienti':'*nascosto* ai clienti')+(a.items?' ('+a.items+(a.items===1?' piatto':' piatti')+')':'')
   if(a.kind==='set_section_active')return 'Sottomenu *'+safe(a.name)+'*'+(a.menuName?' del Menu *'+safe(a.menuName)+'*':'')+': '+(a.value?'*visibile* ai clienti':'*nascosto* ai clienti')+(a.items?' ('+a.items+(a.items===1?' piatto':' piatti')+')':'')
   if(a.kind==='delete_section')return 'Tolto il Sottomenu vuoto *'+safe(a.name)+'*'+(a.menuName?' dal Menu *'+safe(a.menuName)+'*':'')
@@ -191,7 +194,7 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
  if(a.kind==='tag')return fill(a.value?line.tagAdd:line.tagRemove,{piatto,etichetta:allowedTags[a.tag]!});return piatto
 }
 /** Canonical field identity lets corrections replace a value without dropping the rest of a pending batch. */
-export const actionKey=(a:MenuAction)=>isSalesAction(a)?salesActionKey(a):a.kind==='create_menu'?`menu:${plain(a.name)}`:a.kind==='delete_menu'?`delmenu:${a.menuId}`:a.kind==='set_menu_active'?`menuact:${a.menuId}`:a.kind==='set_section_active'?`secact:${a.sectionId}`:a.kind==='delete_section'?`delsec:${a.sectionId}`:a.kind==='create_section'?`section:${a.menuId?a.menuId+':':''}${plain(a.name)}`:a.kind==='rename_section'?`${a.sectionId}:rename_section`:a.kind==='create'?`create:${a.sectionId}:${plain(a.name)}`:a.kind==='special'?`special:${plain(a.name)}`:`${a.id}:${a.kind}:${a.kind==='tag'?a.tag:''}`
+export const actionKey=(a:MenuAction)=>isSalesAction(a)?salesActionKey(a):a.kind==='create_menu'?`menu:${plain(a.name)}`:a.kind==='delete_menu'?`delmenu:${a.menuId}`:a.kind==='set_menu_active'?`menuact:${a.menuId}`:a.kind==='set_formula'?`formula:${a.formulaId}`:a.kind==='delete_formula'?`delformula:${a.formulaId}`:a.kind==='set_menu_pricing'?`pricing:${a.menuId}`:a.kind==='set_section_active'?`secact:${a.sectionId}`:a.kind==='delete_section'?`delsec:${a.sectionId}`:a.kind==='create_section'?`section:${a.menuId?a.menuId+':':''}${plain(a.name)}`:a.kind==='rename_section'?`${a.sectionId}:rename_section`:a.kind==='create'?`create:${a.sectionId}:${plain(a.name)}`:a.kind==='special'?`special:${plain(a.name)}`:`${a.id}:${a.kind}:${a.kind==='tag'?a.tag:''}`
 export function mergeMenuActions(previous:MenuAction[],delta:MenuAction[],remove:number[]=[]){
  const replacementKeys=new Set(delta.map(actionKey)),retained=previous.filter((a,i)=>!remove.includes(i+1)||replacementKeys.has(actionKey(a))),byKey=new Map(retained.map(a=>[actionKey(a),a]));for(const a of delta)byKey.set(actionKey(a),a);return [...byKey.values()]
 }
@@ -200,7 +203,7 @@ export function effectiveMenuActions(actions:MenuAction[],workspace:any):MenuAct
  const items=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i]))));
  const sections=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.map((s:any)=>[s.id,s])))
  const where=new Map<string,string>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,s.id]))))
- return mergeMenuActions([],actions).filter(a=>{if(a.kind==='create'||a.kind==='special'||a.kind==='image'||a.kind==='create_section'||a.kind==='create_menu'||a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_menu_active'||a.kind==='set_section_active')return true
+ return mergeMenuActions([],actions).filter(a=>{if(a.kind==='create'||a.kind==='special'||a.kind==='image'||a.kind==='create_section'||a.kind==='create_menu'||a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_menu_active'||a.kind==='set_section_active'||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')return true
   if(a.kind==='rename_section')return !!sections.get(a.sectionId)&&sections.get(a.sectionId).name!==a.name
   const item=items.get(a.id);if(a.kind==='delete')return !!item;if(!item)throw new Error('Item missing')
   if(a.kind==='rename')return item.name!==a.name;if(a.kind==='move')return where.get(a.id)!==a.sectionId;if(isSalesAction(a))return salesActionChanged(a,item);if(a.kind==='price')return item.price!==a.price;if(a.kind==='description')return (item.description??'')!==a.text;if(a.kind==='tag')return (item.tags??[]).includes(a.tag)!==a.value;return (a.kind==='available'?item.available!==false:!!item[a.kind])!==a.value})

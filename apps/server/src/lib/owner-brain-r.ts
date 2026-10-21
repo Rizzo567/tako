@@ -77,6 +77,8 @@ const REASON:Record<string,string>={
  nome_a_suono:'il piatto è riconosciuto solo a suono e non con certezza: chiedi conferma',
  parte_persa:'una parte del messaggio non è usata dal piano',
  conferma_senza_proposta:'non c’è nessuna proposta in sospeso da confermare: NON chiedere di nuovo conferma. Se nella CRONOLOGIA c’è una richiesta chiara del titolare non ancora fatta, scrivila ora come piano con le sue azioni (intent=change); se non è possibile, dillo in UNA frase semplice (mai «il sistema»)',
+ prezzo_piatto_menu_fisso:'quel piatto è in un Menu a PREZZO FISSO: i piatti non hanno prezzo, il prezzo è delle opzioni (Completo, Solo primo…). Nessuna azione sul piatto: se il titolare voleva cambiare un\'opzione usa set_formula_price, altrimenti spiegalo in una frase',
+ struttura_incompleta_formula:'',
  piatto_gia_presente:'il titolare ha detto «aggiungi» un piatto che c’è già: non cambiare il prezzo, chiedi in UNA domanda «C’è già *X* a N €: lo aggiorno o ne creo un altro?» (intent=clarify)',
  sottomenu_in_piu_menu:'il sottomenu nominato con «tutti» esiste in più Menu e il titolare non ha detto quale: chiedi in UNA domanda breve in quale Menu (intent=clarify), nessuna azione',
  struttura_incompleta:'per creare un Menu o un Sottomenu serve il nome detto dal titolare e, se ci sono più Menu, in quale Menu: fai UNA domanda breve (intent=clarify), nessuna azione; mai chiedere se crearli vuoti o con i piatti',

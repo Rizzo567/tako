@@ -102,7 +102,20 @@ export interface PublicMenu {
   descriptionLang?: string
   /** Menu attivo ma senza piatti nel documento pubblicato: la pagina mostra «Menu in arrivo». */
   empty?: boolean
+  /** Menu «a prezzo fisso» (21/10): assente = alla carta. Con 'fisso' i prezzi dei piatti non si mostrano. */
+  pricing?: 'carta' | 'fisso'
+  /** Opzioni di prezzo del menu fisso (nome · prezzo · nota), già tradotte; presenti solo con pricing 'fisso'. */
+  formulas?: PublicFormula[]
+  /** «Compreso: …» del menu fisso, già tradotto. */
+  included?: string
   sections: PublicSection[]
+}
+
+export interface PublicFormula {
+  id: string
+  name: string
+  price: number
+  note?: string
 }
 
 export interface PublicSection {

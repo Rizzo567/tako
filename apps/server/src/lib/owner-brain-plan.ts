@@ -17,12 +17,12 @@ import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
-import {CONTROL_ACTIONS,politeRequest,isAffirmative,sameDishName,type ControlAction} from './owner-brain-r.js'
+import {numbersIn,CONTROL_ACTIONS,politeRequest,isAffirmative,sameDishName,type ControlAction} from './owner-brain-r.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {callHaiku} from './owner-brain-anthropic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible',...CONTROL_ACTIONS] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing',...CONTROL_ACTIONS] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
@@ -34,7 +34,7 @@ export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'obj
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
-  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 
@@ -509,9 +509,12 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  // run Haiku 21/10: struttura (Menu nuovi e Sottomenu in un Menu preciso, anche vuoti) letta e controllata qui, fuori dal validatore
  // dei piatti: nomi detti dal titolare (adesso o nei suoi ultimi messaggi), Menu indicato o unico, niente doppioni. Si applica subito.
  let struct:{actions:MenuAction[],notes:string[],ask:string|null}={actions:[],notes:[],ask:null}
- if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&parsed.actions.some((a:any)=>a&&(['create_menu','create_section','delete_menu','delete_section','set_menu_visible','set_section_visible'].includes(a.action)))){
+ // Menu a prezzo fisso: piatto nuovo senza prezzo → 0 (mai chiedere); prezzo su un piatto di un menu fisso → domanda (vedi haikuChecks).
+ const fixedSecIds=new Set((input.menus??[]).filter(m=>m.pricing==='fisso').flatMap(m=>(m.secs??[]).map(x=>x.id)))
+ if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&fixedSecIds.size)for(const a of parsed.actions){if(a&&a.action==='create_item'&&(a.price==null)){const sid=typeof a.section==='string'?ctx.codes.get(a.section.trim().toLowerCase()):undefined;if(sid&&fixedSecIds.has(sid))a.price=0}}
+ if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&parsed.actions.some((a:any)=>a&&(['create_menu','create_section','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing'].includes(a.action)))){
   struct=structureActions(parsed.actions,{...input,codes:ctx.codes})
-  const others=parsed.actions.filter((a:any)=>!a||!['create_menu','create_section','delete_menu','delete_section','set_menu_visible','set_section_visible'].includes(a.action))
+  const others=parsed.actions.filter((a:any)=>!a||!['create_menu','create_section','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing'].includes(a.action))
   rest=JSON.stringify({...parsed,actions:others.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action)),intent:others.length||parsed.intent!=='change'?parsed.intent:'change'})
   if(struct.ask)return{path:'brain',intent:'clarify',plan:{type:'clarify',ids:[]},exclude:[],aliasesUsed:[],replyDraft:'',notes:['struttura_incompleta:'+struct.ask],usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
   if(!others.length){const decision={intent:'change' as const,plan:{type:'change',actions:struct.actions} as MenuPlan,exclude:[],aliasesUsed:[],replyDraft:'',notes:struct.notes}
@@ -523,7 +526,7 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
 
  if(struct.actions.length){if(decision.plan.type!=='change')return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
   decision.plan={...decision.plan,actions:[...struct.actions,...decision.plan.actions]};decision.notes=[...decision.notes,...struct.notes]}
- if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
+ if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections,new Set((input.menus??[]).filter(m=>m.pricing==='fisso').flatMap(m=>(m.secs??[]).map(x=>x.id))),input.refs);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
@@ -561,10 +564,12 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
 // (4) numero col separatore delle migliaia («13.000», «1.500») → nessun prezzo: si chiede;
 // (6) azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, nascondi+mostra, due prezzi diversi) → si chiede.
 const SALE_WORDS=/\b(?:scont\w*|promo\w*|offert\w*|in saldo)\b/,SALE_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|via|niente|senza|fine)\b\s+(?:\w+\s+){0,2}(?:scont\w*|promo\w*|offert\w*)/
-export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string,sections:SectionRef[]=[]):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
+export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string,sections:SectionRef[]=[],fixedSecIds:Set<string>=new Set(),refs:MenuRef[]=[]):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
  if(d.plan.type!=='change')return null
  const m=plain(message),acts=d.plan.actions
  const ask=(note:string,ids:string[])=>({...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(ids)].slice(0,5)},notes:[...d.notes,note]})
+ // Menu a prezzo fisso: i piatti non hanno prezzo → nessun set_price/promo su di loro.
+ {const bad=acts.filter(a=>(a.kind==='price'||a.kind==='promo')&&fixedSecIds.has(refs.find(r=>r.id===(a as any).id)?.sectionId??''));if(bad.length)return ask('prezzo_piatto_menu_fisso',bad.map(a=>(a as any).id))}
  // «tutti i secondi» con un Sottomenu Secondi in più Menu e nessun Menu nominato → una sola domanda (quale Menu).
  for(const g of m.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(x=>sameSection(x.name,(g[1]??g[2])!)),menusOf=[...new Set(secs.map(x=>x.menu))]
   if(menusOf.length>=2&&!menusOf.some(n=>{const k=plain(n).replace(/^menu /,'');return k.length>=3&&(' '+m+' ').includes(' '+k+' ')})&&acts.some(a=>'id' in a))return ask('sottomenu_in_piu_menu',[])}
@@ -585,7 +590,7 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
 const STRUCT_VERB=/\b(?:ho detto|devi|dovevi|crea\w*|aggiung\w*|mett\w*|voglio|vorrei|fai|fammi|inizia|nuov[oa]|chiama\w*)\b/
 const menuKey=(n:string)=>plain(n).replace(/^(?:il |un |nuovo )?menu /,'').replace(/^(?:del |della |di )/,'').trim()
 /** Menu nuovi e Sottomenu dal piano del modello (solo motore haiku). `ask` = cosa manca per farlo (si chiede, non si scrive). */
-export function structureActions(raw:any[],input:{message:string,history?:BrainTurn[],sections:SectionRef[],refs?:MenuRef[],codes?:Map<string,string>,menus?:{id:string,name:string,sections:number,active?:boolean,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}[]}):{actions:MenuAction[],notes:string[],ask:string|null}{
+export function structureActions(raw:any[],input:{message:string,history?:BrainTurn[],sections:SectionRef[],refs?:MenuRef[],codes?:Map<string,string>,menus?:{id:string,name:string,sections:number,active?:boolean,pricing?:'carta'|'fisso',formulas?:{id:string,name:string,price:number}[],included?:string|null,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}[]}):{actions:MenuAction[],notes:string[],ask:string|null}{
  const said=plain([input.message,...(input.history??[]).filter(t=>t.role==='owner').slice(-4).map(t=>t.text)].join(' \n '))
  const okName=(n:unknown)=>{if(typeof n!=='string')return null;const t=n.replace(/[*_~`]/g,'').replace(/\s+/g,' ').trim().slice(0,60);const k=plain(t);if(!k||k.split(' ').length>5||STRUCT_VERB.test(k)||/\p{Extended_Pictographic}/u.test(t))return null
   return (' '+said+' ').includes(' '+k+' ')||(' '+said+' ').includes(' '+k.replace(/i$/,'o')+' ')||(' '+said+' ').includes(' '+k.replace(/o$/,'i')+' ')?t.charAt(0).toLocaleUpperCase('it')+t.slice(1):null}
@@ -621,6 +626,40 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   const dup=input.sections.some(s=>s.menu===menu.name&&sameSection(s.name,name))||actions.some(x=>x.kind==='create_section'&&x.menuId===menu.id&&sameSection(x.name,name))
   if(dup){notes.push('sottomenu_esistente:'+name);continue}
   actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:menu.id,menuName:menu.name,hidden:!menu.fresh} as MenuAction)}
+ // Menu a prezzo fisso (21/10): opzioni di prezzo, tipo di prezzo, sostituzione giornaliera dei piatti di un sottomenu.
+ const saidNums=numbersIn(input.message).map(n=>Math.round(n*100)/100),said2=(v:unknown)=>typeof v==='number'&&saidNums.includes(Math.round(v*100)/100)
+ const menuOf=(v:unknown)=>{const k=menuKey(String(v??''));if(!k)return (input.menus??[]).length===1?input.menus![0]:null;return (input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))??null}
+ const fixedMenus=(input.menus??[]).filter(m=>m.pricing==='fisso')
+ for(const a of raw){if(!a||(a.action!=='set_formula_price'&&a.action!=='create_formula'))continue
+  let m=menuOf(a.menu);if(!m&&!(typeof a.menu==='string'&&a.menu.trim())&&fixedMenus.length===1)m=fixedMenus[0]!
+  if(!m)return{actions:[],notes:[],ask:'menu_della_formula'}
+  const n=String(a.name??'').trim(),fk=plain(n),fs=m.formulas??[],hit=fs.find(f=>plain(f.name)===fk)??fs.find(f=>fk.length>=3&&(plain(f.name).includes(fk)||fk.includes(plain(f.name))))
+  if(typeof a.price!=='number'||!said2(a.price))return{actions:[],notes:[],ask:'prezzo_formula_non_detto'}
+  if(hit){if(Math.abs(hit.price-a.price)<0.005){notes.push('formula_gia:'+hit.name);continue};actions.push({kind:'set_formula',menuId:m.id,menuName:m.name,formulaId:hit.id,isNew:false,name:hit.name,price:a.price,before:hit.price} as MenuAction);continue}
+  if(a.action==='set_formula_price'&&fs.length)return{actions:[],notes:[],ask:'formula_da_trovare'}
+  const name=okName(n);if(!name)return{actions:[],notes:[],ask:'nome_formula'}
+  actions.push({kind:'set_formula',menuId:m.id,menuName:m.name,formulaId:randomUUID(),isNew:true,name,price:a.price,note:typeof a.text==='string'&&a.text.trim()?a.text.trim().slice(0,300):null} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='delete_formula')continue;const m=menuOf(a.menu)??(fixedMenus.length===1?fixedMenus[0]!:null);if(!m)return{actions:[],notes:[],ask:'menu_della_formula'}
+  const fk=plain(String(a.name??'')),hit=(m.formulas??[]).find(f=>plain(f.name)===fk)??(m.formulas??[]).find(f=>fk.length>=3&&plain(f.name).includes(fk));if(!hit)return{actions:[],notes:[],ask:'formula_da_trovare'}
+  actions.push({kind:'delete_formula',menuId:m.id,menuName:m.name,formulaId:hit.id,name:hit.name} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='set_menu_pricing')continue;const m=menuOf(a.menu??a.name);if(!m)return{actions:[],notes:[],ask:'menu_da_trovare'};const v=/fiss/.test(plain(String(a.text??a.value??'')))?'fisso':'carta'
+  if((m.pricing??'carta')===v){notes.push('pricing_gia:'+m.name);continue};actions.push({kind:'set_menu_pricing',menuId:m.id,name:m.name,value:v} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='replace_section_items')continue
+  const code=typeof a.section==='string'?input.codes?.get(a.section.trim().toLowerCase()):undefined
+  let sec=code?input.sections.find(x=>x.id===code):undefined
+  if(!sec){const n=String(a.section??a.name??''),want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null,c=input.sections.filter(x=>sameSection(x.name,n)&&(!want||menuKey(x.menu)===want));if(c.length!==1)return{actions:[],notes:[],ask:c.length?'sottomenu_ambiguo':'sottomenu_da_trovare'};sec=c[0]}
+  const menu=(input.menus??[]).find(m=>m.name===sec!.menu),fixed=menu?.pricing==='fisso'
+  const names=String(a.text??'').split(/\s*[;\n]\s*/).map(x=>x.replace(/[*_~`]/g,'').trim()).filter(Boolean).slice(0,40)
+  if(!names.length)return{actions:[],notes:[],ask:'piatti_mancanti'}
+  if(!fixed)return{actions:[],notes:[],ask:'sostituzione_alla_carta'}
+  const inSec=(input.refs??[]).filter(r=>r.sectionId===sec!.id),used=new Set<string>()
+  for(const raw0 of names){const nm=raw0.charAt(0).toLocaleUpperCase('it')+raw0.slice(1);if(STRUCT_VERB.test(plain(nm))||plain(nm).split(' ').length>8)return{actions:[],notes:[],ask:'nome_piatto'}
+   if(!(' '+said+' ').includes(' '+plain(nm).split(' ')[0]!.slice(0,5)))return{actions:[],notes:[],ask:'nome_non_detto'}
+   const hit=inSec.find(r=>!used.has(r.id)&&plain(r.name)===plain(nm))??inSec.find(r=>!used.has(r.id)&&sameDishName(r.name,nm))
+   if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any)}
+   else actions.push({kind:'create',sectionId:sec!.id,name:nm,price:0,description:null,fromReplace:true} as any)}
+  for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+  notes.push('sostituzione:'+sec!.id)}
  // Mostrare/nascondere un intero Menu o Sottomenu (decisione Manuel 21/10). Già così → niente azione, nota per la risposta.
  for(const a of raw){if(!a||a.action!=='set_menu_visible')continue;const k=menuKey(String(a.menu??a.name??''));const m=(input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))
   if(!m)return{actions:[],notes:[],ask:'menu_da_mostrare'};const value=a.value!==false;if((m.active!==false)===value){notes.push('menu_gia:'+m.name);continue}
