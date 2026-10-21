@@ -26,7 +26,7 @@ const first=(r:string)=>r.replace(/^Ci sto lavorando…\s*/,'').replace(/^Sono l
 const asks=(r:string)=>/\?|\brispondi\b/i.test(r)
 const EMOJI=/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B50}\u{2705}]/u
 const CLAIM=/\b(?:ho creato|ho aggiunto|ho messo|ho cambiato|ho rinominato|ho aggiornato|fatto|aggiunt[oaie]|creat[oaie]|rinominat[oaie]|ora si chiama)\b/i
-const NOT_DONE=/non ho cambiato|nessuna modifica|\bgià\b|già così|non ancora|rispondi|\?/i
+const NOT_DONE=/non ho cambiato|nessuna modifica|già|già così|non ancora|rispondi|\?/i
 const COMMANDS=/\b(?:aggiung\w*|aument\w*|abbass\w*|diminu\w*|metti|togli\w*|nascond\w*|rinomin\w*|cambi\w* (?:il )?nome|elimin\w*|sposta|passa|crea)\b/
 const menuIdx=(w:EvalMenu,name:string)=>w.menus.find(m=>plainT(m.name)===plainT(name))
 export function seraChecks(c:SeraCase,v:Verdict,menus:EvalMenu[]):Fail[]{
@@ -41,7 +41,7 @@ export function seraChecks(c:SeraCase,v:Verdict,menus:EvalMenu[]):Fail[]{
   if(COMMANDS.test(plainT(t))&&/^Non ho cambiato nulla\.?$/.test(fb)&&!wrote(n))add('GRAVE','niente-dopo-comando',`turno ${n}: «${t}» → «Non ho cambiato nulla.»`)
   if(!wrote(n)&&CLAIM.test(r)&&!NOT_DONE.test(r))add('GRAVE','conferma-senza-scrittura',`turno ${n}: «${r.replace(/\s+/g,' ').slice(0,120)}» senza nessuna scrittura`)})
  for(const n of s.yes??[])if(!wrote(n))add('GRAVE','si-ignorato',`turno ${n}: «${said[n-1]}» a una proposta con azioni e nessuna scrittura («${(v.replies[n-1]??'').replace(/\s+/g,' ').slice(0,100)}»)`)
- for(const n of s.cmd??[]){const r=v.replies[n-1]??'';if(!wrote(n)&&!asks(first(r))&&!/\bgià\b/.test(r))add('GRAVE','comando-perso',`turno ${n}: «${said[n-1]}» né eseguito né una domanda («${r.replace(/\s+/g,' ').slice(0,100)}»)`)}
+ for(const n of s.cmd??[]){const r=v.replies[n-1]??'';if(!wrote(n)&&!asks(first(r))&&!/già/.test(r))add('GRAVE','comando-perso',`turno ${n}: «${said[n-1]}» né eseguito né una domanda («${r.replace(/\s+/g,' ').slice(0,100)}»)`)}
  for(const x of s.inMenu??[]){const w=menus[x.after];if(!w)continue;const k=plainT(x.dish)
   const hits=w.menus.flatMap(m=>m.sections.flatMap(sc=>sc.items.filter(it=>!menus[0]!.menus.some(m0=>m0.sections.some(s0=>s0.items.some(i0=>i0.id===it.id)))&&(plainT(it.name)===k||plainT(it.name).includes(k)||k.includes(plainT(it.name)))).map(it=>({it,m,sc}))))
   const good=hits.filter(h=>plainT(h.m.name)===plainT(x.menu)&&(!x.section||plainT(h.sc.name).startsWith(plainT(x.section).slice(0,5)))&&(x.price===undefined||Math.abs(h.it.price-x.price)<0.005))

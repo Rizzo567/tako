@@ -565,7 +565,8 @@ export function restoreDestination(message:string,item:MenuRef,sections:SectionR
  * primo…) già cambiata dal pre-passo della struttura, se non nominano anche un piatto del menu. Le altre parti restano intatte. */
 export function formulaClausesOut(message:string,struct:MenuAction[],refs:MenuRef[]):string{
  const names=struct.flatMap(a=>a.kind==='set_formula'||a.kind==='delete_formula'?[plain(a.name)]:[]).filter(n=>n.length>=3);if(!names.length)return message
- const segs=message.split(/([,;.!?\u2026]+|\s+(?:e|ed|poi|e poi)\s+)/i)
+ // «9,50»: la virgola fra due cifre non separa le parti (banco adv-sera 21/10: restava «50» come parte persa).
+ const segs=message.split(/((?:(?<!\d)[,.]|[,.](?!\d)|[;!?\u2026])+|\s+(?:e|ed|poi|e poi)\s+)/i)
  const out=segs.map((x,i)=>{if(i%2)return x;const p=' '+plain(x)+' ';if(!names.some(n=>p.includes(' '+n+' ')))return x;if(refs.some(r=>{const k=plain(r.name);return k.length>=3&&!names.includes(k)&&p.includes(' '+k+' ')}))return x;return ' '})
  return out.join('').replace(/\s+/g,' ').trim()}
 // 21/10: risposta a una TUA domanda nata da «sposta X…» («nei panini, crealo»): il verbo vale dalla richiesta in sospeso.
@@ -629,6 +630,8 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
  // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
  if(/\b(?:da|dal|dalla|a partire da|per|solo)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|stanotte|settimana prossima|prossima settimana)\b|\bdomani\b/.test(m)&&acts.some(a=>a.kind!=='special'))
   return{...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(acts.flatMap(a=>'id' in a?[(a as any).id as string]:[]))].slice(0,5),actions:acts},notes:[...d.notes,'data_futura']}
+ // adv-sera 21/10 notte: «togli la diavola, per oggi non la facciamo» = nascondi; «finito» in più solo se il titolare lo dice.
+ if(!/\b(?:finit\w*|esaurit\w*|terminat\w*|non c e piu|fernut\w*|sold out)\b/.test(m)){const hidIds=new Set(acts.flatMap(a=>a.kind==='hidden'&&a.value?[a.id]:[]));const drop=acts.filter(a=>a.kind==='available'&&!a.value&&hidIds.has(a.id));if(drop.length){d={...d,plan:{...d.plan,actions:acts.filter(a=>!drop.includes(a))} as MenuPlan,notes:[...d.notes,'nascondi_non_finito']};return haikuChecks(d,message,sections,refs,fixedSecIds)??d}}
  const by=new Map<string,MenuAction[]>();for(const a of acts)if('id' in a&&typeof (a as any).id==='string')by.set((a as any).id,[...(by.get((a as any).id)??[]),a])
  for(const [id,list] of by){const v=(k:string)=>list.filter(a=>a.kind===k).map(a=>(a as any).value)
   const hid=v('hidden'),av=v('available'),fe=v('featured'),pr=new Set(list.filter(a=>a.kind==='price').map(a=>Math.round((a as any).price*100)))
@@ -764,7 +767,10 @@ export function replaceCandidates(said:string,inSec:MenuRef[]):MenuRef[]{
  const ws=replWords(said);if(!ws.length)return[]
  const all=inSec.filter(r=>{const rs=replWords(r.name);return ws.every(w=>replWordIn(w,rs))})
  // Fra più candidati vale quello col nome uguale (a meno di plurali/articoli) a quello detto.
- const same=all.filter(r=>{const rs=replWords(r.name);return rs.length===ws.length&&rs.every(w=>replWordIn(w,ws))});return same.length===1?same:all}
+ const same=all.filter(r=>{const rs=replWords(r.name);return rs.length===ws.length&&rs.every(w=>replWordIn(w,ws))});if(same.length===1)return same;if(all.length)return all
+ // 21/10 notte (refusi: «risoto», «pomodorro», «cotolleta»): una lettera in più/meno/diversa per parola (≥5 lettere) = stesso piatto, solo se uno.
+ const fz=inSec.filter(r=>{const rs=replWords(r.name);return ws.every(w=>rs.some(c=>c===w||(w.length>=5&&c.length>=5&&lev1(c,w))))});return fz.length===1?fz:[]}
+const lev1=(a:string,b:string)=>{if(Math.abs(a.length-b.length)>1)return false;let i=0,j=0,e=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){i++;j++;continue}if(++e>1)return false;if(a.length>b.length)i++;else if(b.length>a.length)j++;else{i++;j++}}return e+(a.length-i)+(b.length-j)<=1}
 /** Frase detta dal titolare per un piatto della sostituzione: dal primo termine del nome (stessa radice) fino al prossimo
  * separatore («,», «;», «.», « e », a capo). null se non trovata. «stasera i primi sono gnocchi al ragù e risotto» + «Gnocchi…» → «gnocchi al ragù». */
 const PHRASE_STOP=/^(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto|pizze|panini|stasera|oggi|domani|pranzo|cena|sono|c|ce|poi|invece|anche|mentre)$/

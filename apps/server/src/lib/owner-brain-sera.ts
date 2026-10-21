@@ -98,7 +98,10 @@ export type GroupResult={actions:MenuAction[],label:string}|{ask:'menu',menus:st
 /** Comando su un gruppo intero detto con «tutti/tutte»: un sottomenu («i primi») o una parola dei nomi («le paste»). Solo piatti
  * con prezzo e fuori dai Menu a prezzo fisso. Un prezzo assoluto unico o una differenza. `visible` = solo i visibili. */
 export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[],fixedSecIds:Set<string>,o:{visible?:boolean,menus?:{name:string}[]}={}):GroupResult{
- const p=plain(message),m=p.match(/\btutt[ieoa] (?:quant[ieoa] )?(?:i |le |gli |l )?([a-z]{3,})/)??p.match(/\b(?:i|le|gli) ([a-z]{3,}) tutt[ieoa]\b/);if(!m)return null
+ const p=plain(message);let m=p.match(/\btutt[ieoa] (?:quant[ieoa] )?(?:i |le |gli |l )?([a-z]{3,})/)??p.match(/\b(?:i|le|gli) ([a-z]{3,}) tutt[ieoa]\b/),onlySec=false
+ // «i dolci, solo quelli, alzali di 50 centesimi»: il gruppo detto col pronome; vale solo per un sottomenu vero.
+ if(!m&&/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p)){m=p.match(/\b(?:i|le|gli) ([a-z]{3,})\b/);onlySec=true}
+ if(!m)return null
  const word=m[1]!;if(['piatti','prezzi','menu','sottomenu','quanti','cose'].includes(word))return null
  const rd=relativeDelta(message),abs=[...new Set(g9Prices(message,false))]
  const sp=singlePrice(message),delta=rd?rd.delta:null,price=!rd?(sp??(abs.length===1?abs[0]!:null)):null;if(delta===null&&price===null)return null
@@ -107,6 +110,7 @@ export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[]
  const secs=sections.filter(s=>sameSection(s.name,word)&&refs.some(r=>r.sectionId===s.id&&priced(r)))
  let items:MenuRef[]=[],label=word
  if(secs.length){const menus=[...new Set(secs.map(s=>s.menu))];if(menus.length>1)return{ask:'menu',menus,label:secs[0]!.name};items=refs.filter(r=>secs.some(s=>s.id===r.sectionId)&&priced(r));label=secs[0]!.name}
+ else if(onlySec)return null
  else{const stem=word.length>4?word.replace(/[aeio]$/,''):word;if(stem.length<4)return null;items=refs.filter(r=>priced(r)&&plain(r.name).split(' ').some(x=>x.startsWith(stem)&&x.length<=stem.length+2))}
  if(items.length<(secs.length?1:2))return null
  const actions=items.flatMap(r=>{const v=price!==null?price:Math.round((r.price+delta!)*100)/100;return v>0&&Math.abs(v-r.price)>=0.005?[{kind:'price',id:r.id,price:v} as MenuAction]:[]})
@@ -174,10 +178,12 @@ export function sessionStart<T extends {name:string}>(text:string,menus:T[]):T|n
 export function sessionRest(text:string,menuName:string):number{const k=new Set(menuKey(menuName).split(' '));return plain(text).split(' ').filter(w=>w&&!START.test(w)&&!k.has(w)&&!['menu','il','lo','la','del','di','dei','oggi','giorno','ok','allora','dai','adesso','ora','i','piatti','che','per','a','e','un','po','facciamo','vorrei','voglio','possiamo','ciao'].includes(w)).length}
 export const sessionExit=(text:string)=>/^(?:(?:no|ok|allora|aspetta|scusa)\s+)*(?:annulla(?: tutto)?|basta|stop|lascia (?:stare|perdere)|lasciamo (?:stare|perdere)|niente|esci|non importa|fa niente|lascia stare tutto|non fare niente)(?:\s+(?:grazie|dai))?$/.test(plain(text))
 export const sessionDone=(text:string)=>/\b(?:fatto|finito|ho finito|basta cosi|e tutto|tutto qui|ok cosi|va bene cosi|applica|pubblica|il resto (?:uguale|resta\w*|com e|come prima)|gli altri (?:restano|rimangono|uguali|come prima|com erano)|tutto il resto|nient altro|basta)\b/.test(plain(text))
-const KEEP=/\b(?:restan\w*|resta|rimang\w*|uguali|uguale|come prima|com erano|com era|non (?:li |le )?cambi\w*|salta|saltali|saltiamo|lascial[ie]|lascia(?:li|le)? cosi|invariat\w*|stessi|stesse|non tocc\w*)\b/
+const KEEP=/\b(?:restan\w*|resta|rimang\w*|uguali|uguale|come prima|come ieri|com erano|com era|non (?:li |le )?cambi\w*|salta|saltali|saltiamo|lascial[ie]|lascia(?:li|le)? cosi|invariat\w*|stessi|stesse|non tocc\w*)\b/
 /** Sottomenu che il titolare dice di lasciare come sono («i secondi restano uguali», «salta i contorni», «salta» = quello che si aspettava). */
 export function keptSections(text:string,secs:SectionRef[],missing:SectionRef[]):string[]{const p=plain(text);if(!KEEP.test(p))return[]
  const named=secs.filter(s=>p.split(' ').some(w=>w.length>=4&&sameSection(s.name,w))||(' '+p+' ').includes(' '+plain(s.name)+' '))
+ // «tutto uguale tranne i primi: …»: restano com'erano tutti gli altri (i nominati li riempie la sostituzione).
+ if(/\b(?:tranne|eccetto|a parte|salvo|meno)\b/.test(p))return missing.filter(m=>!named.some(x=>x.id===m.id)).map(m=>m.id)
  return named.length?named.map(s=>s.id):/^(?:salta\w*|saltiamo|no salta|resta(?:no)? (?:uguali|cosi)|uguali?)$/.test(p)&&missing[0]?[missing[0].id]:[]}
 /** Comando nuovo dentro la sessione: cambi di prezzo, rinomine, eliminazioni, visibilità, o un altro Menu nominato. */
 export function newCommandInSession(text:string,menuName:string,menus:{name:string}[]):boolean{const p=plain(text)

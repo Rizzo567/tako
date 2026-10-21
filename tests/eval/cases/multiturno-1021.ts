@@ -6,6 +6,8 @@
 import type {Change,Family,Turn} from '../types.js'
 import type {HaikuCase} from './victoria-1019.js'
 import type {SeraCase} from '../sera-checks.js'
+import {fc} from './prezzo-fisso-1021.js'
+import type {FixedOp} from '../fixed-checks.js'
 
 const T=(s:string):Turn=>({text:s}),V=(s:string):Turn=>({voice:s}),Q=(s:string):Turn=>({text:s,q:true})
 const P=(dish:string,price:number):Change=>({op:'price',dish,price}),HI=(dish:string,value=true):Change=>({op:'hidden',dish,value})
@@ -37,7 +39,7 @@ function vera():MtCase{
 
 const LAS_OK:Change[]=[C('Lasagna',12,'Primi')],LAS_ALT:Change[][]=[[C('Lasagne',12,'Primi')]]
 const lasStruct=(after:number,section='Primi')=>[{after,menus:[{name:'Menu pranzo',sections:[section]}],noNewMenus:true}]
-export const MULTITURNO_CASES:MtCase[]=[
+export const MULTITURNO_BASE:MtCase[]=[
  vera(),
  // catene di sì
  mt('si-catena',[T('aggiungi nel menu pranzo le lasagne a 12'),T('si'),T('si')],LAS_OK,{alt:LAS_ALT,struct:lasStruct(2),sera:{yes:[2],cmd:[1]},note:'sì applica sottomenu + piatto in un colpo; il secondo sì non duplica né ripete la domanda'}),
@@ -69,3 +71,23 @@ export const MULTITURNO_CASES:MtCase[]=[
  mt('parmigiana',[V('La parmigiana passa a 12.50.')],[P('la parmigiana',12.5)],{sera:{cmd:[1]}}),
 ]
 void n
+
+// ---- Sessione dei piatti di oggi (fixture prezzofisso: Menu pranzo e Menu cena a prezzo fisso, Alla carta). Stili diversi di ristoratore:
+// tutto in un messaggio, a pezzi, in ordine sparso, con refusi, che cambia idea, che parte senza piatti, che esce, che dà un comando nuovo.
+// Le operazioni attese stanno sul turno in cui il bot applica (prima nessuna scrittura: l'oracolo lo verifica turno per turno).
+const PR='Menu pranzo',CE='Menu cena'
+const rep=(menu:string,section:string,...names:string[]):FixedOp=>({k:'rep',menu,section,names})
+const ses=(id:string,steps:Parameters<typeof fc>[1],x:Parameters<typeof fc>[2]&{sera?:SeraCase['sera']}={}):MtCase=>{const c=fc('sessione',steps,x) as MtCase;return{...c,id:'mt-sessione-'+id,...(x.sera?{sera:x.sera}:{sera:{}})}}
+export const SESSIONE_CASES:MtCase[]=[
+ ses('a-pezzi',['modifichiamo menu pranzo','primi lasagna e carbonara','secondi cotoletta',['contorni patate al forno',rep(PR,'Primi','lasagna','carbonara'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese'),rep(PR,'Contorni','patate al forno=Patate al forno')]],{sera:{cmd:[1]}}),
+ ses('tutto-insieme',[['modifichiamo menu pranzo: primi pasta al pomodoro e risotto alla milanese, secondi polpette, contorni insalata mista',rep(PR,'Primi','pasta al pomodoro=Pasta al pomodoro','risotto alla milanese=Risotto alla milanese'),rep(PR,'Secondi','polpette=Polpette al sugo'),rep(PR,'Contorni','insalata mista=Insalata mista')]],{sera:{cmd:[1]}}),
+ ses('ordine-sparso',['aggiorniamo il menu del pranzo','i contorni oggi sono spinaci al burro',["primi penne all'arrabbiata, secondi petto di pollo ai ferri",rep(PR,'Contorni','spinaci al burro=Spinaci al burro'),rep(PR,'Primi',"penne all'arrabbiata=Penne all'arrabbiata"),rep(PR,'Secondi','petto di pollo ai ferri=Petto di pollo ai ferri')]],{sera:{cmd:[1]}}),
+ ses('refusi',['modifichiamo menu pranzo','primi risoto alla milanese e pasta al pomodorro','secondi cotolleta',['contorni restano uguali',rep(PR,'Primi','risotto alla milanese=Risotto alla milanese','pasta al pomodoro=Pasta al pomodoro'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese')]],{orAsk:[2,3],sera:{cmd:[1]}}),
+ ses('cambia-idea',['modifichiamo menu pranzo','primi lasagna e carbonara','no, la carbonara toglila, metti la pasta e fagioli',['secondi e contorni restano uguali',rep(PR,'Primi','lasagna','pasta e fagioli=Pasta e fagioli')]],{sera:{cmd:[1]}}),
+ ses('senza-piatti-esce',['modifichiamo menu pranzo','lascia stare'],{sera:{cmd:[1]}}),
+ ses('comando-nuovo',['modifichiamo menu cena','primi gnocchi al pomodoro',['alza il completo della cena di un euro',{k:'fp',menu:CE,name:'Completo',price:17.9}]],{sera:{cmd:[1,3]}}),
+ ses('tutto-uguale-tranne',['modifichiamo il menu della cena',['tutto uguale tranne i primi: tagliatelle al ragù e risotto ai funghi',rep(CE,'Primi','tagliatelle al ragù=Tagliatelle al ragù','risotto ai funghi=Risotto ai funghi')]],{sera:{cmd:[1]}}),
+ ses('si-al-resto',['modifichiamo menu cena','secondi tagliata di manzo e salmone alla griglia',['sì',rep(CE,'Secondi','tagliata di manzo=Tagliata di manzo','salmone alla griglia=Salmone alla griglia')]],{orAsk:[3],sera:{}}),
+ ses('lunga-correzioni',['modifichiamo il menu pranzo di oggi','allora primi: lasagna','e anche la carbonara nei primi','secondi cotoletta e arrosto','no aspetta, l\'arrosto no, metti le polpette',['i contorni come ieri',rep(PR,'Primi','lasagna','carbonara'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese','polpette=Polpette al sugo')]],{orAsk:[2,3,4,5],sera:{cmd:[1]}}),
+]
+export const MULTITURNO_CASES:MtCase[]=[...MULTITURNO_BASE,...SESSIONE_CASES]

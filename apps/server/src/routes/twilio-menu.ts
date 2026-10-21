@@ -39,7 +39,7 @@ import {linkMarkers} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {uniformDelta,uniformReply,pruneWroteDraft} from '../lib/owner-brain-r.js'
-import {fixTruncatedNumbers,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,draftOfUnappliedChange,draftAsksOkOnDate,fixedDishFact,HIDE_WHOLE_MENU_Q,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
+import {fixTruncatedNumbers,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,draftOfUnappliedChange,draftAsksOkOnDate,fixedDishFact,HIDE_WHOLE_MENU_Q,isAffirmative,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,fullyNamed,onlyPrice,singlePrice,answerSectionName,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
@@ -538,7 +538,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     const yesKeep=yesToAsk(text,{question:askP!.question,actions:[],draft:null})
     if(sessionDone(text)||yesKeep)for(const x of sessionMissing(s2,sections))s2.kept.push(x.id)
     const restart=sessionStart(text,base.menus)?.name===sess.menuName&&sessionRest(text,sess.menuName)<=1
-    const covered=!sessionMissing(s2,sections).length,talk=restart?0:plain(text).split(' ').filter(w=>w&&!/^(?:restan\w*|resta|rimang\w*|uguali|uguale|come|prima|salta\w*|i|gli|le|il|la|e|anche|pure|cosi|ok|si|fatto|finito|basta|tutto|qui|altri|resto|lasciali|lasciale|invariati|non|cambiare|stessi|stesse|va|bene)$/.test(w)&&!mSecs.some(x=>sameSection(x.name,w))).length
+    const covered=!sessionMissing(s2,sections).length,talk=restart?0:plain(text).split(' ').filter(w=>w&&!/^(?:restan\w*|resta|rimang\w*|uguali|uguale|come|prima|salta\w*|i|gli|le|il|la|e|anche|pure|cosi|ok|si|fatto|finito|basta|tutto|qui|altri|resto|lasciali|lasciale|invariati|non|cambiare|stessi|stesse|va|bene|ieri|sempre|stessa|quelli|quelle|di|del|della|dei|delle|oggi|anche|loro|tranne)$/.test(w)&&!mSecs.some(x=>sameSection(x.name,w))).length
     if(!talk||s2.rounds!>=SESSION_MAX_ROUNDS){if(covered||s2.rounds!>=SESSION_MAX_ROUNDS){if(s2.acts.length)pre={actions:s2.acts,why:'sessione'};else{preReply='Ok, il '+mLab(sess.menuName)+' resta com\u2019era.';closePend=true}}
      else{preReply=sessionAsk(s2,sections);if(plain(preReply)===plain(askP!.question??''))preReply='Mi mancano ancora: '+sessionMissing(s2,sections).map(x=>'*'+safe(x.name)+'*').join(', ')+'. Scrivimi i piatti o «restano uguali».';const q=preReply;await saveSess(s2,q)}}
     else{sessNow=s2;(base as any).pendingCommand={...cmd,session:s2}}}}
@@ -671,7 +671,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    const other=refs.filter(r=>r.menu!==M.name&&fullyNamed(r.name,text)&&!refs.some(x=>x.menu===M.name&&sameDishName(x.name,r.name)))
    const draftName=out.kind==='ask'&&out.createDraft?.name?out.createDraft.name:''
    const name0=creates.find(a=>!mSecs.some(x=>x.id===a.sectionId)||unfit(a.sectionId,a.name))?.name??(other.length===1?other[0]!.name:'')??''
-   const name=(name0||draftName).replace(/^(?:il|lo|la|i|gli|le|l)\s+/i,'').trim(),nm=name?name.charAt(0).toLocaleUpperCase('it')+name.slice(1):''
+   const name1=(name0||draftName).replace(/^(?:il|lo|la|i|gli|le|l)\s+/i,'').trim(),name=other.length===1&&name1&&fullyNamed(other[0]!.name,name1)?other[0]!.name:name1,nm=name?name.charAt(0).toLocaleUpperCase('it')+name.slice(1):''
    const touchesOther=out.kind!=='change'||out.actions.some(a=>'id' in a&&other.some(r=>r.id===(a as any).id))||creates.some(a=>!mSecs.some(x=>x.id===a.sectionId)||unfit(a.sectionId,a.name))
    if(nm&&!okInM&&touchesOther&&(other.length||draftName||creates.length)){
     const price=creates.find(a=>a.price>0)?.price??(out.kind==='ask'&&out.createDraft?.price?out.createDraft.price:null)??onePrice
@@ -682,7 +682,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else{const course=dishCourse(nm);if(course){const cs={kind:'create_section',newSectionId:randomUUID(),name:course,menuId:M.id,menuName:M.name,hidden:false} as MenuAction
      out={kind:'ask',ids:[],actions:[cs],createDraft:{name:nm,price:price!=null&&price>0?price:null,sectionId:null,sectionName:course}}
      serverQ='Nel '+mLabel+' non c’è un sottomenu adatto a *'+safe(nm)+'*: creo il sottomenu *'+course+'* e '+(/[ei]$/.test(nm)&&!/\s/.test(nm)?'le':'lo')+' metto lì'+(price!=null&&price>0?' a *'+price.toFixed(2).replace('.',',')+' €*':'')+'? Rispondi *sì* oppure dimmi il nome del sottomenu.'+(price!=null&&price>0?'':' Dimmi anche il prezzo.')}}}}
-  if(out.kind!=='change'&&/\btutt[ieoa]\b/.test(p0)&&clearCommand(text)){const g=seraGroup(text,refs,sections,fixedSecIds,{menus:base.menus})
+  if(out.kind!=='change'&&(/\btutt[ieoa]\b/.test(p0)||/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p0))&&(clearCommand(text)||/\d/.test(p0))){const g=seraGroup(text,refs,sections,fixedSecIds,{menus:base.menus})
    if(g&&'actions' in g)out={kind:'change',actions:g.actions}
    else if(g&&'ask' in g){out={kind:'ask',ids:[],actions:[]};serverQ='I *'+safe(g.label)+'* ci sono in più Menu: in quale? '+g.menus.map(x=>'*'+safe(x)+'*').join(' o ')+'?'}}
   if(out.kind==='change'&&visibleOnly(text)){const keep=out.actions.filter(a=>!('id' in a)||a.kind==='hidden'||!refs.find(r=>r.id===(a as any).id)?.hidden);if(keep.length)out={...out,actions:keep}}}
@@ -804,6 +804,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     await propose(tx,ctx,lastRev,{kind:'brain_ask',question:q,ids:[],actions:[],source:follow.origin,origin:follow.origin,rounds:1,draft:{name:follow.name,price:null,sectionId:follow.sectionId,sectionName:null}} satisfies BrainAsk);res=res+'\n\n'+q}
    else if(!wroteActs.length&&out.kind!=='cancel'&&out.kind!=='undo'){const blocks=res.split('\n\n'),first=blocks[0]!.trim()
     const cands=(out.kind==='ask'?out.ids:[]).map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).slice(0,8)
+    if(/^Non ho cambiato nulla\.?$/.test(first)&&!pend&&isAffirmative(text))res=['Non c\u2019è niente in sospeso: dimmi pure cosa vuoi cambiare.',...blocks.slice(1)].join('\n\n')
     const nothing=/^Non ho cambiato nulla\.?$/.test(first)&&(clearCommand(text)||cands.length>=2||(/\d/.test(text)&&plain(text).split(' ').length>=3)),again=!!lastQ&&/\?/.test(first)&&(plain(first)===plain(lastQ)||(!serverQ&&sameQuestion(first,lastQ)))
     if(nothing||again){const q=specificQuestion(text,cands);res=[q,...blocks.slice(1).filter(b=>b.trim()!==NOTHING)].join('\n\n')
      const cur=(await tx.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))[0]

@@ -98,3 +98,74 @@ VIS.forEach((s,i)=>add('visibili',[T('metti tutte le paste a 9'),voice(i,s)],set
 // 6. Domande di capacità e frasi trappola: mai «non posso», mai «categoria» nelle risposte.
 for(const [i,s] of ['puoi rinominare un menu?','si può cambiare il nome di una categoria?','come faccio a cambiare il nome del menu pranzo?','sai creare un sottomenu nuovo?'].entries())add('capacita',[{text:s,q:true}],[],{sera:{}})
 export const ADV_SERA_CASES=out
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// 7. AVVERSARIE DURE (richiesta di Manuel 21/10 notte): italiano scritto normale, parole che il modello può confondere. Fixture
+// prezzofisso (Alla carta + Menu pranzo e Menu cena a prezzo fisso con «Completo»), controlli fixedChecks + seraChecks.
+import {fc} from './prezzo-fisso-1021.js'
+import type {FixedOp} from '../fixed-checks.js'
+const PR='Menu pranzo',CE='Menu cena',AC='Alla carta'
+const rep=(menu:string,section:string,...names:string[]):FixedOp=>({k:'rep',menu,section,names})
+const ip=(dish:string,price:number):FixedOp=>({k:'ip',menu:AC,dish,price})
+const ci=(menu:string,section:string,name:string,price=0):FixedOp=>({k:'ci',menu,section,name,price})
+const fp=(menu:string,name:string,price:number):FixedOp=>({k:'fp',menu,name,price})
+const hard=(g:string,steps:Parameters<typeof fc>[1],x:Parameters<typeof fc>[2]&{sera?:MtCase['sera']}={})=>{const c=fc('dura',steps,x) as MtCase;const k=(seq.get(g)??0)+1;seq.set(g,k);out.push({...c,id:`as-${g}-${String(k).padStart(2,'0')}`,sera:x.sera??{}})}
+// «completo»: opzione di prezzo o aggettivo
+hard('completo',['il completo a 17'],{ask:[1],sera:{}})
+hard('completo',[['il completo del pranzo passa a 13',fp(PR,'Completo',13)]],{sera:{cmd:[1]}})
+hard('completo',[['a cena il completo lo porti a diciassette euro e cinquanta',fp(CE,'Completo',17.5)]],{sera:{cmd:[1]}})
+hard('completo',[['fammi un menu completo per stasera: primi tagliatelle al ragù, secondi tagliata, contorni patatine fritte',rep(CE,'Primi','tagliatelle al ragù=Tagliatelle al ragù'),rep(CE,'Secondi','tagliata=Tagliata di manzo'),rep(CE,'Contorni','patatine fritte=Patatine fritte')]],{orAsk:[1],sera:{}})
+hard('completo',[['la carbonara completa di guanciale alla carta la metti a 13',ip('Carbonara',13)]],{orAsk:[1],sera:{}})
+// «menu» come Menu o come lista; domande senza scritture
+hard('menu',[{text:'mandami il menu del pranzo',q:true}],{sera:{}})
+hard('menu',[{text:'cosa c\'è nel menu di stasera?',q:true}],{sera:{}})
+hard('menu',[{text:'quanto costa il completo a pranzo?',q:true}],{sera:{}})
+// «togli» = nascondere / «elimina» chiede il sì; «metti» = prezzo, aggiunta o spostamento
+hard('metti',[['metti la diavola a 9',ip('Diavola',9)]],{sera:{cmd:[1]}})
+hard('metti',[['metti la bufalina tra le pizze a 10',ci(AC,'Pizze','Bufalina',10)]],{sera:{cmd:[1]}})
+hard('metti',[['metti la lasagna nei primi del pranzo',ci(PR,'Primi','Lasagna')]],{sera:{cmd:[1]}})
+hard('metti',[['metti a 12 e 50 la carbonara alla carta',ip('Carbonara',12.5)]],{sera:{cmd:[1]}})
+// pronomi e rimandi
+hard('pronomi',[['la margherita a 8',ip('Margherita',8)],['anche la diavola',ip('Diavola',8)]],{orAsk:[2],sera:{cmd:[1]}})
+hard('pronomi',[['la carbonara alla carta a 13',ip('Carbonara',13)],['no scusa, quella là mettila a 12',ip('Carbonara',12)]],{sera:{cmd:[1]}})
+hard('pronomi',[['il tiramisù a 7',ip('Tiramisù',7)],['e la panna cotta uguale',ip('Panna cotta',7)]],{orAsk:[2],sera:{cmd:[1]}})
+// numeri in lettere e refusi plausibili
+hard('numeri',[['la carbonara a tredici e cinquanta',ip('Carbonara',13.5)]],{sera:{cmd:[1]}})
+hard('numeri',[['il tiramisu a sei euro',ip('Tiramisù',6)]],{sera:{cmd:[1]}})
+hard('numeri',[['la carbonare alla carta a 13',ip('Carbonara',13)]],{orAsk:[1],sera:{cmd:[1]}})
+hard('numeri',[["l'amatriciana a undici e mezzo",ip('Amatriciana',11.5)]],{sera:{cmd:[1]}})
+hard('numeri',[['la margerita a 7 e 50',ip('Margherita',7.5)]],{orAsk:[1],sera:{cmd:[1]}})
+// frasi lunghe con incisi e richieste multiple
+hard('lunghe',[['allora, la carbonara, che ormai la facciamo con il guanciale buono, la porti a 13, e già che ci sei il tiramisù a 6',ip('Carbonara',13),ip('Tiramisù',6)]],{sera:{cmd:[1]}})
+hard('lunghe',[['carbonara 13, amatriciana 12, diavola 9',ip('Carbonara',13),ip('Amatriciana',12),ip('Diavola',9)]],{sera:{cmd:[1]}})
+hard('lunghe',[['senti, visto che il guanciale è aumentato, la carbonara e l\'amatriciana le porti a 13 tutte e due',ip('Carbonara',13),ip('Amatriciana',13)]],{sera:{cmd:[1]}})
+hard('lunghe',[['a cena il solo primo a 9,50 e alla carta la margherita a 7,50',fp(CE,'Solo primo',9.5),ip('Margherita',7.5)]],{sera:{cmd:[1]}})
+// menu del giorno completo in un solo messaggio
+hard('giorno',[['oggi a pranzo primi lasagna e pasta e fagioli, secondi cotoletta e arrosto di vitello, contorni patate al forno e spinaci al burro',rep(PR,'Primi','lasagna','pasta e fagioli=Pasta e fagioli'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese','arrosto di vitello=Arrosto di vitello'),rep(PR,'Contorni','patate al forno=Patate al forno','spinaci al burro=Spinaci al burro')]],{sera:{cmd:[1]}})
+hard('giorno',[['stasera: primi spaghetti alle vongole e risotto ai funghi; secondi salmone alla griglia; contorni verdure grigliate',rep(CE,'Primi','spaghetti alle vongole=Spaghetti alle vongole','risotto ai funghi=Risotto ai funghi'),rep(CE,'Secondi','salmone alla griglia=Salmone alla griglia'),rep(CE,'Contorni','verdure grigliate=Verdure grigliate')]],{sera:{cmd:[1]}})
+hard('giorno',[['pranzo di oggi primi pasta al pomodoro secondi polpette contorni insalata mista',rep(PR,'Primi','pasta al pomodoro=Pasta al pomodoro'),rep(PR,'Secondi','polpette=Polpette al sugo'),rep(PR,'Contorni','insalata mista=Insalata mista')]],{sera:{cmd:[1]}})
+// sessione guidata dal ristoratore (stili diversi)
+hard('sessione',['modifichiamo menu pranzo',['primi lasagna, secondi cotoletta, contorni patate al forno',rep(PR,'Primi','lasagna'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese'),rep(PR,'Contorni','patate al forno=Patate al forno')]],{sera:{cmd:[1]}})
+hard('sessione',['cambiamo il menu della cena','primi gnocchi al pomodoro',['il resto resta uguale',rep(CE,'Primi','gnocchi al pomodoro=Gnocchi al pomodoro')]],{sera:{cmd:[1]}})
+hard('sessione',['modifichiamo menu pranzo','primi lasagna','basta'],{sera:{cmd:[1]}})
+hard('sessione',['modifichiamo menu pranzo','secondi polpette',['primi pasta al pomodoro e contorni insalata mista',rep(PR,'Secondi','polpette=Polpette al sugo'),rep(PR,'Primi','pasta al pomodoro=Pasta al pomodoro'),rep(PR,'Contorni','insalata mista=Insalata mista')]],{sera:{cmd:[1]}})
+hard('sessione',['modifichiamo menu cena','primi tagliatelle al ragù e carbonara','no la carbonara toglila',['secondi e contorni come ieri',rep(CE,'Primi','tagliatelle al ragù=Tagliatelle al ragù')]],{sera:{cmd:[1]}})
+hard('sessione',['modifichiamo menu pranzo','primi lasagna',['la carbonara alla carta a 13',ip('Carbonara',13)]],{sera:{cmd:[1,3]}})
+// «togli» = nascondere, «elimina» = chiede il sì; «tutti tranne», «solo quelli», «l'ultimo»
+const HC=(g:string,turns:Turn[],changes:Change[],x:Partial<MtCase>={})=>{const k=(seq.get(g)??0)+1;seq.set(g,k);out.push({id:`as-${g}-${String(k).padStart(2,'0')}`,family:fam,menu:'prezzofisso',turns,changes,source:'adv-sera dure 21/10',sera:{},...x})}
+HC('togli',[T('togli la panna cotta')],[HI('Panna cotta')],{sera:{cmd:[1]}})
+HC('togli',[T('togli la diavola dal menu, per oggi non la facciamo')],[HI('Diavola')],{sera:{cmd:[1]}})
+HC('togli',[T('elimina la panna cotta'),T('sì')],[{op:'delete',dish:'Panna cotta'}],{sera:{cmd:[1],yes:[2]}})
+HC('togli',[T('elimina la panna cotta'),T('no lascia stare')],[],{sera:{cmd:[1]}})
+HC('tutti',[T('nascondi tutte le pizze tranne la margherita')],[HI('Diavola')],{sera:{cmd:[1]}})
+HC('tutti',[T('le pizze tutte a 9 euro')],[P('Margherita',9),P('Diavola',9)],{sera:{cmd:[1]}})
+HC('tutti',[T('aumenta di un euro tutti i secondi alla carta')],[P('Filetto al pepe verde',23),P('Grigliata mista',19)],{sera:{cmd:[1]}})
+HC('tutti',[T('i dolci, solo quelli, alzali di 50 centesimi')],[P('Tiramisù',6.5),P('Panna cotta',5.5)],{sera:{cmd:[1]}})
+HC('pronomi',[T('la margherita a 8 e la diavola a 9'),T("l'ultima mettila a 9,50")],[P('Margherita',8),P('Diavola',9.5)],{interim:[P('Diavola',9)],sera:{cmd:[1]}})
+HC('pronomi',[T('quanto costa la grigliata mista?'),T('portala a 19')],[P('Grigliata mista',19)],{sera:{cmd:[2]}})
+HC('lunghe',[T('ok allora ascolta, oggi il tiramisù è finito, la carbonara la metti a 13 e la bruschetta, quella col pomodoro, a 6')],[{op:'available',dish:'Tiramisù',value:false},P('Carbonara',13),P('Bruschetta',6)],{sera:{cmd:[1]}})
+HC('lunghe',[T('nel menu alla carta: margherita 7,50, diavola 9 e la panna cotta nascondila')],[P('Margherita',7.5),P('Diavola',9),HI('Panna cotta')],{sera:{cmd:[1]}})
+HC('menu-lista',[T('il menu lo vedo strano, la carbonara quanto sta?')],[],{sera:{}})
+HC('menu-lista',[T('nel menu metti la carbonara a 13')],[P('Carbonara',13)],{sera:{cmd:[1]}})
+HC('refusi',[T('la grigliata misat a 19')],[P('Grigliata mista',19)],{alt:[[]],sera:{cmd:[1]}})
+HC('refusi',[T('il tiramisu finito')],[{op:'available',dish:'Tiramisù',value:false}],{sera:{cmd:[1]}})

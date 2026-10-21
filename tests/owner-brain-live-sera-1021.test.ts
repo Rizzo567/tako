@@ -13,6 +13,7 @@ import {diff} from './eval/judge.js'
 import {createFakeHaiku,A,P,Q,code,secCode,type Planner,type FakeCtx} from './eval/fake-haiku.js'
 import {yesToAsk,newCommandOverAsk,nextAskSource,askOrigin,parseStructRename,groupCommand,namedMenus,dishCourse,suitableSection,clearCommand,specificQuestion,visibleOnly,uniformTarget} from '../apps/server/src/lib/owner-brain-sera.js'
 import type {Conversation,EvalMenu,Turn} from './eval/types.js'
+import {haikuChecks} from '../apps/server/src/lib/owner-brain-plan.js'
 
 const realFetch=globalThis.fetch
 afterAll(()=>closeHarness())
@@ -209,4 +210,15 @@ describe('sessione di modifica dei piatti di oggi',()=>{
   const a=await play([T('modifichiamo menu pranzo'),T('primi lasagna'),T('annulla')],REPL,pf());expect(diff(pf(),a.final)).toEqual([]);expect(a.pending).toBeFalsy()
   const b=await play([T('modifichiamo menu pranzo'),T('primi lasagna'),T('aumenta il tiramisù di un euro')],c=>/aumenta/.test(plainT(c.message))?P('change',[A('set_price',{item:code(c,'Tiramisù'),price_delta:1})],'Ok.'):REPL(c),pf())
   expect(b.d(3)).toEqual(['price|Tiramisù|7']);expect(b.calls.at(-1)!.ctx.pending).not.toMatch(/sessione/)})
+})
+
+describe('casi duri della batteria adv-sera (giro 5)',()=>{
+ it('«togli X, per oggi non la facciamo» = solo nascosto (niente «finito» non detto); «i dolci, solo quelli, alzali di 50 centesimi» = gruppo Dolci',()=>{
+  const d={intent:'change',plan:{type:'change',actions:[{kind:'hidden',id:'x',value:true},{kind:'available',id:'x',value:false}]},exclude:[],aliasesUsed:[],replyDraft:'',notes:[]}
+  expect((haikuChecks(d as any,'togli la diavola dal menu, per oggi non la facciamo') as any).plan.actions).toEqual([{kind:'hidden',id:'x',value:true}])
+  expect(haikuChecks(d as any,'la diavola è finita, toglila')).toBeNull()
+  const P=initialMenu('prezzofisso') as any,secs=P.menus.flatMap((m:any)=>m.sections.map((x:any)=>({id:x.id,name:x.name,menu:m.name}))),rs=P.menus.flatMap((m:any)=>m.sections.flatMap((x:any)=>x.items.map((i:any)=>({id:i.id,name:i.name,price:i.price,available:true,hidden:!!i.hidden,menu:m.name,sectionId:x.id}))))
+  const g:any=groupCommand('i dolci, solo quelli, alzali di 50 centesimi',rs,secs,new Set(P.menus.slice(1).flatMap((m:any)=>m.sections.map((x:any)=>x.id))),{menus:P.menus})
+  expect(g.actions.map((a:any)=>[rs.find((r:any)=>r.id===a.id).name,a.price])).toEqual([['Tiramisù',6.5],['Panna cotta',5.5]])
+  expect(groupCommand('la panna cotta alzala di 50 centesimi',rs,secs,new Set(),{menus:P.menus})).toBeNull()})
 })

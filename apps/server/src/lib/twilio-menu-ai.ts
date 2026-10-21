@@ -20,7 +20,8 @@ export const euro=(n:number)=>n.toFixed(2).replace('.',',')+' €'
 export const plain=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
 const verbatim=(text:string,message:string)=>{const t=plain(text);return !!t&&(' '+plain(message)+' ').includes(' '+t+' ')}
 // Creazioni solo con richiesta esplicita nel messaggio: «la lasagna costa 12» non crea mai un piatto.
-export const wantsCreate=(m:string)=>/\b(aggiung\w*|inserisc\w*|inserire|nuov[oa]|crea\w*)\b/.test(plain(m))||wantsSpecial(m)
+// 21/10 notte (adv-sera): «metti la bufalina tra le pizze a 10» = aggiunta (un nome già nel menu lo ferma il controllo dei doppioni).
+export const wantsCreate=(m:string)=>/\b(aggiung\w*|inserisc\w*|inserire|nuov[oa]|crea\w*)\b/.test(plain(m))||/\bmett\w*\b.*\b(?:tra|fra|nei|nelle|negli|nel|nella|in)\s+(?:i|le|gli|il|la)?\s*\w+/.test(plain(m))||wantsSpecial(m)
 export const wantsSpecial=(m:string)=>/\b(del giorno|di oggi)\b/.test(plain(m))
 // Se il modello non indica una capacità valida, parole chiave fisse lato server scelgono l'alternativa giusta.
 const hints:[RegExp,string][]=[[/allergen/,'allergens'],[/elimin|cancell|rimuov|toglier\w* per sempre/,'delete'],[/rinomin|cambi\w* (il )?nome/,'rename'],[/tutti i (prezzi|piatti)|tutto il menu|in blocco|percent/,'bulk'],[/grafic|color|font|impagin|logo|sfondo/,'graphics'],[/categori|sezion/,'categories'],[/tradu|ingles|lingu/,'translations'],[/\bfoto|immagin/,'photo'],[/vocal|audio/,'voice']]
