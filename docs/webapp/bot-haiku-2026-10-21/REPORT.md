@@ -4,6 +4,29 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+
+## 0ter. AGGIORNAMENTO 21/10 11:00–13:10 — Menu nuovi nascosti, «rendi visibile», «Menu in arrivo»: edge v132 + lettura v27 + worker 3e44eedc
+
+**Esito.** Gate verde e deploy fatto: `tako-operational-candidate` **v132** (ezbr a4015bb8…), `tako-read-candidate` **v27** (ezbr 4ec90e1d…), worker `takomenu-web` **3e44eedc…** (prima d21ca4b8…). Secret invariati (Haiku per tutti).
+- **Bot:** Menu creati dal bot nascono **nascosti** (`active=false`); un Sottomenu aggiunto a un Menu esistente nasce nascosto, quelli creati dentro un Menu nuovo seguono il Menu. Azioni `set_menu_visible`/`set_section_visible` («rendi visibile», «mostra», «fai vedere», «pubblica il menu…», «attiva…»): mostrare = subito; nascondere un Menu/Sottomenu con piatti = conferma; vuoto = subito; omonimi senza Menu → una domanda. Riepilogo: «Ho creato il Menu *Cena* con i sottomenu … Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.» · dopo «rendi visibile» su vuoto: «I clienti vedono «Menu in arrivo» finché non aggiungi i piatti.» «annulla» rimette anche la visibilità.
+- **Dashboard:** crea i Menu col suo codice (client, `13-menu-workspace.js` `newMenu … active:true`), NON passa dal bot: lì restano visibili alla creazione come prima.
+- **Pagina pubblica:** Menu e Sottomenu `active` si vedono anche vuoti, con la riga sobria «Menu in arrivo» (14 lingue). Un Menu con piatti tutti esauriti sparisce come prima. Senza `menuId` il QR apre il primo Menu con piatti (`defaultPublicMenu`).
+- **Locali online con Menu/Sottomenu attivi ma vuoti (dati NON toccati, decide Manuel):** **Panuzza's** — sottomenu «Fuori menù» e «Verdure» del Menu «Menu» (ora mostrano «Menu in arrivo»); **QA** — «Menu pranzo» (con «Completo») e «Menu cena» (della prova di Manuel).
+- Fix emersi nei giri: proposte di struttura confermabili, «Nascondo tutto il Menu X?» → proposta vera, sottomenu inventati col nome del Menu scartati, candidati incerti col nome del piatto, prezzi veri dei piatti nominati nella bozza, riepilogo con OK scritto dal server, piatti nei sottomenu creati nello stesso piano, con una correzione le parti in sospeso non si pubblicano, «aggiungi» su piatto esistente → domanda anche nei messaggi misti.
+
+| Set (giro v10, stato pushato) | Valore |
+|---|---|
+| Visibilità 20 (nuovo) | **20/20** |
+| Struttura 94 | **94/94** |
+| Banco vero 92 | **82/92 = 89,1%**, 0 GRAVI di sicurezza |
+| Avversario 150 | 140/150 = 93,3%, 0 di sicurezza |
+| Victoria · parlato · playground | 10/10 · 30/30 · 20/20 |
+| Suite vitest | 0 rossi nuovi · test web: stessi 23 rossi del commit prima (800016a) |
+
+Giri: v1 (enum delle azioni di visibilità mancante nello schema: il modello non poteva usarle) → v2 (rete giù) → v3–v10 con fix deterministici. Più dei 3 giri: il banco oscillava 81–90% per la varianza dopo il cambio di prompt; chiuso con regole del server, non col prompt (note 34).
+Rollback (`~/.config/tako-webapp/rollback-edge-20261021/`): operativo `candidate-index-v130-tutti.ts` (= v131); lettura `read-candidate-index-800016a.ts` con `deploy-projection.mjs --read`; worker `npx wrangler rollback d21ca4b8-44d0-4f3b-b451-be6fcdbc522e --config deploy/cloudflare/wrangler.jsonc`.
+
+---
 ## 0bis. AGGIORNAMENTO 21/10 10:00–11:20 — Menu/Sottomenu da chat, niente conferme a vuoto, Haiku per TUTTI, due numeri: edge v131 + dashboard
 
 **Esito.** Gate verde (V1–V9, banco 88%, 0 GRAVI di sicurezza su banco, avversario 150 e struttura). Deploy in ordine: migrazione due-numeri → **edge v130** (codice) → secret `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=haiku` → **edge v131** (stesso codice, ezbr `8f086c00…`) → **dashboard worker `takomenu-web` versione `d21ca4b8…`** (prima: `d0c898a4…`). **Haiku acceso per tutti i titolari** (Victoria compresa) senza scritture sui ristoranti.
