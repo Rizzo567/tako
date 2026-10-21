@@ -12,7 +12,7 @@ export type MenuRef={id:string,name:string,price:number,available:boolean,hidden
 export type SectionRef={id:string,name:string,menu:string,pub?:string}
 export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction|StructAction
 // `after` (17/10, A4.4): risposta alla domanda dello stesso messaggio, scritta dal server DOPO aver salvato la modifica.
-export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[],after?:{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'capability',ids:string[]}}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'clarify',ids:string[],actions?:MenuAction[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
+export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[],after?:{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'capability',ids:string[]}}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'read',read:'formulas',text:string}|{type:'clarify',ids:string[],actions?:MenuAction[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
 export const groqBase=()=>process.env.GROQ_API_BASE||'https://api.groq.com/openai/v1'
 export const twilioBase=()=>process.env.TWILIO_API_BASE||'https://api.twilio.com'
 export const chatModels=['openai/gpt-oss-120b','openai/gpt-oss-20b']
@@ -97,7 +97,9 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
  /** Fase R: categoria nuova anche senza la parola «categoria» (il route chiede sempre il «sì» al titolare). */
  implicitSections?:boolean,
  /** Fase R: piatti appena creati da WhatsApp (≤10 min): «no, il caviale lascialo stare» lo toglie senza conferma (annullamento della creazione). */
- freshIds?:Set<string>}={}):MenuPlan{
+ freshIds?:Set<string>,
+ /** Menu a prezzo fisso (21/10): sottomenu dei Menu fissi. Un piatto nuovo lì non ha prezzo: senza prezzo detto vale 0, mai chiesto. */
+ fixedSectionIds?:Set<string>}={}):MenuPlan{
  const data=parseJson(raw),sections=opts.sections??[],message=opts.message??'';if(!data||typeof data!=='object'||Array.isArray(data))return clarify()
  const byId=new Map(refs.map(r=>[r.id,r])),sectionIds=new Set(sections.map(s=>s.id)),known=(ids:unknown)=>Array.isArray(ids)?ids.filter((id):id is string=>typeof id==='string'&&byId.has(id)):[]
  if(data.intent==='capability'){const ids=Array.isArray(data.capability_ids)?data.capability_ids.filter((id:unknown):id is string=>typeof id==='string'&&(id==='all'||capabilities.some(c=>c.id===id))):[];const chosen=ids.length?[...new Set(ids)].slice(0,4) as string[]:[];return{type:'capability',ids:chosen.length&&!chosen.every(id=>id==='other')?chosen:capabilityHint(message)}}
@@ -124,11 +126,12 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
   if(a.action==='rename_section'){const name=cleanText(a.name,120);if(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)||!name||!verbatim(name,vt)||!RENAME_VERB.test(pm)||sections.some(x=>x.id!==a.section_id&&sameSection(x.name,name)))return clarify(valid);actions.push({kind:'rename_section',sectionId:a.section_id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)});continue}
   if(a.action==='create_item'||a.action==='create_daily_special'){if(++created>200||!(a.action==='create_item'?wantsCreate(message):wantsSpecial(message)))return clarify(valid);const name=cleanText(a.name,300),price=priceOf(a.price),description=a.description==null||a.description===''?null:cleanText(a.description,4000)
    if(a.action==='create_item'&&!okSection(a.section_id))return{type:'missing',missing:['section'],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
-   if(!name||price===null||(a.description!=null&&a.description!==''&&!description))return{type:'missing',missing:[...(!name?['name' as const]:[]),...(price===null?['price' as const]:[])],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
-   if(!verbatim(name,message)||(description&&!verbatim(description,message)))return{type:'verbatim'};if(g9ActionName.test(plain(name))||(a.action==='create_item'&&(' '+plain(name)+' ').includes(' '+plain(sections.find(x=>x.id===a.section_id)?.name??'\u0000')+' '))||!g9Said(price,message))return clarify(valid);const extra=description&&!plain(description).includes(plain(name))?description:null
+   const fixedSec=a.action==='create_item'&&!!opts.fixedSectionIds?.has(a.section_id),price0=price===null&&fixedSec?0:price
+   if(!name||price0===null||(a.description!=null&&a.description!==''&&!description))return{type:'missing',missing:[...(!name?['name' as const]:[]),...(price0===null?['price' as const]:[])],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
+   if(!verbatim(name,message)||(description&&!verbatim(description,message)))return{type:'verbatim'};if(g9ActionName.test(plain(name))||(a.action==='create_item'&&(' '+plain(name)+' ').includes(' '+plain(sections.find(x=>x.id===a.section_id)?.name??'\u0000')+' '))||!(g9Said(price0,message)||(fixedSec&&price0===0)))return clarify(valid);const extra=description&&!plain(description).includes(plain(name))?description:null
    // 17/10 (A4.3): «aggiungi X a 10» con X già nel menu: col prezzo detto diverso è un cambio di prezzo, uguale si salta;
    // le altre parti della richiesta restano (prima la richiesta intera diventava «c'è già»).
-   if(a.action==='create_item'){const twin=refs.find(r=>r.sectionId===a.section_id&&plain(r.name)===plain(name));if(twin){twins++;lastTwin=twin.id;if(Math.abs(twin.price-price)>=0.005&&!seen.has(twin.id+'set_price')){seen.add(twin.id+'set_price');actions.push({kind:'price',id:twin.id,price})}continue};actions.push({kind:'create',sectionId:a.section_id,name,price,description:extra})}else actions.push({kind:'special',name,price,description:extra});continue}
+   if(a.action==='create_item'){const twin=refs.find(r=>r.sectionId===a.section_id&&plain(r.name)===plain(name));if(twin){twins++;lastTwin=twin.id;if(!fixedSec&&Math.abs(twin.price-price0)>=0.005&&!seen.has(twin.id+'set_price')){seen.add(twin.id+'set_price');actions.push({kind:'price',id:twin.id,price:price0})}else if(fixedSec&&twin.hidden&&!seen.has(twin.id+'set_hidden')){seen.add(twin.id+'set_hidden');actions.push({kind:'hidden',id:twin.id,value:false})}continue};actions.push({kind:'create',sectionId:a.section_id,name,price:price0,description:extra,...(fixedSec&&price0===0?{noPrice:true}:{})} as MenuAction)}else actions.push({kind:'special',name,price:price0,description:extra});continue}
   if(typeof a.item_id!=='string'||!byId.has(a.item_id))return clarify(valid);if(!opts.trustedIds?.has(a.item_id)&&!g9DishMentioned(byId.get(a.item_id)!.name,message,refs))return clarify(valid);const key=a.item_id+a.action+(a.tag??'');if(seen.has(key))return clarify(valid);seen.add(key)
   if(a.action==='delete_item'){const fresh=!!opts.freshIds?.has(a.item_id)&&/\b(?:lascia\w*|lascial\w*|togli\w*|toglil\w*|lev\w*|non (?:lo|la) volevo)\b/.test(pm);if(fresh){actions.push({kind:'delete',id:a.item_id,undoCreate:true});continue}if(!DELETE_VERB.test(pm)&&!pm.split(' ').some(w=>['elimina','eliminare','eliminalo','eliminala','eliminali','cancella','cancellare','cancellalo','cancellala','cancellali'].some(f=>g9Near(w,f))))return clarify(valid);actions.push({kind:'delete',id:a.item_id});continue}
   if(a.action==='rename_item'){const name=cleanText(a.name,300);if(!name||!verbatim(name,vt)||!RENAME_VERB.test(pm)||plain(name)===plain(byId.get(a.item_id)!.name)||refs.some(r=>r.id!==a.item_id&&plain(r.name)===plain(name)))return clarify(valid);actions.push({kind:'rename',id:a.item_id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)});continue}
@@ -168,9 +171,11 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
  if(isStructAction(a)){const sec=(id:string)=>sections.find(s=>s.id===id)?.name??'?'
   if(a.kind==='create_menu')return 'Nuovo Menu *'+safe(a.name)+'*'
   if(a.kind==='delete_menu')return 'Tolto il Menu vuoto *'+safe(a.name)+'*'
-  if(a.kind==='set_formula')return a.isNew?'Nuova opzione *'+safe(a.name)+'* nel Menu *'+safe(a.menuName)+'*: *'+euro(a.price)+'*':'*'+safe(a.name)+'* del Menu *'+safe(a.menuName)+'*: '+(typeof a.before==='number'?'da '+euro(a.before)+' a ':'')+'*'+euro(a.price)+'*'
-  if(a.kind==='delete_formula')return 'Tolta l\'opzione *'+safe(a.name)+'* dal Menu *'+safe(a.menuName)+'*'
-  if(a.kind==='set_menu_pricing')return 'Menu *'+safe(a.name)+'*: '+(a.value==='fisso'?'*a prezzo fisso* (i prezzi dei piatti restano salvati)':'*alla carta*')
+  // «del Menu *Menu cena*» → «del *Menu cena*» quando il nome comincia già con «Menu».
+  const mn=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+safe(n.trim())+'*':'Menu *'+safe(n.trim())+'*'
+  if(a.kind==='set_formula')return a.isNew?'Nuova opzione *'+safe(a.name)+'* nel '+mn(a.menuName)+': *'+euro(a.price)+'*':'*'+safe(a.name)+'* del '+mn(a.menuName)+': '+(typeof a.before==='number'?'da '+euro(a.before)+' a ':'')+'*'+euro(a.price)+'*'
+  if(a.kind==='delete_formula')return 'Tolta l\'opzione *'+safe(a.name)+'* dal '+mn(a.menuName)
+  if(a.kind==='set_menu_pricing')return mn(a.name)+': '+(a.value==='fisso'?'*a prezzo fisso* (i prezzi dei piatti restano salvati)':'*alla carta*')
   if(a.kind==='set_menu_active')return 'Menu *'+safe(a.name)+'*: '+(a.value?'*visibile* ai clienti':'*nascosto* ai clienti')+(a.items?' ('+a.items+(a.items===1?' piatto':' piatti')+')':'')
   if(a.kind==='set_section_active')return 'Sottomenu *'+safe(a.name)+'*'+(a.menuName?' del Menu *'+safe(a.menuName)+'*':'')+': '+(a.value?'*visibile* ai clienti':'*nascosto* ai clienti')+(a.items?' ('+a.items+(a.items===1?' piatto':' piatti')+')':'')
   if(a.kind==='delete_section')return 'Tolto il Sottomenu vuoto *'+safe(a.name)+'*'+(a.menuName?' dal Menu *'+safe(a.menuName)+'*':'')
@@ -181,7 +186,9 @@ export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]
   if(a.kind==='delete')return fill(a.undoCreate?line.deletedNew:line.deleted,{piatto})
   if(a.kind==='rename')return fill(line.renamed,{piatto,nome:safe(a.name)})
   return fill(line.moved,{piatto,categoria:safe(sec(a.sectionId))})}
- if(a.kind==='create'){const section=sections.find(s=>s.id===a.sectionId);return fill(line.create,{piatto:safe(a.name),categoria:section?safe(section.name):'?',prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})}
+ if(a.kind==='create'){const section=sections.find(s=>s.id===a.sectionId),t=fill(line.create,{piatto:safe(a.name),categoria:section?safe(section.name):'?',prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})
+  // Menu a prezzo fisso (21/10): il prezzo dei piatti non si mostra.
+  return (a as any).noPrice?t.replace('*'+euro(a.price)+'*','senza prezzo (Menu a prezzo fisso)'):t}
  if(a.kind==='special')return fill(line.special,{piatto:safe(a.name),prezzo:euro(a.price),descrizione:a.description?fill(line.newDescription,{testo:short(a.description)}):''})
  const ref=refs.find(r=>r.id===a.id)!,piatto=itemLabel(ref,refs)
  if(isSalesAction(a))return describeSalesAction(a,piatto,ref.price)
@@ -246,6 +253,8 @@ export function proposalText(restaurant:string,actions:MenuAction[],refs:MenuRef
  return fill(copy.proposal,{locale:restaurant,righe:actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,all)).join('\n')})
 }
 export function readText(plan:Extract<MenuPlan,{type:'read'}>,refs:MenuRef[]){
+ // Menu a prezzo fisso (21/10): le opzioni di prezzo le scrive il server dal menu riletto (il testo è già composto dal pianificatore).
+ if(plan.read==='formulas')return plan.text
  if(plan.read==='items')return plan.ids.map(id=>{const r=refs.find(x=>x.id===id)!;return fill(line.read,{piatto:itemLabel(r,refs),prezzo:euro(r.price),stato:r.available?'disponibile':'finito',extra:(r.hidden?' · nascosto':'')+(r.featured?' · in evidenza':'')})}).join('\n')
  const list=refs.filter(r=>plan.read==='hidden'?r.hidden:!r.available).map(r=>'- '+itemLabel(r,refs));if(!list.length)return copy.readNone[plan.read]
  return fill(copy.readList[plan.read],{n:list.length,elenco:list.slice(0,40).join('\n')+(list.length>40?'\n…':'')})

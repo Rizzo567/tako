@@ -80,7 +80,9 @@ export function fixedChecks(c:FixedCase,v:Verdict,menus:EvalMenu[]):Fail[]{
   for(const id of spec.repTurns[n]??[])targets.add(id)
   // chiede il prezzo di un piatto (in qualsiasi turno) dove non si deve mai
   if(spec.noPriceAsk&&isQuestion(r)&&PRICE_ASK.test(r))add('chiede-prezzo-in-menu-fisso',`turno ${n}: «${r.replace(/\s+/g,' ').slice(0,100)}»`)
-  const same=JSON.stringify(A.menus)===JSON.stringify(P.menus)
+  // confronto semantico (il menu iniziale è il fixture grezzo, i successivi passano da workspaceSchema.parse: JSON.stringify darebbe sempre «diverso»)
+  const sig=(w:EvalMenu)=>JSON.stringify([w.menus.map(m=>m.id+'|'+fKey(m as AnyMenu)),[...items(w)].map(([id,{i,s}])=>[id,i.name,i.price,!!i.hidden,s]).sort()])
+  const same=sig(A)===sig(P)
   if(spec.orAsk.includes(n)&&same&&isQuestion(r))continue
   // formule e pricing
   for(const om of O.menus as AnyMenu[]){const am=A.menus.find(x=>x.id===om.id) as AnyMenu|undefined,pm=P.menus.find(x=>x.id===om.id) as AnyMenu|undefined
