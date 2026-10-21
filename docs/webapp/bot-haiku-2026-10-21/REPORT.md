@@ -6,6 +6,45 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+## 0octies. AGGIORNAMENTO 22/10 notte — bot multi-turno a prova di bug: edge v140
+
+Bug dal vivo segnalati da Manuel sul QA (21/10 sera, v137):
+- un «sì» non eseguiva la proposta;
+- i messaggi nuovi venivano incollati alla domanda in sospeso (`source` che accumulava);
+- mancava la rinomina di Menu e Sottomenu;
+- «tutte le paste» chiedeva conferma;
+- i Primi venivano creati nel Menu sbagliato.
+
+Correzione strutturale (commit d0915bb0 … 2195764e):
+- domanda in sospeso con tetto di 2 giri;
+- un secondo «sì» esegue la proposta, oppure la domanda si chiude;
+- mai una conferma senza azioni salvate;
+- mai «Non ho cambiato nulla» a un comando chiaro;
+- un comando nuovo chiude la domanda e viene eseguito da solo;
+- `source` limitato all'ultimo messaggio;
+- rinomina di Menu e Sottomenu con annulla;
+- sessione dei piatti di oggi letta dal server: liste per sottomenu che restano tra un turno e l'altro, nuovi a 0 € nei menu fissi, correzioni e refusi; non è un copione fisso.
+
+Gate superato:
+
+| Prova | Risultato |
+|---|---|
+| multiturno | 38/38 |
+| adv-sera (batteria dura in italiano normale: omonimi, pronomi, numeri in lettere, refusi, richieste multiple, menu del giorno intero, sessioni) | 227/227 |
+| proprietà | 6 seed × 200 conversazioni, 0 violazioni |
+| prezzofisso | 74/75 (resta il falso positivo noto) |
+| suite vitest | 0 rossi nuovi |
+
+Prove dal vivo sul QA:
+- **v138:** la conversazione di Manuel 1–13 regge.
+- **v139:** la sessione del menu del giorno è corretta (Primi = Lasagna + Risotto ai funghi, Secondi = Tagliata + Polpette, Carbonara tolta alla correzione).
+- **v140:** lasagne senza prezzo con il tetto, poi «lasagna 12» crea il piatto; il «sì» a vuoto riceve una risposta utile.
+
+QA rimesso com'era prima delle prove.
+
+- Nota: il primo messaggio dopo un deploy ha impiegato 69 s (avvio a freddo dell'edge).
+- Rollback: `cp $RB/rollback-v139.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`. Sono disponibili anche rollback-v138 e rollback-v137.
+
 ## 0septies. AGGIORNAMENTO 21/10 notte — Victoria migrata al prezzo fisso, bot finale, punti minori: TUTTO ONLINE
 
 **Online:**
