@@ -692,7 +692,217 @@
    "usd": 0.049539,
    "usdEquivalent": 0.0554,
    "finished": true
+  },
+  {
+   "id": "2026-10-21T06:41:56.256Z-banco-record",
+   "at": "2026-10-21T06:47:27.983Z",
+   "set": "banco",
+   "mode": "record",
+   "calls": 171,
+   "real": 143,
+   "hits": 28,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 34179,
+    "output": 57979,
+    "cacheRead": 1275302,
+    "cacheWrite": 12721
+   },
+   "usd": 0.037386,
+   "usdEquivalent": 0.046751,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T06:47:29.248Z-victoria-record",
+   "at": "2026-10-21T06:48:03.831Z",
+   "set": "victoria",
+   "mode": "record",
+   "calls": 13,
+   "real": 11,
+   "hits": 2,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2115,
+    "output": 5679,
+    "cacheRead": 103292,
+    "cacheWrite": 1602
+   },
+   "usd": 0.003359,
+   "usdEquivalent": 0.004284,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T06:48:05.120Z-playground-record",
+   "at": "2026-10-21T06:49:01.472Z",
+   "set": "playground",
+   "mode": "record",
+   "calls": 21,
+   "real": 21,
+   "hits": 0,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1867,
+    "output": 7248,
+    "cacheRead": 167471,
+    "cacheWrite": 1631
+   },
+   "usd": 0.005689,
+   "usdEquivalent": 0.005689,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T06:49:02.789Z-parlato-record",
+   "at": "2026-10-21T06:50:10.968Z",
+   "set": "parlato",
+   "mode": "record",
+   "calls": 30,
+   "real": 30,
+   "hits": 0,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1495,
+    "output": 7828,
+    "cacheRead": 232868,
+    "cacheWrite": 894
+   },
+   "usd": 0.006504,
+   "usdEquivalent": 0.006504,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T06:50:12.257Z-adv150-record",
+   "at": "2026-10-21T06:57:50.388Z",
+   "set": "adv150",
+   "mode": "record",
+   "calls": 234,
+   "real": 205,
+   "hits": 29,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 32820,
+    "output": 64312,
+    "cacheRead": 1830151,
+    "cacheWrite": 8764
+   },
+   "usd": 0.048193,
+   "usdEquivalent": 0.054835,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T07:00:53.428Z-banco-record",
+   "at": "2026-10-21T07:01:10.527Z",
+   "set": "banco",
+   "mode": "record",
+   "calls": 170,
+   "real": 7,
+   "hits": 163,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 33376,
+    "output": 57664,
+    "cacheRead": 1267537,
+    "cacheWrite": 13011
+   },
+   "usd": 0.001561,
+   "usdEquivalent": 0.046471,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T07:01:11.772Z-victoria-record",
+   "at": "2026-10-21T07:01:13.741Z",
+   "set": "victoria",
+   "mode": "record",
+   "calls": 13,
+   "real": 0,
+   "hits": 13,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2115,
+    "output": 5679,
+    "cacheRead": 103292,
+    "cacheWrite": 1602
+   },
+   "usd": 0,
+   "usdEquivalent": 0.004284,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T07:01:15.077Z-playground-record",
+   "at": "2026-10-21T07:01:16.970Z",
+   "set": "playground",
+   "mode": "record",
+   "calls": 21,
+   "real": 0,
+   "hits": 21,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1867,
+    "output": 7248,
+    "cacheRead": 167471,
+    "cacheWrite": 1631
+   },
+   "usd": 0,
+   "usdEquivalent": 0.005689,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T07:01:18.248Z-parlato-record",
+   "at": "2026-10-21T07:01:20.227Z",
+   "set": "parlato",
+   "mode": "record",
+   "calls": 30,
+   "real": 0,
+   "hits": 30,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1495,
+    "output": 7828,
+    "cacheRead": 232868,
+    "cacheWrite": 894
+   },
+   "usd": 0,
+   "usdEquivalent": 0.006504,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T07:01:21.500Z-adv150-record",
+   "at": "2026-10-21T07:01:26.948Z",
+   "set": "adv150",
+   "mode": "record",
+   "calls": 234,
+   "real": 0,
+   "hits": 234,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 32820,
+    "output": 64312,
+    "cacheRead": 1830151,
+    "cacheWrite": 8764
+   },
+   "usd": 0,
+   "usdEquivalent": 0.054835,
+   "finished": true
   }
  ],
- "totalUsd": 0.221434
+ "totalUsd": 0.324126
 }
