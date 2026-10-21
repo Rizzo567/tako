@@ -556,44 +556,93 @@ function MenuWorkspaceItemActions({document,item,menuId,checked,setChecked,busy,
  </section>;
 }
 
-/* WhatsApp del titolare (15/10/2026): un solo telefono per locale. Salvare crea un pre-collegamento senza codici né messaggi;
-   quando quel numero scrive al bot per la prima volta il collegamento diventa attivo. Permessi verificati dal server (agenzia o titolare). */
-function MenuWhatsAppSetup(){const [state,setState]=useState(null),[phone,setPhone]=useState(''),[email,setEmail]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[move,setMove]=useState(''),[linkedAt,setLinkedAt]=useState(null),[replacedNote,setReplacedNote]=useState('');
- const show=r=>{setState(r);setPhone(r?.phone||'');setEmail(r?.email||'');};
- const statusRef=useRef(null);
- useEffect(()=>{let alive=true;TakoAPI.get('/menu-workspace/whatsapp/owner').then(r=>{if(alive)show(r)}).catch(e=>{if(alive)setError(e.message)});return()=>{alive=false}},[]);
- /* In attesa del primo messaggio: rilegge lo stato ogni 3 s solo con la scheda visibile; si ferma appena collegato o alla chiusura del pannello. */
- const waiting=state?.status==='pending'&&!!state?.phone,waitingPhone=waiting?state.phone:'';
- useEffect(()=>{if(!waitingPhone)return;let alive=true,inFlight=false;
-  const poll=()=>{if(!alive||inFlight||window.document.hidden)return;inFlight=true;TakoAPI.get('/menu-workspace/whatsapp/owner').then(r=>{if(!alive||!r||r.phone!==waitingPhone)return;if(r.status==='linked'){setLinkedAt(new Date());setState(r);}}).catch(()=>{}).finally(()=>{inFlight=false});};
+/* WhatsApp del titolare. 21/10/2026 (richiesta Manuel): fino a DUE numeri per locale, ognuno con la sua email e il suo account;
+   pannello rifatto: una riga di testata, elenco in griglia (numero · email · stato · azioni), modifica e aggiunta nella riga,
+   QR compatto. Salvare crea un pre-collegamento senza codici né messaggi; il primo messaggio di quel numero lo attiva.
+   Permessi e limite di due numeri verificati dal server (agenzia o titolare). */
+const MW_OWA_MAX=2;
+/* «+393347223384» → «+39 334 722 3384»; «+18382622788» → «+1 838 262 2788». Solo presentazione: al server va sempre il valore grezzo. */
+function MW_OWA_PHONE(raw){const d=String(raw||'').replace(/\D/g,'');if(!d)return String(raw||'');
+ const cc=d.startsWith('39')?'39':d.startsWith('1')?'1':d.slice(0,2),rest=d.slice(cc.length);
+ const parts=rest.length===10?[rest.slice(0,3),rest.slice(3,6),rest.slice(6)]:rest.match(/.{1,3}/g)||[];return '+'+cc+' '+parts.join(' ');}
+/* Errore del server → campo giusto (il server manda «field»; i codici coprono i server senza). */
+const MW_OWA_FIELD=e=>e?.field||(/^EMAIL/.test(e?.code||'')?'email':/^(PHONE|OWNER_PHONES)/.test(e?.code||'')?'phone':e?.code==='VALIDATION'?(/^Email/.test(e?.message||'')?'email':'phone'):null);
+
+function MenuWhatsAppNumberForm({initial,busy,canCancel,autoFocus,onSave,onCancel,error,move,onMove,onDismissMove}){
+ const [phone,setPhone]=useState(initial?.phone?MW_OWA_PHONE(initial.phone):''),[email,setEmail]=useState(initial?.email||'');
+ const phoneRef=useRef(null),uid=useRef('mw-owa-'+Math.random().toString(36).slice(2,8)).current;
+ useEffect(()=>{if(autoFocus)phoneRef.current?.focus();},[]);
+ const fieldError=f=>error&&MW_OWA_FIELD(error)===f?error.message:'';
+ const generalError=error&&!MW_OWA_FIELD(error)?error.message:'';
+ const unchanged=!!initial&&phone.replace(/\D/g,'')===String(initial.phone||'').replace(/\D/g,'')&&email.trim().toLowerCase()===(initial.email||'');
+ const submit=e=>{e.preventDefault();if(busy||!phone.trim()||!email.trim()||unchanged)return;onSave({phone:phone.trim(),email:email.trim()});};
+ return <form className="mw-owa-form" onSubmit={submit} onKeyDown={e=>{if(e.key==='Escape'&&canCancel){e.preventDefault();onCancel();}}} noValidate>
+  <label className="mw-field mw-owa-form-phone"><span>Cellulare</span><input ref={phoneRef} type="tel" inputMode="tel" autoComplete="off" placeholder="333 123 4567" maxLength={24} value={phone} disabled={busy} aria-invalid={!!fieldError('phone')} aria-describedby={fieldError('phone')?uid+'-phone':undefined} onChange={e=>{setPhone(e.target.value);onDismissMove?.();}}/></label>
+  {fieldError('phone')&&<p id={uid+'-phone'} role="alert" className="mw-owa-error mw-owa-error-phone">{fieldError('phone')}</p>}
+  <label className="mw-field mw-owa-form-email"><span>Email</span><input type="email" inputMode="email" autoComplete="off" placeholder="nome@gmail.com" maxLength={254} value={email} disabled={busy} aria-invalid={!!fieldError('email')} aria-describedby={fieldError('email')?uid+'-email':undefined} onChange={e=>setEmail(e.target.value)}/></label>
+  {fieldError('email')&&<p id={uid+'-email'} role="alert" className="mw-owa-error mw-owa-error-email">{fieldError('email')}</p>}
+  <div className="mw-owa-form-actions"><button type="submit" className="mw-pill mw-pill-dark mw-owa-btn" disabled={busy||!phone.trim()||!email.trim()||unchanged} aria-busy={busy||undefined}>{busy?'Salvo…':'Salva'}</button>{canCancel&&<button type="button" className="mw-pill mw-owa-btn" disabled={busy} onClick={onCancel}>Annulla</button>}</div>
+  {generalError&&<p role="alert" className="mw-owa-error mw-owa-form-note">{generalError}</p>}
+  {move&&<div role="alert" className="mw-owa-move"><span>{move}</span><button type="button" className="mw-pill mw-pill-dark mw-owa-btn" disabled={busy} onClick={()=>onMove({phone:phone.trim(),email:email.trim()})}>Sposta qui</button><button type="button" className="mw-pill mw-owa-btn" disabled={busy} onClick={onDismissMove}>Annulla</button></div>}
+ </form>;
+}
+
+function MenuWhatsAppSetup(){
+ const [state,setState]=useState(null),[loadError,setLoadError]=useState(''),[busy,setBusy]=useState(false);
+ /* editing: null | 'new' | numero in modifica; confirming: numero di cui si chiede «Scollegare?». */
+ const [editing,setEditing]=useState(null),[confirming,setConfirming]=useState(null),[formError,setFormError]=useState(null),[move,setMove]=useState(''),[justLinked,setJustLinked]=useState('');
+ const addRef=useRef(null),rowRefs=useRef({}),focusNext=useRef(null);
+ const numbers=state?.numbers||[],max=state?.max||MW_OWA_MAX,full=numbers.length>=max;
+ useEffect(()=>{let alive=true;TakoAPI.get('/menu-workspace/whatsapp/owner').then(r=>{if(alive)setState(r)}).catch(e=>{if(alive)setLoadError(e.message||'Pannello non disponibile')});return()=>{alive=false}},[]);
+ /* In attesa del primo messaggio: rilegge lo stato ogni 3 s solo con la scheda visibile; si ferma quando nessun numero è in attesa o alla chiusura. */
+ const waitingKey=numbers.filter(n=>n.status==='pending').map(n=>n.phone).join(',');
+ useEffect(()=>{if(!waitingKey)return;let alive=true,inFlight=false;
+  const poll=()=>{if(!alive||inFlight||window.document.hidden)return;inFlight=true;TakoAPI.get('/menu-workspace/whatsapp/owner').then(r=>{if(!alive||!r)return;
+   const now=new Set((r.numbers||[]).filter(n=>n.status==='linked').map(n=>n.phone)),fresh=waitingKey.split(',').find(p=>now.has(p));
+   if(fresh){setJustLinked(fresh);setState(r);}}).catch(()=>{}).finally(()=>{inFlight=false});};
   const timer=setInterval(poll,3000),visible=()=>{if(!window.document.hidden)poll()};window.document.addEventListener('visibilitychange',visible);
-  return()=>{alive=false;clearInterval(timer);window.document.removeEventListener('visibilitychange',visible)}},[waitingPhone]);
- useEffect(()=>{const el=statusRef.current;if(!linkedAt||!el||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const t=window.TakoMenuMotion;el.animate([{opacity:.4,transform:'scale(.97)'},{opacity:1,transform:'none'}],{duration:t?.durationMs?.standard||280,easing:`cubic-bezier(${(t?.easing?.out||[.22,1,.36,1]).join(',')})`});},[linkedAt]);
- const save=async(confirmMove)=>{if(busy)return;
+  return()=>{alive=false;clearInterval(timer);window.document.removeEventListener('visibilitychange',visible)}},[waitingKey]);
+ /* Collegato appena arrivato: la pillola dello stato cambia sul posto (motion standard), niente con riduzione del movimento. */
+ useEffect(()=>{const el=justLinked&&rowRefs.current[justLinked]?.querySelector('.mw-owa-state');if(!el||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const t=window.TakoMenuMotion;el.animate([{opacity:.4,transform:'scale(.97)'},{opacity:1,transform:'none'}],{duration:t?.durationMs?.standard||280,easing:`cubic-bezier(${(t?.easing?.out||[.22,1,.36,1]).join(',')})`});},[justLinked]);
+ /* Focus dopo il cambio di stato (chiusura del form, scollega): sul «Modifica» della riga o su «Aggiungi numero», altrimenti sul titolo. */
+ useEffect(()=>{const want=focusNext.current;if(!want||editing)return;focusNext.current=null;const target=(want.phone&&rowRefs.current[want.phone]?.querySelector('[data-owa-edit]'))||addRef.current||window.document.getElementById('mw-owa-title');target?.focus?.();});
+ const closeForm=(focusPhone)=>{focusNext.current={phone:focusPhone||null};setEditing(null);setFormError(null);setMove('');};
+ const save=async(values,confirmMove)=>{if(busy)return;const current=editing&&editing!=='new'?numbers.find(n=>n.phone===editing):null;
   /* 19/10 sera: a collegamento attivo l'email è già l'utente del titolare: si cambia solo scollegando e ricollegando (lo verifica anche il server). */
-  if(state?.status==='linked'&&state?.email&&phone.trim()===state?.phone&&email.trim().toLowerCase()!==state.email){setError(`Il titolare ha già l’accesso con ${state.email}. Per cambiarla scollega e ricollega.`);return;}
-  setBusy(true);setError('');setMove('');setReplacedNote('');try{const r=await TakoAPI.post('/menu-workspace/whatsapp/owner',confirmMove?{phone,email,move:true}:{phone,email});show(r);
-   /* 19/10 sera: un locale ha un solo numero: se ne è stato sostituito uno lo diciamo chiaramente. */
-   const gone=(r?.replacedPhones||[]).filter(Boolean);if(gone.length)setReplacedNote(gone.length===1?`Il numero precedente (${gone[0]}) è stato scollegato.`:`I numeri precedenti (${gone.join(', ')}) sono stati scollegati.`);
-   toast('Titolare salvato',{type:'success'})}catch(e){if(e.code==='PHONE_IN_USE_MOVABLE')setMove(e.message);else setError(e.message||'Numero non salvato')}finally{setBusy(false)}};
- const disconnect=async()=>{if(busy||!window.confirm('Scollegare il WhatsApp del titolare? Il bot non risponderà più a questo numero.'))return;setBusy(true);setError('');setMove('');setReplacedNote('');try{show(await TakoAPI.del('/menu-workspace/whatsapp/owner'));toast('WhatsApp scollegato',{type:'success'})}catch(e){setError(e.message||'Scollegamento non riuscito')}finally{setBusy(false)}};
- const linked=state?.status==='linked';
- /* 19/10: QR per il titolare dopo il salvataggio (In attesa o Collegato). Apre la chat col bot con «Ciao» già scritto; nessun token: l'identità è il numero già collegato. */
- const botDigits=/^\+?\d{8,15}$/.test(String(state?.sender||'').replace(/\s/g,''))?String(state.sender).replace(/\D/g,''):'',waLink=state?.phone&&botDigits?`https://wa.me/${botDigits}?text=Ciao`:'';
+  if(current?.status==='linked'&&current.email&&values.phone.replace(/\D/g,'')===current.phone.replace(/\D/g,'')&&values.email.toLowerCase()!==current.email){setFormError({field:'email',message:`Il titolare ha già l’accesso con ${current.email}. Per cambiarla scollega e ricollega.`});return;}
+  setBusy(true);setFormError(null);setMove('');
+  try{const r=await TakoAPI.post('/menu-workspace/whatsapp/owner',{...values,...(current?{replace:current.phone}:{}),...(confirmMove?{move:true}:{})});setState(r);
+   const saved=(r?.numbers||[]).find(n=>n.phone.replace(/\D/g,'')===values.phone.replace(/\D/g,''));toast(current?'Numero aggiornato':'Numero aggiunto',{type:'success'});closeForm(saved?.phone);}
+  catch(e){if(e.code==='PHONE_IN_USE_MOVABLE')setMove(e.message);else setFormError({field:e.field,code:e.code,message:e.message||'Numero non salvato'});}
+  finally{setBusy(false)}};
+ const disconnect=async(phone)=>{if(busy)return;setBusy(true);
+  try{const r=await TakoAPI.del('/menu-workspace/whatsapp/owner?phone='+encodeURIComponent(phone));setState(r);focusNext.current={phone:null};setConfirming(null);toast('Numero scollegato',{type:'success'});}
+  catch(e){toast(e.message||'Scollegamento non riuscito',{type:'error'})}finally{setBusy(false)}};
+ /* 19/10: QR per il titolare (con almeno un numero salvato). Apre la chat col bot con «Ciao» già scritto; nessun token: l'identità è il numero collegato. */
+ const botDigits=/^\+?\d{8,15}$/.test(String(state?.sender||'').replace(/\s/g,''))?String(state.sender).replace(/\D/g,''):'',waLink=numbers.length&&botDigits?`https://wa.me/${botDigits}?text=Ciao`:'';
  const [waQr,setWaQr]=useState('');
  useEffect(()=>{if(!waLink){setWaQr('');return;}let alive=true;MW_TRIAL_QR(waLink,{width:1024,margin:4}).then(data=>{if(alive)setWaQr(data)}).catch(()=>{if(alive)setWaQr('')});return()=>{alive=false}},[waLink]);
- const copyWaLink=async()=>{try{await navigator.clipboard.writeText(waLink);toast('Link copiato',{type:'success'})}catch{setError('Impossibile copiare: seleziona il link e copialo a mano.')}};
+ const copyWaLink=async()=>{try{await navigator.clipboard.writeText(waLink);toast('Link copiato',{type:'success'})}catch{toast('Copia non riuscita: il link è '+waLink,{type:'error',duration:8000})}};
  const downloadWaQr=()=>{if(!waQr)return;const a=window.document.createElement('a');a.href=waQr;a.download='whatsapp-titolare-qr.png';a.click();};
- return <Card><section aria-label="WhatsApp del titolare" className="mw-owner-whatsapp"><h3>WhatsApp del titolare</h3><p>Il titolare aggiorna il menu scrivendo su WhatsApp al numero {state?.sender||'di Tako'}. Inserisci il suo cellulare e la sua email: quando scrive per la prima volta, il bot lo riconosce, gli manda il benvenuto e i dati per entrare nella dashboard (l’utente è l’email). Le modifiche piccole le pubblica subito, quelle grosse le fa confermare.</p>
-  <form onSubmit={e=>{e.preventDefault();save(false)}}><label className="mw-field"><span>WhatsApp del titolare</span><input type="tel" inputMode="tel" autoComplete="off" placeholder="333 123 4567" maxLength={24} value={phone} disabled={busy||!state} onChange={e=>{setPhone(e.target.value);setMove('')}}/></label>
-   {/* 19/10: email del titolare obbligatoria: diventa l'utente della sua dashboard. */}
-   <label className="mw-field"><span>Email del titolare</span><input type="email" inputMode="email" autoComplete="off" placeholder="nome@gmail.com" maxLength={254} required value={email} disabled={busy||!state} onChange={e=>setEmail(e.target.value)}/></label>
-   {state?.phone&&<p role="status" aria-live="polite" className="mw-owner-whatsapp-status"><span ref={statusRef} className={'mw-owner-whatsapp-pill'+(linked?' is-linked':'')}><Badge tone={linked?'ok':'muted'} dot>{linked?'Collegato':'In attesa del primo messaggio'}</Badge></span><span>{state.phone}</span>{linked&&linkedAt&&<span className="mw-owner-whatsapp-time">dalle {linkedAt.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}</span>}</p>}
-   {waLink&&<div className="mw-owner-whatsapp-qr"><div className="mw-owner-whatsapp-qr-img">{waQr?<img src={waQr} alt="QR per scrivere al bot su WhatsApp" width="220" height="220"/>:<span>Preparazione QR…</span>}</div><div className="mw-owner-whatsapp-qr-side"><p>Fai inquadrare il QR al titolare dal suo telefono: si apre WhatsApp con «Ciao» già scritto.</p><input className="mw-owner-whatsapp-link" readOnly aria-label="Link WhatsApp per il titolare" value={waLink} onFocus={e=>e.target.select()}/><div className="mw-actions"><button type="button" className="mw-pill" onClick={copyWaLink}>Copia link</button><button type="button" className="mw-pill" disabled={!waQr} onClick={downloadWaQr}>Scarica QR</button></div></div></div>}
-   {replacedNote&&<p role="status" className="mw-owner-whatsapp-replaced">{replacedNote}</p>}
-   {move&&<div role="alert" className="mw-owner-whatsapp-move"><p>{move}</p><div className="mw-actions"><Btn type="button" disabled={busy} onClick={()=>save(true)}>Sposta su questo locale</Btn><Btn type="button" kind="ghost" disabled={busy} onClick={()=>setMove('')}>Annulla</Btn></div></div>}
-   {error&&<p role="alert">{error}</p>}
-   <div className="mw-actions"><Btn disabled={busy||!state||!phone.trim()||!email.trim()||(phone.trim()===state?.phone&&email.trim().toLowerCase()===(state?.email||''))}>Salva</Btn>{state?.phone&&<Btn type="button" kind="soft" disabled={busy} onClick={disconnect}>Scollega</Btn>}</div></form></section></Card>}
+ const formProps={busy,error:formError,move,onDismissMove:()=>setMove(''),onSave:v=>save(v,false),onMove:v=>save(v,true)};
+ const empty=!!state&&!numbers.length;
+ return <Card><section aria-labelledby="mw-owa-title" className="mw-owa">
+  <header className="mw-owa-head"><div><h3 id="mw-owa-title" tabIndex={-1}>WhatsApp del titolare</h3><p>Chi è in elenco modifica il menu scrivendo a <strong className="mw-owa-num">{state?.sender?MW_OWA_PHONE(state.sender):'Takomenu'}</strong>.</p></div>{!!numbers.length&&<span className="mw-owa-count" aria-label={`${numbers.length} numeri su ${max}`}>{numbers.length} di {max}</span>}</header>
+  {!state&&!loadError&&<TakoLoading label="Caricamento…" variant="compact"/>}
+  {loadError&&<p role="alert" className="mw-owa-error">{loadError}</p>}
+  {!!numbers.length&&<ul className="mw-owa-list">{numbers.map(n=>{const linked=n.status==='linked';return <li key={n.phone} ref={el=>{rowRefs.current[n.phone]=el}} className={'mw-owa-row'+(editing===n.phone?' is-editing':'')}>
+   {editing===n.phone?<MenuWhatsAppNumberForm {...formProps} initial={n} canCancel autoFocus onCancel={()=>closeForm(n.phone)}/>:<>
+    <span className="mw-owa-phone mw-owa-num">{MW_OWA_PHONE(n.phone)}</span>
+    <span className="mw-owa-email" title={n.email||''}>{n.email||<em>Email mancante</em>}</span>
+    <span className="mw-owa-state" role="status"><Badge tone={linked?'ok':'muted'} dot>{linked?'Collegato':'In attesa del primo messaggio'}</Badge></span>
+    {confirming===n.phone?<span className="mw-owa-actions mw-owa-confirm" role="group" aria-label={'Scollegare '+MW_OWA_PHONE(n.phone)+'?'}><span>Scollegare?</span><button type="button" className="mw-owa-link is-danger" disabled={busy} aria-busy={busy||undefined} onClick={()=>disconnect(n.phone)}>{busy?'Attendi…':'Scollega'}</button><button type="button" className="mw-owa-link" autoFocus disabled={busy} onClick={()=>setConfirming(null)}>Annulla</button></span>
+    :<span className="mw-owa-actions"><button type="button" data-owa-edit className="mw-owa-link" disabled={busy||!!editing} onClick={()=>{setConfirming(null);setFormError(null);setMove('');setEditing(n.phone);}}>Modifica</button><button type="button" className="mw-owa-link" disabled={busy||!!editing} onClick={()=>setConfirming(n.phone)}>Scollega</button></span>}
+   </>}
+  </li>})}{editing==='new'&&<li className="mw-owa-row is-editing is-new"><MenuWhatsAppNumberForm {...formProps} canCancel autoFocus onCancel={()=>closeForm()}/></li>}</ul>}
+  {empty&&<div className="mw-owa-list mw-owa-list--empty"><div className="mw-owa-row is-editing"><MenuWhatsAppNumberForm {...formProps} canCancel={false}/></div></div>}
+  {!!numbers.length&&!full&&editing!=='new'&&<button ref={addRef} type="button" className="mw-owa-add" disabled={busy||!!editing} onClick={()=>{setConfirming(null);setFormError(null);setMove('');setEditing('new');}}><span aria-hidden="true">+</span> Aggiungi numero</button>}
+  {waLink&&<div className="mw-owa-qr"><div className="mw-owa-qr-img">{waQr?<img src={waQr} alt="QR per scrivere al bot su WhatsApp" width="104" height="104"/>:<span aria-hidden="true"/>}</div><p>Fai inquadrare al titolare: apre WhatsApp con «Ciao» già scritto.</p><div className="mw-owa-qr-actions"><button type="button" className="mw-pill mw-owa-btn" onClick={copyWaLink}>Copia link</button><button type="button" className="mw-pill mw-owa-btn" disabled={!waQr} onClick={downloadWaQr}>Scarica QR</button></div></div>}
+ </section></Card>}
 
 /* MenuCatalogCategoryIcon: vedi src/13-menu-category-icons.js */
 
