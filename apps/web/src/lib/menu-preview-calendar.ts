@@ -22,7 +22,10 @@ export function projectMenuPreview(doc:any,menuId:string,language:string,instant
    const translated=localize(i);return {...translated,description:translated.description||undefined,imageUrl:i.imageUrl||undefined,available:i.available!==false,...previewSales(i,instant??new Date())}
   })}
  })
- return {menu:{id:menu.id,name:localize(menu).name,description:(typeof localize(menu).description==='string'&&localize(menu).description.trim())||undefined,sections},design:doc.design,foodLabels:doc.foodTranslations?.[language||doc.defaultLanguage],menuVisible}
+ // Menu a prezzo fisso (21/10): l'anteprima della dashboard mostra opzioni e «Compreso» come la pagina pubblica.
+ const fixed=menu.pricing==='fisso',secIds=new Set(sections.map((x:any)=>x.id)),lang=language||doc.defaultLanguage
+ const fixedFields=fixed?{pricing:'fisso',formulas:(Array.isArray(menu.formulas)?menu.formulas:[]).filter((f:any)=>f&&typeof f.name==='string'&&f.name.trim()).map((f:any)=>({id:f.id,name:f.translations?.[lang]?.name||f.name,price:Number(f.price),...(f.translations?.[lang]?.description||f.note?{note:f.translations?.[lang]?.description||f.note}:{}),...(Array.isArray(f.sectionIds)?{sectionIds:f.sectionIds.filter((id:string)=>secIds.has(id))}:{})})),...((menu.translations?.[lang]?.included||menu.included)?{included:menu.translations?.[lang]?.included||menu.included}:{})}:{}
+ return {menu:{id:menu.id,name:localize(menu).name,description:(typeof localize(menu).description==='string'&&localize(menu).description.trim())||undefined,sections,...fixedFields},design:doc.design,foodLabels:doc.foodTranslations?.[language||doc.defaultLanguage],menuVisible}
 }
 /** F3+F4 anteprima: stessa regola del server (giornata alle 06:00, Europe/Rome): solo promo/etichette valide adesso. */
 export function previewSales(item:any,now:Date,zone='Europe/Rome'):{promoPrice?:number,lastPortions?:true,onlyToday?:true}{

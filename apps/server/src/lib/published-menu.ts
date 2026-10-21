@@ -4,7 +4,8 @@ import { readWorkspace } from './menu-workspace-store.js'
 import { publicWorkspace } from './menu-workspace-schedule.js'
 import { salesTimezone } from './menu-sales.js'
 import type { Workspace } from './menu-workspace-contract.js'
-import type { PublicMenu } from '@tako/types'
+import type { PublicMenu, PublicFormula } from '@tako/types'
+import { isFixed, visibleFormulas } from './menu-fixed-price.js'
 
 /** Never initialize an editor or expose drafts from a public request. */
 export async function publishedMenu(restaurantId: string,options:{catalogOnly?:boolean}={}): Promise<Workspace | null> {
@@ -67,6 +68,7 @@ export function publicMenuProjection(menu: Workspace['menus'][number], language?
     id: menu.id, name: translated(menu)?.name || menu.name,
     ...(menuNote ? { description: menuNote, ...(marking && !translated(menu)?.description?.trim() ? { descriptionLang: sourceLanguage } : {}) } : {}),
     ...((menu as PublishedMenuEntry).empty ? { empty: true } : {}),
+    ...fixedPriceProjection(menu, language),
     sections: menu.sections.map(section => ({
       id: section.id, sourceName: section.name, name: translated(section)?.name || section.name,
       parentSectionId: section.parentSectionId, description: translated(section)?.description ?? section.description ?? undefined,
@@ -85,4 +87,18 @@ export function publicMenuProjection(menu: Workspace['menus'][number], language?
       })),
     })),
   }
+}
+/** Menu «a prezzo fisso» (21/10): opzioni e «Compreso» tradotti come nome/descrizione; alla carta nessun campo (identico a prima). */
+export function fixedPriceProjection(menu: Workspace['menus'][number], language?: string): Pick<PublicMenu, 'pricing' | 'formulas' | 'included'> {
+  if (!isFixed(menu)) return {}
+  // Solo Sottomenu presenti nel menu pubblicato (attivi, non nascosti da orari): un id sparito non lascia blocchi vuoti.
+  const sectionIdsInMenu = new Set(menu.sections.map(section => section.id))
+  const formulas: PublicFormula[] = visibleFormulas(menu).map(formula => {
+    const t = language ? formula.translations?.[language] : undefined
+    const note = t?.description?.trim() || formula.note?.trim() || ''
+    const sectionIds = (formula.sectionIds ?? []).filter(id => sectionIdsInMenu.has(id))
+    return { id: formula.id, name: t?.name?.trim() || formula.name.trim(), price: formula.price, ...(note ? { note } : {}), ...(sectionIds.length ? { sectionIds } : {}) }
+  })
+  const included = (language ? menu.translations[language]?.included?.trim() : '') || menu.included?.trim() || ''
+  return { pricing: 'fisso', formulas, ...(included ? { included } : {}) }
 }

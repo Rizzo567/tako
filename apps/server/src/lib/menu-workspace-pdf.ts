@@ -10,6 +10,14 @@ import { publicWorkspace } from './menu-workspace-schedule.js'
 import { salesLabel, validPromoPrice } from './menu-sales.js'
 import { foodCatalogs } from './menu-workspace-catalogs.js'
 import type { Workspace } from './menu-workspace-contract.js'
+import { isFixed, visibleFormulas, formulaLabel, type FixedFormula } from './menu-fixed-price.js'
+/** «Compreso» del menu fisso. Copia identica di MENU_INCLUDED in apps/web/src/lib/menu-fixed-price.ts (pagina pubblica). */
+export const FIXED_PRICE_INCLUDED = {
+  it: 'Compreso', en: 'Included', es: 'Incluido', de: 'Inklusive', fr: 'Compris',
+  pt: 'Incluído', nl: 'Inbegrepen', pl: 'W cenie', ru: 'Включено', tr: 'Dahil',
+  ar: 'يشمل', zh: '包含', ja: '含まれるもの', ko: '포함',
+} as const
+export function fixedIncludedLabel(language='it'):string{const lang=String(language||'it').split('-')[0] as keyof typeof FIXED_PRICE_INCLUDED;return FIXED_PRICE_INCLUDED[lang]||FIXED_PRICE_INCLUDED.it}
 const pdfEuro=(value:number)=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(value)
 /** Prezzo stampato sul PDF: testo libero se presente, altrimenti solo prezzi > 0 (mai "0,00 €"). Le varianti a pagamento si stampano sotto il piatto. */
 export function pdfItemPrice(item:{price:number;priceDisplay?:string|null}):string{const text=item.priceDisplay?.trim();if(text)return text;return Number.isFinite(item.price)&&item.price>0?pdfEuro(item.price):''}
@@ -34,11 +42,11 @@ type Element='name'|'price'|'description'|'category'|'menu'|'footer'|'legend'|'s
 type Area='menu'|'category'|'subcategory'|'item'|'description'|'legend'|'logo'
 type Style={font:Workspace['pdf']['font'];fontSize:number;color:string;bold:boolean;italic:boolean;underline:boolean;align:'left'|'center'|'right';rtl?:boolean}
 export type PdfRuntimeAssets={fonts:ReadonlyMap<string,Buffer>}
-export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],language:string,title:string,restaurantId:string,runtimeAssets?:PdfRuntimeAssets,options:{timezone?:string|null,now?:Date}={}):Promise<Buffer>{
+export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],language:string,title:string,restaurantId:string,runtimeAssets?:PdfRuntimeAssets,options:{timezone?:string|null,now?:Date,menuOrder?:'workspace'|'given',ignoreSchedules?:boolean}={}):Promise<Buffer>{
  const [{default:PDFDocument},{default:QRCode},fontkit]=await Promise.all([import('pdfkit'),import('qrcode'),import('fontkit')]);
  if(!workspace.languages.includes(language))throw new Error('Unsupported PDF language')
  const cfg=workspace.pdf,lang=cfg.translationActive===false?workspace.defaultLanguage:language
- const w=publicWorkspace(cfg.includeUnavailable?{...workspace,menus:workspace.menus.map(m=>({...m,sections:m.sections.map(s=>({...s,items:s.items.map(i=>({...i,available:true}))}))}))}:workspace,options.now??new Date(),{timezone:options.timezone})
+ const w=publicWorkspace(cfg.includeUnavailable?{...workspace,menus:workspace.menus.map(m=>({...m,sections:m.sections.map(s=>({...s,items:s.items.map(i=>({...i,available:true}))}))}))}:workspace,options.now??new Date(),{timezone:options.timezone,ignoreSchedules:options.ignoreSchedules})
  const top=cfg.marginTop??cfg.margin,right=cfg.marginRight??cfg.margin,bottom=cfg.marginBottom??cfg.margin,left=cfg.marginLeft??cfg.margin
  const doc=new PDFDocument({size:cfg.format,layout:cfg.orientation,margins:{top,right,bottom,left},bufferPages:true,info:{Title:title,Creator:'Tako'}})
  const chunks:Buffer[]=[];const completed=new Promise<Buffer>((resolve,reject)=>{doc.on('data',c=>chunks.push(Buffer.from(c)));doc.on('end',()=>resolve(Buffer.concat(chunks)));doc.on('error',reject)})
@@ -97,6 +105,13 @@ export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],la
   for(const text of linesFor(value,s,available)){choose(text,s);const h=doc.currentLineHeight()+2;if(y+h>bodyBottom)advance();const px=x()+a.left,py=y;add(h,offset=>drawText(text,px,py+offset,available,s))}
   y+=spacing+a.bottom
  }
+ // Riquadro delle opzioni di un menu fisso: righe misurate prima, un solo blocco nella stessa colonna.
+ const drawBox=(rows:{value:string,element:Element,gap:number}[])=>{
+  const a=space('category'),pad=10,boxWidth=Math.max(48,columnWidth-a.left-a.right),available=Math.max(24,boxWidth-pad*2),lines:{text:string,s:Style,h:number}[]=[]
+  for(const row of rows){const s={...style(row.element),align:'left' as const,rtl:/[\u0590-\u06ff]/.test(row.value)};const parts=linesFor(row.value,s,available);parts.forEach((text,n)=>{choose(text,s);lines.push({text,s,h:doc.currentLineHeight()+2+(n===parts.length-1?row.gap:0)})})}
+  const total=lines.reduce((sum,l)=>sum+l.h,0)+pad*2;y+=a.top;if(y+total>bodyBottom&&total<bodyBottom-top)advance()
+  const px=x()+a.left,py=y;add(total+12+a.bottom,offset=>{doc.save().lineWidth(.8).strokeColor(cfg.headingColor).roundedRect(px,py+offset,boxWidth,total,6).stroke().restore();let cy=py+offset+pad;for(const l of lines){drawText(l.text,px+pad,cy,available,l.s);cy+=l.h}})
+ }
  type EmbeddedImage={width:number;height:number}
  const imageDocument=doc as typeof doc & {openImage:(bytes:Buffer)=>EmbeddedImage}
  const embeddedImages=new WeakMap<Buffer,EmbeddedImage>()
@@ -107,14 +122,19 @@ export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],la
  if(cfg.showLogo){const logo=await image(w.design.logoUrl);if(logo){const a=space('logo');y+=a.top;const px=left+(width-left-right-60)/2,py=y;add(60,()=>{const yy=py;doc.save();if(cfg.logoShape==='circle')doc.circle(px+30,yy+30,30).clip();else if(cfg.logoShape==='rounded')doc.roundedRect(px,yy,60,60,10).clip();else doc.rect(px,yy,60,60).clip();if(cfg.logoBackground)doc.rect(px,yy,60,60).fill(cfg.logoBackground);doc.image(pdfImage(logo),px,yy,{fit:[60,60],align:'center',valign:'center'});doc.restore()});y+=14+a.bottom;firstPageTop=y}}
  if(cfg.showCover){write(title,'menu',16,'menu',{fontSize:28});write(w.design.headerDescription||'Menu','description',6,'description');newPage()}
  if(cfg.showDate)write(new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(new Date()),'footer')
- for(const m of w.menus.filter(m=>menuIds.includes(m.id))){const mt=m.translations[lang];if(cfg.translationPolicy==='translated-only'&&lang!==w.defaultLanguage&&!mt)continue;if(y+70>bodyBottom)advance();if(cfg.showMenuName)write(mt?.name??m.name,'menu',12,'menu')
+ // Documenti PDF salvati (21/10): i Menu escono nell'ordine scelto dal ristoratore; il download classico resta nell'ordine del workspace.
+ const orderedMenus=options.menuOrder==='given'?[...new Set(menuIds)].map(id=>w.menus.find(m=>m.id===id)).filter((m):m is Workspace['menus'][number]=>!!m):w.menus.filter(m=>menuIds.includes(m.id))
+ for(const m of orderedMenus){const mt=m.translations[lang];if(cfg.translationPolicy==='translated-only'&&lang!==w.defaultLanguage&&!mt)continue;if(y+70>bodyBottom)advance();if(cfg.showMenuName)write(mt?.name??m.name,'menu',12,'menu')
   const menuNote=(mt?.description?.trim()||m.description?.trim()||'');if(menuNote)write(menuNote,'description',10,'description')
-  for(const section of m.sections){const st=section.translations[lang];if(cfg.translationPolicy==='translated-only'&&lang!==w.defaultLanguage&&!st)continue;if(cfg.categoryPageBreak&&y>top)newPage();else if(y+80>bodyBottom)advance();write(st?.name??section.name,section.parentSectionId?'subcategory':'category',8,section.parentSectionId?'subcategory':'category');if(cfg.showDescriptions&&(st?.description??section.description))write(st?.description??section.description??'','description',6,'description')
+  // Menu «a prezzo fisso» (CONTRATTO §6): i piatti non mostrano mai prezzo, promo o prezzo delle varianti.
+  const fixed=isFixed(m),showPrice=cfg.showPrices&&!fixed,formulas=visibleFormulas(m)
+  const included=fixed?((mt as {included?:string}|undefined)?.included?.trim()||m.included?.trim()||''):'',includedLine=included?`${fixedIncludedLabel(lang)}: ${included}`:''
+  const renderSection=async(section:Workspace['menus'][number]['sections'][number])=>{const st=section.translations[lang];if(cfg.translationPolicy==='translated-only'&&lang!==w.defaultLanguage&&!st)return;if(cfg.categoryPageBreak&&y>top)newPage();else if(y+80>bodyBottom)advance();write(st?.name??section.name,section.parentSectionId?'subcategory':'category',8,section.parentSectionId?'subcategory':'category');if(cfg.showDescriptions&&(st?.description??section.description))write(st?.description??section.description??'','description',6,'description')
    for(const item of section.items){const t=item.translations[lang];if(cfg.translationPolicy==='translated-only'&&lang!==w.defaultLanguage&&!t)continue
     const translatedName=cfg.translationNamesPolicy==='auto'&&(item.description||t?.description)?item.name:t?.name??item.name
     const description=cfg.showDescriptions?t?.description??item.description??'':''
     const align=cfg.alignment,ns={...style('name'),align:cfg.typography?.name?.align??align,rtl:/[\u0590-\u06ff]/.test(translatedName)},ps={...style('price'),align:cfg.typography?.price?.align??'right' as const}
-    const promo=cfg.showPrices?pdfPromoPrices(item):null,price=promo?promo.full+'  '+promo.promo:cfg.showPrices?pdfItemPrice(item):''
+    const promo=showPrice?pdfPromoPrices(item):null,price=promo?promo.full+'  '+promo.promo:showPrice?pdfItemPrice(item):''
     const a=space('item'),available=Math.max(24,columnWidth-a.left-a.right),priceWidth=price?Math.min(available*.45,Math.max(45,price.length*ps.fontSize*.65)):0,nameWidth=Math.max(24,available-priceWidth-(price?8:0))
     const nameLines=linesFor(translatedName,ns,nameWidth),priceLines=price?linesFor(price,ps,priceWidth):[],lineCount=Math.max(nameLines.length,priceLines.length);choose(translatedName,ns);const nameHeight=doc.currentLineHeight()+2;choose(price,ps);const rowHeight=Math.max(nameHeight,doc.currentLineHeight()+2)
     const needed=lineCount*rowHeight+(description?style('description').fontSize*2:0)+a.top+a.bottom+24;if(y+needed>bodyBottom&&needed<bodyBottom-top)advance()
@@ -122,12 +142,32 @@ export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],la
     y+=a.top
     for(let n=0;n<lineCount;n++){if(y+rowHeight>bodyBottom)advance();const px=x()+a.left,py=y,text=nameLines[n]??'';add(rowHeight,offset=>{drawText(text,px,py+offset,nameWidth,ns);if(promo&&n===0)drawPromo(promo,px+available-priceWidth,py+offset,priceWidth,ps);else if(priceLines[n]&&!promo)drawText(priceLines[n]!,px+available-priceWidth,py+offset,priceWidth,ps)})}y+=4+a.bottom
     if(description)write(description,'description',4,'description',{align:cfg.typography?.description?.align??align})
-    {const labels=pdfSalesLabels(item,lang);if(labels)write(labels,'traits',4,'legend')}
+    {const labels=pdfSalesLabels(fixed?{...item,promo:null}:item,lang);if(labels)write(labels,'traits',4,'legend')}
     if(cfg.showAllergens&&item.allergens.length)write(`${w.foodTranslations[lang]?.allergens??'Allergeni'}: ${item.allergens.map(id=>w.foodTranslations[lang]?.[id]??id).join(', ')}`,'allergens',4,'legend')
     if(item.tags.length)write(item.tags.map(id=>w.foodTranslations[lang]?.[id]??foodCatalogs.traits.find(t=>t.id===id)?.label??id).join(', '),'traits',4,'legend')
     if(item.additives.length)write(item.additives.map(id=>w.foodTranslations[lang]?.[id]??foodCatalogs.additives.find(t=>t.id===id)?.label??id).join(', '),'additives',4,'legend')
-    for(const variant of item.variants.filter(v=>v.available)){write(variant.name,'name',4);if(cfg.showPrices&&item.price+variant.priceModifier>0)write(pdfEuro(item.price+variant.priceModifier),'price',4)}y+=8
+    for(const variant of item.variants.filter(v=>v.available)){write(variant.name,'name',4);if(showPrice&&item.price+variant.priceModifier>0)write(pdfEuro(item.price+variant.priceModifier),'price',4)}y+=8
    }
+  }
+  const formulaName=(f:FixedFormula)=>f.translations?.[lang]?.name?.trim()||f.name.trim()
+  const formulaNote=(f:FixedFormula)=>f.translations?.[lang]?.description?.trim()||f.note?.trim()||''
+  if(fixed&&formulas.some(f=>f.sectionIds?.length)){
+   // Un blocco per opzione «NOME · prezzo» + nota + Compreso, sotto i Sottomenu compresi (si ripete la VISTA, non i dati); poi i non compresi.
+   const covered=new Set<string>()
+   for(const f of formulas){
+    const ids=new Set(f.sectionIds??[]),inSections=m.sections.filter(s=>ids.has(s.id)||(!!s.parentSectionId&&ids.has(s.parentSectionId)))
+    if(y+90>bodyBottom)advance();write(formulaLabel({name:formulaName(f),price:f.price}),'category',4,'category')
+    const note=formulaNote(f);if(note)write(note,'description',4,'description');if(includedLine)write(includedLine,'description',4,'description');y+=6
+    for(const section of inSections){covered.add(section.id);await renderSection(section)}
+    y+=10
+   }
+   for(const section of m.sections.filter(s=>!covered.has(s.id)))await renderSection(section)
+  }else{
+   // Opzioni senza Sottomenu collegati: riquadro sobrio in cima (nessuna opzione → nessun riquadro vuoto).
+   const rows=formulas.flatMap(f=>{const note=formulaNote(f);return [{value:formulaLabel({name:formulaName(f),price:f.price}),element:'name' as Element,gap:note?0:4},...(note?[{value:note,element:'description' as Element,gap:4}]:[])]})
+   if(rows.length)drawBox([...rows,...(includedLine?[{value:includedLine,element:'description' as Element,gap:0}]:[])])
+   else if(includedLine)write(includedLine,'description',8,'description')
+   for(const section of m.sections)await renderSection(section)
   }
  }
  const legends=cfg.legends??{allergens:cfg.showFoodLegends,traits:false,additives:false}

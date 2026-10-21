@@ -3,13 +3,16 @@ import { withConfiguredPdfRuntimeAssets } from '../lib/edge-pdf-runtime-assets.j
 import { imageErrorStatus } from '../lib/image-error-status.js'
 import {commonMenuLanguages} from '../lib/menu-workspace-languages.js'
 import type { FastifyInstance } from 'fastify'
-import { randomUUID, createHmac } from 'node:crypto'
+import { randomUUID, createHmac, timingSafeEqual } from 'node:crypto'
+import { Buffer } from 'node:buffer'
+import { businessDate } from '../lib/menu-sales.js'
+import { readPdfDocuments, mergePdfDocuments, pdfDocumentsInputSchema, defaultPdfDocument, newShareToken, documentWorkspace, documentMenuIds, documentFilename, documentEtag, etagMatches, SHARE_TOKEN, type PdfDocument } from '../lib/menu-pdf-documents.js'
 import { z } from 'zod'
 import { db, restaurants, menuItems } from '@tako/db'
 import { sql, eq } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
-import { workspaceSchema } from '../lib/menu-workspace-contract.js'
-import { ensureWorkspace, mutateWorkspace, withWorkspace, WorkspaceConflict, WorkspaceOwnership, WorkspaceTrialLocked } from '../lib/menu-workspace-store.js'
+import { workspaceSchema, type Workspace } from '../lib/menu-workspace-contract.js'
+import { ensureWorkspace, readWorkspace, mutateWorkspace, withWorkspace, WorkspaceConflict, WorkspaceOwnership, WorkspaceTrialLocked } from '../lib/menu-workspace-store.js'
 import { workspaceDiff } from '../lib/menu-workspace-schedule.js'
 import { publishDiffBody } from '../lib/menu-workspace-read.js'
 import { foodCatalogs, stylePresets } from '../lib/menu-workspace-catalogs.js'
@@ -53,6 +56,53 @@ export async function menuWorkspaceRoutes(fastify:FastifyInstance){
  fastify.get('/analytics',{preHandler:edit},async(req,reply)=>{const query=z.object({from:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),to:z.string().regex(/^\d{4}-\d{2}-\d{2}$/)}).safeParse(req.query);if(!query.success)return fail(reply,400,'Periodo non valido');return {data:await db.execute(sql`SELECT day,menu_id AS "menuId",kind,lang,count(*)::int AS count FROM menu_workspace_events WHERE restaurant_id=${req.user!.restaurantId} AND day>=${query.data.from}::date AND day<=${query.data.to}::date GROUP BY day,menu_id,kind,lang ORDER BY day`)}})
  fastify.get('/qr',{preHandler:edit},async(req,reply)=>{const query=z.object({menuId:z.string().uuid().optional(),format:z.enum(['png','svg']).default('png')}).safeParse(req.query);if(!query.success)return fail(reply,400,'Formato o menu non valido');const row=await ensureWorkspace(req.user!.restaurantId);if(query.data.menuId&&!row.published?.menus.some(m=>m.id===query.data.menuId&&m.active))return fail(reply,404,'Menu pubblicato non trovato');const url=digitalMenuUrl(req.user!.restaurantId,query.data.menuId);return reply.header('Content-Disposition',`attachment; filename="qr-tako.${query.data.format}"`).header('X-Tako-QR-URL',url).type(query.data.format==='svg'?'image/svg+xml':'image/png').send(await renderDigitalQr(url,query.data.format))})
  fastify.post('/pdf',{preHandler:edit},async(req,reply)=>{const body=z.object({menuIds:z.array(z.string().uuid()).min(1),language:z.string().optional(),preview:z.boolean().default(false)}).safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);const row=await ensureWorkspace(req.user!.restaurantId);const w=body.data.preview?row.draft:row.published??row.draft;if(body.data.menuIds.some(id=>!w.menus.some(m=>m.id===id)))return fail(reply,404,'Menu non trovato');const supplied=await loadSuppliedMenuPdf(req.user!.restaurantId);if(supplied)return reply.header('Content-Disposition',`attachment; filename="${supplied.filename}"`).type('application/pdf').send(supplied.bytes);const [restaurant]=await db.select().from(restaurants).where(eq(restaurants.id,req.user!.restaurantId));const {renderWorkspacePdf}=await import('../lib/menu-workspace-pdf.js');const language=body.data.language??w.defaultLanguage;const bytes=await withConfiguredPdfRuntimeAssets(w,body.data.menuIds,language,assets=>renderWorkspacePdf(w,body.data.menuIds,language,restaurant?.name??'Menu',req.user!.restaurantId,assets,{timezone:(restaurant?.settings as {timezone?:string}|null)?.timezone}));return reply.header('Content-Disposition','attachment; filename="menu-tako.pdf"').type('application/pdf').send(bytes)})
+ // PDF multipli (21/10, CONTRATTO §7): documenti in restaurants.settings.pdfDocuments, generati SEMPRE dal menu pubblicato.
+ // Stesso permesso del menu (owner/manager/menu_editor: anche il titolare creato dal flusso WhatsApp). Il download classico (/pdf) non cambia.
+ fastify.get('/pdf-documents',{preHandler:edit},async req=>{const tenant=req.user!.restaurantId;const [row,restaurant]=await Promise.all([ensureWorkspace(tenant),pdfRestaurant(tenant)]);return pdfDocumentsBody(readPdfDocuments(restaurant?.settings),row.published??row.draft)})
+ fastify.put('/pdf-documents',{preHandler:edit},async(req,reply)=>{const body=pdfDocumentsInputSchema.safeParse(req.body);if(!body.success)return fail(reply,400,body.error.issues[0]?.message??'Documenti non validi');const tenant=req.user!.restaurantId;const row=await ensureWorkspace(tenant);const known=new Set([...(row.draft?.menus??[]),...(row.published?.menus??[])].map(m=>m.id));if(body.data.documents.some(d=>d.menuIds.some(id=>!known.has(id))))return fail(reply,404,'Menu non trovato')
+  const documents=await db.transaction(async tx=>{const current=readPdfDocuments((await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${tenant} FOR UPDATE`))[0]?.settings);const next=mergePdfDocuments(current,body.data);await savePdfDocuments(tx,tenant,next);return next});return pdfDocumentsBody(documents,row.published??row.draft)})
+ fastify.post('/pdf-documents/:id/link',{preHandler:edit},async(req,reply)=>{const id=z.string().uuid().safeParse((req.params as {id:string}).id);if(!id.success)return fail(reply,404,'Documento non trovato');const doc=await updatePdfDocument(req.user!.restaurantId,id.data,()=>newShareToken());if(!doc)return fail(reply,404,'Documento non trovato');const link={id:doc.id,shareToken:doc.shareToken,shareUrl:shareUrl(doc.shareToken)};return {...link,data:link}})
+ fastify.delete('/pdf-documents/:id/link',{preHandler:edit},async(req,reply)=>{const id=z.string().uuid().safeParse((req.params as {id:string}).id);if(!id.success)return fail(reply,404,'Documento non trovato');const doc=await updatePdfDocument(req.user!.restaurantId,id.data,()=>null);if(!doc)return fail(reply,404,'Documento non trovato');const link={id:doc.id,shareToken:null,shareUrl:null};return {...link,data:link}})
+ fastify.get('/pdf-documents/:id/pdf',{preHandler:edit},async(req,reply)=>{const id=z.string().uuid().safeParse((req.params as {id:string}).id);if(!id.success)return fail(reply,404,'Documento non trovato');const tenant=req.user!.restaurantId;const [row,restaurant]=await Promise.all([ensureWorkspace(tenant),pdfRestaurant(tenant)]);const doc=readPdfDocuments(restaurant?.settings).find(d=>d.id===id.data);if(!doc)return fail(reply,404,'Documento non trovato')
+  const result=await renderPdfDocument(tenant,row,doc,(req.query as {lang?:string}|undefined)?.lang,restaurant);if('error' in result)return fail(reply,404,result.error);return reply.header('Content-Disposition',`attachment; filename="${documentFilename(doc.name)}"`).header('ETag',result.etag).header('Cache-Control','private, no-cache').type('application/pdf').send(result.bytes)})
+}
+type PdfRestaurant={name:string;active:boolean;settings:unknown}
+const pdfRestaurant=async(tenant:string):Promise<PdfRestaurant|undefined>=>(await db.select({name:restaurants.name,active:restaurants.active,settings:restaurants.settings}).from(restaurants).where(eq(restaurants.id,tenant)))[0] as PdfRestaurant|undefined
+const shareUrl=(token:string|null)=>token&&process.env.WEB_ORIGIN?`${new URL(process.env.WEB_ORIGIN).origin}/api/public/menu-pdf/${token}`:null
+/** Il contratto chiede {documents,default}; le altre route del pannello rispondono {data}: si danno entrambe le forme. */
+function pdfDocumentsBody(documents:PdfDocument[],workspace:Workspace|null|undefined){const body={documents:documents.map(d=>({...d,shareUrl:shareUrl(d.shareToken)})),default:defaultPdfDocument(workspace)};return {...body,data:body}}
+const savePdfDocuments=(tx:Pick<typeof db,'execute'>,tenant:string,documents:PdfDocument[])=>tx.execute(sql`UPDATE restaurants SET settings=jsonb_set(coalesce(settings,'{}'::jsonb),'{pdfDocuments}',${JSON.stringify(documents)}::jsonb,true) WHERE id=${tenant}`)
+/** Genera/rigenera o revoca il link fisso sotto lock della riga: il vecchio token smette subito di funzionare. */
+async function updatePdfDocument(tenant:string,id:string,token:()=>string|null):Promise<PdfDocument|undefined>{return db.transaction(async tx=>{const documents=readPdfDocuments((await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${tenant} FOR UPDATE`))[0]?.settings);const doc=documents.find(d=>d.id===id);if(!doc)return undefined;doc.shareToken=token();doc.updatedAt=new Date().toISOString();await savePdfDocuments(tx,tenant,documents);return doc})}
+/** Un documento dal menu PUBBLICATO del momento: grafica del documento sopra quella del locale, Menu nell'ordine del documento,
+ * orari ignorati (il ristoratore ha scelto quei Menu: «Menu cena» stampato a mezzogiorno resta pieno). */
+export async function renderPdfDocument(tenant:string,row:{published:Workspace|null;published_revision:number|null},doc:PdfDocument,language:string|undefined,restaurant:PdfRestaurant|undefined,etagOnly=false):Promise<{error:string}|{etag:string;bytes?:Buffer}>{
+ if(!row.published)return {error:'Menu non ancora pubblicato'}
+ const parsed=workspaceSchema.safeParse(row.published),published=parsed.success?parsed.data:row.published
+ const w=documentWorkspace(published,doc),menuIds=documentMenuIds(w,doc);if(!menuIds.length)return {error:'Nessun Menu del documento è pubblicato'}
+ const lang=language&&w.languages.includes(language)?language:w.defaultLanguage,timezone=(restaurant?.settings as {timezone?:string}|null)?.timezone,name=restaurant?.name??'Menu'
+ const etag=await documentEtag({publishedRevision:row.published_revision,doc,pdf:w.pdf,language:lang,restaurantName:name,businessDay:businessDate(timezone)})
+ if(etagOnly)return {etag}
+ const {renderWorkspacePdf}=await import('../lib/menu-workspace-pdf.js')
+ const bytes=await withConfiguredPdfRuntimeAssets(w,menuIds,lang,assets=>renderWorkspacePdf(w,menuIds,lang,name,tenant,assets,{timezone,menuOrder:'given',ignoreSchedules:true}))
+ return {etag,bytes}
+}
+/** Pubblico: GET /api/public/menu-pdf/:token (servizio operativo, registrato in index.ts). Token sconosciuto o revocato → 404.
+ * ETag = revisione pubblicata + hash della config: If-None-Match uguale → 304 senza generare. */
+export async function publicMenuPdfRoutes(fastify:FastifyInstance){
+ fastify.get('/menu-pdf/:token',{config:{rateLimit:{max:30,timeWindow:60000}}},async(req,reply)=>{const token=String((req.params as {token?:string}).token??'');const notFound=()=>reply.code(404).header('Cache-Control','no-store').send({error:{code:'NOT_FOUND',message:'PDF non trovato'}});if(!SHARE_TOKEN.test(token))return notFound()
+  const rows=await db.execute(sql`SELECT id,name,active,settings FROM restaurants WHERE settings->'pdfDocuments' @> ${JSON.stringify([{shareToken:token}])}::jsonb LIMIT 2`)
+  const matches=rows.flatMap(r=>readPdfDocuments(r.settings).filter(d=>!!d.shareToken&&d.shareToken.length===token.length&&timingSafeEqual(Buffer.from(d.shareToken),Buffer.from(token))).map(doc=>({restaurant:r as unknown as PdfRestaurant&{id:string},doc})))
+  if(matches.length!==1)return notFound()
+  const {restaurant,doc}=matches[0]!,settings=(restaurant.settings??{}) as {takomenuTrial?:unknown;takomenuRemoved?:unknown}
+  if(restaurant.active===false||settings.takomenuTrial===true||settings.takomenuRemoved===true)return notFound()
+  const row=await readWorkspace(restaurant.id);if(!row)return notFound()
+  const language=(req.query as {lang?:string}|undefined)?.lang
+  const head=await renderPdfDocument(restaurant.id,row,doc,language,restaurant,true);if('error' in head)return notFound()
+  reply.header('ETag',head.etag).header('Cache-Control','no-cache').header('X-Robots-Tag','noindex, nofollow').header('Referrer-Policy','no-referrer').header('Vary','Accept-Encoding')
+  if(etagMatches(req.headers['if-none-match'],head.etag))return reply.code(304).send()
+  const result=await renderPdfDocument(restaurant.id,row,doc,language,restaurant);if('error' in result)return notFound()
+  return reply.header('ETag',result.etag).header('Content-Disposition',`inline; filename="${documentFilename(doc.name)}"`).type('application/pdf').send(result.bytes)})
 }
 /** Public event entry: parent registers this on customer scope after public tenant/menu validation. */
 export {recordMenuEvent,recordMenuEvents} from '../lib/menu-workspace-events.js'

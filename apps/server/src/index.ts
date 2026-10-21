@@ -175,6 +175,8 @@ await fastify.register((await import('./routes/auth.js')).authRoutes, { prefix: 
 await fastify.register((await import('./routes/restaurants.js')).restaurantRoutes, { prefix: '/api/restaurants' })
 await fastify.register((await import('./routes/menu.js')).menuRoutes, { prefix: '/api/menus' })
 await fastify.register((await import('./routes/menu-workspace.js')).menuWorkspaceRoutes, { prefix: '/api/menu-workspace' })
+// Link fisso dei documenti PDF (21/10): pubblico, sempre dal menu pubblicato del momento.
+await fastify.register((await import('./routes/menu-workspace.js')).publicMenuPdfRoutes, { prefix: '/api/public' })
 await fastify.register((await import('./routes/menu-day-presets.js')).menuDayPresetRoutes, { prefix: '/api/menu-workspace/day-presets' })
 await fastify.register((await import('./routes/menu-day-presets.js')).menuDayPresetCronRoutes, { prefix: '/api/day-presets-cron' })
 await fastify.register((await import('./routes/brand-from-site.js')).brandFromSiteRoutes, { prefix: '/api/menu-workspace' })
