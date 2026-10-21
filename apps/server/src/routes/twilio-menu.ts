@@ -560,6 +560,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  const finalRun=run
  // T6 (PIANO bot-haiku): menu o proposta cambiati mentre il modello pensava (dashboard, altro telefono) → con haiku si rilegge e si
  // rigioca il turno UNA volta; al secondo conflitto copy.menuChanged.
+ let deleteConfirmed=false
+ // run Haiku 21/10 (z-interruzioni-011/012): «Elimino *X*? Rispondi sì.» scritto dal modello come semplice domanda non lascia niente da
+ // confermare e il «sì» girava a vuoto. Se la domanda nomina piatti del menu, diventa la proposta di eliminazione vera (serve sempre il sì).
+ if(engine==='haiku'&&out.kind==='ask'&&!out.hold&&!out.twins?.length){const dq=String(finalRun.decision.draft??'');if(/\belimin\w*\b[^?]*\?/i.test(dq)&&/\brispondi\s+\*?s[iì]\b/i.test(dq)){const named=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(dq)+' ').includes(' '+plain(r.name)+' '));if(named.length&&named.length<=8){out={kind:'change',actions:named.map(r=>({kind:'delete',id:r.id}) as MenuAction)};deleteConfirmed=pend?.kind==='batch'&&pend.why==='delete'&&/^(?:s[iì]|ok|va bene|confermo|certo)\b/i.test(plain(text))&&named.every(r=>pend.actions.some(a=>a.kind==='delete'&&(a as any).id===r.id))}}}
  let conflict=false
  const result=await db.transaction(async tx=>{await lock(tx,ctx.phone)
   const live=await readWorkspace(ctx.tenant,tx);if(!live||!live.published||live.revision!==row.revision||live.revision!==live.published_revision){conflict=!!live?.published&&live.revision===live.published_revision;return copy.menuChanged}
@@ -606,6 +610,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      const r=await applyNow(effective,['WhatsApp: bozza confermata','WhatsApp: pubblicazione confermata']);return say(r.facts,r.allOk,pricesOf(effective))}
     return publish(all)}
    case 'change':{
+    // «sì, solo il babà» su un'eliminazione in attesa: il sì c'è già, si eliminano solo i piatti scelti (annullabile 10 minuti).
+    if(deleteConfirmed){const effective=effectiveMenuActions(out.actions,workspace);if(!effective.length){await drop();return say(copy.noChanges,false)};const r=await applyNow(effective,['WhatsApp: eliminazione confermata','WhatsApp: pubblicazione confermata']);return say(r.facts,r.allOk)}
     // Riepilogo in attesa dell'OK: le correzioni lo aggiornano (e i piatti esclusi escono), resta in attesa.
     if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')){const ex=new Set((finalRun.decision.exclude??[]).map(e=>e.id)),outIds=new Set(out.actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])),namedOff=engine==='haiku'?new Set(pend.actions.flatMap(a=>'id' in a&&!outIds.has((a as any).id)&&g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs)?[(a as any).id as string]:[])):new Set<string>(),merged=mergeMenuActions(pend.actions.filter(a=>!('id' in a)||!namedOff.has((a as any).id)),out.actions).filter(a=>!('id' in a)||!ex.has((a as any).id)||out.actions.includes(a))
      const effective=effectiveMenuActions(merged,workspace);await drop();if(!effective.length)return say(copy.noChanges,false);await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why:approval(effective,refs,text,answered)??pend.why});return say(pendingFacts(approval(effective,refs,text,answered)??pend.why,effective,refs,sections),false,pricesOf(effective))}

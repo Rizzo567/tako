@@ -16,7 +16,14 @@ export type HaikuExtra={
  noQuestion?:boolean
  /** Parlato sporco: la modifica giusta OPPURE una sola domanda che nomina il piatto giusto (parole del nome). */
  actOrAsk?:string[]
+ /** Struttura (set struttura, 21/10): dopo il turno `after`, nel menu PUBBLICATO, devono esistere questi Menu con questi Sottomenu
+  *  (nomi normalizzati: minuscole, senza accenti, «menu» iniziale, «e/&» e singolare/plurale tollerati). Lista BIANCA: ogni Menu o
+  *  sottomenu NUOVO (rispetto al menu iniziale) che non è elencato qui è «struttura-non-richiesta», compresi i doppioni.
+  *  `sub` = Sezioni (livello 3, parentSectionId = sottomenu `parent`). `orAsk` = va bene anche una domanda senza nessuna struttura
+  *  nuova (capacità che il server può non avere, vocali sporchi). `noNewMenus` = nessun Menu nuovo. Vedi eval-haiku.test.ts. */
+ struct?:StructCheck[]
 }
+export type StructCheck={after:number,menus?:{name:string,sections?:string[],sub?:{parent:string,name:string}[]}[],noNewMenus?:boolean,orAsk?:boolean}
 export type HaikuCase=Conversation&HaikuExtra
 
 const T=(s:string):Turn=>({text:s}),Q=(s:string):Turn=>({text:s,q:true}),V=(s:string):Turn=>({voice:s})

@@ -138,3 +138,27 @@ export function initialMenu(key:string,mods:Mods={}):EvalMenu{
  return menu
 }
 export const dishNames=(key:string)=>FIXTURES[key]!.menu.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>i.name)))
+
+// ---------------- Set STRUTTURA (motore Haiku, 21/10/2026: creazione di Menu e Sottomenu, cases/struttura-1021.ts) ----------------
+// qastruttura: il QA come lo ha usato Manuel il 21/10 (un solo Menu «Menu» con tre sottomenu e piatti, NESSUN Menu «Pranzo» o «Cena»).
+export const qastruttura=build('qastruttura',15,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Antipasti',[['Bruschetta al pomodoro',5],['Tagliere misto',14]]],
+ ['Piatti di prova',[['Piatto di verifica',13.5],['pasta al ragù',12]]],
+ ['Dolci',[['tiramisù',6]]]]]]})
+// strutt: tre Menu (Pranzo, Cena, Bevande) per la batteria avversaria della struttura; «Primi» e «Secondi» in due Menu; Sezione
+// «Pizze bianche» (parentSectionId = sottomenu «Pizze» della Cena). Nessun «Dolci», «Contorni», «Insalate», «Amari».
+export const strutt=build('strutt',16,{restaurant:'Osteria della Prova',menus:[
+ ['Pranzo','lunch',[['Antipasti',[['Bruschetta',5],['Caprese',8]]],['Primi',[['Carbonara',12],['Amatriciana',11]]],['Secondi',[['Cotoletta',14],['Tagliata',18]]]]],
+ ['Cena','dinner',[['Primi',[['Risotto ai funghi',15],['Tagliatelle al ragù',13]]],['Secondi',[['Filetto al pepe',24],['Branzino al forno',22]]],['Pizze',[['Margherita',7],['Diavola',8.5]]],['Pizze bianche',[['Focaccia rosmarino',6]]]]],
+ ['Bevande','drinks',[['Bibite',[['Acqua naturale',2],['Coca Cola',3.5]]],['Vini',[['Calice di rosso',6],['Calice di bianco',6]]]]]]})
+{const cena=strutt.menu.menus[1]!;(cena.sections[3] as any).parentSectionId=cena.sections[2]!.id}
+// bimbum: un Menu con un sottomenu «Secondi» di 4 piatti (frasi di Bim Bum Bar). bimbum2: «Secondi» in DUE Menu (Pranzo e Cena).
+export const bimbum=build('bimbum',17,{restaurant:'Bim Bum Bar (prova)',menus:[['Menu','main',[
+ ['Antipasti',[['Tagliere bimbum',12],['Fritto misto',9]]],
+ ['Primi',[['Carbonara',11],['Gnocchi al pomodoro',9]]],
+ ['Secondi',[['Cotoletta alla milanese',14],['Hamburger di manzo',13],['Salsiccia ai ferri',10],['Pollo alla piastra',11]]],
+ ['Dolci',[['Tiramisù',5]]]]]]})
+export const bimbum2=build('bimbum2',18,{restaurant:'Bim Bum Bar (prova)',menus:[
+ ['Pranzo','lunch',[['Primi',[['Carbonara',11]]],['Secondi',[['Cotoletta alla milanese',14],['Salsiccia ai ferri',10]]]]],
+ ['Cena','dinner',[['Secondi',[['Filetto al pepe verde',22],['Grigliata mista',18]]],['Dolci',[['Tiramisù',5]]]]]]})
+Object.assign(FIXTURES,{qastruttura,strutt,bimbum,bimbum2})

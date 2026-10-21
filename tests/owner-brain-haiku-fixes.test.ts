@@ -17,6 +17,10 @@ describe('haikuChecks (motore haiku)',()=>{
    const r=haikuChecks(dec(acts) as any,'nascondi il babà e mettilo in evidenza')!;expect(r.plan.type).toBe('clarify');expect(r.notes).toContain('azioni_contraddittorie')}
   expect(haikuChecks(dec([{kind:'hidden',id:'a',value:true},{kind:'featured',id:'b',value:true}]) as any,'nascondi a, evidenzia b')).toBeNull()
  })
+ it('«aggiungi X a 13» con X già nel menu → domanda, non cambio di prezzo',()=>{
+  expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi la carbonara a 13')!.notes).toContain('piatto_gia_presente')
+  expect(haikuChecks(dec([{kind:'price',id:'c',price:13}]) as any,'aggiungi un euro alla carbonara')).toBeNull()
+ })
  it('data futura («da domani») → domanda con l\'azione in attesa, nessuna scrittura',()=>{
   const r=haikuChecks(dec([{kind:'price',id:'v',price:13.5}]) as any,'il piatto di verifica da domani costa 13,50 euro')!
   expect(r.plan.type).toBe('clarify');expect(r.notes).toContain('data_futura');expect((r.plan as any).actions).toEqual([{kind:'price',id:'v',price:13.5}])

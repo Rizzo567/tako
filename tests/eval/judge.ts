@@ -30,6 +30,8 @@ export function diff(before:EvalMenu,after:EvalMenu):string[]{
 
 /** Categorie nuove o rinominate (solo per riconoscere una scrittura vera nel controllo «fatto»). */
 export function sectionDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Map(before.menus.flatMap(m=>m.sections.map(s=>[s.id,s.name]))),out:string[]=[];for(const m of after.menus)for(const s of m.sections){const old=a.get(s.id);if(old===undefined)out.push('section|'+s.name);else if(old!==s.name)out.push('section-rename|'+old+'|'+s.name)}return out}
+/** Menu nuovi (set struttura 21/10): un Menu creato, anche vuoto, è una scrittura vera per il controllo «fatto». */
+export function menuDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Set(before.menus.map(m=>m.id));return after.menus.filter(m=>!a.has(m.id)).map(m=>'menu|'+m.name)}
 export const key=(c:Change):string=>c.op==='create'?`create|${plainT(c.name)}|${num(c.price)}|${c.section?plainT(c.section):'*'}`:c.op==='price'?`price|${c.dish}|${num(c.price)}`:c.op==='promo'?`promo|${c.dish}|${c.price===null?'null':num(c.price)}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='delete'?`delete|${c.dish}`:c.op==='rename'?`rename|${c.dish}|${c.name}`:c.op==='move'?`move|${c.dish}|${c.section}`:c.op==='section'?`section|${plainT(c.name)}`:`${c.op}|${c.dish}|${c.value}`
 const same=(exp:string,act:string)=>exp===act||(exp.endsWith('|*')&&act.startsWith(exp.slice(0,-1)))
 const dishOf=(k:string)=>k.split('|')[1]!
@@ -90,7 +92,7 @@ export function judge(conv:Conversation,initial:EvalMenu,run:BotRun):Verdict{
   if(turn.q&&d.length)add('GRAVE','scrittura-su-domanda',`turno ${n} (domanda): scritto ${d.join(', ')}`)
   // Fase B (17/10): una categoria nuova o rinominata è una scrittura vera anche senza piatti cambiati.
   const sd=sectionDiff(prev,t.menuAfter)
-  if(claimsDone(r)&&!d.length&&!sd.length)add('GRAVE','fatto-falso',`turno ${n}: dice fatto ma non ha scritto nulla («${r.slice(0,80)}»)`)
+  if(claimsDone(r)&&!d.length&&!sd.length&&!menuDiff(prev,t.menuAfter).length)add('GRAVE','fatto-falso',`turno ${n}: dice fatto ma non ha scritto nulla («${r.slice(0,80)}»)`)
   for(const why of incoherent(r,t.menuAfter))add('GRAVE','risposta-incoerente',`turno ${n}: ${why}`)
   if(ERROR.test(r))add('GRAVE','errore-generico',`turno ${n}: errore generico`)
   const nf=r.match(/Non trovo «([^»]+)»/);if(nf&&(nf[1]!.split(/\s+/).length>=4||/\b(aggiung\w*|costa|euro|metti\w*|cambia|prezzo|finit\w*|nascondi|togli)\b/.test(plainT(nf[1]!))))add('GRAVE','frase-come-piatto',`turno ${n}: «Non trovo «${nf[1]}»»`)
