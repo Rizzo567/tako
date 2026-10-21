@@ -571,7 +571,7 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
  const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
  if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
  // «aggiungi la carbonara a 13» con la carbonara già nel menu e nessuna creazione → domanda (mai un prezzo cambiato da «aggiungi»).
- if(/\b(?:aggiung\w*|inserisc\w*|nuov[oa])\b/.test(m)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(m)&&!acts.some(a=>a.kind==='create'||a.kind==='special')){const pr=acts.filter(a=>a.kind==='price');if(pr.length&&pr.length===acts.length)return ask('piatto_gia_presente',pr.map(a=>(a as any).id))}
+ if(/\b(?:aggiung\w*|inserisc\w*|nuov[oa])\b/.test(m)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(m)&&!/\b(?:mett\w*|port\w*|cambi\w*|alz\w*|abbass\w*|aument\w*|diminu\w*|costa\w*|pass\w*|aggiorn\w*)\b/.test(m)){const pr=acts.filter(a=>a.kind==='price');if(pr.length)return ask('piatto_gia_presente',pr.map(a=>(a as any).id))}
  // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
  if(/\b(?:da|dal|dalla|a partire da|per|solo)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|stanotte|settimana prossima|prossima settimana)\b|\bdomani\b/.test(m)&&acts.some(a=>a.kind!=='special'))
   return{...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(acts.flatMap(a=>'id' in a?[(a as any).id as string]:[]))].slice(0,5),actions:acts},notes:[...d.notes,'data_futura']}
