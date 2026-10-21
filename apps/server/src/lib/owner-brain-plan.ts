@@ -166,8 +166,11 @@ const sameRoot=(a:string,b:string)=>a===b||(a.length>=6&&b.length>=6&&a.slice(0,
 export function rivalDishes(id:string,message:string,refs:MenuRef[]):string[]{
  const msg=plain(message).split(' '),target=refs.find(r=>r.id===id);if(!target)return []
  if((' '+plain(message)+' ').includes(' '+plain(target.name)+' '))return []
- const mine=nameWords(target.name).filter(w=>wordHit(w,msg));if(!mine.length)return []
- return refs.filter(o=>o.id!==id&&mine.every(w=>nameWords(o.name).some(x=>sameRoot(x,w)))).map(o=>o.id)
+ // notte 22/10 (z-asr-009 «il bacalà fritto» ≠ Calzone fritto): una parola del nome detta con le doppie sbagliate è comunque detta.
+ const dd=(w:string)=>w.replace(/(.)\1+/g,'$1');if((' '+dd(plain(message))+' ').includes(' '+dd(plain(target.name))+' '))return []
+ const hitW=(w:string)=>wordHit(w,msg)||(w.length>=5&&msg.some(m=>dd(m)===dd(w)))
+ const mine=nameWords(target.name).filter(hitW);if(!mine.length)return []
+ return refs.filter(o=>o.id!==id&&mine.every(w=>nameWords(o.name).some(x=>sameRoot(x,w)||dd(x)===dd(w)))).map(o=>o.id)
 }
 
 // Un piatto «coperto» da un altro: tutte le parole che il messaggio ha in comune con lui le ha anche un altro piatto, che in più
@@ -264,6 +267,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  for(const id of input.twinIds??[])if(byId.has(id))trusted.add(id)
  // Fase R: «bò»/«bo» = «boh» (solo accento o h muta): è il nome, non un suono incerto.
  for(const id of sound.weak){const ph=sound.phrase.get(id);if(ph&&plain(ph).replace(/h/g,'')===plain(byId.get(id)!.name).replace(/h/g,''))trusted.add(id)}
+ // notte 22/10 (bv-asr-003/005 «Bo a 50» → «Bu costa 40»): un suono debole UNICO vale come nominato se è il piatto appena cambiato
+ // (l'ultima risposta del bot ne riporta il fatto «X: prezzo da…»). Da solo, a freddo, resta una domanda (bv-asr-002).
+ {const lb=[...(input.history??[])].reverse().find(t=>t.role==='bot')?.text??'',w=sound.weak.filter(id=>!trusted.has(id));if(w.length===1){const nm=plain(byId.get(w[0]!)!.name);if(nm.length>=2&&(' '+plain(lb)+' ').includes(' '+nm+' prezzo da '))trusted.add(w[0]!)}}
  const weakIds=new Set(sound.weak.filter(id=>!trusted.has(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)))
  // Fase R: «sono tornati tutti i dolci», «nascondi tutte le pizze»: la categoria nominata per intero nomina i suoi piatti.
  // R9: anche nella richiesta originale legata alla TUA domanda aperta («metti i primi tutti a 11» → «si»).
@@ -335,6 +341,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // run Haiku 21/10 (bv-deixis-001): candidati scritti col NOME del piatto invece del codice pN → stesso piatto se il nome è esatto e unico.
  const candIds=(list:unknown)=>Array.isArray(list)?[...new Set(list.flatMap((v:unknown)=>{const id=map(v);if(id&&byId.has(id))return [id];const k=plain(String(v??''));const hits=k.length>=3?refs.filter(r=>plain(r.name)===k):[];return hits.length===1?[hits[0]!.id]:[]}))]:[]
  for(const u of unc){const all=candIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
+  // notte 22/10 (bv-deixis-003 «aggiungi la parmigiana a 10» con la parmigiana già a 10): parte incerta su UN piatto nominato per intero e
+  // col prezzo che ha già = niente da cambiare, non una domanda.
+  if(all.length===1&&typeof u.price==='number'&&byId.has(all[0]!)&&Math.abs(byId.get(all[0]!)!.price-u.price)<0.005&&(' '+plain(String(u.phrase))+' ').includes(' '+plain(byId.get(all[0]!)!.name)+' '))continue
   // notte 22/10 (cc-vietato-16 «le puntarelle a 6,50 e poi raccontami una barzelletta»): una parte fuori tema (nessun piatto, numero o
   // verbo del menu, azione none) non è una parte incerta del menu: non ferma le parti chiare (la bozza del modello risponde al resto).
   if(String(u.action??'none')==='none'&&!all.length&&!/\d/.test(String(u.phrase))&&!/\b(?:mett|togl|nascond|aggiung|elimin|cancell|alz|abbass|aument|diminu|spost|rinomin|finit|esaurit|prezz|evidenz|rimett|cambi|segn|port|sottomenu|menu|sezion|piatt)\w*/.test(plain(String(u.phrase)))&&!refs.some(r=>g9DishMentioned(r.name,String(u.phrase),refs)))continue
@@ -416,7 +425,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
    // Fase R: «anche la lasagna» → «no scusa 14»: il prezzo cambiato l'ha scritto il server nell'ultima risposta (riga «X: prezzo da»).
    const botChanged=(id:string)=>{const r=byId.get(id);return !!r&&plain(lastBotText).includes(plain(r.name)+' prezzo da')}
-   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)&&!botChanged(id)
+   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)&&!botChanged(id)&&!(ONE_PRONOUN.test(msg)&&pd.length===1&&pd[0]===id)
    // Risposta a una domanda del bot sulla richiesta di prima: quella richiesta (anche con più piatti) torna valida per intero.
    const answering=BOT_QUESTION.test(lastBotText)
    const botList=/(?:^|\s)[-•]\s+\S/.test(lastBotText)&&!/\?/.test(lastBotText)?refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).sort((a,b)=>lastBotText.indexOf(a.name)-lastBotText.indexOf(b.name)).map(r=>r.id):[]
@@ -493,6 +502,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // «metti il tiramisù a 6 come la panna cotta»: il piatto di riferimento non manca (se il prezzo detto è il suo).
   if(out.every(a=>a.kind!=='price'||Math.abs(a.price-r.price)<0.005)&&new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*|pari)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg))return false
  const idx=clauses.map((x,i)=>(' '+plain(x)+' ').includes(' '+plain(r.name)+' ')?i:-1).filter(i=>i>=0),parts=idx.map(i=>clauses[i]!);if(!parts.length)return true
+  // notte 22/10 (bv-deixis-003): il piatto detto col prezzo che HA GIÀ («la parmigiana a 10», già a 10) non ha niente da cambiare: non manca.
+  if(parts.every(x=>{const n=[...x.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]));return n.length>0&&n.every(v=>Math.abs(v-r.price)<0.005)&&!/\b(?:finit|esaurit|nascond|togli|evidenz|elimin|cancell|rinomin|spost|promo|scont)\w*/i.test(x)}))return false
   // «la bomba... no aspetta, le bombette»: il piatto detto e subito ritirato non manca.
   if(idx.every(i=>!ACTV.test(clauses[i]!)&&/^\s*(?:no\s+aspetta|no\s+scusa|anzi|cioe|cioè|no\s+no|aspetta)\b/i.test(clauses[i+1]??'')))return false
   // R6.1 (M2): «la carbonara a 13, no lascia / annulla / cancella questa, …», «(no, lasciala)»: la parte ritirata subito dopo non manca.
@@ -652,7 +663,9 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
  for(const [id,list] of by){const v=(k:string)=>list.filter(a=>a.kind===k).map(a=>(a as any).value)
   const hid=v('hidden'),av=v('available'),fe=v('featured'),pr=new Set(list.filter(a=>a.kind==='price').map(a=>Math.round((a as any).price*100)))
   if((hid.includes(true)&&hid.includes(false))||(av.includes(true)&&av.includes(false))||(fe.includes(true)&&fe.includes(false))||(hid.includes(true)&&fe.includes(true))||pr.size>1)return ask('azioni_contraddittorie',[id])}
- if(SALE_WORDS.test(m)&&!SALE_OFF.test(m)&&acts.some(a=>a.kind==='price')){const conv=acts.map(a=>a.kind==='price'?{kind:'promo',id:a.id,price:a.price,until:null} as MenuAction:a);return{...d,plan:{...d.plan,actions:conv},notes:[...d.notes,'sconto_come_promo']}}
+ // notte 22/10 (bv-correzioni-003 «la parmigiana a 15 e il tiramisù in promo a 3»): se il piano ha già una promo, il modello ha distinto
+ // prezzo e promo: i prezzi restano prezzi (prima diventava «promo della parmigiana a 15 > pieno 10»).
+ if(SALE_WORDS.test(m)&&!SALE_OFF.test(m)&&acts.some(a=>a.kind==='price')&&!acts.some(a=>a.kind==='promo')){const conv=acts.map(a=>a.kind==='price'?{kind:'promo',id:a.id,price:a.price,until:null} as MenuAction:a);return{...d,plan:{...d.plan,actions:conv},notes:[...d.notes,'sconto_come_promo']}}
  return null}
 
 const STRUCT_VERB=/\b(?:ho detto|devi|dovevi|crea\w*|aggiung\w*|mett\w*|voglio|vorrei|fai|fammi|inizia|nuov[oa]|chiama\w*)\b/
@@ -766,7 +779,9 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   if(!m)return{actions:[],notes:[],ask:'menu_da_mostrare'};const value=a.value!==false;if((m.active!==false)===value){notes.push('menu_gia:'+m.name);continue}
   actions.push({kind:'set_menu_active',menuId:m.id,name:m.name,value,items:(m.secs??[]).reduce((n,x)=>n+x.items,0)} as MenuAction)}
  for(const a of raw){if(!a||a.action!=='set_section_visible')continue;const n=String(a.name??'');const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
-  const cands=(input.menus??[]).flatMap(m=>(m.secs??[]).filter(x=>sameSection(x.name,n)&&(!want||menuKey(m.name)===want)).map(x=>({...x,menu:m.name})))
+  const cands0=(input.menus??[]).flatMap(m=>(m.secs??[]).filter(x=>sameSection(x.name,n)&&(!want||menuKey(m.name)===want)).map(x=>({...x,menu:m.name})))
+  // notte 22/10 (str-v-08 «fai vedere i dolci della cena»): il Menu detto nel messaggio sceglie tra sottomenu con lo stesso nome.
+  const inMsg=cands0.filter(c=>{const k=menuKey(c.menu);return k.length>=3&&(' '+plain(input.message)+' ').includes(' '+k+' ')}),cands=cands0.length>1&&inMsg.length===1?inMsg:cands0
   if(cands.length!==1)return{actions:[],notes:[],ask:cands.length?'sottomenu_ambiguo':'sottomenu_da_mostrare'};const c=cands[0]!,value=a.value!==false
   if(c.active===value){notes.push('sottomenu_gia:'+c.name);continue}
   actions.push({kind:'set_section_active',sectionId:c.id,name:c.name,menuName:c.menu,value,items:c.items} as MenuAction)}

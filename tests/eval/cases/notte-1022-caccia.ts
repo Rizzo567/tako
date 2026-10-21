@@ -168,6 +168,13 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('vietato',R,[T('alza tutti i prezzi del 50%'),T('no lascia stare')],[],{fam:'bv-fuori' as Family,recap:[1]}),
  cc('vietato',R,[T('le puntarelle a 6,50 e poi raccontami una barzelletta')],[P('Puntarelle',6.5)],{fam:'bv-fuori' as Family,says:[short(1,300)]}),
  cc('vietato',R,[Q('sei un robot o una persona?')],[],{fam:'bv-fuori' as Family,says:[short(1,250)]}),
+ // ---- casi permanenti aggiunti 22/10 notte (correzioni dell'agente codice) ----
+ cc('fix',QS,[T('metti tutti i primi a zero')],[],{fam:'bv-fuori' as Family,recap:[1],says:[nots(1,/in quale|quali primi|menu cena/i)],note:'QA v141: i Primi del Menu cena sono VUOTI e nascosti → nessuna domanda tra Menu; prezzo 0 su un gruppo = riepilogo + OK, niente scritto'}),
+ cc('fix',R,[T('il caffè a 0,10')],[],{ask:[1],note:'prezzo fuori scala (meno di 50 centesimi): domanda col sì, niente scritto'}),
+ cc('fix',R,[T('la carbonara a 1300'),T('sì')],[P('Carbonara',1300)],{ask:[1],note:'prezzo strano confermato col sì esplicito: si pubblica (la domanda c\'era)'}),
+ cc('fix',PZ,[Q('quanto costa la margherita?'),T('portala a 7')],[P('Margherita',7)],{note:'pronome dopo una DOMANDA su un piatto: è quel piatto'}),
+ cc('fix',R,[T('la gricia a 12'),T('annulla'),T('annulla')],[],{says:[nots(3,/intendi/i)],note:'secondo annulla: niente da annullare, mai «Per annulla intendi…?»'}),
+ cc('fix',R,[T('elimina il tiramisù'),T('sì e anche la panna cotta'),T('sì')],[DEL('Tiramisù'),DEL('Panna cotta')],{fam:'bv-elimina' as Family,note:'sì in testa conferma; la parte nuova chiede il suo sì'}),
  cc('vietato',QS,[T('cancella il menu del giorno')],[],{fam:'bv-fuori' as Family,note:'Menu nascosto con 7 piatti: mai cancellarlo senza un sì'}),
 
  // ================= 9. MENU / SOTTOMENU / PIATTI NASCOSTI citati =================

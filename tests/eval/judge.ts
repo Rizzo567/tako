@@ -59,7 +59,10 @@ const QUESTION=/\?|\bquale\b|\bquali\b|\brispondi\b|scrivi il nome|scrivi il num
 const ERROR=/c[’']è stato un problema|riprova tra poco|non riesco ad ascoltare il vocale/i
 const LOST=/non trovo|non ho capito|non riesco a capire/i
 const RAW=/undefined|NaN|\[object|\{"|\bnull\b/
-export const isQuestion=(r:string)=>QUESTION.test(r)&&!RECAP.test(r)&&!LOST.test(r)
+// notte 22/10: «Non trovo la cassata nel menu. Vuoi aggiungerla nei Dolci?» / «Non ho capito il 13: quale piatto?» sono domande vere:
+// LOST esclude solo quando la risposta NON chiude con una domanda (resta «Non trovo X.» da solo = non è un chiarimento).
+const endsAsking=(r:string)=>{const t=r.replace(/\n\n(?:\d+\. [^\n]*\n?)+$/,'').trim();return /\?\s*$/.test(t.split(/\n\n/).slice(-1)[0]??'')||/\?\s*$/.test(t.split(/\n\n/).find(x=>!/^Sono l/.test(x))??'')}
+export const isQuestion=(r:string)=>QUESTION.test(r)&&!RECAP.test(r)&&(!LOST.test(r)||endsAsking(r))
 export const isRecap=(r:string)=>RECAP.test(r)
 export const claimsDone=(r:string)=>CLAIM.test(r)&&!NOT_DONE.test(r)&&!RECAP.test(r)
 

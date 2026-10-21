@@ -143,7 +143,7 @@ export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[]
  else if(onlySec)return null
  else{const stem=word.length>4?word.replace(/[aeio]$/,''):word;if(stem.length<4)return null;items=refs.filter(r=>priced(r)&&plain(r.name).split(' ').some(x=>x.startsWith(stem)&&x.length<=stem.length+2))}
  if(items.length<(secs.length?1:2))return null
- const actions=items.flatMap(r=>{const v=pct?Math.round(r.price*pct.factor*100)/100:price!==null?price:Math.round((r.price+delta!)*100)/100;return v>0&&Math.abs(v-r.price)>=0.005?[{kind:'price',id:r.id,price:v} as MenuAction]:[]})
+ const actions=items.flatMap(r=>{const v=pct?Math.round(r.price*pct.factor*100)/100:price!==null?price:Math.round((r.price+delta!)*100)/100;return (v>0||(price===0&&!pct&&delta===null))&&Math.abs(v-r.price)>=0.005?[{kind:'price',id:r.id,price:v} as MenuAction]:[]})
  return actions.length?{actions,label}:null}
 /** Stesso prezzo assoluto (≥2 piatti, «tutte a 9»): si applica subito come l'aumento uniforme. */
 export function uniformTarget(actions:MenuAction[]):number|null{if(actions.length<2||!actions.every(a=>a.kind==='price'))return null;const v=new Set(actions.map(a=>Math.round((a as any).price*100)));return v.size===1?[...v][0]!/100:null}
