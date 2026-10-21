@@ -50,7 +50,7 @@ export type BrainRun={decision:BrainDecision,clarifyIds:string[]|null,recentIds?
  /** Fase R: testo recente del titolare (numeri ammessi nella bozza del modello). */
  ownerRecent?:string,lastBot?:string}
 /** Piano del cervello per un turno. null = riserva (Groq giù, quota, JSON non valido, contesto impossibile). */
-export async function brainPlan(db:Exec,o:{menus?:{id:string,name:string,sections:number,active?:boolean,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}[],tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null,
+export async function brainPlan(db:Exec,o:{menus?:{id:string,name:string,sections:number,active?:boolean,pricing?:'carta'|'fisso',formulas?:{id:string,name:string,price:number}[],included?:string|null,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}[],tenant:string,phone:string,restaurantName:string,text:string,refs:MenuRef[],sections:SectionRef[],pendingCommand:any,key:string,ai:GroqOptions,now?:number,exclude?:import('./twilio-menu-clarify.js').Excluded[],undo?:{at:number,items:{id:string,before:any}[]}|null,
  /** Fase R: annulla possibile (ultima pubblicazione ≤10 min) e auto-correzione. */
  undoInfo?:{minutes:number,names:string[]}|null,correction?:{previous:string,reason:string}|null,
  /** Fase R: «rimetti com'era X» fino a 60 minuti a menu invariato (stessa memoria `last:` del percorso di prima). */
