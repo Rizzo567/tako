@@ -44,7 +44,9 @@ const VERBS:[RegExp,Kind[]][]=[
  [/^rimuov\w*$/,['delete','hidden']],
  [/^nascond\w*$/,['hidden']],
  [/^(?:togli|tolg|tolt|lev)\w*$/,['hidden','price','featured','delete','tag','promo','scarcity']],
- [/^(?:rimett|mostr|riattiv)\w*$/,['hidden','available','featured','price','restore' as Kind]],
+ // Prova dal vivo 21/10: «rimetti il tiramisù nei Piatti di prova» = spostamento.
+ [/^(?:rimett|mostr|riattiv)\w*$/,['hidden','available','featured','price','restore' as Kind,'move']],
+ [/^riport\w*$/,['move','price','hidden','available']],
  [/^(?:finit|esaurit|fernut|terminat|finid|finia)\w*$/,['available','hidden']],
  [/^(?:tornat|torna|disponibil)\w*$/,['available','price','hidden']],
  [/^(?:evidenz|evidenza)\w*$/,['featured']],

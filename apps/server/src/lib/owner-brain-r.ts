@@ -70,6 +70,7 @@ const REASON:Record<string,string>={
  piatto_nominato_senza_azione:'un piatto nominato nel messaggio non ha nessuna azione nel piano (parte persa?)',
  azione_sconosciuta:'azione non prevista dallo schema',
  ripristino_non_valido:'restore su un piatto non nominato',
+ ripristino_con_destinazione:'«rimetti/riporta X in/nei <sottomenu>» con un sottomenu diverso da quello attuale è uno spostamento (move_item), non un restore: indica il sottomenu col suo codice; se il sottomenu detto è in più Menu e il Menu non è detto, chiedi quale',
  ripristino_impossibile:'restore impossibile: quel piatto non è stato cambiato da qui negli ultimi 30 minuti',
  domanda_zero_scritture:'il messaggio è una domanda: nessuna modifica, rispondi alla domanda (intent=read)',
  nessuna_azione:'il piano non contiene azioni valide',
@@ -418,3 +419,25 @@ export function fixedDishFact(ids:string[],refs:MenuRef[],menus:{id:string,name:
 // di nascondere TUTTO il Menu cena (un «sì» l'avrebbe tolto ai clienti). Vale solo la domanda che nasconde il Menu stesso:
 // «Nascondo (tutto) il Menu *Cena*?», mai una frase che nasconde dei piatti o un sottomenu dentro il Menu.
 export const HIDE_WHOLE_MENU_Q=/\bnascond\w* (?:tutt[oa] |anche )?(?:il |l intero |l )?menu\b(?! [^?]*\b(?:gli altri|le altre|i piatti|piatti|primi|secondi|contorni|dolci|antipasti|sottomenu)\b)/
+
+// ── Prova dal vivo 21/10 sera (QA): il testo segue il dato ─────────────────────────────────────────────────────────────────────
+/** Stessa differenza di prezzo (≠0) su almeno 2 piatti e nient'altro: aumento/ribasso uniforme. La differenza in euro, oppure null. */
+export function uniformDelta(actions:MenuAction[],refs:MenuRef[]):number|null{
+ if(actions.length<2)return null;const d=new Set<number>()
+ for(const a of actions){if(a.kind!=='price')return null;const r=refs.find(x=>x.id===a.id);if(!r)return null;d.add(Math.round((a.price-r.price)*100))}
+ const [v]=[...d];return d.size===1&&v!==0?v!/100:null}
+/** Risposta del server per un aumento/ribasso uniforme già applicato: la riga d'esito e i fatti riletti (mai la bozza del modello,
+ * che prometteva un riepilogo o nominava come esclusi piatti cambiati). */
+export function uniformReply(delta:number,count:number,facts:string):string{
+ const eur=Math.abs(delta).toFixed(2).replace('.',',')+' €'
+ return [(delta>0?'Aumentati':'Abbassati')+' di '+eur+' i prezzi di '+count+' piatti.',facts].filter(Boolean).join('\n\n')}
+// Frasi della bozza che non possono stare sopra una scrittura già fatta: promessa di un riepilogo da confermare prima di pubblicare.
+const PROMISE_RECAP=/\b(?:riepilogo|prima di pubblicare|da confermare|prima di salvare|aspetto (?:il tuo|la tua) (?:ok|conferma))\b/
+const EXCLUDED_SAY=/\b(?:lascio fuori|lasciamo fuori|lascio (?:stare|com e|come sono|invariat\w*)|restano fuori|resta fuori|rimangono fuori|escludo|esclus\w*|non (?:li |la |lo |le )?tocco|non (?:sono|e) (?:nei|nel|tra|fra)|non (?:li |la |lo |le )?cambio)\b/
+/** Bozza del modello dopo una scrittura: via le frasi che promettono un riepilogo e quelle che dicono «esclusi» piatti che invece
+ * sono stati cambiati. null = non resta niente. */
+export function pruneWroteDraft(draft:string,actions:MenuAction[],refs:MenuRef[]):string|null{
+ const touched=new Set(actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))
+ const names=refs.filter(r=>touched.has(r.id)&&plain(r.name).length>=3).map(r=>' '+plain(r.name)+' ')
+ const keep=draft.split(/(?<=[.!?])\s+/).filter(x=>{const p=' '+plain(x)+' ';if(PROMISE_RECAP.test(p))return false;if(EXCLUDED_SAY.test(p)&&names.some(n=>p.includes(n)))return false;return true})
+ return keep.join(' ').trim()||null}

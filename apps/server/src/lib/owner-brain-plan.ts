@@ -7,7 +7,7 @@
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
 import {randomUUID} from 'node:crypto'
-import {allOfSections} from './owner-brain-sections.js'
+import {allOfSections,namedSections} from './owner-brain-sections.js'
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier,diminutiveRivals} from './twilio-menu-nlu.js'
@@ -354,6 +354,11 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const no=(note:string,ids:(string|null)[]=[])=>({intent:'clarify' as const,plan:{type:'clarify' as const,ids:ids.filter((x):x is string=>!!x&&byId.has(x))},exclude,aliasesUsed,replyDraft:'',notes:[...notes,note]})
  for(const a of actions){if(!a||typeof a!=='object'||!BRAIN_ACTIONS.includes(a.action))return no('azione_sconosciuta',actions.map((x:any)=>map(x?.item)))
   const id=map(a.item)
+  // Prova dal vivo 21/10 («rimetti il tiramisù nei Piatti di prova del Menu di verifica» → ripristinava il prezzo): «rimetti/riporta X
+  // in/nei <sottomenu>» con un sottomenu nominato diverso da quello attuale è uno SPOSTAMENTO; «rimetti com'era» senza destinazione resta un ripristino.
+  if(a.action==='restore'&&id&&byId.has(id)&&mentioned(id)){const dest=restoreDestination(input.message,byId.get(id)!,sections)
+   if(dest==='ambiguous')return no('ripristino_con_destinazione',[id])
+   if(dest){if(!actions.some((x:any)=>x?.action==='move_item'&&map(x.item)===id))legacy.push({action:'move_item',item_id:id,section_id:dest,section_name:null});if(!notes.includes('ripristino_come_spostamento'))notes.push('ripristino_come_spostamento');continue}}
   if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if((!dir.test(msg)&&!(d>0?/\+\s*\d/:/(?:^|[\s(])-\s*\d/).test(message))||/\b(?:a|costa|prezzo|fallo|mettil\w*)\s*[-–]\s*\d/i.test(message))return no('delta_senza_verbo',[id]) /* «a -1» è un prezzo negativo, non una differenza (R5.1) */;legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref)
@@ -530,7 +535,10 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  // Sottomenu creati in questo stesso piano: i piatti che li nominano ci vanno (mai nell'unico sottomenu esistente per ripiego).
  const planSections:SectionRef[]=[...input.sections,...struct.actions.flatMap(a=>a.kind==='create_section'?[{id:a.newSectionId,name:a.name,menu:a.menuName??''} as SectionRef]:[])]
  // La creazione di struttura l'ha già letta il pre-passo: «crealo/crea» non è una parte persa per il validatore dei piatti.
- const vMessage=struct.actions.some(a=>a.kind==='create_section'||a.kind==='create_menu')?input.message.replace(/\bcre(?:a|al[oaie]|ami|are|ato|ati)\b/gi,' ').replace(/\s+/g,' ').trim():input.message
+ const vMessage0=struct.actions.some(a=>a.kind==='create_section'||a.kind==='create_menu')?input.message.replace(/\bcre(?:a|al[oaie]|ami|are|ato|ati)\b/gi,' ').replace(/\s+/g,' ').trim():input.message
+ // Prova dal vivo 21/10 (vocale «il solo primo mettilo a 10… poi tra i secondi aggiungi…»): la parte dell'opzione l'ha già letta il
+ // pre-passo della struttura; per il validatore dei piatti il suo «10» era una parte persa → domanda e niente scritto.
+ const vMessage=formulaClausesOut(vMessage0,struct.actions,input.refs)
  const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:planSections,message:vMessage,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id),fixedSecIds,menus:input.menus})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
 
@@ -542,6 +550,24 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections,input.refs,new Set((input.menus??[]).filter(m=>m.pricing==='fisso').flatMap(m=>(m.secs??[]).map(x=>x.id))));if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
+/** Prova dal vivo 21/10: sottomenu di arrivo detto in «rimetti/riporta X in/nei/tra i <sottomenu> [del Menu Y]». null = nessuna
+ * destinazione (o è il sottomenu dove il piatto sta già: ripristino), 'ambiguous' = più sottomenu possibili. Solo testo, nessuna scelta. */
+export function restoreDestination(message:string,item:MenuRef,sections:SectionRef[]):string|null|'ambiguous'{
+ const m=plain(message).match(/\b(?:rimett\w*|riport\w*|ripon\w*|torn\w*)\b(?:.*?)\s(?:in|nei|negli|nelle|nel|nella|tra|fra|sotto|dentro)\s+(.+)$/);if(!m)return null
+ const tail=m[1]!,hit=namedSections(tail,sections).ids;if(!hit.length)return null
+ // Menu detto («…del Menu di verifica»): solo i suoi sottomenu.
+ const said=sections.filter(s=>hit.includes(s.id)&&!!s.menu&&(()=>{const k=plain(s.menu).replace(/^menu /,'');return k.length>=3&&(' '+tail+' ').includes(' '+k+' ')})())
+ let cands=said.length?said:sections.filter(s=>hit.includes(s.id))
+ if(cands.some(s=>s.id===item.sectionId))return null
+ if(cands.length>1){const cur=sections.find(s=>s.id===item.sectionId)?.menu,same=cands.filter(s=>s.menu===cur);if(same.length===1)cands=same}
+ return cands.length===1?cands[0]!.id:'ambiguous'}
+/** Prova dal vivo 21/10: toglie dal testo per il validatore dei piatti le parti che nominano un'opzione di prezzo (Completo, Solo
+ * primo…) già cambiata dal pre-passo della struttura, se non nominano anche un piatto del menu. Le altre parti restano intatte. */
+export function formulaClausesOut(message:string,struct:MenuAction[],refs:MenuRef[]):string{
+ const names=struct.flatMap(a=>a.kind==='set_formula'||a.kind==='delete_formula'?[plain(a.name)]:[]).filter(n=>n.length>=3);if(!names.length)return message
+ const segs=message.split(/([,;.!?\u2026]+|\s+(?:e|ed|poi|e poi)\s+)/i)
+ const out=segs.map((x,i)=>{if(i%2)return x;const p=' '+plain(x)+' ';if(!names.some(n=>p.includes(' '+n+' ')))return x;if(refs.some(r=>{const k=plain(r.name);return k.length>=3&&!names.includes(k)&&p.includes(' '+k+' ')}))return x;return ' '})
+ return out.join('').replace(/\s+/g,' ').trim()}
 // 21/10: risposta a una TUA domanda nata da «sposta X…» («nei panini, crealo»): il verbo vale dalla richiesta in sospeso.
 const MOVE_VERB_RE=/\b(?:spost\w*|trasferisc\w*|porta\w*)\b/
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
