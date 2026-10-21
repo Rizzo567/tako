@@ -522,7 +522,10 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
 
  if(struct.actions.length){if(decision.plan.type!=='change')return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
-  decision.plan={...decision.plan,actions:[...struct.actions,...decision.plan.actions]};decision.notes=[...decision.notes,...struct.notes]}
+  // Un Sottomenu creato insieme ai piatti che ci vanno dentro (spostati o nuovi) nasce visibile: il titolare lo sta riempiendo adesso.
+  const filled=new Set(decision.plan.actions.flatMap((a:any)=>a.kind==='create'||a.kind==='move'?[a.sectionId as string]:[]))
+  const structActs=struct.actions.map(a=>a.kind==='create_section'&&a.hidden&&filled.has(a.newSectionId)?{...a,hidden:false}:a)
+  decision.plan={...decision.plan,actions:[...structActs,...decision.plan.actions]};decision.notes=[...decision.notes,...struct.notes]}
  if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections);if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }

@@ -41,7 +41,7 @@ export function haikuRequest(ctx:BrainContext,opts:HaikuOptions={}){
 const RETRY_STATUS=(s:number)=>s===429||s===529||s>=500
 class Attempt extends Error{constructor(readonly reason:BrainUnavailable['reason'],readonly retry:boolean,detail=''){super(detail||reason)}}
 
-/** Una chiamata PLAN a Haiku. Timeout 10 s per tentativo, 1 nuovo tentativo dopo 1 s su 429/529/5xx/rete/timeout, nessuno su 4xx.
+/** Una chiamata PLAN a Haiku. Il tentativo usa il budget rimasto (`budgetMs`); 1 nuovo tentativo dopo 1 s su 429/529/5xx/rete (mai per lentezza), nessuno su 4xx.
  * `opts.budgetMs` = tempo massimo TOTALE (tentativi compresi) che il turno concede a questa chiamata. */
 export async function callHaiku(ctx:BrainContext,key:string,opts:HaikuOptions={}):Promise<BrainCall>{
  if(!key)throw new BrainUnavailable('no_key')
@@ -52,8 +52,10 @@ export async function callHaiku(ctx:BrainContext,key:string,opts:HaikuOptions={}
   const doFetch=opts.fetch??((u:string,i:RequestInit)=>globalThis.fetch(u,i))
   const left=deadline-Date.now();if(left<=200)throw new Attempt('timeout',false,'budget')
   const started=Date.now();let response:Response
-  try{response=await doFetch(ANTHROPIC_URL,{method:'POST',headers:{'x-api-key':key,'anthropic-version':ANTHROPIC_VERSION,'content-type':'application/json'},body,signal:AbortSignal.timeout(Math.min(opts.timeoutMs??HAIKU_TIMEOUT_MS,left))})}
-  catch(e){const n=(e as any)?.name;throw new Attempt(n==='TimeoutError'||n==='AbortError'?'timeout':'http',true,n==='TimeoutError'||n==='AbortError'?'timeout':'rete')}
+  try{response=await doFetch(ANTHROPIC_URL,{method:'POST',headers:{'x-api-key':key,'anthropic-version':ANTHROPIC_VERSION,'content-type':'application/json'},body,signal:AbortSignal.timeout(Math.min(opts.timeoutMs??left,left))})}
+  // 21/10 pomeriggio (timeout sul QA con 5 richieste): la lentezza NON si ritenta (rifare la stessa chiamata lunga non serve e brucia il
+  // budget); si ritentano solo rete, 5xx e 429. Il tentativo usa tutto il budget rimasto del turno (niente tetto fisso di 10 s).
+  catch(e){const n=(e as any)?.name;const slow=n==='TimeoutError'||n==='AbortError';throw new Attempt(slow?'timeout':'http',!slow,slow?'timeout':'rete')}
   if(!response.ok){await response.text().catch(()=>'');if(RETRY_STATUS(response.status))throw new Attempt(response.status===429||response.status===529?'busy':'http',true,String(response.status));throw new Attempt('http',false,String(response.status))}
   let data:any;try{data=await response.json()}catch{throw new Attempt('invalid_json',false,'corpo')}
   const u=data?.usage??{},cacheRead=Number(u.cache_read_input_tokens)||0,cacheWrite=Number(u.cache_creation_input_tokens)||0

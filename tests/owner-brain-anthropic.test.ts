@@ -68,9 +68,13 @@ describe('callHaiku: errori e retry',()=>{
   for(const [reply,reason] of [[anthropicReply('',{stop:'refusal'}),'refusal'],[anthropicReply('{"intent":',{stop:'max_tokens'}),'max_tokens'],[anthropicReply('non è json'),'invalid_json']] as const){
    const g=fake(()=>reply.clone());const e=await callHaiku(ctx,'k',{fetch:g.fetch,sleep,retryDelayMs:1}).catch(x=>x);expect(e).toBeInstanceOf(BrainUnavailable);expect(e.reason).toBe(reason);expect(g.calls).toHaveLength(1)}
  })
- it('timeout per tentativo: due timeout → BrainUnavailable(timeout)',async()=>{
+ it('lentezza: un solo tentativo (mai rifatto per timeout) → BrainUnavailable(timeout) (21/10)',async()=>{
   let n=0;const hang=(_u:string,i:RequestInit)=>{n++;return new Promise<Response>((_r,rej)=>{i.signal!.addEventListener('abort',()=>rej(i.signal!.reason))})}
-  const e=await callHaiku(ctx,'k',{fetch:hang,sleep,retryDelayMs:1,timeoutMs:30,budgetMs:5000}).catch(x=>x);expect(e).toBeInstanceOf(BrainUnavailable);expect(e.reason).toBe('timeout');expect(n).toBe(2)
+  const e=await callHaiku(ctx,'k',{fetch:hang,sleep,retryDelayMs:1,timeoutMs:30,budgetMs:5000}).catch(x=>x);expect(e).toBeInstanceOf(BrainUnavailable);expect(e.reason).toBe('timeout');expect(n).toBe(1)
+ })
+ it('il tentativo usa tutto il budget del turno (niente tetto fisso di 10 s)',async()=>{
+  let used=0;const slow=(_u:string,i:RequestInit)=>new Promise<Response>((res,rej)=>{const t0=Date.now();const h=setTimeout(()=>{used=Date.now()-t0;res(anthropicReply(ok))},120);i.signal!.addEventListener('abort',()=>{clearTimeout(h);rej(i.signal!.reason)})})
+  const r=await callHaiku(ctx,'k',{fetch:slow,sleep,budgetMs:5000});expect(r.content).toBeTruthy();expect(used).toBeGreaterThanOrEqual(100)
  })
  it('budget del turno finito: nessuna chiamata',async()=>{
   const g=fake(()=>anthropicReply(ok));const e=await callHaiku(ctx,'k',{fetch:g.fetch,budgetMs:0}).catch(x=>x);expect(e.reason).toBe('timeout');expect(g.calls).toHaveLength(0)

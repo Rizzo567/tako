@@ -25,13 +25,14 @@ import {structChecks} from './struct-checks.js'
 import {BV_CASES} from './cases/banco-vero.js'
 import {VICTORIA_CASES,type HaikuCase} from './cases/victoria-1019.js'
 import {STRUTTURA60,STRUTTURA_CASES,STRUTTURA_VERE,STRUTTURA_VIS} from './cases/struttura-1021.js'
+import {LUNGHI_CASES} from './cases/lunghi-1021.js'
 import {PARLATO_CASES} from './cases/parlato-sporco.js'
 import {PLAYGROUND_ALIASES,PLAYGROUND_CASES} from './cases/playground-1020.js'
 import {ADV150,ADV60,advExtra,strataCount,stratumOf} from './sample-adv.js'
 import type {BotRun,BotUnderTest,Conversation,EvalMenu,Fail,Verdict} from './types.js'
 
 const SET=process.env.TAKO_HAIKU_SET||'victoria',realFetch=globalThis.fetch
-const SETS:Record<string,Conversation[]>={victoria:VICTORIA_CASES,banco:BV_CASES,parlato:PARLATO_CASES,playground:PLAYGROUND_CASES,adv150:ADV150,adv60:ADV60,struttura:STRUTTURA_CASES,visibilita:STRUTTURA_VIS,struttura60:STRUTTURA60,'struttura-vere':STRUTTURA_VERE}
+const SETS:Record<string,Conversation[]>={victoria:VICTORIA_CASES,banco:BV_CASES,parlato:PARLATO_CASES,playground:PLAYGROUND_CASES,adv150:ADV150,adv60:ADV60,struttura:STRUTTURA_CASES,lunghi:LUNGHI_CASES,visibilita:STRUTTURA_VIS,struttura60:STRUTTURA60,'struttura-vere':STRUTTURA_VERE}
 if(process.env.TAKO_HAIKU&&!SETS[SET])throw new Error('TAKO_HAIKU_SET sconosciuto: '+SET+' '+Object.keys(SETS).join('|'))
 const only=process.env.TAKO_HAIKU_ONLY?.split(',')
 const convs=(SETS[SET]??[]).filter(c=>!only||only.includes(c.id))

@@ -493,8 +493,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  const last=await readLast(db,ctx.phone,row.revision),extraRestore=last?last.undo.flatMap(a=>'id' in a?[{id:(a as any).id as string,actions:last.undo.filter(b=>'id' in b&&(b as any).id===(a as any).id)}]:[]):[]
  const freshIds=new Set(undoOK&&!undoRec!.full?undoRec!.items.filter(i=>i.before===null).map(i=>i.id):[])
  // PIANO bot-haiku: con haiku il turno intero (auto-correzioni comprese) sta in 25 s; cervello giù → brainDown + avviso a Manuel.
- const engine=budget.engine,deadline=Date.now()+25_000
- const onDown=engine==='haiku'?(reason:string)=>{inBackground(reportFailure({kind:'job_failed',tenant:ctx.tenant,phone:ctx.phone,detail:'haiku: '+reason}))}:undefined
+ const engine=budget.engine,deadline=Date.now()+30_000
+ let downReason=''
+ const onDown=engine==='haiku'?(reason:string)=>{downReason=reason;inBackground(reportFailure({kind:'job_failed',tenant:ctx.tenant,phone:ctx.phone,detail:'haiku: '+reason+(reason==='timeout'?' (messaggio lungo)':'')}))}:undefined
+ const down=()=>engine==='haiku'&&downReason==='timeout'?copy.brainSlow:copy.brainDown
  const base={menus:(workspaceSchema.parse(row.draft).menus as any[]).map((m:any)=>({id:m.id as string,name:m.name as string,sections:(m.sections??[]).length as number,active:m.active!==false,secs:(m.sections??[]).map((x:any)=>({id:x.id as string,name:x.name as string,active:x.active!==false,parent:(x.parentSectionId??null) as string|null,items:(x.items??[]).length as number}))})),voice,tenant:ctx.tenant,phone:ctx.phone,restaurantName:name,text,refs,sections,pendingCommand:cmd,key,ai,engine,deadline,onDown,undo:restorable,extraRestore,freshIds,undoInfo:undoOK?{minutes:Math.max(1,Math.ceil((undoWindowMs-(Date.now()-Number(undoRec!.at)))/60000)),names:undoNames.length?undoNames:['struttura del menu (sottomenu)']}:null}
  const approval=(actions:MenuAction[],refs0:MenuRef[],message:string,ans=false)=>approvalFor(actions,refs0,message,ans,engine==='haiku',sections)
  const decide=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>decideTurn({decision:run.decision as any,control:run.decision.control??[],raw:run.decision.raw,message:text,pend,undoOK,sections,refs,lastBot:run.lastBot})
@@ -505,14 +507,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  const numbersOK=(run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>,extra:number[]=[])=>[...numbersIn(text),...numbersIn(run.ownerRecent??''),...namedPrices,...(engine==='haiku'?draftNamed(run):[]),...extra]
  // Una domanda (o una risposta senza scrittura) senza testo del modello utilizzabile vale come piano da rifare.
  const needsText=(o:Outcome,run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>)=>(o.kind==='change'&&engine!=='haiku'&&!!approval(o.actions,refs,text,answered)&&!/\?|rispondi|scrivi/i.test(cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run,o.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price]:[]))})??''))||(o.kind==='ask'||o.kind==='say')&&!cleanDraft(run.decision.draft,{wrote:false,numbers:numbersOK(run,[...o.kind==='ask'?o.ids.map(id=>refs.find(r=>r.id===id)?.price??-1):[]])})
- let run=await brainPlan(db,base);if(budget.expired)return '';if(!run)return copy.brainDown
+ let run=await brainPlan(db,base);if(budget.expired)return '';if(!run)return down()
  let calls=1
  let out=decide(run)
  if(out.kind==='reject'||needsText(out,run)){
   const candNames=out.kind==='reject'?[...new Set(out.ids)].map(id=>refs.find(r=>r.id===id)?.name).filter((n):n is string=>!!n).slice(0,8):[]
   const reason=(out.kind==='reject'?out.reason:reasonText(['domanda_mancante']))+(candNames.length>1?' — piatti possibili: '+candNames.join(', '):'')
   if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-RIFIUTO '+JSON.stringify({text,reason,raw:run!.decision.content?.slice(0,400)})+'\n')).catch(()=>{})
-  const first=out,run2=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason}});calls++;if(budget.expired)return '';if(!run2)return copy.brainDown
+  const first=out,run2=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason}});calls++;if(budget.expired)return '';if(!run2)return down()
   const out2=decide(run2);run=run2
   // Ancora rifiutato: il modello formula una domanda (la sua bozza), mai una scrittura; i candidati restano in sospeso.
   // R8: una proposta da confermare (riepilogo/eliminazione) senza domanda nella bozza dopo l'auto-correzione non è un fallimento:
@@ -549,7 +551,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const ig=!repeated(out,run)&&!falseTwin(out,run)?ignored(out,run):null
   const why=ig?ig+': messaggio «'+text.slice(0,200)+'»':falseTwin(out,run)?reasonText(['doppio_falso']):reasonText([tries===0&&calls<2?'gia_risposto':'domanda_ripetuta'])+': «'+text.slice(0,200)+'» alla domanda «'+prevQ.slice(0,200)+'»'
   if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'R-RIPETUTA '+JSON.stringify({text,why})+'\n')).catch(()=>{})
-  const before:Outcome=out,r3=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason:why}});calls++;if(budget.expired)return '';if(!r3)return copy.brainDown
+  const before:Outcome=out,r3=await brainPlan(db,{...base,correction:{previous:run.decision.content??'',reason:why}});calls++;if(budget.expired)return '';if(!r3)return down()
   const o3=decide(r3);run=r3
   if(o3.kind==='reject'||(needsText(o3,r3)&&!(o3.kind==='change'&&approval(o3.actions,refs,text,answered))))out=before.kind==='ask'?{...before}:{kind:'ask',ids:[],actions:[]}
   else out=o3.kind==='ask'&&before.kind==='ask'?{...o3,ids:o3.ids.length?o3.ids.filter(id=>!before.twins?.length||before.twins.some((t:Twin)=>t.id===id)):before.ids,actions:o3.actions.length?o3.actions:before.actions,...(before.twins?{twins:before.twins}:{})}:o3}
@@ -725,7 +727,9 @@ async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string
  // Fase R: col cervello acceso anche il tempo scaduto è «non disponibile» (unico testo fisso ammesso oltre l'avviso AI Act).
  const brainOn=kind!=='image'&&await readBotBrain(db,ctx.tenant)
  const timeout=new Promise<string>(resolve=>{timer=setTimeout(()=>{budget.expired=true;resolve(kind==='image'?copy.photoTimeout:brainOn?copy.brainDown:copy.jobTimeout)},jobTimeoutMs())})
- let message=await Promise.race([jobMessage(kind,ctx,body,form,budget).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:brainOn?copy.brainDown:copy.failed}),timeout]).finally(()=>clearTimeout(timer))
+ // 21/10: col cervello acceso, un turno che supera i 5 s manda UN solo «Ci sto lavorando…», poi il risultato (i turni veloci niente).
+ let finished=false;const ackTimer=brainOn&&!quietPhones.has(ctx.phone)?setTimeout(()=>{if(finished||budget.expired)return;inBackground(sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.working).catch(()=>{}))},5000):undefined
+ let message=await Promise.race([jobMessage(kind,ctx,body,form,budget).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:brainOn?copy.brainDown:copy.failed}),timeout]).finally(()=>{clearTimeout(timer);finished=true;if(ackTimer)clearTimeout(ackTimer)})
  const problem:FailureKind|null=budget.expired?'job_timeout':budget.failed?'job_failed':null
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'JOB '+JSON.stringify({kind,body:body.slice(0,60),message:String(message).slice(0,120),problem})+'\n'))
  if(!message){if(problem)await reportFailure({kind:problem,tenant:ctx.tenant,phone:ctx.phone,detail:kind});return}if(lead)message=lead+message;const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''

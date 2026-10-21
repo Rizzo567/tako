@@ -129,6 +129,9 @@ Indica anche il menu, per esempio «{esempio}».`,
  // Fase R (17/10 notte, decisione di Manuel): l'UNICO altro testo fisso col cervello acceso. Groq giù / 429 / timeout / JSON non
  // valido dopo il ripiego: nessuna modifica, nessuna riserva a regole.
  brainDown:'Sono momentaneamente non disponibile, riprova tra un minuto.',
+ // 21/10: messaggio lungo che non si chiude nel tempo del turno: mai «non disponibile»; non è stato scritto nulla.
+ brainSlow:'Il messaggio è lungo e non sono riuscito a finirlo in tempo: *non ho cambiato nulla*. Mandamelo diviso in due o tre messaggi più corti.',
+ working:'Ci sto lavorando…',
  // 17/10 (vocale di Manuel): richiesta multipla con una parte incerta. Le parti chiare restano in sospeso, mai perse.
  holdHead:'Ho capito, *non ancora pubblicato*:\n{righe}',
  holdRemove:'«{parola}» non è nel menu. Intendi *togliere {piatto}* dal menu? Rispondi *sì* o *no*: poi pubblico tutto insieme. Non ho ancora cambiato nulla.',
