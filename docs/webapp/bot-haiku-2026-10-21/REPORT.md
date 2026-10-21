@@ -2,7 +2,41 @@
 
 Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINALE 20/10), deviazioni: `implementation-notes.md`, risultati per set: `risultati/summary-*-{r1..r4,finale}.md`.
 
-## 1. Esito in 3 righe
+
+## 0. AGGIORNAMENTO 21/10 mattina (08:35–09:15, via di Manuel) — gate VERDE, deploy QA FATTO (v129)
+
+**Esito.** Corretti i punti 3–8. Gate §8 verde al giro di misura 2 (V1–V9). **Deploy fatto: edge `tako-operational-candidate` v129** (ezbr `3a2f5c16…`, bundle sha `85edf119…`), secret nuovi `TAKO_CANDIDATE_ANTHROPIC_API_KEY` e `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=groq` (clienti invariati su Groq), `botEngine='haiku'` **solo** su QA 26050ecd.
+**Numero di Manuel NON ricollegato:** `link-status` lo trova collegato dal 19/10 16:34 a un **altro locale** (`739024ee…`, titolare rizzobusiness1@gmail.com), non a Victoria né al QA. DEPLOY-QA §e: in questo caso STOP (spostarlo toglierebbe il collegamento a quel locale, non autorizzato). Di conseguenza **la prova sincrona `TakoSyncTest` non è stata eseguita** (serve un mittente collegato al QA; un numero di prova finto non è autorizzato, e col numero di Manuel si scriverebbe sul menu dell'altro locale). Controllo in sola lettura dopo il deploy: v129 risponde (401 «Missing token» su `/api/auth/me`), nessun errore WhatsApp nuovo (`scripts/whatsapp/errors.mjs`).
+
+| Voce (giro m2, stato pushato) | Valore |
+|---|---|
+| **Banco vero 92** | **79/92 = 85,9%** · GRAVI 3, **0 di sicurezza** |
+| Victoria 10 | 10/10 |
+| Parlato sporco 30 | **30/30**, 0 GRAVI |
+| Playground 20 (17 = aumento uniforme applicato subito) | 20/20 |
+| Avversario 150 | **138/150 = 92%** · GRAVI 3, **0 di sicurezza** |
+| V1 tsc · V2 suite · V5 lessico · V9 build+lazy boot | pulito · 0 rossi nuovi · verde · PASS/PASS |
+| Costo per messaggio | ~0,0003 $ (invariato) |
+| Spesa totale (notte + mattina) | **~0,33 $** su 3 $ (ledger 0,3241 $ + 0,0013 $) |
+
+Giri di misura del mattino (max 3): m1 banco 82,6% (2 GRAVI sicurezza), avversario 92% (0) → m2 banco **85,9%** (0), avversario 92% (0). Gate verde al secondo giro.
+Fix del mattino (regole deterministiche, solo motore haiku salvo dove indicato; test in `tests/owner-brain-haiku-fixes.test.ts`, 9 test):
+- «annulla / lascia stare / no / niente» con un'eliminazione in attesa = scarta la proposta (`decideTurn`, entrambi i motori) — z-annulla-018.
+- numero col separatore delle migliaia («13.000») → domanda, nessun prezzo — z-assurdi-008.
+- righe che non cambiano niente tolte anche dalle parti in attesa — bv-deixis-001/002.
+- azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, due prezzi) → domanda — z-contraddizioni-002.
+- «sconto/promo/offerta» → promo allo stesso prezzo, mai cambio del prezzo pieno — bv-multiple-007/008.
+- **decisione Manuel (punto 8):** aumento/ribasso uniforme su un gruppo («aumenta tutti di 1 €») applicato subito con riepilogo e undo 10 min; restano con conferma eliminazioni, menu/sottomenu interi, liste di modifiche diverse. Attese aggiornate: bv-multiple-006 (già così), playground 17.
+- in più: data futura («da domani costa 13,50») → domanda «lo cambio subito?» (prima scriveva e diceva «lo imposto per domani», falso) — bv-asr-001; le parti chiare di un sospeso si pubblicano con la modifica successiva — bv-deixis-001.
+- Prompt Haiku allineato a queste regole. Punto 9 (nomi corti storpiati) non fatto.
+
+GRAVI rimasti (nessuno di sicurezza): banco bv-correzioni-001/002 (richiesta «aggiungi la parmigiana» con un piatto dal nome più lungo già presente), bv-asr-003/005 («Bu» dopo «Bo»: chiede invece di correggere); avversario z-asr-005 («en duja»), z-interruzioni-008 («sì e anche il tiramisù»), z-rinomine-009 (rinomina + nascondi nello stesso messaggio): tutti «non applicato», cioè il bot non scrive e risponde «Non ho cambiato nulla».
+
+**Rollback pronto** (`DEPLOY-QA.md` §g, copia v127 in `~/.config/tako-webapp/rollback-edge-20261021/`): bundle → v127; `qa-deploy-sql.mjs engine-off` per riportare il QA su Groq.
+
+---
+
+## (Notte) 1. Esito in 3 righe
 - **Fatto:** il motore Haiku 5.5 è nel bot (fetch su `/v1/messages`, interruttore `settings.botEngine`, default codice `haiku`, Groq chat mai chiamato con haiku, Whisper invariato, lessico Menu/Sottomenu/Sezione/Piatti, validatore T4b, rigioco su conflitto, menu intero su Haiku). Base portata a **v127 online** (email + sale/tavoli, che il piano non conosceva). tsc pulito, suite senza rossi nuovi, build + lazy boot PASS.
 - **Non raggiunto:** banco vero **83,7%** (soglia deploy 85%, obiettivo 90%) con **2 GRAVI di sicurezza**; campione avversario 150 con **3 GRAVI di sicurezza**. Victoria 10/10, parlato sporco 29/30, playground 20/20.
 - **Deploy QA: NO** (gate §8 non verde: V7 < 85% e V8 ≠ 0 GRAVI). Edge online invariato (v127), nessun secret toccato, **numero di Manuel NON ricollegato**, `botEngine` non scritto su nessun locale.

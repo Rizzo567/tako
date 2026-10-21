@@ -24,3 +24,7 @@
 22. Harness: default `botEngine:'groq'` per i giri storici (il default del codice è haiku). Un mio commento a metà riga aveva spento extraSql per ~10 min; corretto prima del commit (misure Haiku già fatte prima).
 23. Deploy QA NON fatto: gate §8 non verde (V7 83,7% < 85%, V8 6 GRAVI). Numero di Manuel non ricollegato. Base v127 pronta nel ramo per il deploy futuro.
 24. B (banco) non ha consegnato il rapporto entro le 02:35: il coordinatore ha usato direttamente il suo runner (`eval-haiku.test.ts`) e ha chiuso lui il fix dell'harness.
+25. Mattina 21/10 (via di Manuel): fix 3–8 + data futura + parti chiare del sospeso; giri m1, m2; gate verde a m2.
+26. Deploy: dopo `secrets set` Supabase ha portato la versione a 128 con lo stesso ezbr di v127 (solo configurazione); check-active ok su 128, poi deploy → v129.
+27. Gate 0: le sezioni non-bot cambiate sono solo di forma (alias `emailRuntimeUsers`, spazi, moduli email/sale separati) — confronto normalizzato `diff2.mjs`/`lits.mjs`.
+28. Numero di Manuel collegato a un altro locale (739024ee, rizzobusiness1@gmail.com) dal 19/10 16:34 → STOP del §e, nessuno spostamento; prova sincrona non eseguita (nessun mittente collegato al QA; un numero finto non è autorizzato). Smoke in sola lettura: 401 su /api/auth/me, nessun errore WhatsApp nuovo.
