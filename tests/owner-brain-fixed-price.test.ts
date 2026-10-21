@@ -119,6 +119,16 @@ describe('difetto 2 — prezzo della formula',()=>{
  })
 })
 
+describe('banco finale — opzione omonima in più Menu fissi',()=>{
+ it('«il completo a 17» senza Menu detto → domanda (mai il pranzo scelto dal modello); col Menu detto → applica',()=>{
+  expect(structureActions([A('set_formula_price',{menu:'Menu pranzo',name:'Completo',price:17})],SI({message:'il completo a 17'})).ask).toBe('menu_della_formula')
+  expect(structureActions([A('set_formula_price',{menu:null,name:'Completo',price:17})],SI({message:'il completo a 17'})).ask).toBe('menu_della_formula')
+  expect(structureActions([A('set_formula_price',{menu:'Menu cena',name:'Completo',price:17})],SI({message:'il completo della cena a 17'})).ask).toBeNull()
+  expect(structureActions([A('set_formula_price',{menu:'Menu cena',name:'Completo',price:17})],SI({message:'stasera il completo a 17'})).ask).toBeNull()
+  expect(structureActions([A('set_formula_price',{menu:'Menu pranzo',name:'Completo',price:13})],SI({message:'a pranzo il completo a 13'})).ask).toBeNull()
+ })
+})
+
 describe('difetto 3 — piatto nuovo in un menu fisso: creato a 0 €, senza domande',()=>{
  it('validateMenuPlan: senza prezzo nel sottomenu di un Menu fisso → 0 € (alla carta il prezzo resta obbligatorio)',()=>{
   const p=validateMenuPlan({intent:'change',actions:[{action:'create_item',section_id:SEC.prPrimi,name:'Lasagna',price:null}]},vRefs,{sections:vSections,message:'aggiungi la lasagna ai primi del pranzo',fixedSectionIds:fixedIds})

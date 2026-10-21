@@ -660,6 +660,12 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   if(!m)return{actions:[],notes:[],ask:'menu_della_formula'}
   const n=String(a.name??'').trim(),fk=plain(n),fs=m.formulas??[],hit=fs.find(f=>plain(f.name)===fk)??fs.find(f=>fk.length>=3&&(plain(f.name).includes(fk)||fk.includes(plain(f.name))))
   // «alza il completo della cena di un euro»: differenza detta (letta dal server sul messaggio, stesso verso del modello) sul prezzo attuale.
+  // Banco prezzofisso finale 21/10 (pf-ambigua-01/04, sicurezza): «il completo a 17» con un Completo a pranzo E a cena → il modello
+  // sceglieva il pranzo da solo. Opzione omonima in più Menu fissi e nessuno nominato dal titolare (messaggio o richiesta a cui
+  // risponde) → domanda, mai una scelta del modello.
+  if(hit){const ctx=' '+plain(input.message+' '+srcText)+' ',said3=(x:{name:string})=>{const k=menuKey(x.name);return(!!k&&ctx.includes(' '+k))||(/pranz/.test(k)&&/ (?:pranz|mezzogiorn)/.test(ctx))||(/cena/.test(k)&&/ (?:cen|sera|stasera|stasser)/.test(ctx))}
+   const twins=fixedMenus.filter(x=>(x.formulas??[]).some(f=>plain(f.name)===plain(hit.name)))
+   if(twins.length>1&&!twins.some(said3))return{actions:[],notes:[],ask:'menu_della_formula'}}
   let price:number|null=typeof a.price==='number'&&said2(a.price)?a.price:null
   if(price===null&&a.price==null&&typeof a.price_delta==='number'&&hit){const rd=relativeDelta(dialectNumbers(input.message));if(rd&&Math.sign(rd.delta)===Math.sign(a.price_delta)&&Math.abs(Math.abs(rd.delta)-Math.abs(a.price_delta))<0.005){const v=Math.round((hit.price+rd.delta)*100)/100;if(v>0)price=v}}
   if(price===null)return{actions:[],notes:[],ask:'prezzo_formula_non_detto'}
