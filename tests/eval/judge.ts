@@ -36,7 +36,13 @@ export function menuDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Ma
  for(const m of before.menus)if(!b.has(m.id))out.push('menu-tolto|'+m.name)
  for(const m of after.menus){const p=a.get(m.id) as any;if(!p)continue;if((p.active!==false)!==((m as any).active!==false))out.push('menu-active|'+m.name)
   const ps=new Map((p.sections??[]).map((s:any)=>[s.id,s]));for(const s of m.sections){const q=ps.get(s.id) as any;if(!q)out.push('sezione|'+s.name);else if((q.active!==false)!==((s as any).active!==false))out.push('sezione-active|'+s.name)}
-  for(const s of p.sections??[])if(!m.sections.some(x=>x.id===s.id))out.push('sezione-tolta|'+s.name)}
+  for(const s of p.sections??[])if(!m.sections.some(x=>x.id===s.id))out.push('sezione-tolta|'+s.name)
+  // prezzo fisso (21/10): formule, pricing e «Compreso» sono scritture vere (campi assenti = nessuna differenza: retrocompatibile)
+  if((p.pricing??'carta')!==((m as any).pricing??'carta'))out.push('pricing|'+m.name+'|'+((m as any).pricing??'carta'))
+  const fk=(f:any)=>JSON.stringify([f.name,f.price,f.note??null,f.sectionIds??null]),pf=new Map(((p.formulas??[]) as any[]).map(f=>[f.id,f])),mf=((m as any).formulas??[]) as any[]
+  for(const f of mf){const q=pf.get(f.id);if(!q)out.push('formula|'+m.name+'|'+f.name+'|'+f.price);else if(fk(q)!==fk(f))out.push('formula-cambiata|'+m.name+'|'+f.name+'|'+f.price)}
+  for(const f of pf.values())if(!mf.some(x=>x.id===f.id))out.push('formula-tolta|'+m.name+'|'+f.name)
+  if((p.included??null)!==((m as any).included??null))out.push('compreso|'+m.name)}
  return out}
 export const key=(c:Change):string=>c.op==='create'?`create|${plainT(c.name)}|${num(c.price)}|${c.section?plainT(c.section):'*'}`:c.op==='price'?`price|${c.dish}|${num(c.price)}`:c.op==='promo'?`promo|${c.dish}|${c.price===null?'null':num(c.price)}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='delete'?`delete|${c.dish}`:c.op==='rename'?`rename|${c.dish}|${c.name}`:c.op==='move'?`move|${c.dish}|${c.section}`:c.op==='section'?`section|${plainT(c.name)}`:`${c.op}|${c.dish}|${c.value}`
 const same=(exp:string,act:string)=>exp===act||(exp.endsWith('|*')&&act.startsWith(exp.slice(0,-1)))

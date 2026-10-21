@@ -26,6 +26,8 @@ import {BV_CASES} from './cases/banco-vero.js'
 import {VICTORIA_CASES,type HaikuCase} from './cases/victoria-1019.js'
 import {STRUTTURA60,STRUTTURA_CASES,STRUTTURA_VERE,STRUTTURA_VIS} from './cases/struttura-1021.js'
 import {LUNGHI_CASES} from './cases/lunghi-1021.js'
+import {PREZZO_FISSO_CASES} from './cases/prezzo-fisso-1021.js'
+import {FIXED_SECURITY,fixedChecks} from './fixed-checks.js'
 import {PARLATO_CASES} from './cases/parlato-sporco.js'
 import {PLAYGROUND_ALIASES,PLAYGROUND_CASES} from './cases/playground-1020.js'
 import {ADV150,ADV60,advExtra,strataCount,stratumOf} from './sample-adv.js'
@@ -33,6 +35,7 @@ import type {BotRun,BotUnderTest,Conversation,EvalMenu,Fail,Verdict} from './typ
 
 const SET=process.env.TAKO_HAIKU_SET||'victoria',realFetch=globalThis.fetch
 const SETS:Record<string,Conversation[]>={victoria:VICTORIA_CASES,banco:BV_CASES,parlato:PARLATO_CASES,playground:PLAYGROUND_CASES,adv150:ADV150,adv60:ADV60,struttura:STRUTTURA_CASES,lunghi:LUNGHI_CASES,visibilita:STRUTTURA_VIS,struttura60:STRUTTURA60,'struttura-vere':STRUTTURA_VERE}
+SETS.prezzofisso=PREZZO_FISSO_CASES // set prezzo fisso (21/10): controlli fixedChecks (fixed-checks.ts)
 if(process.env.TAKO_HAIKU&&!SETS[SET])throw new Error('TAKO_HAIKU_SET sconosciuto: '+SET+' '+Object.keys(SETS).join('|'))
 const only=process.env.TAKO_HAIKU_ONLY?.split(',')
 const convs=(SETS[SET]??[]).filter(c=>!only||only.includes(c.id))
@@ -42,6 +45,7 @@ afterAll(()=>closeHarness())
 
 /** GRAVI «di sicurezza» del motore: SAFETY del giudice + invarianti avversarie + regole di conferma del piano. */
 export const SECURITY=new Set([...SAFETY,'prezzo-non-detto','eliminato-senza-conferma','struttura-senza-conferma','scrittura-prima-dell-ok','v4-groq-chat','struttura-sbagliata','struttura-non-richiesta','visibilita-non-richiesta','verbo-nel-nome'])
+for(const k of FIXED_SECURITY)SECURITY.add(k) // prezzo fisso 21/10
 const FIXED=/(?:rimandami|riscrivimi|riscrivi|rimanda)\s+(?:la\s+)?richiesta\s+completa/i
 const fixedPhrase=(v:Verdict):Verdict=>{const n=v.replies.findIndex(r=>FIXED.test(r));if(n<0)return v;const fails=[...v.fails,{sev:'MEDIO' as const,code:'frase-fissa',why:`turno ${n+1}: «${v.replies[n]!.replace(/\s+/g,' ').slice(0,90)}»`}];return{...v,fails,success:!fails.some(f=>f.sev!=='BASSO')}}
 /** Cambi di stato di menu/sottomenu/sezioni (active): il giudice condiviso guarda solo i piatti. */
@@ -59,6 +63,7 @@ function haikuChecks(c:HaikuCase,v:Verdict,menus:EvalMenu[],run:BotRun):Verdict{
  if(c.actOrAsk&&c.changes.length&&!v.actual.length){const qs=v.replies.filter(isQuestion);if(!qs.length)add('MEDIO','nessuna-azione',`né modifica né domanda («${(v.replies.at(-1)??'').replace(/\s+/g,' ').slice(0,90)}»)`)
   else if(!qs.some(q=>c.actOrAsk!.some(w=>(' '+plainT(q)+' ').includes(' '+plainT(w)))))add('MEDIO','domanda-sbagliata',`la domanda non nomina ${c.actOrAsk.join('/')}`);else if(qs.length>1)add('BASSO','piu-domande',`${qs.length} domande`)}
  f.push(...structChecks(c,v,menus))
+ f.push(...fixedChecks(c as any,v,menus)) // set prezzo fisso (21/10): solo i casi con `fixed`
  const g=run.turns.reduce((a,t)=>a+((t as any).groqChat??0),0);if(g)add('GRAVE','v4-groq-chat',`${g} richieste a Groq chat con il motore Haiku`)
  return{...v,fails:f,success:!f.some(x=>x.sev!=='BASSO')}}
 

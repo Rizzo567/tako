@@ -173,3 +173,19 @@ export const struttvis:MenuFixture=(()=>{const f:MenuFixture={key:'struttvis',re
  W.menus[2].sections[1].active=false
  return f})()
 Object.assign(FIXTURES,{struttvis})
+
+// ---------------- Set PREZZO FISSO (21/10/2026, docs/webapp/menu-prezzo-fisso-2026-10-21/CONTRATTO.md, cases/prezzo-fisso-1021.ts) ----------------
+// prezzofisso: locale «tipo Victoria» INVENTATO (nessun dato vero). Alla carta con prezzi · Menu pranzo pricing:'fisso' (Completo 12 €,
+// primo + secondo con contorno) · Menu cena pricing:'fisso' (Completo 16,90 €, Solo primo 9 €, Solo secondo 10 €). Piatti dei menu fissi
+// a prezzo 0; «Compreso: ¼ di vino oppure ½ l d'acqua + caffè». Nascosti da ieri: Pasta e fagioli e Arrosto di vitello (pranzo),
+// Risotto ai funghi (cena), per provare che la sostituzione li fa tornare con lo stesso id.
+export const prezzofisso:MenuFixture=(()=>{const f=build('prezzofisso',19,{restaurant:'Trattoria La Pergola (prova)',menus:[
+ ['Alla carta','main',[['Antipasti',[['Bruschetta',5],['Tagliere della casa',14]]],['Primi',[['Carbonara',12],['Amatriciana',11]]],['Secondi',[['Filetto al pepe verde',22],['Grigliata mista',18]]],['Pizze',[['Margherita',7],['Diavola',8.5]]],['Dolci',[['Tiramisù',6],['Panna cotta',5]]]]],
+ ['Menu pranzo','lunch',[['Primi',[['Pasta al pomodoro',0],["Penne all'arrabbiata",0],['Risotto alla milanese',0],['Pasta e fagioli',0]]],['Secondi',[['Cotoletta alla milanese',0],['Petto di pollo ai ferri',0],['Polpette al sugo',0],['Arrosto di vitello',0]]],['Contorni',[['Patate al forno',0],['Insalata mista',0],['Spinaci al burro',0]]]]],
+ ['Menu cena','dinner',[['Primi',[['Tagliatelle al ragù',0],['Spaghetti alle vongole',0],['Gnocchi al pomodoro',0],['Risotto ai funghi',0]]],['Secondi',[['Tagliata di manzo',0],['Salmone alla griglia',0],['Scaloppine al limone',0]]],['Contorni',[['Patatine fritte',0],['Verdure grigliate',0]]]]]]})
+ const W=f.menu as any,fid=(n:number)=>'5000bb00-5555-4555-8555-'+String(n).padStart(12,'0'),inc="¼ di vino oppure ½ l d'acqua + caffè",secs=(m:number,ix:number[])=>ix.map(i=>W.menus[m].sections[i].id)
+ W.menus[1].pricing='fisso';W.menus[1].included=inc;W.menus[1].formulas=[{id:fid(1),name:'Completo',price:12,note:'primo + secondo con contorno',sectionIds:secs(1,[0,1,2]),translations:{}}]
+ W.menus[2].pricing='fisso';W.menus[2].included=inc;W.menus[2].formulas=[{id:fid(2),name:'Completo',price:16.9,note:'primo + secondo con contorno',sectionIds:secs(2,[0,1,2]),translations:{}},{id:fid(3),name:'Solo primo',price:9,note:null,sectionIds:secs(2,[0]),translations:{}},{id:fid(4),name:'Solo secondo',price:10,note:'con contorno',sectionIds:secs(2,[1,2]),translations:{}}]
+ for(const n of ['Pasta e fagioli','Arrosto di vitello','Risotto ai funghi'])for(const m of W.menus)for(const s of m.sections)for(const i of s.items)if(i.name===n)i.hidden=true
+ return f})()
+Object.assign(FIXTURES,{prezzofisso})
