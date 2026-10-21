@@ -607,6 +607,9 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // Riepilogo in attesa dell'OK: le correzioni lo aggiornano (e i piatti esclusi escono), resta in attesa.
     if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')){const ex=new Set((finalRun.decision.exclude??[]).map(e=>e.id)),outIds=new Set(out.actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])),namedOff=engine==='haiku'?new Set(pend.actions.flatMap(a=>'id' in a&&!outIds.has((a as any).id)&&g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs)?[(a as any).id as string]:[])):new Set<string>(),merged=mergeMenuActions(pend.actions.filter(a=>!('id' in a)||!namedOff.has((a as any).id)),out.actions).filter(a=>!('id' in a)||!ex.has((a as any).id)||out.actions.includes(a))
      const effective=effectiveMenuActions(merged,workspace);await drop();if(!effective.length)return say(copy.noChanges,false);await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why:approval(effective,refs,text,answered)??pend.why});return say(pendingFacts(approval(effective,refs,text,answered)??pend.why,effective,refs,sections),false,pricesOf(effective))}
+    // run Haiku 21/10 (bv-deixis-001): le parti chiare di un sospeso (hold) chieste dal titolare si pubblicano con la modifica dopo,
+    // salvo quelle che il messaggio nega; prima restavano perse quando la risposta era un'altra modifica.
+    if(engine==='haiku'&&pend?.kind==='hold'){const held=storedActions({kind:'batch',actions:pend.actions},refs,sections)??[],keep=held.filter(a=>!('id' in a&&negatedName(text,refs.find(r=>r.id===(a as any).id)?.name??'\u0000'))&&!(a.kind==='create'&&negatedName(text,a.name)));if(keep.length)return publish(mergeMenuActions(keep,out.actions))}
     return publish(out.actions)}
    case 'ask':{
     // run Haiku 21/10: le righe che non cambiano niente («da 6 € a 6 €») non entrano nelle parti in attesa (confondevano «quei due»).

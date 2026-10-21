@@ -17,6 +17,11 @@ describe('haikuChecks (motore haiku)',()=>{
    const r=haikuChecks(dec(acts) as any,'nascondi il babà e mettilo in evidenza')!;expect(r.plan.type).toBe('clarify');expect(r.notes).toContain('azioni_contraddittorie')}
   expect(haikuChecks(dec([{kind:'hidden',id:'a',value:true},{kind:'featured',id:'b',value:true}]) as any,'nascondi a, evidenzia b')).toBeNull()
  })
+ it('data futura («da domani») → domanda con l\'azione in attesa, nessuna scrittura',()=>{
+  const r=haikuChecks(dec([{kind:'price',id:'v',price:13.5}]) as any,'il piatto di verifica da domani costa 13,50 euro')!
+  expect(r.plan.type).toBe('clarify');expect(r.notes).toContain('data_futura');expect((r.plan as any).actions).toEqual([{kind:'price',id:'v',price:13.5}])
+  expect(haikuChecks(dec([{kind:'price',id:'v',price:13.5}]) as any,'il piatto di verifica a 13,50')).toBeNull()
+ })
  it('sconto/promo/offerta → promo allo stesso prezzo, mai set_price',()=>{
   const r=haikuChecks(dec([{kind:'hidden',id:'p',value:true},{kind:'price',id:'k',price:12}]) as any,'nascondi la parmigiana e mettimi in sconto il kenesac a 12 euro')!
   expect(r.plan.type).toBe('change');expect((r.plan as any).actions).toEqual([{kind:'hidden',id:'p',value:true},{kind:'promo',id:'k',price:12,until:null}])

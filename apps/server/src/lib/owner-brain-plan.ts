@@ -550,6 +550,9 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
  const ask=(note:string,ids:string[])=>({...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(ids)].slice(0,5)},notes:[...d.notes,note]})
  const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
  if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
+ // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
+ if(/\b(?:da|dal|dalla|a partire da|per|solo)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|stanotte|settimana prossima|prossima settimana)\b|\bdomani\b/.test(m)&&acts.some(a=>a.kind!=='special'))
+  return{...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(acts.flatMap(a=>'id' in a?[(a as any).id as string]:[]))].slice(0,5),actions:acts},notes:[...d.notes,'data_futura']}
  const by=new Map<string,MenuAction[]>();for(const a of acts)if('id' in a&&typeof (a as any).id==='string')by.set((a as any).id,[...(by.get((a as any).id)??[]),a])
  for(const [id,list] of by){const v=(k:string)=>list.filter(a=>a.kind===k).map(a=>(a as any).value)
   const hid=v('hidden'),av=v('available'),fe=v('featured'),pr=new Set(list.filter(a=>a.kind==='price').map(a=>Math.round((a as any).price*100)))

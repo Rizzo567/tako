@@ -50,6 +50,7 @@ const CANCEL_WORDS=/\b(annull\w*|lascia\w* (?:stare|perdere)|niente|non pubblica
 
 // ---------- motivi di rifiuto (auto-correzione: il server rimanda al modello il perché, una volta) ----------
 const REASON:Record<string,string>={
+ data_futura:'il titolare parla di una data futura («da domani», «da lunedì»): il bot non programma le modifiche; chiedi se cambiarlo subito (intent=clarify, reply_draft «Lo cambio subito?»), nessuna azione',
  prezzo_migliaia:'il titolare ha scritto un numero col separatore delle migliaia («13.000»): non è un prezzo da menu, chiedi il prezzo esatto (intent=clarify), nessuna azione',
  azioni_contraddittorie:'il piano ha azioni opposte sullo stesso piatto (es. nascondi e metti in evidenza, finito e disponibile, due prezzi diversi): chiedi al titolare cosa vuole (intent=clarify), nessuna azione',
  prezzo_non_detto:'un prezzo del piano non è stato detto dal titolare (né in questo messaggio né, con un rimando esplicito, prima)',
