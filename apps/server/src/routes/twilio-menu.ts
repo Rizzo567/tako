@@ -566,6 +566,11 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // run Haiku 21/10 (z-interruzioni-011/012): «Elimino *X*? Rispondi sì.» scritto dal modello come semplice domanda non lascia niente da
  // confermare e il «sì» girava a vuoto. Se la domanda nomina piatti del menu, diventa la proposta di eliminazione vera (serve sempre il sì).
  if(engine==='haiku'&&out.kind==='ask'&&!out.hold&&!out.twins?.length){const dq=String(finalRun.decision.draft??'');if(/\belimin\w*\b[^?]*\?/i.test(dq)&&/\brispondi\s+\*?s[iì]\b/i.test(dq)){const named=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(dq)+' ').includes(' '+plain(r.name)+' '));if(named.length&&named.length<=8){out={kind:'change',actions:named.map(r=>({kind:'delete',id:r.id}) as MenuAction)};deleteConfirmed=pend?.kind==='batch'&&pend.why==='delete'&&/^(?:s[iì]|ok|va bene|confermo|certo)\b/i.test(plain(text))&&named.every(r=>pend.actions.some(a=>a.kind==='delete'&&(a as any).id===r.id))}}}
+ // run Haiku 21/10 (str-v-10): «Nascondo tutto il Menu *Cena*? Rispondi sì» scritto come domanda → proposta vera di nascondere quel
+ // Menu/Sottomenu (con i piatti serve il sì: il «sì» dopo la conferma). Solo se il nome nella bozza è un Menu/Sottomenu del locale.
+ if(engine==='haiku'&&out.kind==='ask'&&!out.hold&&!out.twins?.length){const dq=String(finalRun.decision.draft??''),pq=plain(dq);if(/\bnascond\w*\b[^?]*\?/i.test(dq)&&/\b(?:menu|sottomenu|tutt[oiae])\b/.test(pq)){const w0=workspaceSchema.parse(row.draft) as any
+   const menuHit=(w0.menus as any[]).filter(m=>{const k=plain(m.name).replace(/^menu /,'');return k.length>=3&&(' '+pq+' ').includes(' '+k+' ')})
+   if(menuHit.length===1&&/\bmenu\b/.test(pq)){const m=menuHit[0];out={kind:'change',actions:[{kind:'set_menu_active',menuId:m.id,name:m.name,value:false,items:(m.sections as any[]).reduce((n:number,x:any)=>n+x.items.length,0)} as MenuAction]}}}}
  let conflict=false
  const result=await db.transaction(async tx=>{await lock(tx,ctx.phone)
   const live=await readWorkspace(ctx.tenant,tx);if(!live||!live.published||live.revision!==row.revision||live.revision!==live.published_revision){conflict=!!live?.published&&live.revision===live.published_revision;return copy.menuChanged}

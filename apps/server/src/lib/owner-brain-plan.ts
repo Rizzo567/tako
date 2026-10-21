@@ -612,6 +612,8 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
   const menu=want?menus.find(m=>menuKey(m.name)===want)??menus.find(m=>menuKey(m.name).includes(want)||want.includes(menuKey(m.name))):menus.length===1?menus[0]:null
   if(!menu)return{actions:[],notes:[],ask:'menu_del_sottomenu'}
+  // Sottomenu col nome del suo stesso Menu («Aperitivo» → «Aperitivi») dopo un «vai»: inventato, si scarta se il titolare non l'ha detto adesso.
+  if(sameSection(menuKey(menu.name),plain(name))&&!/\b(?:sottomenu|categori\w*|sezion\w*)\b/.test(plain(input.message))){notes.push('sottomenu_come_menu:'+name);continue}
   const dup=input.sections.some(s=>s.menu===menu.name&&sameSection(s.name,name))||actions.some(x=>x.kind==='create_section'&&x.menuId===menu.id&&sameSection(x.name,name))
   if(dup){notes.push('sottomenu_esistente:'+name);continue}
   actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:menu.id,menuName:menu.name,hidden:!menu.fresh} as MenuAction)}

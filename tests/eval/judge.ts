@@ -31,7 +31,13 @@ export function diff(before:EvalMenu,after:EvalMenu):string[]{
 /** Categorie nuove o rinominate (solo per riconoscere una scrittura vera nel controllo «fatto»). */
 export function sectionDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Map(before.menus.flatMap(m=>m.sections.map(s=>[s.id,s.name]))),out:string[]=[];for(const m of after.menus)for(const s of m.sections){const old=a.get(s.id);if(old===undefined)out.push('section|'+s.name);else if(old!==s.name)out.push('section-rename|'+old+'|'+s.name)}return out}
 /** Menu nuovi (set struttura 21/10): un Menu creato, anche vuoto, è una scrittura vera per il controllo «fatto». */
-export function menuDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Set(before.menus.map(m=>m.id));return after.menus.filter(m=>!a.has(m.id)).map(m=>'menu|'+m.name)}
+// 21/10: anche Menu/Sottomenu tolti e cambi di visibilità (active) contano come scritture vere (niente «fatto-falso»).
+export function menuDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Map(before.menus.map(m=>[m.id,m])),b=new Set(after.menus.map(m=>m.id)),out=after.menus.filter(m=>!a.has(m.id)).map(m=>'menu|'+m.name)
+ for(const m of before.menus)if(!b.has(m.id))out.push('menu-tolto|'+m.name)
+ for(const m of after.menus){const p=a.get(m.id) as any;if(!p)continue;if((p.active!==false)!==((m as any).active!==false))out.push('menu-active|'+m.name)
+  const ps=new Map((p.sections??[]).map((s:any)=>[s.id,s]));for(const s of m.sections){const q=ps.get(s.id) as any;if(!q)out.push('sezione|'+s.name);else if((q.active!==false)!==((s as any).active!==false))out.push('sezione-active|'+s.name)}
+  for(const s of p.sections??[])if(!m.sections.some(x=>x.id===s.id))out.push('sezione-tolta|'+s.name)}
+ return out}
 export const key=(c:Change):string=>c.op==='create'?`create|${plainT(c.name)}|${num(c.price)}|${c.section?plainT(c.section):'*'}`:c.op==='price'?`price|${c.dish}|${num(c.price)}`:c.op==='promo'?`promo|${c.dish}|${c.price===null?'null':num(c.price)}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='delete'?`delete|${c.dish}`:c.op==='rename'?`rename|${c.dish}|${c.name}`:c.op==='move'?`move|${c.dish}|${c.section}`:c.op==='section'?`section|${plainT(c.name)}`:`${c.op}|${c.dish}|${c.value}`
 const same=(exp:string,act:string)=>exp===act||(exp.endsWith('|*')&&act.startsWith(exp.slice(0,-1)))
 const dishOf=(k:string)=>k.split('|')[1]!
