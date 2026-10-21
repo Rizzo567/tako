@@ -169,3 +169,34 @@ HC('menu-lista',[T('il menu lo vedo strano, la carbonara quanto sta?')],[],{sera
 HC('menu-lista',[T('nel menu metti la carbonara a 13')],[P('Carbonara',13)],{sera:{cmd:[1]}})
 HC('refusi',[T('la grigliata misat a 19')],[P('Grigliata mista',19)],{alt:[[]],sera:{cmd:[1]}})
 HC('refusi',[T('il tiramisu finito')],[{op:'available',dish:'Tiramisù',value:false}],{sera:{cmd:[1]}})
+
+// 8. SESSIONI REALISTICHE (22/10 notte, dopo v138): stili diversi di ristoratore, refusi, correzioni, menu fissi e alla carta.
+// prezzofisso: Menu pranzo / Menu cena fissi con Primi, Secondi, Contorni. Le operazioni stanno sul turno in cui il bot applica
+// (quando ogni sottomenu è detto o resta com'è); le correzioni dopo l'applicazione si applicano subito (ops sul loro turno).
+const S=(steps:Parameters<typeof fc>[1],x:Parameters<typeof fc>[2]&{sera?:MtCase['sera']}={})=>hard('sessione2',steps,{...x,sera:x.sera??{cmd:[1]}})
+S([['modifichiamo menu pranzo: primi lasagne e pasta e fagioli, secondi cotolleta, contorni patate al forno',rep(PR,'Primi','lasagne=Lasagne','pasta e fagioli=Pasta e fagioli'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese'),rep(PR,'Contorni','patate al forno=Patate al forno')]])
+S(['aggiorniamo il menu del pranzo','primi: risotto alla milanese, penne all\'arrabbiata','secondi: polpette',['contorni insalata mista e spinaci',rep(PR,'Primi','risotto alla milanese=Risotto alla milanese',"penne all'arrabbiata=Penne all'arrabbiata"),rep(PR,'Secondi','polpette=Polpette al sugo'),rep(PR,'Contorni','insalata mista=Insalata mista','spinaci=Spinaci al burro')]])
+S(['modifichiamo il menu della cena','secondi tagliata e salmone','primi spaghetti alle vongole',['contorni restano uguali',rep(CE,'Secondi','tagliata=Tagliata di manzo','salmone=Salmone alla griglia'),rep(CE,'Primi','spaghetti alle vongole=Spaghetti alle vongole')]])
+S(['modifichiamo menu cena','primi gnocchi al pomodoro e risotto ai funghi','secondi scaloppine',['contorni patatine fritte',rep(CE,'Primi','gnocchi al pomodoro=Gnocchi al pomodoro','risotto ai funghi=Risotto ai funghi'),rep(CE,'Secondi','scaloppine=Scaloppine al limone'),rep(CE,'Contorni','patatine fritte=Patatine fritte')],['no le patatine toglile',rep(CE,'Contorni')]],{sera:{cmd:[1]},orAsk:[5]})
+S(['modifichiamo menu pranzo','primi lasagna e carbonara','no la carbonara toglila','secondi cotoletta',['contorni come ieri',rep(PR,'Primi','lasagna'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese')]])
+S(['modifichiamo menu pranzo','primi orecchiette e lasagna','e anche la pasta e fagioli nei primi',['secondi e contorni restano uguali',rep(PR,'Primi','orecchiette','lasagna','pasta e fagioli=Pasta e fagioli')]])
+S(['modifichiamo il menu del pranzo','i primi sono pasta al pomodorro e risoto alla milanese',['il resto resta uguale',rep(PR,'Primi','pasta al pomodoro=Pasta al pomodoro','risotto alla milanese=Risotto alla milanese')]])
+S(['modifichiamo menu cena',['tutto uguale tranne i secondi: tagliata e filetto',rep(CE,'Secondi','tagliata=Tagliata di manzo','filetto')]])
+S(['modifichiamo menu pranzo','secondi arrosto e cotoletta','no aspetta, l\'arrosto no, metti le polpette',['primi e contorni restano uguali',rep(PR,'Secondi','cotoletta=Cotoletta alla milanese','polpette=Polpette al sugo')]])
+S(['cambiamo il menu della cena di oggi','primi: tagliatelle al ragù',['secondi salmone alla griglia, contorni verdure grigliate',rep(CE,'Primi','tagliatelle al ragù=Tagliatelle al ragù'),rep(CE,'Secondi','salmone alla griglia=Salmone alla griglia'),rep(CE,'Contorni','verdure grigliate=Verdure grigliate')]])
+S(['modifichiamo menu pranzo','primi lasagna','basta'])
+S(['modifichiamo menu pranzo','annulla'])
+S(['modifichiamo menu cena','primi gnocchi al pomodoro',['la carbonara alla carta a 13',ip('Carbonara',13)]],{sera:{cmd:[1,3]}})
+S(['modifichiamo menu pranzo','primi lasagna e carbonara','secondi cotoletta',['contorni patate al forno',rep(PR,'Primi','lasagna','carbonara'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese'),rep(PR,'Contorni','patate al forno=Patate al forno')],['aggiungi anche gli spinaci nei contorni',rep(PR,'Contorni','patate al forno=Patate al forno','spinaci=Spinaci al burro')]])
+S(['modifichiamo menu pranzo',['primi lasagna secondi cotoletta contorni insalata',rep(PR,'Primi','lasagna'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese'),rep(PR,'Contorni','insalata=Insalata mista')]])
+S(['modifichiamo menu cena','secondi tagliata',['sì',rep(CE,'Secondi','tagliata=Tagliata di manzo')],['primi spaghetti alle vongole',rep(CE,'Primi','spaghetti alle vongole=Spaghetti alle vongole')]],{sera:{cmd:[1]}})
+S([['oggi il menu del pranzo: primi lasagna, secondi polpette al sugo, contorni insalata mista',rep(PR,'Primi','lasagna'),rep(PR,'Secondi','polpette al sugo=Polpette al sugo'),rep(PR,'Contorni','insalata mista=Insalata mista')]])
+S(['modifichiamo menu pranzo','primi carbonara',['i secondi restano uguali e anche i contorni',rep(PR,'Primi','carbonara')]])
+S(['modifichiamo menu cena','primi risotto ai fungi e tagliatelle al ragu',['secondi e contorni come prima',rep(CE,'Primi','risotto ai funghi=Risotto ai funghi','tagliatelle al ragù=Tagliatelle al ragù')]])
+S(['modifichiamo menu pranzo',['primi lasagna, secondi cotoletta e contorni patate',rep(PR,'Primi','lasagna'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese'),rep(PR,'Contorni','patate=Patate al forno')],['no la cotoletta no, metti il petto di pollo',rep(PR,'Secondi','petto di pollo=Petto di pollo ai ferri')]],{orAsk:[3]})
+// alla carta (qasera: Menu pranzo col solo «Completo»): i nuovi vogliono il prezzo
+const CS=(turns:Turn[],changes:Change[],x:Partial<MtCase>={})=>{const k=(seq.get('sessione-carta')??0)+1;seq.set('sessione-carta',k);out.push({id:`as-sessione-carta-${String(k).padStart(2,'0')}`,family:fam,menu:'qasera',turns,changes,source:'adv-sera sessioni 22/10',sera:{cmd:[1]},...x})}
+CS([T('modifichiamo menu pranzo'),T('completo: lasagna 12 e cotoletta 14')],[C('Lasagna',12,'Completo'),C('Cotoletta',14,'Completo')])
+CS([T('modifichiamo menu pranzo'),T('nel completo lasagna 12 e cotoletta'),T('cotoletta 14')],[C('Lasagna',12,'Completo'),C('Cotoletta',14,'Completo')])
+CS([T('modifichiamo il menu pranzo'),T('completo lasagna a 12, gnocchi al ragù a 10'),T('no gli gnocchi toglili')],[C('Lasagna',12,'Completo'),C('Gnocchi al ragù',10,'Completo')],{note:'gli gnocchi creati al turno 2 restano nel menu ma nascosti (la sostituzione non elimina mai)'})
+CS([T('modifichiamo menu pranzo'),T('lascia stare')],[])

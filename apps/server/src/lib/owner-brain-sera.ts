@@ -10,6 +10,7 @@
 import {plain,g9Prices,g9WordNumber,relativeDelta,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import {sameSection,courseRank} from './twilio-menu-structure.js'
 import {isAffirmative,type BrainAsk} from './owner-brain-r.js'
+import {replaceCandidates} from './owner-brain-plan.js'
 
 export type SeraMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}
 
@@ -172,7 +173,9 @@ export function answerSectionName(text:string):string|null{const m=text.replace(
 
 // ---------- sessione di modifica dei piatti di oggi («modifichiamo menu pranzo») ----------
 /** Stato nel pending (brain_ask.session): piatti detti per sottomenu (nomi e azioni della sostituzione), sottomenu che restano com'erano. */
-export type SessState={menuId:string,menuName:string,done:Record<string,string[]>,kept:string[],acts:MenuAction[],rounds?:number}
+export type SessState={menuId:string,menuName:string,done:Record<string,string[]>,kept:string[],acts:MenuAction[],rounds?:number,
+ /** 22/10: prezzi detti per i piatti nuovi alla carta, sessione già applicata (finestra per le correzioni). */
+ prices?:Record<string,number>,applied?:boolean}
 export const SESSION_MAX_ROUNDS=10
 const START=/\b(?:modifich\w*|cambi\w*|aggiorn\w*|rifacciamo|rifare|rifai|facciamo|sistem\w*|impost\w*|prepar\w*|inserisc\w*|inseriamo|mettiamo|scriviamo|cambiamo|aggiorniamo)\b/
 const NOT_SESSION=/\b(?:nome|rinomin\w*|visibil\w*|mostra\w*|nascond\w*|elimin\w*|cancell\w*|aument\w*|abbass\w*|alz\w*|diminu\w*|prezz\w*|euro|formul\w*|fisso|carta|opzion\w*)\b|\d/
@@ -203,3 +206,78 @@ export const sessionOpening=(s:SessState,secs:SectionRef[])=>{const ms=secs.filt
 export function sessionAsk(s:SessState,secs:SectionRef[]):string{const miss=sessionMissing(s,secs),done=secs.filter(x=>s.done[x.id])
  const head=done.length?'Segnato: '+done.map(x=>'*'+x.name+'* ('+s.done[x.id]!.join(', ')+')').join(' · ')+'. ':''
  return head+(miss.length===1?'E nei *'+miss[0]!.name+'* cosa metto? Se restano come sono scrivi «restano uguali».':'E per '+miss.map(x=>'*'+x.name+'*').join(' e ')+' cosa metto? Se qualcuno resta com’è dimmelo.')}
+
+// ---------- sessione: lettura DETERMINISTICA dei messaggi (22/10, prova dal vivo v138) ----------
+// Dal vivo il modello rifaceva le liste dei sottomenu ogni turno, perdendo i piatti già detti e inventandone (Cotoletta), e chiedeva
+// «lo creo come nuovo piatto?» in un menu fisso. Ora le liste le legge il server: «primi: lasagne, carbonara e risoto ai funghi»,
+// «secondi tagliata e polpete al sugo», «no la carbonara toglila», «aggiungi anche X», «i contorni restano uguali». Il modello serve
+// solo per ciò che il server non legge.
+const COURSE_WORDS=['primi','primo','secondi','secondo','contorni','contorno','dolci','dolce','antipasti','antipasto','pizze','pizza','insalate','panini','bevande','dessert','frutta','piatti unici']
+const LIST_ART=/^(?:e |ed |poi |anche |la |il |lo |le |i |gli |l |un |una |uno |di oggi |oggi |sono |abbiamo |ci sono |metti |mettiamo )+/
+const SKIP_ITEM=/^(?:e|poi|oggi|basta|niente|nulla|ok|si|grazie|i|il|la|le|lo|gli|l|di|del|a|ai)$/
+export type SessParse={lists:{key:string,secId:string|null,names:string[]}[],removes:string[],adds:{name:string,key:string|null}[],keep:string[],done:boolean}
+/** Sottomenu del Menu nominato con una parola del messaggio (anche «primo»/«primi»), o una portata che nel Menu non c'è. */
+const secKey=(w:string,secs:SectionRef[])=>secs.find(x=>sameSection(x.name,w)||plain(x.name)===w)??null
+export function parseSession(text:string,secs:SectionRef[],names:string[]=[]):SessParse{
+ const protect=[...new Set([...names.map(n=>plain(n)),'pasta e fagioli','pasta e ceci','pasta e patate','pane e coperto','salsiccia e friarielli','prosciutto e melone','cacio e pepe'].filter(n=>/ (?:e|ed) /.test(n)))]
+ const raw=text.replace(/[🎤*_]/gu,' ').replace(/\s+/g,' ').trim(),p=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’']/g,' ').replace(/[^a-z0-9,;:.\s]/g,' ').replace(/\s*([,;:])\s*/g,'$1 ').replace(/\s+/g,' ').trim(),out:SessParse={lists:[],removes:[],adds:[],keep:[],done:sessionDone(raw)}
+ // Parole dei sottomenu del Menu e delle portate comuni.
+ const words=[...new Set([...secs.flatMap(x=>[plain(x.name),...plain(x.name).split(' ').filter(w=>w.length>=4)]),...COURSE_WORDS])].sort((a,b)=>b.length-a.length)
+ const re=new RegExp('\\b('+words.map(w=>w.replace(/ /g,'\\s+')).join('|')+')\\b','g'),hits=[...p.matchAll(re)]
+ // Correzioni: «no la carbonara toglila», «togli la carbonara», «la carbonara no», «senza carbonara», «niente polpette».
+ for(const m of p.matchAll(/\b(?:togli|leva|elimina|rimuovi|cancella|senza|niente|non mettere|non voglio)\s+(?:anche\s+)?(?:la |il |lo |le |i |gli |l )?([a-z ]+?)(?=$| e | ed | poi |\b(?:dai|dal|dalla|dagli|nei|tra)\b)/g))if(m[1]!.trim())out.removes.push(m[1]!.trim())
+ for(const m of p.matchAll(/(?:^|\bno |, |\be )(?:la |il |lo |le |i |gli |l )?([a-z ]+?)\s+(?:toglil[aoie]|leval[aoie]|non (?:la|lo|li|le) (?:mettere|voglio)|no)\b/g)){let n=m[1]!;for(let k=0;k<4;k++)n=n.replace(/^(?:no|ma|e|aspetta|scusa|allora)\s+/,'').replace(LIST_ART,'');n=n.trim();if(n&&!/^(?:no|si|ok)$/.test(n))out.removes.push(n)}
+ // Aggiunte: «aggiungi anche X (nei primi)», «metti anche X», «e anche X».
+ for(const m of p.matchAll(/\b(?:aggiungi|metti|mettici)\s+anche\s+(?:la |il |lo |le |i |gli |l )?([a-z ]+?)(?:\s+(?:nei|negli|nelle|tra i|tra le|ai|alle)\s+([a-z]+))?(?=$|[,;.])/g))out.adds.push({name:m[1]!.trim(),key:m[2]??null})
+ // «l'arrosto no, metti le polpette»: dopo una correzione, «metti X» aggiunge X (nello stesso sottomenu del piatto tolto).
+ if(out.removes.length&&!out.adds.length){const m=p.match(/\b(?:metti|mettici|aggiungi|al suo posto)\s+(?:la |il |lo |le |i |gli |l )?([a-z ]+?)\s*$/);if(m)out.adds.push({name:m[1]!.trim(),key:null})}
+ if(!out.adds.length){const m=p.match(/^(?:e )?anche (?:la |il |lo |le |i |gli |l )?([a-z ]+?)(?:\s+(?:nei|negli|nelle|tra i|tra le|ai|alle)\s+([a-z]+))?$/);if(m)out.adds.push({name:m[1]!.trim(),key:m[2]??null})}
+ // Liste per sottomenu (sul testo originale per tenere virgole e lettere).
+ if(!out.removes.length&&!out.adds.length)hits.forEach((h,i)=>{const start=h.index!+h[0].length,end=i+1<hits.length?hits[i+1]!.index!:p.length
+  let seg=p.slice(start,end).replace(/^\s*(?:di oggi|del giorno|oggi|sono|e|:)\s*/,'').trim()
+  // «pasta e fagioli» è un piatto solo: la «e» dentro un nome noto non separa.
+  for(const n of protect)seg=seg.split(n).join(n.replace(/ /g,'_'))
+  if(!seg)return
+  const key=h[1]!,sec=secKey(key,secs)
+  if(KEEP.test(seg)||/^(?:come (?:ieri|prima)|uguali?|invariat\w*)/.test(seg)){out.keep.push(key);return}
+  // Il testo tra due parole di sottomenu senza piatti («i secondi e i contorni restano uguali»): la parola successiva decide.
+  const items=seg.split(/\s*,\s*|\s*;\s*|\s+e\s+|\s+ed\s+/).map(x=>x.replace(/_/g,' ').replace(LIST_ART,'').replace(/\s+(?:e|poi)$/,'').trim()).filter(x=>x&&!SKIP_ITEM.test(x))
+  if(!items.length){if(i+1<hits.length&&KEEP.test(p.slice(hits[i+1]!.index!)))out.keep.push(key);return}
+  out.lists.push({key,secId:sec?.id??null,names:items})})
+ // «i secondi e i contorni restano uguali»: le parole di sottomenu dentro una frase di «restano».
+ if(KEEP.test(p)&&!out.lists.length)for(const h of hits)if(!out.keep.includes(h[1]!))out.keep.push(h[1]!)
+ return out}
+const FOOD=['risotto','funghi','polpette','tagliata','lasagne','lasagna','carbonara','cotoletta','gnocchi','spaghetti','vongole','patate','insalata','mista','verdure','grigliate','tagliatelle','amatriciana','frittata','zucchine','melanzane','parmigiana','arrosto','vitello','salmone','branzino','spinaci','fagioli','pomodoro','arrabbiata','ragu','pesto','minestrone','zuppa','orecchiette','ravioli','tortellini','fettuccine','penne','paccheri','salsiccia','pollo','manzo','maiale','polenta','peperoni','scaloppine','limone','milanese','tiramisu','cannoli','crostata','frittura','calamari','gamberi','cozze','burro','salvia','bolognese','ricotta','mozzarella','bufala','prosciutto','formaggi']
+/** Corregge le parole del nome di un piatto nuovo con una lettera sbagliata («risoto» → risotto), solo se il vocabolario dà UN candidato. */
+export function fixSpelling(name:string,vocab:string[]):string{const V=[...new Set([...FOOD,...vocab.flatMap(v=>plain(v).split(' '))].filter(w=>w.length>=4))]
+ return name.split(' ').map(w=>{const k=plain(w);if(k.length<5||V.includes(k))return w;const c=V.filter(v=>v.length>=5&&near(v,k));return c.length===1?c[0]!:w}).join(' ')}
+const levN=(a:string,b:string)=>{const d=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);for(let j=1;j<=b.length;j++)d[0]![j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){d[i]![j]=Math.min(d[i-1]![j]+1,d[i]![j-1]+1,d[i-1]![j-1]+(a[i-1]===b[j-1]?0:1));if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i]![j]=Math.min(d[i]![j],d[i-2]![j-2]+1)}return d[a.length]![b.length]}
+/** Refuso plausibile: una lettera per parole da 5 lettere, due per parole da 8 («cotolleta» → cotoletta). */
+const near=(a:string,b:string)=>a===b||(Math.min(a.length,b.length)>=5&&levN(a,b)<=(Math.min(a.length,b.length)>=8?2:1))
+const lev1s=(a:string,b:string)=>{if(Math.abs(a.length-b.length)>1)return false;let i=0,j=0,e=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){i++;j++;continue}if(++e>1)return false;if(a.length>b.length)i++;else if(b.length>a.length)j++;else{i++;j++}}return e+(a.length-i)+(b.length-j)<=1}
+const capW=(x:string)=>x.charAt(0).toLocaleUpperCase('it')+x.slice(1)
+/** Piatto del sottomenu per il nome detto: uguale, candidati delle parole (anche con un refuso), o un piatto i cui nomi stanno tutti nel detto. */
+export function dishInSection(said:string,inSec:MenuRef[]):MenuRef|null{const k=plain(said)
+ const eq=inSec.find(r=>plain(r.name)===k);if(eq)return eq
+ const c=replaceCandidates(said,inSec);if(c.length===1)return c[0]!;if(c.length>1)return null
+ // Refusi più larghi sulle parole lunghe («cotolleta» = Cotoletta alla milanese), solo se il candidato è uno.
+ {const ws=k.split(' ').filter(w=>w.length>=3&&!['alla','allo','alle','agli','con','del','della'].includes(w)),fz=inSec.filter(r=>{const rw=plain(r.name).split(' ');return ws.length>0&&ws.every(w=>rw.some(x=>near(x,w)||(w.length>=4&&x.startsWith(w))))});if(fz.length===1)return fz[0]!}
+ const rev=inSec.filter(r=>{const rw=plain(r.name).split(' ').filter(w=>w.length>=3);return rw.length>0&&rw.every(w=>k.split(' ').some(x=>x===w||(w.length>=5&&lev1s(w,x))||(w.length>4&&x.startsWith(w.slice(0,-1)))))})
+ return rev.length===1?rev[0]!:null}
+/** Nome come va nel menu: il piatto esistente del sottomenu, altrimenti il detto con i refusi corretti (prezzo «Nome 12» tolto). */
+export function sessionName(said:string,inSec:MenuRef[],vocab:string[]):{name:string,existing:MenuRef|null,price:number|null}{
+ const m=said.match(/^(.*?)\s+(?:a\s+)?(\d+(?:[.,]\d{1,2})?)\s*(?:€|euro)?$/),base=(m?m[1]!:said).trim(),price=m?Number(m[2]!.replace(',','.')):null
+ const hit=dishInSection(base,inSec);if(hit)return{name:hit.name,existing:hit,price}
+ // Accenti come nei nomi del locale («ragu» → «ragù» se c'è un piatto con «ragù»).
+ const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
+ return{name:capW(fixSpelling(base,vocab).split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
+/** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, nasconde gli altri, mai elimina).
+ *  `noPrice` = piatti nuovi alla carta senza prezzo (la sessione li chiede prima di applicare). */
+export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:boolean,prices:Record<string,number>={}):{actions:MenuAction[],noPrice:string[]}{
+ const inSec=refs.filter(r=>r.sectionId===secId),used=new Set<string>(),actions:MenuAction[]=[],noPrice:string[]=[]
+ for(const n of names){const hit=inSec.find(r=>r.name===n&&!used.has(r.id))??dishInSection(n,inSec.filter(r=>!used.has(r.id)))
+  if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);const pr=prices[n];if(!fixed&&pr&&Math.abs(pr-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:pr,fromReplace:true} as any);continue}
+  const pr=prices[n];if(!fixed&&!(pr&&pr>0)){noPrice.push(n);continue}
+  actions.push({kind:'create',sectionId:secId,name:n,price:fixed?0:pr!,description:null,fromReplace:true} as any)}
+ for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+ return{actions,noPrice}}

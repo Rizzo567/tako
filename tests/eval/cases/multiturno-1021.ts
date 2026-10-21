@@ -90,4 +90,11 @@ export const SESSIONE_CASES:MtCase[]=[
  ses('si-al-resto',['modifichiamo menu cena','secondi tagliata di manzo e salmone alla griglia',['sì',rep(CE,'Secondi','tagliata di manzo=Tagliata di manzo','salmone alla griglia=Salmone alla griglia')]],{orAsk:[3],sera:{}}),
  ses('lunga-correzioni',['modifichiamo il menu pranzo di oggi','allora primi: lasagna','e anche la carbonara nei primi','secondi cotoletta e arrosto','no aspetta, l\'arrosto no, metti le polpette',['i contorni come ieri',rep(PR,'Primi','lasagna','carbonara'),rep(PR,'Secondi','cotoletta=Cotoletta alla milanese','polpette=Polpette al sugo')]],{orAsk:[2,3,4,5],sera:{cmd:[1]}}),
 ]
-export const MULTITURNO_CASES:MtCase[]=[...MULTITURNO_BASE,...SESSIONE_CASES]
+// ---- v138 dal vivo (22/10 notte): trascrizioni ESATTE sul QA (fixture qasera: Menu del giorno a prezzo fisso, niente Contorni) ----
+export const V138_CASES:MtCase[]=[
+ mt('v138-sessione',[T('modifichiamo il menu del giorno'),T('primi: lasagne, carbonara e risoto ai funghi'),T('secondi tagliata e polpete al sugo'),T('no la carbonara toglila'),T('i contorni restano uguali')],
+  [C('Risotto ai funghi',0,'Primi'),C('Tagliata',0,'Secondi'),HI('Gnocchi al ragù'),HI('Cotoletta'),HI('Polpette',false)],{interim:[HI('Carbonara',false)],sera:{cmd:[1]},note:'Primi = Lasagna + Risotto ai funghi (nuovo, 0 €), Secondi = Tagliata (nuova) + Polpette; il Menu non ha Contorni'}),
+ mt('v138-lasagne',[V('No vabbè fa niente, voglio che aggiungi nel menù pranzo le lasagne.'),T('si'),T('si'),T('si voglio chiamarlo primi')],[],{struct:[{after:2,menus:[{name:'Menu pranzo',sections:['Primi']}],noNewMenus:true}],sera:{cmd:[1],notSay:[{turn:4,re:/Non ho cambiato nulla|già così/}]},note:'senza prezzo: mai la stessa domanda, mai «Non ho cambiato nulla» mescolato a una domanda'}),
+ mt('v138-gnocchi',[T('aggiungi gnocchi al ragu in menu pranzo a 10'),T('si')],[C('Gnocchi al ragù',10,'Primi')],{alt:[[C('gnocchi al ragu',10,'Primi')]],sera:{cmd:[1],notSay:[{turn:2,re:/\(Menu del giorno\)/},{turn:1,re:/\(Menu del giorno\)/}]}}),
+]
+export const MULTITURNO_CASES:MtCase[]=[...MULTITURNO_BASE,...SESSIONE_CASES,...V138_CASES]

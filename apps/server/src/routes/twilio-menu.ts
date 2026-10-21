@@ -41,7 +41,7 @@ import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {uniformDelta,uniformReply,pruneWroteDraft} from '../lib/owner-brain-r.js'
 import {fixTruncatedNumbers,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,draftOfUnappliedChange,draftAsksOkOnDate,fixedDishFact,HIDE_WHOLE_MENU_Q,isAffirmative,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
-import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,fullyNamed,onlyPrice,singlePrice,answerSectionName,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
+import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
@@ -484,6 +484,8 @@ function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered
  return null}
 /** Fase R: il turno del cervello. Il modello decide e scrive; il server valida (una auto-correzione), impone i vincoli, scrive
  * e aggiunge i fatti riletti dal DB. Groq giù → copy.brainDown, nessuna modifica, nessuna riserva a regole. */
+/** Il messaggio senza le parole del nome del piatto in bozza («lasagna 12» → «12»). */
+const draftless=(text:string,name:string)=>{const ws=new Set(plain(name).split(' '));return plain(text).split(' ').filter(w=>!ws.has(w)&&!(w.length>4&&[...ws].some(x=>x.length>4&&x.slice(0,-1)===w.slice(0,-1)))).join(' ')}
 async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:Budget,voice=false,replay=false):Promise<string>{
  budget.brain=true;const text=(budget.engine==='haiku'?fixTruncatedNumbers(text0):text0).trim()||'[messaggio vuoto]'
  const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');if(!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
@@ -522,7 +524,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // domanda con azioni pronte = si applicano subito; (3) comando nuovo, o domanda già al 2° giro = la domanda si chiude e il
  // messaggio va da solo; (4) «solo quelle visibili» dopo una scrittura = i piatti nascosti tornano com'erano.
  type Follow={name:string,sectionId:string,sectionName:string,origin:string}
- let pre:{actions:MenuAction[],why:string,follow?:Follow|null}|null=null,preReply:string|null=null,closePend=false,sessNow:SessState|null=null
+ let pre:{actions:MenuAction[],why:string,follow?:Follow|null}|null=null,preReply:string|null=null,closePend=false,sessNow:SessState|null=null,sessNote='',sessAfter:SessState|null=null
  if(engine==='haiku'){
   const askP=pend?.kind==='ask'?pend.ask as BrainAsk&{origin?:string,rounds?:number,session?:SessState}:null
   const rn=parseStructRename(text,base.menus,sections)
@@ -531,9 +533,54 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const sess=askP?.session&&typeof askP.session.menuName==='string'?askP.session:null
   const mLab=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+safe(n.trim())+'*':'Menu *'+safe(n.trim())+'*'
   const saveSess=async(s2:SessState,q:string)=>db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:askP?askOrigin(askP):text.slice(0,600),origin:askP?askOrigin(askP):text.slice(0,600),rounds:1,session:s2} as any)})
+  // 22/10 (v138 dal vivo): passo DETERMINISTICO della sessione. Le liste per sottomenu, le correzioni e le aggiunte le legge il server;
+  // i piatti già detti restano (mai rifatti dal modello), il nuovo nei menu fissi nasce a 0 € senza domande, alla carta vuole il prezzo.
+  const sessStep=(st:SessState,msg:string):{kind:'apply',actions:MenuAction[]}|{kind:'ask',q:string}|{kind:'info',q:string}|{kind:'out'}|null=>{
+   const mSecs=sections.filter(x=>x.menu===st.menuName),ps=parseSession(msg,mSecs,refs.map(r=>r.name)),vocab=refs.map(r=>r.name),fixedM=base.menus.find(m=>m.id===st.menuId)?.pricing==='fisso'
+   const missing0=sessionMissing(st,sections),tranne=/\b(?:tranne|eccetto|a parte|salvo)\b/.test(plain(msg))?keptSections(msg,mSecs,missing0):[]
+   const yesK=!!askP&&yesToAsk(msg,{question:askP.question,actions:[],draft:null}),priceOnly=onlyPrice(msg)
+   // «cotoletta 14»: il prezzo di un piatto nuovo alla carta che la sessione aveva chiesto.
+   const unpriced=fixedM?[]:Object.entries(st.done).flatMap(([id,ns])=>sectionReplace(id,ns,refs,false,st.prices??{}).noPrice),sp=singlePrice(msg),named=sp!==null?unpriced.filter(n=>fullyNamed(n,msg)):[]
+   if(named.length===1){st.prices={...(st.prices??{}),[named[0]!]:sp!}}
+   if(!ps.lists.length&&!ps.removes.length&&!ps.adds.length&&!ps.keep.length&&!ps.done&&!yesK&&!tranne.length&&priceOnly===null&&!named.length)return null
+   st.prices={...(st.prices??{})};if(named.length&&!ps.lists.length&&!ps.removes.length&&!ps.adds.length){/* solo il prezzo */}
+   const unknown:string[]=[],touched=new Set<string>()
+   const inSec=(id:string)=>refs.filter(r=>r.sectionId===id)
+   for(const l of ps.lists){if(!l.secId){unknown.push(l.key);continue}const names:string[]=[];for(const n of l.names){const r=sessionName(n,inSec(l.secId),vocab);if(r.price)st.prices[r.name]=r.price;if(!names.includes(r.name))names.push(r.name)}st.done[l.secId]=names;st.kept=st.kept.filter(k=>k!==l.secId);touched.add(l.secId)}
+   for(const k of ps.keep){const sc=mSecs.find(x=>sameSection(x.name,k)||plain(x.name)===k);if(!sc){unknown.push(k);continue}if(!st.done[sc.id]&&!st.kept.includes(sc.id))st.kept.push(sc.id)}
+   for(const id of tranne)if(!st.kept.includes(id)&&!st.done[id])st.kept.push(id)
+   let lastSec:string|null=null
+   for(const x of ps.removes){const k=plain(x);let hit=false
+    for(const [id,names] of Object.entries(st.done)){const keep=names.filter(n=>{const pn=plain(n);return !(pn===k||pn.includes(k)||(k.length>=5&&dishInSection(x,[{id:'x',name:n,price:0,available:true,hidden:false,menu:'',sectionId:id} as MenuRef])))});if(keep.length!==names.length){st.done[id]=keep;hit=true;touched.add(id);lastSec=id}}
+    if(!hit){const sc=mSecs.find(z=>dishInSection(x,inSec(z.id).filter(r=>!r.hidden)));if(sc){const vis=inSec(sc.id).filter(r=>!r.hidden).map(r=>r.name),drop=dishInSection(x,inSec(sc.id).filter(r=>!r.hidden))!;st.done[sc.id]=(st.done[sc.id]??vis).filter(n=>n!==drop.name);st.kept=st.kept.filter(z=>z!==sc.id);touched.add(sc.id);lastSec=sc.id}}}
+   for(const a of ps.adds){const byKey=a.key?mSecs.find(z=>sameSection(z.name,a.key!)):undefined,byDish=mSecs.find(z=>dishInSection(a.name,inSec(z.id))),byCourse=mSecs.find(z=>{const c=dishCourse(a.name);return !!c&&sameSection(z.name,c)})
+    const sc=byKey??byDish??(lastSec?mSecs.find(z=>z.id===lastSec):undefined)??byCourse??(mSecs.length===1?mSecs[0]:undefined);if(!sc){unknown.push(a.name);continue}
+    const r=sessionName(a.name,inSec(sc.id),vocab);if(r.price)st.prices[r.name]=r.price;const base0=st.done[sc.id]??inSec(sc.id).filter(z=>!z.hidden).map(z=>z.name);st.done[sc.id]=[...base0.filter(n=>n!==r.name),r.name];st.kept=st.kept.filter(z=>z!==sc.id);touched.add(sc.id)}
+   // Solo un prezzo («12») con un solo piatto nuovo alla carta senza prezzo: è il suo.
+   if(priceOnly!==null&&!fixedM){const pend0=Object.entries(st.done).flatMap(([id,ns])=>sectionReplace(id,ns,refs,false,st.prices).noPrice);if(pend0.length===1)st.prices[pend0[0]!]=priceOnly}
+   // «togli la pasta al sugo» con un piatto che nel Menu della sessione non c'è: è un comando a sé (la sessione si chiude).
+   if(!touched.size&&(ps.removes.length||ps.adds.length)&&!ps.lists.length&&!ps.keep.length&&!ps.done&&!yesK)return{kind:'out'}
+   if(ps.done||yesK)for(const x of sessionMissing(st,sections))st.kept.push(x.id)
+   const unk=[...new Set(unknown.filter(u=>!mSecs.some(z=>sameSection(z.name,u))))]
+   sessNote=unk.length?'Nel '+mLab(st.menuName)+' non c\u2019è '+unk.map(u=>'*'+safe(u.charAt(0).toUpperCase()+u.slice(1))+'*').join(' né ')+': ci sono '+mSecs.map(z=>'*'+safe(z.name)+'*').join(', ')+'.':''
+   const ready=st.applied?[...touched]:sessionMissing(st,sections).length?[]:Object.keys(st.done)
+   if(!ready.length&&(st.applied||!sessionMissing(st,sections).length))return{kind:'info',q:sessNote||(st.applied?'Ok, i piatti di oggi restano come li hai messi.':'Ok, il '+mLab(st.menuName)+' resta com\u2019era.')}
+   if(!ready.length)return{kind:'ask',q:[sessNote,sessionAsk(st,sections)].filter(Boolean).join(' ')}
+   const parts=ready.map(id=>sectionReplace(id,st.done[id]!,refs,!!fixedM,st.prices)),noP=parts.flatMap(x=>x.noPrice)
+   if(noP.length)return{kind:'ask',q:[sessNote,'Per i piatti nuovi mi serve il prezzo: '+noP.map(n=>'*'+safe(n)+'*').join(', ')+'. Scrivimi per esempio «'+noP[0]!.toLowerCase()+' 12».'].filter(Boolean).join(' ')}
+   return{kind:'apply',actions:parts.flatMap(x=>x.actions)}}
+  const runStep=async(st:SessState,msg:string)=>{const r=sessStep(st,msg);if(!r)return false
+   if(r.kind==='info'){preReply=r.q;closePend=true;return true}
+   if(r.kind==='out'){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null;return true}
+   if(r.kind==='ask'){let q=r.q;if(askP&&plain(q)===plain(askP.question??''))q='Mi mancano ancora: '+sessionMissing(st,sections).map(x=>'*'+safe(x.name)+'*').join(', ')+'. Scrivimi i piatti oppure «restano uguali».';preReply=q;await saveSess(st,q);closePend=false}
+   else{sessAfter={...st,applied:true,rounds:0};if(r.actions.length)pre={actions:r.actions,why:'sessione'};else{preReply=[sessNote,'Ok, i piatti di oggi del '+mLab(st.menuName)+' sono già così.'].filter(Boolean).join(' ');await saveSess(sessAfter,'');closePend=false}}
+   return true}
   if(sess){const mSecs=sections.filter(x=>x.menu===sess.menuName),s2:SessState={...sess,done:{...sess.done},kept:[...sess.kept],acts:[...(sess.acts??[])],rounds:(sess.rounds??0)+1}
-   if(sessionExit(text)){preReply='Ok, lascio il '+mLab(sess.menuName)+' com\u2019era: non ho cambiato nulla.';closePend=true}
+   if(sess.applied&&(sessionExit(text)||isUndoRequest(text)||/\b(?:grazie|perfetto|ok|va bene|fatto|basta)\b/.test(plain(text))&&!parseSession(text,mSecs).lists.length))closePend=true
+   else if(sessionExit(text)){preReply='Ok, lascio il '+mLab(sess.menuName)+' com\u2019era: non ho cambiato nulla.';closePend=true}
    else if(newCommandInSession(text,sess.menuName,base.menus)||rn)closePend=true
+   else if(await runStep(s2,text)){/* passo deterministico */}
+   else if(sess.applied)closePend=true
    else{for(const id of keptSections(text,mSecs,sessionMissing(s2,sections)))if(!s2.kept.includes(id))s2.kept.push(id)
     const yesKeep=yesToAsk(text,{question:askP!.question,actions:[],draft:null})
     if(sessionDone(text)||yesKeep)for(const x of sessionMissing(s2,sections))s2.kept.push(x.id)
@@ -544,8 +591,9 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else{sessNow=s2;(base as any).pendingCommand={...cmd,session:s2}}}}
   else if(!rn){const sm=sessionStart(text,base.menus);if(sm&&sections.some(x=>x.menu===sm.name)){if(askP){closePend=true;pend=null;answered=false}const s0:SessState={menuId:sm.id,menuName:sm.name,done:{},kept:[],acts:[],rounds:0}
     if(sessionRest(text,sm.name)<=1){preReply=sessionOpening(s0,sections);const q=preReply;await saveSess(s0,q);closePend=false}
+    else if(await runStep(s0,text)){/* lista già nel messaggio di avvio */}
     else{sessNow=s0;(base as any).pendingCommand={kind:'brain_ask',question:'',ids:[],actions:[],source:text.slice(0,600),session:s0}}}}
-  if(preReply||sessNow){/* sessione: niente altri percorsi deterministici */}
+  if(preReply||sessNow||pre){/* sessione: niente altri percorsi deterministici */}
   else if(rn){closePend=!!askP;if('ask' in rn){let q=renameAskText(rn.ask,base.menus,sections,/\b(?:sottomenu|sezione)\b/.test(plain(text)))
     // Mai la stessa domanda due volte di fila: la seconda volta l'esempio da copiare.
     if(askP&&plain(askP.question??'')===plain(q))q='Non lo trovo: scrivimi così, «rinomina il '+(/\b(?:sottomenu|sezione)\b/.test(plain(text))?'sottomenu':'menu')+' <nome di adesso> in <nome nuovo>». Quale vuoi rinominare? '+q.replace(/^[^?]*\?\s*/,'')
@@ -553,7 +601,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    else pre={actions:[rn.kind==='rename_menu'?{kind:'rename_menu',menuId:rn.menuId,name:rn.name,before:rn.before} as MenuAction:{kind:'rename_section',sectionId:rn.sectionId,name:rn.name,before:rn.before} as MenuAction],why:'rinomina'}}
   else if(askP&&!askP.twins?.length&&!sess){
    const stored=storedActions({kind:'batch',actions:askP.actions??[]},refs,sections)??[],ids=(askP.ids??[]).filter(id=>refs.some(r=>r.id===id)),origin=askOrigin(askP)
-   const yes=yesToAsk(text,askP),all=allChosen(text),vis=visibleOnly(text)&&ids.length>=2,priceOnly=!!askP.draft?.name&&askP.draft.price==null&&onlyPrice(text)!==null
+   const yes=yesToAsk(text,askP),all=allChosen(text),vis=visibleOnly(text)&&ids.length>=2,priceOnly=!!askP.draft?.name&&askP.draft.price==null&&onlyPrice(draftless(text,askP.draft.name))!==null
    // Gruppo di candidati («Intendi tutte e cinque le paste a 9 €?»): «sì»/«tutte»/«solo le visibili» = l'azione su ognuno.
    const expand=():MenuAction[]|null=>{const want=refs.filter(r=>ids.includes(r.id)&&(!vis&&!visibleOnly(origin)||!r.hidden));if(!want.length)return null
     const pr=stored.filter(a=>a.kind==='price') as Extract<MenuAction,{kind:'price'}>[],abs=[...new Set(pr.map(a=>Math.round(a.price*100)))],dl=[...new Set(pr.map(a=>Math.round((a.price-(refs.find(r=>r.id===a.id)?.price??0))*100)))]
@@ -570,10 +618,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    // Prezzo detto dopo «A che prezzo metto X nei Primi?» (sottomenu già creato): il piatto si crea lì, senza altre domande.
    else if(priceOnly&&!stored.length&&!!askP.draft?.sectionId&&sections.some(x=>x.id===askP.draft!.sectionId))acts=[]
    // Bozza di piatto senza prezzo e un «sì»: serve il prezzo, chiesto con parole nuove (la domanda di prima non si ripete).
-   else if(yes&&!stored.length&&askP.draft?.name&&askP.draft.price==null&&(askP.rounds??1)<ASK_MAX_ROUNDS){preReply='Mi serve solo il prezzo: quanto costa *'+safe(askP.draft.name)+'*? Scrivimi il numero, per esempio «12».'
-    await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{...askP,rounds:(askP.rounds??1)+1,question:preReply!})})}
+   // 22/10 (v138 dal vivo, «si» / «si voglio chiamarlo primi» dopo «A che prezzo metto Lasagna?»): un solo messaggio chiaro, ogni volta
+   // diverso; al terzo giro senza prezzo si chiude con una frase utile (mai «Non ho cambiato nulla» mescolato a una domanda).
+   else if(!stored.length&&askP.draft?.name&&askP.draft.price==null&&!!askP.draft.sectionId&&(yes||!!answerSectionName(text))){const sc=sections.find(x=>x.id===askP.draft!.sectionId),nm=askP.draft.name,low=nm.toLowerCase()
+    const q=(answerSectionName(text)&&sc?'Il sottomenu *'+safe(sc.name)+'* c\u2019è già. ':sc?'Il sottomenu *'+safe(sc.name)+'* è pronto. ':'')+'Per mettere *'+safe(nm)+'* mi manca solo il prezzo: scrivimi per esempio «'+low+' 12».'
+    if((askP.rounds??1)>=3||plain(q)===plain(askP.question??'')){preReply='Va bene, per ora lascio *'+safe(nm)+'* fuori dal menu. Quando vuoi aggiungerlo scrivimi per esempio «aggiungi '+low+(sc?' nei '+sc.name.toLowerCase()+' del '+sc.menu.toLowerCase():'')+' a 12».';closePend=true}
+    else{preReply=q;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{...askP,rounds:(askP.rounds??1)+1,question:q})})}}
    if(acts&&(acts.length||priceOnly)){let follow:Follow|null=null;const cs=acts.find(a=>a.kind==='create_section') as Extract<MenuAction,{kind:'create_section'}>|undefined,d=askP.draft
-    if(d?.name&&!acts.some(a=>a.kind==='create')){const price=priceOnly?onlyPrice(text)!:d.price,secId=cs?.newSectionId??d.sectionId
+    if(d?.name&&!acts.some(a=>a.kind==='create')){const price=priceOnly?onlyPrice(draftless(text,d.name))!:d.price,secId=cs?.newSectionId??d.sectionId
      if(secId&&price!=null&&price>0)acts=[...acts,{kind:'create',sectionId:secId,name:d.name,price,description:null} as MenuAction]
      else if(cs)follow={name:d.name,sectionId:cs.newSectionId,sectionName:cs.name,origin}}
     if(cs&&acts.some(a=>a.kind==='create'))acts=acts.map(a=>a===cs?{...cs,hidden:false} as MenuAction:a)
@@ -681,7 +733,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else if(sec){out={kind:'ask',ids:[],actions:[],createDraft:{name:nm,price:null,sectionId:sec.id,sectionName:null}};serverQ='A che prezzo metto *'+safe(nm)+'* nei *'+safe(sec.name)+'* del '+mLabel+'?'}
     else{const course=dishCourse(nm);if(course){const cs={kind:'create_section',newSectionId:randomUUID(),name:course,menuId:M.id,menuName:M.name,hidden:false} as MenuAction
      out={kind:'ask',ids:[],actions:[cs],createDraft:{name:nm,price:price!=null&&price>0?price:null,sectionId:null,sectionName:course}}
-     serverQ='Nel '+mLabel+' non c’è un sottomenu adatto a *'+safe(nm)+'*: creo il sottomenu *'+course+'* e '+(/[ei]$/.test(nm)&&!/\s/.test(nm)?'le':'lo')+' metto lì'+(price!=null&&price>0?' a *'+price.toFixed(2).replace('.',',')+' €*':'')+'? Rispondi *sì* oppure dimmi il nome del sottomenu.'+(price!=null&&price>0?'':' Dimmi anche il prezzo.')}}}}
+     serverQ='Nel '+mLabel+' non c’è un sottomenu adatto a *'+safe(nm)+'*: creo il sottomenu *'+course+'* e '+(()=>{const w=plain(nm).split(' ')[0]!;return /e$/.test(w)?'le':/i$/.test(w)?'li':/a$/.test(w)?'la':'lo'})()+' metto lì'+(price!=null&&price>0?' a *'+price.toFixed(2).replace('.',',')+' €*':'')+'? Rispondi *sì* oppure dimmi il nome del sottomenu.'+(price!=null&&price>0?'':' Dimmi anche il prezzo.')}}}}
   if(out.kind!=='change'&&(/\btutt[ieoa]\b/.test(p0)||/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p0))&&(clearCommand(text)||/\d/.test(p0))){const g=seraGroup(text,refs,sections,fixedSecIds,{menus:base.menus})
    if(g&&'actions' in g)out={kind:'change',actions:g.actions}
    else if(g&&'ask' in g){out={kind:'ask',ids:[],actions:[]};serverQ='I *'+safe(g.label)+'* ci sono in più Menu: in quale? '+g.menus.map(x=>'*'+safe(x)+'*').join(' o ')+'?'}}
@@ -693,7 +745,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  let deleteConfirmed=false
  // run Haiku 21/10 (z-interruzioni-011/012): «Elimino *X*? Rispondi sì.» scritto dal modello come semplice domanda non lascia niente da
  // confermare e il «sì» girava a vuoto. Se la domanda nomina piatti del menu, diventa la proposta di eliminazione vera (serve sempre il sì).
- if(engine==='haiku'&&out.kind==='ask'&&!out.hold&&!out.twins?.length){const dq=String(finalRun.decision.draft??'');if(/\belimin\w*\b[^?]*\?/i.test(dq)&&/\brispondi\s+\*?s[iì]\b/i.test(dq)){const named=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(dq)+' ').includes(' '+plain(r.name)+' '));if(named.length&&named.length<=8){out={kind:'change',actions:named.map(r=>({kind:'delete',id:r.id}) as MenuAction)};deleteConfirmed=pend?.kind==='batch'&&pend.why==='delete'&&/^(?:s[iì]|ok|va bene|confermo|certo)\b/i.test(plain(text))&&named.every(r=>pend.actions.some(a=>a.kind==='delete'&&(a as any).id===r.id))}}}
+ if(engine==='haiku'&&out.kind==='ask'&&!out.hold&&!out.twins?.length){const dq=String(finalRun.decision.draft??'');if(/\belimin\w*\b[^?]*\?/i.test(dq)&&/\brispondi\s+\*?s[iì]\b/i.test(dq)){const named=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(dq)+' ').includes(' '+plain(r.name)+' '));if(named.length&&named.length<=8){out={kind:'change',actions:named.map(r=>({kind:'delete',id:r.id}) as MenuAction)};deleteConfirmed=pend?.kind==='batch'&&pend.why==='delete'&&/^(?:s[iì]|ok|va bene|confermo|certo)\b/i.test(plain(text))&&named.every(r=>(pend as any).actions.some((a:any)=>a.kind==='delete'&&a.id===r.id))}}}
  // run Haiku 21/10 (str-v-10): «Nascondo tutto il Menu *Cena*? Rispondi sì» scritto come domanda → proposta vera di nascondere quel
  // Menu/Sottomenu (con i piatti serve il sì: il «sì» dopo la conferma). Solo se il nome nella bozza è un Menu/Sottomenu del locale.
  if(engine==='haiku'&&out.kind==='ask'&&!out.hold&&!out.twins?.length){const dq=String(finalRun.decision.draft??''),pq=plain(dq);if(/\bnascond\w*\b[^?]*\?/i.test(dq)&&/\b(?:menu|sottomenu|tutt[oiae])\b/.test(pq)&&HIDE_WHOLE_MENU_Q.test(pq)){const w0=workspaceSchema.parse(row.draft) as any
@@ -720,7 +772,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,back?{kind:'last',actions:effective,undo:back,revision:saved.revision+1,at:Date.now()}:null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
    const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
    inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter,engine}))
-   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
+   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
    lastRev=reread?.revision??saved.revision+1
    return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1}}
   const publish=async(actions:MenuAction[]):Promise<string>=>{const effective=effectiveMenuActions(actions,workspace)
@@ -801,7 +853,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // 21/10 sera, rete di sicurezza sulle risposte: piatto nuovo in un sottomenu appena creato senza prezzo → la domanda del prezzo
   // (bozza in sospeso); mai «Non ho cambiato nulla» dopo un comando chiaro; mai la stessa domanda due volte di fila.
   if(engine==='haiku'){
-   if(follow&&wroteActs.some(a=>a.kind==='create_section')){const q='A che prezzo metto *'+safe(follow.name)+'* nei *'+safe(follow.sectionName)+'*?'
+   if(sessAfter&&wroteActs.length){await propose(tx,ctx,lastRev,{kind:'brain_ask',question:'',ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,session:sessAfter} as any);if(sessNote)res=sessNote+'\n\n'+res}
+   else if(follow&&wroteActs.some(a=>a.kind==='create_section')){const q='A che prezzo metto *'+safe(follow.name)+'* nei *'+safe(follow.sectionName)+'*?'
     await propose(tx,ctx,lastRev,{kind:'brain_ask',question:q,ids:[],actions:[],source:follow.origin,origin:follow.origin,rounds:1,draft:{name:follow.name,price:null,sectionId:follow.sectionId,sectionName:null}} satisfies BrainAsk);res=res+'\n\n'+q}
    else if(!wroteActs.length&&out.kind!=='cancel'&&out.kind!=='undo'){const blocks=res.split('\n\n'),first=blocks[0]!.trim()
     const cands=(out.kind==='ask'?out.ids:[]).map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).slice(0,8)

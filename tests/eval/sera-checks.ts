@@ -17,7 +17,8 @@ export type SeraSpec={
  menuNamed?:{after:number,name:string}[]
  /** Dopo il turno `after` nel Menu `menu` c'è il sottomenu `section`. */
  sectionIn?:{after:number,menu:string,section:string}[]
- /** Turni in cui non deve cambiare niente nel Menu del giorno (prezzo fisso). */
+ /** La risposta del turno non deve contenere questo (es. una lettura non richiesta). */
+ notSay?:{turn:number,re:RegExp}[]
 }
 export type SeraCase=Conversation&{sera?:SeraSpec}
 export const SERA_SECURITY=['menu-nominato-ignorato','conferma-senza-scrittura']
@@ -47,6 +48,7 @@ export function seraChecks(c:SeraCase,v:Verdict,menus:EvalMenu[]):Fail[]{
   const good=hits.filter(h=>plainT(h.m.name)===plainT(x.menu)&&(!x.section||plainT(h.sc.name).startsWith(plainT(x.section).slice(0,5)))&&(x.price===undefined||Math.abs(h.it.price-x.price)<0.005))
   if(hits.some(h=>plainT(h.m.name)!==plainT(x.menu)))add('GRAVE','menu-nominato-ignorato',`dopo il turno ${x.after}: «${x.dish}» creato fuori dal ${x.menu}`)
   else if(!good.length)add('GRAVE','menu-nominato-ignorato',`dopo il turno ${x.after}: «${x.dish}» non è nel ${x.menu}${x.section?' > '+x.section:''}${x.price!==undefined?' a '+x.price:''}`)}
+ for(const x of s.notSay??[])if(x.re.test(v.replies[x.turn-1]??''))add('GRAVE','testo-non-richiesto',`turno ${x.turn}: contiene ${x.re}`)
  for(const x of s.menuNamed??[]){const w=menus[x.after];if(w&&!menuIdx(w,x.name))add('GRAVE','rinomina-mancante',`dopo il turno ${x.after}: nessun Menu «${x.name}»`)}
  for(const x of s.sectionIn??[]){const w=menus[x.after];const m=w&&menuIdx(w,x.menu);if(w&&(!m||!m.sections.some(sc=>plainT(sc.name)===plainT(x.section))))add('GRAVE','rinomina-mancante',`dopo il turno ${x.after}: nel ${x.menu} non c'è il sottomenu «${x.section}»`)}
  return f}

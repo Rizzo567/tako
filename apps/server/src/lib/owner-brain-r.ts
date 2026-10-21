@@ -339,6 +339,8 @@ export function cleanDraft(draft:unknown,o:{wrote:boolean,numbers:number[]}):str
  if(typeof draft!=='string')return null;let s=draft.replace(/[`~]/g,'').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();if(!s||s.length>600)return null
  // run Haiku 21/10 (prova di Manuel sul QA): mai gergo tecnico né scelte numerate inventate («il sistema non può…», «rispondi 1 per sì»).
  if(/\bil sistema\b/i.test(s)||/\b[12]\*?\s+per\s+(?:dire\s+)?(?:s[iì]|no)\b/i.test(s))return null
+ // 22/10: mai «non posso / non ho un comando» verso il titolare: la frase cade, il resto della bozza resta.
+ if(/\bnon posso\b|non ho un comando|non riesco a\b/i.test(s)){s=s.split(/(?<=[.!?])\s+/).filter(x=>!/\bnon posso\b|non ho un comando|non riesco a\b/i.test(x)).join(' ').trim();if(!s)return null}
  if(!o.wrote&&claimsWrite(s))return null
  // Codici interni del contesto («p5», «c2») mai al titolare.
  if(/\b[pc]\d{1,3}\b/i.test(s))return null

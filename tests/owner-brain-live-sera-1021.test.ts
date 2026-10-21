@@ -233,3 +233,44 @@ describe('regressioni del giro finale (struttura, lunghi, adv150)',()=>{
   expect(groupCommand('la carbonara a 13.000 e tutti i primi a 9',refs,sections,fixed,{menus})).toBeNull()
   expect(groupCommand('metti tutte le paste a 8,50',refs,sections,fixed,{menus})).not.toBeNull()})
 })
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// v138 dal vivo (22/10 notte): trascrizioni ESATTE. Il finto modello sbaglia come quella notte; il server deve reggere da solo.
+const V138:Planner=c=>{const m=plainT(c.message)
+ if(/risoto/.test(m))return Q('Ok, *Lasagna* e *Carbonara* li metto nei *Primi*. Il *Risotto ai funghi* non è nel menu: lo creo come nuovo piatto?')
+ if(/tagliata/.test(m))return P('change',[A('replace_section_items',{section:secCode(c,'Primi','Menu del giorno'),menu:'Menu del giorno',text:'Lasagna; Carbonara'}),A('replace_section_items',{section:secCode(c,'Secondi','Menu del giorno'),menu:'Menu del giorno',text:'Cotoletta; Polpette'})],'Ok, aggiorno.')
+ if(/toglila/.test(m))return Q('Quale piatto intendi?')
+ if(/visibil/.test(m))return Q('Tutte e quattro sono visibili, quindi non posso scegliere solo alcune. Quali intendi?')
+ return P('chat',[],'Ok.')}
+const visM=(w:EvalMenu,menu:string,sec:string)=>w.menus.find(m=>m.name===menu)!.sections.find(s=>s.name===sec)!.items.filter(i=>!i.hidden).map(i=>i.name).sort()
+describe('v138 dal vivo: sessione del Menu del giorno (prezzo fisso) e loop del prezzo',()=>{
+ it('S1–S5: i piatti dei turni prima restano, il nuovo nasce a 0 € senza domande, «no la carbonara toglila» è una correzione, niente Contorni',async()=>{
+  const r=await play([T('modifichiamo il menu del giorno'),T('primi: lasagne, carbonara e risoto ai funghi'),T('secondi tagliata e polpete al sugo'),T('no la carbonara toglila'),T('i contorni restano uguali')],V138)
+  if(process.env.TAKO_SERA_SHOW)r.replies.forEach((x,i)=>process.stderr.write('S'+(i+1)+' '+JSON.stringify(x)+' | '+r.d(i+1).join(',')+'\n'))
+  expect(visM(r.final,'Menu del giorno','Primi')).toEqual(['Lasagna','Risotto ai funghi']);expect(visM(r.final,'Menu del giorno','Secondi')).toEqual(['Polpette','Tagliata'])
+  for(const x of r.replies)expect(x).not.toMatch(/lo creo come nuovo|mi manca un dettaglio|Non ho cambiato nulla|non posso/i)
+  expect(r.replies[4]).toMatch(/Contorni/);expect(r.final.menus.find(m=>m.name==='Menu del giorno')!.sections.flatMap(s=>s.items).filter(i=>/risotto|tagliata/i.test(i.name)).every(i=>i.price===0)).toBe(true)
+  for(let i=1;i<r.replies.length;i++)expect(plainT(r.replies[i]!)).not.toBe(plainT(r.replies[i-1]!))})
+ it('L1–L4: «si», «si», «si voglio chiamarlo primi» dopo la domanda del prezzo: messaggi diversi e chiari, poi la chiusura; «lasagna 12» la crea',async()=>{
+  const pl:Planner=c=>/lasagne/.test(plainT(c.message))?Q('Ok, in quale sottomenu?'):P('chat',[],'Ok.')
+  const r=await play([V('No vabbè fa niente, voglio che aggiungi nel menù pranzo le lasagne.'),T('si'),T('si'),T('si voglio chiamarlo primi'),T('si')],pl)
+  if(process.env.TAKO_SERA_SHOW)r.replies.forEach((x,i)=>process.stderr.write('L'+(i+1)+' '+JSON.stringify(x)+'\n'))
+  expect(r.replies[3]).toMatch(/c’è già/);for(const x of r.replies)expect(x).not.toMatch(/Non ho cambiato nulla|già così/)
+  for(let i=1;i<r.replies.length;i++){const a=r.replies[i-1]!.replace(/^Sono l.*?persona\.\s*/s,''),b=r.replies[i]!;expect(plainT(b)).not.toBe(plainT(a));if(i>=2&&/prezzo/.test(a))expect(/\?/.test(b)&&/prezzo/.test(b)&&/\?/.test(a)).toBe(false)}
+  const k=await play([V('aggiungi nel menù pranzo le lasagne'),T('si'),T('lasagna 12')],pl);expect(secOf(k.final,'Menu pranzo','Primi')!.items.map(i=>[i.name,i.price])).toEqual([['Lasagna',12]])})
+ it('M2: «non posso» non arriva mai al titolare',async()=>{
+  const r=await play([T('metti tutte le paste visibili a 9'),T('solo le visibili')],V138);for(const x of r.replies)expect(x).not.toMatch(/non posso/i)})
+})
+describe('lettura deterministica della sessione',()=>{
+ it('liste per sottomenu, correzioni, aggiunte, «restano uguali», «pasta e fagioli» un piatto solo, refusi',async()=>{
+  const {parseSession,sessionName}=await import('../apps/server/src/lib/owner-brain-sera.js')
+  const sc=[{id:'p',name:'Primi',menu:'M'},{id:'s',name:'Secondi',menu:'M'}]
+  expect(parseSession('primi: lasagne, carbonara e risoto ai funghi',sc).lists[0]!.names).toEqual(['lasagne','carbonara','risoto ai funghi'])
+  expect(parseSession('primi lasagne e pasta e fagioli, secondi cotolleta',sc).lists.map(l=>l.names)).toEqual([['lasagne','pasta e fagioli'],['cotolleta']])
+  expect(parseSession('no la carbonara toglila',sc).removes).toEqual(['carbonara'])
+  expect(parseSession("no aspetta, l'arrosto no, metti le polpette",sc)).toMatchObject({removes:['arrosto'],adds:[{name:'polpette'}]})
+  expect(parseSession('i secondi e i contorni restano uguali',sc).keep).toEqual(['secondi','contorni'])
+  const sec=[{id:'1',name:'Cotoletta alla milanese',price:0,available:true,hidden:false,menu:'M',sectionId:'s'},{id:'2',name:'Polpette',price:0,available:true,hidden:true,menu:'M',sectionId:'s'}] as any
+  expect(sessionName('cotolleta',sec,[]).name).toBe('Cotoletta alla milanese');expect(sessionName('polpete al sugo',sec,[]).name).toBe('Polpette');expect(sessionName('risoto ai funghi',[],[]).name).toBe('Risotto ai funghi')
+  expect(sessionName('gnocchi al ragu 10',[],['Gnocchi al ragù'])).toEqual({name:'Gnocchi al ragù',existing:null,price:10})})
+})
