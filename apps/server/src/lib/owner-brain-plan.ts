@@ -119,11 +119,11 @@ export function priceOfOtherClause(actions:MenuAction[],message:string,refs:Menu
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
 export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[]):string[]{const m=' '+msg+' ',out:string[]=[]
  // Verso per parte: «è finita la gricia, la carbonara c'è» → la carbonara non può diventare finita.
- if(refs)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=msg.split(/ (?:e|ed|ma) | , /).find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;const on=AV_ON.test(' '+part+' ')&&!AV_OFF.test(' '+part+' '),off=AV_OFF.test(' '+part+' ')&&!AV_ON.test(' '+part+' ');if((on&&!a.value)||(off&&a.value))out.push(a.id)}
+ if(refs)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=msg.split(/ (?:e|ed|ma) | , /).find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;const neg=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(' '+part+' '),on=(neg||AV_ON.test(' '+part+' '))&&!(AV_OFF.test(' '+part+' ')&&!neg),off=!neg&&AV_OFF.test(' '+part+' ')&&!AV_ON.test(' '+part+' ');if((on&&!a.value)||(off&&a.value))out.push(a.id)}
  // «non è finita», «nun è finita» (dialetto): una negazione del verbo vieta proprio quell'azione.
  const notFinished=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(m)
  for(const a of actions)if(notFinished&&'id' in a&&a.kind==='available'&&!a.value)out.push(a.id)
- const fOff=FEAT_OFF.test(m),fOn=FEAT_ON.test(m)&&!fOff,hOn=HID_ON.test(m)&&!HID_OFF.test(m)&&!/evidenza|promo|offert|scont|etichett/.test(m),hOff=HID_OFF.test(m)&&!HID_ON.test(m),aOff=AV_OFF.test(m)&&!AV_ON.test(m),aOn=AV_ON.test(m)&&!AV_OFF.test(m)
+ const fOff=FEAT_OFF.test(m),fOn=FEAT_ON.test(m)&&!fOff,hOn=HID_ON.test(m)&&!HID_OFF.test(m)&&!/evidenza|promo|offert|scont|etichett/.test(m),hOff=HID_OFF.test(m)&&!HID_ON.test(m),aOff=!notFinished&&AV_OFF.test(m)&&!AV_ON.test(m),aOn=(AV_ON.test(m)||notFinished)&&!(AV_OFF.test(m)&&!notFinished)
  for(const a of actions){if(!('id' in a))continue
   if(a.kind==='featured'&&((fOff&&a.value)||(fOn&&!a.value)))out.push(a.id)
   if(a.kind==='hidden'&&((hOn&&!a.value)||(hOff&&a.value)))out.push(a.id)

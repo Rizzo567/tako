@@ -38,7 +38,7 @@ import {linkIntent,botQuestion} from '../lib/twilio-menu-nlu.js'
 import {linkMarkers} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
-import {ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
+import {fixTruncatedNumbers,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
@@ -475,7 +475,7 @@ function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered
 /** Fase R: il turno del cervello. Il modello decide e scrive; il server valida (una auto-correzione), impone i vincoli, scrive
  * e aggiunge i fatti riletti dal DB. Groq giù → copy.brainDown, nessuna modifica, nessuna riserva a regole. */
 async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:Budget,voice=false,replay=false):Promise<string>{
- budget.brain=true;const text=text0.trim()||'[messaggio vuoto]'
+ budget.brain=true;const text=(budget.engine==='haiku'?fixTruncatedNumbers(text0):text0).trim()||'[messaggio vuoto]'
  const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');if(!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
  const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
  if(text.length>30000||refs.length>1500)return copy.brainDown

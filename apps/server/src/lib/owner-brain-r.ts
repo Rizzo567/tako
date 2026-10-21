@@ -4,7 +4,7 @@
  * Testi fissi ammessi: la riga «assistente automatico» (route) e `copy.brainDown` quando Groq non risponde.
  * Modulo puro (niente DB, niente rete): stato in sospeso, strumenti di controllo, esito del turno, motivi di rifiuto per
  * l'auto-correzione, fatti della risposta. */
-import {plain,g9Prices,describeAction,withNewSections,itemLabel,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
+import {plain,g9Prices,relativeDelta,describeAction,withNewSections,itemLabel,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import type {Hold} from './twilio-menu-hold.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {allOfSections,namedSections,nameInText,unknownSectionPhrase,sectionListText} from './owner-brain-sections.js'
@@ -289,7 +289,12 @@ const CLAIM=/\b(confermato|fatto|fatta|aggiornat\w*|modificat\w*|salvat\w*|pubbl
 // R8 (18/10, QA dal vivo «Aggiunti i nuovi piatti…» senza scrittura): anche i participi da soli («aggiunti», «creata», «spostati»…)
 // in una frase che non è una domanda sono un «fatto». Le domande («Vuoi che la sposti?», «La creo?») restano ammesse.
 const CLAIM_PART=/\b(?:aggiunt[oaie]|creat[oaie]|inserit[oaie]|spostat[oaie]|rinominat[oaie]|eliminat[oaie]|cancellat[oaie]|nascost[oaie]|rimoss[oaie]|tolt[oaie]|mess[oaie]|cambiat[oaie]|segnat[oaie]|rimess[oaie]|annullat[oaie]|ho (?:inserito|rimosso|reso|fatto|messo|tolto|aggiunto|creato|spostato))\b/
-export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_PART.test(plain(x)))
+// run Haiku 21/10: Haiku scrive al presente («Ok, rimetto *X* disponibile.», «Tolgo il tiramisù.»): in una frase che non è una
+// domanda vale come «fatto», a meno che la bozza chieda una conferma (rispondi/confermi/ok per…).
+const CLAIM_NOW=/^(?:ok|va bene|perfetto|d accordo|bene)?\s*(?:allora\s+)?(?:ti\s+)?(?:rimetto|tolgo|levo|metto|segno|nascondo|cambio|aggiorno|aggiungo|creo|sposto|rinomino|imposto|porto|abbasso|alzo|aumento|elimino|cancello|pubblico|tolgo)\b/
+const ASKS_OK=/\b(?:rispondi|confermi|conferma|scrivi ok|ok per|dimmi (?:si|ok)|vuoi che|procedo)\b/
+const claimsNow=(s:string)=>!ASKS_OK.test(plain(s))&&s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_NOW.test(plain(x).trim()))
+export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||claimsNow(s)||s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_PART.test(plain(x)))
 /** Bozza utilizzabile o null. `wrote` = il server ha scritto e riletto tutte le azioni; `numbers` = numeri ammessi
  * (detti dal titolare, prezzi scritti, prezzi dei piatti citati). */
 export function cleanDraft(draft:unknown,o:{wrote:boolean,numbers:number[]}):string|null{
@@ -300,7 +305,12 @@ export function cleanDraft(draft:unknown,o:{wrote:boolean,numbers:number[]}):str
  const allowed=new Set(o.numbers.map(n=>Math.round(n*100)/100))
  for(const m of s.replace(/(\d)\s*,\s*(\d{2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)){const v=Number(m[0]);if(Number.isInteger(v)&&v<=9&&!/€|euro/i.test(s.slice(m.index!,m.index!+m[0].length+6)))continue;if(!allowed.has(Math.round(v*100)/100))return null}
  return s}
-export const numbersIn=(s:string)=>[...s.replace(/(\d)\s*,\s*(\d{2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]))
+// run Haiku 21/10: anche i numeri detti a parole («di un euro», «dodici e cinquanta») e la differenza relativa: il modello li
+// ripete in cifre nella domanda («Aumento di 1 euro…?») e una bozza giusta non deve cadere per questo.
+export const numbersIn=(s:string)=>{const d=[...s.replace(/(\d)\s*,\s*(\d{2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]))
+ try{d.push(...g9Prices(s),...g9Prices(s,false));const r=relativeDelta(s);if(r)d.push(Math.abs(r.delta))}catch{/* solo cifre */}
+ if(/\b(?:di|da|a|per) (?:un|uno|1) (?:euro|eur)\b/i.test(plain(s)))d.push(1)
+ return d}
 
 // ---------- fatti del server ----------
 const num=(n:number)=>n.toFixed(2).replace('.',',')+' €'
@@ -343,3 +353,11 @@ export function wholeGroup(actions:MenuAction[],refs:MenuRef[],sections:SectionR
  return null
 }
 export const wholeGroupText=(w:{kind:'hidden'|'delete',label:string,count:number})=>(w.kind==='hidden'?'Nascondo':'Elimino')+' *'+w.label+'* ('+w.count+(w.count===1?' piatto':' piatti')+')? Rispondi *sì*. Non ho ancora cambiato nulla.'
+
+// run Haiku 21/10 (parlato sporco): Whisper su un ristoratore che biascica tronca i numeri («dodic», «diciott e cinquant»,
+// «cinque e mezz»). Il modello li capisce, il controllo «prezzo detto» no: si completano le parole-numero troncate SOLO quando
+// il troncamento è univoco, prima del cervello. Le parole intere e il resto del testo restano identici.
+const TRUNC:[RegExp,string][]=[[/\bundic\b/g,'undici'],[/\bdodic\b/g,'dodici'],[/\btredic\b/g,'tredici'],[/\bquattordic\b/g,'quattordici'],[/\bquindic\b/g,'quindici'],[/\bsedic\b/g,'sedici'],
+ [/\bdiciasset+\b/g,'diciassette'],[/\bdiciott\b/g,'diciotto'],[/\bdiciannov\b/g,'diciannove'],[/\bvent\b/g,'venti'],[/\btrent\b/g,'trenta'],[/\bquarant\b/g,'quaranta'],
+ [/\bcinquant\b/g,'cinquanta'],[/\bsessant\b/g,'sessanta'],[/\bsettant\b/g,'settanta'],[/\bottant\b/g,'ottanta'],[/\bnovant\b/g,'novanta'],[/\be mezz\b/g,'e mezzo'],[/\bquattr\b/g,'quattro'],[/\bcinqu\b/g,'cinque']]
+export function fixTruncatedNumbers(text:string):string{let t=text;for(const [re,w] of TRUNC)t=t.replace(new RegExp(re.source,'gi'),w);return t}
