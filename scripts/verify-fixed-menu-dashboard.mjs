@@ -5,13 +5,15 @@
 // Uscita: docs/webapp/menu-prezzo-fisso-2026-10-21/screenshot-dashboard/*.png + verifica.json
 import puppeteer from 'puppeteer-core'
 import {readFile,writeFile,mkdir,mkdtemp} from 'node:fs/promises'
-import {resolve,extname,join} from 'node:path'
+import {resolve,extname,join,dirname} from 'node:path'
+import {createRequire} from 'node:module'
 import {tmpdir} from 'node:os'
 import {createServer} from 'node:http'
 import {execFileSync} from 'node:child_process'
 import {transform,build} from 'esbuild'
 import assert from 'node:assert/strict'
 
+const pdfjsDir=dirname(createRequire(import.meta.url).resolve('pdfjs-dist/package.json'))
 const repo=process.cwd(),root=resolve('apps/dashboard/public/staff'),out=resolve('docs/webapp/menu-prezzo-fisso-2026-10-21/screenshot-dashboard');await mkdir(out,{recursive:true})
 // Sorgenti nello stesso ordine di index.html, senza la radice dell'app (login, socket, navigazione).
 const index=await readFile(resolve(root,'index.html'),'utf8')
@@ -44,12 +46,13 @@ const __json=(data,status=200)=>new Response(JSON.stringify(data),{status,header
 const __pdfBytes=()=>{const o=['%PDF-1.4\\n'],x=[];const add=s=>{x.push(o.join('').length);o.push(s)};add('1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\\n');add('2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\\n');add('3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]>>endobj\\n');const start=o.join('').length;o.push('xref\\n0 4\\n0000000000 65535 f \\n'+x.map(n=>String(n).padStart(10,'0')+' 00000 n \\n').join('')+'trailer<</Size 4/Root 1 0 R>>\\nstartxref\\n'+start+'\\n%%EOF');return new Blob([o.join('')],{type:'application/pdf'})};
 const __uuid=()=>crypto.randomUUID();
 const __defaultDoc=()=>({name:'PDF predefinito',menuIds:window.__srv.doc.menus.filter(m=>m.active!==false).map(m=>m.id)});
-window.fetch=async(url,opt={})=>{const u=new URL(url,location.origin),m=opt.method||'GET',S=window.__srv,p=u.pathname;S.calls.push(m+' '+p);await new Promise(r=>setTimeout(r,40));
+const __realFetch=window.fetch.bind(window);
+window.fetch=async(url,opt={})=>{const u=new URL(url,location.origin),m=opt.method||'GET',S=window.__srv,p=u.pathname;if(!p.startsWith('/api/'))return __realFetch(url,opt);S.calls.push(m+' '+p);await new Promise(r=>setTimeout(r,40));
  const body=opt.body&&typeof opt.body==='string'?JSON.parse(opt.body):null;
  if(p==='/api/menu-workspace'&&m==='GET')return __json({data:S.doc,revision:S.revision,publishedRevision:S.published});
  if(p==='/api/menu-workspace'&&m==='PUT'){if(body.expectedRevision!==S.revision)return __json({error:{message:'Conflitto'}},409);S.doc=body.workspace;S.revision++;return __json({data:S.doc,revision:S.revision})}
  if(p==='/api/menu-workspace/versions')return __json({data:[{id:'v'+S.revision,revision:S.revision,createdAt:new Date().toISOString()}]});
- if(p==='/api/menu-workspace/qr')return fetch('/staff/assets/takos/arancione/logo-chef.png');
+ if(p==='/api/menu-workspace/qr')return __realFetch('/staff/assets/takos/arancione/logo-chef.png');
  if(p==='/api/menu-workspace/pdf')return new Response(__pdfBytes());
  if(['/api/menu-workspace/catalogs','/api/menu-workspace/presets','/api/menu-workspace/assets'].includes(p))return __json({data:[]});
  if(p==='/api/menu-workspace/pdf-documents'&&m==='GET')return __json({data:{documents:S.documents,default:__defaultDoc()}});
@@ -70,12 +73,14 @@ const compiled=(await transform(fake+source+'\n'+mount,{loader:'jsx',format:'iif
 const css=[...index.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)].map(m=>m[1])
 const html=`<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${css.map(f=>`<link rel="stylesheet" href="/staff/${f}">`).join('')}<body style="margin:0"><div id="root"></div><script src="/staff/lib/react.js"></script><script src="/staff/lib/react-dom.js"></script><script src="/fixture.js"></script></body></html>`
 const previewHtml=`<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/preview/tw.css"><link rel="stylesheet" href="/preview/entry.css"><body><div id="root"></div><script src="/preview/entry.js"></script></body></html>`
-const types={'.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2','.woff':'font/woff','.ttf':'font/ttf','.mjs':'text/javascript'}
+const types={'.wasm':'application/wasm','.bcmap':'application/octet-stream','.pfb':'application/octet-stream','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2','.woff':'font/woff','.ttf':'font/ttf','.mjs':'text/javascript'}
 const server=createServer(async(req,res)=>{try{const path=new URL(req.url,'http://localhost').pathname
  if(path==='/'){res.setHeader('Content-Type','text/html');res.end(html);return}
  if(path==='/fixture.js'){res.setHeader('Content-Type','text/javascript');res.end(compiled);return}
  if(path.startsWith('/menu-preview/')){res.setHeader('Content-Type','text/html');res.end(previewHtml);return}
  if(path==='/api/menu-workspace/presentation'){res.setHeader('Content-Type','application/json');res.end(JSON.stringify({data:{restaurantName:'Trattoria Prova'}}));return}
+ // pdf.js come nella build (scripts/build-staff-web.mjs): anteprima PDF vera, niente «Pagina 0 di 0».
+ const pj=path.match(/^(?:\/staff)?\/lib\/pdfjs\/(.+)$/);if(pj){const rel=decodeURIComponent(pj[1]),file=/^pdf(\.worker)?\.mjs$/.test(rel)?resolve(pdfjsDir,'legacy/build',rel):resolve(pdfjsDir,rel);if(!file.startsWith(pdfjsDir+'/'))throw Error('Invalid path');res.setHeader('Content-Type',types[extname(file)]||'application/octet-stream');res.end(await readFile(file));return}
  if(path.startsWith('/preview/')){const file=join(tmp,path);res.setHeader('Content-Type',types[extname(file)]||'application/octet-stream');res.end(await readFile(file));return}
  const rel=path.startsWith('/staff/')?path.slice(6):path;const file=resolve(root,'.'+decodeURIComponent(rel));if(!file.startsWith(root+'/'))throw Error('Invalid path')
  res.setHeader('Content-Type',types[extname(file)]||'application/octet-stream');res.end(await readFile(file))}catch{res.statusCode=404;res.end()}})
@@ -105,70 +110,86 @@ try{
   await shot(p,vp,'01-scelta-carta-fisso','Impostazioni menu: scelta «Alla carta / Prezzo fisso»','.mw-pricing')
   // tastiera: freccia sulla scelta → Prezzo fisso, il focus segue
   await p.focus('.mw-pricing-choice [aria-checked=true]');await p.keyboard.press('ArrowRight');await wait(300)
-  assert.equal(await p.evaluate(()=>window.__srv&&document.querySelector('.mw-pricing-choice [aria-checked=true]').textContent),'Prezzo fisso');assert.equal(await activeText(p),'Prezzo fisso');results.push(vp+': freccia sulla scelta passa a Prezzo fisso e porta il focus')
-  await shot(p,vp,'02-riga-prezzi-conservati','Prezzo fisso scelto: riga «I prezzi dei piatti restano salvati»','.mw-pricing')
+  await p.waitForSelector('.mw-fixed');assert.equal(await p.evaluate(()=>document.querySelectorAll('.mw-pricing-choice').length),1,'la scelta Alla carta/Prezzo fisso compare una volta sola');assert.equal(await p.evaluate(()=>document.querySelectorAll('[data-mw-prices-kept]').length),1,'una sola riga sui prezzi conservati')
+  assert.equal(await p.evaluate(()=>document.querySelector('.mw-fixed .mw-pricing-choice [aria-checked=true]').textContent),'Prezzo fisso');assert.equal(await activeText(p),'Prezzo fisso');results.push(vp+': freccia sulla scelta passa a Prezzo fisso; la scelta resta solo nel riquadro Prezzo fisso e il focus la segue')
+  await shot(p,vp,'02-riga-prezzi-conservati','Prezzo fisso scelto: la scelta e la riga «I prezzi dei piatti restano salvati» solo nel riquadro Prezzo fisso','.mw-fixed')
   await click(p,'Chiudi pannello');await p.waitForSelector('.mw-fixed')
   assert.ok(await p.$('.mw-fixed-empty [data-fixed-add]'));await shot(p,vp,'03-stato-vuoto','Menu fisso senza opzioni: invito ad aggiungere la prima','.mw-fixed')
   // piatti senza prezzo
   await p.evaluate(()=>document.querySelectorAll('.mw-category-toggle[aria-expanded=false]').forEach(b=>b.click()));await wait(300)
   assert.equal(await p.$('.mw-daily-price'),null,'nessun campo prezzo sulle righe');await shot(p,vp,'04-piatti-senza-prezzo','Elenco piatti del menu fisso: nessun prezzo','.mw-catalog-list')
   // opzioni
-  await click(p,'Aggiungi la prima opzione di prezzo');assert.equal(await p.evaluate(()=>document.activeElement?.dataset.f),'name','focus sul nome della nuova opzione')
-  await type(p,'.mw-fixed-row:nth-child(1) input[data-f=name]','Completo');await type(p,'.mw-fixed-row:nth-child(1) .mw-fixed-price input','13');await p.keyboard.press('Enter');await type(p,'.mw-fixed-row:nth-child(1) input[data-f=note]','Primo, secondo e contorno')
+  await click(p,'Aggiungi opzione');assert.equal(await p.evaluate(()=>document.activeElement?.dataset.f),'name','focus sul nome della nuova opzione')
+  assert.equal(await p.$('.mw-fixed-row:nth-child(1) input[data-f=note]'),null,'nota nascosta finché non si preme «+ Nota»');assert.equal(await p.$eval('.mw-fixed-row:nth-child(1) [data-all]',e=>e.getAttribute('aria-pressed')),'true','senza Sottomenu scelti è selezionato «Tutto il menu»')
+  await type(p,'.mw-fixed-row:nth-child(1) input[data-f=name]','Completo');await type(p,'.mw-fixed-row:nth-child(1) .mw-fixed-price input','13');await p.keyboard.press('Enter');await click(p,'+ Nota','.mw-fixed-row:nth-child(1)');assert.equal(await p.evaluate(()=>document.activeElement?.dataset.f),'note');await type(p,'.mw-fixed-row:nth-child(1) input[data-f=note]','Primo, secondo e contorno')
+  for(const s of ['Primi','Secondi','Contorni'])await click(p,s,'.mw-fixed-row:nth-child(1)');assert.equal(await p.$eval('.mw-fixed-row:nth-child(1) [data-all]',e=>e.getAttribute('aria-pressed')),'false')
+  await click(p,'Tutto il menu','.mw-fixed-row:nth-child(1)');assert.equal(await p.$$eval('.mw-fixed-row:nth-child(1) .mw-chip[aria-pressed=true]',els=>els.map(e=>e.textContent).join()),'Tutto il menu','«Tutto il menu» toglie i Sottomenu scelti');results.push(vp+': «Tutto il menu» selezionato quando nessun sottomenu è scelto; sceglierlo azzera la scelta')
+  for(const s of ['Primi','Secondi','Contorni'])await click(p,s,'.mw-fixed-row:nth-child(1)')
   await click(p,'Aggiungi opzione');await type(p,'.mw-fixed-row:nth-child(2) input[data-f=name]','Solo primo');await type(p,'.mw-fixed-row:nth-child(2) .mw-fixed-price input','9');await p.keyboard.press('Enter');await click(p,'Primi','.mw-fixed-row:nth-child(2)')
   await click(p,'Aggiungi opzione');await type(p,'.mw-fixed-row:nth-child(3) input[data-f=name]','Solo secondo');await type(p,'.mw-fixed-row:nth-child(3) .mw-fixed-price input','10,50');await p.keyboard.press('Enter');await click(p,'Secondi','.mw-fixed-row:nth-child(3)');await click(p,'Contorni','.mw-fixed-row:nth-child(3)')
   await type(p,'.mw-fixed-included input','¼ di vino oppure ½ l d’acqua + caffè')
-  await shot(p,vp,'05-opzioni-compilate','Tre opzioni con nome, prezzo, nota e Sottomenu compresi','.mw-fixed')
+  await shot(p,vp,'05-opzioni-compilate','Tre opzioni (come Victoria Cena), «Comprende» = Sottomenu compresi: Completo = Primi+Secondi+Contorni, Solo primo, Solo secondo; nota solo dove scritta','.mw-fixed')
   await shot(p,vp,'06-compreso','Campo «Compreso» compilato','.mw-fixed-included')
   await click(p,'Sposta giù Completo');assert.equal(await activeText(p),'Sposta giù Completo','focus resta sul pulsante spostato')
   await shot(p,vp,'07-riordino','Riordino: «Completo» spostato dopo «Solo primo»','.mw-fixed')
   // stato salvato in bozza: formato del contratto
   await p.evaluate(()=>{});
   // Sostituisci i piatti (Primi)
-  await click(p,'Modifica categoria Primi');await click(p,'Sostituisci i piatti');await p.waitForSelector('.mw-replace textarea');assert.equal(await p.evaluate(()=>document.activeElement?.tagName),'TEXTAREA')
+  await click(p,'Modifica sottomenu Primi');await click(p,'Sostituisci i piatti');await p.waitForSelector('.mw-replace textarea');assert.equal(await p.evaluate(()=>document.activeElement?.tagName),'TEXTAREA')
   await p.type('.mw-replace textarea','Risotto ai funghi\nPasta al pomodoro\nGnocchi al pesto');await shot(p,vp,'08-sostituisci-incolla','Sostituisci i piatti: lista incollata','.mw-replace')
   await click(p,'Controlla (3)');await p.waitForSelector('.mw-replace-summary');await shot(p,vp,'09-sostituisci-riepilogo','Riepilogo: restano 2 (uno torna visibile), nuovo 1, nascosto 1','.mw-replace')
-  await click(p,'Conferma');await p.waitForSelector('.mw-replace:not(.is-open)');results.push(vp+': conferma applica nella bozza')
+  await click(p,'Conferma');await p.waitForSelector('.mw-replace:not(.is-open)');assert.equal(await p.$eval('.mw-replace-status',e=>e.textContent),'Piatti sostituiti: premi Salva.');results.push(vp+': conferma applica nella bozza; «premi Salva» resta nel riquadro, niente toast')
+  await shot(p,vp,'09b-sostituisci-premi-salva','Dopo «Conferma»: una sola riga «Piatti sostituiti: premi Salva.» nel riquadro, nessun toast','.mw-replace')
   // salva la bozza e verifica il formato salvato
   await p.evaluate(()=>{const b=[...document.querySelectorAll('button')].find(x=>x.offsetParent&&/^Salva/.test(x.textContent.trim())&&!x.disabled&&x.closest('.mw-drawer,.mw-context-inspector,dialog,.mw-inspector,[role=dialog]'));b?.click()});await wait(600)
   if(await p.evaluate(()=>window.__srv.revision===1)){await click(p,'Altre azioni');await click(p,'Salva bozza');await wait(500)}
   const saved=await p.evaluate(()=>window.__srv.doc.menus[0])
-  assert.equal(saved.pricing,'fisso');assert.deepEqual(saved.formulas.map(f=>[f.name,f.price,f.note,f.sectionIds||null]),[['Solo primo',9,null,[U(10)]],['Completo',13,'Primo, secondo e contorno',null],['Solo secondo',10.5,null,[U(11),U(12)]]]);assert.equal(saved.included,'¼ di vino oppure ½ l d’acqua + caffè')
+  assert.equal(saved.pricing,'fisso');assert.deepEqual(saved.formulas.map(f=>[f.name,f.price,f.note,f.sectionIds||null]),[['Solo primo',9,null,[U(10)]],['Completo',13,'Primo, secondo e contorno',[U(10),U(11),U(12)]],['Solo secondo',10.5,null,[U(11),U(12)]]]);assert.equal(saved.included,'¼ di vino oppure ½ l d’acqua + caffè')
   assert.deepEqual(saved.sections[0].items.map(i=>[i.name,i.price,!!i.hidden]),[['Risotto ai funghi',12,false],['Pasta al pomodoro',9,false],['Gnocchi al pesto',0,false],['Lasagna',11,true]])
   assert.equal(saved.sections[0].items[1].description,'Pomodoro fresco e basilico');results.push(vp+': salvato nel formato del contratto (pricing, formulas con sectionIds, included; piatti nascosti, prezzi intatti)')
-  await shot(p,vp,'10-dopo-sostituzione','Dopo la sostituzione: Lasagna nascosta, Gnocchi nuovo senza prezzo','#mw-section-'+U(10))
+  {const toasts=await p.evaluate(()=>[...document.querySelectorAll('.ds-toast-in, .new-row')].map(e=>e.textContent.trim()).filter(t=>/salvat|Salva/.test(t)));assert.deepEqual(toasts,['Menu salvato'],'una sola notifica dopo il salvataggio');assert.equal(await p.$('.mw-replace-status'),null,'la riga «premi Salva» sparisce dopo il salvataggio');results.push(vp+': dopo Salva una sola notifica («Menu salvato»)')}
+  await wait(3800);await shot(p,vp,'10-dopo-sostituzione','Dopo la sostituzione e il salvataggio: Lasagna nascosta, Gnocchi nuovo senza prezzo','#mw-section-'+U(10))
   // chiudi il riquadro categoria se aperto
   await p.keyboard.press('Escape');await wait(300)
   // anteprima cliente (renderer vero)
-  await click(p,'Anteprima cliente');await p.waitForSelector('dialog.mw-glass-preview iframe');const frame=await (await p.$('dialog.mw-glass-preview iframe')).contentFrame();await frame.waitForFunction(()=>document.body.innerText.includes('Primi'),{timeout:15000}).catch(()=>{});await wait(800)
-  await shot(p,vp,'11-anteprima-cliente','Anteprima cliente (renderer vero di apps/web)')
-  await p.keyboard.press('Escape');await wait(300);assert.equal(await p.$('dialog.mw-glass-preview'),null);assert.equal(await activeText(p),'Anteprima cliente','Esc chiude e rende il focus');results.push(vp+': Esc chiude l’anteprima e rende il focus')
+  // «Anteprima cliente» nel riquadro c'è solo su mobile (su desktop c'è l'anteprima laterale): per lo scatto grande su desktop si preme il pulsante nascosto.
+  assert.equal(await p.$eval('.mw-fixed-foot',e=>getComputedStyle(e).display==='none'),vp==='desktop','pulsante Anteprima cliente solo su mobile')
+  if(vp==='mobile')await click(p,'Anteprima cliente');else await p.$eval('.mw-fixed-foot button',b=>b.click())
+  await p.waitForSelector('dialog.mw-glass-preview iframe');const frame=await (await p.$('dialog.mw-glass-preview iframe')).contentFrame();await frame.waitForFunction(()=>document.body.innerText.includes('COMPLETO'),{timeout:15000});await wait(800)
+  const pills=await frame.evaluate(()=>[...document.querySelectorAll('nav button, [role=tab]')].map(b=>b.textContent.trim()).filter(Boolean));assert.ok(!pills.includes('Altre proposte'),'nessuna scheda «Altre proposte»: '+pills.join(', '))
+  await shot(p,vp,'11-anteprima-cliente','Anteprima cliente (renderer vero di apps/web): schede come Victoria (Completo, Primi, Secondi)')
+  await p.keyboard.press('Escape');await wait(300);assert.equal(await p.$('dialog.mw-glass-preview'),null);if(vp==='mobile'){assert.equal(await activeText(p),'Anteprima cliente','Esc chiude e rende il focus');results.push(vp+': Esc chiude l’anteprima e rende il focus')}
   // torna alla carta: prezzi tornano
   await click(p,'Alla carta','.mw-fixed');await wait(300);assert.equal(await p.$('.mw-fixed'),null);assert.ok(await p.$('.mw-daily-price'))
-  const priceShown=await p.$$eval('.mw-daily-price input',els=>els.map(e=>e.value));assert.ok(priceShown.includes('14')&&priceShown.includes('15'),'prezzi di nuovo visibili');await shot(p,vp,'12-tornato-alla-carta','Rimesso «Alla carta»: i prezzi dei piatti tornano','.mw-catalog-list')
+  const priceShown=await p.$$eval('.mw-daily-price input',els=>els.map(e=>e.value));assert.ok(priceShown.includes('14')&&priceShown.includes('15'),'prezzi di nuovo visibili')
+  assert.equal(await p.$eval('[aria-label="Prezzo Gnocchi al pesto"]',e=>e.value+'|'+e.placeholder),'|Senza prezzo','piatto senza prezzo: campo vuoto con segnaposto');await shot(p,vp,'12-tornato-alla-carta','Rimesso «Alla carta»: i prezzi tornano; il piatto nuovo mostra «Senza prezzo», non «€ 0»','.mw-catalog-list')
   const back=await p.evaluate(()=>{});results.push(vp+': carta↔fisso conserva i prezzi')
   // nuovo menu già a prezzo fisso
-  await p.click('[aria-label="Aggiungi categoria o piatto"]');await wait(300);await click(p,'Menu','.mw-create-kind');await type(p,'input[aria-label="Nome menu"]','Menu degustazione');await click(p,'Prezzo fisso','.mw-pricing-choice')
-  await shot(p,vp,'13-nuovo-menu-fisso','Nuovo menu: scelto «Prezzo fisso» alla creazione')
+  await p.click('[aria-label="Aggiungi sottomenu o piatto"]');await wait(300);assert.deepEqual(await p.$$eval('.mw-create-kind button',b=>b.map(x=>x.textContent.trim())),['Sottomenu','Piatto','Menu']);await click(p,'Menu','.mw-create-kind');await type(p,'input[aria-label="Nome menu"]','Menu degustazione');await click(p,'Prezzo fisso','.mw-pricing-choice')
+  await shot(p,vp,'13-nuovo-menu-fisso','Nuovo menu (scelte: Sottomenu / Piatto / Menu): scelto «Prezzo fisso» alla creazione')
   await p.evaluate(()=>{const b=[...document.querySelectorAll('button')].find(x=>x.offsetParent&&x.textContent.trim()==='Salva'&&!x.disabled);b.click()});await wait(800)
   const created=await p.evaluate(()=>window.__srv.doc.menus.find(m=>m.name==='Menu degustazione'));assert.equal(created?.pricing,'fisso');assert.deepEqual(created.formulas,[])
-  await p.keyboard.press('Escape');await wait(300);await p.waitForSelector('.mw-fixed-empty');await shot(p,vp,'14-nuovo-menu-fisso-vuoto','Menu nuovo a prezzo fisso: stato vuoto','.mw-fixed')
+  await p.keyboard.press('Escape');await wait(300);await p.waitForSelector('.mw-fixed-empty');await wait(3800);await shot(p,vp,'14-nuovo-menu-fisso-vuoto','Menu nuovo a prezzo fisso: stato vuoto','.mw-fixed')
   {const now=Object.fromEntries(await prices(p));for(const [n,v] of before)assert.equal(now[n],v,'prezzo di '+n+' intatto');results.push(vp+': tutti i prezzi originali intatti dopo fisso→carta e sostituzione')}await p.close()
 
   // ── PDF multipli (Condividi) ──
   p=await open(vp);await click(p,'Condividi');await p.waitForSelector('.mw-pdfdoc-row.is-default')
   assert.equal(await p.$eval('.mw-pdfdoc-row.is-default small',e=>e.textContent),'Predefinito · Menu pranzo, Menu cena');await shot(p,vp,'20-pdf-predefinito','PDF: nessun documento salvato → «PDF predefinito»','.mw-pdfdoc')
-  await click(p,'Nuovo PDF');await p.waitForSelector('.mw-pdfdoc-editor');assert.equal(await p.evaluate(()=>document.activeElement?.placeholder),'Menu pranzo')
+  await click(p,'Nuovo PDF');await p.waitForSelector('.mw-pdfdoc-editor');assert.equal(await p.evaluate(()=>document.activeElement?.placeholder),'Es. Pranzo del giorno')
   await shot(p,vp,'21-pdf-nuovo','Nuovo PDF: nome, menu inclusi, grafica','.mw-pdfdoc')
   await p.keyboard.press('Escape');await wait(300);assert.equal(await p.$('.mw-pdfdoc-editor'),null);assert.equal(await activeText(p),'Nuovo PDF');results.push(vp+': Esc chiude l’editor PDF e rende il focus a «Nuovo PDF»')
   await click(p,'Nuovo PDF');await type(p,'.mw-pdfdoc-editor input[maxlength="80"]','Pranzo e cena');await click(p,'Sposta giù Menu pranzo')
   assert.deepEqual(await p.$$eval('.mw-pdfdoc-menu.is-on',els=>els.map(e=>e.textContent.replace(/[↑↓]/g,'').trim())),['Menu cena','Menu pranzo'])
   await shot(p,vp,'22-pdf-scelta-ordine-menu','Menu inclusi e loro ordine (Cena prima di Pranzo)','.mw-pdfdoc-menus')
-  await click(p,'Grafica propria');await p.waitForSelector('.mw-pdfdoc-config');await shot(p,vp,'23-pdf-grafica','Grafica propria: controlli del PDF esistenti','.mw-pdfdoc-look')
+  await click(p,'Grafica propria');await p.waitForSelector('.mw-pdfdoc-config');await shot(p,vp,'23-pdf-grafica','Grafica propria: controlli del PDF esistenti, etichette in italiano','.mw-pdfdoc-look')
+  {const txt=[];for(const g of await p.$$eval('.mw-pdfdoc-groups button',b=>b.map(x=>x.textContent))){await click(p,g,'.mw-pdfdoc-groups');txt.push(await p.$eval('.mw-pdfdoc-look',e=>e.innerText+' '+[...e.querySelectorAll('option')].map(o=>o.textContent).join(' ')))}
+   const all=txt.join(' ');assert.ok(!/categori|portrait|landscape|\bleft\b|\bcenter\b/i.test(all),'grafica PDF: niente «categoria» né valori inglesi');assert.ok(all.includes('Ogni sottomenu su una pagina nuova'));results.push(vp+': grafica PDF in italiano, «Ogni sottomenu su una pagina nuova»')
+   await click(p,'Formato','.mw-pdfdoc-groups')}
   await p.$eval('.mw-pdfdoc-config select',s=>{s.value='A5';s.dispatchEvent(new Event('change',{bubbles:true}))}).catch(()=>{})
   await click(p,'Salva','.mw-pdfdoc-editor');await p.waitForSelector('.mw-pdfdoc-row[data-pdfdoc]')
   const put=await p.evaluate(()=>window.__srv.lastPut);assert.equal(put.documents.length,1);assert.equal('id' in put.documents[0],false);assert.equal(put.documents[0].name,'Pranzo e cena');assert.deepEqual(put.documents[0].menuIds,[U(2),U(1)]);assert.equal(typeof put.documents[0].config,'object');results.push(vp+': PUT {documents:[{name,menuIds,config}]} senza id per il nuovo')
-  await shot(p,vp,'24-pdf-lista','Lista dei PDF salvati','.mw-pdfdoc')
+  assert.ok(await p.$('.mw-pdfdoc-row.is-default'),'il PDF predefinito resta in lista');assert.equal(await p.$eval('.mw-pdfdoc-saved',e=>e.textContent),'PDF salvato.');assert.equal(await p.evaluate(()=>[...document.querySelectorAll('.ds-toast-in, .new-row')].filter(e=>/PDF/.test(e.textContent)).length),0,'nessun toast PDF');results.push(vp+': dopo il salvataggio il PDF predefinito resta in lista; una sola conferma nel riquadro')
+  await shot(p,vp,'24-pdf-lista','Lista dei PDF: PDF predefinito sempre in cima + PDF salvato','.mw-pdfdoc')
   // secondo documento, poi rinomina
   await click(p,'Nuovo PDF');await type(p,'.mw-pdfdoc-editor input[maxlength="80"]','Solo pranzo');await p.evaluate(()=>[...document.querySelectorAll('.mw-pdfdoc-menu.is-on input')].find(i=>i.closest('li').textContent.includes('Menu cena')).click());await click(p,'Salva','.mw-pdfdoc-editor');await wait(300)
   await p.evaluate(()=>{const row=[...document.querySelectorAll('.mw-pdfdoc-row')].find(r=>r.textContent.includes('Solo pranzo'));[...row.querySelectorAll('button')].find(b=>b.textContent==='Modifica').click()});await wait(250);await type(p,'.mw-pdfdoc-editor input[maxlength="80"]','Pranzo del giorno');await click(p,'Salva','.mw-pdfdoc-editor');await wait(300)
@@ -187,12 +208,15 @@ try{
   await click(p,'Revoca');await click(p,'Revoca','.mw-pdfdoc-confirm');await p.waitForFunction(()=>!document.querySelector('.mw-pdfdoc-url'));assert.equal(await p.evaluate(()=>window.__srv.documents[0].shareToken),null)
   await shot(p,vp,'30-link-revocato','Link revocato: si può crearne uno nuovo','.mw-pdfdoc')
   await p.keyboard.press('Escape');await wait(200);assert.equal(await p.$('.mw-pdfdoc-link'),null);assert.equal(await activeText(p),'Link fisso');results.push(vp+': Esc chiude il link fisso e rende il focus')
-  // PDF anche nella scheda PDF (desktop)
-  if(vp==='desktop'){await click(p,'PDF','.mw-tabs');await p.waitForSelector('.mw--pdf .mw-pdfdoc');await shot(p,vp,'31-pdf-scheda-pdf','Pannello «I tuoi PDF» anche nella scheda PDF','.mw-pdfdoc')}
-  await p.close()
+  // Un solo sistema PDF: «PDF predefinito → Modifica» apre le impostazioni vecchie del PDF predefinito (scheda PDF), senza il pannello «I tuoi PDF».
+  await p.$eval('[data-pdfdoc-default-edit]',b=>{b.scrollIntoView({block:'center'});b.click()});await p.waitForSelector('.mw--pdf');await wait(400)
+  assert.equal(await p.$('.mw--pdf .mw-pdfdoc'),null,'nella scheda PDF non c’è un secondo sistema');if(vp==='desktop')await p.waitForFunction(()=>/Pagina 1 di 1/.test(document.body.innerText),{timeout:15000})
+  await p.evaluate(()=>{window.scrollTo(0,0);document.querySelectorAll('*').forEach(e=>{if(e.scrollTop)e.scrollTop=0})});await shot(p,vp,'31-pdf-scheda-pdf','Scheda PDF aperta da «PDF predefinito → Modifica»: solo le impostazioni del PDF predefinito'+(vp==='desktop'?', anteprima vera (Pagina 1 di 1)':''))
+  results.push(vp+': scheda PDF con un solo sistema (impostazioni del PDF predefinito)')
+  assert.equal(await p.evaluate(()=>document.body.innerText.includes('Non previsto')),false,'nessuna risorsa non servita dal finto server');await p.close()
  }
  assert.deepEqual(errors,[]);results.push('nessun errore nel browser')
- const lines=['# Screenshot dashboard — Menu a prezzo fisso e PDF multipli (21/10/2026)','','Generati da `node scripts/verify-fixed-menu-dashboard.mjs`: componenti veri della dashboard, ruolo **titolare (owner)**, API finta in memoria con le forme del CONTRATTO §7, anteprima cliente = renderer vero di `apps/web` compilato. Chrome headless, 1280×900 e 375×812, reduced motion.','','| File | Viewport | Stato |','|---|---|---|',...shots.map(s=>`| [${s.file}](${s.file}) | ${s.vp==='desktop'?'1280':'375'} | ${s.label} |`),'','## Verifiche automatiche','',...results.map(r=>'- '+r),'']
+ const lines=['# Screenshot dashboard — Menu a prezzo fisso e PDF multipli (21/10/2026)','','Generati da `node scripts/verify-fixed-menu-dashboard.mjs`: componenti veri della dashboard, ruolo **titolare (owner)**, API finta in memoria con le forme del CONTRATTO §7, anteprima cliente = renderer vero di `apps/web` compilato. Chrome headless, 1280×900 e 375×812, reduced motion. Giro correzioni del 21/10 sera: «Sottomenu» al posto di «categoria» (sottocategoria = «Sezione»), scelta Alla carta/Prezzo fisso solo nel riquadro, un solo sistema PDF, fixture come Victoria Cena, una notifica per volta.','','| File | Viewport | Stato |','|---|---|---|',...shots.map(s=>`| [${s.file}](${s.file}) | ${s.vp==='desktop'?'1280':'375'} | ${s.label} |`),'','## Verifiche automatiche','',...results.map(r=>'- '+r),'']
  await writeFile(resolve(out,'INDICE.md'),lines.join('\n'))
  await writeFile(resolve(out,'verifica.json'),JSON.stringify({ambito:'componenti veri della dashboard, ruolo owner, API finta in memoria, nessun DB/login/deploy',viewport:viewports,risultati:results,screenshot:shots},null,2))
  console.log(JSON.stringify({ok:true,shots:shots.length,results},null,1))

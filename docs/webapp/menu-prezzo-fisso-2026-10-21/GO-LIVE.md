@@ -35,6 +35,7 @@ CI=true npx wrangler deploy --config deploy/cloudflare/wrangler.jsonc   # annota
 ## 4. Controlli in sola lettura
 - `GET https://takoitalia.com/api/customer/restaurant/528e263c-…/menu` per Alla carta, Menu pranzo, Menu cena: 200, contenuti come prima (Victoria non è ancora migrata: deve essere IDENTICA).
 - `/staff` 200, `/api/auth/me` 401, webhook senza firma 403, nessun errore nuovo in `tako_whatsapp_errors`.
+- PDF (mai verificati sull'edge vero prima di questo passo): `GET /api/public/menu-pdf/token-inesistente` → 404; dalla dashboard del **QA** (26050ecd, mai Victoria) crea un documento in «I tuoi PDF», scaricalo (PDF valido, tempi < 10 s), crea il link fisso, aprilo da anonimo (200 `application/pdf`), revocalo (poi 404). Se la generazione sull'edge fallisce o va in timeout: rollback del solo operativo (la pagina pubblica resta).
 ## 5. Migrazione di Victoria (solo dopo 1–4 verdi)
 ```bash
 OUT=~/.config/tako-webapp/victoria-prezzo-fisso-$(date +%Y%m%d-%H%M)

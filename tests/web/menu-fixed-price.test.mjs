@@ -42,6 +42,15 @@ test('sectionIds: scelta in ordine dei Sottomenu, vuoto = chiave assente (tutto 
  assert.equal(F.toggleSection(m,U(900),U(999)),false,'Sottomenu inesistente');
 });
 
+test('«Tutto il menu»: selezionato quando nessun Sottomenu è scelto; sceglierlo toglie sectionIds (dato invariato: chiave assente)',()=>{
+ const m=menu();F.setPricing(m,'fisso');F.addFormula(m,U(900),'Completo');
+ assert.equal(F.coversAll(m.formulas[0]),true,'opzione nuova = tutto il menu');
+ F.toggleSection(m,U(900),U(10));F.toggleSection(m,U(900),U(11));assert.equal(F.coversAll(m.formulas[0]),false);eq(m.formulas[0].sectionIds,[U(10),U(11)]);
+ assert.equal(F.setAllSections(m,U(900)),true);assert.equal('sectionIds' in m.formulas[0],false);assert.equal(F.coversAll(m.formulas[0]),true);
+ assert.equal(F.setAllSections(m,U(999)),false,'opzione inesistente');
+ assert.equal(F.coversAll({sectionIds:[]}),true,'elenco vuoto = tutto il menu');
+});
+
 test('sostituisci i piatti: stesso nome conserva i dati, i nuovi nascono a prezzo 0, chi manca si nasconde (mai eliminato)',()=>{
  const m=menu();F.setPricing(m,'fisso');
  const names=F.parseList('- risotto ai FUNGHI\n\n• Pasta al pomodoro\n1. Gnocchi al pesto\nPasta al pomodoro\n');

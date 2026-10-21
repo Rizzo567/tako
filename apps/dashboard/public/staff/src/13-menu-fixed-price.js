@@ -2,7 +2,7 @@
    Logica pura in window.TakoMenuFixed (testata in tests/web/menu-fixed-price.test.mjs); componenti agganciati in 13-menu-workspace.js:
    scelta Alla carta/Prezzo fisso, opzioni di prezzo (nome, prezzo, nota, Sottomenu compresi), «Compreso», «Sostituisci i piatti».
    Regole: i prezzi dei piatti NON si toccano mai (restano salvati e nascosti); i piatti tolti da una lista si NASCONDONO, mai eliminati.
-   Movimento: nessuna animazione decorativa; solo stati reali. Testi brevi, «Sottomenu» (mai «categoria» nei testi nuovi). */
+   Movimento: nessuna animazione decorativa; solo stati reali. Testi brevi, «Sottomenu» (mai «categoria» nei testi visibili). */
 
 const MW_FIXED_NORM=v=>String(v||'').toLocaleLowerCase('it').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[’`]/g,"'").replace(/\s+/g,' ').trim();
 const MW_FIXED_PRICE=value=>{const text=String(value??'').trim().replace('€','').trim().replace(',','.');if(!/^\d+(?:\.\d{1,2})?$/.test(text))return null;const n=Number(text);return Number.isFinite(n)&&n<=100000?n:null;};
@@ -20,7 +20,10 @@ const TakoMenuFixed={
   return true;},
  moveFormula(menu,id,delta){const a=menu?.formulas||[],i=a.findIndex(x=>x.id===id),j=i+delta;if(i<0||j<0||j>=a.length)return false;[a[i],a[j]]=[a[j],a[i]];return true;},
  removeFormula(menu,id){const a=menu?.formulas||[],n=a.length;menu.formulas=a.filter(x=>x.id!==id);return menu.formulas.length<n;},
- /** Sottomenu compresi: nessuno scelto = «tutto il menu» (chiave assente, come i documenti senza sectionIds). */
+ /** Sottomenu compresi: nessuno scelto = «Tutto il menu» (chiave assente, come i documenti senza sectionIds). */
+ coversAll:f=>!(f?.sectionIds||[]).length,
+ /** «Tutto il menu»: toglie la scelta dei Sottomenu (sectionIds assente). */
+ setAllSections(menu,formulaId){const f=menu?.formulas?.find(x=>x.id===formulaId);if(!f)return false;delete f.sectionIds;return true;},
  toggleSection(menu,formulaId,sectionId){const f=menu?.formulas?.find(x=>x.id===formulaId);if(!f||!menu.sections.some(s=>s.id===sectionId))return false;
   const set=new Set(f.sectionIds||[]);set.has(sectionId)?set.delete(sectionId):set.add(sectionId);
   const ordered=menu.sections.map(s=>s.id).filter(id=>set.has(id));if(ordered.length)f.sectionIds=ordered;else delete f.sectionIds;return true;},
@@ -57,7 +60,7 @@ function MenuFixedPriceInput({value,label,onCommit}){
 
 /* Pannello del menu fisso, in cima ai piatti: opzioni (aggiungi, modifica, riordina, togli), Sottomenu compresi, «Compreso», anteprima. */
 function MenuFixedPricePanel({menu,mutate,onPreview,disabled}){
- const formulas=menu.formulas||[],sections=menu.sections||[],focusNext=useRef(null),host=useRef(null);
+ const formulas=menu.formulas||[],sections=menu.sections||[],focusNext=useRef(null),host=useRef(null),[noteOpen,setNoteOpen]=useState(()=>new Set());
  const edit=fn=>mutate(d=>{const m=d.menus.find(x=>x.id===menu.id);if(m)fn(m);});
  useEffect(()=>{const t=focusNext.current;if(!t)return;focusNext.current=null;const el=t.split(' || ').map(x=>host.current?.querySelector(x)).find(Boolean);el?.focus();if(el?.select)el.select();});
  const add=()=>{const id=crypto.randomUUID();edit(m=>TakoMenuFixed.addFormula(m,id,'Opzione '+((m.formulas||[]).length+1)));focusNext.current=`[data-formula="${id}"] input[data-f="name"]`;};
@@ -67,12 +70,13 @@ function MenuFixedPricePanel({menu,mutate,onPreview,disabled}){
  return <Card className="mw-fixed" aria-labelledby={'mw-fixed-title-'+menu.id}><div ref={host}>
   <div className="mw-fixed-head"><h3 id={'mw-fixed-title-'+menu.id}>Prezzo fisso</h3><MenuPricingChoice value={menu.pricing} disabled={disabled} showNote={false} onChange={mode=>edit(m=>TakoMenuFixed.setPricing(m,mode))}/></div>
   <p className="mw-pricing-note" data-mw-prices-kept>I prezzi dei piatti restano salvati: tornano se rimetti Alla carta.</p>
-  {!formulas.length?<div className="mw-fixed-empty"><p>Il cliente vede il prezzo del menu, non dei piatti.</p><button type="button" data-fixed-add className="mw-pill mw-pill-dark" disabled={disabled} onClick={add}>Aggiungi la prima opzione di prezzo</button></div>:<>
+  {!formulas.length?<div className="mw-fixed-empty"><p>Il cliente vede il prezzo del menu, non dei piatti.</p><button type="button" data-fixed-add className="mw-pill mw-pill-dark" disabled={disabled} onClick={add}>Aggiungi opzione</button></div>:<>
   <ol className="mw-fixed-list">{formulas.map((f,i)=>{const chosen=new Set(f.sectionIds||[]);return <li key={f.id} className="mw-fixed-row" data-formula={f.id}>
-   <div className="mw-fixed-main"><label className="mw-field"><span>Nome</span><input data-f="name" aria-label={'Nome opzione '+(i+1)} maxLength={120} placeholder="Completo" value={f.name} disabled={disabled} onChange={e=>{const v=e.target.value;edit(m=>TakoMenuFixed.updateFormula(m,f.id,{name:v}));}} onBlur={e=>{if(!e.target.value.trim())edit(m=>TakoMenuFixed.updateFormula(m,f.id,{name:'Opzione '+(i+1)}));}}/></label>
+   <div className="mw-fixed-main"><label className="mw-field"><span>Nome</span><input data-f="name" aria-label={'Nome opzione '+(i+1)} maxLength={120} placeholder="Es. Completo" value={f.name} disabled={disabled} onChange={e=>{const v=e.target.value;edit(m=>TakoMenuFixed.updateFormula(m,f.id,{name:v}));}} onBlur={e=>{if(!e.target.value.trim())edit(m=>TakoMenuFixed.updateFormula(m,f.id,{name:'Opzione '+(i+1)}));}}/></label>
     <MenuFixedPriceInput value={f.price} label={'Prezzo '+(f.name||'opzione')} onCommit={p=>edit(m=>TakoMenuFixed.updateFormula(m,f.id,{price:p}))}/></div>
-   <label className="mw-field"><span>Nota</span><input data-f="note" aria-label={'Nota '+(f.name||'opzione')} maxLength={300} placeholder="Facoltativa" value={f.note||''} disabled={disabled} onChange={e=>{const v=e.target.value;edit(m=>TakoMenuFixed.updateFormula(m,f.id,{note:v}));}}/></label>
-   {sections.length>0&&<div className="mw-fixed-chips" role="group" aria-label={'Sottomenu compresi in '+(f.name||'opzione')}><span className="mw-fixed-chips-label">Comprende</span>{sections.map(s=><button key={s.id} type="button" className="mw-chip" aria-pressed={chosen.has(s.id)} disabled={disabled} onClick={()=>edit(m=>TakoMenuFixed.toggleSection(m,f.id,s.id))}>{parent(s)}{s.name}</button>)}{!chosen.size&&<small className="mw-fixed-all">Tutto il menu</small>}</div>}
+   {f.note||noteOpen.has(f.id)?<label className="mw-field"><span>Nota</span><input data-f="note" aria-label={'Nota '+(f.name||'opzione')} maxLength={300} placeholder="Facoltativa" value={f.note||''} disabled={disabled} onChange={e=>{const v=e.target.value;edit(m=>TakoMenuFixed.updateFormula(m,f.id,{note:v}));}}/></label>
+   :<button type="button" className="mw-fixed-note-add" data-note-add={f.id} disabled={disabled} onClick={()=>{setNoteOpen(s=>new Set(s).add(f.id));focusNext.current=`[data-formula="${f.id}"] input[data-f="note"]`;}}>+ Nota</button>}
+   {sections.length>0&&<div className="mw-fixed-chips" role="group" aria-label={'Sottomenu compresi in '+(f.name||'opzione')}><span className="mw-fixed-chips-label">Comprende</span><button type="button" className="mw-chip" data-all aria-pressed={!chosen.size} disabled={disabled} onClick={()=>edit(m=>TakoMenuFixed.setAllSections(m,f.id))}>Tutto il menu</button>{sections.map(s=><button key={s.id} type="button" className="mw-chip" aria-pressed={chosen.has(s.id)} disabled={disabled} onClick={()=>edit(m=>TakoMenuFixed.toggleSection(m,f.id,s.id))}>{parent(s)}{s.name}</button>)}</div>}
    <div className="mw-fixed-row-actions"><button type="button" className="mw-icon-pill" data-move="up" aria-label={'Sposta su '+(f.name||'opzione')} disabled={disabled||i===0} onClick={()=>move(f,-1,'up')}>↑</button><button type="button" className="mw-icon-pill" data-move="down" aria-label={'Sposta giù '+(f.name||'opzione')} disabled={disabled||i===formulas.length-1} onClick={()=>move(f,1,'down')}>↓</button><button type="button" className="mw-pill mw-fixed-remove" aria-label={'Togli '+(f.name||'opzione')} disabled={disabled} onClick={()=>remove(f,i)}>Togli</button></div>
   </li>;})}</ol>
   {formulas.length<12&&<button type="button" data-fixed-add className="mw-pill" disabled={disabled} onClick={add}>Aggiungi opzione</button>}</>}
@@ -83,16 +87,18 @@ function MenuFixedPricePanel({menu,mutate,onPreview,disabled}){
 window.MenuFixedPricePanel=MenuFixedPricePanel;
 
 /* «Sostituisci i piatti» di un Sottomenu: incolla → riepilogo → conferma nella bozza (poi «Salva» del riquadro). */
-function MenuReplaceItems({menu,section,mutate,adapter,disabled}){
- const [step,setStep]=useState(''),[text,setText]=useState(''),[plan,setPlan]=useState(null),trigger=useRef(null),area=useRef(null),ok=useRef(null);
- useEffect(()=>{setStep('');setText('');setPlan(null);},[section.id]);
+function MenuReplaceItems({menu,section,mutate,adapter,disabled,dirty}){
+ const [step,setStep]=useState(''),[text,setText]=useState(''),[plan,setPlan]=useState(null),[done,setDone]=useState(false),trigger=useRef(null),area=useRef(null),ok=useRef(null);
+ useEffect(()=>{setStep('');setText('');setPlan(null);setDone(false);},[section.id]);
+ // Una sola notifica: la riga «premi Salva» resta nel riquadro finché la bozza non è salvata (poi arriva solo «Menu salvato»).
+ useEffect(()=>{if(dirty===false)setDone(false);},[dirty]);
  useEffect(()=>{if(step==='paste')area.current?.focus();if(step==='review')ok.current?.focus();},[step]);
  const names=TakoMenuFixed.parseList(text);
  const close=()=>{setStep('');setPlan(null);setTimeout(()=>trigger.current?.focus(),0);};
  const review=()=>{setPlan(TakoMenuFixed.planReplace(section,names));setStep('review');};
- const apply=()=>{mutate(d=>{const m=d.menus.find(x=>x.id===menu.id);TakoMenuFixed.applyReplace(m,section.id,names,name=>adapter.newItem(crypto.randomUUID(),name));});toast(`Piatti sostituiti in «${section.name}»: premi Salva`,{type:'success'});setText('');close();};
+ const apply=()=>{mutate(d=>{const m=d.menus.find(x=>x.id===menu.id);TakoMenuFixed.applyReplace(m,section.id,names,name=>adapter.newItem(crypto.randomUUID(),name));});setDone(true);setText('');close();};
  const esc=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();step==='review'?setStep('paste'):close();}};
- if(!step)return <section className="mw-replace"><button ref={trigger} type="button" className="mw-pill" disabled={disabled} onClick={()=>setStep('paste')}>Sostituisci i piatti</button></section>;
+ if(!step)return <section className="mw-replace"><button ref={trigger} type="button" className="mw-pill" disabled={disabled} onClick={()=>{setDone(false);setStep('paste');}}>Sostituisci i piatti</button>{done&&<p className="mw-replace-status" role="status">Piatti sostituiti: premi Salva.</p>}</section>;
  return <section className="mw-replace is-open" aria-label={'Sostituisci i piatti di '+section.name} onKeyDown={esc}>
   {step==='paste'?<><label className="mw-field"><span>Incolla la lista · una riga = un piatto</span><textarea ref={area} rows={7} value={text} placeholder={'Pasta al pomodoro\nRisotto ai funghi\nLasagna'} onChange={e=>setText(e.target.value)}/></label>
    <p className="mw-replace-hint">Stesso nome: restano foto, descrizione e allergeni. Chi non è in lista si nasconde, non si elimina.</p>

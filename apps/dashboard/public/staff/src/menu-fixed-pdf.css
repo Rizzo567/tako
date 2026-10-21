@@ -26,7 +26,9 @@
 .mw-fixed-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .mw-fixed-chips .mw-chip{height:32px;cursor:pointer}
 .mw-fixed-chips-label{font-size:12.5px;font-weight:500;color:var(--ink-2);margin-right:2px}
-.mw-fixed-all{font-size:12px;color:var(--ink-3)}
+.mw-fixed-note-add{align-self:flex-start;border:0;background:none;padding:6px 0;font:inherit;font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer}
+.mw-fixed-note-add:hover:not(:disabled){color:var(--ink)}
+.mw-fixed-note-add:focus-visible{outline:2px solid #111;outline-offset:2px;border-radius:6px}
 .mw-fixed-row-actions{display:flex;gap:6px;justify-content:flex-end}
 .mw-fixed-remove{min-height:40px}
 .mw-fixed-included{margin-top:14px !important}
@@ -76,3 +78,28 @@
 @media (max-width:520px){.mw-fixed-main{grid-template-columns:minmax(0,1fr) 104px}.mw-pdfdoc-actions{width:100%}.mw-pdfdoc-actions .mw-pill{flex:1 1 auto}.mw-pdfdoc-url{flex-direction:column}.mw-pdfdoc-delete{margin-left:0}}
 @media (min-width:721px){.mw-fixed-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px}.mw-fixed-row>.mw-fixed-main,.mw-fixed-row>.mw-field{grid-column:1/-1}.mw-fixed-row>.mw-fixed-chips{grid-column:1}.mw-fixed-row>.mw-fixed-row-actions{grid-column:2}}
 .mw-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* 21/10 sera, giro correzioni revisore */
+.mw-replace-status{margin:0;font-size:12.5px;color:var(--ink)}
+.mw-pdfdoc-saved{margin:0 0 10px}
+.mw-pdfdoc-url .mw-pill{flex:none;min-width:96px;justify-content:center}
+/* «Anteprima cliente» nel riquadro solo senza l'anteprima laterale (mobile). */
+.mw-studio.with-preview .mw-fixed-foot{display:none}
+/* Piatto senza prezzo (Alla carta): campo vuoto con segnaposto, senza «€». */
+.mw .mw-catalog-item .mw-daily-price:has(input:placeholder-shown):before{content:none}
+.mw .mw-catalog-item .mw-daily-price input::placeholder{font-size:11px;font-weight:500;color:var(--ink-3)}
+.mw .mw-catalog-item .mw-daily-price input:placeholder-shown{padding-left:0!important}
+/* «Non salvata» accanto ad «Anteprima cliente»: mai tagliata. */
+.mw-right-phone>.mw-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 8px;min-width:0}
+.mw-right-phone>.mw-row>span{position:static;max-width:none;flex:none;white-space:nowrap}
+/* Mobile: il nome del menu sta su una riga con i puntini, nessun controllo esce dalla barra. */
+.mw-menu-picker{min-width:0;gap:6px}
+.mw-menu-picker>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mw-menu-picker>svg{flex:none}
+@media (max-width:520px){
+ .mw-studio .mw-studio-toolbar{flex-wrap:nowrap;gap:6px;min-width:0}
+ .mw-studio .mw-studio-toolbar .mw-universal-search:not(.is-searching){flex:1 1 0;width:auto;min-width:96px}
+ .mw-studio .mw-studio-toolbar .mw-dp-btn{width:96px;flex:none;padding:0 12px}
+ .mw-studio .mw-studio-toolbar .mw-menu-picker{padding:0 10px 0 12px}
+ .mw-studio .mw-studio-toolbar .mw-dp-spacer{display:none}
+}
+.mw-fixed-row>.mw-fixed-note-add{grid-column:1/-1;justify-self:start}

@@ -1,6 +1,7 @@
 /* PDF multipli del locale con «link fisso» (21/10/2026, CONTRATTO docs/webapp/menu-prezzo-fisso-2026-10-21 §7).
    API (owner/manager/menu_editor): GET/PUT /api/menu-workspace/pdf-documents, POST|DELETE …/:id/link, GET …/:id/pdf.
-   Senza documenti salvati la lista mostra il «PDF predefinito» (calcolato dal server, non salvato).
+   In cima resta sempre il «PDF predefinito» (calcolato dal server, non salvato): «Modifica» apre le sue impostazioni nella scheda PDF.
+   Una sola notifica per volta, dentro il riquadro (niente toast impilati).
    Dopo ogni scrittura si rilegge la lista: la UI mostra solo lo stato reale del server (niente successo ottimistico). */
 
 const MW_PDFDOC_MAX=12;
@@ -32,7 +33,7 @@ function MenuPdfDocumentEditor({draft,setDraft,menus,adapter,basePdf,busy,error,
  const fields=sel?(adapter?.pdfFields||[]).filter(f=>sel[2].includes(f.key)):[];
  const valid=!!draft.name.trim()&&draft.menuIds.length>0;
  return <form className="mw-pdfdoc-editor" aria-label={isNew?'Nuovo PDF':'Modifica '+draft.name} onSubmit={e=>{e.preventDefault();if(valid&&!busy)onSave();}}>
-  <label className="mw-field"><span>Nome</span><input ref={nameRef} maxLength={80} required value={draft.name} placeholder="Menu pranzo" onChange={e=>{const v=e.target.value;setDraft(d=>({...d,name:v}));}}/></label>
+  <label className="mw-field"><span>Nome</span><input ref={nameRef} maxLength={80} required value={draft.name} placeholder="Es. Pranzo del giorno" onChange={e=>{const v=e.target.value;setDraft(d=>({...d,name:v}));}}/></label>
   <fieldset className="mw-pdfdoc-menus"><legend>Menu inclusi · nell’ordine del PDF</legend>
    <ol>{included.map((m,i)=><li key={m.id} className="mw-pdfdoc-menu is-on"><label className="mw-check"><input type="checkbox" checked onChange={()=>setDraft(d=>({...d,menuIds:d.menuIds.filter(x=>x!==m.id)}))}/>{m.name}</label><span className="mw-pdfdoc-order"><button type="button" className="mw-icon-pill" aria-label={'Sposta su '+m.name} disabled={i===0} onClick={()=>move(m.id,-1)}>↑</button><button type="button" className="mw-icon-pill" aria-label={'Sposta giù '+m.name} disabled={i===included.length-1} onClick={()=>move(m.id,1)}>↓</button></span></li>)}
    {others.map(m=><li key={m.id} className="mw-pdfdoc-menu"><label className="mw-check"><input type="checkbox" checked={false} onChange={()=>setDraft(d=>({...d,menuIds:[...d.menuIds,m.id]}))}/>{m.name}{m.active===false&&<small> · nascosto</small>}</label></li>)}</ol>
@@ -68,9 +69,9 @@ function MenuPdfDocumentLink({doc,api,busy,run,notice}){
  </div>;
 }
 
-function MenuPdfDocuments({adapter,document,api=window.TakoPdfDocumentsApi}){
+function MenuPdfDocuments({adapter,document,onEditDefault,api=window.TakoPdfDocumentsApi}){
  const [state,setState]=useState({loading:true,error:'',documents:[],fallback:null});
- const [editing,setEditing]=useState(null),[editError,setEditError]=useState(''),[open,setOpen]=useState(''),[busy,setBusy]=useState(''),[notice,setNotice]=useState({id:'',text:''}),[rowError,setRowError]=useState({id:'',text:''});
+ const [editing,setEditing]=useState(null),[editError,setEditError]=useState(''),[open,setOpen]=useState(''),[busy,setBusy]=useState(''),[notice,setNotice]=useState({id:'',text:''}),[rowError,setRowError]=useState({id:'',text:''}),[saved,setSaved]=useState('');
  const opener=useRef(null),host=useRef(null),mounted=useRef(true);
  useEffect(()=>()=>{mounted.current=false;},[]);
  const menus=document?.menus||[];
@@ -80,22 +81,23 @@ function MenuPdfDocuments({adapter,document,api=window.TakoPdfDocumentsApi}){
  const restore=()=>setTimeout(()=>{const el=opener.current;opener.current=null;if(el?.isConnected)el.focus();else host.current?.querySelector('[data-pdfdoc-new]')?.focus();},0);
  const close=()=>{setEditing(null);setEditError('');restore();};
  const names=ids=>ids.map(id=>menus.find(m=>m.id===id)?.name).filter(Boolean).join(', ')||'Nessun menu';
- const startNew=(from)=>{remember();setOpen('');setEditError('');setEditing({isNew:true,draft:{id:null,name:from?.name&&state.documents.length===0?from.name:'',menuIds:from?.menuIds?.filter(id=>menus.some(m=>m.id===id))||menus.filter(m=>m.active!==false).map(m=>m.id),config:null}});};
- const startEdit=doc=>{remember();setOpen('');setEditError('');setEditing({isNew:false,draft:{id:doc.id,name:doc.name,menuIds:[...doc.menuIds],config:doc.config?JSON.parse(JSON.stringify(doc.config)):null}});};
- const persist=async next=>{setBusy('save');setEditError('');try{await api.save(next);await load();if(mounted.current){setEditing(null);toast('PDF salvato',{type:'success'});restore();}}catch(e){if(mounted.current)setEditError(e.message);}finally{if(mounted.current)setBusy('');}};
+ const startNew=(from)=>{remember();setSaved('');setOpen('');setEditError('');setEditing({isNew:true,draft:{id:null,name:from?.name&&state.documents.length===0?from.name:'',menuIds:from?.menuIds?.filter(id=>menus.some(m=>m.id===id))||menus.filter(m=>m.active!==false).map(m=>m.id),config:null}});};
+ const startEdit=doc=>{remember();setSaved('');setOpen('');setEditError('');setEditing({isNew:false,draft:{id:doc.id,name:doc.name,menuIds:[...doc.menuIds],config:doc.config?JSON.parse(JSON.stringify(doc.config)):null}});};
+ const persist=async next=>{setBusy('save');setEditError('');try{await api.save(next);await load();if(mounted.current){setEditing(null);setSaved(next.length<state.documents.length?'PDF eliminato.':'PDF salvato.');restore();}}catch(e){if(mounted.current)setEditError(e.message);}finally{if(mounted.current)setBusy('');}};
  const save=()=>{const d=editing.draft;const list=editing.isNew?[...state.documents,d]:state.documents.map(x=>x.id===d.id?{...x,...d}:x);persist(list);};
  const remove=()=>{const d=editing.draft;persist(state.documents.filter(x=>x.id!==d.id));};
- const run=async(id,fn,text)=>{setBusy(id);setRowError({id:'',text:''});setNotice({id:'',text:''});try{await fn();await load();if(mounted.current)setNotice({id,text});}catch(e){if(mounted.current)setRowError({id,text:e.message});}finally{if(mounted.current)setBusy('');}};
+ const run=async(id,fn,text)=>{setSaved('');setBusy(id);setRowError({id:'',text:''});setNotice({id:'',text:''});try{await fn();await load();if(mounted.current)setNotice({id,text});}catch(e){if(mounted.current)setRowError({id,text:e.message});}finally{if(mounted.current)setBusy('');}};
  const download=async doc=>{setBusy(doc.id||'default');setRowError({id:'',text:''});try{const blob=doc.id?await api.download(doc.id):await adapter.renderPdf({menuIds:doc.menuIds});window.MW_SAVE_PDF?.(blob,MW_PDFDOC_FILE(doc.name));}catch(e){if(mounted.current)setRowError({id:doc.id||'default',text:e.message||'PDF non disponibile'});}finally{if(mounted.current)setBusy('');}};
  const key=e=>{if(e.key!=='Escape')return;if(editing){e.preventDefault();close();}else if(open){e.preventDefault();const id=open;setOpen('');setTimeout(()=>host.current?.querySelector(`[data-pdfdoc-link="${id}"]`)?.focus(),0);}};
  const docs=state.documents,editorFor=id=>editing&&(editing.isNew?id==='new':editing.draft.id===id);
  const editor=editing&&<MenuPdfDocumentEditor draft={editing.draft} setDraft={fn=>setEditing(e=>({...e,draft:typeof fn==='function'?fn(e.draft):fn}))} menus={menus} adapter={adapter} basePdf={document?.pdf} busy={busy==='save'} error={editError} isNew={editing.isNew} onSave={save} onCancel={close} onDelete={remove}/>;
  return <Card className="mw-pdfdoc"><section ref={host} aria-labelledby="mw-pdfdoc-title" onKeyDown={key}>
   <div className="mw-pdfdoc-head"><div><h3 id="mw-pdfdoc-title">I tuoi PDF</h3><p className="mw-pdfdoc-hint">Ogni PDF ha i suoi menu e un link fisso sempre aggiornato.</p></div>{!state.loading&&!state.error&&!editorFor('new')&&<button type="button" data-pdfdoc-new className="mw-pill" disabled={docs.length>=MW_PDFDOC_MAX||!menus.length} onClick={()=>startNew(null)}>Nuovo PDF</button>}</div>
+  {saved&&!editing&&<p className="mw-pdfdoc-status mw-pdfdoc-saved" role="status">{saved}</p>}
   {state.loading?<TakoLoading label="Caricamento PDF…" variant="inline"/>:state.error?<div className="mw-pdfdoc-error"><p role="alert">{state.error}</p><button type="button" className="mw-pill" onClick={()=>{setState(s=>({...s,loading:true,error:''}));load();}}>Riprova</button></div>:<>
    {editorFor('new')&&editor}
    <ul className="mw-pdfdoc-list">
-    {!docs.length&&state.fallback&&<li className="mw-pdfdoc-row is-default"><div className="mw-pdfdoc-info"><strong>{state.fallback.name||'PDF predefinito'}</strong><small>Predefinito · {names(state.fallback.menuIds||[])}</small></div><div className="mw-pdfdoc-actions"><button type="button" className="mw-pill" disabled={!!busy} onClick={()=>download({name:state.fallback.name||'menu',menuIds:state.fallback.menuIds||[]})}>{busy==='default'?'Preparazione…':'Scarica'}</button><button type="button" className="mw-pill" disabled={!!editing} onClick={()=>startNew(state.fallback)}>Personalizza</button></div>{rowError.id==='default'&&<p role="alert" className="mw-pdfdoc-error">{rowError.text}</p>}</li>}
+    {state.fallback&&<li className="mw-pdfdoc-row is-default"><div className="mw-pdfdoc-info"><strong>{state.fallback.name||'PDF predefinito'}</strong><small>Predefinito · {names(state.fallback.menuIds||[])}</small></div><div className="mw-pdfdoc-actions"><button type="button" className="mw-pill" disabled={!!busy} onClick={()=>download({name:state.fallback.name||'menu',menuIds:state.fallback.menuIds||[]})}>{busy==='default'?'Preparazione…':'Scarica'}</button><button type="button" className="mw-pill" data-pdfdoc-default-edit disabled={!!editing} onClick={()=>onEditDefault?onEditDefault():startNew(state.fallback)}>Modifica</button></div>{rowError.id==='default'&&<p role="alert" className="mw-pdfdoc-error">{rowError.text}</p>}</li>}
     {docs.map(doc=><li key={doc.id} className={'mw-pdfdoc-row'+(open===doc.id?' is-open':'')} data-pdfdoc={doc.id}>
      {editorFor(doc.id)?editor:<>
      <div className="mw-pdfdoc-info"><strong>{doc.name}</strong><small>{names(doc.menuIds)}{doc.config?' · grafica propria':''}{doc.shareToken?' · link attivo':''}</small></div>

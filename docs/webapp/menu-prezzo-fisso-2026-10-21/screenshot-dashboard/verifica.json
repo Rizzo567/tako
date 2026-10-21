@@ -16,32 +16,36 @@
   },
   "risultati": [
     "desktop: Impostazioni menu: scelta «Alla carta / Prezzo fisso»",
-    "desktop: freccia sulla scelta passa a Prezzo fisso e porta il focus",
-    "desktop: Prezzo fisso scelto: riga «I prezzi dei piatti restano salvati»",
+    "desktop: freccia sulla scelta passa a Prezzo fisso; la scelta resta solo nel riquadro Prezzo fisso e il focus la segue",
+    "desktop: Prezzo fisso scelto: la scelta e la riga «I prezzi dei piatti restano salvati» solo nel riquadro Prezzo fisso",
     "desktop: Menu fisso senza opzioni: invito ad aggiungere la prima",
     "desktop: Elenco piatti del menu fisso: nessun prezzo",
-    "desktop: Tre opzioni con nome, prezzo, nota e Sottomenu compresi",
+    "desktop: «Tutto il menu» selezionato quando nessun sottomenu è scelto; sceglierlo azzera la scelta",
+    "desktop: Tre opzioni (come Victoria Cena), «Comprende» = Sottomenu compresi: Completo = Primi+Secondi+Contorni, Solo primo, Solo secondo; nota solo dove scritta",
     "desktop: Campo «Compreso» compilato",
     "desktop: Riordino: «Completo» spostato dopo «Solo primo»",
     "desktop: Sostituisci i piatti: lista incollata",
     "desktop: Riepilogo: restano 2 (uno torna visibile), nuovo 1, nascosto 1",
-    "desktop: conferma applica nella bozza",
+    "desktop: conferma applica nella bozza; «premi Salva» resta nel riquadro, niente toast",
+    "desktop: Dopo «Conferma»: una sola riga «Piatti sostituiti: premi Salva.» nel riquadro, nessun toast",
     "desktop: salvato nel formato del contratto (pricing, formulas con sectionIds, included; piatti nascosti, prezzi intatti)",
-    "desktop: Dopo la sostituzione: Lasagna nascosta, Gnocchi nuovo senza prezzo",
-    "desktop: Anteprima cliente (renderer vero di apps/web)",
-    "desktop: Esc chiude l’anteprima e rende il focus",
-    "desktop: Rimesso «Alla carta»: i prezzi dei piatti tornano",
+    "desktop: dopo Salva una sola notifica («Menu salvato»)",
+    "desktop: Dopo la sostituzione e il salvataggio: Lasagna nascosta, Gnocchi nuovo senza prezzo",
+    "desktop: Anteprima cliente (renderer vero di apps/web): schede come Victoria (Completo, Primi, Secondi)",
+    "desktop: Rimesso «Alla carta»: i prezzi tornano; il piatto nuovo mostra «Senza prezzo», non «€ 0»",
     "desktop: carta↔fisso conserva i prezzi",
-    "desktop: Nuovo menu: scelto «Prezzo fisso» alla creazione",
+    "desktop: Nuovo menu (scelte: Sottomenu / Piatto / Menu): scelto «Prezzo fisso» alla creazione",
     "desktop: Menu nuovo a prezzo fisso: stato vuoto",
     "desktop: tutti i prezzi originali intatti dopo fisso→carta e sostituzione",
     "desktop: PDF: nessun documento salvato → «PDF predefinito»",
     "desktop: Nuovo PDF: nome, menu inclusi, grafica",
     "desktop: Esc chiude l’editor PDF e rende il focus a «Nuovo PDF»",
     "desktop: Menu inclusi e loro ordine (Cena prima di Pranzo)",
-    "desktop: Grafica propria: controlli del PDF esistenti",
+    "desktop: Grafica propria: controlli del PDF esistenti, etichette in italiano",
+    "desktop: grafica PDF in italiano, «Ogni sottomenu su una pagina nuova»",
     "desktop: PUT {documents:[{name,menuIds,config}]} senza id per il nuovo",
-    "desktop: Lista dei PDF salvati",
+    "desktop: dopo il salvataggio il PDF predefinito resta in lista; una sola conferma nel riquadro",
+    "desktop: Lista dei PDF: PDF predefinito sempre in cima + PDF salvato",
     "desktop: crea e rinomina",
     "desktop: Conferma eliminazione di un PDF",
     "desktop: elimina con conferma",
@@ -53,34 +57,40 @@
     "desktop: rigenera → token nuovo",
     "desktop: Link revocato: si può crearne uno nuovo",
     "desktop: Esc chiude il link fisso e rende il focus",
-    "desktop: Pannello «I tuoi PDF» anche nella scheda PDF",
+    "desktop: Scheda PDF aperta da «PDF predefinito → Modifica»: solo le impostazioni del PDF predefinito, anteprima vera (Pagina 1 di 1)",
+    "desktop: scheda PDF con un solo sistema (impostazioni del PDF predefinito)",
     "mobile: Impostazioni menu: scelta «Alla carta / Prezzo fisso»",
-    "mobile: freccia sulla scelta passa a Prezzo fisso e porta il focus",
-    "mobile: Prezzo fisso scelto: riga «I prezzi dei piatti restano salvati»",
+    "mobile: freccia sulla scelta passa a Prezzo fisso; la scelta resta solo nel riquadro Prezzo fisso e il focus la segue",
+    "mobile: Prezzo fisso scelto: la scelta e la riga «I prezzi dei piatti restano salvati» solo nel riquadro Prezzo fisso",
     "mobile: Menu fisso senza opzioni: invito ad aggiungere la prima",
     "mobile: Elenco piatti del menu fisso: nessun prezzo",
-    "mobile: Tre opzioni con nome, prezzo, nota e Sottomenu compresi",
+    "mobile: «Tutto il menu» selezionato quando nessun sottomenu è scelto; sceglierlo azzera la scelta",
+    "mobile: Tre opzioni (come Victoria Cena), «Comprende» = Sottomenu compresi: Completo = Primi+Secondi+Contorni, Solo primo, Solo secondo; nota solo dove scritta",
     "mobile: Campo «Compreso» compilato",
     "mobile: Riordino: «Completo» spostato dopo «Solo primo»",
     "mobile: Sostituisci i piatti: lista incollata",
     "mobile: Riepilogo: restano 2 (uno torna visibile), nuovo 1, nascosto 1",
-    "mobile: conferma applica nella bozza",
+    "mobile: conferma applica nella bozza; «premi Salva» resta nel riquadro, niente toast",
+    "mobile: Dopo «Conferma»: una sola riga «Piatti sostituiti: premi Salva.» nel riquadro, nessun toast",
     "mobile: salvato nel formato del contratto (pricing, formulas con sectionIds, included; piatti nascosti, prezzi intatti)",
-    "mobile: Dopo la sostituzione: Lasagna nascosta, Gnocchi nuovo senza prezzo",
-    "mobile: Anteprima cliente (renderer vero di apps/web)",
+    "mobile: dopo Salva una sola notifica («Menu salvato»)",
+    "mobile: Dopo la sostituzione e il salvataggio: Lasagna nascosta, Gnocchi nuovo senza prezzo",
+    "mobile: Anteprima cliente (renderer vero di apps/web): schede come Victoria (Completo, Primi, Secondi)",
     "mobile: Esc chiude l’anteprima e rende il focus",
-    "mobile: Rimesso «Alla carta»: i prezzi dei piatti tornano",
+    "mobile: Rimesso «Alla carta»: i prezzi tornano; il piatto nuovo mostra «Senza prezzo», non «€ 0»",
     "mobile: carta↔fisso conserva i prezzi",
-    "mobile: Nuovo menu: scelto «Prezzo fisso» alla creazione",
+    "mobile: Nuovo menu (scelte: Sottomenu / Piatto / Menu): scelto «Prezzo fisso» alla creazione",
     "mobile: Menu nuovo a prezzo fisso: stato vuoto",
     "mobile: tutti i prezzi originali intatti dopo fisso→carta e sostituzione",
     "mobile: PDF: nessun documento salvato → «PDF predefinito»",
     "mobile: Nuovo PDF: nome, menu inclusi, grafica",
     "mobile: Esc chiude l’editor PDF e rende il focus a «Nuovo PDF»",
     "mobile: Menu inclusi e loro ordine (Cena prima di Pranzo)",
-    "mobile: Grafica propria: controlli del PDF esistenti",
+    "mobile: Grafica propria: controlli del PDF esistenti, etichette in italiano",
+    "mobile: grafica PDF in italiano, «Ogni sottomenu su una pagina nuova»",
     "mobile: PUT {documents:[{name,menuIds,config}]} senza id per il nuovo",
-    "mobile: Lista dei PDF salvati",
+    "mobile: dopo il salvataggio il PDF predefinito resta in lista; una sola conferma nel riquadro",
+    "mobile: Lista dei PDF: PDF predefinito sempre in cima + PDF salvato",
     "mobile: crea e rinomina",
     "mobile: Conferma eliminazione di un PDF",
     "mobile: elimina con conferma",
@@ -92,6 +102,8 @@
     "mobile: rigenera → token nuovo",
     "mobile: Link revocato: si può crearne uno nuovo",
     "mobile: Esc chiude il link fisso e rende il focus",
+    "mobile: Scheda PDF aperta da «PDF predefinito → Modifica»: solo le impostazioni del PDF predefinito",
+    "mobile: scheda PDF con un solo sistema (impostazioni del PDF predefinito)",
     "nessun errore nel browser"
   ],
   "screenshot": [
@@ -103,7 +115,7 @@
     {
       "file": "desktop-02-riga-prezzi-conservati.png",
       "vp": "desktop",
-      "label": "Prezzo fisso scelto: riga «I prezzi dei piatti restano salvati»"
+      "label": "Prezzo fisso scelto: la scelta e la riga «I prezzi dei piatti restano salvati» solo nel riquadro Prezzo fisso"
     },
     {
       "file": "desktop-03-stato-vuoto.png",
@@ -118,7 +130,7 @@
     {
       "file": "desktop-05-opzioni-compilate.png",
       "vp": "desktop",
-      "label": "Tre opzioni con nome, prezzo, nota e Sottomenu compresi"
+      "label": "Tre opzioni (come Victoria Cena), «Comprende» = Sottomenu compresi: Completo = Primi+Secondi+Contorni, Solo primo, Solo secondo; nota solo dove scritta"
     },
     {
       "file": "desktop-06-compreso.png",
@@ -141,24 +153,29 @@
       "label": "Riepilogo: restano 2 (uno torna visibile), nuovo 1, nascosto 1"
     },
     {
+      "file": "desktop-09b-sostituisci-premi-salva.png",
+      "vp": "desktop",
+      "label": "Dopo «Conferma»: una sola riga «Piatti sostituiti: premi Salva.» nel riquadro, nessun toast"
+    },
+    {
       "file": "desktop-10-dopo-sostituzione.png",
       "vp": "desktop",
-      "label": "Dopo la sostituzione: Lasagna nascosta, Gnocchi nuovo senza prezzo"
+      "label": "Dopo la sostituzione e il salvataggio: Lasagna nascosta, Gnocchi nuovo senza prezzo"
     },
     {
       "file": "desktop-11-anteprima-cliente.png",
       "vp": "desktop",
-      "label": "Anteprima cliente (renderer vero di apps/web)"
+      "label": "Anteprima cliente (renderer vero di apps/web): schede come Victoria (Completo, Primi, Secondi)"
     },
     {
       "file": "desktop-12-tornato-alla-carta.png",
       "vp": "desktop",
-      "label": "Rimesso «Alla carta»: i prezzi dei piatti tornano"
+      "label": "Rimesso «Alla carta»: i prezzi tornano; il piatto nuovo mostra «Senza prezzo», non «€ 0»"
     },
     {
       "file": "desktop-13-nuovo-menu-fisso.png",
       "vp": "desktop",
-      "label": "Nuovo menu: scelto «Prezzo fisso» alla creazione"
+      "label": "Nuovo menu (scelte: Sottomenu / Piatto / Menu): scelto «Prezzo fisso» alla creazione"
     },
     {
       "file": "desktop-14-nuovo-menu-fisso-vuoto.png",
@@ -183,12 +200,12 @@
     {
       "file": "desktop-23-pdf-grafica.png",
       "vp": "desktop",
-      "label": "Grafica propria: controlli del PDF esistenti"
+      "label": "Grafica propria: controlli del PDF esistenti, etichette in italiano"
     },
     {
       "file": "desktop-24-pdf-lista.png",
       "vp": "desktop",
-      "label": "Lista dei PDF salvati"
+      "label": "Lista dei PDF: PDF predefinito sempre in cima + PDF salvato"
     },
     {
       "file": "desktop-25-pdf-elimina-conferma.png",
@@ -223,7 +240,7 @@
     {
       "file": "desktop-31-pdf-scheda-pdf.png",
       "vp": "desktop",
-      "label": "Pannello «I tuoi PDF» anche nella scheda PDF"
+      "label": "Scheda PDF aperta da «PDF predefinito → Modifica»: solo le impostazioni del PDF predefinito, anteprima vera (Pagina 1 di 1)"
     },
     {
       "file": "mobile-01-scelta-carta-fisso.png",
@@ -233,7 +250,7 @@
     {
       "file": "mobile-02-riga-prezzi-conservati.png",
       "vp": "mobile",
-      "label": "Prezzo fisso scelto: riga «I prezzi dei piatti restano salvati»"
+      "label": "Prezzo fisso scelto: la scelta e la riga «I prezzi dei piatti restano salvati» solo nel riquadro Prezzo fisso"
     },
     {
       "file": "mobile-03-stato-vuoto.png",
@@ -248,7 +265,7 @@
     {
       "file": "mobile-05-opzioni-compilate.png",
       "vp": "mobile",
-      "label": "Tre opzioni con nome, prezzo, nota e Sottomenu compresi"
+      "label": "Tre opzioni (come Victoria Cena), «Comprende» = Sottomenu compresi: Completo = Primi+Secondi+Contorni, Solo primo, Solo secondo; nota solo dove scritta"
     },
     {
       "file": "mobile-06-compreso.png",
@@ -271,24 +288,29 @@
       "label": "Riepilogo: restano 2 (uno torna visibile), nuovo 1, nascosto 1"
     },
     {
+      "file": "mobile-09b-sostituisci-premi-salva.png",
+      "vp": "mobile",
+      "label": "Dopo «Conferma»: una sola riga «Piatti sostituiti: premi Salva.» nel riquadro, nessun toast"
+    },
+    {
       "file": "mobile-10-dopo-sostituzione.png",
       "vp": "mobile",
-      "label": "Dopo la sostituzione: Lasagna nascosta, Gnocchi nuovo senza prezzo"
+      "label": "Dopo la sostituzione e il salvataggio: Lasagna nascosta, Gnocchi nuovo senza prezzo"
     },
     {
       "file": "mobile-11-anteprima-cliente.png",
       "vp": "mobile",
-      "label": "Anteprima cliente (renderer vero di apps/web)"
+      "label": "Anteprima cliente (renderer vero di apps/web): schede come Victoria (Completo, Primi, Secondi)"
     },
     {
       "file": "mobile-12-tornato-alla-carta.png",
       "vp": "mobile",
-      "label": "Rimesso «Alla carta»: i prezzi dei piatti tornano"
+      "label": "Rimesso «Alla carta»: i prezzi tornano; il piatto nuovo mostra «Senza prezzo», non «€ 0»"
     },
     {
       "file": "mobile-13-nuovo-menu-fisso.png",
       "vp": "mobile",
-      "label": "Nuovo menu: scelto «Prezzo fisso» alla creazione"
+      "label": "Nuovo menu (scelte: Sottomenu / Piatto / Menu): scelto «Prezzo fisso» alla creazione"
     },
     {
       "file": "mobile-14-nuovo-menu-fisso-vuoto.png",
@@ -313,12 +335,12 @@
     {
       "file": "mobile-23-pdf-grafica.png",
       "vp": "mobile",
-      "label": "Grafica propria: controlli del PDF esistenti"
+      "label": "Grafica propria: controlli del PDF esistenti, etichette in italiano"
     },
     {
       "file": "mobile-24-pdf-lista.png",
       "vp": "mobile",
-      "label": "Lista dei PDF salvati"
+      "label": "Lista dei PDF: PDF predefinito sempre in cima + PDF salvato"
     },
     {
       "file": "mobile-25-pdf-elimina-conferma.png",
@@ -349,6 +371,11 @@
       "file": "mobile-30-link-revocato.png",
       "vp": "mobile",
       "label": "Link revocato: si può crearne uno nuovo"
+    },
+    {
+      "file": "mobile-31-pdf-scheda-pdf.png",
+      "vp": "mobile",
+      "label": "Scheda PDF aperta da «PDF predefinito → Modifica»: solo le impostazioni del PDF predefinito"
     }
   ]
 }
