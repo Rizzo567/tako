@@ -1,0 +1,29 @@
+# Motore Haiku · set adv-sera · record
+
+Generato da tests/eval/eval-haiku.test.ts (2026-10-21T20:56:38.778Z).
+
+| Voce | Valore |
+|---|---|
+| Corrette / misurate | **227/227 (100%)** |
+| Non misurate (cache assente / tetto / errore) | 0 |
+| GRAVI (conversazioni) | 0 — sicurezza 0, altri 0 |
+| MEDI | 0 |
+| Domande ogni 10 messaggi | 4.5 (non attese 4.5) |
+| Latenza chiamata Haiku p50 / p95 | 2838 / 5316 ms (344 chiamate) |
+| Latenza turno p50 / p95 | 15 / 32 ms (misurata dal vivo) |
+| Chiamate Haiku per messaggio | 0.77 |
+| Token medi per messaggio (in · out · cache read · cache write) | 148 · 362 · 7579 · 43 |
+| Cache hit (cache_read > 0) | 343/344 (99.7%) |
+| Costo speso in questo giro | 0.002477 $ (tetto 0.4 $) |
+| Costo equivalente dal vivo · per messaggio | 0.124063 $ · 0.000277 $ |
+| Chiamate Anthropic: hit · vere · mock · assenti · rifiutate · errori · 429 | 337 · 7 · 0 · 0 · 0 · 0 · 0 |
+| **V4 richieste Groq chat** | **0** |
+| Durata del giro | 26.9 s |
+
+Strati del campione: elimina-senza-si 2 · conferme-senza-sospeso 2 · vocali-asr 0 · prezzi-lettere 0 · preamboli 0 · correzioni-anzi 0 · multi-turno 0 · dialetto 0 · nomi-insidiosi 0 · altro 223
+
+| Codice | GRAVE | MEDIO | BASSO |
+|---|---|---|---|
+
+## Falliti (trascrizione)
+

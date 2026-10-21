@@ -209,3 +209,13 @@ Object.assign(FIXTURES,{qasera})
 // qasera139: qasera dopo la sera (v139 dal vivo, 22/10): nel Menu pranzo c'è già «Primi» con Gnocchi al ragù a 10.
 export const qasera139:MenuFixture=(()=>{const f:MenuFixture={key:'qasera139',restaurant:'Tako · Verifica web',menu:structuredClone(qasera.menu)};(f.menu as any).menus[1].sections.push({id:'7bbbbbbb-7777-4777-8777-000000000001',name:'Primi',items:[{id:'5bbbbbbb-5555-4555-8555-000000000001',name:'Gnocchi al ragù',price:10}]});return f})()
 Object.assign(FIXTURES,{qasera139})
+
+// ---------------- Set NOTTE-1022 (22/10/2026 notte, cases/notte-1022.ts) ----------------
+// notte: locale INVENTATO con nomi simili (Carbonara / Carbonara di mare, Cotoletta / Cotoletta alla bolognese, Tiramisù / Tiramisù al
+// pistacchio, Margherita / Margherita bufala) e un Menu «Pizze» con il sottomenu «Pizze», più «Pizze» anche nel Menu «Cena».
+export const notte=build('notte',21,{restaurant:'Osteria Notturna (prova)',menus:[
+ ['Pranzo','lunch',[['Primi',[['Carbonara',12],['Carbonara di mare',15],['Amatriciana',11],['Gricia',11]]],['Secondi',[['Cotoletta',14],['Cotoletta alla bolognese',16],['Tagliata',18]]],['Dolci',[['Tiramisù',6],['Tiramisù al pistacchio',7]]]]],
+ ['Pizze','dinner',[['Pizze',[['Margherita',7],['Margherita bufala',9],['Diavola',8.5],['Capricciosa',9]]],['Fritti',[['Supplì',2.5],['Crocchetta',2]]]]],
+ ['Cena','dinner',[['Pizze',[['Marinara',6],['Napoli',7.5]]],['Primi',[['Risotto ai funghi',14]]]]],
+ ['Bevande','drinks',[['Bibite',[['Acqua',2],['Coca Cola',3.5],['Birra media',5]]]]]]})
+Object.assign(FIXTURES,{notte})

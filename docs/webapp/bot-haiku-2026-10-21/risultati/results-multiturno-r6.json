@@ -1,0 +1,2268 @@
+{
+ "set": "multiturno",
+ "metriche": {
+  "set": "multiturno",
+  "modo": "record",
+  "conversazioni": 34,
+  "misurate": 34,
+  "nonMisurate": [],
+  "messaggi": 89,
+  "corrette": 34,
+  "percentuale": 100,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 4.9,
+  "domandeNonAttesePer10": 4.7,
+  "latenzaAnthropicMs": {
+   "p50": 2416,
+   "p95": 5316,
+   "chiamate": 68
+  },
+  "latenzaTurnoMs": {
+   "p50": 16,
+   "p95": 45,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 0.76,
+  "tokenMediPerMessaggio": {
+   "input": 322,
+   "output": 338,
+   "cacheRead": 7107,
+   "cacheWrite": 517
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 64,
+   "su": 68,
+   "percentuale": 94.1
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.02997,
+   "perMessaggioUsd": 0.000337,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 68,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 3.2
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "mt-vera",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|gnocchi al ragu|10|primi",
+    "price|Pasta al pesto e lasagna|9",
+    "price|la parmigiana|13.5",
+    "price|pasta al pesto|10",
+    "price|pasta al ragù|9",
+    "price|pasta all'amatriciana|12",
+    "price|pasta alla norma|11",
+    "price|riso giallo|9"
+   ],
+   "actual": [
+    "create|gnocchi al ragu|10|primi",
+    "price|Pasta al pesto e lasagna|9",
+    "price|la parmigiana|13.5",
+    "price|pasta al pesto|10",
+    "price|pasta al ragù|9",
+    "price|pasta all'amatriciana|12",
+    "price|pasta alla norma|11",
+    "price|riso giallo|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *La parmigiana* a 12,50 €.\n\n*la parmigiana*: prezzo da 15,00 € a *12,50 €*",
+    "Non ho cambiato nulla.\n\n1. *la parmigiana* (12,50 €)",
+    "Messi a 9,00 € i prezzi di 6 piatti.\n\n*pasta al ragù*: prezzo da 10,00 € a *9,00 €*\n*Pasta al pesto e lasagna*: prezzo da 10,01 € a *9,00 €*\n*pasta al pesto*: prezzo da 11,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 10,00 € a *9,00 €*\n*pasta all'amatriciana*: prezzo da 11,00 € a *9,00 €*\n*pasta alla norma*: prezzo da 10,00 € a *9,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "*pasta all'amatriciana*: prezzo da 9,00 € a *11,00 €*\n*pasta alla norma*: prezzo da 9,00 € a *10,00 €*",
+    "Per «solamente pasta al pesto e carbonara» a quale piatto ti riferisci? Rispondi col numero.\n\n1. *pasta al pesto* (9,00 €)\n2. *pasta carbonara* (9,00 €)",
+    "Menu *Menu di verifica · web QA*: ora si chiama *Menu di prova*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Nel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì? Rispondi *sì* oppure dimmi il nome del sottomenu. Dimmi anche il prezzo.",
+    "Per il Menu pranzo ti consiglio *Primi*, come nel resto del locale. Se va bene, rispondi *sì* e creo il Sottomenu *Primi* con *Lasagna*, ma mi serve anche il prezzo della lasagna.",
+    "Ho creato il sottomenu *Primi* nel Menu *Menu pranzo*.\n\nA che prezzo metto *Lasagna* nei *Primi*?",
+    "Mi serve solo il prezzo: quanto costa *Lasagna*? Scrivimi il numero, per esempio «12».",
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
+    "Aumentati di 1,00 € i prezzi di 6 piatti.\n\n*la parmigiana*: prezzo da 12,50 € a *13,50 €*\n*pasta al pesto*: prezzo da 9,00 € a *10,00 €*\n*pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta all'amatriciana*: prezzo da 11,00 € a *12,00 €*\n*pasta alla norma*: prezzo da 10,00 € a *11,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Nuovo piatto *Gnocchi al ragù* in *Primi*: *10,00 €*"
+   ],
+   "turns": [
+    "🎤 La parmigiana passa a 12.50.",
+    "🎤 No, ha detto la parmigiana.",
+    "🎤 Ok, adesso metti tutte le paste a 9 euro.",
+    "🎤 No, no, diminuisci il prezzo solamente a quelle là che sono visibili.",
+    "solamente pasta al pesto e carbonara",
+    "🎤 Cambia il nome del menù, da menù di verifica a menù di prova.",
+    "🎤 No vabbè fa niente, voglio che aggiungi nel menù pranzo le lasagne.",
+    "🎤 Tu come mi consiglieresti di chiamare il sottomenù?",
+    "si",
+    "si",
+    "si voglio chiamarlo primi",
+    "aumenta tutti i primi di 1 euro",
+    "aggiungi gnocchi al ragu in menu pranzo a 10"
+   ],
+   "clarifications": 5,
+   "unexpectedClarifications": 5,
+   "llmCalls": 13,
+   "llmMisses": 0,
+   "llmTokens": 141419,
+   "latencyMs": [
+    172.5,
+    67,
+    43.8,
+    17.4,
+    37.6,
+    19.4,
+    37.6,
+    37.5,
+    90.9,
+    9.1,
+    17.9,
+    45.1,
+    23.8
+   ],
+   "recordedLlmMs": 27932,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "note": "conversazione vera: 5 «solamente pasta al pesto e carbonara» può valere come correzione (solo quelle due a 9) o come conferma; 12 «tutti i primi» con o senza i nascosti; Lasagne senza prezzo mai create con un prezzo inventato",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-si-catena",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|primi"
+   ],
+   "actual": [
+    "create|lasagna|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Nuovo Sottomenu *Primi* nel Menu *Menu pranzo*\nNuovo piatto *Lasagna* in *Primi*: *12,00 €*",
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne a 12",
+    "si",
+    "si"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 31791,
+   "latencyMs": [
+    19.6,
+    15.3,
+    18.5
+   ],
+   "recordedLlmMs": 7234,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "note": "sì applica sottomenu + piatto in un colpo; il secondo sì non duplica né ripete la domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-si-voglio",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|primi"
+   ],
+   "actual": [
+    "create|lasagna|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Nuovo Sottomenu *Primi* nel Menu *Menu pranzo*\nNuovo piatto *Lasagna* in *Primi*: *12,00 €*"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne a 12",
+    "sì voglio chiamarlo primi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10529,
+   "latencyMs": [
+    17.8,
+    15.2
+   ],
+   "recordedLlmMs": 3584,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-si-vocale",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|primi"
+   ],
+   "actual": [
+    "create|lasagna|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Nuovo Sottomenu *Primi* nel Menu *Menu pranzo*\nNuovo piatto *Lasagna* in *Primi*: *12,00 €*"
+   ],
+   "turns": [
+    "🎤 aggiungi nel menù pranzo le lasagne a dodici euro",
+    "🎤 sì"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10645,
+   "latencyMs": [
+    16.7,
+    12.1
+   ],
+   "recordedLlmMs": 4039,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-si-consiglio",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|primi"
+   ],
+   "actual": [
+    "create|lasagna|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Per le lasagne ti consiglio *Primi*, il nome più usato nei menu. Se vuoi, creo il sottomenu *Primi* nel *Menu pranzo* e metto *Lasagna* a *12 €*: rispondi *sì*.",
+    "Nuovo Sottomenu *Primi* nel Menu *Menu pranzo*\nNuovo piatto *Lasagna* in *Primi*: *12,00 €*"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne a 12",
+    "come mi consigli di chiamare il sottomenu?",
+    "ok"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20950,
+   "latencyMs": [
+    18.8,
+    26.6,
+    12.2
+   ],
+   "recordedLlmMs": 4991,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-si-senza-prezzo",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|primi"
+   ],
+   "actual": [
+    "create|lasagna|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì? Rispondi *sì* oppure dimmi il nome del sottomenu. Dimmi anche il prezzo.",
+    "Ho creato il sottomenu *Primi* nel Menu *Menu pranzo*.\n\nA che prezzo metto *Lasagna* nei *Primi*?",
+    "Nuovo piatto *Lasagna* in *Primi*: *12,00 €*"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne",
+    "si",
+    "12"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10626,
+   "latencyMs": [
+    16.1,
+    11.1,
+    12.3
+   ],
+   "recordedLlmMs": 4174,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "note": "senza prezzo: al sì il sottomenu, poi il prezzo completa il piatto",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-nome-diverso",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|paste fresche"
+   ],
+   "actual": [
+    "create|lasagna|12|paste fresche"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Nuovo Sottomenu *Paste fresche* nel Menu *Menu pranzo*\nNuovo piatto *Lasagna* in *Paste fresche*: *12,00 €*"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne a 12",
+    "no, chiamalo Paste fresche"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10529,
+   "latencyMs": [
+    14.5,
+    12.9
+   ],
+   "recordedLlmMs": 3584,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-domanda-a-meta",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|12|primi"
+   ],
+   "actual": [
+    "create|lasagna|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Il *tiramisù* costa *15 €*.\n\n*tiramisù*: *15,00 €* · disponibile",
+    "Nuovo Sottomenu *Primi* nel Menu *Menu pranzo*\nNuovo piatto *Lasagna* in *Primi*: *12,00 €*"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne a 12",
+    "❓ quanto costa il tiramisù?",
+    "si"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20876,
+   "latencyMs": [
+    15,
+    19,
+    12.5
+   ],
+   "recordedLlmMs": 4886,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-cambio-argomento",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|16",
+    "price|pasta al pesto|12",
+    "price|pasta all'amatriciana|12",
+    "price|pasta alla norma|11",
+    "price|pasta carbonara|11",
+    "price|riso giallo|9"
+   ],
+   "actual": [
+    "price|la parmigiana|16",
+    "price|pasta al pesto|12",
+    "price|pasta all'amatriciana|12",
+    "price|pasta alla norma|11",
+    "price|pasta carbonara|11",
+    "price|riso giallo|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì? Rispondi *sì* oppure dimmi il nome del sottomenu. Dimmi anche il prezzo.",
+    "Aumentati di 1,00 € i prezzi di 6 piatti.\n\n*la parmigiana*: prezzo da 15,00 € a *16,00 €*\n*pasta al pesto*: prezzo da 11,00 € a *12,00 €*\n*pasta carbonara*: prezzo da 10,00 € a *11,00 €*\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta all'amatriciana*: prezzo da 11,00 € a *12,00 €*\n*pasta alla norma*: prezzo da 10,00 € a *11,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne",
+    "aumenta tutti i primi di 1 euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21214,
+   "latencyMs": [
+    13.9,
+    31.8
+   ],
+   "recordedLlmMs": 6635,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "note": "il comando nuovo chiude la domanda sul sottomenu ed è eseguito da solo",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-fa-niente",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|riso giallo|true"
+   ],
+   "actual": [
+    "hidden|riso giallo|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì? Rispondi *sì* oppure dimmi il nome del sottomenu. Dimmi anche il prezzo.",
+    "Nascondo il *Riso giallo* dal menu.\n\n*riso giallo*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne",
+    "🎤 No vabbè fa niente, nascondi il riso giallo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20861,
+   "latencyMs": [
+    13.2,
+    27.8
+   ],
+   "recordedLlmMs": 5795,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-comando-su-domanda",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|7"
+   ],
+   "actual": [
+    "price|tiramisù|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale pasta vuoi mettere a *10 €*? Dimmi il nome preciso del *Piatto*.",
+    "Metto il *tiramisù* a 7 €.\n\n*tiramisù*: prezzo da 15,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "la pasta a 10",
+    "metti il tiramisù a 7"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20642,
+   "latencyMs": [
+    13.4,
+    52.8
+   ],
+   "recordedLlmMs": 5183,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-no-poi-comando",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|tiramisù|7"
+   ],
+   "actual": [
+    "price|tiramisù|7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale pasta vuoi mettere a *10 €*? Dimmi il nome preciso del *Piatto*.",
+    "Ok, lascio stare. Quale pasta vuoi mettere a *10 €*?",
+    "Metto il *tiramisù* a 7 €.\n\n*tiramisù*: prezzo da 15,00 € a *7,00 €*"
+   ],
+   "turns": [
+    "la pasta a 10",
+    "no lascia stare",
+    "metti il tiramisù a 7"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 41216,
+   "latencyMs": [
+    11.3,
+    21.6,
+    17.6
+   ],
+   "recordedLlmMs": 8841,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-no-poi-comando-voce",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Pasta al sugo|true"
+   ],
+   "actual": [
+    "hidden|Pasta al sugo|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e lo metto lì a *12,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Va bene, non aggiungo la *Lasagna*.",
+    "Nascondo la *Pasta al sugo* dal menu.\n\n*Pasta al sugo*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne a 12",
+    "🎤 no",
+    "🎤 nascondi la pasta al sugo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 31308,
+   "latencyMs": [
+    14.8,
+    14.8,
+    18.2
+   ],
+   "recordedLlmMs": 6160,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-tutte-paste",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta al pesto e lasagna|9",
+    "price|pasta al pesto|9",
+    "price|pasta al ragù|9",
+    "price|pasta all'amatriciana|9",
+    "price|pasta alla norma|9",
+    "price|pasta carbonara|9"
+   ],
+   "actual": [
+    "price|Pasta al pesto e lasagna|9",
+    "price|pasta al pesto|9",
+    "price|pasta al ragù|9",
+    "price|pasta all'amatriciana|9",
+    "price|pasta alla norma|9",
+    "price|pasta carbonara|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMessi a 9,00 € i prezzi di 6 piatti.\n\n*pasta al ragù*: prezzo da 10,00 € a *9,00 €*\n*Pasta al pesto e lasagna*: prezzo da 10,01 € a *9,00 €*\n*pasta al pesto*: prezzo da 11,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 10,00 € a *9,00 €*\n*pasta all'amatriciana*: prezzo da 11,00 € a *9,00 €*\n*pasta alla norma*: prezzo da 10,00 € a *9,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 metti tutte le paste a 9 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 23034,
+   "latencyMs": [
+    23.1
+   ],
+   "recordedLlmMs": 10553,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "note": "«tutte» è chiaro: si applica subito con «annulla»",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-solo-visibili",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta al pesto e lasagna|9",
+    "price|pasta al pesto|9",
+    "price|pasta al ragù|9",
+    "price|pasta carbonara|9"
+   ],
+   "actual": [
+    "price|Pasta al pesto e lasagna|9",
+    "price|pasta al pesto|9",
+    "price|pasta al ragù|9",
+    "price|pasta carbonara|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMessi a 9,00 € i prezzi di 4 piatti.\n\n*pasta al ragù*: prezzo da 10,00 € a *9,00 €*\n*Pasta al pesto e lasagna*: prezzo da 10,01 € a *9,00 €*\n*pasta al pesto*: prezzo da 11,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 10,00 € a *9,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "metti tutte le paste visibili a 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 23278,
+   "latencyMs": [
+    22.8
+   ],
+   "recordedLlmMs": 12628,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-tutte-poi-visibili",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta al pesto e lasagna|9",
+    "price|pasta al pesto|9",
+    "price|pasta al ragù|9",
+    "price|pasta carbonara|9"
+   ],
+   "actual": [
+    "price|Pasta al pesto e lasagna|9",
+    "price|pasta al pesto|9",
+    "price|pasta al ragù|9",
+    "price|pasta carbonara|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMessi a 9,00 € i prezzi di 6 piatti.\n\n*pasta al ragù*: prezzo da 10,00 € a *9,00 €*\n*Pasta al pesto e lasagna*: prezzo da 10,01 € a *9,00 €*\n*pasta al pesto*: prezzo da 11,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 10,00 € a *9,00 €*\n*pasta all'amatriciana*: prezzo da 11,00 € a *9,00 €*\n*pasta alla norma*: prezzo da 10,00 € a *9,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "*pasta all'amatriciana*: prezzo da 9,00 € a *11,00 €*\n*pasta alla norma*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "metti tutte le paste a 9",
+    "no, solo quelle visibili"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22846,
+   "latencyMs": [
+    19.6,
+    12.3
+   ],
+   "recordedLlmMs": 9685,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-primi-aumento",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|16",
+    "price|pasta al pesto|12",
+    "price|pasta all'amatriciana|12",
+    "price|pasta alla norma|11",
+    "price|pasta carbonara|11",
+    "price|riso giallo|9"
+   ],
+   "actual": [
+    "price|la parmigiana|16",
+    "price|pasta al pesto|12",
+    "price|pasta all'amatriciana|12",
+    "price|pasta alla norma|11",
+    "price|pasta carbonara|11",
+    "price|riso giallo|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 1,00 € i prezzi di 6 piatti.\n\n*la parmigiana*: prezzo da 15,00 € a *16,00 €*\n*pasta al pesto*: prezzo da 11,00 € a *12,00 €*\n*pasta carbonara*: prezzo da 10,00 € a *11,00 €*\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta all'amatriciana*: prezzo da 11,00 € a *12,00 €*\n*pasta alla norma*: prezzo da 10,00 € a *11,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "aumenta tutti i primi di 1 euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10490,
+   "latencyMs": [
+    17.7
+   ],
+   "recordedLlmMs": 3957,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-rinomina-menu",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMenu *Menu di verifica · web QA*: ora si chiama *Menu di prova*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 Cambia il nome del menù, da menù di verifica a menù di prova."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    12.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-rinomina-sottomenu",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSottomenu *Completo*: nuovo nome *Primi*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "rinomina il sottomenu Completo del menu pranzo in Primi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    14
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-rinomina-piatto",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "rename|pasta carbonara|Carbonara romana"
+   ],
+   "actual": [
+    "rename|pasta carbonara|Carbonara romana"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*pasta carbonara*: nuovo nome *Carbonara romana*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "rinomina la pasta carbonara in Carbonara romana"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10126,
+   "latencyMs": [
+    21.3
+   ],
+   "recordedLlmMs": 2296,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-rinomina-annulla",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMenu *Menu pranzo*: ora si chiama *Pranzo veloce*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima modifica alla struttura del menu."
+   ],
+   "turns": [
+    "rinomina il menu pranzo in Pranzo veloce",
+    "annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10222,
+   "latencyMs": [
+    11.8,
+    16.2
+   ],
+   "recordedLlmMs": 1805,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-menu-nominato",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|gnocchi al ragu|10|primi"
+   ],
+   "actual": [
+    "create|gnocchi al ragu|10|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Gnocchi al ragù*: creo il sottomenu *Primi* e lo metto lì a *10,00 €*? Rispondi *sì* oppure dimmi il nome del sottomenu.",
+    "Nuovo Sottomenu *Primi* nel Menu *Menu pranzo*\nNuovo piatto *Gnocchi al ragù* in *Primi*: *10,00 €*"
+   ],
+   "turns": [
+    "aggiungi gnocchi al ragu in menu pranzo a 10",
+    "si"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10515,
+   "latencyMs": [
+    14.8,
+    10.1
+   ],
+   "recordedLlmMs": 2945,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-menu-nominato-cena",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|gnocchi al ragu|12|primi"
+   ],
+   "actual": [
+    "create|gnocchi al ragu|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Gnocchi al ragù* a 12 € nel Primi del Menu cena.\n\nNuovo piatto *Gnocchi al ragù* in *Primi*: *12,00 €*\n\n*Gnocchi al ragù (Menu del giorno)*: *senza prezzo* · disponibile"
+   ],
+   "turns": [
+    "aggiungi gnocchi al ragù nel menu cena a 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10370,
+   "latencyMs": [
+    18
+   ],
+   "recordedLlmMs": 2927,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-parmigiana",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|12.5"
+   ],
+   "actual": [
+    "price|la parmigiana|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *La parmigiana* a 12,50 €.\n\n*la parmigiana*: prezzo da 15,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "🎤 La parmigiana passa a 12.50."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10112,
+   "latencyMs": [
+    19.8
+   ],
+   "recordedLlmMs": 3508,
+   "usedLlm": true,
+   "source": "QA 21/10 sera (fixture qasera)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-a-pezzi",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Insalata mista|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true",
+    "hidden|Spinaci al burro|true"
+   ],
+   "actual": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Insalata mista|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true",
+    "hidden|Spinaci al burro|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu pranzo*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Ok, metto *Lasagna* e *Carbonara* tra i Primi del Menu pranzo. Per i Secondi e i Contorni cosa metto?",
+    "Ok, metto *Cotoletta alla milanese* tra i Secondi del *Menu pranzo*. Per i Contorni cosa metto?",
+    "Oggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*. Nascosti: *Petto di pollo ai ferri*, *Polpette al sugo* (tornano quando li rimetti).\nOggi nei *Contorni* del *Menu pranzo*: *Patate al forno*. Nascosti: *Insalata mista*, *Spinaci al burro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo menu pranzo",
+    "primi lasagna e carbonara",
+    "secondi cotoletta",
+    "contorni patate al forno"
+   ],
+   "clarifications": 3,
+   "unexpectedClarifications": 3,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 33815,
+   "latencyMs": [
+    10.1,
+    19.3,
+    18.7,
+    23.1
+   ],
+   "recordedLlmMs": 6482,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-tutto-insieme",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Patate al forno|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Spinaci al burro|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Patate al forno|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Spinaci al burro|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Pasta al pomodoro*, *Risotto alla milanese*. Nascosti: *Penne all'arrabbiata* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Polpette al sugo*. Nascosti: *Cotoletta alla milanese*, *Petto di pollo ai ferri* (tornano quando li rimetti).\nOggi nei *Contorni* del *Menu pranzo*: *Insalata mista*. Nascosti: *Patate al forno*, *Spinaci al burro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo menu pranzo: primi pasta al pomodoro e risotto alla milanese, secondi polpette, contorni insalata mista"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11276,
+   "latencyMs": [
+    17.6
+   ],
+   "recordedLlmMs": 3241,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-ordine-sparso",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Insalata mista|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Patate al forno|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Cotoletta alla milanese|true",
+    "hidden|Insalata mista|true",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Patate al forno|true",
+    "hidden|Polpette al sugo|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu pranzo*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Ok, per oggi i *Contorni* del *Menu pranzo* sono *Spinaci al burro*. Mi dici anche *Primi* e *Secondi*?",
+    "Oggi nei *Primi* del *Menu pranzo*: *Penne all'arrabbiata*. Nascosti: *Pasta al pomodoro*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Petto di pollo ai ferri*. Nascosti: *Cotoletta alla milanese*, *Polpette al sugo* (tornano quando li rimetti).\nOggi nei *Contorni* del *Menu pranzo*: *Spinaci al burro*. Nascosti: *Patate al forno*, *Insalata mista* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "aggiorniamo il menu del pranzo",
+    "i contorni oggi sono spinaci al burro",
+    "primi penne all'arrabbiata, secondi petto di pollo ai ferri"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22687,
+   "latencyMs": [
+    10.8,
+    15,
+    21.3
+   ],
+   "recordedLlmMs": 3874,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-refusi",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true"
+   ],
+   "actual": [
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Polpette al sugo|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu pranzo*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Ok, *Primi* del pranzo: *Risotto alla milanese* e *Pasta al pomodoro*. Adesso mi dici i *Secondi*?",
+    "Ok, *Secondi* del pranzo: *Cotoletta alla milanese*. Mi dici i *Contorni*?",
+    "Oggi nei *Primi* del *Menu pranzo*: *Pasta al pomodoro*, *Risotto alla milanese*. Nascosti: *Penne all'arrabbiata* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*. Nascosti: *Petto di pollo ai ferri*, *Polpette al sugo* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo menu pranzo",
+    "primi risoto alla milanese e pasta al pomodorro",
+    "secondi cotolleta",
+    "contorni restano uguali"
+   ],
+   "clarifications": 3,
+   "unexpectedClarifications": 3,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22386,
+   "latencyMs": [
+    8.8,
+    15.5,
+    15.9,
+    15.1
+   ],
+   "recordedLlmMs": 4603,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-cambia-idea",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu pranzo*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Ok, metto *Lasagna* e *Carbonara* tra i Primi del Menu pranzo. Per i Secondi e i Contorni cosa metto?",
+    "Ok, tolgo la *Carbonara* e metto *Pasta e fagioli* tra i Primi: ora sono *Lasagna* e *Pasta e fagioli*. Vuoi cambiare anche i Secondi o i Contorni di oggi?",
+    "Oggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Pasta e fagioli*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo menu pranzo",
+    "primi lasagna e carbonara",
+    "no, la carbonara toglila, metti la pasta e fagioli",
+    "secondi e contorni restano uguali"
+   ],
+   "clarifications": 3,
+   "unexpectedClarifications": 3,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22390,
+   "latencyMs": [
+    7.2,
+    15.2,
+    14.7,
+    14.9
+   ],
+   "recordedLlmMs": 5759,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-senza-piatti-esce",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu pranzo*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Ok, lascio il *Menu pranzo* com’era: non ho cambiato nulla."
+   ],
+   "turns": [
+    "modifichiamo menu pranzo",
+    "lascia stare"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    9.2,
+    7.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-comando-nuovo",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu cena*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Ok, *Primi* del *Menu cena* con *Gnocchi al pomodoro*. Secondi e Contorni come li vuoi?",
+    "*Completo* del *Menu cena*: da 16,90 € a *17,90 €*."
+   ],
+   "turns": [
+    "modifichiamo menu cena",
+    "primi gnocchi al pomodoro",
+    "alza il completo della cena di un euro"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21519,
+   "latencyMs": [
+    7,
+    13,
+    22.5
+   ],
+   "recordedLlmMs": 4408,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-tutto-uguale-tranne",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Spaghetti alle vongole|true"
+   ],
+   "actual": [
+    "hidden|Gnocchi al pomodoro|true",
+    "hidden|Risotto ai funghi|false",
+    "hidden|Spaghetti alle vongole|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu cena*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Oggi nei *Primi* del *Menu cena*: *Risotto ai funghi*, *Tagliatelle al ragù*. Nascosti: *Spaghetti alle vongole*, *Gnocchi al pomodoro* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo il menu della cena",
+    "tutto uguale tranne i primi: tagliatelle al ragù e risotto ai funghi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 23297,
+   "latencyMs": [
+    8.6,
+    30
+   ],
+   "recordedLlmMs": 7250,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-si-al-resto",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Scaloppine al limone|true"
+   ],
+   "actual": [
+    "hidden|Scaloppine al limone|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu cena*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Segnato: *Secondi* (Tagliata di manzo, Salmone alla griglia). E per *Primi* e *Contorni* cosa metto? Se qualcuno resta com’è dimmelo.",
+    "Oggi nei *Secondi* del *Menu cena*: *Tagliata di manzo*, *Salmone alla griglia*. Nascosti: *Scaloppine al limone* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo menu cena",
+    "secondi tagliata di manzo e salmone alla griglia",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11217,
+   "latencyMs": [
+    7.7,
+    16.3,
+    13.4
+   ],
+   "recordedLlmMs": 3301,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  },
+  {
+   "id": "mt-sessione-lunga-correzioni",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "create|carbonara|0|primi",
+    "create|lasagna|0|primi",
+    "hidden|Pasta al pomodoro|true",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, modifichiamo i piatti di oggi del *Menu pranzo*: cosa metto in *Primi*, *Secondi*, *Contorni*? Puoi scrivere tutto insieme o un pezzo alla volta; se un sottomenu resta com’è, dimmelo.",
+    "Segnato: *Primi* (Lasagna). E per *Secondi* e *Contorni* cosa metto? Se qualcuno resta com’è dimmelo.",
+    "Ok, *Primi* del pranzo di oggi: *Lasagna* e *Carbonara*. Per *Secondi* e *Contorni* cosa metto?",
+    "Ok, *Secondi* del pranzo di oggi: *Cotoletta alla milanese* e *Arrosto di vitello*. Per *Contorni* cosa metto?",
+    "Ok, *Secondi* ora sono *Cotoletta alla milanese* e *Polpette al sugo*. Per *Contorni* cosa metto?",
+    "Oggi nei *Primi* del *Menu pranzo*: *Lasagna*, *Carbonara*. Nascosti: *Pasta al pomodoro*, *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*, *Polpette al sugo*. Nascosti: *Petto di pollo ai ferri* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "modifichiamo il menu pranzo di oggi",
+    "allora primi: lasagna",
+    "e anche la carbonara nei primi",
+    "secondi cotoletta e arrosto",
+    "no aspetta, l'arrosto no, metti le polpette",
+    "i contorni come ieri"
+   ],
+   "clarifications": 5,
+   "unexpectedClarifications": 5,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 44981,
+   "latencyMs": [
+    9.3,
+    14.1,
+    15.6,
+    15.6,
+    14.5,
+    15.5
+   ],
+   "recordedLlmMs": 8592,
+   "usedLlm": true,
+   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "mt-vera",
+   "hash": "a914f0a262e4bc54",
+   "source": "hit",
+   "status": 200,
+   "ms": 3508,
+   "usage": {
+    "input": 50,
+    "output": 190,
+    "cacheRead": 0,
+    "cacheWrite": 9872
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "609717358593cd81",
+   "source": "hit",
+   "status": 200,
+   "ms": 1671,
+   "usage": {
+    "input": 162,
+    "output": 259,
+    "cacheRead": 9267,
+    "cacheWrite": 607
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "612508f8785d62c0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1227,
+   "usage": {
+    "input": 513,
+    "output": 187,
+    "cacheRead": 9874,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "e905a9a161757080",
+   "source": "hit",
+   "status": 200,
+   "ms": 2409,
+   "usage": {
+    "input": 265,
+    "output": 624,
+    "cacheRead": 9874,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "d33eaf1e6b1d310a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1596,
+   "usage": {
+    "input": 1035,
+    "output": 238,
+    "cacheRead": 9874,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "e6144a7f73386256",
+   "source": "hit",
+   "status": 200,
+   "ms": 2146,
+   "usage": {
+    "input": 526,
+    "output": 269,
+    "cacheRead": 9267,
+    "cacheWrite": 605
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "b958edf0d3ab98e9",
+   "source": "hit",
+   "status": 200,
+   "ms": 1664,
+   "usage": {
+    "input": 910,
+    "output": 269,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "a816b1531538266a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2452,
+   "usage": {
+    "input": 723,
+    "output": 197,
+    "cacheRead": 9267,
+    "cacheWrite": 590
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "1eb22d682dda25e4",
+   "source": "hit",
+   "status": 200,
+   "ms": 2385,
+   "usage": {
+    "input": 1012,
+    "output": 165,
+    "cacheRead": 9857,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "916737143b039c96",
+   "source": "hit",
+   "status": 200,
+   "ms": 2416,
+   "usage": {
+    "input": 1066,
+    "output": 177,
+    "cacheRead": 9857,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "0d2f35b9e6ff53ec",
+   "source": "hit",
+   "status": 200,
+   "ms": 1649,
+   "usage": {
+    "input": 1056,
+    "output": 200,
+    "cacheRead": 9267,
+    "cacheWrite": 607
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "09eae5d4bd29a241",
+   "source": "hit",
+   "status": 200,
+   "ms": 3149,
+   "usage": {
+    "input": 1035,
+    "output": 581,
+    "cacheRead": 9874,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-vera",
+   "hash": "ae8bbdff9f3b88cb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1660,
+   "usage": {
+    "input": 1229,
+    "output": 176,
+    "cacheRead": 9267,
+    "cacheWrite": 607
+   }
+  },
+  {
+   "conv": "mt-si-catena",
+   "hash": "a2e201167d8bdf92",
+   "source": "hit",
+   "status": 200,
+   "ms": 3584,
+   "usage": {
+    "input": 57,
+    "output": 600,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-si-catena",
+   "hash": "9f05ce4d63dfbdd1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1729,
+   "usage": {
+    "input": 256,
+    "output": 176,
+    "cacheRead": 9267,
+    "cacheWrite": 633
+   }
+  },
+  {
+   "conv": "mt-si-catena",
+   "hash": "fa102b9a6a2a8fc0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1921,
+   "usage": {
+    "input": 634,
+    "output": 396,
+    "cacheRead": 9900,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-si-voglio",
+   "hash": "a2e201167d8bdf92",
+   "source": "hit",
+   "status": 200,
+   "ms": 3584,
+   "usage": {
+    "input": 57,
+    "output": 600,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-si-vocale",
+   "hash": "90a7c130ad1abca1",
+   "source": "hit",
+   "status": 200,
+   "ms": 4039,
+   "usage": {
+    "input": 60,
+    "output": 713,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-si-consiglio",
+   "hash": "a2e201167d8bdf92",
+   "source": "hit",
+   "status": 200,
+   "ms": 3584,
+   "usage": {
+    "input": 57,
+    "output": 600,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-si-consiglio",
+   "hash": "59b7ec6575e76bf0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1407,
+   "usage": {
+    "input": 373,
+    "output": 176,
+    "cacheRead": 9267,
+    "cacheWrite": 605
+   }
+  },
+  {
+   "conv": "mt-si-senza-prezzo",
+   "hash": "53511b2cdccc2cb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 4174,
+   "usage": {
+    "input": 54,
+    "output": 700,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-nome-diverso",
+   "hash": "a2e201167d8bdf92",
+   "source": "hit",
+   "status": 200,
+   "ms": 3584,
+   "usage": {
+    "input": 57,
+    "output": 600,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-domanda-a-meta",
+   "hash": "a2e201167d8bdf92",
+   "source": "hit",
+   "status": 200,
+   "ms": 3584,
+   "usage": {
+    "input": 57,
+    "output": 600,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-domanda-a-meta",
+   "hash": "0a38c92081167aaa",
+   "source": "hit",
+   "status": 200,
+   "ms": 1302,
+   "usage": {
+    "input": 367,
+    "output": 108,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-cambio-argomento",
+   "hash": "53511b2cdccc2cb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 4174,
+   "usage": {
+    "input": 54,
+    "output": 700,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-cambio-argomento",
+   "hash": "6c6cc601a5ec6097",
+   "source": "hit",
+   "status": 200,
+   "ms": 2461,
+   "usage": {
+    "input": 168,
+    "output": 548,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-fa-niente",
+   "hash": "53511b2cdccc2cb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 4174,
+   "usage": {
+    "input": 54,
+    "output": 700,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-fa-niente",
+   "hash": "df1caaa3a3dd604a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1621,
+   "usage": {
+    "input": 172,
+    "output": 191,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-comando-su-domanda",
+   "hash": "3cb2d06320ad0f3b",
+   "source": "hit",
+   "status": 200,
+   "ms": 3389,
+   "usage": {
+    "input": 43,
+    "output": 581,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-comando-su-domanda",
+   "hash": "9c66d4bac8b1987a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1794,
+   "usage": {
+    "input": 97,
+    "output": 177,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando",
+   "hash": "3cb2d06320ad0f3b",
+   "source": "hit",
+   "status": 200,
+   "ms": 3389,
+   "usage": {
+    "input": 43,
+    "output": 581,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando",
+   "hash": "28a9919c4c4f569e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2023,
+   "usage": {
+    "input": 92,
+    "output": 181,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando",
+   "hash": "5d9ca98cc4a8d530",
+   "source": "hit",
+   "status": 200,
+   "ms": 1708,
+   "usage": {
+    "input": 365,
+    "output": 152,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando",
+   "hash": "cd8e908cf8e8e37b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1721,
+   "usage": {
+    "input": 137,
+    "output": 177,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando-voce",
+   "hash": "a2e201167d8bdf92",
+   "source": "hit",
+   "status": 200,
+   "ms": 3584,
+   "usage": {
+    "input": 57,
+    "output": 600,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando-voce",
+   "hash": "3796e458a06e998f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1259,
+   "usage": {
+    "input": 480,
+    "output": 182,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-no-poi-comando-voce",
+   "hash": "e6ba11d3239afb44",
+   "source": "hit",
+   "status": 200,
+   "ms": 1317,
+   "usage": {
+    "input": 187,
+    "output": 186,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-tutte-paste",
+   "hash": "77f997367ad93906",
+   "source": "hit",
+   "status": 200,
+   "ms": 4925,
+   "usage": {
+    "input": 50,
+    "output": 1147,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-tutte-paste",
+   "hash": "997e5f3ccaa155d2",
+   "source": "hit",
+   "status": 200,
+   "ms": 5628,
+   "usage": {
+    "input": 821,
+    "output": 1272,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-solo-visibili",
+   "hash": "142eddeb531e4d83",
+   "source": "hit",
+   "status": 200,
+   "ms": 6488,
+   "usage": {
+    "input": 50,
+    "output": 1469,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-solo-visibili",
+   "hash": "f8975150e6491d6c",
+   "source": "hit",
+   "status": 200,
+   "ms": 6140,
+   "usage": {
+    "input": 748,
+    "output": 1267,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-tutte-poi-visibili",
+   "hash": "1b72637265a926ad",
+   "source": "hit",
+   "status": 200,
+   "ms": 4369,
+   "usage": {
+    "input": 47,
+    "output": 1058,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-tutte-poi-visibili",
+   "hash": "167bdbef3b121f59",
+   "source": "hit",
+   "status": 200,
+   "ms": 5316,
+   "usage": {
+    "input": 803,
+    "output": 1194,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-primi-aumento",
+   "hash": "f588ee09eb72e0c9",
+   "source": "hit",
+   "status": 200,
+   "ms": 3957,
+   "usage": {
+    "input": 52,
+    "output": 566,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-rinomina-piatto",
+   "hash": "0554e1fc2237e028",
+   "source": "hit",
+   "status": 200,
+   "ms": 2296,
+   "usage": {
+    "input": 56,
+    "output": 198,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-rinomina-annulla",
+   "hash": "7f47cf8be71b15b6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1805,
+   "usage": {
+    "input": 167,
+    "output": 181,
+    "cacheRead": 9267,
+    "cacheWrite": 607
+   }
+  },
+  {
+   "conv": "mt-menu-nominato",
+   "hash": "68d06ac10b2158ac",
+   "source": "hit",
+   "status": 200,
+   "ms": 2945,
+   "usage": {
+    "input": 60,
+    "output": 583,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-menu-nominato-cena",
+   "hash": "30eeaba8dc76e8b2",
+   "source": "hit",
+   "status": 200,
+   "ms": 2927,
+   "usage": {
+    "input": 59,
+    "output": 439,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-parmigiana",
+   "hash": "a914f0a262e4bc54",
+   "source": "hit",
+   "status": 200,
+   "ms": 3508,
+   "usage": {
+    "input": 50,
+    "output": 190,
+    "cacheRead": 0,
+    "cacheWrite": 9872
+   }
+  },
+  {
+   "conv": "mt-sessione-a-pezzi",
+   "hash": "b2a731316ead0cf8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2392,
+   "usage": {
+    "input": 587,
+    "output": 235,
+    "cacheRead": 0,
+    "cacheWrite": 10143
+   }
+  },
+  {
+   "conv": "mt-sessione-a-pezzi",
+   "hash": "6194bd641ee38995",
+   "source": "hit",
+   "status": 200,
+   "ms": 1866,
+   "usage": {
+    "input": 631,
+    "output": 341,
+    "cacheRead": 9267,
+    "cacheWrite": 1099
+   }
+  },
+  {
+   "conv": "mt-sessione-a-pezzi",
+   "hash": "02ae3306fbf794ec",
+   "source": "hit",
+   "status": 200,
+   "ms": 2224,
+   "usage": {
+    "input": 695,
+    "output": 451,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-tutto-insieme",
+   "hash": "9bed6dd1370eaf2a",
+   "source": "hit",
+   "status": 200,
+   "ms": 3241,
+   "usage": {
+    "input": 449,
+    "output": 461,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-ordine-sparso",
+   "hash": "14185fee57ddeeea",
+   "source": "hit",
+   "status": 200,
+   "ms": 1702,
+   "usage": {
+    "input": 598,
+    "output": 235,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-ordine-sparso",
+   "hash": "037af8fbe81c5eef",
+   "source": "hit",
+   "status": 200,
+   "ms": 2172,
+   "usage": {
+    "input": 669,
+    "output": 453,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-refusi",
+   "hash": "a5d45c93cbaf9990",
+   "source": "hit",
+   "status": 200,
+   "ms": 2244,
+   "usage": {
+    "input": 596,
+    "output": 269,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-refusi",
+   "hash": "5afda9078c5e238d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2359,
+   "usage": {
+    "input": 660,
+    "output": 352,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-cambia-idea",
+   "hash": "b2a731316ead0cf8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2392,
+   "usage": {
+    "input": 587,
+    "output": 235,
+    "cacheRead": 0,
+    "cacheWrite": 10143
+   }
+  },
+  {
+   "conv": "mt-sessione-cambia-idea",
+   "hash": "ff10977202e55640",
+   "source": "hit",
+   "status": 200,
+   "ms": 3367,
+   "usage": {
+    "input": 645,
+    "output": 637,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-comando-nuovo",
+   "hash": "7539e8cc968ec6e1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2244,
+   "usage": {
+    "input": 579,
+    "output": 228,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-comando-nuovo",
+   "hash": "6706a8ee193f13b1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2164,
+   "usage": {
+    "input": 225,
+    "output": 201,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-tutto-uguale-tranne",
+   "hash": "3f2f958c1b18d4d0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2817,
+   "usage": {
+    "input": 606,
+    "output": 450,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-tutto-uguale-tranne",
+   "hash": "8bbed103f2c01069",
+   "source": "hit",
+   "status": 200,
+   "ms": 4433,
+   "usage": {
+    "input": 1203,
+    "output": 752,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-si-al-resto",
+   "hash": "f7e7bba3e2e56409",
+   "source": "hit",
+   "status": 200,
+   "ms": 3301,
+   "usage": {
+    "input": 586,
+    "output": 265,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-lunga-correzioni",
+   "hash": "4ecdbbf5914c4b99",
+   "source": "hit",
+   "status": 200,
+   "ms": 1694,
+   "usage": {
+    "input": 595,
+    "output": 229,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-lunga-correzioni",
+   "hash": "c223a62488920bb9",
+   "source": "hit",
+   "status": 200,
+   "ms": 1316,
+   "usage": {
+    "input": 637,
+    "output": 236,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-lunga-correzioni",
+   "hash": "75491b1255e79721",
+   "source": "hit",
+   "status": 200,
+   "ms": 3005,
+   "usage": {
+    "input": 719,
+    "output": 380,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "mt-sessione-lunga-correzioni",
+   "hash": "4ec04e7955e294d0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2577,
+   "usage": {
+    "input": 828,
+    "output": 339,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

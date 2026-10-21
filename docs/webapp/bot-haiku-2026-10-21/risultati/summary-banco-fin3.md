@@ -1,6 +1,6 @@
 # Motore Haiku · set banco · record
 
-Generato da tests/eval/eval-haiku.test.ts (2026-10-21T15:40:19.805Z).
+Generato da tests/eval/eval-haiku.test.ts (2026-10-21T20:08:48.930Z).
 
 | Voce | Valore |
 |---|---|
@@ -8,17 +8,17 @@ Generato da tests/eval/eval-haiku.test.ts (2026-10-21T15:40:19.805Z).
 | Non misurate (cache assente / tetto / errore) | 0 |
 | GRAVI (conversazioni) | 5 — sicurezza 0, altri 5 |
 | MEDI | 3 |
-| Domande ogni 10 messaggi | 3.4 (non attese 1.9) |
-| Latenza chiamata Haiku p50 / p95 | 2072 / 5185 ms (172 chiamate) |
-| Latenza turno p50 / p95 | 17 / 32 ms (misurata dal vivo) |
-| Chiamate Haiku per messaggio | 1.15 |
-| Token medi per messaggio (in · out · cache read · cache write) | 231 · 351 · 10911 · 46 |
-| Cache hit (cache_read > 0) | 172/172 (100%) |
+| Domande ogni 10 messaggi | 3.5 (non attese 2) |
+| Latenza chiamata Haiku p50 / p95 | 2004 / 4706 ms (173 chiamate) |
+| Latenza turno p50 / p95 | 13 / 21 ms (misurata dal vivo) |
+| Chiamate Haiku per messaggio | 1.16 |
+| Token medi per messaggio (in · out · cache read · cache write) | 231 · 350 · 10906 · 114 |
+| Cache hit (cache_read > 0) | 172/173 (99.4%) |
 | Costo speso in questo giro | 0 $ (tetto 0.4 $) |
-| Costo equivalente dal vivo · per messaggio | 0.046716 $ · 0.000314 $ |
-| Chiamate Anthropic: hit · vere · mock · assenti · rifiutate · errori · 429 | 172 · 0 · 0 · 0 · 0 · 0 · 0 |
+| Costo equivalente dal vivo · per messaggio | 0.047886 $ · 0.000321 $ |
+| Chiamate Anthropic: hit · vere · mock · assenti · rifiutate · errori · 429 | 173 · 0 · 0 · 0 · 0 · 0 · 0 |
 | **V4 richieste Groq chat** | **0** |
-| Durata del giro | 4.6 s |
+| Durata del giro | 3.6 s |
 
 | Codice | GRAVE | MEDIO | BASSO |
 |---|---|---|---|

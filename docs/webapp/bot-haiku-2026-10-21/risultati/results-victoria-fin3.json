@@ -21,8 +21,8 @@
    "chiamate": 11
   },
   "latenzaTurnoMs": {
-   "p50": 51,
-   "p95": 222,
+   "p50": 41,
+   "p95": 176,
    "nota": "misurata dal vivo"
   },
   "chiamatePerMessaggio": 1,
@@ -53,7 +53,7 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 2.4
+  "durataGiroS": 1.9
  },
  "codici": {},
  "unknownSql": [],
@@ -82,7 +82,7 @@
    "llmMisses": 0,
    "llmTokens": 10247,
    "latencyMs": [
-    221.9
+    175.7
    ],
    "recordedLlmMs": 2543,
    "usedLlm": true,
@@ -114,7 +114,7 @@
    "llmMisses": 0,
    "llmTokens": 10240,
    "latencyMs": [
-    139.8
+    89.5
    ],
    "recordedLlmMs": 2013,
    "usedLlm": true,
@@ -146,7 +146,7 @@
    "llmMisses": 0,
    "llmTokens": 10240,
    "latencyMs": [
-    39.3
+    31.8
    ],
    "recordedLlmMs": 3054,
    "usedLlm": true,
@@ -174,7 +174,7 @@
    "llmMisses": 0,
    "llmTokens": 10260,
    "latencyMs": [
-    34.2
+    26.1
    ],
    "recordedLlmMs": 2104,
    "usedLlm": true,
@@ -206,7 +206,7 @@
    "llmMisses": 0,
    "llmTokens": 10689,
    "latencyMs": [
-    50.7
+    40.7
    ],
    "recordedLlmMs": 2622,
    "usedLlm": true,
@@ -234,7 +234,7 @@
    "llmMisses": 0,
    "llmTokens": 10442,
    "latencyMs": [
-    36.8
+    28.8
    ],
    "recordedLlmMs": 3675,
    "usedLlm": true,
@@ -262,7 +262,7 @@
    "llmMisses": 0,
    "llmTokens": 10645,
    "latencyMs": [
-    22.2
+    22.6
    ],
    "recordedLlmMs": 2996,
    "usedLlm": true,
@@ -290,7 +290,7 @@
    "llmMisses": 0,
    "llmTokens": 10519,
    "latencyMs": [
-    87.9
+    72.3
    ],
    "recordedLlmMs": 2500,
    "usedLlm": true,
@@ -330,8 +330,8 @@
    "llmMisses": 0,
    "llmTokens": 21145,
    "latencyMs": [
-    83,
-    124.2
+    69.1,
+    103.1
    ],
    "recordedLlmMs": 4787,
    "usedLlm": true,
@@ -363,7 +363,7 @@
    "llmMisses": 0,
    "llmTokens": 10455,
    "latencyMs": [
-    29
+    21.9
    ],
    "recordedLlmMs": 2590,
    "usedLlm": true,

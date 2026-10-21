@@ -71,8 +71,10 @@ export let presetChatCommand:PresetChatCommand=async(tx,ctx,text)=>{
  if((m=t.match(autoRe))){const on=/^(attiva|accendi)$/.test(m[1]!),menu=await pcMenu(tx,ctx.tenant,m[2],enabled);if(typeof menu==='string')return menu
   try{await F2.setDayPresetAutoPublish(ctx.tenant,menu.id,on,{connection:tx as never})}catch(e){return e instanceof Error?e.message:'Non riesco a cambiare la pubblicazione automatica.'}
   return on?`*Confermato.* Pubblicazione automatica *attiva* per il ${menu.name}: dal prossimo cambio giornata (06:00) ogni giorno va online il suo preset.`:`*Confermato.* Pubblicazione automatica *spenta* per il ${menu.name}. Il menu online resta quello attuale.`}
- if((m=t.match(readRe))){const weekday=await pcWeekday(tx,ctx.tenant,m[1]!),menu=await pcMenu(tx,ctx.tenant,m[2],enabled);if(typeof menu==='string')return menu
-  const preset=await F2.readDayPreset(ctx.tenant,{menuId:menu.id,weekday},tx as never);if(!preset||!preset.sections)return `Il *${menu.name}* non ha un preset per *${F2.WEEKDAY_NAMES[weekday]}*.`
+ // notte 22/10 (n-domanda-oggi): «cosa c'è oggi nel menu del pranzo?» senza un preset da leggere non è una domanda sui preset: risponde il
+ // bot con il menu di adesso (prima «Non trovo il menu…» / «non ha un preset» a chi i preset non li usa).
+ if((m=t.match(readRe))){const weekday=await pcWeekday(tx,ctx.tenant,m[1]!),menu=await pcMenu(tx,ctx.tenant,m[2],enabled);if(typeof menu==='string')return null
+  const preset=await F2.readDayPreset(ctx.tenant,{menuId:menu.id,weekday},tx as never);if(!preset||!preset.sections)return null
   const lines=preset.sections.flatMap(s=>s.items.length?[`*${s.name}*`,...s.items.map(i=>`- ${i.name}: ${Number(i.price).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2})} €`)]:[])
   return lines.length?`*${F2.WEEKDAY_NAMES[weekday]}* · ${menu.name} (preset «${preset.name}»):\n\n${lines.join('\n')}`.slice(0,1500):`Il preset *${preset.name}* del ${menu.name} è vuoto.`}
  return null}

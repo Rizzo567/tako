@@ -43,6 +43,8 @@ const KIND=(p:string)=>/\b(?:aggiung\w*|inserisc\w*|crea\w*|nuov[oa])\b/.test(p)
 const STOPW=new Set(['menu','sottomenu','piatto','piatti','prezzo','prezzi','euro','tutti','tutte','della','delle','degli','dello','nella','nelle','negli','alla','alle','agli','allo','anche','voglio','vorrei','adesso','allora','quello','quella','questi','queste','sono','quelli','quelle','perche','dentro','dove','come'])
 /** true = il messaggio è un comando indipendente dalla domanda in sospeso: la domanda si chiude e il messaggio va da solo.
  * Vale per le domande del modello (brain_ask) senza piatti omonimi in attesa. `about` = domanda + richiesta originale. */
+/** notte 22/10: rinuncia pura alla domanda aperta («lascia stare», «fa niente», «vabbè lascia perdere»), senza un comando nuovo dentro. */
+export function pureDrop(text:string):boolean{const p=plain(text);return DROP_PENDING.test(p)&&!CMD_VERB.test(p.replace(DROP_PENDING,' '))&&p.split(' ').filter(Boolean).length<=4}
 export function newCommandOverAsk(text:string,ask:Pick<BrainAsk,'question'|'source'|'twins'|'ids'>,refs:MenuRef[]=[]):boolean{
  const p=plain(text),w=p.split(' ').filter(Boolean)
  if(DROP_PENDING.test(p))return CMD_VERB.test(p.replace(DROP_PENDING,' '))||w.length<=4
@@ -98,17 +100,30 @@ export function suitableSection(menuName:string,dishName:string,sections:Section
 export type GroupResult={actions:MenuAction[],label:string}|{ask:'menu',menus:string[],label:string}|null
 /** Comando su un gruppo intero detto con «tutti/tutte»: un sottomenu («i primi») o una parola dei nomi («le paste»). Solo piatti
  * con prezzo e fuori dai Menu a prezzo fisso. Un prezzo assoluto unico o una differenza. `visible` = solo i visibili. */
+/** notte 22/10: verbo di prezzo + «i/le/gli <nome di un sottomenu>» («alza le pizze di 50 centesimi») senza nessun piatto nominato:
+ * la parola del sottomenu (gruppo), altrimenti null. Vale solo per un sottomenu vero con piatti. */
+export function sectionGroupWord(p:string,sections:SectionRef[],refs:MenuRef[]):string|null{
+ // Il gruppo è l'oggetto diretto del verbo («alza le pizze», «abbassa i fritti»): «metti la bufalina tra le pizze» è un piatto nuovo.
+ const m=p.match(/\b(?:alz|abbass|aument|diminu|port|mett|scal|rincar)\w* (?:i|le|gli) ([a-z]{3,})\b/);if(!m)return null
+ const w=m[1]!;if(['piatti','prezzi','menu','sottomenu','cose'].includes(w))return null
+ if(!sections.some(s=>sameSection(s.name,w)&&refs.some(r=>r.sectionId===s.id)))return null
+ if(refs.some(r=>(' '+p+' ').includes(' '+plain(r.name)+' ')))return null
+ return w}
 export function groupCommand(message:string,refs:MenuRef[],sections:SectionRef[],fixedSecIds:Set<string>,o:{visible?:boolean,menus?:{name:string}[]}={}):GroupResult{
  const p=plain(message);let m=p.match(/\btutt[ieoa] (?:quant[ieoa] )?(?:i |le |gli |l )?([a-z]{3,})/)??p.match(/\b(?:i|le|gli) ([a-z]{3,}) tutt[ieoa]\b/),onlySec=false
  // «i dolci, solo quelli, alzali di 50 centesimi»: il gruppo detto col pronome; vale solo per un sottomenu vero.
  if(!m&&/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p)){m=p.match(/\b(?:i|le|gli) ([a-z]{3,})\b/);onlySec=true}
+ // notte 22/10 (n-menu-cena-pizze-aumento): «nel menu cena alza le pizze di 50 centesimi» = il sottomenu intero detto col plurale.
+ if(!m){const w=sectionGroupWord(p,sections,refs);if(w){m=['',w] as unknown as RegExpMatchArray;onlySec=true}}
  if(!m)return null
  const word=m[1]!;if(['piatti','prezzi','menu','sottomenu','quanti','cose'].includes(word))return null
  // Mai su un messaggio con più richieste o con percentuali/migliaia (giro finale lunghi/adv150 21/10): lì decide il modello.
  if(/%|\bpercent\w*|\bper cento\b|\d{1,3}\.\d{3}/.test(message.toLowerCase())||new Set([...message.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>x[0])).size>1)return null
  const rd=relativeDelta(message),abs=[...new Set(g9Prices(message,false))]
  const sp=singlePrice(message),delta=rd?rd.delta:null,price=!rd?(sp??(abs.length===1?abs[0]!:null)):null;if(delta===null&&price===null)return null
- const visible=o.visible??visibleOnly(message),said=namedMenus(message,o.menus??[...new Map(sections.map(s=>[s.menu,{name:s.menu}])).values()]).map(x=>x.name)
+ const visible=o.visible??visibleOnly(message),said0=namedMenus(message,o.menus??[...new Map(sections.map(s=>[s.menu,{name:s.menu}])).values()]).map(x=>x.name)
+ // notte 22/10: «nel menu cena alza le pizze» nomina il Menu Cena; «pizze» è il gruppo, non il Menu «Pizze» (vale il nome dopo «menu»).
+ const exp=(n:string)=>(' '+p+' ').includes(' menu '+menuKey(n)+' '),said1=said0.filter(n=>menuKey(n)!==word||exp(n)),saidEx=said1.length>1?said1.filter(exp):[],said=saidEx.length?saidEx:said1
  const priced=(r:MenuRef)=>r.price>0&&!fixedSecIds.has(r.sectionId??'')&&(!visible||!r.hidden)&&(!said.length||said.includes(r.menu))
  const secs=sections.filter(s=>sameSection(s.name,word)&&refs.some(r=>r.sectionId===s.id&&priced(r)))
  let items:MenuRef[]=[],label=word

@@ -52,7 +52,7 @@ const CANCEL_WORDS=/\b(annull\w*|lascia\w* (?:stare|perdere)|niente|non pubblica
 
 // ---------- motivi di rifiuto (auto-correzione: il server rimanda al modello il perché, una volta) ----------
 const REASON:Record<string,string>={
- data_futura:'il titolare parla di una data futura («da domani», «da lunedì»): il bot non programma le modifiche; chiedi se cambiarlo subito (intent=clarify, reply_draft «Lo cambio subito?»), nessuna azione',
+ data_futura:'il titolare parla di una data futura («da domani», «da lunedì»): il bot non programma le modifiche; chiedi se cambiarlo subito dicendo cosa cambia (intent=clarify, reply_draft breve tipo «Le modifiche per domani non le programmo: metto subito *Carbonara* a 13 €? Rispondi sì o no.»), nessuna azione',
  prezzo_migliaia:'il titolare ha scritto un numero col separatore delle migliaia («13.000»): non è un prezzo da menu, chiedi il prezzo esatto (intent=clarify), nessuna azione',
  azioni_contraddittorie:'il piano ha azioni opposte sullo stesso piatto (es. nascondi e metti in evidenza, finito e disponibile, due prezzi diversi): chiedi al titolare cosa vuole (intent=clarify), nessuna azione',
  prezzo_non_detto:'un prezzo del piano non è stato detto dal titolare (né in questo messaggio né, con un rimando esplicito, prima)',
@@ -147,6 +147,9 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  // run Haiku 21/10 (z-annulla-018): con un'eliminazione in attesa del «sì», «annulla», «lascia stare», «no», «niente» scartano la
  // proposta (mai «annulla l'ultima pubblicazione», mai una nuova domanda che tenga l'eliminazione confermabile).
  if(pend?.kind==='batch'&&pend.why==='delete'&&!changeActs.length&&(ONLY_CANCEL.test(plain(message))||CANCEL_WORDS.test(plain(message))))return{kind:'cancel'}
+ // notte 22/10 (n-annulla-domanda, n-annulla-poi-comando): «annulla», «lascia stare», «no» mentre il bot aspetta una risposta alla SUA domanda
+ // chiudono la domanda (salvo un «annulla» dell'ultima pubblicazione ancora annullabile): prima «non c’è nulla da annullare» + la stessa domanda.
+ if(!changeActs.length&&(pend?.kind==='ask'||pend?.kind==='hold'||pend?.kind==='other')&&ONLY_CANCEL.test(plain(message))&&!(control.includes('undo_last')&&o.undoOK))return{kind:'cancel'}
  if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
   // R9: con una TUA domanda aperta (brain_ask) non c'è nulla da confermare: la risposta va scritta come piano con le azioni della richiesta originale.

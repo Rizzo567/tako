@@ -69,6 +69,10 @@ export function changesOf(a:EvalMenu,b:EvalMenu):Change[]{const A=items(a),out:C
 
 const fKey=(m:AnyMenu|undefined)=>m?[m.pricing??'carta',...(m.formulas??[]).map(f=>nk(f.name)+'='+Math.round(f.price*100)/100).sort()].join(' · '):'—'
 const PRICE_ASK=/\bprezz|\bquanto (?:cost|viene|lo|la|li|le|vuoi)|\ba quanto\b|\bcosto\b|\beuro\b.*\?/i
+// Notte 21→22/10 (pf-piatto-nuovo-08): una frase che spiega il prezzo fisso o propone di cambiare il prezzo di un'OPZIONE
+// («Vuoi cambiare il prezzo di un'opzione, tipo il Completo?») non chiede il prezzo del piatto: quelle frasi non contano.
+const OPTION_PRICE=/opzion|complet|formul|prezzo fisso|menu fisso|solo primo|solo secondo/i
+const asksDishPrice=(r:string)=>r.split(/(?<=[.!?])\s+|\n+/).some(s=>PRICE_ASK.test(s)&&!OPTION_PRICE.test(s))
 
 /** `menus` = menu pubblicato [iniziale, dopo turno 1, …]. */
 export function fixedChecks(c:FixedCase,v:Verdict,menus:EvalMenu[]):Fail[]{
@@ -79,7 +83,7 @@ export function fixedChecks(c:FixedCase,v:Verdict,menus:EvalMenu[]):Fail[]{
   const A=menus[n]!,P=menus[n-1]!,O=spec.oracle[n]!,r=v.replies[n-1]??''
   for(const id of spec.repTurns[n]??[])targets.add(id)
   // chiede il prezzo di un piatto (in qualsiasi turno) dove non si deve mai
-  if(spec.noPriceAsk&&isQuestion(r)&&PRICE_ASK.test(r))add('chiede-prezzo-in-menu-fisso',`turno ${n}: «${r.replace(/\s+/g,' ').slice(0,100)}»`)
+  if(spec.noPriceAsk&&isQuestion(r)&&asksDishPrice(r))add('chiede-prezzo-in-menu-fisso',`turno ${n}: «${r.replace(/\s+/g,' ').slice(0,100)}»`)
   // confronto semantico (il menu iniziale è il fixture grezzo, i successivi passano da workspaceSchema.parse: JSON.stringify darebbe sempre «diverso»)
   const sig=(w:EvalMenu)=>JSON.stringify([w.menus.map(m=>m.id+'|'+fKey(m as AnyMenu)),[...items(w)].map(([id,{i,s}])=>[id,i.name,i.price,!!i.hidden,s]).sort()])
   const same=sig(A)===sig(P)

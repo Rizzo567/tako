@@ -7,45 +7,45 @@
   "misurate": 94,
   "nonMisurate": [],
   "messaggi": 119,
-  "corrette": 94,
-  "percentuale": 100,
-  "gravi": 0,
+  "corrette": 89,
+  "percentuale": 94.7,
+  "gravi": 5,
   "graviSicurezza": 0,
-  "graviAltri": 0,
+  "graviAltri": 5,
   "medi": 0,
-  "domandePer10Messaggi": 1.6,
-  "domandeNonAttesePer10": 0.6,
+  "domandePer10Messaggi": 2.4,
+  "domandeNonAttesePer10": 1.4,
   "latenzaAnthropicMs": {
-   "p50": 2248,
-   "p95": 3858,
-   "chiamate": 130
+   "p50": 2397,
+   "p95": 4004,
+   "chiamate": 124
   },
   "latenzaTurnoMs": {
-   "p50": 2173,
-   "p95": 5916,
+   "p50": 14,
+   "p95": 1353,
    "nota": "misurata dal vivo"
   },
-  "chiamatePerMessaggio": 1.09,
+  "chiamatePerMessaggio": 1.04,
   "tokenMediPerMessaggio": {
-   "input": 150,
-   "output": 340,
-   "cacheRead": 10331,
-   "cacheWrite": 101
+   "input": 134,
+   "output": 347,
+   "cacheRead": 10083,
+   "cacheWrite": 95
   },
   "cacheHit": {
-   "chiamateConCacheRead": 130,
-   "su": 130,
+   "chiamateConCacheRead": 124,
+   "su": 124,
    "percentuale": 100
   },
   "costo": {
-   "spesoGiroUsd": 0.032858,
-   "equivalenteLiveUsd": 0.035806,
-   "perMessaggioUsd": 0.000301,
+   "spesoGiroUsd": 0.002523,
+   "equivalenteLiveUsd": 0.035632,
+   "perMessaggioUsd": 0.000299,
    "tetto": 0.4
   },
   "anthropic": {
-   "hit": 12,
-   "vere": 118,
+   "hit": 118,
+   "vere": 6,
    "mock": 0,
    "assenti": 0,
    "rifiutateTetto": 0,
@@ -53,9 +53,20 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 294.7
+  "durataGiroS": 21.6
  },
- "codici": {},
+ "codici": {
+  "struttura-non-creata": {
+   "GRAVE": 6,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "visibilita-mancante": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  }
+ },
  "unknownSql": [],
  "verdicts": [
   {
@@ -67,13 +78,13 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Completo* quando vuoi che i clienti lo vedano.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. Per ora sono nascosti: scrivi *rendi visibile Completo* quando vuoi che i clienti li vedano.",
-    "Va bene, dimmi da quale Menu vuoi partire e quali Sottomenu ci metto dentro.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamarlo? Scrivimi il nome nuovo, per esempio «rinomina il menu pranzo in Pranzo veloce».",
+    "Ci sto lavorando…\nHo creato il Menu *Pranzo* con il sottomenu *Completo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena* con i sottomenu *Completo*, *Primo*, *Secondo*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
+    "Ho capito, i menu li crei tu. Dimmi il nome del primo menu e lo creo subito.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
-    "Ci sto lavorando…\nNon ho cambiato nulla."
+    "Intendi il Menu *Pranzo* o il Menu *Cena*?"
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
@@ -84,21 +95,21 @@
     "si",
     "1"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
-   "llmCalls": 8,
+   "clarifications": 3,
+   "unexpectedClarifications": 3,
+   "llmCalls": 6,
    "llmMisses": 0,
-   "llmTokens": 82453,
+   "llmTokens": 63025,
    "latencyMs": [
-    2495.5,
-    2852.3,
-    2613.3,
-    3462.5,
-    3331.3,
-    3228,
-    6544.7
+    61.6,
+    5580.1,
+    1810.3,
+    3037,
+    3750.1,
+    3144.4,
+    1353.4
    ],
-   "recordedLlmMs": 24023,
+   "recordedLlmMs": 18323,
    "usedLlm": true,
    "source": "QA Manuel 21/10",
    "note": "conversazione vera: al più tardi dopo il turno 2 Pranzo {Completo} e Cena {Completo, Primo, Secondo}; poi niente doppioni né conferme a vuoto",
@@ -108,28 +119,39 @@
    "id": "str-m2",
    "family": "bv-categorie",
    "menu": "qastruttura",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "struttura-non-creata",
+     "why": "dopo il turno 1: manca il Menu «Pranzo»"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "struttura-non-creata",
+     "why": "dopo il turno 1: manca il Menu «Cena»"
+    }
+   ],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Completo* quando vuoi che i clienti lo vedano.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. Per ora sono nascosti: scrivi *rendi visibile Completo* quando vuoi che i clienti li vedano."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamarlo? Scrivimi il nome nuovo, per esempio «rinomina il menu pranzo in Pranzo veloce».",
+    "Ho creato il Menu *Pranzo* con il sottomenu *Completo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena* con i sottomenu *Completo*, *Primo*, *Secondo*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano."
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
     "in pranzo metti completo come sottomenu, invece in cena metti completo, primo e secondo"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 19644,
+   "llmTokens": 10767,
    "latencyMs": [
-    17.7,
-    19.8
+    10.6,
+    23.8
    ],
-   "recordedLlmMs": 5130,
+   "recordedLlmMs": 5476,
    "usedLlm": true,
    "source": "QA Manuel 21/10 (variante)",
    "note": "variante: il turno 1 basta da solo (Menu vuoti subito), il turno 2 aggiunge i sottomenu",
@@ -139,26 +161,37 @@
    "id": "str-m3",
    "family": "bv-categorie",
    "menu": "qastruttura",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "struttura-non-creata",
+     "why": "dopo il turno 1: manca il Menu «Pranzo»"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "struttura-non-creata",
+     "why": "dopo il turno 1: manca il Menu «Cena»"
+    }
+   ],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamarlo? Scrivimi il nome nuovo, per esempio «rinomina il menu pranzo in Pranzo veloce»."
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
-   "llmTokens": 9612,
+   "llmTokens": 0,
    "latencyMs": [
-    13
+    10.8
    ],
-   "recordedLlmMs": 2314,
-   "usedLlm": true,
+   "recordedLlmMs": 0,
+   "usedLlm": false,
    "source": "QA Manuel 21/10 (variante)",
    "note": "solo il turno 1: due Menu vuoti creati subito (una domanda di seguito sui sottomenu è ammessa)",
    "nonMisurato": false
@@ -182,7 +215,7 @@
     "price|Salsiccia ai ferri|13"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumento di 3 euro tutti i piatti dei Secondi.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 3,00 € i prezzi di 4 piatti.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "Tutti i secondi aumentali di 3 euro"
@@ -191,11 +224,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10171,
+   "llmTokens": 10505,
    "latencyMs": [
-    3341.1
+    39.9
    ],
-   "recordedLlmMs": 3282,
+   "recordedLlmMs": 4004,
    "usedLlm": true,
    "source": "Bim Bum Bar 21/10",
    "note": "+3 € a tutti i Secondi applicato subito con riepilogo, niente OK (4 piatti: se il server vuole l'OK oltre 3 modifiche esce «in-attesa-ok» MEDIO)",
@@ -210,7 +243,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Menu?"
    ],
    "turns": [
     "Aggiungi un nuovo menù"
@@ -219,11 +252,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9628,
+   "llmTokens": 9822,
    "latencyMs": [
-    1744.7
+    16.8
    ],
-   "recordedLlmMs": 1727,
+   "recordedLlmMs": 3169,
    "usedLlm": true,
    "source": "Bim Bum Bar 21/10",
    "note": "manca il nome: una domanda breve, nessuna scrittura",
@@ -238,8 +271,8 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?",
-    "Certo, lo creo. Come lo chiamo il nuovo *Menu*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Menu?",
+    "Ok, lo creo. Che nome vuoi dare al nuovo *Menu*?"
    ],
    "turns": [
     "Aggiungi un nuovo menù",
@@ -249,12 +282,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19418,
+   "llmTokens": 19870,
    "latencyMs": [
-    10.6,
-    2610.7
+    16.2,
+    27.5
    ],
-   "recordedLlmMs": 4318,
+   "recordedLlmMs": 6872,
    "usedLlm": true,
    "source": "Bim Bum Bar 21/10",
    "note": "insiste senza nome: di nuovo una domanda sul nome, mai un Menu/piatto che si chiama con la frase",
@@ -269,20 +302,20 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Menu vuoi aumentare i *Secondi*: *Pranzo* o *Cena*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nI *Secondi* ci sono in più Menu: in quale? *Pranzo* o *Cena*?"
    ],
    "turns": [
     "Tutti i secondi aumentali di 3 euro"
    ],
    "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 20897,
+   "llmTokens": 10355,
    "latencyMs": [
-    7702.5
+    17.3
    ],
-   "recordedLlmMs": 7662,
+   "recordedLlmMs": 3514,
    "usedLlm": true,
    "source": "Bim Bum Bar 21/10",
    "note": "«Secondi» in due Menu: una sola domanda (quale menu), nessuna scrittura",
@@ -306,11 +339,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9771,
+   "llmTokens": 9974,
    "latencyMs": [
-    2444.1
+    19
    ],
-   "recordedLlmMs": 2415,
+   "recordedLlmMs": 1671,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -319,26 +352,32 @@
    "id": "str-a-menu-nuovo-02",
    "family": "bv-categorie",
    "menu": "strutt",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "struttura-non-creata",
+     "why": "dopo il turno 1: manca il Menu «Brunch»"
+    }
+   ],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Brunch*. Per ora è nascosto: scrivi *rendi visibile Brunch* quando vuoi che i clienti lo vedano."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamarlo? Scrivimi il nome nuovo, per esempio «rinomina il menu pranzo in Pranzo veloce»."
    ],
    "turns": [
     "aggiungi un nuovo menù che si chiama Brunch"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
-   "llmTokens": 9777,
+   "llmTokens": 0,
    "latencyMs": [
-    1626.7
+    9.5
    ],
-   "recordedLlmMs": 1609,
-   "usedLlm": true,
+   "recordedLlmMs": 0,
+   "usedLlm": false,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
   },
@@ -360,11 +399,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9765,
+   "llmTokens": 9979,
    "latencyMs": [
-    2379
+    16.8
    ],
-   "recordedLlmMs": 2356,
+   "recordedLlmMs": 2859,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -387,11 +426,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9770,
+   "llmTokens": 9978,
    "latencyMs": [
-    2357.9
+    15.6
    ],
-   "recordedLlmMs": 2337,
+   "recordedLlmMs": 1764,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -400,26 +439,32 @@
    "id": "str-a-menu-nuovo-05",
    "family": "bv-categorie",
    "menu": "strutt",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "struttura-non-creata",
+     "why": "dopo il turno 1: manca il Menu «Asporto»"
+    }
+   ],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Asporto*. Per ora è nascosto: scrivi *rendi visibile Asporto* quando vuoi che i clienti lo vedano."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale Menu vuoi rinominare? Ci sono: Pranzo, Cena, Bevande."
    ],
    "turns": [
     "voglio un menù nuovo, chiamalo Asporto"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
-   "llmTokens": 9776,
+   "llmTokens": 0,
    "latencyMs": [
-    1826.9
+    6.9
    ],
-   "recordedLlmMs": 1808,
-   "usedLlm": true,
+   "recordedLlmMs": 0,
+   "usedLlm": false,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
   },
@@ -441,11 +486,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9770,
+   "llmTokens": 9978,
    "latencyMs": [
-    3188.3
+    15.2
    ],
-   "recordedLlmMs": 3165,
+   "recordedLlmMs": 1336,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -468,11 +513,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9785,
+   "llmTokens": 9994,
    "latencyMs": [
-    2046.8
+    14.7
    ],
-   "recordedLlmMs": 2027,
+   "recordedLlmMs": 2566,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -495,11 +540,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9850,
+   "llmTokens": 10064,
    "latencyMs": [
-    1775.1
+    16.7
    ],
-   "recordedLlmMs": 1745,
+   "recordedLlmMs": 1863,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -522,11 +567,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9955,
+   "llmTokens": 10160,
    "latencyMs": [
-    1935.8
+    16
    ],
-   "recordedLlmMs": 1914,
+   "recordedLlmMs": 2285,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -549,11 +594,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9853,
+   "llmTokens": 10054,
    "latencyMs": [
-    2087.1
+    16
    ],
-   "recordedLlmMs": 2065,
+   "recordedLlmMs": 2880,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -576,11 +621,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9949,
+   "llmTokens": 10153,
    "latencyMs": [
-    2147.4
+    16.4
    ],
-   "recordedLlmMs": 2126,
+   "recordedLlmMs": 3760,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -603,11 +648,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10549,
+   "llmTokens": 10603,
    "latencyMs": [
-    4689.4
+    17.5
    ],
-   "recordedLlmMs": 4664,
+   "recordedLlmMs": 4842,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -630,11 +675,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9793,
+   "llmTokens": 9998,
    "latencyMs": [
-    1651.4
+    14.2
    ],
-   "recordedLlmMs": 1631,
+   "recordedLlmMs": 1728,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -657,11 +702,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9790,
+   "llmTokens": 10260,
    "latencyMs": [
-    1751.8
+    15.4
    ],
-   "recordedLlmMs": 1733,
+   "recordedLlmMs": 2925,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -684,11 +729,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9799,
+   "llmTokens": 9999,
    "latencyMs": [
-    1775
+    13.5
    ],
-   "recordedLlmMs": 1759,
+   "recordedLlmMs": 1741,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -711,11 +756,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9995,
+   "llmTokens": 10178,
    "latencyMs": [
-    1924.5
+    14.9
    ],
-   "recordedLlmMs": 1900,
+   "recordedLlmMs": 1443,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -729,7 +774,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Antipasti* nel Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Antipasti* quando vuoi che i clienti lo vedano."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Antipasti* nel Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Antipasti* quando vuoi che i clienti lo vedano."
    ],
    "turns": [
     "nel menu cena crea Antipasti"
@@ -738,11 +783,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9989,
+   "llmTokens": 10200,
    "latencyMs": [
-    8578.7
+    13.7
    ],
-   "recordedLlmMs": 8550,
+   "recordedLlmMs": 1803,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -765,11 +810,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9876,
+   "llmTokens": 10387,
    "latencyMs": [
-    1835.9
+    15.7
    ],
-   "recordedLlmMs": 1813,
+   "recordedLlmMs": 3869,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -792,11 +837,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10028,
+   "llmTokens": 10089,
    "latencyMs": [
-    2587.1
+    15.3
    ],
-   "recordedLlmMs": 2567,
+   "recordedLlmMs": 2572,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -819,11 +864,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10138,
+   "llmTokens": 10228,
    "latencyMs": [
-    3407
+    20.4
    ],
-   "recordedLlmMs": 3385,
+   "recordedLlmMs": 3146,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -846,11 +891,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10111,
+   "llmTokens": 10324,
    "latencyMs": [
-    3666.4
+    20.6
    ],
-   "recordedLlmMs": 3652,
+   "recordedLlmMs": 3404,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -873,11 +918,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9869,
+   "llmTokens": 10315,
    "latencyMs": [
-    1835
+    14.6
    ],
-   "recordedLlmMs": 1816,
+   "recordedLlmMs": 3047,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -900,11 +945,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10322,
+   "llmTokens": 10644,
    "latencyMs": [
-    3148.9
+    14
    ],
-   "recordedLlmMs": 3132,
+   "recordedLlmMs": 3518,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -927,11 +972,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10238,
+   "llmTokens": 10377,
    "latencyMs": [
-    3531.6
+    15.1
    ],
-   "recordedLlmMs": 3516,
+   "recordedLlmMs": 3340,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -954,11 +999,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10132,
+   "llmTokens": 10428,
    "latencyMs": [
-    2845.7
+    13
    ],
-   "recordedLlmMs": 2828,
+   "recordedLlmMs": 2464,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -981,11 +1026,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10544,
+   "llmTokens": 10587,
    "latencyMs": [
-    4368.1
+    13.8
    ],
-   "recordedLlmMs": 4351,
+   "recordedLlmMs": 3149,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1008,11 +1053,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9771,
+   "llmTokens": 9979,
    "latencyMs": [
-    2314.6
+    12.7
    ],
-   "recordedLlmMs": 2300,
+   "recordedLlmMs": 1903,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1035,11 +1080,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10021,
+   "llmTokens": 10375,
    "latencyMs": [
-    2136.6
+    14.2
    ],
-   "recordedLlmMs": 2119,
+   "recordedLlmMs": 3223,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1062,11 +1107,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9778,
+   "llmTokens": 10175,
    "latencyMs": [
-    1826.6
+    13.9
    ],
-   "recordedLlmMs": 1807,
+   "recordedLlmMs": 2654,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1089,11 +1134,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9782,
+   "llmTokens": 9986,
    "latencyMs": [
-    1709.8
+    14
    ],
-   "recordedLlmMs": 1691,
+   "recordedLlmMs": 2172,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "note": "emoji vietate nei nomi: il Menu si chiama Aperitivo",
@@ -1117,11 +1162,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9942,
+   "llmTokens": 10134,
    "latencyMs": [
-    2690
+    14.5
    ],
-   "recordedLlmMs": 2670,
+   "recordedLlmMs": 2199,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1144,11 +1189,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9810,
+   "llmTokens": 10015,
    "latencyMs": [
-    1631.1
+    12.8
    ],
-   "recordedLlmMs": 1613,
+   "recordedLlmMs": 3559,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1171,11 +1216,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9782,
+   "llmTokens": 9990,
    "latencyMs": [
-    1558.8
+    13.6
    ],
-   "recordedLlmMs": 1540,
+   "recordedLlmMs": 2374,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1200,12 +1245,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19698,
+   "llmTokens": 20085,
    "latencyMs": [
-    16.5,
-    2353.9
+    11.5,
+    9.3
    ],
-   "recordedLlmMs": 4753,
+   "recordedLlmMs": 3467,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1220,7 +1265,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Aperitivo*. Per ora è nascosto: scrivi *rendi visibile Aperitivo* quando vuoi che i clienti lo vedano.",
-    "Fatto: il Menu *Aperitivo* ora è visibile ai clienti. I clienti vedono «Menu in arrivo» finché non aggiungi i piatti."
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
    ],
    "turns": [
     "crea il menu Aperitivo",
@@ -1230,12 +1275,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19664,
+   "llmTokens": 20086,
    "latencyMs": [
-    16.7,
-    2173.1
+    11.5,
+    10.1
    ],
-   "recordedLlmMs": 4569,
+   "recordedLlmMs": 4062,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1260,12 +1305,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19799,
+   "llmTokens": 20127,
    "latencyMs": [
-    1999.7,
-    2439.6
+    13.4,
+    14.2
    ],
-   "recordedLlmMs": 4378,
+   "recordedLlmMs": 4449,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1280,22 +1325,22 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Dolci* nel Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Dolci* quando vuoi che i clienti lo vedano.",
-    "Non ho cambiato nulla."
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
    ],
    "turns": [
     "nel menu cena aggiungi il sottomenu Dolci",
     "sì dai"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 30006,
+   "llmTokens": 30627,
    "latencyMs": [
-    18.9,
-    4460.7
+    13.7,
+    23.4
    ],
-   "recordedLlmMs": 6398,
+   "recordedLlmMs": 5613,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1310,22 +1355,22 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Brunch*. Per ora è nascosto: scrivi *rendi visibile Brunch* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Asporto*. Per ora è nascosto: scrivi *rendi visibile Asporto* quando vuoi che i clienti lo vedano.",
-    "Fatto: il Menu *Brunch* ora è visibile ai clienti. I clienti vedono «Menu in arrivo» finché non aggiungi i piatti.\nFatto: il Menu *Asporto* ora è visibile ai clienti. I clienti vedono «Menu in arrivo» finché non aggiungi i piatti."
+    "Non ho nessuna modifica in sospeso da confermare. Cosa vuoi che faccia adesso?"
    ],
    "turns": [
     "aggiungi i menu Brunch e Asporto",
     "sì dai"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 19897,
+   "llmTokens": 30728,
    "latencyMs": [
-    2529.1,
-    2620.6
+    16.2,
+    21.4
    ],
-   "recordedLlmMs": 5103,
+   "recordedLlmMs": 5823,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1340,22 +1385,22 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Brunch*. Per ora è nascosto: scrivi *rendi visibile Brunch* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Asporto*. Per ora è nascosto: scrivi *rendi visibile Asporto* quando vuoi che i clienti lo vedano.",
-    "Non ho modifiche in sospeso da confermare. Dimmi cosa vuoi cambiare nel menu."
+    "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla."
    ],
    "turns": [
     "aggiungi i menu Brunch e Asporto",
     "ok procedi"
    ],
-   "clarifications": 1,
-   "unexpectedClarifications": 1,
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 30128,
+   "llmTokens": 30954,
    "latencyMs": [
-    21.2,
-    4675
+    12.2,
+    17.6
    ],
-   "recordedLlmMs": 7144,
+   "recordedLlmMs": 5593,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1370,7 +1415,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Contorni* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Contorni* quando vuoi che i clienti lo vedano.",
-    "Non c'è nessuna modifica in attesa da confermare. Dimmi cosa vuoi cambiare nel menu."
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
    ],
    "turns": [
     "in pranzo metti il sottomenu Contorni",
@@ -1380,12 +1425,12 @@
    "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 29987,
+   "llmTokens": 30854,
    "latencyMs": [
-    17.6,
-    3889.6
+    11.4,
+    15.7
    ],
-   "recordedLlmMs": 5595,
+   "recordedLlmMs": 7566,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1400,7 +1445,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Contorni* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Contorni* quando vuoi che i clienti lo vedano.",
-    "Vuoi che renda visibile il sottomenu *Contorni* nel Menu *Pranzo* ai clienti?"
+    "Vuoi che confermi l'ultima richiesta, cioè il Sottomenu *Contorni* nel Menu *Pranzo*? Rispondi sì."
    ],
    "turns": [
     "in pranzo metti il sottomenu Contorni",
@@ -1410,12 +1455,12 @@
    "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 29786,
+   "llmTokens": 30948,
    "latencyMs": [
-    14.6,
-    4223.6
+    11.9,
+    13.5
    ],
-   "recordedLlmMs": 5928,
+   "recordedLlmMs": 8648,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1440,12 +1485,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19916,
+   "llmTokens": 20348,
    "latencyMs": [
-    2093.5,
-    2603.2
+    11.9,
+    14.1
    ],
-   "recordedLlmMs": 4654,
+   "recordedLlmMs": 4272,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1460,7 +1505,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Aperitivo* con il sottomenu *Spritz*. Per ora è nascosto: scrivi *rendi visibile Aperitivo* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. Per ora è nascosto: scrivi *rendi visibile Cocktail* quando vuoi che i clienti lo vedano."
+    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. I clienti lo vedranno quando renderai visibile il Menu."
    ],
    "turns": [
     "crea il menu Aperitivo con il sottomenu Spritz",
@@ -1470,12 +1515,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 20146,
+   "llmTokens": 20803,
    "latencyMs": [
-    1852.4,
-    1789.7
+    14.3,
+    13.4
    ],
-   "recordedLlmMs": 3608,
+   "recordedLlmMs": 5957,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1500,12 +1545,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19757,
+   "llmTokens": 20174,
    "latencyMs": [
-    1855.1,
-    1783.3
+    13.8,
+    12.9
    ],
-   "recordedLlmMs": 3604,
+   "recordedLlmMs": 4094,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1530,12 +1575,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19817,
+   "llmTokens": 20498,
    "latencyMs": [
-    2173.9,
-    2583
+    13.4,
+    12.6
    ],
-   "recordedLlmMs": 4716,
+   "recordedLlmMs": 4914,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1560,12 +1605,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 20060,
+   "llmTokens": 20752,
    "latencyMs": [
-    1631.5,
-    1987.8
+    13.8,
+    13.3
    ],
-   "recordedLlmMs": 3590,
+   "recordedLlmMs": 4823,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1590,12 +1635,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19627,
+   "llmTokens": 19910,
    "latencyMs": [
-    2019.6,
-    2542.7
+    8.2,
+    9.8
    ],
-   "recordedLlmMs": 4537,
+   "recordedLlmMs": 4759,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1618,11 +1663,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9787,
+   "llmTokens": 9988,
    "latencyMs": [
-    2134.9
+    12.5
    ],
-   "recordedLlmMs": 2116,
+   "recordedLlmMs": 1500,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1645,11 +1690,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9953,
+   "llmTokens": 10159,
    "latencyMs": [
-    2537
+    13.6
    ],
-   "recordedLlmMs": 2517,
+   "recordedLlmMs": 2454,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1672,11 +1717,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10081,
+   "llmTokens": 10203,
    "latencyMs": [
-    2132.6
+    13.5
    ],
-   "recordedLlmMs": 2111,
+   "recordedLlmMs": 1557,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1699,11 +1744,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9781,
+   "llmTokens": 9989,
    "latencyMs": [
-    2126.2
+    12.8
    ],
-   "recordedLlmMs": 2108,
+   "recordedLlmMs": 2265,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1726,11 +1771,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 20335,
+   "llmTokens": 20857,
    "latencyMs": [
-    4227.7
+    14.3
    ],
-   "recordedLlmMs": 4207,
+   "recordedLlmMs": 5760,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1753,11 +1798,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9771,
+   "llmTokens": 9979,
    "latencyMs": [
-    2059.4
+    9.2
    ],
-   "recordedLlmMs": 2043,
+   "recordedLlmMs": 3121,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1771,7 +1816,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu cena* c'è già: vuoi aggiungerci un Sottomenu?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu cena* c'è già: vuoi aggiungere un Sottomenu o un Piatto?"
    ],
    "turns": [
     "crea il menu cena"
@@ -1780,11 +1825,11 @@
    "unexpectedClarifications": 1,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10068,
+   "llmTokens": 10168,
    "latencyMs": [
-    3600.9
+    17.2
    ],
-   "recordedLlmMs": 3587,
+   "recordedLlmMs": 2544,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1798,7 +1843,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu cena* c'è già il Sottomenu *Pizze*: ne creo un altro con lo stesso nome?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel Menu cena c'è già il Sottomenu *Pizze*: ne creo un altro con lo stesso nome?"
    ],
    "turns": [
     "nel menu cena aggiungi il sottomenu Pizze"
@@ -1807,11 +1852,11 @@
    "unexpectedClarifications": 1,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10398,
+   "llmTokens": 10538,
    "latencyMs": [
-    4763.5
+    18.6
    ],
-   "recordedLlmMs": 4742,
+   "recordedLlmMs": 3172,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1834,11 +1879,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9781,
+   "llmTokens": 9989,
    "latencyMs": [
-    2314.2
+    10.4
    ],
-   "recordedLlmMs": 2299,
+   "recordedLlmMs": 1639,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1852,7 +1897,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il Sottomenu che vuoi creare, e in quale Menu lo metto: *Pranzo*, *Cena* o *Bevande*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Sottomenu? Dimmi anche in quale Menu va: Pranzo, Cena o Bevande."
    ],
    "turns": [
     "crea un sottomenu"
@@ -1861,11 +1906,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9754,
+   "llmTokens": 9925,
    "latencyMs": [
-    1953.5
+    13.3
    ],
-   "recordedLlmMs": 1941,
+   "recordedLlmMs": 2010,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1888,11 +1933,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9914,
+   "llmTokens": 10221,
    "latencyMs": [
-    2662.1
+    11.7
    ],
-   "recordedLlmMs": 2651,
+   "recordedLlmMs": 2770,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "note": "tre Menu: quale?",
@@ -1907,7 +1952,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Menu?"
    ],
    "turns": [
     "crea un nuovo menu"
@@ -1916,11 +1961,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9689,
+   "llmTokens": 9901,
    "latencyMs": [
-    2114.5
+    11.6
    ],
-   "recordedLlmMs": 2105,
+   "recordedLlmMs": 1895,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1934,7 +1979,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo *Menu*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamarlo il nuovo Menu?"
    ],
    "turns": [
     "aggiungi un menu"
@@ -1943,11 +1988,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9688,
+   "llmTokens": 9900,
    "latencyMs": [
-    1386.6
+    9.2
    ],
-   "recordedLlmMs": 1373,
+   "recordedLlmMs": 2086,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1961,7 +2006,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome lo chiamo il nuovo Sottomenu nel Menu Cena?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome lo vuoi chiamare il nuovo Sottomenu nel Menu cena?"
    ],
    "turns": [
     "nel menu cena aggiungi un sottomenu"
@@ -1970,11 +2015,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9843,
+   "llmTokens": 9930,
    "latencyMs": [
-    2449.2
+    13.1
    ],
-   "recordedLlmMs": 2431,
+   "recordedLlmMs": 2510,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -1988,7 +2033,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il nuovo *Sottomenu*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome si chiama il nuovo Sottomenu e in quale Menu lo metto: Pranzo, Cena o Bevande?"
    ],
    "turns": [
     "aggiungi una categoria"
@@ -1997,11 +2042,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9880,
+   "llmTokens": 9952,
    "latencyMs": [
-    2444.6
+    9.5
    ],
-   "recordedLlmMs": 2435,
+   "recordedLlmMs": 2200,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -2015,7 +2060,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il nuovo Menu? Dimmi il nome intero, per esempio *Pranzo*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il menu nuovo? Dimmi il nome completo."
    ],
    "turns": [
     "🎤 eh crea… il menu… pranz"
@@ -2024,11 +2069,11 @@
    "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19670,
+   "llmTokens": 20213,
    "latencyMs": [
-    5916.3
+    18.6
    ],
-   "recordedLlmMs": 5896,
+   "recordedLlmMs": 5733,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -2051,11 +2096,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9978,
+   "llmTokens": 10150,
    "latencyMs": [
-    2996.7
+    14.7
    ],
-   "recordedLlmMs": 2981,
+   "recordedLlmMs": 2614,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -2069,20 +2114,20 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Aperitivo*. Per ora è nascosto: scrivi *rendi visibile Aperitivo* quando vuoi che i clienti lo vedano."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi creare un Menu che si chiama *Aperitivo*?"
    ],
    "turns": [
     "🎤 eh nuovo menu aperitiv… aperitivo"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9994,
+   "llmTokens": 9921,
    "latencyMs": [
-    2516.7
+    14.7
    ],
-   "recordedLlmMs": 2490,
+   "recordedLlmMs": 1465,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -2105,11 +2150,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9951,
+   "llmTokens": 10152,
    "latencyMs": [
-    2329.8
+    13.6
    ],
-   "recordedLlmMs": 2300,
+   "recordedLlmMs": 2780,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -2132,11 +2177,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9899,
+   "llmTokens": 10151,
    "latencyMs": [
-    2614.4
+    14.4
    ],
-   "recordedLlmMs": 2590,
+   "recordedLlmMs": 2380,
    "usedLlm": true,
    "source": "batteria struttura 21/10 (template)",
    "nonMisurato": false
@@ -2159,11 +2204,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9882,
+   "llmTokens": 10092,
    "latencyMs": [
-    2515.2
+    14.6
    ],
-   "recordedLlmMs": 2497,
+   "recordedLlmMs": 1542,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2186,11 +2231,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9896,
+   "llmTokens": 10100,
    "latencyMs": [
-    2087.8
+    13
    ],
-   "recordedLlmMs": 2066,
+   "recordedLlmMs": 2022,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2213,11 +2258,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10027,
+   "llmTokens": 10096,
    "latencyMs": [
-    2146.7
+    14.2
    ],
-   "recordedLlmMs": 2128,
+   "recordedLlmMs": 1690,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2240,11 +2285,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9894,
+   "llmTokens": 10102,
    "latencyMs": [
-    2407.5
+    13.6
    ],
-   "recordedLlmMs": 2391,
+   "recordedLlmMs": 1550,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2267,11 +2312,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9889,
+   "llmTokens": 10099,
    "latencyMs": [
-    2055.4
+    8.9
    ],
-   "recordedLlmMs": 2037,
+   "recordedLlmMs": 2103,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2294,11 +2339,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10308,
+   "llmTokens": 10585,
    "latencyMs": [
-    2135.8
+    11.7
    ],
-   "recordedLlmMs": 2116,
+   "recordedLlmMs": 2578,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2312,7 +2357,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuali Dolci vuoi far vedere: quelli del *Pranzo* o quelli della *Cena*?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi i *Dolci* del *Pranzo* o quelli della *Cena*?"
    ],
    "turns": [
     "fai vedere i dolci"
@@ -2321,11 +2366,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10289,
+   "llmTokens": 10567,
    "latencyMs": [
-    3103.3
+    12.3
    ],
-   "recordedLlmMs": 3090,
+   "recordedLlmMs": 3663,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "«Dolci» in due Menu: una domanda, niente reso visibile",
@@ -2335,25 +2380,31 @@
    "id": "str-v-08",
    "family": "bv-categorie",
    "menu": "struttvis",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "visibilita-mancante",
+     "why": "dopo il turno 1: «Cena>Dolci» è ancora nascosto"
+    }
+   ],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto: il sottomenu *Dolci* ora è visibile ai clienti. I clienti vedono «Menu in arrivo» finché non aggiungi i piatti."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuali *Dolci* vuoi rendere visibili, quelli del *Pranzo* o della *Cena*?"
    ],
    "turns": [
     "fai vedere i dolci della cena"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 10259,
+   "llmTokens": 20990,
    "latencyMs": [
-    2754
+    16.5
    ],
-   "recordedLlmMs": 2724,
+   "recordedLlmMs": 4157,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2376,11 +2427,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10096,
+   "llmTokens": 10252,
    "latencyMs": [
-    2559
+    10.2
    ],
-   "recordedLlmMs": 2546,
+   "recordedLlmMs": 2611,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "già nascosto: nessun cambio",
@@ -2395,8 +2446,8 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Menu *Cena*: *nascosto* ai clienti (7 piatti)",
-    "Ok, pubblico la modifica al *Menu cena*.\n\nMenu *Cena*: *nascosto* ai clienti (7 piatti)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Menu *Cena*: *nascosto* ai clienti (7 piatti)",
+    "Ok, confermo le modifiche in sospeso.\n\nMenu *Cena*: *nascosto* ai clienti (7 piatti)"
    ],
    "turns": [
     "nascondi tutto il menu cena",
@@ -2406,12 +2457,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 31573,
+   "llmTokens": 32338,
    "latencyMs": [
-    6940.9,
-    1999.7
+    15.8,
+    18.4
    ],
-   "recordedLlmMs": 8890,
+   "recordedLlmMs": 8911,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "Menu con piatti: prima la conferma, poi nascosto",
@@ -2435,11 +2486,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9898,
+   "llmTokens": 10106,
    "latencyMs": [
-    1717.4
+    15.3
    ],
-   "recordedLlmMs": 1699,
+   "recordedLlmMs": 2032,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "nasce nascosto",
@@ -2465,12 +2516,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 19912,
+   "llmTokens": 20331,
    "latencyMs": [
-    14.4,
-    1443.4
+    13.1,
+    15.5
    ],
-   "recordedLlmMs": 3124,
+   "recordedLlmMs": 3653,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2493,11 +2544,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9901,
+   "llmTokens": 10109,
    "latencyMs": [
-    1586.9
+    13.4
    ],
-   "recordedLlmMs": 1570,
+   "recordedLlmMs": 2006,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2522,12 +2573,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 20232,
+   "llmTokens": 20648,
    "latencyMs": [
-    10.8,
-    1945.7
+    13.3,
+    15.1
    ],
-   "recordedLlmMs": 3489,
+   "recordedLlmMs": 4728,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2550,11 +2601,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9889,
+   "llmTokens": 10097,
    "latencyMs": [
-    1383.5
+    13.3
    ],
-   "recordedLlmMs": 1351,
+   "recordedLlmMs": 2338,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2568,20 +2619,20 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi il Menu *Brunch*, che è nascosto e non ha ancora piatti?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho un Menu Colazione: intendi il *Brunch*?"
    ],
    "turns": [
     "mostra il menu della colazione"
    ],
    "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 19963,
+   "llmTokens": 10303,
    "latencyMs": [
-    4363.8
+    12.7
    ],
-   "recordedLlmMs": 4340,
+   "recordedLlmMs": 2741,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "non esiste: una domanda",
@@ -2596,7 +2647,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAttivo il *Menu pranzo* per i clienti.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
    ],
    "turns": [
     "attiva il pranzo"
@@ -2605,11 +2656,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 10024,
+   "llmTokens": 10092,
    "latencyMs": [
-    2681.8
+    8.9
    ],
-   "recordedLlmMs": 2669,
+   "recordedLlmMs": 2677,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "già visibile: nessun cambio",
@@ -2624,20 +2675,20 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo i piatti dei *Secondi* del *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Menu *Cena*: *nascosto* ai clienti (7 piatti)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo i *Secondi* della *Cena*? Rispondi sì.\n\n1. *Filetto al pepe* (24,00 €)\n2. *Branzino al forno* (22,00 €)"
    ],
    "turns": [
     "nascondi i secondi della cena"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 21553,
+   "llmTokens": 22003,
    "latencyMs": [
-    7323.7
+    17.9
    ],
-   "recordedLlmMs": 7291,
+   "recordedLlmMs": 8808,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "note": "sottomenu con piatti: conferma prima di nascondere",
@@ -2661,11 +2712,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9978,
+   "llmTokens": 10183,
    "latencyMs": [
-    1587.7
+    13.1
    ],
-   "recordedLlmMs": 1555,
+   "recordedLlmMs": 2159,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2688,11 +2739,11 @@
    "unexpectedClarifications": 0,
    "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 9917,
+   "llmTokens": 10130,
    "latencyMs": [
-    1505.9
+    14.5
    ],
-   "recordedLlmMs": 1487,
+   "recordedLlmMs": 1962,
    "usedLlm": true,
    "source": "visibilità 21/10",
    "nonMisurato": false
@@ -2701,1691 +2752,1613 @@
  "chiamate": [
   {
    "conv": "str-m1",
-   "hash": "ab91fba81c097b9f",
+   "hash": "39293a77869f4116",
    "source": "real",
    "status": 200,
-   "ms": 2314,
+   "ms": 5476,
    "usage": {
-    "input": 76,
-    "output": 281,
-    "cacheRead": 9059,
+    "input": 165,
+    "output": 1139,
+    "cacheRead": 9267,
     "cacheWrite": 196
    }
   },
   {
    "conv": "str-m1",
-   "hash": "57389fdd43aacbe7",
+   "hash": "f88b2832adcbd821",
    "source": "real",
    "status": 200,
-   "ms": 2816,
+   "ms": 1756,
    "usage": {
-    "input": 279,
-    "output": 466,
-    "cacheRead": 9059,
-    "cacheWrite": 228
+    "input": 383,
+    "output": 171,
+    "cacheRead": 9267,
+    "cacheWrite": 288
    }
   },
   {
    "conv": "str-m1",
-   "hash": "df7638aebc32e8a5",
+   "hash": "3746b0dc77c4e3ca",
    "source": "real",
    "status": 200,
-   "ms": 2572,
+   "ms": 3010,
    "usage": {
-    "input": 445,
-    "output": 158,
-    "cacheRead": 9059,
-    "cacheWrite": 325
-   }
-  },
-  {
-   "conv": "str-m1",
-   "hash": "2c5b3793a83c78f4",
-   "source": "real",
-   "status": 200,
-   "ms": 3437,
-   "usage": {
-    "input": 574,
-    "output": 486,
-    "cacheRead": 9384,
+    "input": 433,
+    "output": 629,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "5c1d1e234820ec8f",
+   "hash": "4d69f7aa995a46f8",
    "source": "real",
    "status": 200,
-   "ms": 3310,
+   "ms": 3728,
    "usage": {
-    "input": 534,
-    "output": 573,
-    "cacheRead": 9384,
+    "input": 470,
+    "output": 615,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "c00860aed3d472a5",
+   "hash": "cfd03af57b910620",
    "source": "real",
    "status": 200,
-   "ms": 3090,
+   "ms": 3024,
    "usage": {
-    "input": 569,
-    "output": 497,
-    "cacheRead": 9384,
+    "input": 505,
+    "output": 593,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "a3244d00c619352b",
+   "hash": "049ba50e72975786",
    "source": "real",
    "status": 200,
-   "ms": 3802,
+   "ms": 1329,
    "usage": {
-    "input": 604,
-    "output": 430,
-    "cacheRead": 9384,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-m1",
-   "hash": "3183bcf2aa4ec512",
-   "source": "real",
-   "status": 200,
-   "ms": 2682,
-   "usage": {
-    "input": 1205,
-    "output": 430,
-    "cacheRead": 9384,
+    "input": 540,
+    "output": 144,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m2",
-   "hash": "ab91fba81c097b9f",
+   "hash": "39293a77869f4116",
    "source": "hit",
    "status": 200,
-   "ms": 2314,
+   "ms": 5476,
    "usage": {
-    "input": 76,
-    "output": 281,
-    "cacheRead": 9059,
-    "cacheWrite": 196
-   }
-  },
-  {
-   "conv": "str-m2",
-   "hash": "57389fdd43aacbe7",
-   "source": "hit",
-   "status": 200,
-   "ms": 2816,
-   "usage": {
-    "input": 279,
-    "output": 466,
-    "cacheRead": 9059,
-    "cacheWrite": 228
-   }
-  },
-  {
-   "conv": "str-m3",
-   "hash": "ab91fba81c097b9f",
-   "source": "hit",
-   "status": 200,
-   "ms": 2314,
-   "usage": {
-    "input": 76,
-    "output": 281,
-    "cacheRead": 9059,
+    "input": 165,
+    "output": 1139,
+    "cacheRead": 9267,
     "cacheWrite": 196
    }
   },
   {
    "conv": "str-b1",
-   "hash": "5f577d0d55886afe",
-   "source": "real",
+   "hash": "558fce733b901c7d",
+   "source": "hit",
    "status": 200,
-   "ms": 3282,
+   "ms": 4004,
    "usage": {
     "input": 54,
-    "output": 642,
-    "cacheRead": 9059,
+    "output": 768,
+    "cacheRead": 9267,
     "cacheWrite": 416
    }
   },
   {
    "conv": "str-b2",
-   "hash": "9662a04e395d9055",
-   "source": "real",
-   "status": 200,
-   "ms": 1727,
-   "usage": {
-    "input": 49,
-    "output": 254,
-    "cacheRead": 9059,
-    "cacheWrite": 266
-   }
-  },
-  {
-   "conv": "str-b3",
-   "hash": "9662a04e395d9055",
+   "hash": "2528ae08f312664c",
    "source": "hit",
    "status": 200,
-   "ms": 1727,
+   "ms": 3169,
    "usage": {
     "input": 49,
-    "output": 254,
-    "cacheRead": 9059,
+    "output": 240,
+    "cacheRead": 9267,
     "cacheWrite": 266
    }
   },
   {
    "conv": "str-b3",
-   "hash": "5e39ce5f2085e682",
-   "source": "real",
+   "hash": "2528ae08f312664c",
+   "source": "hit",
    "status": 200,
-   "ms": 2591,
+   "ms": 3169,
    "usage": {
-    "input": 157,
-    "output": 308,
-    "cacheRead": 9325,
+    "input": 49,
+    "output": 240,
+    "cacheRead": 9267,
+    "cacheWrite": 266
+   }
+  },
+  {
+   "conv": "str-b3",
+   "hash": "27d9264eee9e6d5c",
+   "source": "hit",
+   "status": 200,
+   "ms": 3703,
+   "usage": {
+    "input": 153,
+    "output": 362,
+    "cacheRead": 9533,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-b4",
-   "hash": "9345261c183f222c",
-   "source": "real",
+   "hash": "4ee48401873babc4",
+   "source": "hit",
    "status": 200,
-   "ms": 5424,
+   "ms": 3514,
    "usage": {
     "input": 54,
-    "output": 1164,
-    "cacheRead": 9059,
+    "output": 640,
+    "cacheRead": 9267,
     "cacheWrite": 394
    }
   },
   {
-   "conv": "str-b4",
-   "hash": "42b31367d1c123bf",
-   "source": "real",
-   "status": 200,
-   "ms": 2238,
-   "usage": {
-    "input": 613,
-    "output": 160,
-    "cacheRead": 9453,
-    "cacheWrite": 0
-   }
-  },
-  {
    "conv": "str-a-menu-nuovo-01",
-   "hash": "755c3bc7c0c12bd5",
-   "source": "real",
+   "hash": "77a3a7ded87d214a",
+   "source": "hit",
    "status": 200,
-   "ms": 2415,
+   "ms": 1671,
    "usage": {
     "input": 47,
-    "output": 208,
-    "cacheRead": 9059,
+    "output": 203,
+    "cacheRead": 9267,
     "cacheWrite": 457
    }
   },
   {
-   "conv": "str-a-menu-nuovo-02",
-   "hash": "6df55a486a38fe68",
-   "source": "real",
-   "status": 200,
-   "ms": 1609,
-   "usage": {
-    "input": 57,
-    "output": 204,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
    "conv": "str-a-menu-nuovo-03",
-   "hash": "1057013e5d499aa0",
-   "source": "real",
+   "hash": "3a8b6323fc6244d5",
+   "source": "hit",
    "status": 200,
-   "ms": 2356,
+   "ms": 2859,
    "usage": {
     "input": 46,
-    "output": 203,
-    "cacheRead": 9516,
+    "output": 209,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-menu-nuovo-04",
-   "hash": "d3138b72108982fe",
-   "source": "real",
+   "hash": "4c151fbbeef859e8",
+   "source": "hit",
    "status": 200,
-   "ms": 2337,
+   "ms": 1764,
    "usage": {
     "input": 48,
     "output": 206,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-menu-nuovo-05",
-   "hash": "8652a2159d2a0756",
-   "source": "real",
-   "status": 200,
-   "ms": 1808,
-   "usage": {
-    "input": 56,
-    "output": 204,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-menu-nuovo-06",
-   "hash": "02bb267e9bbdd473",
-   "source": "real",
+   "hash": "4808b102e6c9adb7",
+   "source": "hit",
    "status": 200,
-   "ms": 3165,
+   "ms": 1336,
    "usage": {
     "input": 49,
     "output": 205,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-menu-nuovo-07",
-   "hash": "75a53a4066e0fb83",
-   "source": "real",
+   "hash": "c9de083445ef9aa6",
+   "source": "hit",
    "status": 200,
-   "ms": 2027,
+   "ms": 2566,
    "usage": {
     "input": 54,
-    "output": 215,
-    "cacheRead": 9516,
+    "output": 216,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-piu-menu-01",
-   "hash": "94f45c9f307db6f0",
-   "source": "real",
+   "hash": "3fddb0fe9141d08c",
+   "source": "hit",
    "status": 200,
-   "ms": 1745,
+   "ms": 1863,
    "usage": {
     "input": 52,
-    "output": 282,
-    "cacheRead": 9516,
+    "output": 288,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-piu-menu-02",
-   "hash": "7ce138dfb6b0b52e",
-   "source": "real",
+   "hash": "e4ac1905418a4225",
+   "source": "hit",
    "status": 200,
-   "ms": 1914,
+   "ms": 2285,
    "usage": {
     "input": 63,
-    "output": 376,
-    "cacheRead": 9516,
+    "output": 373,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-piu-menu-03",
-   "hash": "7b6dc15a51609982",
-   "source": "real",
+   "hash": "481a4890ef94baab",
+   "source": "hit",
    "status": 200,
-   "ms": 2065,
+   "ms": 2880,
    "usage": {
     "input": 56,
-    "output": 281,
-    "cacheRead": 9516,
+    "output": 274,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-piu-menu-04",
-   "hash": "b6563b35f555d5e4",
-   "source": "real",
+   "hash": "62b49f8f1dbb1c6f",
+   "source": "hit",
    "status": 200,
-   "ms": 2126,
+   "ms": 3760,
    "usage": {
     "input": 60,
-    "output": 373,
-    "cacheRead": 9516,
+    "output": 369,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-piu-menu-05",
-   "hash": "4147a39137b2462c",
-   "source": "real",
+   "hash": "dd7739040b3c8631",
+   "source": "hit",
    "status": 200,
-   "ms": 4664,
+   "ms": 4842,
    "usage": {
     "input": 75,
-    "output": 958,
-    "cacheRead": 9516,
+    "output": 804,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sottomenu-01",
-   "hash": "99e706aa628d6a92",
-   "source": "real",
+   "hash": "ed9a87dd36003215",
+   "source": "hit",
    "status": 200,
-   "ms": 1631,
+   "ms": 1728,
    "usage": {
     "input": 58,
-    "output": 219,
-    "cacheRead": 9516,
+    "output": 216,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sottomenu-02",
-   "hash": "a71e96aa24c90b74",
-   "source": "real",
+   "hash": "69671fbe8a072611",
+   "source": "hit",
    "status": 200,
-   "ms": 1733,
+   "ms": 2925,
    "usage": {
     "input": 53,
-    "output": 221,
-    "cacheRead": 9516,
+    "output": 483,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sottomenu-03",
-   "hash": "aa3cb7f993ee4eae",
-   "source": "real",
+   "hash": "0489be97e3a987f2",
+   "source": "hit",
    "status": 200,
-   "ms": 1759,
+   "ms": 1741,
    "usage": {
     "input": 57,
-    "output": 226,
-    "cacheRead": 9516,
+    "output": 218,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sottomenu-04",
-   "hash": "22c55c12be06f1c8",
-   "source": "real",
+   "hash": "ddc88d96050f1d53",
+   "source": "hit",
    "status": 200,
-   "ms": 1900,
+   "ms": 1443,
    "usage": {
     "input": 54,
-    "output": 214,
-    "cacheRead": 9059,
+    "output": 189,
+    "cacheRead": 9267,
     "cacheWrite": 668
    }
   },
   {
    "conv": "str-a-sottomenu-05",
-   "hash": "e24e9e832c538f35",
-   "source": "real",
+   "hash": "38965a304f9a8691",
+   "source": "hit",
    "status": 200,
-   "ms": 8550,
+   "ms": 1803,
    "usage": {
     "input": 49,
-    "output": 213,
-    "cacheRead": 9727,
+    "output": 216,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sottomenu-06",
-   "hash": "ed0c59b51b673812",
-   "source": "real",
+   "hash": "f49d24b4d15c7f80",
+   "source": "hit",
    "status": 200,
-   "ms": 1813,
+   "ms": 3869,
    "usage": {
     "input": 60,
-    "output": 300,
-    "cacheRead": 9516,
+    "output": 603,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-due-menu-01",
-   "hash": "3f1d385362962110",
-   "source": "real",
+   "hash": "06de3be0f0d9bc5e",
+   "source": "hit",
    "status": 200,
-   "ms": 2567,
+   "ms": 2572,
    "usage": {
     "input": 62,
-    "output": 450,
-    "cacheRead": 9516,
+    "output": 303,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-due-menu-02",
-   "hash": "fbe11bb557b8b785",
-   "source": "real",
+   "hash": "3c2e66d99dcebd60",
+   "source": "hit",
    "status": 200,
-   "ms": 3385,
+   "ms": 3146,
    "usage": {
     "input": 51,
-    "output": 571,
-    "cacheRead": 9516,
+    "output": 453,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-due-menu-03",
-   "hash": "9ad72085601b440f",
-   "source": "real",
+   "hash": "03e4c08c1aba3088",
+   "source": "hit",
    "status": 200,
-   "ms": 3652,
+   "ms": 3404,
    "usage": {
     "input": 59,
-    "output": 536,
-    "cacheRead": 9516,
+    "output": 541,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-due-menu-04",
-   "hash": "85baf1208b21fe50",
-   "source": "real",
+   "hash": "8c3249c665130705",
+   "source": "hit",
    "status": 200,
-   "ms": 1816,
+   "ms": 3047,
    "usage": {
     "input": 55,
-    "output": 298,
-    "cacheRead": 9516,
+    "output": 536,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sezione-01",
-   "hash": "39ef408292cd1a9f",
-   "source": "real",
+   "hash": "0148692df67a6a9e",
+   "source": "hit",
    "status": 200,
-   "ms": 3132,
+   "ms": 3518,
    "usage": {
     "input": 62,
-    "output": 533,
-    "cacheRead": 9727,
+    "output": 647,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sezione-02",
-   "hash": "b9a4a23b28f960fd",
-   "source": "real",
+   "hash": "35d777891e2cfd0c",
+   "source": "hit",
    "status": 200,
-   "ms": 3516,
+   "ms": 3340,
    "usage": {
     "input": 59,
-    "output": 663,
-    "cacheRead": 9516,
+    "output": 594,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sezione-03",
-   "hash": "e7a3aadeb3a14dd1",
-   "source": "real",
+   "hash": "a7ff12a835b57a3b",
+   "source": "hit",
    "status": 200,
-   "ms": 2828,
+   "ms": 2464,
    "usage": {
     "input": 56,
-    "output": 349,
-    "cacheRead": 9727,
+    "output": 437,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-sezione-04",
-   "hash": "fa7d3d8ccc5f7995",
-   "source": "real",
+   "hash": "50288af18ce451ee",
+   "source": "hit",
    "status": 200,
-   "ms": 4351,
+   "ms": 3149,
    "usage": {
     "input": 55,
-    "output": 762,
-    "cacheRead": 9727,
+    "output": 597,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-01",
-   "hash": "100998f10984317b",
-   "source": "real",
+   "hash": "f710c7ce38023c1b",
+   "source": "hit",
    "status": 200,
-   "ms": 2300,
+   "ms": 1903,
    "usage": {
     "input": 47,
     "output": 208,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-02",
-   "hash": "4254beb27ae8cfd6",
-   "source": "real",
+   "hash": "26dcbb34e6fb6ff8",
+   "source": "hit",
    "status": 200,
-   "ms": 2119,
+   "ms": 3223,
    "usage": {
     "input": 63,
-    "output": 231,
-    "cacheRead": 9727,
+    "output": 377,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-03",
-   "hash": "a081f648fa22b06c",
-   "source": "real",
+   "hash": "0e804bedc59d64c3",
+   "source": "hit",
    "status": 200,
-   "ms": 1807,
+   "ms": 2654,
    "usage": {
     "input": 59,
-    "output": 203,
-    "cacheRead": 9516,
+    "output": 392,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-04",
-   "hash": "6d5d13fa5e41e054",
-   "source": "real",
+   "hash": "f319f3e51c5707e7",
+   "source": "hit",
    "status": 200,
-   "ms": 1691,
+   "ms": 2172,
    "usage": {
     "input": 54,
-    "output": 212,
-    "cacheRead": 9516,
+    "output": 208,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-05",
-   "hash": "7bbf1d596bf6c312",
-   "source": "real",
+   "hash": "b4b17ec314e4e0f1",
+   "source": "hit",
    "status": 200,
-   "ms": 2670,
+   "ms": 2199,
    "usage": {
     "input": 56,
-    "output": 370,
-    "cacheRead": 9516,
+    "output": 354,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-06",
-   "hash": "0cdea5c9a3f6d46d",
-   "source": "real",
+   "hash": "8659a093ea0ba702",
+   "source": "hit",
    "status": 200,
-   "ms": 1613,
+   "ms": 3559,
    "usage": {
     "input": 62,
-    "output": 232,
-    "cacheRead": 9516,
+    "output": 229,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-nomi-strani-07",
-   "hash": "c1a1e9fce797617e",
-   "source": "real",
+   "hash": "a54a2e7cdf151f78",
+   "source": "hit",
    "status": 200,
-   "ms": 1540,
+   "ms": 2374,
    "usage": {
     "input": 52,
     "output": 214,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-conferme-vaghe-01",
-   "hash": "755c3bc7c0c12bd5",
+   "hash": "77a3a7ded87d214a",
    "source": "hit",
    "status": 200,
-   "ms": 2415,
+   "ms": 1671,
    "usage": {
     "input": 47,
-    "output": 208,
-    "cacheRead": 9059,
+    "output": 203,
+    "cacheRead": 9267,
     "cacheWrite": 457
    }
   },
   {
    "conv": "str-a-conferme-vaghe-01",
-   "hash": "f2a926185362ab62",
-   "source": "real",
+   "hash": "63758cb02023f578",
+   "source": "hit",
    "status": 200,
-   "ms": 2338,
+   "ms": 1796,
    "usage": {
     "input": 165,
-    "output": 228,
-    "cacheRead": 9059,
+    "output": 204,
+    "cacheRead": 9267,
     "cacheWrite": 475
    }
   },
   {
    "conv": "str-a-conferme-vaghe-02",
-   "hash": "755c3bc7c0c12bd5",
+   "hash": "77a3a7ded87d214a",
    "source": "hit",
    "status": 200,
-   "ms": 2415,
+   "ms": 1671,
    "usage": {
     "input": 47,
-    "output": 208,
-    "cacheRead": 9059,
+    "output": 203,
+    "cacheRead": 9267,
     "cacheWrite": 457
    }
   },
   {
    "conv": "str-a-conferme-vaghe-02",
-   "hash": "53473627ab516857",
-   "source": "real",
+   "hash": "53d3bc2012f2a177",
+   "source": "hit",
    "status": 200,
-   "ms": 2154,
+   "ms": 2391,
    "usage": {
     "input": 166,
-    "output": 193,
-    "cacheRead": 9534,
+    "output": 204,
+    "cacheRead": 9742,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-conferme-vaghe-03",
-   "hash": "c4b704d27e2d221b",
-   "source": "real",
+   "hash": "c1ae931054852bef",
+   "source": "hit",
    "status": 200,
-   "ms": 1978,
+   "ms": 1789,
    "usage": {
     "input": 57,
-    "output": 222,
-    "cacheRead": 9516,
+    "output": 211,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-conferme-vaghe-03",
-   "hash": "b7d40addc847a29e",
-   "source": "real",
+   "hash": "95cdee02c1a535b9",
+   "source": "hit",
    "status": 200,
-   "ms": 2400,
+   "ms": 2660,
    "usage": {
     "input": 184,
-    "output": 274,
-    "cacheRead": 9059,
+    "output": 197,
+    "cacheRead": 9267,
     "cacheWrite": 487
    }
   },
   {
    "conv": "str-a-conferme-vaghe-04",
-   "hash": "c4b704d27e2d221b",
+   "hash": "c1ae931054852bef",
+   "source": "hit",
+   "status": 200,
+   "ms": 1789,
+   "usage": {
+    "input": 57,
+    "output": 211,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-04",
+   "hash": "09ae86cd38da6628",
+   "source": "hit",
+   "status": 200,
+   "ms": 1901,
+   "usage": {
+    "input": 185,
+    "output": 205,
+    "cacheRead": 9754,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-04",
+   "hash": "a1de6d20be0b8618",
+   "source": "hit",
+   "status": 200,
+   "ms": 1923,
+   "usage": {
+    "input": 592,
+    "output": 145,
+    "cacheRead": 9754,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-05",
+   "hash": "549e424a7ce64f05",
+   "source": "hit",
+   "status": 200,
+   "ms": 2564,
+   "usage": {
+    "input": 53,
+    "output": 281,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-05",
+   "hash": "a6599a287d68e964",
+   "source": "hit",
+   "status": 200,
+   "ms": 1999,
+   "usage": {
+    "input": 228,
+    "output": 172,
+    "cacheRead": 9267,
+    "cacheWrite": 489
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-05",
+   "hash": "9364279623dddfac",
+   "source": "hit",
+   "status": 200,
+   "ms": 1260,
+   "usage": {
+    "input": 602,
+    "output": 156,
+    "cacheRead": 9756,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-06",
+   "hash": "549e424a7ce64f05",
+   "source": "hit",
+   "status": 200,
+   "ms": 2564,
+   "usage": {
+    "input": 53,
+    "output": 281,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-06",
+   "hash": "cee46f19fcb4cfae",
+   "source": "hit",
+   "status": 200,
+   "ms": 1163,
+   "usage": {
+    "input": 229,
+    "output": 184,
+    "cacheRead": 9756,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-06",
+   "hash": "df69c51c82df58e3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1866,
+   "usage": {
+    "input": 615,
+    "output": 356,
+    "cacheRead": 9756,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-07",
+   "hash": "69671fbe8a072611",
+   "source": "hit",
+   "status": 200,
+   "ms": 2925,
+   "usage": {
+    "input": 53,
+    "output": 483,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-07",
+   "hash": "0dfb27d9a4e4993e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2139,
+   "usage": {
+    "input": 184,
+    "output": 176,
+    "cacheRead": 9267,
+    "cacheWrite": 489
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-07",
+   "hash": "143189f8ea036577",
+   "source": "hit",
+   "status": 200,
+   "ms": 2502,
+   "usage": {
+    "input": 562,
+    "output": 160,
+    "cacheRead": 9756,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-08",
+   "hash": "69671fbe8a072611",
+   "source": "hit",
+   "status": 200,
+   "ms": 2925,
+   "usage": {
+    "input": 53,
+    "output": 483,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-08",
+   "hash": "fbca027f7c899356",
+   "source": "hit",
+   "status": 200,
+   "ms": 2310,
+   "usage": {
+    "input": 181,
+    "output": 230,
+    "cacheRead": 9756,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-conferme-vaghe-08",
+   "hash": "aac6525d654d61fa",
+   "source": "hit",
+   "status": 200,
+   "ms": 3413,
+   "usage": {
+    "input": 582,
+    "output": 183,
+    "cacheRead": 9756,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-01",
+   "hash": "9177e668970f9ecb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2294,
+   "usage": {
+    "input": 56,
+    "output": 334,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-a-correzioni-01",
+   "hash": "1224140e8cf2a687",
    "source": "hit",
    "status": 200,
    "ms": 1978,
    "usage": {
-    "input": 57,
-    "output": 222,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-04",
-   "hash": "d349299f3a7d5d3c",
-   "source": "real",
-   "status": 200,
-   "ms": 2307,
-   "usage": {
-    "input": 185,
-    "output": 196,
-    "cacheRead": 9546,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-04",
-   "hash": "6e6a5b2d7510d763",
-   "source": "real",
-   "status": 200,
-   "ms": 2113,
-   "usage": {
-    "input": 583,
-    "output": 155,
-    "cacheRead": 9546,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-05",
-   "hash": "6bc97713c8224473",
-   "source": "real",
-   "status": 200,
-   "ms": 2507,
-   "usage": {
-    "input": 53,
-    "output": 276,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-05",
-   "hash": "067c585904eb612a",
-   "source": "real",
-   "status": 200,
-   "ms": 2596,
-   "usage": {
-    "input": 228,
-    "output": 276,
-    "cacheRead": 9059,
-    "cacheWrite": 489
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-06",
-   "hash": "6bc97713c8224473",
-   "source": "hit",
-   "status": 200,
-   "ms": 2507,
-   "usage": {
-    "input": 53,
-    "output": 276,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-06",
-   "hash": "f0ef1fed79c9955f",
-   "source": "real",
-   "status": 200,
-   "ms": 2097,
-   "usage": {
-    "input": 229,
-    "output": 183,
-    "cacheRead": 9548,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-06",
-   "hash": "aa64559fa8383f52",
-   "source": "real",
-   "status": 200,
-   "ms": 2540,
-   "usage": {
-    "input": 614,
-    "output": 161,
-    "cacheRead": 9548,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-07",
-   "hash": "a71e96aa24c90b74",
-   "source": "hit",
-   "status": 200,
-   "ms": 1733,
-   "usage": {
-    "input": 53,
-    "output": 221,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-07",
-   "hash": "4fc39e82654d8c89",
-   "source": "real",
-   "status": 200,
-   "ms": 2054,
-   "usage": {
-    "input": 184,
-    "output": 200,
-    "cacheRead": 9059,
-    "cacheWrite": 489
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-07",
-   "hash": "8655a2ddac7e74e9",
-   "source": "real",
-   "status": 200,
-   "ms": 1808,
-   "usage": {
-    "input": 586,
-    "output": 131,
-    "cacheRead": 9548,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-08",
-   "hash": "a71e96aa24c90b74",
-   "source": "hit",
-   "status": 200,
-   "ms": 1733,
-   "usage": {
-    "input": 53,
-    "output": 221,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-08",
-   "hash": "f5118ccae3192e13",
-   "source": "real",
-   "status": 200,
-   "ms": 1956,
-   "usage": {
-    "input": 181,
-    "output": 137,
-    "cacheRead": 9548,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-conferme-vaghe-08",
-   "hash": "65ac805602aaf3eb",
-   "source": "real",
-   "status": 200,
-   "ms": 2239,
-   "usage": {
-    "input": 410,
-    "output": 172,
-    "cacheRead": 9548,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-correzioni-01",
-   "hash": "e121ac67a23f7203",
-   "source": "real",
-   "status": 200,
-   "ms": 2072,
-   "usage": {
-    "input": 56,
-    "output": 292,
-    "cacheRead": 9516,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-a-correzioni-01",
-   "hash": "3e0d1f2fbbbe9413",
-   "source": "real",
-   "status": 200,
-   "ms": 2582,
-   "usage": {
     "input": 193,
-    "output": 311,
-    "cacheRead": 9059,
+    "output": 285,
+    "cacheRead": 9267,
     "cacheWrite": 489
    }
   },
   {
    "conv": "str-a-correzioni-02",
-   "hash": "846a363fe4df6a9b",
-   "source": "real",
+   "hash": "e9616feabc640472",
+   "source": "hit",
    "status": 200,
-   "ms": 1834,
+   "ms": 3032,
    "usage": {
     "input": 58,
     "output": 294,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-correzioni-02",
-   "hash": "fbaa6cda5c871512",
-   "source": "real",
+   "hash": "f3dbc8a2c1b77740",
+   "source": "hit",
    "status": 200,
-   "ms": 1774,
+   "ms": 2925,
    "usage": {
     "input": 196,
-    "output": 313,
-    "cacheRead": 9059,
+    "output": 554,
+    "cacheRead": 9267,
     "cacheWrite": 710
    }
   },
   {
    "conv": "str-a-correzioni-03",
-   "hash": "2af8a4cd1c90a515",
-   "source": "real",
+   "hash": "43a8c3551c8a73ba",
+   "source": "hit",
    "status": 200,
-   "ms": 1839,
+   "ms": 1965,
    "usage": {
     "input": 45,
-    "output": 204,
-    "cacheRead": 9516,
+    "output": 199,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-correzioni-03",
-   "hash": "f9c88ebaafdcd163",
-   "source": "real",
+   "hash": "4e0a8850e5e12dec",
+   "source": "hit",
    "status": 200,
-   "ms": 1765,
+   "ms": 2129,
    "usage": {
     "input": 168,
-    "output": 292,
-    "cacheRead": 9059,
+    "output": 298,
+    "cacheRead": 9267,
     "cacheWrite": 473
    }
   },
   {
    "conv": "str-a-correzioni-04",
-   "hash": "2a74c55cebf78d17",
-   "source": "real",
+   "hash": "f254d554389ecad7",
+   "source": "hit",
    "status": 200,
-   "ms": 2154,
+   "ms": 2517,
    "usage": {
     "input": 47,
-    "output": 220,
-    "cacheRead": 9516,
+    "output": 416,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-correzioni-04",
-   "hash": "880892f0b4614888",
-   "source": "real",
+   "hash": "9568d8291563fec1",
+   "source": "hit",
    "status": 200,
-   "ms": 2562,
+   "ms": 2397,
    "usage": {
     "input": 181,
-    "output": 305,
-    "cacheRead": 9548,
+    "output": 374,
+    "cacheRead": 9756,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-correzioni-05",
-   "hash": "1ee52785dd2edbe0",
-   "source": "real",
+   "hash": "9b3f3d1b8d77d275",
+   "source": "hit",
    "status": 200,
-   "ms": 1614,
+   "ms": 1562,
    "usage": {
     "input": 52,
-    "output": 218,
-    "cacheRead": 9727,
+    "output": 213,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-correzioni-05",
-   "hash": "be90b1187dcb12a3",
-   "source": "real",
+   "hash": "becc6b6fea5b3f3f",
+   "source": "hit",
    "status": 200,
-   "ms": 1976,
+   "ms": 3261,
    "usage": {
     "input": 195,
-    "output": 320,
-    "cacheRead": 9059,
+    "output": 601,
+    "cacheRead": 9267,
     "cacheWrite": 489
    }
   },
   {
    "conv": "str-a-correzioni-06",
-   "hash": "7bcf99e8183e65f6",
-   "source": "real",
+   "hash": "530f35f425a0f2a4",
+   "source": "hit",
    "status": 200,
-   "ms": 2008,
+   "ms": 2141,
    "usage": {
     "input": 56,
     "output": 290,
-    "cacheRead": 9255,
+    "cacheRead": 9463,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-correzioni-06",
-   "hash": "1784b5f91dcbfddb",
-   "source": "real",
+   "hash": "22a7ae5a9a41cd09",
+   "source": "hit",
    "status": 200,
-   "ms": 2529,
+   "ms": 2618,
    "usage": {
     "input": 203,
-    "output": 526,
-    "cacheRead": 9059,
+    "output": 393,
+    "cacheRead": 9267,
     "cacheWrite": 238
    }
   },
   {
    "conv": "str-a-categoria-01",
-   "hash": "28f8c01866cfae22",
-   "source": "real",
+   "hash": "8ba0afee8d524f87",
+   "source": "hit",
    "status": 200,
-   "ms": 2116,
+   "ms": 1500,
    "usage": {
     "input": 55,
-    "output": 216,
-    "cacheRead": 9516,
+    "output": 209,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-categoria-02",
-   "hash": "42cc0ffb97edd096",
-   "source": "real",
+   "hash": "00168866fa5bcdb3",
+   "source": "hit",
    "status": 200,
-   "ms": 2517,
+   "ms": 2454,
    "usage": {
     "input": 52,
-    "output": 385,
-    "cacheRead": 9516,
+    "output": 383,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-categoria-03",
-   "hash": "1c8461b5f5807b23",
-   "source": "real",
+   "hash": "f3a849ecb6abd093",
+   "source": "hit",
    "status": 200,
-   "ms": 2111,
+   "ms": 1557,
    "usage": {
     "input": 52,
-    "output": 302,
-    "cacheRead": 9727,
+    "output": 216,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-categoria-04",
-   "hash": "337ecfafb57e7f6e",
-   "source": "real",
+   "hash": "78d521c4064214fd",
+   "source": "hit",
    "status": 200,
-   "ms": 2108,
+   "ms": 2265,
    "usage": {
     "input": 51,
     "output": 214,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-esistente-01",
-   "hash": "1aa66b477b0d407c",
-   "source": "real",
+   "hash": "7cbafc6f0a4e8023",
+   "source": "hit",
    "status": 200,
-   "ms": 2782,
+   "ms": 3682,
    "usage": {
     "input": 45,
-    "output": 360,
-    "cacheRead": 9727,
+    "output": 463,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-esistente-01",
-   "hash": "86d819f0c4cdcf62",
-   "source": "real",
+   "hash": "54917d6bbb246a00",
+   "source": "hit",
    "status": 200,
-   "ms": 1425,
+   "ms": 2078,
    "usage": {
-    "input": 275,
-    "output": 201,
-    "cacheRead": 9727,
+    "input": 277,
+    "output": 202,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-esistente-02",
-   "hash": "04617ee129e9b9c3",
-   "source": "real",
+   "hash": "9741197c2a45d7f9",
+   "source": "hit",
    "status": 200,
-   "ms": 2043,
+   "ms": 3121,
    "usage": {
     "input": 49,
     "output": 206,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-esistente-03",
-   "hash": "d4a4b80221acce5f",
-   "source": "real",
+   "hash": "7cea9a182f425006",
+   "source": "hit",
    "status": 200,
-   "ms": 3587,
+   "ms": 2544,
    "usage": {
     "input": 43,
-    "output": 509,
-    "cacheRead": 9516,
+    "output": 401,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-esistente-04",
-   "hash": "e07e360d4fee2cdd",
-   "source": "real",
+   "hash": "56f4b48d8fa89081",
+   "source": "hit",
    "status": 200,
-   "ms": 4742,
+   "ms": 3172,
    "usage": {
     "input": 57,
-    "output": 614,
-    "cacheRead": 9727,
+    "output": 546,
+    "cacheRead": 9935,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-esistente-05",
-   "hash": "65d93b7b055a8409",
-   "source": "real",
+   "hash": "114f8ede9b13484c",
+   "source": "hit",
    "status": 200,
-   "ms": 2299,
+   "ms": 1639,
    "usage": {
     "input": 52,
     "output": 213,
-    "cacheRead": 9516,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-incompleta-01",
-   "hash": "bc8f7d11e2b54ac4",
-   "source": "real",
+   "hash": "a32f533bc8656550",
+   "source": "hit",
    "status": 200,
-   "ms": 1941,
+   "ms": 2010,
    "usage": {
     "input": 44,
-    "output": 194,
-    "cacheRead": 9516,
+    "output": 157,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-incompleta-02",
-   "hash": "0f32b85a6a564cae",
-   "source": "real",
+   "hash": "1f90bac0af5e8067",
+   "source": "hit",
    "status": 200,
-   "ms": 2651,
+   "ms": 2770,
    "usage": {
     "input": 51,
-    "output": 347,
-    "cacheRead": 9516,
+    "output": 446,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-incompleta-03",
-   "hash": "4d60b30e5c109c19",
-   "source": "real",
+   "hash": "9a222243cf953582",
+   "source": "hit",
    "status": 200,
-   "ms": 2105,
+   "ms": 1895,
    "usage": {
     "input": 45,
-    "output": 128,
-    "cacheRead": 9516,
+    "output": 132,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-incompleta-04",
-   "hash": "6a47dd1a11267221",
-   "source": "real",
+   "hash": "d8de08fab873af11",
+   "source": "hit",
    "status": 200,
-   "ms": 1373,
+   "ms": 2086,
    "usage": {
     "input": 44,
-    "output": 128,
-    "cacheRead": 9516,
+    "output": 132,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-incompleta-05",
-   "hash": "fb3725ef9c9fb98d",
-   "source": "real",
+   "hash": "d08cbb4056d952c2",
+   "source": "hit",
    "status": 200,
-   "ms": 2431,
+   "ms": 2510,
    "usage": {
     "input": 53,
-    "output": 274,
-    "cacheRead": 9516,
+    "output": 153,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-incompleta-06",
-   "hash": "454614a70fdcf597",
-   "source": "real",
+   "hash": "cbcace24f89e13a2",
+   "source": "hit",
    "status": 200,
-   "ms": 2435,
+   "ms": 2200,
    "usage": {
     "input": 45,
-    "output": 319,
-    "cacheRead": 9516,
+    "output": 183,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-vocali-01",
-   "hash": "1cb9877bba45b858",
-   "source": "real",
+   "hash": "ecee8df43056dd9c",
+   "source": "hit",
    "status": 200,
-   "ms": 3700,
+   "ms": 4108,
    "usage": {
     "input": 48,
-    "output": 510,
-    "cacheRead": 9255,
+    "output": 672,
+    "cacheRead": 9463,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-vocali-01",
-   "hash": "5d57d2f261bb0664",
-   "source": "real",
+   "hash": "bfe5b212b6bf233d",
+   "source": "hit",
    "status": 200,
-   "ms": 2196,
+   "ms": 1625,
    "usage": {
-    "input": 430,
-    "output": 172,
-    "cacheRead": 9255,
+    "input": 418,
+    "output": 149,
+    "cacheRead": 9463,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-vocali-02",
-   "hash": "679502368ec6a5d2",
-   "source": "real",
+   "hash": "6ab9f98d1dd72e22",
+   "source": "hit",
    "status": 200,
-   "ms": 2981,
+   "ms": 2614,
    "usage": {
     "input": 63,
-    "output": 399,
-    "cacheRead": 9516,
+    "output": 363,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-vocali-03",
-   "hash": "c0fe4383fa8f5101",
-   "source": "real",
+   "hash": "64b3cfa342cd9a4f",
+   "source": "hit",
    "status": 200,
-   "ms": 2490,
+   "ms": 1465,
    "usage": {
     "input": 55,
-    "output": 423,
-    "cacheRead": 9516,
+    "output": 142,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-vocali-04",
-   "hash": "294912967bef60c9",
-   "source": "real",
+   "hash": "7b2cfbd23575f705",
+   "source": "hit",
    "status": 200,
-   "ms": 2300,
+   "ms": 2780,
    "usage": {
     "input": 55,
-    "output": 380,
-    "cacheRead": 9516,
+    "output": 373,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-a-vocali-05",
-   "hash": "3f634e52763836fe",
-   "source": "real",
+   "hash": "c3cded5a9742abbc",
+   "source": "hit",
    "status": 200,
-   "ms": 2590,
+   "ms": 2380,
    "usage": {
     "input": 61,
-    "output": 322,
-    "cacheRead": 9516,
+    "output": 366,
+    "cacheRead": 9724,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-01",
-   "hash": "cdd228690f7351f0",
-   "source": "real",
+   "hash": "17488e1bf51c5029",
+   "source": "hit",
    "status": 200,
-   "ms": 2497,
+   "ms": 1542,
    "usage": {
     "input": 46,
-    "output": 184,
-    "cacheRead": 9059,
+    "output": 186,
+    "cacheRead": 9267,
     "cacheWrite": 593
    }
   },
   {
    "conv": "str-v-02",
-   "hash": "f918b5458937657a",
-   "source": "real",
+   "hash": "7dacaaf99e784176",
+   "source": "hit",
    "status": 200,
-   "ms": 2066,
+   "ms": 2022,
    "usage": {
     "input": 47,
-    "output": 197,
-    "cacheRead": 9652,
+    "output": 193,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-03",
-   "hash": "28e16ca52a4061cf",
-   "source": "real",
+   "hash": "9c07457e1a437fcc",
+   "source": "hit",
    "status": 200,
-   "ms": 2128,
+   "ms": 1690,
    "usage": {
     "input": 50,
-    "output": 325,
-    "cacheRead": 9652,
+    "output": 186,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-04",
-   "hash": "44334f32c8d6cbc3",
-   "source": "real",
+   "hash": "d5252285a8c52b72",
+   "source": "hit",
    "status": 200,
-   "ms": 2391,
+   "ms": 1550,
    "usage": {
     "input": 46,
     "output": 196,
-    "cacheRead": 9652,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-05",
-   "hash": "9ae809ae236116f6",
-   "source": "real",
+   "hash": "6b5849035e9b378c",
+   "source": "hit",
    "status": 200,
-   "ms": 2037,
+   "ms": 2103,
    "usage": {
     "input": 47,
-    "output": 190,
-    "cacheRead": 9652,
+    "output": 192,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-06",
-   "hash": "fdbf15ebc9a98877",
-   "source": "real",
+   "hash": "e58c1b1136541ac2",
+   "source": "hit",
    "status": 200,
-   "ms": 2116,
+   "ms": 2578,
    "usage": {
     "input": 45,
-    "output": 358,
-    "cacheRead": 9059,
+    "output": 427,
+    "cacheRead": 9267,
     "cacheWrite": 846
    }
   },
   {
    "conv": "str-v-07",
-   "hash": "06f8499a04a35fe8",
-   "source": "real",
+   "hash": "626f4e3f72f44dda",
+   "source": "hit",
    "status": 200,
-   "ms": 3090,
+   "ms": 3663,
    "usage": {
     "input": 45,
-    "output": 339,
-    "cacheRead": 9905,
+    "output": 409,
+    "cacheRead": 10113,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-08",
-   "hash": "b851174b03e07b45",
-   "source": "real",
+   "hash": "b3e04dfd29f97c26",
+   "source": "hit",
    "status": 200,
-   "ms": 2724,
+   "ms": 1382,
    "usage": {
     "input": 48,
-    "output": 306,
-    "cacheRead": 9905,
+    "output": 186,
+    "cacheRead": 10113,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-v-08",
+   "hash": "0447ea0df64c7ece",
+   "source": "hit",
+   "status": 200,
+   "ms": 2775,
+   "usage": {
+    "input": 378,
+    "output": 152,
+    "cacheRead": 10113,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-09",
-   "hash": "55ea4e69fd85718a",
-   "source": "real",
+   "hash": "a3012b8ee0602465",
+   "source": "hit",
    "status": 200,
-   "ms": 2546,
+   "ms": 2611,
    "usage": {
     "input": 46,
-    "output": 398,
-    "cacheRead": 9652,
+    "output": 346,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-10",
-   "hash": "92782dd488ddeccd",
-   "source": "real",
+   "hash": "2880bcacc83fca86",
+   "source": "hit",
    "status": 200,
-   "ms": 3054,
+   "ms": 4170,
    "usage": {
     "input": 48,
-    "output": 631,
-    "cacheRead": 9652,
+    "output": 1028,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-10",
-   "hash": "9de2dc68d7dc4d48",
-   "source": "real",
+   "hash": "c8842fb38a845c26",
+   "source": "hit",
    "status": 200,
-   "ms": 3858,
+   "ms": 2617,
    "usage": {
-    "input": 822,
-    "output": 765,
-    "cacheRead": 9652,
+    "input": 841,
+    "output": 493,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-10",
-   "hash": "53622fc03fdcf74a",
-   "source": "real",
+   "hash": "7457e197712a9673",
+   "source": "hit",
    "status": 200,
-   "ms": 1978,
+   "ms": 2124,
    "usage": {
     "input": 168,
-    "output": 183,
-    "cacheRead": 9652,
+    "output": 180,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-11",
-   "hash": "3e6dcf573ce74376",
-   "source": "real",
-   "status": 200,
-   "ms": 1699,
-   "usage": {
-    "input": 44,
-    "output": 202,
-    "cacheRead": 9652,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-v-12",
-   "hash": "3e6dcf573ce74376",
+   "hash": "8beb7b42072eb07e",
    "source": "hit",
    "status": 200,
-   "ms": 1699,
+   "ms": 2032,
    "usage": {
     "input": 44,
     "output": 202,
-    "cacheRead": 9652,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-12",
-   "hash": "adbf19e19d26c85f",
-   "source": "real",
+   "hash": "8beb7b42072eb07e",
+   "source": "hit",
    "status": 200,
-   "ms": 1425,
+   "ms": 2032,
+   "usage": {
+    "input": 44,
+    "output": 202,
+    "cacheRead": 9860,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-v-12",
+   "hash": "45557692d1c54c57",
+   "source": "hit",
+   "status": 200,
+   "ms": 1621,
    "usage": {
     "input": 163,
-    "output": 184,
-    "cacheRead": 9059,
+    "output": 187,
+    "cacheRead": 9267,
     "cacheWrite": 608
    }
   },
   {
    "conv": "str-v-13",
-   "hash": "9a1d981c17dc143a",
-   "source": "real",
-   "status": 200,
-   "ms": 1570,
-   "usage": {
-    "input": 56,
-    "output": 193,
-    "cacheRead": 9652,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-v-14",
-   "hash": "9a1d981c17dc143a",
+   "hash": "14963e150d1df706",
    "source": "hit",
    "status": 200,
-   "ms": 1570,
+   "ms": 2006,
    "usage": {
     "input": 56,
     "output": 193,
-    "cacheRead": 9652,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-14",
-   "hash": "29dacc3c9c3f07e8",
-   "source": "real",
+   "hash": "14963e150d1df706",
+   "source": "hit",
    "status": 200,
-   "ms": 1919,
+   "ms": 2006,
+   "usage": {
+    "input": 56,
+    "output": 193,
+    "cacheRead": 9860,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-v-14",
+   "hash": "50e127a65d811ce5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2722,
    "usage": {
     "input": 189,
     "output": 201,
-    "cacheRead": 9059,
+    "cacheRead": 9267,
     "cacheWrite": 882
    }
   },
   {
    "conv": "str-v-15",
-   "hash": "a2d93162611627fe",
-   "source": "real",
+   "hash": "935c615491700818",
+   "source": "hit",
    "status": 200,
-   "ms": 1351,
+   "ms": 2338,
    "usage": {
     "input": 51,
     "output": 186,
-    "cacheRead": 9652,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-16",
-   "hash": "dc97ce2b3edc094e",
-   "source": "real",
+   "hash": "4870064578590dbc",
+   "source": "hit",
    "status": 200,
-   "ms": 2248,
+   "ms": 2741,
    "usage": {
     "input": 46,
-    "output": 151,
-    "cacheRead": 9652,
-    "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "str-v-16",
-   "hash": "f9ac17881282f03b",
-   "source": "real",
-   "status": 200,
-   "ms": 2092,
-   "usage": {
-    "input": 306,
-    "output": 156,
-    "cacheRead": 9652,
+    "output": 397,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-17",
-   "hash": "acbfb95263491491",
-   "source": "real",
+   "hash": "e18eaaf644f2b95a",
+   "source": "hit",
    "status": 200,
-   "ms": 2669,
+   "ms": 2677,
    "usage": {
     "input": 44,
-    "output": 328,
-    "cacheRead": 9652,
+    "output": 188,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-18",
-   "hash": "4436b08844cfa095",
-   "source": "real",
+   "hash": "a4bf9baa7f54bb82",
+   "source": "hit",
    "status": 200,
-   "ms": 3089,
+   "ms": 3578,
    "usage": {
     "input": 47,
-    "output": 511,
-    "cacheRead": 9905,
+    "output": 542,
+    "cacheRead": 10113,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-18",
-   "hash": "6ccaefa48ad9ba08",
-   "source": "real",
+   "hash": "cb9ab5f4a225223b",
+   "source": "hit",
    "status": 200,
-   "ms": 4202,
+   "ms": 5230,
    "usage": {
-    "input": 436,
-    "output": 749,
-    "cacheRead": 9905,
+    "input": 432,
+    "output": 756,
+    "cacheRead": 10113,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-19",
-   "hash": "c1abe16694db696b",
-   "source": "real",
+   "hash": "7153383aa0e9b0af",
+   "source": "hit",
    "status": 200,
-   "ms": 1555,
+   "ms": 2159,
    "usage": {
     "input": 51,
-    "output": 275,
-    "cacheRead": 9652,
+    "output": 272,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-v-20",
-   "hash": "efa6a04ce32a474f",
-   "source": "real",
+   "hash": "506b31f6ac2a15fd",
+   "source": "hit",
    "status": 200,
-   "ms": 1487,
+   "ms": 1962,
    "usage": {
     "input": 61,
-    "output": 204,
-    "cacheRead": 9652,
+    "output": 209,
+    "cacheRead": 9860,
     "cacheWrite": 0
    }
   }

@@ -41,7 +41,7 @@ import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {uniformDelta,uniformReply,pruneWroteDraft} from '../lib/owner-brain-r.js'
 import {fixTruncatedNumbers,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,draftOfUnappliedChange,draftAsksOkOnDate,fixedDishFact,HIDE_WHOLE_MENU_Q,isAffirmative,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
-import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
+import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
@@ -456,7 +456,7 @@ async function brainEntry(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,settings:any):
  const normalized=normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ').trim()
  const full=await fullMenuTurn(tx,ctx,text,{revision:row.revision,workspace,refs,reply:null,normalized,voice:opts.voice,timezone:String(settings?.timezone??'Europe/Rome'),isExpired:opts.isExpired});if(full!==null)return full
  return{llm:true,brain:true}}
-function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string){if(!/\btutt[ieao]\b/.test(normalizeMenuText(message)))return false
+function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string,sections:SectionRef[]=[]){if(!/\btutt[ieao]\b/.test(normalizeMenuText(message))&&!sectionGroupWord(plain(message),sections,refs))return false // notte 22/10: anche «alza i dolci di 50 centesimi» (sottomenu intero)
  // Prova dal vivo 21/10 sera («metti tutte le paste a 9 euro»): «tutte» è chiaro, lo stesso prezzo su tutto il gruppo si applica subito.
  if(uniformTarget(actions)!==null&&actions.every(a=>refs.some(r=>r.id===(a as any).id&&r.price>0)))return true
  const d=new Set<number>();for(const a of actions){if(a.kind!=='price')return false;const r=refs.find(x=>x.id===a.id);if(!r||!(r.price>0))return false;d.add(Math.round((a.price-r.price)*100))}
@@ -479,12 +479,13 @@ function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered
  // struttura detto per intero, si applica subito (nota 64).
  // R9: la risposta alla domanda «lo aggiorno o ne creo un altro?» (che mostrava le parti in attesa, numerate) conferma la richiesta intera.
  if(strict&&wholeGroup(actions,refs,sections))return 'recap'
- if(actions.length>3&&!answered&&!uniformBulk(actions,refs,message)&&!(EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' '))&&actions.some(a=>a.kind==='create_section')&&actions.every(a=>a.kind==='create_section'||a.kind==='move'||a.kind==='create')))return 'recap'
+ if(actions.length>3&&!answered&&!uniformBulk(actions,refs,message,sections)&&!(EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' '))&&actions.some(a=>a.kind==='create_section')&&actions.every(a=>a.kind==='create_section'||a.kind==='move'||a.kind==='create')))return 'recap'
  if(actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})()))))return 'price'
  return null}
 /** Fase R: il turno del cervello. Il modello decide e scrive; il server valida (una auto-correzione), impone i vincoli, scrive
  * e aggiunge i fatti riletti dal DB. Groq giù → copy.brainDown, nessuna modifica, nessuna riserva a regole. */
 /** Il messaggio senza le parole del nome del piatto in bozza («lasagna 12» → «12»). */
+const CMD_RE_NEW=/\b(?:aggiung\w*|nascond\w*|togli\w*|elimin\w*|rinomin\w*|abbass\w*|alz\w*|aument\w*|diminu\w*)\b/
 const draftless=(text:string,name:string)=>{const ws=new Set(plain(name).split(' '));return plain(text).split(' ').filter(w=>!ws.has(w)&&!(w.length>4&&[...ws].some(x=>x.length>4&&x.slice(0,-1)===w.slice(0,-1)))).join(' ')}
 async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:Budget,voice=false,replay=false):Promise<string>{
  budget.brain=true;const text=(budget.engine==='haiku'?fixTruncatedNumbers(text0):text0).trim()||'[messaggio vuoto]'
@@ -635,11 +636,15 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      else if(cs)follow={name:d.name,sectionId:cs.newSectionId,sectionName:cs.name,origin}}
     if(cs&&acts.some(a=>a.kind==='create'))acts=acts.map(a=>a===cs?{...cs,hidden:false} as MenuAction:a)
     pre={actions:acts,why:'risposta',follow}}
-   else if(newCommandOverAsk(text,askP,refs))closePend=true}
+   // notte 22/10 (n-annulla-lascia-stare): «lascia stare» su una domanda aperta la chiude con un testo fisso (prima il modello, senza più
+   // nulla in sospeso, rispondeva con un’altra domanda).
+   else if(newCommandOverAsk(text,askP,refs)){closePend=true;if(engine==='haiku'&&pureDrop(text))preReply='Ok, lascio stare: non ho cambiato nulla.'}}
   else if(askP&&askP.twins?.length&&newCommandOverAsk(text,askP,refs))closePend=true
   if(!pre&&!preReply&&!sessNow&&visibleOnly(text)&&/\b(?:solo|solamente|soltanto|unicamente)\b/.test(plain(text))&&last&&(!pend||closePend)){const back=last.undo.filter(a=>'id' in a&&a.kind==='price'&&refs.find(r=>r.id===(a as any).id)?.hidden);if(back.length)pre={actions:back,why:'solo_visibili'}}
   if(closePend){pend=null;answered=false;(base as any).pendingCommand=null}
   if(pre)answered=true}
+ // notte 22/10 (n-sessione-lunga): «fatto?», «hai fatto?», «tutto a posto?» = conferma di ciò che è già stato scritto (prima la scheda di un piatto).
+ if(engine==='haiku'&&!preReply&&!pre&&!sessNow&&!pend&&/\?\s*$/.test(text)&&/^(?:e |allora |quindi |ok )?(?:hai |e )?(?:fatto|fatto tutto|tutto fatto|tutto ok|tutto a posto|pubblicato|l hai fatto|li hai fatti|le hai fatte|l hai messo|fatto bene)$/.test(plain(text)))preReply=last?'Sì: le modifiche di prima sono online, non c’è altro in sospeso.'+(undoOK?' '+UNDO_HINT:''):'Non c’è nessuna modifica in corso: dimmi pure cosa vuoi cambiare.'
  if(preReply){if(closePend)await db.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return preReply}
  let run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>|null=pre?({decision:{path:'brain',intent:'change',plan:{type:'change',actions:pre.actions},exclude:[],aliasesUsed:[],replyDraft:'',notes:['sera:'+pre.why],usage:{},tokens:{},control:[],raw:{intent:'change',actions:[]},content:'',draft:''},clarifyIds:null,ownerRecent:'',lastBot:''} as any):await brainPlan(db,base);if(budget.expired)return '';if(!run)return down()
  let calls=pre?0:1
@@ -657,6 +662,12 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   else if(out2.kind==='reject'||needsText(out2,run2)){const f=out2.kind==='reject'?out2:first.kind==='reject'?first:{kind:'reject' as const,reason,ids:[],actions:[]};out={kind:'ask',ids:f.ids.length?f.ids:first.kind==='reject'?first.ids:[],actions:f.actions,...(f.hold?{hold:f.hold}:{})}}
   // La domanda del modello dopo il rifiuto: se non indica i piatti, valgono i candidati del validatore.
   else out=out2.kind==='ask'&&!out2.ids.length&&!out2.hold&&first.kind==='reject'&&first.ids.length>1?{...out2,ids:first.ids,actions:out2.actions.length?out2.actions:first.actions}:out2
+  // notte 22/10 (n-lungo-motivato): «da domani la carbonara costa 13» → il server non programma e il modello chiede «Lo cambio subito?»:
+  // le azioni capite (valide) restano in attesa con la domanda, così il «sì» le applica (prima la domanda partiva senza azioni).
+  if(out.kind==='ask'&&!out.actions.length&&!out.hold&&first.kind==='reject'&&first.actions.length&&first.reason.startsWith(reasonText(['data_futura'])))out={...out,ids:[],actions:first.actions} // niente elenco numerato sotto un sì/no
+  // notte 22/10 (n-dialetto): il server aveva costruito le parti chiare in attesa + la domanda «quale?» (hold) e il modello ha risposto con
+  // una domanda sua senza azioni: la parte chiara («e la gricia pure») restava persa. Il sospeso del server resta, con la domanda del modello.
+  if(out.kind==='ask'&&!out.actions.length&&!out.hold&&!out.twins?.length&&first.kind==='reject'&&first.hold&&first.hold.actions.length)out={...out,actions:first.hold.actions,hold:first.hold}
   // R9: domanda nata da piatti con lo stesso nome (piatto_doppio): i candidati sono SOLO i gemelli veri, le parti chiare della
   // richiesta restano in attesa con la domanda (il modello le rivede col messaggio dopo).
   if(out.kind==='ask'&&!out.hold&&first.kind==='reject'&&first.twins?.length)out={...out,ids:first.twins.map(t=>t.id),actions:first.actions,twins:first.twins}}
@@ -739,9 +750,16 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else{const course=dishCourse(nm);if(course){const cs={kind:'create_section',newSectionId:randomUUID(),name:course,menuId:M.id,menuName:M.name,hidden:false} as MenuAction
      out={kind:'ask',ids:[],actions:[cs],createDraft:{name:nm,price:price!=null&&price>0?price:null,sectionId:null,sectionName:course}}
      serverQ='Nel '+mLabel+' non c’è un sottomenu adatto a *'+safe(nm)+'*: creo il sottomenu *'+course+'* e '+(()=>{const w=plain(nm).split(' ')[0]!;return /e$/.test(w)?'le':/i$/.test(w)?'li':/a$/.test(w)?'la':'lo'})()+' metto lì'+(price!=null&&price>0?' a *'+price.toFixed(2).replace('.',',')+' €*':'')+'? Rispondi *sì* oppure dimmi il nome del sottomenu.'+(price!=null&&price>0?'':' Dimmi anche il prezzo.')}}}}
-  if(out.kind!=='change'&&(/\btutt[ieoa]\b/.test(p0)||/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p0))&&(clearCommand(text)||/\d/.test(p0))){const g=seraGroup(text,refs,sections,fixedSecIds,{menus:base.menus})
+  // notte 22/10 (n-gruppo-pizze-due-menu): «alza le pizze di 1 euro» = il sottomenu intero: lo legge il server anche se il modello ha
+  // proposto un elenco suo (prendeva pizze di due Menu e chiedeva dell’ultima); se il sottomenu è in più Menu, chiede quale.
+  // notte 22/10 (n-gruppo-pizze-due-menu): risposta alla domanda del server «Le Pizze ci sono in più Menu: in quale?» → il comando di
+  // gruppo di prima si applica nel Menu detto (prima il modello rifaceva un riepilogo da confermare con OK).
+  {const src=pend?.kind==='ask'&&/ci sono in più Menu: in quale\?/.test(pend.ask.question??'')&&typeof pend.ask.source==='string'?pend.ask.source:'',nm=src?namedMenus(text,base.menus):[]
+   if(src&&nm.length===1&&!CMD_RE_NEW.test(p0)){const g=seraGroup(src+' nel menu '+nm[0]!.name,refs,sections,fixedSecIds,{menus:base.menus});if(g&&'actions' in g){out={kind:'change',actions:g.actions};answered=true}}}
+  const secWord=engine==='haiku'&&out.kind!=='cancel'&&out.kind!=='undo'&&!pend?sectionGroupWord(p0,sections,refs):null
+   if((out.kind!=='change'||!!secWord)&&(/\btutt[ieoa]\b/.test(p0)||/\b(?:solo quell[ie]|alzal[ie]|abbassal[ie]|aumental[ie]|diminuiscil[ie]|portal[ie]|mettil[ie])\b/.test(p0)||!!sectionGroupWord(p0,sections,refs))&&(clearCommand(text)||/\d/.test(p0))){const g=seraGroup(text,refs,sections,fixedSecIds,{menus:base.menus})
    if(g&&'actions' in g)out={kind:'change',actions:g.actions}
-   else if(g&&'ask' in g){out={kind:'ask',ids:[],actions:[]};serverQ='I *'+safe(g.label)+'* ci sono in più Menu: in quale? '+g.menus.map(x=>'*'+safe(x)+'*').join(' o ')+'?'}}
+   else if(g&&'ask' in g){out={kind:'ask',ids:[],actions:[]};serverQ=(/e$/i.test(g.label.trim())?'Le':'I')+' *'+safe(g.label)+'* ci sono in più Menu: in quale? '+g.menus.map(x=>'*'+safe(x)+'*').join(' o ')+'?'}}
   if(out.kind==='change'&&visibleOnly(text)){const keep=out.actions.filter(a=>!('id' in a)||a.kind==='hidden'||!refs.find(r=>r.id===(a as any).id)?.hidden);if(keep.length)out={...out,actions:keep}}}
  if(serverQ)noDraft=true
  const finalRun=run
@@ -806,10 +824,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(engine==='haiku'&&r.allOk&&effective.every(isStructAction)&&effective.some(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='set_menu_active'||a.kind==='set_section_active'||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing'))return structureReply(effective,refs,sections,new Set(base.menus.filter(m=>!m.active).map(m=>m.name)))
    return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   const core=async():Promise<string>=>{switch(out.kind){
-   case 'undo':{const res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
+   case 'undo':{const before=structuredClone(workspace) as any,res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
-    return say([...res.restored.map(n=>fill(copy.undoRestored,{piatto:safe(n)})),...res.removed.map(n=>fill(copy.undoRemoved,{piatto:safe(n)}))].join('\n'),true)}
-   case 'cancel':await drop();return say('',false)
+    // notte 22/10 (n-pf annulla): annullare il prezzo di un'opzione (Completo, Solo primo…) mostra il prezzo tornato, non solo la bozza.
+    const prevF=new Map<string,number>(((before.menus??[]) as any[]).flatMap(m=>((m.formulas??[]) as any[]).map(f=>[String(f.id),Number(f.price)] as [string,number])))
+    const fx=((next as any).menus??[] as any[]).flatMap((m:any)=>((m.formulas??[]) as any[]).filter(f=>prevF.has(String(f.id))&&Math.abs(prevF.get(String(f.id))!-Number(f.price))>=0.005).map(f=>'*'+safe(f.name)+'* del *'+safe(m.name)+'*: di nuovo *'+Number(f.price).toFixed(2).replace('.',',')+' €*'))
+    return say([...res.restored.map(n=>fill(copy.undoRestored,{piatto:safe(n)})),...res.removed.map(n=>fill(copy.undoRemoved,{piatto:safe(n)})),...fx].join('\n'),true)}
+   // notte 22/10 (n-annulla-domanda): chiudere una domanda o una bozza non è «annullare l’ultima pubblicazione»: testo fisso, mai la bozza.
+   case 'cancel':await drop();if(engine==='haiku'&&pend&&pend.kind!=='batch')return 'Ok, lascio stare: non ho cambiato nulla.';return say('',false)
    case 'confirm':{const stored=pend&&(pend.kind==='batch'||pend.kind==='hold')?storedActions({kind:'batch',actions:pend.actions},refs,sections):null;if(!stored){await drop();return copy.menuChanged}
     const exIds=new Set((finalRun.decision.exclude??[]).map(e=>e.id)),all=(pend!.kind==='hold'?mergeMenuActions(stored,out.extra):stored).filter(a=>!(a.kind==='create'&&negatedName(text,a.name))&&!('id' in a&&exIds.has((a as any).id)&&!out.extra.includes(a)))
     // Una conferma di riepilogo pubblica; le risposte alle parti incerte passano dagli stessi vincoli di una richiesta nuova.
@@ -946,13 +968,13 @@ export async function recordUsage(e:UsageEvent){try{
  const text=fill(copy.usageWarning,{modello:e.model,percento:Math.round(worst[0]*100),uso:worst[1]});console.warn(JSON.stringify({event:'groq_usage_warning',model:e.model,day,ratio:Math.round(worst[0]*100)}))
  const linked=await db.execute(sql`SELECT 1 FROM tako_whatsapp_links WHERE phone=${owner}`);if(linked.length)await sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',owner,text)
 }catch(error){console.error(JSON.stringify({event:'groq_usage_record_failed',error:error instanceof Error?error.message.slice(0,80):'Error'}));await reportFailure({kind:'usage_record_failed',detail:error instanceof Error?error.message:'Error'})}}
-async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string,form:Record<string,string>,lead=''){
+async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string,form:Record<string,string>,lead='',arrivedAt=Date.now()){
  const budget:Budget={expired:false};let timer:ReturnType<typeof setTimeout>|undefined
  // Fase R: col cervello acceso anche il tempo scaduto è «non disponibile» (unico testo fisso ammesso oltre l'avviso AI Act).
  const brainOn=kind!=='image'&&await readBotBrain(db,ctx.tenant)
  const timeout=new Promise<string>(resolve=>{timer=setTimeout(()=>{budget.expired=true;resolve(kind==='image'?copy.photoTimeout:brainOn?copy.brainDown:copy.jobTimeout)},jobTimeoutMs())})
  // 21/10: col cervello acceso, un turno che supera i 5 s manda UN solo «Ci sto lavorando…», poi il risultato (i turni veloci niente).
- let finished=false;const ackTimer=brainOn&&!quietPhones.has(ctx.phone)?setTimeout(()=>{if(finished||budget.expired)return;inBackground(sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.working).catch(()=>{}))},5000):undefined
+ let finished=false;const ackTimer=brainOn&&!quietPhones.has(ctx.phone)?setTimeout(()=>{if(finished||budget.expired)return;inBackground(sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.working).catch(()=>{}))},Math.max(0,5000-(Date.now()-arrivedAt))):undefined
  let message=await Promise.race([jobMessage(kind,ctx,body,form,budget).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:brainOn?copy.brainDown:copy.failed}),timeout]).finally(()=>{clearTimeout(timer);finished=true;if(ackTimer)clearTimeout(ackTimer)})
  const problem:FailureKind|null=budget.expired?'job_timeout':budget.failed?'job_failed':null
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'JOB '+JSON.stringify({kind,body:body.slice(0,60),message:String(message).slice(0,120),problem})+'\n'))
@@ -1068,6 +1090,8 @@ export async function twilioMenuRoutes(app:FastifyInstance){
   return{data:await ownerState(db,tenant)}})
  app.addContentTypeParser('application/x-www-form-urlencoded',{parseAs:'string'},(_req,body,done)=>{const values=new URLSearchParams(String(body)),form:Record<string,string>={};for(const[k,v]of values){if(k in form)return done(Error('Duplicate form key'));form[k]=v}done(null,form)})
  app.post('/whatsapp/twilio',{bodyLimit:32768},async(req,reply)=>{
+ // «Ci sto lavorando…» a 5 s dall'ARRIVO del messaggio (non da dopo lock/DB/lettura impostazioni).
+ const arrivedAt=Date.now();
  const form=req.body as Record<string,string>,signature=String(req.headers['x-twilio-signature']||''),endpoint=process.env.TWILIO_WEBHOOK_URL||'';
  if(req.url!=='/api/whatsapp/twilio'||!form||!validTwilioSignature(process.env.TWILIO_AUTH_TOKEN||'',endpoint,form,signature)||form.AccountSid!==process.env.TWILIO_ACCOUNT_SID||form.To!==process.env.TWILIO_WHATSAPP_NUMBER)return reply.code(403).send('Forbidden');
  // Owner invitation is a separate trust boundary: validate the signed envelope before consuming it,
@@ -1135,7 +1159,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // Verifica dal vivo sincrona: solo sul QA e solo con il campo firmato TakoSyncTest=1 (la firma Twilio copre tutti i campi: serve il
  // token). Anche le risposte dell'IA tornano SOLO nel TwiML di questa richiesta, mai via REST, e senza avvisi. Altrimenti nulla cambia.
  if(result.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'){const m=await jobMessage(result.job,result.ctx,body,form,{expired:false}).catch(()=>copy.failed);await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${sid}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml((result.ack?result.ack+'\n\n':'')+(m?result.prefix+m:'')))}
- const job=runJob(result.job,result.ctx,sid,body,form,result.prefix).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
+ const job=runJob(result.job,result.ctx,sid,body,form,result.prefix,arrivedAt).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result.ack))
  })
 }

@@ -7,45 +7,45 @@
   "misurate": 150,
   "nonMisurate": [],
   "messaggi": 196,
-  "corrette": 136,
-  "percentuale": 90.7,
-  "gravi": 5,
+  "corrette": 137,
+  "percentuale": 91.3,
+  "gravi": 3,
   "graviSicurezza": 0,
-  "graviAltri": 5,
-  "medi": 9,
-  "domandePer10Messaggi": 2.8,
-  "domandeNonAttesePer10": 1.4,
+  "graviAltri": 3,
+  "medi": 10,
+  "domandePer10Messaggi": 2.9,
+  "domandeNonAttesePer10": 1.6,
   "latenzaAnthropicMs": {
-   "p50": 1847,
-   "p95": 3971,
-   "chiamate": 233
+   "p50": 1858,
+   "p95": 4287,
+   "chiamate": 236
   },
   "latenzaTurnoMs": {
-   "p50": 1859,
-   "p95": 6401,
+   "p50": 19,
+   "p95": 42,
    "nota": "misurata dal vivo"
   },
-  "chiamatePerMessaggio": 1.19,
+  "chiamatePerMessaggio": 1.2,
   "tokenMediPerMessaggio": {
-   "input": 164,
-   "output": 308,
-   "cacheRead": 11628,
-   "cacheWrite": 48
+   "input": 177,
+   "output": 310,
+   "cacheRead": 11769,
+   "cacheWrite": 58
   },
   "cacheHit": {
-   "chiamateConCacheRead": 232,
-   "su": 233,
+   "chiamateConCacheRead": 235,
+   "su": 236,
    "percentuale": 99.6
   },
   "costo": {
-   "spesoGiroUsd": 0.051438,
-   "equivalenteLiveUsd": 0.057354,
-   "perMessaggioUsd": 0.000293,
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.058343,
+   "perMessaggioUsd": 0.000298,
    "tetto": 0.4
   },
   "anthropic": {
-   "hit": 27,
-   "vere": 206,
+   "hit": 236,
+   "vere": 0,
    "mock": 0,
    "assenti": 0,
    "rifiutateTetto": 0,
@@ -53,7 +53,7 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 448.3,
+  "durataGiroS": 6,
   "strati": {
    "elimina-senza-si": 17,
    "conferme-senza-sospeso": 1,
@@ -70,11 +70,11 @@
  "codici": {
   "chiede-invece-di-agire": {
    "GRAVE": 0,
-   "MEDIO": 6,
+   "MEDIO": 7,
    "BASSO": 0
   },
   "non-applicato": {
-   "GRAVE": 3,
+   "GRAVE": 2,
    "MEDIO": 0,
    "BASSO": 0
   },
@@ -84,7 +84,7 @@
    "BASSO": 0
   },
   "conferma-a-vuoto": {
-   "GRAVE": 2,
+   "GRAVE": 1,
    "MEDIO": 0,
    "BASSO": 0
   }
@@ -115,7 +115,7 @@
    "llmMisses": 0,
    "llmTokens": 10088,
    "latencyMs": [
-    2252.8
+    224.8
    ],
    "recordedLlmMs": 2036,
    "usedLlm": true,
@@ -147,7 +147,7 @@
    "llmMisses": 0,
    "llmTokens": 10091,
    "latencyMs": [
-    1748.7
+    79
    ],
    "recordedLlmMs": 1674,
    "usedLlm": true,
@@ -179,7 +179,7 @@
    "llmMisses": 0,
    "llmTokens": 10079,
    "latencyMs": [
-    2014.5
+    35.1
    ],
    "recordedLlmMs": 1978,
    "usedLlm": true,
@@ -211,7 +211,7 @@
    "llmMisses": 0,
    "llmTokens": 10080,
    "latencyMs": [
-    1981.2
+    36
    ],
    "recordedLlmMs": 1926,
    "usedLlm": true,
@@ -243,7 +243,7 @@
    "llmMisses": 0,
    "llmTokens": 10072,
    "latencyMs": [
-    1542.6
+    32.3
    ],
    "recordedLlmMs": 1498,
    "usedLlm": true,
@@ -275,7 +275,7 @@
    "llmMisses": 0,
    "llmTokens": 10099,
    "latencyMs": [
-    1602.2
+    30
    ],
    "recordedLlmMs": 1544,
    "usedLlm": true,
@@ -311,7 +311,7 @@
    "llmMisses": 0,
    "llmTokens": 10477,
    "latencyMs": [
-    3703.6
+    44.2
    ],
    "recordedLlmMs": 3677,
    "usedLlm": true,
@@ -330,23 +330,23 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.",
-    "Elimino il *Babà* dal menu? Rispondi sì."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.",
+    "Ok, procedo con l'eliminazione del *Babà*."
    ],
    "turns": [
     "il babà scancellalo proprio",
     "sine"
    ],
-   "clarifications": 2,
-   "unexpectedClarifications": 1,
-   "llmCalls": 4,
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 5,
    "llmMisses": 0,
-   "llmTokens": 41687,
+   "llmTokens": 52334,
    "latencyMs": [
-    6560,
-    4174.6
+    36.6,
+    42.4
    ],
-   "recordedLlmMs": 10662,
+   "recordedLlmMs": 13196,
    "usedLlm": true,
    "source": "z:dialetto",
    "nonMisurato": false,
@@ -374,8 +374,8 @@
    "llmMisses": 0,
    "llmTokens": 20243,
    "latencyMs": [
-    1681.9,
-    1512.5
+    18.5,
+    19.4
    ],
    "recordedLlmMs": 3151,
    "usedLlm": true,
@@ -403,7 +403,7 @@
    "llmMisses": 0,
    "llmTokens": 10004,
    "latencyMs": [
-    1265
+    20.1
    ],
    "recordedLlmMs": 1241,
    "usedLlm": true,
@@ -432,7 +432,7 @@
    "llmMisses": 0,
    "llmTokens": 10242,
    "latencyMs": [
-    1315.1
+    16.4
    ],
    "recordedLlmMs": 1293,
    "usedLlm": true,
@@ -464,7 +464,7 @@
    "llmMisses": 0,
    "llmTokens": 10116,
    "latencyMs": [
-    1571.4
+    25.4
    ],
    "recordedLlmMs": 1543,
    "usedLlm": true,
@@ -496,7 +496,7 @@
    "llmMisses": 0,
    "llmTokens": 10101,
    "latencyMs": [
-    1574.4
+    27.6
    ],
    "recordedLlmMs": 1537,
    "usedLlm": true,
@@ -528,7 +528,7 @@
    "llmMisses": 0,
    "llmTokens": 10091,
    "latencyMs": [
-    2119.7
+    25.1
    ],
    "recordedLlmMs": 2082,
    "usedLlm": true,
@@ -547,7 +547,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Carbonara* (12,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Carbonara* (12,00 €)"
    ],
    "turns": [
     "🎤 la carbonara a tre dici"
@@ -558,7 +558,7 @@
    "llmMisses": 0,
    "llmTokens": 21351,
    "latencyMs": [
-    8019.6
+    21.4
    ],
    "recordedLlmMs": 8002,
    "usedLlm": true,
@@ -583,7 +583,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Pizza 'nduja* (9,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Pizza 'nduja* (9,00 €)"
    ],
    "turns": [
     "🎤 la pizza en duja a dieci"
@@ -594,7 +594,7 @@
    "llmMisses": 0,
    "llmTokens": 20861,
    "latencyMs": [
-    5244.3
+    23.2
    ],
    "recordedLlmMs": 5219,
    "usedLlm": true,
@@ -613,7 +613,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Pizza 'nduja* (9,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Pizza 'nduja* (9,00 €)"
    ],
    "turns": [
     "🎤 la pizza indulia a dieci"
@@ -624,7 +624,7 @@
    "llmMisses": 0,
    "llmTokens": 20928,
    "latencyMs": [
-    5346.1
+    20.2
    ],
    "recordedLlmMs": 5323,
    "usedLlm": true,
@@ -656,7 +656,7 @@
    "llmMisses": 0,
    "llmTokens": 10080,
    "latencyMs": [
-    1469.7
+    25.1
    ],
    "recordedLlmMs": 1447,
    "usedLlm": true,
@@ -688,7 +688,7 @@
    "llmMisses": 0,
    "llmTokens": 10289,
    "latencyMs": [
-    3170.2
+    23.5
    ],
    "recordedLlmMs": 3142,
    "usedLlm": true,
@@ -724,7 +724,7 @@
    "llmMisses": 0,
    "llmTokens": 20533,
    "latencyMs": [
-    2990.4
+    23.2
    ],
    "recordedLlmMs": 2954,
    "usedLlm": true,
@@ -756,7 +756,7 @@
    "llmMisses": 0,
    "llmTokens": 10324,
    "latencyMs": [
-    3081.8
+    22.2
    ],
    "recordedLlmMs": 3049,
    "usedLlm": true,
@@ -788,7 +788,7 @@
    "llmMisses": 0,
    "llmTokens": 10080,
    "latencyMs": [
-    2141.1
+    22.1
    ],
    "recordedLlmMs": 2120,
    "usedLlm": true,
@@ -820,7 +820,7 @@
    "llmMisses": 0,
    "llmTokens": 10265,
    "latencyMs": [
-    2757.5
+    23.5
    ],
    "recordedLlmMs": 2743,
    "usedLlm": true,
@@ -852,7 +852,7 @@
    "llmMisses": 0,
    "llmTokens": 10074,
    "latencyMs": [
-    1901.3
+    19.9
    ],
    "recordedLlmMs": 1878,
    "usedLlm": true,
@@ -875,7 +875,7 @@
     "price|Calzone|9"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Calzone fritto* e il *Calzone*.\n\n*Calzone fritto*: prezzo da 9,00 € a *10,00 €*\n*Calzone*: prezzo da 8,00 € a *9,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 1,00 € i prezzi di 2 piatti.\n\n*Calzone fritto*: prezzo da 9,00 € a *10,00 €*\n*Calzone*: prezzo da 8,00 € a *9,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "🎤 il calzone fritto a dieci e il calzone a nove"
@@ -886,7 +886,7 @@
    "llmMisses": 0,
    "llmTokens": 10161,
    "latencyMs": [
-    1642.6
+    31
    ],
    "recordedLlmMs": 1608,
    "usedLlm": true,
@@ -909,7 +909,7 @@
     "price|Calzone|9"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Calzone* a 9 e il *Calzone fritto* a 10.\n\n*Calzone*: prezzo da 8,00 € a *9,00 €*\n*Calzone fritto*: prezzo da 9,00 € a *10,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 1,00 € i prezzi di 2 piatti.\n\n*Calzone*: prezzo da 8,00 € a *9,00 €*\n*Calzone fritto*: prezzo da 9,00 € a *10,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "🎤 il calzone a nove e il calzone fritto a dieci"
@@ -920,7 +920,7 @@
    "llmMisses": 0,
    "llmTokens": 10168,
    "latencyMs": [
-    2055.7
+    27.1
    ],
    "recordedLlmMs": 2026,
    "usedLlm": true,
@@ -952,7 +952,7 @@
    "llmMisses": 0,
    "llmTokens": 10079,
    "latencyMs": [
-    1865.1
+    20.5
    ],
    "recordedLlmMs": 1847,
    "usedLlm": true,
@@ -980,7 +980,7 @@
    "llmMisses": 0,
    "llmTokens": 10253,
    "latencyMs": [
-    3044.8
+    18.8
    ],
    "recordedLlmMs": 3025,
    "usedLlm": true,
@@ -1009,7 +1009,7 @@
    "llmMisses": 0,
    "llmTokens": 10010,
    "latencyMs": [
-    1342
+    12.4
    ],
    "recordedLlmMs": 1329,
    "usedLlm": true,
@@ -1038,7 +1038,7 @@
    "llmMisses": 0,
    "llmTokens": 10021,
    "latencyMs": [
-    1572.8
+    14
    ],
    "recordedLlmMs": 1559,
    "usedLlm": true,
@@ -1070,7 +1070,7 @@
    "llmMisses": 0,
    "llmTokens": 10069,
    "latencyMs": [
-    1579.3
+    18.7
    ],
    "recordedLlmMs": 1557,
    "usedLlm": true,
@@ -1102,7 +1102,7 @@
    "llmMisses": 0,
    "llmTokens": 10085,
    "latencyMs": [
-    1572.3
+    20.2
    ],
    "recordedLlmMs": 1541,
    "usedLlm": true,
@@ -1134,7 +1134,7 @@
    "llmMisses": 0,
    "llmTokens": 10085,
    "latencyMs": [
-    1578.6
+    21.2
    ],
    "recordedLlmMs": 1540,
    "usedLlm": true,
@@ -1166,7 +1166,7 @@
    "llmMisses": 0,
    "llmTokens": 10078,
    "latencyMs": [
-    2180
+    21.5
    ],
    "recordedLlmMs": 2153,
    "usedLlm": true,
@@ -1187,7 +1187,7 @@
     "price|Greco di Tufo|38"
    ],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Greco di Tufo* a 38 €.\n\n*Greco di Tufo*: prezzo da 25,00 € a *38,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Greco di Tufo* a 38 €.\n\n*Greco di Tufo*: prezzo da 25,00 € a *38,00 €*"
    ],
    "turns": [
     "il greco di tufo a trentotto"
@@ -1198,7 +1198,7 @@
    "llmMisses": 0,
    "llmTokens": 10160,
    "latencyMs": [
-    10933.4
+    21.5
    ],
    "recordedLlmMs": 10889,
    "usedLlm": true,
@@ -1230,7 +1230,7 @@
    "llmMisses": 0,
    "llmTokens": 10082,
    "latencyMs": [
-    2395.8
+    23.2
    ],
    "recordedLlmMs": 2368,
    "usedLlm": true,
@@ -1262,7 +1262,7 @@
    "llmMisses": 0,
    "llmTokens": 10083,
    "latencyMs": [
-    1812.9
+    20.3
    ],
    "recordedLlmMs": 1786,
    "usedLlm": true,
@@ -1294,7 +1294,7 @@
    "llmMisses": 0,
    "llmTokens": 10079,
    "latencyMs": [
-    2591.5
+    21.4
    ],
    "recordedLlmMs": 2560,
    "usedLlm": true,
@@ -1327,7 +1327,7 @@
    "llmMisses": 0,
    "llmTokens": 10078,
    "latencyMs": [
-    2168.2
+    17.7
    ],
    "recordedLlmMs": 2139,
    "usedLlm": true,
@@ -1359,7 +1359,7 @@
    "llmMisses": 0,
    "llmTokens": 10081,
    "latencyMs": [
-    1501.4
+    25.1
    ],
    "recordedLlmMs": 1473,
    "usedLlm": true,
@@ -1391,7 +1391,7 @@
    "llmMisses": 0,
    "llmTokens": 10072,
    "latencyMs": [
-    1225.9
+    22.6
    ],
    "recordedLlmMs": 1201,
    "usedLlm": true,
@@ -1423,7 +1423,7 @@
    "llmMisses": 0,
    "llmTokens": 10075,
    "latencyMs": [
-    1393.4
+    19.2
    ],
    "recordedLlmMs": 1346,
    "usedLlm": true,
@@ -1455,7 +1455,7 @@
    "llmMisses": 0,
    "llmTokens": 10471,
    "latencyMs": [
-    2765.1
+    24
    ],
    "recordedLlmMs": 2741,
    "usedLlm": true,
@@ -1487,7 +1487,7 @@
    "llmMisses": 0,
    "llmTokens": 10075,
    "latencyMs": [
-    2132
+    16.8
    ],
    "recordedLlmMs": 2103,
    "usedLlm": true,
@@ -1519,7 +1519,7 @@
    "llmMisses": 0,
    "llmTokens": 10295,
    "latencyMs": [
-    2411.1
+    19.1
    ],
    "recordedLlmMs": 2385,
    "usedLlm": true,
@@ -1551,7 +1551,7 @@
    "llmMisses": 0,
    "llmTokens": 10079,
    "latencyMs": [
-    1587.4
+    18.9
    ],
    "recordedLlmMs": 1558,
    "usedLlm": true,
@@ -1583,7 +1583,7 @@
    "llmMisses": 0,
    "llmTokens": 10077,
    "latencyMs": [
-    1846.1
+    18.2
    ],
    "recordedLlmMs": 1825,
    "usedLlm": true,
@@ -1618,8 +1618,8 @@
    "llmMisses": 0,
    "llmTokens": 20299,
    "latencyMs": [
-    1904.1,
-    2719.5
+    17.5,
+    11.6
    ],
    "recordedLlmMs": 4587,
    "usedLlm": true,
@@ -1646,7 +1646,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il sottomenu *Calzoni*? Rispondi sì.\n\n1. *Calzone* (8,00 €)\n2. *Calzone fritto* (9,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il sottomenu *Calzoni*? Rispondi sì.\n\n1. *Calzone* (8,00 €)\n2. *Calzone fritto* (9,00 €)"
    ],
    "turns": [
     "nascondi i calzoni"
@@ -1657,7 +1657,7 @@
    "llmMisses": 0,
    "llmTokens": 21444,
    "latencyMs": [
-    7142
+    14.5
    ],
    "recordedLlmMs": 7122,
    "usedLlm": true,
@@ -1689,7 +1689,7 @@
    "llmMisses": 0,
    "llmTokens": 10813,
    "latencyMs": [
-    3908.1
+    23
    ],
    "recordedLlmMs": 3886,
    "usedLlm": true,
@@ -1712,21 +1712,21 @@
     "move|Calzone|Ripieni"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino il Sottomenu *Calzoni* in *Ripieni*.\n\nSottomenu *Calzoni*: nuovo nome *Ripieni*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSottomenu *Calzoni*: nuovo nome *Ripieni*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "rinomina la categoria calzoni in ripieni"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 1,
+   "llmCalls": 0,
    "llmMisses": 0,
-   "llmTokens": 10225,
+   "llmTokens": 0,
    "latencyMs": [
-    2385.1
+    15.5
    ],
-   "recordedLlmMs": 2364,
-   "usedLlm": true,
+   "recordedLlmMs": 0,
+   "usedLlm": false,
    "source": "z:omonimi",
    "nonMisurato": false,
    "strato": "nomi-insidiosi"
@@ -1743,18 +1743,18 @@
    ],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Vino della casa* (4,00 €)\n2. *Greco di Tufo* (25,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «i vini in evidenza» a quale piatto ti riferisci? Rispondi col numero.\n\n1. *Vino della casa* (4,00 €)\n2. *Greco di Tufo* (25,00 €)"
    ],
    "turns": [
     "i vini in evidenza"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 21121,
    "latencyMs": [
-    3449.8
+    18
    ],
    "recordedLlmMs": 3427,
    "usedLlm": true,
@@ -1786,7 +1786,7 @@
    "llmMisses": 0,
    "llmTokens": 10085,
    "latencyMs": [
-    2021.1
+    21.4
    ],
    "recordedLlmMs": 2007,
    "usedLlm": true,
@@ -1819,7 +1819,7 @@
    "llmMisses": 0,
    "llmTokens": 10076,
    "latencyMs": [
-    1859.2
+    17.9
    ],
    "recordedLlmMs": 1841,
    "usedLlm": true,
@@ -1838,7 +1838,7 @@
     "move|Speciale della casa|Specialità"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rinomino il Sottomenu *Speciali* in *Specialità*.\n\nSottomenu *Speciali*: nuovo nome *Specialità*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSottomenu *Speciali*: nuovo nome *Specialità*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "rinomina speciali in specialità"
@@ -1849,7 +1849,7 @@
    "llmMisses": 0,
    "llmTokens": 10118,
    "latencyMs": [
-    1570
+    21
    ],
    "recordedLlmMs": 1550,
    "usedLlm": true,
@@ -1889,9 +1889,9 @@
    "llmMisses": 0,
    "llmTokens": 31314,
    "latencyMs": [
-    2675.1,
-    2038.4,
-    1310.7
+    38.1,
+    19.6,
+    94.6
    ],
    "recordedLlmMs": 5791,
    "usedLlm": true,
@@ -1931,8 +1931,8 @@
    "llmMisses": 0,
    "llmTokens": 20662,
    "latencyMs": [
-    26.6,
-    1289.3
+    41.6,
+    18.8
    ],
    "recordedLlmMs": 3885,
    "usedLlm": true,
@@ -1962,8 +1962,8 @@
    "llmMisses": 0,
    "llmTokens": 20679,
    "latencyMs": [
-    37.5,
-    1139.7
+    38.2,
+    22.8
    ],
    "recordedLlmMs": 3723,
    "usedLlm": true,
@@ -2006,8 +2006,8 @@
    "llmMisses": 0,
    "llmTokens": 20799,
    "latencyMs": [
-    2629.2,
-    1280.3
+    49.9,
+    18.3
    ],
    "recordedLlmMs": 3840,
    "usedLlm": true,
@@ -2030,7 +2030,7 @@
     "price|Spaghetti all'astice|26"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Polpo all'insalata* a 16 € e lo *Spaghetti all'astice* a 26 €. Il resto resta com'è.\n\n*Polpo all'insalata*: prezzo da 14,00 € a *16,00 €*\n*Spaghetti all'astice*: prezzo da 24,00 € a *26,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 2,00 € i prezzi di 2 piatti.\n\n*Polpo all'insalata*: prezzo da 14,00 € a *16,00 €*\n*Spaghetti all'astice*: prezzo da 24,00 € a *26,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "Buongiorno, allora, scusa se ti scrivo così presto ma stamattina sono andato al mercato e il pesce costava tantissimo, quindi ho deciso: il polpo all'insalata lo metti a 16, gli spaghetti all'astice a 26, e poi niente, per il resto lascia tutto com'è, grazie mille e buona giornata"
@@ -2041,7 +2041,7 @@
    "llmMisses": 0,
    "llmTokens": 10293,
    "latencyMs": [
-    2295.9
+    87.9
    ],
    "recordedLlmMs": 2215,
    "usedLlm": true,
@@ -2069,7 +2069,7 @@
    "llmMisses": 0,
    "llmTokens": 10059,
    "latencyMs": [
-    1248.4
+    36.9
    ],
    "recordedLlmMs": 1216,
    "usedLlm": true,
@@ -2094,7 +2094,7 @@
     "featured|Tagliata|true"
    ],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Babà* e *Burrata* come finiti e metto in evidenza la *Tagliata*.\n\n*Babà*: *finito*\n*Burrata*: *finito*\n*Tagliata*: *in evidenza*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Babà* e *Burrata* come finiti e metto in evidenza la *Tagliata*.\n\n*Babà*: *finito*\n*Burrata*: *finito*\n*Tagliata*: *in evidenza*"
    ],
    "turns": [
     "Ciao! Oggi è una giornata pienissima, abbiamo 40 coperti a pranzo, quindi per favore: il babà è finito, la burrata pure, e metti in evidenza la tagliata che ne abbiamo tanta. Grazie!"
@@ -2105,7 +2105,7 @@
    "llmMisses": 0,
    "llmTokens": 21397,
    "latencyMs": [
-    6570.7
+    57.8
    ],
    "recordedLlmMs": 6529,
    "usedLlm": true,
@@ -2133,7 +2133,7 @@
    "llmMisses": 0,
    "llmTokens": 0,
    "latencyMs": [
-    1.9
+    1.3
    ],
    "recordedLlmMs": 0,
    "usedLlm": false,
@@ -2163,7 +2163,7 @@
    "llmMisses": 0,
    "llmTokens": 1595,
    "latencyMs": [
-    83.7
+    108.8
    ],
    "recordedLlmMs": 2851,
    "usedLlm": true,
@@ -2197,7 +2197,7 @@
    "llmMisses": 0,
    "llmTokens": 10068,
    "latencyMs": [
-    1988.2
+    21
    ],
    "recordedLlmMs": 1974,
    "usedLlm": true,
@@ -2229,7 +2229,7 @@
    "llmMisses": 0,
    "llmTokens": 10075,
    "latencyMs": [
-    1580.3
+    22.2
    ],
    "recordedLlmMs": 1562,
    "usedLlm": true,
@@ -2261,7 +2261,7 @@
    "llmMisses": 0,
    "llmTokens": 10076,
    "latencyMs": [
-    2109.6
+    20.9
    ],
    "recordedLlmMs": 2093,
    "usedLlm": true,
@@ -2293,7 +2293,7 @@
    "llmMisses": 0,
    "llmTokens": 10224,
    "latencyMs": [
-    2600.3
+    15.3
    ],
    "recordedLlmMs": 2584,
    "usedLlm": true,
@@ -2325,7 +2325,7 @@
    "llmMisses": 0,
    "llmTokens": 10244,
    "latencyMs": [
-    2096.4
+    17.5
    ],
    "recordedLlmMs": 2084,
    "usedLlm": true,
@@ -2357,7 +2357,7 @@
    "llmMisses": 0,
    "llmTokens": 10070,
    "latencyMs": [
-    1309.9
+    15.7
    ],
    "recordedLlmMs": 1297,
    "usedLlm": true,
@@ -2385,7 +2385,7 @@
    "llmMisses": 0,
    "llmTokens": 9998,
    "latencyMs": [
-    1305.1
+    9.3
    ],
    "recordedLlmMs": 1292,
    "usedLlm": true,
@@ -2419,8 +2419,8 @@
    "llmMisses": 0,
    "llmTokens": 20180,
    "latencyMs": [
-    2102,
-    1570.8
+    16.6,
+    9.4
    ],
    "recordedLlmMs": 3647,
    "usedLlm": true,
@@ -2448,7 +2448,7 @@
    "llmMisses": 0,
    "llmTokens": 10058,
    "latencyMs": [
-    1715.2
+    10.9
    ],
    "recordedLlmMs": 1701,
    "usedLlm": true,
@@ -2476,7 +2476,7 @@
    "llmMisses": 0,
    "llmTokens": 10059,
    "latencyMs": [
-    1952
+    11.2
    ],
    "recordedLlmMs": 1941,
    "usedLlm": true,
@@ -2504,7 +2504,7 @@
    "llmMisses": 0,
    "llmTokens": 10036,
    "latencyMs": [
-    1330.1
+    12.1
    ],
    "recordedLlmMs": 1313,
    "usedLlm": true,
@@ -2532,7 +2532,7 @@
    "llmMisses": 0,
    "llmTokens": 10048,
    "latencyMs": [
-    1513.2
+    11.5
    ],
    "recordedLlmMs": 1491,
    "usedLlm": true,
@@ -2560,7 +2560,7 @@
    "llmMisses": 0,
    "llmTokens": 10057,
    "latencyMs": [
-    1535.8
+    16.7
    ],
    "recordedLlmMs": 1516,
    "usedLlm": true,
@@ -2588,7 +2588,7 @@
    "llmMisses": 0,
    "llmTokens": 10231,
    "latencyMs": [
-    2433.2
+    17.5
    ],
    "recordedLlmMs": 2412,
    "usedLlm": true,
@@ -2616,7 +2616,7 @@
    "llmMisses": 0,
    "llmTokens": 20830,
    "latencyMs": [
-    4837.9
+    17.8
    ],
    "recordedLlmMs": 4798,
    "usedLlm": true,
@@ -2647,7 +2647,7 @@
    "llmMisses": 0,
    "llmTokens": 20523,
    "latencyMs": [
-    2560.8
+    19.8
    ],
    "recordedLlmMs": 2524,
    "usedLlm": true,
@@ -2678,8 +2678,8 @@
    "llmMisses": 0,
    "llmTokens": 20255,
    "latencyMs": [
-    27.9,
-    2533.5
+    17.8,
+    22.1
    ],
    "recordedLlmMs": 4586,
    "usedLlm": true,
@@ -2709,8 +2709,8 @@
    "llmMisses": 0,
    "llmTokens": 20221,
    "latencyMs": [
-    2116.4,
-    1550.6
+    13.8,
+    23.1
    ],
    "recordedLlmMs": 3592,
    "usedLlm": true,
@@ -2738,7 +2738,7 @@
    "llmMisses": 0,
    "llmTokens": 20419,
    "latencyMs": [
-    2870.4
+    18.3
    ],
    "recordedLlmMs": 2845,
    "usedLlm": true,
@@ -2770,9 +2770,9 @@
    "llmMisses": 0,
    "llmTokens": 40904,
    "latencyMs": [
-    17.5,
-    2018.5,
-    3763.2
+    18.4,
+    14.2,
+    19.3
    ],
    "recordedLlmMs": 7807,
    "usedLlm": true,
@@ -2802,8 +2802,8 @@
    "llmMisses": 0,
    "llmTokens": 20253,
    "latencyMs": [
-    23.1,
-    1381.9
+    18.7,
+    14.5
    ],
    "recordedLlmMs": 3453,
    "usedLlm": true,
@@ -2835,8 +2835,8 @@
    "llmMisses": 0,
    "llmTokens": 30710,
    "latencyMs": [
-    15.9,
-    3527.1
+    18.2,
+    17.8
    ],
    "recordedLlmMs": 5582,
    "usedLlm": true,
@@ -2866,8 +2866,8 @@
    "llmMisses": 0,
    "llmTokens": 20247,
    "latencyMs": [
-    21.2,
-    1409.7
+    16,
+    16.4
    ],
    "recordedLlmMs": 3483,
    "usedLlm": true,
@@ -2901,8 +2901,8 @@
    "llmMisses": 0,
    "llmTokens": 20347,
    "latencyMs": [
-    16.8,
-    1721.3
+    18.2,
+    27
    ],
    "recordedLlmMs": 3780,
    "usedLlm": true,
@@ -2935,8 +2935,8 @@
    "llmTokens": 40905,
    "latencyMs": [
     12.8,
-    1527.9,
-    2850.3
+    16.1,
+    16.4
    ],
    "recordedLlmMs": 6011,
    "usedLlm": true,
@@ -2965,7 +2965,7 @@
    "llmMisses": 0,
    "llmTokens": 10069,
    "latencyMs": [
-    1871.4
+    13.6
    ],
    "recordedLlmMs": 1858,
    "usedLlm": true,
@@ -2993,7 +2993,7 @@
    "llmMisses": 0,
    "llmTokens": 10016,
    "latencyMs": [
-    1725.5
+    12.7
    ],
    "recordedLlmMs": 1704,
    "usedLlm": true,
@@ -3013,7 +3013,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi rimettere disponibili *Burrata* e *Babà*, cioè i due piatti esauriti?\n\n1. *Burrata* (9,00 €)\n2. *Babà* (5,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi rimettere disponibili *Burrata* e *Babà*, cioè i due piatti esauriti?\n\n1. *Burrata* (9,00 €)\n2. *Babà* (5,00 €)"
    ],
    "turns": [
     "rimetti tutto disponibile"
@@ -3024,7 +3024,7 @@
    "llmMisses": 0,
    "llmTokens": 21283,
    "latencyMs": [
-    6141
+    17.1
    ],
    "recordedLlmMs": 6112,
    "usedLlm": true,
@@ -3058,7 +3058,7 @@
    "llmMisses": 0,
    "llmTokens": 10082,
    "latencyMs": [
-    2355.5
+    11.8
    ],
    "recordedLlmMs": 2332,
    "usedLlm": true,
@@ -3086,7 +3086,7 @@
    "llmMisses": 0,
    "llmTokens": 10267,
    "latencyMs": [
-    2353.7
+    12.9
    ],
    "recordedLlmMs": 2336,
    "usedLlm": true,
@@ -3116,8 +3116,8 @@
    "llmMisses": 0,
    "llmTokens": 20397,
    "latencyMs": [
-    14.5,
-    1562.7
+    11.3,
+    14
    ],
    "recordedLlmMs": 3875,
    "usedLlm": true,
@@ -3129,29 +3129,23 @@
    "id": "z-assurdi-008",
    "family": "b1-elimina",
    "menu": "zeta",
-   "success": false,
-   "fails": [
-    {
-     "sev": "MEDIO",
-     "code": "chiarimento-mancante",
-     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «la carbonara a 13.000» mi manca un dettaglio: qual è il nome esatto del piatto (o del sottomenu) e cosa devo cambiare? Per esempio «la carbonara a 12»."
    ],
    "turns": [
     "la carbonara a 13.000"
    ],
-   "clarifications": 0,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 20429,
    "latencyMs": [
-    3665.1
+    16.9
    ],
    "recordedLlmMs": 3637,
    "usedLlm": true,
@@ -3183,7 +3177,7 @@
    "llmMisses": 0,
    "llmTokens": 10099,
    "latencyMs": [
-    3246.9
+    20.9
    ],
    "recordedLlmMs": 3213,
    "usedLlm": true,
@@ -3215,7 +3209,7 @@
    "llmMisses": 0,
    "llmTokens": 10082,
    "latencyMs": [
-    1563.6
+    20.1
    ],
    "recordedLlmMs": 1539,
    "usedLlm": true,
@@ -3247,7 +3241,7 @@
    "llmMisses": 0,
    "llmTokens": 10082,
    "latencyMs": [
-    2531.9
+    20.5
    ],
    "recordedLlmMs": 2505,
    "usedLlm": true,
@@ -3268,7 +3262,7 @@
     "rename|Babà|Babà al rum"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rinomino il *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Babà*: nuovo nome *Babà al rum*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "rinomina il babà in \"Babà al rum\""
@@ -3279,7 +3273,7 @@
    "llmMisses": 0,
    "llmTokens": 10091,
    "latencyMs": [
-    1589.3
+    20.8
    ],
    "recordedLlmMs": 1563,
    "usedLlm": true,
@@ -3311,7 +3305,7 @@
    "llmMisses": 0,
    "llmTokens": 10084,
    "latencyMs": [
-    1830.7
+    16.3
    ],
    "recordedLlmMs": 1811,
    "usedLlm": true,
@@ -3347,9 +3341,9 @@
    "llmMisses": 0,
    "llmTokens": 30467,
    "latencyMs": [
-    14.2,
-    1529.4,
-    1526.5
+    16.8,
+    19.4,
+    18
    ],
    "recordedLlmMs": 5093,
    "usedLlm": true,
@@ -3370,23 +3364,23 @@
     "rename|Babà|Babà al rum"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*",
-    "Ci sto lavorando…\nNon ho cambiato nulla.\n\n1. *Babà al rum* (5,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Babà*: nuovo nome *Babà al rum*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Il *Babà* risulta già come *Babà al rum*: vuoi cambiargli nome in un'altra forma?"
    ],
    "turns": [
     "rinomina il babà in babà al rum",
     "rinomina il babà in babà al rum"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 31537,
+   "llmTokens": 31163,
    "latencyMs": [
-    1592.1,
-    6875.2
+    16.7,
+    23.1
    ],
-   "recordedLlmMs": 8411,
+   "recordedLlmMs": 6756,
    "usedLlm": true,
    "source": "z:ripeti",
    "nonMisurato": false,
@@ -3416,7 +3410,7 @@
    "llmMisses": 0,
    "llmTokens": 10084,
    "latencyMs": [
-    1932.8
+    21.1
    ],
    "recordedLlmMs": 1899,
    "usedLlm": true,
@@ -3428,14 +3422,8 @@
    "id": "z-ripeti-010",
    "family": "b1-elimina",
    "menu": "zeta",
-   "success": false,
-   "fails": [
-    {
-     "sev": "GRAVE",
-     "code": "conferma-a-vuoto",
-     "why": "turno 4: «sì» dopo una richiesta di conferma, e il bot chiede ancora conferma («Elimino il *Babà* dal menu? Rispondi sì.»)"
-    }
-   ],
+   "success": true,
+   "fails": [],
    "expected": [
     "delete|Babà"
    ],
@@ -3446,7 +3434,7 @@
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
     "Ok, elimino il *Babà*.\n\n*Babà*: *eliminato* dal menu",
     "Elimino il *Babà* dal menu? Rispondi sì.",
-    "Elimino il *Babà* dal menu? Rispondi sì."
+    "Non trovo il *Babà* nel menu. Quale piatto intendi? 1. *Tiramisù* 2. *Delizia al limone* 3. Nessuno, lascia stare. Rispondi con il numero.\n\n1. *Tiramisù* (6,00 €)\n2. *Delizia al limone* (5,50 €)"
    ],
    "turns": [
     "elimina il babà",
@@ -3454,18 +3442,18 @@
     "elimina il babà",
     "sì"
    ],
-   "clarifications": 3,
-   "unexpectedClarifications": 2,
-   "llmCalls": 6,
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 7,
    "llmMisses": 0,
-   "llmTokens": 61824,
+   "llmTokens": 73027,
    "latencyMs": [
-    23,
-    1629.6,
-    2531.8,
-    3016.3
+    12.6,
+    18.3,
+    19.8,
+    24.6
    ],
-   "recordedLlmMs": 8765,
+   "recordedLlmMs": 13052,
    "usedLlm": true,
    "source": "z:ripeti",
    "nonMisurato": false,
@@ -3499,9 +3487,9 @@
    "llmMisses": 0,
    "llmTokens": 41114,
    "latencyMs": [
-    15.8,
-    2096.3,
-    3891.6
+    12.8,
+    22.6,
+    17.9
    ],
    "recordedLlmMs": 7599,
    "usedLlm": true,
@@ -3535,9 +3523,9 @@
    "llmMisses": 0,
    "llmTokens": 30466,
    "latencyMs": [
-    41.2,
-    1550,
-    1967.1
+    11.8,
+    16.8,
+    13
    ],
    "recordedLlmMs": 5137,
    "usedLlm": true,
@@ -3555,7 +3543,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
-    "Ci sto lavorando…\nPrima confermo l'eliminazione del *Babà*? Rispondi sì, poi dimmi cosa vuoi fare del *Tiramisù*.\n\n1. *Babà* (5,00 €)\n2. *Tiramisù* (6,00 €)"
+    "Prima confermo l'eliminazione del *Babà*? Rispondi sì, poi dimmi cosa vuoi fare del *Tiramisù*.\n\n1. *Babà* (5,00 €)\n2. *Tiramisù* (6,00 €)"
    ],
    "turns": [
     "elimina il babà",
@@ -3567,8 +3555,8 @@
    "llmMisses": 0,
    "llmTokens": 31463,
    "latencyMs": [
-    33.8,
-    6210.8
+    13.9,
+    22
    ],
    "recordedLlmMs": 7842,
    "usedLlm": true,
@@ -3612,8 +3600,8 @@
    "llmMisses": 0,
    "llmTokens": 30916,
    "latencyMs": [
-    17.1,
-    3274.7
+    10.5,
+    23.2
    ],
    "recordedLlmMs": 4913,
    "usedLlm": true,
@@ -3643,8 +3631,8 @@
    "llmMisses": 0,
    "llmTokens": 20223,
    "latencyMs": [
-    11.8,
-    1568
+    13.4,
+    14.8
    ],
    "recordedLlmMs": 3209,
    "usedLlm": true,
@@ -3656,28 +3644,34 @@
    "id": "z-interruzioni-010",
    "family": "b1-elimina",
    "menu": "zeta",
-   "success": true,
-   "fails": [],
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 2: doveva chiedere un chiarimento («Ok, eliminiamo solo il *Babà*. Rispondi sì per confermare.»)"
+    }
+   ],
    "expected": [],
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* e il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare\n2. *Tiramisù*: da eliminare",
-    "Elimino il *Babà* dal menu? Rispondi sì."
+    "Ok, eliminiamo solo il *Babà*. Rispondi sì per confermare."
    ],
    "turns": [
     "elimina il babà e il tiramisù",
     "solo il babà"
    ],
-   "clarifications": 2,
+   "clarifications": 1,
    "unexpectedClarifications": 0,
-   "llmCalls": 3,
+   "llmCalls": 4,
    "llmMisses": 0,
-   "llmTokens": 30879,
+   "llmTokens": 41520,
    "latencyMs": [
-    1857.7,
-    3747
+    14.6,
+    23.2
    ],
-   "recordedLlmMs": 5568,
+   "recordedLlmMs": 6832,
    "usedLlm": true,
    "source": "z:interruzioni",
    "nonMisurato": false,
@@ -3706,7 +3700,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* e il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare\n2. *Tiramisù*: da eliminare",
-    "Elimino il *Babà* dal menu? Rispondi sì.",
+    "Ok, eliminiamo solo il *Babà*. Rispondi sì per confermare.",
     "Elimino il *Babà* dal menu? Rispondi sì."
    ],
    "turns": [
@@ -3714,17 +3708,17 @@
     "solo il babà",
     "sì"
    ],
-   "clarifications": 3,
-   "unexpectedClarifications": 2,
-   "llmCalls": 5,
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 6,
    "llmMisses": 0,
-   "llmTokens": 51798,
+   "llmTokens": 62479,
    "latencyMs": [
-    7.6,
-    9.7,
-    3311
+    16.3,
+    21.2,
+    20.7
    ],
-   "recordedLlmMs": 8861,
+   "recordedLlmMs": 10502,
    "usedLlm": true,
    "source": "z:interruzioni",
    "nonMisurato": false,
@@ -3742,7 +3736,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* e il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare\n2. *Tiramisù*: da eliminare",
-    "Ci sto lavorando…\nNon ho cambiato nulla.\n\n1. *Babà* (5,00 €)"
+    "Non ho cambiato nulla.\n\n1. *Babà* (5,00 €)"
    ],
    "turns": [
     "elimina il babà e il tiramisù",
@@ -3754,8 +3748,8 @@
    "llmMisses": 0,
    "llmTokens": 31543,
    "latencyMs": [
-    12.2,
-    6362
+    19.6,
+    17.9
    ],
    "recordedLlmMs": 8180,
    "usedLlm": true,
@@ -3780,8 +3774,8 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa la *Cassata* nei Dolci?",
-    "Quanto costa la *Cassata* nei Dolci?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuanto costa la *Cassata* nei Dolci?",
+    "Ho capito il 6, ma quale prezzo vuoi per la *Cassata*? Rispondi 1 per 6 € oppure 2 per un altro importo."
    ],
    "turns": [
     "aggiungi nei dolci la cassata",
@@ -3789,14 +3783,14 @@
    ],
    "clarifications": 2,
    "unexpectedClarifications": 1,
-   "llmCalls": 3,
+   "llmCalls": 4,
    "llmMisses": 0,
-   "llmTokens": 31152,
+   "llmTokens": 41908,
    "latencyMs": [
-    5721,
-    1509.1
+    17.7,
+    18.2
    ],
-   "recordedLlmMs": 7197,
+   "recordedLlmMs": 9200,
    "usedLlm": true,
    "source": "z:interruzioni",
    "nonMisurato": false,
@@ -3822,7 +3816,7 @@
    "llmMisses": 0,
    "llmTokens": 10003,
    "latencyMs": [
-    1403.1
+    11.1
    ],
    "recordedLlmMs": 1390,
    "usedLlm": true,
@@ -3850,7 +3844,7 @@
    "llmMisses": 0,
    "llmTokens": 10006,
    "latencyMs": [
-    1263.7
+    12.3
    ],
    "recordedLlmMs": 1249,
    "usedLlm": true,
@@ -3880,7 +3874,7 @@
    "llmMisses": 0,
    "llmTokens": 10027,
    "latencyMs": [
-    1900.4
+    12.1
    ],
    "recordedLlmMs": 1886,
    "usedLlm": true,
@@ -3910,7 +3904,7 @@
    "llmMisses": 0,
    "llmTokens": 10080,
    "latencyMs": [
-    1504.5
+    15
    ],
    "recordedLlmMs": 1463,
    "usedLlm": true,
@@ -3938,7 +3932,7 @@
    "llmMisses": 0,
    "llmTokens": 10025,
    "latencyMs": [
-    1547.6
+    12.8
    ],
    "recordedLlmMs": 1527,
    "usedLlm": true,
@@ -3966,7 +3960,7 @@
    "llmMisses": 0,
    "llmTokens": 10002,
    "latencyMs": [
-    1896.7
+    11.6
    ],
    "recordedLlmMs": 1882,
    "usedLlm": true,
@@ -3998,7 +3992,7 @@
    "llmMisses": 0,
    "llmTokens": 10146,
    "latencyMs": [
-    1764.7
+    18.2
    ],
    "recordedLlmMs": 1747,
    "usedLlm": true,
@@ -4028,8 +4022,8 @@
    "llmMisses": 0,
    "llmTokens": 20260,
    "latencyMs": [
-    1900.4,
-    2352.6
+    18.2,
+    16.3
    ],
    "recordedLlmMs": 4201,
    "usedLlm": true,
@@ -4048,18 +4042,18 @@
    ],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\nNon salvato: *Burrata*: spostato in *Secondi*\n\n1. *Tagliata* (18,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «sposta la burrata dove sta la tagliata» intendi *Tagliata*? Rispondi sì oppure dimmi il nome giusto.\n\nNon salvato: *Burrata*: spostato in *Secondi*\n\n1. *Tagliata* (18,00 €)"
    ],
    "turns": [
     "sposta la burrata dove sta la tagliata"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 20716,
    "latencyMs": [
-    4659.1
+    24.2
    ],
    "recordedLlmMs": 4635,
    "usedLlm": true,
@@ -4087,8 +4081,8 @@
     "rename|Babà|Babà al rum"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*",
-    "Intendi *Babà al rum* a 6 €?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Babà*: nuovo nome *Babà al rum*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Per «e mettilo a 6» intendi *Babà al rum*? Rispondi sì oppure dimmi il nome giusto.\n\n1. *Babà al rum* (5,00 €)"
    ],
    "turns": [
     "rinomina il babà in babà al rum",
@@ -4098,12 +4092,12 @@
    "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
-   "llmTokens": 30993,
+   "llmTokens": 30813,
    "latencyMs": [
-    35.1,
-    4159.6
+    21.1,
+    26.2
    ],
-   "recordedLlmMs": 5697,
+   "recordedLlmMs": 5185,
    "usedLlm": true,
    "source": "z:rinomine",
    "nonMisurato": false,
@@ -4124,7 +4118,7 @@
     "rename|Babà|Babà al rum"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Babà*: nuovo nome *Babà al rum*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
     "Ok, il *Babà al rum* passa a 6 €.\n\n*Babà al rum*: prezzo da 5,00 € a *6,00 €*"
    ],
    "turns": [
@@ -4135,12 +4129,12 @@
    "unexpectedClarifications": 0,
    "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 20309,
+   "llmTokens": 20312,
    "latencyMs": [
-    24.3,
-    1664.6
+    19.6,
+    23.5
    ],
-   "recordedLlmMs": 3207,
+   "recordedLlmMs": 3110,
    "usedLlm": true,
    "source": "z:rinomine",
    "nonMisurato": false,
@@ -4153,9 +4147,9 @@
    "success": false,
    "fails": [
     {
-     "sev": "GRAVE",
-     "code": "non-applicato",
-     "why": "non applicato: hidden|Babà|true, rename|Babà|Babà al rum"
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: hidden|Babà|true, rename|Babà|Babà al rum"
     }
    ],
    "expected": [
@@ -4164,18 +4158,18 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Babà* (5,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «rinomina il babà in babà al rum, e nascondilo» intendi *Babà*? Rispondi sì oppure dimmi il nome giusto.\n\n1. *Babà* (5,00 €)"
    ],
    "turns": [
     "rinomina il babà in babà al rum, e nascondilo"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 21324,
    "latencyMs": [
-    6713.6
+    28.5
    ],
    "recordedLlmMs": 6684,
    "usedLlm": true,
@@ -4196,7 +4190,7 @@
     "rename|Burrata|Burrata pugliese"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Burrata* diventa *Burrata pugliese*.\n\n*Burrata*: nuovo nome *Burrata pugliese*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Burrata*: nuovo nome *Burrata pugliese*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "chiama la burrata burrata pugliese"
@@ -4207,7 +4201,7 @@
    "llmMisses": 0,
    "llmTokens": 10091,
    "latencyMs": [
-    1645.1
+    19.4
    ],
    "recordedLlmMs": 1619,
    "usedLlm": true,
@@ -4239,7 +4233,7 @@
    "llmMisses": 0,
    "llmTokens": 10285,
    "latencyMs": [
-    1489.3
+    21.6
    ],
    "recordedLlmMs": 1458,
    "usedLlm": true,
@@ -4271,7 +4265,7 @@
    "llmMisses": 0,
    "llmTokens": 10081,
    "latencyMs": [
-    1583.3
+    20.5
    ],
    "recordedLlmMs": 1547,
    "usedLlm": true,
@@ -4299,7 +4293,7 @@
    "llmMisses": 0,
    "llmTokens": 10450,
    "latencyMs": [
-    3264.2
+    14.8
    ],
    "recordedLlmMs": 3238,
    "usedLlm": true,
@@ -4332,7 +4326,7 @@
    "llmMisses": 0,
    "llmTokens": 10296,
    "latencyMs": [
-    1433.2
+    21
    ],
    "recordedLlmMs": 1404,
    "usedLlm": true,
@@ -4364,7 +4358,7 @@
    "llmMisses": 0,
    "llmTokens": 10551,
    "latencyMs": [
-    3998.4
+    18.4
    ],
    "recordedLlmMs": 3971,
    "usedLlm": true,
@@ -4383,18 +4377,18 @@
    ],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Tagliata* (18,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «aumenta la tagliata del 10 per cento» intendi *Tagliata*? Rispondi sì oppure dimmi il nome giusto.\n\n1. *Tagliata* (18,00 €)"
    ],
    "turns": [
     "aumenta la tagliata del 10 per cento"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 20734,
    "latencyMs": [
-    4388.4
+    20.3
    ],
    "recordedLlmMs": 4350,
    "usedLlm": true,
@@ -4426,7 +4420,7 @@
    "llmMisses": 0,
    "llmTokens": 10355,
    "latencyMs": [
-    3213.1
+    21
    ],
    "recordedLlmMs": 3179,
    "usedLlm": true,
@@ -4447,18 +4441,18 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Tiramisù* (6,00 €)\n2. *Babà* (5,00 €)\n3. *Delizia al limone* (5,50 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «tutti i dolci più 10%» a quale piatto ti riferisci? Rispondi col numero.\n\n1. *Tiramisù* (6,00 €)\n2. *Babà* (5,00 €)\n3. *Delizia al limone* (5,50 €)"
    ],
    "turns": [
     "tutti i dolci più 10%"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 2,
    "llmMisses": 0,
    "llmTokens": 22288,
    "latencyMs": [
-    9880
+    16
    ],
    "recordedLlmMs": 9848,
    "usedLlm": true,
@@ -4486,7 +4480,7 @@
    "llmMisses": 0,
    "llmTokens": 10296,
    "latencyMs": [
-    3673.1
+    13.8
    ],
    "recordedLlmMs": 3640,
    "usedLlm": true,
@@ -4505,7 +4499,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Tagliata* (18,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Tagliata* (18,00 €)"
    ],
    "turns": [
     "🎤 la tagliata a dicia nove"
@@ -4516,7 +4510,7 @@
    "llmMisses": 0,
    "llmTokens": 21040,
    "latencyMs": [
-    6400.9
+    18.2
    ],
    "recordedLlmMs": 6368,
    "usedLlm": true,
@@ -4550,7 +4544,7 @@
    "llmMisses": 0,
    "llmTokens": 20440,
    "latencyMs": [
-    3235.4
+    18.7
    ],
    "recordedLlmMs": 3209,
    "usedLlm": true,
@@ -4569,7 +4563,7 @@
    ],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi la *Burrata* a quale prezzo?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi la *Burrata* a quale prezzo?"
    ],
    "turns": [
     "🎤 la burrata a quattro dici"
@@ -4580,7 +4574,7 @@
    "llmMisses": 0,
    "llmTokens": 20686,
    "latencyMs": [
-    8020
+    19.7
    ],
    "recordedLlmMs": 7872,
    "usedLlm": true,
@@ -4608,7 +4602,7 @@
    "llmMisses": 0,
    "llmTokens": 20729,
    "latencyMs": [
-    4924.3
+    27.1
    ],
    "recordedLlmMs": 4895,
    "usedLlm": true,
@@ -4636,7 +4630,7 @@
    "llmMisses": 0,
    "llmTokens": 10190,
    "latencyMs": [
-    2674.2
+    24.3
    ],
    "recordedLlmMs": 2651,
    "usedLlm": true,
@@ -4664,7 +4658,7 @@
    "llmMisses": 0,
    "llmTokens": 10160,
    "latencyMs": [
-    1842.9
+    14.4
    ],
    "recordedLlmMs": 1818,
    "usedLlm": true,
@@ -4692,7 +4686,7 @@
    "llmMisses": 0,
    "llmTokens": 10214,
    "latencyMs": [
-    2147.1
+    14
    ],
    "recordedLlmMs": 2121,
    "usedLlm": true,
@@ -4722,7 +4716,7 @@
    "llmMisses": 0,
    "llmTokens": 10222,
    "latencyMs": [
-    1803
+    21.3
    ],
    "recordedLlmMs": 1767,
    "usedLlm": true,
@@ -4754,7 +4748,7 @@
    "llmMisses": 0,
    "llmTokens": 10329,
    "latencyMs": [
-    2775.5
+    28.2
    ],
    "recordedLlmMs": 2683,
    "usedLlm": true,
@@ -4784,8 +4778,8 @@
    "llmMisses": 0,
    "llmTokens": 20225,
    "latencyMs": [
-    18.9,
-    2309.3
+    18,
+    20.4
    ],
    "recordedLlmMs": 4344,
    "usedLlm": true,
@@ -4815,8 +4809,8 @@
    "llmMisses": 0,
    "llmTokens": 20226,
    "latencyMs": [
-    1437.9,
-    1572.8
+    16.4,
+    21.4
    ],
    "recordedLlmMs": 2956,
    "usedLlm": true,
@@ -4846,8 +4840,8 @@
    "llmMisses": 0,
    "llmTokens": 20259,
    "latencyMs": [
-    20.4,
-    1526.8
+    16.8,
+    12.9
    ],
    "recordedLlmMs": 3596,
    "usedLlm": true,
@@ -4877,8 +4871,8 @@
    "llmMisses": 0,
    "llmTokens": 20255,
    "latencyMs": [
-    12.4,
-    1394.4
+    17.7,
+    15
    ],
    "recordedLlmMs": 3468,
    "usedLlm": true,
@@ -4893,12 +4887,10 @@
    "success": true,
    "fails": [],
    "expected": [],
-   "actual": [
-    "move|Burrata|Secondi"
-   ],
+   "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSposto la *Burrata* nei Secondi.\n\n*Burrata*: spostato in *Secondi*",
-    "Non ho cambiato nulla.\n\n1. *Burrata* (9,00 €)"
+    "Riporto la *Burrata* negli Antipasti.\n\n*Burrata*: spostato in *Antipasti*"
    ],
    "turns": [
     "sposta la burrata nei secondi",
@@ -4906,14 +4898,14 @@
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 3,
+   "llmCalls": 2,
    "llmMisses": 0,
-   "llmTokens": 31319,
+   "llmTokens": 20666,
    "latencyMs": [
-    1218.7,
-    4320.3
+    15.3,
+    19.5
    ],
-   "recordedLlmMs": 5497,
+   "recordedLlmMs": 3269,
    "usedLlm": true,
    "source": "z:r2-disfa",
    "nonMisurato": false,
@@ -4924,7 +4916,7 @@
   {
    "conv": "z-dialetto-002",
    "hash": "f20a30325cb15c9d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2036,
    "usage": {
@@ -4937,7 +4929,7 @@
   {
    "conv": "z-dialetto-003",
    "hash": "7899bed66b0c2aad",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1674,
    "usage": {
@@ -4950,7 +4942,7 @@
   {
    "conv": "z-dialetto-004",
    "hash": "d9bbcc09c012c50c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1978,
    "usage": {
@@ -4963,7 +4955,7 @@
   {
    "conv": "z-dialetto-006",
    "hash": "c80026d3f79b204e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1926,
    "usage": {
@@ -4976,7 +4968,7 @@
   {
    "conv": "z-dialetto-008",
    "hash": "f88c4af574c8c3ec",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1498,
    "usage": {
@@ -4989,7 +4981,7 @@
   {
    "conv": "z-dialetto-010",
    "hash": "280f89e9f613b145",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1544,
    "usage": {
@@ -5002,7 +4994,7 @@
   {
    "conv": "z-dialetto-011",
    "hash": "422c5d181cd3dfad",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3677,
    "usage": {
@@ -5015,7 +5007,7 @@
   {
    "conv": "z-dialetto-014",
    "hash": "6fe947df40a1f0f5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1880,
    "usage": {
@@ -5028,7 +5020,7 @@
   {
    "conv": "z-dialetto-014",
    "hash": "50be22654b3fbed5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4636,
    "usage": {
@@ -5041,7 +5033,7 @@
   {
    "conv": "z-dialetto-014",
    "hash": "023cebd991674bef",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2065,
    "usage": {
@@ -5054,7 +5046,7 @@
   {
    "conv": "z-dialetto-014",
    "hash": "ea24b7c01cebcb9a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2081,
    "usage": {
@@ -5065,9 +5057,22 @@
    }
   },
   {
+   "conv": "z-dialetto-014",
+   "hash": "ba4349aa771b02f1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2534,
+   "usage": {
+    "input": 544,
+    "output": 257,
+    "cacheRead": 9267,
+    "cacheWrite": 579
+   }
+  },
+  {
    "conv": "z-dialetto-017",
    "hash": "ffb77388e498ef41",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1662,
    "usage": {
@@ -5080,7 +5085,7 @@
   {
    "conv": "z-dialetto-017",
    "hash": "b82bd5d23ae8430b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1489,
    "usage": {
@@ -5093,7 +5098,7 @@
   {
    "conv": "z-dialetto-018",
    "hash": "d560931998dc08c8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1241,
    "usage": {
@@ -5106,7 +5111,7 @@
   {
    "conv": "z-dialetto-020",
    "hash": "e97b60edadd7488b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1293,
    "usage": {
@@ -5119,7 +5124,7 @@
   {
    "conv": "z-dialetto-022",
    "hash": "31e255def5385e5f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1543,
    "usage": {
@@ -5132,7 +5137,7 @@
   {
    "conv": "z-dialetto-023",
    "hash": "fe5a751f12f5f002",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1537,
    "usage": {
@@ -5145,7 +5150,7 @@
   {
    "conv": "z-asr-001",
    "hash": "27751141a24d2298",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2082,
    "usage": {
@@ -5158,7 +5163,7 @@
   {
    "conv": "z-asr-002",
    "hash": "fd6eeb2dae0e37b8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2762,
    "usage": {
@@ -5171,7 +5176,7 @@
   {
    "conv": "z-asr-002",
    "hash": "f5ff5a0bf02c1fda",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 5240,
    "usage": {
@@ -5184,7 +5189,7 @@
   {
    "conv": "z-asr-005",
    "hash": "d962c9ec744ed514",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1894,
    "usage": {
@@ -5197,7 +5202,7 @@
   {
    "conv": "z-asr-005",
    "hash": "2b8500dea47b6dd7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3325,
    "usage": {
@@ -5210,7 +5215,7 @@
   {
    "conv": "z-asr-006",
    "hash": "f01bedb5146fb926",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2087,
    "usage": {
@@ -5223,7 +5228,7 @@
   {
    "conv": "z-asr-006",
    "hash": "73f0e393849fd70a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3236,
    "usage": {
@@ -5236,7 +5241,7 @@
   {
    "conv": "z-asr-007",
    "hash": "1f68d942ac92f448",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1447,
    "usage": {
@@ -5249,7 +5254,7 @@
   {
    "conv": "z-asr-008",
    "hash": "cd0594afb59f415b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3142,
    "usage": {
@@ -5262,7 +5267,7 @@
   {
    "conv": "z-asr-009",
    "hash": "bbc282d4ac9d9bd3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1323,
    "usage": {
@@ -5275,7 +5280,7 @@
   {
    "conv": "z-asr-009",
    "hash": "b93da36f160b09c0",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1631,
    "usage": {
@@ -5288,7 +5293,7 @@
   {
    "conv": "z-asr-011",
    "hash": "e17ae6daa66d9980",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3049,
    "usage": {
@@ -5301,7 +5306,7 @@
   {
    "conv": "z-asr-013",
    "hash": "7b3c0a6cf43f6a6c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2120,
    "usage": {
@@ -5314,7 +5319,7 @@
   {
    "conv": "z-asr-015",
    "hash": "73a335daeaae82ef",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2743,
    "usage": {
@@ -5327,7 +5332,7 @@
   {
    "conv": "z-asr-016",
    "hash": "2eef1656344f97aa",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1878,
    "usage": {
@@ -5340,7 +5345,7 @@
   {
    "conv": "z-asr-018",
    "hash": "5526733c6457d016",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1608,
    "usage": {
@@ -5353,7 +5358,7 @@
   {
    "conv": "z-asr-019",
    "hash": "1c50a6193e0c1a1c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2026,
    "usage": {
@@ -5366,7 +5371,7 @@
   {
    "conv": "z-asr-020",
    "hash": "f7ca1d531fdc9307",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1847,
    "usage": {
@@ -5379,7 +5384,7 @@
   {
    "conv": "z-asr-023",
    "hash": "e485b34f8de38d4e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3025,
    "usage": {
@@ -5392,7 +5397,7 @@
   {
    "conv": "z-asr-024",
    "hash": "264542be7dbdb931",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1329,
    "usage": {
@@ -5405,7 +5410,7 @@
   {
    "conv": "z-asr-025",
    "hash": "0b8ebe5a09526cec",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1559,
    "usage": {
@@ -5418,7 +5423,7 @@
   {
    "conv": "z-numeri-002",
    "hash": "b2d6e7c259fbe600",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1557,
    "usage": {
@@ -5431,7 +5436,7 @@
   {
    "conv": "z-numeri-003",
    "hash": "1b46dc2fd2db867f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1541,
    "usage": {
@@ -5444,7 +5449,7 @@
   {
    "conv": "z-numeri-005",
    "hash": "6655dfbe1387e70d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1540,
    "usage": {
@@ -5457,7 +5462,7 @@
   {
    "conv": "z-numeri-006",
    "hash": "ab5a12ea676fde3b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2153,
    "usage": {
@@ -5470,7 +5475,7 @@
   {
    "conv": "z-numeri-007",
    "hash": "3c127a6d90e7c417",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 10889,
    "usage": {
@@ -5483,7 +5488,7 @@
   {
    "conv": "z-numeri-011",
    "hash": "f0aae2c72152537f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2368,
    "usage": {
@@ -5496,7 +5501,7 @@
   {
    "conv": "z-numeri-012",
    "hash": "e8e2146a62e8cc8b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1786,
    "usage": {
@@ -5509,7 +5514,7 @@
   {
    "conv": "z-numeri-015",
    "hash": "e2c6252866fedb05",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2560,
    "usage": {
@@ -5522,7 +5527,7 @@
   {
    "conv": "z-numeri-017",
    "hash": "830c06aa6e40c182",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2139,
    "usage": {
@@ -5535,7 +5540,7 @@
   {
    "conv": "z-numeri-018",
    "hash": "c9f87b1a716ea06f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1473,
    "usage": {
@@ -5548,7 +5553,7 @@
   {
    "conv": "z-numeri-019",
    "hash": "361f7d9d314282c5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1201,
    "usage": {
@@ -5561,7 +5566,7 @@
   {
    "conv": "z-numeri-021",
    "hash": "7c95199b6dcc921b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1346,
    "usage": {
@@ -5574,7 +5579,7 @@
   {
    "conv": "z-numeri-025",
    "hash": "615afc51d0bca930",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2741,
    "usage": {
@@ -5587,7 +5592,7 @@
   {
    "conv": "z-tempo-004",
    "hash": "456e0a925249632c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2103,
    "usage": {
@@ -5600,7 +5605,7 @@
   {
    "conv": "z-tempo-007",
    "hash": "4b0b3c2ea7510bdf",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2385,
    "usage": {
@@ -5613,7 +5618,7 @@
   {
    "conv": "z-tempo-010",
    "hash": "3845124391e75d34",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1558,
    "usage": {
@@ -5626,7 +5631,7 @@
   {
    "conv": "z-tempo-013",
    "hash": "a44c439817a743b4",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1825,
    "usage": {
@@ -5639,7 +5644,7 @@
   {
    "conv": "z-tempo-017",
    "hash": "6f603acfde53962a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1879,
    "usage": {
@@ -5652,7 +5657,7 @@
   {
    "conv": "z-tempo-017",
    "hash": "18bb6d66aa3f9b58",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2708,
    "usage": {
@@ -5665,7 +5670,7 @@
   {
    "conv": "z-omonimi-003",
    "hash": "453cfb142abc1f61",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2242,
    "usage": {
@@ -5678,7 +5683,7 @@
   {
    "conv": "z-omonimi-003",
    "hash": "e5b7c7538f16a8f6",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4880,
    "usage": {
@@ -5691,7 +5696,7 @@
   {
    "conv": "z-omonimi-006",
    "hash": "045785e438abd2a9",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3886,
    "usage": {
@@ -5702,22 +5707,9 @@
    }
   },
   {
-   "conv": "z-omonimi-010",
-   "hash": "b4f9baead83f5af2",
-   "source": "real",
-   "status": 200,
-   "ms": 2364,
-   "usage": {
-    "input": 53,
-    "output": 326,
-    "cacheRead": 9846,
-    "cacheWrite": 0
-   }
-  },
-  {
    "conv": "z-omonimi-015",
    "hash": "49f0b2d4b7c4753b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1718,
    "usage": {
@@ -5730,7 +5722,7 @@
   {
    "conv": "z-omonimi-015",
    "hash": "14707fe02abfc83d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1709,
    "usage": {
@@ -5743,7 +5735,7 @@
   {
    "conv": "z-omonimi-018",
    "hash": "2606ff9fd8dd8aa3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2007,
    "usage": {
@@ -5756,7 +5748,7 @@
   {
    "conv": "z-omonimi-020",
    "hash": "8b07cc10bd538dba",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1841,
    "usage": {
@@ -5769,7 +5761,7 @@
   {
    "conv": "z-omonimi-024",
    "hash": "70fdfabca097c2c2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1550,
    "usage": {
@@ -5782,7 +5774,7 @@
   {
    "conv": "z-riepilogo-004",
    "hash": "d68a894bc8a6cd6a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2616,
    "usage": {
@@ -5795,7 +5787,7 @@
   {
    "conv": "z-riepilogo-004",
    "hash": "28ca5ee70db23266",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2017,
    "usage": {
@@ -5808,7 +5800,7 @@
   {
    "conv": "z-riepilogo-004",
    "hash": "9e13abe172e89ce2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1158,
    "usage": {
@@ -5834,7 +5826,7 @@
   {
    "conv": "z-riepilogo-013",
    "hash": "770848e97bf89fa4",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1269,
    "usage": {
@@ -5860,7 +5852,7 @@
   {
    "conv": "z-riepilogo-018",
    "hash": "02c773895b5cf464",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1107,
    "usage": {
@@ -5873,7 +5865,7 @@
   {
    "conv": "z-riepilogo-019",
    "hash": "98f0c60febf21129",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2579,
    "usage": {
@@ -5886,7 +5878,7 @@
   {
    "conv": "z-riepilogo-019",
    "hash": "7c50bdd5a4a1f50b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1261,
    "usage": {
@@ -5899,7 +5891,7 @@
   {
    "conv": "z-lunghi-001",
    "hash": "11cae38633138a8b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2215,
    "usage": {
@@ -5912,7 +5904,7 @@
   {
    "conv": "z-lunghi-003",
    "hash": "a0ba6f9fec6cede7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1216,
    "usage": {
@@ -5925,7 +5917,7 @@
   {
    "conv": "z-lunghi-005",
    "hash": "26548ae39b90d42a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3930,
    "usage": {
@@ -5938,7 +5930,7 @@
   {
    "conv": "z-lunghi-005",
    "hash": "9404a15f5594ee6d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2599,
    "usage": {
@@ -5964,7 +5956,7 @@
   {
    "conv": "z-emoji-001",
    "hash": "d3063e9b5b0b5851",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1974,
    "usage": {
@@ -5977,7 +5969,7 @@
   {
    "conv": "z-emoji-002",
    "hash": "07b526987ad62321",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1562,
    "usage": {
@@ -5990,7 +5982,7 @@
   {
    "conv": "z-emoji-003",
    "hash": "791258bd4d809bf1",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2093,
    "usage": {
@@ -6003,7 +5995,7 @@
   {
    "conv": "z-emoji-004",
    "hash": "cd2d8ac3e96e1fde",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2584,
    "usage": {
@@ -6016,7 +6008,7 @@
   {
    "conv": "z-emoji-005",
    "hash": "2ab9ae267905b45f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2084,
    "usage": {
@@ -6029,7 +6021,7 @@
   {
    "conv": "z-emoji-006",
    "hash": "523862f76f8bd13f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1297,
    "usage": {
@@ -6042,7 +6034,7 @@
   {
    "conv": "z-emoji-009",
    "hash": "a306c84eb8286937",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1292,
    "usage": {
@@ -6055,7 +6047,7 @@
   {
    "conv": "z-emoji-010",
    "hash": "a92bedb5c06ed99c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2089,
    "usage": {
@@ -6068,7 +6060,7 @@
   {
    "conv": "z-emoji-010",
    "hash": "fd3fd21ecb3cf226",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1558,
    "usage": {
@@ -6081,7 +6073,7 @@
   {
    "conv": "z-emoji-012",
    "hash": "5e18ad56e7627d0c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1701,
    "usage": {
@@ -6094,7 +6086,7 @@
   {
    "conv": "z-emoji-013",
    "hash": "9fa7d6a87baf826f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1941,
    "usage": {
@@ -6107,7 +6099,7 @@
   {
    "conv": "z-emoji-014",
    "hash": "41cb2d247f332f8f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1313,
    "usage": {
@@ -6120,7 +6112,7 @@
   {
    "conv": "z-emoji-015",
    "hash": "0d0478c68e0d45fa",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1491,
    "usage": {
@@ -6133,7 +6125,7 @@
   {
    "conv": "z-contraddizioni-002",
    "hash": "e1bd5810fb22a1cc",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1516,
    "usage": {
@@ -6146,7 +6138,7 @@
   {
    "conv": "z-contraddizioni-004",
    "hash": "7c543a43aaea8e25",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2412,
    "usage": {
@@ -6159,7 +6151,7 @@
   {
    "conv": "z-contraddizioni-005",
    "hash": "5972f3c2f4bc51ed",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1545,
    "usage": {
@@ -6172,7 +6164,7 @@
   {
    "conv": "z-contraddizioni-005",
    "hash": "690cfe4dd7b0f3b9",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3253,
    "usage": {
@@ -6185,7 +6177,7 @@
   {
    "conv": "z-contraddizioni-008",
    "hash": "8fb44d872d5223d6",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1422,
    "usage": {
@@ -6198,7 +6190,7 @@
   {
    "conv": "z-contraddizioni-008",
    "hash": "9e35492a9805daf8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1102,
    "usage": {
@@ -6224,7 +6216,7 @@
   {
    "conv": "z-contraddizioni-009",
    "hash": "ecba15e43df42b8f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2497,
    "usage": {
@@ -6237,7 +6229,7 @@
   {
    "conv": "z-contraddizioni-011",
    "hash": "e0c6fa9adee41acf",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2069,
    "usage": {
@@ -6250,7 +6242,7 @@
   {
    "conv": "z-contraddizioni-011",
    "hash": "01cb47d7b1f39ce2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1523,
    "usage": {
@@ -6263,7 +6255,7 @@
   {
    "conv": "z-annulla-002",
    "hash": "a43838a5650006b2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1294,
    "usage": {
@@ -6276,7 +6268,7 @@
   {
    "conv": "z-annulla-002",
    "hash": "f6726f617dbdec9b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1551,
    "usage": {
@@ -6302,7 +6294,7 @@
   {
    "conv": "z-annulla-007",
    "hash": "b73f8d83ce7939b7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1986,
    "usage": {
@@ -6315,7 +6307,7 @@
   {
    "conv": "z-annulla-007",
    "hash": "2795f68c4d85fc62",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1973,
    "usage": {
@@ -6328,7 +6320,7 @@
   {
    "conv": "z-annulla-007",
    "hash": "bdb9af2dbfc88c4b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1759,
    "usage": {
@@ -6354,7 +6346,7 @@
   {
    "conv": "z-annulla-009",
    "hash": "0a89dc7c148c5ac7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1364,
    "usage": {
@@ -6380,7 +6372,7 @@
   {
    "conv": "z-annulla-011",
    "hash": "d0621336ba88007b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2132,
    "usage": {
@@ -6393,7 +6385,7 @@
   {
    "conv": "z-annulla-011",
    "hash": "f32548701b3236a9",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1361,
    "usage": {
@@ -6419,7 +6411,7 @@
   {
    "conv": "z-annulla-012",
    "hash": "bbf943494355dcff",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1394,
    "usage": {
@@ -6445,7 +6437,7 @@
   {
    "conv": "z-annulla-016",
    "hash": "0fcb8d35535eb387",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1691,
    "usage": {
@@ -6471,7 +6463,7 @@
   {
    "conv": "z-annulla-018",
    "hash": "deadaa08509d5ea3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1513,
    "usage": {
@@ -6484,7 +6476,7 @@
   {
    "conv": "z-annulla-018",
    "hash": "1e27a902025888bc",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1561,
    "usage": {
@@ -6497,7 +6489,7 @@
   {
    "conv": "z-annulla-018",
    "hash": "7d30f92f53d30348",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1275,
    "usage": {
@@ -6510,7 +6502,7 @@
   {
    "conv": "z-nascosti-007",
    "hash": "9733cd5621af244f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1858,
    "usage": {
@@ -6523,7 +6515,7 @@
   {
    "conv": "z-nascosti-008",
    "hash": "86a63a28960c585b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1704,
    "usage": {
@@ -6536,7 +6528,7 @@
   {
    "conv": "z-nascosti-011",
    "hash": "dc2e6d904f0ae249",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3113,
    "usage": {
@@ -6549,7 +6541,7 @@
   {
    "conv": "z-nascosti-011",
    "hash": "0f917a8292f062ee",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2999,
    "usage": {
@@ -6562,7 +6554,7 @@
   {
    "conv": "z-nascosti-012",
    "hash": "3b291a37d9d5d789",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2332,
    "usage": {
@@ -6575,7 +6567,7 @@
   {
    "conv": "z-nascosti-015",
    "hash": "1379084344c3e942",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2336,
    "usage": {
@@ -6601,7 +6593,7 @@
   {
    "conv": "z-nascosti-016",
    "hash": "ac39b61a45a536ea",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1539,
    "usage": {
@@ -6614,7 +6606,7 @@
   {
    "conv": "z-assurdi-008",
    "hash": "79865710112dd921",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2085,
    "usage": {
@@ -6627,7 +6619,7 @@
   {
    "conv": "z-assurdi-008",
    "hash": "acb8f7b62697cc69",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1552,
    "usage": {
@@ -6640,7 +6632,7 @@
   {
    "conv": "z-apostrofi-004",
    "hash": "e2677c2b948e7001",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3213,
    "usage": {
@@ -6653,7 +6645,7 @@
   {
    "conv": "z-apostrofi-008",
    "hash": "78bbee32a18d8ce6",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1539,
    "usage": {
@@ -6666,7 +6658,7 @@
   {
    "conv": "z-apostrofi-011",
    "hash": "3620884b31fecb1f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2505,
    "usage": {
@@ -6679,7 +6671,7 @@
   {
    "conv": "z-apostrofi-016",
    "hash": "b15e4ef89731ca80",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1563,
    "usage": {
@@ -6692,7 +6684,7 @@
   {
    "conv": "z-apostrofi-019",
    "hash": "8e8ca1504fa4b707",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1811,
    "usage": {
@@ -6718,7 +6710,7 @@
   {
    "conv": "z-ripeti-002",
    "hash": "7a4846e16af5e0b5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1500,
    "usage": {
@@ -6731,7 +6723,7 @@
   {
    "conv": "z-ripeti-002",
    "hash": "ba7b7c880d0d4095",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1504,
    "usage": {
@@ -6744,7 +6736,7 @@
   {
    "conv": "z-ripeti-006",
    "hash": "f749f68293b97ff5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1571,
    "usage": {
@@ -6756,26 +6748,26 @@
   },
   {
    "conv": "z-ripeti-006",
-   "hash": "9aab5e7459d13276",
-   "source": "real",
+   "hash": "56cb91c43467bd9d",
+   "source": "hit",
    "status": 200,
-   "ms": 3084,
+   "ms": 2023,
    "usage": {
-    "input": 148,
-    "output": 472,
+    "input": 154,
+    "output": 203,
     "cacheRead": 9267,
     "cacheWrite": 616
    }
   },
   {
    "conv": "z-ripeti-006",
-   "hash": "317cf0348e6b1442",
-   "source": "real",
+   "hash": "73c4f9a781f940e2",
+   "source": "hit",
    "status": 200,
-   "ms": 3756,
+   "ms": 3162,
    "usage": {
-    "input": 443,
-    "output": 624,
+    "input": 449,
+    "output": 507,
     "cacheRead": 9883,
     "cacheWrite": 0
    }
@@ -6783,7 +6775,7 @@
   {
    "conv": "z-ripeti-009",
    "hash": "59fd124e8d74d344",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1899,
    "usage": {
@@ -6809,7 +6801,7 @@
   {
    "conv": "z-ripeti-010",
    "hash": "ba9db4e09b10dce8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1599,
    "usage": {
@@ -6822,7 +6814,7 @@
   {
    "conv": "z-ripeti-010",
    "hash": "97140692871d21d7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1369,
    "usage": {
@@ -6835,7 +6827,7 @@
   {
    "conv": "z-ripeti-010",
    "hash": "18bfcca9e4524523",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1142,
    "usage": {
@@ -6848,7 +6840,7 @@
   {
    "conv": "z-ripeti-010",
    "hash": "b8615de1c22f6885",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1430,
    "usage": {
@@ -6861,7 +6853,7 @@
   {
    "conv": "z-ripeti-010",
    "hash": "00e2777f498d8e0c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1563,
    "usage": {
@@ -6869,6 +6861,19 @@
     "output": 187,
     "cacheRead": 9837,
     "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "43b12ee0dda87121",
+   "source": "hit",
+   "status": 200,
+   "ms": 4287,
+   "usage": {
+    "input": 667,
+    "output": 699,
+    "cacheRead": 9267,
+    "cacheWrite": 570
    }
   },
   {
@@ -6887,7 +6892,7 @@
   {
    "conv": "z-interruzioni-002",
    "hash": "faf6be7a448966df",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2072,
    "usage": {
@@ -6900,7 +6905,7 @@
   {
    "conv": "z-interruzioni-002",
    "hash": "59d76a1f509c7483",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2067,
    "usage": {
@@ -6913,7 +6918,7 @@
   {
    "conv": "z-interruzioni-002",
    "hash": "437615e08f3c67a8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1798,
    "usage": {
@@ -6939,7 +6944,7 @@
   {
    "conv": "z-interruzioni-006",
    "hash": "1ce6b7e137eb4e41",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1525,
    "usage": {
@@ -6952,7 +6957,7 @@
   {
    "conv": "z-interruzioni-006",
    "hash": "56394da10534f4c3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1950,
    "usage": {
@@ -6978,7 +6983,7 @@
   {
    "conv": "z-interruzioni-007",
    "hash": "3ce5abb0bdd0b8ea",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4538,
    "usage": {
@@ -6991,7 +6996,7 @@
   {
    "conv": "z-interruzioni-007",
    "hash": "eaeb627600d5dd9b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1642,
    "usage": {
@@ -7017,7 +7022,7 @@
   {
    "conv": "z-interruzioni-008",
    "hash": "5c53355c7a4df06a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1611,
    "usage": {
@@ -7030,7 +7035,7 @@
   {
    "conv": "z-interruzioni-008",
    "hash": "2931f592ea71ce7a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1640,
    "usage": {
@@ -7056,7 +7061,7 @@
   {
    "conv": "z-interruzioni-009",
    "hash": "255e376c458f3f06",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1547,
    "usage": {
@@ -7069,7 +7074,7 @@
   {
    "conv": "z-interruzioni-010",
    "hash": "aca613a8b28d0935",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1839,
    "usage": {
@@ -7082,7 +7087,7 @@
   {
    "conv": "z-interruzioni-010",
    "hash": "be079b422817b86d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1798,
    "usage": {
@@ -7095,12 +7100,25 @@
   {
    "conv": "z-interruzioni-010",
    "hash": "6a86a3592555bab9",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1931,
    "usage": {
     "input": 465,
     "output": 187,
+    "cacheRead": 9846,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-010",
+   "hash": "262d928fa7dae256",
+   "source": "hit",
+   "status": 200,
+   "ms": 1264,
+   "usage": {
+    "input": 600,
+    "output": 195,
     "cacheRead": 9846,
     "cacheWrite": 0
    }
@@ -7146,25 +7164,38 @@
   },
   {
    "conv": "z-interruzioni-011",
-   "hash": "112f36f90e0cfdf0",
-   "source": "real",
+   "hash": "262d928fa7dae256",
+   "source": "hit",
    "status": 200,
-   "ms": 1556,
+   "ms": 1264,
    "usage": {
-    "input": 228,
-    "output": 180,
+    "input": 600,
+    "output": 195,
     "cacheRead": 9846,
     "cacheWrite": 0
    }
   },
   {
    "conv": "z-interruzioni-011",
-   "hash": "3d831c56ec846c35",
-   "source": "real",
+   "hash": "26f8df13bd2c03ab",
+   "source": "hit",
    "status": 200,
-   "ms": 1737,
+   "ms": 2190,
    "usage": {
-    "input": 632,
+    "input": 244,
+    "output": 184,
+    "cacheRead": 9846,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-011",
+   "hash": "79fbf57f5565c883",
+   "source": "hit",
+   "status": 200,
+   "ms": 1480,
+   "usage": {
+    "input": 652,
     "output": 187,
     "cacheRead": 9846,
     "cacheWrite": 0
@@ -7186,7 +7217,7 @@
   {
    "conv": "z-interruzioni-012",
    "hash": "0c9a0fa86a2eb001",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1579,
    "usage": {
@@ -7199,7 +7230,7 @@
   {
    "conv": "z-interruzioni-012",
    "hash": "9f9e1389e6dbc56a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4762,
    "usage": {
@@ -7212,7 +7243,7 @@
   {
    "conv": "z-interruzioni-017",
    "hash": "cafae264fa010854",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4354,
    "usage": {
@@ -7225,7 +7256,7 @@
   {
    "conv": "z-interruzioni-017",
    "hash": "fc0865bfb30569c3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1346,
    "usage": {
@@ -7238,7 +7269,7 @@
   {
    "conv": "z-interruzioni-017",
    "hash": "6949cf5190dfb19d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1497,
    "usage": {
@@ -7249,9 +7280,22 @@
    }
   },
   {
+   "conv": "z-interruzioni-017",
+   "hash": "d8f5bf2e74612e31",
+   "source": "hit",
+   "status": 200,
+   "ms": 2003,
+   "usage": {
+    "input": 521,
+    "output": 177,
+    "cacheRead": 9267,
+    "cacheWrite": 791
+   }
+  },
+  {
    "conv": "z-travestite-002",
    "hash": "5fada64531683274",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1390,
    "usage": {
@@ -7264,7 +7308,7 @@
   {
    "conv": "z-travestite-010",
    "hash": "af588c09fb2e6f50",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1249,
    "usage": {
@@ -7277,7 +7321,7 @@
   {
    "conv": "z-travestite-016",
    "hash": "0fedd3a32885e5dd",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1886,
    "usage": {
@@ -7290,7 +7334,7 @@
   {
    "conv": "z-travestite-017",
    "hash": "b1d4e0c229e30f64",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1463,
    "usage": {
@@ -7303,7 +7347,7 @@
   {
    "conv": "z-travestite-022",
    "hash": "9723ef9cb22b0ecf",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1527,
    "usage": {
@@ -7316,7 +7360,7 @@
   {
    "conv": "z-travestite-023",
    "hash": "84b2b76452cf9bd7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1882,
    "usage": {
@@ -7329,7 +7373,7 @@
   {
    "conv": "z-promo-011",
    "hash": "777a927389f3cf5f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1747,
    "usage": {
@@ -7342,7 +7386,7 @@
   {
    "conv": "z-promo-019",
    "hash": "9de8626baa6c4b3a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1865,
    "usage": {
@@ -7355,7 +7399,7 @@
   {
    "conv": "z-promo-019",
    "hash": "9c4b78f05ae8754e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2336,
    "usage": {
@@ -7368,7 +7412,7 @@
   {
    "conv": "z-sposta-006",
    "hash": "ae7ac954f45a6b84",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2708,
    "usage": {
@@ -7381,7 +7425,7 @@
   {
    "conv": "z-sposta-006",
    "hash": "acc75a5837f838e5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1927,
    "usage": {
@@ -7406,26 +7450,26 @@
   },
   {
    "conv": "z-rinomine-002",
-   "hash": "dbbfa2b8e387b1ff",
-   "source": "real",
+   "hash": "c2ea16f1df46ff9f",
+   "source": "hit",
    "status": 200,
-   "ms": 1518,
+   "ms": 1730,
    "usage": {
-    "input": 143,
-    "output": 180,
+    "input": 149,
+    "output": 183,
     "cacheRead": 9883,
     "cacheWrite": 0
    }
   },
   {
    "conv": "z-rinomine-002",
-   "hash": "d63c36c62fb671e4",
-   "source": "real",
+   "hash": "23db61b90773db03",
+   "source": "hit",
    "status": 200,
-   "ms": 2608,
+   "ms": 1884,
    "usage": {
-    "input": 439,
-    "output": 381,
+    "input": 448,
+    "output": 183,
     "cacheRead": 9883,
     "cacheWrite": 0
    }
@@ -7445,13 +7489,13 @@
   },
   {
    "conv": "z-rinomine-004",
-   "hash": "82fe15d8eaf8e2a3",
-   "source": "real",
+   "hash": "379b9c0509a1f99b",
+   "source": "hit",
    "status": 200,
-   "ms": 1636,
+   "ms": 1539,
    "usage": {
-    "input": 141,
-    "output": 201,
+    "input": 147,
+    "output": 198,
     "cacheRead": 9883,
     "cacheWrite": 0
    }
@@ -7459,7 +7503,7 @@
   {
    "conv": "z-rinomine-009",
    "hash": "9ae7937a3a5f58d2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1956,
    "usage": {
@@ -7472,7 +7516,7 @@
   {
    "conv": "z-rinomine-009",
    "hash": "1f26d296221a8559",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4728,
    "usage": {
@@ -7485,7 +7529,7 @@
   {
    "conv": "z-rinomine-013",
    "hash": "20e152f952ffad72",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1619,
    "usage": {
@@ -7498,7 +7542,7 @@
   {
    "conv": "z-locali-001",
    "hash": "1ea4f79664b4c317",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1458,
    "usage": {
@@ -7511,7 +7555,7 @@
   {
    "conv": "z-locali-002",
    "hash": "a802440ab1a3be69",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1547,
    "usage": {
@@ -7524,7 +7568,7 @@
   {
    "conv": "z-locali-003",
    "hash": "58d3f9c5b54a9a97",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3238,
    "usage": {
@@ -7537,7 +7581,7 @@
   {
    "conv": "z-locali-008",
    "hash": "e91de508493e2481",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1404,
    "usage": {
@@ -7550,7 +7594,7 @@
   {
    "conv": "z-locali-009",
    "hash": "4752950b349f9eb7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3971,
    "usage": {
@@ -7563,7 +7607,7 @@
   {
    "conv": "z-r2-percento-001",
    "hash": "ee6ce48fa225d389",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2824,
    "usage": {
@@ -7576,7 +7620,7 @@
   {
    "conv": "z-r2-percento-001",
    "hash": "0fce926fd1bed562",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1526,
    "usage": {
@@ -7589,7 +7633,7 @@
   {
    "conv": "z-r2-percento-004",
    "hash": "97eb645fee64fe54",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3179,
    "usage": {
@@ -7602,7 +7646,7 @@
   {
    "conv": "z-r2-percento-005",
    "hash": "daa06cffa999fa12",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4931,
    "usage": {
@@ -7615,7 +7659,7 @@
   {
    "conv": "z-r2-percento-005",
    "hash": "cd014cc5161fb34c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4917,
    "usage": {
@@ -7628,7 +7672,7 @@
   {
    "conv": "z-r2-percento-006",
    "hash": "8d214348dd285b18",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3640,
    "usage": {
@@ -7641,7 +7685,7 @@
   {
    "conv": "z-r2-spezzati-001",
    "hash": "087a8bf72c5397c1",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3108,
    "usage": {
@@ -7654,7 +7698,7 @@
   {
    "conv": "z-r2-spezzati-001",
    "hash": "b566dfffe359c5cd",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3260,
    "usage": {
@@ -7667,7 +7711,7 @@
   {
    "conv": "z-r2-spezzati-003",
    "hash": "f0b4352c6980a428",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2154,
    "usage": {
@@ -7680,7 +7724,7 @@
   {
    "conv": "z-r2-spezzati-003",
    "hash": "e8f49d5570be4afd",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1055,
    "usage": {
@@ -7693,7 +7737,7 @@
   {
    "conv": "z-r2-spezzati-005",
    "hash": "f31d530108b8b3f6",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 6063,
    "usage": {
@@ -7706,7 +7750,7 @@
   {
    "conv": "z-r2-spezzati-005",
    "hash": "869ebe102f747175",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1809,
    "usage": {
@@ -7719,7 +7763,7 @@
   {
    "conv": "z-r2-spezzati-006",
    "hash": "1c251ea70e6378cc",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3180,
    "usage": {
@@ -7732,7 +7776,7 @@
   {
    "conv": "z-r2-spezzati-006",
    "hash": "77ae87b25afa7d36",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1715,
    "usage": {
@@ -7745,7 +7789,7 @@
   {
    "conv": "z-r2-opposti-001",
    "hash": "32c5ece2a1410d21",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2651,
    "usage": {
@@ -7758,7 +7802,7 @@
   {
    "conv": "z-r2-opposti-004",
    "hash": "c8a5b595bc20ca94",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1818,
    "usage": {
@@ -7771,7 +7815,7 @@
   {
    "conv": "z-r2-opposti-005",
    "hash": "2bda56f1979b5d6e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2121,
    "usage": {
@@ -7784,7 +7828,7 @@
   {
    "conv": "z-r2-ritiri-003",
    "hash": "035537d501e3b3b2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1767,
    "usage": {
@@ -7797,7 +7841,7 @@
   {
    "conv": "z-r2-ritiri-004",
    "hash": "a88a7bd640ce5ef4",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2683,
    "usage": {
@@ -7823,7 +7867,7 @@
   {
    "conv": "z-r2-disfa-002",
    "hash": "6c46c2ed7b4c741d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2275,
    "usage": {
@@ -7836,7 +7880,7 @@
   {
    "conv": "z-r2-disfa-003",
    "hash": "b6eece0b7a83f11f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1418,
    "usage": {
@@ -7849,7 +7893,7 @@
   {
    "conv": "z-r2-disfa-003",
    "hash": "56092232f3715529",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1538,
    "usage": {
@@ -7875,7 +7919,7 @@
   {
    "conv": "z-r2-disfa-004",
    "hash": "160d61275dbe44be",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1507,
    "usage": {
@@ -7901,7 +7945,7 @@
   {
    "conv": "z-r2-disfa-005",
    "hash": "cc7f6e50073c38e3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1379,
    "usage": {
@@ -7914,7 +7958,7 @@
   {
    "conv": "z-r2-disfa-007",
    "hash": "df6590a072ec9290",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1197,
    "usage": {
@@ -7927,7 +7971,7 @@
   {
    "conv": "z-r2-disfa-007",
    "hash": "65e2356a63c6b570",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2072,
    "usage": {
@@ -7935,19 +7979,6 @@
     "output": 183,
     "cacheRead": 9267,
     "cacheWrite": 791
-   }
-  },
-  {
-   "conv": "z-r2-disfa-007",
-   "hash": "df439d74141dac6c",
-   "source": "real",
-   "status": 200,
-   "ms": 2228,
-   "usage": {
-    "input": 412,
-    "output": 183,
-    "cacheRead": 10058,
-    "cacheWrite": 0
    }
   }
  ]

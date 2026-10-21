@@ -13,24 +13,24 @@
   "graviSicurezza": 0,
   "graviAltri": 1,
   "medi": 0,
-  "domandePer10Messaggi": 1.8,
-  "domandeNonAttesePer10": 0.8,
+  "domandePer10Messaggi": 1.9,
+  "domandeNonAttesePer10": 0.9,
   "latenzaAnthropicMs": {
-   "p50": 2376,
-   "p95": 3760,
+   "p50": 2391,
+   "p95": 3869,
    "chiamate": 129
   },
   "latenzaTurnoMs": {
-   "p50": 2403,
-   "p95": 4867,
+   "p50": 14,
+   "p95": 35,
    "nota": "misurata dal vivo"
   },
   "chiamatePerMessaggio": 1.08,
   "tokenMediPerMessaggio": {
-   "input": 142,
-   "output": 343,
-   "cacheRead": 10481,
-   "cacheWrite": 101
+   "input": 140,
+   "output": 344,
+   "cacheRead": 10482,
+   "cacheWrite": 98
   },
   "cacheHit": {
    "chiamateConCacheRead": 129,
@@ -38,14 +38,14 @@
    "percentuale": 100
   },
   "costo": {
-   "spesoGiroUsd": 0.032845,
-   "equivalenteLiveUsd": 0.036072,
+   "spesoGiroUsd": 0.000367,
+   "equivalenteLiveUsd": 0.036065,
    "perMessaggioUsd": 0.000303,
    "tetto": 0.4
   },
   "anthropic": {
-   "hit": 12,
-   "vere": 117,
+   "hit": 128,
+   "vere": 1,
    "mock": 0,
    "assenti": 0,
    "rifiutateTetto": 0,
@@ -53,7 +53,7 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 292.9
+  "durataGiroS": 7
  },
  "codici": {
   "visibilita-mancante": {
@@ -74,12 +74,12 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Completo* quando vuoi che i clienti lo vedano.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. Per ora sono nascosti: scrivi *rendi visibile Completo* quando vuoi che i clienti li vedano.",
-    "Ok, da quale Menu inizio: *Pranzo* o *Cena*?",
+    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. I clienti lo vedranno quando renderai visibile il Menu.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. I clienti li vedranno quando renderai visibile il Menu.",
+    "Ok, scrivimi i nomi dei piatti per ogni sottomenu e li aggiungo subito.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
-    "Non ho capito a cosa ti riferisci con *1*. Cosa vuoi fare con i Menu *Pranzo* e *Cena*?"
+    "Quale piatto vuoi mettere nel sottomenu *Completo* del Menu *Pranzo*? Dimmi il nome e lo aggiungo subito."
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
@@ -94,17 +94,17 @@
    "unexpectedClarifications": 1,
    "llmCalls": 7,
    "llmMisses": 0,
-   "llmTokens": 72509,
+   "llmTokens": 72216,
    "latencyMs": [
-    2299.2,
-    2862.9,
-    1809.4,
-    2622.2,
-    2448,
-    2621.6,
-    2889.2
+    147.7,
+    37.2,
+    47.1,
+    3611.1,
+    15.8,
+    79.9,
+    19.9
    ],
-   "recordedLlmMs": 17018,
+   "recordedLlmMs": 22355,
    "usedLlm": true,
    "source": "QA Manuel 21/10",
    "note": "conversazione vera: al più tardi dopo il turno 2 Pranzo {Completo} e Cena {Completo, Primo, Secondo}; poi niente doppioni né conferme a vuoto",
@@ -120,7 +120,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Completo* quando vuoi che i clienti lo vedano.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. Per ora sono nascosti: scrivi *rendi visibile Completo* quando vuoi che i clienti li vedano."
+    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. I clienti lo vedranno quando renderai visibile il Menu.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. I clienti li vedranno quando renderai visibile il Menu."
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
@@ -132,8 +132,8 @@
    "llmMisses": 0,
    "llmTokens": 20074,
    "latencyMs": [
-    18.9,
-    24
+    13.9,
+    20.7
    ],
    "recordedLlmMs": 4990,
    "usedLlm": true,
@@ -188,7 +188,7 @@
     "price|Salsiccia ai ferri|13"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aumento di 3 euro tutti i piatti del Sottomenu *Secondi*.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 3,00 € i prezzi di 4 piatti.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "Tutti i secondi aumentali di 3 euro"
@@ -199,7 +199,7 @@
    "llmMisses": 0,
    "llmTokens": 10505,
    "latencyMs": [
-    4040.4
+    35.2
    ],
    "recordedLlmMs": 4004,
    "usedLlm": true,
@@ -227,7 +227,7 @@
    "llmMisses": 0,
    "llmTokens": 9822,
    "latencyMs": [
-    3188.5
+    14.2
    ],
    "recordedLlmMs": 3169,
    "usedLlm": true,
@@ -257,8 +257,8 @@
    "llmMisses": 0,
    "llmTokens": 19870,
    "latencyMs": [
-    13.6,
-    3722.5
+    9.9,
+    19.3
    ],
    "recordedLlmMs": 6872,
    "usedLlm": true,
@@ -275,7 +275,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi i *Secondi* del Menu pranzo, quelli del Menu cena o tutti e due?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nI *Secondi* ci sono in più Menu: in quale? *Pranzo* o *Cena*?"
    ],
    "turns": [
     "Tutti i secondi aumentali di 3 euro"
@@ -286,7 +286,7 @@
    "llmMisses": 0,
    "llmTokens": 10355,
    "latencyMs": [
-    3532.2
+    13.4
    ],
    "recordedLlmMs": 3514,
    "usedLlm": true,
@@ -314,7 +314,7 @@
    "llmMisses": 0,
    "llmTokens": 9974,
    "latencyMs": [
-    1690.9
+    15
    ],
    "recordedLlmMs": 1671,
    "usedLlm": true,
@@ -341,7 +341,7 @@
    "llmMisses": 0,
    "llmTokens": 9982,
    "latencyMs": [
-    1205.8
+    20
    ],
    "recordedLlmMs": 1187,
    "usedLlm": true,
@@ -368,7 +368,7 @@
    "llmMisses": 0,
    "llmTokens": 9979,
    "latencyMs": [
-    2874.9
+    15.8
    ],
    "recordedLlmMs": 2859,
    "usedLlm": true,
@@ -395,7 +395,7 @@
    "llmMisses": 0,
    "llmTokens": 9978,
    "latencyMs": [
-    1786.8
+    13.2
    ],
    "recordedLlmMs": 1764,
    "usedLlm": true,
@@ -422,7 +422,7 @@
    "llmMisses": 0,
    "llmTokens": 9985,
    "latencyMs": [
-    1604.6
+    15.8
    ],
    "recordedLlmMs": 1583,
    "usedLlm": true,
@@ -449,7 +449,7 @@
    "llmMisses": 0,
    "llmTokens": 9978,
    "latencyMs": [
-    1358.9
+    13.4
    ],
    "recordedLlmMs": 1336,
    "usedLlm": true,
@@ -476,7 +476,7 @@
    "llmMisses": 0,
    "llmTokens": 9994,
    "latencyMs": [
-    2581.8
+    15.8
    ],
    "recordedLlmMs": 2566,
    "usedLlm": true,
@@ -503,7 +503,7 @@
    "llmMisses": 0,
    "llmTokens": 10064,
    "latencyMs": [
-    1874.5
+    13.8
    ],
    "recordedLlmMs": 1863,
    "usedLlm": true,
@@ -530,7 +530,7 @@
    "llmMisses": 0,
    "llmTokens": 10160,
    "latencyMs": [
-    2311.2
+    15.8
    ],
    "recordedLlmMs": 2285,
    "usedLlm": true,
@@ -557,7 +557,7 @@
    "llmMisses": 0,
    "llmTokens": 10054,
    "latencyMs": [
-    2902.4
+    15.8
    ],
    "recordedLlmMs": 2880,
    "usedLlm": true,
@@ -584,7 +584,7 @@
    "llmMisses": 0,
    "llmTokens": 10153,
    "latencyMs": [
-    3783.6
+    14.5
    ],
    "recordedLlmMs": 3760,
    "usedLlm": true,
@@ -611,7 +611,7 @@
    "llmMisses": 0,
    "llmTokens": 10603,
    "latencyMs": [
-    4866.8
+    15.9
    ],
    "recordedLlmMs": 4842,
    "usedLlm": true,
@@ -638,7 +638,7 @@
    "llmMisses": 0,
    "llmTokens": 9998,
    "latencyMs": [
-    1747.2
+    13.3
    ],
    "recordedLlmMs": 1728,
    "usedLlm": true,
@@ -665,7 +665,7 @@
    "llmMisses": 0,
    "llmTokens": 10260,
    "latencyMs": [
-    2948.5
+    14.6
    ],
    "recordedLlmMs": 2925,
    "usedLlm": true,
@@ -692,7 +692,7 @@
    "llmMisses": 0,
    "llmTokens": 9999,
    "latencyMs": [
-    1765.1
+    14.2
    ],
    "recordedLlmMs": 1741,
    "usedLlm": true,
@@ -719,7 +719,7 @@
    "llmMisses": 0,
    "llmTokens": 10178,
    "latencyMs": [
-    1463.4
+    12.7
    ],
    "recordedLlmMs": 1443,
    "usedLlm": true,
@@ -746,7 +746,7 @@
    "llmMisses": 0,
    "llmTokens": 10200,
    "latencyMs": [
-    1816.6
+    14.7
    ],
    "recordedLlmMs": 1803,
    "usedLlm": true,
@@ -773,7 +773,7 @@
    "llmMisses": 0,
    "llmTokens": 10387,
    "latencyMs": [
-    3885.7
+    14.6
    ],
    "recordedLlmMs": 3869,
    "usedLlm": true,
@@ -800,7 +800,7 @@
    "llmMisses": 0,
    "llmTokens": 10089,
    "latencyMs": [
-    2592.8
+    16.1
    ],
    "recordedLlmMs": 2572,
    "usedLlm": true,
@@ -827,7 +827,7 @@
    "llmMisses": 0,
    "llmTokens": 10228,
    "latencyMs": [
-    3165.9
+    15.2
    ],
    "recordedLlmMs": 3146,
    "usedLlm": true,
@@ -854,7 +854,7 @@
    "llmMisses": 0,
    "llmTokens": 10324,
    "latencyMs": [
-    3421.7
+    15.7
    ],
    "recordedLlmMs": 3404,
    "usedLlm": true,
@@ -881,7 +881,7 @@
    "llmMisses": 0,
    "llmTokens": 10315,
    "latencyMs": [
-    3064.4
+    14.3
    ],
    "recordedLlmMs": 3047,
    "usedLlm": true,
@@ -908,7 +908,7 @@
    "llmMisses": 0,
    "llmTokens": 10644,
    "latencyMs": [
-    3531.9
+    13.8
    ],
    "recordedLlmMs": 3518,
    "usedLlm": true,
@@ -935,7 +935,7 @@
    "llmMisses": 0,
    "llmTokens": 10377,
    "latencyMs": [
-    3359.9
+    14.2
    ],
    "recordedLlmMs": 3340,
    "usedLlm": true,
@@ -962,7 +962,7 @@
    "llmMisses": 0,
    "llmTokens": 10428,
    "latencyMs": [
-    2482
+    12.4
    ],
    "recordedLlmMs": 2464,
    "usedLlm": true,
@@ -989,7 +989,7 @@
    "llmMisses": 0,
    "llmTokens": 10587,
    "latencyMs": [
-    3167.8
+    14.1
    ],
    "recordedLlmMs": 3149,
    "usedLlm": true,
@@ -1016,7 +1016,7 @@
    "llmMisses": 0,
    "llmTokens": 9979,
    "latencyMs": [
-    1914
+    12.5
    ],
    "recordedLlmMs": 1903,
    "usedLlm": true,
@@ -1043,7 +1043,7 @@
    "llmMisses": 0,
    "llmTokens": 10375,
    "latencyMs": [
-    3233.7
+    10.7
    ],
    "recordedLlmMs": 3223,
    "usedLlm": true,
@@ -1070,7 +1070,7 @@
    "llmMisses": 0,
    "llmTokens": 10175,
    "latencyMs": [
-    2671.9
+    11.2
    ],
    "recordedLlmMs": 2654,
    "usedLlm": true,
@@ -1097,7 +1097,7 @@
    "llmMisses": 0,
    "llmTokens": 9986,
    "latencyMs": [
-    2184.7
+    21.3
    ],
    "recordedLlmMs": 2172,
    "usedLlm": true,
@@ -1125,7 +1125,7 @@
    "llmMisses": 0,
    "llmTokens": 10134,
    "latencyMs": [
-    2212.7
+    21
    ],
    "recordedLlmMs": 2199,
    "usedLlm": true,
@@ -1152,7 +1152,7 @@
    "llmMisses": 0,
    "llmTokens": 10015,
    "latencyMs": [
-    3573.9
+    13
    ],
    "recordedLlmMs": 3559,
    "usedLlm": true,
@@ -1179,7 +1179,7 @@
    "llmMisses": 0,
    "llmTokens": 9990,
    "latencyMs": [
-    2387.9
+    9.4
    ],
    "recordedLlmMs": 2374,
    "usedLlm": true,
@@ -1208,8 +1208,8 @@
    "llmMisses": 0,
    "llmTokens": 20085,
    "latencyMs": [
-    14.1,
-    1816.1
+    14.5,
+    10.6
    ],
    "recordedLlmMs": 3467,
    "usedLlm": true,
@@ -1238,8 +1238,8 @@
    "llmMisses": 0,
    "llmTokens": 20086,
    "latencyMs": [
-    15.1,
-    2403.1
+    12,
+    14.9
    ],
    "recordedLlmMs": 4062,
    "usedLlm": true,
@@ -1268,8 +1268,8 @@
    "llmMisses": 0,
    "llmTokens": 20127,
    "latencyMs": [
-    1814.4,
-    2678.5
+    12.4,
+    14
    ],
    "recordedLlmMs": 4449,
    "usedLlm": true,
@@ -1286,20 +1286,20 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Dolci* nel Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Dolci* quando vuoi che i clienti lo vedano.",
-    "Non ho cambiato nulla."
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
    ],
    "turns": [
     "nel menu cena aggiungi il sottomenu Dolci",
     "sì dai"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
    "llmTokens": 30627,
    "latencyMs": [
-    10.4,
-    3856.1
+    14.1,
+    19.6
    ],
    "recordedLlmMs": 5613,
    "usedLlm": true,
@@ -1328,8 +1328,8 @@
    "llmMisses": 0,
    "llmTokens": 30728,
    "latencyMs": [
-    2579.6,
-    3280.3
+    14,
+    17.5
    ],
    "recordedLlmMs": 5823,
    "usedLlm": true,
@@ -1358,8 +1358,8 @@
    "llmMisses": 0,
    "llmTokens": 30954,
    "latencyMs": [
-    11.6,
-    3049.5
+    13.9,
+    14.2
    ],
    "recordedLlmMs": 5593,
    "usedLlm": true,
@@ -1376,20 +1376,20 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Contorni* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Contorni* quando vuoi che i clienti lo vedano.",
-    "Non ho cambiato nulla."
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
    ],
    "turns": [
     "in pranzo metti il sottomenu Contorni",
     "ok procedi"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
    "llmTokens": 30854,
    "latencyMs": [
-    11.3,
-    4660.5
+    12,
+    15
    ],
    "recordedLlmMs": 7566,
    "usedLlm": true,
@@ -1406,7 +1406,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Contorni* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Contorni* quando vuoi che i clienti lo vedano.",
-    "Ci sto lavorando…\nVuoi che confermi l'ultima richiesta, cioè il Sottomenu *Contorni* nel Menu *Pranzo*? Rispondi sì."
+    "Vuoi che confermi l'ultima richiesta, cioè il Sottomenu *Contorni* nel Menu *Pranzo*? Rispondi sì."
    ],
    "turns": [
     "in pranzo metti il sottomenu Contorni",
@@ -1418,8 +1418,8 @@
    "llmMisses": 0,
    "llmTokens": 30948,
    "latencyMs": [
-    11.1,
-    5749.2
+    14.5,
+    13.3
    ],
    "recordedLlmMs": 8648,
    "usedLlm": true,
@@ -1448,8 +1448,8 @@
    "llmMisses": 0,
    "llmTokens": 20348,
    "latencyMs": [
-    2312,
-    2002.5
+    14.8,
+    15
    ],
    "recordedLlmMs": 4272,
    "usedLlm": true,
@@ -1466,7 +1466,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Aperitivo* con il sottomenu *Spritz*. Per ora è nascosto: scrivi *rendi visibile Aperitivo* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. Per ora è nascosto: scrivi *rendi visibile Cocktail* quando vuoi che i clienti lo vedano."
+    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. I clienti lo vedranno quando renderai visibile il Menu."
    ],
    "turns": [
     "crea il menu Aperitivo con il sottomenu Spritz",
@@ -1478,8 +1478,8 @@
    "llmMisses": 0,
    "llmTokens": 20803,
    "latencyMs": [
-    3054.2,
-    2945.1
+    13.1,
+    15
    ],
    "recordedLlmMs": 5957,
    "usedLlm": true,
@@ -1508,8 +1508,8 @@
    "llmMisses": 0,
    "llmTokens": 20174,
    "latencyMs": [
-    1977.9,
-    2148.8
+    12.9,
+    15
    ],
    "recordedLlmMs": 4094,
    "usedLlm": true,
@@ -1538,8 +1538,8 @@
    "llmMisses": 0,
    "llmTokens": 20498,
    "latencyMs": [
-    2530.5,
-    2418.6
+    12.4,
+    14.4
    ],
    "recordedLlmMs": 4914,
    "usedLlm": true,
@@ -1568,8 +1568,8 @@
    "llmMisses": 0,
    "llmTokens": 20752,
    "latencyMs": [
-    1576.1,
-    3273.2
+    11.2,
+    14.8
    ],
    "recordedLlmMs": 4823,
    "usedLlm": true,
@@ -1598,8 +1598,8 @@
    "llmMisses": 0,
    "llmTokens": 19910,
    "latencyMs": [
-    2151.4,
-    2630.4
+    9.1,
+    8.9
    ],
    "recordedLlmMs": 4759,
    "usedLlm": true,
@@ -1626,7 +1626,7 @@
    "llmMisses": 0,
    "llmTokens": 9988,
    "latencyMs": [
-    1517.1
+    15.4
    ],
    "recordedLlmMs": 1500,
    "usedLlm": true,
@@ -1653,7 +1653,7 @@
    "llmMisses": 0,
    "llmTokens": 10159,
    "latencyMs": [
-    2469.8
+    14.1
    ],
    "recordedLlmMs": 2454,
    "usedLlm": true,
@@ -1680,7 +1680,7 @@
    "llmMisses": 0,
    "llmTokens": 10203,
    "latencyMs": [
-    1572.9
+    12.5
    ],
    "recordedLlmMs": 1557,
    "usedLlm": true,
@@ -1707,7 +1707,7 @@
    "llmMisses": 0,
    "llmTokens": 9989,
    "latencyMs": [
-    2282.5
+    13.4
    ],
    "recordedLlmMs": 2265,
    "usedLlm": true,
@@ -1723,7 +1723,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessuna modifica: il menu è *già così*. Non ho cambiato nulla."
    ],
    "turns": [
     "crea il menu Bevande"
@@ -1734,7 +1734,7 @@
    "llmMisses": 0,
    "llmTokens": 20857,
    "latencyMs": [
-    5788.1
+    12.2
    ],
    "recordedLlmMs": 5760,
    "usedLlm": true,
@@ -1761,7 +1761,7 @@
    "llmMisses": 0,
    "llmTokens": 9979,
    "latencyMs": [
-    3146.5
+    10.2
    ],
    "recordedLlmMs": 3121,
    "usedLlm": true,
@@ -1788,7 +1788,7 @@
    "llmMisses": 0,
    "llmTokens": 10168,
    "latencyMs": [
-    2565.6
+    11.7
    ],
    "recordedLlmMs": 2544,
    "usedLlm": true,
@@ -1815,7 +1815,7 @@
    "llmMisses": 0,
    "llmTokens": 10538,
    "latencyMs": [
-    3195.4
+    12.5
    ],
    "recordedLlmMs": 3172,
    "usedLlm": true,
@@ -1842,7 +1842,7 @@
    "llmMisses": 0,
    "llmTokens": 9989,
    "latencyMs": [
-    1658.5
+    10.2
    ],
    "recordedLlmMs": 1639,
    "usedLlm": true,
@@ -1869,7 +1869,7 @@
    "llmMisses": 0,
    "llmTokens": 9925,
    "latencyMs": [
-    2025.9
+    10.6
    ],
    "recordedLlmMs": 2010,
    "usedLlm": true,
@@ -1896,7 +1896,7 @@
    "llmMisses": 0,
    "llmTokens": 10221,
    "latencyMs": [
-    2783.9
+    12.8
    ],
    "recordedLlmMs": 2770,
    "usedLlm": true,
@@ -1924,7 +1924,7 @@
    "llmMisses": 0,
    "llmTokens": 9901,
    "latencyMs": [
-    1906.8
+    10
    ],
    "recordedLlmMs": 1895,
    "usedLlm": true,
@@ -1951,7 +1951,7 @@
    "llmMisses": 0,
    "llmTokens": 9900,
    "latencyMs": [
-    2102
+    11
    ],
    "recordedLlmMs": 2086,
    "usedLlm": true,
@@ -1978,7 +1978,7 @@
    "llmMisses": 0,
    "llmTokens": 9930,
    "latencyMs": [
-    2529
+    13.5
    ],
    "recordedLlmMs": 2510,
    "usedLlm": true,
@@ -2005,7 +2005,7 @@
    "llmMisses": 0,
    "llmTokens": 9952,
    "latencyMs": [
-    2249.5
+    10.3
    ],
    "recordedLlmMs": 2200,
    "usedLlm": true,
@@ -2021,7 +2021,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il menu nuovo? Dimmi il nome completo."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCome vuoi chiamare il menu nuovo? Dimmi il nome completo."
    ],
    "turns": [
     "🎤 eh crea… il menu… pranz"
@@ -2032,7 +2032,7 @@
    "llmMisses": 0,
    "llmTokens": 20213,
    "latencyMs": [
-    5768.1
+    18
    ],
    "recordedLlmMs": 5733,
    "usedLlm": true,
@@ -2059,7 +2059,7 @@
    "llmMisses": 0,
    "llmTokens": 10150,
    "latencyMs": [
-    2634.4
+    11.8
    ],
    "recordedLlmMs": 2614,
    "usedLlm": true,
@@ -2086,7 +2086,7 @@
    "llmMisses": 0,
    "llmTokens": 9921,
    "latencyMs": [
-    1481
+    13.8
    ],
    "recordedLlmMs": 1465,
    "usedLlm": true,
@@ -2113,7 +2113,7 @@
    "llmMisses": 0,
    "llmTokens": 10152,
    "latencyMs": [
-    2794.3
+    15.1
    ],
    "recordedLlmMs": 2780,
    "usedLlm": true,
@@ -2140,7 +2140,7 @@
    "llmMisses": 0,
    "llmTokens": 10151,
    "latencyMs": [
-    2394.3
+    14.5
    ],
    "recordedLlmMs": 2380,
    "usedLlm": true,
@@ -2167,7 +2167,7 @@
    "llmMisses": 0,
    "llmTokens": 10092,
    "latencyMs": [
-    1556.1
+    15.2
    ],
    "recordedLlmMs": 1542,
    "usedLlm": true,
@@ -2194,7 +2194,7 @@
    "llmMisses": 0,
    "llmTokens": 10100,
    "latencyMs": [
-    2039.5
+    12.7
    ],
    "recordedLlmMs": 2022,
    "usedLlm": true,
@@ -2221,7 +2221,7 @@
    "llmMisses": 0,
    "llmTokens": 10096,
    "latencyMs": [
-    1706.3
+    14.4
    ],
    "recordedLlmMs": 1690,
    "usedLlm": true,
@@ -2248,7 +2248,7 @@
    "llmMisses": 0,
    "llmTokens": 10102,
    "latencyMs": [
-    1562.8
+    14.4
    ],
    "recordedLlmMs": 1550,
    "usedLlm": true,
@@ -2275,7 +2275,7 @@
    "llmMisses": 0,
    "llmTokens": 10099,
    "latencyMs": [
-    2117.8
+    12.3
    ],
    "recordedLlmMs": 2103,
    "usedLlm": true,
@@ -2302,7 +2302,7 @@
    "llmMisses": 0,
    "llmTokens": 10585,
    "latencyMs": [
-    2597.2
+    14.6
    ],
    "recordedLlmMs": 2578,
    "usedLlm": true,
@@ -2329,7 +2329,7 @@
    "llmMisses": 0,
    "llmTokens": 10567,
    "latencyMs": [
-    3681.3
+    16.3
    ],
    "recordedLlmMs": 3663,
    "usedLlm": true,
@@ -2363,7 +2363,7 @@
    "llmMisses": 0,
    "llmTokens": 20990,
    "latencyMs": [
-    4181.5
+    19.8
    ],
    "recordedLlmMs": 4157,
    "usedLlm": true,
@@ -2390,7 +2390,7 @@
    "llmMisses": 0,
    "llmTokens": 10252,
    "latencyMs": [
-    2625
+    10
    ],
    "recordedLlmMs": 2611,
    "usedLlm": true,
@@ -2407,7 +2407,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Menu *Cena*: *nascosto* ai clienti (7 piatti)",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il *Menu cena*? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Menu *Cena*: *nascosto* ai clienti (7 piatti)",
     "Ok, confermo le modifiche in sospeso.\n\nMenu *Cena*: *nascosto* ai clienti (7 piatti)"
    ],
    "turns": [
@@ -2420,8 +2420,8 @@
    "llmMisses": 0,
    "llmTokens": 32338,
    "latencyMs": [
-    6810.7,
-    2148.1
+    15.2,
+    19.4
    ],
    "recordedLlmMs": 8911,
    "usedLlm": true,
@@ -2449,7 +2449,7 @@
    "llmMisses": 0,
    "llmTokens": 10106,
    "latencyMs": [
-    2046.3
+    12.4
    ],
    "recordedLlmMs": 2032,
    "usedLlm": true,
@@ -2479,8 +2479,8 @@
    "llmMisses": 0,
    "llmTokens": 20331,
    "latencyMs": [
-    10.8,
-    1634.3
+    12.2,
+    11.3
    ],
    "recordedLlmMs": 3653,
    "usedLlm": true,
@@ -2507,7 +2507,7 @@
    "llmMisses": 0,
    "llmTokens": 10109,
    "latencyMs": [
-    2022.9
+    13.2
    ],
    "recordedLlmMs": 2006,
    "usedLlm": true,
@@ -2536,8 +2536,8 @@
    "llmMisses": 0,
    "llmTokens": 20648,
    "latencyMs": [
-    14.8,
-    2737.4
+    11.8,
+    11.7
    ],
    "recordedLlmMs": 4728,
    "usedLlm": true,
@@ -2564,7 +2564,7 @@
    "llmMisses": 0,
    "llmTokens": 10097,
    "latencyMs": [
-    2360.9
+    13
    ],
    "recordedLlmMs": 2338,
    "usedLlm": true,
@@ -2591,7 +2591,7 @@
    "llmMisses": 0,
    "llmTokens": 10303,
    "latencyMs": [
-    2765.4
+    12.5
    ],
    "recordedLlmMs": 2741,
    "usedLlm": true,
@@ -2619,7 +2619,7 @@
    "llmMisses": 0,
    "llmTokens": 10092,
    "latencyMs": [
-    2696.5
+    11.6
    ],
    "recordedLlmMs": 2677,
    "usedLlm": true,
@@ -2636,7 +2636,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Ci sto lavorando…\nSono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo i *Secondi* della *Cena*? Rispondi sì.\n\n1. *Filetto al pepe* (24,00 €)\n2. *Branzino al forno* (22,00 €)"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo i *Secondi* della *Cena*? Rispondi sì.\n\n1. *Filetto al pepe* (24,00 €)\n2. *Branzino al forno* (22,00 €)"
    ],
    "turns": [
     "nascondi i secondi della cena"
@@ -2647,7 +2647,7 @@
    "llmMisses": 0,
    "llmTokens": 22003,
    "latencyMs": [
-    8836.8
+    17.6
    ],
    "recordedLlmMs": 8808,
    "usedLlm": true,
@@ -2675,7 +2675,7 @@
    "llmMisses": 0,
    "llmTokens": 10183,
    "latencyMs": [
-    2184.7
+    14.7
    ],
    "recordedLlmMs": 2159,
    "usedLlm": true,
@@ -2702,7 +2702,7 @@
    "llmMisses": 0,
    "llmTokens": 10130,
    "latencyMs": [
-    1985.4
+    14.9
    ],
    "recordedLlmMs": 1962,
    "usedLlm": true,
@@ -2714,7 +2714,7 @@
   {
    "conv": "str-m1",
    "hash": "f91d1b2a652c30ae",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2169,
    "usage": {
@@ -2727,7 +2727,7 @@
   {
    "conv": "str-m1",
    "hash": "d89cabd9769c5f26",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2821,
    "usage": {
@@ -2739,66 +2739,66 @@
   },
   {
    "conv": "str-m1",
-   "hash": "ccc1c65d38b7de63",
-   "source": "real",
+   "hash": "cfa00a15645bda5b",
+   "source": "hit",
    "status": 200,
-   "ms": 1774,
+   "ms": 4331,
    "usage": {
-    "input": 445,
-    "output": 161,
-    "cacheRead": 9267,
-    "cacheWrite": 325
-   }
-  },
-  {
-   "conv": "str-m1",
-   "hash": "0fe75976e684b1eb",
-   "source": "real",
-   "status": 200,
-   "ms": 2601,
-   "usage": {
-    "input": 554,
-    "output": 495,
-    "cacheRead": 9592,
+    "input": 408,
+    "output": 185,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "01fe4bacb94cdc99",
+   "hash": "10fcbc9be9cec4fd",
    "source": "real",
    "status": 200,
-   "ms": 2376,
+   "ms": 3585,
    "usage": {
-    "input": 524,
-    "output": 477,
-    "cacheRead": 9592,
+    "input": 459,
+    "output": 451,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "05e5f56b9767c069",
-   "source": "real",
+   "hash": "caee508a70cad97c",
+   "source": "hit",
    "status": 200,
-   "ms": 2451,
+   "ms": 3852,
    "usage": {
-    "input": 559,
-    "output": 468,
-    "cacheRead": 9592,
+    "input": 496,
+    "output": 623,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "f60f203e2c67eb97",
-   "source": "real",
+   "hash": "477ad3e5059feab2",
+   "source": "hit",
    "status": 200,
-   "ms": 2826,
+   "ms": 2773,
    "usage": {
-    "input": 594,
-    "output": 198,
-    "cacheRead": 9592,
+    "input": 531,
+    "output": 467,
+    "cacheRead": 9555,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "637c6d4fe6e4662b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2824,
+   "usage": {
+    "input": 566,
+    "output": 181,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
@@ -2844,7 +2844,7 @@
   {
    "conv": "str-b1",
    "hash": "558fce733b901c7d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4004,
    "usage": {
@@ -2857,7 +2857,7 @@
   {
    "conv": "str-b2",
    "hash": "2528ae08f312664c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3169,
    "usage": {
@@ -2883,7 +2883,7 @@
   {
    "conv": "str-b3",
    "hash": "27d9264eee9e6d5c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3703,
    "usage": {
@@ -2896,7 +2896,7 @@
   {
    "conv": "str-b4",
    "hash": "4ee48401873babc4",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3514,
    "usage": {
@@ -2909,7 +2909,7 @@
   {
    "conv": "str-a-menu-nuovo-01",
    "hash": "77a3a7ded87d214a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1671,
    "usage": {
@@ -2922,7 +2922,7 @@
   {
    "conv": "str-a-menu-nuovo-02",
    "hash": "b08cc3cb358386e1",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1187,
    "usage": {
@@ -2935,7 +2935,7 @@
   {
    "conv": "str-a-menu-nuovo-03",
    "hash": "3a8b6323fc6244d5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2859,
    "usage": {
@@ -2948,7 +2948,7 @@
   {
    "conv": "str-a-menu-nuovo-04",
    "hash": "4c151fbbeef859e8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1764,
    "usage": {
@@ -2961,7 +2961,7 @@
   {
    "conv": "str-a-menu-nuovo-05",
    "hash": "22bb5bfdeb2065e5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1583,
    "usage": {
@@ -2974,7 +2974,7 @@
   {
    "conv": "str-a-menu-nuovo-06",
    "hash": "4808b102e6c9adb7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1336,
    "usage": {
@@ -2987,7 +2987,7 @@
   {
    "conv": "str-a-menu-nuovo-07",
    "hash": "c9de083445ef9aa6",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2566,
    "usage": {
@@ -3000,7 +3000,7 @@
   {
    "conv": "str-a-piu-menu-01",
    "hash": "3fddb0fe9141d08c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1863,
    "usage": {
@@ -3013,7 +3013,7 @@
   {
    "conv": "str-a-piu-menu-02",
    "hash": "e4ac1905418a4225",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2285,
    "usage": {
@@ -3026,7 +3026,7 @@
   {
    "conv": "str-a-piu-menu-03",
    "hash": "481a4890ef94baab",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2880,
    "usage": {
@@ -3039,7 +3039,7 @@
   {
    "conv": "str-a-piu-menu-04",
    "hash": "62b49f8f1dbb1c6f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3760,
    "usage": {
@@ -3052,7 +3052,7 @@
   {
    "conv": "str-a-piu-menu-05",
    "hash": "dd7739040b3c8631",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4842,
    "usage": {
@@ -3065,7 +3065,7 @@
   {
    "conv": "str-a-sottomenu-01",
    "hash": "ed9a87dd36003215",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1728,
    "usage": {
@@ -3078,7 +3078,7 @@
   {
    "conv": "str-a-sottomenu-02",
    "hash": "69671fbe8a072611",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2925,
    "usage": {
@@ -3091,7 +3091,7 @@
   {
    "conv": "str-a-sottomenu-03",
    "hash": "0489be97e3a987f2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1741,
    "usage": {
@@ -3104,7 +3104,7 @@
   {
    "conv": "str-a-sottomenu-04",
    "hash": "ddc88d96050f1d53",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1443,
    "usage": {
@@ -3117,7 +3117,7 @@
   {
    "conv": "str-a-sottomenu-05",
    "hash": "38965a304f9a8691",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1803,
    "usage": {
@@ -3130,7 +3130,7 @@
   {
    "conv": "str-a-sottomenu-06",
    "hash": "f49d24b4d15c7f80",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3869,
    "usage": {
@@ -3143,7 +3143,7 @@
   {
    "conv": "str-a-due-menu-01",
    "hash": "06de3be0f0d9bc5e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2572,
    "usage": {
@@ -3156,7 +3156,7 @@
   {
    "conv": "str-a-due-menu-02",
    "hash": "3c2e66d99dcebd60",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3146,
    "usage": {
@@ -3169,7 +3169,7 @@
   {
    "conv": "str-a-due-menu-03",
    "hash": "03e4c08c1aba3088",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3404,
    "usage": {
@@ -3182,7 +3182,7 @@
   {
    "conv": "str-a-due-menu-04",
    "hash": "8c3249c665130705",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3047,
    "usage": {
@@ -3195,7 +3195,7 @@
   {
    "conv": "str-a-sezione-01",
    "hash": "0148692df67a6a9e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3518,
    "usage": {
@@ -3208,7 +3208,7 @@
   {
    "conv": "str-a-sezione-02",
    "hash": "35d777891e2cfd0c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3340,
    "usage": {
@@ -3221,7 +3221,7 @@
   {
    "conv": "str-a-sezione-03",
    "hash": "a7ff12a835b57a3b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2464,
    "usage": {
@@ -3234,7 +3234,7 @@
   {
    "conv": "str-a-sezione-04",
    "hash": "50288af18ce451ee",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3149,
    "usage": {
@@ -3247,7 +3247,7 @@
   {
    "conv": "str-a-nomi-strani-01",
    "hash": "f710c7ce38023c1b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1903,
    "usage": {
@@ -3260,7 +3260,7 @@
   {
    "conv": "str-a-nomi-strani-02",
    "hash": "26dcbb34e6fb6ff8",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3223,
    "usage": {
@@ -3273,7 +3273,7 @@
   {
    "conv": "str-a-nomi-strani-03",
    "hash": "0e804bedc59d64c3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2654,
    "usage": {
@@ -3286,7 +3286,7 @@
   {
    "conv": "str-a-nomi-strani-04",
    "hash": "f319f3e51c5707e7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2172,
    "usage": {
@@ -3299,7 +3299,7 @@
   {
    "conv": "str-a-nomi-strani-05",
    "hash": "b4b17ec314e4e0f1",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2199,
    "usage": {
@@ -3312,7 +3312,7 @@
   {
    "conv": "str-a-nomi-strani-06",
    "hash": "8659a093ea0ba702",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3559,
    "usage": {
@@ -3325,7 +3325,7 @@
   {
    "conv": "str-a-nomi-strani-07",
    "hash": "a54a2e7cdf151f78",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2374,
    "usage": {
@@ -3351,7 +3351,7 @@
   {
    "conv": "str-a-conferme-vaghe-01",
    "hash": "63758cb02023f578",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1796,
    "usage": {
@@ -3377,7 +3377,7 @@
   {
    "conv": "str-a-conferme-vaghe-02",
    "hash": "53d3bc2012f2a177",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2391,
    "usage": {
@@ -3390,7 +3390,7 @@
   {
    "conv": "str-a-conferme-vaghe-03",
    "hash": "c1ae931054852bef",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1789,
    "usage": {
@@ -3403,7 +3403,7 @@
   {
    "conv": "str-a-conferme-vaghe-03",
    "hash": "95cdee02c1a535b9",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2660,
    "usage": {
@@ -3429,7 +3429,7 @@
   {
    "conv": "str-a-conferme-vaghe-04",
    "hash": "09ae86cd38da6628",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1901,
    "usage": {
@@ -3442,7 +3442,7 @@
   {
    "conv": "str-a-conferme-vaghe-04",
    "hash": "a1de6d20be0b8618",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1923,
    "usage": {
@@ -3455,7 +3455,7 @@
   {
    "conv": "str-a-conferme-vaghe-05",
    "hash": "549e424a7ce64f05",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2564,
    "usage": {
@@ -3468,7 +3468,7 @@
   {
    "conv": "str-a-conferme-vaghe-05",
    "hash": "a6599a287d68e964",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1999,
    "usage": {
@@ -3481,7 +3481,7 @@
   {
    "conv": "str-a-conferme-vaghe-05",
    "hash": "9364279623dddfac",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1260,
    "usage": {
@@ -3507,7 +3507,7 @@
   {
    "conv": "str-a-conferme-vaghe-06",
    "hash": "cee46f19fcb4cfae",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1163,
    "usage": {
@@ -3520,7 +3520,7 @@
   {
    "conv": "str-a-conferme-vaghe-06",
    "hash": "df69c51c82df58e3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1866,
    "usage": {
@@ -3546,7 +3546,7 @@
   {
    "conv": "str-a-conferme-vaghe-07",
    "hash": "0dfb27d9a4e4993e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2139,
    "usage": {
@@ -3559,7 +3559,7 @@
   {
    "conv": "str-a-conferme-vaghe-07",
    "hash": "143189f8ea036577",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2502,
    "usage": {
@@ -3585,7 +3585,7 @@
   {
    "conv": "str-a-conferme-vaghe-08",
    "hash": "fbca027f7c899356",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2310,
    "usage": {
@@ -3598,7 +3598,7 @@
   {
    "conv": "str-a-conferme-vaghe-08",
    "hash": "aac6525d654d61fa",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3413,
    "usage": {
@@ -3611,7 +3611,7 @@
   {
    "conv": "str-a-correzioni-01",
    "hash": "9177e668970f9ecb",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2294,
    "usage": {
@@ -3624,7 +3624,7 @@
   {
    "conv": "str-a-correzioni-01",
    "hash": "1224140e8cf2a687",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1978,
    "usage": {
@@ -3637,7 +3637,7 @@
   {
    "conv": "str-a-correzioni-02",
    "hash": "e9616feabc640472",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3032,
    "usage": {
@@ -3650,7 +3650,7 @@
   {
    "conv": "str-a-correzioni-02",
    "hash": "f3dbc8a2c1b77740",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2925,
    "usage": {
@@ -3663,7 +3663,7 @@
   {
    "conv": "str-a-correzioni-03",
    "hash": "43a8c3551c8a73ba",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1965,
    "usage": {
@@ -3676,7 +3676,7 @@
   {
    "conv": "str-a-correzioni-03",
    "hash": "4e0a8850e5e12dec",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2129,
    "usage": {
@@ -3689,7 +3689,7 @@
   {
    "conv": "str-a-correzioni-04",
    "hash": "f254d554389ecad7",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2517,
    "usage": {
@@ -3702,7 +3702,7 @@
   {
    "conv": "str-a-correzioni-04",
    "hash": "9568d8291563fec1",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2397,
    "usage": {
@@ -3715,7 +3715,7 @@
   {
    "conv": "str-a-correzioni-05",
    "hash": "9b3f3d1b8d77d275",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1562,
    "usage": {
@@ -3728,7 +3728,7 @@
   {
    "conv": "str-a-correzioni-05",
    "hash": "becc6b6fea5b3f3f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3261,
    "usage": {
@@ -3741,7 +3741,7 @@
   {
    "conv": "str-a-correzioni-06",
    "hash": "530f35f425a0f2a4",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2141,
    "usage": {
@@ -3754,7 +3754,7 @@
   {
    "conv": "str-a-correzioni-06",
    "hash": "22a7ae5a9a41cd09",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2618,
    "usage": {
@@ -3767,7 +3767,7 @@
   {
    "conv": "str-a-categoria-01",
    "hash": "8ba0afee8d524f87",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1500,
    "usage": {
@@ -3780,7 +3780,7 @@
   {
    "conv": "str-a-categoria-02",
    "hash": "00168866fa5bcdb3",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2454,
    "usage": {
@@ -3793,7 +3793,7 @@
   {
    "conv": "str-a-categoria-03",
    "hash": "f3a849ecb6abd093",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1557,
    "usage": {
@@ -3806,7 +3806,7 @@
   {
    "conv": "str-a-categoria-04",
    "hash": "78d521c4064214fd",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2265,
    "usage": {
@@ -3819,7 +3819,7 @@
   {
    "conv": "str-a-esistente-01",
    "hash": "7cbafc6f0a4e8023",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3682,
    "usage": {
@@ -3832,7 +3832,7 @@
   {
    "conv": "str-a-esistente-01",
    "hash": "54917d6bbb246a00",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2078,
    "usage": {
@@ -3845,7 +3845,7 @@
   {
    "conv": "str-a-esistente-02",
    "hash": "9741197c2a45d7f9",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3121,
    "usage": {
@@ -3858,7 +3858,7 @@
   {
    "conv": "str-a-esistente-03",
    "hash": "7cea9a182f425006",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2544,
    "usage": {
@@ -3871,7 +3871,7 @@
   {
    "conv": "str-a-esistente-04",
    "hash": "56f4b48d8fa89081",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3172,
    "usage": {
@@ -3884,7 +3884,7 @@
   {
    "conv": "str-a-esistente-05",
    "hash": "114f8ede9b13484c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1639,
    "usage": {
@@ -3897,7 +3897,7 @@
   {
    "conv": "str-a-incompleta-01",
    "hash": "a32f533bc8656550",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2010,
    "usage": {
@@ -3910,7 +3910,7 @@
   {
    "conv": "str-a-incompleta-02",
    "hash": "1f90bac0af5e8067",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2770,
    "usage": {
@@ -3923,7 +3923,7 @@
   {
    "conv": "str-a-incompleta-03",
    "hash": "9a222243cf953582",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1895,
    "usage": {
@@ -3936,7 +3936,7 @@
   {
    "conv": "str-a-incompleta-04",
    "hash": "d8de08fab873af11",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2086,
    "usage": {
@@ -3949,7 +3949,7 @@
   {
    "conv": "str-a-incompleta-05",
    "hash": "d08cbb4056d952c2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2510,
    "usage": {
@@ -3962,7 +3962,7 @@
   {
    "conv": "str-a-incompleta-06",
    "hash": "cbcace24f89e13a2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2200,
    "usage": {
@@ -3975,7 +3975,7 @@
   {
    "conv": "str-a-vocali-01",
    "hash": "ecee8df43056dd9c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4108,
    "usage": {
@@ -3988,7 +3988,7 @@
   {
    "conv": "str-a-vocali-01",
    "hash": "bfe5b212b6bf233d",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1625,
    "usage": {
@@ -4001,7 +4001,7 @@
   {
    "conv": "str-a-vocali-02",
    "hash": "6ab9f98d1dd72e22",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2614,
    "usage": {
@@ -4014,7 +4014,7 @@
   {
    "conv": "str-a-vocali-03",
    "hash": "64b3cfa342cd9a4f",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1465,
    "usage": {
@@ -4027,7 +4027,7 @@
   {
    "conv": "str-a-vocali-04",
    "hash": "7b2cfbd23575f705",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2780,
    "usage": {
@@ -4040,7 +4040,7 @@
   {
    "conv": "str-a-vocali-05",
    "hash": "c3cded5a9742abbc",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2380,
    "usage": {
@@ -4053,7 +4053,7 @@
   {
    "conv": "str-v-01",
    "hash": "17488e1bf51c5029",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1542,
    "usage": {
@@ -4066,7 +4066,7 @@
   {
    "conv": "str-v-02",
    "hash": "7dacaaf99e784176",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2022,
    "usage": {
@@ -4079,7 +4079,7 @@
   {
    "conv": "str-v-03",
    "hash": "9c07457e1a437fcc",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1690,
    "usage": {
@@ -4092,7 +4092,7 @@
   {
    "conv": "str-v-04",
    "hash": "d5252285a8c52b72",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1550,
    "usage": {
@@ -4105,7 +4105,7 @@
   {
    "conv": "str-v-05",
    "hash": "6b5849035e9b378c",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2103,
    "usage": {
@@ -4118,7 +4118,7 @@
   {
    "conv": "str-v-06",
    "hash": "e58c1b1136541ac2",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2578,
    "usage": {
@@ -4131,7 +4131,7 @@
   {
    "conv": "str-v-07",
    "hash": "626f4e3f72f44dda",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3663,
    "usage": {
@@ -4144,7 +4144,7 @@
   {
    "conv": "str-v-08",
    "hash": "b3e04dfd29f97c26",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1382,
    "usage": {
@@ -4157,7 +4157,7 @@
   {
    "conv": "str-v-08",
    "hash": "0447ea0df64c7ece",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2775,
    "usage": {
@@ -4170,7 +4170,7 @@
   {
    "conv": "str-v-09",
    "hash": "a3012b8ee0602465",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2611,
    "usage": {
@@ -4183,7 +4183,7 @@
   {
    "conv": "str-v-10",
    "hash": "2880bcacc83fca86",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 4170,
    "usage": {
@@ -4196,7 +4196,7 @@
   {
    "conv": "str-v-10",
    "hash": "c8842fb38a845c26",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2617,
    "usage": {
@@ -4209,7 +4209,7 @@
   {
    "conv": "str-v-10",
    "hash": "7457e197712a9673",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2124,
    "usage": {
@@ -4222,7 +4222,7 @@
   {
    "conv": "str-v-11",
    "hash": "8beb7b42072eb07e",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2032,
    "usage": {
@@ -4248,7 +4248,7 @@
   {
    "conv": "str-v-12",
    "hash": "45557692d1c54c57",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1621,
    "usage": {
@@ -4261,7 +4261,7 @@
   {
    "conv": "str-v-13",
    "hash": "14963e150d1df706",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2006,
    "usage": {
@@ -4287,7 +4287,7 @@
   {
    "conv": "str-v-14",
    "hash": "50e127a65d811ce5",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2722,
    "usage": {
@@ -4300,7 +4300,7 @@
   {
    "conv": "str-v-15",
    "hash": "935c615491700818",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2338,
    "usage": {
@@ -4313,7 +4313,7 @@
   {
    "conv": "str-v-16",
    "hash": "4870064578590dbc",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2741,
    "usage": {
@@ -4326,7 +4326,7 @@
   {
    "conv": "str-v-17",
    "hash": "e18eaaf644f2b95a",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2677,
    "usage": {
@@ -4339,7 +4339,7 @@
   {
    "conv": "str-v-18",
    "hash": "a4bf9baa7f54bb82",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 3578,
    "usage": {
@@ -4352,7 +4352,7 @@
   {
    "conv": "str-v-18",
    "hash": "cb9ab5f4a225223b",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 5230,
    "usage": {
@@ -4365,7 +4365,7 @@
   {
    "conv": "str-v-19",
    "hash": "7153383aa0e9b0af",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 2159,
    "usage": {
@@ -4378,7 +4378,7 @@
   {
    "conv": "str-v-20",
    "hash": "506b31f6ac2a15fd",
-   "source": "real",
+   "source": "hit",
    "status": 200,
    "ms": 1962,
    "usage": {

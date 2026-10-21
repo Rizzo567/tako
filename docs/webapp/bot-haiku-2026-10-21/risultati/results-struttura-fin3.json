@@ -13,24 +13,24 @@
   "graviSicurezza": 0,
   "graviAltri": 1,
   "medi": 0,
-  "domandePer10Messaggi": 1.8,
-  "domandeNonAttesePer10": 0.8,
+  "domandePer10Messaggi": 1.9,
+  "domandeNonAttesePer10": 0.9,
   "latenzaAnthropicMs": {
-   "p50": 2376,
-   "p95": 3760,
+   "p50": 2391,
+   "p95": 3869,
    "chiamate": 129
   },
   "latenzaTurnoMs": {
-   "p50": 17,
-   "p95": 44,
+   "p50": 13,
+   "p95": 21,
    "nota": "misurata dal vivo"
   },
   "chiamatePerMessaggio": 1.08,
   "tokenMediPerMessaggio": {
-   "input": 142,
-   "output": 343,
-   "cacheRead": 10481,
-   "cacheWrite": 101
+   "input": 140,
+   "output": 344,
+   "cacheRead": 10482,
+   "cacheWrite": 98
   },
   "cacheHit": {
    "chiamateConCacheRead": 129,
@@ -39,7 +39,7 @@
   },
   "costo": {
    "spesoGiroUsd": 0,
-   "equivalenteLiveUsd": 0.036072,
+   "equivalenteLiveUsd": 0.036065,
    "perMessaggioUsd": 0.000303,
    "tetto": 0.4
   },
@@ -53,7 +53,7 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 4.1
+  "durataGiroS": 3.2
  },
  "codici": {
   "visibilita-mancante": {
@@ -74,12 +74,12 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Completo* quando vuoi che i clienti lo vedano.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. Per ora sono nascosti: scrivi *rendi visibile Completo* quando vuoi che i clienti li vedano.",
-    "Ok, da quale Menu inizio: *Pranzo* o *Cena*?",
+    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. I clienti lo vedranno quando renderai visibile il Menu.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. I clienti li vedranno quando renderai visibile il Menu.",
+    "Ok, scrivimi i nomi dei piatti per ogni sottomenu e li aggiungo subito.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
     "Nessuna modifica: il menu è *già così*. Non ho cambiato nulla.",
-    "Non ho capito a cosa ti riferisci con *1*. Cosa vuoi fare con i Menu *Pranzo* e *Cena*?"
+    "Quale piatto vuoi mettere nel sottomenu *Completo* del Menu *Pranzo*? Dimmi il nome e lo aggiungo subito."
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
@@ -94,17 +94,17 @@
    "unexpectedClarifications": 1,
    "llmCalls": 7,
    "llmMisses": 0,
-   "llmTokens": 72509,
+   "llmTokens": 72216,
    "latencyMs": [
-    151.9,
-    36.3,
-    44,
-    18.5,
-    16.3,
-    92.1,
-    22.6
+    143.4,
+    33.6,
+    47.2,
+    16.6,
+    13.5,
+    78.4,
+    19.8
    ],
-   "recordedLlmMs": 17018,
+   "recordedLlmMs": 22355,
    "usedLlm": true,
    "source": "QA Manuel 21/10",
    "note": "conversazione vera: al più tardi dopo il turno 2 Pranzo {Completo} e Cena {Completo, Primo, Secondo}; poi niente doppioni né conferme a vuoto",
@@ -120,7 +120,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Pranzo* quando vuoi che i clienti lo vedano.\nHo creato il Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Completo* quando vuoi che i clienti lo vedano.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. Per ora sono nascosti: scrivi *rendi visibile Completo* quando vuoi che i clienti li vedano."
+    "Ho creato il sottomenu *Completo* nel Menu *Pranzo*. I clienti lo vedranno quando renderai visibile il Menu.\nHo creato i sottomenu *Completo*, *Primo*, *Secondo* nel Menu *Cena*. I clienti li vedranno quando renderai visibile il Menu."
    ],
    "turns": [
     "voglio che aggiungi un nuovo menù che si chiama pranzo e un nuovo menù che si chiama cena",
@@ -132,8 +132,8 @@
    "llmMisses": 0,
    "llmTokens": 20074,
    "latencyMs": [
-    11.3,
-    18.3
+    13.7,
+    20.3
    ],
    "recordedLlmMs": 4990,
    "usedLlm": true,
@@ -161,7 +161,7 @@
    "llmMisses": 0,
    "llmTokens": 9819,
    "latencyMs": [
-    17.8
+    14.4
    ],
    "recordedLlmMs": 2169,
    "usedLlm": true,
@@ -188,7 +188,7 @@
     "price|Salsiccia ai ferri|13"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aumento di 3 euro tutti i piatti del Sottomenu *Secondi*.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 3,00 € i prezzi di 4 piatti.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *17,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *16,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *13,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *14,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
    ],
    "turns": [
     "Tutti i secondi aumentali di 3 euro"
@@ -199,7 +199,7 @@
    "llmMisses": 0,
    "llmTokens": 10505,
    "latencyMs": [
-    139.5
+    34.9
    ],
    "recordedLlmMs": 4004,
    "usedLlm": true,
@@ -227,7 +227,7 @@
    "llmMisses": 0,
    "llmTokens": 9822,
    "latencyMs": [
-    29.4
+    14.2
    ],
    "recordedLlmMs": 3169,
    "usedLlm": true,
@@ -257,8 +257,8 @@
    "llmMisses": 0,
    "llmTokens": 19870,
    "latencyMs": [
-    28,
-    15.9
+    10.5,
+    18.4
    ],
    "recordedLlmMs": 6872,
    "usedLlm": true,
@@ -275,7 +275,7 @@
    "expected": [],
    "actual": [],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi i *Secondi* del Menu pranzo, quelli del Menu cena o tutti e due?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nI *Secondi* ci sono in più Menu: in quale? *Pranzo* o *Cena*?"
    ],
    "turns": [
     "Tutti i secondi aumentali di 3 euro"
@@ -286,7 +286,7 @@
    "llmMisses": 0,
    "llmTokens": 10355,
    "latencyMs": [
-    11.8
+    11.9
    ],
    "recordedLlmMs": 3514,
    "usedLlm": true,
@@ -314,7 +314,7 @@
    "llmMisses": 0,
    "llmTokens": 9974,
    "latencyMs": [
-    14
+    11
    ],
    "recordedLlmMs": 1671,
    "usedLlm": true,
@@ -341,7 +341,7 @@
    "llmMisses": 0,
    "llmTokens": 9982,
    "latencyMs": [
-    14.3
+    16.2
    ],
    "recordedLlmMs": 1187,
    "usedLlm": true,
@@ -368,7 +368,7 @@
    "llmMisses": 0,
    "llmTokens": 9979,
    "latencyMs": [
-    17.4
+    14.5
    ],
    "recordedLlmMs": 2859,
    "usedLlm": true,
@@ -395,7 +395,7 @@
    "llmMisses": 0,
    "llmTokens": 9978,
    "latencyMs": [
-    14.4
+    12.2
    ],
    "recordedLlmMs": 1764,
    "usedLlm": true,
@@ -422,7 +422,7 @@
    "llmMisses": 0,
    "llmTokens": 9985,
    "latencyMs": [
-    19.5
+    15.6
    ],
    "recordedLlmMs": 1583,
    "usedLlm": true,
@@ -449,7 +449,7 @@
    "llmMisses": 0,
    "llmTokens": 9978,
    "latencyMs": [
-    14.8
+    13.8
    ],
    "recordedLlmMs": 1336,
    "usedLlm": true,
@@ -476,7 +476,7 @@
    "llmMisses": 0,
    "llmTokens": 9994,
    "latencyMs": [
-    15.4
+    15.5
    ],
    "recordedLlmMs": 2566,
    "usedLlm": true,
@@ -503,7 +503,7 @@
    "llmMisses": 0,
    "llmTokens": 10064,
    "latencyMs": [
-    16.7
+    14.5
    ],
    "recordedLlmMs": 1863,
    "usedLlm": true,
@@ -530,7 +530,7 @@
    "llmMisses": 0,
    "llmTokens": 10160,
    "latencyMs": [
-    15.7
+    12
    ],
    "recordedLlmMs": 2285,
    "usedLlm": true,
@@ -557,7 +557,7 @@
    "llmMisses": 0,
    "llmTokens": 10054,
    "latencyMs": [
-    15.9
+    16.3
    ],
    "recordedLlmMs": 2880,
    "usedLlm": true,
@@ -584,7 +584,7 @@
    "llmMisses": 0,
    "llmTokens": 10153,
    "latencyMs": [
-    19
+    13
    ],
    "recordedLlmMs": 3760,
    "usedLlm": true,
@@ -611,7 +611,7 @@
    "llmMisses": 0,
    "llmTokens": 10603,
    "latencyMs": [
-    17.6
+    14.9
    ],
    "recordedLlmMs": 4842,
    "usedLlm": true,
@@ -638,7 +638,7 @@
    "llmMisses": 0,
    "llmTokens": 9998,
    "latencyMs": [
-    15
+    10.9
    ],
    "recordedLlmMs": 1728,
    "usedLlm": true,
@@ -665,7 +665,7 @@
    "llmMisses": 0,
    "llmTokens": 10260,
    "latencyMs": [
-    16.6
+    13
    ],
    "recordedLlmMs": 2925,
    "usedLlm": true,
@@ -692,7 +692,7 @@
    "llmMisses": 0,
    "llmTokens": 9999,
    "latencyMs": [
-    19.2
+    13.4
    ],
    "recordedLlmMs": 1741,
    "usedLlm": true,
@@ -719,7 +719,7 @@
    "llmMisses": 0,
    "llmTokens": 10178,
    "latencyMs": [
-    18.9
+    13
    ],
    "recordedLlmMs": 1443,
    "usedLlm": true,
@@ -746,7 +746,7 @@
    "llmMisses": 0,
    "llmTokens": 10200,
    "latencyMs": [
-    15.1
+    14.9
    ],
    "recordedLlmMs": 1803,
    "usedLlm": true,
@@ -773,7 +773,7 @@
    "llmMisses": 0,
    "llmTokens": 10387,
    "latencyMs": [
-    17.8
+    14.3
    ],
    "recordedLlmMs": 3869,
    "usedLlm": true,
@@ -800,7 +800,7 @@
    "llmMisses": 0,
    "llmTokens": 10089,
    "latencyMs": [
-    23.8
+    14.5
    ],
    "recordedLlmMs": 2572,
    "usedLlm": true,
@@ -827,7 +827,7 @@
    "llmMisses": 0,
    "llmTokens": 10228,
    "latencyMs": [
-    16.4
+    12.7
    ],
    "recordedLlmMs": 3146,
    "usedLlm": true,
@@ -854,7 +854,7 @@
    "llmMisses": 0,
    "llmTokens": 10324,
    "latencyMs": [
-    15.4
+    13.5
    ],
    "recordedLlmMs": 3404,
    "usedLlm": true,
@@ -881,7 +881,7 @@
    "llmMisses": 0,
    "llmTokens": 10315,
    "latencyMs": [
-    13.8
+    13.3
    ],
    "recordedLlmMs": 3047,
    "usedLlm": true,
@@ -908,7 +908,7 @@
    "llmMisses": 0,
    "llmTokens": 10644,
    "latencyMs": [
-    17.8
+    13.2
    ],
    "recordedLlmMs": 3518,
    "usedLlm": true,
@@ -935,7 +935,7 @@
    "llmMisses": 0,
    "llmTokens": 10377,
    "latencyMs": [
-    13.1
+    13.7
    ],
    "recordedLlmMs": 3340,
    "usedLlm": true,
@@ -962,7 +962,7 @@
    "llmMisses": 0,
    "llmTokens": 10428,
    "latencyMs": [
-    17.7
+    12.4
    ],
    "recordedLlmMs": 2464,
    "usedLlm": true,
@@ -989,7 +989,7 @@
    "llmMisses": 0,
    "llmTokens": 10587,
    "latencyMs": [
-    17.9
+    14
    ],
    "recordedLlmMs": 3149,
    "usedLlm": true,
@@ -1016,7 +1016,7 @@
    "llmMisses": 0,
    "llmTokens": 9979,
    "latencyMs": [
-    15.1
+    12.2
    ],
    "recordedLlmMs": 1903,
    "usedLlm": true,
@@ -1043,7 +1043,7 @@
    "llmMisses": 0,
    "llmTokens": 10375,
    "latencyMs": [
-    16.3
+    13.5
    ],
    "recordedLlmMs": 3223,
    "usedLlm": true,
@@ -1070,7 +1070,7 @@
    "llmMisses": 0,
    "llmTokens": 10175,
    "latencyMs": [
-    34.5
+    13.6
    ],
    "recordedLlmMs": 2654,
    "usedLlm": true,
@@ -1097,7 +1097,7 @@
    "llmMisses": 0,
    "llmTokens": 9986,
    "latencyMs": [
-    15.1
+    13.2
    ],
    "recordedLlmMs": 2172,
    "usedLlm": true,
@@ -1125,7 +1125,7 @@
    "llmMisses": 0,
    "llmTokens": 10134,
    "latencyMs": [
-    18
+    14.1
    ],
    "recordedLlmMs": 2199,
    "usedLlm": true,
@@ -1152,7 +1152,7 @@
    "llmMisses": 0,
    "llmTokens": 10015,
    "latencyMs": [
-    14.2
+    12.7
    ],
    "recordedLlmMs": 3559,
    "usedLlm": true,
@@ -1208,8 +1208,8 @@
    "llmMisses": 0,
    "llmTokens": 20085,
    "latencyMs": [
-    33.5,
-    26.1
+    12.1,
+    11.1
    ],
    "recordedLlmMs": 3467,
    "usedLlm": true,
@@ -1238,8 +1238,8 @@
    "llmMisses": 0,
    "llmTokens": 20086,
    "latencyMs": [
-    16.6,
-    12.7
+    12.2,
+    10.1
    ],
    "recordedLlmMs": 4062,
    "usedLlm": true,
@@ -1268,8 +1268,8 @@
    "llmMisses": 0,
    "llmTokens": 20127,
    "latencyMs": [
-    14,
-    16.6
+    12.3,
+    13.4
    ],
    "recordedLlmMs": 4449,
    "usedLlm": true,
@@ -1286,20 +1286,20 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Dolci* nel Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Dolci* quando vuoi che i clienti lo vedano.",
-    "Non ho cambiato nulla."
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
    ],
    "turns": [
     "nel menu cena aggiungi il sottomenu Dolci",
     "sì dai"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
    "llmTokens": 30627,
    "latencyMs": [
-    18.1,
-    37.1
+    11.9,
+    21.1
    ],
    "recordedLlmMs": 5613,
    "usedLlm": true,
@@ -1328,8 +1328,8 @@
    "llmMisses": 0,
    "llmTokens": 30728,
    "latencyMs": [
-    20.1,
-    22.9
+    12.1,
+    19.3
    ],
    "recordedLlmMs": 5823,
    "usedLlm": true,
@@ -1358,8 +1358,8 @@
    "llmMisses": 0,
    "llmTokens": 30954,
    "latencyMs": [
-    13.5,
-    19
+    12.1,
+    15
    ],
    "recordedLlmMs": 5593,
    "usedLlm": true,
@@ -1376,20 +1376,20 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Contorni* nel Menu *Pranzo*. Per ora è nascosto: scrivi *rendi visibile Contorni* quando vuoi che i clienti lo vedano.",
-    "Non ho cambiato nulla."
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
    ],
    "turns": [
     "in pranzo metti il sottomenu Contorni",
     "ok procedi"
    ],
-   "clarifications": 0,
-   "unexpectedClarifications": 0,
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
    "llmCalls": 3,
    "llmMisses": 0,
    "llmTokens": 30854,
    "latencyMs": [
-    18.7,
-    22.5
+    12.2,
+    17.4
    ],
    "recordedLlmMs": 7566,
    "usedLlm": true,
@@ -1418,8 +1418,8 @@
    "llmMisses": 0,
    "llmTokens": 30948,
    "latencyMs": [
-    13.9,
-    17
+    13.4,
+    12.4
    ],
    "recordedLlmMs": 8648,
    "usedLlm": true,
@@ -1448,8 +1448,8 @@
    "llmMisses": 0,
    "llmTokens": 20348,
    "latencyMs": [
-    14.9,
-    30.5
+    13.1,
+    13
    ],
    "recordedLlmMs": 4272,
    "usedLlm": true,
@@ -1466,7 +1466,7 @@
    "actual": [],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Aperitivo* con il sottomenu *Spritz*. Per ora è nascosto: scrivi *rendi visibile Aperitivo* quando vuoi che i clienti lo vedano.",
-    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. Per ora è nascosto: scrivi *rendi visibile Cocktail* quando vuoi che i clienti lo vedano."
+    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. I clienti lo vedranno quando renderai visibile il Menu."
    ],
    "turns": [
     "crea il menu Aperitivo con il sottomenu Spritz",
@@ -1478,8 +1478,8 @@
    "llmMisses": 0,
    "llmTokens": 20803,
    "latencyMs": [
-    16.1,
-    17.2
+    13.5,
+    12.8
    ],
    "recordedLlmMs": 5957,
    "usedLlm": true,
@@ -1508,8 +1508,8 @@
    "llmMisses": 0,
    "llmTokens": 20174,
    "latencyMs": [
-    17.4,
-    17
+    12.7,
+    12.6
    ],
    "recordedLlmMs": 4094,
    "usedLlm": true,
@@ -1538,8 +1538,8 @@
    "llmMisses": 0,
    "llmTokens": 20498,
    "latencyMs": [
-    15.1,
-    21.1
+    13.3,
+    13
    ],
    "recordedLlmMs": 4914,
    "usedLlm": true,
@@ -1568,8 +1568,8 @@
    "llmMisses": 0,
    "llmTokens": 20752,
    "latencyMs": [
-    14.1,
-    15.9
+    13.1,
+    12.4
    ],
    "recordedLlmMs": 4823,
    "usedLlm": true,
@@ -1598,8 +1598,8 @@
    "llmMisses": 0,
    "llmTokens": 19910,
    "latencyMs": [
-    12.8,
-    12.8
+    9.2,
+    8.6
    ],
    "recordedLlmMs": 4759,
    "usedLlm": true,
@@ -1626,7 +1626,7 @@
    "llmMisses": 0,
    "llmTokens": 9988,
    "latencyMs": [
-    15
+    13.9
    ],
    "recordedLlmMs": 1500,
    "usedLlm": true,
@@ -1653,7 +1653,7 @@
    "llmMisses": 0,
    "llmTokens": 10159,
    "latencyMs": [
-    16.4
+    12.3
    ],
    "recordedLlmMs": 2454,
    "usedLlm": true,
@@ -1680,7 +1680,7 @@
    "llmMisses": 0,
    "llmTokens": 10203,
    "latencyMs": [
-    18.2
+    13.8
    ],
    "recordedLlmMs": 1557,
    "usedLlm": true,
@@ -1707,7 +1707,7 @@
    "llmMisses": 0,
    "llmTokens": 9989,
    "latencyMs": [
-    17.6
+    11.7
    ],
    "recordedLlmMs": 2265,
    "usedLlm": true,
@@ -1734,7 +1734,7 @@
    "llmMisses": 0,
    "llmTokens": 20857,
    "latencyMs": [
-    20.6
+    13.2
    ],
    "recordedLlmMs": 5760,
    "usedLlm": true,
@@ -1761,7 +1761,7 @@
    "llmMisses": 0,
    "llmTokens": 9979,
    "latencyMs": [
-    15.2
+    9.5
    ],
    "recordedLlmMs": 3121,
    "usedLlm": true,
@@ -1788,7 +1788,7 @@
    "llmMisses": 0,
    "llmTokens": 10168,
    "latencyMs": [
-    12.5
+    10.3
    ],
    "recordedLlmMs": 2544,
    "usedLlm": true,
@@ -1815,7 +1815,7 @@
    "llmMisses": 0,
    "llmTokens": 10538,
    "latencyMs": [
-    9.5
+    11.3
    ],
    "recordedLlmMs": 3172,
    "usedLlm": true,
@@ -1842,7 +1842,7 @@
    "llmMisses": 0,
    "llmTokens": 9989,
    "latencyMs": [
-    11
+    9.9
    ],
    "recordedLlmMs": 1639,
    "usedLlm": true,
@@ -1869,7 +1869,7 @@
    "llmMisses": 0,
    "llmTokens": 9925,
    "latencyMs": [
-    10.1
+    10.5
    ],
    "recordedLlmMs": 2010,
    "usedLlm": true,
@@ -1896,7 +1896,7 @@
    "llmMisses": 0,
    "llmTokens": 10221,
    "latencyMs": [
-    19
+    12.5
    ],
    "recordedLlmMs": 2770,
    "usedLlm": true,
@@ -1924,7 +1924,7 @@
    "llmMisses": 0,
    "llmTokens": 9901,
    "latencyMs": [
-    13.3
+    9.8
    ],
    "recordedLlmMs": 1895,
    "usedLlm": true,
@@ -1951,7 +1951,7 @@
    "llmMisses": 0,
    "llmTokens": 9900,
    "latencyMs": [
-    23.6
+    10.9
    ],
    "recordedLlmMs": 2086,
    "usedLlm": true,
@@ -1978,7 +1978,7 @@
    "llmMisses": 0,
    "llmTokens": 9930,
    "latencyMs": [
-    22.1
+    11
    ],
    "recordedLlmMs": 2510,
    "usedLlm": true,
@@ -2005,7 +2005,7 @@
    "llmMisses": 0,
    "llmTokens": 9952,
    "latencyMs": [
-    11.9
+    12.1
    ],
    "recordedLlmMs": 2200,
    "usedLlm": true,
@@ -2032,7 +2032,7 @@
    "llmMisses": 0,
    "llmTokens": 20213,
    "latencyMs": [
-    14.9
+    16.5
    ],
    "recordedLlmMs": 5733,
    "usedLlm": true,
@@ -2059,7 +2059,7 @@
    "llmMisses": 0,
    "llmTokens": 10150,
    "latencyMs": [
-    17.2
+    13.5
    ],
    "recordedLlmMs": 2614,
    "usedLlm": true,
@@ -2086,7 +2086,7 @@
    "llmMisses": 0,
    "llmTokens": 9921,
    "latencyMs": [
-    12.1
+    13.2
    ],
    "recordedLlmMs": 1465,
    "usedLlm": true,
@@ -2113,7 +2113,7 @@
    "llmMisses": 0,
    "llmTokens": 10152,
    "latencyMs": [
-    33.2
+    13.6
    ],
    "recordedLlmMs": 2780,
    "usedLlm": true,
@@ -2140,7 +2140,7 @@
    "llmMisses": 0,
    "llmTokens": 10151,
    "latencyMs": [
-    53.9
+    12.3
    ],
    "recordedLlmMs": 2380,
    "usedLlm": true,
@@ -2167,7 +2167,7 @@
    "llmMisses": 0,
    "llmTokens": 10092,
    "latencyMs": [
-    22.9
+    13
    ],
    "recordedLlmMs": 1542,
    "usedLlm": true,
@@ -2194,7 +2194,7 @@
    "llmMisses": 0,
    "llmTokens": 10100,
    "latencyMs": [
-    30.4
+    10.8
    ],
    "recordedLlmMs": 2022,
    "usedLlm": true,
@@ -2221,7 +2221,7 @@
    "llmMisses": 0,
    "llmTokens": 10096,
    "latencyMs": [
-    36.2
+    15.1
    ],
    "recordedLlmMs": 1690,
    "usedLlm": true,
@@ -2248,7 +2248,7 @@
    "llmMisses": 0,
    "llmTokens": 10102,
    "latencyMs": [
-    145.9
+    14.7
    ],
    "recordedLlmMs": 1550,
    "usedLlm": true,
@@ -2275,7 +2275,7 @@
    "llmMisses": 0,
    "llmTokens": 10099,
    "latencyMs": [
-    25.4
+    13
    ],
    "recordedLlmMs": 2103,
    "usedLlm": true,
@@ -2302,7 +2302,7 @@
    "llmMisses": 0,
    "llmTokens": 10585,
    "latencyMs": [
-    40.2
+    13.9
    ],
    "recordedLlmMs": 2578,
    "usedLlm": true,
@@ -2329,7 +2329,7 @@
    "llmMisses": 0,
    "llmTokens": 10567,
    "latencyMs": [
-    21.7
+    11.2
    ],
    "recordedLlmMs": 3663,
    "usedLlm": true,
@@ -2363,7 +2363,7 @@
    "llmMisses": 0,
    "llmTokens": 20990,
    "latencyMs": [
-    33.5
+    16.4
    ],
    "recordedLlmMs": 4157,
    "usedLlm": true,
@@ -2390,7 +2390,7 @@
    "llmMisses": 0,
    "llmTokens": 10252,
    "latencyMs": [
-    11.5
+    9
    ],
    "recordedLlmMs": 2611,
    "usedLlm": true,
@@ -2420,8 +2420,8 @@
    "llmMisses": 0,
    "llmTokens": 32338,
    "latencyMs": [
-    22.7,
-    21.1
+    15.4,
+    19
    ],
    "recordedLlmMs": 8911,
    "usedLlm": true,
@@ -2449,7 +2449,7 @@
    "llmMisses": 0,
    "llmTokens": 10106,
    "latencyMs": [
-    14.4
+    13
    ],
    "recordedLlmMs": 2032,
    "usedLlm": true,
@@ -2479,7 +2479,7 @@
    "llmMisses": 0,
    "llmTokens": 20331,
    "latencyMs": [
-    28.6,
+    14,
     13.2
    ],
    "recordedLlmMs": 3653,
@@ -2507,7 +2507,7 @@
    "llmMisses": 0,
    "llmTokens": 10109,
    "latencyMs": [
-    29.9
+    14.6
    ],
    "recordedLlmMs": 2006,
    "usedLlm": true,
@@ -2536,8 +2536,8 @@
    "llmMisses": 0,
    "llmTokens": 20648,
    "latencyMs": [
-    17.4,
-    15.7
+    14.8,
+    13.6
    ],
    "recordedLlmMs": 4728,
    "usedLlm": true,
@@ -2564,7 +2564,7 @@
    "llmMisses": 0,
    "llmTokens": 10097,
    "latencyMs": [
-    17.2
+    14.7
    ],
    "recordedLlmMs": 2338,
    "usedLlm": true,
@@ -2591,7 +2591,7 @@
    "llmMisses": 0,
    "llmTokens": 10303,
    "latencyMs": [
-    11
+    11.3
    ],
    "recordedLlmMs": 2741,
    "usedLlm": true,
@@ -2619,7 +2619,7 @@
    "llmMisses": 0,
    "llmTokens": 10092,
    "latencyMs": [
-    10.9
+    10
    ],
    "recordedLlmMs": 2677,
    "usedLlm": true,
@@ -2647,7 +2647,7 @@
    "llmMisses": 0,
    "llmTokens": 22003,
    "latencyMs": [
-    24.4
+    16.1
    ],
    "recordedLlmMs": 8808,
    "usedLlm": true,
@@ -2675,7 +2675,7 @@
    "llmMisses": 0,
    "llmTokens": 10183,
    "latencyMs": [
-    15.5
+    14.5
    ],
    "recordedLlmMs": 2159,
    "usedLlm": true,
@@ -2702,7 +2702,7 @@
    "llmMisses": 0,
    "llmTokens": 10130,
    "latencyMs": [
-    16.8
+    14.1
    ],
    "recordedLlmMs": 1962,
    "usedLlm": true,
@@ -2739,66 +2739,66 @@
   },
   {
    "conv": "str-m1",
-   "hash": "ccc1c65d38b7de63",
+   "hash": "cfa00a15645bda5b",
    "source": "hit",
    "status": 200,
-   "ms": 1774,
+   "ms": 4331,
    "usage": {
-    "input": 445,
-    "output": 161,
-    "cacheRead": 9267,
-    "cacheWrite": 325
-   }
-  },
-  {
-   "conv": "str-m1",
-   "hash": "0fe75976e684b1eb",
-   "source": "hit",
-   "status": 200,
-   "ms": 2601,
-   "usage": {
-    "input": 554,
-    "output": 495,
-    "cacheRead": 9592,
+    "input": 408,
+    "output": 185,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "01fe4bacb94cdc99",
+   "hash": "10fcbc9be9cec4fd",
    "source": "hit",
    "status": 200,
-   "ms": 2376,
+   "ms": 3585,
    "usage": {
-    "input": 524,
-    "output": 477,
-    "cacheRead": 9592,
+    "input": 459,
+    "output": 451,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "05e5f56b9767c069",
+   "hash": "caee508a70cad97c",
    "source": "hit",
    "status": 200,
-   "ms": 2451,
+   "ms": 3852,
    "usage": {
-    "input": 559,
-    "output": 468,
-    "cacheRead": 9592,
+    "input": 496,
+    "output": 623,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },
   {
    "conv": "str-m1",
-   "hash": "f60f203e2c67eb97",
+   "hash": "477ad3e5059feab2",
    "source": "hit",
    "status": 200,
-   "ms": 2826,
+   "ms": 2773,
    "usage": {
-    "input": 594,
-    "output": 198,
-    "cacheRead": 9592,
+    "input": 531,
+    "output": 467,
+    "cacheRead": 9555,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "str-m1",
+   "hash": "637c6d4fe6e4662b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2824,
+   "usage": {
+    "input": 566,
+    "output": 181,
+    "cacheRead": 9555,
     "cacheWrite": 0
    }
   },

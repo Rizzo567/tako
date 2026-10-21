@@ -30,6 +30,8 @@ import {PREZZO_FISSO_CASES} from './cases/prezzo-fisso-1021.js'
 import {FIXED_SECURITY,fixedChecks} from './fixed-checks.js'
 import {MULTITURNO_CASES} from './cases/multiturno-1021.js'
 import {ADV_SERA_CASES} from './cases/adv-sera.js'
+import {NOTTE_CASES} from './cases/notte-1022.js'
+import {CACCIA_CASES} from './cases/notte-1022-caccia.js'
 import {SERA_SECURITY,seraChecks} from './sera-checks.js'
 import {PARLATO_CASES} from './cases/parlato-sporco.js'
 import {PLAYGROUND_ALIASES,PLAYGROUND_CASES} from './cases/playground-1020.js'
@@ -41,6 +43,8 @@ const SETS:Record<string,Conversation[]>={victoria:VICTORIA_CASES,banco:BV_CASES
 SETS.prezzofisso=PREZZO_FISSO_CASES // set prezzo fisso (21/10): controlli fixedChecks (fixed-checks.ts)
 // 21/10 sera (prova dal vivo di Manuel sul QA): conversazione vera + varianti, e batteria avversaria; controlli seraChecks (sera-checks.ts)
 SETS.multiturno=MULTITURNO_CASES;SETS['adv-sera']=ADV_SERA_CASES
+SETS['notte-1022']=NOTTE_CASES // run notturna 22/10: fase 1
+SETS['notte-caccia']=CACCIA_CASES // run notturna 22/10: fase 2 caccia ai bug
 if(process.env.TAKO_HAIKU&&!SETS[SET])throw new Error('TAKO_HAIKU_SET sconosciuto: '+SET+' '+Object.keys(SETS).join('|'))
 const only=process.env.TAKO_HAIKU_ONLY?.split(',')
 const convs=(SETS[SET]??[]).filter(c=>!only||only.includes(c.id))

@@ -1,0 +1,2903 @@
+{
+ "set": "lunghi",
+ "metriche": {
+  "set": "lunghi",
+  "modo": "record",
+  "conversazioni": 42,
+  "misurate": 42,
+  "nonMisurate": [],
+  "messaggi": 78,
+  "corrette": 40,
+  "percentuale": 95.2,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 2,
+  "domandePer10Messaggi": 0.6,
+  "domandeNonAttesePer10": 0.1,
+  "latenzaAnthropicMs": {
+   "p50": 4086,
+   "p95": 6999,
+   "chiamate": 81
+  },
+  "latenzaTurnoMs": {
+   "p50": 57,
+   "p95": 138,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1.04,
+  "tokenMediPerMessaggio": {
+   "input": 330,
+   "output": 803,
+   "cacheRead": 10435,
+   "cacheWrite": 21
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 81,
+   "su": 81,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.042226,
+   "perMessaggioUsd": 0.000541,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 81,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 6.5
+ },
+ "codici": {
+  "chiarimento-mancante": {
+   "GRAVE": 0,
+   "MEDIO": 2,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "lng-01",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n2. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n3. *Tagliere misto*: *finito*\n4. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n5. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 eh allora senti, la carbonara a 12,50, poi gli gnocchi ai quattro formaggi a 11 e è finito il tagliere, e poi il cappuccino a 2 euro, ah e la cotoletta a 16",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21753,
+   "latencyMs": [
+    268.7,
+    117.7
+   ],
+   "recordedLlmMs": 11613,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-02",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Diavola*: prezzo da 8,50 € a *9,50 €*\n2. *Lasagna al forno*: *finito*\n3. *Pasta e fagioli*: *nascosto* dal menu\n4. *Margherita*: prezzo da 7,00 € a *8,00 €*\n5. *Birra media*: prezzo da 5,00 € a *5,50 €*\n6. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Fatto, ho pubblicato le modifiche.\n\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "la diavola a 9 anzi 9,50 e è finita la lasagna, e poi togli la pasta e fagioli, ah e la margherita a 8 euro anziché 7, la birra media a 5,50, poi aggiungi tra le pizze la bufalina a 10",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21880,
+   "latencyMs": [
+    163.1,
+    39
+   ],
+   "recordedLlmMs": 6756,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-03",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n2. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n3. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n4. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n5. *Tagliere misto*: *finito*\n6. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n7. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "la tagliata diciannove euro, e poi aggiungi nei dolci il cannolo a 4 euro, ah e la carbonara a 12,50, gli gnocchi ai quattro formaggi a 11, poi è finito il tagliere e il cappuccino a 2 euro, e poi la cotoletta a 16",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22175,
+   "latencyMs": [
+    127,
+    31.6
+   ],
+   "recordedLlmMs": 5910,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-04",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, ho preparato le modifiche. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Panna cotta*: *finito*\n2. *Burger classico*: spostato in *Secondi*\n3. *Diavola*: prezzo da 8,50 € a *9,50 €*\n4. *Lasagna al forno*: *finito*\n5. *Pasta e fagioli*: *nascosto* dal menu\n6. *Margherita*: prezzo da 7,00 € a *8,00 €*\n7. *Birra media*: prezzo da 5,00 € a *5,50 €*\n8. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "🎤 la panna cotta non c'è più, ah e sposta il burger classico nei secondi, la diavola a 9 anzi 9,50, poi è finita la lasagna e togli la pasta e fagioli, e poi la margherita a 8 euro anziché 7, ah e la birra media a 5,50, aggiungi tra le pizze la bufalina a 10",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22325,
+   "latencyMs": [
+    126.3,
+    28.5
+   ],
+   "recordedLlmMs": 7695,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-05",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n2. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n4. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n5. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "aggiungi tra le pizze la bufalina a 10, il tiramisù a 6 euro, poi la tagliata diciannove euro e aggiungi nei dolci il cannolo a 4 euro, e poi la carbonara a 12,50",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22110,
+   "latencyMs": [
+    77.8,
+    27.2
+   ],
+   "recordedLlmMs": 7249,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-06",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n2. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n3. *Panna cotta*: *finito*\n4. *Burger classico*: spostato in *Secondi*\n5. *Diavola*: prezzo da 8,50 € a *9,50 €*\n6. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "il cappuccino a 2 euro, poi la cotoletta a 16 e la panna cotta non c'è più, e poi sposta il burger classico nei secondi, ah e la diavola a 9 anzi 9,50, è finita la lasagna",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21410,
+   "latencyMs": [
+    82.1,
+    25.6
+   ],
+   "recordedLlmMs": 4711,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-07",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, sono sette modifiche. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Margherita*: prezzo da 7,00 € a *8,00 €*\n2. *Birra media*: prezzo da 5,00 € a *5,50 €*\n3. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n4. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n5. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n6. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n7. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "🎤 allora, la margherita a 8 euro anziché 7 e la birra media a 5,50, e poi aggiungi tra le pizze la bufalina a 10, ah e il tiramisù a 6 euro, la tagliata diciannove euro, poi aggiungi nei dolci il cannolo a 4 euro e la carbonara a 12,50",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22280,
+   "latencyMs": [
+    121.9,
+    27.2
+   ],
+   "recordedLlmMs": 7708,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-08",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5",
+    "price|Gnocchi 4 formaggi|11"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5",
+    "price|Gnocchi 4 formaggi|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n2. *Tagliere misto*: *finito*\n3. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n5. *Panna cotta*: *finito*\n6. *Burger classico*: spostato in *Secondi*\n7. *Diavola*: prezzo da 8,50 € a *9,50 €*\n8. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "gli gnocchi ai quattro formaggi a 11, e poi è finito il tagliere, ah e il cappuccino a 2 euro, la cotoletta a 16, poi la panna cotta non c'è più e sposta il burger classico nei secondi, e poi la diavola a 9 anzi 9,50, ah e è finita la lasagna",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22733,
+   "latencyMs": [
+    122.6,
+    26.6
+   ],
+   "recordedLlmMs": 9658,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-09",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Lasagna al forno*: *finito*\n2. *Pasta e fagioli*: *nascosto* dal menu\n3. *Margherita*: prezzo da 7,00 € a *8,00 €*\n4. *Birra media*: prezzo da 5,00 € a *5,50 €*\n5. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "è finita la lasagna, ah e togli la pasta e fagioli, la margherita a 8 euro anziché 7, poi la birra media a 5,50 e aggiungi tra le pizze la bufalina a 10",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22048,
+   "latencyMs": [
+    69.7,
+    25.6
+   ],
+   "recordedLlmMs": 5899,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-10",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, preparo: *Cannolo* nei Dolci, *Carbonara*, *Gnocchi 4 formaggi*, *Tagliere misto* esaurito, *Cappuccino* e *Cotoletta alla milanese*. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n2. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n3. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n4. *Tagliere misto*: *finito*\n5. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n6. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 eh… aggiungi nei dolci il cannolo a 4 euro, la carbonara a 12,50, poi gli gnocchi ai quattro formaggi a 11 e è finito il tagliere, e poi il cappuccino a 2 euro, ah e la cotoletta a 16",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22419,
+   "latencyMs": [
+    95.9,
+    25.2
+   ],
+   "recordedLlmMs": 7602,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-11",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Burger classico*: spostato in *Secondi*\n2. *Diavola*: prezzo da 8,50 € a *9,50 €*\n3. *Lasagna al forno*: *finito*\n4. *Pasta e fagioli*: *nascosto* dal menu\n5. *Margherita*: prezzo da 7,00 € a *8,00 €*\n6. *Birra media*: prezzo da 5,00 € a *5,50 €*\n7. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "sposta il burger classico nei secondi, poi la diavola a 9 anzi 9,50 e è finita la lasagna, e poi togli la pasta e fagioli, ah e la margherita a 8 euro anziché 7, la birra media a 5,50, poi aggiungi tra le pizze la bufalina a 10",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22333,
+   "latencyMs": [
+    102.1,
+    24.9
+   ],
+   "recordedLlmMs": 8823,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-12",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n2. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n3. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n4. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n5. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n6. *Tagliere misto*: *finito*\n7. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n8. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "il tiramisù a 6 euro e la tagliata diciannove euro, e poi aggiungi nei dolci il cannolo a 4 euro, ah e la carbonara a 12,50, gli gnocchi ai quattro formaggi a 11, poi è finito il tagliere e il cappuccino a 2 euro, e poi la cotoletta a 16",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22505,
+   "latencyMs": [
+    125.4,
+    25.5
+   ],
+   "recordedLlmMs": 8177,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-13",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n2. *Panna cotta*: *finito*\n3. *Burger classico*: spostato in *Secondi*\n4. *Diavola*: prezzo da 8,50 € a *9,50 €*\n5. *Lasagna al forno*: *finito*",
+    "Perfetto, applico le modifiche.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "🎤 ok ascolta: la cotoletta a 16, e poi la panna cotta non c'è più, ah e sposta il burger classico nei secondi, la diavola a 9 anzi 9,50, poi è finita la lasagna",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21926,
+   "latencyMs": [
+    63.5,
+    24.2
+   ],
+   "recordedLlmMs": 7281,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-14",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, ho preparato le modifiche a birra media, tiramisù, tagliata, carbonara, più *Bufalina* tra le Pizze e *Cannolo* tra i Dolci. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Birra media*: prezzo da 5,00 € a *5,50 €*\n2. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n3. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n4. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n5. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n6. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche in sospeso.\n\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "la birra media a 5,50, ah e aggiungi tra le pizze la bufalina a 10, il tiramisù a 6 euro, poi la tagliata diciannove euro e aggiungi nei dolci il cannolo a 4 euro, e poi la carbonara a 12,50",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22271,
+   "latencyMs": [
+    94.2,
+    24.9
+   ],
+   "recordedLlmMs": 8009,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-15",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tagliere misto*: *finito*\n2. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n3. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n4. *Panna cotta*: *finito*\n5. *Burger classico*: spostato in *Secondi*\n6. *Diavola*: prezzo da 8,50 € a *9,50 €*\n7. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "è finito il tagliere, il cappuccino a 2 euro, poi la cotoletta a 16 e la panna cotta non c'è più, e poi sposta il burger classico nei secondi, ah e la diavola a 9 anzi 9,50, è finita la lasagna",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22000,
+   "latencyMs": [
+    88.2,
+    25.7
+   ],
+   "recordedLlmMs": 5408,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-16",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, ho preparato tutte le modifiche. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta e fagioli*: *nascosto* dal menu\n2. *Margherita*: prezzo da 7,00 € a *8,00 €*\n3. *Birra media*: prezzo da 5,00 € a *5,50 €*\n4. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n5. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n6. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n7. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n8. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "🎤 eh allora senti, togli la pasta e fagioli, poi la margherita a 8 euro anziché 7 e la birra media a 5,50, e poi aggiungi tra le pizze la bufalina a 10, ah e il tiramisù a 6 euro, la tagliata diciannove euro, poi aggiungi nei dolci il cannolo a 4 euro e la carbonara a 12,50",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22122,
+   "latencyMs": [
+    137.7,
+    28.2
+   ],
+   "recordedLlmMs": 6891,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-17",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n2. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n3. *Tagliere misto*: *finito*\n4. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n5. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 12,50 e gli gnocchi ai quattro formaggi a 11, e poi è finito il tagliere, ah e il cappuccino a 2 euro, la cotoletta a 16",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21616,
+   "latencyMs": [
+    76,
+    22.8
+   ],
+   "recordedLlmMs": 6418,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-18",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Diavola*: prezzo da 8,50 € a *9,50 €*\n2. *Lasagna al forno*: *finito*\n3. *Pasta e fagioli*: *nascosto* dal menu\n4. *Margherita*: prezzo da 7,00 € a *8,00 €*\n5. *Birra media*: prezzo da 5,00 € a *5,50 €*\n6. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "la diavola a 9 anzi 9,50, e poi è finita la lasagna, ah e togli la pasta e fagioli, la margherita a 8 euro anziché 7, poi la birra media a 5,50 e aggiungi tra le pizze la bufalina a 10",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21905,
+   "latencyMs": [
+    91.1,
+    24.1
+   ],
+   "recordedLlmMs": 5570,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-19",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n2. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n3. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n4. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n5. *Tagliere misto*: *finito*\n6. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n7. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 la tagliata diciannove euro, ah e aggiungi nei dolci il cannolo a 4 euro, la carbonara a 12,50, poi gli gnocchi ai quattro formaggi a 11 e è finito il tagliere, e poi il cappuccino a 2 euro, ah e la cotoletta a 16",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22602,
+   "latencyMs": [
+    108.2,
+    25.4
+   ],
+   "recordedLlmMs": 7797,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-20",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Panna cotta*: *finito*\n2. *Burger classico*: spostato in *Secondi*\n3. *Diavola*: prezzo da 8,50 € a *9,50 €*\n4. *Lasagna al forno*: *finito*\n5. *Pasta e fagioli*: *nascosto* dal menu\n6. *Margherita*: prezzo da 7,00 € a *8,00 €*\n7. *Birra media*: prezzo da 5,00 € a *5,50 €*\n8. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "la panna cotta non c'è più, sposta il burger classico nei secondi, poi la diavola a 9 anzi 9,50 e è finita la lasagna, e poi togli la pasta e fagioli, ah e la margherita a 8 euro anziché 7, la birra media a 5,50, poi aggiungi tra le pizze la bufalina a 10",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22454,
+   "latencyMs": [
+    106.8,
+    26.5
+   ],
+   "recordedLlmMs": 7872,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-21",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n2. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n3. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n4. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n5. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "aggiungi tra le pizze la bufalina a 10, poi il tiramisù a 6 euro e la tagliata diciannove euro, e poi aggiungi nei dolci il cannolo a 4 euro, ah e la carbonara a 12,50",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22247,
+   "latencyMs": [
+    71.6,
+    23.8
+   ],
+   "recordedLlmMs": 7491,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-22",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, ho preparato le modifiche su cappuccino, cotoletta, panna cotta, burger classico, diavola e lasagna. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n2. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n3. *Panna cotta*: *finito*\n4. *Burger classico*: spostato in *Secondi*\n5. *Diavola*: prezzo da 8,50 € a *9,50 €*\n6. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "🎤 allora, il cappuccino a 2 euro e la cotoletta a 16, e poi la panna cotta non c'è più, ah e sposta il burger classico nei secondi, la diavola a 9 anzi 9,50, poi è finita la lasagna",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21822,
+   "latencyMs": [
+    77.6,
+    21
+   ],
+   "recordedLlmMs": 6744,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-23",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, preparo queste 7 modifiche: *Margherita*, *Birra media*, *Bufalina* nelle Pizze, *Tiramisù*, *Tagliata di manzo*, *Cannolo* nei Dolci e *Spaghetti alla carbonara*. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Margherita*: prezzo da 7,00 € a *8,00 €*\n2. *Birra media*: prezzo da 5,00 € a *5,50 €*\n3. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n4. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n5. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n6. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n7. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "la margherita a 8 euro anziché 7, e poi la birra media a 5,50, ah e aggiungi tra le pizze la bufalina a 10, il tiramisù a 6 euro, poi la tagliata diciannove euro e aggiungi nei dolci il cannolo a 4 euro, e poi la carbonara a 12,50",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22458,
+   "latencyMs": [
+    112.3,
+    28.3
+   ],
+   "recordedLlmMs": 8819,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-24",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5",
+    "price|Gnocchi 4 formaggi|11"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5",
+    "price|Gnocchi 4 formaggi|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n2. *Tagliere misto*: *finito*\n3. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n4. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n5. *Panna cotta*: *finito*\n6. *Burger classico*: spostato in *Secondi*\n7. *Diavola*: prezzo da 8,50 € a *9,50 €*\n8. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "gli gnocchi ai quattro formaggi a 11, ah e è finito il tagliere, il cappuccino a 2 euro, poi la cotoletta a 16 e la panna cotta non c'è più, e poi sposta il burger classico nei secondi, ah e la diavola a 9 anzi 9,50, è finita la lasagna",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22578,
+   "latencyMs": [
+    122.8,
+    25.3
+   ],
+   "recordedLlmMs": 8258,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-25",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Lasagna al forno*: *finito*\n2. *Pasta e fagioli*: *nascosto* dal menu\n3. *Margherita*: prezzo da 7,00 € a *8,00 €*\n4. *Birra media*: prezzo da 5,00 € a *5,50 €*\n5. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "🎤 eh… è finita la lasagna, togli la pasta e fagioli, poi la margherita a 8 euro anziché 7 e la birra media a 5,50, e poi aggiungi tra le pizze la bufalina a 10",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21751,
+   "latencyMs": [
+    69.7,
+    26.5
+   ],
+   "recordedLlmMs": 5743,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-26",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n2. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n3. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n4. *Tagliere misto*: *finito*\n5. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n6. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, applico le modifiche.\n\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "aggiungi nei dolci il cannolo a 4 euro, poi la carbonara a 12,50 e gli gnocchi ai quattro formaggi a 11, e poi è finito il tagliere, ah e il cappuccino a 2 euro, la cotoletta a 16",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22625,
+   "latencyMs": [
+    92.3,
+    26.2
+   ],
+   "recordedLlmMs": 8462,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-27",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "move|Burger classico|Secondi",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Burger classico*: spostato in *Secondi*\n2. *Diavola*: prezzo da 8,50 € a *9,50 €*\n3. *Lasagna al forno*: *finito*\n4. *Pasta e fagioli*: *nascosto* dal menu\n5. *Margherita*: prezzo da 7,00 € a *8,00 €*\n6. *Birra media*: prezzo da 5,00 € a *5,50 €*\n7. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "sposta il burger classico nei secondi e la diavola a 9 anzi 9,50, e poi è finita la lasagna, ah e togli la pasta e fagioli, la margherita a 8 euro anziché 7, poi la birra media a 5,50 e aggiungi tra le pizze la bufalina a 10",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22254,
+   "latencyMs": [
+    105.1,
+    28.7
+   ],
+   "recordedLlmMs": 6578,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-28",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *Tiramisù*, *Tagliata di manzo*, *Carbonara*, *Gnocchi 4 formaggi*, *Cappuccino* e *Cotoletta alla milanese*, aggiungo *Cannolo* ai Dolci e segno *Tagliere misto* come esaurito. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n2. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n3. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n4. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n5. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n6. *Tagliere misto*: *finito*\n7. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n8. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico tutte le modifiche.\n\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 ok ascolta: il tiramisù a 6 euro, e poi la tagliata diciannove euro, ah e aggiungi nei dolci il cannolo a 4 euro, la carbonara a 12,50, poi gli gnocchi ai quattro formaggi a 11 e è finito il tagliere, e poi il cappuccino a 2 euro, ah e la cotoletta a 16",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22704,
+   "latencyMs": [
+    140.7,
+    25.7
+   ],
+   "recordedLlmMs": 8627,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-29",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "move|Burger classico|Secondi",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo preparato le modifiche su *Cotoletta alla milanese*, *Panna cotta*, *Burger classico*, *Diavola* e *Lasagna al forno*. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n2. *Panna cotta*: *finito*\n3. *Burger classico*: spostato in *Secondi*\n4. *Diavola*: prezzo da 8,50 € a *9,50 €*\n5. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "la cotoletta a 16, ah e la panna cotta non c'è più, sposta il burger classico nei secondi, poi la diavola a 9 anzi 9,50 e è finita la lasagna",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22256,
+   "latencyMs": [
+    63.1,
+    24.1
+   ],
+   "recordedLlmMs": 7197,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-30",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "price|Birra media|5.5",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Birra media*: prezzo da 5,00 € a *5,50 €*\n2. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n3. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n4. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n5. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n6. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "la birra media a 5,50, aggiungi tra le pizze la bufalina a 10, poi il tiramisù a 6 euro e la tagliata diciannove euro, e poi aggiungi nei dolci il cannolo a 4 euro, ah e la carbonara a 12,50",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21995,
+   "latencyMs": [
+    96.8,
+    24.6
+   ],
+   "recordedLlmMs": 6217,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-31",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "available|Panna cotta|false",
+    "available|Tagliere misto|false",
+    "move|Burger classico|Secondi",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Diavola|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tagliere misto*: *finito*\n2. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n3. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n4. *Panna cotta*: *finito*\n5. *Burger classico*: spostato in *Secondi*\n6. *Diavola*: prezzo da 8,50 € a *9,50 €*\n7. *Lasagna al forno*: *finito*",
+    "Perfetto, pubblico le modifiche.\n\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n*Panna cotta*: *finito*\n*Burger classico*: spostato in *Secondi*\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*"
+   ],
+   "turns": [
+    "🎤 eh allora senti, è finito il tagliere, poi il cappuccino a 2 euro e la cotoletta a 16, e poi la panna cotta non c'è più, ah e sposta il burger classico nei secondi, la diavola a 9 anzi 9,50, poi è finita la lasagna",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22490,
+   "latencyMs": [
+    92.2,
+    24.2
+   ],
+   "recordedLlmMs": 8756,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-32",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "actual": [
+    "create|bufalina|10|pizze",
+    "create|cannolo|4|dolci",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Margherita|8",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19",
+    "price|Tiramisù|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo preparato 8 modifiche: tolgo la *Pasta e fagioli*, la *Margherita* a 8 €, la *Birra media* a 5,50 €, aggiungo la *Bufalina* tra le pizze a 10 €, il *Tiramisù* a 6 €, la *Tagliata di manzo* a 19 €, aggiungo il *Cannolo* nei dolci a 4 € e la *Carbonara* a 12,50 €. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Pasta e fagioli*: *nascosto* dal menu\n2. *Margherita*: prezzo da 7,00 € a *8,00 €*\n3. *Birra media*: prezzo da 5,00 € a *5,50 €*\n4. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n5. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n6. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n7. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n8. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n*Tiramisù*: prezzo da 5,00 € a *6,00 €*\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "togli la pasta e fagioli e la margherita a 8 euro anziché 7, e poi la birra media a 5,50, ah e aggiungi tra le pizze la bufalina a 10, il tiramisù a 6 euro, poi la tagliata diciannove euro e aggiungi nei dolci il cannolo a 4 euro, e poi la carbonara a 12,50",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22321,
+   "latencyMs": [
+    134.6,
+    25.9
+   ],
+   "recordedLlmMs": 6474,
+   "usedLlm": true,
+   "note": "8 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-33",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n2. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n3. *Tagliere misto*: *finito*\n4. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n5. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 12,50, e poi gli gnocchi ai quattro formaggi a 11, ah e è finito il tagliere, il cappuccino a 2 euro, poi la cotoletta a 16",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21995,
+   "latencyMs": [
+    75.9,
+    22.7
+   ],
+   "recordedLlmMs": 7190,
+   "usedLlm": true,
+   "note": "5 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-34",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "available|Lasagna al forno|false",
+    "create|bufalina|10|pizze",
+    "hidden|Pasta e fagioli|true",
+    "price|Birra media|5.5",
+    "price|Diavola|9.5",
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Diavola*: prezzo da 8,50 € a *9,50 €*\n2. *Lasagna al forno*: *finito*\n3. *Pasta e fagioli*: *nascosto* dal menu\n4. *Margherita*: prezzo da 7,00 € a *8,00 €*\n5. *Birra media*: prezzo da 5,00 € a *5,50 €*\n6. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Diavola*: prezzo da 8,50 € a *9,50 €*\n*Lasagna al forno*: *finito*\n*Pasta e fagioli*: *nascosto* dal menu\n*Margherita*: prezzo da 7,00 € a *8,00 €*\n*Birra media*: prezzo da 5,00 € a *5,50 €*\nNuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "🎤 la diavola a 9 anzi 9,50, ah e è finita la lasagna, togli la pasta e fagioli, poi la margherita a 8 euro anziché 7 e la birra media a 5,50, e poi aggiungi tra le pizze la bufalina a 10",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21754,
+   "latencyMs": [
+    85.2,
+    24.6
+   ],
+   "recordedLlmMs": 5760,
+   "usedLlm": true,
+   "note": "6 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-35",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19"
+   ],
+   "actual": [
+    "available|Tagliere misto|false",
+    "create|cannolo|4|dolci",
+    "price|Cappuccino|2",
+    "price|Cotoletta alla milanese|16",
+    "price|Gnocchi 4 formaggi|11",
+    "price|Spaghetti alla carbonara|12.5",
+    "price|Tagliata di manzo|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, ho preparato sette modifiche: tagliata, cannolo nei *Dolci*, carbonara, *Gnocchi 4 formaggi*, *Tagliere misto* esaurito, cappuccino e cotoletta. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n2. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n3. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n4. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n5. *Tagliere misto*: *finito*\n6. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n7. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\nNuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n*Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n*Tagliere misto*: *finito*\n*Cappuccino*: prezzo da 1,80 € a *2,00 €*\n*Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "la tagliata diciannove euro, aggiungi nei dolci il cannolo a 4 euro, poi la carbonara a 12,50 e gli gnocchi ai quattro formaggi a 11, e poi è finito il tagliere, ah e il cappuccino a 2 euro, la cotoletta a 16",
+    "🎤 va bene"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22378,
+   "latencyMs": [
+    104.5,
+    26.2
+   ],
+   "recordedLlmMs": 7376,
+   "usedLlm": true,
+   "note": "7 richieste: riepilogo + OK, poi tutto scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-mig-1",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi *13 €* per la *Spaghetti alla carbonara*? Il prezzo 13.000 non è valido, quindi aspetto la tua conferma per quella parte.\n\nNon ancora pubblicato:\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n2. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n3. *Panna cotta*: *finito*\n4. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 12,50, poi la cotoletta a 16 e la panna cotta non c'è più, e poi aggiungi tra le pizze la bufalina a 10, la carbonara a 13.000"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 23084,
+   "latencyMs": [
+    82.2
+   ],
+   "recordedLlmMs": 9139,
+   "usedLlm": true,
+   "note": "«13.000»: una domanda, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-mig-2",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *Tiramisù*, *Gnocchi 4 formaggi*, segno il *Tagliere misto* come finito e nascondo la *Pasta e fagioli*. Per la *Carbonara* che prezzo intendi, 13 €? Scrivilo senza il punto delle migliaia.\n\nNon ancora pubblicato:\n1. *Tiramisù*: prezzo da 5,00 € a *6,00 €*\n2. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*\n3. *Tagliere misto*: *finito*\n4. *Pasta e fagioli*: *nascosto* dal menu\n\n«la carbonara a 13.000»:\n1. *Spaghetti alla carbonara* (12,00 €)"
+   ],
+   "turns": [
+    "🎤 eh il tiramisù a 6 euro e gli gnocchi ai quattro formaggi a 11, e poi è finito il tagliere, ah e togli la pasta e fagioli, la carbonara a 13.000"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11475,
+   "latencyMs": [
+    41.9
+   ],
+   "recordedLlmMs": 5969,
+   "usedLlm": true,
+   "note": "«13.000»: una domanda, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-mig-3",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer la *Carbonara* intendi *13 €*? Rispondi OK per pubblicare.\n\nNon ancora pubblicato:\n1. *Margherita*: prezzo da 7,00 € a *8,00 €*\n2. *Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*\n3. Nuovo piatto *Cannolo* in *Dolci*: *4,00 €*\n4. *Burger classico*: spostato in *Secondi*\n\n«13.000»:\n1. *Spaghetti alla carbonara* (12,00 €)"
+   ],
+   "turns": [
+    "la margherita a 8 euro anziché 7, e poi la tagliata diciannove euro, ah e aggiungi nei dolci il cannolo a 4 euro, sposta il burger classico nei secondi, la carbonara a 13.000"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11852,
+   "latencyMs": [
+    48.4
+   ],
+   "recordedLlmMs": 6595,
+   "usedLlm": true,
+   "note": "«13.000»: una domanda, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-mig-4",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiorno la *Diavola* a 9,50, la *Birra media* a 5,50, il *Cappuccino* a 2 e aggiungo la *Bufalina* a 10 tra le Pizze. Per la *Carbonara* intendi 13 euro? Rispondi OK per pubblicare.\n\nNon ancora pubblicato:\n1. *Diavola*: prezzo da 8,50 € a *9,50 €*\n2. *Birra media*: prezzo da 5,00 € a *5,50 €*\n3. Nuovo piatto *Bufalina* in *Pizze*: *10,00 €*\n4. *Cappuccino*: prezzo da 1,80 € a *2,00 €*\n\n«la carbonara a 13.000»:\n1. *Spaghetti alla carbonara* (12,00 €)"
+   ],
+   "turns": [
+    "🎤 eh la diavola a 9 anzi 9,50, ah e la birra media a 5,50, aggiungi tra le pizze la bufalina a 10, poi il cappuccino a 2 euro, la carbonara a 13.000"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11633,
+   "latencyMs": [
+    41.5
+   ],
+   "recordedLlmMs": 6142,
+   "usedLlm": true,
+   "note": "«13.000»: una domanda, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-mig-5",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer la *Carbonara* intendi *12,50 €* o un altro prezzo? Il 13.000 non l'ho capito come prezzo.\n\nNon ancora pubblicato:\n1. *Cotoletta alla milanese*: prezzo da 15,00 € a *16,00 €*\n2. *Lasagna al forno*: *finito*\n3. *Pasta e fagioli*: *nascosto* dal menu\n4. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "la cotoletta a 16, è finita la lasagna, poi togli la pasta e fagioli e la carbonara a 12,50, la carbonara a 13.000"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22466,
+   "latencyMs": [
+    57.1
+   ],
+   "recordedLlmMs": 9542,
+   "usedLlm": true,
+   "note": "«13.000»: una domanda, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-manuel",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiorno la *Carbonara* a 12,50, la *Pasta del giorno* a 9, la *Pasta al ragù* a 10 e gli altri primi di un euro in più. Per la *Carbonara* intendi *13 €*?\n\nNon ancora pubblicato:\n1. *Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*\n2. *pasta al ragù*: prezzo da 12,00 € a *10,00 €*\n3. *Pasta e fagioli*: prezzo da 9,00 € a *10,00 €*\n4. *Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *9,00 €*\n5. *Lasagna al forno*: prezzo da 11,00 € a *12,00 €*\n6. *Gnocchi 4 formaggi*: prezzo da 10,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "🎤 metti la carbonara a 12,50, la pasta del giorno a 9 euro anziché 8,50, poi la pasta al ragù a 10, la carbonara a 13.000, poi aumenta tutti i primi di un euro"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 25058,
+   "latencyMs": [
+    132.2
+   ],
+   "recordedLlmMs": 17037,
+   "usedLlm": true,
+   "note": "vocale vero di Manuel sul QA (timeout 11:30): una domanda (13.000 e carbonara detta due volte), nessuna scrittura, mai «non disponibile»",
+   "nonMisurato": false
+  },
+  {
+   "id": "lng-sposta-crea",
+   "family": "bv-multiple",
+   "menu": "mario",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Nuovo burger|Panini"
+   ],
+   "actual": [
+    "move|Nuovo burger|Panini"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Sottomenu di *Bevande* vuoi spostare il *Nuovo burger*: *Bibite* o *Caffetteria*?",
+    "Ho creato il sottomenu *Panini* nel Menu *Bevande*."
+   ],
+   "turns": [
+    "sposta il nuovo burger nel menù bevande",
+    "nei panini, crealo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21784,
+   "latencyMs": [
+    20.7,
+    35.7
+   ],
+   "recordedLlmMs": 5879,
+   "usedLlm": true,
+   "note": "la risposta che completa la domanda esegue anche lo spostamento",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "lng-01",
+   "hash": "844f4a1699d9b3ab",
+   "source": "hit",
+   "status": 200,
+   "ms": 9773,
+   "usage": {
+    "input": 114,
+    "output": 1027,
+    "cacheRead": 9267,
+    "cacheWrite": 688
+   }
+  },
+  {
+   "conv": "lng-01",
+   "hash": "625eed105fbd5bab",
+   "source": "hit",
+   "status": 200,
+   "ms": 1840,
+   "usage": {
+    "input": 524,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-02",
+   "hash": "c054b83cc037c9c2",
+   "source": "hit",
+   "status": 200,
+   "ms": 4935,
+   "usage": {
+    "input": 127,
+    "output": 988,
+    "cacheRead": 9267,
+    "cacheWrite": 929
+   }
+  },
+  {
+   "conv": "lng-02",
+   "hash": "44953a10dff68841",
+   "source": "hit",
+   "status": 200,
+   "ms": 1821,
+   "usage": {
+    "input": 434,
+    "output": 180,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-03",
+   "hash": "bf37fe1108a67f72",
+   "source": "hit",
+   "status": 200,
+   "ms": 4502,
+   "usage": {
+    "input": 143,
+    "output": 1109,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-03",
+   "hash": "84c0d42c14540cc7",
+   "source": "hit",
+   "status": 200,
+   "ms": 1408,
+   "usage": {
+    "input": 594,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-04",
+   "hash": "5f4d787965084a8a",
+   "source": "hit",
+   "status": 200,
+   "ms": 5738,
+   "usage": {
+    "input": 155,
+    "output": 1380,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-04",
+   "hash": "5cf05ac63c08fd74",
+   "source": "hit",
+   "status": 200,
+   "ms": 1957,
+   "usage": {
+    "input": 461,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-05",
+   "hash": "2841a97373ba13f5",
+   "source": "hit",
+   "status": 200,
+   "ms": 5714,
+   "usage": {
+    "input": 118,
+    "output": 1112,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-05",
+   "hash": "e7b12708061cda24",
+   "source": "hit",
+   "status": 200,
+   "ms": 1535,
+   "usage": {
+    "input": 551,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-06",
+   "hash": "38ee68b66a96b6e1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2300,
+   "usage": {
+    "input": 118,
+    "output": 563,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-06",
+   "hash": "9a50a626061c8652",
+   "source": "hit",
+   "status": 200,
+   "ms": 2411,
+   "usage": {
+    "input": 400,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-07",
+   "hash": "77d4ef5056ca591c",
+   "source": "hit",
+   "status": 200,
+   "ms": 5685,
+   "usage": {
+    "input": 151,
+    "output": 1193,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-07",
+   "hash": "bcae20d7b4343d31",
+   "source": "hit",
+   "status": 200,
+   "ms": 2023,
+   "usage": {
+    "input": 607,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-08",
+   "hash": "5f13ed2912f1c6fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 7685,
+   "usage": {
+    "input": 152,
+    "output": 1788,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-08",
+   "hash": "3a392a3b53f1372e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1973,
+   "usage": {
+    "input": 464,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-09",
+   "hash": "6607b7267b078cda",
+   "source": "hit",
+   "status": 200,
+   "ms": 4648,
+   "usage": {
+    "input": 108,
+    "output": 1118,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-09",
+   "hash": "ea09213b99538d69",
+   "source": "hit",
+   "status": 200,
+   "ms": 1251,
+   "usage": {
+    "input": 493,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-10",
+   "hash": "7b0b4d846870850f",
+   "source": "hit",
+   "status": 200,
+   "ms": 6301,
+   "usage": {
+    "input": 132,
+    "output": 1525,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-10",
+   "hash": "fc853b707015cad3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1301,
+   "usage": {
+    "input": 433,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-11",
+   "hash": "92566b6303dcad45",
+   "source": "hit",
+   "status": 200,
+   "ms": 6489,
+   "usage": {
+    "input": 143,
+    "output": 1287,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-11",
+   "hash": "561e523725a33b92",
+   "source": "hit",
+   "status": 200,
+   "ms": 2334,
+   "usage": {
+    "input": 574,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-12",
+   "hash": "ee3760c99693339c",
+   "source": "hit",
+   "status": 200,
+   "ms": 6336,
+   "usage": {
+    "input": 156,
+    "output": 1520,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-12",
+   "hash": "6f7e7645e00c838a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1841,
+   "usage": {
+    "input": 500,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-13",
+   "hash": "36b6781c9cf97943",
+   "source": "hit",
+   "status": 200,
+   "ms": 5308,
+   "usage": {
+    "input": 111,
+    "output": 1017,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-13",
+   "hash": "77ff8056c694dfb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1973,
+   "usage": {
+    "input": 471,
+    "output": 176,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-14",
+   "hash": "33a800c6e7a0e488",
+   "source": "hit",
+   "status": 200,
+   "ms": 6079,
+   "usage": {
+    "input": 131,
+    "output": 1373,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-14",
+   "hash": "bf87de1f49fce173",
+   "source": "hit",
+   "status": 200,
+   "ms": 1930,
+   "usage": {
+    "input": 433,
+    "output": 183,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-15",
+   "hash": "eb926a47b323284e",
+   "source": "hit",
+   "status": 200,
+   "ms": 4086,
+   "usage": {
+    "input": 127,
+    "output": 995,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-15",
+   "hash": "a4d8651e6e9b1fce",
+   "source": "hit",
+   "status": 200,
+   "ms": 1322,
+   "usage": {
+    "input": 549,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-16",
+   "hash": "9072a4c820dffaf8",
+   "source": "hit",
+   "status": 200,
+   "ms": 4876,
+   "usage": {
+    "input": 169,
+    "output": 1120,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-16",
+   "hash": "af85ea580cad39cf",
+   "source": "hit",
+   "status": 200,
+   "ms": 2015,
+   "usage": {
+    "input": 504,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-17",
+   "hash": "71fad47d65ea5841",
+   "source": "hit",
+   "status": 200,
+   "ms": 4553,
+   "usage": {
+    "input": 105,
+    "output": 908,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-17",
+   "hash": "4f273002783f8e76",
+   "source": "hit",
+   "status": 200,
+   "ms": 1865,
+   "usage": {
+    "input": 515,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-18",
+   "hash": "76c884fa7f8fcdb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 4197,
+   "usage": {
+    "input": 127,
+    "output": 1015,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-18",
+   "hash": "3bd590dc950482bd",
+   "source": "hit",
+   "status": 200,
+   "ms": 1373,
+   "usage": {
+    "input": 434,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-19",
+   "hash": "28fbf85d839ed24d",
+   "source": "hit",
+   "status": 200,
+   "ms": 6391,
+   "usage": {
+    "input": 144,
+    "output": 1534,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-19",
+   "hash": "29c609d6b373c17f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1406,
+   "usage": {
+    "input": 595,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-20",
+   "hash": "53ebffce876f166b",
+   "source": "hit",
+   "status": 200,
+   "ms": 6691,
+   "usage": {
+    "input": 155,
+    "output": 1503,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-20",
+   "hash": "59853ca141600bb4",
+   "source": "hit",
+   "status": 200,
+   "ms": 1181,
+   "usage": {
+    "input": 467,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-21",
+   "hash": "884fda307dc25bb8",
+   "source": "hit",
+   "status": 200,
+   "ms": 5479,
+   "usage": {
+    "input": 121,
+    "output": 1243,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-21",
+   "hash": "d4861b4a76c7269d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2012,
+   "usage": {
+    "input": 554,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-22",
+   "hash": "9b59b3549a9656db",
+   "source": "hit",
+   "status": 200,
+   "ms": 4686,
+   "usage": {
+    "input": 120,
+    "output": 982,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-22",
+   "hash": "c6fd73b3486896b0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2058,
+   "usage": {
+    "input": 391,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-23",
+   "hash": "e845a5fde8bd96af",
+   "source": "hit",
+   "status": 200,
+   "ms": 6470,
+   "usage": {
+    "input": 150,
+    "output": 1386,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-23",
+   "hash": "cfc4bf6c73622d30",
+   "source": "hit",
+   "status": 200,
+   "ms": 2349,
+   "usage": {
+    "input": 593,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-24",
+   "hash": "042e7fdb8b964c12",
+   "source": "hit",
+   "status": 200,
+   "ms": 6999,
+   "usage": {
+    "input": 150,
+    "output": 1637,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-24",
+   "hash": "ba3cd306bd8afd90",
+   "source": "hit",
+   "status": 200,
+   "ms": 1259,
+   "usage": {
+    "input": 462,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-25",
+   "hash": "5836bb9f6011a0ec",
+   "source": "hit",
+   "status": 200,
+   "ms": 4134,
+   "usage": {
+    "input": 111,
+    "output": 815,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-25",
+   "hash": "5fc9274644eb7edd",
+   "source": "hit",
+   "status": 200,
+   "ms": 1609,
+   "usage": {
+    "input": 496,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-26",
+   "hash": "f201d2d324c04c7a",
+   "source": "hit",
+   "status": 200,
+   "ms": 6982,
+   "usage": {
+    "input": 129,
+    "output": 1727,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-26",
+   "hash": "e2fcaf2da7092fbb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1480,
+   "usage": {
+    "input": 442,
+    "output": 176,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-27",
+   "hash": "e731961dc326f9c3",
+   "source": "hit",
+   "status": 200,
+   "ms": 5109,
+   "usage": {
+    "input": 141,
+    "output": 1212,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-27",
+   "hash": "a39ef12cac33a63f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1469,
+   "usage": {
+    "input": 572,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-28",
+   "hash": "8213cd52136e353d",
+   "source": "hit",
+   "status": 200,
+   "ms": 6870,
+   "usage": {
+    "input": 167,
+    "output": 1711,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-28",
+   "hash": "2918cf809eddac29",
+   "source": "hit",
+   "status": 200,
+   "ms": 1757,
+   "usage": {
+    "input": 494,
+    "output": 181,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-29",
+   "hash": "ee741064047c6799",
+   "source": "hit",
+   "status": 200,
+   "ms": 5675,
+   "usage": {
+    "input": 102,
+    "output": 1347,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-29",
+   "hash": "eecfcd19df57447c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1522,
+   "usage": {
+    "input": 478,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-30",
+   "hash": "273115101f89be83",
+   "source": "hit",
+   "status": 200,
+   "ms": 4245,
+   "usage": {
+    "input": 131,
+    "output": 1077,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-30",
+   "hash": "e720491e7cd1c363",
+   "source": "hit",
+   "status": 200,
+   "ms": 1972,
+   "usage": {
+    "input": 458,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-31",
+   "hash": "852990104337ca1b",
+   "source": "hit",
+   "status": 200,
+   "ms": 6909,
+   "usage": {
+    "input": 135,
+    "output": 1469,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-31",
+   "hash": "f60f6a1a90d7d26a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1847,
+   "usage": {
+    "input": 557,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-32",
+   "hash": "0c891d0880723aa3",
+   "source": "hit",
+   "status": 200,
+   "ms": 5049,
+   "usage": {
+    "input": 162,
+    "output": 1333,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-32",
+   "hash": "03df5b5f99a1c7d2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1425,
+   "usage": {
+    "input": 497,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-33",
+   "hash": "a850ada675dfc25c",
+   "source": "hit",
+   "status": 200,
+   "ms": 5676,
+   "usage": {
+    "input": 106,
+    "output": 1285,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-33",
+   "hash": "c61d558eedae811a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1514,
+   "usage": {
+    "input": 516,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-34",
+   "hash": "502563c4b40841e0",
+   "source": "hit",
+   "status": 200,
+   "ms": 4344,
+   "usage": {
+    "input": 127,
+    "output": 864,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-34",
+   "hash": "1544bab0dd5e6945",
+   "source": "hit",
+   "status": 200,
+   "ms": 1416,
+   "usage": {
+    "input": 434,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-35",
+   "hash": "095d1d9c74cb3e80",
+   "source": "hit",
+   "status": 200,
+   "ms": 5306,
+   "usage": {
+    "input": 141,
+    "output": 1336,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-35",
+   "hash": "642764a3eabd0028",
+   "source": "hit",
+   "status": 200,
+   "ms": 2070,
+   "usage": {
+    "input": 572,
+    "output": 178,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-1",
+   "hash": "145bfb31f91e82af",
+   "source": "hit",
+   "status": 200,
+   "ms": 6078,
+   "usage": {
+    "input": 105,
+    "output": 1293,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-1",
+   "hash": "cd9d0856d8578ba0",
+   "source": "hit",
+   "status": 200,
+   "ms": 3061,
+   "usage": {
+    "input": 756,
+    "output": 538,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-2",
+   "hash": "1b136cc96a7295b2",
+   "source": "hit",
+   "status": 200,
+   "ms": 5969,
+   "usage": {
+    "input": 108,
+    "output": 1412,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-3",
+   "hash": "1071dd4b98f9893d",
+   "source": "hit",
+   "status": 200,
+   "ms": 6595,
+   "usage": {
+    "input": 116,
+    "output": 1540,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-4",
+   "hash": "b3c2931a67576cba",
+   "source": "hit",
+   "status": 200,
+   "ms": 6142,
+   "usage": {
+    "input": 112,
+    "output": 1325,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-5",
+   "hash": "ab7e460b05d6831c",
+   "source": "hit",
+   "status": 200,
+   "ms": 6585,
+   "usage": {
+    "input": 90,
+    "output": 1298,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-mig-5",
+   "hash": "e73bd17933916746",
+   "source": "hit",
+   "status": 200,
+   "ms": 2957,
+   "usage": {
+    "input": 709,
+    "output": 459,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-manuel",
+   "hash": "55aed9fced9df56c",
+   "source": "hit",
+   "status": 200,
+   "ms": 8488,
+   "usage": {
+    "input": 112,
+    "output": 1990,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-manuel",
+   "hash": "5729435eabef3cd8",
+   "source": "hit",
+   "status": 200,
+   "ms": 8549,
+   "usage": {
+    "input": 1135,
+    "output": 1911,
+    "cacheRead": 9955,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-sposta-crea",
+   "hash": "7f3fa1d7ada064eb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2923,
+   "usage": {
+    "input": 53,
+    "output": 551,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "lng-sposta-crea",
+   "hash": "864325b6d78fb8cb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2956,
+   "usage": {
+    "input": 210,
+    "output": 578,
+    "cacheRead": 10196,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

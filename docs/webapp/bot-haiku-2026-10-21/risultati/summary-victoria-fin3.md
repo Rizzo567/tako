@@ -1,6 +1,6 @@
 # Motore Haiku · set victoria · record
 
-Generato da tests/eval/eval-haiku.test.ts (2026-10-21T15:40:23.977Z).
+Generato da tests/eval/eval-haiku.test.ts (2026-10-21T20:09:12.172Z).
 
 | Voce | Valore |
 |---|---|
@@ -10,7 +10,7 @@ Generato da tests/eval/eval-haiku.test.ts (2026-10-21T15:40:23.977Z).
 | MEDI | 0 |
 | Domande ogni 10 messaggi | 2.7 (non attese 0.9) |
 | Latenza chiamata Haiku p50 / p95 | 2543 / 3675 ms (11 chiamate) |
-| Latenza turno p50 / p95 | 51 / 222 ms (misurata dal vivo) |
+| Latenza turno p50 / p95 | 41 / 176 ms (misurata dal vivo) |
 | Chiamate Haiku per messaggio | 1 |
 | Token medi per messaggio (in · out · cache read · cache write) | 86 · 300 · 9900 · 157 |
 | Cache hit (cache_read > 0) | 11/11 (100%) |
@@ -18,7 +18,7 @@ Generato da tests/eval/eval-haiku.test.ts (2026-10-21T15:40:23.977Z).
 | Costo equivalente dal vivo · per messaggio | 0.003052 $ · 0.000277 $ |
 | Chiamate Anthropic: hit · vere · mock · assenti · rifiutate · errori · 429 | 11 · 0 · 0 · 0 · 0 · 0 · 0 |
 | **V4 richieste Groq chat** | **0** |
-| Durata del giro | 2.4 s |
+| Durata del giro | 1.9 s |
 
 | Codice | GRAVE | MEDIO | BASSO |
 |---|---|---|---|

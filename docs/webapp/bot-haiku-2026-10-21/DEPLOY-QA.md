@@ -80,6 +80,7 @@ node scripts/serverless/bundle-sections-diff.mjs ~/.config/tako-webapp/room-fix-
 node scripts/serverless/check-active.mjs --local > $RB/pre-deploy.json; cat $RB/pre-deploy.json   # version 127 + sha locale
 cp release/serverless/candidate/index.ts $RB/candidate-index-v128-haiku.ts
 node scripts/translations/deploy-projection.mjs                                # {"projectionDeploy":"PASS"}; log in ~/.config/tako-webapp/translation-projection-deploy.log
+node scripts/serverless/wait-edge-ready.mjs                                    # {"ready":true,...}: aspetta che la versione nuova risponda (v140: ~70 s dopo il deploy). Prima di questo NIENTE prove dal vivo.
 node scripts/serverless/check-active.mjs --local                               # annota version (atteso 128) ed ezbr nuovi
 node scripts/serverless/check-active.mjs 128 <ezbr-appena-letto>               # ok:true
 ```
