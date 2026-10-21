@@ -1,4 +1,5 @@
 # STATO — motore Haiku 5.5 (21/10/2026)
 
-**Aggiornato 15:10 — edge v133 online (messaggi lunghi senza timeout, «sposta→crealo» corretto); lettura v27 e worker 3e44eedc invariati.** Vedi `REPORT.md` §0quater.
-- Prossimo (via di Manuel 21/10): menu a prezzo fisso + PDF multipli, ripartendo da `wip/menu-prezzo-fisso` (2d1112a) e dal contratto 242a2da.
+**Aggiornato 18:00 — prezzo fisso + PDF multipli COSTRUITI E VERIFICATI, NON online (nessun deploy, Victoria non migrata).** Online: edge v133, lettura v27, worker 3e44eedc. Vedi `REPORT.md` §0quinquies, procedura `../menu-prezzo-fisso-2026-10-21/GO-LIVE.md`.
+- Problemi aperti prima del go-live: generazione PDF sull'edge vero mai provata; PDF nuovi senza logo né immagini (diversi dal PDF fisso di Victoria, che resta finché Manuel approva); titoli Cena «SOLO PRIMO/SOLO SECONDO»; «Compreso» senza etichetta sulla pagina ma «Compreso:» nel PDF; opzione «Tutto il menu» mista a opzioni con sottomenu → il suo blocco resta vuoto/«Altre proposte» sulla pagina; sostituzione «gnocchi al ragù» può riusare «Gnocchi al pomodoro»; promo visibile nei menu fissi; ruolo manager senza permessi menu (già prima); scheda PDF su mobile solo dalla ricerca; `PUT /api/restaurants/me` senza lock su settings (PDF salvati); ricerca token PDF senza indice; vecchia schermata `06-screens-gestione.js` dice ancora «sezione» per i sottomenu; toast globale mobile copre l'header.
+- Prossimo: decisione di Manuel su go-live (GO-LIVE.md passi 0–4), poi migrazione Victoria (passo 5) e confronto PDF prima di togliere `supplied-menu-pdf.ts`.

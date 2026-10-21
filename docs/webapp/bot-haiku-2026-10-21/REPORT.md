@@ -6,6 +6,40 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+## 0quinquies. AGGIORNAMENTO 21/10 15:10–18:00 — Menu a prezzo fisso + PDF multipli: COSTRUITO E VERIFICATO, NON ONLINE
+
+**Niente deploy, niente migrazione dei dati veri di Victoria** (istruzione di Manuel). Online resta tutto come §0quater (edge v133, lettura v27, worker 3e44eedc). Procedura pronta: `docs/webapp/menu-prezzo-fisso-2026-10-21/GO-LIVE.md`.
+
+**Cosa c'è** (commit 242a2da → b174a644, branch pushato):
+- Dati: Menu `pricing carta|fisso`, opzioni (nome · prezzo · nota · sottomenu compresi), «Compreso»; i prezzi dei piatti restano salvati passando a fisso.
+- Pagina pubblica a blocchi per opzione. Copia locale di Victoria migrata: Pranzo identico al pixel; Cena identica salvo i titoli «PRIMO»→«SOLO PRIMO», «SECONDO»→«SOLO SECONDO».
+- Dashboard ristoratore: scelta carta/fisso, opzioni, «Tutto il menu», Compreso, «Sostituisci i piatti», anteprima, «I tuoi PDF» (più documenti, ordine dei menu, grafica, link fisso copia/rigenera/revoca). 54 scatti desktop+375 in `menu-prezzo-fisso-2026-10-21/screenshot-dashboard/`.
+- PDF: documenti salvati in `settings.pdfDocuments`, generati sempre dal menu pubblicato, link pubblico `/api/public/menu-pdf/:token`.
+- Bot: «il completo a cena passa a 17», «alza di un euro», opzioni nuove/tolte (con conferma), piatti nuovi a 0 € nei menu fissi, sostituzione dei piatti del giorno su più sottomenu (riusa i piatti esistenti, nasconde gli altri, mai elimina, «annulla» 10 min).
+- Migrazione Victoria: `scripts/victoria/fixed-price-migration.ts` (--plan/--execute/--restore con backup). Sulla copia del 19/10: 0 piatti persi, 10 doppioni tolti.
+
+**Giro di verifiche finale:**
+- Revisione avversariale della dashboard (agente separato): NON PASSA con 8 ALTO, tra cui la parola «categoria», la scelta carta/fisso doppia, due sistemi PDF, l'anteprima e il mobile 375. Tutti corretti nel giro unico; nella dashboard ora c'è «Sottomenu» (categoria) / «Sezione» (sottocategoria).
+- Banco col modello vero: il primo giro prezzofisso ha dato 48/75. Corretti 6 difetti del bot, tra cui il più grave: confermava «passa a 17 €» senza applicare. Correzione generale: le bozze di piani non applicati vengono scartate.
+
+| set | finale |
+|---|---|
+| prezzofisso | **73/75 (97,3%)**, 0 GRAVI sicurezza |
+| banco | 84/92 (91,3%) |
+| victoria | 10/10 |
+| struttura | 93/94 |
+| visibilita | 19/20 |
+| playground | 20/20 |
+| parlato | 29/30 |
+| adv150 | 136/150 (90,7%), 0 sicurezza |
+| lunghi | 40/42, 0 timeout, turno p50 4,2 s / p95 9,2 s |
+
+- Restano 2 casi prezzofisso. pf-piatto-nuovo-08 è un falso positivo del banco: il bot spiega che il prezzo è delle opzioni. pf-sostituzione-16 è vero: «gnocchi al ragù» rimostra «Gnocchi al pomodoro» invece di crearne uno nuovo.
+- tsc server/web verdi. vitest: nessun rosso nuovo (4 file con hook in timeout sotto carico, saltati se rieseguiti da soli: richiedono il server :3001). tests/web: gli stessi 23 rossi noti. Build edge PASS + lazy boot PASS; rispetto a v133 cambiano solo i moduli attesi (bot, prezzo fisso, PDF).
+- Spesa Anthropic cumulativa dei banchi: 1,62 $.
+
+**Problemi possibili (da leggere prima del go-live):** vedi il resoconto a Manuel e `STATO.md`.
+
 ## 0quater. AGGIORNAMENTO 21/10 14:00–15:10 — messaggi lunghi senza timeout, «sposta» non più perso: edge v133
 
 **Esito.** Deploy `tako-operational-candidate` **v133** (ezbr cbf863d3…); lettura (v27) e worker (3e44eedc) invariati.
