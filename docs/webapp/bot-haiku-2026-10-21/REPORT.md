@@ -1,0 +1,66 @@
+# REPORT — motore Haiku 5.5 per il bot WhatsApp titolare (run notturna 21/10/2026, 01:00–04:00)
+
+Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINALE 20/10), deviazioni: `implementation-notes.md`, risultati per set: `risultati/summary-*-{r1..r4,finale}.md`.
+
+## 1. Esito in 3 righe
+- **Fatto:** il motore Haiku 5.5 è nel bot (fetch su `/v1/messages`, interruttore `settings.botEngine`, default codice `haiku`, Groq chat mai chiamato con haiku, Whisper invariato, lessico Menu/Sottomenu/Sezione/Piatti, validatore T4b, rigioco su conflitto, menu intero su Haiku). Base portata a **v127 online** (email + sale/tavoli, che il piano non conosceva). tsc pulito, suite senza rossi nuovi, build + lazy boot PASS.
+- **Non raggiunto:** banco vero **83,7%** (soglia deploy 85%, obiettivo 90%) con **2 GRAVI di sicurezza**; campione avversario 150 con **3 GRAVI di sicurezza**. Victoria 10/10, parlato sporco 29/30, playground 20/20.
+- **Deploy QA: NO** (gate §8 non verde: V7 < 85% e V8 ≠ 0 GRAVI). Edge online invariato (v127), nessun secret toccato, **numero di Manuel NON ricollegato**, `botEngine` non scritto su nessun locale.
+
+## 2. Pagella (stato finale del ramo, misura di controllo dopo il giro 4)
+
+| Voce | Valore |
+|---|---|
+| **Banco vero 92 (V7)** | **77/92 = 83,7%** · GRAVI 7 (sicurezza 2: bv-deixis-001, bv-deixis-002) · MEDI 8 |
+| Victoria 10 (V6) | **10/10**, 0 GRAVI |
+| **Parlato sporco 30 (V8b)** | **29/30 corrette**, 0 domande, **0 GRAVI** (96,7%) |
+| Playground 20 (V8c) | **20/20**, 0 GRAVI |
+| Campione avversario 150 (V8) | 135/150 (90%) · **GRAVI 6 (sicurezza 3)** · MEDI 9 |
+| V4 chiamate Groq chat con haiku | **0** su tutti i set (asserzione dell'harness) |
+| V1 tsc · V2 suite · V3 unit motore · V5 lessico · V9 bundle | pulito · 0 rossi nuovi (baseline in `BASELINE-SUITE-ROSSI.txt`) · 23/23 · verde · build PASS + lazy boot PASS |
+| Domande ogni 10 messaggi | banco 3,6 (non attese 2,2) · avversario 2,8 (1,5) · Victoria 2,7 (0,9) |
+| Latenza turno dal vivo p50 / p95 | **2,0 s / 6,4 s** (avversario 150, tutto dal vivo); banco giro 1 2,2 / 6,7 s. Chiamata Haiku p50 2,0–2,6 s, p95 4,3–5,5 s. V10 ok (≤4 / ≤8 s) |
+| Chiamate Haiku per messaggio | 1,2 (auto-correzioni comprese) |
+| Token medi per messaggio | input 180–235 + cache read 8,3–9,2k + output 340–385 |
+| Cache hit | 99,4–100% (il prefisso system ~8k token resta in cache) |
+| **Costo per messaggio** | **~0,0003 $** (0,00028–0,00031 sui set grandi) |
+| **€ per locale al mese (500 msg)** | **~0,14 €** con cache; caso peggiore senza cache (messaggi radi, >5 min) ~0,0011 $/msg → ~0,50 € |
+| **Spesa della notte** | **~0,22 $** su 3,00 $ di tetto (ledger 0,2214 $ + A0 e prove 0,0013 $) |
+
+### Giri del loop (fix → verifica, max 4)
+
+| Giro | Banco | GRAVI (sicurezza) | Victoria | Parlato | Playground | Cosa è cambiato |
+|---|---|---|---|---|---|---|
+| 1 (codice di T) | 77,2% (71/92) | 7 (3) | 10/10 | 26/30 | 17/20 | — |
+| 2 | **82,4%** (75/91, 1 non misurata) | 7 (4) | 10/10 | 29/30 | 20/20 | numeri troncati del parlato («dodic», «diciott e cinquant»), «nun è fernuta» non è «finita», bozza al presente («rimetto…») = «fatto», numeri detti a parole ammessi nella bozza; prompt: un solo candidato = agisci, parti chiare sempre, correzione di proposta = rifai tutte le azioni, valori alternativi = domanda |
+| 3 | 69,6% (64/92) | 3 (**0**) | 9/10 | 21/30 | 19/20 | proposta vecchia mai confermata dopo una correzione; prezzi della proposta in attesa validi; bozza con domanda = proposta (troppo larga: Haiku scrive spesso «Confermi?») |
+| 4 | 80,4% (74/92) | 10 (4) | 8/10 | 30/30 | 20/20 | conferma solo con data futura («da domani…»); tolta la domanda dalla bozza quando il server scrive; regola prompt «fino a 3 modifiche senza conferma» → regressione (4 modifiche diventano una domanda e l'«ok» non trova la proposta) |
+| finale (controllo, non giro di fix) | **83,7%** (77/92) | 7 (2) | 10/10 | 29/30 | 20/20 | tolta la regola prompt del giro 4 |
+
+Stop: 4 giri fatti e due giri consecutivi (3 e 4) senza miglioramento sul giro 2 → stop del §7. E3 non scattato (giro 1 al 77% > 70%).
+Nota: tra un giro e l'altro la varianza del modello è di ±5–7 punti sul banco anche a prompt quasi uguale; ora la cache record/replay rende i giri ripetibili a costo zero.
+
+### Parlato sporco — casi peggiori (stato finale: 1 solo non corretto, 0 GRAVI)
+1. ps-06 «la ghisa a dodici» → «Non ho cambiato nulla.» + elenco con *Gricia* (MEDIO: avrebbe dovuto chiedere «Intendi la *Gricia*?»).
+Nel giro 1 (prima dei fix) i peggiori erano: ps-01 «carbonar tredic», ps-02 «la lasagn… a dodic» (bozza «Ok, aggiorno la *Lasagna*» senza scrittura), ps-03, ps-06; playground pg-09 «gnocchi quattro formag dodic», pg-11 «la tagliat… diciott e cinquant», pg-14 «bruschett cinque e mezz» → tutti risolti dal normalizzatore dei numeri troncati.
+
+## 3. Problemi trovati (gravità · stato · fix in una riga)
+1. **ALTO · risolto (base)** — Online c'era **v127**, non v119: email (v121/v125, 5c136e1) e sale/tavoli (v126/v127, 24ad33f) mancavano nel ramo; un deploy le avrebbe tolte a tutti i clienti. Ricostruita la base (`codex/bot-haiku-base-v127` 0fa42a6) e mergiata (4377c76); il confronto per sezioni resta «diverso» per costruzione (online = patch a mano sul bundle), il confronto normalizzato non trova codice mancante.
+2. **ALTO · risolto** — Dopo una correzione di un riepilogo («la pasta fai 15, l'acqua lasciala») il secondo «OK» pubblicava la **proposta vecchia** (bv-multiple-003). Fix: correzione che nomina piatti della proposta → la proposta vecchia non resta in sospeso; prezzi della proposta in attesa valgono come detti.
+3. **ALTO · aperto** — «annulla» su un'eliminazione in attesa: il modello lo legge come «annulla l'ultima pubblicazione», il bot richiede «vuoi eliminare?» e al «sì» elimina (z-annulla-018). Fix: con una proposta di eliminazione in attesa, «annulla/lascia stare» = scarta la proposta (regola del validatore).
+4. **ALTO · aperto** — «la carbonara a 13.000» scritto come 13 € (z-assurdi-008). Fix: prezzo con separatore delle migliaia o > 500 → domanda.
+5. **ALTO · aperto** — Rimandi «quei due prodotti» risolti sui piatti sbagliati quando la proposta contiene una riga inutile («tiramisù da 6 € a 6 €») (bv-deixis-001/002: boh a 15 € non richiesto). Fix: togliere dalle proposte le azioni che non cambiano niente (oggi lo fa solo sulle scritture immediate).
+6. **MEDIO · aperto** — «nascondi il babà e mettilo in evidenza» scrive entrambe (z-contraddizioni-002). Fix: azioni contraddittorie sullo stesso piatto → domanda.
+7. **MEDIO · aperto** — «sconto/promo a 12» a volte diventa `set_price` invece della promo (bv-multiple-007/008 nei giri 2–4). Fix: regola del validatore (parola «sconto/promo/offerta» → solo promo).
+8. **MEDIO · scelta da confermare** — Più di 3 modifiche con haiku = sempre «Rispondi OK», anche «aumenta tutti di un euro» (scelta conservativa di T4b, allinea il playground 17). Contraddice la risposta #6 del §11 per quel caso del banco (bv-multiple-006 resta MEDIO). Decide Manuel.
+9. **MEDIO · aperto** — Nomi corti storpiati («Bo», «Bu») → il bot chiede «Intendi *boh*?» anche dopo aver già capito (bv-asr-003/005: «correzione non applicata»).
+10. **BASSO · risolto** — Incidente 00:57: un `pnpm install` nella worktree ha svuotato il node_modules condiviso del repo `Tako`; ripristinato alle 00:58 col lockfile del repo (nessun file tracciato cambiato).
+11. **BASSO · risolto** — Un mio commento a metà riga nell'harness ha spento per ~10 minuti l'emulazione delle tabelle del cervello nei test storici (fix-a/fix-b/r9 rossi); corretto prima del commit, le misure Haiku non ne sono toccate (fatte prima).
+
+## 4. Cosa resta (per Manuel)
+- **Nessuna prova dal telefono possibile stamattina:** il QA non è stato deployato e il tuo numero non è ricollegato. Edge online = v127 di ieri, clienti invariati su Groq.
+- Per arrivare al gate (≥85% banco, 0 GRAVI): un giro corto sui punti 3–7 (sono regole deterministiche del validatore, 1–2 h) e poi misura in replay + record; la procedura di deploy è pronta in `DEPLOY-QA.md` (secret nuovi, rollback, `bot-engine.sql` solo QA, `qa-manuel-link.sql` per il tuo numero solo sul QA, prova sincrona `qa-sync-test.mjs`).
+- Decisione: punto 8 (aumento uniforme: applica subito o chiede OK?).
+- Decisione dopo il collaudo: passare `TAKO_BOT_ENGINE_DEFAULT` a `haiku` (= Victoria e tutti su Haiku). Finché il secret vale `groq`, il codice nuovo si comporta come oggi per i clienti.
+- Tagli: nessuno (T3 menu intero su Haiku fatto; campione avversario a 150, non 60).
+- Exit scattati: nessun E0–E6; stop per regola «2 giri senza miglioramento» + max 4 giri. Deploy non tentato (gate).

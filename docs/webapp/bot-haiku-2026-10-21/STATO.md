@@ -1,12 +1,13 @@
 # STATO — run notturna motore Haiku 5.5 (21/10/2026)
 
-**In corso** (coordinatore Opus 5.5). Branch `codex/bot-anthropic-1019`.
+**Run conclusa alle ~04:00, in attesa di Manuel.** Nessun deploy (gate §8 non verde). Vedi `REPORT.md`.
 
-- 01:00 prerequisiti P1 ok, P2 ok (deploy QA autorizzato, tetto 3 $), P3 ok (stash pre-haiku + owner-ai-facts-1019), P4 parziale (vedi note 4), P5 sleep disabilitato.
-- 01:00 base v119 mergiata senza conflitti (a037bb2).
-- 01:05 A0 verde (CHIAVI-OK.md). Contratto in CONTRATTO.md.
-- 01:05 Baseline: `tsc --noEmit -p apps/server` pulito. Vitest 3.313 test: rossi = **i 14 noti nome per nome** (menu-controls-images-output 1, menu-workspace-presentation 2, agency-isolation 1, menu-controls-persistence 1, twilio-menu-ai-flow 1, twilio-menu-hold 1, twilio-owner-link 7) **+ 68 test che vogliono il server :3001** (copilot-owner, correctness, realtime, load-review-fixes, review-fixes, waiter-calls, takeaway, oggi-summary, reservations, shifts, simulation, stats-export, menu-availability): elenco esatto in `BASELINE-SUITE-ROSSI.txt`. Regola da qui: nessun rosso nuovo.
-- 01:10 lanciati T (motore), B (banco), E (edge) in parallelo, model opus, perimetri disgiunti.
-- 01:25 E consegnato (env, bot-engine.sql, check-active, DEPLOY-QA, test lessico). Scoperto: online v127, non v119.
-- 01:36 T consegnato (Fase 1 verde 01:09, Fase 2 01:27, nessun taglio). 01:37 base v127 ricostruita (0fa42a6).
-- 01:45 integrazione: commit motore 033476a, merge base v127 4377c76. V1 tsc pulito. V2 suite: nessun rosso nuovo del bot (restano eval-fix-a/b in correzione da B nell'harness; 3 rossi web-accounts della base email). V5 lessico verde. V9 build PASS + lazy boot PASS (sha eeb28b88…).
+- Branch `codex/bot-anthropic-1019` pushato. Edge online invariato (v127). Numero di Manuel non ricollegato. Nessun secret, nessuna scrittura su DB remoti.
+- Banco vero 83,7% (2 GRAVI sicurezza) · Victoria 10/10 · parlato 29/30 · playground 20/20 · avversario 150: 90% (3 GRAVI sicurezza). Spesa ~0,22 $.
+- Prossimo passo proposto: giro corto sui problemi 3–7 del REPORT, poi deploy QA con `DEPLOY-QA.md`.
+
+Cronologia
+- 01:00 prerequisiti ok; base v119 mergiata (a037bb2); 01:05 A0 verde; baseline = 14 rossi noti + test che vogliono :3001.
+- 01:10 T/B/E lanciati. 01:25 E: scoperto online v127. 01:36 T consegnato. 01:37 base v127 ricostruita. 01:45 integrazione (033476a, 4377c76), V1/V2/V5/V9 verdi.
+- 02:41 misure col modello vero, giri 1–4 (02:41–03:16), misura finale di controllo 03:17, avversario 150 03:26.
+- 03:43 suite finale 0 rossi nuovi; commit e7cfaf2.
