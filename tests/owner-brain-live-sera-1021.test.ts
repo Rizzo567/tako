@@ -274,3 +274,20 @@ describe('lettura deterministica della sessione',()=>{
   expect(sessionName('cotolleta',sec,[]).name).toBe('Cotoletta alla milanese');expect(sessionName('polpete al sugo',sec,[]).name).toBe('Polpette');expect(sessionName('risoto ai funghi',[],[]).name).toBe('Risotto ai funghi')
   expect(sessionName('gnocchi al ragu 10',[],['Gnocchi al ragù'])).toEqual({name:'Gnocchi al ragù',existing:null,price:10})})
 })
+
+// v139 dal vivo (22/10 notte): «sì» ignorato dopo una domanda di conferma del modello senza azioni.
+const qa139=()=>{const m=initialMenu('qasera') as any;m.menus[1].sections.push({id:'7bbbbbbb-7777-4777-8777-000000000001',name:'Primi',items:[{id:'5bbbbbbb-5555-4555-8555-000000000001',name:'Gnocchi al ragù',price:10}]});return m as EvalMenu}
+describe('v139 dal vivo: conferme senza azioni e prezzo dopo la chiusura',()=>{
+ it('trascrizione esatta: «è pronto» solo se appena creato, «lasagna 12» crea subito, nessun «sì» a vuoto',async()=>{
+  const pl:Planner=c=>{const m=plainT(c.message);if(/lasagne/.test(m))return Q('A che prezzo metto le Lasagne?');if(/lasagna 12/.test(m))return Q('Aggiungo *Lasagna* nei *Primi* del *Menu pranzo*? Rispondi sì.');if(/chiamarlo/.test(m))return P('change',[A('rename_section',{section:secCode(c,'Primi','Menu pranzo'),name:'Primi'})],'Ok.');return P('chat',[],'Ok.')}
+  const r=await play([T('voglio che aggiungi nel menù pranzo le lasagne'),T('si'),T('si'),T('si voglio chiamarlo primi'),T('lasagna 12'),T('sì')],pl,qa139())
+  if(process.env.TAKO_SERA_SHOW)r.replies.forEach((x,i)=>process.stderr.write('V'+(i+1)+' '+JSON.stringify(x)+' | '+r.d(i+1).join(',')+'\n'))
+  expect(r.replies[1]).not.toMatch(/è pronto/);expect(r.replies[3]).toMatch(/c’è già/)
+  expect(r.d(5)).toEqual(['create|lasagna|12|primi']);for(const x of r.replies)expect(x).not.toMatch(/Non ho cambiato nulla|già così|Rispondi sì/)
+  for(const c of r.calls)if(c.proposal?.kind==='brain_ask')expect(String(c.proposal.source).split(' \n ').length).toBeLessThanOrEqual(2)})
+ it('proprietà: una domanda di conferma del modello senza azioni non parte mai con «rispondi sì»; il «sì» dopo non resta mai a vuoto',async()=>{
+  const confirms=['Aggiungo *Lasagna* nei *Primi*? Rispondi sì.','Vuoi che metta il tiramisù a 7?','Confermi la carbonara a 13?','Creo il sottomenu Dolci? Rispondi sì.','Sposto la panna cotta nei Dolci?']
+  for(const [i,q] of confirms.entries())for(const say of ['metti la lasagna 12','tiramisù 7','carbonara 13 alla carta','crea i dolci','panna cotta nei dolci']){
+   const r=await play([T(say),T(i%2?'sì':'ok')],()=>Q(q))
+   expect(r.replies[0]).not.toMatch(/rispondi s[iì]|vuoi che|confermi/i);expect(r.replies[1]).not.toMatch(/^Non ho cambiato nulla\.?$/m);expect(r.pending?.source?String(r.pending.source).split(' \n ').length:0).toBeLessThanOrEqual(2)}},60000)
+})

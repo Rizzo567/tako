@@ -48,7 +48,7 @@ const YES=['si','sì','ok','esatto','va bene','sì voglio chiamarlo primi','si s
 const OTHER=['grazie','quanto costa il tiramisù?','la prima','solo quelle visibili','tutte','restano uguali','basta','fatto']
 // Finto Haiku: per ogni chiamata un comportamento plausibile, a volte sbagliato (seed della conversazione).
 function planner(r:()=>number){return(c:FakeCtx)=>{const m=plainT(c.message),cmd=CMDS.find(x=>plainT(x.say)===m)
- if(cmd){if(c.correction)return r()<0.5?cmd.ok(c):Q('Puoi ripetere?');return cmd.wrong&&r()<0.4?cmd.wrong(c):cmd.ok(c)}
+ if(cmd){if(c.correction)return r()<0.5?cmd.ok(c):Q('Puoi ripetere?');const k=r();if(k<0.12)return Q('Ok, lo faccio? Rispondi sì.') /* v139: conferma senza azioni */;return cmd.wrong&&k<0.45?cmd.wrong(c):cmd.ok(c)}
  if(YES.some(y=>plainT(y)===m)){if(!c.pending)return P('chat',[],'Ok.');const q=c.pending.match(/tua domanda aperta\): (.*?)(?: — |$)/m)?.[1];return r()<0.5?P('change',[A('confirm_pending')],'Fatto.'):Q(q||'Intendi questo? Rispondi sì oppure dimmi il nome.')}
  if(NO.some(y=>plainT(y)===m))return P('change',[A('cancel_pending')],'Ok, lascio stare.')
  if(/quanto costa/.test(m))return P('read',[],'',{item_refs:[code(c,'tiramisù')]})
@@ -85,6 +85,8 @@ describe('proprietà multiturno sul route vero (finto Haiku, seed fisso)',()=>{
     if(/categori/i.test(rep))viol.push('lessico «categoria»: '+tag)
     if(/non ho un comando|non posso|non riesco a/i.test(rep))viol.push('«non posso»: '+tag)
     if(EMOJI.test(rep))viol.push('emoji: '+tag)
+    // I6 (v139): una richiesta di «sì» seguita da un «sì» non finisce mai a vuoto.
+    if(i&&isYes(msg)&&/rispondi\s+\*?s[iì]/i.test(run.turns[i-1]!.reply)&&!d.length&&/^Non ho cambiato nulla\.?$/.test(f))viol.push('I6 sì a vuoto dopo «rispondi sì»: '+tag)
     prev=t.menuAfter})}
   if(viol.length)process.stderr.write(viol.slice(0,40).join('\n')+'\n')
   expect({turni:turnsTot,violazioni:viol.length,esempi:viol.slice(0,5)}).toMatchObject({violazioni:0})},Number(process.env.TAKO_PROP_TIMEOUT||600000))

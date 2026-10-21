@@ -206,3 +206,6 @@ export const qasera:MenuFixture=(()=>{const f=build('qasera',20,{restaurant:'Tak
  W.menus[3].pricing='fisso';W.menus[3].active=false;W.menus[3].formulas=[{id:'5000cc00-5555-4555-8555-000000000001',name:'Completo',price:18,note:null,sectionIds:W.menus[3].sections.map((s:any)=>s.id),translations:{}},{id:'5000cc00-5555-4555-8555-000000000002',name:'Solo primo',price:11,note:null,sectionIds:[W.menus[3].sections[0].id],translations:{}}]
  return f})()
 Object.assign(FIXTURES,{qasera})
+// qasera139: qasera dopo la sera (v139 dal vivo, 22/10): nel Menu pranzo c'è già «Primi» con Gnocchi al ragù a 10.
+export const qasera139:MenuFixture=(()=>{const f:MenuFixture={key:'qasera139',restaurant:'Tako · Verifica web',menu:structuredClone(qasera.menu)};(f.menu as any).menus[1].sections.push({id:'7bbbbbbb-7777-4777-8777-000000000001',name:'Primi',items:[{id:'5bbbbbbb-5555-4555-8555-000000000001',name:'Gnocchi al ragù',price:10}]});return f})()
+Object.assign(FIXTURES,{qasera139})
