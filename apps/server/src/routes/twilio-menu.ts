@@ -578,8 +578,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      else if(cs)follow={name:d.name,sectionId:cs.newSectionId,sectionName:cs.name,origin}}
     if(cs&&acts.some(a=>a.kind==='create'))acts=acts.map(a=>a===cs?{...cs,hidden:false} as MenuAction:a)
     pre={actions:acts,why:'risposta',follow}}
-   else if((askP.rounds??1)>=ASK_MAX_ROUNDS||newCommandOverAsk(text,askP,refs))closePend=true}
-  else if(askP&&askP.twins?.length&&((askP.rounds??1)>=ASK_MAX_ROUNDS||newCommandOverAsk(text,askP,refs)))closePend=true
+   else if(newCommandOverAsk(text,askP,refs))closePend=true}
+  else if(askP&&askP.twins?.length&&newCommandOverAsk(text,askP,refs))closePend=true
   if(!pre&&!preReply&&!sessNow&&visibleOnly(text)&&/\b(?:solo|solamente|soltanto|unicamente)\b/.test(plain(text))&&last&&(!pend||closePend)){const back=last.undo.filter(a=>'id' in a&&a.kind==='price'&&refs.find(r=>r.id===(a as any).id)?.hidden);if(back.length)pre={actions:back,why:'solo_visibili'}}
   if(closePend){pend=null;answered=false;(base as any).pendingCommand=null}
   if(pre)answered=true}
@@ -776,7 +776,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     const keepRecap=pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!(engine==='haiku'&&pend.actions.some(a=>'id' in a&&g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs)))
     const question=serverQ??(noDraft||actedDraft(finalRun)?'':cleanDraft(finalRun.decision.draft,{wrote:false,numbers:numbersOK(finalRun,[...out.ids.map(id=>refs.find(r=>r.id===id)?.price??-1),...(out.twins??[]).flatMap(t=>t.price!=null?[t.price]:[]),...out.actions.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[])])})??'')
     // 21/10 sera: il source è al massimo «richiesta originale + ultima risposta» (prima accumulava ogni messaggio dopo la domanda).
-    const src=nextAskSource(pend?.kind==='ask'?pend.ask as any:null,text)
+    // Tetto: la stessa domanda in sospeso vive al massimo 2 giri; al terzo la domanda vecchia si chiude e resta solo questo messaggio.
+    const src0=nextAskSource(pend?.kind==='ask'?pend.ask as any:null,text),src=src0.rounds>ASK_MAX_ROUNDS?nextAskSource(null,text):src0
     // 21/10 sera: niente pending vuoto («Ok, lascio stare.» senza nulla in sospeso) — confonde il turno dopo.
     const emptyAsk=engine==='haiku'&&!noDraft&&!!question&&!out.hold&&!/\?|\brispondi\b/i.test(question)&&!out.ids.length&&!out.actions.length&&!out.createDraft&&!sessOut&&!out.twins?.length
     if(!keepRecap&&emptyAsk)await drop()
