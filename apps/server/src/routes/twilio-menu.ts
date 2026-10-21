@@ -481,6 +481,11 @@ function priceAskText(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[])
 /** Il messaggio è un comando su un GRUPPO non elencato piatto per piatto («tutti», «i dolci», «del 10%»): lì vale groupPriceRisk.
  * «mettili entrambi a 15» dopo due piatti nominati è un prezzo detto per quei piatti (vale solo il controllo del prezzo singolo). */
 function groupWording(message:string,sections:SectionRef[],refs:MenuRef[]):boolean{const p=plain(message);return /\btutt[ieoa]\b/.test(p)||!!groupPercent(message)||!!sectionGroupWord(p,sections,refs)}
+/** notte 22/10 (imperfezione «sezione Pizze e pinse» inventata dal modello): frasi della bozza che nominano un Menu/Sottomenu che nel locale
+ * non c'è (e che il turno non crea) cadono. `names` = nomi validi (Menu, Sottomenu, quelli creati adesso). */
+function dropInventedGroups(draft:string|null,names:string[],said=''):string|null{if(!draft)return draft;const ok=names.map(n=>plain(n)).filter(Boolean),sp=' '+plain(said)+' '
+ const fake=(x:string)=>[...x.matchAll(/\b(?:sottomenu|sezione|categoria|menu|menù)\s+(?:dei |delle |degli |del |della |di )?\*([^*\n]{2,40})\*/gi)].some(m=>{const k=plain(m[1]!).replace(/^menu\s+/,'');return !!k&&!sp.includes(' '+k+' ')&&!ok.some(o=>{const o2=o.replace(/^menu\s+/,'');return o===k||o2===k||sameSection(o,k)||(k.length>=4&&(o2.startsWith(k)||(' '+o+' ').includes(' '+k+' ')))})})
+ const keep=draft.split(/(?<=[.!?])\s+/).filter(x=>!fake(x));return keep.join(' ').trim()||null}
 function groupPriceRisk(actions:MenuAction[],refs:MenuRef[]):boolean{const ps=actions.filter(a=>a.kind==='price') as Extract<MenuAction,{kind:'price'}>[];if(ps.length<2)return false
  return ps.some(a=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&(a.price<=0||Math.abs(a.price-r.price)/r.price>0.5+1e-9)})}
 /** Una proposta ha bisogno del «sì»/«OK» del titolare? (vincoli del server, non interpretazione: elimina, categoria nuova non
@@ -835,7 +840,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // Prova dal vivo 21/10: le azioni davvero scritte in questo turno (la bozza del modello non può dire «esclusi» piatti cambiati).
   let wroteActs:MenuAction[]=[],lastRev=row.revision
   // R10: senza scrittura, mai la stessa domanda dell'ultima risposta (riepilogo rimandato uguale): restano i fatti.
-  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=(noDraft||actedDraft(finalRun))&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(d&&wrote&&engine==='haiku'){d=d.split(/(?<=[.!?])\s+/).filter(x=>!/\?\s*$/.test(x.trim())&&!/\b(?:rispondi|confermi|conferma)\b/i.test(x)).join(' ').trim()||null};if(d&&wrote&&engine==='haiku')d=finalRun.decision.notes?.includes('ripristino_come_spostamento')?null:pruneWroteDraft(d,wroteActs,refs);if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
+  const groupNames=[...base.menus.map(m=>m.name),...sections.map(x=>x.name),...((out as any).actions??[]).flatMap((a:any)=>a.kind==='create_section'||a.kind==='create_menu'||a.kind==='rename_section'||a.kind==='rename_menu'?[String(a.name??'')]:[])]
+  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=(noDraft||actedDraft(finalRun))&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(engine==='haiku')d=dropInventedGroups(d,groupNames,askText);if(d&&wrote&&engine==='haiku'){d=d.split(/(?<=[.!?])\s+/).filter(x=>!/\?\s*$/.test(x.trim())&&!/\b(?:rispondi|confermi|conferma)\b/i.test(x)).join(' ').trim()||null};if(d&&wrote&&engine==='haiku')d=finalRun.decision.notes?.includes('ripristino_come_spostamento')?null:pruneWroteDraft(d,wroteActs,refs);if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
   const pricesOf=(acts:MenuAction[])=>acts.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[]).concat(acts.flatMap(a=>'id' in a?[refs.find(r=>r.id===(a as any).id)?.price??-1]:[]))
   // Scrive e pubblica, poi rilegge dal DB: i fatti della risposta sono quelli riletti.
   const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number}>=>{
@@ -911,7 +917,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // run Haiku 21/10 (bv-deixis-001): le parti chiare di un sospeso (hold) chieste dal titolare si pubblicano con la modifica dopo,
     // salvo quelle che il messaggio nega; prima restavano perse quando la risposta era un'altra modifica.
     // Mai se il titolare sta correggendo («no, fai una cosa…», «invece…»): le parti in sospeso possono essere proprio quelle che cambia.
-    if(engine==='haiku'&&!/^(?:no|ah no|aspetta|anzi)\b|\b(?:invece|fai una cosa|ho detto|intendevo)\b/.test(plain(text))&&(pend?.kind==='hold'||(pend?.kind==='ask'&&(pend.ask.twins?.length??0)>0&&(pend.ask.actions?.length??0)>0))){const held=storedActions({kind:'batch',actions:pend.kind==='hold'?pend.actions:(pend.ask.actions??[])},refs,sections)??[],keep=held.filter(a=>!('id' in a&&negatedName(text,refs.find(r=>r.id===(a as any).id)?.name??'\u0000'))&&!(a.kind==='create'&&negatedName(text,a.name)));if(keep.length)return publish(mergeMenuActions(keep,out.actions))}
+    // notte 22/10 (bv-correzioni-002 «No, ho detto togli boh»): una correzione che NON nomina nessuna parte in attesa corregge solo la
+    // domanda; le parti chiare restano e si pubblicano (prima il «no/ho detto» le buttava tutte: tiramisù perso).
+    const heldNamed=(()=>{const h=pend?.kind==='hold'?pend.actions:pend?.kind==='ask'?(pend.ask.actions??[]):[];return h.some(a=>'id' in a?g9DishMentioned(refs.find(r=>r.id===(a as any).id)?.name??'\u0000',text,refs):a.kind==='create'&&g9DishMentioned(a.name,text,refs))})()
+    if(engine==='haiku'&&(!/^(?:no|ah no|aspetta|anzi)\b|\b(?:invece|fai una cosa|ho detto|intendevo)\b/.test(plain(text))||!heldNamed)&&(pend?.kind==='hold'||(pend?.kind==='ask'&&(pend.ask.twins?.length??0)>0&&(pend.ask.actions?.length??0)>0))){const held=storedActions({kind:'batch',actions:pend.kind==='hold'?pend.actions:(pend.ask.actions??[])},refs,sections)??[],keep=held.filter(a=>!('id' in a&&negatedName(text,refs.find(r=>r.id===(a as any).id)?.name??'\u0000'))&&!(a.kind==='create'&&negatedName(text,a.name)));if(keep.length)return publish(mergeMenuActions(keep,out.actions))}
     return publish(out.actions)}
    case 'ask':{
     // run Haiku 21/10: le righe che non cambiano niente («da 6 € a 6 €») non entrano nelle parti in attesa (confondevano «quei due»).
@@ -921,6 +930,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // 22/10 (v139): una domanda di conferma («…? Rispondi sì», «Vuoi che…», «Aggiungo…?») parte SOLO con azioni salvate da eseguire al «sì»;
     // senza, diventa una domanda specifica (mai un «sì» che poi gira a vuoto).
     if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.createDraft&&/\brispondi\s+\*?s[iì](?![a-z])|\bvuoi che\b|\bconfermi\b|\blo faccio\?|^(?:ok,?\s*)?(?:aggiungo|creo|metto|tolgo|nascondo|sposto|cambio|elimino|rinomino|porto|inserisco)\b[^?\n]*\?/i.test(question))question=specificQuestion(text,out.ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r))
+    if(engine==='haiku'&&question&&!serverQ){const q3=dropInventedGroups(question,groupNames,askText);question=q3&&/\?/.test(q3)?q3:q3&&q3===question?q3:''}
     // notte 22/10 (lng-mig-3/4): una domanda su parti incerte non chiede anche «Rispondi OK per pubblicare» (due richieste insieme: il
     // titolare non sa a cosa rispondere). Resta la domanda; le parti chiare in attesa le mostrano i fatti.
     if(engine==='haiku'&&out.hold&&/\?/.test(question)){const q2=question.split(/(?<=[.!?])\s+/).filter(x=>!/\brispondi\s+\*?ok\b|\bper pubblicar/i.test(x)).join(' ').trim();if(/\?/.test(q2))question=q2}

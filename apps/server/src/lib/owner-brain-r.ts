@@ -80,6 +80,7 @@ const REASON:Record<string,string>={
  azione_sul_piatto_della_domanda:'nel messaggio misto l’azione è finita sul piatto della domanda invece che su quello del comando',
  nome_a_suono:'il piatto è riconosciuto solo a suono e non con certezza: chiedi conferma',
  parte_persa:'una parte del messaggio non è usata dal piano',
+ gemello_dimenticato:'il titolare dice «quei due / entrambi / quelli» e tra quei piatti c\u2019è anche il piatto già nel menu della domanda di prima (stesso nome): il piano deve fare qualcosa anche su quello (spostarlo, aggiornarlo) come chiede il messaggio',
  conferma_senza_proposta:'non c’è nessuna proposta in sospeso da confermare: NON chiedere di nuovo conferma. Se nella CRONOLOGIA c’è una richiesta chiara del titolare non ancora fatta, scrivila ora come piano con le sue azioni (intent=change); se non è possibile, dillo in UNA frase semplice (mai «il sistema»)',
  prezzo_piatto_menu_fisso:'quel piatto è in un Menu a PREZZO FISSO: i piatti non hanno prezzo, il prezzo è delle opzioni (Completo, Solo primo…). Nessuna azione sul piatto: se il titolare voleva cambiare un\'opzione usa set_formula_price, altrimenti spiegalo in una frase',
  struttura_incompleta_formula:'',
@@ -176,6 +177,10 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!control.length&&d.exclude.some(e=>pend.actions.some(a=>'id' in a&&(a as any).id===e.id)))return{kind:'change',actions:changeActs}
  if(d.intent==='chat'||d.intent==='capability'||(!rawActs.length&&(rawIntent==='chat'||rawIntent==='capability')))return{kind:'say'}
  if(d.plan?.type==='read')return d.notes.includes('domanda_zero_scritture')&&rawIntent==='change'?{kind:'read',plan:d.plan}:{kind:'read',plan:d.plan}
+ // notte 22/10 (bv-categorie-001 «…e lì aggiungi quei due piatti che ti ho detto»): «quei due» comprende il piatto già nel menu della
+ // domanda di prima; un piano che lo dimentica perde una parte (prima: pasta al pesto creata, pasta al ragù mai spostata).
+ {const tw:{id:string,name:string}[]=pend?.kind==='ask'?(pend.ask.twins??[]):pend?.kind==='hold'?((pend.hold.asks??(pend.hold.ask?[pend.hold.ask]:[])) as any[]).flatMap(a=>a.type==='choose'&&Array.isArray(a.options)&&a.options.length===1?[a.options[0]]:a.type==='confirm'&&a.action?.id?[a.action.id]:[]).map((id:string)=>({id,name:(o.refs??[]).find(r=>r.id===id)?.name??''})).filter(t=>t.name):[]
+  if(tw.length&&changeActs.length&&/\b(?:quei|quegli|quelli|quelle|entramb\w*|ambedue|tutti e due|tutte e due)\b/.test(plain(message))&&tw.some(t=>!changeActs.some((a:any)=>a.id===t.id||(a.kind==='create'&&sameDishName(a.name,t.name)))))return reject('gemello_dimenticato',tw.map(t=>t.id),changeActs)}
  // R9: risposta alla domanda sui piatti con lo stesso nome: un'azione su un piatto dal nome PIÙ LUNGO che contiene un nome della richiesta
  // («pasta al pesto» → «Pasta al pesto e lasagna») non è la scelta del titolare: quel nome è un piatto nuovo.
  if(d.plan?.type==='change'&&!d.hold&&pend?.kind==='ask'&&pend.ask.twins?.length){const said=[...pend.ask.twins.map(t=>t.name),...(pend.ask.actions??[]).flatMap(a=>a.kind==='create'?[a.name]:[])],refs=o.refs??[]
@@ -246,8 +251,10 @@ export function allSubsetProblem(text:string,actions:MenuAction[],refs:MenuRef[]
 export function namedSectionMismatch(message:string,actions:MenuAction[],sections:SectionRef[]):boolean{
  const creates=actions.filter(a=>a.kind==='create') as Extract<MenuAction,{kind:'create'}>[];if(!creates.length)return false
  const fresh=new Set(actions.flatMap(a=>a.kind==='create_section'?[plain(a.name)]:[]))
- for(const m of plain(message).matchAll(/\b(?:nei|negli|nelle|tra i|tra gli|tra le|fra i|fra gli|fra le|categoria|sezione)\s+([a-z]+)(?:\s+([a-z]+))?/g)){const w0=m[1]!,w1=m[2]??''
-  if(w0.length<3||['che','si','chiama','nuova','nuovo','piu','di'].includes(w0))continue
+ for(const m of plain(message).matchAll(/\b(?:nei|negli|nelle|tra i|tra gli|tra le|fra i|fra gli|fra le|categoria|sezione)\s+([a-z]+)(?:\s+([a-z]+))?/g)){let w0=m[1]!,w1=m[2]??''
+  // notte 22/10 (bv-categorie-001 «un'altra categoria, ovvero primi», «un'altra categoria ancora, chiamandola speciali»): le parole di raccordo non sono il nome.
+  if(['ovvero','cioe','ossia','ancora','chiamata','chiamandola','chiamato','detta'].includes(w0)){if(!w1)continue;w0=w1;w1=''}
+  if(w0.length<3||['che','si','chiama','nuova','nuovo','piu','di','ancora','chiamandola'].includes(w0))continue
   const known=sections.some(s=>{const sw=plain(s.name).split(' ');return sw[0]!.slice(0,5)===w0.slice(0,5)||sameSection(s.name,w0)||(!!w1&&sameSection(s.name,w0+' '+w1))})||[...fresh].some(f=>f.split(' ')[0]!.slice(0,5)===w0.slice(0,5))||sections.some(s=>!!s.pub&&nameInText(s.pub,w0+' '+w1,true))
   if(!known)return true}
  return false}

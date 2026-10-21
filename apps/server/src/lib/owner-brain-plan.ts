@@ -346,7 +346,12 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
   if(all.length===1&&typeof u.price==='number'&&byId.has(all[0]!)&&Math.abs(byId.get(all[0]!)!.price-u.price)<0.005&&(' '+plain(String(u.phrase))+' ').includes(' '+plain(byId.get(all[0]!)!.name)+' '))continue
   // notte 22/10 (cc-vietato-16 «le puntarelle a 6,50 e poi raccontami una barzelletta»): una parte fuori tema (nessun piatto, numero o
   // verbo del menu, azione none) non è una parte incerta del menu: non ferma le parti chiare (la bozza del modello risponde al resto).
-  if(String(u.action??'none')==='none'&&!all.length&&!/\d/.test(String(u.phrase))&&!/\b(?:mett|togl|nascond|aggiung|elimin|cancell|alz|abbass|aument|diminu|spost|rinomin|finit|esaurit|prezz|evidenz|rimett|cambi|segn|port|sottomenu|menu|sezion|piatt)\w*/.test(plain(String(u.phrase)))&&!refs.some(r=>g9DishMentioned(r.name,String(u.phrase),refs)))continue
+  if(String(u.action??'none')==='none'&&!all.length&&plain(String(u.phrase)).split(' ').length>=2&&!/\d/.test(String(u.phrase))&&!/\b(?:mett|togl|nascond|aggiung|elimin|cancell|alz|abbass|aument|diminu|spost|rinomin|finit|esaurit|prezz|evidenz|rimett|cambi|segn|port|sottomenu|menu|sezion|piatt)\w*/.test(plain(String(u.phrase)))&&!refs.some(r=>g9DishMentioned(r.name,String(u.phrase),refs)))continue
+  // notte 22/10 (bv-correzioni-002 «aggiungi nei piatti di prova la parmigiana a 10» con «Inserisce il piatto la parmigiana» nel menu): un nome
+  // CONTENUTO in quello più lungo di un piatto esistente, detto con «aggiungi» e un prezzo, è un piatto NUOVO (regola del titolare), non un doppione.
+  {const art=(x:string)=>plain(x).replace(/^(?:il|lo|la|l|i|gli|le)\s+/,'').trim(),ph=art(String(u.phrase));if(all.length===1&&typeof u.price==='number'&&u.price>0&&byId.has(all[0]!)&&ph.length>=4){const cn=art(byId.get(all[0]!)!.name)
+   const sib=actions.find((a:any)=>a?.action==='create_item'&&a.section)
+   if(cn!==ph&&(' '+cn+' ').includes(' '+ph+' ')&&/\b(?:aggiung|inserisc|nuov)\w*/.test(msg)&&sib&&g9Prices(message).some(v=>Math.abs(v-u.price)<0.005)&&!refs.some(r=>art(r.name)===ph)){const nm=String(u.phrase).trim().replace(/^(?:il|lo|la|l'|l’|i|gli|le)\s*/i,'');actions.push({action:'create_item',item:null,section:sib.section,menu:null,price:u.price,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:nm.charAt(0).toLocaleUpperCase('it')+nm.slice(1),until:null});continue}}}
   // Candidati già toccati da una parte chiara o negati: quell'ambiguità non c'è più (resta solo se rimangono ≥2 piatti o nessuno era indicato).
   if(all.length&&cands.length<(all.length>=2?2:1))continue
   candCovered.push(...cands);const word=String(u.phrase).trim().slice(0,60)
