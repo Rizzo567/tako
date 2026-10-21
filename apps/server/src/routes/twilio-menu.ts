@@ -462,7 +462,7 @@ function uniformBulk(actions:MenuAction[],refs:MenuRef[],message:string){if(!/\b
  * nascosto piatto per piatto chiede sempre conferma. */
 function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false,strict=false,sections:SectionRef[]=[]):BatchWhy|null{
  if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
- const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section')
+ const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='delete_menu'||a.kind==='delete_section')
  if(structOnly)return null
  if(!strict&&actions.some(a=>a.kind==='create_section')&&!EXPLICIT_SECTION.test(normalizeMenuText(message).replace(/[^a-z0-9]+/g,' ')))return 'section'
  // Un solo comando su un gruppo («aumenta tutti i piatti della categoria X di un euro»): stessa differenza su ogni piatto → si

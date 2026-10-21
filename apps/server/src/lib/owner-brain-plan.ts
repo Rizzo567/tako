@@ -22,7 +22,7 @@ import {sameSection} from './twilio-menu-structure.js'
 import {callHaiku} from './owner-brain-anthropic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu',...CONTROL_ACTIONS] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','delete_menu','delete_section',...CONTROL_ACTIONS] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
@@ -507,9 +507,9 @@ export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOpti
  // run Haiku 21/10: struttura (Menu nuovi e Sottomenu in un Menu preciso, anche vuoti) letta e controllata qui, fuori dal validatore
  // dei piatti: nomi detti dal titolare (adesso o nei suoi ultimi messaggi), Menu indicato o unico, niente doppioni. Si applica subito.
  let struct:{actions:MenuAction[],notes:string[],ask:string|null}={actions:[],notes:[],ask:null}
- if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&parsed.actions.some((a:any)=>a&&(a.action==='create_menu'||a.action==='create_section'))){
-  struct=structureActions(parsed.actions,input)
-  const others=parsed.actions.filter((a:any)=>!a||(a.action!=='create_menu'&&a.action!=='create_section'))
+ if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&parsed.actions.some((a:any)=>a&&(['create_menu','create_section','delete_menu','delete_section'].includes(a.action)))){
+  struct=structureActions(parsed.actions,{...input,codes:ctx.codes})
+  const others=parsed.actions.filter((a:any)=>!a||!['create_menu','create_section','delete_menu','delete_section'].includes(a.action))
   rest=JSON.stringify({...parsed,actions:others.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action)),intent:others.length||parsed.intent!=='change'?parsed.intent:'change'})
   if(struct.ask)return{path:'brain',intent:'clarify',plan:{type:'clarify',ids:[]},exclude:[],aliasesUsed:[],replyDraft:'',notes:['struttura_incompleta:'+struct.ask],usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
   if(!others.length){const decision={intent:'change' as const,plan:{type:'change',actions:struct.actions} as MenuPlan,exclude:[],aliasesUsed:[],replyDraft:'',notes:struct.notes}
@@ -581,7 +581,7 @@ export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,messag
 const STRUCT_VERB=/\b(?:ho detto|devi|dovevi|crea\w*|aggiung\w*|mett\w*|voglio|vorrei|fai|fammi|inizia|nuov[oa]|chiama\w*)\b/
 const menuKey=(n:string)=>plain(n).replace(/^(?:il |un |nuovo )?menu /,'').replace(/^(?:del |della |di )/,'').trim()
 /** Menu nuovi e Sottomenu dal piano del modello (solo motore haiku). `ask` = cosa manca per farlo (si chiede, non si scrive). */
-export function structureActions(raw:any[],input:{message:string,history?:BrainTurn[],sections:SectionRef[],menus?:{id:string,name:string,sections:number}[]}):{actions:MenuAction[],notes:string[],ask:string|null}{
+export function structureActions(raw:any[],input:{message:string,history?:BrainTurn[],sections:SectionRef[],refs?:MenuRef[],codes?:Map<string,string>,menus?:{id:string,name:string,sections:number}[]}):{actions:MenuAction[],notes:string[],ask:string|null}{
  const said=plain([input.message,...(input.history??[]).filter(t=>t.role==='owner').slice(-4).map(t=>t.text)].join(' \n '))
  const okName=(n:unknown)=>{if(typeof n!=='string')return null;const t=n.replace(/[*_~`]/g,'').replace(/\s+/g,' ').trim().slice(0,60);const k=plain(t);if(!k||k.split(' ').length>5||STRUCT_VERB.test(k)||/\p{Extended_Pictographic}/u.test(t))return null
   return (' '+said+' ').includes(' '+k+' ')||(' '+said+' ').includes(' '+k.replace(/i$/,'o')+' ')||(' '+said+' ').includes(' '+k.replace(/o$/,'i')+' ')?t.charAt(0).toLocaleUpperCase('it')+t.slice(1):null}
@@ -591,7 +591,21 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
  for(const a of raw){if(!a||a.action!=='create_menu')continue;const name=okName(a.name??a.menu);if(!name)return{actions:[],notes:[],ask:'nome_menu'}
   if(menus.some(m=>menuKey(m.name)===menuKey(name))){notes.push('menu_esistente:'+name);continue}
   const id=randomUUID();menus.push({id,name,sections:0,fresh:true});actions.push({kind:'create_menu',newMenuId:id,name,type:typeOf(name)} as MenuAction)}
+ const itemsIn=(sectionId:string)=>(input.refs??[]).filter(r=>r.sectionId===sectionId).length
+ const secOfMenu=(menuName:string)=>input.sections.filter(x=>x.menu===menuName)
+ // Correzioni di una struttura appena creata: si toglie solo ciò che è vuoto (Menu senza piatti, Sottomenu senza piatti).
+ for(const a of raw){if(!a||a.action!=='delete_menu')continue;const k=menuKey(String(a.name??a.menu??''));const m=menus.find(x=>!x.fresh&&menuKey(x.name)===k);if(!m)return{actions:[],notes:[],ask:'menu_da_togliere'}
+  if(secOfMenu(m.name).some(x=>itemsIn(x.id)))return{actions:[],notes:[],ask:'menu_non_vuoto'}
+  actions.push({kind:'delete_menu',menuId:m.id,name:m.name} as MenuAction);menus.splice(menus.indexOf(m),1)}
+ for(const a of raw){if(!a||a.action!=='delete_section')continue;const n=String(a.name??'');const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
+  const cands=input.sections.filter(x=>sameSection(x.name,n)&&(!want||menuKey(x.menu)===want));if(cands.length!==1)return{actions:[],notes:[],ask:'sottomenu_da_togliere'}
+  if(itemsIn(cands[0]!.id))return{actions:[],notes:[],ask:'sottomenu_non_vuoto'}
+  actions.push({kind:'delete_section',sectionId:cands[0]!.id,name:cands[0]!.name,menuName:cands[0]!.menu} as MenuAction)}
  for(const a of raw){if(!a||a.action!=='create_section')continue;const name=okName(a.name??a.section);if(!name)return{actions:[],notes:[],ask:'nome_sottomenu'}
+  const parentId=typeof a.section==='string'?input.codes?.get(a.section.trim().toLowerCase()):undefined,parent=parentId?input.sections.find(x=>x.id===parentId):undefined
+  if(parent){const pm=menus.find(m=>m.name===parent.menu);if(!pm)return{actions:[],notes:[],ask:'menu_del_sottomenu'}
+   if(input.sections.some(x=>x.menu===parent.menu&&sameSection(x.name,name))){notes.push('sottomenu_esistente:'+name);continue}
+   actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:pm.id,menuName:pm.name,parentSectionId:parent.id,parentName:parent.name} as MenuAction);continue}
   const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
   const menu=want?menus.find(m=>menuKey(m.name)===want)??menus.find(m=>menuKey(m.name).includes(want)||want.includes(menuKey(m.name))):menus.length===1?menus[0]:null
   if(!menu)return{actions:[],notes:[],ask:'menu_del_sottomenu'}

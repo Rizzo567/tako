@@ -38,6 +38,23 @@ describe('structureActions + applyActions',()=>{
  })
 })
 
+describe('Sezioni e correzioni della struttura',()=>{
+ it('Sezione dentro un Sottomenu (section = codice cN)',()=>{
+  const r=structureActions([A('create_section',{name:'Rossi',section:'c1'})],{message:'nei primi metti la sezione rossi',sections,menus,codes:new Map([['c1','22222222-2222-4222-8222-222222222222']])})
+  expect(r.actions[0]).toMatchObject({kind:'create_section',parentSectionId:'22222222-2222-4222-8222-222222222222',menuId:QA})
+  const w=ws();applyActions(w,r.actions);const p=workspaceSchema.parse(w);expect(p.menus[0]!.sections.map(x=>[x.name,x.parentSectionId])).toEqual([['Primi',null],['Rossi','22222222-2222-4222-8222-222222222222']])
+ })
+ it('«chiamalo Colazione»: si toglie il Menu vuoto appena creato e si crea quello giusto; un Menu con piatti non si toglie',()=>{
+  const two=[...menus,{id:'55555555-5555-4555-8555-555555555555',name:'Brunch',sections:0}]
+  const r=structureActions([A('delete_menu',{name:'Brunch'}),A('create_menu',{name:'Colazione'})],{message:'no, chiamalo colazione',sections,menus:two,refs:[]})
+  expect(r.actions.map(a=>a.kind).sort()).toEqual(['create_menu','delete_menu'])
+  const w=ws();w.menus.push({id:'55555555-5555-4555-8555-555555555555',name:'Brunch',type:'main',active:true,translations:{},sections:[]});applyActions(w,r.actions);expect(workspaceSchema.parse(w).menus.map(m=>m.name)).toEqual(['Menu','Colazione'])
+  const refs=[{id:'33333333-3333-4333-8333-333333333333',name:'Carbonara',price:12,sectionId:'22222222-2222-4222-8222-222222222222'} as any]
+  expect(structureActions([A('delete_menu',{name:'Menu'})],{message:'togli il menu',sections,menus,refs}).ask).toBe('menu_non_vuoto')
+  expect(structureActions([A('delete_section',{name:'Primi',menu:'Menu'})],{message:'togli i primi',sections,menus,refs}).ask).toBe('sottomenu_non_vuoto')
+ })
+})
+
 describe('invariante: nessuna conferma a vuoto, niente gergo',()=>{
  it('bozze con «il sistema» o «rispondi 1 per sì» non arrivano al titolare',()=>{
   expect(cleanDraft('Il sistema non può ancora creare Menu e Sottomenu vuoti da solo.',{wrote:false,numbers:[]})).toBeNull()
