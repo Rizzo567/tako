@@ -21,10 +21,18 @@ const PRICE=/^\s*(?:€\s*)?(\d+(?:[.,]\d{1,2})?)\s*(?:€|eur\w*)?\s*[·•\-�
 export function splitDescription(d:string){const m=d.match(PRICE);if(!m)return null;const price=Number(m[1]!.replace(',','.')),rest=d.slice(m[0].length).trim()
  const parts=rest.split(/(?<=[.!])\s+/).map(x=>x.trim()).filter(Boolean),note=(parts[0]??'').replace(/[.]\s*$/,''),included=parts.slice(1).join(' ').replace(/[.]\s*$/,'')
  return{price,note:note||null,included:included||null}}
-const isTrick=(s:any)=>!s.parentSectionId&&s.items.length===0&&typeof s.description==='string'&&!!splitDescription(s.description)
+// Variante 21/10 (dati veri): il sottomenu trucco ha UN piatto-prezzo con lo stesso nome (COMPLETO 12 €, descrizione «Un primo + … . ¼ di vino …»).
+const priceItemOf=(s:any)=>!s.parentSectionId&&s.items.length===1&&plain(s.items[0].name)===plain(s.name)&&Number(s.items[0].price)>0?s.items[0]:null
+const splitNote=(d:string)=>{const parts=String(d??'').split(/(?<=[.!])\s+/).map(x=>x.trim()).filter(Boolean);return{note:(parts[0]??'').replace(/[.]\s*$/,'')||null,included:parts.slice(1).join(' ').replace(/[.]\s*$/,'')||null}}
+/** Prezzo, nota e «compreso» di un sottomenu trucco (descrizione con prezzo, oppure piatto-prezzo). */
+export function trickInfo(s:any):{price:number,note:string|null,included:string|null}|null{
+ if(!s.parentSectionId&&s.items.length===0&&typeof s.description==='string'){const p=splitDescription(s.description);if(p)return p}
+ const it=priceItemOf(s);if(it)return{price:Number(it.price),...splitNote(it.description)}
+ return null}
+const isTrick=(s:any)=>!!trickInfo(s)&&s.id!=null
 
 export function migrateMenu(menu:any):{menu:any,report:any}|null{
- const tricks=menu.sections.filter(isTrick);if(!tricks.length)return null
+ const tricks=menu.sections.filter((s:any)=>isTrick(s)&&(s.items.length===0||menu.sections.some((c:any)=>c.parentSectionId===s.id)));if(!tricks.length)return null
  const canon=new Map<string,any>(),kept:any[]=[],dupItems:{id:string,name:string,into:string}[]=[],added:string[]=[]
  const childrenOf=(t:any)=>menu.sections.filter((s:any)=>s.parentSectionId===t.id)
  for(const t of tricks)for(const c of childrenOf(t)){const k=plain(c.name);let target=canon.get(k)
@@ -33,8 +41,8 @@ export function migrateMenu(menu:any):{menu:any,report:any}|null{
    if(same){for(const f of ['imageUrl','description'])if(!same[f]&&it[f])same[f]=it[f];if(!(same.allergens?.length)&&it.allergens?.length)same.allergens=it.allergens
     for(const [lang,tr] of Object.entries(it.translations??{}))if(!same.translations?.[lang])(same.translations??={})[lang]=tr;dupItems.push({id:it.id,name:it.name,into:same.id})}
    else{target.items.push(structuredClone(it));added.push(it.name)}}}
- const included=tricks.map((t:any)=>splitDescription(t.description)!.included).find(Boolean)??null
- const formulas=tricks.map((t:any)=>{const p=splitDescription(t.description)!,name=NAMES[plain(t.name)]??(t.name.charAt(0)+t.name.slice(1).toLowerCase())
+ const included=tricks.map((t:any)=>trickInfo(t)!.included).find(Boolean)??null
+ const formulas=tricks.map((t:any)=>{const p=trickInfo(t)!,name=NAMES[plain(t.name)]??(t.name.charAt(0)+t.name.slice(1).toLowerCase())
   const translations:Record<string,{name:string,description?:string}>={}
   for(const [lang,tr] of Object.entries<any>(t.translations??{})){const sd=typeof tr?.description==='string'?splitDescription(tr.description)??{note:tr.description.replace(/^[^·]*·\s*/,'').split(/(?<=[.!])\s+/)[0]?.replace(/[.]\s*$/,''),included:null}:null
    if(tr?.name)translations[lang]={name:String(tr.name).charAt(0).toUpperCase()+String(tr.name).slice(1).toLowerCase(),...(sd?.note?{description:sd.note}:{})}}
@@ -51,7 +59,9 @@ export function migrateWorkspace(w:Workspace){const report:any[]=[],next=structu
 /** Nessun piatto distinto perso: ogni (menu, sottomenu figlio, nome) di prima esiste dopo. */
 export function lostDishes(before:Workspace,after:Workspace){const key=(m:string,s:string,i:string)=>plain(m)+'|'+plain(s)+'|'+plain(i)
  const have=new Set(after.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>key(m.name,s.name,i.name)))))
- return before.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>({m:m.name,s:s.name,i:i.name})))).filter(x=>!have.has(key(x.m,x.s,x.i)))}
+ // Il piatto-prezzo del trucco (COMPLETO 12 €) diventa la formula: non è un piatto perso.
+ const priceItems=new Set(before.menus.flatMap(m=>m.sections.filter(s=>priceItemOf(s)&&m.sections.some(c=>(c as any).parentSectionId===s.id)).map(s=>s.items[0]!.id)))
+ return before.menus.flatMap(m=>m.sections.flatMap(s=>s.items.filter(i=>!priceItems.has(i.id)).map(i=>({m:m.name,s:s.name,i:i.name})))).filter(x=>!have.has(key(x.m,x.s,x.i)))}
 
 async function main(args=process.argv.slice(2)){
  const get=(n:string)=>{const i=args.indexOf(n);return i<0?undefined:args[i+1]},execute=args.includes('--execute'),restore=args.includes('--restore'),out=get('--out')

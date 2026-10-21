@@ -27,3 +27,20 @@ describe('migrazione Victoria al prezzo fisso',()=>{
  })
  it('menu senza trucco: invariato',()=>{const w=workspaceSchema.parse({menus:[{id:U(1),name:'Alla carta',sections:[{id:U(2),name:'Primi',items:[{id:U(3),name:'Carbonara',price:12}]}]}]});expect(migrateWorkspace(w).report).toEqual([])})
 })
+
+describe('variante dati veri 21/10: piatto-prezzo dentro il sottomenu trucco',()=>{
+ it('COMPLETO con un piatto COMPLETO 12 € → formula 12, nota e Compreso dalla descrizione; il piatto-prezzo non è «perso»',()=>{
+  const w=workspaceSchema.parse({menus:[
+   {id:U(1),name:'Alla carta',sections:[{id:U(2),name:'Formaggi',items:[{id:U(3),name:'Formaggi',price:9}]}]},
+   {id:U(20),name:'Menu Pranzo',type:'lunch',sections:[
+    {id:U(21),name:'COMPLETO',items:[{id:U(22),name:'COMPLETO',price:12,description:'Un primo + un secondo con contorno. ¼ di vino oppure ½ litro d’acqua + caffè.'}]},
+    child(23,21,'Primi',[it2(24,'Gnocchi alla sorrentina')]),child(25,21,'Secondi',[it2(26,'Nodino burro e salvia')])]}]})
+  const {workspace:out}=migrateWorkspace(w),m=out.menus.find(x=>x.name==='Menu Pranzo') as any
+  expect(m.pricing).toBe('fisso');expect(m.formulas.map((f:any)=>[f.name,f.price,f.note])).toEqual([['Completo',12,'Un primo + un secondo con contorno']])
+  expect(m.included).toBe('¼ di vino oppure ½ litro d’acqua + caffè')
+  expect(m.sections.map((s:any)=>s.name)).toEqual(['Primi','Secondi'])
+  expect(lostDishes(w,out)).toEqual([])
+  // Alla carta: un sottomenu con un solo piatto omonimo ma senza figli non è un trucco.
+  expect((out.menus[0] as any).pricing).toBeUndefined()
+ })
+})
