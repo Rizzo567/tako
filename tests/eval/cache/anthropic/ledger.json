@@ -1742,6 +1742,48 @@
    "usd": 0,
    "usdEquivalent": 0.029066,
    "finished": true
+  },
+  {
+   "id": "2026-10-21T08:47:57.632Z-banco-replay",
+   "at": "2026-10-21T08:48:01.203Z",
+   "set": "banco",
+   "mode": "replay",
+   "calls": 182,
+   "real": 0,
+   "hits": 182,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 40765,
+    "output": 63128,
+    "cacheRead": 1509494,
+    "cacheWrite": 6286
+   },
+   "usd": 0,
+   "usdEquivalent": 0.051521,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T08:48:02.478Z-struttura-replay",
+   "at": "2026-10-21T08:48:05.223Z",
+   "set": "struttura",
+   "mode": "replay",
+   "calls": 99,
+   "real": 0,
+   "hits": 99,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 12059,
+    "output": 31222,
+    "cacheRead": 813849,
+    "cacheWrite": 32881
+   },
+   "usd": 0,
+   "usdEquivalent": 0.029066,
+   "finished": true
   }
  ],
  "totalUsd": 0.582449
