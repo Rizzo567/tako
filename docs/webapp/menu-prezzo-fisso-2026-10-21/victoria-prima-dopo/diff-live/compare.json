@@ -1,0 +1,234 @@
+{
+ "structure": [
+  {
+   "file": "structure-menu-cena-desktop.json",
+   "identical": false,
+   "diffs": [
+    {
+     "path": ".pages.0.sections.0.rows.0.name",
+     "prima": "COMPLETO",
+     "dopo": "Completo"
+    },
+    {
+     "path": ".pages.1.sections.0.title",
+     "prima": "PRIMO",
+     "dopo": "SOLO PRIMO"
+    },
+    {
+     "path": ".pages.1.sections.0.rows.0.name",
+     "prima": "PRIMO",
+     "dopo": "Solo primo"
+    },
+    {
+     "path": ".pages.2.sections.0.title",
+     "prima": "SECONDO",
+     "dopo": "SOLO SECONDO"
+    },
+    {
+     "path": ".pages.2.sections.0.rows.0.name",
+     "prima": "SECONDO",
+     "dopo": "Solo secondo"
+    }
+   ],
+   "heights": [
+    [
+     2206,
+     2206
+    ],
+    [
+     1434,
+     1434
+    ],
+    [
+     1731,
+     1731
+    ]
+   ]
+  },
+  {
+   "file": "structure-menu-cena-mobile.json",
+   "identical": false,
+   "diffs": [
+    {
+     "path": ".pages.0.sections.0.rows.0.name",
+     "prima": "COMPLETO",
+     "dopo": "Completo"
+    },
+    {
+     "path": ".pages.1.sections.0.title",
+     "prima": "PRIMO",
+     "dopo": "SOLO PRIMO"
+    },
+    {
+     "path": ".pages.1.sections.0.rows.0.name",
+     "prima": "PRIMO",
+     "dopo": "Solo primo"
+    },
+    {
+     "path": ".pages.2.sections.0.title",
+     "prima": "SECONDO",
+     "dopo": "SOLO SECONDO"
+    },
+    {
+     "path": ".pages.2.sections.0.rows.0.name",
+     "prima": "SECONDO",
+     "dopo": "Solo secondo"
+    }
+   ],
+   "heights": [
+    [
+     2256,
+     2256
+    ],
+    [
+     1505,
+     1505
+    ],
+    [
+     1781,
+     1781
+    ]
+   ]
+  },
+  {
+   "file": "structure-menu-pranzo-desktop.json",
+   "identical": false,
+   "diffs": [
+    {
+     "path": ".pages.0.sections.0.rows.0.name",
+     "prima": "COMPLETO",
+     "dopo": "Completo"
+    }
+   ],
+   "heights": [
+    [
+     2206,
+     2206
+    ]
+   ]
+  },
+  {
+   "file": "structure-menu-pranzo-mobile.json",
+   "identical": false,
+   "diffs": [
+    {
+     "path": ".pages.0.sections.0.rows.0.name",
+     "prima": "COMPLETO",
+     "dopo": "Completo"
+    }
+   ],
+   "heights": [
+    [
+     2206,
+     2206
+    ]
+   ]
+  }
+ ],
+ "pixels": [
+  {
+   "file": "menu-cena-desktop-1-completo.png",
+   "sizePrima": [
+    1280,
+    2206
+   ],
+   "sizeDopo": [
+    1280,
+    2206
+   ],
+   "changedPixels": 0,
+   "ratio": 0
+  },
+  {
+   "file": "menu-cena-desktop-2-primi.png",
+   "sizePrima": [
+    1280,
+    1434
+   ],
+   "sizeDopo": [
+    1280,
+    1434
+   ],
+   "changedPixels": 2823,
+   "ratio": 0.00154
+  },
+  {
+   "file": "menu-cena-desktop-3-secondi-e-panini.png",
+   "sizePrima": [
+    1280,
+    1731
+   ],
+   "sizeDopo": [
+    1280,
+    1731
+   ],
+   "changedPixels": 3060,
+   "ratio": 0.00138
+  },
+  {
+   "file": "menu-cena-mobile-1-completo.png",
+   "sizePrima": [
+    375,
+    2256
+   ],
+   "sizeDopo": [
+    375,
+    2256
+   ],
+   "changedPixels": 0,
+   "ratio": 0
+  },
+  {
+   "file": "menu-cena-mobile-2-primi.png",
+   "sizePrima": [
+    375,
+    1505
+   ],
+   "sizeDopo": [
+    375,
+    1505
+   ],
+   "changedPixels": 2708,
+   "ratio": 0.0048
+  },
+  {
+   "file": "menu-cena-mobile-3-secondi-e-panini.png",
+   "sizePrima": [
+    375,
+    1781
+   ],
+   "sizeDopo": [
+    375,
+    1781
+   ],
+   "changedPixels": 2947,
+   "ratio": 0.00441
+  },
+  {
+   "file": "menu-pranzo-desktop-1-completo.png",
+   "sizePrima": [
+    1280,
+    2206
+   ],
+   "sizeDopo": [
+    1280,
+    2206
+   ],
+   "changedPixels": 0,
+   "ratio": 0
+  },
+  {
+   "file": "menu-pranzo-mobile-1-completo.png",
+   "sizePrima": [
+    375,
+    2206
+   ],
+   "sizeDopo": [
+    375,
+    2206
+   ],
+   "changedPixels": 0,
+   "ratio": 0
+  }
+ ]
+}

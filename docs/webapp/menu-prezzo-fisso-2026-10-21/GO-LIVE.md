@@ -1,4 +1,4 @@
-# GO-LIVE — Menu a prezzo fisso + PDF multipli (passi 0–4 ESEGUITI il 21/10 sera per il bot: edge v136, lettura v28, worker 8c5992d3; PDF spenti con TAKO_MENU_PDF_DOCUMENTS; passo 5 Victoria NON eseguito)
+# GO-LIVE — Menu a prezzo fisso (ESEGUITO 21/10 notte: edge v137, lettura v28, worker 49846043, worker pubblico 037f6b68, Victoria migrata rev 61; PDF multipli spenti in attesa dei design di Manuel)
 
 Ordine: (1) edge operativo + (2) funzione di lettura + (3) dashboard/pagina statica → controlli in sola lettura → (4) SOLO dopo, migrazione di Victoria.
 Tutti i comandi da `cd /Users/manuel/Projects/Tako/Tako-bot-anthropic` (symlink `.env.web` presente). Rollback in `~/.config/tako-webapp/rollback-edge-20261021/`.
@@ -49,3 +49,12 @@ Verifica pubblica dopo: pagine Menu pranzo / Menu cena di Victoria come nelle fo
 - Dashboard: `npx wrangler rollback 3e44eedc-c6ea-424a-9c0c-5cc2d07512b0 --config deploy/cloudflare/wrangler.jsonc`
 - Lettura: `cp $RB/rollback-read-v27.ts release/serverless/read-candidate/index.ts && node scripts/translations/deploy-projection.mjs --read`
 - Operativo: `cp $RB/rollback-v133.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`
+
+## Lezione (21/10)
+La pagina pubblica sta nel worker **takomenu-public** (`deploy/cloudflare/wrangler-public.jsonc`, build `node scripts/build-public-menu-release.mjs docs/webapp/portfolio-rollout/public-manifest.json`), NON in takomenu-web. Ogni modifica a `apps/web` / `apps/web-static` per i clienti richiede quel deploy, PRIMA di migrare dati che la usano.
+
+## Design PDF di Manuel (da collegare)
+I PDF multipli sono pronti ma spenti (`TAKO_MENU_PDF_DOCUMENTS=1` per accenderli). Si innestano così:
+- **Formato dei design:** un'immagine di sfondo per pagina, A4 verticale, 2480×3508 px (300 dpi), PNG, JPG o WebP. L'area centrale dove va il testo dev'essere libera e chiara; titoli e prezzi li scrive il generatore.
+- **Dove si innestano:** come tema PDF in `design.pdfPresets[].config`, con `backgroundImageUrl` (immagine caricata negli asset del locale), `backgroundSize:'cover'`, margini (`marginTop/Right/Bottom/Left`) che coincidono con l'area libera, `font`, `textColor` e `headingColor` presi dal design. Il singolo PDF (`settings.pdfDocuments[].config`) può usare il tema.
+- **Per accenderli:** impostare il secret, generare i 3 PDF di Victoria dal QA, fare il confronto con `supplied-menu-pdf.ts`, poi togliere quel file.

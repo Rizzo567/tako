@@ -92,7 +92,7 @@ async function capture({url,out,names}){
   await page.evaluateOnNewDocument(h=>{Date.prototype.getHours=function(){return h}},hour)
   await page.emulateMediaFeatures([{name:'prefers-reduced-motion',value:'reduce'}])
   await page.setViewport({width,height,deviceScaleFactor:1,isMobile:vp==='mobile',hasTouch:vp==='mobile'})
-  await page.goto(url,{waitUntil:'networkidle0',timeout:60000});await page.waitForSelector('[data-category-page]',{timeout:30000}).catch(async e=>{await page.screenshot({path:join(out,`error-${vp}.png`)});throw new Error(`Pagina non pronta (${vp}): ${errors.join(' | ')||e.message} — ${(await page.evaluate(()=>document.body.innerText)).slice(0,300)}`)})
+  await page.goto(url,{waitUntil:'networkidle2',timeout:90000});await page.waitForSelector('[data-category-page]',{timeout:30000}).catch(async e=>{await page.screenshot({path:join(out,`error-${vp}.png`)});throw new Error(`Pagina non pronta (${vp}): ${errors.join(' | ')||e.message} — ${(await page.evaluate(()=>document.body.innerText)).slice(0,300)}`)})
   const menuButtons=await page.$$eval(STRIP,els=>els.map(e=>e.textContent.trim()))
   const wanted=names.length?names:menuButtons
   for(const name of wanted){

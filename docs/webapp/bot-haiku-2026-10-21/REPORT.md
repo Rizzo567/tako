@@ -6,6 +6,45 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+## 0septies. AGGIORNAMENTO 21/10 notte — Victoria migrata al prezzo fisso, bot finale, punti minori: TUTTO ONLINE
+
+**Online:**
+- edge `tako-operational-candidate` **v137** (ezbr f499083b…);
+- lettura **v28**;
+- worker dashboard `takomenu-web` **49846043-0b54-4759-bb28-9013ca33ca3e**;
+- worker pagine pubbliche `takomenu-public` **037f6b68-8d34-4d2b-a2a1-0b2e39322033** (prima d9c80a18, del 17/10).
+
+**Victoria (528e263c), migrata:** revisione 59 → 61; backup in `~/.config/tako-webapp/victoria-prezzo-fisso-20261021-*c/`.
+- Pranzo: Completo 12 €. Cena: Completo 16,90 / Solo primo 9 / Solo secondo 10. Compreso: «¼ di vino oppure ½ litro d’acqua + caffè».
+- Alla carta (106 piatti) e Drinks (16) invariati. Nessun piatto perso; 10 doppioni tolti e 4 piatti-prezzo diventati opzioni.
+- Foto dal vivo, prima e dopo, da computer e da telefono (`menu-prezzo-fisso-2026-10-21/victoria-prima-dopo/{prima,dopo-live,diff-live}`): cambiano solo «COMPLETO»→«Completo», «PRIMO/SECONDO»→«SOLO PRIMO/SOLO SECONDO» e i nomi delle opzioni; gli altri pixel sono 0 o rumore minimo (<0,5%).
+- **Incidente:**
+  - la prima migrazione (rev 57) era andata online con il worker pubblico ancora del 17/10, che non conosce il prezzo fisso, quindi i blocchi COMPLETO e i prezzi non comparivano;
+  - visto con le foto, `--restore` eseguito subito (rev 59) e pagina verificata identica;
+  - poi il deploy del worker pubblico e la nuova migrazione;
+  - finestra di pagina errata: circa 30–40 minuti in serata.
+- Lo script di migrazione ora riconosce anche il trucco col piatto-prezzo, che è la forma dei dati veri di oggi.
+
+**Worker pubblico:** il nuovo deploy porta online anche le modifiche della pagina pubblica dal 17/10 in poi, cioè «Menu in arrivo», la scelta del tavolo e il delta live. Confronto prima/dopo su Bim Bum Bar, Panuzza's e San Galdino: struttura identica; le differenze di pixel sono la foto di testata e il «Menu in arrivo» nei sottomenu vuoti di Panuzza's, già deciso. Rollback: `CI=true npx wrangler rollback d9c80a18-b160-4b34-9af5-2b4333f57722 --config deploy/cloudflare/wrangler-public.jsonc` (attenzione: senza riportare Victoria alla carta la sua pagina perderebbe i prezzi, quindi prima `--restore`).
+
+**Bot v137:**
+- aumento uniforme con risposta solo del server;
+- «rimetti X nei <sottomenu>» = spostamento;
+- vocale con più richieste applicato subito.
+
+Prova dal vivo sul QA: tutto corretto, compresi «gnocchi al ragù», «passa a 18» e la lettura delle opzioni. QA rimesso com'era; il «Menu del giorno» resta nascosto.
+
+**Punti minori online:** scheda PDF su mobile, notifiche in basso su mobile, «sottomenu» nel vecchio schermo Menu, promo nascosta nei menu fissi, `PATCH /api/restaurants/me` con lock e chiavi di sistema preservate. Indice GIN `restaurants_pdf_documents_path_ops_idx` applicato.
+
+**PDF:** su decisione di Manuel, la grafica la fa lui. I PDF multipli restano spenti (`TAKO_MENU_PDF_DOCUMENTS` non impostato) e `supplied-menu-pdf.ts` resta. Il lavoro grafico a metà è salvato nello stash «wip grafica PDF curata 21/10» e in `~/.config/tako-webapp/wip-pdf-grafica-1021/`.
+
+**Verifiche finali:**
+- banco: prezzofisso 74/75, banco 84/92, adv150 136/150, lunghi 40/42, struttura 93/94, victoria 10/10, visibilita 19/20, parlato 29/30, playground 20/20, 0 GRAVI di sicurezza;
+- vitest: 0 rossi nuovi;
+- tests/web: gli stessi 23 rossi noti;
+- build edge e lazy boot PASS.
+- Spesa banchi totale: 1,62 $.
+
 ## 0sexies. AGGIORNAMENTO 21/10 sera — BOT + menu a prezzo fisso ONLINE (PDF multipli spenti, Victoria non migrata)
 
 **Online:** edge `tako-operational-candidate` **v136** (ezbr d7d4d5aa…), lettura `tako-read-candidate` **v28** (ezbr d2af569b…), worker `takomenu-web` **8c5992d3-226b-456b-ad3e-4c0a87780e49**.
