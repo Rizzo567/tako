@@ -101,17 +101,17 @@ export async function rememberTurn(db:Exec,tenant:string,phone:string,owner:stri
  * com'era» anche dopo altre modifiche. Chiave `brainundo:<telefono>` in tako_whatsapp_messages (come `undo:`, nessuna migrazione);
  * per ogni piatto vale il valore PRIMA della prima modifica nella finestra. */
 export const RESTORE_WINDOW_MS=30*60*1000
-type UndoLike={at:number,items:{id:string,before:any}[]}
+type UndoLike={at:number,items:{id:string,before:any,sectionId?:string}[]}
 export async function trackChange(db:Exec,phone:string,rec:UndoLike|null,now=Date.now()){
  if(!rec?.items?.length)return
  try{const key='brainundo:'+phone,rows=await db.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${key}`) as any[];let list:UndoLike[]=[];try{list=JSON.parse(String(rows?.[0]?.response??'[]'))}catch{}
-  list=[...(Array.isArray(list)?list:[]).filter(e=>now-Number(e.at)<=RESTORE_WINDOW_MS),{at:rec.at??now,items:rec.items.map(i=>({id:i.id,before:i.before}))}].slice(-20)
+  list=[...(Array.isArray(list)?list:[]).filter(e=>now-Number(e.at)<=RESTORE_WINDOW_MS),{at:rec.at??now,items:rec.items.map(i=>({id:i.id,before:i.before,...(i.sectionId?{sectionId:i.sectionId}:{})}))}].slice(-20)
   const text=JSON.stringify(list);await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${text} WHERE sid=${key}`);await db.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${key},${text}) ON CONFLICT DO NOTHING`)}catch{}
 }
 export async function readRestorable(db:Exec,phone:string,now=Date.now()):Promise<UndoLike|null>{
  try{const rows=await db.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${'brainundo:'+phone}`) as any[];const list=JSON.parse(String(rows?.[0]?.response??'[]')) as UndoLike[]
-  const items=new Map<string,any>();for(const e of (Array.isArray(list)?list:[]).filter(e=>now-Number(e.at)<=RESTORE_WINDOW_MS).sort((a,b)=>a.at-b.at))for(const i of e.items)if(!items.has(i.id))items.set(i.id,i.before)
-  return items.size?{at:now,items:[...items].map(([id,before])=>({id,before}))}:null}catch{return null}
+  const items=new Map<string,any>();for(const e of (Array.isArray(list)?list:[]).filter(e=>now-Number(e.at)<=RESTORE_WINDOW_MS).sort((a,b)=>a.at-b.at))for(const i of e.items)if(!items.has(i.id))items.set(i.id,{before:i.before,sectionId:i.sectionId})
+  return items.size?{at:now,items:[...items].map(([id,v])=>({id,before:v.before,...(v.sectionId?{sectionId:v.sectionId}:{})}))}:null}catch{return null}
 }
 
 /** Memoria appresa dopo una scrittura riuscita del cervello (in background). */

@@ -401,12 +401,21 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   const clear=d.plan.type==='change'?d.plan.actions:[];if(asks.length<2&&!clear.length)return d
   return{...d,intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:clear,asks},notes:[...d.notes,'parti_incerte']}}
  const guard=(plan:MenuPlan):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(plan.type!=='change')return{intent:'clarify',plan,exclude,aliasesUsed,replyDraft:'',notes}
+  // notte 22/10 (QA v143): un prezzo messo sul piatto di un Menu a prezzo fisso (0 €) quando c'è UN solo omonimo alla carta, visibile e col
+  // prezzo, che il messaggio nomina allo stesso modo → va su quello alla carta (prima: «la Carbonara è nel Menu del giorno a prezzo fisso»).
+  for(const a of plan.actions){if(a.kind!=='price'||!('id' in a))continue;const t=byId.get(a.id);if(!t||t.price>0||trustedHas(a.id))continue
+   const key=plain(t.name).split(' ').filter(w=>w.length>=4),alt=refs.filter(o=>o.id!==t.id&&o.price>0&&!o.hidden&&key.length>0&&key.every(w=>plain(o.name).split(' ').includes(w))&&g9DishMentioned(o.name,message,refs))
+   if(alt.length===1&&!plan.actions.some(b=>'id' in b&&(b as any).id===alt[0]!.id))(a as any).id=alt[0]!.id}
   const ids=[...new Set(plan.actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))],rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
   // Piatti indicati in modo ambiguo o coperti da un altro: le azioni chiare restano, per ognuna ambigua una domanda «quale?»
   // con l'azione già capita (proposta hold o scelta), mai una scelta del modello e mai la richiesta intera persa.
   const dim=(id:string)=>{const t=byId.get(id)!;return message.split(/[,;]|\s+e\s+/).filter(x=>g9DishMentioned(t.name,x,refs)).flatMap(x=>diminutiveRivals(x,t,refs).map(o=>o.id))}
    const openSet=new Set(input.clarifyIds??[]),inOpen=(x:string)=>!openSet.size||!openSet.has(id0)||openSet.has(x);let id0=''
-   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;id0=id;const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id&&inOpen(x));if(r.length)doubt.set(id,[id,...new Set(r)])}
+   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;id0=id
+    // notte 22/10 (QA v143 «la carbonara a dieci e mezzo»): per un PREZZO, un omonimo di un Menu a prezzo fisso (piatto a 0 €, il prezzo
+    // non si mette lì) non è un rivale di un piatto alla carta col prezzo: vale quello alla carta.
+    const t0=byId.get(id)!,priceAct=plan.actions.some(a=>'id' in a&&(a as any).id===id&&(a.kind==='price'||a.kind==='promo'))
+    const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id&&inOpen(x)&&!(priceAct&&t0.price>0&&(byId.get(x)?.price??1)<=0));if(r.length)doubt.set(id,[id,...new Set(r)])}
   if(doubt.size){const clear=plan.actions.filter(a=>!('id' in a)||!doubt.has((a as any).id)),amb=plan.actions.filter(a=>'id' in a&&doubt.has((a as any).id))
    const asks2:HoldAsk[]=amb.map(a=>{const {id,...template}=a as any;return{type:'choose' as const,word:refs.find(r=>r.id===id)?.name??'',options:doubt.get(id)!.slice(0,8),template}})
    if(!clear.length&&asks2.length===1)return{intent:'clarify',plan:{type:'clarify',ids:asks2[0]!.type==='choose'?asks2[0]!.options:[],actions:[amb[0]!]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}

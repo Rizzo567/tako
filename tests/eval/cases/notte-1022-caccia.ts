@@ -175,6 +175,8 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('fix',PZ,[Q('quanto costa la margherita?'),T('portala a 7')],[P('Margherita',7)],{note:'pronome dopo una DOMANDA su un piatto: è quel piatto'}),
  cc('fix',R,[T('la gricia a 12'),T('annulla'),T('annulla')],[],{says:[nots(3,/intendi/i)],note:'secondo annulla: niente da annullare, mai «Per annulla intendi…?»'}),
  cc('fix',R,[T('elimina il tiramisù'),T('sì e anche la panna cotta'),T('sì')],[DEL('Tiramisù'),DEL('Panna cotta')],{fam:'bv-elimina' as Family,note:'sì in testa conferma; la parte nuova chiede il suo sì'}),
+ cc('fix',QS,[Q('quante paste ho nei primi?')],[],{says:[nots(1,/pasta al rag|pasta al sugo|lasagna e|gnocchi|menu cena/i)],note:'QA v143: lettura dei Primi = solo i piatti VERI dei Primi (la parmigiana, pasta al pesto, pasta carbonara, riso giallo; 2 nascoste), mai piatti di altri sottomenu o Menu'}),
+ cc('fix',QS,[T('la carbonara a dieci e mezzo')],[P('pasta carbonara',10.5)],{says:[nots(1,/prezzo fisso|menu del giorno/i)],note:'QA v143: omonimo nel Menu del giorno (nascosto, prezzo fisso) e «pasta carbonara» alla carta visibile → quella alla carta (o domanda), mai solo quella nascosta'}),
  cc('vietato',QS,[T('cancella il menu del giorno')],[],{fam:'bv-fuori' as Family,note:'Menu nascosto con 7 piatti: mai cancellarlo senza un sì'}),
 
  // ================= 9. MENU / SOTTOMENU / PIATTI NASCOSTI citati =================

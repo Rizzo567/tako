@@ -10373,7 +10373,427 @@
    "usd": 0,
    "usdEquivalent": 0.003052,
    "finished": true
+  },
+  {
+   "id": "2026-10-21T23:13:03.754Z-notte-caccia-record",
+   "at": "2026-10-21T23:13:05.555Z",
+   "set": "notte-caccia",
+   "mode": "record",
+   "calls": 10,
+   "real": 0,
+   "hits": 10,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 4168,
+    "output": 1768,
+    "cacheRead": 97072,
+    "cacheWrite": 1874
+   },
+   "usd": 0,
+   "usdEquivalent": 0.002506,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:13:24.425Z-notte-caccia-record",
+   "at": "2026-10-21T23:13:30.511Z",
+   "set": "notte-caccia",
+   "mode": "record",
+   "calls": 5,
+   "real": 2,
+   "hits": 3,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1569,
+    "output": 872,
+    "cacheRead": 47617,
+    "cacheWrite": 1908
+   },
+   "usd": 0.000611,
+   "usdEquivalent": 0.001308,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:13:46.409Z-notte-caccia-record",
+   "at": "2026-10-21T23:13:54.382Z",
+   "set": "notte-caccia",
+   "mode": "record",
+   "calls": 3,
+   "real": 3,
+   "hits": 0,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 494,
+    "output": 813,
+    "cacheRead": 29011,
+    "cacheWrite": 605
+   },
+   "usd": 0.000822,
+   "usdEquivalent": 0.000822,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:14:12.924Z-notte-caccia-replay",
+   "at": "2026-10-21T23:14:14.394Z",
+   "set": "notte-caccia",
+   "mode": "replay",
+   "calls": 3,
+   "real": 0,
+   "hits": 3,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 494,
+    "output": 813,
+    "cacheRead": 29011,
+    "cacheWrite": 605
+   },
+   "usd": 0,
+   "usdEquivalent": 0.000822,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:14:41.752Z-notte-caccia-replay",
+   "at": "2026-10-21T23:14:43.141Z",
+   "set": "notte-caccia",
+   "mode": "replay",
+   "calls": 1,
+   "real": 0,
+   "hits": 1,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 47,
+    "output": 198,
+    "cacheRead": 9267,
+    "cacheWrite": 605
+   },
+   "usd": 0,
+   "usdEquivalent": 0.000272,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:15:12.295Z-notte-caccia-replay",
+   "at": "2026-10-21T23:15:13.735Z",
+   "set": "notte-caccia",
+   "mode": "replay",
+   "calls": 1,
+   "real": 0,
+   "hits": 1,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 50,
+    "output": 215,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0.000211,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:16:28.798Z-notte-caccia-record",
+   "at": "2026-10-21T23:16:41.792Z",
+   "set": "notte-caccia",
+   "mode": "record",
+   "calls": 187,
+   "real": 4,
+   "hits": 183,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 48824,
+    "output": 43153,
+    "cacheRead": 1788291,
+    "cacheWrite": 61043
+   },
+   "usd": 0.001332,
+   "usdEquivalent": 0.051972,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:16:43.317Z-notte-1022-record",
+   "at": "2026-10-21T23:16:47.043Z",
+   "set": "notte-1022",
+   "mode": "record",
+   "calls": 112,
+   "real": 0,
+   "hits": 112,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 15855,
+    "output": 33941,
+    "cacheRead": 1077991,
+    "cacheWrite": 21688
+   },
+   "usd": 0,
+   "usdEquivalent": 0.032047,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:16:48.575Z-multiturno-record",
+   "at": "2026-10-21T23:16:51.833Z",
+   "set": "multiturno",
+   "mode": "record",
+   "calls": 52,
+   "real": 0,
+   "hits": 52,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 16984,
+    "output": 25367,
+    "cacheRead": 485781,
+    "cacheWrite": 27980
+   },
+   "usd": 0,
+   "usdEquivalent": 0.022737,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:16:53.384Z-adv-sera-record",
+   "at": "2026-10-21T23:17:02.342Z",
+   "set": "adv-sera",
+   "mode": "record",
+   "calls": 320,
+   "real": 0,
+   "hits": 320,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 58451,
+    "output": 156605,
+    "cacheRead": 3158748,
+    "cacheWrite": 18467
+   },
+   "usd": 0,
+   "usdEquivalent": 0.118043,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:03.994Z-prezzofisso-record",
+   "at": "2026-10-21T23:17:07.524Z",
+   "set": "prezzofisso",
+   "mode": "record",
+   "calls": 91,
+   "real": 0,
+   "hits": 91,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 8829,
+    "output": 39590,
+    "cacheRead": 891624,
+    "cacheWrite": 36891
+   },
+   "usd": 0,
+   "usdEquivalent": 0.034206,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:09.079Z-banco-record",
+   "at": "2026-10-21T23:17:12.647Z",
+   "set": "banco",
+   "mode": "record",
+   "calls": 167,
+   "real": 0,
+   "hits": 167,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 32811,
+    "output": 50882,
+    "cacheRead": 1566624,
+    "cacheWrite": 18681
+   },
+   "usd": 0,
+   "usdEquivalent": 0.046723,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:14.162Z-adv150-record",
+   "at": "2026-10-21T23:17:19.928Z",
+   "set": "adv150",
+   "mode": "record",
+   "calls": 214,
+   "real": 0,
+   "hits": 214,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 25491,
+    "output": 54549,
+    "cacheRead": 2090376,
+    "cacheWrite": 10622
+   },
+   "usd": 0,
+   "usdEquivalent": 0.052055,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:21.504Z-struttura-record",
+   "at": "2026-10-21T23:17:24.770Z",
+   "set": "struttura",
+   "mode": "record",
+   "calls": 128,
+   "real": 0,
+   "hits": 128,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 16272,
+    "output": 40777,
+    "cacheRead": 1237251,
+    "cacheWrite": 11693
+   },
+   "usd": 0,
+   "usdEquivalent": 0.03585,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:26.311Z-lunghi-record",
+   "at": "2026-10-21T23:17:32.804Z",
+   "set": "lunghi",
+   "mode": "record",
+   "calls": 81,
+   "real": 0,
+   "hits": 81,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 25704,
+    "output": 62630,
+    "cacheRead": 813896,
+    "cacheWrite": 1617
+   },
+   "usd": 0,
+   "usdEquivalent": 0.042226,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:34.310Z-visibilita-record",
+   "at": "2026-10-21T23:17:36.254Z",
+   "set": "visibilita",
+   "mode": "record",
+   "calls": 25,
+   "real": 0,
+   "hits": 25,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2761,
+    "output": 7750,
+    "cacheRead": 245140,
+    "cacheWrite": 2929
+   },
+   "usd": 0,
+   "usdEquivalent": 0.006969,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:37.786Z-parlato-record",
+   "at": "2026-10-21T23:17:39.943Z",
+   "set": "parlato",
+   "mode": "record",
+   "calls": 30,
+   "real": 0,
+   "hits": 30,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1495,
+    "output": 6635,
+    "cacheRead": 291898,
+    "cacheWrite": 994
+   },
+   "usd": 0,
+   "usdEquivalent": 0.00651,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:41.476Z-playground-record",
+   "at": "2026-10-21T23:17:43.556Z",
+   "set": "playground",
+   "mode": "record",
+   "calls": 21,
+   "real": 0,
+   "hits": 21,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1919,
+    "output": 7348,
+    "cacheRead": 208781,
+    "cacheWrite": 1733
+   },
+   "usd": 0,
+   "usdEquivalent": 0.00617,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:17:45.095Z-victoria-record",
+   "at": "2026-10-21T23:17:47.052Z",
+   "set": "victoria",
+   "mode": "record",
+   "calls": 11,
+   "real": 0,
+   "hits": 11,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 949,
+    "output": 3305,
+    "cacheRead": 108904,
+    "cacheWrite": 1724
+   },
+   "usd": 0,
+   "usdEquivalent": 0.003052,
+   "finished": true
+  },
+  {
+   "id": "2026-10-21T23:18:25.436Z-notte-cieco-record",
+   "at": "2026-10-21T23:23:18.579Z",
+   "set": "notte-cieco",
+   "mode": "record",
+   "calls": 129,
+   "real": 126,
+   "hits": 3,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 21900,
+    "output": 37512,
+    "cacheRead": 1244725,
+    "cacheWrite": 26617
+   },
+   "usd": 0.036059,
+   "usdEquivalent": 0.03672,
+   "finished": true
   }
  ],
- "totalUsd": 1.915689
+ "totalUsd": 1.954513
 }

@@ -530,7 +530,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  const undoRec=await readUndo(db,ctx.phone),undoOK=!!undoRec&&Date.now()-Number(undoRec.at)<=undoWindowMs
  const undoNames=undoOK?(undoRec!.full?[...undoRec!.full.names.restored,...undoRec!.full.names.removed]:undoRec!.items.map(i=>String(refs.find(r=>r.id===i.id)?.name??i.after?.name??i.before?.name??'')).filter(Boolean)):[]
  const name=String((await db.execute(sql`SELECT name FROM restaurants WHERE id=${ctx.tenant}`))[0]?.name??'')
- const restorable=await (async()=>{const a=await readRestorable(db,ctx.phone),b=undoRec,items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before});return items.length?{at:Date.now(),items}:null})()
+ const restorable=await (async()=>{const a=await readRestorable(db,ctx.phone),b=undoRec,items=[...(a?.items??[])];for(const i of b&&Date.now()-Number(b.at)<=30*60*1000?b.items:[])if(!items.some(x=>x.id===i.id))items.push({id:i.id,before:i.before,sectionId:i.sectionId});return items.length?{at:Date.now(),items}:null})()
  const last=await readLast(db,ctx.phone,row.revision),extraRestore=last?last.undo.flatMap(a=>'id' in a?[{id:(a as any).id as string,actions:last.undo.filter(b=>'id' in b&&(b as any).id===(a as any).id)}]:[]):[]
  const freshIds=new Set(undoOK&&!undoRec!.full?undoRec!.items.filter(i=>i.before===null).map(i=>i.id):[])
  // PIANO bot-haiku: con haiku il turno intero (auto-correzioni comprese) sta in 25 s; cervello giù → brainDown + avviso a Manuel.
@@ -685,6 +685,22 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const dels=pend.actions.filter(a=>a.kind==='delete') as Extract<MenuAction,{kind:'delete'}>[],keep=dels.filter(a=>{const r=refs.find(x=>x.id===a.id);return !!r&&g9DishMentioned(r.name,text,refs)})
   if(keep.length&&keep.length<dels.length){const nm=keep.map(a=>'*'+safe(refs.find(x=>x.id===a.id)!.name)+'*').join(' e ');await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:keep,requiresTypedOk:true,why:'delete'})})
    preReply='Elimino solo '+nm+'? Rispondi *sì*.\n\n'+pendingFacts('delete',keep,refs,sections)}}
+ // notte 22/10 (cc-giornata-05 «elimina i rigatoni con la pajata» → «sì» → «quanto costa la pajata?» → «rimetti i rigatoni con la pajata» →
+ // «14 euro nei primi»): un piatto ELIMINATO da poco (30 minuti) è un fatto del server. Domanda su di lui = «l'hai eliminato»; «rimettilo» =
+ // proposta di ricrearlo com'era (sottomenu e prezzo di prima) col sì; un prezzo / sottomenu detto dopo la proposta la completa.
+ if(engine==='haiku'&&!preReply&&!pre&&!sessNow){const askR=pend?.kind==='ask'?(pend.ask as any):null
+  if(askR?.restoreOf&&!CMD_RE_NEW.test(plain(text).replace(/\b(?:aggiung|rimett)\w*\b/g,' '))){const sp=singlePrice(text),ns=namedSections(text,sections).ids,ro=askR.restoreOf as {name:string,price:number,sectionId:string|null,description:string|null}
+   const secId=ns.length===1?ns[0]!:ro.sectionId&&sections.some(x=>x.id===ro.sectionId)?ro.sectionId:null
+   if(sp!==null&&sp>0&&secId){pre={actions:[{kind:'create',sectionId:secId,name:ro.name,price:sp,description:ro.description} as MenuAction],why:'ripristino'};closePend=true;pend=null;(base as any).pendingCommand=null}}
+  else if(!pend){const gone=((restorable?.items??[]) as any[]).filter(i=>i.before&&typeof i.before.name==='string'&&!refs.some(r=>r.id===i.id)&&!refs.some(r=>sameDishName(r.name,i.before.name)))
+   const hit=gone.filter(i=>{const n=plain(i.before.name),t=' '+plain(text)+' ';return t.includes(' '+n+' ')||n.split(' ').filter((w:string)=>w.length>=5).some((w:string)=>t.includes(' '+w+' '))})
+   if(hit.length===1){const i=hit[0],nm=String(i.before.name),sec=sections.find(x=>x.id===i.sectionId),old=Number(i.before.price)||0,eur=(n:number)=>n.toFixed(2).replace('.',',')+' €'
+    if(/\b(?:rimett\w*|ripristin\w*|riaggiung\w*|aggiung\w*|rimetti\w*|torna\w*)\b/.test(plain(text))&&!/\b(?:non|niente)\b/.test(plain(text))){const sp=singlePrice(text),ns=namedSections(text,sections).ids,secId=ns.length===1?ns[0]!:sec?.id??null
+     if(sp!==null&&sp>0&&secId)pre={actions:[{kind:'create',sectionId:secId,name:nm,price:sp,description:i.before.description??null} as MenuAction],why:'ripristino'}
+     else{const q=secId&&old>0?'*'+safe(nm)+'* l\u2019hai eliminato poco fa. Lo rimetto nei *'+safe(sections.find(x=>x.id===secId)!.name)+'* a *'+eur(old)+'* come prima? Rispondi *sì*, oppure scrivimi prezzo e sottomenu (per esempio «14 euro nei primi»).':'*'+safe(nm)+'* l\u2019hai eliminato poco fa. Per rimetterlo scrivimi prezzo e sottomenu, per esempio «14 euro nei primi».'
+      const acts=secId&&old>0?[{kind:'create',sectionId:secId,name:nm,price:old,description:i.before.description??null} as MenuAction]:[]
+      await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:acts,source:text.slice(0,600),origin:text.slice(0,600),rounds:1,restoreOf:{name:nm,price:old,sectionId:secId,description:i.before.description??null}} as any)});preReply=q}}
+    else if(/\?\s*$/.test(text)||/^(?:quanto|che|cosa|c e|dov e|e il|e la)\b/.test(plain(text)))preReply='*'+safe(nm)+'* l\u2019hai eliminato poco fa: non è più nel menu. Per rimetterlo scrivimi «rimetti '+nm.toLowerCase()+'».'}}}
  // notte 22/10 (bv-domande-006 «che locale ho?» → «Il tuo locale è Tako. Nel menu hai il Menu…? No: …»): il nome del locale è un fatto: lo dice il server.
  if(engine==='haiku'&&!preReply&&!pre&&!sessNow&&name&&/^(?:ciao |scusa |senti )?(?:che|quale|qual e il|qual e) (?:locale|ristorante) (?:ho|e|e il mio|gestisco|sto modificando)\b|\bcome si chiama il (?:mio )?(?:locale|ristorante)\b/.test(plain(text))&&plain(text).split(' ').length<=9)preReply='Il tuo locale è *'+safe(name)+'*. Dimmi pure cosa vuoi cambiare nel menu.'
  // notte 22/10 (cc-foglio-01/02): listino incollato con i prezzi dei piatti del menu → lo legge il server (mai 30 azioni scritte dal modello).
@@ -850,6 +866,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(budget.expired)throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,label[0],tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired');await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,label[1],tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
    const waItems=new Map(beforeW.menus.flatMap((m:any)=>m.sections.flatMap((sec:any)=>sec.items.map((i:any)=>[i.id,structuredClone(i)] as const)))),back=undoFor(effective,id=>waItems.get(id) as any)
    await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,back?{kind:'last',actions:effective,undo:back,revision:saved.revision+1,at:Date.now()}:null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
+   // notte 22/10 (cc-giornata-05): i piatti eliminati restano 30 minuti tra i «ripristinabili» (nome, prezzo, sottomenu di prima).
+   {const dels=effective.filter(a=>a.kind==='delete'&&waItems.has((a as any).id)).map(a=>({id:(a as any).id as string,before:waItems.get((a as any).id),sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??undefined}));if(dels.length)await trackChange(tx,ctx.phone,{at:Date.now(),items:dels} as any)}
    const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
    inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter,engine}))
    const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
@@ -951,7 +969,16 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     const unsaved=!question&&!out.hold&&!out.twins?.length&&out.actions.length?'Non salvato: '+out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions))).join('; '):''
     return [question,question||missingSection?'':NOTHING,unsaved,facts,missingSection].filter(Boolean).join('\n\n')}
    // Opzioni di un Menu a prezzo fisso: i fatti del server bastano (la bozza ripeteva gli stessi prezzi).
-   case 'read':if(out.plan?.read==='formulas')return planText(out.plan,refs,sections);return say(planText(out.plan,refs,sections),false,pricesOf(out.plan.ids?.map((id:string)=>({kind:'available',id,value:true}) as MenuAction)??[]))
+   case 'read':if(out.plan?.read==='formulas')return planText(out.plan,refs,sections)
+    // notte 22/10 (QA v143 «quante paste ho nei primi?» → piatti di altri sottomenu e di un altro Menu): la lettura di un sottomenu
+    // nominato la compone il server dai dati — solo i piatti che stanno davvero lì, raggruppati per Menu; la bozza del modello non parte.
+    if(engine==='haiku'&&out.plan?.read==='items'&&Array.isArray(out.plan.ids)){const ns=namedSections(text,sections).ids
+     if(ns.length){const inSec=refs.filter(r=>ns.includes(r.sectionId??'')),picked=inSec.filter(r=>out.plan.ids.includes(r.id)),list=picked.length?picked:inSec
+      if(out.plan.ids.some((id:string)=>!inSec.some(r=>r.id===id))||!picked.length){const by=new Map<string,MenuRef[]>();for(const r of list){const k=(r.sectionId??'');by.set(k,[...(by.get(k)??[]),r])}
+       const lines=[...by].map(([sid,rs])=>{const sc=sections.find(x=>x.id===sid);return 'Nei *'+safe(sc?.name??'')+'* del *'+safe(sc?.menu??'')+'* '+(rs.length===1?'c\u2019è 1 piatto':'ci sono '+rs.length+' piatti')+(rs.some(r=>r.hidden)?' ('+rs.filter(r=>r.hidden).length+' nascost'+(rs.filter(r=>r.hidden).length===1?'o':'i')+')':'')+':'})
+       if(!list.length)return 'Nei *'+safe(sections.find(x=>x.id===ns[0])?.name??'')+'* non c\u2019è nessun piatto.'
+       return [lines.length===1?lines[0]!:lines.join('\n'),planText({type:'read',read:'items',ids:list.map(r=>r.id)} as any,refs,sections)].join('\n\n')}}}
+    return say(planText(out.plan,refs,sections),false,pricesOf(out.plan.ids?.map((id:string)=>({kind:'available',id,value:true}) as MenuAction)??[]))
    case 'say':{const p=finalRun.decision.plan as any,ids=p?.type==='capability'&&Array.isArray(p.ids)?(p.ids as string[]).filter(i=>i==='dashboard'||i==='menulink'):[];if(ids.length)return capabilityText(ids);return say('',false)}}
    return NOTHING}
   // Una domanda chiusa (comando nuovo, 2° giro) non resta in sospeso anche se questo turno non scrive.

@@ -1,12 +1,12 @@
 {
- "set": "notte-1022",
+ "set": "notte-caccia",
  "metriche": {
-  "set": "notte-1022",
+  "set": "notte-caccia",
   "modo": "replay",
   "conversazioni": 1,
   "misurate": 1,
   "nonMisurate": [],
-  "messaggi": 2,
+  "messaggi": 1,
   "corrette": 1,
   "percentuale": 100,
   "gravi": 0,
@@ -16,35 +16,35 @@
   "domandePer10Messaggi": 0,
   "domandeNonAttesePer10": 0,
   "latenzaAnthropicMs": {
-   "p50": 1392,
-   "p95": 1392,
-   "chiamate": 2
+   "p50": 1452,
+   "p95": 1452,
+   "chiamate": 1
   },
   "latenzaTurnoMs": {
-   "p50": 1527,
-   "p95": 1527,
+   "p50": 1639,
+   "p95": 1639,
    "nota": "harness + latenza Haiku registrata"
   },
   "chiamatePerMessaggio": 1,
   "tokenMediPerMessaggio": {
-   "input": 90,
-   "output": 185,
-   "cacheRead": 9705,
-   "cacheWrite": 437
+   "input": 50,
+   "output": 215,
+   "cacheRead": 9872,
+   "cacheWrite": 0
   },
   "cacheHit": {
-   "chiamateConCacheRead": 2,
-   "su": 2,
+   "chiamateConCacheRead": 1,
+   "su": 1,
    "percentuale": 100
   },
   "costo": {
    "spesoGiroUsd": 0,
-   "equivalenteLiveUsd": 0.000506,
-   "perMessaggioUsd": 0.000253,
-   "tetto": 0.5
+   "equivalenteLiveUsd": 0.000211,
+   "perMessaggioUsd": 0.000211,
+   "tetto": 0.1
   },
   "anthropic": {
-   "hit": 2,
+   "hit": 1,
    "vere": 0,
    "mock": 0,
    "assenti": 0,
@@ -53,67 +53,56 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 1.5
+  "durataGiroS": 1.4
  },
  "codici": {},
  "unknownSql": [],
  "verdicts": [
   {
-   "id": "n-pf-notte-04",
+   "id": "cc-fix-08",
    "family": "bv-multiple",
-   "menu": "prezzofisso",
+   "menu": "qasera",
    "success": true,
    "fails": [],
-   "expected": [],
-   "actual": [],
+   "expected": [
+    "price|pasta carbonara|10.5"
+   ],
+   "actual": [
+    "price|pasta carbonara|10.5"
+   ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu cena*: da 16,90 € a *17,00 €*.",
-    "Annullo l'ultima modifica alla struttura del menu.\n\n*Completo* del *Menu cena*: di nuovo *16,90 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, cambio il prezzo della *Pasta carbonara* a 10,50 €.\n\n*pasta carbonara*: prezzo da 10,00 € a *10,50 €*"
    ],
    "turns": [
-    "alza il completo della cena a 17",
-    "annulla"
+    "la carbonara a dieci e mezzo"
    ],
    "clarifications": 0,
    "unexpectedClarifications": 0,
-   "llmCalls": 2,
+   "llmCalls": 1,
    "llmMisses": 0,
-   "llmTokens": 20834,
+   "llmTokens": 10137,
    "latencyMs": [
-    135.3,
-    58.6
+    187.4
    ],
-   "recordedLlmMs": 2757,
+   "recordedLlmMs": 1452,
    "usedLlm": true,
-   "source": "prezzo fisso 21/10 (fixture inventata)",
+   "source": "caccia notte 22/10 (fixture esistenti)",
+   "note": "QA v143: omonimo nel Menu del giorno (nascosto, prezzo fisso) e «pasta carbonara» alla carta visibile → quella alla carta (o domanda), mai solo quella nascosta",
    "nonMisurato": false
   }
  ],
  "chiamate": [
   {
-   "conv": "n-pf-notte-04",
-   "hash": "2d3e95608edcef6b",
+   "conv": "cc-fix-08",
+   "hash": "860d9138a586a7cd",
    "source": "hit",
    "status": 200,
-   "ms": 1392,
+   "ms": 1452,
    "usage": {
-    "input": 47,
-    "output": 189,
-    "cacheRead": 10143,
+    "input": 50,
+    "output": 215,
+    "cacheRead": 9872,
     "cacheWrite": 0
-   }
-  },
-  {
-   "conv": "n-pf-notte-04",
-   "hash": "3d6911d87b1b6a20",
-   "source": "hit",
-   "status": 200,
-   "ms": 1365,
-   "usage": {
-    "input": 133,
-    "output": 181,
-    "cacheRead": 9267,
-    "cacheWrite": 874
    }
   }
  ]
